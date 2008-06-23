@@ -11,11 +11,11 @@
  */
 
 /**
- * class to hold product data
+ * class to hold product data linked to leads
  * 
  * @package     Crm
  */
-class Crm_Model_Product extends Tinebase_Record_Abstract
+class Crm_Model_LeadProduct extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 

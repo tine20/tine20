@@ -12,16 +12,16 @@
 
 
 /**
- * interface for leads products
+ * backend for leads products
  *
  * @package     Crm
  */
-class Crm_Backend_LeadsProducts implements Crm_Backend_Interface
+class Crm_Backend_LeadProducts implements Crm_Backend_Interface
 {
     /**
-    * Instance of Crm_Backend_LeadsProducts
+    * lead products table
     *
-    * @var Crm_Backend_LeadsProducts
+    * @var string
     */
     protected $_table;
     
@@ -32,43 +32,13 @@ class Crm_Backend_LeadsProducts implements Crm_Backend_Interface
 
     /**
      * the constructor
-     *
-     * don't use the constructor. use the singleton 
      */
     private function __construct ()
     {
         $this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leads_products'));
     }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone ()
-    {
-    }
-    
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Crm_Backend_LeadsProducts
-     */
-    private static $_instance = NULL;
-
-    /**
-     * the singleton pattern
-     *
-     * @return Crm_Backend_LeadsProducts
-     */
-    public static function getInstance ()
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Backend_LeadsProducts();
-        }
-        return self::$_instance;
-    }
-    
+        
     /**
      * get products by lead id
      *
