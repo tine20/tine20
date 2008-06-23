@@ -52,11 +52,10 @@ class Tinebase_User_Registration
     private function __construct ()
     {
         // get config
-        try {
-            $this->_config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
-        } catch (Zend_Config_Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
-                ' no config for registration found! ' . $e->getMessage());
+        if(isset(Zend_Registry::get('configFile')->registration)) {
+            $this->_config = Zend_Registry::get('configFile')->registration;
+        } else {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ' . $e->getMessage());
         }
         // create table objects and get db adapter
         $this->_registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
