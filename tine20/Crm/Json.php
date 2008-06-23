@@ -455,10 +455,10 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      */ 
     public function saveProducts($optionsData)
     {
-        $productSource = Zend_Json::decode($optionsData);
+        $products = Zend_Json::decode($optionsData);
          
         try {
-            $productSource = new Tinebase_Record_RecordSet('Crm_Model_Productsource', $productSource);
+            $products = new Tinebase_Record_RecordSet('Crm_Model_Product', $products);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -469,7 +469,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
             
         
-        if(Crm_Controller::getInstance()->saveProductSource($productSource) === FALSE) {
+        if(Crm_Controller::getInstance()->saveProducts($products) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);

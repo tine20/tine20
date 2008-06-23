@@ -90,6 +90,32 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 
         return $lead;
     }
+
+    /**
+     * returns an empty lead with some defaults set
+     *
+     * @return Crm_Model_Lead
+     * @deprecated ?
+     * @todo    move functionality to getLead() or javascript?
+     */
+    public function getEmptyLead()
+    {
+        $defaultState  = (isset(Zend_Registry::get('configFile')->crm->defaultstate) ? Zend_Registry::get('configFile')->crm->defaultstate : 1);
+        $defaultType   = (isset(Zend_Registry::get('configFile')->crm->defaulttype) ? Zend_Registry::get('configFile')->crm->defaulttype : 1);
+        $defaultSource = (isset(Zend_Registry::get('configFile')->crm->defaultsource) ? Zend_Registry::get('configFile')->crm->defaultsource : 1);
+        
+        $defaultData = array(
+            'leadstate_id'   => $defaultState,
+            'leadtype_id'    => $defaultType,
+            'leadsource_id'  => $defaultSource,
+            'start'          => Zend_Date::now(),
+            'probability'    => 0
+        );
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
+        $emptyLead = new Crm_Model_Lead($defaultData, true);
+        
+        return $emptyLead;
+    }
     
     /**
      * Search for leads matching given filter
@@ -341,8 +367,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     
     /*************** products functions *****************/
 
-    // @todo check/rework those
-    
     /**
      * get products available
      *
@@ -350,30 +374,27 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param string $_dir
      * @return array
      * 
-     * @todo fix that
      */
     public function getProducts($_sort = 'id', $_dir = 'ASC')
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
         $result = $backend->getAll($_sort, $_dir);
         
-        $result = array();
-        
         return $result;    
     }     
 
     /**
-     * save Productsource
+     * save Products
      *
      * if $_Id is -1 the options element gets added, otherwise it gets updated
      * this function handles insert and updates as well as deleting vanished items
      *
      * @return array
      */ 
-    public function saveProductSource(Tinebase_Record_Recordset $_productSource)
+    public function saveProducts(Tinebase_Record_Recordset $_products)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $result = $backend->saveProducts($_productSource);
+        $result = $backend->saveProducts($_products);
         
         return $result;
     } 
@@ -393,25 +414,17 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     }     
 
     /**
-     * save Products
+     * save Products linked to a lead
      *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
+     * @todo implement
+     * @todo write test
      */ 
-    public function saveProducts(Tinebase_Record_Recordset $_productData)
+    public function saveLeadProducts($_leadId, Tinebase_Record_Recordset $_products)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $result = $backend->saveProducts($_productData);
-        
-        return $result;
-    }   
+    } 
     
     /*********** handling of lead sources/types/states **************/
     
-    // @todo check/rework those
-        
     /**
      * get lead sources
      *
@@ -677,35 +690,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         Tinebase_Notification::getInstance()->send($this->_currentAccount, $_contactIds, $subject, $plain, $html);
     }
     
-    /******************* old or deprecated functions ******************/
-    
-    // @todo    remove no longer needed functions
           
-    /**
-     * returns an empty lead with some defaults set
-     *
-     * @return Crm_Model_Lead
-     * @deprecated ?
-     * @todo    move functionality to getLead() or javascript?
-     */
-    public function getEmptyLead()
-    {
-        $defaultState  = (isset(Zend_Registry::get('configFile')->crm->defaultstate) ? Zend_Registry::get('configFile')->crm->defaultstate : 1);
-        $defaultType   = (isset(Zend_Registry::get('configFile')->crm->defaulttype) ? Zend_Registry::get('configFile')->crm->defaulttype : 1);
-        $defaultSource = (isset(Zend_Registry::get('configFile')->crm->defaultsource) ? Zend_Registry::get('configFile')->crm->defaultsource : 1);
-        
-        $defaultData = array(
-            'leadstate_id'   => $defaultState,
-            'leadtype_id'    => $defaultType,
-            'leadsource_id'  => $defaultSource,
-            'start'          => Zend_Date::now(),
-            'probability'    => 0
-        );
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
-        $emptyLead = new Crm_Model_Lead($defaultData, true);
-        
-        return $emptyLead;
-    }
         
     
 }
