@@ -27,19 +27,28 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Crm_Backend_LeadSourcesTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Fixtures
+     * 
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_objects = array();
     
-    protected $testContainer;
+    /**
+     * Testcontainer
+     *
+     * @var unknown_type
+     */
+    protected $_testContainer;
     
-    protected $backend;
+    /**
+     * Backend
+     *
+     * @var Crm_Backend_LeadSources
+     */
+    protected $_backend;
 
     /**
      * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
      */
     public static function main()
     {
@@ -49,8 +58,8 @@ class Crm_Backend_LeadSourcesTest extends PHPUnit_Framework_TestCase
 
     /**
      * Sets up the fixture.
+     * 
      * This method is called before a test is executed.
-     *
      */
     protected function setUp()
     {
@@ -67,44 +76,19 @@ class Crm_Backend_LeadSourcesTest extends PHPUnit_Framework_TestCase
             $this->testContainer = $personalContainer[0];
         }
         
-        $this->objects['initialLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description',
-            'end'           => Zend_Date::now(),
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
+        $this->_objects['initialLeadSource'] = new Crm_Model_Leadsource(array(
+            'id' => 1000,
+            'leadsource' => 'Just a unit test lead source.',
+            'translate' => 0
         )); 
         
-        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description updated',
-            'end'           => NULL,
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => NULL,
-        )); 
-        
-        $this->backend = new Crm_Backend_LeadSources();
+        $this->_backend = new Crm_Backend_LeadSources();
     }
 
     /**
      * Tears down the fixture
+     * 
      * This method is called after a test is executed.
-     *
-     * @access protected
      */
     protected function tearDown()
     {
@@ -112,12 +96,23 @@ class Crm_Backend_LeadSourcesTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to add a lead source
+     */
+    public function testAddLeadSource()
+    {
+        $source = $this->_backend->create($this->_objects['initialLeadSource']);
+        
+        $this->assertEquals($this->_objects['initialLeadSource']->id, $source->id);
+    }
+    
+    /**
      * try to get one lead source
-     *
      */
     public function testGetLeadSource()
     {
-        $source = $this->backend->get(1);
+    	$sources = $this->_backend->getAll();
+        // $source = $this->_backend->get(1);
+        $source = $this->_backend->get($sources[0]->id);
         
         $this->assertType('Crm_Model_Leadsource', $source);
         $this->assertTrue($source->isValid());
@@ -125,17 +120,28 @@ class Crm_Backend_LeadSourcesTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get the lead sources
-     *
      */
     public function testGetLeadSources()
     {
-        $sources = $this->backend->getAll();
+        $sources = $this->_backend->getAll();
         
         $this->assertTrue(count($sources) >= 4);
+    }
+    
+    /**
+     * try to delete a lead source
+     */
+    public function testDeleteLeadSource()
+    {
+        $id = $this->_objects['initialLeadSource']->getId();
+        
+        $this->_backend->delete($id);
+        $this->setExpectedException('UnderflowException');
+        $this->_backend->get($id);
     }
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadSosurcesTest::main') {
+if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadSourcesTest::main') {
     Crm_Backend_LeadSourcesTest::main();
 }
