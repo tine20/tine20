@@ -694,6 +694,7 @@ Tine.Crm.LeadEditDialog = {
                         
                         // update stores
                         Ext.StoreMgr.lookup('ContactsStore').commitChanges();
+                        Ext.StoreMgr.lookup('TasksStore').commitChanges();
                                                 
                         Ext.MessageBox.hide();
                     },
@@ -1064,17 +1065,6 @@ Tine.Crm.LeadEditDialog = {
                 var bbarItems = [                
                     this.actions.linkContact,
                     this.actions.addContact
-                    /*{
-                        text: this.translation._('Add new contact'),
-                        iconCls: 'actionAdd',
-                        menu: {
-                            items: [
-                                this.actions.addResponsible,
-                                this.actions.addCustomer,
-                                this.actions.addPartner
-                            ]
-                        }
-                    }*/
                 ]; 
                 
                 break;
@@ -1119,62 +1109,81 @@ Tine.Crm.LeadEditDialog = {
             /******************* tasks tabpanel ********************/                
 
             case 'Tasks':
-
-                // tasks grid
-                var columnModel = new Ext.grid.ColumnModel([
-                    {   id:'id', 
-                        header: this.translation._("Identifier"), 
-                        dataIndex: 'id', 
-                        width: 5, 
-                        sortable: true, 
-                        hidden: true 
-                    }, {
-                        id: 'status_id',
-                        header: this.translation._("Status"),
-                        width: 45,
-                        sortable: true,
-                        dataIndex: 'status_id',
-                        renderer: Tine.Tasks.status.getStatusIcon
-                    }, {
-                        id: 'percent',
-                        header: this.translation._("Percent"),
-                        width: 60,
-                        sortable: true,
-                        dataIndex: 'percent',
-                        renderer: Ext.ux.PercentRenderer
-                    }, {
-                        id: 'summary',
-                        header: this.translation._("Summary"),
-                        width: 200,
-                        sortable: true,
-                        dataIndex: 'summary'
-                    }, {
-                        // @todo fix date & add again
-                        id: 'due',
-                        header: this.translation._("Due date"),
-                        width: 80,
-                        sortable: true,
-                        dataIndex: 'due',
-                        hidden: true,
-                        renderer: Tine.Tinebase.Common.dateRenderer
-                    }, {
-                        // @todo add again ?
-                        id: 'creator',
-                        header: this.translation._("Creator"),
-                        width: 130,
-                        sortable: true,
-                        hidden: true,
-                        dataIndex: 'creator'
-                    }, {
-                        // @todo add again ?
-                        id: 'description',
-                        header: this.translation._("Description"),
-                        width: 240,
-                        sortable: false,
-                        dataIndex: 'description',
-                        hidden: true
-                    }                               
-                ]);                       	
+                var columnModel = [{
+                    id: 'status_id',
+                    header: this.translation._("Status"),
+                    width: 45,
+                    sortable: true,
+                    dataIndex: 'status_id',
+                    renderer: Tine.Tasks.status.getStatusIcon,
+                    editor: new Tine.Tasks.status.ComboBox({
+                        autoExpand: true,
+                        blurOnSelect: true,
+                        listClass: 'x-combo-list-small'
+                    }),
+                    quickaddField: new Tine.Tasks.status.ComboBox({
+                        autoExpand: true
+                    })
+                },
+                {
+                    id: 'percent',
+                    header: this.translation._("Percent"),
+                    width: 50,
+                    sortable: true,
+                    dataIndex: 'percent',
+                    renderer: Ext.ux.PercentRenderer,
+                    editor: new Ext.ux.PercentCombo({
+                        autoExpand: true,
+                        blurOnSelect: true
+                    }),
+                    quickaddField: new Ext.ux.PercentCombo({
+                        autoExpand: true
+                    })
+                },
+                {
+                    id: 'summary',
+                    header: this.translation._("Summary"),
+                    width: 100,
+                    sortable: true,
+                    dataIndex: 'summary',
+                    //editor: new Ext.form.TextField({
+                    //  allowBlank: false
+                    //}),
+                    quickaddField: new Ext.form.TextField({
+                        emptyText: this.translation._('Add a task...')
+                    })
+                },
+                {
+                    id: 'priority',
+                    header: this.translation._("Priority"),
+                    width: 45,
+                    sortable: true,
+                    dataIndex: 'priority',
+                    renderer: Tine.widgets.Priority.renderer,
+                    editor: new Tine.widgets.Priority.Combo({
+                        allowBlank: false,
+                        autoExpand: true,
+                        blurOnSelect: true
+                    }),
+                    quickaddField: new Tine.widgets.Priority.Combo({
+                        autoExpand: true
+                    })
+                },
+                {
+                    id: 'due',
+                    header: this.translation._("Due Date"),
+                    width: 55,
+                    sortable: true,
+                    dataIndex: 'due',
+                    renderer: Tine.Tinebase.Common.dateRenderer,
+                    editor: new Ext.ux.form.ClearableDateField({
+                        //format : 'd.m.Y'
+                    }),
+                    quickaddField: new Ext.ux.form.ClearableDateField({
+                        //value: new Date(),
+                        //format : "d.m.Y"
+                    })
+                }];
                 
             	var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
@@ -1247,8 +1256,40 @@ Tine.Crm.LeadEditDialog = {
                 clicksToEdit: 'auto'
             });            
             
-        } else {
-        	// @todo make the other gris quickadd/editor grids as well
+        } else if ( _type === 'Tasks') {
+            var grid = new Ext.ux.grid.QuickaddGridPanel({
+                title: _title,
+                id: 'crmGrid' + _type,
+                border: false,
+                store: gridStore,
+                clicksToEdit: 'auto',
+                bbar: bbarItems,
+                enableColumnHide:false,
+                enableColumnMove:false,
+                //region:'center',
+                sm: rowSelectionModel,
+                loadMask: true,
+                quickaddMandatory: 'summary',
+                autoExpandColumn: 'summary',
+                columns: columnModel,
+                view: new Ext.grid.GridView({
+                    autoFill: true,
+                    forceFit:true,
+                    ignoreAdd: true,
+                    emptyText: this.translation._('No Tasks to display')
+                })
+            });
+            
+            grid.on('newentry', function(taskData){
+                // add new task to store
+                var gridStore = Ext.StoreMgr.lookup('TasksStore');      
+                var newData = [taskData];
+                gridStore.loadData(newData, true);
+
+                return true;
+            }, this);
+            
+        } else {        	
             var grid = {
                 xtype:'grid',
                 id: 'crmGrid' + _type,
@@ -1258,7 +1299,7 @@ Tine.Crm.LeadEditDialog = {
                 selModel: rowSelectionModel,
                 autoExpandColumn: autoExpand,
                 bbar: bbarItems
-            };                	
+            };
         }
         	
         if ( _type === 'Products' ) {
