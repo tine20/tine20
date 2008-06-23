@@ -45,11 +45,16 @@ class Tinebase_Controller
     private function __construct()
     {
         Zend_Session::start();
-        try {
-            $this->_config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-            Zend_Registry::set('configFile', $this->_config);
-        } catch (Zend_Config_Exception $e) {
-            die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
+
+        if(file_exists(require dirname(__FILE__) . '/../config.inc.php')) {
+            $config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
+        } else {
+            try {
+                $this->_config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+                Zend_Registry::set('configFile', $this->_config);
+            } catch (Zend_Config_Exception $e) {
+                die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
+            }
         }
         
         // Timezones must be setup before logger, as logger has timehandling!
