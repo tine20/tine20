@@ -42,20 +42,20 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 
         $view->setScriptPath('Tinebase/views');
 
-        try {
-            $loginConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'login');
+        if(isset(Zend_Registry::get('configFile')->login)) {
+            $loginConfig = Zend_Registry::get('configFile')->login;
             $view->defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
             $view->defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
-        } catch (Zend_Config_Exception $e) {
+        } else {
             $view->defaultUsername = '';
             $view->defaultPassword = '';
         }
 
         // check if registration is active
-        try {
-            $registrationConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
+        if(isset(Zend_Registry::get('configFile')->login)) {
+            $registrationConfig = Zend_Registry::get('configFile')->registration;
             $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
-        } catch (Zend_Config_Exception $e) {
+        } else {
             $view->userRegistration = 0;
         }
         
