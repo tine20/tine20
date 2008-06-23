@@ -46,7 +46,7 @@ class Tinebase_Controller
     {
         Zend_Session::start();
 
-        if(file_exists(require dirname(__FILE__) . '/../config.inc.php')) {
+        if(file_exists(dirname(__FILE__) . '/../config.inc.php')) {
             $config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
         } else {
             try {
