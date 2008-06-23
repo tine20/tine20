@@ -794,21 +794,13 @@ Tine.Crm.LeadEditDialog = {
          */
         linkContact: function(_button, _event)
         {
+        	// create new contact search grid
+        	contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
         	
-        	Ext.getCmp('linkPanel').activate(Ext.getCmp('crmGridContactsSearch'));
-        	Ext.getCmp('linkPanel').unhideTabStripItem(Ext.getCmp('crmGridContactsSearch'));
-        },
-
-        
-        /**
-         * showContactList
-         * 
-         * jump back to contact list tab
-         * @deprecated
-         */
-        showContactList: function(_button, _event)
-        {
-            Ext.getCmp('linkPanel').activate(Ext.getCmp('crmGridContacts'));
+        	// add grid to tabpanel
+        	var tabPanel = Ext.getCmp('linkPanel');
+        	tabPanel.add(contactSearchGrid);
+            Ext.getCmp('linkPanel').activate(contactSearchGrid);            	
         },
 
         /**
@@ -1116,7 +1108,6 @@ Tine.Crm.LeadEditDialog = {
                 storeName = 'ContactsStore';
                 
                 var bbarItems = [
-                    //this.actions.showContactList
                 ];
 
                 
@@ -1240,7 +1231,7 @@ Tine.Crm.LeadEditDialog = {
                 bbarItems: bbarItems,
                 closable: true
             });
-        	
+            
         } else if ( _type === 'Contacts' ) {
             var grid = new Ext.grid.EditorGridPanel({
                 id: 'crmGrid' + _type,
@@ -1499,18 +1490,6 @@ Tine.Crm.LeadEditDialog = {
             handler: this.handlers.unlink
         });
         
-        // @deprecated
-        /*
-        this.actions.showContactList = new Ext.Action({
-            text: this.translation._('Show contact list'),
-            tooltip: this.translation._('Show contact list'),
-            disabled: false,
-            iconCls: 'contactIconCustomer',
-            scope: this,
-            handler: this.handlers.showContactList
-        });
-        */
-
         // tasks
         this.actions.addTask = new Ext.Action({
             text: this.translation._('Add task'),
@@ -1615,8 +1594,8 @@ Tine.Crm.LeadEditDialog = {
             items: Tine.Crm.LeadEditDialog.getEditForm([
                         this.getLinksGrid('Contacts', this.translation._('Contacts')),
                         this.getLinksGrid('Tasks', this.translation._('Tasks')),
-                        this.getLinksGrid('Products', this.translation._('Products')),
-                        this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'))
+                        this.getLinksGrid('Products', this.translation._('Products'))
+                        //,this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'))
                     ])             
         });
 
@@ -1636,9 +1615,6 @@ Tine.Crm.LeadEditDialog = {
             id: 'editViewport',
             items: leadEdit
         });
-
-        // hide contacts search tab item
-        Ext.getCmp('linkPanel').hideTabStripItem(Ext.getCmp('crmGridContactsSearch')); 
 
         leadEdit.getForm().loadRecord(lead);
                 
