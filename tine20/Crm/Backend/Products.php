@@ -41,22 +41,6 @@ class Crm_Backend_Products extends Tinebase_Abstract_SqlTableBackend
     }
     
     /**
-     * get available products
-     * 
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
-     */
-    public function _getAll($_sort = 'id', $_dir = 'ASC')
-    {   
-        $rows = $this->_table->fetchAll(NULL, $_sort, $_dir);
-        
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
-        
-        return $result;
-    }   
-    
-    /**
      * add or updates an option
      *
      * @param Crm_Record_Recordset $_optionData the optiondata
