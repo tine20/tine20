@@ -804,6 +804,7 @@ Tine.Crm.LeadEditDialog = {
          * showContactList
          * 
          * jump back to contact list tab
+         * @deprecated
          */
         showContactList: function(_button, _event)
         {
@@ -1003,19 +1004,6 @@ Tine.Crm.LeadEditDialog = {
                 // @todo   move that to renderer/addressbook ?
                 var columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
-                    {
-                        id:'link_remark', 
-                        header: this.translation._("Type"), 
-                        dataIndex: 'link_remark', 
-                        width: 75, 
-                        sortable: true,
-                        renderer: Tine.Crm.contactType.Renderer,
-                        editor: new Tine.Crm.contactType.ComboBox({
-                            autoExpand: true,
-                            blurOnSelect: true,
-                            listClass: 'x-combo-list-small'
-                        })
-                    },
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                         function(val, meta, record) {
                             var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
@@ -1034,14 +1022,30 @@ Tine.Crm.LeadEditDialog = {
                         }
                     },
                     {id:'tel_work', header: this.translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
-                        var formated_return = '<table>' + 
+                        var formated_return = ''
+                        /*var formated_return = '<table>' + 
                             '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_work) + '</td></tr>' + 
                             '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '</td></tr>' + 
                             '</table>';
-                        
-                            return formated_return;
-                        }
-                    }    
+                        */
+                        var formated_return = 'Phone: ' + Ext.util.Format.htmlEncode(record.data.tel_work) + '<br/>' + 
+                            'Cellphone: ' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '<br/>';
+                        return formated_return;
+                        }                        
+                    },    
+                    {
+                        id:'link_remark', 
+                        header: this.translation._("Type"), 
+                        dataIndex: 'link_remark', 
+                        width: 75, 
+                        sortable: true,
+                        renderer: Tine.Crm.contactType.Renderer,
+                        editor: new Tine.Crm.contactType.ComboBox({
+                            autoExpand: true,
+                            blurOnSelect: true,
+                            listClass: 'x-combo-list-small'
+                        })
+                    }
                 ]);
                 
                 var autoExpand = 'n_fileas';                        
@@ -1495,6 +1499,8 @@ Tine.Crm.LeadEditDialog = {
             handler: this.handlers.unlink
         });
         
+        // @deprecated
+        /*
         this.actions.showContactList = new Ext.Action({
             text: this.translation._('Show contact list'),
             tooltip: this.translation._('Show contact list'),
@@ -1503,6 +1509,7 @@ Tine.Crm.LeadEditDialog = {
             scope: this,
             handler: this.handlers.showContactList
         });
+        */
 
         // tasks
         this.actions.addTask = new Ext.Action({
