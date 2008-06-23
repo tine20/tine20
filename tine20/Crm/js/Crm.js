@@ -641,6 +641,7 @@ Tine.Crm.LeadEditDialog = {
         addResponsible: null,
         addCustomer: null,
         addPartner: null,
+        addContact: null,
         editContact: null,
         linkContact: null,
         unlinkContact: null,
@@ -790,17 +791,18 @@ Tine.Crm.LeadEditDialog = {
         /**
          * linkContact
          * 
-         * link an existing contact, open 'object' picker dialog
+         * link an existing contact -> create and activate contact picker/search dialog
+         * @todo    add bigger & better search dialog later
          */
         linkContact: function(_button, _event)
         {
         	// create new contact search grid
         	contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
         	
-        	// add grid to tabpanel
-        	var tabPanel = Ext.getCmp('linkPanel');
-        	tabPanel.add(contactSearchGrid);
-            Ext.getCmp('linkPanel').activate(contactSearchGrid);            	
+        	// add grid to tabpanel & activate
+        	var linkTabPanel = Ext.getCmp('linkPanel');
+        	linkTabPanel.add(contactSearchGrid);
+            linkTabPanel.activate(contactSearchGrid);            	
         },
 
         /**
@@ -1059,9 +1061,10 @@ Tine.Crm.LeadEditDialog = {
                     }
                 }, this);
                 
-                var bbarItems = [
+                var bbarItems = [                
                     this.actions.linkContact,
-                    {
+                    this.actions.addContact
+                    /*{
                         text: this.translation._('Add new contact'),
                         iconCls: 'actionAdd',
                         menu: {
@@ -1071,7 +1074,7 @@ Tine.Crm.LeadEditDialog = {
                                 this.actions.addPartner
                             ]
                         }
-                    }
+                    }*/
                 ]; 
                 
                 break;
@@ -1279,6 +1282,8 @@ Tine.Crm.LeadEditDialog = {
                 var addNewItems = {
                     text: this.translation._('Add new contact'),
                     iconCls: 'actionAdd',
+                    contactType: 'partner',
+                    handler: this.handlers.addContact,
                     menu: {
                         items: [
                             this.actions.addResponsible,
@@ -1462,6 +1467,22 @@ Tine.Crm.LeadEditDialog = {
             handler: this.handlers.addContact
         });
 
+        // split button with all contact types
+        this.actions.addContact = new Ext.SplitButton({
+            contactType: 'customer',
+            text: this.translation._('Add new contact'),
+            tooltip: this.translation._('Add new customer contact'),
+            iconCls: 'actionAdd',
+            handler: this.handlers.addContact,
+            menu: {
+                items: [
+                    this.actions.addResponsible,
+                    this.actions.addCustomer,
+                    this.actions.addPartner
+                ]
+            }
+        }); 
+        
         this.actions.editContact = new Ext.Action({
             text: this.translation._('Edit contact'),
             tooltip: this.translation._('Edit selected contact'),
