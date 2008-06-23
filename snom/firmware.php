@@ -20,9 +20,9 @@ Zend_Loader::registerAutoload();
 $config = new Zend_Config(require dirname(__FILE__) . '/config.inc.php');
 
 Zend_Registry::set('config', $config);
-define(SQL_TABLE_PREFIX, (isset($config->database->params->tableprefix) ? $config->database->params->tableprefix : ''));
+define(SQL_TABLE_PREFIX, (isset($config->database->tableprefix) ? $config->database->tableprefix : ''));
 
-$db = Zend_Db::factory($config->database->adapter, $config->database->params->toArray());
+$db = Zend_Db::factory($config->database->adapter, $config->database->toArray());
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
 $phoneBackend = new Voipmanager_Backend_Snom_Phone();
