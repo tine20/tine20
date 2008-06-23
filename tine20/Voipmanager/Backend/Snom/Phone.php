@@ -130,7 +130,6 @@ class Voipmanager_Backend_Snom_Phone
         return $this->get($_phone);
     }
     
-    
     /**
      * update an existing phone
      *
@@ -177,5 +176,32 @@ class Voipmanager_Backend_Snom_Phone
             $this->_db->rollBack();
             throw $e;
         }
-    }    
+    }
+        
+    /**
+     * update an existing phone
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone the phonedata
+     * @return Voipmanager_Model_SnomPhone
+     */
+    public function updateStatus(Voipmanager_Model_SnomPhone $_phone)
+    {
+        if (! $_phone->isValid()) {
+            throw new Exception('invalid phone');
+        }
+        $phoneId = $_phone->getId();
+        $phoneData = $_phone->toArray();
+        $statusData = array(
+            'ipaddress'             => $_phone->ipaddress,
+            'current_software'      => $_phone->current_software,
+            'current_model'         => $_phone->current_model,
+            'settings_loaded_at'    => $phoneData['settings_loaded_at'],
+            'firmware_checked_at'   => $phoneData['firmware_checked_at']
+        );
+
+        $where = array($this->_db->quoteInto('id = ?', $phoneId));
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $statusData, $where);
+        
+        return $this->get($_phone);
+    }        
 }
