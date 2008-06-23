@@ -1281,11 +1281,37 @@ Tine.Crm.LeadEditDialog = {
             });
             
             grid.on('newentry', function(taskData){
-                // add new task to store
-                var gridStore = Ext.StoreMgr.lookup('TasksStore');      
-                var newData = [taskData];
-                gridStore.loadData(newData, true);
 
+            	// @todo change that later -> we don't need this ajax request 
+            	// because the new tasks should only be saved on "apply" or "saveandclose"            	
+
+                // add new task to store
+            	/*
+                var gridStore = Ext.StoreMgr.lookup('TasksStore');      
+                var newTask = [taskData];
+                gridStore.loadData(newTask, true);
+                */
+            	
+                var gridStore = Ext.StoreMgr.lookup('TasksStore');                  	
+                var task = new Tine.Tasks.Task(taskData);
+    
+                Ext.Ajax.request({
+                    scope: this,
+                    params: {
+                        method: 'Tasks.saveTask', 
+                        task: Ext.util.JSON.encode(task.data),
+                        linkingApp: '',
+                        linkedId: ''
+                    },
+                    success: function(_result, _request) {
+                    	var newTask = [Ext.util.JSON.decode(_result.responseText)];
+                        gridStore.loadData(newTask, true);
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
+                    }
+                });
+            	
                 return true;
             }, this);
             
