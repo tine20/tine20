@@ -1,3 +1,15 @@
+/**
+ * Tine 2.0
+ * 
+ * @package     Crm
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+
+/****************** lead edit dialog layout ************************/
 
 /**
  * Lead Edit Dialog
@@ -267,6 +279,8 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
     ];
 };
 
+/*********************** crm widgets ************************/
+
 Ext.namespace('Tine.Crm', 'Tine.Crm.contactType');
 
 /**
@@ -287,7 +301,6 @@ Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
     valueField: 'link_remark',
     mode: 'local',
     triggerAction: 'all',
-    //emptyText: 'percent ...',
     lazyInit: false,
     
     //private
