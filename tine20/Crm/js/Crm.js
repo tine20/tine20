@@ -1416,6 +1416,19 @@ Tine.Crm.LeadEditDialog = {
             	
                 return true;
             }, this);
+            
+            // hack to get percentage editor working
+            grid.on('rowclick', function(grid,row,e) {
+                var cell = Ext.get(grid.getView().getCell(row,1));
+                var dom = cell.child('div:last');
+                while (cell.first()) {
+                    cell = cell.first();
+                    cell.on('click', function(e){
+                        e.stopPropagation();
+                        grid.fireEvent('celldblclick', grid, row, 1, e);
+                    });
+                }
+            }, this);            
 
         } else if ( _type === 'Products') {
             var grid = new Ext.ux.grid.QuickaddGridPanel({
