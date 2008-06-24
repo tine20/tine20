@@ -179,7 +179,12 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'containerType' => 'all',
             'query' => $this->objects['initialLead']->lead_name     
         );
-        
+
+        $this->objects['productLink'] = array(
+            'product_id'        => 1001,
+            'product_desc'      => 'test product',
+            'product_price'     => 4000.44
+        );
     }
 
     /**
@@ -218,6 +223,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $leadData['responsible'] = array($contact->getId());
         $leadData['tasks'] = array($task->getId());
         $leadData['tags'] = Zend_Json::encode(array());
+        $leadData['products'] = array($this->objects['productLink']);
         
         $encodedData = Zend_Json::encode($leadData);
         
@@ -225,7 +231,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         //print_r ( $result );
         
-        $this->assertTrue($result['success']); 
+        $this->assertTrue($result['success'], 'saving of lead failed'); 
         $this->assertEquals($this->objects['initialLead']->description, $result['updatedData']['description']);
         $leadId = $result['updatedData']['id'];
 
@@ -236,6 +242,10 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         // check linked tasks
         $this->assertGreaterThan(0, count($result['updatedData']['tasks']));
         $this->assertEquals($task->getId(), $result['updatedData']['tasks'][0]);
+
+        // check linked products
+        $this->assertGreaterThan(0, count($result['updatedData']['products']));
+        $this->assertEquals($this->objects['productLink']['product_desc'], $result['updatedData']['products'][0]['product_desc']);
     }
 
     /**
@@ -254,6 +264,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
         $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);                
+        $this->assertEquals( $lead['products'][0]['product_desc'], $this->objects['productLink']['product_desc']);
     }
 
     /**
