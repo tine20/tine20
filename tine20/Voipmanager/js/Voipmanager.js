@@ -474,7 +474,7 @@ Tine.Voipmanager.Data = {
 
         var templateDataStore = new Ext.data.JsonStore({
           baseParams: {
-                method: 'Voipmanager.getTemplates',
+                method: 'Voipmanager.getSnomTemplates',
                 sort: 'name',
                 dir: 'ASC',
                 query: ''
@@ -502,7 +502,7 @@ Tine.Voipmanager.Data = {
 
         var locationDataStore = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Voipmanager.getLocation',
+                method: 'Voipmanager.getSnomLocations',
                 sort: 'name',
                 dir: 'ASC',
                 query: ''
@@ -555,7 +555,7 @@ Tine.Voipmanager.Data = {
 
         var keylayoutDataStore = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Voipmanager.getKeylayout',
+                method: 'Voipmanager.getSnomKeylayouts',
                 sort: 'description',
                 dir: 'ASC'
             },
@@ -583,7 +583,7 @@ Tine.Voipmanager.Data = {
 
         var settingsDataStore = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Voipmanager.getSettings',
+                method: 'Voipmanager.getSnomSettings',
                 sort: 'description',
                 dir: 'ASC'
             },

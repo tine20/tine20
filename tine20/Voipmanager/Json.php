@@ -32,7 +32,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-    public function getPhones($sort, $dir, $query)
+    public function getSnomPhones($sort, $dir, $query)
     {     
   
         $result = array(
@@ -40,7 +40,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getPhones($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->getSnomPhones($sort, $dir, $query)) {
         
             $_rows = $rows->toArray();
 
@@ -48,13 +48,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
                   
             foreach($_rows AS $_row)
             {
-                if($location_row = Voipmanager_Controller::getInstance()->getLocationById($_row['location_id']))
+                if($location_row = Voipmanager_Controller::getInstance()->getSnomLocation($_row['location_id']))
                 {
                     $_location = $location_row->toArray();
                     $_rows[$i]['location'] = $_location['name'];
                 }
                 
-                if($template_row = Voipmanager_Controller::getInstance()->getTemplateById($_row['template_id']))
+                if($template_row = Voipmanager_Controller::getInstance()->getSnomTemplate($_row['template_id']))
                 {
                     $_template = $template_row->toArray();                                        
                     $_rows[$i]['template'] = $_template['name'];
@@ -77,7 +77,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $phoneId
      * @return array
      */
-    public function getPhoneById($phoneId)
+    public function getSnomPhone($phoneId)
     {
         $result = array(
             'success'   => true
@@ -97,7 +97,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_phoneIDs list of phoneId's to delete
      * @return array
      */
-    public function deletePhones($_phoneIds)
+    public function deleteSnomPhones($_phoneIds)
     {
         $result = array(
             'success'   => TRUE
@@ -105,7 +105,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $phoneIds = Zend_Json::decode($_phoneIds);
         
-        Voipmanager_Controller::getInstance()->deletePhones($phoneIds);
+        Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds);
 
         return $result;
     }    
@@ -140,7 +140,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         } else {
             $phone = Voipmanager_Controller::getInstance()->updateSnomPhone($phone);
         }
-        $phone = $this->getPhoneById($phone->getId());
+        $phone = $this->getSnomPhone($phone->getId());
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $phone
@@ -159,14 +159,14 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-    public function getLocation($sort, $dir, $query)
+    public function getSnomLocations($sort, $dir, $query)
     {     
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getLocation($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->getSnomLocations($sort, $dir, $query)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -180,13 +180,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $locationId
      * @return array
      */
-    public function getLocationById($locationId)
+    public function getSnomLocation($locationId)
     {
         $result = array(
             'success'   => true
         );
 
-        $location = Voipmanager_Controller::getInstance()->getLocationById($locationId);
+        $location = Voipmanager_Controller::getInstance()->getSnomLocation($locationId);
         
         $result = $location->toArray();        
         return $result;
@@ -202,7 +202,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $locationData a JSON encoded array of location properties
      * @return array
      */
-    public function saveLocation($locationData)
+    public function saveSnomLocation($locationData)
     {
         $locationData = Zend_Json::decode($locationData);
         Zend_Registry::get('logger')->debug(print_r($locationData,true));
@@ -212,15 +212,15 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             unset($locationData['id']);
         }
 
-        $location = new Voipmanager_Model_Location();
+        $location = new Voipmanager_Model_SnomLocation();
         $location->setFromArray($locationData);
         
         if (empty($location->id)) {
-            $location = Voipmanager_Controller::getInstance()->addLocation($location);
+            $location = Voipmanager_Controller::getInstance()->addSnomLocation($location);
         } else {
-            $location = Voipmanager_Controller::getInstance()->updateLocation($location);
+            $location = Voipmanager_Controller::getInstance()->updateSnomLocation($location);
         }
-        $location = $this->getLocationById($location->getId());
+        $location = $this->getSnomLocation($location->getId());
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $location
@@ -239,7 +239,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_locationIDs list of locationId's to delete
      * @return array
      */
-    public function deleteLocations($_locationIds)
+    public function deleteSnomLocations($_locationIds)
     {
         $result = array(
             'success'   => TRUE
@@ -247,7 +247,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $locationIds = Zend_Json::decode($_locationIds);
         
-        Voipmanager_Controller::getInstance()->deleteLocations($locationIds);
+        Voipmanager_Controller::getInstance()->deleteSnomLocations($locationIds);
 
         return $result;
     }        
@@ -294,24 +294,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     }         
 
 
-   /**
-     * get softwareImages identified by softwareImageId
-     *
-     * @param int $softwareImageId
-     * @return array
-     */
-    public function getSoftwareImagesById($softwareImageId)
-    {
-        $result = array(
-            'success'   => true
-        );
-
-        $softwareImage = Voipmanager_Controller::getInstance()->getSoftwareImageById($softwareImageId);
-        
-        $result = $softwareImage->toArray();        
-        return $result;
-    } 
-
     /**
      * add/update software
      *
@@ -335,9 +317,9 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $software->setFromArray($softwareData);
         
         if ( empty($software->id) ) {
-            $software = Voipmanager_Controller::getInstance()->addSoftware($software);
+            $software = Voipmanager_Controller::getInstance()->addSnomSoftware($software);
         } else {
-            $software = Voipmanager_Controller::getInstance()->updateSoftware($software);
+            $software = Voipmanager_Controller::getInstance()->updateSnomSoftware($software);
         }
         //$software = $this->getSoftware($software->getId());
         $result = array('success'           => true,
@@ -370,7 +352,24 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }       
         
+    /**
+     * delete multiple template entries
+     *
+     * @param array $_templateIDs list of templateId's to delete
+     * @return array
+     */
+    public function deleteSnomTemplates($_templateIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
         
+        $templateIds = Zend_Json::decode($_templateIds);
+        
+        Voipmanager_Controller::getInstance()->deleteSnomTemplates($templateIds);
+
+        return $result;
+    }          
         
         
     /**
@@ -380,7 +379,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-    public function getTemplates($sort, $dir, $query)
+    public function getSnomTemplates($sort, $dir, $query)
     {     
   
         $result = array(
@@ -388,7 +387,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getTemplates($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->getSnomTemplates($sort, $dir, $query)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -403,7 +402,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $templateId
      * @return array
      */
-    public function getTemplateById($templateId)
+    public function getSnomTemplate($templateId)
     {
         $result = array(
             'success'   => true
@@ -423,7 +422,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $templateData a JSON encoded array of template properties
      * @return array
      */
-    public function saveTemplate($templateData)
+    public function saveSnomTemplate($templateData)
     {
         $templateData = Zend_Json::decode($templateData);
         
@@ -432,13 +431,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             unset($templateData['id']);
         }
 
-        $template = new Voipmanager_Model_Template();
+        $template = new Voipmanager_Model_SnomTemplate();
         $template->setFromArray($templateData);
         
         if ( empty($template->id) ) {
-            $template = Voipmanager_Controller::getInstance()->addTemplate($template);
+            $template = Voipmanager_Controller::getInstance()->addSnomTemplate($template);
         } else {
-            $template = Voipmanager_Controller::getInstance()->updateTemplate($template);
+            $template = Voipmanager_Controller::getInstance()->updateSnomTemplate($template);
         }
 
         $result = array('success'           => true,

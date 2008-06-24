@@ -287,33 +287,8 @@ Tine.Voipmanager.Software.Main = {
     loadData: function(_node)
     {
         var dataStore = Ext.getCmp('Voipmanager_Software_Grid').getStore();
-        
-        // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.dataPanelType) {
-            case 'phones':
-                dataStore.baseParams.method = 'Voipmanager.getPhones';
-                break;
-                
-            case 'location':
-                dataStore.baseParams.method = 'Voipmanager.getLocation';
-                break;                
-
-            case 'templates':
-                dataStore.baseParams.method = 'Voipmanager.getTemplates';
-                break;  
-                
-            case 'lines':
-                dataStore.baseParams.method = 'Voipmanager.getLines';
-                break;                
-                
-            case 'settings':
-                dataStore.baseParams.method = 'Voipmanager.getSettings';
-                break;                
-                
-            case 'software':
-                dataStore.baseParams.method = 'Voipmanager.searchSnomSoftware';
-                break;                                                                
-        }
+     
+        dataStore.baseParams.method = 'Voipmanager.searchSnomSoftware';
         
         dataStore.load({
             params:{
@@ -362,7 +337,7 @@ Tine.Voipmanager.Software.EditDialog =  {
             Ext.Ajax.request({
                 url: 'index.php',
                 params: {
-                    method: 'Voipmanager.deleteSoftware', 
+                    method: 'Voipmanager.deleteSnomSoftwares', 
                     phoneIds: softwareIds
                 },
                 text: 'Deleting software...',
@@ -449,7 +424,7 @@ Tine.Voipmanager.Software.EditDialog =  {
                 //frame: true,
                 border:false,
                 width: 440,
-                height: 280,
+                autoHeight: true,
                 items: [{
                     //labelSeparator: '',
                     xtype:'textarea',
@@ -460,17 +435,10 @@ Tine.Voipmanager.Software.EditDialog =  {
                     anchor:'100%',
                     height: 60
                 }, {
-                    layout: 'column',
+                    layout: 'form',
                     border: false,
                     anchor: '100%',
-                    height: 130,
-                    items: [{
-                        columnWidth: 1,
-                        layout: 'form',
-                        border: false,
-                        anchor: '100%',
-                        items: softwareVersion
-                    }]
+                    items: softwareVersion
                 }]
             }];
         

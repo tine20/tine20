@@ -61,15 +61,15 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedAsteriskLines = Zend_Json::encode($asteriskLines->toArray());              
         } else {
             //$phone = new Voipmanager_Model_SnomPhone();
-            //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Line');
+            //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine');
             
             $encodedSnomPhone = '{}';
             $encodedSnomLines = '[]';
             $encodedAsteriskLines = '{}';
         }
 
-        $encodedTemplates = Zend_Json::encode($controller->getTemplates()->toArray());
-        $encodedLocations = Zend_Json::encode($controller->getLocation()->toArray());
+        $encodedTemplates = Zend_Json::encode($controller->getSnomTemplates()->toArray());
+        $encodedLocations = Zend_Json::encode($controller->getSnomLocations()->toArray());
         
         $currentAccount = Zend_Registry::get('currentAccount');
                 
@@ -105,9 +105,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editLine($lineId=NULL)
     {
         if (!empty($lineId)) {
-            $line = Voipmanager_Controller::getInstance()->getLineById($lineId);
+            $line = Voipmanager_Controller::getInstance()->getSnomLine($lineId);
         } else {
-            $line = new Voipmanager_Model_Line(array(
+            $line = new Voipmanager_Model_SnomLine(array(
                 'type'  => 'user'
             )); 
         }
@@ -151,9 +151,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editLocation($locationId=NULL)
     {
         if (!empty($locationId)) {
-            $location = Voipmanager_Controller::getInstance()->getLocationById($locationId);
+            $location = Voipmanager_Controller::getInstance()->getSnomLocation($locationId);
         } else {
-            $location = new Voipmanager_Model_Location(array(
+            $location = new Voipmanager_Model_SnomLocation(array(
                 'webserver_type'    => 'http',
                 'http_port'         => 80,
                 'https_port'        => 443
@@ -240,9 +240,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $controller = Voipmanager_Controller::getInstance();
 
         if (!empty($templateId)) {
-            $template = $controller->getTemplateById($templateId);
+            $template = $controller->getSnomTemplate($templateId);
         } else {
-            $template = new Voipmanager_Model_Template(array(
+            $template = new Voipmanager_Model_SnomTemplate(array(
                 'model' => 'snom320'
             ), true);
         }

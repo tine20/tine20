@@ -1,21 +1,21 @@
 <?php
 /**
- * class to hold templates data
+ * class to hold snom template data
  * 
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:  $
  *
  */
 
 /**
- * class to hold templates data
+ * class to hold snom template data
  * 
  * @package     Voipmanager Management
  */
-class Voipmanager_Model_Template extends Tinebase_Record_Abstract
+class Voipmanager_Model_SnomTemplate extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -66,9 +66,9 @@ class Voipmanager_Model_Template extends Tinebase_Record_Abstract
      * @param int|string|Voipmanager_Model_Template $_templateId the template id to convert
      * @return int
      */
-    static public function convertTemplateIdToInt($_templateId)
+    static public function convertSnomTemplateIdToInt($_templateId)
     {
-        if ($_templateId instanceof Voipmanager_Model_Template) {
+        if ($_templateId instanceof Voipmanager_Model_SnomTemplate) {
             if (empty($_templateId->id)) {
                 throw new Exception('no template id set');
             }

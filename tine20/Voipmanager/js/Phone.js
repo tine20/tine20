@@ -56,7 +56,7 @@ Tine.Voipmanager.Phones.Main = {
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
-                            method: 'Voipmanager.deletePhones',
+                            method: 'Voipmanager.deleteSnomPhones',
                             _phoneIds: phoneIds
                         },
                         text: 'Deleting phone(s)...',
@@ -315,34 +315,9 @@ Tine.Voipmanager.Phones.Main = {
     loadData: function(_node)
     {
         var dataStore = Ext.getCmp('Voipmanager_Phones_Grid').getStore();
-        
-        // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.dataPanelType) {
-            case 'phones':
-                dataStore.baseParams.method = 'Voipmanager.getPhones';
-                break;
-                
-            case 'location':
-                dataStore.baseParams.method = 'Voipmanager.getLocation';
-                break;                
-                
-            case 'templates':
-                dataStore.baseParams.method = 'Voipmanager.getTemplates';
-                break;                 
-                
-            case 'lines':
-                dataStore.baseParams.method = 'Voipmanager.getLines';
-                break;                
-                
-            case 'settings':
-                dataStore.baseParams.method = 'Voipmanager.getSettings';
-                break;                
-                
-            case 'software':
-                dataStore.baseParams.method = 'Voipmanager.searchSnomSoftware';
-                break;                                                                
-        }
-        
+
+        dataStore.baseParams.method = 'Voipmanager.getSnomPhones';
+
         dataStore.load({
             params:{
                 start:0, 
@@ -401,7 +376,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
             Ext.Ajax.request({
                 url: 'index.php',
                 params: {
-                    method: 'Voipmanager.deletePhones', 
+                    method: 'Voipmanager.deleteSnomPhones', 
                     phoneIds: phoneIds
                 },
                 text: 'Deleting phone...',

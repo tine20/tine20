@@ -145,7 +145,11 @@ class Voipmanager_Backend_Snom_Line
         try {
             $this->_db->beginTransaction();
 
-            $this->_db->delete(SQL_TABLE_PREFIX . 'snom_lines', $where);
+            // NOTE: using array for second argument won't work as delete function joins array items using "AND"
+            foreach($where AS $where_atom)
+            {
+                $this->_db->delete(SQL_TABLE_PREFIX . 'snom_lines', $where_atom);
+            }
 
             $this->_db->commit();
         } catch (Exception $e) {

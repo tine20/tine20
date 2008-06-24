@@ -324,34 +324,8 @@ Tine.Voipmanager.Lines.Main = {
     loadData: function(_node)
     {
         var dataStore = Ext.getCmp('Voipmanager_Lines_Grid').getStore();
-        
-        // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.dataPanelType) {
-            case 'phones':
-                dataStore.baseParams.method = 'Voipmanager.getPhones';
-                break;
-                
-            case 'location':
-                dataStore.baseParams.method = 'Voipmanager.getLocation';
-                break;                
-                
-            case 'templates':
-                dataStore.baseParams.method = 'Voipmanager.getTemplates';
-                break;                 
-                
-            case 'lines':
-                dataStore.baseParams.method = 'Voipmanager.getLines';
-                break;                
-                
-            case 'settings':
-                dataStore.baseParams.method = 'Voipmanager.getSettings';
-                break;                
-                
-            case 'software':
-                dataStore.baseParams.method = 'Voipmanager.searchSnomSoftware';
-                break;                                                                
-        }
-        
+    
+        dataStore.baseParams.method = 'Voipmanager.getLines';
         dataStore.load({
             params:{
                 start:0, 

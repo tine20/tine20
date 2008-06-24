@@ -56,7 +56,7 @@ Tine.Voipmanager.Templates.Main = {
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
-                            method: 'Voipmanager.deleteTemplates',
+                            method: 'Voipmanager.deleteSnomTemplates',
                             _templateIds: templateIds
                         },
                         text: 'Deleting template...',
@@ -283,34 +283,9 @@ Tine.Voipmanager.Templates.Main = {
     loadData: function(_node)
     {
         var dataStore = Ext.getCmp('Voipmanager_Template_Grid').getStore();
-        
-        // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.dataPanelType) {
-            case 'phones':
-                dataStore.baseParams.method = 'Voipmanager.getPhones';
-                break;
-                
-            case 'location':
-                dataStore.baseParams.method = 'Voipmanager.getLocation';
-                break;                
-
-            case 'templates':
-                dataStore.baseParams.method = 'Voipmanager.getTemplates';
-                break;  
-                
-            case 'lines':
-                dataStore.baseParams.method = 'Voipmanager.getLines';
-                break;                
-                
-            case 'settings':
-                dataStore.baseParams.method = 'Voipmanager.getSettings';
-                break;                
-                
-            case 'software':
-                dataStore.baseParams.method = 'Voipmanager.searchSnomSoftware';
-                break;                                                                
-        }
-        
+   
+        dataStore.baseParams.method = 'Voipmanager.getSnomTemplates';
+   
         dataStore.load({
             params:{
                 start:0, 
@@ -357,7 +332,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
             Ext.Ajax.request({
                 url: 'index.php',
                 params: {
-                    method: 'Voipmanager.deleteTemplate', 
+                    method: 'Voipmanager.deleteSnomTemplates', 
                     phoneIds: templateIds
                 },
                 text: 'Deleting template...',
@@ -380,7 +355,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
         
                 Ext.Ajax.request({
                     params: {
-                        method: 'Voipmanager.saveTemplate', 
+                        method: 'Voipmanager.saveSnomTemplate', 
                         templateData: Ext.util.JSON.encode(this.templateRecord.data)
                     },
                     success: function(_result, _request) {

@@ -56,7 +56,7 @@ Tine.Voipmanager.Location.Main = {
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
-                            method: 'Voipmanager.deleteLocations',
+                            method: 'Voipmanager.deleteSnomLocations',
                             _locationIds: locationIds
                         },
                         text: 'Deleting location...',
@@ -298,32 +298,7 @@ Tine.Voipmanager.Location.Main = {
     {
         var dataStore = Ext.getCmp('Voipmanager_Location_Grid').getStore();
         
-        // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.dataPanelType) {
-            case 'phones':
-                dataStore.baseParams.method = 'Voipmanager.getPhones';
-                break;
-                
-            case 'location':
-                dataStore.baseParams.method = 'Voipmanager.getLocation';
-                break;                
-
-            case 'templates':
-                dataStore.baseParams.method = 'Voipmanager.getTemplates';
-                break;  
-                
-            case 'lines':
-                dataStore.baseParams.method = 'Voipmanager.getLines';
-                break;                
-                
-            case 'settings':
-                dataStore.baseParams.method = 'Voipmanager.getSettings';
-                break;                
-                
-            case 'software':
-                dataStore.baseParams.method = 'Voipmanager.searchSnomSoftware';
-                break;                                                                
-        }
+        dataStore.baseParams.method = 'Voipmanager.getSnomLocations';
         
         dataStore.load({
             params:{
@@ -391,7 +366,7 @@ Tine.Voipmanager.Location.EditDialog =  {
             Ext.Ajax.request({
                 url: 'index.php',
                 params: {
-                    method: 'Voipmanager.deleteLocation', 
+                    method: 'Voipmanager.deleteSnomLocations', 
                     locationIds: locationIds
                 },
                 text: 'Deleting location...',
@@ -414,7 +389,7 @@ console.log(this.locationRecord);
         
                 Ext.Ajax.request({
                     params: {
-                        method: 'Voipmanager.saveLocation', 
+                        method: 'Voipmanager.saveSnomLocation', 
                         locationData: Ext.util.JSON.encode(this.locationRecord.data)
                     },
                     success: function(_result, _request) {

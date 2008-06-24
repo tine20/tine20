@@ -1,21 +1,21 @@
 <?php
 /**
- * class to hold location data
+ * class to hold snom location data
  * 
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:  $
  *
  */
 
 /**
- * class to hold location data
+ * class to hold snom location data
  * 
  * @package     Voipmanager Management
  */
-class Voipmanager_Model_Location extends Tinebase_Record_Abstract
+class Voipmanager_Model_SnomLocation extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -72,14 +72,14 @@ class Voipmanager_Model_Location extends Tinebase_Record_Abstract
     );
 
     /**
-     * converts a int, string or Voipmanager_Model_Location to an location id
+     * converts a int, string or Voipmanager_Model_SnomLocation to an location id
      *
-     * @param int|string|Voipmanager_Model_Location $_locationId the location id to convert
+     * @param int|string|Voipmanager_Model_SnomLocation $_locationId the location id to convert
      * @return int
      */
-    static public function convertLocationIdToInt($_locationId)
+    static public function convertSnomLocationIdToInt($_locationId)
     {
-        if ($_locationId instanceof Voipmanager_Model_Location) {
+        if ($_locationId instanceof Voipmanager_Model_SnomLocation) {
             if (empty($_locationId->id)) {
                 throw new Exception('no location id set');
             }
@@ -91,7 +91,6 @@ class Voipmanager_Model_Location extends Tinebase_Record_Abstract
         if ($id == '') {
             throw new Exception('location id can not be 0');
         }
-        
         return $id;
     }
 
