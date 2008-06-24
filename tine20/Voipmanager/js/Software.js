@@ -180,7 +180,7 @@ Tine.Voipmanager.Software.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
-            _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
+            /*_dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();*/
         }, this);   
         
         //Ext.StoreMgr.add('SoftwareStore', dataStore);
