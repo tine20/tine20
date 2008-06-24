@@ -105,9 +105,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editLine($lineId=NULL)
     {
         if (!empty($lineId)) {
-            $line = Voipmanager_Controller::getInstance()->getSnomLine($lineId);
+            $line = Voipmanager_Controller::getInstance()->getLineById($lineId);
         } else {
-            $line = new Voipmanager_Model_SnomLine(array(
+            $line = new Voipmanager_Model_Line(array(
                 'type'  => 'user'
             )); 
         }
