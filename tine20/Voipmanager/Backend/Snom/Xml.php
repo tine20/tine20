@@ -86,6 +86,10 @@ class Voipmanager_Backend_Snom_Xml
     
     public function getFirmware(Voipmanager_Model_SnomPhone $_phone)
     {
+        if (!$_phone->isValid()) {
+            throw new Exception('invalid phone');
+        }
+        
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><firmware-settings></firmware-settings>');
         
         $locationSettings = $this->_getLocationSettings($_phone);
@@ -94,11 +98,13 @@ class Voipmanager_Backend_Snom_Xml
             ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
             ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
             ->join(SQL_TABLE_PREFIX . 'snom_templates', SQL_TABLE_PREFIX . 'snom_phones.template_id = ' . SQL_TABLE_PREFIX . 'snom_templates.id', array())
-            ->join(SQL_TABLE_PREFIX . 'snom_software', SQL_TABLE_PREFIX . 'snom_templates.software_id = ' . SQL_TABLE_PREFIX . 'snom_software.id', array('softwareimage'));
+            ->join(SQL_TABLE_PREFIX . 'snom_software', SQL_TABLE_PREFIX . 'snom_templates.software_id = ' . SQL_TABLE_PREFIX . 'snom_software.id', array('softwareimage_' . $_phone->current_model));
             
         $firmware = $this->_db->fetchOne($select);
     
-        $child = $xml->addChild('firmware', $locationSettings['base_download_url'] . '/' . $firmware);
+        if(!empty($firmware)) {
+            $child = $xml->addChild('firmware', $locationSettings['base_download_url'] . '/' . $firmware);
+        }
     
         return $xml->asXML();        
     }
