@@ -15,7 +15,7 @@
  * 
  * @package     Voipmanager 
  */
-class Voipmanager_Model_Line extends Tinebase_Record_Abstract
+class Voipmanager_Model_AsteriskPeer extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -98,14 +98,14 @@ class Voipmanager_Model_Line extends Tinebase_Record_Abstract
     );
 
     /**
-     * converts a int, string or Voipmanager_Model_Line to an line id
+     * converts a int, string or Voipmanager_Model_AsteriskPeer to an line id
      *
-     * @param int|string|Voipmanager_Model_Line $_lineId the line id to convert
+     * @param int|string|Voipmanager_Model_AsteriskPeer $_lineId the line id to convert
      * @return int
      */
     static public function convertLineIdToInt($_lineId)
     {
-        if ($_lineId instanceof Voipmanager_Model_Line) {
+        if ($_lineId instanceof Voipmanager_Model_AsteriskPeer) {
             if (empty($_lineId->id)) {
                 throw new Exception('no line id set');
             }

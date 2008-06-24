@@ -136,7 +136,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine', $lineData, true);
         
         if (empty($phone->id)) {
-            $phone = Voipmanager_Controller::getInstance()->addSnomPhone($phone);
+            $phone = Voipmanager_Controller::getInstance()->createSnomPhone($phone);
         } else {
             $phone = Voipmanager_Controller::getInstance()->updateSnomPhone($phone);
         }
@@ -216,7 +216,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $location->setFromArray($locationData);
         
         if (empty($location->id)) {
-            $location = Voipmanager_Controller::getInstance()->addSnomLocation($location);
+            $location = Voipmanager_Controller::getInstance()->createSnomLocation($location);
         } else {
             $location = Voipmanager_Controller::getInstance()->updateSnomLocation($location);
         }
@@ -317,7 +317,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $software->setFromArray($softwareData);
         
         if ( empty($software->id) ) {
-            $software = Voipmanager_Controller::getInstance()->addSnomSoftware($software);
+            $software = Voipmanager_Controller::getInstance()->createSnomSoftware($software);
         } else {
             $software = Voipmanager_Controller::getInstance()->updateSnomSoftware($software);
         }
@@ -435,7 +435,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $template->setFromArray($templateData);
         
         if ( empty($template->id) ) {
-            $template = Voipmanager_Controller::getInstance()->addSnomTemplate($template);
+            $template = Voipmanager_Controller::getInstance()->createSnomTemplate($template);
         } else {
             $template = Voipmanager_Controller::getInstance()->updateSnomTemplate($template);
         }
@@ -467,7 +467,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getAsteriskLines($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskPeers($sort, $dir, $query)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -482,13 +482,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $lineId
      * @return array
      */
-    public function getLineById($lineId)
+    public function getAsteriskPeer($lineId)
     {
         $result = array(
             'success'   => true
         );
 
-        $line = Voipmanager_Controller::getInstance()->getLineById($lineId);
+        $line = Voipmanager_Controller::getInstance()->getAsteriskPeer($lineId);
         
         $result = $line->toArray();        
         return $result;
@@ -511,13 +511,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             unset($lineData['id']);
         }
 
-        $line = new Voipmanager_Model_Line();
+        $line = new Voipmanager_Model_AsteriskPeer();
         $line->setFromArray($lineData);
         
         if ( empty($line->id) ) {
-            $line = Voipmanager_Controller::getInstance()->addLine($line);
+            $line = Voipmanager_Controller::getInstance()->createAsteriskPeer($line);
         } else {
-            $line = Voipmanager_Controller::getInstance()->updateLine($line);
+            $line = Voipmanager_Controller::getInstance()->updateAsteriskPeer($line);
         }
 
         $result = array('success'           => true,

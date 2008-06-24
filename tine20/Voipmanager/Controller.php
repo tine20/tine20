@@ -48,17 +48,38 @@ class Voipmanager_Controller
     protected $_snomSoftwareBackend;
     
     /**
+     * the snom phone location sql backend
+     *
+     * @var Voipmanager_Backend_Snom_Location
+     */
+    protected $_snomLocationBackend;
+    
+    /**
+     * the snom phone template sql backend
+     *
+     * @var Voipmanager_Backend_Snom_Template
+     */
+    protected $_snomTemplateBackend;
+    
+    /**
+     * the asterisk peer sql backend
+     *
+     * @var Voipmanager_Backend_Asterisk_Peer
+     */
+    protected $_asteriskPeerBackend;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend = Voipmanager_Backend_Phone_Factory::factory(Voipmanager_Backend_Phone_Factory::SQL);
-        $this->_snomPhoneBackend = new Voipmanager_Backend_Snom_Phone();
-        $this->_snomLineBackend = new Voipmanager_Backend_Snom_Line();
+        $this->_snomPhoneBackend    = new Voipmanager_Backend_Snom_Phone();
+        $this->_snomLineBackend     = new Voipmanager_Backend_Snom_Line();
         $this->_snomSoftwareBackend = new Voipmanager_Backend_Snom_Software();
         $this->_snomLocationBackend = new Voipmanager_Backend_Snom_Location();
-        $this->_snomTemplateBackend = new Voipmanager_Backend_Snom_Template();                
+        $this->_snomTemplateBackend = new Voipmanager_Backend_Snom_Template();      
+        $this->_asteriskPeerBackend = new Voipmanager_Backend_Asterisk_Peer();          
     }
     
     /**
@@ -134,7 +155,7 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function addSnomPhone(Voipmanager_Model_SnomPhone $_phone)
+    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone)
     {        
         $phone = $this->_snomPhoneBackend->create($_phone);
         foreach($_phone->lines as $line) {
@@ -269,7 +290,7 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_Location $_location
      * @return  Voipmanager_Model_Location
      */
-    public function addSnomLocation(Voipmanager_Model_SnomLocation $_location)
+    public function createSnomLocation(Voipmanager_Model_SnomLocation $_location)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_ADD)) {
@@ -343,7 +364,7 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_Software $_software
      * @return  Voipmanager_Model_Software
      */
-    public function addSnomSoftware(Voipmanager_Model_SnomSoftware $_software)
+    public function createSnomSoftware(Voipmanager_Model_SnomSoftware $_software)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
@@ -431,7 +452,7 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_Template $_template
      * @return  Voipmanager_Model_Template
      */
-    public function addSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
+    public function createSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
@@ -464,67 +485,56 @@ class Voipmanager_Controller
     
     
     /**
-     * get snom_line by id
+     * get asterisk peer by id
      *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Line
+     * @param string $_id the id of the peer
+     * @return Voipmanager_Model_AsteriskPeer
      */
-    public function getLineById($_id)
+    public function getAsteriskPeer($_id)
     {
-        $result = $this->_backend->getLineById($_id);
+        $result = $this->_asteriskPeerBackend->get($_id);
 
         return $result;    
     }
 
     /**
-     * get snom_lines
+     * get list of asterisk peers
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Line
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskPeer
      */
-    public function getAsteriskLines($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function searchAsteriskPeers($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
-        $result = $this->_backend->getAsteriskLines($_sort, $_dir, $_query);
+        $result = $this->_asteriskPeerBackend->search($_sort, $_dir, $_query);
 
         return $result;    
     }
     
     /**
-     * add new line
+     * add new asterisk peer
      *
-     * @param Voipmanager_Model_Line $_line
-     * @return  Voipmanager_Model_Line
+     * @param Voipmanager_Model_AsteriskPeer $_peer
+     * @return  Voipmanager_Model_AsteriskPeer
      */
-    public function addLine(Voipmanager_Model_Line $_line)
+    public function createAsteriskPeer(Voipmanager_Model_AsteriskPeer $_peer)
     {        
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
-            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-        $line = $this->_backend->addLine($_line);
+        $peer = $this->_asteriskPeerBackend->create($_peer);
       
-        return $line;
+        return $peer;
     }
     
     /**
-     * update existing line
+     * update existing asterisk peer
      *
-     * @param Voipmanager_Model_Line $_line
-     * @return  Voipmanager_Model_Line
+     * @param Voipmanager_Model_AsteriskPeer $_peer
+     * @return  Voipmanager_Model_AsteriskPeer
      */
-    public function updateLine(Voipmanager_Model_Line $_line)
+    public function updateAsteriskPeer(Voipmanager_Model_AsteriskPeer $_peer)
     {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-       
-        $line = $this->_backend->updateLine($_line);
+        $peer = $this->_asteriskPeerBackend->update($_peer);
         
-        return $line;
+        return $peer;
     }       
     
     /**

@@ -53,7 +53,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $snomPhone = $controller->getSnomPhone($phoneId);
             $snomLines = $snomPhone->lines;
             unset($phone->lines);
-            $asteriskLines = $controller->getAsteriskLines('name');
+            $asteriskLines = $controller->searchAsteriskPeers('name');
 
             // encode the phone array
             $encodedSnomPhone = Zend_Json::encode($snomPhone->toArray());
@@ -105,9 +105,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editLine($lineId=NULL)
     {
         if (!empty($lineId)) {
-            $line = Voipmanager_Controller::getInstance()->getLineById($lineId);
+            $line = Voipmanager_Controller::getInstance()->getAsteriskPeer($lineId);
         } else {
-            $line = new Voipmanager_Model_Line(array(
+            $line = new Voipmanager_Model_AsteriskPeer(array(
                 'type'  => 'user'
             )); 
         }
