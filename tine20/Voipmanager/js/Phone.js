@@ -338,7 +338,7 @@ Tine.Voipmanager.Phones.Main = {
                 break;                
                 
             case 'software':
-                dataStore.baseParams.method = 'Voipmanager.getSoftware';
+                dataStore.baseParams.method = 'Voipmanager.searchSnomSoftware';
                 break;                                                                
         }
         

@@ -61,9 +61,14 @@ Tine.Voipmanager.Model.Template = Ext.data.Record.create([
 ]);
 
 
-Tine.Voipmanager.Model.Software = Ext.data.Record.create([
+Tine.Voipmanager.Model.SnomSoftware = Ext.data.Record.create([
     {name: 'id'},
-    {name: 'description'}
+    {name: 'description'},
+    {name: 'softwareimage_snom300'},
+    {name: 'softwareimage_snom320'},
+    {name: 'softwareimage_snom360'},
+    {name: 'softwareimage_snom370'}
+    
 ]);
 
 Tine.Voipmanager.Model.SoftwareImage = Ext.data.Record.create([

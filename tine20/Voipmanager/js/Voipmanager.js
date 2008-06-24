@@ -529,7 +529,7 @@ Tine.Voipmanager.Data = {
 
         var softwareDataStore = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Voipmanager.getSoftware',
+                method: 'Voipmanager.searchSnomSoftware',
                 sort: 'description',
                 dir: 'ASC'
             },

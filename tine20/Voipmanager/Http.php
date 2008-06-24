@@ -197,16 +197,12 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editSoftware($softwareId=NULL)
     {
         if (!empty($softwareId)) {
-            $softwares = Voipmanager_Controller::getInstance();
-            $software = $softwares->getSoftwareById($softwareId);
-            $arraySoftware = $software->toArray();
+            $software = Voipmanager_Controller::getInstance()->getSnomSoftware($softwareId);
+            $encodedSoftware = Zend_Json::encode($software->toArray());
         } else {
-
+            $encodedSoftware = '{}';
         }
 
-        // encode the software array
-        $encodedSoftware = Zend_Json::encode($arraySoftware);                   
-        
         $currentAccount = Zend_Registry::get('currentAccount');
                 
         $view = new Zend_View();
@@ -257,7 +253,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         
         // software data
-        $software = $controller->getSoftware();
+        $software = $controller->searchSnomSoftware();
         $encodedSoftware = Zend_Json::encode($software->toArray());
         
         // keylayout data
@@ -277,7 +273,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
             'currentAccount' => Zend_Registry::get('currentAccount')->toArray(),
-            'softwareVersions' => $controller->getSoftware('id', 'ASC', $template->model)->toArray() 
+            'softwareVersions' => $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray() 
         );
         
         $view->title="edit template data";

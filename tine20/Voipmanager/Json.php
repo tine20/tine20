@@ -85,7 +85,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
 
         $phone = Voipmanager_Controller::getInstance()->getSnomPhone($phoneId);
         
-        $result = $phone->toArray();        
+        $result = $phone->toArray();      
+          
         return $result;
     }    
     
@@ -259,37 +260,18 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-    public function getSoftware($sort, $dir, $query)
+    public function searchSnomSoftware($sort, $dir, $query)
     {     
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getSoftware($sort, $dir, $query)) {
-            
-            $_rows = $rows->toArray();
+        $rows = Voipmanager_Controller::getInstance()->searchSnomSoftware($sort, $dir, $query);
+        $result['results']      = $rows->toArray();
+        $result['totalcount']   = count($result['results']);
 
-            $i = 0; 
-                  
-            foreach($_rows AS $_row)
-            {
-                if($si_rows = Voipmanager_Controller::getInstance()->getSoftwareImageById($_row['id']))
-                {
-                    $_rows[$i]['softwareImages'] = $si_rows->toArray();
-                }
-                
-                $i = $i + 1;
-            } 
-            
-
-            
-            $result['results']      = $_rows;
-            $result['totalcount']   = count($result['results']);
-        }
-
-
-        return $result;    
+        return $result;        
     }        
     
     
@@ -299,13 +281,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $softwareId
      * @return array
      */
-    public function getSoftwareById($softwareId)
+    public function getSnomSoftware($softwareId)
     {
         $result = array(
             'success'   => true
         );
 
-        $software = Voipmanager_Controller::getInstance()->getSoftwareById($softwareId);
+        $software = Voipmanager_Controller::getInstance()->getSnomSoftware($softwareId);
         
         $result = $software->toArray();        
         return $result;
@@ -338,7 +320,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $phoneData a JSON encoded array of software properties
      * @return array
      */
-    public function saveSoftware($softwareData)
+    public function saveSnomSoftware($softwareData)
     {
         $softwareData = Zend_Json::decode($softwareData);
         Zend_Registry::get('logger')->debug(print_r($softwareData,true));
@@ -349,7 +331,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         }
 
         //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
-        $software = new Voipmanager_Model_Software();
+        $software = new Voipmanager_Model_SnomSoftware();
         $software->setFromArray($softwareData);
         
         if ( empty($software->id) ) {
@@ -375,7 +357,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_softwareIDs list of softwareId's to delete
      * @return array
      */
-    public function deleteSoftwares($_softwareIds)
+    public function deleteSnomSoftware($_softwareIds)
     {
         $result = array(
             'success'   => TRUE
@@ -383,7 +365,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $softwareIds = Zend_Json::decode($_softwareIds);
         
-        Voipmanager_Controller::getInstance()->deleteSoftwares($softwareIds);
+        Voipmanager_Controller::getInstance()->deleteSnomSoftware($softwareIds);
 
         return $result;
     }       

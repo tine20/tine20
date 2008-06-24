@@ -41,6 +41,13 @@ class Voipmanager_Controller
     protected $_snomLineBackend;
     
     /**
+     * the snom phone software sql backend
+     *
+     * @var Voipmanager_Backend_Snom_Software
+     */
+    protected $_snomSoftwareBackend;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -49,6 +56,7 @@ class Voipmanager_Controller
         $this->_backend = Voipmanager_Backend_Phone_Factory::factory(Voipmanager_Backend_Phone_Factory::SQL);
         $this->_snomPhoneBackend = new Voipmanager_Backend_Snom_Phone();
         $this->_snomLineBackend = new Voipmanager_Backend_Snom_Line();
+        $this->_snomSoftwareBackend = new Voipmanager_Backend_Snom_Software();
     }
     
     /**
@@ -271,12 +279,20 @@ class Voipmanager_Controller
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomSoftware
      */
-    public function getSoftware($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function searchSnomSoftware($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {        
-        $result = $this->_snomPhoneBackend->getSoftware($_sort, $_dir, $_query);
+        $filter = new Voipmanager_Model_SnomSoftwareFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
 
+        $result = $this->_snomSoftwareBackend->search($filter, $pagination);
+        
         return $result;    
     }  
     
@@ -284,11 +300,11 @@ class Voipmanager_Controller
      * get snom_software by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomSoftware
      */
-    public function getSoftwareById($_id)
+    public function getSnomSoftware($_id)
     {
-        $result = $this->_snomPhoneBackend->getSoftwareById($_id);
+        $result = $this->_snomSoftwareBackend->get($_id);
 
         return $result;    
     }    
@@ -312,14 +328,14 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_Software $_software
      * @return  Voipmanager_Model_Software
      */
-    public function addSoftware(Voipmanager_Model_Software $_software)
+    public function addSoftware(Voipmanager_Model_SnomSoftware $_software)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
         */
-        $software = $this->_snomPhoneBackend->addSoftware($_software);
+        $software = $this->_snomSoftwareBackend->create($_software);
       
         return $software;
     }
@@ -327,10 +343,10 @@ class Voipmanager_Controller
     /**
      * update existing software
      *
-     * @param Voipmanager_Model_Software $_software
-     * @return  Voipmanager_Model_Software
+     * @param Voipmanager_Model_SnomSoftware $_software
+     * @return  Voipmanager_Model_SnomSoftware
      */
-    public function updateSoftware(Voipmanager_Model_Software $_software)
+    public function updateSoftware(Voipmanager_Model_SnomSoftware $_software)
     {
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
@@ -338,7 +354,7 @@ class Voipmanager_Controller
         }
         */
        
-        $software = $this->_snomPhoneBackend->updateSoftware($_software);
+        $software = $this->_snomSoftwareBackend->update($_software);
         
         return $software;
     }    
@@ -350,19 +366,12 @@ class Voipmanager_Controller
      * If one of the software entries could not be deleted, no software is deleted
      * 
      * @throws Exception
-     * @param array array of software identifiers
+     * @param string|array|Tinebase_Record_RecordSet $_identifiers list of software identifiers
      * @return void
      */
-    public function deleteSoftwares($_identifiers)
+    public function deleteSnomSoftware($_identifiers)
     {
-/*        foreach ($_identifiers as $identifier) {
-            $Software = $this->getSoftwareById($identifier);
-            if (!$this->_currentAccount->hasGrant($Software->container_id, Tinebase_Container::GRANT_DELETE)) {
-                throw new Exception('Not allowed!');
-            }
-        }
-       */ 
-        $this->_snomPhoneBackend->deleteSoftwares($_identifiers);
+        $this->_snomSoftwareBackend->delete($_identifiers);
     }    
     
     

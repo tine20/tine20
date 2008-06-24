@@ -209,8 +209,8 @@ class Voipmanager_Backend_Snom_Phone
 	/**
 	 * get softwareImage identified by softwareImage id
 	 * 
-     * @param string|Voipmanager_Model_SoftwareImage $_id
-	 * @return Voipmanager_Model_SoftwareImage the softwareImages
+     * @param string|Voipmanager_Model_SnomSoftwareImage $_id
+	 * @return Voipmanager_Model_SnomSoftwareImage the softwareImages
 	 */
     public function getSoftwareImageById($_id)
     {	
@@ -347,7 +347,6 @@ class Voipmanager_Backend_Snom_Phone
         return $result;
     }    
     
-    
     /**
      * Deletes a set of locations.
      * 
@@ -370,154 +369,7 @@ class Voipmanager_Backend_Snom_Phone
             $this->_db->rollBack();
             throw $e;
         }
-    } 
-    
-    
-    
-	/**
-	 * get Software
-	 * 
-     * @param string $_sort
-     * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
-	 */
-    public function getSoftware($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
-    {	
-        $where = array();
-        
-        if(!empty($_filter)) {
-            $_fields = "description";            
-            $where = $this->_getSearchFilter($_filter, $_fields);
-        }
-        
-        $select = $this->_db->select()
-            ->from(array('location' => SQL_TABLE_PREFIX . 'snom_software'), array(
-                'id',
-                'description')
-            );
-
-        $select->order($_sort.' '.$_dir);
-
-         foreach($where as $whereStatement) {
-              $select->where($whereStatement);
-         }               
-       //echo  $select->__toString();
-       
-        $stmt = $this->_db->query($select);
-
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Software', $rows);
-		
-        return $result;
-	}    
-    
-	/**
-	 * get Software by id
-	 * 
-     * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
-	 */
-    public function getSoftwareById($_softwareId)
-    {	
-        //$softwareId = Voipmanager_Model_Software::convertSoftwareIdToInt($_softwareId);
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_software')
-            ->where($this->_db->quoteInto('id = ?', $_softwareId));
-            
-        $row = $this->_db->fetchRow($select);
-        if (! $row) {
-            throw new UnderflowException('software not found');
-        }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Software', $row);
-        $result = new Voipmanager_Model_Software($row);
-        return $result;
-	}      
-    
-    /**
-     * add new software
-     *
-     * @param Voipmanager_Model_Software $_software the softwaredata
-     * @return Voipmanager_Model_Software
-     */
-    public function addSoftware (Voipmanager_Model_Software  $_software)
-    {
-        if (! $_software->isValid()) {
-            throw new Exception('invalid software');
-        }
-
-        if ( empty($_software->id) ) {
-            $_software->setId(Tinebase_Record_Abstract::generateUID());
-        }
-        
-        $softwareData = $_software->toArray();
-        
-        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_software', $softwareData);
-
-        return $this->getSoftwareById($_software->getId());
-    }
-    
-    /**
-     * update an existing software
-     *
-     * @param Voipmanager_Model_Software $_software the softwaredata
-     * @return Voipmanager_Model_Software
-     */
-    public function updateSoftware (Voipmanager_Model_Software $_software)
-    {
-        if (! $_software->isValid()) {
-            throw new Exception('invalid software');
-        }
-        $softwareId = $_software->getId();
-        $softwareData = $_software->toArray();
-        unset($softwareData['id']);
-
-        $where = array($this->_db->quoteInto('id = ?', $softwareId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'snom_software', $softwareData, $where);
-        
-        return $this->getSoftwareById($softwareId);
     }    
-    
-
-    /**
-     * delete software identified by software id
-     *
-     * @param int $_softwareId software id
-     * @return int the number of row deleted
-     */
-    public function deleteSoftware ($_softwareId)
-    {
-        $softwareId = Voipmanager_Model_Software::convertSoftwareIdToInt($_softwareId);
-        $where = array($this->_db->quoteInto('id = ?', $softwareId) , $this->_db->quoteInto('id = ?', $softwareId));
-        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_software', $where);
-        return $result;
-    }    
-    
-    
-    /**
-     * Deletes a set of software entries ids.
-     * 
-     * If one of the software entries could not be deleted, no software is deleted
-     * 
-     * @throws Exception
-     * @param array array of strings (software ids)
-     * @return void
-     */
-    public function deleteSoftwares($_ids)
-    {
-        try {
-            $this->_db->beginTransaction();
-            foreach ($_ids as $id) {
-                $this->deleteSoftware($id);
-            }
-            $this->_db->commit();
-            
-        } catch (Exception $e) {
-            $this->_db->rollBack();
-            throw $e;
-        }
-    }
-    
   
 	/**
 	 * get Templates

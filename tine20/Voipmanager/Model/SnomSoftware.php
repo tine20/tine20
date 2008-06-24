@@ -15,7 +15,7 @@
  * 
  * @package     Voipmanager Management
  */
-class Voipmanager_Model_Software extends Tinebase_Record_Abstract
+class Voipmanager_Model_SnomSoftware extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -52,18 +52,22 @@ class Voipmanager_Model_Software extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'						=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'softwareimage_snom300'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'softwareimage_snom320'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'softwareimage_snom360'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'softwareimage_snom370'     => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**
-     * converts a int, string or Voipmanager_Model_Software to an software id
+     * converts a int, string or Voipmanager_Model_SnomSoftware to an software id
      *
-     * @param int|string|Voipmanager_Model_Software $_softwareId the software id to convert
+     * @param int|string|Voipmanager_Model_SnomSoftware $_softwareId the software id to convert
      * @return int
      */
     static public function convertSoftwareIdToInt($_softwareId)
     {
-        if ($_softwareId instanceof Voipmanager_Model_Software) {
+        if ($_softwareId instanceof Voipmanager_Model_SnomSoftware) {
             if (empty($_softwareId->id)) {
                 throw new Exception('no software id set');
             }

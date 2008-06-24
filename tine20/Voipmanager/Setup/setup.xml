@@ -17,16 +17,22 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>model</name>
-                    <type>enum</type>
-                    <value>snom300</value>
-                    <value>snom320</value>
-                    <value>snom360</value>
-                    <value>snom370</value>
-                    <notnull>true</notnull>
+                    <name>softwareimage_snom300</name>
+                    <type>text</type>
+                    <length>255</length>
                 </field>
                 <field>
-                    <name>softwareimage</name>
+                    <name>softwareimage_snom320</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>softwareimage_snom360</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>softwareimage_snom370</name>
                     <type>text</type>
                     <length>255</length>
                 </field>
@@ -40,12 +46,6 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>model</name>
-                    <field>
-                        <name>model</name>
                     </field>
                 </index>
             </declaration>
