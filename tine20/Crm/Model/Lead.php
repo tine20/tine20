@@ -69,6 +69,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'customer'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'partner'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tasks'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'products'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadmodified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         #'leadcreated'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),

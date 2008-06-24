@@ -124,16 +124,20 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      *
      * @param  string  $lead           JSON encoded lead data
      * @return array
+     * 
+     * @todo save all linked objects in recordsets and create new ones if id is empty 
      */ 
     public function saveLead($lead)
     {
-        $decodedLead = Zend_Json::decode($lead);        
-        if (isset($decodedLead['tags'])) {
-            $decodedLead['tags'] = Zend_Json::decode($decodedLead['tags']);
-        }      
-        
+        $decodedLead = Zend_Json::decode($lead);       
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedLead, true));
         
+        // tags
+        if (isset($decodedLead['tags'])) {
+            $decodedLead['tags'] = Zend_Json::decode($decodedLead['tags']);
+        }                     
+        
+        // lead data
         $leadData = new Crm_Model_Lead();
         try {
             $leadData->setFromArray($decodedLead);
@@ -146,8 +150,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             );
             
             return $result;
-        }        
-        
+        }      
+          
         if(empty($leadData->id)) {
             $savedLead = Crm_Controller::getInstance()->createLead($leadData);
         } else {
@@ -243,9 +247,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $result['container'] = $folder->toArray();
                 
             // add products
-            //$products = Crm_Controller::getInstance()->getProductsByLeadId($_lead->getId());
-            //$result['products'] = $products->toArray();
-            $result['products'] = array();
+            $products = Crm_Controller::getInstance()->getLeadProducts($_lead->getId());
+            $result['products'] = $products->toArray();
+            //$result['products'] = array();
                 
             // add tags
             $result['tags'] = $_lead['tags']->toArray();                    

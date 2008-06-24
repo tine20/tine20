@@ -936,39 +936,24 @@ Tine.Crm.LeadEditDialog = {
         var storeTasks = Ext.StoreMgr.lookup('TasksStore');
         
         storeTasks.each(function(record) {
-            linksTasks.push(record.data.id);          
+            linksTasks.push(record.data.id);
         });
         
-        lead.data.tasks = linksTasks;        
-
-        return lead;
+        lead.data.tasks = linksTasks;
         
-        /*
-        var store_products      = Ext.getCmp('grid_choosenProducts').getStore();       
-        additionalData.products = Tine.Tinebase.Common.getJSONdata(store_products);
+        // add products
+        var linksProducts = new Array();
+        var storeProducts = Ext.StoreMgr.lookup('ProductsStore');       
 
-        // the start date (can not be empty)
-        var startDate = Ext.getCmp('start').getValue();
-        additionalData.start = startDate.format('c');
-
-        // the end date
-        var endDate = Ext.getCmp('end').getValue();
-        if(typeof endDate == 'object') {
-            additionalData.end = endDate.format('c');
-        } else {
-            additionalData.end = null;
-        }
-
-        // the estimated end
-        var endScheduledDate = Ext.getCmp('end_scheduled').getValue();
-        if(typeof endScheduledDate == 'object') {
-            additionalData.end_scheduled = endScheduledDate.format('c');
-        } else {
-            additionalData.end_scheduled = null;
-        }
+        storeProducts.each(function(record) {
+            linksProducts.push(record.data);
+        });
         
-        */
-                
+        lead.data.products = linksProducts;
+        
+        console.log(linksProducts);
+        
+        return lead;        
     },
         
     /**

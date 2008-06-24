@@ -397,7 +397,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
         $leadData = $_lead->toArray();
         
        // unset fields that should not be written into the db
-        $unsetFields = array('id', 'responsible', 'customer', 'partner', 'tasks', 'tags');
+        $unsetFields = array('id', 'responsible', 'customer', 'partner', 'tasks', 'products', 'tags');
         foreach ( $unsetFields as $field ) {
             unset($leadData[$field]);
         }

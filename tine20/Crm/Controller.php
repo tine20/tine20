@@ -202,6 +202,20 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
         $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');
+
+        // products (add lead id first)
+        $products = array();
+        foreach ($_lead->products as $product) {
+            $product['lead_id'] = $lead->getId(); 
+            $products[] = $product;     
+        }
+        try {
+            $lead->products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $products);
+        } catch (Exception $e) {
+            throw $e;
+        }                
+        
+        $this->saveLeadProducts($lead->getId(), $lead->products);
         
         if (!empty($_lead->tags)) {
             $lead->tags = $_lead->tags;
@@ -237,7 +251,23 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
-        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');                
+        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');  
+
+        // products (add lead id first)
+        $products = array();
+        if (is_array($_lead->products)) {
+            foreach ($_lead->products as $product) {
+                $product['lead_id'] = $lead->getId(); 
+                $products[] = $product;     
+            }
+        }
+        try {
+            $lead->products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $products);
+        } catch (Exception $e) {
+            throw $e;
+        }                
+        
+        $this->saveLeadProducts($lead->getId(), $lead->products);
 
         if (isset($_lead->tags)) {
             Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
@@ -363,6 +393,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $_lead->partner = $partner;
         $_lead->responsible = $responsible;
         $_lead->tasks = $tasks;
+        $_lead->products = $this->getLeadProducts($_lead->getId());
     }
     
     /*************** products functions *****************/
@@ -414,13 +445,33 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     }     
 
     /**
+     * get Products linked to a lead
+     *
+     * @param string $_leadId
+     * @return Tinebase_Record_Recordset products
+     * 
+     * @todo write test
+     */ 
+    public function getLeadProducts($_leadId)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
+        $result = $backend->getProducts($_leadId);
+
+        return $result;    
+    } 
+    
+    /**
      * save Products linked to a lead
      *
-     * @todo implement
+     * @param string $_leadId
+     * @param Tinebase_Record_Recordset $_products
+     * 
      * @todo write test
      */ 
     public function saveLeadProducts($_leadId, Tinebase_Record_Recordset $_products)
     {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
+        $backend->saveProducts($_leadId, $_products);
     } 
     
     /*********** handling of lead sources/types/states **************/

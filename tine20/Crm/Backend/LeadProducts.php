@@ -16,7 +16,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_LeadProducts implements Crm_Backend_Interface
+class Crm_Backend_LeadProducts extends Tinebase_Abstract_SqlTableBackend
 {
     /**
     * lead products table
@@ -33,7 +33,7 @@ class Crm_Backend_LeadProducts implements Crm_Backend_Interface
     /**
      * the constructor
      */
-    private function __construct ()
+    public function __construct ()
     {
         $this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leads_products'));
@@ -43,9 +43,9 @@ class Crm_Backend_LeadProducts implements Crm_Backend_Interface
      * get products by lead id
      *
      * @param int $_leadId the leadId
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_LeadProduct
      */
-    public function getProductsByLeadId($_leadId)
+    public function getProducts($_leadId)
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
 
@@ -55,8 +55,40 @@ class Crm_Backend_LeadProducts implements Crm_Backend_Interface
 
         $rows = $this->_table->fetchAll($where);
         
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
+        $result = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $rows->toArray());
    
         return $result;
     }      
+    
+    /**
+    * add or updates an product (which belongs to one lead)
+    *
+    * @param int $_leadId the lead id
+    * @param Tinebase_Record_Recordset $_productData the productdata
+    */
+    public function saveProducts($_leadId, Tinebase_Record_Recordset $_productData)
+    {    
+        $products = $_productData->toArray();
+    
+        if(!(int)$_leadId || $_leadId === 0) {
+            return $_productData;  
+        }
+          
+        $this->_db->beginTransaction();
+        
+        try {
+            $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', 'lead_id = '.$_leadId);
+
+            foreach($products as $data) {
+                $this->_db->insert(SQL_TABLE_PREFIX . 'metacrm_leads_products', $data);                
+            }
+
+            $this->_db->commit();
+
+        } catch (Exception $e) {
+            $this->_db->rollBack();
+            error_log($e->getMessage());
+        }
+    }    
+    
 }

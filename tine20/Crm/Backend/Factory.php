@@ -50,6 +50,8 @@ class Crm_Backend_Factory
     
     const LEAD_STATES = 'LeadStates';
     
+    const LEAD_PRODUCTS = 'LeadProducts';
+    
     /**
      * factory function to return a selected contacts backend class
      *
@@ -101,6 +103,13 @@ class Crm_Backend_Factory
                 $instance = self::$_backends[$_type];
                 break;
             
+            case self::LEAD_PRODUCTS:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Crm_Backend_LeadProducts();
+                }
+                $instance = self::$_backends[$_type];
+                break;
+                
             default:
                 throw new Exception('unknown type');
         }
