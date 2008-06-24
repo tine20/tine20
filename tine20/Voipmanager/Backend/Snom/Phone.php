@@ -68,7 +68,7 @@ class Voipmanager_Backend_Snom_Phone
 	 */
     public function get($_id)
     {	
-        $phoneId = Voipmanager_Model_SnomPhone::convertPhoneIdToInt($_id);
+        $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($_id);
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'snom_phones')

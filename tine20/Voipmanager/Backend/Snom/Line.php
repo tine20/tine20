@@ -166,7 +166,7 @@ class Voipmanager_Backend_Snom_Line
      */
     public function deletePhoneLines($_id)
     {
-        $phoneId = Voipmanager_Model_SnomPhone::convertPhoneIdToInt($_id);
+        $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($_id);
         $where[] = $this->_db->quoteInto('snomphone_id = ?', $phoneId);
 
         $this->_db->delete(SQL_TABLE_PREFIX . 'snom_lines', $where);
