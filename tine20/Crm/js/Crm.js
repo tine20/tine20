@@ -1216,94 +1216,53 @@ Tine.Crm.LeadEditDialog = {
             
                 var columnModel = [
                 {
+                    header: this.translation._("Product"),
+                    id: 'product_id',
+                    dataIndex: 'product_id',
+                    sortable: true,
+                    width: 150,
+                    editor: new Tine.Crm.Product.ComboBox({
+                        store: Tine.Crm.Product.getStore() 
+                    }),
+                    quickaddField: new Tine.Crm.Product.ComboBox({
+                        emptyText: this.translation._('Add a product...'),
+                        store: Tine.Crm.Product.getStore(),
+                        setPrice: true
+                    }),
+                    renderer: Tine.Crm.Product.renderer
+                },
+                {
                     id: 'product_desc',
                     header: this.translation._("Description"),
-                    width: 100,
+                    //width: 100,
                     sortable: true,
                     dataIndex: 'product_desc',
                     editor: new Ext.form.TextField({
-                      allowBlank: false
+                        allowBlank: false
                     }),
                     quickaddField: new Ext.form.TextField({
-                        emptyText: this.translation._('Add a product...')
-                    })
-                }
-                /*
-                {
-                    id: 'status_id',
-                    header: this.translation._("Status"),
-                    width: 45,
-                    sortable: true,
-                    dataIndex: 'status_id',
-                    renderer: Tine.Tasks.status.getStatusIcon,
-                    editor: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true,
-                        blurOnSelect: true,
-                        listClass: 'x-combo-list-small'
-                    }),
-                    quickaddField: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true
+                        allowBlank: false
                     })
                 },
                 {
-                    id: 'percent',
-                    header: this.translation._("Percent"),
-                    width: 50,
-                    sortable: true,
-                    dataIndex: 'percent',
-                    renderer: Ext.ux.PercentRenderer,
-                    editor: new Ext.ux.PercentCombo({
-                        autoExpand: true,
-                        blurOnSelect: true
-                    }),
-                    quickaddField: new Ext.ux.PercentCombo({
-                        autoExpand: true
-                    })
-                },
-                {
-                    id: 'summary',
-                    header: this.translation._("Summary"),
-                    width: 100,
-                    sortable: true,
-                    dataIndex: 'summary',
-                    //editor: new Ext.form.TextField({
-                    //  allowBlank: false
-                    //}),
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: this.translation._('Add a task...')
-                    })
-                },
-                {
-                    id: 'priority',
-                    header: this.translation._("Priority"),
-                    width: 45,
-                    sortable: true,
-                    dataIndex: 'priority',
-                    renderer: Tine.widgets.Priority.renderer,
-                    editor: new Tine.widgets.Priority.Combo({
+                    id: 'product_price',
+                    header: this.translation._("Price"),
+                    dataIndex: 'product_price',
+                    width: 80,
+                    align: 'right',
+                    editor: new Ext.form.NumberField({
                         allowBlank: false,
-                        autoExpand: true,
-                        blurOnSelect: true
-                    }),
-                    quickaddField: new Tine.widgets.Priority.Combo({
-                        autoExpand: true
-                    })
-                },
-                {
-                    id: 'due',
-                    header: this.translation._("Due Date"),
-                    width: 55,
-                    sortable: true,
-                    dataIndex: 'due',
-                    renderer: Tine.Tinebase.Common.dateRenderer,
-                    editor: new Ext.ux.form.ClearableDateField({
-                        //format : 'd.m.Y'
-                    }),
-                    quickaddField: new Ext.ux.form.ClearableDateField({
-                        //value: new Date(),
-                        //format : "d.m.Y"
-                    })
-                }*/
+                        allowNegative: false,
+                        decimalSeparator: ','
+                        }),
+                    quickaddField: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        decimalSeparator: ',',
+                        id: 'new-product_price'
+                        }),  
+                    renderer: Ext.util.Format.euMoney
+                }                
                 ];
                 
                 var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
@@ -1360,6 +1319,7 @@ Tine.Crm.LeadEditDialog = {
             });            
             
         } else if ( _type === 'Tasks') {
+        	
             var grid = new Ext.ux.grid.QuickaddGridPanel({
                 title: _title,
                 id: 'crmGrid' + _type,
@@ -1431,6 +1391,7 @@ Tine.Crm.LeadEditDialog = {
             }, this);            
 
         } else if ( _type === 'Products') {
+        	
             var grid = new Ext.ux.grid.QuickaddGridPanel({
                 title: _title,
                 id: 'crmGrid' + _type,
@@ -1442,9 +1403,10 @@ Tine.Crm.LeadEditDialog = {
                 enableColumnMove:false,
                 sm: rowSelectionModel,
                 loadMask: true,
-                quickaddMandatory: 'product_desc',
+                quickaddMandatory: 'product_id',
                 autoExpandColumn: 'product_desc',
-                columns: columnModel,
+                columns: columnModel
+                ,
                 view: new Ext.grid.GridView({
                     autoFill: true,
                     forceFit:true,
@@ -1453,42 +1415,16 @@ Tine.Crm.LeadEditDialog = {
                 })
             });
             
-            grid.on('newentry', function(taskData){
+            grid.on('newentry', function(productData){
 
-            	// @todo make that work
-            	console.log('add new product');
+            	//console.log(productData);
             	
-                // @todo change that later -> we don't need this ajax request 
-                // because the new products should only be saved on "apply" or "saveandclose"              
-
                 // add new product to store
-                /*
-                var gridStore = Ext.StoreMgr.lookup('TasksStore');      
-                var newTask = [taskData];
-                gridStore.loadData(newTask, true);
-                */
-            	
-                /*
-                var gridStore = Ext.StoreMgr.lookup('ProductsStore');                      
-                var task = new Tine.Tasks.Task(taskData);
-    
-                Ext.Ajax.request({
-                    scope: this,
-                    params: {
-                        method: 'Tasks.saveTask', 
-                        task: Ext.util.JSON.encode(task.data),
-                        linkingApp: '',
-                        linkedId: ''
-                    },
-                    success: function(_result, _request) {
-                        var newTask = [Ext.util.JSON.decode(_result.responseText)];
-                        gridStore.loadData(newTask, true);
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
-                    }
-                });
-                */
+                var gridStore = Ext.StoreMgr.lookup('ProductsStore');      
+                var newProduct = [productData];
+                gridStore.loadData(newProduct, true);
+            	                
+                //console.log(gridStore);
                 
                 return true;
             }, this);
@@ -1663,6 +1599,18 @@ Tine.Crm.LeadEditDialog = {
             storeProducts.loadData(_products);                    
             //storeProducts.setDefaultSort('remark', 'asc');     
         }
+        
+        // @todo do we need that here?
+        /*
+        storeProducts.on('update', function(store, record, index) {
+        	console.log('update');
+            if(record.data.product_id && !arguments[1].modified.product_price) {          
+                var st_productsAvailable = Tine.Crm.Product.getStore();
+                var preset_price = st_productsAvailable.getById(record.data.product_id);
+                record.data.product_price = preset_price.data.price;
+            }
+        }); 
+        */               
         
         Ext.StoreMgr.add('ProductsStore', storeProducts);
     },    

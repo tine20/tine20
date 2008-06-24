@@ -169,3 +169,62 @@ Tine.Crm.Product.EditDialog = function() {
     Dialog.show();                          
 };
 
+/**
+ * product selection combo box
+ * 
+ */
+Tine.Crm.Product.ComboBox = Ext.extend(Ext.form.ComboBox, {
+
+    /**
+     * @cfg {bool} setPrice in price form field
+     */
+    setPrice: false,
+    
+	name: 'product_combo',
+    id: 'product_combo',
+    hiddenName: 'id',
+    displayField:'productsource',
+    valueField: 'id',
+    allowBlank: false, 
+    typeAhead: true,
+    editable: true,
+    selectOnFocus:true,
+    forceSelection: true, 
+    triggerAction: "all", 
+    mode: 'local', 
+    lazyRender: true,
+    listClass: 'x-combo-list-small',
+
+    //private
+    initComponent: function(){
+
+        Tine.Crm.Product.ComboBox.superclass.initComponent.call(this);        
+
+        if (this.setPrice) {
+            // update price field
+            this.on('select', function(combo, record, index){
+                var priceField = Ext.getCmp('new-product_price');
+                priceField.setValue(record.data.price);
+                
+            }, this);
+        }
+    }
+        
+});
+
+/**
+ * product renderer
+ */
+Tine.Crm.Product.renderer = function(data) {
+                                                
+    record = Tine.Crm.Product.getStore().getById(data);
+    
+    if (record) {
+        //return record.data.value;
+        return Ext.util.Format.htmlEncode(record.data.productsource);
+    }
+    else {
+        Ext.getCmp('leadDialog').doLayout();
+        return Ext.util.Format.htmlEncode(data);
+    }
+}
