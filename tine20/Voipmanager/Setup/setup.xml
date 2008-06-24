@@ -129,6 +129,28 @@
                         <name>macaddress</name>
                     </field>
                 </index>              
+                <index>
+                    <name>snom_phone::template_id--snom_templates::id</name>
+                    <field>
+                        <name>template_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_templates</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
+                <index>
+                    <name>snom_phone::location_id--snom_location::id</name>
+                    <field>
+                        <name>location_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_location</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
             </declaration>
         </table>
         
