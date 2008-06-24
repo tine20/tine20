@@ -341,6 +341,17 @@
                         <name>id</name>
                     </field>
                 </index>
+                <index>
+                    <name>snom_templates::software_id--snom_software::id</name>
+                    <field>
+                        <name>software_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_software</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
             </declaration>
         </table>
         
