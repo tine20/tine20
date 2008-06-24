@@ -1227,7 +1227,8 @@ Tine.Crm.LeadEditDialog = {
                     quickaddField: new Tine.Crm.Product.ComboBox({
                         emptyText: this.translation._('Add a product...'),
                         store: Tine.Crm.Product.getStore(),
-                        setPrice: true
+                        setPrice: true,
+                        id: 'new-product_combo'
                     }),
                     renderer: Tine.Crm.Product.renderer
                 },
