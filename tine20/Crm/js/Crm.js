@@ -649,8 +649,6 @@ Tine.Crm.LeadEditDialog = {
         editTask: null,
         linkTask: null,
         unlinkTask: null,
-        addProduct: null,      
-        //editProduct: null,
         unlinkProduct: null,
         exportLead: null
 	},
@@ -1009,23 +1007,17 @@ Tine.Crm.LeadEditDialog = {
                         }
                     },
                     {id:'contact_one', header: this.translation._("Address"), dataIndex: 'adr_one_locality', width: 160, sortable: false, renderer: function(val, meta, record) {
-                        var formated_return =  
-                            Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />' + 
-                            Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality);
+                            var formated_return =  
+                                Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />' + 
+                                Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality);
                         
                             return formated_return;
                         }
                     },
                     {id:'tel_work', header: this.translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
-                        var formated_return = ''
-                        /*var formated_return = '<table>' + 
-                            '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_work) + '</td></tr>' + 
-                            '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '</td></tr>' + 
-                            '</table>';
-                        */
-                        var formated_return = 'Phone: ' + Ext.util.Format.htmlEncode(record.data.tel_work) + '<br/>' + 
-                            'Cellphone: ' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '<br/>';
-                        return formated_return;
+                            var formated_return = 'Phone: ' + Ext.util.Format.htmlEncode(record.data.tel_work) + '<br/>' + 
+                                'Cellphone: ' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '<br/>';
+                            return formated_return;
                         }                        
                     },    
                     {
@@ -1063,8 +1055,9 @@ Tine.Crm.LeadEditDialog = {
                 }, this);
                 
                 var bbarItems = [                
-                    this.actions.linkContact,
-                    this.actions.addContact
+                    this.actions.linkContact,                    
+                    this.actions.addContact,
+                    this.actions.unlinkContact
                 ]; 
                 
                 break;
@@ -1072,8 +1065,6 @@ Tine.Crm.LeadEditDialog = {
             /******************* contacts search tabpanel ********************/                
                 
             case 'ContactsSearch':
-            
-                // @todo add cm, selection model event handler and context menu
             
                 var columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
@@ -1101,6 +1092,7 @@ Tine.Crm.LeadEditDialog = {
                 storeName = 'ContactsStore';
                 
                 var bbarItems = [
+                    this.actions.unlinkProduct
                 ];
 
                 
@@ -1109,6 +1101,7 @@ Tine.Crm.LeadEditDialog = {
             /******************* tasks tabpanel ********************/                
 
             case 'Tasks':
+            
                 var columnModel = [{
                     id: 'status_id',
                     header: this.translation._("Status"),
@@ -1205,7 +1198,8 @@ Tine.Crm.LeadEditDialog = {
                 var autoExpand = 'summary';
                 
                 var bbarItems = [
-                    this.actions.addTask
+                    this.actions.addTask,
+                    this.actions.unlinkTask
                 ]; 
                 
                 break;
@@ -1267,27 +1261,23 @@ Tine.Crm.LeadEditDialog = {
                 ];
                 
                 var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-                /*
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();                    
                     if(rowCount < 1) {
-                        this.actions.editTask.setDisabled(true);
-                        this.actions.unlinkTask.setDisabled(true);
+                        this.actions.unlinkProduct.setDisabled(true);
                     } 
                     if (rowCount == 1) {
-                        this.actions.editTask.setDisabled(false);
-                        this.actions.unlinkTask.setDisabled(false);
+                        this.actions.unlinkProduct.setDisabled(false);
                     }    
                     if(rowCount > 1) {                
-                        this.actions.editTask.setDisabled(true);
-                        this.actions.unlinkTask.setDisabled(false);
+                        this.actions.unlinkProduct.setDisabled(false);
                     }
                 }, this);
-                */
+                
                 var autoExpand = 'product_desc';
                 
                 var bbarItems = [
-                    //this.actions.addTask
+                    this.actions.unlinkProduct
                 ]; 
                 
                 break;
@@ -1406,26 +1396,21 @@ Tine.Crm.LeadEditDialog = {
                 loadMask: true,
                 quickaddMandatory: 'product_id',
                 autoExpandColumn: 'product_desc',
-                columns: columnModel
-                ,
+                columns: columnModel /*,                
                 view: new Ext.grid.GridView({
                     autoFill: true,
                     forceFit:true,
                     ignoreAdd: true,
                     emptyText: this.translation._('No Products to display')
-                })
+                })*/
             });
             
             grid.on('newentry', function(productData){
 
-            	//console.log(productData);
-            	
                 // add new product to store
                 var gridStore = Ext.StoreMgr.lookup('ProductsStore');      
                 var newProduct = [productData];
                 gridStore.loadData(newProduct, true);
-            	                
-                //console.log(gridStore);
                 
                 return true;
             }, this);
@@ -1450,8 +1435,6 @@ Tine.Crm.LeadEditDialog = {
      * set context menu for link grid
      * 
      * @param   string _type (Contacts|Tasks|Products)
-     * 
-     * @todo add products context menu
      */
     setLinksContextMenu: function(_type)
     {
@@ -1491,14 +1474,23 @@ Tine.Crm.LeadEditDialog = {
                     this.actions.editTask,
                     this.actions.unlinkTask,
                     '-',
-                    this.actions.linkTask,
+                    //this.actions.linkTask,
                     this.actions.addTask
                 ];
                 // items for all grid context menu
                 var gridItems = [
-                    this.actions.linkTask,
+                    //this.actions.linkTask,
                     this.actions.addTask
                 ];
+                break;
+                
+            case 'Products':
+                // items for row context menu
+                var rowItems = [
+                    this.actions.unlinkProduct
+                ];
+                // items for all grid context menu
+                var gridItems = [];
                 break;
         }
         
@@ -1601,8 +1593,7 @@ Tine.Crm.LeadEditDialog = {
             //storeProducts.setDefaultSort('remark', 'asc');     
         }
         
-        // @todo do we need that here?
-        /*
+        // update price if new product is chosen
         storeProducts.on('update', function(store, record, index) {
         	console.log('update');
             if(record.data.product_id && !arguments[1].modified.product_price) {          
@@ -1611,7 +1602,6 @@ Tine.Crm.LeadEditDialog = {
                 record.data.product_price = preset_price.data.price;
             }
         }); 
-        */               
         
         Ext.StoreMgr.add('ProductsStore', storeProducts);
     },    
@@ -1719,8 +1709,8 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.linkTask = new Ext.Action({
-            text: this.translation._('Link task'),
-            tooltip: this.translation._('Link existing task with lead'),
+            text: this.translation._('Add task'),
+            tooltip: this.translation._('Add existing task with lead'),
             disabled: true,
             iconCls: 'actionAddTask',
             scope: this,
@@ -1728,8 +1718,8 @@ Tine.Crm.LeadEditDialog = {
         });
 
         this.actions.unlinkTask = new Ext.Action({
-            text: this.translation._('Unlink tasks'),
-            tooltip: this.translation._('Unlink selected tasks'),
+            text: this.translation._('Remove tasks'),
+            tooltip: this.translation._('Remove selected tasks'),
             disabled: true,
             iconCls: 'actionDelete',
             scope: this,
@@ -1739,6 +1729,8 @@ Tine.Crm.LeadEditDialog = {
         });
 
         // products
+        // we don't need that at the moment
+        /*
         this.actions.addProduct = new Ext.Action({
             text: this.translation._('Add product'),
             tooltip: this.translation._('Add product'),
@@ -1746,10 +1738,11 @@ Tine.Crm.LeadEditDialog = {
             disabled: true,
             handler: this.handlers.addProduct
         });
+        */
 
         this.actions.unlinkProduct = new Ext.Action({
-            text: this.translation._('Unlink products'),
-            tooltip: this.translation._('Unlink selected products'),
+            text: this.translation._('Remove products'),
+            tooltip: this.translation._('Remove selected products'),
             disabled: true,
             iconCls: 'actionDelete',
             scope: this,
@@ -1812,7 +1805,7 @@ Tine.Crm.LeadEditDialog = {
         // add context menu events
         this.setLinksContextMenu('Contacts');
         this.setLinksContextMenu('Tasks');
-        //this.setLinksContextMenu('Products');
+        this.setLinksContextMenu('Products');
 
         // fix to have the tab panel in the right height accross browsers
         Ext.getCmp('editMainTabPanel').on('afterlayout', function(container) {
