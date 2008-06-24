@@ -133,7 +133,7 @@ class Voipmanager_Backend_Snom_Xml
             ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
             ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
             ->join(SQL_TABLE_PREFIX . 'snom_lines', SQL_TABLE_PREFIX . 'snom_phones.id = ' . SQL_TABLE_PREFIX . 'snom_lines.snomphone_id')
-            ->join(SQL_TABLE_PREFIX . 'asterisk_lines', SQL_TABLE_PREFIX . 'asterisk_lines.id = ' . SQL_TABLE_PREFIX . 'snom_lines.asteriskline_id', array('name', 'secret', 'mailbox', 'callerid'));
+            ->join(SQL_TABLE_PREFIX . 'asterisk_peers', SQL_TABLE_PREFIX . 'asterisk_peers.id = ' . SQL_TABLE_PREFIX . 'snom_lines.asteriskline_id', array('name', 'secret', 'mailbox', 'callerid'));
 
         $rows = $this->_db->fetchAssoc($select);
         

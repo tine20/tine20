@@ -12,13 +12,13 @@
 class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     /**
-     * add the asterisk_lines table
+     * add the asterisk_peers table
      */    
     public function update_1()
     {
         $tableDefinition = "  
         <table>
-            <name>asterisk_lines</name>
+            <name>asterisk_peers</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>1</version>
@@ -388,7 +388,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>asterisk_lines</table>
+                        <table>asterisk_peers</table>
                         <field>id</field>
                     </reference>
                 </index>   

@@ -357,7 +357,7 @@
         </table>
         
         <table>
-            <name>asterisk_lines</name>
+            <name>asterisk_peers</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>1</version>
@@ -725,7 +725,7 @@
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>asterisk_lines</table>
+                        <table>asterisk_peers</table>
                         <field>id</field>
                     </reference>
                 </index>   
