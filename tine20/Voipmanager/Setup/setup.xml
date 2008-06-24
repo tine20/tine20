@@ -326,6 +326,7 @@
                 </index>
                 <index>
                     <name>macaddress</name>
+                    <unique>true</unique>
                     <field>
                         <name>macaddress</name>
                     </field>
@@ -695,6 +696,16 @@
                         <name>id</name>
                     </field>
                 </index>
+                <index>
+                    <name>snomphone_id-linenumber</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>snomphone_id</name>
+                    </field>
+                    <field>
+                        <name>linenumber</name>
+                    </field>
+                </index>              
                 <index>
                     <name>snom_lines_snomphone_id</name>
                     <field>
