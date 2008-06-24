@@ -29,8 +29,8 @@ $phoneBackend = new Voipmanager_Backend_Snom_Phone();
 
 $phone = $phoneBackend->getByMacAddress($_GET['mac']);
 
-#$phone = updateStatus($phone, $_SERVER['HTTP_USER_AGENT']);
-$phone = updateStatus($phone, 'Mozilla/4.0 (compatible; snom320-SIP 7.1.30');
+$phone = updateStatus($phone, $_SERVER['HTTP_USER_AGENT']);
+#$phone = updateStatus($phone, 'Mozilla/4.0 (compatible; snom320-SIP 7.1.30');
 $phoneBackend->updateStatus($phone);
 
 header('Content-Type: text/xml');
