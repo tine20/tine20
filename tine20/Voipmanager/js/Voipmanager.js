@@ -291,7 +291,15 @@ Tine.Voipmanager = function() {
                     } else {
                         Tine.Voipmanager.Context.Main.show(_node);
                     }
-                    break;                                                       
+                    break;  
+                    
+                case 'voicemail':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerVoicemail') {
+                        Ext.getCmp('gridVoipmanagerVoicemail').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Voipmanager.Voicemail.Main.show(_node);
+                    }
+                    break;                                                                             
             }
         }, this);
 

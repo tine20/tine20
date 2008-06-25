@@ -75,6 +75,12 @@ class Voipmanager_Controller
      */
     protected $_asteriskContextBackend;
 
+    /**
+     * the asterisk voicemail sql backend
+     *
+     * @var Voipmanager_Backend_Asterisk_Voicemail
+     */
+    protected $_asteriskVoicemailBackend;
     
     /**
      * the constructor
@@ -82,13 +88,14 @@ class Voipmanager_Controller
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_snomPhoneBackend        = new Voipmanager_Backend_Snom_Phone();
-        $this->_snomLineBackend         = new Voipmanager_Backend_Snom_Line();
-        $this->_snomSoftwareBackend     = new Voipmanager_Backend_Snom_Software();
-        $this->_snomLocationBackend     = new Voipmanager_Backend_Snom_Location();
-        $this->_snomTemplateBackend     = new Voipmanager_Backend_Snom_Template();      
-        $this->_asteriskPeerBackend     = new Voipmanager_Backend_Asterisk_Peer();          
-        $this->_asteriskContextBackend  = new Voipmanager_Backend_Asterisk_Context();          
+        $this->_snomPhoneBackend            = new Voipmanager_Backend_Snom_Phone();
+        $this->_snomLineBackend             = new Voipmanager_Backend_Snom_Line();
+        $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software();
+        $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
+        $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();      
+        $this->_asteriskPeerBackend         = new Voipmanager_Backend_Asterisk_Peer();          
+        $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context();          
+        $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();                  
     }
     
     /**
@@ -634,8 +641,7 @@ class Voipmanager_Controller
         return $this->getAsteriskContext($context);
     }    
     
-    
-    
+  
     
     /**
      * Deletes a set of contexts.
@@ -651,6 +657,90 @@ class Voipmanager_Controller
         $this->_asteriskContextBackend->delete($_identifiers);
     }
     
+    
+    /**
+     * get asterisk_voicemail by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskVoicemail
+     */
+    public function getAsteriskVoicemail($_id)
+    {
+        $voicemail = $this->_asteriskVoicemailBackend->get($_id);
+        
+        return $voicemail;    
+    }
+
+    /**
+     * get asterisk_voicemails
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskVoicemail
+     */
+    public function getAsteriskVoicemails($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {
+        $filter = new Voipmanager_Model_AsteriskVoicemailFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
+
+        $result = $this->_asteriskVoicemailBackend->search($filter, $pagination);
+        
+        return $result;    
+    }
+
+    /**
+     * add one voicemail
+     *
+     * @param Voipmanager_Model_AsteriskVoicemail $_voicemail
+     * @return  Voipmanager_Model_AsteriskVoicemail
+     */
+    public function createAsteriskVoicemail(Voipmanager_Model_AsteriskVoicemail $_voicemail)
+    {        
+        $voicemail = $this->_asteriskVoicemailBackend->create($_voicemail);
+      
+        return $this->getAsteriskVoicemail($voicemail);
+    }
+    
+    
+
+    /**
+     * update one voicemail
+     *
+     * @param Voipmanager_Model_AsteriskVoicemail $_voicemail
+     * @return  Voipmanager_Model_AsteriskVoicemail
+     */
+    public function updateAsteriskVoicemail(Voipmanager_Model_AsteriskVoicemail $_voicemail)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+        $voicemail = $this->_asteriskVoicemailBackend->update($_voicemail);
+        
+        return $this->getAsteriskVoicemail($voicemail);
+    }    
+    
+  
+    
+    /**
+     * Deletes a set of voicemails.
+     * 
+     * If one of the voicemails could not be deleted, no voicemail is deleted
+     * 
+     * @throws Exception
+     * @param array array of voicemail identifiers
+     * @return void
+     */
+    public function deleteAsteriskVoicemails($_identifiers)
+    {
+        $this->_asteriskVoicemailBackend->delete($_identifiers);
+    }    
     
     
 }

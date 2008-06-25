@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-25 15:07+0100\n"
+"POT-Creation-Date: 2008-06-25 17:52+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -35,6 +35,7 @@ msgstr "Kontext löschen"
 #: Voipmanager/js/Phone.js:163
 #: Voipmanager/js/Software.js:160
 #: Voipmanager/js/Templates.js:152
+#: Voipmanager/js/Voicemail.js:152
 msgid "Search: "
 msgstr "Suche:"
 
@@ -50,6 +51,7 @@ msgstr "Kein Kontext vorhanden"
 #: Voipmanager/js/Location.js:199
 #: Voipmanager/js/Software.js:199
 #: Voipmanager/js/Templates.js:190
+#: Voipmanager/js/Voicemail.js:190
 msgid "id"
 msgstr "id"
 
@@ -73,27 +75,13 @@ msgstr "Beschreibung"
 
 #: Voipmanager/js/Context.js:396
 #: Voipmanager/js/Line.js:440
-#: Voipmanager/js/Line.js:585
+#: Voipmanager/js/Line.js:594
 #: Voipmanager/js/Location.js:203
 #: Voipmanager/js/Location.js:439
 #: Voipmanager/js/Templates.js:400
+#: Voipmanager/js/Voicemail.js:428
 msgid "Name"
 msgstr "Name"
-
-#: Voipmanager/js/Context.js:410
-#: Voipmanager/js/Templates.js:414
-msgid "Software Version"
-msgstr "Software Version"
-
-#: Voipmanager/js/Context.js:426
-#: Voipmanager/js/Templates.js:430
-msgid "Keylayout"
-msgstr "Tastaturlayout"
-
-#: Voipmanager/js/Context.js:442
-#: Voipmanager/js/Templates.js:446
-msgid "Settings"
-msgstr "Einstellungen"
 
 #: Voipmanager/js/Line.js:83
 msgid "add line"
@@ -290,182 +278,182 @@ msgid "ASTERISK_LINES_busy level"
 msgstr "busy level"
 
 #: Voipmanager/js/Line.js:447
-#: Voipmanager/js/Line.js:637
+#: Voipmanager/js/Line.js:646
 msgid "Context"
 msgstr "Kontext"
 
-#: Voipmanager/js/Line.js:454
-#: Voipmanager/js/Line.js:845
+#: Voipmanager/js/Line.js:463
+#: Voipmanager/js/Line.js:854
 msgid "Type"
 msgstr "Typ"
 
-#: Voipmanager/js/Line.js:471
-#: Voipmanager/js/Line.js:838
+#: Voipmanager/js/Line.js:480
+#: Voipmanager/js/Line.js:847
 msgid "Secret"
 msgstr "Secret"
 
-#: Voipmanager/js/Line.js:478
-#: Voipmanager/js/Line.js:613
+#: Voipmanager/js/Line.js:487
+#: Voipmanager/js/Line.js:622
 msgid "Callerid"
 msgstr "Caller ID"
 
-#: Voipmanager/js/Line.js:485
-#: Voipmanager/js/Line.js:727
+#: Voipmanager/js/Line.js:494
+#: Voipmanager/js/Line.js:736
 msgid "Mailbox"
 msgstr "Mailbox"
 
-#: Voipmanager/js/Line.js:492
-#: Voipmanager/js/Line.js:606
+#: Voipmanager/js/Line.js:501
+#: Voipmanager/js/Line.js:615
 msgid "Callgroup"
 msgstr "Call Group"
 
-#: Voipmanager/js/Line.js:499
-#: Voipmanager/js/Line.js:779
+#: Voipmanager/js/Line.js:508
+#: Voipmanager/js/Line.js:788
 msgid "Pickup group"
 msgstr "Pickup Group"
 
-#: Voipmanager/js/Line.js:506
-#: Voipmanager/js/Line.js:592
+#: Voipmanager/js/Line.js:515
+#: Voipmanager/js/Line.js:601
 msgid "Accountcode"
 msgstr "Account Code"
 
-#: Voipmanager/js/Line.js:513
-#: Voipmanager/js/Line.js:720
+#: Voipmanager/js/Line.js:522
+#: Voipmanager/js/Line.js:729
 msgid "Language"
 msgstr "Sprache"
 
-#: Voipmanager/js/Line.js:520
-#: Voipmanager/js/Line.js:741
+#: Voipmanager/js/Line.js:529
+#: Voipmanager/js/Line.js:750
 msgid "NAT"
 msgstr "NAT"
 
-#: Voipmanager/js/Line.js:537
-#: Voipmanager/js/Line.js:800
+#: Voipmanager/js/Line.js:546
+#: Voipmanager/js/Line.js:809
 msgid "Qualify"
 msgstr "Qualify"
 
-#: Voipmanager/js/Line.js:599
+#: Voipmanager/js/Line.js:608
 msgid "Amaflags"
 msgstr "AMA Flags"
 
-#: Voipmanager/js/Line.js:620
+#: Voipmanager/js/Line.js:629
 msgid "Can reinvite"
 msgstr "Can re-invite"
 
-#: Voipmanager/js/Line.js:644
+#: Voipmanager/js/Line.js:653
 msgid "Default IP"
 msgstr "Standard IP"
 
-#: Voipmanager/js/Line.js:651
+#: Voipmanager/js/Line.js:660
 msgid "DTMF mode"
 msgstr "DTMF Mode"
 
-#: Voipmanager/js/Line.js:668
+#: Voipmanager/js/Line.js:677
 msgid "From User"
 msgstr "\"From\" Benutzer"
 
-#: Voipmanager/js/Line.js:675
+#: Voipmanager/js/Line.js:684
 msgid "From Domain"
 msgstr "\"From\" Domain"
 
-#: Voipmanager/js/Line.js:689
+#: Voipmanager/js/Line.js:698
 msgid "Full Contact"
 msgstr "kompletter Kontakt"
 
-#: Voipmanager/js/Line.js:696
+#: Voipmanager/js/Line.js:705
 msgid "Host"
 msgstr "Host"
 
-#: Voipmanager/js/Line.js:703
+#: Voipmanager/js/Line.js:712
 msgid "Insecure"
 msgstr "Insecure"
 
-#: Voipmanager/js/Line.js:734
+#: Voipmanager/js/Line.js:743
 msgid "MD5 Secret"
 msgstr "MD5 Secret"
 
-#: Voipmanager/js/Line.js:758
+#: Voipmanager/js/Line.js:767
 msgid "Deny"
 msgstr "Verbieten"
 
-#: Voipmanager/js/Line.js:765
+#: Voipmanager/js/Line.js:774
 msgid "Permit"
 msgstr "Erlauben"
 
-#: Voipmanager/js/Line.js:772
+#: Voipmanager/js/Line.js:781
 msgid "Mask"
 msgstr "Maske"
 
-#: Voipmanager/js/Line.js:793
+#: Voipmanager/js/Line.js:802
 msgid "Port"
 msgstr "Port"
 
-#: Voipmanager/js/Line.js:817
+#: Voipmanager/js/Line.js:826
 msgid "Restrict CID"
 msgstr "Restrict CID"
 
-#: Voipmanager/js/Line.js:824
+#: Voipmanager/js/Line.js:833
 msgid "RTP Timeout"
 msgstr "RTP Timeout"
 
-#: Voipmanager/js/Line.js:831
+#: Voipmanager/js/Line.js:840
 msgid "RTP Hold Timeout"
 msgstr "RTP Hold Timeout"
 
-#: Voipmanager/js/Line.js:862
+#: Voipmanager/js/Line.js:871
 msgid "Username"
 msgstr "Benutzername"
 
-#: Voipmanager/js/Line.js:869
+#: Voipmanager/js/Line.js:878
 msgid "Disallow"
 msgstr "Disallow"
 
-#: Voipmanager/js/Line.js:876
+#: Voipmanager/js/Line.js:885
 msgid "Allow"
 msgstr "Allow"
 
-#: Voipmanager/js/Line.js:883
+#: Voipmanager/js/Line.js:892
 msgid "Music on hold"
 msgstr "Music on hold"
 
-#: Voipmanager/js/Line.js:897
+#: Voipmanager/js/Line.js:906
 msgid "Reg Seconds"
 msgstr "Reg Sekunden"
 
-#: Voipmanager/js/Line.js:904
+#: Voipmanager/js/Line.js:913
 #: Voipmanager/js/Phone.js:224
 msgid "IP Address"
 msgstr "IP Adresse"
 
-#: Voipmanager/js/Line.js:911
+#: Voipmanager/js/Line.js:920
 msgid "Reg Exten"
 msgstr "Reg Exten"
 
-#: Voipmanager/js/Line.js:918
+#: Voipmanager/js/Line.js:927
 msgid "Can forward call"
 msgstr "Can forward call"
 
-#: Voipmanager/js/Line.js:935
+#: Voipmanager/js/Line.js:944
 msgid "Set Var"
 msgstr "Set Var"
 
-#: Voipmanager/js/Line.js:942
+#: Voipmanager/js/Line.js:951
 msgid "Notify Ringing"
 msgstr "notify ringing"
 
-#: Voipmanager/js/Line.js:959
+#: Voipmanager/js/Line.js:968
 msgid "Use Client Code"
 msgstr "Use Client Code"
 
-#: Voipmanager/js/Line.js:976
+#: Voipmanager/js/Line.js:985
 msgid "Auth User"
 msgstr "Auth Benutzer"
 
-#: Voipmanager/js/Line.js:983
+#: Voipmanager/js/Line.js:992
 msgid "Call Limit"
 msgstr "Call Limit"
 
-#: Voipmanager/js/Line.js:990
+#: Voipmanager/js/Line.js:999
 msgid "Busy Level"
 msgstr "Busy Level"
 
@@ -727,6 +715,130 @@ msgstr "Einstellungen Id"
 #: Voipmanager/js/Templates.js:196
 msgid "Software Id"
 msgstr "Software Id"
+
+#: Voipmanager/js/Templates.js:414
+msgid "Software Version"
+msgstr "Software Version"
+
+#: Voipmanager/js/Templates.js:430
+msgid "Keylayout"
+msgstr "Tastaturlayout"
+
+#: Voipmanager/js/Templates.js:446
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: Voipmanager/js/Voicemail.js:82
+msgid "add voicemail"
+msgstr "Voicemail hinzufügen"
+
+#: Voipmanager/js/Voicemail.js:89
+msgid "edit voicemail"
+msgstr "Voicemail bearbeiten"
+
+#: Voipmanager/js/Voicemail.js:97
+msgid "delete voicemail"
+msgstr "Voicemail löschen"
+
+#: Voipmanager/js/Voicemail.js:184
+msgid "Displaying voicemail {0} - {1} of {2}"
+msgstr "Zeige Voicemail {0} - {1} von {2}"
+
+#: Voipmanager/js/Voicemail.js:185
+msgid "No voicemail to display"
+msgstr "Keine Voicemail vorhanden"
+
+#: Voipmanager/js/Voicemail.js:191
+#: Voipmanager/js/Voicemail.js:463
+msgid "context"
+msgstr "Kontext"
+
+#: Voipmanager/js/Voicemail.js:192
+#: Voipmanager/js/Voicemail.js:456
+msgid "mailbox"
+msgstr "Mailbox"
+
+#: Voipmanager/js/Voicemail.js:193
+msgid "fullname"
+msgstr "Name"
+
+#: Voipmanager/js/Voicemail.js:194
+#: Voipmanager/js/Voicemail.js:442
+msgid "email"
+msgstr "EMail"
+
+#: Voipmanager/js/Voicemail.js:195
+#: Voipmanager/js/Voicemail.js:449
+msgid "pager"
+msgstr "Pager"
+
+#: Voipmanager/js/Voicemail.js:196
+msgid "tz"
+msgstr "TZ"
+
+#: Voipmanager/js/Voicemail.js:197
+msgid "attach"
+msgstr "attach"
+
+#: Voipmanager/js/Voicemail.js:198
+msgid "saycid"
+msgstr "say cid"
+
+#: Voipmanager/js/Voicemail.js:199
+msgid "dialout"
+msgstr "dialout"
+
+#: Voipmanager/js/Voicemail.js:200
+msgid "callback"
+msgstr "callback"
+
+#: Voipmanager/js/Voicemail.js:201
+msgid "review"
+msgstr "review"
+
+#: Voipmanager/js/Voicemail.js:202
+msgid "operator"
+msgstr "operator"
+
+#: Voipmanager/js/Voicemail.js:203
+msgid "envelope"
+msgstr "envelope"
+
+#: Voipmanager/js/Voicemail.js:204
+msgid "sayduration"
+msgstr "say duration"
+
+#: Voipmanager/js/Voicemail.js:205
+msgid "saydurationm"
+msgstr "say duration m"
+
+#: Voipmanager/js/Voicemail.js:206
+msgid "sendvoicemail"
+msgstr "send voicemail"
+
+#: Voipmanager/js/Voicemail.js:207
+msgid "delete"
+msgstr "löschen"
+
+#: Voipmanager/js/Voicemail.js:208
+msgid "nextaftercmd"
+msgstr "next after cmd"
+
+#: Voipmanager/js/Voicemail.js:209
+msgid "forcename"
+msgstr "force name"
+
+#: Voipmanager/js/Voicemail.js:210
+msgid "forcegreetings"
+msgstr "force greetings"
+
+#: Voipmanager/js/Voicemail.js:211
+msgid "hidefromdir"
+msgstr "hide from dir"
+
+#: Voipmanager/js/Voicemail.js:435
+msgid "Password"
+msgstr "Passwort"
 
 #~ msgid "Software Image"
 #~ msgstr "Name"

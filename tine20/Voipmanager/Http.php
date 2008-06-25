@@ -35,7 +35,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Phone.js',
             'Voipmanager/js/Location.js',
             'Voipmanager/js/Line.js',
-            'Voipmanager/js/Context.js'
+            'Voipmanager/js/Context.js',
+            'Voipmanager/js/Voicemail.js'
         );
     }
     
@@ -174,6 +175,48 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         );
         
         $view->title="edit context data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+
+
+    /**
+     * create edit asterisk context dialog
+     *
+     * @param int $lineId
+     * 
+     */
+    public function editVoicemail($voicemailId=NULL)
+    {
+        if (!empty($voicemailId)) {
+            $voicemail = Voipmanager_Controller::getInstance()->getAsteriskVoicemail($voicemailId);
+            $encodedVoicemail = Zend_Json::encode($voicemail->toArray());                   
+        } else {
+            $encodedVoicemail = '{}';
+        }
+
+        
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Voipmanager.Voicemail.EditDialog.display(' . $encodedVoicemail .');';
+
+        $view->locationData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit voicemail data";
 
         $view->isPopup = true;
         

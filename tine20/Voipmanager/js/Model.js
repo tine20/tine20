@@ -138,3 +138,30 @@ Tine.Voipmanager.Model.Context = Ext.data.Record.create([
     {name: 'name'},
     {name: 'description'}
 ]);
+
+Tine.Voipmanager.Model.Voicemail = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'context'},
+    {name: 'mailbox'},
+    {name: 'password'},
+    {name: 'fullname'},
+    {name: 'email'},
+    {name: 'pager'},
+    {name: 'tz'},
+    {name: 'attach'},
+    {name: 'saycid'},
+    {name: 'dialout'},
+    {name: 'callback'},
+    {name: 'review'},
+    {name: 'operator'},
+    {name: 'envelope'},
+    {name: 'sayduration'},
+    {name: 'saydurationm'},
+    {name: 'sendvoicemail'},
+    {name: 'delete'},
+    {name: 'nextaftercmd'},
+    {name: 'forcename'},
+    {name: 'forcegreetings'},
+    {name: 'hidefromdir'}
+]);
+

@@ -646,4 +646,113 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     
     
     
+    /**
+     * get asterisk voicemails
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+    public function getAsteriskVoicemails($sort, $dir, $query)
+    {     
+  
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Voipmanager_Controller::getInstance()->getAsteriskVoicemails($sort, $dir, $query)) {
+        
+            $_rows = $rows->toArray();
+
+            $i = 0; 
+        
+            $result['results']      = $_rows;
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }
+    
+    
+   /**
+     * get one voicemail identified by voicemailId
+     *
+     * @param int $voicemailId
+     * @return array
+     */
+    public function getAsteriskVoicemail($voicemailId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $voicemail = Voipmanager_Controller::getInstance()->getAsteriskVoicemail($voicemailId);
+        
+        $result = $voicemail->toArray();      
+          
+        return $result;
+    }    
+    
+    
+    /**
+     * save one voicemail
+     *
+     * if $voicemailData['id'] is empty the voicemail gets added, otherwise it gets updated
+     *
+     * @param string $voicemailData a JSON encoded array of voicemail properties
+     * @return array
+     */
+    public function saveAsteriskVoicemail($voicemailData)
+    {
+        $voicemailData = Zend_Json::decode($voicemailData);
+        
+        // unset if empty
+        if (empty($voicemailData['id'])) {
+            unset($voicemailData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($voicemailData,true));
+        $voicemail = new Voipmanager_Model_AsteriskVoicemail();
+        $voicemail->setFromArray($voicemailData);
+
+        
+        if (empty($voicemail->id)) {
+            $voicemail = Voipmanager_Controller::getInstance()->createAsteriskVoicemail($voicemail);
+        } else {
+            $voicemail = Voipmanager_Controller::getInstance()->updateAsteriskVoicemail($voicemail);
+        }
+        $voicemail = $this->getAsteriskVoicemail($voicemail->getId());
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $voicemail
+        ); //$voicemail->toArray());
+        
+        
+        return $result;
+         
+    }     
+    
+    
+   
+    /**
+     * delete multiple voicemails
+     *
+     * @param array $_voicemailIDs list of voicemailId's to delete
+     * @return array
+     */
+    public function deleteAsteriskVoicemails($_voicemailIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $voicemailIds = Zend_Json::decode($_voicemailIds);
+        
+        Voipmanager_Controller::getInstance()->deleteAsteriskVoicemails($voicemailIds);
+
+        return $result;
+    }     
+    
+    
 }
