@@ -10,8 +10,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        rework functions
- * @todo        add rights
+ * @todo        replace links with relations
+ * @todo        add other rights
  */
 
 /**
@@ -188,6 +188,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function createLead(Crm_Model_Lead $_lead)
     {
+        $this->checkRight('MANAGE_LEADS');
+        
         if(!$_lead->isValid()) {
             throw new Exception('lead object is not valid');
         }
@@ -241,6 +243,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
+        $this->checkRight('MANAGE_LEADS');
+        
         if(!$_lead->isValid()) {
             throw new Exception('lead object is not valid');
         }
@@ -290,6 +294,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function deleteLead($_leadId)
     {
+        $this->checkRight('MANAGE_LEADS');
+        
         if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
             foreach($_leadId as $leadId) {
                 $this->deleteLead($leadId);
@@ -745,7 +751,43 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         Tinebase_Notification::getInstance()->send($this->_currentAccount, $_contactIds, $subject, $plain, $html);
     }
     
-          
+    /**
+     * generic check admin rights function
+     * rules: 
+     * - ADMIN right includes all other rights
+     * - MANAGE_* right includes VIEW_* right 
+     * 
+     * @param   string  $_right to check
+     * @todo    think about moving that to Tinebase_Acl or Tinebase_Application
+     */    
+    protected function checkRight( $_right ) {
         
+        // array with the rights that should be checked, ADMIN is in it per default
+        $rightsToCheck = array ( Tinebase_Acl_Rights::ADMIN );
+        
+        if ( preg_match("/MANAGE_/", $_right) ) {
+            $rightsToCheck[] = constant('Crm_Acl_Rights::' . $_right);
+        }
+
+        if ( preg_match("/VIEW_([A-Z_]*)/", $_right, $matches) ) {
+            $rightsToCheck[] = constant('Crm_Acl_Rights::' . $_right);
+            // manage right includes view right
+            $rightsToCheck[] = constant('Crm_Acl_Rights::MANAGE_' . $matches[1]);
+        }
+        
+        $hasRight = FALSE;
+        
+        foreach ( $rightsToCheck as $rightToCheck ) {
+            if ( Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck) ) {
+                $hasRight = TRUE;
+                break;    
+            }
+        }
+        
+        if ( !$hasRight ) {
+            throw new Exception("You are not allowed to $_right !");
+        }        
+                
+    }    
     
 }
