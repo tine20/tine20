@@ -132,3 +132,9 @@ Tine.Voipmanager.Model.Line = Ext.data.Record.create([
     {name: 'call-limit'},
     {name: 'busy-level'}
 ]);
+
+Tine.Voipmanager.Model.Context = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'}
+]);

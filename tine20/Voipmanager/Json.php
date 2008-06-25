@@ -92,26 +92,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     
     
     /**
-     * delete multiple phones
-     *
-     * @param array $_phoneIDs list of phoneId's to delete
-     * @return array
-     */
-    public function deleteSnomPhones($_phoneIds)
-    {
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $phoneIds = Zend_Json::decode($_phoneIds);
-        
-        Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds);
-
-        return $result;
-    }    
-    
-    
-    /**
      * save one phone
      *
      * if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
@@ -150,6 +130,28 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
          
     }     
+    
+    
+   
+    /**
+     * delete multiple phones
+     *
+     * @param array $_phoneIDs list of phoneId's to delete
+     * @return array
+     */
+    public function deleteSnomPhones($_phoneIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $phoneIds = Zend_Json::decode($_phoneIds);
+        
+        Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds);
+
+        return $result;
+    }    
+       
         
         
     /**
@@ -529,6 +531,118 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
          
     }     
+    
+    
+    
+    /**
+     * get asterisk contexts
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+    public function getAsteriskContexts($sort, $dir, $query)
+    {     
+  
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Voipmanager_Controller::getInstance()->getAsteriskContexts($sort, $dir, $query)) {
+        
+            $_rows = $rows->toArray();
+
+            $i = 0; 
+        
+            $result['results']      = $_rows;
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }
+    
+    
+   /**
+     * get one context identified by contextId
+     *
+     * @param int $contextId
+     * @return array
+     */
+    public function getAsteriskContext($contextId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $context = Voipmanager_Controller::getInstance()->getAsteriskContext($contextId);
+        
+        $result = $context->toArray();      
+          
+        return $result;
+    }    
+    
+    
+    /**
+     * save one context
+     *
+     * if $contextData['id'] is empty the context gets added, otherwise it gets updated
+     *
+     * @param string $contextData a JSON encoded array of context properties
+     * @return array
+     */
+    public function saveAsteriskContext($contextData)
+    {
+        $contextData = Zend_Json::decode($contextData);
+        
+        // unset if empty
+        if (empty($contextData['id'])) {
+            unset($contextData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($contextData,true));
+        $context = new Voipmanager_Model_AsteriskContext();
+        $context->setFromArray($contextData);
+
+        
+        if (empty($context->id)) {
+            $context = Voipmanager_Controller::getInstance()->createAsteriskContext($context);
+        } else {
+            $context = Voipmanager_Controller::getInstance()->updateAsteriskContext($context);
+        }
+        $context = $this->getAsteriskContext($context->getId());
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $context
+        ); //$context->toArray());
+        
+        
+        return $result;
+         
+    }     
+    
+    
+   
+    /**
+     * delete multiple contexts
+     *
+     * @param array $_contextIDs list of contextId's to delete
+     * @return array
+     */
+    public function deleteAsteriskContexts($_contextIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $contextIds = Zend_Json::decode($_contextIds);
+        
+        Voipmanager_Controller::getInstance()->deleteAsteriskContexts($contextIds);
+
+        return $result;
+    }    
+       
+    
     
     
     

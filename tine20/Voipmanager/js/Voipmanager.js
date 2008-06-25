@@ -283,7 +283,15 @@ Tine.Voipmanager = function() {
                     } else {
                         Tine.Voipmanager.Lines.Main.show(_node);
                     }
-                    break;                                          
+                    break;        
+                    
+                case 'context':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerContext') {
+                        Ext.getCmp('gridVoipmanagerContext').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Voipmanager.Context.Main.show(_node);
+                    }
+                    break;                                                       
             }
         }, this);
 

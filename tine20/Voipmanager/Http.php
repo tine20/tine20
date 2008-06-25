@@ -34,7 +34,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Templates.js',
             'Voipmanager/js/Phone.js',
             'Voipmanager/js/Location.js',
-            'Voipmanager/js/Line.js'
+            'Voipmanager/js/Line.js',
+            'Voipmanager/js/Context.js'
         );
     }
     
@@ -140,6 +141,48 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         echo $view->render('mainscreen.php');
     }       
     
+
+    /**
+     * create edit asterisk context dialog
+     *
+     * @param int $lineId
+     * 
+     */
+    public function editContext($contextId=NULL)
+    {
+        if (!empty($contextId)) {
+            $context = Voipmanager_Controller::getInstance()->getAsteriskContext($contextId);
+            $encodedContext = Zend_Json::encode($context->toArray());                   
+        } else {
+            $encodedContext = '{}';
+        }
+
+        
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Voipmanager.Context.EditDialog.display(' . $encodedContext .');';
+
+        $view->locationData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit context data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+
 
     /**
      * create edit location dialog

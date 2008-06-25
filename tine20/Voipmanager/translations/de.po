@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-25 13:42+0100\n"
+"POT-Creation-Date: 2008-06-25 15:07+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -17,6 +17,84 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Voipmanager\n"
 
+#: Voipmanager/js/Context.js:82
+msgid "add context"
+msgstr "Kontext hinzufügen"
+
+#: Voipmanager/js/Context.js:89
+msgid "edit context"
+msgstr "Kontext editieren"
+
+#: Voipmanager/js/Context.js:97
+msgid "delete context"
+msgstr "Kontext löschen"
+
+#: Voipmanager/js/Context.js:152
+#: Voipmanager/js/Line.js:156
+#: Voipmanager/js/Location.js:152
+#: Voipmanager/js/Phone.js:163
+#: Voipmanager/js/Software.js:160
+#: Voipmanager/js/Templates.js:152
+msgid "Search: "
+msgstr "Suche:"
+
+#: Voipmanager/js/Context.js:184
+msgid "Displaying context {0} - {1} of {2}"
+msgstr "Zeige Kontext {0} - {1} von {2}"
+
+#: Voipmanager/js/Context.js:185
+msgid "No context to display"
+msgstr "Kein Kontext vorhanden"
+
+#: Voipmanager/js/Context.js:190
+#: Voipmanager/js/Location.js:199
+#: Voipmanager/js/Software.js:199
+#: Voipmanager/js/Templates.js:190
+msgid "id"
+msgstr "id"
+
+#: Voipmanager/js/Context.js:191
+#: Voipmanager/js/Line.js:195
+#: Voipmanager/js/Templates.js:191
+msgid "name"
+msgstr "Name"
+
+#: Voipmanager/js/Context.js:192
+#: Voipmanager/js/Context.js:404
+#: Voipmanager/js/Location.js:207
+#: Voipmanager/js/Location.js:447
+#: Voipmanager/js/Phone.js:698
+#: Voipmanager/js/Software.js:200
+#: Voipmanager/js/Software.js:435
+#: Voipmanager/js/Templates.js:192
+#: Voipmanager/js/Templates.js:408
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Voipmanager/js/Context.js:396
+#: Voipmanager/js/Line.js:440
+#: Voipmanager/js/Line.js:585
+#: Voipmanager/js/Location.js:203
+#: Voipmanager/js/Location.js:439
+#: Voipmanager/js/Templates.js:400
+msgid "Name"
+msgstr "Name"
+
+#: Voipmanager/js/Context.js:410
+#: Voipmanager/js/Templates.js:414
+msgid "Software Version"
+msgstr "Software Version"
+
+#: Voipmanager/js/Context.js:426
+#: Voipmanager/js/Templates.js:430
+msgid "Keylayout"
+msgstr "Tastaturlayout"
+
+#: Voipmanager/js/Context.js:442
+#: Voipmanager/js/Templates.js:446
+msgid "Settings"
+msgstr "Einstellungen"
+
 #: Voipmanager/js/Line.js:83
 msgid "add line"
 msgstr "Line hinzufügen"
@@ -28,14 +106,6 @@ msgstr "Line editieren"
 #: Voipmanager/js/Line.js:98
 msgid "delete line"
 msgstr "Line löschen"
-
-#: Voipmanager/js/Line.js:156
-#: Voipmanager/js/Location.js:152
-#: Voipmanager/js/Phone.js:163
-#: Voipmanager/js/Software.js:160
-#: Voipmanager/js/Templates.js:152
-msgid "Search: "
-msgstr "Suche:"
 
 #: Voipmanager/js/Line.js:188
 msgid "Displaying lines {0} - {1} of {2}"
@@ -50,11 +120,6 @@ msgstr "Keine Line vorhanden"
 #: Voipmanager/js/Phone.js:201
 msgid "Id"
 msgstr "Id"
-
-#: Voipmanager/js/Line.js:195
-#: Voipmanager/js/Templates.js:191
-msgid "name"
-msgstr "Name"
 
 #: Voipmanager/js/Line.js:196
 msgid "ASTERISK_LINES_account code"
@@ -223,14 +288,6 @@ msgstr "call limit"
 #: Voipmanager/js/Line.js:237
 msgid "ASTERISK_LINES_busy level"
 msgstr "busy level"
-
-#: Voipmanager/js/Line.js:440
-#: Voipmanager/js/Line.js:585
-#: Voipmanager/js/Location.js:203
-#: Voipmanager/js/Location.js:439
-#: Voipmanager/js/Templates.js:400
-msgid "Name"
-msgstr "Name"
 
 #: Voipmanager/js/Line.js:447
 #: Voipmanager/js/Line.js:637
@@ -473,22 +530,6 @@ msgstr "HTTPS Port"
 msgid "HTTP User"
 msgstr "HTTP Benutzer"
 
-#: Voipmanager/js/Location.js:199
-#: Voipmanager/js/Software.js:199
-#: Voipmanager/js/Templates.js:190
-msgid "id"
-msgstr "id"
-
-#: Voipmanager/js/Location.js:207
-#: Voipmanager/js/Location.js:447
-#: Voipmanager/js/Phone.js:698
-#: Voipmanager/js/Software.js:200
-#: Voipmanager/js/Software.js:435
-#: Voipmanager/js/Templates.js:192
-#: Voipmanager/js/Templates.js:408
-msgid "Description"
-msgstr "Beschreibung"
-
 #: Voipmanager/js/Location.js:208
 msgid "Filter Registrar"
 msgstr "Filter Registrar"
@@ -686,18 +727,6 @@ msgstr "Einstellungen Id"
 #: Voipmanager/js/Templates.js:196
 msgid "Software Id"
 msgstr "Software Id"
-
-#: Voipmanager/js/Templates.js:414
-msgid "Software Version"
-msgstr "Software Version"
-
-#: Voipmanager/js/Templates.js:430
-msgid "Keylayout"
-msgstr "Tastaturlayout"
-
-#: Voipmanager/js/Templates.js:446
-msgid "Settings"
-msgstr "Einstellungen"
 
 #~ msgid "Software Image"
 #~ msgstr "Name"

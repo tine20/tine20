@@ -67,6 +67,14 @@ class Voipmanager_Controller
      * @var Voipmanager_Backend_Asterisk_Peer
      */
     protected $_asteriskPeerBackend;
+
+    /**
+     * the asterisk context sql backend
+     *
+     * @var Voipmanager_Backend_Asterisk_Context
+     */
+    protected $_asteriskContextBackend;
+
     
     /**
      * the constructor
@@ -74,12 +82,13 @@ class Voipmanager_Controller
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_snomPhoneBackend    = new Voipmanager_Backend_Snom_Phone();
-        $this->_snomLineBackend     = new Voipmanager_Backend_Snom_Line();
-        $this->_snomSoftwareBackend = new Voipmanager_Backend_Snom_Software();
-        $this->_snomLocationBackend = new Voipmanager_Backend_Snom_Location();
-        $this->_snomTemplateBackend = new Voipmanager_Backend_Snom_Template();      
-        $this->_asteriskPeerBackend = new Voipmanager_Backend_Asterisk_Peer();          
+        $this->_snomPhoneBackend        = new Voipmanager_Backend_Snom_Phone();
+        $this->_snomLineBackend         = new Voipmanager_Backend_Snom_Line();
+        $this->_snomSoftwareBackend     = new Voipmanager_Backend_Snom_Software();
+        $this->_snomLocationBackend     = new Voipmanager_Backend_Snom_Location();
+        $this->_snomTemplateBackend     = new Voipmanager_Backend_Snom_Template();      
+        $this->_asteriskPeerBackend     = new Voipmanager_Backend_Asterisk_Peer();          
+        $this->_asteriskContextBackend  = new Voipmanager_Backend_Asterisk_Context();          
     }
     
     /**
@@ -166,6 +175,37 @@ class Voipmanager_Controller
         return $this->getSnomPhone($phone);
     }
     
+    
+
+    /**
+     * update one phone
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return  Voipmanager_Model_SnomPhone
+     */
+    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+        $phone = $this->_snomPhoneBackend->update($_phone);
+        
+        $this->_snomLineBackend->deletePhoneLines($phone->getId());
+        
+        foreach($_phone->lines as $line) {
+            $line->snomphone_id = $phone->getId();
+            error_log(print_r($line->toArray(), true));
+            $addedLine = $this->_snomLineBackend->create($line);
+        }
+      
+        return $this->getSnomPhone($phone);
+    }    
+    
+    
+    
+    
     /**
      * Deletes a set of phones.
      * 
@@ -219,34 +259,6 @@ class Voipmanager_Controller
         $this->_snomTemplateBackend->delete($_identifiers);
     }
     
-
-    /**
-     * update one phone
-     *
-     * @param Voipmanager_Model_SnomPhone $_phone
-     * @return  Voipmanager_Model_SnomPhone
-     */
-    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone)
-    {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-        $phone = $this->_snomPhoneBackend->update($_phone);
-        
-        $this->_snomLineBackend->deletePhoneLines($phone->getId());
-        
-        foreach($_phone->lines as $line) {
-            $line->snomphone_id = $phone->getId();
-            error_log(print_r($line->toArray(), true));
-            $addedLine = $this->_snomLineBackend->create($line);
-        }
-      
-        return $this->getSnomPhone($phone);
-    }    
-    
-
 
 
     /**
@@ -550,4 +562,95 @@ class Voipmanager_Controller
         
         return $xml;
     }
+    
+    
+    
+    
+    /**
+     * get asterisk_context by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskContext
+     */
+    public function getAsteriskContext($_id)
+    {
+        $context = $this->_asteriskContextBackend->get($_id);
+        
+        return $context;    
+    }
+
+    /**
+     * get asterisk_contexts
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskContext
+     */
+    public function getAsteriskContexts($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {
+        $filter = new Voipmanager_Model_AsteriskContextFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
+
+        $result = $this->_asteriskContextBackend->search($filter, $pagination);
+        
+        return $result;    
+    }
+
+    /**
+     * add one context
+     *
+     * @param Voipmanager_Model_AsteriskContext $_context
+     * @return  Voipmanager_Model_AsteriskContext
+     */
+    public function createAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
+    {        
+        $context = $this->_asteriskContextBackend->create($_context);
+      
+        return $this->getAsteriskContext($context);
+    }
+    
+    
+
+    /**
+     * update one context
+     *
+     * @param Voipmanager_Model_AsteriskContext $_context
+     * @return  Voipmanager_Model_AsteriskContext
+     */
+    public function updateAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+        $context = $this->_asteriskContextBackend->update($_context);
+        
+        return $this->getAsteriskContext($context);
+    }    
+    
+    
+    
+    
+    /**
+     * Deletes a set of contexts.
+     * 
+     * If one of the contexts could not be deleted, no context is deleted
+     * 
+     * @throws Exception
+     * @param array array of context identifiers
+     * @return void
+     */
+    public function deleteAsteriskContexts($_identifiers)
+    {
+        $this->_asteriskContextBackend->delete($_identifiers);
+    }
+    
+    
+    
 }

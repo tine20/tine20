@@ -400,4 +400,51 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Voipmanager', '0.3');
     }    
+    
+    
+    /**
+     * add the asterisk_context table
+     */    
+    public function update_3()
+    {
+        $tableDefinition = "  
+            <table>
+                <name>asterisk_context</name>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>150</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>description</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>true</notnull>
+                    </field>            
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>";
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+
+        $this->setApplicationVersion('Voipmanager', '0.4');
+    }        
 }
