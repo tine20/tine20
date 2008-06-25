@@ -43,7 +43,6 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'deleted_by'           => array('allowEmpty' => true         ),
         // task only fields
         'id'                   => array('allowEmpty' => true, 'Alnum'),
-        //'percent'              => array('presence' => 'required', 'default' => '00'),
         'percent'              => array('allowEmpty' => true, 'default' => 0),
         'completed'            => array('allowEmpty' => true         ),
         'due'                  => array('allowEmpty' => true         ),
@@ -53,7 +52,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'geo'                  => array('allowEmpty' => true         ),
         'location'             => array('allowEmpty' => true         ),
         'organizer'            => array('allowEmpty' => true, 'Int' ),
-        'priority'             => array('presence' => 'required', 'default' => 1),
+        'priority'             => array('allowEmpty' => true, 'default' => 1),
         'status_id'            => array('presence' => 'required', 'default' => 3, 'allowEmpty' => false),
         'summary'              => array('presence' => 'required'     ),
         'url'                  => array('allowEmpty' => true         ),
