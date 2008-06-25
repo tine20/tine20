@@ -188,8 +188,8 @@ Tine.Voipmanager.Voicemail.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 10, hidden: true },
+            { resizable: true, id: 'mailbox', header: this.translation._('mailbox'), dataIndex: 'mailbox', width: 50 },
             { resizable: true, id: 'context', header: this.translation._('context'), dataIndex: 'context', width: 70 },
-            { resizable: true, id: 'mailbox', header: this.translation._('mailbox'), dataIndex: 'mailbox', width: 120 },
             { resizable: true, id: 'fullname', header: this.translation._('fullname'), dataIndex: 'fullname', width: 180 },
             { resizable: true, id: 'email', header: this.translation._('email'), dataIndex: 'email', width: 150 },
             { resizable: true, id: 'pager', header: this.translation._('pager'), dataIndex: 'pager', width: 150 },
@@ -244,7 +244,7 @@ Tine.Voipmanager.Voicemail.Main = {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'description',
+            autoExpandColumn: 'fullname',
             border: false,
             view: new Ext.grid.GridView({
                 autoFill: true,
