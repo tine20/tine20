@@ -366,11 +366,11 @@ class Voipmanager_Controller
      */
     public function createSnomSoftware(Voipmanager_Model_SnomSoftware $_software)
     {        
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
-            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
+        unset($_software->current_software);
+        unset($_software->settings_loaded_at);
+        unset($_software->firmware_checked_at);
+        unset($_software->ipaddress);
+        
         $software = $this->_snomSoftwareBackend->create($_software);
       
         return $software;
@@ -384,12 +384,11 @@ class Voipmanager_Controller
      */
     public function updateSnomSoftware(Voipmanager_Model_SnomSoftware $_software)
     {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-       
+        unset($_software->current_software);
+        unset($_software->settings_loaded_at);
+        unset($_software->firmware_checked_at);
+        unset($_software->ipaddress);
+        
         $software = $this->_snomSoftwareBackend->update($_software);
         
         return $software;
