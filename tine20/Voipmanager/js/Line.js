@@ -207,7 +207,7 @@ Tine.Voipmanager.Lines.Main = {
             { resizable: true, id: 'host', header: this.translation._('ASTERISK_LINES_host'), dataIndex: 'host', width: 30, hidden: true },
             { resizable: true, id: 'insecure', header: this.translation._('ASTERISK_LINES_insecure'), dataIndex: 'insecure', width: 30, hidden: true },
             { resizable: true, id: 'language', header: this.translation._('ASTERISK_LINES_language'), dataIndex: 'language', width: 30, hidden: true },
-            { resizable: true, id: 'mailbox', header: this.translation._('ASTERISK_LINES_mailbox'), dataIndex: 'mailbox', width: 50},
+            { resizable: true, id: 'mailbox', header: this.translation._('ASTERISK_LINES_mailbox'), dataIndex: 'mailbox', width: 30},
             { resizable: true, id: 'md5secret', header: this.translation._('ASTERISK_LINES_md5 secret'), dataIndex: 'md5secret', width: 30, hidden: true },
             { resizable: true, id: 'nat', header: this.translation._('ASTERISK_LINES_nat'), dataIndex: 'nat', width: 30, hidden: true },
             { resizable: true, id: 'deny', header: this.translation._('ASTERISK_LINES_deny'), dataIndex: 'deny', width: 30, hidden: true },
