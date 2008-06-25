@@ -425,34 +425,6 @@ Tine.Voipmanager.Voicemail.EditDialog =  {
                         height: 280,
                         items: [{
                             xtype: 'textfield',
-                            fieldLabel: translation._('Name'),
-                            name: 'fullname',
-                            maxLength: 150,
-                            anchor: '100%',
-                            allowBlank: false
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: translation._('Password'),
-                            name: 'password',
-                            maxLength: 5,
-                            anchor: '100%',
-                            allowBlank: false
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: translation._('email'),
-                            name: 'email',
-                            maxLength: 50,
-                            anchor: '100%',
-                            allowBlank: false
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: translation._('pager'),
-                            name: 'pager',
-                            maxLength: 50,
-                            anchor: '100%',
-                            allowBlank: false
-                        }, {
-                            xtype: 'textfield',
                             fieldLabel: translation._('mailbox'),
                             name: 'mailbox',
                             maxLength: 11,
@@ -465,6 +437,33 @@ Tine.Voipmanager.Voicemail.EditDialog =  {
                             maxLength: 40,
                             anchor: '100%',
                             allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: translation._('Name'),
+                            name: 'fullname',
+                            maxLength: 150,
+                            anchor: '100%',
+                            allowBlank: false
+                        }, {
+                            xtype: 'numberfield',
+                            fieldLabel: translation._('Password'),
+                            name: 'password',
+                            maxLength: 5,
+                            anchor: '100%',
+                            allowBlank: false
+                        }, {
+                            xtype: 'textfield',
+                            vtype: 'email',
+                            fieldLabel: translation._('email'),
+                            name: 'email',
+                            maxLength: 50,
+                            anchor: '100%'                        
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: translation._('pager'),
+                            name: 'pager',
+                            maxLength: 50,
+                            anchor: '100%'
                         }]
                     }]
                 }]
