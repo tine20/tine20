@@ -383,7 +383,7 @@ Tine.Voipmanager.Location.EditDialog =  {
         applyChanges: function(_button, _event, _closeWindow) 
         {
             var form = Ext.getCmp('voipmanager_editLocationForm').getForm();
-console.log(this.locationRecord);
+
             if(form.isValid()) {
                 form.updateRecord(this.locationRecord);
         
@@ -419,125 +419,125 @@ console.log(this.locationRecord);
             this.applyChanges(_button, _event, true);
         },
         
-        editLocationDialog: [{
-            layout:'fit',
-            border: false,
-            autoHeight: true,
-            anchor: '100% 100%',
-            items:[{            
-                layout:'form',
-                //frame: true,
-                border:false,
-                anchor: '100%',
+        editLocationDialog: function(){
+        
+            var translation = new Locale.Gettext();
+            translation.textdomain('Voipmanager');
+            
+            var _dialog = [{
+                layout: 'fit',
+                border: false,
+                autoHeight: true,
+                anchor: '100% 100%',
                 items: [{
+                    layout: 'form',
+                    //frame: true,
+                    border: false,
+                    anchor: '100%',
+                    items: [{
                         xtype: 'textfield',
-                        fieldLabel: 'Name',
+                        fieldLabel: translation._('Name'),
                         name: 'name',
                         maxLength: 80,
-                        anchor:'100%',
+                        anchor: '100%',
                         allowBlank: false
-                    } , {
-                        xtype:'textarea',
+                    }, {
+                        xtype: 'textarea',
                         name: 'description',
-                        fieldLabel: 'Description',
+                        fieldLabel: translation._('Description'),
                         grow: false,
-                        preventScrollbars:false,
-                        anchor:'100%',
+                        preventScrollbars: false,
+                        anchor: '100%',
                         height: 30
-                    } , {
+                    }, {
                         xtype: 'textfield',
                         vtype: 'url',
-                        fieldLabel: 'Settings URL',
+                        fieldLabel: translation._('Settings URL'),
                         name: 'setting_server',
                         maxLength: 255,
-                        anchor:'100%',
+                        anchor: '100%',
                         allowBlank: false
-                    } , {
+                    }, {
                         xtype: 'textfield',
                         vtype: 'url',
-                        fieldLabel: 'Firmware URL',
+                        fieldLabel: translation._('Firmware URL'),
                         name: 'firmware_status',
                         maxLength: 255,
-                        anchor:'100%',
+                        anchor: '100%',
                         allowBlank: false
-                    } , {
+                    }, {
                         xtype: 'textfield',
                         vtype: 'url',
-                        fieldLabel: 'Base Download URL',
+                        fieldLabel: translation._('Base Download URL'),
                         name: 'base_download_url',
                         maxLength: 255,
-                        anchor:'100%',
+                        anchor: '100%',
                         allowBlank: false
-                    } , {
-                        layout:'column',
-                        border:false,
+                    }, {
+                        layout: 'column',
+                        border: false,
                         anchor: '100%',
                         items: [{
                             columnWidth: .5,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items:[{
+                            items: [{
                                 xtype: 'combo',
-                                fieldLabel: 'Update Policy',
+                                fieldLabel: translation._('Update Policy'),
                                 name: 'update_policy',
                                 mode: 'local',
-                                displayField:'policy',
-                                valueField:'key',
-                                anchor:'98%',                    
+                                displayField: 'policy',
+                                valueField: 'key',
+                                anchor: '98%',
                                 triggerAction: 'all',
                                 allowBlank: false,
                                 editable: false,
                                 store: new Ext.data.SimpleStore({
-                                    fields: ['key','policy'],
-                                    data: [
-	                                    ['auto_update', 'auto update'], 
-	                                    ['ask_for_update', 'ask for update'],  
-	                                    ['never_update_firm', 'never update firm'],  
-	                                    ['never_update_boot', 'never update boot'],  
-	                                    ['settings_only', 'settings only'],  
-	                                    ['never_update', 'never update']
-                                    ]
+                                    fields: ['key', 'policy'],
+                                    data: [['auto_update', 'auto update'], ['ask_for_update', 'ask for update'], ['never_update_firm', 'never update firm'], ['never_update_boot', 'never update boot'], ['settings_only', 'settings only'], ['never_update', 'never update']]
                                 })
                             }]
-                        } , {
+                        }, {
                             columnWidth: .5,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items:[{
+                            items: [{
                                 xtype: 'numberfield',
-                                fieldLabel: 'Firmware Interval',
+                                fieldLabel: translation._('Firmware Interval'),
                                 name: 'firmware_interval',
                                 maxLength: 11,
-                                anchor:'100%',
+                                anchor: '100%',
                                 allowBlank: false
-                           }]
-                       }]
-                    } , {
-                        xtype:'fieldset',
-                        checkboxToggle:false,
+                            }]
+                        }]
+                    }, {
+                        xtype: 'fieldset',
+                        checkboxToggle: false,
                         checkboxName: 'ntpSetting',
                         id: 'ntp_setting',
-                        title: 'NTP Server',
-                        autoHeight:true,
+                        title: translation._('NTP Server'),
+                        autoHeight: true,
                         anchor: '100%',
-                        defaults: {anchor:'100%'},
-                        items :[{
-                            layout:'column',
-                            border:false,
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        items: [{
+                            layout: 'column',
+                            border: false,
                             anchor: '100%',
                             items: [{
                                 columnWidth: .7,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items:[{
+                                items: [{
                                     xtype: 'textfield',
-                                    fieldLabel: 'NTP Server Address',
+                                    fieldLabel: translation._('NTP Server Address'),
                                     name: 'ntp_server',
                                     maxLength: 255,
-                                    anchor:'98%',
+                                    anchor: '98%',
                                     allowBlank: false
                                 }]
                             }, {
@@ -545,194 +545,198 @@ console.log(this.locationRecord);
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items:[{
+                                items: [{
                                     xtype: 'numberfield',
-                                    fieldLabel: 'NTP Refresh',
+                                    fieldLabel: translation._('NTP Refresh'),
                                     name: 'ntp_refresh',
                                     maxLength: 20,
-                                    anchor:'100%'
+                                    anchor: '100%'
                                 }]
                             }]
                         }, new Ext.form.ComboBox({
-                            fieldLabel: 'Timezone',
+                            fieldLabel: translation._('Timezone'),
                             id: 'timezone',
                             name: 'timezone',
                             mode: 'local',
-                            displayField:'timezone',
-                            valueField:'key',
-                            anchor:'98%',                    
+                            displayField: 'timezone',
+                            valueField: 'key',
+                            anchor: '98%',
                             triggerAction: 'all',
                             allowBlank: false,
                             editable: false,
                             store: Tine.Voipmanager.Data.loadTimezoneData()
                         })]
                     }, {
-                        xtype:'fieldset',
-                        checkboxToggle:true,
+                        xtype: 'fieldset',
+                        checkboxToggle: true,
                         checkboxName: 'admin_mode',
                         id: 'admin_mode_switch',
                         listeners: {
-                            expand: function() {
+                            expand: function(){
                                 Ext.getCmp('admin_mode').setValue(true);
                             },
-                            collapse: function() {
+                            collapse: function(){
                                 Ext.getCmp('admin_mode').setValue(false);
                             }
                         },
-                        title: 'Enable admin mode',
-                        autoHeight:true,
-                        anchor:'100%',
-                        defaults: {anchor:'100%'},
-                        items :[{
+                        title: translation._('Enable admin mode'),
+                        autoHeight: true,
+                        anchor: '100%',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        items: [{
                             xtype: 'hidden',
                             name: 'admin_mode',
                             id: 'admin_mode'
-                        },{
+                        }, {
                             xtype: 'numberfield',
-                            fieldLabel: 'Admin Mode Password',
+                            fieldLabel: translation._('Admin Mode Password'),
                             name: 'admin_mode_password',
                             /*inputType: 'password',*/
                             maxLength: 20,
-                            anchor:'100%'
-                       }]
+                            anchor: '100%'
+                        }]
                     }, {
-                        xtype:'fieldset',
-                        checkboxToggle:true,
-                        checkboxName: 'enableWebserver',                        
-                        title: 'Enable webserver',
-                        autoHeight:true,
+                        xtype: 'fieldset',
+                        checkboxToggle: true,
+                        checkboxName: 'enableWebserver',
+                        title: translation._('Enable webserver'),
+                        autoHeight: true,
                         id: 'enable_webserver_switch',
                         listeners: {
-                            collapse: function() {
+                            collapse: function(){
                                 Ext.getCmp('webserver_type').setValue('off');
                             },
-                            expand: function() {
-                                if(Ext.getCmp('webserver_type').getValue() == 'off') {
+                            expand: function(){
+                                if (Ext.getCmp('webserver_type').getValue() == 'off') {
                                     Ext.getCmp('webserver_type').setValue('http_https');
                                 }
                             }
-                        },                        
-                        defaults: {anchor:'100%'},
-                        items :[{
-                        layout:'column',
-                        border:false,
-                        anchor: '100%',
+                        },
+                        defaults: {
+                            anchor: '100%'
+                        },
                         items: [{
-                            columnWidth: .5,
-                            layout: 'form',
+                            layout: 'column',
                             border: false,
                             anchor: '100%',
-                            items:[{
-                                xtype: 'combo',
-                                fieldLabel: 'Webserver Type',
-                                name: 'webserver_type',
-                                id: 'webserver_type',
-                                mode: 'local',
-                                displayField:'wwwtype',
-                                valueField:'key',
-                                listeners: {
-                                    select: function(_field, _newValue, _oldValue) {   
-                                        if (_newValue.data.key == 'https') {
-                                            Ext.getCmp('http_port').disable();
-                                            Ext.getCmp('https_port').enable();                                            
-                                        }
-                                        if (_newValue.data.key == 'http') {
-                                            Ext.getCmp('http_port').enable();
-                                            Ext.getCmp('https_port').disable();                                            
-                                        }  
-                                        if (_newValue.data.key == 'http_https') {
-                                            Ext.getCmp('http_port').enable();
-                                            Ext.getCmp('https_port').enable();                                            
-                                        }                                          
-                                    }
-                                },
-                                anchor:'98%',                    
-                                triggerAction: 'all',
-                                allowBlank: false,
-                                editable: false,
-                                store: new Ext.data.SimpleStore({
-                                    fields: ['key','wwwtype'],
-                                    data: [
-                                            ['https', 'https'],
-                                            ['http', 'http'],
-                                            ['http_https', 'http https']
-                                    ]
-                                })
-                            }]
-                        } , {
-	                        columnWidth: .5,
-	                        layout: 'form',
-	                        border: false,
-	                        anchor: '100%',
-	                        items:[{
-                                layout:'column',
-                                border:false,
+                            items: [{
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .5,
-                                    layout: 'form',
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('Webserver Type'),
+                                    name: 'webserver_type',
+                                    id: 'webserver_type',
+                                    mode: 'local',
+                                    displayField: 'wwwtype',
+                                    valueField: 'key',
+                                    listeners: {
+                                        select: function(_field, _newValue, _oldValue){
+                                            if (_newValue.data.key == 'https') {
+                                                Ext.getCmp('http_port').disable();
+                                                Ext.getCmp('https_port').enable();
+                                            }
+                                            if (_newValue.data.key == 'http') {
+                                                Ext.getCmp('http_port').enable();
+                                                Ext.getCmp('https_port').disable();
+                                            }
+                                            if (_newValue.data.key == 'http_https') {
+                                                Ext.getCmp('http_port').enable();
+                                                Ext.getCmp('https_port').enable();
+                                            }
+                                        }
+                                    },
+                                    anchor: '98%',
+                                    triggerAction: 'all',
+                                    allowBlank: false,
+                                    editable: false,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: ['key', 'wwwtype'],
+                                        data: [['https', 'https'], ['http', 'http'], ['http_https', 'http https']]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    layout: 'column',
                                     border: false,
                                     anchor: '100%',
-                                    items:[{                                    
-                                        xtype: 'textfield',
-                                        fieldLabel: 'HTTP Port',
-                                        name: 'http_port',
-                                        id: 'http_port',
-                                        maxLength: 6,
-                                        anchor:'98%',
-                                        allowBlank: true
-                                    }]
-                                } , {
-                                    columnWidth: .5,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items:[{                                    
-                                        xtype: 'textfield',
-                                        fieldLabel: 'HTTPS Port',
-                                        name: 'https_port',
-                                        id: 'https_port',
-                                        maxLength: 6,
-                                        anchor:'100%',
-                                        allowBlank: true
+                                    items: [{
+                                        columnWidth: .5,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('HTTP Port'),
+                                            name: 'http_port',
+                                            id: 'http_port',
+                                            maxLength: 6,
+                                            anchor: '98%',
+                                            allowBlank: true
+                                        }]
+                                    }, {
+                                        columnWidth: .5,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('HTTPS Port'),
+                                            name: 'https_port',
+                                            id: 'https_port',
+                                            maxLength: 6,
+                                            anchor: '100%',
+                                            allowBlank: true
+                                        }]
                                     }]
                                 }]
                             }]
-                        }]
-                    },{
-                        layout:'column',
-                        border:false,
-                        anchor: '100%',
-                        items: [{
-                            columnWidth: .5,
-                            layout: 'form',
+                        }, {
+                            layout: 'column',
                             border: false,
                             anchor: '100%',
-                            items:[{
-                                xtype: 'textfield',
-                                fieldLabel: 'HTTP User',
-                                name: 'http_user',
-                                maxLength: 20,
-                                anchor:'98%'
-                            }]
-                        },{
-                            columnWidth: .5,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items:[{
-                                xtype: 'textfield',
-                                fieldLabel: 'HTTP Password',
-                                name: 'http_pass',
-                                inputType: 'textfield',
-                                maxLength: 20,
-                                anchor:'100%'
+                            items: [{
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('HTTP User'),
+                                    name: 'http_user',
+                                    maxLength: 20,
+                                    anchor: '98%'
+                                }]
+                            }, {
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('HTTP Password'),
+                                    name: 'http_pass',
+                                    inputType: 'textfield',
+                                    maxLength: 20,
+                                    anchor: '100%'
+                                }]
                             }]
                         }]
                     }]
                 }]
-            }]
-        }],
+            }];
+         
+         
+            return _dialog;    
+        },
         
         updateToolbarButtons: function()
         {
@@ -757,7 +761,7 @@ console.log(this.locationRecord);
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteLocation,
-                items: this.editLocationDialog
+                items: this.editLocationDialog()
             });
 
             var viewport = new Ext.Viewport({

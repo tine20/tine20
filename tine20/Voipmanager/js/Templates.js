@@ -385,81 +385,85 @@ Tine.Voipmanager.Templates.EditDialog =  {
             this.applyChanges(_button, _event, true);
         },
         
-        editTemplateDialog: [{
-            layout:'form',
-            //frame: true,
-            border:false,
-            width: 440,
-            height: 280,
-            items: [{
-                xtype: 'textfield',
-                fieldLabel: 'Name',
-                name: 'name',
-                maxLength: 80,
-                anchor:'100%',
-                allowBlank: false
-            } , {
-                xtype:'textarea',
-                name: 'description',
-                fieldLabel: 'Description',
-                grow: false,
-                preventScrollbars:false,
-                anchor:'100%',
-                height: 40
-            } ,
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Software Version',
+        editTemplateDialog: function(){
+            var translation = new Locale.Gettext();
+            translation.textdomain('Voipmanager');
+            
+            var _dialog = [{
+                layout: 'form',
+                //frame: true,
+                border: false,
+                width: 440,
+                height: 280,
+                items: [{
+                    xtype: 'textfield',
+                    fieldLabel: translation._('Name'),
+                    name: 'name',
+                    maxLength: 80,
+                    anchor: '100%',
+                    allowBlank: false
+                }, {
+                    xtype: 'textarea',
+                    name: 'description',
+                    fieldLabel: translation._('Description'),
+                    grow: false,
+                    preventScrollbars: false,
+                    anchor: '100%',
+                    height: 40
+                }, new Ext.form.ComboBox({
+                    fieldLabel: translation._('Software Version'),
                     name: 'software_id',
                     id: 'software_id',
                     mode: 'local',
-                    displayField:'description',
-                    valueField:'id',
-                    anchor:'100%',                    
+                    displayField: 'description',
+                    valueField: 'id',
+                    anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
                     store: new Ext.data.JsonStore({
-                    	storeId: 'Voipmanger_EditTemplate_Software',
+                        storeId: 'Voipmanger_EditTemplate_Software',
                         id: 'id',
-                        fields: ['id','model','description']
-                    })                    
-                }),
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Keylayout',
+                        fields: ['id', 'model', 'description']
+                    })
+                }), new Ext.form.ComboBox({
+                    fieldLabel: translation._('Keylayout'),
                     name: 'keylayout_id',
                     id: 'keylayout_id',
                     mode: 'local',
-                    displayField:'description',
-                    valueField:'id',
-                    anchor:'100%',                    
+                    displayField: 'description',
+                    valueField: 'id',
+                    anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
                     store: new Ext.data.JsonStore({
-                    	storeId: 'Voipmanger_EditTemplate_Keylayout',
+                        storeId: 'Voipmanger_EditTemplate_Keylayout',
                         id: 'id',
-                        fields: ['id','model','description']
-                    })                    
-                }),
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Settings',
+                        fields: ['id', 'model', 'description']
+                    })
+                }), new Ext.form.ComboBox({
+                    fieldLabel: translation._('Settings'),
                     name: 'setting_id',
                     id: 'setting_id',
                     mode: 'local',
-                    displayField:'description',
-                    valueField:'id',
-                    anchor:'100%',                    
+                    displayField: 'description',
+                    valueField: 'id',
+                    anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
                     store: new Ext.data.JsonStore({
-                    	storeId: 'Voipmanger_EditTemplate_Settings',
+                        storeId: 'Voipmanger_EditTemplate_Settings',
                         id: 'id',
-                        fields: ['id','model','description']
-                    })                    
-                })                                  
-            ]
-        }],
+                        fields: ['id', 'model', 'description']
+                    })
+                })]
+            }];
+            
+            
+            return _dialog;    
+        },
         
         updateToolbarButtons: function()
         {
@@ -474,9 +478,6 @@ Tine.Voipmanager.Templates.EditDialog =  {
                 var _templateData = {model:'snom320'};                
             }
             
-            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Software').loadData(_software);
-            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Keylayout').loadData(_keylayout);            
-            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Settings').loadData(_settings);            
 
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
@@ -489,8 +490,12 @@ Tine.Voipmanager.Templates.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteTemplate,
-                items: this.editTemplateDialog
+                items: this.editTemplateDialog()
             });
+
+            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Software').loadData(_software);
+            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Keylayout').loadData(_keylayout);            
+            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Settings').loadData(_settings);            
 
             var viewport = new Ext.Viewport({
                 layout: 'border',

@@ -406,6 +406,9 @@ Tine.Voipmanager.Software.EditDialog =  {
         
         editSoftwareDialog: function(_phoneModels) 
         {
+            var translation = new Locale.Gettext();
+            translation.textdomain('Voipmanager');
+            
             var softwareVersion = new Array();
             
             _phoneModels.each(function(_rec) {
@@ -429,7 +432,7 @@ Tine.Voipmanager.Software.EditDialog =  {
                     //labelSeparator: '',
                     xtype:'textarea',
                     name: 'description',
-                    fieldLabel: 'Description',
+                    fieldLabel: translation._('Description'),
                     grow: false,
                     preventScrollbars:false,
                     anchor:'100%',

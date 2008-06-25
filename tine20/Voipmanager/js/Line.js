@@ -276,7 +276,7 @@ Tine.Voipmanager.Lines.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: 'No lines to display'
+                emptyText: this.translation._('No lines to display')
             })            
             
         });
@@ -425,584 +425,579 @@ Tine.Voipmanager.Lines.EditDialog =  {
         this.applyChanges(_button, _event, true);
     },
         
-    generalTab: {
-        title: 'General',
-        border: false,
-        anchor: '100%',
-        xtype: 'columnform',
-        items: [
-            [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Name',
-                    name: 'name',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
-                }, 
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Context',
-                    name: 'context',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
-                },
-                {
-                    xtype: 'combo',
-                    fieldLabel: 'Type',
-                    name: 'type',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['friend', 'friend'], ['user', 'user'], ['peer', 'peer']]
-                    })
-                }
-            ],
-            [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Secret',
-                    name: 'secret',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Callerid',
-                    name: 'callerid',
-                    maxLength: 80,
-                    anchor: '100%',
-                    allowBlank: true
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Mailbox',
-                    name: 'mailbox',
-                    maxLength: 50,
-                    anchor: '98%',
-                    allowBlank: true
-                }
-            ],
-            [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Callgroup',
-                    name: 'callgroup',
-                    maxLength: 10,
-                    anchor: '98%',
-                    allowBlank: true
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Pickup group',
-                    name: 'pickupgroup',
-                    maxLength: 10,
-                    anchor: '98%',
-                    allowBlank: true
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Accountcode',
-                    name: 'accountcode',
-                    maxLength: 20,
-                    anchor: '98%',
-                    allowBlank: true
-                }
-            ],
-            [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Language',
-                    name: 'language',
-                    maxLength: 2,
-                    anchor: '98%',
-                    allowBlank: true
-                },
-                {
-                    xtype: 'combo',
-                    fieldLabel: 'NAT',
-                    name: 'nat',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                },
-                {
-                    xtype: 'combo',
-                    fieldLabel: 'Qualify',
-                    name: 'qualify',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                }
-            ]]
-    },     
+    generalTab: function() {
 
-    editLineDialog: {
-        id: 'adbEditDialogTabPanel',
-        xtype:'tabpanel',
-        defaults: {
-            frame: true
-        },
-        height: 500,
-        plain:true,
-        activeTab: 0,
-        border: false,
-        items:[this.generalTab
-        , {
-            title: 'Advanced',
-            layout: 'column',
+        var translation = new Locale.Gettext();
+        translation.textdomain('Voipmanager');
+
+        var _dialog = {
+            title: 'General',
             border: false,
             anchor: '100%',
-            items: [{
-                columnWidth: .25,
-                layout: 'form',
+            xtype: 'columnform',
+            items: [[{
+                xtype: 'textfield',
+                fieldLabel: translation._('Name'),
+                name: 'name',
+                maxLength: 80,
+                anchor: '98%',
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
+                fieldLabel: translation._('Context'),
+                name: 'context',
+                maxLength: 80,
+                anchor: '98%',
+                allowBlank: false
+            }, {
+                xtype: 'combo',
+                fieldLabel: translation._('Type'),
+                name: 'type',
+                mode: 'local',
+                displayField: 'value',
+                valueField: 'key',
+                anchor: '98%',
+                triggerAction: 'all',
+                editable: false,
+                forceSelection: true,
+                store: new Ext.data.SimpleStore({
+                    autoLoad: true,
+                    id: 'key',
+                    fields: ['key', 'value'],
+                    data: [['friend', 'friend'], ['user', 'user'], ['peer', 'peer']]
+                })
+            }], [{
+                xtype: 'textfield',
+                fieldLabel: translation._('Secret'),
+                name: 'secret',
+                maxLength: 80,
+                anchor: '98%',
+                allowBlank: false
+            }, {
+                xtype: 'textfield',
+                fieldLabel: translation._('Callerid'),
+                name: 'callerid',
+                maxLength: 80,
+                anchor: '100%',
+                allowBlank: true
+            }, {
+                xtype: 'textfield',
+                fieldLabel: translation._('Mailbox'),
+                name: 'mailbox',
+                maxLength: 50,
+                anchor: '98%',
+                allowBlank: true
+            }], [{
+                xtype: 'textfield',
+                fieldLabel: translation._('Callgroup'),
+                name: 'callgroup',
+                maxLength: 10,
+                anchor: '98%',
+                allowBlank: true
+            }, {
+                xtype: 'textfield',
+                fieldLabel: translation._('Pickup group'),
+                name: 'pickupgroup',
+                maxLength: 10,
+                anchor: '98%',
+                allowBlank: true
+            }, {
+                xtype: 'textfield',
+                fieldLabel: translation._('Accountcode'),
+                name: 'accountcode',
+                maxLength: 20,
+                anchor: '98%',
+                allowBlank: true
+            }], [{
+                xtype: 'textfield',
+                fieldLabel: translation._('Language'),
+                name: 'language',
+                maxLength: 2,
+                anchor: '98%',
+                allowBlank: true
+            }, {
+                xtype: 'combo',
+                fieldLabel: translation._('NAT'),
+                name: 'nat',
+                mode: 'local',
+                displayField: 'value',
+                valueField: 'key',
+                anchor: '98%',
+                triggerAction: 'all',
+                editable: false,
+                forceSelection: true,
+                store: new Ext.data.SimpleStore({
+                    autoLoad: true,
+                    id: 'key',
+                    fields: ['key', 'value'],
+                    data: [['yes', 'yes'], ['no', 'no']]
+                })
+            }, {
+                xtype: 'combo',
+                fieldLabel: translation._('Qualify'),
+                name: 'qualify',
+                mode: 'local',
+                displayField: 'value',
+                valueField: 'key',
+                anchor: '98%',
+                triggerAction: 'all',
+                editable: false,
+                forceSelection: true,
+                store: new Ext.data.SimpleStore({
+                    autoLoad: true,
+                    id: 'key',
+                    fields: ['key', 'value'],
+                    data: [['yes', 'yes'], ['no', 'no']]
+                })
+            }]]
+        }
+    
+        return _dialog;
+    },     
+
+    editLineDialog: function(){
+    
+        var translation = new Locale.Gettext();
+        translation.textdomain('Voipmanager');
+        
+        var _dialog = {
+            id: 'adbEditDialogTabPanel',
+            xtype: 'tabpanel',
+            defaults: {
+                frame: true
+            },
+            height: 500,
+            plain: true,
+            activeTab: 0,
+            border: false,
+            items: [this.generalTab, {
+                title: 'Advanced',
+                layout: 'column',
                 border: false,
                 anchor: '100%',
                 items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Name',
-                    name: 'name',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
+                    columnWidth: .25,
+                    layout: 'form',
+                    border: false,
+                    anchor: '100%',
+                    items: [{
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Name'),
+                        name: 'name',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Accountcode'),
+                        name: 'accountcode',
+                        maxLength: 20,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Amaflags'),
+                        name: 'amaflags',
+                        maxLength: 13,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Callgroup'),
+                        name: 'callgroup',
+                        maxLength: 10,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Callerid'),
+                        name: 'callerid',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('Can reinvite'),
+                        name: 'canreinvite',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['yes', 'yes'], ['no', 'no']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Context'),
+                        name: 'context',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Default IP'),
+                        name: 'defaultip',
+                        maxLength: 15,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('DTMF mode'),
+                        name: 'dtmfmode',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['inband', 'inband', ], ['info', 'info'], ['rfc2833', 'rfc2833']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('From User'),
+                        name: 'fromuser',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('From Domain'),
+                        name: 'fromdomain',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: true
+                    }]
                 }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Accountcode',
-                    name: 'accountcode',
-                    maxLength: 20,
+                    columnWidth: .25,
+                    layout: 'form',
+                    border: false,
                     anchor: '98%',
-                    allowBlank: true
+                    autoHeight: true,
+                    items: [{
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Full Contact'),
+                        name: 'fullcontact',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Host'),
+                        name: 'host',
+                        maxLength: 31,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('Insecure'),
+                        name: 'insecure',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['very', 'very'], ['yes', 'yes'], ['no', 'no'], ['invite', 'invite'], ['port', 'port']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Language'),
+                        name: 'language',
+                        maxLength: 2,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Mailbox'),
+                        name: 'mailbox',
+                        maxLength: 50,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('MD5 Secret'),
+                        name: 'md5secret',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('NAT'),
+                        name: 'nat',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['yes', 'yes'], ['no', 'no']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Deny'),
+                        name: 'deny',
+                        maxLength: 95,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Permit'),
+                        name: 'permit',
+                        maxLength: 95,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Mask'),
+                        name: 'mask',
+                        maxLength: 95,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Pickup group'),
+                        name: 'pickupgroup',
+                        maxLength: 10,
+                        anchor: '98%',
+                        allowBlank: true
+                    }]
                 }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Amaflags',
-                    name: 'amaflags',
-                    maxLength: 13,
+                    columnWidth: .25,
+                    layout: 'form',
+                    border: false,
                     anchor: '98%',
-                    allowBlank: true
+                    autoHeight: true,
+                    items: [{
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Port'),
+                        name: 'port',
+                        maxLength: 5,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('Qualify'),
+                        name: 'qualify',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['yes', 'yes'], ['no', 'no']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Restrict CID'),
+                        name: 'restrictcid',
+                        maxLength: 1,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('RTP Timeout'),
+                        name: 'rtptimeout',
+                        maxLength: 3,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('RTP Hold Timeout'),
+                        name: 'rtpholdtimeout',
+                        maxLength: 3,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Secret'),
+                        name: 'secret',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: true
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('Type'),
+                        name: 'type',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['friend', 'friend'], ['user', 'user'], ['peer', 'peer']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Username'),
+                        name: 'username',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Disallow'),
+                        name: 'disallow',
+                        maxLength: 100,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Allow'),
+                        name: 'allow',
+                        maxLength: 100,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Music on hold'),
+                        name: 'musiconhold',
+                        maxLength: 100,
+                        anchor: '98%',
+                        allowBlank: false
+                    }]
                 }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Callgroup',
-                    name: 'callgroup',
-                    maxLength: 10,
+                    columnWidth: .25,
+                    layout: 'form',
+                    border: false,
                     anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Callerid',
-                    name: 'callerid',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'Can reinvite',
-                    name: 'canreinvite',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Context',
-                    name: 'context',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Default IP',
-                    name: 'defaultip',
-                    maxLength: 15,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'DTMF mode',
-                    name: 'dtmfmode',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['inband', 'inband', ], ['info', 'info'], ['rfc2833', 'rfc2833']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'From User',
-                    name: 'fromuser',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'From Domain',
-                    name: 'fromdomain',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: true
-                }]
-             }, {
-                columnWidth: .25,
-                layout: 'form',
-                border: false,
-                anchor: '98%',
-                autoHeight: true,
-                items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Full Contact',
-                    name: 'fullcontact',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Host',
-                    name: 'host',
-                    maxLength: 31,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'Insecure',
-                    name: 'insecure',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['very', 'very'], ['yes', 'yes'], ['no', 'no'], ['invite', 'invite'], ['port', 'port']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Language',
-                    name: 'language',
-                    maxLength: 2,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Mailbox',
-                    name: 'mailbox',
-                    maxLength: 50,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'MD5 Secret',
-                    name: 'md5secret',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'NAT',
-                    name: 'nat',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Deny',
-                    name: 'deny',
-                    maxLength: 95,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Permit',
-                    name: 'permit',
-                    maxLength: 95,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Mask',
-                    name: 'mask',
-                    maxLength: 95,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Pickup group',
-                    name: 'pickupgroup',
-                    maxLength: 10,
-                    anchor: '98%',
-                    allowBlank: true
-                }]
-             }, {
-                columnWidth: .25,
-                layout: 'form',
-                border: false,
-                anchor: '98%',
-                autoHeight: true,
-                items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Port',
-                    name: 'port',
-                    maxLength: 5,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'Qualify',
-                    name: 'qualify',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Restrict CID',
-                    name: 'restrictcid',
-                    maxLength: 1,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'RTP Timeout',
-                    name: 'rtptimeout',
-                    maxLength: 3,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'RTP Hold Timeout',
-                    name: 'rtpholdtimeout',
-                    maxLength: 3,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Secret',
-                    name: 'secret',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: true
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'Type',
-                    name: 'type',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['friend', 'friend'], ['user', 'user'], ['peer', 'peer']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Username',
-                    name: 'username',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Disallow',
-                    name: 'disallow',
-                    maxLength: 100,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Allow',
-                    name: 'allow',
-                    maxLength: 100,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Music on hold',
-                    name: 'musiconhold',
-                    maxLength: 100,
-                    anchor: '98%',
-                    allowBlank: false
-                }]
-             }, {
-                columnWidth: .25,
-                layout: 'form',
-                border: false,
-                anchor: '98%',
-                autoHeight: true,
-                items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Reg Seconds',
-                    name: 'regseconds',
-                    maxLength: 11,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'IP Address',
-                    name: 'ipaddr',
-                    maxLength: 15,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Reg Exten',
-                    name: 'regexten',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'Can forward call',
-                    name: 'cancallforward',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Set Var',
-                    name: 'setvar',
-                    maxLength: 100,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'Notify Ringing',
-                    name: 'notifyringing',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                }, {
-                    xtype: 'combo',
-                    fieldLabel: 'Use Client Code',
-                    name: 'useclientcode',
-                    mode: 'local',
-                    displayField: 'value',
-                    valueField: 'key',
-                    anchor: '98%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore({
-                        autoLoad: true,
-                        id: 'key',
-                        fields: ['key', 'value'],
-                        data: [['yes', 'yes'], ['no', 'no']]
-                    })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Auth User',
-                    name: 'authuser',
-                    maxLength: 100,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Call Limit',
-                    name: 'call-limit',
-                    maxLength: 11,
-                    anchor: '98%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Busy Level',
-                    name: 'busy-level',
-                    maxLength: 100,
-                    anchor: '98%',
-                    allowBlank: false
+                    autoHeight: true,
+                    items: [{
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Reg Seconds'),
+                        name: 'regseconds',
+                        maxLength: 11,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('IP Address'),
+                        name: 'ipaddr',
+                        maxLength: 15,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Reg Exten'),
+                        name: 'regexten',
+                        maxLength: 80,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('Can forward call'),
+                        name: 'cancallforward',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['yes', 'yes'], ['no', 'no']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Set Var'),
+                        name: 'setvar',
+                        maxLength: 100,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('Notify Ringing'),
+                        name: 'notifyringing',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['yes', 'yes'], ['no', 'no']]
+                        })
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: translation._('Use Client Code'),
+                        name: 'useclientcode',
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'key',
+                        anchor: '98%',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.SimpleStore({
+                            autoLoad: true,
+                            id: 'key',
+                            fields: ['key', 'value'],
+                            data: [['yes', 'yes'], ['no', 'no']]
+                        })
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Auth User'),
+                        name: 'authuser',
+                        maxLength: 100,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Call Limit'),
+                        name: 'call-limit',
+                        maxLength: 11,
+                        anchor: '98%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: translation._('Busy Level'),
+                        name: 'busy-level',
+                        maxLength: 100,
+                        anchor: '98%',
+                        allowBlank: false
+                    }]
                 }]
             }]
-        }]
+        };
+     
+        return _dialog;    
     },
     
     updateToolbarButtons: function()
@@ -1039,7 +1034,7 @@ Tine.Voipmanager.Lines.EditDialog =  {
 		        activeTab: 0,
 		        border: false,
 		        items:[
-		          this.generalTab
+		          this.generalTab()
                 ]
             }]
         });

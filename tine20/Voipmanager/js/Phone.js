@@ -445,6 +445,9 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 
         editPhoneLinesDialog: function(_maxLines, _lines, _snomLines) {
             
+            var translation = new Locale.Gettext();
+            translation.textdomain('Voipmanager');
+            
             var linesText = new Array();
             var linesSIPCombo = new Array();
             var linesIdleText = new Array();
@@ -483,7 +486,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
 			};
 			
 	        var checkColumn = new Ext.grid.CheckColumn({
-		       header: 'lineactive',
+		       header: translation._('lineactive'),
 		       dataIndex: 'lineactive',
 		       width: 25
 		    });			
@@ -542,7 +545,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
 	            {
 					resizable: true,
 					id: 'sipCombo',
-					header: 'sipCombo',
+					header: translation._('sipCombo'),
 					dataIndex: 'asteriskline_id',
 					width: 80,
 					editor: combo,
@@ -551,7 +554,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
 	            {
 					resizable: true,
 					id: 'idletext',
-					header: 'Idle Text',
+					header: translation._('Idle Text'),
 					dataIndex: 'idletext',
 					width: 40,
 					editor: new Ext.form.TextField({
@@ -601,167 +604,175 @@ Tine.Voipmanager.Phones.EditDialog =  {
         },                
                  
                   
-        editPhoneDialog: {
-            title: 'Phone',
-            layout:'border',
-            anchor: '100% 100%',
-            layoutOnTabChange: true,
-            defaults: {
-                border: true,
-                frame: true            
-            },
-            items: [{
-                region: 'center',
-                autoScroll: true,
-                autoHeight: true,
+        editPhoneDialog: function(){
+        
+            var translation = new Locale.Gettext();
+            translation.textdomain('Voipmanager');
+        
+            var _dialog = {
+                title: 'Phone',
+                layout: 'border',
+                anchor: '100% 100%',
+                layoutOnTabChange: true,
+                defaults: {
+                    border: true,
+                    frame: true
+                },
                 items: [{
-                    layout:'column',
-                    border:false,
-                    anchor: '100%',
-                    height: 130,                        
+                    region: 'center',
+                    autoScroll: true,
+                    autoHeight: true,
                     items: [{
-                        columnWidth: .5,
-                        layout: 'form',
+                        layout: 'column',
                         border: false,
                         anchor: '100%',
-                        items:[{
-                            xtype: 'textfield',
-                            fieldLabel: 'MAC Address',
-                            name: 'macaddress',
-                            maxLength: 12,
-                            anchor:'98%',
-                            allowBlank: false
-                        } , {
-                            xtype: 'combo',
-                            fieldLabel: 'Template',
-                            name: 'template_id',
-                            id: 'template_id',
-                            mode: 'local',
-                            displayField:'name',
-                            valueField:'id',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            editable: false,
-                            forceSelection: true,
-                            store: new Ext.data.JsonStore({
-                                storeId: 'Voipmanger_EditPhone_Templates',
-                                id: 'id',
-                                fields: ['id','name']
-                            })
-                        }, {
-                            xtype: 'combo',
-                            fieldLabel: 'Location',
-                            name: 'location_id',
-                            id: 'location_id',
-                            mode: 'local',
-                            displayField:'name',
-                            valueField:'id',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            editable: false,
-                            forceSelection: true,
-                            store: new Ext.data.JsonStore({
-                            	storeId: 'Voipmanger_EditPhone_Locations',
-                                id: 'id',
-                                fields: ['id','name']
-                            })
-                        }]
-                    }, {
-                        columnWidth: .5,
-                        layout: 'form',
-                        border: false,
-                        anchor: '98%',
-                        autoHeight: true,
-                        items:[
-                            new Ext.form.ComboBox({
-                                fieldLabel: 'Phone Model',
-                                name: 'current_model',
-                                id: 'current_model',
+                        height: 130,
+                        items: [{
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'textfield',
+                                fieldLabel: translation._('MAC Address'),
+                                name: 'macaddress',
+                                maxLength: 12,
+                                anchor: '98%',
+                                allowBlank: false
+                            }, {
+                                xtype: 'combo',
+                                fieldLabel: translation._('Template'),
+                                name: 'template_id',
+                                id: 'template_id',
                                 mode: 'local',
-                                displayField:'model',
-                                valueField:'id',
-                                anchor:'100%',                    
+                                displayField: 'name',
+                                valueField: 'id',
+                                anchor: '98%',
                                 triggerAction: 'all',
                                 editable: false,
                                 forceSelection: true,
-                                store:  Tine.Voipmanager.Data.loadPhoneModelData()
-                            })
-                        ,{
-                            xtype:'textarea',
-                            name: 'description',
-                            fieldLabel: 'Description',
-                            grow: false,
-                            preventScrollbars:false,
-                            anchor:'100%',
-                            height: 85
+                                store: new Ext.data.JsonStore({
+                                    storeId: 'Voipmanger_EditPhone_Templates',
+                                    id: 'id',
+                                    fields: ['id', 'name']
+                                })
+                            }, {
+                                xtype: 'combo',
+                                fieldLabel: translation._('Location'),
+                                name: 'location_id',
+                                id: 'location_id',
+                                mode: 'local',
+                                displayField: 'name',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.JsonStore({
+                                    storeId: 'Voipmanger_EditPhone_Locations',
+                                    id: 'id',
+                                    fields: ['id', 'name']
+                                })
+                            }]
+                        }, {
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '98%',
+                            autoHeight: true,
+                            items: [new Ext.form.ComboBox({
+                                fieldLabel: translation._('Phone Model'),
+                                name: 'current_model',
+                                id: 'current_model',
+                                mode: 'local',
+                                displayField: 'model',
+                                valueField: 'id',
+                                anchor: '100%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: Tine.Voipmanager.Data.loadPhoneModelData()
+                            }), {
+                                xtype: 'textarea',
+                                name: 'description',
+                                fieldLabel: translation._('Description'),
+                                grow: false,
+                                preventScrollbars: false,
+                                anchor: '100%',
+                                height: 85
+                            }]
                         }]
-                    }]
-                },{
-                    layout:'form',
-                    border:false,
-                    anchor: '100%',
-                    items: [{                
-                        xtype:'fieldset',
-                        checkboxToggle:false,
-                        id: 'infos',
-                        title: 'Infos',
-                        autoHeight:true,
+                    }, {
+                        layout: 'form',
+                        border: false,
                         anchor: '100%',
-                        defaults: {anchor:'100%'},
-                        items :[{
-                            layout:'column',
-                            border:false,
+                        items: [{
+                            xtype: 'fieldset',
+                            checkboxToggle: false,
+                            id: 'infos',
+                            title: 'Infos',
+                            autoHeight: true,
                             anchor: '100%',
+                            defaults: {
+                                anchor: '100%'
+                            },
                             items: [{
-                                columnWidth: .5,
-                                layout: 'form',
+                                layout: 'column',
                                 border: false,
                                 anchor: '100%',
-                                items:[{
-                                    xtype: 'textfield',
-                                    fieldLabel: 'Current IP Address',
-                                    name: 'ipaddress',
-                                    maxLength: 20,
-                                    anchor:'98%',
-                                    readOnly: true                        
-                                },{
-                                    xtype: 'textfield',
-                                    fieldLabel: 'Current Software Version',
-                                    name: 'current_software',
-                                    maxLength: 20,
-                                    anchor:'98%',
-                                    readOnly: true                        
-                                }]
-                            },{         
-                                columnWidth: .5,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items:[{                                    
-                                    xtype: 'datefield',
-                                    fieldLabel: 'Settings Loaded at',
-                                    name: 'settings_loaded_at',
-                                    anchor:'100%',
-    		                        emptyText: 'never',
-    		                        format: "d.m.Y H:i:s",
-    		                        hideTrigger: true,
-    		                        readOnly: true
-                                },{
-                                    xtype: 'datefield',
-                                    fieldLabel: 'Firmware last checked at',
-                                    name: 'firmware_checked_at',
-                                    anchor:'100%',
-                                    emptyText: 'never',
-                                    format: "d.m.Y H:i:s",
-                                    hideTrigger: true,
-                                    readOnly: true
+                                items: [{
+                                    columnWidth: .5,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'textfield',
+                                        fieldLabel: translation._('Current IP Address'),
+                                        name: 'ipaddress',
+                                        maxLength: 20,
+                                        anchor: '98%',
+                                        readOnly: true
+                                    }, {
+                                        xtype: 'textfield',
+                                        fieldLabel: translation._('Current Software Version'),
+                                        name: 'current_software',
+                                        maxLength: 20,
+                                        anchor: '98%',
+                                        readOnly: true
+                                    }]
+                                }, {
+                                    columnWidth: .5,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'datefield',
+                                        fieldLabel: translation._('Settings Loaded at'),
+                                        name: 'settings_loaded_at',
+                                        anchor: '100%',
+                                        emptyText: 'never',
+                                        format: "d.m.Y H:i:s",
+                                        hideTrigger: true,
+                                        readOnly: true
+                                    }, {
+                                        xtype: 'datefield',
+                                        fieldLabel: translation._('Firmware last checked at'),
+                                        name: 'firmware_checked_at',
+                                        anchor: '100%',
+                                        emptyText: 'never',
+                                        format: "d.m.Y H:i:s",
+                                        hideTrigger: true,
+                                        readOnly: true
+                                    }]
                                 }]
                             }]
                         }]
                     }]
-                }]
                 
-            }]
+                }]
+            };
+            
+            return _dialog;   
         },
         
         updateToolbarButtons: function()
@@ -773,8 +784,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
         
         display: function(_phoneData, _snomLines, _lines, _templates, _locations) 
         {
-            Ext.StoreMgr.lookup('Voipmanger_EditPhone_Templates').loadData(_templates);
-            Ext.StoreMgr.lookup('Voipmanger_EditPhone_Locations').loadData(_locations);
+
 
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
@@ -797,7 +807,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         id: 'editPhoneTabPanel',
                         layoutOnTabChange:true,  
                         items:[
-                            this.editPhoneDialog,
+                            this.editPhoneDialog(),
                             this.editPhoneLinesDialog(2, _lines, _snomLines)                  
                         ]
                     })
@@ -806,6 +816,9 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 }]
             });
 
+            Ext.StoreMgr.lookup('Voipmanger_EditPhone_Templates').loadData(_templates);
+            Ext.StoreMgr.lookup('Voipmanger_EditPhone_Locations').loadData(_locations);
+            
             var viewport = new Ext.Viewport({
                 layout: 'border',
                 frame: true,
