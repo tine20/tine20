@@ -686,6 +686,9 @@ Tine.Crm.LeadEditDialog = {
                         Tine.Crm.Model.Lead.FixDates(lead);
                         leadForm.loadRecord(lead);
                         
+                        Ext.getCmp('crmGridTasks').setDisabled(false);
+                        Ext.getCmp('crmGridProducts').setDisabled(false);
+
                         // update stores
                         Ext.StoreMgr.lookup('ContactsStore').commitChanges();
                         Ext.StoreMgr.lookup('TasksStore').commitChanges();
@@ -1285,6 +1288,7 @@ Tine.Crm.LeadEditDialog = {
             var grid = new Ext.ux.grid.QuickaddGridPanel({
                 title: _title,
                 id: 'crmGrid' + _type,
+                disabled: true,
                 border: false,
                 store: gridStore,
                 clicksToEdit: 'auto',
@@ -1357,6 +1361,7 @@ Tine.Crm.LeadEditDialog = {
             var grid = new Ext.ux.grid.QuickaddGridPanel({
                 title: _title,
                 id: 'crmGrid' + _type,
+                disabled: true,
                 border: false,
                 store: gridStore,
                 clicksToEdit: 'auto',
@@ -1729,7 +1734,7 @@ Tine.Crm.LeadEditDialog = {
         
         this.initComponent(lead);
         
-        //console.log(lead);
+        console.log(lead.data);
         //console.log(lead.data.tasks);
         //console.log(lead.data.responsible);
     	
@@ -1774,6 +1779,12 @@ Tine.Crm.LeadEditDialog = {
         });
 
         leadEdit.getForm().loadRecord(lead);
+        
+        // disable tasks/products grids for new lead
+        if (lead.data.id) {
+        	Ext.getCmp('crmGridTasks').setDisabled(false);
+            Ext.getCmp('crmGridProducts').setDisabled(false);
+        } 
                 
     } // end of function display()
 }; // end of application CRM LEAD EDIT DIALOG
