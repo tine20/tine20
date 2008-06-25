@@ -359,7 +359,7 @@ Tine.Crm.Main = {
             if(rowCount > 1) {                
                this.actions.editLead.setDisabled(true);
                this.actions.deleteLead.setDisabled(false);
-               this.actions.exportLead.setDisabled(true);
+               this.actions.exportLead.setDisabled(false);
                this.actions.addTask.setDisabled(true);
             }
         }, this);
