@@ -39,7 +39,7 @@ class Voipmanager_Backend_Snom_Xml
         }
         
         // set the microphone volume temporarly
-        $child = $phonesettings->addChild('vol_speaker_mic', 7);
+        $child = $phonesettings->addChild('vol_handset_mic', 7);
         $child->addAttribute('perm', 'RW');
 /*        
         $userSettings = $this->_getUserSettings();
