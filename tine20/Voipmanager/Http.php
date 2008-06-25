@@ -116,13 +116,15 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         // encode the asterisk line array
         $encodedLine = Zend_Json::encode($line->toArray());                   
         
+        $encodedContexts = Zend_Json::encode(Voipmanager_Controller::getInstance()->getAsteriskContexts()->toArray());
+        
         $currentAccount = Zend_Registry::get('currentAccount');
                 
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Lines.EditDialog.display(' . $encodedLine .');';
+        $view->jsExecute = 'Tine.Voipmanager.Lines.EditDialog.display(' . $encodedLine .','. $encodedContexts .');';
 
         $view->locationData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

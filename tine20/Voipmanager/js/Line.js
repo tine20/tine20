@@ -443,12 +443,21 @@ Tine.Voipmanager.Lines.EditDialog =  {
                 anchor: '98%',
                 allowBlank: false
             }, {
-                xtype: 'textfield',
+                xtype: 'combo',
                 fieldLabel: translation._('Context'),
                 name: 'context',
-                maxLength: 80,
+                mode: 'local',
+                displayField: 'name',
+                valueField: 'id',
                 anchor: '98%',
-                allowBlank: false
+                triggerAction: 'all',
+                editable: false,
+                forceSelection: true,
+                store: new Ext.data.JsonStore({
+                    storeId: 'Voipmanger_EditLine_Context',
+                    id: 'id',
+                    fields: ['id', 'name']
+                })
             }, {
                 xtype: 'combo',
                 fieldLabel: translation._('Type'),
@@ -1007,7 +1016,7 @@ Tine.Voipmanager.Lines.EditDialog =  {
         }
     },
     
-    display: function(_lineData) 
+    display: function(_lineData, _contexts) 
     {
         if (!arguments[0]) {
             var _lineData = {};
@@ -1038,6 +1047,8 @@ Tine.Voipmanager.Lines.EditDialog =  {
                 ]
             }]
         });
+
+        Ext.StoreMgr.lookup('Voipmanger_EditLine_Context').loadData(_contexts);
 
         var viewport = new Ext.Viewport({
             layout: 'border',

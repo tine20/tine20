@@ -346,15 +346,9 @@ Tine.Voipmanager.Context.EditDialog =  {
         {
             var form = Ext.getCmp('voipmanager_editContextForm').getForm();
 
-
-console.log(this.contextRecord.data);
-
-
             if(form.isValid()) {
                 form.updateRecord(this.contextRecord);
 
-console.log(this.contextRecord.data);
-        
                 Ext.Ajax.request({
                     params: {
                         method: 'Voipmanager.saveAsteriskContext', 
