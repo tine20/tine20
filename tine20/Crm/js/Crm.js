@@ -940,8 +940,6 @@ Tine.Crm.LeadEditDialog = {
         
         lead.data.products = linksProducts;
         
-        console.log(linksProducts);
-        
         return lead;        
     },
         
@@ -1565,7 +1563,7 @@ Tine.Crm.LeadEditDialog = {
         
         // update price if new product is chosen
         storeProducts.on('update', function(store, record, index) {
-        	console.log('update');
+        	//console.log('update');
             if(record.data.product_id && !arguments[1].modified.product_price) {          
                 var st_productsAvailable = Tine.Crm.Product.getStore();
                 var preset_price = st_productsAvailable.getById(record.data.product_id);
@@ -1734,7 +1732,7 @@ Tine.Crm.LeadEditDialog = {
         
         this.initComponent(lead);
         
-        console.log(lead.data);
+        //console.log(lead.data);
         //console.log(lead.data.tasks);
         //console.log(lead.data.responsible);
     	
