@@ -739,6 +739,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                                     name: 'settings_loaded_at',
                                     anchor:'100%',
     		                        emptyText: 'never',
+    		                        format: "d.m.Y H:i:s",
     		                        hideTrigger: true,
     		                        readOnly: true
                                 },{
@@ -747,6 +748,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                                     name: 'firmware_checked_at',
                                     anchor:'100%',
                                     emptyText: 'never',
+                                    format: "d.m.Y H:i:s",
                                     hideTrigger: true,
                                     readOnly: true
                                 }]
