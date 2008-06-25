@@ -287,8 +287,8 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.contactType');
  * contact type select combo box
  * 
  */
-Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
-    /**
+Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {	
+	/**
      * @cfg {bool} autoExpand Autoexpand comboBox on focus.
      */
     autoExpand: false,
@@ -297,14 +297,18 @@ Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     blurOnSelect: false,
     
-    displayField: 'link_remark',
+    displayField: 'label',
     valueField: 'link_remark',
     mode: 'local',
     triggerAction: 'all',
     lazyInit: false,
     
     //private
-    initComponent: function(){
+    initComponent: function() {
+    	
+        var translation = new Locale.Gettext();
+        translation.textdomain('Crm');
+    	
         Tine.Crm.contactType.ComboBox.superclass.initComponent.call(this);
         // allways set a default
         if(!this.value) {
@@ -312,11 +316,11 @@ Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
             
         this.store = new Ext.data.SimpleStore({
-            fields: ['link_remark'],
+            fields: ['label', 'link_remark'],
             data: [
-                    ['responsible'],
-                    ['customer'],
-                    ['partner']
+                    [translation._('Responsible'), 'responsible'],
+                    [translation._('Customer'), 'customer'],
+                    [translation._('Partner'), 'partner']
                 ]
         });
         

@@ -328,10 +328,7 @@ Tine.Crm.Main = {
             {resizable: true, header: this.translation._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
             {resizable: true, header: this.translation._('Partner'), id: 'lead_partner', dataIndex: 'partner', width: 175, sortable: false, renderer: Tine.Crm.Main.renderer.shortContact},
             {resizable: true, header: this.translation._('Customer'), id: 'lead_customer', dataIndex: 'customer', width: 175, sortable: false, renderer: Tine.Crm.Main.renderer.shortContact},
-            {resizable: true, header: this.translation._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100,
-                //renderer: function(leadState) {return leadState.leadstate;}
-                renderer: Tine.Crm.LeadState.Renderer
-            },
+            {resizable: true, header: this.translation._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Crm.LeadState.Renderer},
             {resizable: true, header: this.translation._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
             {resizable: true, header: this.translation._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney }
         ]);
@@ -389,7 +386,6 @@ Tine.Crm.Main = {
         });
         
         Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
-
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -555,10 +551,10 @@ Tine.Crm.Main = {
         menu.removeAll();
         menu.add(
             // @todo    replace with standard popup windows
-            {text: 'leadstate', handler: Tine.Crm.LeadState.EditDialog},
-            {text: 'leadsource', handler: Tine.Crm.LeadType.EditDialog},
-            {text: 'leadtype', handler: Tine.Crm.LeadSource.EditDialog},
-            {text: 'product', handler: Tine.Crm.Product.EditDialog}
+            {text: this.translation._('Lead states'), handler: Tine.Crm.LeadState.EditDialog},
+            {text: this.translation._('Lead sources'), handler: Tine.Crm.LeadType.EditDialog},
+            {text: this.translation._('Lead types'), handler: Tine.Crm.LeadSource.EditDialog},
+            {text: this.translation._('Products'), handler: Tine.Crm.Product.EditDialog}
         );
 
     	var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
@@ -619,8 +615,8 @@ Tine.Crm.Main = {
                                          + '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>'
                                          + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>'
                                          + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + adr_one_locality + '</td></tr>'
-                                         + '<tr><td width="50%">phone: </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>'
-                                         + '<tr><td width="50%">cellphone: </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>'
+                                         + '<tr><td width="50%">' + this.translation._('Phone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>'
+                                         + '<tr><td width="50%">' + this.translation._('Cellphone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>'
                                          + '</table> <br />';
                 }
                 
@@ -868,16 +864,6 @@ Tine.Crm.LeadEditDialog = {
         },
 
         /**
-         * onclick handler for add product
-         * 
-         * @todo    add product via inline editing
-         */
-        addProduct: function(_button, _event) 
-        {
-
-        },
-            
-        /**
          * onclick handler for exportBtn
          */
         exportLead: function(_button, _event) {            
@@ -1000,8 +986,8 @@ Tine.Crm.LeadEditDialog = {
                         }
                     },
                     {id:'tel_work', header: this.translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
-                            var formated_return = 'Phone: ' + Ext.util.Format.htmlEncode(record.data.tel_work) + '<br/>' + 
-                                'Cellphone: ' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '<br/>';
+                            var formated_return = Tine.Crm.LeadEditDialog.translation._('Phone') + ': ' + Ext.util.Format.htmlEncode(record.data.tel_work) + '<br/>' + 
+                                Tine.Crm.LeadEditDialog.translation._('Cellphone') + ': ' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '<br/>';
                             return formated_return;
                         }                        
                     },    
@@ -1320,8 +1306,8 @@ Tine.Crm.LeadEditDialog = {
             
             grid.on('newentry', function(taskData){
 
-            	// @todo change that later -> we don't need this ajax request 
-            	// because the new tasks should only be saved on "apply" or "saveandclose"            	
+            	// @todo change that later -> we do not need this ajax request 
+            	// because the new tasks should only be saved on _apply_ or _saveandclose_            	
 
                 // add new task to store
             	/*
@@ -1381,13 +1367,7 @@ Tine.Crm.LeadEditDialog = {
                 loadMask: true,
                 quickaddMandatory: 'product_id',
                 autoExpandColumn: 'product_desc',
-                columns: columnModel /*,                
-                view: new Ext.grid.GridView({
-                    autoFill: true,
-                    forceFit:true,
-                    ignoreAdd: true,
-                    emptyText: this.translation._('No Products to display')
-                })*/
+                columns: columnModel
             });
             
             grid.on('newentry', function(productData){
@@ -1695,7 +1675,7 @@ Tine.Crm.LeadEditDialog = {
         
         this.actions.linkTask = new Ext.Action({
             text: this.translation._('Add task'),
-            tooltip: this.translation._('Add existing task with lead'),
+            tooltip: this.translation._('Add existing task to lead'),
             disabled: true,
             iconCls: 'actionAddTask',
             scope: this,
@@ -1714,17 +1694,6 @@ Tine.Crm.LeadEditDialog = {
         });
 
         // products
-        // we don't need that at the moment
-        /*
-        this.actions.addProduct = new Ext.Action({
-            text: this.translation._('Add product'),
-            tooltip: this.translation._('Add product'),
-            iconCls: 'actionAdd',
-            disabled: true,
-            handler: this.handlers.addProduct
-        });
-        */
-
         this.actions.unlinkProduct = new Ext.Action({
             text: this.translation._('Remove products'),
             tooltip: this.translation._('Remove selected products'),
