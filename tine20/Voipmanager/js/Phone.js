@@ -202,19 +202,23 @@ Tine.Voipmanager.Phones.Main = {
             { resizable: true, id: 'macaddress', header: this.translation._('MAC address'), dataIndex: 'macaddress',width: 50 },
             {
                 resizable: true,
-                id: 'location',
+                id: 'location_id',
                 header: this.translation._('Location'),
-                dataIndex: 'location',
+                dataIndex: 'location_id',
                 width: 70,
-                sortable: false
+                renderer: function(_data,_obj, _rec) {
+                    return _rec.data.location;
+                }
             },
             {
                 resizable: true,
-                id: 'template',
+                id: 'template_id',
                 header: this.translation._('Template'),
-                dataIndex: 'template',
+                dataIndex: 'template_id',
                 width: 50,
-                sortable: false                
+                renderer: function(_data,_obj, _rec) {
+                    return _rec.data.template;
+                }                                
             },            
             { resizable: true, id: 'current_software', header: this.translation._('Software'), dataIndex: 'current_software', width: 50 },
             { resizable: true, id: 'ipaddress', header: this.translation._('IP Address'), dataIndex: 'ipaddress', width: 50 },

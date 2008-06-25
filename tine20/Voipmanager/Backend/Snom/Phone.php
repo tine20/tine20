@@ -42,8 +42,22 @@ class Voipmanager_Backend_Snom_Phone
         $where = array();
         
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_phones');
+            ->from(array('phones' => SQL_TABLE_PREFIX . 'snom_phones'));
             
+        $_sort = $_pagination->toArray();
+        
+        if($_sort['sort'] == 'location_id') {
+            $select->join(array('loc' => SQL_TABLE_PREFIX . 'snom_location'), 'phones.location_id = loc.id', array('location' => 'name'));    
+            $_sort['sort'] = 'location';
+            $_pagination->setFromArray($_sort);
+        }
+
+        if($_sort['sort'] == 'template_id') {
+            $select->join(array('temp' => SQL_TABLE_PREFIX . 'snom_templates'), 'phones.template_id = temp.id', array('template' => 'name'));        
+            $_sort['sort'] = 'template';
+            $_pagination->setFromArray($_sort);
+        }
+        
         $_pagination->appendPagination($select);
 
         if(!empty($_filter->query)) {
@@ -51,9 +65,10 @@ class Voipmanager_Backend_Snom_Phone
         } else {
             // handle the other fields separately
         }
-       
+
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
         
        	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhone', $rows);
 		
