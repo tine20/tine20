@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $ $ 
  *
+ * @todo    add manage leads right for crm application to user role
+ * 
  */
 
 /**
@@ -156,8 +158,8 @@ class Setup_Import_TineInitial
                     );
                 }                                                
             }
-        } // end foreach applications               
-
+        } // end foreach applications                               
+        
         # give Users group read rights to the internal addressbook
         # give Adminstrators group read/write rights to the internal addressbook
         $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
