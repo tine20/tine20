@@ -658,12 +658,6 @@ console.log(this.locationRecord);
                                             ['http_https', 'http https']
                                     ]
                                 })
-                            } , {
-                                xtype: 'textfield',
-                                fieldLabel: 'HTTP User',
-                                name: 'http_user',
-                                maxLength: 20,
-                                anchor:'98%'
                             }]
                         } , {
 	                        columnWidth: .5,
@@ -703,7 +697,30 @@ console.log(this.locationRecord);
                                         allowBlank: true
                                     }]
                                 }]
-                            } , {
+                            }]
+                        }]
+                    },{
+                        layout:'column',
+                        border:false,
+                        anchor: '100%',
+                        items: [{
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{
+                                xtype: 'textfield',
+                                fieldLabel: 'HTTP User',
+                                name: 'http_user',
+                                maxLength: 20,
+                                anchor:'98%'
+                            }]
+                        },{
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{
                                 xtype: 'textfield',
                                 fieldLabel: 'HTTP Password',
                                 name: 'http_pass',
