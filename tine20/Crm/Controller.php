@@ -184,6 +184,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @return Crm_Model_Lead the newly added lead
      * 
      * @todo add notifications later
+     * @todo move the linking/relations stuff to seperate function
      */ 
     public function createLead(Crm_Model_Lead $_lead)
     {
@@ -205,9 +206,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
         // products (add lead id first)
         $products = array();
-        foreach ($_lead->products as $product) {
-            $product['lead_id'] = $lead->getId(); 
-            $products[] = $product;     
+        if (is_array($_lead->products)) {
+            foreach ($_lead->products as $product) {
+                $product['lead_id'] = $lead->getId(); 
+                $products[] = $product;     
+            }
         }
         try {
             $lead->products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $products);
@@ -234,6 +237,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @return Crm_Model_Lead the updated lead
      * 
      * @todo add notifications later
+     * @todo move the linking/relations stuff to seperate function
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
