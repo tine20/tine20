@@ -214,6 +214,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $products[] = $product;     
             }
         }
+        
         try {
             $lead->products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $products);
         } catch (Exception $e) {
@@ -512,9 +513,12 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function saveLeadsources(Tinebase_Record_Recordset $_leadSources)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
-        $result = $backend->saveLeadsources($_leadSources);
         
-        return $result;
+        foreach($_leadSources as $leadSource) {
+            $backend->update($leadSource);
+        }
+        
+        return $_leadSources;
     }  
     
     /**
