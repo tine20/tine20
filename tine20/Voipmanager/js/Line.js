@@ -203,7 +203,7 @@ Tine.Voipmanager.Lines.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('Id'), dataIndex: 'id', width: 30, hidden: true },
-            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 60 },
+            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 50 },
             { resizable: true, id: 'accountcode', header: this.translation._('ASTERISK_LINES_account code'), dataIndex: 'accountcode', width: 30, hidden: true },
             { resizable: true, id: 'amaflags', header: this.translation._('ASTERISK_LINES_ama flags'), dataIndex: 'amaflags', width: 30, hidden: true },
             { resizable: true, id: 'callgroup', header: this.translation._('ASTERISK_LINES_call group'), dataIndex: 'callgroup', width: 30, hidden: true },
@@ -224,7 +224,7 @@ Tine.Voipmanager.Lines.Main = {
             { resizable: true, id: 'deny', header: this.translation._('ASTERISK_LINES_deny'), dataIndex: 'deny', width: 30, hidden: true },
             { resizable: true, id: 'permit', header: this.translation._('ASTERISK_LINES_permit'), dataIndex: 'permit', width: 30, hidden: true },
             { resizable: true, id: 'mask', header: this.translation._('ASTERISK_LINES_mask'), dataIndex: 'mask', width: 30, hidden: true },
-            { resizable: true, id: 'pickupgroup', header: this.translation._('ASTERISK_LINES_pickup group'), dataIndex: 'pickupgroup', width: 30 },
+            { resizable: true, id: 'pickupgroup', header: this.translation._('ASTERISK_LINES_pickup group'), dataIndex: 'pickupgroup', width: 40 },
             { resizable: true, id: 'port', header: this.translation._('ASTERISK_LINES_port'), dataIndex: 'port', width: 30, hidden: true },
             { resizable: true, id: 'qualify', header: this.translation._('ASTERISK_LINES_qualify'), dataIndex: 'qualify', width: 30, hidden: true },
             { resizable: true, id: 'restrictcid', header: this.translation._('ASTERISK_LINES_retrict cid'), dataIndex: 'restrictcid', width: 30, hidden: true },
