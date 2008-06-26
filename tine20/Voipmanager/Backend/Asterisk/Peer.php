@@ -135,6 +135,36 @@ class Voipmanager_Backend_Asterisk_Peer
     }        
     
     /**
+     * delete sip peer(s) identified by sip peer id
+     *
+     * @param string|array|Tinebase_Record_RecordSet $_id
+     * @return void
+     */
+    public function delete($_id)
+    {
+        foreach ((array)$_id as $id) {
+            $sipPeerId = Voipmanager_Model_AsteriskPeer::convertAsteriskPeerIdToInt($id);
+            $where[] = $this->_db->quoteInto('id = ?', $sipPeerId);
+        }
+
+        try {
+            $this->_db->beginTransaction();
+
+            // NOTE: using array for second argument won't work as delete function joins array items using "AND"
+            foreach($where AS $where_atom)
+            {
+                $this->_db->delete(SQL_TABLE_PREFIX . 'asterisk_peers', $where_atom);
+            }
+
+            $this->_db->commit();
+        } catch (Exception $e) {
+            $this->_db->rollBack();
+            throw $e;
+        }
+    }      
+    
+    
+    /**
      * create search filter
      *
      * @param string $_filter

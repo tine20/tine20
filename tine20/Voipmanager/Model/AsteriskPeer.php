@@ -103,7 +103,7 @@ class Voipmanager_Model_AsteriskPeer extends Tinebase_Record_Abstract
      * @param int|string|Voipmanager_Model_AsteriskPeer $_lineId the line id to convert
      * @return int
      */
-    static public function convertLineIdToInt($_lineId)
+    static public function convertAsteriskPeerIdToInt($_lineId)
     {
         if ($_lineId instanceof Voipmanager_Model_AsteriskPeer) {
             if (empty($_lineId->id)) {

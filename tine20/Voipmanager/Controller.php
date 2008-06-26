@@ -93,7 +93,7 @@ class Voipmanager_Controller
         $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software();
         $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
         $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();      
-        $this->_asteriskPeerBackend         = new Voipmanager_Backend_Asterisk_Peer();          
+        $this->_asteriskPeerBackend      = new Voipmanager_Backend_Asterisk_Peer();          
         $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context();          
         $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();                  
     }
@@ -554,6 +554,23 @@ class Voipmanager_Controller
         
         return $peer;
     }       
+    
+    
+    /**
+     * Deletes a set of asterisk sip peers.
+     * 
+     * If one of the asterisk sip peer could not be deleted, no asterisk sip peer is deleted
+     * 
+     * @throws Exception
+     * @param array array of asterisk sip peer identifiers
+     * @return void
+     */
+    public function deleteAsteriskSipPeers($_identifiers)
+    {
+        $this->_asteriskPeerBackend->delete($_identifiers);
+    }     
+    
+    
     
     /**
      * get xml configurationfile for snom phones

@@ -405,7 +405,7 @@ Tine.Voipmanager.Voicemail.EditDialog =  {
             translation.textdomain('Voipmanager');
             
             var _dialog = {
-                title: 'Voicemail',
+                title: 'main',
                 layout: 'border',
                 anchor: '100% 100%',
                 layoutOnTabChange: true,
@@ -421,8 +421,7 @@ Tine.Voipmanager.Voicemail.EditDialog =  {
                         layout: 'form',
                         //frame: true,
                         border: false,
-                        width: 440,
-                        height: 280,
+                        anchor: '100%',
                         items: [{
                             xtype: 'textfield',
                             fieldLabel: translation._('mailbox'),
@@ -473,6 +472,268 @@ Tine.Voipmanager.Voicemail.EditDialog =  {
             return _dialog;    
         },
         
+        
+        editVoicemailAdditionalDialog: function(){
+            var translation = new Locale.Gettext();
+            translation.textdomain('Voipmanager');
+            
+            var _dialog = {
+                title: 'additional',
+                layout: 'border',
+                anchor: '100% 100%',
+                layoutOnTabChange: true,
+                defaults: {
+                    border: true,
+                    frame: true
+                },
+                items: [{
+                    region: 'center',
+                    autoScroll: true,
+                    autoHeight: true,
+                    items: [{                
+                        layout: 'form',
+                        //frame: true,
+                        border: false,
+                        anchor: '100%',
+                        items: [{
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('tz'),
+                                    name: 'tz',
+                                    maxLength: 10,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            }, {
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('dialout'),
+                                    name: 'dialout',
+                                    maxLength: 10,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            }, {
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('callback'),
+                                    name: 'callback',
+                                    maxLength: 10,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            }, {
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('attach'),
+                                    name: 'attach',
+                                    maxLength: 4,
+                                    anchor: '100%',
+                                    allowBlank: true
+                                }]
+                            }]
+                        }, {
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('saycid'),
+                                    name: 'saycid',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('review'),
+                                    name: 'review',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('operator'),
+                                    name: 'operator',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('envelope'),
+                                    name: 'envelope',
+                                    maxLength: 4,
+                                    anchor: '100%',
+                                    allowBlank: true
+                                }]
+                            }]
+                        },{
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'numberfield',
+                                    fieldLabel: translation._('sayduration'),
+                                    name: 'sayduration',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'numberfield',
+                                    fieldLabel: translation._('saydurationm'),
+                                    name: 'saydurationm',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('sendvoicemail'),
+                                    name: 'sendvoicemail',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('delete'),
+                                    name: 'delete',
+                                    maxLength: 4,
+                                    anchor: '100%',
+                                    allowBlank: true
+                                }]
+                            }]
+                        },{
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('nextaftercmd'),
+                                    name: 'nextaftercmd',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('forcename'),
+                                    name: 'forcename',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('forcegreetings'),
+                                    name: 'forcegreetings',
+                                    maxLength: 4,
+                                    anchor: '98%',
+                                    allowBlank: true
+                                }]
+                            },{
+                                columnWidth: .25,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('hidefromdir'),
+                                    name: 'hidefromdir',
+                                    maxLength: 4,
+                                    anchor: '100%',
+                                    allowBlank: true
+                                }]
+                            }]
+                        }]
+                    }]
+                }]
+            };
+            
+            
+            return _dialog;    
+        },
+        
+        
+        
         updateToolbarButtons: function()
         {
             if(this.voicemailRecord.get('id') > 0) {
@@ -504,7 +765,8 @@ Tine.Voipmanager.Voicemail.EditDialog =  {
                         id: 'editPhoneTabPanel',
                         layoutOnTabChange:true,  
                         items:[
-                            this.editVoicemailMainDialog()
+                            this.editVoicemailMainDialog(),
+                            this.editVoicemailAdditionalDialog()
                         ]
                     })                      
                 }]

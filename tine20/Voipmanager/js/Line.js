@@ -57,7 +57,7 @@ Tine.Voipmanager.Lines.Main = {
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
-                            method: 'Voipmanager.deleteLines',
+                            method: 'Voipmanager.deleteAsteriskSipPeers',
                             _lineIds: lineIds
                         },
                         text: 'Deleting line(s)...',

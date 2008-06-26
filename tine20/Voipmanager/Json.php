@@ -532,6 +532,26 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
          
     }     
     
+
+    /**
+     * delete multiple asterisk sip peers
+     *
+     * @param array $_sipPeerIDs list of sipPeerId's to delete
+     * @return array
+     */
+    public function deleteAsteriskSipPeers($_lineIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $sipPeerIds = Zend_Json::decode($_lineIds);
+     
+        Voipmanager_Controller::getInstance()->deleteAsteriskSipPeers($sipPeerIds);
+
+        return $result;
+    }     
+    
     
     
     /**
