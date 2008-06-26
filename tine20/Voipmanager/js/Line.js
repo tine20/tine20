@@ -163,7 +163,7 @@ Tine.Voipmanager.Lines.Main = {
     renderer: {
     	regseconds: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
     		if(_data > 0) {
-    			var date = new Date(_data);
+    			var date = Date.parseDate(_data, 'U');
     			return date.format('d-m-Y H:i:s')
     		} else {
     			return '';
