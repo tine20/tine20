@@ -200,6 +200,7 @@ Tine.Voipmanager.Phones.Main = {
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('Id'), dataIndex: 'id', width: 30, hidden: true },
             { resizable: true, id: 'macaddress', header: this.translation._('MAC address'), dataIndex: 'macaddress',width: 50 },
+            { resizable: true, id: 'description', header: this.translation._('description'), dataIndex: 'description' },
             {
                 resizable: true,
                 id: 'location_id',
@@ -215,7 +216,7 @@ Tine.Voipmanager.Phones.Main = {
                 id: 'template_id',
                 header: this.translation._('Template'),
                 dataIndex: 'template_id',
-                width: 50,
+                width: 70,
                 renderer: function(_data,_obj, _rec) {
                     return _rec.data.template;
                 }                                
@@ -223,13 +224,6 @@ Tine.Voipmanager.Phones.Main = {
             { resizable: true, id: 'current_software', header: this.translation._('Software'), dataIndex: 'current_software', width: 50 },
             { resizable: true, id: 'ipaddress', header: this.translation._('IP Address'), dataIndex: 'ipaddress', width: 50 },
             { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true },
-            {
-                resizable: true,
-                id: 'description',
-                header: this.translation._('description'),
-                dataIndex: 'description',
-                width: 250
-            }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
