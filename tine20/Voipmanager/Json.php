@@ -814,6 +814,120 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
     }     
+
+
+
+/********************************
+ * SNOM SETTING FUNCTIONS
+ *
+ * 
+ */        
     
+    /**
+     * get snom settings
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+    public function getSnomSettings($sort, $dir, $query)
+    {     
+  
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Voipmanager_Controller::getInstance()->getSnomSettings($sort, $dir, $query)) {
+        
+            $_rows = $rows->toArray();
+
+            $i = 0; 
+        
+            $result['results']      = $_rows;
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }
+    
+    
+   /**
+     * get one setting identified by settingId
+     *
+     * @param int $settingId
+     * @return array
+     */
+    public function getSnomSetting($settingId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $setting = Voipmanager_Controller::getInstance()->getSnomSetting($settingId);
+        
+        $result = $setting->toArray();      
+          
+        return $result;
+    }    
+    
+    
+    /**
+     * save one setting
+     *
+     * if $settingData['id'] is empty the setting gets added, otherwise it gets updated
+     *
+     * @param string $settingData a JSON encoded array of setting properties
+     * @return array
+     */
+    public function saveSnomSetting($settingData)
+    {
+        $settingData = Zend_Json::decode($settingData);
+        
+        // unset if empty
+        if (empty($settingData['id'])) {
+            unset($settingData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($settingData,true));
+        $setting = new Voipmanager_Model_SnomSetting();
+        $setting->setFromArray($settingData);
+
+        
+        if (empty($setting->id)) {
+            $setting = Voipmanager_Controller::getInstance()->createSnomSetting($setting);
+        } else {
+            $setting = Voipmanager_Controller::getInstance()->updateSnomSetting($setting);
+        }
+        $setting = $this->getSnomSetting($setting->getId());
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $setting
+        ); //$setting->toArray());
+        
+        
+        return $result;
+         
+    }     
+    
+   
+    /**
+     * delete multiple settings
+     *
+     * @param array $_settingIDs list of settingId's to delete
+     * @return array
+     */
+    public function deleteSnomSettings($_settingIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $settingIds = Zend_Json::decode($_settingIds);
+        
+        Voipmanager_Controller::getInstance()->deleteSnomSettings($settingIds);
+
+        return $result;
+    }      
     
 }

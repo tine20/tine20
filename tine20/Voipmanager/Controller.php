@@ -83,6 +83,13 @@ class Voipmanager_Controller
     protected $_asteriskVoicemailBackend;
     
     /**
+     * the snom setting sql backend
+     *
+     * @var Voipmanager_Backend_Snom_Setting
+     */
+    protected $_snomSettingBackend;    
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -93,6 +100,7 @@ class Voipmanager_Controller
         $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software();
         $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
         $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();      
+        $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting();              
         $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer();          
         $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context();          
         $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();                  
@@ -830,5 +838,93 @@ class Voipmanager_Controller
         $this->_asteriskVoicemailBackend->delete($_identifiers);
     }    
     
+    
+    
+    
+/********************************
+ * SNOM SETTINGS FUNCTIONS
+ *
+ * 
+ */
+
+    
+    /**
+     * get snom_setting by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomSetting
+     */
+    public function getSnomSetting($_id)
+    {
+        $setting = $this->_snomSettingBackend->get($_id);
+        
+        return $setting;    
+    }
+
+
+    /**
+     * get snom settings
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomSetting
+     */
+    public function getSnomSettings($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {
+        $filter = new Voipmanager_Model_SnomSettingFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
+
+        $result = $this->_snomSettingBackend->search($filter, $pagination);
+        
+        return $result;    
+    }
+
+
+    /**
+     * add one setting
+     *
+     * @param Voipmanager_Model_SnomSetting $_voicemail
+     * @return  Voipmanager_Model_SnomSetting
+     */
+    public function createSnomSetting(Voipmanager_Model_SnomSetting $_setting)
+    {        
+        $setting = $this->_snomSettingBackend->create($_setting);
+      
+        return $this->getSnomSetting($setting);
+    }
+    
+
+    /**
+     * update one setting
+     *
+     * @param Voipmanager_Model_SnomSetting $_setting
+     * @return  Voipmanager_Model_SnomSetting
+     */
+    public function updateSnomSetting(Voipmanager_Model_SnomSetting $_setting)
+    {
+        $setting = $this->_snomSettingBackend->update($_setting);
+        
+        return $this->getSnomSetting($setting);
+    }    
+    
+  
+    /**
+     * Deletes a set of settings.
+     * 
+     * If one of the settings could not be deleted, no setting is deleted
+     * 
+     * @throws Exception
+     * @param array array of setting identifiers
+     * @return void
+     */
+    public function deleteSnomSettings($_identifiers)
+    {
+        $this->_snomSettingBackend->delete($_identifiers);
+    }     
     
 }

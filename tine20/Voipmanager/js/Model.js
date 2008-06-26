@@ -4,7 +4,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id: Model.js 3083 2008-06-25 15:51:22Z twadewitz $
  *
  */
 
@@ -85,7 +85,62 @@ Tine.Voipmanager.Model.Snom.Line = Ext.data.Record.create([
     {name: 'snomphone_id'}
 ]);
 
-
+Tine.Voipmanager.Model.Snom.Setting = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'},        
+    {name: 'web_language'},
+    {name: 'language'},
+    {name: 'display_method'},
+    {name: 'tone_scheme'},
+    {name: 'mwi_notification'},
+    {name: 'mwi_dialtone'},
+    {name: 'headset_device'},
+    {name: 'date_us_format'},
+    {name: 'time_24_format'},
+    {name: 'with_flash'},
+    {name: 'message_led_other'},
+    {name: 'global_missed_counter'},
+    {name: 'scroll_outgoing'},
+    {name: 'show_local_line'},
+    {name: 'show_call_status'},
+    {name: 'redirect_event'},
+    {name: 'redirect_number'},
+    {name: 'redirect_always_on_code'},
+    {name: 'redirect_always_off_code'},
+    {name: 'redirect_busy_number'},
+    {name: 'redirect_busy_on_code'},
+    {name: 'redirect_busy_off_code'},
+    {name: 'redirect_time'},
+    {name: 'redirect_time_number'},
+    {name: 'redirect_time_on_code'},
+    {name: 'redirect_time_off_code'},
+    {name: 'dnd_on_code'},
+    {name: 'dnd_off_code'},
+    {name: 'ringer_headset_device'},
+    {name: 'ring_sound'},
+    {name: 'alert_internal_ring_text'},
+    {name: 'alert_internal_ring_sound'},
+    {name: 'alert_external_ring_text'},
+    {name: 'alert_external_ring_sound'},
+    {name: 'alert_group_ring_text'},
+    {name: 'alert_group_ring_sound'},
+    {name: 'friends_ring_sound'},
+    {name: 'family_ring_sound'},
+    {name: 'colleagues_ring_sound'},
+    {name: 'vip_ring_sound'},
+    {name: 'custom_melody_url'},
+    {name: 'auto_connect_indication'},
+    {name: 'auto_connect_type'},
+    {name: 'privacy_out'},
+    {name: 'privacy_in'},
+    {name: 'presence_timeout'},
+    {name: 'enable_keyboard_lock'},
+    {name: 'keyboard_lock'},
+    {name: 'keyboard_lock_pw'},
+    {name: 'keyboard_lock_emergency'},
+    {name: 'emergency_proxy'}
+]);
 
 Ext.namespace('Tine.Voipmanager.Model.Asterisk');
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-26 11:46+0100\n"
+"POT-Creation-Date: 2008-06-26 18:54+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -17,844 +17,1294 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Voipmanager\n"
 
-#: Voipmanager/js/Context.js:82
+#: Voipmanager/js/Asterisk/Context.js:82
 msgid "add context"
 msgstr "Kontext hinzufügen"
 
-#: Voipmanager/js/Context.js:89
+#: Voipmanager/js/Asterisk/Context.js:89
 msgid "edit context"
 msgstr "Kontext editieren"
 
-#: Voipmanager/js/Context.js:97
+#: Voipmanager/js/Asterisk/Context.js:97
 msgid "delete context"
 msgstr "Kontext löschen"
 
-#: Voipmanager/js/Context.js:152
-#: Voipmanager/js/Line.js:156
-#: Voipmanager/js/Location.js:152
-#: Voipmanager/js/Phone.js:163
-#: Voipmanager/js/Software.js:160
-#: Voipmanager/js/Templates.js:152
-#: Voipmanager/js/Voicemail.js:152
+#: Voipmanager/js/Asterisk/Context.js:152
+#: Voipmanager/js/Asterisk/SipPeer.js:156
+#: Voipmanager/js/Asterisk/Voicemail.js:152
+#: Voipmanager/js/Snom/Location.js:152
+#: Voipmanager/js/Snom/Phone.js:163
+#: Voipmanager/js/Snom/Settings.js:163
+#: Voipmanager/js/Snom/Software.js:160
+#: Voipmanager/js/Snom/Templates.js:152
 msgid "Search: "
 msgstr "Suche:"
 
-#: Voipmanager/js/Context.js:184
+#: Voipmanager/js/Asterisk/Context.js:184
 msgid "Displaying context {0} - {1} of {2}"
 msgstr "Zeige Kontext {0} - {1} von {2}"
 
-#: Voipmanager/js/Context.js:185
+#: Voipmanager/js/Asterisk/Context.js:185
 msgid "No context to display"
 msgstr "Kein Kontext vorhanden"
 
-#: Voipmanager/js/Context.js:190
-#: Voipmanager/js/Location.js:199
-#: Voipmanager/js/Software.js:199
-#: Voipmanager/js/Templates.js:190
-#: Voipmanager/js/Voicemail.js:190
+#: Voipmanager/js/Asterisk/Context.js:190
+#: Voipmanager/js/Asterisk/Voicemail.js:190
+#: Voipmanager/js/Snom/Location.js:199
+#: Voipmanager/js/Snom/Software.js:199
+#: Voipmanager/js/Snom/Templates.js:190
 msgid "id"
 msgstr "id"
 
-#: Voipmanager/js/Context.js:191
-#: Voipmanager/js/Line.js:206
-#: Voipmanager/js/Templates.js:191
+#: Voipmanager/js/Asterisk/Context.js:191
+#: Voipmanager/js/Asterisk/SipPeer.js:206
+#: Voipmanager/js/Snom/Settings.js:202
+#: Voipmanager/js/Snom/Settings.js:491
+#: Voipmanager/js/Snom/Settings.js:686
+#: Voipmanager/js/Snom/Templates.js:191
 msgid "name"
 msgstr "Name"
 
-#: Voipmanager/js/Context.js:192
-#: Voipmanager/js/Context.js:404
-#: Voipmanager/js/Location.js:207
-#: Voipmanager/js/Location.js:447
-#: Voipmanager/js/Phone.js:692
-#: Voipmanager/js/Software.js:200
-#: Voipmanager/js/Software.js:435
-#: Voipmanager/js/Templates.js:192
-#: Voipmanager/js/Templates.js:408
+#: Voipmanager/js/Asterisk/Context.js:192
+#: Voipmanager/js/Asterisk/Context.js:404
+#: Voipmanager/js/Snom/Location.js:207
+#: Voipmanager/js/Snom/Location.js:447
+#: Voipmanager/js/Snom/Phone.js:692
+#: Voipmanager/js/Snom/Settings.js:506
+#: Voipmanager/js/Snom/Software.js:200
+#: Voipmanager/js/Snom/Software.js:435
+#: Voipmanager/js/Snom/Templates.js:192
+#: Voipmanager/js/Snom/Templates.js:408
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Voipmanager/js/Context.js:396
-#: Voipmanager/js/Line.js:451
-#: Voipmanager/js/Line.js:605
-#: Voipmanager/js/Location.js:203
-#: Voipmanager/js/Location.js:439
-#: Voipmanager/js/Templates.js:400
-#: Voipmanager/js/Voicemail.js:441
+#: Voipmanager/js/Asterisk/Context.js:396
+#: Voipmanager/js/Asterisk/SipPeer.js:451
+#: Voipmanager/js/Asterisk/SipPeer.js:605
+#: Voipmanager/js/Asterisk/Voicemail.js:442
+#: Voipmanager/js/Snom/Location.js:203
+#: Voipmanager/js/Snom/Location.js:439
+#: Voipmanager/js/Snom/Templates.js:400
 msgid "Name"
 msgstr "Name"
 
-#: Voipmanager/js/Line.js:83
-msgid "add line"
-msgstr "Line hinzufügen"
+#: Voipmanager/js/Asterisk/SipPeer.js:83
+msgid "add sipPeer"
+msgstr "Sip Peer hinzufügen"
 
-#: Voipmanager/js/Line.js:90
-msgid "edit line"
-msgstr "Line editieren"
+#: Voipmanager/js/Asterisk/SipPeer.js:90
+msgid "edit sipPeer"
+msgstr "Sip Peer editieren"
 
-#: Voipmanager/js/Line.js:98
-msgid "delete line"
-msgstr "Line löschen"
+#: Voipmanager/js/Asterisk/SipPeer.js:98
+msgid "delete sipPeer"
+msgstr "Sip Peer löschen"
 
-#: Voipmanager/js/Line.js:199
-msgid "Displaying lines {0} - {1} of {2}"
-msgstr "Zeige Line {0} - {1} von {2}"
+#: Voipmanager/js/Asterisk/SipPeer.js:199
+msgid "Displaying sipPeers {0} - {1} of {2}"
+msgstr "Zeige Sip Peers {0} - {1} von {2}"
 
-#: Voipmanager/js/Line.js:200
-#: Voipmanager/js/Line.js:290
-msgid "No lines to display"
-msgstr "Keine Line vorhanden"
+#: Voipmanager/js/Asterisk/SipPeer.js:200
+#: Voipmanager/js/Asterisk/SipPeer.js:290
+msgid "No sipPeers to display"
+msgstr "Keine Sip Peer vorhanden"
 
-#: Voipmanager/js/Line.js:205
-#: Voipmanager/js/Phone.js:201
+#: Voipmanager/js/Asterisk/SipPeer.js:205
+#: Voipmanager/js/Snom/Phone.js:201
+#: Voipmanager/js/Snom/Settings.js:201
 msgid "Id"
 msgstr "Id"
 
-#: Voipmanager/js/Line.js:207
+#: Voipmanager/js/Asterisk/SipPeer.js:207
 msgid "ASTERISK_LINES_account code"
 msgstr "account code"
 
-#: Voipmanager/js/Line.js:208
+#: Voipmanager/js/Asterisk/SipPeer.js:208
 msgid "ASTERISK_LINES_ama flags"
 msgstr "AMA flags"
 
-#: Voipmanager/js/Line.js:209
+#: Voipmanager/js/Asterisk/SipPeer.js:209
 msgid "ASTERISK_LINES_call group"
 msgstr "call group"
 
-#: Voipmanager/js/Line.js:210
+#: Voipmanager/js/Asterisk/SipPeer.js:210
 msgid "ASTERISK_LINES_caller id"
 msgstr "caller id"
 
-#: Voipmanager/js/Line.js:211
+#: Voipmanager/js/Asterisk/SipPeer.js:211
 msgid "ASTERISK_LINES_can reinvite"
 msgstr "can reinvite"
 
-#: Voipmanager/js/Line.js:212
+#: Voipmanager/js/Asterisk/SipPeer.js:212
 msgid "ASTERISK_LINES_context"
 msgstr "context"
 
-#: Voipmanager/js/Line.js:213
+#: Voipmanager/js/Asterisk/SipPeer.js:213
 msgid "ASTERISK_LINES_default ip"
 msgstr "default ip"
 
-#: Voipmanager/js/Line.js:214
+#: Voipmanager/js/Asterisk/SipPeer.js:214
 msgid "ASTERISK_LINES_dtmf mode"
 msgstr "DTMF mode"
 
-#: Voipmanager/js/Line.js:215
+#: Voipmanager/js/Asterisk/SipPeer.js:215
 msgid "ASTERISK_LINES_from user"
 msgstr "from user"
 
-#: Voipmanager/js/Line.js:216
+#: Voipmanager/js/Asterisk/SipPeer.js:216
 msgid "ASTERISK_LINES_from domain"
 msgstr "from domain"
 
-#: Voipmanager/js/Line.js:217
+#: Voipmanager/js/Asterisk/SipPeer.js:217
 msgid "ASTERISK_LINES_full contact"
 msgstr "full contact"
 
-#: Voipmanager/js/Line.js:218
+#: Voipmanager/js/Asterisk/SipPeer.js:218
 msgid "ASTERISK_LINES_host"
 msgstr "host"
 
-#: Voipmanager/js/Line.js:219
+#: Voipmanager/js/Asterisk/SipPeer.js:219
 msgid "ASTERISK_LINES_insecure"
 msgstr "insecure"
 
-#: Voipmanager/js/Line.js:220
+#: Voipmanager/js/Asterisk/SipPeer.js:220
 msgid "ASTERISK_LINES_language"
 msgstr "language"
 
-#: Voipmanager/js/Line.js:221
+#: Voipmanager/js/Asterisk/SipPeer.js:221
 msgid "ASTERISK_LINES_mailbox"
 msgstr "mailbox"
 
-#: Voipmanager/js/Line.js:222
+#: Voipmanager/js/Asterisk/SipPeer.js:222
 msgid "ASTERISK_LINES_md5 secret"
 msgstr "MD5 secret"
 
-#: Voipmanager/js/Line.js:223
+#: Voipmanager/js/Asterisk/SipPeer.js:223
 msgid "ASTERISK_LINES_nat"
 msgstr "NAT"
 
-#: Voipmanager/js/Line.js:224
+#: Voipmanager/js/Asterisk/SipPeer.js:224
 msgid "ASTERISK_LINES_deny"
 msgstr "deny"
 
-#: Voipmanager/js/Line.js:225
+#: Voipmanager/js/Asterisk/SipPeer.js:225
 msgid "ASTERISK_LINES_permit"
 msgstr "permit"
 
-#: Voipmanager/js/Line.js:226
+#: Voipmanager/js/Asterisk/SipPeer.js:226
 msgid "ASTERISK_LINES_mask"
 msgstr "mask"
 
-#: Voipmanager/js/Line.js:227
+#: Voipmanager/js/Asterisk/SipPeer.js:227
 msgid "ASTERISK_LINES_pickup group"
 msgstr "pickup group"
 
-#: Voipmanager/js/Line.js:228
+#: Voipmanager/js/Asterisk/SipPeer.js:228
 msgid "ASTERISK_LINES_port"
 msgstr "port"
 
-#: Voipmanager/js/Line.js:229
+#: Voipmanager/js/Asterisk/SipPeer.js:229
 msgid "ASTERISK_LINES_qualify"
 msgstr "qualify"
 
-#: Voipmanager/js/Line.js:230
+#: Voipmanager/js/Asterisk/SipPeer.js:230
 msgid "ASTERISK_LINES_retrict cid"
 msgstr "retrict CID"
 
-#: Voipmanager/js/Line.js:231
+#: Voipmanager/js/Asterisk/SipPeer.js:231
 msgid "ASTERISK_LINES_rtp timeout"
 msgstr "RTP timeout"
 
-#: Voipmanager/js/Line.js:232
+#: Voipmanager/js/Asterisk/SipPeer.js:232
 msgid "ASTERISK_LINES_rtp hold timeout"
 msgstr "RTP hold timeout"
 
-#: Voipmanager/js/Line.js:233
+#: Voipmanager/js/Asterisk/SipPeer.js:233
 msgid "ASTERISK_LINES_secret"
 msgstr "secret"
 
-#: Voipmanager/js/Line.js:234
+#: Voipmanager/js/Asterisk/SipPeer.js:234
 msgid "ASTERISK_LINES_type"
 msgstr "type"
 
-#: Voipmanager/js/Line.js:235
+#: Voipmanager/js/Asterisk/SipPeer.js:235
 msgid "ASTERISK_LINES_username"
 msgstr "username"
 
-#: Voipmanager/js/Line.js:236
+#: Voipmanager/js/Asterisk/SipPeer.js:236
 msgid "ASTERISK_LINES_disallow"
 msgstr "disallow"
 
-#: Voipmanager/js/Line.js:237
+#: Voipmanager/js/Asterisk/SipPeer.js:237
 msgid "ASTERISK_LINES_allow"
 msgstr "allow"
 
-#: Voipmanager/js/Line.js:238
+#: Voipmanager/js/Asterisk/SipPeer.js:238
 msgid "ASTERISK_LINES_music on hold"
 msgstr "music on hold"
 
-#: Voipmanager/js/Line.js:239
+#: Voipmanager/js/Asterisk/SipPeer.js:239
 msgid "ASTERISK_LINES_reg seconds"
 msgstr "reg seconds"
 
-#: Voipmanager/js/Line.js:240
+#: Voipmanager/js/Asterisk/SipPeer.js:240
 msgid "ASTERISK_LINES_ip address"
 msgstr "IP address"
 
-#: Voipmanager/js/Line.js:241
+#: Voipmanager/js/Asterisk/SipPeer.js:241
 msgid "ASTERISK_LINES_reg exten"
 msgstr "reg exten"
 
-#: Voipmanager/js/Line.js:242
+#: Voipmanager/js/Asterisk/SipPeer.js:242
 msgid "ASTERISK_LINES_can call forward"
 msgstr "can call forward"
 
-#: Voipmanager/js/Line.js:243
+#: Voipmanager/js/Asterisk/SipPeer.js:243
 msgid "ASTERISK_LINES_set var"
 msgstr "set var"
 
-#: Voipmanager/js/Line.js:244
+#: Voipmanager/js/Asterisk/SipPeer.js:244
 msgid "ASTERISK_LINES_notify ringing"
 msgstr "notify ringing"
 
-#: Voipmanager/js/Line.js:245
+#: Voipmanager/js/Asterisk/SipPeer.js:245
 msgid "ASTERISK_LINES_use client code"
 msgstr "use client code"
 
-#: Voipmanager/js/Line.js:246
+#: Voipmanager/js/Asterisk/SipPeer.js:246
 msgid "ASTERISK_LINES_auth user"
 msgstr "auth user"
 
-#: Voipmanager/js/Line.js:247
+#: Voipmanager/js/Asterisk/SipPeer.js:247
 msgid "ASTERISK_LINES_call limit"
 msgstr "call limit"
 
-#: Voipmanager/js/Line.js:248
+#: Voipmanager/js/Asterisk/SipPeer.js:248
 msgid "ASTERISK_LINES_busy level"
 msgstr "busy level"
 
-#: Voipmanager/js/Line.js:458
-#: Voipmanager/js/Line.js:657
+#: Voipmanager/js/Asterisk/SipPeer.js:458
+#: Voipmanager/js/Asterisk/SipPeer.js:657
 msgid "Context"
 msgstr "Kontext"
 
-#: Voipmanager/js/Line.js:474
-#: Voipmanager/js/Line.js:865
+#: Voipmanager/js/Asterisk/SipPeer.js:474
+#: Voipmanager/js/Asterisk/SipPeer.js:865
 msgid "Type"
 msgstr "Typ"
 
-#: Voipmanager/js/Line.js:491
-#: Voipmanager/js/Line.js:858
+#: Voipmanager/js/Asterisk/SipPeer.js:491
+#: Voipmanager/js/Asterisk/SipPeer.js:858
 msgid "Secret"
 msgstr "Secret"
 
-#: Voipmanager/js/Line.js:498
-#: Voipmanager/js/Line.js:633
+#: Voipmanager/js/Asterisk/SipPeer.js:498
+#: Voipmanager/js/Asterisk/SipPeer.js:633
 msgid "Callerid"
 msgstr "Caller ID"
 
-#: Voipmanager/js/Line.js:505
-#: Voipmanager/js/Line.js:747
+#: Voipmanager/js/Asterisk/SipPeer.js:505
+#: Voipmanager/js/Asterisk/SipPeer.js:747
 msgid "Mailbox"
 msgstr "Mailbox"
 
-#: Voipmanager/js/Line.js:512
-#: Voipmanager/js/Line.js:626
+#: Voipmanager/js/Asterisk/SipPeer.js:512
+#: Voipmanager/js/Asterisk/SipPeer.js:626
 msgid "Callgroup"
 msgstr "Call Group"
 
-#: Voipmanager/js/Line.js:519
-#: Voipmanager/js/Line.js:799
+#: Voipmanager/js/Asterisk/SipPeer.js:519
+#: Voipmanager/js/Asterisk/SipPeer.js:799
 msgid "Pickup group"
 msgstr "Pickup Group"
 
-#: Voipmanager/js/Line.js:526
-#: Voipmanager/js/Line.js:612
+#: Voipmanager/js/Asterisk/SipPeer.js:526
+#: Voipmanager/js/Asterisk/SipPeer.js:612
 msgid "Accountcode"
 msgstr "Account Code"
 
-#: Voipmanager/js/Line.js:533
-#: Voipmanager/js/Line.js:740
+#: Voipmanager/js/Asterisk/SipPeer.js:533
+#: Voipmanager/js/Asterisk/SipPeer.js:740
 msgid "Language"
 msgstr "Sprache"
 
-#: Voipmanager/js/Line.js:540
-#: Voipmanager/js/Line.js:761
+#: Voipmanager/js/Asterisk/SipPeer.js:540
+#: Voipmanager/js/Asterisk/SipPeer.js:761
 msgid "NAT"
 msgstr "NAT"
 
-#: Voipmanager/js/Line.js:557
-#: Voipmanager/js/Line.js:820
+#: Voipmanager/js/Asterisk/SipPeer.js:557
+#: Voipmanager/js/Asterisk/SipPeer.js:820
 msgid "Qualify"
 msgstr "Qualify"
 
-#: Voipmanager/js/Line.js:619
+#: Voipmanager/js/Asterisk/SipPeer.js:619
 msgid "Amaflags"
 msgstr "AMA Flags"
 
-#: Voipmanager/js/Line.js:640
+#: Voipmanager/js/Asterisk/SipPeer.js:640
 msgid "Can reinvite"
 msgstr "Can re-invite"
 
-#: Voipmanager/js/Line.js:664
+#: Voipmanager/js/Asterisk/SipPeer.js:664
 msgid "Default IP"
 msgstr "Standard IP"
 
-#: Voipmanager/js/Line.js:671
+#: Voipmanager/js/Asterisk/SipPeer.js:671
 msgid "DTMF mode"
 msgstr "DTMF Mode"
 
-#: Voipmanager/js/Line.js:688
+#: Voipmanager/js/Asterisk/SipPeer.js:688
 msgid "From User"
 msgstr "\"From\" Benutzer"
 
-#: Voipmanager/js/Line.js:695
+#: Voipmanager/js/Asterisk/SipPeer.js:695
 msgid "From Domain"
 msgstr "\"From\" Domain"
 
-#: Voipmanager/js/Line.js:709
+#: Voipmanager/js/Asterisk/SipPeer.js:709
 msgid "Full Contact"
 msgstr "kompletter Kontakt"
 
-#: Voipmanager/js/Line.js:716
+#: Voipmanager/js/Asterisk/SipPeer.js:716
 msgid "Host"
 msgstr "Host"
 
-#: Voipmanager/js/Line.js:723
+#: Voipmanager/js/Asterisk/SipPeer.js:723
 msgid "Insecure"
 msgstr "Insecure"
 
-#: Voipmanager/js/Line.js:754
+#: Voipmanager/js/Asterisk/SipPeer.js:754
 msgid "MD5 Secret"
 msgstr "MD5 Secret"
 
-#: Voipmanager/js/Line.js:778
+#: Voipmanager/js/Asterisk/SipPeer.js:778
 msgid "Deny"
 msgstr "Verbieten"
 
-#: Voipmanager/js/Line.js:785
+#: Voipmanager/js/Asterisk/SipPeer.js:785
 msgid "Permit"
 msgstr "Erlauben"
 
-#: Voipmanager/js/Line.js:792
+#: Voipmanager/js/Asterisk/SipPeer.js:792
 msgid "Mask"
 msgstr "Maske"
 
-#: Voipmanager/js/Line.js:813
+#: Voipmanager/js/Asterisk/SipPeer.js:813
 msgid "Port"
 msgstr "Port"
 
-#: Voipmanager/js/Line.js:837
+#: Voipmanager/js/Asterisk/SipPeer.js:837
 msgid "Restrict CID"
 msgstr "Restrict CID"
 
-#: Voipmanager/js/Line.js:844
+#: Voipmanager/js/Asterisk/SipPeer.js:844
 msgid "RTP Timeout"
 msgstr "RTP Timeout"
 
-#: Voipmanager/js/Line.js:851
+#: Voipmanager/js/Asterisk/SipPeer.js:851
 msgid "RTP Hold Timeout"
 msgstr "RTP Hold Timeout"
 
-#: Voipmanager/js/Line.js:882
+#: Voipmanager/js/Asterisk/SipPeer.js:882
 msgid "Username"
 msgstr "Benutzername"
 
-#: Voipmanager/js/Line.js:889
+#: Voipmanager/js/Asterisk/SipPeer.js:889
 msgid "Disallow"
 msgstr "Disallow"
 
-#: Voipmanager/js/Line.js:896
+#: Voipmanager/js/Asterisk/SipPeer.js:896
 msgid "Allow"
 msgstr "Allow"
 
-#: Voipmanager/js/Line.js:903
+#: Voipmanager/js/Asterisk/SipPeer.js:903
 msgid "Music on hold"
 msgstr "Music on hold"
 
-#: Voipmanager/js/Line.js:917
+#: Voipmanager/js/Asterisk/SipPeer.js:917
 msgid "Reg Seconds"
 msgstr "Reg Sekunden"
 
-#: Voipmanager/js/Line.js:924
-#: Voipmanager/js/Phone.js:225
+#: Voipmanager/js/Asterisk/SipPeer.js:924
+#: Voipmanager/js/Snom/Phone.js:225
 msgid "IP Address"
 msgstr "IP Adresse"
 
-#: Voipmanager/js/Line.js:931
+#: Voipmanager/js/Asterisk/SipPeer.js:931
 msgid "Reg Exten"
 msgstr "Reg Exten"
 
-#: Voipmanager/js/Line.js:938
+#: Voipmanager/js/Asterisk/SipPeer.js:938
 msgid "Can forward call"
 msgstr "Can forward call"
 
-#: Voipmanager/js/Line.js:955
+#: Voipmanager/js/Asterisk/SipPeer.js:955
 msgid "Set Var"
 msgstr "Set Var"
 
-#: Voipmanager/js/Line.js:962
+#: Voipmanager/js/Asterisk/SipPeer.js:962
 msgid "Notify Ringing"
 msgstr "notify ringing"
 
-#: Voipmanager/js/Line.js:979
+#: Voipmanager/js/Asterisk/SipPeer.js:979
 msgid "Use Client Code"
 msgstr "Use Client Code"
 
-#: Voipmanager/js/Line.js:996
+#: Voipmanager/js/Asterisk/SipPeer.js:996
 msgid "Auth User"
 msgstr "Auth Benutzer"
 
-#: Voipmanager/js/Line.js:1003
+#: Voipmanager/js/Asterisk/SipPeer.js:1003
 msgid "Call Limit"
 msgstr "Call Limit"
 
-#: Voipmanager/js/Line.js:1010
+#: Voipmanager/js/Asterisk/SipPeer.js:1010
 msgid "Busy Level"
 msgstr "Busy Level"
 
-#: Voipmanager/js/Location.js:82
-msgid "add location"
-msgstr "Standort hinzufügen"
-
-#: Voipmanager/js/Location.js:89
-msgid "edit location"
-msgstr "Standort editieren"
-
-#: Voipmanager/js/Location.js:97
-msgid "delete location"
-msgstr "Standort löschen"
-
-#: Voipmanager/js/Location.js:184
-msgid "Displaying location {0} - {1} of {2}"
-msgstr "Zeige Standort {0} - {1} von {2}"
-
-#: Voipmanager/js/Location.js:185
-msgid "No location to display"
-msgstr "Kein Standort vorhanden"
-
-#: Voipmanager/js/Location.js:190
-msgid "FW Interval"
-msgstr "Firmware Intervall"
-
-#: Voipmanager/js/Location.js:191
-msgid "FW Status"
-msgstr "Firmware Status"
-
-#: Voipmanager/js/Location.js:192
-#: Voipmanager/js/Location.js:487
-msgid "Update Policy"
-msgstr "Update Grundsatz"
-
-#: Voipmanager/js/Location.js:193
-msgid "Server Setting"
-msgstr "Server Einstellung"
-
-#: Voipmanager/js/Location.js:194
-msgid "Admin Mode"
-msgstr "Admin Mode"
-
-#: Voipmanager/js/Location.js:195
-#: Voipmanager/js/Location.js:520
-msgid "NTP Server"
-msgstr "NTP Server"
-
-#: Voipmanager/js/Location.js:196
-#: Voipmanager/js/Location.js:631
-msgid "Webserver Type"
-msgstr "Webserver Typ"
-
-#: Voipmanager/js/Location.js:197
-#: Voipmanager/js/Location.js:692
-msgid "HTTPS Port"
-msgstr "HTTPS Port"
-
-#: Voipmanager/js/Location.js:198
-#: Voipmanager/js/Location.js:713
-msgid "HTTP User"
-msgstr "HTTP Benutzer"
-
-#: Voipmanager/js/Location.js:208
-msgid "Filter Registrar"
-msgstr "Filter Registrar"
-
-#: Voipmanager/js/Location.js:209
-msgid "CP Dialoginfo"
-msgstr "CP Dialoginfo"
-
-#: Voipmanager/js/Location.js:210
-msgid "Pickup Indic."
-msgstr "Pickup Indic."
-
-#: Voipmanager/js/Location.js:455
-msgid "Settings URL"
-msgstr "Einstellungen URL"
-
-#: Voipmanager/js/Location.js:463
-msgid "Firmware URL"
-msgstr "Firmware URL"
-
-#: Voipmanager/js/Location.js:471
-msgid "Base Download URL"
-msgstr "Base Download URL"
-
-#: Voipmanager/js/Location.js:508
-msgid "Firmware Interval"
-msgstr "Firmware Intervall"
-
-#: Voipmanager/js/Location.js:537
-msgid "NTP Server Address"
-msgstr "NTP Server Addresse"
-
-#: Voipmanager/js/Location.js:550
-msgid "NTP Refresh"
-msgstr "NTP Refresh"
-
-#: Voipmanager/js/Location.js:557
-msgid "Timezone"
-msgstr "Zeitzone"
-
-#: Voipmanager/js/Location.js:582
-msgid "Enable admin mode"
-msgstr "Admin Mode aktivieren"
-
-#: Voipmanager/js/Location.js:594
-msgid "Admin Mode Password"
-msgstr "Admin Mode Passwort"
-
-#: Voipmanager/js/Location.js:604
-msgid "Enable webserver"
-msgstr "Webserver aktivieren"
-
-#: Voipmanager/js/Location.js:678
-msgid "HTTP Port"
-msgstr "HTTP Port"
-
-#: Voipmanager/js/Location.js:725
-msgid "HTTP Password"
-msgstr "HTTP Passwort"
-
-#: Voipmanager/js/Phone.js:90
-msgid "add phone"
-msgstr "Telefon hinzufügen"
-
-#: Voipmanager/js/Phone.js:97
-msgid "edit phone"
-msgstr "Telefon editieren"
-
-#: Voipmanager/js/Phone.js:105
-msgid "delete phone"
-msgstr "Telefon löschen"
-
-#: Voipmanager/js/Phone.js:195
-msgid "Displaying phones {0} - {1} of {2}"
-msgstr "Zeige Telefone {0} - {1} von {2}"
-
-#: Voipmanager/js/Phone.js:196
-msgid "No phones to display"
-msgstr "Keine Telefone vorhanden"
-
-#: Voipmanager/js/Phone.js:202
-msgid "MAC address"
-msgstr "MAC Adresse"
-
-#: Voipmanager/js/Phone.js:203
-msgid "description"
-msgstr "Beschreibung"
-
-#: Voipmanager/js/Phone.js:207
-#: Voipmanager/js/Phone.js:655
-msgid "Location"
-msgstr "Standort"
-
-#: Voipmanager/js/Phone.js:217
-#: Voipmanager/js/Phone.js:638
-msgid "Template"
-msgstr "Template"
-
-#: Voipmanager/js/Phone.js:224
-msgid "Software"
-msgstr "Software"
-
-#: Voipmanager/js/Phone.js:226
-msgid "last modified"
-msgstr "zuletzt geändert"
-
-#: Voipmanager/js/Phone.js:483
-msgid "lineactive"
-msgstr "Line aktiv"
-
-#: Voipmanager/js/Phone.js:542
-msgid "sipCombo"
-msgstr "SIP Combo"
-
-#: Voipmanager/js/Phone.js:551
-msgid "Idle Text"
-msgstr "Idle Text"
-
-#: Voipmanager/js/Phone.js:631
-msgid "MAC Address"
-msgstr "MAC Adresse"
-
-#: Voipmanager/js/Phone.js:678
-msgid "Phone Model"
-msgstr "Telefonmodell"
-
-#: Voipmanager/js/Phone.js:724
-msgid "Current IP Address"
-msgstr "aktuelle IP Adresse"
-
-#: Voipmanager/js/Phone.js:731
-msgid "Current Software Version"
-msgstr "aktuelle Software Version"
-
-#: Voipmanager/js/Phone.js:744
-msgid "Settings Loaded at"
-msgstr "Einstellungen geladen am"
-
-#: Voipmanager/js/Phone.js:753
-msgid "Firmware last checked at"
-msgstr "Firmware zuletzt überprüft"
-
-#: Voipmanager/js/Software.js:90
-msgid "add software"
-msgstr "Software hinzufügen"
-
-#: Voipmanager/js/Software.js:97
-msgid "edit software"
-msgstr "Software editieren"
-
-#: Voipmanager/js/Software.js:105
-msgid "delete software"
-msgstr "Software löschen"
-
-#: Voipmanager/js/Software.js:193
-msgid "Displaying software {0} - {1} of {2}"
-msgstr "Zeige Software {0} - {1} von {2}"
-
-#: Voipmanager/js/Software.js:194
-msgid "No software to display"
-msgstr "Keine Software vorhanden"
-
-#: Voipmanager/js/Templates.js:82
-msgid "add template"
-msgstr "Template hinzufügen"
-
-#: Voipmanager/js/Templates.js:89
-msgid "edit template"
-msgstr "Template editieren"
-
-#: Voipmanager/js/Templates.js:97
-msgid "delete template"
-msgstr "Template löschen"
-
-#: Voipmanager/js/Templates.js:184
-msgid "Displaying template {0} - {1} of {2}"
-msgstr "Zeige Template {0} - {1} von {2}"
-
-#: Voipmanager/js/Templates.js:185
-msgid "No template to display"
-msgstr "Kein Template vorhanden"
-
-#: Voipmanager/js/Templates.js:193
-msgid "Model"
-msgstr "Telefonmodell"
-
-#: Voipmanager/js/Templates.js:194
-msgid "Keylayout Id"
-msgstr "Tastaturlayout Id"
-
-#: Voipmanager/js/Templates.js:195
-msgid "Settings Id"
-msgstr "Einstellungen Id"
-
-#: Voipmanager/js/Templates.js:196
-msgid "Software Id"
-msgstr "Software Id"
-
-#: Voipmanager/js/Templates.js:414
-msgid "Software Version"
-msgstr "Software Version"
-
-#: Voipmanager/js/Templates.js:430
-msgid "Keylayout"
-msgstr "Tastaturlayout"
-
-#: Voipmanager/js/Templates.js:446
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: Voipmanager/js/Voicemail.js:82
+#: Voipmanager/js/Asterisk/Voicemail.js:82
 msgid "add voicemail"
 msgstr "Voicemail hinzufügen"
 
-#: Voipmanager/js/Voicemail.js:89
+#: Voipmanager/js/Asterisk/Voicemail.js:89
 msgid "edit voicemail"
 msgstr "Voicemail bearbeiten"
 
-#: Voipmanager/js/Voicemail.js:97
+#: Voipmanager/js/Asterisk/Voicemail.js:97
 msgid "delete voicemail"
 msgstr "Voicemail löschen"
 
-#: Voipmanager/js/Voicemail.js:184
+#: Voipmanager/js/Asterisk/Voicemail.js:184
 msgid "Displaying voicemail {0} - {1} of {2}"
 msgstr "Zeige Voicemail {0} - {1} von {2}"
 
-#: Voipmanager/js/Voicemail.js:185
+#: Voipmanager/js/Asterisk/Voicemail.js:185
 msgid "No voicemail to display"
 msgstr "Keine Voicemail vorhanden"
 
-#: Voipmanager/js/Voicemail.js:191
-#: Voipmanager/js/Voicemail.js:427
+#: Voipmanager/js/Asterisk/Voicemail.js:191
+#: Voipmanager/js/Asterisk/Voicemail.js:428
 msgid "mailbox"
 msgstr "Mailbox"
 
-#: Voipmanager/js/Voicemail.js:192
-#: Voipmanager/js/Voicemail.js:434
+#: Voipmanager/js/Asterisk/Voicemail.js:192
+#: Voipmanager/js/Asterisk/Voicemail.js:435
 msgid "context"
 msgstr "Kontext"
 
-#: Voipmanager/js/Voicemail.js:193
+#: Voipmanager/js/Asterisk/Voicemail.js:193
 msgid "fullname"
 msgstr "Name"
 
-#: Voipmanager/js/Voicemail.js:194
-#: Voipmanager/js/Voicemail.js:456
+#: Voipmanager/js/Asterisk/Voicemail.js:194
+#: Voipmanager/js/Asterisk/Voicemail.js:457
 msgid "email"
 msgstr "EMail"
 
-#: Voipmanager/js/Voicemail.js:195
-#: Voipmanager/js/Voicemail.js:462
+#: Voipmanager/js/Asterisk/Voicemail.js:195
+#: Voipmanager/js/Asterisk/Voicemail.js:463
 msgid "pager"
 msgstr "Pager"
 
-#: Voipmanager/js/Voicemail.js:196
-#: Voipmanager/js/Voicemail.js:509
+#: Voipmanager/js/Asterisk/Voicemail.js:196
+#: Voipmanager/js/Asterisk/Voicemail.js:505
 msgid "tz"
 msgstr "TZ"
 
-#: Voipmanager/js/Voicemail.js:197
-#: Voipmanager/js/Voicemail.js:548
+#: Voipmanager/js/Asterisk/Voicemail.js:197
+#: Voipmanager/js/Asterisk/Voicemail.js:544
 msgid "attach"
 msgstr "attach"
 
-#: Voipmanager/js/Voicemail.js:198
-#: Voipmanager/js/Voicemail.js:566
+#: Voipmanager/js/Asterisk/Voicemail.js:198
+#: Voipmanager/js/Asterisk/Voicemail.js:562
 msgid "saycid"
 msgstr "say cid"
 
-#: Voipmanager/js/Voicemail.js:199
-#: Voipmanager/js/Voicemail.js:522
+#: Voipmanager/js/Asterisk/Voicemail.js:199
+#: Voipmanager/js/Asterisk/Voicemail.js:518
 msgid "dialout"
 msgstr "dialout"
 
-#: Voipmanager/js/Voicemail.js:200
-#: Voipmanager/js/Voicemail.js:535
+#: Voipmanager/js/Asterisk/Voicemail.js:200
+#: Voipmanager/js/Asterisk/Voicemail.js:531
 msgid "callback"
 msgstr "callback"
 
-#: Voipmanager/js/Voicemail.js:201
-#: Voipmanager/js/Voicemail.js:579
+#: Voipmanager/js/Asterisk/Voicemail.js:201
+#: Voipmanager/js/Asterisk/Voicemail.js:575
 msgid "review"
 msgstr "review"
 
-#: Voipmanager/js/Voicemail.js:202
-#: Voipmanager/js/Voicemail.js:592
+#: Voipmanager/js/Asterisk/Voicemail.js:202
+#: Voipmanager/js/Asterisk/Voicemail.js:588
 msgid "operator"
 msgstr "operator"
 
-#: Voipmanager/js/Voicemail.js:203
-#: Voipmanager/js/Voicemail.js:605
+#: Voipmanager/js/Asterisk/Voicemail.js:203
+#: Voipmanager/js/Asterisk/Voicemail.js:601
 msgid "envelope"
 msgstr "envelope"
 
-#: Voipmanager/js/Voicemail.js:204
-#: Voipmanager/js/Voicemail.js:623
+#: Voipmanager/js/Asterisk/Voicemail.js:204
+#: Voipmanager/js/Asterisk/Voicemail.js:619
 msgid "sayduration"
 msgstr "say duration"
 
-#: Voipmanager/js/Voicemail.js:205
-#: Voipmanager/js/Voicemail.js:636
+#: Voipmanager/js/Asterisk/Voicemail.js:205
+#: Voipmanager/js/Asterisk/Voicemail.js:632
 msgid "saydurationm"
 msgstr "say duration m"
 
-#: Voipmanager/js/Voicemail.js:206
-#: Voipmanager/js/Voicemail.js:649
+#: Voipmanager/js/Asterisk/Voicemail.js:206
+#: Voipmanager/js/Asterisk/Voicemail.js:645
 msgid "sendvoicemail"
 msgstr "send voicemail"
 
-#: Voipmanager/js/Voicemail.js:207
-#: Voipmanager/js/Voicemail.js:662
+#: Voipmanager/js/Asterisk/Voicemail.js:207
+#: Voipmanager/js/Asterisk/Voicemail.js:658
 msgid "delete"
 msgstr "löschen"
 
-#: Voipmanager/js/Voicemail.js:208
-#: Voipmanager/js/Voicemail.js:680
+#: Voipmanager/js/Asterisk/Voicemail.js:208
+#: Voipmanager/js/Asterisk/Voicemail.js:676
 msgid "nextaftercmd"
 msgstr "next after cmd"
 
-#: Voipmanager/js/Voicemail.js:209
-#: Voipmanager/js/Voicemail.js:693
+#: Voipmanager/js/Asterisk/Voicemail.js:209
+#: Voipmanager/js/Asterisk/Voicemail.js:689
 msgid "forcename"
 msgstr "force name"
 
-#: Voipmanager/js/Voicemail.js:210
-#: Voipmanager/js/Voicemail.js:706
+#: Voipmanager/js/Asterisk/Voicemail.js:210
+#: Voipmanager/js/Asterisk/Voicemail.js:702
 msgid "forcegreetings"
 msgstr "force greetings"
 
-#: Voipmanager/js/Voicemail.js:211
-#: Voipmanager/js/Voicemail.js:719
+#: Voipmanager/js/Asterisk/Voicemail.js:211
+#: Voipmanager/js/Asterisk/Voicemail.js:715
 msgid "hidefromdir"
 msgstr "hide from dir"
 
-#: Voipmanager/js/Voicemail.js:448
+#: Voipmanager/js/Asterisk/Voicemail.js:449
 msgid "Password"
 msgstr "Passwort"
+
+#: Voipmanager/js/Snom/Location.js:82
+msgid "add location"
+msgstr "Standort hinzufügen"
+
+#: Voipmanager/js/Snom/Location.js:89
+msgid "edit location"
+msgstr "Standort editieren"
+
+#: Voipmanager/js/Snom/Location.js:97
+msgid "delete location"
+msgstr "Standort löschen"
+
+#: Voipmanager/js/Snom/Location.js:184
+msgid "Displaying location {0} - {1} of {2}"
+msgstr "Zeige Standort {0} - {1} von {2}"
+
+#: Voipmanager/js/Snom/Location.js:185
+msgid "No location to display"
+msgstr "Kein Standort vorhanden"
+
+#: Voipmanager/js/Snom/Location.js:190
+msgid "FW Interval"
+msgstr "Firmware Intervall"
+
+#: Voipmanager/js/Snom/Location.js:191
+msgid "FW Status"
+msgstr "Firmware Status"
+
+#: Voipmanager/js/Snom/Location.js:192
+#: Voipmanager/js/Snom/Location.js:487
+msgid "Update Policy"
+msgstr "Update Grundsatz"
+
+#: Voipmanager/js/Snom/Location.js:193
+msgid "Server Setting"
+msgstr "Server Einstellung"
+
+#: Voipmanager/js/Snom/Location.js:194
+msgid "Admin Mode"
+msgstr "Admin Mode"
+
+#: Voipmanager/js/Snom/Location.js:195
+#: Voipmanager/js/Snom/Location.js:520
+msgid "NTP Server"
+msgstr "NTP Server"
+
+#: Voipmanager/js/Snom/Location.js:196
+#: Voipmanager/js/Snom/Location.js:631
+msgid "Webserver Type"
+msgstr "Webserver Typ"
+
+#: Voipmanager/js/Snom/Location.js:197
+#: Voipmanager/js/Snom/Location.js:692
+msgid "HTTPS Port"
+msgstr "HTTPS Port"
+
+#: Voipmanager/js/Snom/Location.js:198
+#: Voipmanager/js/Snom/Location.js:713
+msgid "HTTP User"
+msgstr "HTTP Benutzer"
+
+#: Voipmanager/js/Snom/Location.js:208
+msgid "Filter Registrar"
+msgstr "Filter Registrar"
+
+#: Voipmanager/js/Snom/Location.js:209
+msgid "CP Dialoginfo"
+msgstr "CP Dialoginfo"
+
+#: Voipmanager/js/Snom/Location.js:210
+msgid "Pickup Indic."
+msgstr "Pickup Indic."
+
+#: Voipmanager/js/Snom/Location.js:455
+msgid "Settings URL"
+msgstr "Einstellungen URL"
+
+#: Voipmanager/js/Snom/Location.js:463
+msgid "Firmware URL"
+msgstr "Firmware URL"
+
+#: Voipmanager/js/Snom/Location.js:471
+msgid "Base Download URL"
+msgstr "Base Download URL"
+
+#: Voipmanager/js/Snom/Location.js:508
+msgid "Firmware Interval"
+msgstr "Firmware Intervall"
+
+#: Voipmanager/js/Snom/Location.js:537
+msgid "NTP Server Address"
+msgstr "NTP Server Addresse"
+
+#: Voipmanager/js/Snom/Location.js:550
+msgid "NTP Refresh"
+msgstr "NTP Refresh"
+
+#: Voipmanager/js/Snom/Location.js:557
+msgid "Timezone"
+msgstr "Zeitzone"
+
+#: Voipmanager/js/Snom/Location.js:582
+msgid "Enable admin mode"
+msgstr "Admin Mode aktivieren"
+
+#: Voipmanager/js/Snom/Location.js:594
+msgid "Admin Mode Password"
+msgstr "Admin Mode Passwort"
+
+#: Voipmanager/js/Snom/Location.js:604
+msgid "Enable webserver"
+msgstr "Webserver aktivieren"
+
+#: Voipmanager/js/Snom/Location.js:678
+msgid "HTTP Port"
+msgstr "HTTP Port"
+
+#: Voipmanager/js/Snom/Location.js:725
+msgid "HTTP Password"
+msgstr "HTTP Passwort"
+
+#: Voipmanager/js/Snom/Phone.js:90
+msgid "add phone"
+msgstr "Telefon hinzufügen"
+
+#: Voipmanager/js/Snom/Phone.js:97
+msgid "edit phone"
+msgstr "Telefon editieren"
+
+#: Voipmanager/js/Snom/Phone.js:105
+msgid "delete phone"
+msgstr "Telefon löschen"
+
+#: Voipmanager/js/Snom/Phone.js:195
+msgid "Displaying phones {0} - {1} of {2}"
+msgstr "Zeige Telefone {0} - {1} von {2}"
+
+#: Voipmanager/js/Snom/Phone.js:196
+msgid "No phones to display"
+msgstr "Keine Telefone vorhanden"
+
+#: Voipmanager/js/Snom/Phone.js:202
+msgid "MAC address"
+msgstr "MAC Adresse"
+
+#: Voipmanager/js/Snom/Phone.js:203
+#: Voipmanager/js/Snom/Settings.js:203
+msgid "description"
+msgstr "Beschreibung"
+
+#: Voipmanager/js/Snom/Phone.js:207
+#: Voipmanager/js/Snom/Phone.js:655
+msgid "Location"
+msgstr "Standort"
+
+#: Voipmanager/js/Snom/Phone.js:217
+#: Voipmanager/js/Snom/Phone.js:638
+msgid "Template"
+msgstr "Template"
+
+#: Voipmanager/js/Snom/Phone.js:224
+msgid "Software"
+msgstr "Software"
+
+#: Voipmanager/js/Snom/Phone.js:226
+msgid "last modified"
+msgstr "zuletzt geändert"
+
+#: Voipmanager/js/Snom/Phone.js:483
+msgid "lineactive"
+msgstr "Line aktiv"
+
+#: Voipmanager/js/Snom/Phone.js:542
+msgid "sipCombo"
+msgstr "SIP Combo"
+
+#: Voipmanager/js/Snom/Phone.js:551
+msgid "Idle Text"
+msgstr "Idle Text"
+
+#: Voipmanager/js/Snom/Phone.js:631
+msgid "MAC Address"
+msgstr "MAC Adresse"
+
+#: Voipmanager/js/Snom/Phone.js:678
+msgid "Phone Model"
+msgstr "Telefonmodell"
+
+#: Voipmanager/js/Snom/Phone.js:724
+msgid "Current IP Address"
+msgstr "aktuelle IP Adresse"
+
+#: Voipmanager/js/Snom/Phone.js:731
+msgid "Current Software Version"
+msgstr "aktuelle Software Version"
+
+#: Voipmanager/js/Snom/Phone.js:744
+msgid "Settings Loaded at"
+msgstr "Einstellungen geladen am"
+
+#: Voipmanager/js/Snom/Phone.js:753
+msgid "Firmware last checked at"
+msgstr "Firmware zuletzt überprüft"
+
+#: Voipmanager/js/Snom/Settings.js:90
+msgid "add setting"
+msgstr "Setting hinzufügen"
+
+#: Voipmanager/js/Snom/Settings.js:97
+msgid "edit setting"
+msgstr "Setting editieren"
+
+#: Voipmanager/js/Snom/Settings.js:105
+msgid "delete setting"
+msgstr "Setting löschen"
+
+#: Voipmanager/js/Snom/Settings.js:195
+msgid "Displaying settings {0} - {1} of {2}"
+msgstr "Zeige Settings {0} - {1} von {2}"
+
+#: Voipmanager/js/Snom/Settings.js:196
+msgid "No settings to display"
+msgstr "Keine Settings vorhanden"
+
+#: Voipmanager/js/Snom/Settings.js:204
+#: Voipmanager/js/Snom/Settings.js:538
+msgid "web_language"
+msgstr "web language"
+
+#: Voipmanager/js/Snom/Settings.js:205
+#: Voipmanager/js/Snom/Settings.js:573
+msgid "language"
+msgstr "Sprache"
+
+#: Voipmanager/js/Snom/Settings.js:206
+#: Voipmanager/js/Snom/Settings.js:671
+msgid "display_method"
+msgstr "display method"
+
+#: Voipmanager/js/Snom/Settings.js:207
+#: Voipmanager/js/Snom/Settings.js:700
+msgid "tone_scheme"
+msgstr "tone scheme"
+
+#: Voipmanager/js/Snom/Settings.js:208
+#: Voipmanager/js/Snom/Settings.js:799
+msgid "mwi_notification"
+msgstr "mwi notification"
+
+#: Voipmanager/js/Snom/Settings.js:209
+#: Voipmanager/js/Snom/Settings.js:826
+msgid "mwi_dialtone"
+msgstr "mwi dialtone"
+
+#: Voipmanager/js/Snom/Settings.js:210
+#: Voipmanager/js/Snom/Settings.js:909
+msgid "headset_device"
+msgstr "headset device"
+
+#: Voipmanager/js/Snom/Settings.js:211
+#: Voipmanager/js/Snom/Settings.js:614
+msgid "date_us_format"
+msgstr "date us format"
+
+#: Voipmanager/js/Snom/Settings.js:212
+#: Voipmanager/js/Snom/Settings.js:640
+msgid "time_24_format"
+msgstr "time 24 format"
+
+#: Voipmanager/js/Snom/Settings.js:213
+#: Voipmanager/js/Snom/Settings.js:742
+msgid "with_flash"
+msgstr "with flash"
+
+#: Voipmanager/js/Snom/Settings.js:214
+#: Voipmanager/js/Snom/Settings.js:768
+msgid "message_led_other"
+msgstr "message led other"
+
+#: Voipmanager/js/Snom/Settings.js:215
+#: Voipmanager/js/Snom/Settings.js:852
+msgid "global_missed_counter"
+msgstr "global missed counter"
+
+#: Voipmanager/js/Snom/Settings.js:216
+#: Voipmanager/js/Snom/Settings.js:878
+msgid "scroll_outgoing"
+msgstr "scroll outgoing"
+
+#: Voipmanager/js/Snom/Settings.js:217
+#: Voipmanager/js/Snom/Settings.js:941
+msgid "show_local_line"
+msgstr "show local line"
+
+#: Voipmanager/js/Snom/Settings.js:218
+#: Voipmanager/js/Snom/Settings.js:967
+msgid "show_call_status"
+msgstr "show call status"
+
+#: Voipmanager/js/Snom/Settings.js:219
+msgid "redirect_event"
+msgstr "redirect event"
+
+#: Voipmanager/js/Snom/Settings.js:220
+msgid "redirect_number"
+msgstr "redirect number"
+
+#: Voipmanager/js/Snom/Settings.js:221
+msgid "redirect_always_on_code"
+msgstr "redirect always on code"
+
+#: Voipmanager/js/Snom/Settings.js:222
+msgid "redirect_always_off_code"
+msgstr "redirect always off code"
+
+#: Voipmanager/js/Snom/Settings.js:223
+msgid "redirect_busy_number"
+msgstr "redirect busy number"
+
+#: Voipmanager/js/Snom/Settings.js:224
+msgid "redirect_busy_on_code"
+msgstr "redirect busy on code"
+
+#: Voipmanager/js/Snom/Settings.js:225
+msgid "redirect_busy_off_code"
+msgstr "redirect busy off code"
+
+#: Voipmanager/js/Snom/Settings.js:226
+msgid "redirect_time"
+msgstr "redirect time"
+
+#: Voipmanager/js/Snom/Settings.js:227
+msgid "redirect_time_number"
+msgstr "redirect time number"
+
+#: Voipmanager/js/Snom/Settings.js:228
+msgid "redirect_time_on_code"
+msgstr "redirect time on code"
+
+#: Voipmanager/js/Snom/Settings.js:229
+msgid "redirect_time_off_code"
+msgstr "redirect time off code"
+
+#: Voipmanager/js/Snom/Settings.js:230
+msgid "dnd_on_code"
+msgstr "dnd on code"
+
+#: Voipmanager/js/Snom/Settings.js:231
+msgid "dnd_off_code"
+msgstr "dnd off code"
+
+#: Voipmanager/js/Snom/Settings.js:232
+msgid "ringer_headset_device"
+msgstr "ringer headset device"
+
+#: Voipmanager/js/Snom/Settings.js:233
+msgid "ring_sound"
+msgstr "ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:234
+msgid "alert_internal_ring_text"
+msgstr "alert internal ring text"
+
+#: Voipmanager/js/Snom/Settings.js:235
+msgid "alert_internal_ring_sound"
+msgstr "alert internal ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:236
+msgid "alert_external_ring_text"
+msgstr "alert external ring text"
+
+#: Voipmanager/js/Snom/Settings.js:237
+msgid "alert_external_ring_sound"
+msgstr "alert external ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:238
+msgid "alert_group_ring_text"
+msgstr "alert group ring text"
+
+#: Voipmanager/js/Snom/Settings.js:239
+msgid "alert_group_ring_sound"
+msgstr "alert group ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:240
+msgid "friends_ring_sound"
+msgstr "friends ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:241
+msgid "family_ring_sound"
+msgstr "family ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:242
+msgid "colleagues_ring_sound"
+msgstr "colleagues ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:243
+msgid "vip_ring_sound"
+msgstr "vip ring sound"
+
+#: Voipmanager/js/Snom/Settings.js:244
+msgid "custom_melody_url"
+msgstr "custom melody url"
+
+#: Voipmanager/js/Snom/Settings.js:245
+msgid "auto_connect_indication"
+msgstr "auto connect indication"
+
+#: Voipmanager/js/Snom/Settings.js:246
+msgid "auto_connect_type"
+msgstr "auto connect type"
+
+#: Voipmanager/js/Snom/Settings.js:247
+msgid "privacy_out"
+msgstr "privacy out"
+
+#: Voipmanager/js/Snom/Settings.js:248
+msgid "privacy_in"
+msgstr "privacy in"
+
+#: Voipmanager/js/Snom/Settings.js:249
+msgid "presence_timeout"
+msgstr "presence timeout"
+
+#: Voipmanager/js/Snom/Settings.js:250
+msgid "enable_keyboard_lock"
+msgstr "enable keyboard lock"
+
+#: Voipmanager/js/Snom/Settings.js:251
+msgid "keyboard_lock"
+msgstr "keyboard lock"
+
+#: Voipmanager/js/Snom/Settings.js:252
+msgid "keyboard_lock_pw"
+msgstr "keyboard lock pw"
+
+#: Voipmanager/js/Snom/Settings.js:253
+msgid "keyboard_lock_emergency"
+msgstr "keyboard lock emergency"
+
+#: Voipmanager/js/Snom/Settings.js:254
+msgid "emergency_proxy"
+msgstr "emergency proxy"
+
+#: Voipmanager/js/Snom/Settings.js:520
+msgid "general information"
+msgstr "general information"
+
+#: Voipmanager/js/Snom/Settings.js:552
+#: Voipmanager/js/Snom/Settings.js:587
+msgid "English"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:553
+#: Voipmanager/js/Snom/Settings.js:589
+msgid "Deutsch"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:554
+#: Voipmanager/js/Snom/Settings.js:590
+msgid "Espanol"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:555
+#: Voipmanager/js/Snom/Settings.js:591
+msgid "Francais"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:556
+#: Voipmanager/js/Snom/Settings.js:592
+msgid "Italiano"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:557
+#: Voipmanager/js/Snom/Settings.js:594
+msgid "Nederlands"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:558
+#: Voipmanager/js/Snom/Settings.js:596
+#, fuzzy
+msgid "Portugues"
+msgstr "Port"
+
+#: Voipmanager/js/Snom/Settings.js:559
+#: Voipmanager/js/Snom/Settings.js:598
+msgid "Suomi"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:560
+#: Voipmanager/js/Snom/Settings.js:599
+msgid "Svenska"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:561
+#: Voipmanager/js/Snom/Settings.js:600
+#, fuzzy
+msgid "Dansk"
+msgstr "Maske"
+
+#: Voipmanager/js/Snom/Settings.js:562
+#: Voipmanager/js/Snom/Settings.js:601
+msgid "Norsk"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:588
+msgid "English(UK)"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:593
+msgid "Cestina"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:595
+msgid "Polski"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:597
+msgid "Slovencina"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:602
+msgid "Japanese"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:603
+msgid "Chinese"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:685
+msgid "whole url"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:687
+#, fuzzy
+msgid "number"
+msgstr "Name"
+
+#: Voipmanager/js/Snom/Settings.js:688
+msgid "name + number"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:689
+msgid "number + name"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:714
+msgid "australia"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:715
+msgid "austria"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:716
+msgid "china"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:717
+#, fuzzy
+msgid "dansk"
+msgstr "Maske"
+
+#: Voipmanager/js/Snom/Settings.js:718
+msgid "france"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:719
+msgid "germany"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:720
+msgid "great britain"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:721
+msgid "india"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:722
+msgid "italy"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:723
+msgid "japan"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:724
+msgid "mexiko"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:725
+msgid "netherlands"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:726
+msgid "norway"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:727
+msgid "newzealand"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:728
+msgid "spain"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:729
+msgid "sweden"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:730
+msgid "switzerland"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:731
+msgid "usa"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:813
+msgid "silent"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:814
+msgid "beep"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:815
+msgid "reminder"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:840
+msgid "normal"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:841
+msgid "stutter"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:923
+msgid "none"
+msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:924
+#, fuzzy
+msgid "headset_rj"
+msgstr "headset device"
+
+#: Voipmanager/js/Snom/Software.js:90
+msgid "add software"
+msgstr "Software hinzufügen"
+
+#: Voipmanager/js/Snom/Software.js:97
+msgid "edit software"
+msgstr "Software editieren"
+
+#: Voipmanager/js/Snom/Software.js:105
+msgid "delete software"
+msgstr "Software löschen"
+
+#: Voipmanager/js/Snom/Software.js:193
+msgid "Displaying software {0} - {1} of {2}"
+msgstr "Zeige Software {0} - {1} von {2}"
+
+#: Voipmanager/js/Snom/Software.js:194
+msgid "No software to display"
+msgstr "Keine Software vorhanden"
+
+#: Voipmanager/js/Snom/Templates.js:82
+msgid "add template"
+msgstr "Template hinzufügen"
+
+#: Voipmanager/js/Snom/Templates.js:89
+msgid "edit template"
+msgstr "Template editieren"
+
+#: Voipmanager/js/Snom/Templates.js:97
+msgid "delete template"
+msgstr "Template löschen"
+
+#: Voipmanager/js/Snom/Templates.js:184
+msgid "Displaying template {0} - {1} of {2}"
+msgstr "Zeige Template {0} - {1} von {2}"
+
+#: Voipmanager/js/Snom/Templates.js:185
+msgid "No template to display"
+msgstr "Kein Template vorhanden"
+
+#: Voipmanager/js/Snom/Templates.js:193
+msgid "Model"
+msgstr "Telefonmodell"
+
+#: Voipmanager/js/Snom/Templates.js:194
+msgid "Keylayout Id"
+msgstr "Tastaturlayout Id"
+
+#: Voipmanager/js/Snom/Templates.js:195
+msgid "Settings Id"
+msgstr "Einstellungen Id"
+
+#: Voipmanager/js/Snom/Templates.js:196
+msgid "Software Id"
+msgstr "Software Id"
+
+#: Voipmanager/js/Snom/Templates.js:414
+msgid "Software Version"
+msgstr "Software Version"
+
+#: Voipmanager/js/Snom/Templates.js:430
+msgid "Keylayout"
+msgstr "Tastaturlayout"
+
+#: Voipmanager/js/Snom/Templates.js:446
+msgid "Settings"
+msgstr "Einstellungen"
 
 #~ msgid "Software Image"
 #~ msgstr "Name"

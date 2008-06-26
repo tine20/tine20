@@ -338,6 +338,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
         updateVoicemailRecord: function(_voicemailData)
         {            
             this.voicemailRecord = new Tine.Voipmanager.Model.Asterisk.Voicemail(_voicemailData);
+            console.log(this.voicemailRecord);
         },
         
         deleteVoicemail: function(_button, _event)
@@ -756,7 +757,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                     items: new Ext.TabPanel({
                         plain:true,
                         activeTab: 0,
-                        id: 'editPhoneTabPanel',
+                        id: 'editVoicemailTabPanel',
                         layoutOnTabChange:true,  
                         items:[
                             this.editVoicemailMainDialog(),

@@ -4,7 +4,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id: Voipmanager.js 3083 2008-06-25 15:51:22Z twadewitz $
  *
  */
  
@@ -299,7 +299,15 @@ Tine.Voipmanager = function() {
                     } else {
                         Tine.Voipmanager.Asterisk.Voicemail.Main.show(_node);
                     }
-                    break;                                                                             
+                    break;     
+                    
+                case 'settings':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerSettings') {
+                        Ext.getCmp('gridVoipmanagerSettings').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Voipmanager.Snom.Settings.Main.show(_node);
+                    }
+                    break;                                                                                            
             }
         }, this);
 

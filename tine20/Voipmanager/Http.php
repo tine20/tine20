@@ -34,6 +34,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Snom/Templates.js',
             'Voipmanager/js/Snom/Phone.js',
             'Voipmanager/js/Snom/Location.js',
+            'Voipmanager/js/Snom/Settings.js',
             'Voipmanager/js/Asterisk/SipPeer.js',
             'Voipmanager/js/Asterisk/Context.js',
             'Voipmanager/js/Asterisk/Voicemail.js'
@@ -316,6 +317,49 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         echo $view->render('mainscreen.php');
     }    
 
+
+   /**
+     * create edit snom setting dialog
+     *
+     * @param int $settingId
+     * @todo catch permission denied exceptions only
+     * 
+     */
+    public function editSnomSetting($settingId=NULL)
+    {
+        if (!empty($settingId)) {
+            $setting = Voipmanager_Controller::getInstance()->getSnomSetting($settingId);
+            $encodedSetting = Zend_Json::encode($setting->toArray());
+        } else {
+            $encodedSetting = '{}';
+        }
+
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Settings.EditDialog.display(' . $encodedSetting .');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit snom setting data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }  
+
+
     /**
      * create edit template dialog
      *
@@ -349,8 +393,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $encodedKeylayout = Zend_Json::encode('[]');
         
         // settings data
-//        $settings = $controller->getSettings();
-        $encodedSettings = Zend_Json::encode('[]');
+        $settings = $controller->getSnomSettings();
+        $encodedSettings = Zend_Json::encode($settings->toArray());
         
         $view = new Zend_View();
          
