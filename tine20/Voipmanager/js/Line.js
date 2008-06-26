@@ -159,6 +159,17 @@ Tine.Voipmanager.Lines.Main = {
 
         Tine.Tinebase.MainScreen.setActiveToolbar(lineToolbar);
     },
+    
+    renderer: {
+    	regseconds: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+    		if(_data > 0) {
+    			var date = new Date(_data);
+    			return date.format('d-m-Y H:i:s')
+    		} else {
+    			return '';
+    		}
+    	}
+    },
 
     displayLinesGrid: function() 
     {
@@ -225,7 +236,7 @@ Tine.Voipmanager.Lines.Main = {
             { resizable: true, id: 'disallow', header: this.translation._('ASTERISK_LINES_disallow'), dataIndex: 'disallow', width: 30, hidden: true },
             { resizable: true, id: 'allow', header: this.translation._('ASTERISK_LINES_allow'), dataIndex: 'allow', width: 30, hidden: true },
             { resizable: true, id: 'musiconhold', header: this.translation._('ASTERISK_LINES_music on hold'), dataIndex: 'musiconhold', width: 30, hidden: true },
-            { resizable: true, id: 'regseconds', header: this.translation._('ASTERISK_LINES_reg seconds'), dataIndex: 'regseconds', width: 30 },
+            { resizable: true, id: 'regseconds', header: this.translation._('ASTERISK_LINES_reg seconds'), dataIndex: 'regseconds', width: 30, renderer: Tine.Voipmanager.Lines.Main.renderer.regseconds},
             { resizable: true, id: 'ipaddr', header: this.translation._('ASTERISK_LINES_ip address'), dataIndex: 'ipaddr', width: 30, hidden: true },
             { resizable: true, id: 'regexten', header: this.translation._('ASTERISK_LINES_reg exten'), dataIndex: 'regexten', width: 30, hidden: true },
             { resizable: true, id: 'cancallforward', header: this.translation._('ASTERISK_LINES_can call forward'), dataIndex: 'cancallforward', width: 30, hidden: true },
