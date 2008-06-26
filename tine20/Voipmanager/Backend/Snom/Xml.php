@@ -38,8 +38,21 @@ class Voipmanager_Backend_Snom_Xml
           $child->addAttribute('perm', 'RW');
         }
         
-        // set the microphone volume temporarly
+        // set the microphone volume temporarly and other things
+        // get removed if we have the settings dialogue
         $child = $phonesettings->addChild('vol_handset_mic', 7);
+        $child->addAttribute('perm', 'RW');
+        $child = $phonesettings->addChild('web_language', 'Deutsch');
+        $child->addAttribute('perm', 'RW');
+        $child = $phonesettings->addChild('language', 'Deutsch');
+        $child->addAttribute('perm', 'RW');
+        $child = $phonesettings->addChild('tone_scheme', 'GER');
+        $child->addAttribute('perm', 'RW');
+        $child = $phonesettings->addChild('display_method', 'Name+Number');
+        $child->addAttribute('perm', 'RW');
+        $child = $phonesettings->addChild('date_us_format', 'off');
+        $child->addAttribute('perm', 'RW');
+        $child = $phonesettings->addChild('time_24_format', 'on');
         $child->addAttribute('perm', 'RW');
 /*        
         $userSettings = $this->_getUserSettings();
