@@ -459,7 +459,7 @@ Tine.Voipmanager.Lines.EditDialog =  {
                 name: 'context',
                 mode: 'local',
                 displayField: 'name',
-                valueField: 'id',
+                valueField: 'name',
                 anchor: '98%',
                 triggerAction: 'all',
                 editable: false,

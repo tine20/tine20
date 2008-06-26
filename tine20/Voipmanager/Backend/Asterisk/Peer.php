@@ -72,7 +72,7 @@ class Voipmanager_Backend_Asterisk_Peer
 	 */
     public function get($_id)
     {	
-        $peerId = Voipmanager_Model_AsteriskPeer::convertLineIdToInt($_id);
+        $peerId = Voipmanager_Model_AsteriskPeer::convertAsteriskPeerIdToInt($_id);
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'asterisk_peers')
             ->where($this->_db->quoteInto('id = ?', $peerId));
