@@ -8,9 +8,9 @@
  *
  */
 
-Ext.namespace('Tine.Voipmanager.Phones');
+Ext.namespace('Tine.Voipmanager.Snom.Phones');
 
-Tine.Voipmanager.Phones.Main = {
+Tine.Voipmanager.Snom.Phones.Main = {
        
     actions: {
         addPhone: null,
@@ -24,7 +24,7 @@ Tine.Voipmanager.Phones.Main = {
          */
         addPhone: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=', 600, 450);
+            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=', 600, 450);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Phones.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
             var phoneId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + phoneId, 600, 450);
+            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=' + phoneId, 600, 450);
         },
         
         /**
@@ -174,7 +174,7 @@ Tine.Voipmanager.Phones.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Model.Phone,
+            fields: Tine.Voipmanager.Model.Snom.Phone,
             // turn on remote sorting
             remoteSort: true
         });
@@ -291,7 +291,7 @@ Tine.Voipmanager.Phones.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + record.data.id, 600, 450);
+                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=' + record.data.id, 600, 450);
             } catch(e) {
                 // alert(e);
             }
@@ -346,7 +346,7 @@ Tine.Voipmanager.Phones.Main = {
 };
 
 
-Tine.Voipmanager.Phones.EditDialog =  {
+Tine.Voipmanager.Snom.Phones.EditDialog =  {
 
         phoneRecord: null,
         
@@ -363,7 +363,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
             if(_phoneData.firmware_checked_at && _phoneData.firmware_checked_at !== null) {
                 _phoneData.firmware_checked_at = Date.parseDate(_phoneData.firmware_checked_at, 'c');
             }
-            this.phoneRecord = new Tine.Voipmanager.Model.Phone(_phoneData);
+            this.phoneRecord = new Tine.Voipmanager.Model.Snom.Phone(_phoneData);
         },
         
         
@@ -379,7 +379,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 },
                 text: 'Deleting phone...',
                 success: function(_result, _request) {
-                    window.opener.Tine.Voipmanager.Phones.Main.reload();
+                    window.opener.Tine.Voipmanager.Snom.Phones.Main.reload();
                     window.close();
                 },
                 failure: function ( result, request) { 
@@ -410,8 +410,8 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         lineData: Ext.util.JSON.encode(lines)
                     },
                     success: function(_result, _request) {
-                        if(window.opener.Tine.Voipmanager.Phones) {
-                            window.opener.Tine.Voipmanager.Phones.Main.reload();
+                        if(window.opener.Tine.Voipmanager.Snom.Phones) {
+                            window.opener.Tine.Voipmanager.Snom.Phones.Main.reload();
                         }
                         if(_closeWindow === true) {
                             window.close();
@@ -501,7 +501,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
 			});
 	
 			while (snomLinesDS.getCount() < _maxLines) {
-				_snomRecord = new Tine.Voipmanager.Model.SnomLine({
+				_snomRecord = new Tine.Voipmanager.Model.Snom.Line({
 					'asteriskline_id':'',
 					'id':'',
 					'idletext':'',

@@ -8,9 +8,9 @@
  *
  */
 
-Ext.namespace('Tine.Voipmanager.Model');
+Ext.namespace('Tine.Voipmanager.Model.Snom');
 
-Tine.Voipmanager.Model.Phone = Ext.data.Record.create([
+Tine.Voipmanager.Model.Snom.Phone = Ext.data.Record.create([
     {name: 'id'},
     {name: 'macaddress'},
     {name: 'description'},
@@ -28,7 +28,7 @@ Tine.Voipmanager.Model.Phone = Ext.data.Record.create([
 
 
 
-Tine.Voipmanager.Model.Location = Ext.data.Record.create([
+Tine.Voipmanager.Model.Snom.Location = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
@@ -50,7 +50,7 @@ Tine.Voipmanager.Model.Location = Ext.data.Record.create([
 ]);
 
 
-Tine.Voipmanager.Model.Template = Ext.data.Record.create([
+Tine.Voipmanager.Model.Snom.Template = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
@@ -61,7 +61,7 @@ Tine.Voipmanager.Model.Template = Ext.data.Record.create([
 ]);
 
 
-Tine.Voipmanager.Model.SnomSoftware = Ext.data.Record.create([
+Tine.Voipmanager.Model.Snom.Software = Ext.data.Record.create([
     {name: 'id'},
     {name: 'description'},
     {name: 'softwareimage_snom300'},
@@ -71,12 +71,12 @@ Tine.Voipmanager.Model.SnomSoftware = Ext.data.Record.create([
     
 ]);
 
-Tine.Voipmanager.Model.SoftwareImage = Ext.data.Record.create([
+Tine.Voipmanager.Model.Snom.SoftwareImage = Ext.data.Record.create([
     {name: 'model'},
     {name: 'softwareimage'}
 ]);
 
-Tine.Voipmanager.Model.SnomLine = Ext.data.Record.create([
+Tine.Voipmanager.Model.Snom.Line = Ext.data.Record.create([
     {name: 'asteriskline_id'},
     {name: 'id'},
     {name: 'idletext'},
@@ -86,7 +86,10 @@ Tine.Voipmanager.Model.SnomLine = Ext.data.Record.create([
 ]);
 
 
-Tine.Voipmanager.Model.Line = Ext.data.Record.create([
+
+Ext.namespace('Tine.Voipmanager.Model.Asterisk');
+
+Tine.Voipmanager.Model.Asterisk.SipPeer = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'accountcode'},
@@ -133,13 +136,13 @@ Tine.Voipmanager.Model.Line = Ext.data.Record.create([
     {name: 'busy-level'}
 ]);
 
-Tine.Voipmanager.Model.Context = Ext.data.Record.create([
+Tine.Voipmanager.Model.Asterisk.Context = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'}
 ]);
 
-Tine.Voipmanager.Model.Voicemail = Ext.data.Record.create([
+Tine.Voipmanager.Model.Asterisk.Voicemail = Ext.data.Record.create([
     {name: 'id'},
     {name: 'context'},
     {name: 'mailbox'},

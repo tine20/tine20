@@ -1,6 +1,6 @@
 <?php
 /**
- * class to hold asterisk line data
+ * class to hold asterisk sip peer data
  * 
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -11,11 +11,11 @@
  */
 
 /**
- * class to hold asterisk line data
+ * class to hold asterisk sip peer data
  * 
  * @package     Voipmanager 
  */
-class Voipmanager_Model_AsteriskPeer extends Tinebase_Record_Abstract
+class Voipmanager_Model_AsteriskSipPeer extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -98,24 +98,24 @@ class Voipmanager_Model_AsteriskPeer extends Tinebase_Record_Abstract
     );
 
     /**
-     * converts a int, string or Voipmanager_Model_AsteriskPeer to an line id
+     * converts a int, string or Voipmanager_Model_AsteriskSipPeer to an line id
      *
-     * @param int|string|Voipmanager_Model_AsteriskPeer $_lineId the line id to convert
+     * @param int|string|Voipmanager_Model_AsteriskSipPeer $_sipPeerId the sip peer id to convert
      * @return int
      */
-    static public function convertAsteriskPeerIdToInt($_lineId)
+    static public function convertAsteriskSipPeerIdToInt($_sipPeerId)
     {
-        if ($_lineId instanceof Voipmanager_Model_AsteriskPeer) {
-            if (empty($_lineId->id)) {
-                throw new Exception('no line id set');
+        if ($_sipPeerId instanceof Voipmanager_Model_AsteriskSipPeer) {
+            if (empty($_sipPeerId->id)) {
+                throw new Exception('no sip peer id set');
             }
-            $id = (string) $_lineId->id;
+            $id = (string) $_sipPeerId->id;
         } else {
-            $id = (string) $_lineId;
+            $id = (string) $_sipPeerId;
         }
         
         if ($id == '') {
-            throw new Exception('line id can not be 0');
+            throw new Exception('sip peer id can not be 0');
         }
         
         return $id;

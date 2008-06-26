@@ -8,9 +8,9 @@
  *
  */
 
-Ext.namespace('Tine.Voipmanager.Software');
+Ext.namespace('Tine.Voipmanager.Snom.Software');
 
-Tine.Voipmanager.Software.Main = {
+Tine.Voipmanager.Snom.Software.Main = {
        
     actions: {
         addSoftware: null,
@@ -24,7 +24,7 @@ Tine.Voipmanager.Software.Main = {
          */
         addSoftware: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSoftware&softwareId=', 450, 300);
+            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=', 450, 300);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Software.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Software_Grid').getSelectionModel().getSelections();
             var softwareId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSoftware&softwareId=' + softwareId, 450, 300);
+            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + softwareId, 450, 300);
         },
         
         /**
@@ -171,7 +171,7 @@ Tine.Voipmanager.Software.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Model.SnomSoftware,
+            fields: Tine.Voipmanager.Model.Snom.Software,
             // turn on remote sorting
             remoteSort: true
         });
@@ -265,7 +265,7 @@ Tine.Voipmanager.Software.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSoftware&softwareId=' + record.data.id, 450, 300);
+                Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + record.data.id, 450, 300);
             } catch(e) {
                 // alert(e);
             }
@@ -321,13 +321,13 @@ Tine.Voipmanager.Software.Main = {
 
 
 
-Tine.Voipmanager.Software.EditDialog =  {
+Tine.Voipmanager.Snom.Software.EditDialog =  {
 
         softwareRecord: null,
         
         updateSoftwareRecord: function(_softwareData)
         {
-            this.softwareRecord = new Tine.Voipmanager.Model.SnomSoftware(_softwareData);
+            this.softwareRecord = new Tine.Voipmanager.Model.Snom.Software(_softwareData);
         },
         
         deleteSoftware: function(_button, _event)
@@ -342,7 +342,7 @@ Tine.Voipmanager.Software.EditDialog =  {
                 },
                 text: 'Deleting software...',
                 success: function(_result, _request) {
-                    window.opener.Tine.Voipmanager.Software.Main.reload();
+                    window.opener.Tine.Voipmanager.Snom.Software.Main.reload();
                     window.close();
                 },
                 failure: function ( result, request) { 
@@ -362,7 +362,7 @@ Tine.Voipmanager.Software.EditDialog =  {
 /*            this._phoneModels.each(function(_rec) {               
                 _softwareImageData = [_rec.data.id,Ext.getCmp('softwareimage' + _rec.data.id).getValue()];
                 
-                _siData = new Tine.Voipmanager.Model.SnomSoftware(_softwareImageData);
+                _siData = new Tine.Voipmanager.Model.Snom.Software(_softwareImageData);
     console.log(_siData.data);                            
 //                softwareImageData = softwareImageData + ',' + Ext.util.JSON.encode(_siData.data);
   //              console.log(softwareImageData);
@@ -378,8 +378,8 @@ Tine.Voipmanager.Software.EditDialog =  {
                         softwareData: Ext.util.JSON.encode(this.softwareRecord.data)
                     },
                     success: function(_result, _request) {
-                        if(window.opener.Tine.Voipmanager.Software) {
-                            window.opener.Tine.Voipmanager.Software.Main.reload();
+                        if(window.opener.Tine.Voipmanager.Snom.Software) {
+                            window.opener.Tine.Voipmanager.Snom.Software.Main.reload();
                         }
                         if(_closeWindow === true) {
                             window.close();

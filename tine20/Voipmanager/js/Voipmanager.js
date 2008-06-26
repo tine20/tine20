@@ -23,17 +23,17 @@ Tine.Voipmanager = function() {
         id: 'asterisk',
         icon: false,
         children: [{
-            text :"Lines",
+            text :"SipPeers",
             cls :"treemain",
             allowDrag :false,
             allowDrop :true,
-            id :"lines",
+            id :"sipPeers",
             icon :false,
             children :[],
             leaf :true,
             expanded :true,
-            dataPanelType :"lines",
-            viewRight: 'lines'
+            dataPanelType :"sipPeers",
+            viewRight: 'sipPeers'
         },{
             text :"Dialplan",
             cls :"treemain",
@@ -249,7 +249,7 @@ Tine.Voipmanager = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerPhones') {
                         Ext.getCmp('gridVoipmanagerPhones').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Phones.Main.show(_node);
+                        Tine.Voipmanager.Snom.Phones.Main.show(_node);
                     }
                     break;                    
                     
@@ -257,7 +257,7 @@ Tine.Voipmanager = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerLocation') {
                         Ext.getCmp('gridVoipmanagerLocation').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Location.Main.show(_node);
+                        Tine.Voipmanager.Snom.Location.Main.show(_node);
                     }
                     break;                                        
                     
@@ -265,7 +265,7 @@ Tine.Voipmanager = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerTemplates') {
                         Ext.getCmp('gridVoipmanagerTemplates').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Templates.Main.show(_node);
+                        Tine.Voipmanager.Snom.Templates.Main.show(_node);
                     }
                     break;                     
                     
@@ -273,15 +273,15 @@ Tine.Voipmanager = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerSoftware') {
                         Ext.getCmp('gridVoipmanagerSoftware').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Software.Main.show(_node);
+                        Tine.Voipmanager.Snom.Software.Main.show(_node);
                     }
                     break;                      
                     
-                case 'lines':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerLines') {
-                        Ext.getCmp('gridVoipmanagerLines').getStore().load({params:{start:0, limit:50}});
+                case 'sipPeers':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerSipPeers') {
+                        Ext.getCmp('gridVoipmanagerSipPeers').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Lines.Main.show(_node);
+                        Tine.Voipmanager.Asterisk.SipPeers.Main.show(_node);
                     }
                     break;        
                     
@@ -289,7 +289,7 @@ Tine.Voipmanager = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerContext') {
                         Ext.getCmp('gridVoipmanagerContext').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Context.Main.show(_node);
+                        Tine.Voipmanager.Asterisk.Context.Main.show(_node);
                     }
                     break;  
                     
@@ -297,7 +297,7 @@ Tine.Voipmanager = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerVoicemail') {
                         Ext.getCmp('gridVoipmanagerVoicemail').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Voicemail.Main.show(_node);
+                        Tine.Voipmanager.Asterisk.Voicemail.Main.show(_node);
                     }
                     break;                                                                             
             }

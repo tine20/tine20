@@ -357,7 +357,7 @@
         </table>
         
         <table>
-            <name>asterisk_peers</name>
+            <name>asterisk_sip_peers</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>1</version>

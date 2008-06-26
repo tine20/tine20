@@ -15,7 +15,7 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Asterisk_Peer
+class Voipmanager_Backend_Asterisk_SipPeer
 {
     /**
      * @var Zend_Db_Adapter_Abstract
@@ -31,11 +31,11 @@ class Voipmanager_Backend_Asterisk_Peer
     }
     
     /**
-	 * search for peers
+	 * search for Sip Peers
 	 * 
      * @param string $_sort
      * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskPeer
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
 	 */
     public function search($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
@@ -47,7 +47,7 @@ class Voipmanager_Backend_Asterisk_Peer
         }
         
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'asterisk_peers');
+            ->from(SQL_TABLE_PREFIX . 'asterisk_sip_peers');
 
         $select->order($_sort.' '.$_dir);
 
@@ -59,79 +59,79 @@ class Voipmanager_Backend_Asterisk_Peer
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskPeer', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskSipPeer', $rows);
 		
         return $result;
 	}
     
 	/**
-	 * get peer by id
+	 * get Sip peer by id
 	 * 
-     * @param string $_id the id of the peer
-	 * @return Voipmanager_Model_AsteriskPeer
+     * @param string $_id the id of the Sip peer
+	 * @return Voipmanager_Model_AsteriskSipPeer
 	 */
     public function get($_id)
     {	
-        $peerId = Voipmanager_Model_AsteriskPeer::convertAsteriskPeerIdToInt($_id);
+        $sipPeerId = Voipmanager_Model_AsteriskSipPeer::convertAsteriskSipPeerIdToInt($_id);
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'asterisk_peers')
-            ->where($this->_db->quoteInto('id = ?', $peerId));
+            ->from(SQL_TABLE_PREFIX . 'asterisk_sip_peers')
+            ->where($this->_db->quoteInto('id = ?', $sipPeerId));
             
         $row = $this->_db->fetchRow($select);
         
         if (!$row) {
-            throw new UnderflowException('peer not found');
+            throw new UnderflowException('sip peer not found');
         }
 
-        $result = new Voipmanager_Model_AsteriskPeer($row);
+        $result = new Voipmanager_Model_AsteriskSipPeer($row);
         
         return $result;
 	}
 	   
     /**
-     * add new asterisk peer
+     * add new asterisk Sip peer
      *
-     * @param Voipmanager_Model_AsteriskPeer $_peer the peer data
-     * @return Voipmanager_Model_AsteriskPeer
+     * @param Voipmanager_Model_AsteriskSipPeer $_peer the Sip peer data
+     * @return Voipmanager_Model_AsteriskSipPeer
      */
-    public function create(Voipmanager_Model_AsteriskPeer $_peer)
+    public function create(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
     {
-        if (!$_peer->isValid()) {
-            throw new Exception('invalid peer');
+        if (!$_sipPeer->isValid()) {
+            throw new Exception('invalid sipPeer');
         }
 
-        if (empty($_peer->id) ) {
-            $_peer->setId(Tinebase_Record_Abstract::generateUID());
+        if (empty($_sipPeer->id) ) {
+            $_sipPeer->setId(Tinebase_Record_Abstract::generateUID());
         }
         
-        $peer = $_peer->toArray();
+        $sipPeer = $_sipPeer->toArray();
         
-        $this->_db->insert(SQL_TABLE_PREFIX . 'asterisk_peers', $peer);
+        $this->_db->insert(SQL_TABLE_PREFIX . 'asterisk_sip_peers', $sipPeer);
 
-        return $this->get($_peer);
+        return $this->get($_sipPeer);
     }
     
     /**
-     * update an existing asterisk peer
+     * update an existing asterisk sip peer
      *
-     * @param Voipmanager_Model_AsteriskPeer $_peer the peer data
-     * @return Voipmanager_Model_AsteriskPeer
+     * @param Voipmanager_Model_AsteriskSipPeer $_sipPeer the sip peer data
+     * @return Voipmanager_Model_AsteriskSipPeer
      */
-    public function update(Voipmanager_Model_AsteriskPeer $_peer)
+    public function update(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
     {
-        if (!$_peer->isValid()) {
-            throw new Exception('invalid peer');
+        if (!$_sipPeer->isValid()) {
+            throw new Exception('invalid sip peer');
         }
         
-        $peerId = $_peer->getId();
-        $peerData = $_peer->toArray();
-        unset($peerData['id']);
+        $sipPeerId = $_sipPeer->getId();
+        $sipPeerData = $_sipPeer->toArray();
+        unset($sipPeerData['id']);
 
-        $where = array($this->_db->quoteInto('id = ?', $peerId));
+        $where = array($this->_db->quoteInto('id = ?', $sipPeerId));
         
-        $this->_db->update(SQL_TABLE_PREFIX . 'asterisk_peers', $peerData, $where);
+        $this->_db->update(SQL_TABLE_PREFIX . 'asterisk_sip_peers', $sipPeerData, $where);
         
-        return $this->get($_peer);
+        return $this->get($_sipPeer);
     }        
     
     /**
@@ -143,7 +143,7 @@ class Voipmanager_Backend_Asterisk_Peer
     public function delete($_id)
     {
         foreach ((array)$_id as $id) {
-            $sipPeerId = Voipmanager_Model_AsteriskPeer::convertAsteriskPeerIdToInt($id);
+            $sipPeerId = Voipmanager_Model_AsteriskSipPeer::convertAsteriskSipPeerIdToInt($id);
             $where[] = $this->_db->quoteInto('id = ?', $sipPeerId);
         }
 
@@ -153,7 +153,7 @@ class Voipmanager_Backend_Asterisk_Peer
             // NOTE: using array for second argument won't work as delete function joins array items using "AND"
             foreach($where AS $where_atom)
             {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'asterisk_peers', $where_atom);
+                $this->_db->delete(SQL_TABLE_PREFIX . 'asterisk_sip_peers', $where_atom);
             }
 
             $this->_db->commit();

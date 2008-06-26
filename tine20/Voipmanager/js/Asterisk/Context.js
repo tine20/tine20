@@ -8,9 +8,9 @@
  *
  */
 
-Ext.namespace('Tine.Voipmanager.Context');
+Ext.namespace('Tine.Voipmanager.Asterisk.Context');
 
-Tine.Voipmanager.Context.Main = {
+Tine.Voipmanager.Asterisk.Context.Main = {
        
     actions: {
         addContext: null,
@@ -24,7 +24,7 @@ Tine.Voipmanager.Context.Main = {
          */
         addContext: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editContext&contextId=', 450, 350);
+            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=', 450, 350);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Context.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Context_Grid').getSelectionModel().getSelections();
             var contextId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editContext&contextId=' + contextId, 450, 350);
+            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=' + contextId, 450, 350);
         },
         
         /**
@@ -163,7 +163,7 @@ Tine.Voipmanager.Context.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Model.Context,
+            fields: Tine.Voipmanager.Model.Asterisk.Context,
             // turn on remote sorting
             remoteSort: true
         });
@@ -257,7 +257,7 @@ Tine.Voipmanager.Context.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editContext&contextId=' + record.data.id, 450, 350);
+                Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=' + record.data.id, 450, 350);
             } catch(e) {
                 // alert(e);
             }
@@ -312,13 +312,13 @@ Tine.Voipmanager.Context.Main = {
 };
 
 
-Tine.Voipmanager.Context.EditDialog =  {
+Tine.Voipmanager.Asterisk.Context.EditDialog =  {
 
         contextRecord: null,
         
         updateContextRecord: function(_contextData)
         {            
-            this.contextRecord = new Tine.Voipmanager.Model.Context(_contextData);
+            this.contextRecord = new Tine.Voipmanager.Model.Asterisk.Context(_contextData);
         },
         
         deleteContext: function(_button, _event)
@@ -333,7 +333,7 @@ Tine.Voipmanager.Context.EditDialog =  {
                 },
                 text: 'Deleting context...',
                 success: function(_result, _request) {
-                    window.opener.Tine.Voipmanager.Context.Main.reload();
+                    window.opener.Tine.Voipmanager.Asterisk.Context.Main.reload();
                     window.close();
                 },
                 failure: function ( result, request) { 
@@ -355,8 +355,8 @@ Tine.Voipmanager.Context.EditDialog =  {
                         contextData: Ext.util.JSON.encode(this.contextRecord.data)
                     },
                     success: function(_result, _request) {
-                        if(window.opener.Tine.Voipmanager.Context) {
-                            window.opener.Tine.Voipmanager.Context.Main.reload();
+                        if(window.opener.Tine.Voipmanager.Asterisk.Context) {
+                            window.opener.Tine.Voipmanager.Asterisk.Context.Main.reload();
                         }
                         if(_closeWindow === true) {
                             window.close();

@@ -62,11 +62,11 @@ class Voipmanager_Controller
     protected $_snomTemplateBackend;
     
     /**
-     * the asterisk peer sql backend
+     * the asterisk sip peer sql backend
      *
-     * @var Voipmanager_Backend_Asterisk_Peer
+     * @var Voipmanager_Backend_Asterisk_SipPeer
      */
-    protected $_asteriskPeerBackend;
+    protected $_asteriskSipPeerBackend;
 
     /**
      * the asterisk context sql backend
@@ -93,7 +93,7 @@ class Voipmanager_Controller
         $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software();
         $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
         $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();      
-        $this->_asteriskPeerBackend      = new Voipmanager_Backend_Asterisk_Peer();          
+        $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer();          
         $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context();          
         $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();                  
     }
@@ -125,6 +125,15 @@ class Voipmanager_Controller
         return self::$_instance;
     }
 
+
+
+/********************************
+ * SNOM PHONE FUNCTIONS
+ *
+ * 
+ */
+
+
     /**
      * get snom_phone by id
      *
@@ -142,6 +151,7 @@ class Voipmanager_Controller
 
         return $phone;    
     }
+
 
     /**
      * get snom_phones
@@ -165,6 +175,7 @@ class Voipmanager_Controller
         return $result;    
     }
 
+
     /**
      * add one phone
      *
@@ -181,7 +192,6 @@ class Voipmanager_Controller
       
         return $this->getSnomPhone($phone);
     }
-    
     
 
     /**
@@ -211,8 +221,6 @@ class Voipmanager_Controller
     }    
     
     
-    
-    
     /**
      * Deletes a set of phones.
      * 
@@ -228,6 +236,90 @@ class Voipmanager_Controller
     }
 
 
+
+/********************************
+ * SNOM LOCATION FUNCTIONS
+ *
+ * 
+ */
+
+
+   /**
+     * get snom_location
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
+     */
+    public function getSnomLocations($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {        
+        $filter = new Voipmanager_Model_SnomLocationFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
+
+        $result = $this->_snomLocationBackend->search($filter, $pagination);    
+    
+        return $result;    
+    }
+    
+    
+    /**
+     * get snom_location by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
+     */
+    public function getSnomLocation($_id)
+    {
+        $result = $this->_snomLocationBackend->get($_id);
+
+        return $result;    
+    }    
+    
+    
+    /**
+     * add one location
+     *
+     * @param Voipmanager_Model_Location $_location
+     * @return  Voipmanager_Model_Location
+     */
+    public function createSnomLocation(Voipmanager_Model_SnomLocation $_location)
+    {        
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_ADD)) {
+            throw new Exception('add access to location in container ' . $_location->owner . ' denied');
+        }
+        */
+        $location = $this->_snomLocationBackend->create($_location);
+      
+        return $location;
+    }    
+    
+    
+    /**
+     * update one location
+     *
+     * @param Voipmanager_Model_Location $_location
+     * @return  Voipmanager_Model_Location
+     */
+    public function updateSnomLocation(Voipmanager_Model_SnomLocation $_location)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to location in container ' . $_location->owner . ' denied');
+        }
+        */
+       
+        $location = $this->_snomLocationBackend->update($_location);
+        
+        return $location;
+    }
+      
+      
     /**
      * Deletes a set of locations.
      * 
@@ -251,6 +343,90 @@ class Voipmanager_Controller
     }
 
 
+
+/********************************
+ * SNOM TEMPLATE FUNCTIONS
+ *
+ * 
+ */
+
+    
+    /**
+     * get snom_template by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
+     */
+    public function getSnomTemplate($_id)
+    {
+        $result = $this->_snomTemplateBackend->get($_id);
+
+        return $result;  
+    }
+
+
+    /**
+     * get snom_templates
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
+     */
+    public function getSnomTemplates($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {
+        $filter = new Voipmanager_Model_SnomTemplateFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
+
+        $result = $this->_snomTemplateBackend->search($filter, $pagination);        
+
+        return $result;    
+    }
+    
+    
+    /**
+     * add new template
+     *
+     * @param Voipmanager_Model_Template $_template
+     * @return  Voipmanager_Model_Template
+     */
+    public function createSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
+    {        
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+        $template = $this->_snomTemplateBackend->create($_template);
+      
+        return $template;
+    }
+    
+    
+    /**
+     * update existing template
+     *
+     * @param Voipmanager_Model_Template $_template
+     * @return  Voipmanager_Model_Template
+     */
+    public function updateSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+       
+        $template = $this->_snomTemplateBackend->update($_template);
+        
+        return $template;
+    }   
+
+
    /**
      * Deletes a set of templates.
      * 
@@ -268,78 +444,12 @@ class Voipmanager_Controller
     
 
 
-    /**
-     * get snom_location
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
-     */
-    public function getSnomLocations($_sort = 'id', $_dir = 'ASC', $_query = NULL)
-    {        
-        $filter = new Voipmanager_Model_SnomLocationFilter(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_snomLocationBackend->search($filter, $pagination);    
-    
-        return $result;    
-    }
-    
-    /**
-     * get snom_location by id
-     *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
-     */
-    public function getSnomLocation($_id)
-    {
-        $result = $this->_snomLocationBackend->get($_id);
-
-        return $result;    
-    }    
-    
-    /**
-     * add one location
-     *
-     * @param Voipmanager_Model_Location $_location
-     * @return  Voipmanager_Model_Location
-     */
-    public function createSnomLocation(Voipmanager_Model_SnomLocation $_location)
-    {        
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_ADD)) {
-            throw new Exception('add access to location in container ' . $_location->owner . ' denied');
-        }
-        */
-        $location = $this->_snomLocationBackend->create($_location);
-      
-        return $location;
-    }    
-    
-    /**
-     * update one location
-     *
-     * @param Voipmanager_Model_Location $_location
-     * @return  Voipmanager_Model_Location
-     */
-    public function updateSnomLocation(Voipmanager_Model_SnomLocation $_location)
-    {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to location in container ' . $_location->owner . ' denied');
-        }
-        */
-       
-        $location = $this->_snomLocationBackend->update($_location);
-        
-        return $location;
-    }
-        
+/********************************
+ * SNOM SOFTWARE FUNCTIONS
+ *
+ * 
+ */
+   
     
     /**
      * get snom_software
@@ -362,6 +472,7 @@ class Voipmanager_Controller
         
         return $result;    
     }  
+    
     
     /**
      * get snom_software by id
@@ -394,6 +505,7 @@ class Voipmanager_Controller
       
         return $software;
     }
+    
     
     /**
      * update existing software
@@ -428,131 +540,69 @@ class Voipmanager_Controller
         $this->_snomSoftwareBackend->delete($_identifiers);
     }    
     
-    
-    /**
-     * get snom_template by id
-     *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
-     */
-    public function getSnomTemplate($_id)
-    {
-        $result = $this->_snomTemplateBackend->get($_id);
 
-        return $result;  
-    }
+    
+/********************************
+ * ASTERISK SIP PEER FUNCTIONS
+ *
+ * 
+ */
 
-    /**
-     * get snom_templates
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
-     */
-    public function getSnomTemplates($_sort = 'id', $_dir = 'ASC', $_query = NULL)
-    {
-        $filter = new Voipmanager_Model_SnomTemplateFilter(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_snomTemplateBackend->search($filter, $pagination);        
-
-        return $result;    
-    }
     
     /**
-     * add new template
-     *
-     * @param Voipmanager_Model_Template $_template
-     * @return  Voipmanager_Model_Template
-     */
-    public function createSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
-    {        
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
-            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-        $template = $this->_snomTemplateBackend->create($_template);
-      
-        return $template;
-    }
-    
-    /**
-     * update existing template
-     *
-     * @param Voipmanager_Model_Template $_template
-     * @return  Voipmanager_Model_Template
-     */
-    public function updateSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
-    {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-       
-        $template = $this->_snomTemplateBackend->update($_template);
-        
-        return $template;
-    }   
-    
-    
-    /**
-     * get asterisk peer by id
+     * get asterisk sip peer by id
      *
      * @param string $_id the id of the peer
-     * @return Voipmanager_Model_AsteriskPeer
+     * @return Voipmanager_Model_AsteriskSipPeer
      */
-    public function getAsteriskPeer($_id)
+    public function getAsteriskSipPeer($_id)
     {
-        $result = $this->_asteriskPeerBackend->get($_id);
+        $result = $this->_asteriskSipPeerBackend->get($_id);
 
         return $result;    
     }
 
+
     /**
-     * get list of asterisk peers
+     * get list of asterisk sip peers
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskPeer
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
      */
-    public function searchAsteriskPeers($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function searchAsteriskSipPeers($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
-        $result = $this->_asteriskPeerBackend->search($_sort, $_dir, $_query);
+        $result = $this->_asteriskSipPeerBackend->search($_sort, $_dir, $_query);
 
         return $result;    
     }
-    
+   
+   
     /**
-     * add new asterisk peer
+     * add new asterisk sip peer
      *
-     * @param Voipmanager_Model_AsteriskPeer $_peer
-     * @return  Voipmanager_Model_AsteriskPeer
+     * @param Voipmanager_Model_AsteriskSipPeer $_sipPeer
+     * @return  Voipmanager_Model_AsteriskSipPeer
      */
-    public function createAsteriskPeer(Voipmanager_Model_AsteriskPeer $_peer)
+    public function createAsteriskSipPeer(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
     {        
-        $peer = $this->_asteriskPeerBackend->create($_peer);
+        $sipPeer = $this->_asteriskSipPeerBackend->create($_sipPeer);
       
-        return $peer;
+        return $sipPeer;
     }
     
+    
     /**
-     * update existing asterisk peer
+     * update existing asterisk sip peer
      *
-     * @param Voipmanager_Model_AsteriskPeer $_peer
-     * @return  Voipmanager_Model_AsteriskPeer
+     * @param Voipmanager_Model_AsteriskSipPeer $_sipPeer
+     * @return  Voipmanager_Model_AsteriskSipPeer
      */
-    public function updateAsteriskPeer(Voipmanager_Model_AsteriskPeer $_peer)
+    public function updateAsteriskSipPeer(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
     {
-        $peer = $this->_asteriskPeerBackend->update($_peer);
+        $sipPeer = $this->_asteriskSipPeerBackend->update($_sipPeer);
         
-        return $peer;
+        return $sipPeer;
     }       
     
     
@@ -567,11 +617,18 @@ class Voipmanager_Controller
      */
     public function deleteAsteriskSipPeers($_identifiers)
     {
-        $this->_asteriskPeerBackend->delete($_identifiers);
+        $this->_asteriskSipPeerBackend->delete($_identifiers);
     }     
     
     
     
+/********************************
+ * SNOM XML CONFIG FUNCTIONS
+ *
+ * 
+ */    
+ 
+ 
     /**
      * get xml configurationfile for snom phones
      *
@@ -589,6 +646,12 @@ class Voipmanager_Controller
     
     
     
+/********************************
+ * ASTERISK CONTEXT FUNCTIONS
+ *
+ * 
+ */
+
     
     /**
      * get asterisk_context by id
@@ -602,6 +665,7 @@ class Voipmanager_Controller
         
         return $context;    
     }
+
 
     /**
      * get asterisk_contexts
@@ -625,6 +689,7 @@ class Voipmanager_Controller
         return $result;    
     }
 
+
     /**
      * add one context
      *
@@ -637,7 +702,6 @@ class Voipmanager_Controller
       
         return $this->getAsteriskContext($context);
     }
-    
     
 
     /**
@@ -659,7 +723,6 @@ class Voipmanager_Controller
     }    
     
   
-    
     /**
      * Deletes a set of contexts.
      * 
@@ -675,6 +738,14 @@ class Voipmanager_Controller
     }
     
     
+    
+/********************************
+ * ASTERISK VOICEMAIL FUNCTIONS
+ *
+ * 
+ */
+
+    
     /**
      * get asterisk_voicemail by id
      *
@@ -687,6 +758,7 @@ class Voipmanager_Controller
         
         return $voicemail;    
     }
+
 
     /**
      * get asterisk_voicemails
@@ -710,6 +782,7 @@ class Voipmanager_Controller
         return $result;    
     }
 
+
     /**
      * add one voicemail
      *
@@ -722,7 +795,6 @@ class Voipmanager_Controller
       
         return $this->getAsteriskVoicemail($voicemail);
     }
-    
     
 
     /**
@@ -744,7 +816,6 @@ class Voipmanager_Controller
     }    
     
   
-    
     /**
      * Deletes a set of voicemails.
      * 

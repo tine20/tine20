@@ -8,9 +8,9 @@
  *
  */
 
-Ext.namespace('Tine.Voipmanager.Location');
+Ext.namespace('Tine.Voipmanager.Snom.Location');
 
-Tine.Voipmanager.Location.Main = {
+Tine.Voipmanager.Snom.Location.Main = {
        
     actions: {
         addLocation: null,
@@ -24,7 +24,7 @@ Tine.Voipmanager.Location.Main = {
          */
         addLocation: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&LocationId=', 550, 600);
+            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&LocationId=', 550, 600);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Location.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Location_Grid').getSelectionModel().getSelections();
             var locationId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + locationId, 550, 600);
+            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&locationId=' + locationId, 550, 600);
         },
         
         /**
@@ -163,7 +163,7 @@ Tine.Voipmanager.Location.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Model.Location,
+            fields: Tine.Voipmanager.Model.Snom.Location,
             // turn on remote sorting
             remoteSort: true
         });
@@ -275,7 +275,7 @@ Tine.Voipmanager.Location.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + record.data.id, 550, 600);
+                Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&locationId=' + record.data.id, 550, 600);
             } catch(e) {
                 // alert(e);
             }
@@ -331,7 +331,7 @@ Tine.Voipmanager.Location.Main = {
 
 
 
-Tine.Voipmanager.Location.EditDialog =  {
+Tine.Voipmanager.Snom.Location.EditDialog =  {
 
         locationRecord: null,
         
@@ -356,7 +356,7 @@ Tine.Voipmanager.Location.EditDialog =  {
                 Ext.getCmp('http_port').disable();
             }         
             
-            this.locationRecord = new Tine.Voipmanager.Model.Location(_locationData);
+            this.locationRecord = new Tine.Voipmanager.Model.Snom.Location(_locationData);
         },
         
         deleteLocation: function(_button, _event)
@@ -371,7 +371,7 @@ Tine.Voipmanager.Location.EditDialog =  {
                 },
                 text: 'Deleting location...',
                 success: function(_result, _request) {
-                    window.opener.Tine.Voipmanager.Location.Main.reload();
+                    window.opener.Tine.Voipmanager.Snom.Location.Main.reload();
                     window.close();
                 },
                 failure: function ( result, request) { 
@@ -393,8 +393,8 @@ Tine.Voipmanager.Location.EditDialog =  {
                         locationData: Ext.util.JSON.encode(this.locationRecord.data)
                     },
                     success: function(_result, _request) {
-                        if(window.opener.Tine.Voipmanager.Location) {
-                            window.opener.Tine.Voipmanager.Location.Main.reload();
+                        if(window.opener.Tine.Voipmanager.Snom.Location) {
+                            window.opener.Tine.Voipmanager.Snom.Location.Main.reload();
                         }
                         if(_closeWindow === true) {
                             window.close();

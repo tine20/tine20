@@ -4,68 +4,68 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id: Line.js 3098 2008-06-26 10:11:21Z twadewitz $
  *
  */
 
     
-Ext.namespace('Tine.Voipmanager.Lines');
+Ext.namespace('Tine.Voipmanager.Asterisk.SipPeers');
 
-Tine.Voipmanager.Lines.Main = {
+Tine.Voipmanager.Asterisk.SipPeers.Main = {
        
     actions: {
-        addLine: null,
-        editLine: null,
-        deleteLine: null
+        addSipPeer: null,
+        editSipPeer: null,
+        deleteSipPeer: null
     },
     
     handlers: {
         /**
-         * onclick handler for addLine
+         * onclick handler for addSipPeer
          */
-        addLine: function(_button, _event) 
+        addSipPeer: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('linesWindow', 'index.php?method=Voipmanager.editLine&lineId=', 750, 600);
+            Tine.Tinebase.Common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=', 750, 600);
         },
 
         /**
-         * onclick handler for editLine
+         * onclick handler for editSipPeer
          */
-        editLine: function(_button, _event) 
+        editSipPeer: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('Voipmanager_Lines_Grid').getSelectionModel().getSelections();
-            var lineId = selectedRows[0].id;
+            var selectedRows = Ext.getCmp('Voipmanager_SipPeers_Grid').getSelectionModel().getSelections();
+            var sipPeerId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('linesWindow', 'index.php?method=Voipmanager.editLine&lineId=' + lineId, 750, 600);
+            Tine.Tinebase.Common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=' + sipPeerId, 750, 600);
         },
         
         /**
-         * onclick handler for deleteLine
+         * onclick handler for deleteSipPeer
          */
-        deleteLine: function(_button, _event) {
-            Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected lines?', function(_button){
+        deleteSipPeer: function(_button, _event) {
+            Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected sipPeers?', function(_button){
                 if (_button == 'yes') {
                 
-                    var lineIds = [];
-                    var selectedRows = Ext.getCmp('Voipmanager_Lines_Grid').getSelectionModel().getSelections();
+                    var sipPeerIds = [];
+                    var selectedRows = Ext.getCmp('Voipmanager_SipPeers_Grid').getSelectionModel().getSelections();
                     for (var i = 0; i < selectedRows.length; ++i) {
-                        lineIds.push(selectedRows[i].id);
+                        sipPeerIds.push(selectedRows[i].id);
                     }
                     
-                    lineIds = Ext.util.JSON.encode(lineIds);
+                    sipPeerIds = Ext.util.JSON.encode(sipPeerIds);
                     
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
                             method: 'Voipmanager.deleteAsteriskSipPeers',
-                            _lineIds: lineIds
+                            _sipPeerIds: sipPeerIds
                         },
-                        text: 'Deleting line(s)...',
+                        text: 'Deleting sipPeer(s)...',
                         success: function(_result, _request){
-                            Ext.getCmp('Voipmanager_Lines_Grid').getStore().reload();
+                            Ext.getCmp('Voipmanager_SipPeers_Grid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the line.');
+                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the sipPeer.');
                         }
                     });
                 }
@@ -79,25 +79,25 @@ Tine.Voipmanager.Lines.Main = {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Voipmanager');
     
-        this.actions.addLine = new Ext.Action({
-            text: this.translation._('add line'),
-            handler: this.handlers.addLine,
+        this.actions.addSipPeer = new Ext.Action({
+            text: this.translation._('add sipPeer'),
+            handler: this.handlers.addSipPeer,
             iconCls: 'action_add',
             scope: this
         });
         
-        this.actions.editLine = new Ext.Action({
-            text: this.translation._('edit line'),
+        this.actions.editSipPeer = new Ext.Action({
+            text: this.translation._('edit sipPeer'),
             disabled: true,
-            handler: this.handlers.editLine,
+            handler: this.handlers.editSipPeer,
             iconCls: 'action_edit',
             scope: this
         });
         
-        this.actions.deleteLine = new Ext.Action({
-            text: this.translation._('delete line'),
+        this.actions.deleteSipPeer = new Ext.Action({
+            text: this.translation._('delete sipPeer'),
             disabled: true,
-            handler: this.handlers.deleteLine,
+            handler: this.handlers.deleteSipPeer,
             iconCls: 'action_delete',
             scope: this
         });
@@ -124,12 +124,12 @@ Tine.Voipmanager.Lines.Main = {
         preferencesButton.setDisabled(true);
     },
     
-    displayLinesToolbar: function()
+    displaySipPeersToolbar: function()
     {
         var onFilterChange = function(_field, _newValue, _oldValue){
             // only refresh data on new query strings
             if (_newValue != _oldValue) {
-                Ext.getCmp('Voipmanager_Lines_Grid').getStore().load({
+                Ext.getCmp('Voipmanager_SipPeers_Grid').getStore().load({
                     params: {
                         start: 0,
                         limit: 50
@@ -144,20 +144,20 @@ Tine.Voipmanager.Lines.Main = {
         }); 
         quickSearchField.on('change', onFilterChange, this);
      
-        var lineToolbar = new Ext.Toolbar({
-            id: 'Voipmanager_Lines_Toolbar',
+        var sipPeerToolbar = new Ext.Toolbar({
+            id: 'Voipmanager_SipPeers_Toolbar',
             split: false,
             height: 26,
             items: [
-                this.actions.addLine, 
-                this.actions.editLine,
-                this.actions.deleteLine,
+                this.actions.addSipPeer, 
+                this.actions.editSipPeer,
+                this.actions.deleteSipPeer,
                 '->',
                 this.translation._('Search: '), quickSearchField
             ]
         });
 
-        Tine.Tinebase.MainScreen.setActiveToolbar(lineToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(sipPeerToolbar);
     },
     
     renderer: {
@@ -171,14 +171,14 @@ Tine.Voipmanager.Lines.Main = {
     	}
     },
 
-    displayLinesGrid: function() 
+    displaySipPeersGrid: function() 
     {
         // the datastore
         var dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Model.Line,
+            fields: Tine.Voipmanager.Model.Asterisk.SipPeer,
             // turn on remote sorting
             remoteSort: true
         });
@@ -189,15 +189,15 @@ Tine.Voipmanager.Lines.Main = {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
         }, this);   
         
-        Ext.StoreMgr.add('LinesStore', dataStore);
+        Ext.StoreMgr.add('SipPeersStore', dataStore);
         
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
             pageSize: 50,
             store: dataStore,
             displayInfo: true,
-            displayMsg: this.translation._('Displaying lines {0} - {1} of {2}'),
-            emptyMsg: this.translation._("No lines to display")
+            displayMsg: this.translation._('Displaying sipPeers {0} - {1} of {2}'),
+            emptyMsg: this.translation._("No sipPeers to display")
         }); 
         
         // the columnmodel
@@ -236,7 +236,7 @@ Tine.Voipmanager.Lines.Main = {
             { resizable: true, id: 'disallow', header: this.translation._('ASTERISK_LINES_disallow'), dataIndex: 'disallow', width: 30, hidden: true },
             { resizable: true, id: 'allow', header: this.translation._('ASTERISK_LINES_allow'), dataIndex: 'allow', width: 30, hidden: true },
             { resizable: true, id: 'musiconhold', header: this.translation._('ASTERISK_LINES_music on hold'), dataIndex: 'musiconhold', width: 30, hidden: true },
-            { resizable: true, id: 'regseconds', header: this.translation._('ASTERISK_LINES_reg seconds'), dataIndex: 'regseconds', width: 50, renderer: Tine.Voipmanager.Lines.Main.renderer.regseconds},
+            { resizable: true, id: 'regseconds', header: this.translation._('ASTERISK_LINES_reg seconds'), dataIndex: 'regseconds', width: 50, renderer: Tine.Voipmanager.Asterisk.SipPeers.Main.renderer.regseconds},
             { resizable: true, id: 'ipaddr', header: this.translation._('ASTERISK_LINES_ip address'), dataIndex: 'ipaddr', width: 30, hidden: true },
             { resizable: true, id: 'regexten', header: this.translation._('ASTERISK_LINES_reg exten'), dataIndex: 'regexten', width: 30, hidden: true },
             { resizable: true, id: 'cancallforward', header: this.translation._('ASTERISK_LINES_can call forward'), dataIndex: 'cancallforward', width: 30, hidden: true },
@@ -258,22 +258,22 @@ Tine.Voipmanager.Lines.Main = {
 
             if(rowCount < 1) {
                 // no row selected
-                this.actions.deleteLine.setDisabled(true);
-                this.actions.editLine.setDisabled(true);
+                this.actions.deleteSipPeer.setDisabled(true);
+                this.actions.editSipPeer.setDisabled(true);
             } else if(rowCount > 1) {
                 // more than one row selected
-                this.actions.deleteLine.setDisabled(false);
-                this.actions.editLine.setDisabled(true);
+                this.actions.deleteSipPeer.setDisabled(false);
+                this.actions.editSipPeer.setDisabled(true);
             } else {
                 // only one row selected
-                this.actions.deleteLine.setDisabled(false);
-                this.actions.editLine.setDisabled(false);
+                this.actions.deleteSipPeer.setDisabled(false);
+                this.actions.editSipPeer.setDisabled(false);
             }
         }, this);
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Voipmanager_Lines_Grid',
+            id: 'Voipmanager_SipPeers_Grid',
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -287,7 +287,7 @@ Tine.Voipmanager.Lines.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: this.translation._('No lines to display')
+                emptyText: this.translation._('No sipPeers to display')
             })            
             
         });
@@ -298,12 +298,12 @@ Tine.Voipmanager.Lines.Main = {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
             var contextMenu = new Ext.menu.Menu({
-                id:'ctxMenuLines', 
+                id:'ctxMenuSipPeers', 
                 items: [
-                    this.actions.editLine,
-                    this.actions.deleteLine,
+                    this.actions.editSipPeer,
+                    this.actions.deleteSipPeer,
                     '-',
-                    this.actions.addLine 
+                    this.actions.addSipPeer 
                 ]
             });
             contextMenu.showAt(_eventObject.getXY());
@@ -313,15 +313,15 @@ Tine.Voipmanager.Lines.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('linesWindow', 'index.php?method=Voipmanager.editLine&lineId=' + record.data.id, 750, 600);
+                Tine.Tinebase.Common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=' + record.data.id, 750, 600);
             } catch(e) {
                 // alert(e);
             }
         }, this);
 
         gridPanel.on('keydown', function(e){
-             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_Lines_Grid').getSelectionModel().getCount() > 0){
-                 this.handlers.deleteLine();
+             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_SipPeers_Grid').getSelectionModel().getCount() > 0){
+                 this.handlers.deleteSipPeer();
              }
         }, this);
 
@@ -334,9 +334,9 @@ Tine.Voipmanager.Lines.Main = {
      */
     loadData: function(_node)
     {
-        var dataStore = Ext.getCmp('Voipmanager_Lines_Grid').getStore();
+        var dataStore = Ext.getCmp('Voipmanager_SipPeers_Grid').getStore();
     
-        dataStore.baseParams.method = 'Voipmanager.getLines';
+        dataStore.baseParams.method = 'Voipmanager.getAsteriskSipPeers';
         dataStore.load({
             params:{
                 start:0, 
@@ -349,10 +349,10 @@ Tine.Voipmanager.Lines.Main = {
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_Lines_Toolbar') {
+        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_SipPeers_Toolbar') {
             this.initComponent();
-            this.displayLinesToolbar();
-            this.displayLinesGrid();
+            this.displaySipPeersToolbar();
+            this.displaySipPeersGrid();
             this.updateMainToolbar();
         }
         this.loadData(_node);
@@ -360,69 +360,69 @@ Tine.Voipmanager.Lines.Main = {
     
     reload: function() 
     {
-        if(Ext.ComponentMgr.all.containsKey('Voipmanager_Lines_Grid')) {
-            setTimeout ("Ext.getCmp('Voipmanager_Lines_Grid').getStore().reload()", 200);
+        if(Ext.ComponentMgr.all.containsKey('Voipmanager_SipPeers_Grid')) {
+            setTimeout ("Ext.getCmp('Voipmanager_SipPeers_Grid').getStore().reload()", 200);
         }
     }
 };
 
-Tine.Voipmanager.Lines.EditDialog =  {
+Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
 
-    lineRecord: null,
+    sipPeerRecord: null,
     
-    updateLineRecord: function(_lineData)
+    updateSipPeerRecord: function(_sipPeerData)
     {   
-        this.lineRecord = new Tine.Voipmanager.Model.Line(_lineData);
+        this.sipPeerRecord = new Tine.Voipmanager.Model.Asterisk.SipPeer(_sipPeerData);
     },
     
     
-    deleteLine: function(_button, _event)
+    deleteSipPeer: function(_button, _event)
     {
-        var lineIds = Ext.util.JSON.encode([this.lineRecord.get('id')]);
+        var sipPeerIds = Ext.util.JSON.encode([this.sipPeerRecord.get('id')]);
             
         Ext.Ajax.request({
             url: 'index.php',
             params: {
-                method: 'Voipmanager.deleteLines', 
-                lineIds: lineIds
+                method: 'Voipmanager.deleteAsteriskSipPeers', 
+                sipPeerIds: sipPeerIds
             },
-            text: 'Deleting line...',
+            text: 'Deleting sipPeer...',
             success: function(_result, _request) {
-                window.opener.Tine.Voipmanager.Lines.Main.reload();
+                window.opener.Tine.Voipmanager.Asterisk.SipPeers.Main.reload();
                 window.close();
             },
             failure: function ( result, request) { 
-                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the line.'); 
+                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the sipPeer.'); 
             } 
         });         
     },
     
     applyChanges: function(_button, _event, _closeWindow) 
     {
-        var form = Ext.getCmp('voipmanager_editLineForm').getForm();
+        var form = Ext.getCmp('voipmanager_editSipPeerForm').getForm();
 
         if(form.isValid()) {
-            form.updateRecord(this.lineRecord);
+            form.updateRecord(this.sipPeerRecord);
     
             Ext.Ajax.request({
                 params: {
-                    method: 'Voipmanager.saveLine', 
-                    lineData: Ext.util.JSON.encode(this.lineRecord.data)
+                    method: 'Voipmanager.saveAsteriskSipPeer', 
+                    sipPeerData: Ext.util.JSON.encode(this.sipPeerRecord.data)
                 },
                 success: function(_result, _request) {
-                    if(window.opener.Tine.Voipmanager.Lines) {
-                        window.opener.Tine.Voipmanager.Lines.Main.reload();
+                    if(window.opener.Tine.Voipmanager.Asterisk.SipPeers) {
+                        window.opener.Tine.Voipmanager.Asterisk.SipPeers.Main.reload();
                     }
                     if(_closeWindow === true) {
                         window.close();
                     } else {
-                        this.updateLineRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                        this.updateSipPeerRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
                         this.updateToolbarButtons();
-                        form.loadRecord(this.lineRecord);
+                        form.loadRecord(this.sipPeerRecord);
                     }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Could not save line.'); 
+                    Ext.MessageBox.alert('Failed', 'Could not save sipPeer.'); 
                 },
                 scope: this 
             });
@@ -465,7 +465,7 @@ Tine.Voipmanager.Lines.EditDialog =  {
                 editable: false,
                 forceSelection: true,
                 store: new Ext.data.JsonStore({
-                    storeId: 'Voipmanger_EditLine_Context',
+                    storeId: 'Voipmanger_EditSipPeer_Context',
                     id: 'id',
                     fields: ['id', 'name']
                 })
@@ -575,7 +575,7 @@ Tine.Voipmanager.Lines.EditDialog =  {
         return _dialog;
     },     
 
-    editLineDialog: function(){
+    editSipPeerDialog: function(){
     
         var translation = new Locale.Gettext();
         translation.textdomain('Voipmanager');
@@ -1022,27 +1022,27 @@ Tine.Voipmanager.Lines.EditDialog =  {
     
     updateToolbarButtons: function()
     {
-        if(this.lineRecord.get('id') > 0) {
-            Ext.getCmp('voipmanager_editLineForm').action_delete.enable();
+        if(this.sipPeerRecord.get('id') > 0) {
+            Ext.getCmp('voipmanager_editSipPeerForm').action_delete.enable();
         }
     },
     
-    display: function(_lineData, _contexts) 
+    display: function(_sipPeerData, _contexts) 
     {
         if (!arguments[0]) {
-            var _lineData = {};
+            var _sipPeerData = {};
         }
 
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
-            id : 'voipmanager_editLineForm',
+            id : 'voipmanager_editSipPeerForm',
             //title: 'the title',
             labelWidth: 120,
             labelAlign: 'top',
             handlerScope: this,
             handlerApplyChanges: this.applyChanges,
             handlerSaveAndClose: this.saveChanges,
-            handlerDelete: this.deleteLine,
+            handlerDelete: this.deleteSipPeer,
             items: [{
 		        id: 'adbEditDialogTabPanel',
 		        xtype:'tabpanel',
@@ -1059,7 +1059,7 @@ Tine.Voipmanager.Lines.EditDialog =  {
             }]
         });
 
-        Ext.StoreMgr.lookup('Voipmanger_EditLine_Context').loadData(_contexts);
+        Ext.StoreMgr.lookup('Voipmanger_EditSipPeer_Context').loadData(_contexts);
 
         var viewport = new Ext.Viewport({
             layout: 'border',
@@ -1069,8 +1069,8 @@ Tine.Voipmanager.Lines.EditDialog =  {
         });
         
                 
-        this.updateLineRecord(_lineData);
+        this.updateSipPeerRecord(_sipPeerData);
         this.updateToolbarButtons();           
-        dialog.getForm().loadRecord(this.lineRecord);
+        dialog.getForm().loadRecord(this.sipPeerRecord);
     } 
 };

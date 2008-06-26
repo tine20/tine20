@@ -24,6 +24,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     protected $_appname = 'Voipmanager';
 
+
+
+/********************************
+ * SNOM PHONE FUNCTIONS
+ *
+ * 
+ */
     
     /**
      * get snom phones
@@ -131,7 +138,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
          
     }     
     
-    
    
     /**
      * delete multiple phones
@@ -153,6 +159,12 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     }    
        
         
+      
+/********************************
+ * SNOM LOCATION FUNCTIONS
+ *
+ * 
+ */
         
     /**
      * get snom location
@@ -176,6 +188,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;    
     }        
     
+    
    /**
      * get one location identified by locationId
      *
@@ -195,7 +208,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     }      
 
 
-    
     /**
      * save one location
      *
@@ -233,7 +245,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
          
     }     
      
-    
         
     /**
      * delete multiple locations
@@ -254,7 +265,14 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }        
         
-        
+      
+      
+/********************************
+ * SNOM SOFTWARE FUNCTIONS
+ *
+ * 
+ */       
+  
     /**
      * get snom software
      *
@@ -354,25 +372,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }       
         
-    /**
-     * delete multiple template entries
-     *
-     * @param array $_templateIDs list of templateId's to delete
-     * @return array
-     */
-    public function deleteSnomTemplates($_templateIds)
-    {
-        $result = array(
-            'success'   => TRUE
-        );
         
-        $templateIds = Zend_Json::decode($_templateIds);
         
-        Voipmanager_Controller::getInstance()->deleteSnomTemplates($templateIds);
-
-        return $result;
-    }          
-        
+/********************************
+ * SNOM TEMPLATE FUNCTIONS
+ *
+ * 
+ */
         
     /**
      * get snom templates
@@ -453,15 +459,41 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     }     
     
     
-    
     /**
-     * get asterisk lines
+     * delete multiple template entries
+     *
+     * @param array $_templateIDs list of templateId's to delete
+     * @return array
+     */
+    public function deleteSnomTemplates($_templateIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $templateIds = Zend_Json::decode($_templateIds);
+        
+        Voipmanager_Controller::getInstance()->deleteSnomTemplates($templateIds);
+
+        return $result;
+    }     
+    
+    
+    
+/********************************
+ * ASTERISK SIP PEER FUNCTIONS
+ *
+ * 
+ */    
+ 
+    /**
+     * get asterisk sip peers
      *
      * @param string $sort
      * @param string $dir
      * @return array
      */
-    public function getLines($sort, $dir, $query)
+    public function getAsteriskSipPeers($sort, $dir, $query)
     {     
   
         $result = array(
@@ -469,7 +501,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskPeers($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($sort, $dir, $query)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -479,52 +511,53 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     
     
    /**
-     * get one asterisk line identified by lineId
+     * get one asterisk sip peer identified by sipPeerId
      *
-     * @param int $lineId
+     * @param int $sipPeerId
      * @return array
      */
-    public function getAsteriskPeer($lineId)
+    public function getAsteriskSipPeer($sipPeerId)
     {
         $result = array(
             'success'   => true
         );
 
-        $line = Voipmanager_Controller::getInstance()->getAsteriskPeer($lineId);
+        $sipPeer = Voipmanager_Controller::getInstance()->getAsteriskSipPeer($sipPeerId);
         
-        $result = $line->toArray();        
+        $result = $sipPeer->toArray();        
         return $result;
     }
+          
              
     /**
-     * add/update asterisk line
+     * add/update asterisk sip peer
      *
-     * if $lineData['id'] is empty the line gets added, otherwise it gets updated
+     * if $sipPeerData['id'] is empty the sip peer gets added, otherwise it gets updated
      *
-     * @param string $lineData a JSON encoded array of line properties
+     * @param string $sipPeerData a JSON encoded array of sipPeer properties
      * @return array
      */
-    public function saveLine($lineData)
+    public function saveAsteriskSipPeer($sipPeerData)
     {
-        $lineData = Zend_Json::decode($lineData);
+        $sipPeerData = Zend_Json::decode($sipPeerData);
         
         // unset if empty
-        if (empty($lineData['id'])) {
-            unset($lineData['id']);
+        if (empty($sipPeerData['id'])) {
+            unset($sipPeerData['id']);
         }
 
-        $line = new Voipmanager_Model_AsteriskPeer();
-        $line->setFromArray($lineData);
+        $sipPeer = new Voipmanager_Model_AsteriskSipPeer();
+        $sipPeer->setFromArray($sipPeerData);
         
-        if ( empty($line->id) ) {
-            $line = Voipmanager_Controller::getInstance()->createAsteriskPeer($line);
+        if ( empty($sipPeer->id) ) {
+            $sipPeer = Voipmanager_Controller::getInstance()->createAsteriskSipPeer($sipPeer);
         } else {
-            $line = Voipmanager_Controller::getInstance()->updateAsteriskPeer($line);
+            $sipPeer = Voipmanager_Controller::getInstance()->updateAsteriskSipPeer($sipPeer);
         }
 
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $line->toArray()
+                        'updatedData'       => $sipPeer->toArray()
         );
         
         
@@ -539,13 +572,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_sipPeerIDs list of sipPeerId's to delete
      * @return array
      */
-    public function deleteAsteriskSipPeers($_lineIds)
+    public function deleteAsteriskSipPeers($_sipPeerIds)
     {
         $result = array(
             'success'   => TRUE
         );
         
-        $sipPeerIds = Zend_Json::decode($_lineIds);
+        $sipPeerIds = Zend_Json::decode($_sipPeerIds);
      
         Voipmanager_Controller::getInstance()->deleteAsteriskSipPeers($sipPeerIds);
 
@@ -554,6 +587,12 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     
     
     
+/********************************
+ * ASTERISK CONTEXT FUNCTIONS
+ *
+ * 
+ */    
+     
     /**
      * get asterisk contexts
      *
@@ -642,8 +681,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     }     
     
     
-   
-    /**
+     /**
      * delete multiple contexts
      *
      * @param array $_contextIDs list of contextId's to delete
@@ -664,7 +702,11 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
        
     
     
-    
+/********************************
+ * ASTERISK VOICEMAIL FUNCTIONS
+ *
+ * 
+ */        
     
     /**
      * get asterisk voicemails
@@ -752,7 +794,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
          
     }     
-    
     
    
     /**

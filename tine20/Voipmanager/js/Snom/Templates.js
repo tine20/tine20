@@ -8,9 +8,9 @@
  *
  */
 
-Ext.namespace('Tine.Voipmanager.Templates');
+Ext.namespace('Tine.Voipmanager.Snom.Templates');
 
-Tine.Voipmanager.Templates.Main = {
+Tine.Voipmanager.Snom.Templates.Main = {
        
     actions: {
         addTemplate: null,
@@ -24,7 +24,7 @@ Tine.Voipmanager.Templates.Main = {
          */
         addTemplate: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=', 450, 350);
+            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=', 450, 350);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Templates.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Template_Grid').getSelectionModel().getSelections();
             var templateId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + templateId, 450, 350);
+            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=' + templateId, 450, 350);
         },
         
         /**
@@ -163,7 +163,7 @@ Tine.Voipmanager.Templates.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Model.Template,
+            fields: Tine.Voipmanager.Model.Snom.Template,
             // turn on remote sorting
             remoteSort: true
         });
@@ -261,7 +261,7 @@ Tine.Voipmanager.Templates.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + record.data.id, 450, 350);
+                Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=' + record.data.id, 450, 350);
             } catch(e) {
                 // alert(e);
             }
@@ -316,13 +316,13 @@ Tine.Voipmanager.Templates.Main = {
 };
 
 
-Tine.Voipmanager.Templates.EditDialog =  {
+Tine.Voipmanager.Snom.Templates.EditDialog =  {
 
         templateRecord: null,
         
         updateTemplateRecord: function(_templateData)
         {
-            this.templateRecord = new Tine.Voipmanager.Model.Template(_templateData);
+            this.templateRecord = new Tine.Voipmanager.Model.Snom.Template(_templateData);
         },
         
         deleteTemplate: function(_button, _event)
@@ -337,7 +337,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
                 },
                 text: 'Deleting template...',
                 success: function(_result, _request) {
-                    window.opener.Tine.Voipmanager.Templates.Main.reload();
+                    window.opener.Tine.Voipmanager.Snom.Templates.Main.reload();
                     window.close();
                 },
                 failure: function ( result, request) { 
@@ -359,8 +359,8 @@ Tine.Voipmanager.Templates.EditDialog =  {
                         templateData: Ext.util.JSON.encode(this.templateRecord.data)
                     },
                     success: function(_result, _request) {
-                        if(window.opener.Tine.Voipmanager.Templates) {
-                            window.opener.Tine.Voipmanager.Templates.Main.reload();
+                        if(window.opener.Tine.Voipmanager.Snom.Templates) {
+                            window.opener.Tine.Voipmanager.Snom.Templates.Main.reload();
                         }
                         if(_closeWindow === true) {
                             window.close();
