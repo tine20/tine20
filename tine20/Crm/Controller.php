@@ -501,7 +501,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
         return $result;    
     }
-
+        
     /**
      * save leadsources
      *
@@ -513,13 +513,10 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function saveLeadsources(Tinebase_Record_Recordset $_leadSources)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
+        $result = $backend->saveLeadsources($_leadSources);
         
-        foreach($_leadSources as $leadSource) {
-            $backend->update($leadSource);
-        }
-        
-        return $_leadSources;
-    }  
+        return $result;
+    }
     
     /**
      * get lead types
