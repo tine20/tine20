@@ -39,33 +39,4 @@ class Crm_Backend_Products extends Tinebase_Abstract_SqlTableBackend
     	$this->_db = Zend_Registry::get('dbAdapter');
         $this->_table  = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_products'));
     }
-    
-    /**
-     * add or updates an option
-     *
-     * @param Crm_Record_Recordset $_optionData the optiondata
-     * @return unknown
-     */
-    public function saveProducts(Tinebase_Record_Recordset $_optionData)
-    {
-        $db = Zend_Registry::get('dbAdapter');
-  
-        $db->beginTransaction();
-        
-        try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_products');
-
-            foreach($_optionData as $_product) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_products', $_product->toArray());                
-            }
-
-            $db->commit();
-
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-
-        return $_optionData;
-    }
 }
