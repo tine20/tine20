@@ -426,13 +426,15 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     }     
 
     /**
-     * save Products
+     * saves products
      *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
-     */ 
+     * Saving products means to calculate the difference between posted data
+     * and existing data and than deleting, creating or updating as needed.
+     * Every change is done one by one.
+     * 
+     * @param Tinebase_Record_Recordset $_products Products to save
+     * @return Tinebase_Record_Recordset Exactly the same record set as in argument $_products
+     */
     public function saveProducts(Tinebase_Record_Recordset $_products)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);

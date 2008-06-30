@@ -297,6 +297,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         unset($this->_listOfRecords[$_offset]);
     }
+    
     /**
      * Returns an array with ids of records to delete, to create or to update
      *
