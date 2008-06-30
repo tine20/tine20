@@ -65,17 +65,16 @@ abstract class Tinebase_Abstract_SqlTableBackend
         $id = $this->_db->lastInsertId();
 
         // if we insert a record without an id, we need to get back one
-        if(empty($_record->id) && $id == 0) {
+        if (empty($_record->id) && $id == 0) {
             throw new Exception("returned lead id is 0");
         }
         
         // if the record had no id set, set the id now
-        if(empty($_record->id)) {
-            $_record->id = $id;
+        if ($_record->id == NULL || $_record->id == 'NULL') {
+        	$_record->id = $id;
         }
         
         return $this->get($_record->id);
-        
     }
     
     /**
