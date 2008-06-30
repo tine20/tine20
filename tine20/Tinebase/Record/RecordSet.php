@@ -297,5 +297,23 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         unset($this->_listOfRecords[$_offset]);
     }
+    /**
+     * Returns an array with ids of records to delete, to create or to update
+     *
+     * @param array $_toCompareWithRecordsIds Array to compare this record sets ids with
+     * @return array An array with sub array indices 'toDeleteIds', 'toCreateIds' and 'toUpdateIds'
+     */
+    public function getMigration(array $_toCompareWithRecordsIds)
+    {
+    	$existingRecordsIds = $this->getArrayOfIds();
+    	
+        $result = array();
+        
+    	$result['toDeleteIds'] = array_diff($existingRecordsIds, $_toCompareWithRecordsIds);
+        $result['toCreateIds'] = array_diff($_toCompareWithRecordsIds, $existingRecordsIds);
+        $result['toUpdateIds'] = array_intersect($existingRecordsIds, $_toCompareWithRecordsIds);
+        
+        return $result;
+    }
 
 }

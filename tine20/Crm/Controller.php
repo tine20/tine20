@@ -437,28 +437,24 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
         $existingProducts = $backend->getAll();
-        $existingProductsIds = $existingProducts->getArrayOfIds();
-        $productsIds = $_products->getArrayOfIds();
         
-        $toDeleteIds = array_diff($existingProductsIds, $productsIds);
-        $toAddIds = array_diff($productsIds, $existingProductsIds);
-        $toUpdateIds = array_intersect($existingProductsIds, $productsIds);
+        $migration = $existingProducts->getMigration($_products->getArrayOfIds());
         
         // delete
-        foreach ($toDeleteIds as $id) {
+        foreach ($migration['toDeleteIds'] as $id) {
         	$backend->delete($id);
         }
         
         // add / create
         foreach ($_products as $product) {
-        	if (in_array($product->id, $toAddIds)) {
+        	if (in_array($product->id, $migration['toCreateIds'])) {
         		$backend->create($product);
         	}
         }
         
         // update
         foreach ($_products as $product) {
-        	if (in_array($product->id, $toUpdateIds)) {
+        	if (in_array($product->id, $migration['toUpdateIds'])) {
         		$backend->update($product);
         	}
         }
