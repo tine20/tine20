@@ -159,6 +159,8 @@ abstract class Tinebase_Abstract_SqlTableBackend
       * @param string|array $_id Ids
       * @return void
       * @throws Exception
+      * 
+      * @todo Change to deleting only ONE record. "Delete all" style should be removed from backend.
       */
     public function delete($_id) {
     	foreach ((array) $_id as $id) {
