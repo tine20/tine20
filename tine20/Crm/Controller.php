@@ -436,9 +436,34 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function saveProducts(Tinebase_Record_Recordset $_products)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $result = $backend->saveProducts($_products);
+        $existingProducts = $backend->getAll();
+        $existingProductsIds = $existingProducts->getArrayOfIds();
+        $productsIds = $_products->getArrayOfIds();
         
-        return $result;
+        $toDeleteIds = array_diff($existingProductsIds, $productsIds);
+        $toAddIds = array_diff($productsIds, $existingProductsIds);
+        $toUpdateIds = array_intersect($existingProductsIds, $productsIds);
+        
+        // delete
+        foreach ($toDeleteIds as $id) {
+        	$backend->delete($id);
+        }
+        
+        // add / create
+        foreach ($_products as $product) {
+        	if (in_array($product->id, $toAddIds)) {
+        		$backend->create($product);
+        	}
+        }
+        
+        // update
+        foreach ($_products as $product) {
+        	if (in_array($product->id, $toUpdateIds)) {
+        		$backend->update($product);
+        	}
+        }
+        
+        return $_products;
     } 
     
     /**
