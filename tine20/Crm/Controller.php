@@ -571,19 +571,44 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     }
     
     /**
-     * save Leadtypes
+     * saves lead types
      *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
-     */ 
+     * Saving lead types means to calculate the difference between posted data
+     * and existing data and than deleting, creating or updating as needed.
+     * Every change is done one by one.
+     * 
+     * @param Tinebase_Record_Recordset $_leadTypes Lead types to save
+     * @return Tinebase_Record_Recordset Exactly the same record set as in argument $_leadTypes
+     */
     public function saveLeadtypes(Tinebase_Record_Recordset $_leadTypes)
     {
     	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
-        $result = $backend->saveLeadtypes($_leadTypes);
+        // $result = $backend->saveLeadtypes($_leadTypes);
+        $existingLeadTypes = $backend->getAll();
         
-        return $result;
+        $migration = $existingLeadTypes->getMigration($_leadTypes->getArrayOfIds());
+        
+        // delete
+        foreach ($migration['toDeleteIds'] as $id) {
+            $backend->delete($id);
+        }
+        
+        // add / create
+        foreach ($_leadTypes as $leadType) {
+            if (in_array($leadType->id, $migration['toCreateIds'])) {
+                $backend->create($leadType);
+            }
+        }
+        
+        // update
+        foreach ($_leadTypes as $leadType) {
+            if (in_array($leadType->id, $migration['toUpdateIds'])) {
+                $backend->update($leadType);
+            }
+        }
+        
+        return $_leadTypes;
+        // return $result;
     }      
     
     /**
