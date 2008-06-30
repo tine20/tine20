@@ -526,19 +526,42 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     }
         
     /**
-     * save leadsources
+     * saves lead sources
      *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
-     */ 
+     * Saving lead source means to calculate the difference between posted data
+     * and existing data and than deleting, creating or updating as needed.
+     * Every change is done one by one.
+     * 
+     * @param Tinebase_Record_Recordset $_leadSources Lead states to save
+     * @return Tinebase_Record_Recordset Exactly the same record set as in argument $_leadSources
+     */
     public function saveLeadsources(Tinebase_Record_Recordset $_leadSources)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
-        $result = $backend->saveLeadsources($_leadSources);
+        $existingLeadSources = $backend->getAll();
         
-        return $result;
+        $migration = $existingLeadSources->getMigration($_leadSources->getArrayOfIds());
+        
+        // delete
+        foreach ($migration['toDeleteIds'] as $id) {
+            $backend->delete($id);
+        }
+        
+        // add / create
+        foreach ($_leadSources as $leadSource) {
+            if (in_array($leadSource->id, $migration['toCreateIds'])) {
+                $backend->create($leadSource);
+            }
+        }
+        
+        // update
+        foreach ($_leadSources as $leadSource) {
+            if (in_array($leadSource->id, $migration['toUpdateIds'])) {
+                $backend->update($leadSource);
+            }
+        }
+        
+        return $_leadSources;
     }
     
     /**
@@ -583,7 +606,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function saveLeadtypes(Tinebase_Record_Recordset $_leadTypes)
     {
     	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
-        // $result = $backend->saveLeadtypes($_leadTypes);
         $existingLeadTypes = $backend->getAll();
         
         $migration = $existingLeadTypes->getMigration($_leadTypes->getArrayOfIds());
@@ -608,7 +630,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }
         
         return $_leadTypes;
-        // return $result;
     }      
     
     /**
@@ -640,20 +661,43 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         return $result;    
     }
 
-   /**
-     * save Leadstates
+    /**
+     * saves lead states
      *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
-     */ 
+     * Saving lead states means to calculate the difference between posted data
+     * and existing data and than deleting, creating or updating as needed.
+     * Every change is done one by one.
+     * 
+     * @param Tinebase_Record_Recordset $_leadStates Lead states to save
+     * @return Tinebase_Record_Recordset Exactly the same record set as in argument $_leadStates
+     */
     public function saveLeadstates(Tinebase_Record_Recordset $_leadStates)
     {
     	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
-        $result = $backend->saveLeadstates($_leadStates);
+        $existingLeadStates = $backend->getAll();
         
-        return $result;
+        $migration = $existingLeadStates->getMigration($_leadStates->getArrayOfIds());
+        
+        // delete
+        foreach ($migration['toDeleteIds'] as $id) {
+            $backend->delete($id);
+        }
+        
+        // add / create
+        foreach ($_leadStates as $leadState) {
+            if (in_array($leadState->id, $migration['toCreateIds'])) {
+                $backend->create($leadState);
+            }
+        }
+        
+        // update
+        foreach ($_leadStates as $leadState) {
+            if (in_array($leadState->id, $migration['toUpdateIds'])) {
+                $backend->update($leadState);
+            }
+        }
+        
+        return $_leadStates;
     } 
   
     
