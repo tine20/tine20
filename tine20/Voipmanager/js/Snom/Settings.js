@@ -24,7 +24,7 @@ Tine.Voipmanager.Snom.Settings.Main = {
          */
         addSetting: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=', 600, 450);
+            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=', 770, 550);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Snom.Settings.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Settings_Grid').getSelectionModel().getSelections();
             var settingId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + settingId, 600, 450);
+            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + settingId, 770, 550);
         },
         
         /**
@@ -320,7 +320,7 @@ Tine.Voipmanager.Snom.Settings.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + record.data.id, 600, 450);
+                Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + record.data.id, 770, 550);
             } catch(e) {
                 // alert(e);
             }
@@ -464,7 +464,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             translation.textdomain('Voipmanager');
         
             var _dialog = {
-                title: 'Setting',
+                title: translation._('SettingsMain'),
                 layout: 'border',
                 anchor: '100% 100%',
                 layoutOnTabChange: true,
@@ -473,9 +473,12 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                     frame: true
                 },
                 items: [{
-                    region: 'center',
+                    layout: 'hfit',
+                    containsScrollbar: false,
+                    //margins: '0 18 0 5',
                     autoScroll: true,
-                    autoHeight: true,
+                    id: 'bla',
+                    region: 'center',
                     items: [{
                         layout: 'column',
                         border: false,
@@ -517,10 +520,11 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                         items: [{
                             xtype: 'fieldset',
                             checkboxToggle: false,
-                            id: translation._('general information'),
-                            title: 'Infos',
+                            id: 'general information',
+                            title: translation._('general information'),
                             autoHeight: true,
                             anchor: '100%',
+                            width: 800,
                             defaults: {
                                 anchor: '100%'
                             },
@@ -529,7 +533,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .25,
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -564,7 +568,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .25,
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -604,65 +608,8 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
-                                }, {
-                                    columnWidth: .25,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('date_us_format'),
-                                        name: 'date_us_format',
-                                        id: 'date_us_format',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '98%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
                                 },{
-                                    columnWidth: .25,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('time_24_format'),
-                                        name: 'time_24_format',
-                                        id: 'time_24_format',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '98%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }]
-                            },{          
-                                layout: 'column',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    columnWidth: .25,
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -690,8 +637,13 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
-                                }, {
-                                    columnWidth: .25,
+                                }]
+                            },{          
+                                layout: 'column',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -733,64 +685,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .25,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('with_flash'),
-                                        name: 'with_flash',
-                                        id: 'with_flash',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '98%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .25,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('message_led_other'),
-                                        name: 'message_led_other',
-                                        id: 'message_led_other',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '98%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }]
-                            },{          
-                                layout: 'column',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    columnWidth: .25,
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -817,7 +712,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .25,
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -842,65 +737,13 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
-                                }, {
-                                    columnWidth: .25,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('global_missed_counter'),
-                                        name: 'global_missed_counter',
-                                        id: 'global_missed_counter',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '98%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .25,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('scroll_outgoing'),
-                                        name: 'scroll_outgoing',
-                                        id: 'scroll_outgoing',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '98%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
                                 }]
-                            }, {          
+                            },{          
                                 layout: 'column',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .25,
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -925,14 +768,174 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
-                                },{
-                                    columnWidth: .25,
+                                }, {
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
-                                    items: [{}]
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: translation._('date_us_format'),
+                                        name: 'date_us_format',
+                                        id: 'date_us_format',
+                                        mode: 'local',
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        anchor: '98%',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        forceSelection: true,
+                                        store: new Ext.data.SimpleStore({
+                                            id: 'id',
+                                            fields: ['id', 'name'],
+                                            data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                            ]
+                                        })
+                                    }]
+                                },{
+                                    columnWidth: .33,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: translation._('time_24_format'),
+                                        name: 'time_24_format',
+                                        id: 'time_24_format',
+                                        mode: 'local',
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        anchor: '98%',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        forceSelection: true,
+                                        store: new Ext.data.SimpleStore({
+                                            id: 'id',
+                                            fields: ['id', 'name'],
+                                            data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                            ]
+                                        })
+                                    }]
+                                }]
+                            }, {          
+                                layout: 'column',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    columnWidth: .33,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: translation._('with_flash'),
+                                        name: 'with_flash',
+                                        id: 'with_flash',
+                                        mode: 'local',
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        anchor: '98%',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        forceSelection: true,
+                                        store: new Ext.data.SimpleStore({
+                                            id: 'id',
+                                            fields: ['id', 'name'],
+                                            data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                            ]
+                                        })
+                                    }]
                                 }, {
-                                    columnWidth: .25,
+                                    columnWidth: .33,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: translation._('message_led_other'),
+                                        name: 'message_led_other',
+                                        id: 'message_led_other',
+                                        mode: 'local',
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        anchor: '98%',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        forceSelection: true,
+                                        store: new Ext.data.SimpleStore({
+                                            id: 'id',
+                                            fields: ['id', 'name'],
+                                            data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                            ]
+                                        })
+                                    }]
+                                },{
+                                    columnWidth: .33,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: translation._('global_missed_counter'),
+                                        name: 'global_missed_counter',
+                                        id: 'global_missed_counter',
+                                        mode: 'local',
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        anchor: '98%',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        forceSelection: true,
+                                        store: new Ext.data.SimpleStore({
+                                            id: 'id',
+                                            fields: ['id', 'name'],
+                                            data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                            ]
+                                        })
+                                    }]
+                                }]
+                            }, {          
+                                layout: 'column',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    columnWidth: .33,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'combo',
+                                        fieldLabel: translation._('scroll_outgoing'),
+                                        name: 'scroll_outgoing',
+                                        id: 'scroll_outgoing',
+                                        mode: 'local',
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        anchor: '98%',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        forceSelection: true,
+                                        store: new Ext.data.SimpleStore({
+                                            id: 'id',
+                                            fields: ['id', 'name'],
+                                            data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                            ]
+                                        })
+                                    }]
+                                },{
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -958,7 +961,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .25,
+                                    columnWidth: .33,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -986,9 +989,230 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 }]
                             }]
                         }]
-                    }]
-                
-                }]
+                    }, {
+                        layout: 'form',
+                        border: false,
+                        anchor: '100%',
+                        items: [{
+                            xtype: 'fieldset',
+                            checkboxToggle: false,
+                            id: 'general information',
+                            title: translation._('redirecting'),
+                            autoHeight: true,
+                            anchor: '100%',
+                            defaults: {
+                                anchor: '100%'
+                            },
+                            items: [{
+                                xtype: 'combo',
+                                fieldLabel: translation._('redirect_event'),
+                                name: 'redirect_event',
+                                id: 'redirect_event',
+                                mode: 'local',
+                                displayField: 'name',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'name'],
+                                    data: [
+                                        ['all', translation._('all')],
+                                        ['busy', translation._('busy')],
+                                        ['none', translation._('none')],
+                                        ['time', translation._('time')]
+                                    ]
+                                })
+                            },{
+                                xtype: 'fieldset',
+                                checkboxToggle: false,
+                                id: 'general information',
+                                title: translation._('all'),
+                                layout: 'form',                                
+                                autoHeight: true,
+                                anchor: '100%',
+                                width: 800,
+                                defaults: {
+                                    anchor: '100%'
+                                },
+                                items: [{
+                                    layout: 'column',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        columnWidth: .33,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_number'),
+                                            name: 'redirect_number',
+                                            id: 'redirect_number',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    }, {
+                                        columnWidth: .33,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_always_on_code'),
+                                            name: 'redirect_always_on_code',
+                                            id: 'redirect_always_on_code',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    },{
+                                        columnWidth: .33,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_always_off_code'),
+                                            name: 'redirect_always_off_code',
+                                            id: 'redirect_always_off_code',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    }]
+                                }]   // column
+                            },{
+                                xtype: 'fieldset',
+                                checkboxToggle: false,
+                                id: 'general information',
+                                title: translation._('busy'),
+                                layout: 'form',                                
+                                autoHeight: true,
+                                anchor: '100%',
+                                width: 800,
+                                defaults: {
+                                    anchor: '100%'
+                                },
+                                items: [{
+                                    layout: 'column',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        columnWidth: .33,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_busy_number'),
+                                            name: 'redirect_busy_number',
+                                            id: 'redirect_busy_number',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    }, {
+                                        columnWidth: .33,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_busy_on_code'),
+                                            name: 'redirect_busy_on_code',
+                                            id: 'redirect_busy_on_code',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    },{
+                                        columnWidth: .33,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_busy_off_code'),
+                                            name: 'redirect_busy_off_code',
+                                            id: 'redirect_busy_off_code',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    }]
+                                }]   // column
+                            },{
+                                xtype: 'fieldset',
+                                checkboxToggle: false,
+                                id: 'general information',
+                                title: translation._('time'),
+                                layout: 'form',
+                                autoHeight: true,
+                                anchor: '100%',
+                                width: 800,
+                                defaults: {
+                                    anchor: '100%'
+                                },
+                                items: [{
+                                    layout: 'column',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        columnWidth: .1,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_time'),
+                                            name: 'redirect_time',
+                                            id: 'redirect_time',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    }, {
+                                        columnWidth: .3,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_time_number'),
+                                            name: 'redirect_time_number',
+                                            id: 'redirect_time_number',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    }, {
+                                        columnWidth: .3,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_time_on_code'),
+                                            name: 'redirect_time_on_code',
+                                            id: 'redirect_time_on_code',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    },{
+                                        columnWidth: .3,
+                                        layout: 'form',
+                                        border: false,
+                                        anchor: '100%',
+                                        items: [{
+                                            xtype: 'textfield',
+                                            fieldLabel: translation._('redirect_time_off_code'),
+                                            name: 'redirect_time_off_code',
+                                            id: 'redirect_time_off_code',
+                                            anchor: '98%',
+                                            maxLength: 255
+                                       }]
+                                    }]
+                                }]   // column
+                            }]   // fieldset
+                        }]   // fieldsest
+                    }]   // form 
+                }]   // center
             };
             
             return _dialog;   
