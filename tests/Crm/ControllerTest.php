@@ -28,9 +28,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_objects = array();
     
-    protected $testContainer;
+    protected $_testContainer;
     
     /**
      * Runs the test methods of this class.
@@ -60,18 +60,18 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+            $this->_testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
-            $this->testContainer = $personalContainer[0];
+            $this->_testContainer = $personalContainer[0];
         }
         
-        $this->objects['initialLead'] = new Crm_Model_Lead(array(
+        $this->_objects['initialLead'] = new Crm_Model_Lead(array(
             'id'            => 20,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
+            'container'     => $this->_testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description',
             'end'           => Zend_Date::now(),
@@ -80,13 +80,13 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => Zend_Date::now(),
         )); 
         
-        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
+        $this->_objects['updatedLead'] = new Crm_Model_Lead(array(
             'id'            => 20,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
+            'container'     => $this->_testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description updated',
             'end'           => NULL,
@@ -104,7 +104,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $addressbookContainer = $addressbookPersonalContainer[0];
         
-        $this->objects['user'] = new Addressbook_Model_Contact(array(
+        $this->_objects['user'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
             'adr_one_locality'      => 'Hamburg',
             'adr_one_postalcode'    => '24xxx',
@@ -157,7 +157,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $tasksContainer = $tasksPersonalContainer[0];
         
         // create test task
-        $this->objects['task'] = new Tasks_Model_Task(array(
+        $this->_objects['task'] = new Tasks_Model_Task(array(
             // tine record fields
             'id'                   => '90a75021e353685aa9a06e67a7c0b558d0acae32',
             'container_id'         => $tasksContainer->id,
@@ -167,6 +167,22 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'due'                  => Zend_Date::now()->addMonth(1),
             'summary'              => 'phpunit: crm test task',        
         ));
+        
+        // some products
+        $this->_objects['someProducts'] = array(
+                new Crm_Model_Product(array(
+                    'id' => 1001,
+                    'productsource' => 'Just a phpunit test product #1',
+                    'price' => '47.11')),
+                new Crm_Model_Product(array(
+                    'id' => 1002,
+                    'productsource' => 'Just a phpunit test product #2',
+                    'price' => '18.05')),
+                new Crm_Model_Product(array(
+                    'id' => 1003,
+                    'productsource' => 'Just a phpunit test product #3',
+                    'price' => '19.78'))
+        );
     }
 
     /**
@@ -185,10 +201,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddLead()
     {
-        $lead = Crm_Controller::getInstance()->createLead($this->objects['initialLead']);
+        $lead = Crm_Controller::getInstance()->createLead($this->_objects['initialLead']);
         
-        $this->assertEquals($this->objects['initialLead']->id, $lead->id);
-        $this->assertEquals($this->objects['initialLead']->description, $lead->description);
+        $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
+        $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
     }
     
     /**
@@ -197,10 +213,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLead()
     {
-        $lead = Crm_Controller::getInstance()->getLead($this->objects['initialLead']);
+        $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']);
         
-        $this->assertEquals($this->objects['initialLead']->id, $lead->id);
-        $this->assertEquals($this->objects['initialLead']->description, $lead->description);
+        $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
+        $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
     }
     
     /**
@@ -223,10 +239,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateLead()
     {
-        $lead = Crm_Controller::getInstance()->updateLead($this->objects['updatedLead']);
+        $lead = Crm_Controller::getInstance()->updateLead($this->_objects['updatedLead']);
         
-        $this->assertEquals($this->objects['updatedLead']->id, $lead->id);
-        $this->assertEquals($this->objects['updatedLead']->description, $lead->description);
+        $this->assertEquals($this->_objects['updatedLead']->id, $lead->id);
+        $this->assertEquals($this->_objects['updatedLead']->description, $lead->description);
     }
 
     /**
@@ -236,7 +252,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     public function testGetAllLeads()
     {
         $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->testContainer->id);
+        $filter->container = array($this->_testContainer->id);
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
         $pagination = new Crm_Model_LeadPagination();
@@ -273,17 +289,17 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     public function testLinkedTasks()
     {        
         try {
-            $task = Tasks_Controller::getInstance()->getTask($this->objects['task']->id);
+            $task = Tasks_Controller::getInstance()->getTask($this->_objects['task']->id);
         } catch (Exception $e) {
-            $task = Tasks_Controller::getInstance()->createTask($this->objects['task']);
+            $task = Tasks_Controller::getInstance()->createTask($this->_objects['task']);
         }
         
         // link task
         //print_r($task->toArray());
-        Crm_Controller::getInstance()->setLinksForApplication($this->objects['initialLead']->getId(), array($task->getId()), 'Tasks');
+        Crm_Controller::getInstance()->setLinksForApplication($this->_objects['initialLead']->getId(), array($task->getId()), 'Tasks');
         
         // get linked tasks
-        $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($this->objects['initialLead']->getId(), 'Tasks');
+        $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($this->_objects['initialLead']->getId(), 'Tasks');
         
         //print_r($linkedTasks);
         
@@ -301,16 +317,16 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     {
         // create test contact
         try {
-            $contact = Addressbook_Controller::getInstance()->getContact($this->objects['user']->getId());
+            $contact = Addressbook_Controller::getInstance()->getContact($this->_objects['user']->getId());
         } catch ( Exception $e ) {
-            $contact = Addressbook_Controller::getInstance()->addContact($this->objects['user']);
+            $contact = Addressbook_Controller::getInstance()->addContact($this->_objects['user']);
         }
         
         // link contact
-        Crm_Controller::getInstance()->setLinksForApplication($this->objects['initialLead']->getId(), array($contact->getId()), 'Addressbook', 'account');
+        Crm_Controller::getInstance()->setLinksForApplication($this->_objects['initialLead']->getId(), array($contact->getId()), 'Addressbook', 'account');
         
         // get linked contacts
-        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($this->objects['initialLead']->getId(), 'Addressbook');
+        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($this->_objects['initialLead']->getId(), 'Addressbook');
         
         //print_r($linkedContacts);
         
@@ -318,7 +334,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($contact->getId(), $linkedContacts[0]['recordId']);
         
         // delete contact
-        Addressbook_Controller::getInstance()->deleteContact($this->objects['user']->getId());
+        Addressbook_Controller::getInstance()->deleteContact($this->_objects['user']->getId());
     }
     
     /**
@@ -327,11 +343,11 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteLead()
     {
-        Crm_Controller::getInstance()->deleteLead($this->objects['initialLead']);
+        Crm_Controller::getInstance()->deleteLead($this->_objects['initialLead']);
 
         $this->setExpectedException('UnderflowException');
         
-        Crm_Controller::getInstance()->getLead($this->objects['initialLead']);
+        Crm_Controller::getInstance()->getLead($this->_objects['initialLead']);
     }
     
     /**
