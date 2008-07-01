@@ -101,7 +101,22 @@ class Voipmanager_Model_SnomSetting extends Tinebase_Record_Abstract
         'keyboard_lock_pw'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
         'keyboard_lock_emergency'   => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'emergency_proxy'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'call_waiting'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'call_waiting'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'web_language_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'language_writable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'display_method_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'tone_scheme_writable'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'mwi_notification_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
+        'mwi_dialtone_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'headset_device_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'message_led_other_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'global_missed_counter_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'scroll_outgoing_writable'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'show_local_line_writable'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'show_call_status_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_event_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_number_writable'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_time_writable'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**

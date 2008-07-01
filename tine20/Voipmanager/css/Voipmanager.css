@@ -25,3 +25,9 @@
 .VoipmanagerIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }
+
+.cboxmiddle {
+    vertical-align: middle;
+    left: 2px !important;
+    top: 9px !important;
+}

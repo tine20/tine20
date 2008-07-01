@@ -139,7 +139,22 @@ Tine.Voipmanager.Model.Snom.Setting = Ext.data.Record.create([
     {name: 'keyboard_lock_pw'},
     {name: 'keyboard_lock_emergency'},
     {name: 'emergency_proxy'},
-    {name: 'call_waiting'}
+    {name: 'call_waiting'},
+    {name: 'web_language_writable'},
+    {name: 'language_writable'},
+    {name: 'display_method_writable'},
+    {name: 'tone_scheme_writable'},
+    {name: 'mwi_notification_writable'},
+    {name: 'mwi_dialtone_writable'},
+    {name: 'headset_device_writable'},
+    {name: 'message_led_other_writable'},
+    {name: 'global_missed_counter_writable'},
+    {name: 'scroll_outgoing_writable'},
+    {name: 'show_local_line_writable'},
+    {name: 'show_call_status_writable'},
+    {name: 'redirect_event_writable'},
+    {name: 'redirect_number_writable'},
+    {name: 'redirect_time_writable'}
 ]);
 
 Ext.namespace('Tine.Voipmanager.Model.Asterisk');

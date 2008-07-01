@@ -527,7 +527,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -539,7 +539,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -562,7 +562,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .33,
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('web_language_writable'),
+                                        name: 'web_language_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
+                                        id: 'web_language_writable',
+                                        anchor: '98%'
+                                    }]
+                                }, {
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -574,7 +588,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -602,8 +616,22 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('language_writable'),
+                                        name: 'language_writable',
+                                        id: 'language_writable',
+                                        hideLabel: true,   
+                                        cls: 'cboxmiddle',                                     
+                                        anchor: '98%'
+                                    }]
                                 },{
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -615,7 +643,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -631,13 +659,27 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('display_method_writable'),
+                                        name: 'display_method_writable',
+                                        id: 'display_method_writable',
+                                        hideLabel: true,  
+                                        cls: 'cboxmiddle',                                      
+                                        anchor: '98%'
+                                    }]
                                 }]
                             },{          
                                 layout: 'column',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -649,7 +691,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -664,8 +706,22 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('tone_scheme_writable'),
+                                        name: 'tone_scheme_writable',
+                                        id: 'tone_scheme_writable',
+                                        hideLabel: true,         
+                                        cls: 'cboxmiddle',                               
+                                        anchor: '98%'
+                                    }]
                                 },{
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -677,7 +733,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -692,7 +748,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .33,
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('mwi_notification_writable'),
+                                        name: 'mwi_notification_writable',
+                                        id: 'mwi_notification_writable',
+                                        hideLabel: true,        
+                                        cls: 'cboxmiddle',                                
+                                        anchor: '98%'
+                                    }]
+                                }, {
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -704,7 +774,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -717,13 +787,27 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('mwi_dialtone_writable'),
+                                        name: 'mwi_dialtone_writable',
+                                        id: 'mwi_dialtone_writable',
+                                        hideLabel: true,     
+                                        cls: 'cboxmiddle',                                  
+                                        anchor: '98%'
+                                    }]
                                 }]
                             }, {          
                                 layout: 'column',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -735,7 +819,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -749,7 +833,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .33,
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('headset_device_writable'),
+                                        name: 'headset_device_writable',
+                                        id: 'headset_device_writable',
+                                        hideLabel: true,    
+                                        cls: 'cboxmiddle',                                    
+                                        anchor: '98%'
+                                    }]
+                                }, {
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -761,7 +859,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -774,8 +872,22 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('message_led_other_writable'),
+                                        name: 'message_led_other_writable',
+                                        id: 'message_led_other_writable',
+                                        hideLabel: true,  
+                                        cls: 'cboxmiddle',                                      
+                                        anchor: '98%'
+                                    }]
                                 },{
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -787,7 +899,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -800,13 +912,27 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             ]
                                         })
                                     }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('global_missed_counter_writable'),
+                                        name: 'global_missed_counter_writable',
+                                        id: 'global_missed_counter_writable',
+                                        hideLabel: true,     
+                                        cls: 'cboxmiddle',                                   
+                                        anchor: '98%'
+                                    }]
                                 }]
                             }, {          
                                 layout: 'column',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -818,7 +944,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -832,7 +958,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .33,
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('scroll_outgoing_writable'),
+                                        name: 'scroll_outgoing_writable',
+                                        id: 'scroll_outgoing_writable',
+                                        hideLabel: true,   
+                                        cls: 'cboxmiddle',                                     
+                                        anchor: '98%'
+                                    }]
+                                }, {
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -844,7 +984,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -858,7 +998,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .33,
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('show_local_line_writable'),
+                                        name: 'show_local_line_writable',
+                                        id: 'show_local_line_writable',
+                                        hideLabel: true,    
+                                        cls: 'cboxmiddle',                                    
+                                        anchor: '98%'
+                                    }]
+                                }, {
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -870,7 +1024,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -882,6 +1036,20 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                                 ['off', 'off']
                                             ]
                                         })
+                                    }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('show_call_status_writable'),
+                                        name: 'show_call_status_writable',
+                                        id: 'show_call_status_writable',
+                                        hideLabel: true,        
+                                        cls: 'cboxmiddle',                                
+                                        anchor: '98%'
                                     }]
                                 }]
                             }]
@@ -905,7 +1073,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{ 
-                                    columnWidth: .33,
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -917,7 +1085,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -945,7 +1113,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                     }]
                                 }, {
-                                    columnWidth: .33,
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('redirect_event_writable'),
+                                        name: 'redirect_event_writable',
+                                        id: 'redirect_event_writable',
+                                        hideLabel: true,                 
+                                        cls: 'cboxmiddle',                       
+                                        anchor: '98%'
+                                    }]
+                                }, {
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -954,11 +1136,25 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         fieldLabel: translation._('redirect_number'),
                                         name: 'redirect_number',
                                         id: 'redirect_number',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         maxLength: 255
                                    }]
                                 }, {
-                                    columnWidth: .33,
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('redirect_number_writable'),
+                                        name: 'redirect_number_writable',
+                                        id: 'redirect_number_writable',
+                                        hideLabel: true,             
+                                        cls: 'cboxmiddle',                                                                   
+                                        anchor: '98%'
+                                    }]
+                                }, {
+                                    columnWidth: .3,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -968,9 +1164,23 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         disabled: true,
                                         name: 'redirect_time',
                                         id: 'redirect_time',
-                                        anchor: '98%',
+                                        anchor: '100%',
                                         maxLength: 5
                                    }]
+                                }, {
+                                    columnWidth: .03,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('redirect_time_writable'),
+                                        name: 'redirect_time_writable',
+                                        id: 'redirect_time_writable',
+                                        hideLabel: true,                                        
+                                        cls: 'cboxmiddle',
+                                        anchor: '98%'
+                                    }]
                                 }]  
                             }]   // column
                         }]   // fieldsest
