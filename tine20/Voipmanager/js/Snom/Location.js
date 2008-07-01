@@ -513,6 +513,80 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                             }]
                         }]
                     }, {
+                       layout: 'column',
+                       border: false,
+                       anchor: '100%',
+                       items: [{
+                           columnWidth: .33,
+                           layout: 'form',
+                           border: false,
+                           anchor: '100%',
+                           items: [{
+                               xtype: 'combo',
+                               fieldLabel: translation._('tone_scheme'),
+                               name: 'tone_scheme',
+                               id: 'tone_scheme',
+                               mode: 'local',
+                               displayField: 'name',
+                               valueField: 'id',
+                               anchor: '98%',
+                               triggerAction: 'all',
+                               editable: false,
+                               forceSelection: true,
+                               store: new Ext.data.SimpleStore({
+                                   id: 'id',
+                                   fields: ['id', 'name'],
+                                   data: [['AUS', translation._('australia')], ['AUT', translation._('austria')], ['CHN', translation._('china')], ['DNK', translation._('dansk')], ['FRA', translation._('france')], ['GER', translation._('germany')], ['GBR', translation._('great britain')], ['IND', translation._('india')], ['ITA', translation._('italy')], ['JPN', translation._('japan')], ['MEX', translation._('mexiko')], ['NLD', translation._('netherlands')], ['NOR', translation._('norway')], ['NZL', translation._('newzealand')], ['ESP', translation._('spain')], ['SWE', translation._('sweden')], ['SWI', translation._('switzerland')], ['USA', translation._('usa')]]
+                               })
+                           }]
+                       }, {
+                               columnWidth: .33,
+                               layout: 'form',
+                               border: false,
+                               anchor: '100%',
+                               items: [{
+                                   xtype: 'combo',
+                                   fieldLabel: translation._('date_us_format'),
+                                   name: 'date_us_format',
+                                   id: 'date_us_format',
+                                   mode: 'local',
+                                   displayField: 'name',
+                                   valueField: 'id',
+                                   anchor: '98%',
+                                   triggerAction: 'all',
+                                   editable: false,
+                                   forceSelection: true,
+                                   store: new Ext.data.SimpleStore({
+                                       id: 'id',
+                                       fields: ['id', 'name'],
+                                       data: [['on', 'on'], ['off', 'off']]
+                                   })
+                               }]
+                           }, {
+                               columnWidth: .33,
+                               layout: 'form',
+                               border: false,
+                               anchor: '100%',
+                               items: [{
+                                   xtype: 'combo',
+                                   fieldLabel: translation._('time_24_format'),
+                                   name: 'time_24_format',
+                                   id: 'time_24_format',
+                                   mode: 'local',
+                                   displayField: 'name',
+                                   valueField: 'id',
+                                   anchor: '100%',
+                                   triggerAction: 'all',
+                                   editable: false,
+                                   forceSelection: true,
+                                   store: new Ext.data.SimpleStore({
+                                       id: 'id',
+                                       fields: ['id', 'name'],
+                                       data: [['on', 'on'], ['off', 'off']]
+                                   })
+                               }]
+                           }]
+                       },{
                         xtype: 'fieldset',
                         checkboxToggle: false,
                         checkboxName: 'ntpSetting',

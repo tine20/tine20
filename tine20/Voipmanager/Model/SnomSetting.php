@@ -57,13 +57,9 @@ class Voipmanager_Model_SnomSetting extends Tinebase_Record_Abstract
         'web_language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'language'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'display_method'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tone_scheme'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'mwi_notification'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),  
         'mwi_dialtone'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),  
         'headset_device'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'date_us_format'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'time_24_format'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'with_flash'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'message_led_other'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'global_missed_counter'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
         'scroll_outgoing'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
@@ -104,7 +100,8 @@ class Voipmanager_Model_SnomSetting extends Tinebase_Record_Abstract
         'keyboard_lock'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'keyboard_lock_pw'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
         'keyboard_lock_emergency'   => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'emergency_proxy'           => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'emergency_proxy'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'call_waiting'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**

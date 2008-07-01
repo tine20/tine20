@@ -68,7 +68,10 @@ class Voipmanager_Model_SnomLocation extends Tinebase_Record_Abstract
         'http_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'https_port'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'http_user'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'http_pass'             => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'http_pass'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tone_scheme'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'date_us_format'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'time_24_format'        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**

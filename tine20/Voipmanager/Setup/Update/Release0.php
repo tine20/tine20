@@ -1138,6 +1138,40 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Voipmanager', '0.7');
     }
 
+   /**
+     * update snom_location
+     */    
+    public function update_7()
+    {
+        $declaration = new Setup_Backend_Schema_Field();
+        $declaration->name      = 'tone_scheme';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('AUS', 'AUT', 'CHN', 'DNK', 'FRA', 'GER', 'GBR', 'IND', 'ITA', 'JPN', 'MEX', 'NLD', 'NOR', 'NZL', 'ESP', 'SWE', 'SWI', 'USA');
+        
+        $this->_backend->addCol('snom_location', $declaration);        
+
+
+        $declaration = new Setup_Backend_Schema_Field();
+        $declaration->name      = 'date_us_format';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('on', 'off');
+        
+        $this->_backend->addCol('snom_location', $declaration);                
+        
+        
+        $declaration = new Setup_Backend_Schema_Field();
+        $declaration->name      = 'time_24_format';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('on', 'off');
+        
+        $this->_backend->addCol('snom_location', $declaration);                 
+        
+        $this->setApplicationVersion('Voipmanager', '0.8');               
+
+    }
  
  
           
