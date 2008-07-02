@@ -427,10 +427,27 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                         fields: ['id', 'model', 'description']
                     })
                 }), new Ext.form.ComboBox({
+                    fieldLabel: translation._('Settings'),
+                    name: 'setting_id',
+                    id: 'setting_id',
+                    mode: 'local',
+                    displayField: 'name',
+                    valueField: 'id',
+                    anchor: '100%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: new Ext.data.JsonStore({
+                        storeId: 'Voipmanger_EditTemplate_Settings',
+                        id: 'id',
+                        fields: ['id', 'name']
+                    })
+                }), new Ext.form.ComboBox({
                     fieldLabel: translation._('Keylayout'),
                     name: 'keylayout_id',
                     id: 'keylayout_id',
                     mode: 'local',
+                    disabled: true,
                     displayField: 'description',
                     valueField: 'id',
                     anchor: '100%',
@@ -442,23 +459,8 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                         id: 'id',
                         fields: ['id', 'model', 'description']
                     })
-                }), new Ext.form.ComboBox({
-                    fieldLabel: translation._('Settings'),
-                    name: 'setting_id',
-                    id: 'setting_id',
-                    mode: 'local',
-                    displayField: 'description',
-                    valueField: 'id',
-                    anchor: '100%',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.JsonStore({
-                        storeId: 'Voipmanger_EditTemplate_Settings',
-                        id: 'id',
-                        fields: ['id', 'model', 'description']
-                    })
-                })]
+                })
+                ]
             }];
             
             
