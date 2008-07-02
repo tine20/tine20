@@ -310,13 +310,17 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['updatedLead']->description, $result['updatedData']['description']);
 
         // check if contact is no longer linked        
-        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($initialLead['id'], 'Addressbook');        
-        $this->assertEquals(0, count($linkedContacts));        
+        //$linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($initialLead['id'], 'Addressbook');
+        $lead = Crm_Controller::getInstance()->getLead($initialLead['id']);
+        $linkedContacts = $lead->responsible;
+        $this->assertEquals(0, count($linkedContacts));
+                
         // delete contact
         Addressbook_Controller::getInstance()->deleteContact($this->objects['contact']->getId());
 
         // check if task is no longer linked        
-        $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($initialLead['id'], 'Tasks');        
+        //$linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($initialLead['id'], 'Tasks');
+        $linkedTasks = $lead->tasks;      
         $this->assertEquals(0, count($linkedTasks));
     }
 
