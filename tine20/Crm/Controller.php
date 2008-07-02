@@ -84,7 +84,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             throw new Exception('read permission to lead denied');
         }
 
-        $this->getLinkedProperties($lead);
+        //$this->getLinkedProperties($lead);
+        $this->getLeadLinks($lead);
         
         Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
                 
@@ -135,7 +136,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         if ( $_getRelations ) {
             foreach ($leads as $lead) {
-                $this->getLinkedProperties($lead);
+                //$this->getLinkedProperties($lead);
+                $this->getLeadLinks($lead);
             }
         }
         
@@ -201,6 +203,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $leadBackend->create($_lead);
         
+        /*
         $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
@@ -214,14 +217,19 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $products[] = $product;     
             }
         }
-        
+
         try {
             $lead->products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $products);
         } catch (Exception $e) {
             throw $e;
         }                
-        
+
         $this->saveLeadProducts($lead->getId(), $lead->products);
+        
+        */
+        
+        // set relations & links
+        $this->setLeadLinks($lead->getId(), $_lead);        
         
         if (!empty($_lead->tags)) {
             $lead->tags = $_lead->tags;
@@ -256,7 +264,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $backend->updateLead($_lead);
-        
+
+        /*
         $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
@@ -277,7 +286,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }                
         
         $this->saveLeadProducts($lead->getId(), $lead->products);
+        */
 
+        // set relations & links
+        $this->setLeadLinks($lead->getId(), $_lead);        
+        
         if (isset($_lead->tags)) {
             Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
         }
@@ -316,6 +329,125 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     /*********************** links functions ************************/
     
     // @todo rework link functions / use new relation class
+
+    /**
+     * set lead links and relations (contacts, tasks, products)
+     *
+     * @param integer $_leadId
+     * @param Crm_Model_Lead $_lead
+     * 
+     * @todo implement & test
+     * @todo add different backend types
+     * @todo add creation of new records
+     */
+    private function setLeadLinks($_leadId, Crm_Model_Lead $_lead)
+    {
+        $relationTypes = array(
+            'responsible' => array(
+                'model'     => 'Addressbook_Model_Contact',
+                'backend'   => Addressbook_Backend_Factory::SQL,
+                'type'      => 'RESPONSIBLE'
+        ),
+            'customer' => array(
+                'model'     => 'Addressbook_Model_Contact',
+                'backend'   => Addressbook_Backend_Factory::SQL,
+                'type'      => 'CUSTOMER'
+            ), 
+            'partner' => array(
+                'model'     => 'Addressbook_Model_Contact',
+                'backend'   => Addressbook_Backend_Factory::SQL,
+                'type'      => 'PARTNER'
+            ), 
+            'tasks' => array(
+                'model'     => 'Tasks_Model_Task',
+                'backend'   => Tasks_Backend_Factory::SQL,
+                'type'      => 'TASK'
+            ), 
+        );
+        
+        // build relation data array
+        $relationData = array();
+        foreach ($relationTypes as $type => $values) {  
+            if (isset($_lead[$type])) {          
+                foreach ($_lead[$type] as $id) {
+                    $data = array(
+                        'own_model'              => 'Crm_Model_Lead',
+                        'own_backend'            => Crm_Backend_Factory::SQL,
+                        'own_id'                 => $_leadId,
+                        'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                        'related_model'          => $values['model'],
+                        'related_backend'        => $values['backend'],
+                        'related_id'             => $id,
+                        'type'                   => $values['type']                    
+                    );
+                    
+                    $relationData[] = $data;
+                }
+            }
+        }
+
+        // set relations
+        Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_leadId, $relationData);       
+
+        // add product links
+        $productsArray = array();
+        if (is_array($_lead->products)) {
+            foreach ($_lead->products as $product) {
+                $product['lead_id'] = $_leadId; 
+                $productsArray[] = $product;     
+            }
+        }
+        try {
+            $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
+        } catch (Exception $e) {
+            throw $e;
+        }                
+        
+        $this->saveLeadProducts($_leadId, $products);                
+        
+    }
+
+    /**
+     * get lead links and relations (contacts, tasks, products)
+     *
+     * @param Crm_Model_Lead $_lead
+     * 
+     * @todo implement & test
+     * @todo add different backend types
+     * @todo return Relation records instead of ids?
+     */
+    private function getLeadLinks(Crm_Model_Lead &$_lead)
+    {
+        $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());        
+        
+        $customer = array();
+        $partner = array();
+        $responsible = array();
+        $tasks = array();
+        foreach($relations as $relation) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $relation->type . ' for id ' . $_lead->getId());
+            switch(strtolower($relation->type)) {
+                case 'customer':
+                    $customer[] = $relation->related_id;
+                    break;
+                case 'partner':
+                    $partner[] = $relation->related_id;
+                    break;
+                case 'responsible':
+                    $responsible[] = $relation->related_id;
+                    break;
+                case 'task':
+                    $tasks[] = $relation->related_id;
+                    break;
+            }
+        }
+        $_lead->customer = $customer;
+        $_lead->partner = $partner;
+        $_lead->responsible = $responsible;
+        $_lead->tasks = $tasks;
+        $_lead->products = $this->getLeadProducts($_lead->getId());
+        
+    }
     
     /**
      * set lead links for an application
@@ -326,7 +458,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param string $_remark
      * @return unknown
      * 
-     * @todo    add set ALL links functions (for performance/easy to use)?
+     * @deprecated 
      */
     public function setLinksForApplication($_leadId, $_linkIds, $_applicationName, $_remark = NULL)
     {
@@ -353,7 +485,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param string $_applicationName
      * @return array with links
      * 
-     * @todo    add get ALL links functions (for performance/easy to use)?
+     * @deprecated 
      */
     public function getLinksForApplication($_leadId, $_applicationName)
     {
@@ -369,9 +501,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * fetch ids of linked properties(contacts, tasks, notes)
      *
      * @param Crm_Model_Lead $_lead
-     * @deprecated ?
      * 
-     * @todo    replace with getLinksForApplication / new relations handling
+     * @deprecated
      */
     protected function getLinkedProperties(Crm_Model_Lead &$_lead)
     {
