@@ -24,7 +24,7 @@ Tine.Voipmanager.Snom.Settings.Main = {
          */
         addSetting: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=', 770, 550);
+            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=', 740, 330);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Snom.Settings.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Settings_Grid').getSelectionModel().getSelections();
             var settingId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + settingId, 770, 550);
+            Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + settingId, 740, 330);
         },
         
         /**
@@ -320,7 +320,7 @@ Tine.Voipmanager.Snom.Settings.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + record.data.id, 770, 550);
+                Tine.Tinebase.Common.openWindow('settingsWindow', 'index.php?method=Voipmanager.editSnomSetting&settingId=' + record.data.id, 740, 330);
             } catch(e) {
                 // alert(e);
             }
@@ -386,6 +386,14 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             if(_settingData.redirect_event == 'time') {
                 Ext.getCmp('redirect_time').setDisabled(false);
             } 
+
+
+            var _rewritableFields = new Array("with_flash","message_led_other","global_missed_counter","scroll_outgoing","show_local_line","show_call_status","auto_connect_indication","privacy_out","privacy_in","enable_keyboard_lock","keyboard_lock");
+            Ext.each(_rewritableFields, function(_object, _index, _all) {
+                if(! _settingData[_object]) { _settingData[_object] = null;  }
+            });
+            
+            
             this.settingRecord = new Tine.Voipmanager.Model.Snom.Setting(_settingData);
         },
         
@@ -456,6 +464,9 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
             var translation = new Locale.Gettext();
             translation.textdomain('Voipmanager');
+            
+            Ext.QuickTips.init();                         
+            
         
             var _dialog = {
                 title: translation._('SettingsMain'),
@@ -477,9 +488,9 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                         layout: 'column',
                         border: false,
                         anchor: '100%',
-                        height: 70,
+                        height: 50,
                         items: [{
-                            columnWidth: .5,
+                            columnWidth: .35,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -492,19 +503,18 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 allowBlank: false
                             }]
                         }, {
-                            columnWidth: .5,
+                            columnWidth: .65,
                             layout: 'form',
                             border: false,
                             anchor: '98%',
                             autoHeight: true,
                             items: [{
-                                xtype: 'textarea',
+                                xtype: 'textfield',
                                 name: 'description',
+                                        tooltip: 'bla',                                
                                 fieldLabel: translation._('Description'),
-                                grow: false,
-                                preventScrollbars: false,
-                                anchor: '100%',
-                                height: 45
+                                maxLength: 255,
+                                anchor: '100%'
                             }]
                         }]
                     }, {
@@ -512,684 +522,635 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            xtype: 'fieldset',
-                            checkboxToggle: false,
-                            id: 'general information',
-                            title: translation._('general information'),
-                            autoHeight: true,
+                            layout: 'column',
+                            border: false,
                             anchor: '100%',
-//                            width: 800,
-                            defaults: {
-                                anchor: '100%'
-                            },
                             items: [{
-                                layout: 'column',
+                                columnWidth: .27,
+                                layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('web_language'),
+                                    name: 'web_language',
+                                    id: 'web_language',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                        tooltip: 'bla',                                    
                                     anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('web_language'),
-                                        name: 'web_language',
-                                        id: 'web_language',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['English', translation._('English')],
-                                                ['Deutsch', translation._('Deutsch')],
-                                                ['Espanol', translation._('Espanol')],
-                                                ['Francais', translation._('Francais')],
-                                                ['Italiano', translation._('Italiano')],
-                                                ['Nederlands', translation._('Nederlands')],
-                                                ['Portugues', translation._('Portugues')],
-                                                ['Suomi', translation._('Suomi')],
-                                                ['Svenska', translation._('Svenska')],
-                                                ['Dansk', translation._('Dansk')],
-                                                ['Norsk', translation._('Norsk')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- none -')],                                        
+                                            ['English', translation._('English')],
+                                            ['Deutsch', translation._('Deutsch')],
+                                            ['Espanol', translation._('Espanol')],
+                                            ['Francais', translation._('Francais')],
+                                            ['Italiano', translation._('Italiano')],
+                                            ['Nederlands', translation._('Nederlands')],
+                                            ['Portugues', translation._('Portugues')],
+                                            ['Suomi', translation._('Suomi')],
+                                            ['Svenska', translation._('Svenska')],
+                                            ['Dansk', translation._('Dansk')],
+                                            ['Norsk', translation._('Norsk')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('web_language_writable'),
                                         name: 'web_language_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        cls: 'cboxmiddle',   
+                                        tooltip: 'bla',                                 
                                         id: 'web_language_writable',
                                         anchor: '98%'
-                                    }]
-                                }, {
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
+                                }]
+                            }, {
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('language'),
+                                    name: 'language',
+                                    id: 'language',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
                                     anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('language'),
-                                        name: 'language',
-                                        id: 'language',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['English', translation._('English')],
-                                                ['English(UK)', translation._('English(UK)')],
-                                                ['Deutsch', translation._('Deutsch')],
-                                                ['Espanol', translation._('Espanol')],
-                                                ['Francais', translation._('Francais')],
-                                                ['Italiano', translation._('Italiano')],
-                                                ['Cestina', translation._('Cestina')],
-                                                ['Nederlands', translation._('Nederlands')],
-                                                ['Polski', translation._('Polski')],
-                                                ['Portugues', translation._('Portugues')],
-                                                ['Slovencina', translation._('Slovencina')],
-                                                ['Suomi', translation._('Suomi')],
-                                                ['Svenska', translation._('Svenska')],
-                                                ['Dansk', translation._('Dansk')],
-                                                ['Norsk',translation._('Norsk')],
-                                                ['Japanese', translation._('Japanese')],
-                                                ['Chinese', translation._('Chinese')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- none -')],                                                                                               
+                                            ['English', translation._('English')],
+                                            ['English(UK)', translation._('English(UK)')],
+                                            ['Deutsch', translation._('Deutsch')],
+                                            ['Espanol', translation._('Espanol')],
+                                            ['Francais', translation._('Francais')],
+                                            ['Italiano', translation._('Italiano')],
+                                            ['Cestina', translation._('Cestina')],
+                                            ['Nederlands', translation._('Nederlands')],
+                                            ['Polski', translation._('Polski')],
+                                            ['Portugues', translation._('Portugues')],
+                                            ['Slovencina', translation._('Slovencina')],
+                                            ['Suomi', translation._('Suomi')],
+                                            ['Svenska', translation._('Svenska')],
+                                            ['Dansk', translation._('Dansk')],
+                                            ['Norsk',translation._('Norsk')],
+                                            ['Japanese', translation._('Japanese')],
+                                            ['Chinese', translation._('Chinese')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('language_writable'),
                                         name: 'language_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'language_writable',
-                                        hideLabel: true,   
-                                        cls: 'cboxmiddle',                                     
                                         anchor: '98%'
-                                    }]
-                                },{
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
+                                }]
+                            },{
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('display_method'),
+                                    name: 'display_method',
+                                    id: 'display_method',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
                                     anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('display_method'),
-                                        name: 'display_method',
-                                        id: 'display_method',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['full_contact', translation._('whole url')],
-                                                ['display_name', translation._('name')],
-                                                ['display_number', translation._('number')],
-                                                ['display_name_number', translation._('name + number')],
-                                                ['display_number_name', translation._('number + name')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- none -')],                                                                                
+                                            ['full_contact', translation._('whole url')],
+                                            ['display_name', translation._('name')],
+                                            ['display_number', translation._('number')],
+                                            ['display_name_number', translation._('name + number')],
+                                            ['display_number_name', translation._('number + name')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('display_method_writable'),
                                         name: 'display_method_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'display_method_writable',
-                                        hideLabel: true,  
-                                        cls: 'cboxmiddle',                                      
                                         anchor: '98%'
-                                    }]
                                 }]
-                            },{          
-                                layout: 'column',
+                            }]
+                        },{          
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .27,
+                                layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('call_waiting'),
+                                    name: 'call_waiting',
+                                    id: 'call_waiting',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
                                     anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('call_waiting'),
-                                        name: 'call_waiting',
-                                        id: 'call_waiting',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', translation._('on')],
-                                                ['visual', translation._('visual')],
-                                                ['ringer', translation._('ringer')],
-                                                ['off', translation._('off')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- none -')],                                        
+                                            ['on', translation._('on')],
+                                            ['visual', translation._('visual')],
+                                            ['ringer', translation._('ringer')],
+                                            ['off', translation._('off')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('tone_scheme_writable'),
                                         name: 'tone_scheme_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'tone_scheme_writable',
-                                        hideLabel: true,         
-                                        cls: 'cboxmiddle',                               
                                         anchor: '98%'
-                                    }]
-                                },{
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
+                                }]
+                            },{
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('mwi_notification'),
+                                    name: 'mwi_notification',
+                                    id: 'mwi_notification',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
                                     anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('mwi_notification'),
-                                        name: 'mwi_notification',
-                                        id: 'mwi_notification',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['silent', translation._('silent')],
-                                                ['beep', translation._('beep')],
-                                                ['reminder', translation._('reminder')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- none -')],                                        
+                                            ['silent', translation._('silent')],
+                                            ['beep', translation._('beep')],
+                                            ['reminder', translation._('reminder')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('mwi_notification_writable'),
                                         name: 'mwi_notification_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'mwi_notification_writable',
-                                        hideLabel: true,        
-                                        cls: 'cboxmiddle',                                
                                         anchor: '98%'
-                                    }]
-                                }, {
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
+                                }]
+                            }, {
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('mwi_dialtone'),
+                                    name: 'mwi_dialtone',
+                                    id: 'mwi_dialtone',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
                                     anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('mwi_dialtone'),
-                                        name: 'mwi_dialtone',
-                                        id: 'mwi_dialtone',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['normal', translation._('normal')],
-                                                ['stutter', translation._('stutter')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- none -')],                                        
+                                            ['normal', translation._('normal')],
+                                            ['stutter', translation._('stutter')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('mwi_dialtone_writable'),
                                         name: 'mwi_dialtone_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'mwi_dialtone_writable',
-                                        hideLabel: true,     
-                                        cls: 'cboxmiddle',                                  
                                         anchor: '98%'
-                                    }]
                                 }]
-                            }, {          
-                                layout: 'column',
+                            }]
+                        }, {          
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .27,
+                                layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('headset_device'),
+                                    name: 'headset_device',
+                                    id: 'headset_device',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
                                     anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('headset_device'),
-                                        name: 'headset_device',
-                                        id: 'headset_device',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['none', translation._('none')],
-                                                ['headset_rj', translation._('headset_rj')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- none -')],                                        
+                                            ['none', translation._('none')],
+                                            ['headset_rj', translation._('headset_rj')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('headset_device_writable'),
                                         name: 'headset_device_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'headset_device_writable',
-                                        hideLabel: true,    
-                                        cls: 'cboxmiddle',                                    
                                         anchor: '98%'
-                                    }]
-                                }, {
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
+                                }]
+                            }, {
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [
+                                    new Ext.ux.form.TriCheckbox({
                                         fieldLabel: translation._('message_led_other'),
                                         name: 'message_led_other',
                                         id: 'message_led_other',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'checkbox',
-                                        fieldLabel: translation._('message_led_other_writable'),
-                                        name: 'message_led_other_writable',
-                                        id: 'message_led_other_writable',
-                                        hideLabel: true,  
-                                        cls: 'cboxmiddle',                                      
-                                        anchor: '98%'
-                                    }]
-                                },{
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('global_missed_counter'),
-                                        name: 'global_missed_counter',
-                                        id: 'global_missed_counter',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'checkbox',
-                                        fieldLabel: translation._('global_missed_counter_writable'),
-                                        name: 'global_missed_counter_writable',
-                                        id: 'global_missed_counter_writable',
-                                        hideLabel: true,     
-                                        cls: 'cboxmiddle',                                   
-                                        anchor: '98%'
-                                    }]
-                                }]
-                            }, {          
-                                layout: 'column',
+                                        anchor: '100%'
+                                    })
+                                ]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('message_led_other_writable'),
+                                        name: 'message_led_other_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
+                                        id: 'message_led_other_writable',
+                                        anchor: '98%'
+                                }]
+                            },{
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [new Ext.ux.form.TriCheckbox({
+                                        fieldLabel: translation._('global_missed_counter'),
+                                        name: 'global_missed_counter',
+                                        id: 'global_missed_counter',                                        
+                                        anchor: '98%'
+                                    })    ]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('global_missed_counter_writable'),
+                                        name: 'global_missed_counter_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
+                                        id: 'global_missed_counter_writable',
+                                        anchor: '98%'
+                                }]
+                            }]
+                        }, {          
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [                                    
+                                    new Ext.ux.form.TriCheckbox({
                                         fieldLabel: translation._('scroll_outgoing'),
                                         name: 'scroll_outgoing',
-                                        id: 'scroll_outgoing',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                        id: 'scroll_outgoing',                                       
+                                        anchor: '98%'
+                                    })  ]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('scroll_outgoing_writable'),
                                         name: 'scroll_outgoing_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'scroll_outgoing_writable',
-                                        hideLabel: true,   
-                                        cls: 'cboxmiddle',                                     
                                         anchor: '98%'
-                                    }]
-                                }, {
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
+                                }]
+                            }, {
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [                 
+                                    new Ext.ux.form.TriCheckbox({
                                         fieldLabel: translation._('show_local_line'),
                                         name: 'show_local_line',
-                                        id: 'show_local_line',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                        id: 'show_local_line',                                  
+                                        anchor: '98%'
+                                    })]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('show_local_line_writable'),
                                         name: 'show_local_line_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'show_local_line_writable',
-                                        hideLabel: true,    
-                                        cls: 'cboxmiddle',                                    
                                         anchor: '98%'
-                                    }]
-                                }, {
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
+                                }]
+                            }, {
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [     
+                                    new Ext.ux.form.TriCheckbox({
                                         fieldLabel: translation._('show_call_status'),
                                         name: 'show_call_status',
-                                        id: 'show_call_status',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['on', 'on'],
-                                                ['off', 'off']
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
+                                        id: 'show_call_status',                                       
+                                        anchor: '98%'
+                                    }) ]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
                                         xtype: 'checkbox',
                                         fieldLabel: translation._('show_call_status_writable'),
                                         name: 'show_call_status_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
                                         id: 'show_call_status_writable',
-                                        hideLabel: true,        
-                                        cls: 'cboxmiddle',                                
                                         anchor: '98%'
-                                    }]
                                 }]
                             }]
                         }]
-                    }, {
-                        layout: 'form',
-                        border: false,
-                        anchor: '100%',
-                        items: [{
-                            xtype: 'fieldset',
-                            checkboxToggle: false,
-                            id: 'general information',
-                            title: translation._('redirecting'),
-                            autoHeight: true,
-                            anchor: '100%',
-                            defaults: {
-                                anchor: '100%'
-                            },
-                            items: [{
-                                layout: 'column',
-                                border: false,
-                                anchor: '100%',
-                                items: [{ 
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: translation._('redirect_event'),
-                                        name: 'redirect_event',
-                                        id: 'redirect_event',
-                                        mode: 'local',
-                                        displayField: 'name',
-                                        valueField: 'id',
-                                        anchor: '100%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        listeners: {
-                                            select: function(_combo, _record, _index) {
-                                                if (_record.data.name == 'time') {
-                                                    Ext.getCmp('redirect_time').setDisabled(false);
-                                                }
-                                                
-                                                if(_record.data.name != 'time') {
-                                                    Ext.getCmp('redirect_time').reset();                                                    
-                                                    Ext.getCmp('redirect_time').setDisabled(true);
-                                                }
-                                            }
-                                        },
-                                        store: new Ext.data.SimpleStore({
-                                            id: 'id',
-                                            fields: ['id', 'name'],
-                                            data: [
-                                                ['all', translation._('all')],
-                                                ['busy', translation._('busy')],
-                                                ['none', translation._('none')],
-                                                ['time', translation._('time')]
-                                            ]
-                                        })
-                                    }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'checkbox',
-                                        fieldLabel: translation._('redirect_event_writable'),
-                                        name: 'redirect_event_writable',
-                                        id: 'redirect_event_writable',
-                                        hideLabel: true,                 
-                                        cls: 'cboxmiddle',                       
-                                        anchor: '98%'
-                                    }]
-                                }, {
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'textfield',
-                                        fieldLabel: translation._('redirect_number'),
-                                        name: 'redirect_number',
-                                        id: 'redirect_number',
-                                        anchor: '100%',
-                                        maxLength: 255
-                                   }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'checkbox',
-                                        fieldLabel: translation._('redirect_number_writable'),
-                                        name: 'redirect_number_writable',
-                                        id: 'redirect_number_writable',
-                                        hideLabel: true,             
-                                        cls: 'cboxmiddle',                                                                   
-                                        anchor: '98%'
-                                    }]
-                                }, {
-                                    columnWidth: .3,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'numberfield',
-                                        fieldLabel: translation._('redirect_time'),
-                                        disabled: true,
-                                        name: 'redirect_time',
-                                        id: 'redirect_time',
-                                        anchor: '100%',
-                                        maxLength: 5
-                                   }]
-                                }, {
-                                    columnWidth: .03,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'checkbox',
-                                        fieldLabel: translation._('redirect_time_writable'),
-                                        name: 'redirect_time_writable',
-                                        id: 'redirect_time_writable',
-                                        hideLabel: true,                                        
-                                        cls: 'cboxmiddle',
-                                        anchor: '98%'
-                                    }]
-                                }]  
-                            }]   // column
-                        }]   // fieldsest
                     }]   // form 
                 }]   // center
             };
             
             return _dialog;   
         },
+        
+        
+        editSettingRedirectDialog: function(){
+        
+            var translation = new Locale.Gettext();
+            translation.textdomain('Voipmanager');
+            
+        
+            var _dialog = {
+                title: translation._('redirect'),
+                layout: 'border',
+                anchor: '100% 100%',
+                layoutOnTabChange: true,
+                defaults: {
+                    border: true,
+                    frame: true
+                },
+                items: [{
+                    layout: 'hfit',
+                    containsScrollbar: false,
+                    //margins: '0 18 0 5',
+                    autoScroll: false,
+                    id: 'editSettingRedirectDialog',
+                    region: 'center',
+                    items: [{
+                        layout: 'form',
+                        border: false,
+                        anchor: '100%',
+                        items: [{
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{ 
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('redirect_event'),
+                                    name: 'redirect_event',
+                                    id: 'redirect_event',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '100%',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    listeners: {
+                                        select: function(_combo, _record, _index) {
+                                            if (_record.data.name == 'time') {
+                                                Ext.getCmp('redirect_time').setDisabled(false);
+                                            }
+                                            
+                                            if(_record.data.name != 'time') {
+                                                Ext.getCmp('redirect_time').reset();                                                    
+                                                Ext.getCmp('redirect_time').setDisabled(true);
+                                            }
+                                        }
+                                    },
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            ['all', translation._('all')],
+                                            ['busy', translation._('busy')],
+                                            ['none', translation._('none')],
+                                            ['time', translation._('time')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('redirect_event_writable'),
+                                        name: 'redirect_event_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
+                                        id: 'redirect_event_writable',
+                                        anchor: '98%'
+                                }]
+                            }, {
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('redirect_number'),
+                                    name: 'redirect_number',
+                                    id: 'redirect_number',
+                                    anchor: '100%',
+                                    maxLength: 255
+                               }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('redirect_number_writable'),
+                                        name: 'redirect_number_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
+                                        id: 'redirect_number_writable',
+                                        anchor: '98%'
+                                }]
+                            }, {
+                                columnWidth: .27,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'numberfield',
+                                    fieldLabel: translation._('redirect_time'),
+                                    disabled: true,
+                                    name: 'redirect_time',
+                                    id: 'redirect_time',
+                                    anchor: '100%',
+                                    maxLength: 5
+                               }]
+                            }, {
+                                columnWidth: .06,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                        xtype: 'checkbox',
+                                        fieldLabel: translation._('redirect_time_writable'),
+                                        name: 'redirect_time_writable',
+                                        hideLabel: true,
+                                        cls: 'cboxmiddle',
+                                        id: 'redirect_time_writable',
+                                        anchor: '98%'
+                                }]
+                            }]  
+                        }]   // column
+                    }]
+                }]
+            };
+            
+            return _dialog;           
+        },
+        
+        
+        
+        
+        
         
         updateToolbarButtons: function()
         {
@@ -1200,8 +1161,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
         display: function(_settingData, _snomLines, _lines, _templates, _locations) 
         {
-
-
+            
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
                 id : 'voipmanager_editSettingForm',
@@ -1223,7 +1183,8 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                         id: 'editSettingTabPanel',
                         layoutOnTabChange:true,  
                         items:[
-                            this.editSettingMainDialog()
+                            this.editSettingMainDialog(),
+                            this.editSettingRedirectDialog()
                         ]
                     })
                    
@@ -1242,6 +1203,19 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             this.updateSettingRecord(_settingData);
             this.updateToolbarButtons();           
             dialog.getForm().loadRecord(this.settingRecord);
+  /*          
+            new Ext.ToolTip({
+                target: 'web_language_writable',
+                title: 'Mouse Track',
+                width:200,
+                html: 'This tip will follow...',
+                trackMouse:true
+            });
+            
+            
+*/          
+
+            
         } 
 };
 

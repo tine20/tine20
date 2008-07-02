@@ -120,6 +120,23 @@ class Voipmanager_Backend_Snom_Setting
         $settingId = $_setting->getId();
         $settingData = $_setting->toArray();
         unset($settingData['id']);
+     
+        $writableFields = array("with_flash","message_led_other","global_missed_counter","scroll_outgoing","show_local_line","show_call_status","auto_connect_indication","privacy_out","privacy_in","enable_keyboard_lock","keyboard_lock");
+        foreach($writableFields AS $wField) 
+        { 
+            if(empty($settingData[$wField])) {      
+                $settingData[$wField] = NULL;
+            }
+            
+            if($settingData[$wField] === false) {                     
+                $settingData[$wField] = 'false'; 
+            }
+            
+            if($settingData[$wField] === true) {                         
+                $settingData[$wField] = 'true'; 
+            }            
+        }
+
 
         $where = array($this->_db->quoteInto('id = ?', $settingId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_settings', $settingData, $where);

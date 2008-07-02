@@ -31,3 +31,7 @@
     left: 2px !important;
     top: 9px !important;
 }
+
+.x-form-check-wrap {
+    line-height:24px !important;
+}

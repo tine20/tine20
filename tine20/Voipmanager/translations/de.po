@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-01 16:05+0100\n"
+"POT-Creation-Date: 2008-07-02 15:50+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -59,8 +59,8 @@ msgstr "id"
 #: Voipmanager/js/Asterisk/Context.js:191
 #: Voipmanager/js/Asterisk/SipPeer.js:206
 #: Voipmanager/js/Snom/Settings.js:202
-#: Voipmanager/js/Snom/Settings.js:494
-#: Voipmanager/js/Snom/Settings.js:633
+#: Voipmanager/js/Snom/Settings.js:497
+#: Voipmanager/js/Snom/Settings.js:653
 #: Voipmanager/js/Snom/Templates.js:191
 msgid "name"
 msgstr "Name"
@@ -70,7 +70,7 @@ msgstr "Name"
 #: Voipmanager/js/Snom/Location.js:207
 #: Voipmanager/js/Snom/Location.js:447
 #: Voipmanager/js/Snom/Phone.js:692
-#: Voipmanager/js/Snom/Settings.js:509
+#: Voipmanager/js/Snom/Settings.js:512
 #: Voipmanager/js/Snom/Software.js:200
 #: Voipmanager/js/Snom/Software.js:435
 #: Voipmanager/js/Snom/Templates.js:192
@@ -904,32 +904,32 @@ msgid "No settings to display"
 msgstr "Keine Settings vorhanden"
 
 #: Voipmanager/js/Snom/Settings.js:204
-#: Voipmanager/js/Snom/Settings.js:542
+#: Voipmanager/js/Snom/Settings.js:534
 msgid "web_language"
 msgstr "Webseitensprache"
 
 #: Voipmanager/js/Snom/Settings.js:205
-#: Voipmanager/js/Snom/Settings.js:577
+#: Voipmanager/js/Snom/Settings.js:583
 msgid "language"
 msgstr "Sprache"
 
 #: Voipmanager/js/Snom/Settings.js:206
-#: Voipmanager/js/Snom/Settings.js:618
+#: Voipmanager/js/Snom/Settings.js:638
 msgid "display_method"
 msgstr "Nummernanzeigestil"
 
 #: Voipmanager/js/Snom/Settings.js:208
-#: Voipmanager/js/Snom/Settings.js:680
+#: Voipmanager/js/Snom/Settings.js:728
 msgid "mwi_notification"
 msgstr "Hinweis für 'Nachricht liegt vor'"
 
 #: Voipmanager/js/Snom/Settings.js:209
-#: Voipmanager/js/Snom/Settings.js:707
+#: Voipmanager/js/Snom/Settings.js:769
 msgid "mwi_dialtone"
 msgstr "Wählton für 'Nachricht liegt vor'"
 
 #: Voipmanager/js/Snom/Settings.js:210
-#: Voipmanager/js/Snom/Settings.js:738
+#: Voipmanager/js/Snom/Settings.js:814
 msgid "headset_device"
 msgstr "Kopfhörernutzung"
 
@@ -938,37 +938,37 @@ msgid "with_flash"
 msgstr "Benutze Flashplugin"
 
 #: Voipmanager/js/Snom/Settings.js:214
-#: Voipmanager/js/Snom/Settings.js:764
+#: Voipmanager/js/Snom/Settings.js:854
 msgid "message_led_other"
-msgstr "Message LED für Dialog State/Verpasste Anrufe"
+msgstr "Message LED für verpasste Anrufe"
 
 #: Voipmanager/js/Snom/Settings.js:215
-#: Voipmanager/js/Snom/Settings.js:790
+#: Voipmanager/js/Snom/Settings.js:894
 msgid "global_missed_counter"
 msgstr "Globaler 'Verpasste Anrufe' Zähler"
 
 #: Voipmanager/js/Snom/Settings.js:216
-#: Voipmanager/js/Snom/Settings.js:821
+#: Voipmanager/js/Snom/Settings.js:939
 msgid "scroll_outgoing"
 msgstr "Scrollen aktiver Identitäten"
 
 #: Voipmanager/js/Snom/Settings.js:217
-#: Voipmanager/js/Snom/Settings.js:847
+#: Voipmanager/js/Snom/Settings.js:979
 msgid "show_local_line"
 msgstr "Identitäts-Index anzeigen"
 
 #: Voipmanager/js/Snom/Settings.js:218
-#: Voipmanager/js/Snom/Settings.js:873
+#: Voipmanager/js/Snom/Settings.js:1019
 msgid "show_call_status"
 msgstr "Anrufstatusinfo anzeigen"
 
 #: Voipmanager/js/Snom/Settings.js:219
-#: Voipmanager/js/Snom/Settings.js:920
+#: Voipmanager/js/Snom/Settings.js:1099
 msgid "redirect_event"
 msgstr "Ereignis"
 
 #: Voipmanager/js/Snom/Settings.js:220
-#: Voipmanager/js/Snom/Settings.js:960
+#: Voipmanager/js/Snom/Settings.js:1153
 msgid "redirect_number"
 msgstr "Ziel"
 
@@ -993,7 +993,7 @@ msgid "redirect_busy_off_code"
 msgstr "redirect busy off code"
 
 #: Voipmanager/js/Snom/Settings.js:226
-#: Voipmanager/js/Snom/Settings.js:973
+#: Voipmanager/js/Snom/Settings.js:1180
 msgid "redirect_time"
 msgstr "Zeitüberschreitung (Sek)"
 
@@ -1109,178 +1109,247 @@ msgstr "keyboard lock emergency"
 msgid "emergency_proxy"
 msgstr "emergency proxy"
 
-#: Voipmanager/js/Snom/Settings.js:467
+#: Voipmanager/js/Snom/Settings.js:470
 msgid "SettingsMain"
 msgstr "Haupteinstellungen"
 
-#: Voipmanager/js/Snom/Settings.js:524
-msgid "general information"
-msgstr "Allgemeine Informationen"
-
-#: Voipmanager/js/Snom/Settings.js:556
-#: Voipmanager/js/Snom/Settings.js:591
+#: Voipmanager/js/Snom/Settings.js:548
+#: Voipmanager/js/Snom/Settings.js:597
 msgid "English"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:557
-#: Voipmanager/js/Snom/Settings.js:593
+#: Voipmanager/js/Snom/Settings.js:549
+#: Voipmanager/js/Snom/Settings.js:599
 msgid "Deutsch"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:558
-#: Voipmanager/js/Snom/Settings.js:594
+#: Voipmanager/js/Snom/Settings.js:550
+#: Voipmanager/js/Snom/Settings.js:600
 msgid "Espanol"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:559
-#: Voipmanager/js/Snom/Settings.js:595
+#: Voipmanager/js/Snom/Settings.js:551
+#: Voipmanager/js/Snom/Settings.js:601
 msgid "Francais"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:560
-#: Voipmanager/js/Snom/Settings.js:596
+#: Voipmanager/js/Snom/Settings.js:552
+#: Voipmanager/js/Snom/Settings.js:602
 msgid "Italiano"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:561
-#: Voipmanager/js/Snom/Settings.js:598
+#: Voipmanager/js/Snom/Settings.js:553
+#: Voipmanager/js/Snom/Settings.js:604
 msgid "Nederlands"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:562
-#: Voipmanager/js/Snom/Settings.js:600
+#: Voipmanager/js/Snom/Settings.js:554
+#: Voipmanager/js/Snom/Settings.js:606
 #, fuzzy
 msgid "Portugues"
 msgstr "Port"
 
-#: Voipmanager/js/Snom/Settings.js:563
-#: Voipmanager/js/Snom/Settings.js:602
+#: Voipmanager/js/Snom/Settings.js:555
+#: Voipmanager/js/Snom/Settings.js:608
 msgid "Suomi"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:564
-#: Voipmanager/js/Snom/Settings.js:603
+#: Voipmanager/js/Snom/Settings.js:556
+#: Voipmanager/js/Snom/Settings.js:609
 msgid "Svenska"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:565
-#: Voipmanager/js/Snom/Settings.js:604
+#: Voipmanager/js/Snom/Settings.js:557
+#: Voipmanager/js/Snom/Settings.js:610
 #, fuzzy
 msgid "Dansk"
 msgstr "Maske"
 
-#: Voipmanager/js/Snom/Settings.js:566
-#: Voipmanager/js/Snom/Settings.js:605
+#: Voipmanager/js/Snom/Settings.js:558
+#: Voipmanager/js/Snom/Settings.js:611
 msgid "Norsk"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:592
+#: Voipmanager/js/Snom/Settings.js:569
+#, fuzzy
+msgid "web_language_writable"
+msgstr "Webseitensprache"
+
+#: Voipmanager/js/Snom/Settings.js:598
 msgid "English(UK)"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:597
+#: Voipmanager/js/Snom/Settings.js:603
 msgid "Cestina"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:599
+#: Voipmanager/js/Snom/Settings.js:605
 msgid "Polski"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:601
+#: Voipmanager/js/Snom/Settings.js:607
 msgid "Slovencina"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:606
+#: Voipmanager/js/Snom/Settings.js:612
 msgid "Japanese"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:607
+#: Voipmanager/js/Snom/Settings.js:613
 msgid "Chinese"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:632
+#: Voipmanager/js/Snom/Settings.js:624
+#, fuzzy
+msgid "language_writable"
+msgstr "Sprache"
+
+#: Voipmanager/js/Snom/Settings.js:652
 msgid "whole url"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:634
-#, fuzzy
+#: Voipmanager/js/Snom/Settings.js:654
 msgid "number"
-msgstr "Name"
+msgstr "Nummer"
 
-#: Voipmanager/js/Snom/Settings.js:635
+#: Voipmanager/js/Snom/Settings.js:655
 msgid "name + number"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:636
+#: Voipmanager/js/Snom/Settings.js:656
 msgid "number + name"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:652
+#: Voipmanager/js/Snom/Settings.js:667
+#, fuzzy
+msgid "display_method_writable"
+msgstr "Nummernanzeigestil"
+
+#: Voipmanager/js/Snom/Settings.js:686
 msgid "call_waiting"
 msgstr "Anklopfen"
 
-#: Voipmanager/js/Snom/Settings.js:666
-#, fuzzy
+#: Voipmanager/js/Snom/Settings.js:700
 msgid "on"
-msgstr "none"
+msgstr "On"
 
-#: Voipmanager/js/Snom/Settings.js:667
+#: Voipmanager/js/Snom/Settings.js:701
 msgid "visual"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:668
+#: Voipmanager/js/Snom/Settings.js:702
 msgid "ringer"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:669
+#: Voipmanager/js/Snom/Settings.js:703
 msgid "off"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:694
+#: Voipmanager/js/Snom/Settings.js:714
+#, fuzzy
+msgid "tone_scheme_writable"
+msgstr "Ruftonschema"
+
+#: Voipmanager/js/Snom/Settings.js:742
 msgid "silent"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:695
+#: Voipmanager/js/Snom/Settings.js:743
 msgid "beep"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:696
+#: Voipmanager/js/Snom/Settings.js:744
 msgid "reminder"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:721
+#: Voipmanager/js/Snom/Settings.js:755
+#, fuzzy
+msgid "mwi_notification_writable"
+msgstr "Hinweis für 'Nachricht liegt vor'"
+
+#: Voipmanager/js/Snom/Settings.js:783
 msgid "normal"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:722
+#: Voipmanager/js/Snom/Settings.js:784
 msgid "stutter"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:752
-#: Voipmanager/js/Snom/Settings.js:948
+#: Voipmanager/js/Snom/Settings.js:795
+#, fuzzy
+msgid "mwi_dialtone_writable"
+msgstr "Wählton für 'Nachricht liegt vor'"
+
+#: Voipmanager/js/Snom/Settings.js:828
+#: Voipmanager/js/Snom/Settings.js:1127
 msgid "none"
 msgstr "none"
 
-#: Voipmanager/js/Snom/Settings.js:753
+#: Voipmanager/js/Snom/Settings.js:829
 #, fuzzy
 msgid "headset_rj"
 msgstr "headset device"
 
-#: Voipmanager/js/Snom/Settings.js:903
-msgid "redirecting"
+#: Voipmanager/js/Snom/Settings.js:840
+#, fuzzy
+msgid "headset_device_writable"
+msgstr "Kopfhörernutzung"
+
+#: Voipmanager/js/Snom/Settings.js:880
+#, fuzzy
+msgid "message_led_other_writable"
+msgstr "Message LED für verpasste Anrufe"
+
+#: Voipmanager/js/Snom/Settings.js:920
+#, fuzzy
+msgid "global_missed_counter_writable"
+msgstr "Globaler 'Verpasste Anrufe' Zähler"
+
+#: Voipmanager/js/Snom/Settings.js:965
+#, fuzzy
+msgid "scroll_outgoing_writable"
+msgstr "Scrollen aktiver Identitäten"
+
+#: Voipmanager/js/Snom/Settings.js:1005
+#, fuzzy
+msgid "show_local_line_writable"
+msgstr "Identitäts-Index anzeigen"
+
+#: Voipmanager/js/Snom/Settings.js:1045
+#, fuzzy
+msgid "show_call_status_writable"
+msgstr "Anrufstatusinfo anzeigen"
+
+#: Voipmanager/js/Snom/Settings.js:1069
+msgid "redirect"
 msgstr "Umleitung"
 
-#: Voipmanager/js/Snom/Settings.js:946
+#: Voipmanager/js/Snom/Settings.js:1125
 msgid "all"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:947
+#: Voipmanager/js/Snom/Settings.js:1126
 msgid "busy"
 msgstr ""
 
-#: Voipmanager/js/Snom/Settings.js:949
+#: Voipmanager/js/Snom/Settings.js:1128
 msgid "time"
 msgstr ""
+
+#: Voipmanager/js/Snom/Settings.js:1139
+#, fuzzy
+msgid "redirect_event_writable"
+msgstr "Ereignis"
+
+#: Voipmanager/js/Snom/Settings.js:1166
+#, fuzzy
+msgid "redirect_number_writable"
+msgstr "Ziel"
+
+#: Voipmanager/js/Snom/Settings.js:1194
+#, fuzzy
+msgid "redirect_time_writable"
+msgstr "redirect time number"
 
 #: Voipmanager/js/Snom/Software.js:90
 msgid "add software"
@@ -1350,6 +1419,8 @@ msgstr "Tastaturlayout"
 msgid "Settings"
 msgstr "Einstellungen"
 
+#~ msgid "general information"
+#~ msgstr "Allgemeine Informationen"
 #~ msgid "Software Image"
 #~ msgstr "Name"
 #~ msgid "phone IP address"
