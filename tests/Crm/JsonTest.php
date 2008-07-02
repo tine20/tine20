@@ -331,15 +331,19 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         $deleteIds = array();
         
+        $backend = new Tinebase_Relation_Backend_Sql();        
         foreach ($result['results'] as $lead) {
             $deleteIds[] = $lead['id'];
+
+            // purge all relations
+            $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $lead['id']);
         }
         
         //print_r($deleteIds);
         
         $encodedLeadIds = Zend_Json::encode($deleteIds);
         
-        $json->deleteLeads($encodedLeadIds);
+        $json->deleteLeads($encodedLeadIds);        
                 
         $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));
         $this->assertEquals(0, $result['totalcount']);     

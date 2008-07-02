@@ -364,6 +364,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('UnderflowException');
         
         Crm_Controller::getInstance()->getLead($this->_objects['initialLead']);
+        
+        // purge all relations
+        $backend = new Tinebase_Relation_Backend_Sql();        
+        $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $this->_objects['initialLead']->getId());
     }
     
     /**
