@@ -425,7 +425,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $responsible = array();
         $tasks = array();
         foreach($relations as $relation) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $relation->type . ' for id ' . $_lead->getId());
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $relation->type . ' for id ' . $_lead->getId());
             switch(strtolower($relation->type)) {
                 case 'customer':
                     $customer[] = $relation->related_id;
