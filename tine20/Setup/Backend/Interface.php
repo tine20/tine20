@@ -55,19 +55,19 @@ interface Setup_Backend_Interface
     * add column/field to database table
     * 
     * @param string tableName
-    * @param Setup_Backend_Schema_Field declaration
+    * @param Setup_Backend_Schema_Field_Abstract declaration
     * @param int position of future column
     */    
-    public function addCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_position = NULL);
+    public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL);
     
     /*
     * rename or redefines column/field in database table
     * 
     * @param string tableName
-    * @param Setup_Backend_Schema_Field declaration
+    * @param Setup_Backend_Schema_Field_Abstract declaration
     * @param string old column/field name 
     */    
-    public function alterCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_oldName = NULL);
+    public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL);
 
     /*
     * drop column/field in database table
