@@ -235,10 +235,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * add column/field to database table
      * 
      * @param string tableName
-     * @param Setup_Backend_Schema_Field declaration
+     * @param Setup_Backend_Schema_Field_Abstract declaration
      * @param int position of future column
      */    
-    public function addCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_position = NULL)
+    public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
         
@@ -260,10 +260,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * rename or redefines column/field in database table
      * 
      * @param string tableName
-     * @param Setup_Backend_Schema_Field declaration
+     * @param Setup_Backend_Schema_Field_Abstract declaration
      * @param string old column/field name 
      */    
-    public function alterCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_oldName = NULL)
+    public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
         $oldName = $_oldName ;
@@ -366,7 +366,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * create the right mysql-statement-snippet for columns/fields
      *
-     * @param Setup_Backend_Schema_Field field / column
+     * @param Setup_Backend_Schema_Field_Abstract field / column
      * @return string
      */
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field)
