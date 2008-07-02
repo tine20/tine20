@@ -181,6 +181,22 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
                 new Crm_Model_Product(array(
                     'id' => 1003,
                     'productsource' => 'Just a phpunit test product #3',
+                    'price' => '19.78')),
+                new Crm_Model_Product(array(
+                    'id' => 1004,
+                    'productsource' => 'Just a phpunit test product #4',
+                    'price' => '20.07'))
+        );
+        
+        // products to update
+        $this->_objects['someProductsToUpdate'] = array(
+                new Crm_Model_Product(array(
+                    'id' => 1002,
+                    'productsource' => 'Just a phpunit test product #2 UPDATED',
+                    'price' => '18.05')),
+                new Crm_Model_Product(array(
+                    'id' => 1003,
+                    'productsource' => 'Just a phpunit test product #3 UPDATED',
                     'price' => '19.78'))
         );
     }
@@ -409,6 +425,50 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Crm_Model_Leadstate', $state);
         $this->assertTrue($state->isValid());
+    }
+    
+    /**
+     * try to save more than one product
+     * 
+     * @todo complete test for products to delete
+     */
+    public function testSaveProducts() {
+    	$someProducts = new Tinebase_Record_RecordSet('Crm_Model_Product',
+                $this->_objects['someProducts']);
+        
+        // save / create some products
+        $resultProducts = Crm_Controller::getInstance()
+                ->saveProducts($someProducts);
+        
+        $this->assertEquals($someProducts, $resultProducts);
+        
+        // get every saved product back from database one by one
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        
+        foreach ($this->_objects['someProducts'] as $product) {
+        	$this->assertEquals($product, $backend->get($product->id));
+        }
+        
+        // update some products
+        $someProducts = new Tinebase_Record_RecordSet('Crm_Model_Product',
+                $this->_objects['someProductsToUpdate']);
+        
+        $resultProducts = Crm_Controller::getInstance()
+                ->saveProducts($someProducts);
+        
+        foreach ($this->_objects['someProductsToUpdate'] as $product) {
+            $this->assertEquals($product['productsource'],
+                    $backend->get($product->id)->productsource);
+        }
+        
+        // cleanup
+        foreach ($this->_objects['someProducts'] as $product) {
+            $backend->delete($product->id);
+        }
+        
+        foreach ($this->_objects['someProductsToUpdate'] as $product) {
+            $backend->delete($product->id);
+        }
     }
     
 }		

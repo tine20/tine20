@@ -76,10 +76,9 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
         }
         
         $this->_objects['initialProduct'] = new Crm_Model_Product(array(
-            'id' => 1000,
-            'productsource' => 'Just to test',
-            'price' => '47.11'
-        ));
+                'id' => 1000,
+                'productsource' => 'Just a phpunit test product #0',
+                'price' => '47.11'));
         
         $this->_backend = new Crm_Backend_Products();
     }
