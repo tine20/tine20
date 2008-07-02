@@ -60,6 +60,7 @@ abstract class Setup_Backend_Schema_Field_Abstract
      * @var mixed
      */
     public $value;
+    
     /**
      * value / decimal definition / enum values / default values
      *

@@ -14,7 +14,9 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
 {
     public function __construct($_definition = NULL)
     {
-        $this->_setField($_definition);
+        if($_definition !== NULL) {
+            $this->_setField($_definition);
+        }
     }
 
     /**
