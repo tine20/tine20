@@ -123,7 +123,7 @@ class Setup_Import_TineInitial
         $applications = Tinebase_Application::getInstance()->getApplications();
         foreach ($applications as $application) {
             
-            if ( $application->name  !== 'Admin' ) {
+            if ($application->name  !== 'Admin') {
 
                 /***** All applications except Admin *****/
             
@@ -144,7 +144,7 @@ class Setup_Import_TineInitial
                     );
                 }                                
 
-                } else {
+            } else {
 
                 /***** Admin application *****/
 
@@ -158,6 +158,18 @@ class Setup_Import_TineInitial
                     );
                 }                                                
             }
+            
+            // more application specific rights
+            if ($application->name  === 'Crm') { 
+                // manage roles right for user role
+                Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                    $userRole->getId(), 
+                    $application->getId(), 
+                    Crm_Acl_Rights::MANAGE_LEADS
+                );                
+            }
+           
+            
         } // end foreach applications                               
         
         # give Users group read rights to the internal addressbook
