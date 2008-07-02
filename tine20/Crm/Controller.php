@@ -203,31 +203,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $leadBackend->create($_lead);
         
-        /*
-        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
-        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
-        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
-        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');
-
-        // products (add lead id first)
-        $products = array();
-        if (is_array($_lead->products)) {
-            foreach ($_lead->products as $product) {
-                $product['lead_id'] = $lead->getId(); 
-                $products[] = $product;     
-            }
-        }
-
-        try {
-            $lead->products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $products);
-        } catch (Exception $e) {
-            throw $e;
-        }                
-
-        $this->saveLeadProducts($lead->getId(), $lead->products);
-        
-        */
-        
         // set relations & links
         $this->setLeadLinks($lead->getId(), $_lead);        
         
@@ -264,29 +239,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $backend->updateLead($_lead);
-
-        /*
-        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
-        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
-        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
-        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');  
-
-        // products (add lead id first)
-        $products = array();
-        if (is_array($_lead->products)) {
-            foreach ($_lead->products as $product) {
-                $product['lead_id'] = $lead->getId(); 
-                $products[] = $product;     
-            }
-        }
-        try {
-            $lead->products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $products);
-        } catch (Exception $e) {
-            throw $e;
-        }                
-        
-        $this->saveLeadProducts($lead->getId(), $lead->products);
-        */
 
         // set relations & links
         $this->setLeadLinks($lead->getId(), $_lead);        
@@ -328,15 +280,12 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
     /*********************** links functions ************************/
     
-    // @todo rework link functions / use new relation class
-
     /**
      * set lead links and relations (contacts, tasks, products)
      *
      * @param integer $_leadId
      * @param Crm_Model_Lead $_lead
      * 
-     * @todo implement & test
      * @todo add different backend types
      * @todo add creation of new records
      */
@@ -412,7 +361,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      *
      * @param Crm_Model_Lead $_lead
      * 
-     * @todo implement & test
      * @todo add different backend types
      * @todo return Relation records instead of ids?
      */
@@ -447,96 +395,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $_lead->tasks = $tasks;
         $_lead->products = $this->getLeadProducts($_lead->getId());
         
-    }
-    
-    /**
-     * set lead links for an application
-     *
-     * @param int|Crm_Model_Lead $_leadId
-     * @param array $_linkIds
-     * @param string $_applicationName
-     * @param string $_remark
-     * @return unknown
-     * 
-     * @deprecated 
-     */
-    public function setLinksForApplication($_leadId, $_linkIds, $_applicationName, $_remark = NULL)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-        $applicationName = strtolower($_applicationName);
-        $remark = ( $_remark !== NULL ) ? $_remark : $applicationName;
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'set ' . $_applicationName . 
-        //    ' links for lead id ' . $leadId . ': ' . print_r($_linkIds, true));
-        
-        if(is_array($_linkIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, $applicationName, $_linkIds, $remark);
-        } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, $applicationName, $_remark);
-        }
-        
-        return $result;
     }    
-                
-    /**
-     * get lead links for an application
-     *
-     * @param int|Crm_Model_Lead $_leadId
-     * @param string $_applicationName
-     * @return array with links
-     * 
-     * @deprecated 
-     */
-    public function getLinksForApplication($_leadId, $_applicationName)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-        $applicationName = strtolower($_applicationName);
-        
-        $result = Tinebase_Links::getInstance()->getLinks('crm', $leadId, $applicationName);
-                        
-        return $result;
-    }    
-    
-    /**
-     * fetch ids of linked properties(contacts, tasks, notes)
-     *
-     * @param Crm_Model_Lead $_lead
-     * 
-     * @deprecated
-     */
-    protected function getLinkedProperties(Crm_Model_Lead &$_lead)
-    {
-        $links = Tinebase_Links::getInstance()->getLinks('crm', $_lead->getId());
-        $customer = array();
-        $partner = array();
-        $responsible = array();
-        $tasks = array();
-        foreach($links as $link) {
-            switch(strtolower($link['applicationName'])) {
-                case 'addressbook':
-                    switch($link['remark']) {
-                        case 'customer':
-                            $customer[] = $link['recordId'];
-                            break;
-                        case 'partner':
-                            $partner[] = $link['recordId'];
-                            break;
-                        case 'responsible':
-                            $responsible[] = $link['recordId'];
-                            break;
-                    }
-                    break;
-                case 'tasks':
-                    $tasks[] = $link['recordId'];
-                    break;
-            }
-        }
-        $_lead->customer = $customer;
-        $_lead->partner = $partner;
-        $_lead->responsible = $responsible;
-        $_lead->tasks = $tasks;
-        $_lead->products = $this->getLeadProducts($_lead->getId());
-    }
     
     /*************** products functions *****************/
 
