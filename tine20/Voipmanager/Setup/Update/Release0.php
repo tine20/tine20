@@ -633,7 +633,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
     public function update_5()
     {
         $tableDefinition = "
-<table>
+        <table>
             <name>snom_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
