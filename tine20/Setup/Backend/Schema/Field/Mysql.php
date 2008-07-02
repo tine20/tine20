@@ -21,6 +21,7 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
     /**
      * set Setup_Backend_Schema_Table from a given database query 
      *
+     * @todo this function does not work is_array and -> does not fit together
      * @param stdClass $_declaration
      */    
     protected function _setField($_declaration)
