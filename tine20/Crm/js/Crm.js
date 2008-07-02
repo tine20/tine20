@@ -552,8 +552,8 @@ Tine.Crm.Main = {
         menu.add(
             // @todo    replace with standard popup windows
             {text: this.translation._('Lead states'), handler: Tine.Crm.LeadState.EditDialog},
-            {text: this.translation._('Lead sources'), handler: Tine.Crm.LeadType.EditDialog},
-            {text: this.translation._('Lead types'), handler: Tine.Crm.LeadSource.EditDialog},
+            {text: this.translation._('Lead sources'), handler: Tine.Crm.LeadSource.EditDialog},
+            {text: this.translation._('Lead types'), handler: Tine.Crm.LeadType.EditDialog},
             {text: this.translation._('Products'), handler: Tine.Crm.Product.EditDialog}
         );
 
