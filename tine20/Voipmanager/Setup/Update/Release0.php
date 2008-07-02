@@ -1143,7 +1143,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_7()
     {
-        $declaration = new Setup_Backend_Schema_Field();
+        $declaration = new Setup_Backend_Schema_Field_Xml();
         $declaration->name      = 'tone_scheme';
         $declaration->type      = 'enum';
         $declaration->notnull   = 'false';
@@ -1152,7 +1152,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->addCol('snom_location', $declaration);        
 
 
-        $declaration = new Setup_Backend_Schema_Field();
+        $declaration = new Setup_Backend_Schema_Field_Xml();
         $declaration->name      = 'date_us_format';
         $declaration->type      = 'enum';
         $declaration->notnull   = 'false';
@@ -1161,7 +1161,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->addCol('snom_location', $declaration);                
         
         
-        $declaration = new Setup_Backend_Schema_Field();
+        $declaration = new Setup_Backend_Schema_Field_Xml();
         $declaration->name      = 'time_24_format';
         $declaration->type      = 'enum';
         $declaration->notnull   = 'false';
