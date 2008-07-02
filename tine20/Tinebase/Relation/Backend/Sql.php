@@ -126,16 +126,20 @@ class Tinebase_Relation_Backend_Sql
      * @param  string $_id       own id to get all relations for 
      * @param  string $_degree   only breaks relations of given degree
      * @param  string $_type     only breaks relations of given type
+     * @param  boolean $_returnAll gets all relations (default: only get not deleted/broken relations)
      * @return Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
      */
-    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnBroken = false  ) {
+    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false  ) {
     	$where = array(
     	    'own_model   = ' . $this->_db->getAdapter()->quote($_model),
     	    'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
             'own_id      = ' . $this->_db->getAdapter()->quote($_id),
-    	    //'is_deleted  ='  . $this->_db->getAdapter()->quote((bool)$_returnBroken)
-    	    'is_deleted  ='  . $this->_db->getAdapter()->quote((int)$_returnBroken)
+    	    //'is_deleted  = '  . $this->_db->getAdapter()->quote((bool)$_returnBroken)
     	);
+    	
+    	if (!$_returnAll) {
+    	    $where[] = 'is_deleted = FALSE';
+    	}
     	if ($_degree) {
             $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
         }
@@ -181,6 +185,7 @@ class Tinebase_Relation_Backend_Sql
     	}
     	
     } // end of member function getRelationById
+    
     /**
      * purges(removes from table) all relations
      * 
@@ -188,6 +193,8 @@ class Tinebase_Relation_Backend_Sql
      * @param  string $_ownBackend
      * @param  string $_ownId
      * @return void
+     * 
+     * @todo should this function only purge deleted/broken relations?
      */
     public function purgeAllRelations($_ownModel, $_ownBackend, $_ownId)
     {
