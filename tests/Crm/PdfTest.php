@@ -229,7 +229,6 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         $task = Tasks_Controller::getInstance()->createTask($this->objects['linkedTask']);
 
         $lead = Crm_Controller::getInstance()->getLead($this->objects['leadWithLink']->getId());
-        $lead->customer = array();
         $lead->tasks = array($task->getId());
         $lead = Crm_Controller::getInstance()->updateLead($lead);
         
@@ -242,8 +241,6 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match("/".$task->summary."/", $pdfOutput), "no summary found");
                 
         // remove
-        $lead->tasks = array();
-        $lead = Crm_Controller::getInstance()->updateLead($lead);
         Tasks_Controller::getInstance()->deleteTask($task->getId());
         
         // purge all relations
