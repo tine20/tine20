@@ -1769,9 +1769,125 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
 
         $this->_backend->dropTable('snom_settings');
         $this->_backend->createTable($table);        
-        $this->setApplicationVersion('Voipmanager', '0.8');
+        $this->setApplicationVersion('Voipmanager', '0.9');
     }  
  
+  /**
+     * update snom_location
+     */    
+    public function update_9()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'attach';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'saycid';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'review';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'operator';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'envelope';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'sayduration';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'sendvoicemail';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'delete';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'nextaftercmd';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'forcename';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'forcegreetings';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'hidefromdir';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('true', 'false');
+        
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);        
+                                                                                
+        
+        $this->setApplicationVersion('Voipmanager', '1.0');               
+
+    } 
  
           
 }

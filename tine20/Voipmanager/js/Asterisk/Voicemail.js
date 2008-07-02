@@ -431,12 +431,21 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                             anchor: '100%',
                             allowBlank: false
                         }, {
-                            xtype: 'textfield',
-                            fieldLabel: translation._('context'),
+                            xtype: 'combo',
+                            fieldLabel: translation._('Context'),
                             name: 'context',
-                            maxLength: 40,
+                            mode: 'local',
+                            displayField: 'name',
+                            valueField: 'name',
                             anchor: '100%',
-                            allowBlank: false
+                            triggerAction: 'all',
+                            editable: false,
+                            forceSelection: true,
+                            store: new Ext.data.JsonStore({
+                                storeId: 'Voipmanger_EditVoicemail_Context',
+                                id: 'id',
+                                fields: ['id', 'name']
+                            })
                         }, {
                             xtype: 'textfield',
                             fieldLabel: translation._('Name'),
@@ -496,7 +505,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -509,7 +518,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }, {
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -522,7 +531,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }, {
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -534,96 +543,101 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 anchor: '98%',
                                 allowBlank: true
                             }]
+                        }]
+                    },{                
+                        layout: 'column',
+                        border: false,
+                        anchor: '100%',
+                        items: [{
+                            columnWidth: .33,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('attach'),
+                                    name: 'attach',
+                                    id: 'attach',
+                                    anchor: '100%'
+                                })
+                            ]
                         }, {
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('attach'),
-                                name: 'attach',
-                                maxLength: 4,
-                                anchor: '100%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('saycid'),
+                                    name: 'saycid',
+                                    id: 'saycid',
+                                    anchor: '100%'
+                                })                            
+                            ]
+                        },{
+                            columnWidth: .33,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('review'),
+                                    name: 'review',
+                                    id: 'review',
+                                    anchor: '100%'
+                                })                              
+                           ]
                         }]
-                    }, {
+                    },{                
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('saycid'),
-                                name: 'saycid',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('operator'),
+                                    name: 'operator',
+                                    id: 'operator',
+                                    anchor: '100%'
+                                })                             
+                            ]
                         },{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('review'),
-                                name: 'review',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
-                        },{
-                            columnWidth: .25,
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('envelope'),
+                                    name: 'envelope',
+                                    id: 'envelope',
+                                    anchor: '100%'
+                                })                                           
+                            ]
+                        }, {
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('operator'),
-                                name: 'operator',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
-                        },{
-                            columnWidth: .25,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('envelope'),
-                                name: 'envelope',
-                                maxLength: 4,
-                                anchor: '100%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('sayduration'),
+                                    name: 'sayduration',
+                                    id: 'sayduration',
+                                    anchor: '100%'
+                                })                                           
+                            ]
                         }]
-                    },{
+                    }, {                
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .25,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'numberfield',
-                                fieldLabel: translation._('sayduration'),
-                                name: 'sayduration',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
-                        },{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -636,88 +650,93 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         },{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('sendvoicemail'),
-                                name: 'sendvoicemail',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('sendvoicemail'),
+                                    name: 'sendvoicemail',
+                                    id: 'sendvoicemail',
+                                    anchor: '100%'
+                                })                                                                    
+                            ]
                         },{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('delete'),
-                                name: 'delete',
-                                maxLength: 4,
-                                anchor: '100%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('delete'),
+                                    name: 'delete',
+                                    id: 'delete',
+                                    anchor: '100%'
+                                })                                                                                                
+                            ]
                         }]
                     },{
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('nextaftercmd'),
-                                name: 'nextaftercmd',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('nextaftercmd'),
+                                    name: 'nextaftercmd',
+                                    id: 'nextaftercmd',
+                                    anchor: '100%'
+                                })                                           
+                            ]
                         },{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('forcename'),
-                                name: 'forcename',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('forcename'),
+                                    name: 'forcename',
+                                    id: 'forcename',
+                                    anchor: '100%'
+                                })                                                                     
+                            ]
                         },{
-                            columnWidth: .25,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('forcegreetings'),
-                                name: 'forcegreetings',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
-                        },{
-                            columnWidth: .25,
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('forcegreetings'),
+                                    name: 'forcegreetings',
+                                    id: 'forcegreetings',
+                                    anchor: '100%'
+                                })                                                                  
+                            ]
+                        }]
+                    },{                
+                        layout: 'column',
+                        border: false,
+                        anchor: '100%',
+                        items: [{
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: translation._('hidefromdir'),
-                                name: 'hidefromdir',
-                                maxLength: 4,
-                                anchor: '100%',
-                                allowBlank: true
-                            }]
+                            items: [
+                                new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('hidefromdir'),
+                                    name: 'hidefromdir',
+                                    id: 'hidefromdir',
+                                    anchor: '100%'
+                                })                                                 
+                            ]
                         }]
                     }]
                 }]
@@ -736,7 +755,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
             }
         },
         
-        display: function(_voicemailData, _software, _keylayout, _settings) 
+        display: function(_voicemailData, _contexts) 
         {           
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
@@ -766,6 +785,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                     })                      
                 }]
             });
+
+            Ext.StoreMgr.lookup('Voipmanger_EditVoicemail_Context').loadData(_contexts);
 
             var viewport = new Ext.Viewport({
                 layout: 'border',

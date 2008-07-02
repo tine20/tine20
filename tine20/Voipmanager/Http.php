@@ -203,6 +203,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedVoicemail = '{}';
         }
 
+
+        $encodedContexts = Zend_Json::encode(Voipmanager_Controller::getInstance()->getAsteriskContexts()->toArray());
         
         $currentAccount = Zend_Registry::get('currentAccount');
                 
@@ -210,7 +212,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Voicemail.EditDialog.display(' . $encodedVoicemail .');';
+        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Voicemail.EditDialog.display(' . $encodedVoicemail .','.$encodedContexts.');';
 
         $view->locationData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
