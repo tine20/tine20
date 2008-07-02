@@ -133,7 +133,8 @@ class Tinebase_Relation_Backend_Sql
     	    'own_model   = ' . $this->_db->getAdapter()->quote($_model),
     	    'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
             'own_id      = ' . $this->_db->getAdapter()->quote($_id),
-    	    'is_deleted  ='  . $this->_db->getAdapter()->quote((bool)$_returnBroken)
+    	    //'is_deleted  ='  . $this->_db->getAdapter()->quote((bool)$_returnBroken)
+    	    'is_deleted  ='  . $this->_db->getAdapter()->quote((int)$_returnBroken)
     	);
     	if ($_degree) {
             $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
@@ -141,6 +142,8 @@ class Tinebase_Relation_Backend_Sql
         if ($_type) {
             $where[] = $this->_db->getAdapter()->quoteInto('type = ?', $_type);
         }
+        
+       // Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
         
         $relations = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation');
         foreach ($this->_db->fetchAll($where) as $relation) {
@@ -189,6 +192,9 @@ class Tinebase_Relation_Backend_Sql
     public function purgeAllRelations($_ownModel, $_ownBackend, $_ownId)
     {
         $relationIds = $this->getAllRelations($_ownModel, $_ownBackend, $_ownId, NULL, NULL, true)->getArrayOfIds();
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($relationIds, true));
+        
         if (!empty($relationIds)) {
             $where = array(
                 $this->_db->getAdapter()->quoteInto('id IN (?)', $relationIds)
