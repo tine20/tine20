@@ -633,7 +633,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
     public function update_5()
     {
         $tableDefinition = "
-        <table>
+<table>
             <name>snom_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -656,7 +656,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
-                </field>                 
+                </field> 
                 <field>
                     <name>web_language</name>
                     <type>enum</type>
@@ -706,28 +706,6 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <default>display_name</default>
                 </field>
                 <field>
-                    <name>tone_scheme</name>
-                    <type>enum</type>
-                    <value>AUS</value>
-                    <value>AUT</value>
-                    <value>CHN</value>
-                    <value>DNK</value>
-                    <value>FRA</value>
-                    <value>GER</value>
-                    <value>GBR</value>
-                    <value>IND</value>
-                    <value>ITA</value>
-                    <value>JPN</value>
-                    <value>MEX</value>
-                    <value>NLD</value>
-                    <value>NOR</value>
-                    <value>NZL</value>
-                    <value>ESP</value>
-                    <value>SWE</value>
-                    <value>SWI</value>
-                    <value>USA</value>            
-                </field>
-                <field>
                     <name>mwi_notification</name>
                     <type>enum</type>
                     <value>silent</value>
@@ -748,20 +726,6 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>none</value>
                     <value>headset_rj</value>
                     <default>none</default>
-                </field>
-                <field>
-                    <name>date_us_format</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>on</default>
-                </field>
-                <field>
-                    <name>time_24_format</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
                 </field>
                 <field>
                     <name>with_flash</name>
@@ -1111,7 +1075,91 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <type>text</type>
                     <length>255</length>
                     <notnull>false</notnull>                                                       
-                </field>                    
+                </field>  
+                <field>
+                    <name>call_waiting</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>visual</value>
+                    <value>ringer</value>
+                    <value>off</value>
+                    <default>off</default>
+                </field>     
+                <field>
+                    <name>web_language_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>language_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>display_method_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>tone_scheme_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>mwi_notification_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>mwi_dialtone_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>headset_device_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>message_led_other_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>global_missed_counter_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>scroll_outgoing_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>show_local_line_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>show_call_status_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>redirect_event_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>redirect_number_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>redirect_time_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>   
                 <index>
                     <name>id</name>
                     <primary>true</primary>
