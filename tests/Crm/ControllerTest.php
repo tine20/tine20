@@ -9,6 +9,7 @@
  * @version     $Id$
  * 
  * @todo        complete code coverage of controller by adding more tests
+ * @todo        resolve test dependencies - make them _stand-alone_
  */
 
 /**
@@ -199,6 +200,38 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
                     'productsource' => 'Just a phpunit test product #3 UPDATED',
                     'price' => '19.78'))
         );
+        
+        // some lead types
+        $this->_objects['someLeadTypes'] = array(
+                new Crm_Model_Leadtype(array(
+                    'id' => 1001,
+                    'leadtype' => 'Just a phpunit test lead type #1',
+                    'leadtype_translate' => 0)),
+                new Crm_Model_Leadtype(array(
+                    'id' => 1002,
+                    'leadtype' => 'Just a phpunit test lead type #2',
+                    'leadtype_translate' => 0)),
+                new Crm_Model_Leadtype(array(
+                    'id' => 1003,
+                    'leadtype' => 'Just a phpunit test lead type #3',
+                    'leadtype_translate' => 0)),
+                new Crm_Model_Leadtype(array(
+                    'id' => 1004,
+                    'leadtype' => 'Just a phpunit test lead type #4',
+                    'leadtype_translate' => 0))
+        );
+        
+        // some lead types to update
+        $this->_objects['someLeadTypesToUpdate'] = array(
+                new Crm_Model_Leadtype(array(
+                    'id' => 1002,
+                    'leadtype' => 'Just a phpunit test lead type #2',
+                    'leadtype_translate' => 0)),
+                new Crm_Model_Leadtype(array(
+                    'id' => 1003,
+                    'leadtype' => 'Just a phpunit test lead type #3',
+                    'leadtype_translate' => 0))
+        );
     }
 
     /**
@@ -380,7 +413,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('UnderflowException');
         
         Crm_Controller::getInstance()->getLead($this->_objects['initialLead']);
-        
     }
     
     /**
@@ -445,11 +477,15 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to save more than one product
+     * try to save / create, update and delete more than one product
      * 
      * @todo complete test for products to delete
      */
     public function testSaveProducts() {
+    	// save db table content (because of test dependencies)
+    	$savedProducts = Crm_Controller::getInstance()->getProducts();
+    	
+    	// go!
     	$someProducts = new Tinebase_Record_RecordSet('Crm_Model_Product',
                 $this->_objects['someProducts']);
         
@@ -479,6 +515,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // cleanup
+        /*
         foreach ($this->_objects['someProducts'] as $product) {
             $backend->delete($product->id);
         }
@@ -486,6 +523,62 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         foreach ($this->_objects['someProductsToUpdate'] as $product) {
             $backend->delete($product->id);
         }
+        */
+        foreach ($savedProducts->getArrayOfIds() as $id) {
+            $backend->delete($id);
+        }
     }
     
+    /**
+     * try to save / create, update and delete more than one lead type
+     * 
+     * @todo complete test for lead types to delete
+     */
+    public function testSaveLeadTypes() {
+        // save db table content (because of test dependencies)
+        $savedLeadTypes = Crm_Controller::getInstance()->getLeadTypes();
+        
+        // go!
+    	$someLeadTypes = new Tinebase_Record_RecordSet('Crm_Model_Leadtype',
+                $this->_objects['someLeadTypes']);
+        
+        // save / create some lead types
+        $resultLeadTypes = Crm_Controller::getInstance()
+                ->saveLeadtypes($someLeadTypes);
+        
+        $this->assertEquals($someLeadTypes, $resultLeadTypes);
+        
+        // get every saved lead type back from database one by one
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
+        
+        foreach ($this->_objects['someLeadTypes'] as $leadType) {
+            $this->assertEquals($leadType, $backend->get($leadType->id));
+        }
+        
+        // update some lead types
+        $someLeadTypes = new Tinebase_Record_RecordSet('Crm_Model_Leadtype',
+                $this->_objects['someLeadTypesToUpdate']);
+        
+        $resultLeadTypes = Crm_Controller::getInstance()
+                ->saveLeadtypes($someLeadTypes);
+        
+        foreach ($this->_objects['someLeadTypesToUpdate'] as $leadType) {
+            $this->assertEquals($leadType['leadtype'],
+                    $backend->get($leadType->id)->leadtype);
+        }
+        
+        // cleanup
+        /*
+        foreach ($this->_objects['someLeadTypes'] as $leadType) {
+            $backend->delete($leadType->id);
+        }
+        
+        foreach ($this->_objects['someLeadTypesToUpdate'] as $leadType) {
+            $backend->delete($leadType->id);
+        }
+        */
+        foreach ($savedLeadTypes->getArrayOfIds() as $id) {
+            $backend->delete($id);
+        }
+    }
 }		
