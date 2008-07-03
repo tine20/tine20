@@ -455,20 +455,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     } 
     
     /**
-     * delete products (belonging to one lead)
-     *
-     * @param string $_id
-     * @return array
-     */
-    public function deleteProducts($_id)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $result = $backend->deleteProducts($_id);
-
-        return $result;
-    }     
-
-    /**
      * get Products linked to a lead
      *
      * @param string $_leadId
