@@ -1,5 +1,5 @@
 /*
- *  Tine 2.0 - Ext.ux.form.ImgCheckbox - image checkbox
+ *  Tine 2.0 - mwImgCheckbox
  * 
  * @package     Ext
  * @subpackage  ux
@@ -12,63 +12,63 @@
 
 Ext.ns('Ext.ux.form');
 Ext.ux.form.ImgCheckbox = Ext.extend(Ext.form.Checkbox, {
-    offCls:'imgcheckbox-off',
-    onCls:'imgcheckbox-on',
-    submitOffValue:'0',
-    submitOnValue:'1',
-    chk: '0',
     
-    onRender:function(ct) {
-        Ext.ux.form.ImgCheckbox.superclass.onRender.apply(this, arguments);
+    // initial value for cls class used for TRUE case
+    trueCls:'imgCheckboxFalse',
 
-        // saving the tab-index, remove and recreate this.elment
-        var tabIndex = this.el.dom.tabIndex;
-        var id = this.el.dom.id;
-        this.el.remove();
-        this.el = ct.createChild({tag:'input', type:'hidden', name:this.name, id:id});
+    // initial value for cls class used for FALSE case    
+    falseCls:'imgCheckboxTrue',
+    
+    // initial value for FALSE case    
+    submitFalseValue:'0',
 
-        // hidden field value update
-        this.updateHidden();
+    // initial value for TRUE case        
+    submitTrueValue:'1',
+    
+    // initial value box        
+    trueValue: '0',
+    
+    
+    
+    getValue:function() {
+        return this.trueValue;
+    },
+    
+    setValue:function(_value) {
 
-        this.wrap.replaceClass('x-form-check-wrap', 'imgcheckbox-wrap');
-        this.cbEl = this.wrap.createChild({
-								tag:'a',
-								href:'#',
-								cls: ((this.chk == '1')? this.onCls : this.offCls)                                
-								});
+			if('string' == typeof _value) 
+            {
+                this.trueValue = _value === this.submitTrueValue;
+			} else 
+            {
+                this.trueValue = !(!_value);
+            }
 
-        // repositioning the boxLabel
-        var boxLabel = this.wrap.down('label');
-        if(boxLabel) {
-            this.wrap.appendChild(boxLabel);
-        }
+			this.newRender();
 
-        // supporting of tooltip
-        if(this.tooltip) {
-            this.cbEl.set({qtip:this.tooltip});
-        }
+        this.fireEvent('check', this, this.trueValue);
 
-        // installation of event handlers
-        this.wrap.on({click:{scope:this, fn:this.onClick, delegate:'a'}});
-        this.wrap.on({keyup:{scope:this, fn:this.onClick, delegate:'a'}});
-
-        // restoring the tab index
-        this.cbEl.dom.tabIndex = tabIndex;
     },
 
-    onClick:function(e) {
-        if(this.disabled || this.readOnly) {
-            return;
-        }
-        if(!e.isNavKeyPress()) {
-				switch (this.chk) {
-				case '0': this.setValue('1'); break;
-				case false: this.setValue('1'); break;                
-				case '1':  this.setValue('0'); break;
-				case true:  this.setValue('0'); break;                
-				}
-        }
+
+    updateHiddenValue:function() {
+        this.el.dom.value = (
+	  	  ((this.trueValue =='1')? this.submitTrueValue : this.submitFalseValue)
+        );
     },
+    
+        
+	newRender: function() {
+
+        if(this.rendered && this.cbEl) {
+            this.updateHiddenValue();
+            this.cbEl.removeClass([this.falseCls, this.trueCls]);
+            this.cbEl.addClass(
+    			 ((this.trueValue == '1')? this.trueCls : this.falseCls)
+			);
+        }
+	 },
+
 
     onDisable:function() {
         this.cbEl.addClass(this.disabledClass);
@@ -80,44 +80,50 @@ Ext.ux.form.ImgCheckbox = Ext.extend(Ext.form.Checkbox, {
         this.el.dom.disabled = '0';
     },
 
-    setValue:function(val) {
-
-			if('string' == typeof val) 
-            {
-                this.chk = val === this.submitOnValue;
-			} else 
-            {
-                this.chk = !(!val);
-            }
-
-			this.redraw();
-
-        this.fireEvent('check', this, this.chk);
-
-    },
-	 
-	redraw: function() {
-
-        if(this.rendered && this.cbEl) {
-            this.updateHidden();
-            this.cbEl.removeClass([this.offCls, this.onCls]);
-            this.cbEl.addClass(
-    			 ((this.chk == '1')? this.onCls : this.offCls)
-			);
+    onClick:function(e) {
+        if(this.disabled || this.readOnly) {
+            return;
         }
-	 },
-
-    updateHidden:function() {
-        this.el.dom.value = (
-	  	  ((this.chk =='1')? this.submitOnValue : this.submitOffValue)
-        );
+        if(!e.isNavKeyPress()) {
+				switch (this.trueValue) {
+				case '0':     this.setValue('1'); break;
+				case false:   this.setValue('1'); break;                
+				case '1':     this.setValue('0'); break;
+				case true:    this.setValue('0'); break;                
+				}
+        }
     },
+    
+    
+    onRender:function(ct) {
+        Ext.ux.form.ImgCheckbox.superclass.onRender.apply(this, arguments);
 
-    getValue:function() {
-        return this.chk;
+        var _tabIndex = this.el.dom.tabIndex;
+        var _id = this.el.dom.id;
+        this.el.remove();
+        this.el = ct.createChild({tag:'input', type:'hidden', name:this.name, id:_id});
+
+        this.updateHiddenValue();
+
+        this.wrap.replaceClass('x-form-check-wrap', 'imgCheckboxWrapped');
+        this.cbEl = this.wrap.createChild({ tag:'a', href:'#', cls: ((this.trueValue == '1')? this.trueCls : this.falseCls) });
+
+        var _label = this.wrap.down('label');
+        if(_label) {
+            this.wrap.appendChild(_label);
+        }
+
+        if(this.tooltip) {
+            this.cbEl.set({qtip:this.tooltip});
+        }
+
+        this.wrap.on({click:{scope:this, fn:this.onClick, delegate:'a'}});
+        this.wrap.on({keyup:{scope:this, fn:this.onClick, delegate:'a'}});
+
+        this.cbEl.dom.tabIndex = _tabIndex;
     }
 
 }); 
 
-// xtype registration
+
 Ext.reg('imgcheckbox', Ext.ux.form.ImgCheckbox);
