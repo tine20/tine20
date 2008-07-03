@@ -178,16 +178,6 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get count of leads
-     */
-    public function testGetCountOfLeads()
-    {
-        $count = $this->_backend->getCountOfLeads(array($this->_testContainer->id), 'PHPUnit');
-        
-        $this->assertEquals(1, $count);
-    }
-    
-    /**
      * try to delete a contact
      */
     public function testDeleteLead()
