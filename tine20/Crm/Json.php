@@ -106,8 +106,11 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         $result = array();
         foreach ($leads as $lead) {
-            $result[] = $this->convertLeadToArray($lead);
+            $leadArray = $this->convertLeadToArray($lead);
+            $result[] = $leadArray;
         }
+        
+        //Zend_Registry::get('logger')->debug(print_r($result,true));
         
         return array(
             'results'       => $result,
@@ -159,8 +162,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         } 
                
         
-        $resultData = $savedLead->toArray();
-        $resultData['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();
+        //$resultData = $savedLead->toArray();
+        //$resultData['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();
         
         // testing
         //$resultData = $leadData->toArray();
@@ -168,7 +171,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $resultData
+                        //'updatedData'       => $resultData
+                        'updatedData'       => $this->convertLeadToArray($savedLead, FALSE)
         );
         
         return $result;  
@@ -202,9 +206,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param Crm_Model_Lead    $_lead              lead record
      * @param boolean           $_getOnlyContacts   resolve only contact links
      * @return array
-     * 
-     * @todo use relations
-     * @todo add products again
      */
     protected function convertLeadToArray(Crm_Model_Lead $_lead, $_getOnlyContacts = TRUE) 
     {
@@ -218,13 +219,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
         foreach ( $types as $type ) {
             $result[$type] = array();
-            foreach($_lead->$type as $contactId) {
+            foreach($_lead->$type as $relation) {
                 try {
-                    $contact = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+                    $contact = Addressbook_Controller::getInstance()->getContact($relation->related_id)->toArray();
+                    $contact['link_id'] = $relation->getId();
                     $contact['link_remark'] = $type;
                     $result[$type][] = $contact;
                 } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $relation->related_id);
                     // ignore, permission denied or contact not found
                 }
             }
@@ -233,27 +235,32 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         if ( !$_getOnlyContacts ) {
             // add tasks
             $result['tasks'] = array();
-            foreach($_lead->tasks as $taskId) {
+            foreach($_lead->tasks as $relation) {
                 try {
-                    $result['tasks'][] = Tasks_Controller::getInstance()->getTask($taskId)->toArray();
+                    $task = Tasks_Controller::getInstance()->getTask($relation->related_id)->toArray();
+                    $task['link_id'] = $relation->getId();
+                    $result['tasks'][] = $task;
                 } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped task: ' . $taskId);
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped task: ' . $relation->related_id);
                     // ignore, permission denied or contact not found
                 }
             }
             
-            // add container
-            $folder = Tinebase_Container::getInstance()->getContainerById($_lead->container);            
-            $result['container'] = $folder->toArray();
-                
             // add products
             $products = Crm_Controller::getInstance()->getLeadProducts($_lead->getId());
             $result['products'] = $products->toArray();
-            //$result['products'] = array();
                 
             // add tags
             $result['tags'] = $_lead['tags']->toArray();                    
+        } else {
+            $result['tasks'] = array();
+            $result['tags'] = array();
+            $result['products'] = array();
         }
+
+        // add container
+        $folder = Tinebase_Container::getInstance()->getContainerById($_lead->container);            
+        $result['container'] = $folder->toArray();                
         
         return $result;
     }

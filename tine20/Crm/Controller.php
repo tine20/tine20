@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        replace links with relations
  * @todo        add other rights
  */
 
@@ -223,7 +222,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @return Crm_Model_Lead the updated lead
      * 
      * @todo add notifications later
-     * @todo move the linking/relations stuff to seperate function
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
@@ -318,19 +316,23 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $relationData = array();
         foreach ($relationTypes as $type => $values) {  
             if (isset($_lead[$type])) {          
-                foreach ($_lead[$type] as $id) {
-                    $data = array(
-                        'own_model'              => 'Crm_Model_Lead',
-                        'own_backend'            => Crm_Backend_Factory::SQL,
-                        'own_id'                 => $_leadId,
-                        'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
-                        'related_model'          => $values['model'],
-                        'related_backend'        => $values['backend'],
-                        'related_id'             => $id,
-                        'type'                   => $values['type']                    
-                    );
-                    
-                    $relationData[] = $data;
+                foreach ($_lead[$type] as $relation) {
+                    if ($relation instanceOf Tinebase_Relation_Model_Relation) {
+                        $relationData[] = $relation->toArray();
+                    } else {
+                        $data = array(
+                            'own_model'              => 'Crm_Model_Lead',
+                            'own_backend'            => Crm_Backend_Factory::SQL,
+                            'own_id'                 => $_leadId,
+                            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                            'related_model'          => $values['model'],
+                            'related_backend'        => $values['backend'],
+                            'related_id'             => $relation,
+                            'type'                   => $values['type']                    
+                        );
+                        
+                        $relationData[] = $data;
+                    }
                 }
             }
         }
@@ -362,7 +364,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param Crm_Model_Lead $_lead
      * 
      * @todo add different backend types
-     * @todo return Relation records instead of ids?
      */
     private function getLeadLinks(Crm_Model_Lead &$_lead)
     {
@@ -376,16 +377,20 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $relation->type . ' for id ' . $_lead->getId());
             switch(strtolower($relation->type)) {
                 case 'customer':
-                    $customer[] = $relation->related_id;
+                    //$customer[] = $relation->related_id;
+                    $customer[] = $relation;
                     break;
                 case 'partner':
-                    $partner[] = $relation->related_id;
+                    //$partner[] = $relation->related_id;
+                    $partner[] = $relation;
                     break;
                 case 'responsible':
-                    $responsible[] = $relation->related_id;
+                    //$responsible[] = $relation->related_id;
+                    $responsible[] = $relation;
                     break;
                 case 'task':
-                    $tasks[] = $relation->related_id;
+                    //$tasks[] = $relation->related_id;
+                    $tasks[] = $relation;
                     break;
             }
         }

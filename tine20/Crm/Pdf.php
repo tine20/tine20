@@ -175,9 +175,9 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             if ( !empty($_lead->$type)) {
                 //$linkedObjects[] = array ( $headline, 'headline');
                 
-                foreach ( $_lead->$type as $linkID ) {
+                foreach ( $_lead->$type as $relation ) {
                     try {
-                        $contact = Addressbook_Controller::getInstance()->getContact($linkID);
+                        $contact = Addressbook_Controller::getInstance()->getContact($relation->related_id);
                         
                         $contactNameAndCompany = $contact->n_fn;
                         if ( !empty($contact->org_name) ) {
@@ -212,9 +212,9 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             
             $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
             
-            foreach ( $_lead->tasks as $taskId ) {
+            foreach ( $_lead->tasks as $relation ) {
                 try {
-                    $task = Tasks_Controller::getInstance()->getTask($taskId);
+                    $task = Tasks_Controller::getInstance()->getTask($relation->related_id);
                     
                     $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
                     // @todo add big icon to db or preg_replace? 
