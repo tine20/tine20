@@ -416,7 +416,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * try to set / get linked tasks
      *
-     * @todo use relations here
      */
     public function testLinkedTasks()
     {        
@@ -427,28 +426,24 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // link task
-        //print_r($task->toArray());
-        //Crm_Controller::getInstance()->setLinksForApplication($this->_objects['initialLead']->getId(), array($task->getId()), 'Tasks');
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
         $lead->tasks = array($task->getId()); 
         $lead = Crm_Controller::getInstance()->updateLead($lead);
         
         // get linked tasks
-        //$linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($this->_objects['initialLead']->getId(), 'Tasks');
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
         $linkedTasks = $lead->tasks;
         
         //print_r($linkedTasks);
         
         $this->assertGreaterThan(0, count($linkedTasks));
-        $this->assertEquals($task->getId(), $linkedTasks[0]);
+        $this->assertEquals($task->getId(), $linkedTasks[0]->related_id);
         
     }
 
     /**
      * try to set / get linked contacts
      *
-     * @todo use relations here
      */
     public function testLinkedContacts()
     {
@@ -460,22 +455,18 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // link contact
-        //Crm_Controller::getInstance()->setLinksForApplication($this->_objects['initialLead']->getId(), array($contact->getId()), 'Addressbook', 'account');
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
-        $lead->tasks = array();
         $lead->responsible = array($contact->getId()); 
         $lead = Crm_Controller::getInstance()->updateLead($lead);
-        
-        
+                
         // get linked contacts
-        //$linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($this->_objects['initialLead']->getId(), 'Addressbook');
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
         $linkedContacts = $lead->responsible;
         
         //print_r($linkedContacts);
         
         $this->assertGreaterThan(0, count($linkedContacts));
-        $this->assertEquals($contact->getId(), $linkedContacts[0]);
+        $this->assertEquals($contact->getId(), $linkedContacts[0]->related_id);
         
         // delete contact
         Addressbook_Controller::getInstance()->deleteContact($this->_objects['user']->getId());
