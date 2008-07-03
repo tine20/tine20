@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        rework functions
  */
 
 /**
@@ -58,6 +57,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int $_leadId
      * @return array with lead data
+     * 
+     * @todo set default values in js and remove getEmptyXXX functions ?
      */
     public function getLead($_leadId)
     {
@@ -68,7 +69,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $leadData = $this->convertLeadToArray($lead, FALSE);
                         
         } else {
-            // @todo set default values in js and remove getEmptyXXX functions
+
             $leadData = $controller->getEmptyLead()->toArray();
             $leadData['products'] = array();                
             $leadData['contacts'] = array();   
@@ -106,8 +107,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         $result = array();
         foreach ($leads as $lead) {
-            $leadArray = $this->convertLeadToArray($lead);
-            $result[] = $leadArray;
+            $result[] = $this->convertLeadToArray($lead);
         }
         
         //Zend_Registry::get('logger')->debug(print_r($result,true));
@@ -159,19 +159,10 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $savedLead = Crm_Controller::getInstance()->createLead($leadData);
         } else {
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
-        } 
-               
+        }
         
-        //$resultData = $savedLead->toArray();
-        //$resultData['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();
-        
-        // testing
-        //$resultData = $leadData->toArray();
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($resultData, true));
-
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        //'updatedData'       => $resultData
                         'updatedData'       => $this->convertLeadToArray($savedLead, FALSE)
         );
         

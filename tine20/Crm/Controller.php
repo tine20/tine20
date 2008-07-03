@@ -185,7 +185,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @return Crm_Model_Lead the newly added lead
      * 
      * @todo add notifications later
-     * @todo move the linking/relations stuff to seperate function
      */ 
     public function createLead(Crm_Model_Lead $_lead)
     {
@@ -377,19 +376,15 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $relation->type . ' for id ' . $_lead->getId());
             switch(strtolower($relation->type)) {
                 case 'customer':
-                    //$customer[] = $relation->related_id;
                     $customer[] = $relation;
                     break;
                 case 'partner':
-                    //$partner[] = $relation->related_id;
                     $partner[] = $relation;
                     break;
                 case 'responsible':
-                    //$responsible[] = $relation->related_id;
                     $responsible[] = $relation;
                     break;
                 case 'task':
-                    //$tasks[] = $relation->related_id;
                     $tasks[] = $relation;
                     break;
             }
