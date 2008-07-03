@@ -690,8 +690,12 @@ Tine.Crm.LeadEditDialog = {
                         Ext.getCmp('crmGridProducts').setDisabled(false);
 
                         // update stores
-                        Ext.StoreMgr.lookup('ContactsStore').commitChanges();
-                        Ext.StoreMgr.lookup('TasksStore').commitChanges();
+                        Tine.Crm.LeadEditDialog.loadContactsStore(lead.data.responsible, lead.data.customer, lead.data.partner, true);        
+                        Tine.Crm.LeadEditDialog.loadTasksStore(lead.data.tasks);
+                        //Tine.Crm.LeadEditDialog.loadProductsStore(lead.data.products);
+                        
+                        //Ext.StoreMgr.lookup('ContactsStore').commitChanges();
+                        //Ext.StoreMgr.lookup('TasksStore').commitChanges();
                                                 
                         Ext.MessageBox.hide();
                     },
@@ -819,6 +823,9 @@ Tine.Crm.LeadEditDialog = {
             
             // update event handler
             taskPopup.on('update', function(task) {
+            	
+            	//console.log(task);
+            	
             	// set id and link properties
                 task.id = task.data.id;
                 task.data.link_id = null;
@@ -895,7 +902,7 @@ Tine.Crm.LeadEditDialog = {
         	var link = {};
         	
         	if ( record.id !== null ) {
-        		link = record.id; 
+        		link = {id: record.id, link_id: record.data.link_id}; 
         	} else {
         		// add complete data array for new records 
         		link = record.data;
@@ -925,7 +932,8 @@ Tine.Crm.LeadEditDialog = {
         var storeTasks = Ext.StoreMgr.lookup('TasksStore');
         
         storeTasks.each(function(record) {
-            linksTasks.push(record.data.id);
+            link = {id: record.id, link_id: record.data.link_id}; 
+            linksTasks.push(link);
         });
         
         lead.data.tasks = linksTasks;
@@ -1064,7 +1072,6 @@ Tine.Crm.LeadEditDialog = {
                 storeName = 'ContactsStore';
                 
                 var bbarItems = [
-                    this.actions.unlinkProduct
                 ];
 
                 
@@ -1494,30 +1501,61 @@ Tine.Crm.LeadEditDialog = {
     /**
      * get linked contacts store and put it into store manager
      * 
-     * @param   array _contacts
+     * @param   array _responsible
+     * @param   array _customer
+     * @param   array _partner
+     * @param   boolean _reload reload or create new store
      */
-    loadContactsStore: function(_responsible, _customer, _partner)
+    loadContactsStore: function(_responsible, _customer, _partner, _reload)
     {
-        var storeContacts = new Ext.data.JsonStore({
-            id: 'id',
-            fields: Tine.Crm.Model.ContactLink
-        });
+    	if (_reload) {
+    	   	var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+
+    	   	// empty store and fill with data
+    	   	storeContacts.removeAll();
+    	   	
+            if(_responsible) {
+                storeContacts.loadData(_responsible, true);                    
+            }
+    
+            if(_customer) {
+                storeContacts.loadData(_customer, true);                    
+            }
             
-        if(_responsible) {
-            storeContacts.loadData(_responsible, true);                    
-        }
-
-        if(_customer) {
-            storeContacts.loadData(_customer, true);                    
-        }
-        
-        if(_partner) {
-            storeContacts.loadData(_partner, true);                    
-        }
-
-        storeContacts.setDefaultSort('link_remark', 'asc');     
-        
-        Ext.StoreMgr.add('ContactsStore', storeContacts);
+            if(_partner) {
+                storeContacts.loadData(_partner, true);                    
+            }
+    	   	
+    	} else {
+            var storeContacts = new Ext.data.JsonStore({
+                id: 'id',
+                fields: Tine.Crm.Model.ContactLink
+            });
+                
+            if(_responsible) {
+                storeContacts.loadData(_responsible, true);                    
+            }
+    
+            if(_customer) {
+                storeContacts.loadData(_customer, true);                    
+            }
+            
+            if(_partner) {
+                storeContacts.loadData(_partner, true);                    
+            }
+    
+            storeContacts.setDefaultSort('link_remark', 'asc');   
+            
+            // remove link_id on update
+            // @todo is that needed?
+            storeContacts.on('update', function(store, record, operation) {
+            	if (operation === Ext.data.Record.EDIT) {
+                    record.data.link_id = null;
+            	}
+            }, this);        
+            
+            Ext.StoreMgr.add('ContactsStore', storeContacts);
+    	}
     },
 
     /**
@@ -1529,8 +1567,7 @@ Tine.Crm.LeadEditDialog = {
     {
         var storeTasks = new Ext.data.JsonStore({
             id: 'id',
-            fields: Tine.Tasks.Task
-                //Tine.Crm.Model.TaskLink
+            fields: Tine.Crm.Model.TaskLink
         });
             
         if(_tasks) {
@@ -1563,7 +1600,6 @@ Tine.Crm.LeadEditDialog = {
         
         // update price if new product is chosen
         storeProducts.on('update', function(store, record, index) {
-        	//console.log('update');
             if(record.data.product_id && !arguments[1].modified.product_price) {          
                 var st_productsAvailable = Tine.Crm.Product.getStore();
                 var preset_price = st_productsAvailable.getById(record.data.product_id);
@@ -1819,9 +1855,9 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
 
 // contact link
 Tine.Crm.Model.ContactLink = Ext.data.Record.create([
+    {name: 'id'},
     {name: 'link_id'},              
     {name: 'link_remark'},                        
-    {name: 'id'},
     {name: 'owner'},
     {name: 'n_family'},
     {name: 'n_given'},
@@ -1844,9 +1880,9 @@ Tine.Crm.Model.ContactLink = Ext.data.Record.create([
 ]);
 
 // task link
-// @todo replace by task model ?
 Tine.Crm.Model.TaskLink = Ext.data.Record.create([
     {name: 'id'},
+    {name: 'link_id'},
     {name: 'status_id'},
     {name: 'status_realname'},
     {name: 'status_icon'},
@@ -1854,11 +1890,11 @@ Tine.Crm.Model.TaskLink = Ext.data.Record.create([
     {name: 'summary'},
     {name: 'due'},
     {name: 'creator'},
-    {name: 'description'}
+    {name: 'description'},
+    {name: 'priority'},
 ]);
 
 // product link
-// @todo replace by product model ?
 Tine.Crm.Model.ProductLink = Ext.data.Record.create([
     {name: 'id'},
     {name: 'product_id'},

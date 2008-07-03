@@ -233,7 +233,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
                     $result['tasks'][] = $task;
                 } catch (Exception $e) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped task: ' . $relation->related_id);
-                    // ignore, permission denied or contact not found
+                    // ignore, permission denied or task not found
                 }
             }
             
@@ -242,8 +242,10 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $result['products'] = $products->toArray();
                 
             // add tags
-            $result['tags'] = $_lead['tags']->toArray();                    
+            $result['tags'] = $_lead['tags']->toArray();  
+                              
         } else {
+            // return empty arrays
             $result['tasks'] = array();
             $result['tags'] = array();
             $result['products'] = array();

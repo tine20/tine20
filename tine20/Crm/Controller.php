@@ -319,14 +319,20 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                     if ($relation instanceOf Tinebase_Relation_Model_Relation) {
                         $relationData[] = $relation->toArray();
                     } else {
+                        
+                        if (!isset($relation['id'])) {
+                            throw new Exception('Related object id is missing!');
+                        }
+                        
                         $data = array(
+                            'id'                     => (isset($relation['link_id'])) ? $relation['link_id'] : NULL,
                             'own_model'              => 'Crm_Model_Lead',
                             'own_backend'            => Crm_Backend_Factory::SQL,
                             'own_id'                 => $_leadId,
                             'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
                             'related_model'          => $values['model'],
                             'related_backend'        => $values['backend'],
-                            'related_id'             => $relation,
+                            'related_id'             => $relation['id'],
                             'type'                   => $values['type']                    
                         );
                         
