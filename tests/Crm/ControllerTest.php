@@ -225,12 +225,44 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_objects['someLeadTypesToUpdate'] = array(
                 new Crm_Model_Leadtype(array(
                     'id' => 1002,
-                    'leadtype' => 'Just a phpunit test lead type #2',
+                    'leadtype' => 'Just a phpunit test lead type #2 UPDATED',
                     'leadtype_translate' => 0)),
                 new Crm_Model_Leadtype(array(
                     'id' => 1003,
-                    'leadtype' => 'Just a phpunit test lead type #3',
+                    'leadtype' => 'Just a phpunit test lead type #3 UPDATED',
                     'leadtype_translate' => 0))
+        );
+        
+        // some lead sources
+        $this->_objects['someLeadSources'] = array(
+                new Crm_Model_Leadsource(array(
+                    'id' => 1001,
+                    'leadsource' => 'Just a phpunit test lead source #1',
+                    'leadsource_translate' => 0)),
+                new Crm_Model_Leadsource(array(
+                    'id' => 1002,
+                    'leadsource' => 'Just a phpunit test lead source #2',
+                    'leadsource_translate' => 0)),
+                new Crm_Model_Leadsource(array(
+                    'id' => 1003,
+                    'leadsource' => 'Just a phpunit test lead source #3',
+                    'leadsource_translate' => 0)),
+                new Crm_Model_Leadsource(array(
+                    'id' => 1004,
+                    'leadsource' => 'Just a phpunit test lead source #4',
+                    'leadsource_translate' => 0))
+        );
+        
+        // some lead sources to update
+        $this->_objects['someLeadSourcesToUpdate'] = array(
+                new Crm_Model_Leadsource(array(
+                    'id' => 1002,
+                    'leadsource' => 'Just a phpunit test lead source #2 UPDATED',
+                    'leadsource_translate' => 0)),
+                new Crm_Model_Leadsource(array(
+                    'id' => 1003,
+                    'leadsource' => 'Just a phpunit test lead source #3 UPDATED',
+                    'leadsource_translate' => 0))
         );
     }
 
@@ -559,4 +591,46 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         // cleanup
         Crm_Controller::getInstance()->saveLeadtypes($savedLeadTypes);
     }
-}		
+    
+    /**
+     * try to save / create, update and delete more than one lead source
+     * 
+     * @todo complete test for lead sources to delete
+     */
+    public function testSaveLeadSources() {
+        // save db table content (because of test dependencies)
+        $savedLeadSources = Crm_Controller::getInstance()->getLeadSources();
+        
+        // go!
+        $someLeadSources = new Tinebase_Record_RecordSet('Crm_Model_Leadsource',
+                $this->_objects['someLeadSources']);
+        
+        // save / create some lead types
+        $resultLeadSources = Crm_Controller::getInstance()
+                ->saveLeadsources($someLeadSources);
+        
+        $this->assertEquals($someLeadSources, $resultLeadSources);
+        
+        // get every saved lead source back from database one by one
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
+        
+        foreach ($this->_objects['someLeadSources'] as $leadSource) {
+            $this->assertEquals($leadSource, $backend->get($leadSource->id));
+        }
+        
+        // update some lead sources
+        $someLeadSources = new Tinebase_Record_RecordSet('Crm_Model_Leadsource',
+                $this->_objects['someLeadSourcesToUpdate']);
+        
+        $resultLeadSources = Crm_Controller::getInstance()
+                ->saveLeadsources($someLeadSources);
+        
+        foreach ($this->_objects['someLeadSourcesToUpdate'] as $leadSource) {
+            $this->assertEquals($leadSource['leadsource'],
+                    $backend->get($leadSource->id)->leadsource);
+        }
+        
+        // cleanup
+        Crm_Controller::getInstance()->saveLeadsources($savedLeadSources);
+    }
+}
