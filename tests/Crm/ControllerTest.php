@@ -427,7 +427,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         // link task
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
-        $lead->tasks = array($task->getId()); 
+        $lead->tasks = array(array(
+            'id' => $task->getId()
+        )); 
         $lead = Crm_Controller::getInstance()->updateLead($lead);
         
         // get linked tasks
@@ -456,7 +458,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         // link contact
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
-        $lead->responsible = array($contact->getId()); 
+        $lead->responsible = array(array(
+            'id' => $contact->getId()
+        )); 
         $lead = Crm_Controller::getInstance()->updateLead($lead);
                 
         // get linked contacts

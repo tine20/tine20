@@ -220,8 +220,12 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         }
 
         $leadData = $this->objects['initialLead']->toArray();
-        $leadData['responsible'] = array($contact->getId());
-        $leadData['tasks'] = array($task->getId());
+        $leadData['responsible'] = array(array(
+            'id' => $contact->getId()            
+        ));
+        $leadData['tasks'] = array(array(
+            'id' => $task->getId()
+        ));
         $leadData['tags'] = Zend_Json::encode(array());
         $leadData['products'] = array($this->objects['productLink']);
         
@@ -262,6 +266,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $initialLead = $leads[0];
         
         $lead = $json->getLead($initialLead['id']);
+        
+        //print_r($lead);
         
         $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
         $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);                
