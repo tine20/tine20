@@ -544,29 +544,42 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }]
-                    },{                
+                    },{
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                               new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('sayduration'),
-                                    name: 'sayduration',
-                                    id: 'sayduration',
-                                    anchor: '100%',
-                                    listeners: {
-                                        valid: function() {
-                                            console.log('valid');
-                                            console.log(this.value);   
-                                        }
-                                    }                                    
-                                })                                       
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('sayduration'),
+                                id: 'sayduration',
+                                name: 'sayduration',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',
+                                anchor: '100%'
+                            }]
+                        }, {
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('sayduration'),
+                                hideLabel: true,
+                                id: 'sayduration',
+                                name: 'sayduration',
+                                boxLabel: 'no',
+                                checked: false,
+                                ctCls: 'down',                                
+                                value: 'false',
+                                anchor: '100%'
+                            }]
                         }, {
                             columnWidth: .33,
                             layout: 'form',
@@ -581,168 +594,377 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('attach'),
-                                    name: 'attach',
-                                    id: 'attach',
-                                    anchor: '100%'
-                                })
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('attach'),
+                                name: 'attach',
+                                id: 'attach',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',
+                                anchor: '100%'
+                            }]
+                        }, {
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('attach'),
+                                hideLabel: true,
+                                name: 'attach',
+                                id: 'attach',
+                                boxLabel: 'no',
+                                checked: false,
+                                ctCls: 'down',
+                                value: 'false',
+                                anchor: '100%'
+                            }]
                         }]
                     },{                
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('saycid'),
-                                    name: 'saycid',
-                                    id: 'saycid',
-                                    anchor: '100%'
-                                })                            
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('saycid'),
+                                name: 'saycid',
+                                id: 'saycid',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('review'),
-                                    name: 'review',
-                                    id: 'review',
-                                    anchor: '100%'
-                                })                              
-                           ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('saycid'),
+                                hideLabel: true,
+                                name: 'saycid',
+                                id: 'saycid',
+                                boxLabel: 'no',
+                                ctCls: 'down',
+                                checked: false,
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('review'),
+                                name: 'review',
+                                id: 'review',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('review'),
+                                hideLabel: true,
+                                name: 'review',
+                                id: 'review',
+                                boxLabel: 'no',
+                                ctCls: 'down',
+                                checked: false,
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('operator'),
-                                    name: 'operator',
-                                    id: 'operator',
-                                    anchor: '100%'
-                                })                             
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('operator'),
+                                name: 'operator',
+                                id: 'operator',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('operator'),
+                                hideLabel: true,
+                                name: 'operator',
+                                id: 'operator',
+                                boxLabel: 'no',
+                                ctCls: 'down',
+                                checked: false,
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
                         }]
                     }, {                
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('envelope'),
-                                    name: 'envelope',
-                                    id: 'envelope',
-                                    anchor: '100%'
-                                })                                           
-                            ]
-                        }, {
-                            columnWidth: .33,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('sendvoicemail'),
-                                    name: 'sendvoicemail',
-                                    id: 'sendvoicemail',
-                                    anchor: '100%'
-                                })                                                                    
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('envelope'),
+                                name: 'envelope',
+                                id: 'envelope',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('delete'),
-                                    name: 'delete',
-                                    id: 'delete',
-                                    anchor: '100%'
-                                })                                                                                                
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('envelope'),
+                                hideLabel: true,
+                                name: 'envelope',
+                                id: 'envelope',
+                                boxLabel: 'no',
+                                checked: false,
+                                ctCls: 'down',
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
+                        }, {
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('sendvoicemail'),
+                                name: 'sendvoicemail',
+                                id: 'sendvoicemail',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('sendvoicemail'),
+                                hideLabel: true,
+                                name: 'sendvoicemail',
+                                id: 'sendvoicemail',
+                                boxLabel: 'no',
+                                checked: false,
+                                ctCls: 'down',
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('delete'),
+                                name: 'delete',
+                                id: 'delete',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('delete'),
+                                hideLabel: true,
+                                name: 'delete',
+                                id: 'delete',
+                                boxLabel: 'no',
+                                checked: false,
+                                ctCls: 'down',
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
                         }]
                     },{
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('nextaftercmd'),
-                                    name: 'nextaftercmd',
-                                    id: 'nextaftercmd',
-                                    anchor: '100%'
-                                })                                           
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('nextaftercmd'),
+                                name: 'nextaftercmd',
+                                id: 'nextaftercmd',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('forcename'),
-                                    name: 'forcename',
-                                    id: 'forcename',
-                                    anchor: '100%'
-                                })                                                                     
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('nextaftercmd'),
+                                hideLabel: true,
+                                name: 'nextaftercmd',
+                                id: 'nextaftercmd',
+                                boxLabel: 'no',
+                                checked: false,
+                                ctCls: 'down',
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('forcegreetings'),
-                                    name: 'forcegreetings',
-                                    id: 'forcegreetings',
-                                    anchor: '100%'
-                                })                                                                  
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('forcename'),
+                                name: 'forcename',
+                                id: 'forcename',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('forcename'),
+                                hideLabel: true,
+                                name: 'forcename',
+                                id: 'forcename',
+                                boxLabel: 'no',
+                                checked: false,
+                                value: 'false',     
+                                ctCls: 'down',                           
+                                anchor: '100%'
+                            }] 
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('forcegreetings'),
+                                name: 'forcegreetings',
+                                id: 'forcegreetings',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('forcegreetings'),
+                                hideLabel: true,
+                                name: 'forcegreetings',
+                                id: 'forcegreetings',
+                                boxLabel: 'no',
+                                ctCls: 'down',
+                                checked: false,
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
                         }]
                     },{                
                         layout: 'column',
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: .166,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('hidefromdir'),
-                                    name: 'hidefromdir',
-                                    id: 'hidefromdir',
-                                    anchor: '100%'
-                                })                                                 
-                            ]
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('hidefromdir'),
+                                name: 'hidefromdir',
+                                id: 'hidefromdir',
+                                boxLabel: 'yes',
+                                checked: false,
+                                value: 'true',                                
+                                anchor: '100%'
+                            }]
+                        },{
+                            columnWidth: .166,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'radio',
+                                fieldLabel: translation._('hidefromdir'),
+                                hideLabel: true,
+                                name: 'hidefromdir',
+                                id: 'hidefromdir',
+                                boxLabel: 'no',
+                                ctCls: 'down',
+                                checked: false,
+                                value: 'false',                                
+                                anchor: '100%'
+                            }]
                         }]
                     }]
                 }]
