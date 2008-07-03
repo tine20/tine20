@@ -19,18 +19,6 @@
 class Crm_Backend_LeadSources extends Tinebase_Abstract_SqlTableBackend
 {
     /**
-    * Instance of Crm_Backend_LeadSources
-    *
-    * @var Crm_Backend_Sources
-    */
-    protected $_table;
-    
-   /**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
-
-    /**
      * the constructor
      */
     public function __construct ()
@@ -39,34 +27,5 @@ class Crm_Backend_LeadSources extends Tinebase_Abstract_SqlTableBackend
         $this->_modelName = 'Crm_Model_Leadsource';
     	$this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
-    }
-    
-    /**
-    * add or updates an option
-    *
-    * @param Tinebase_Record_Recordset $_leadSources list of lead sources
-    * @return unknown
-    */
-    public function saveLeadsources(Tinebase_Record_Recordset $_leadSources)
-    {
-        $db = Zend_Registry::get('dbAdapter');
-  
-        $db->beginTransaction();
-        
-        try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leadsource');
-
-            foreach($_leadSources as $leadSource) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_leadsource', $leadSource->toArray());
-            }
-
-            $db->commit();
-
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-
-        return $_leadSources;
     }
 }

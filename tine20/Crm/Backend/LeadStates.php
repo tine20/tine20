@@ -19,18 +19,6 @@
 class Crm_Backend_LeadStates extends Tinebase_Abstract_SqlTableBackend
 {
     /**
-    * Instance of Crm_Backend_LeadStates
-    *
-    * @var Crm_Backend_LeadStates
-    */
-    protected $_table;
-    
-   /**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
-
-    /**
      * the constructor
      */
     public function __construct ()
@@ -39,38 +27,5 @@ class Crm_Backend_LeadStates extends Tinebase_Abstract_SqlTableBackend
         $this->_modelName = 'Crm_Model_Leadstate';
     	$this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
-    }
-    
-    /**
-    * add or updates an option
-    *
-    * @param Crm_Leadstate $_optionData the optiondata
-    * @return unknown
-    */
-    public function saveLeadstates(Tinebase_Record_Recordset $_optionData)
-    {
-
-        $_daten = $_optionData->toArray();
-    
-
-        $db = Zend_Registry::get('dbAdapter');
-  
-        $db->beginTransaction();
-        
-        try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leadstate');
-
-            foreach($_daten as $_data) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_leadstate', $_data);                
-            }
-
-            $db->commit();
-
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-
-        return $_optionData;
     }
 }

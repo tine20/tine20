@@ -17,18 +17,6 @@
  */
 class Crm_Backend_Products extends Tinebase_Abstract_SqlTableBackend
 {
-	/**
-	* Instance of Crm_Backend_Products
-	*
-	* @var Crm_Backend_Products
-	*/
-    protected $_table;
-   
-   /**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
-
     /**
      * the constructor
      */

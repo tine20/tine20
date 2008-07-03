@@ -22,13 +22,6 @@
 class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
 {
     /**
-    * Instance of Crm_Backend_Leads
-    *
-    * @var Crm_Backend_Leads
-    */
-    protected $_table;
-   
-    /**
      * the constructor
      */
     public function __construct ()

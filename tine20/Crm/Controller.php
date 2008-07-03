@@ -479,7 +479,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function getLeadProducts($_leadId)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-        $result = $backend->getProducts($_leadId);
+        $result = $backend->get($_leadId);
 
         return $result;    
     } 

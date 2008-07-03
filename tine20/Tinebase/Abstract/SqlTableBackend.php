@@ -46,6 +46,13 @@ abstract class Tinebase_Abstract_SqlTableBackend
     protected $_db;
     
     /**
+    * Instance of backend
+    *
+    * @var mixed
+    */
+    protected $_table;
+    
+    /**
      * Creates new entry
      *
      * @param Tinebase_Record_Interface $_record
@@ -159,7 +166,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
       * @return void
       * @throws Exception
       * 
-      * @todo Change to deleting only ONE record. "Delete all" style should be removed from backend.
+      * @todo Change to delete only ONE record. "Delete all" style should be removed from backend to controller.
       */
     public function delete($_id) {
     	foreach ((array) $_id as $id) {
