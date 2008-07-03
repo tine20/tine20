@@ -515,15 +515,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // cleanup
-        /*
-        foreach ($this->_objects['someProducts'] as $product) {
-            $backend->delete($product->id);
-        }
-        
-        foreach ($this->_objects['someProductsToUpdate'] as $product) {
-            $backend->delete($product->id);
-        }
-        */
         foreach ($savedProducts->getArrayOfIds() as $id) {
             $backend->delete($id);
         }
@@ -568,15 +559,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // cleanup
-        /*
-        foreach ($this->_objects['someLeadTypes'] as $leadType) {
-            $backend->delete($leadType->id);
-        }
-        
-        foreach ($this->_objects['someLeadTypesToUpdate'] as $leadType) {
-            $backend->delete($leadType->id);
-        }
-        */
         foreach ($savedLeadTypes->getArrayOfIds() as $id) {
             $backend->delete($id);
         }
