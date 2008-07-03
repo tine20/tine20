@@ -515,9 +515,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // cleanup
-        foreach ($savedProducts->getArrayOfIds() as $id) {
-            $backend->delete($id);
-        }
+        Crm_Controller::getInstance()->saveProducts($savedProducts);
     }
     
     /**
@@ -559,8 +557,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // cleanup
-        foreach ($savedLeadTypes->getArrayOfIds() as $id) {
-            $backend->delete($id);
-        }
+        Crm_Controller::getInstance()->saveLeadtypes($savedLeadTypes);
     }
 }		
