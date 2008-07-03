@@ -1052,6 +1052,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
 		        height: 500,
 		        plain:true,
 		        activeTab: 0,
+                deferredRender: false,                
 		        border: false,
 		        items:[
 		          this.generalTab()

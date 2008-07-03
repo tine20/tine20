@@ -24,7 +24,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
          */
         addVoicemail: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=', 450, 350);
+            Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=', 450, 400);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Voicemail_Grid').getSelectionModel().getSelections();
             var voicemailId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + voicemailId, 450, 350);
+            Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + voicemailId, 450, 400);
         },
         
         /**
@@ -276,7 +276,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + record.data.id, 450, 350);
+                Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + record.data.id, 450, 400);
             } catch(e) {
                 // alert(e);
             }
@@ -554,6 +554,38 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [
+                               new Ext.ux.form.TriCheckbox({
+                                    fieldLabel: translation._('sayduration'),
+                                    name: 'sayduration',
+                                    id: 'sayduration',
+                                    anchor: '100%',
+                                    listeners: {
+                                        valid: function() {
+                                            console.log('valid');
+                                            console.log(this.value);   
+                                        }
+                                    }                                    
+                                })                                       
+                            ]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [{
+                                xtype: 'numberfield',
+                                fieldLabel: translation._('saydurationm'),
+                                name: 'saydurationm',
+                                maxLength: 4,
+                                anchor: '98%',
+                                allowBlank: true
+                            }]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items: [
                                 new Ext.ux.form.TriCheckbox({
                                     fieldLabel: translation._('attach'),
                                     name: 'attach',
@@ -561,7 +593,12 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     anchor: '100%'
                                 })
                             ]
-                        }, {
+                        }]
+                    },{                
+                        layout: 'column',
+                        border: false,
+                        anchor: '100%',
+                        items: [{
                             columnWidth: .33,
                             layout: 'form',
                             border: false,
@@ -587,12 +624,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     anchor: '100%'
                                 })                              
                            ]
-                        }]
-                    },{                
-                        layout: 'column',
-                        border: false,
-                        anchor: '100%',
-                        items: [{
+                        }, {
                             columnWidth: .33,
                             layout: 'form',
                             border: false,
@@ -605,7 +637,12 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     anchor: '100%'
                                 })                             
                             ]
-                        },{
+                        }]
+                    }, {                
+                        layout: 'column',
+                        border: false,
+                        anchor: '100%',
+                        items: [{
                             columnWidth: .33,
                             layout: 'form',
                             border: false,
@@ -619,37 +656,6 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })                                           
                             ]
                         }, {
-                            columnWidth: .33,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [
-                                new Ext.ux.form.TriCheckbox({
-                                    fieldLabel: translation._('sayduration'),
-                                    name: 'sayduration',
-                                    id: 'sayduration',
-                                    anchor: '100%'
-                                })                                           
-                            ]
-                        }]
-                    }, {                
-                        layout: 'column',
-                        border: false,
-                        anchor: '100%',
-                        items: [{
-                            columnWidth: .33,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'numberfield',
-                                fieldLabel: translation._('saydurationm'),
-                                name: 'saydurationm',
-                                maxLength: 4,
-                                anchor: '98%',
-                                allowBlank: true
-                            }]
-                        },{
                             columnWidth: .33,
                             layout: 'form',
                             border: false,
@@ -776,6 +782,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                     items: new Ext.TabPanel({
                         plain:true,
                         activeTab: 0,
+                        deferredRender: false,                        
                         id: 'editVoicemailTabPanel',
                         layoutOnTabChange:true,  
                         items:[

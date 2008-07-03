@@ -1,0 +1,25 @@
+.imgcheckbox-wrap {
+    line-height: 18px;
+    padding-top:2px;
+}
+.imgcheckbox-wrap a {
+    display:block;
+    width:20px;
+    height:25px;
+    float:left;
+    position: relative;
+    bottom: -8px;
+}
+.x-toolbar .imgcheckbox-wrap {
+    padding: 0 0 2px 0;
+}
+.imgcheckbox-on {
+    background:transparent url(../../../../images/oxygen/22x22/actions/document-decrypt-grey.png) no-repeat 0 0;
+    outline:0; 
+    -moz-outline:0; 
+}
+.imgcheckbox-off {
+    background:transparent url(../../../../images/oxygen/22x22/actions/document-encrypt.png) no-repeat 0 0;
+    outline:0; 
+    -moz-outline:0;     
+}

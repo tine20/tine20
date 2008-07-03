@@ -386,14 +386,6 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             if(_settingData.redirect_event == 'time') {
                 Ext.getCmp('redirect_time').setDisabled(false);
             } 
-
-
-            var _rewritableFields = new Array("with_flash","message_led_other","global_missed_counter","scroll_outgoing","show_local_line","show_call_status","auto_connect_indication","privacy_out","privacy_in","enable_keyboard_lock","keyboard_lock");
-            Ext.each(_rewritableFields, function(_object, _index, _all) {
-                if(! _settingData[_object]) { _settingData[_object] = null;  }
-            });
-            
-            
             this.settingRecord = new Tine.Voipmanager.Model.Snom.Setting(_settingData);
         },
         
@@ -547,7 +539,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ null,  translation._('- none -')],                                        
+                                            [ null,  translation._('- default setting -')],                                        
                                             ['English', translation._('English')],
                                             ['Deutsch', translation._('Deutsch')],
                                             ['Espanol', translation._('Espanol')],
@@ -567,16 +559,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('web_language_writable'),
-                                        name: 'web_language_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',   
-                                        tooltip: 'bla',                                 
+                                        name: 'web_language_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'web_language_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })
+                                ]
                             }, {
                                 columnWidth: .27,
                                 layout: 'form',
@@ -598,7 +590,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ null,  translation._('- none -')],                                                                                               
+                                            [ null,  translation._('- default setting -')],                                                                                               
                                             ['English', translation._('English')],
                                             ['English(UK)', translation._('English(UK)')],
                                             ['Deutsch', translation._('Deutsch')],
@@ -624,15 +616,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('language_writable'),
-                                        name: 'language_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'language_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'language_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })
+                                ]
                             },{
                                 columnWidth: .27,
                                 layout: 'form',
@@ -654,7 +647,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ null,  translation._('- none -')],                                                                                
+                                            [ null,  translation._('- default setting -')],                                                                                
                                             ['full_contact', translation._('whole url')],
                                             ['display_name', translation._('name')],
                                             ['display_number', translation._('number')],
@@ -668,15 +661,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('display_method_writable'),
-                                        name: 'display_method_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'display_method_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'display_method_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                       
+                                ]
                             }]
                         },{          
                             layout: 'column',
@@ -703,7 +697,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ null,  translation._('- none -')],                                        
+                                            [ null,  translation._('- default setting -')],                                        
                                             ['on', translation._('on')],
                                             ['visual', translation._('visual')],
                                             ['ringer', translation._('ringer')],
@@ -716,15 +710,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('tone_scheme_writable'),
-                                        name: 'tone_scheme_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'tone_scheme_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'tone_scheme_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             },{
                                 columnWidth: .27,
                                 layout: 'form',
@@ -746,7 +741,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ null,  translation._('- none -')],                                        
+                                            [ null,  translation._('- default setting -')],                                        
                                             ['silent', translation._('silent')],
                                             ['beep', translation._('beep')],
                                             ['reminder', translation._('reminder')]
@@ -758,15 +753,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('mwi_notification_writable'),
-                                        name: 'mwi_notification_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'mwi_notification_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'mwi_notification_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }, {
                                 columnWidth: .27,
                                 layout: 'form',
@@ -788,7 +784,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ null,  translation._('- none -')],                                        
+                                            [ null,  translation._('- default setting -')],                                        
                                             ['normal', translation._('normal')],
                                             ['stutter', translation._('stutter')]
                                         ]
@@ -799,15 +795,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('mwi_dialtone_writable'),
-                                        name: 'mwi_dialtone_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'mwi_dialtone_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'mwi_dialtone_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }]
                         }, {          
                             layout: 'column',
@@ -834,7 +831,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ null,  translation._('- none -')],                                        
+                                            [ null,  translation._('- default setting -')],                                        
                                             ['none', translation._('none')],
                                             ['headset_rj', translation._('headset_rj')]
                                         ]
@@ -845,67 +842,97 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('headset_device_writable'),
-                                        name: 'headset_device_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'headset_device_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'headset_device_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }, {
                                 columnWidth: .27,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.TriCheckbox({
+                                items: [{
+                                        xtype: 'combo',
                                         fieldLabel: translation._('message_led_other'),
                                         name: 'message_led_other',
                                         id: 'message_led_other',
-                                        anchor: '100%'
-                                    })
+                                        mode: 'local',
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        anchor: '100%',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        forceSelection: true,
+                                        store: new Ext.data.SimpleStore({
+                                            id: 'id',
+                                            fields: ['id', 'name'],
+                                            data: [
+                                                [ null,  translation._('- default setting -')],
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                            ]
+                                        })
+                                    }
                                 ]
                             }, {
                                 columnWidth: .06,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('message_led_other_writable'),
-                                        name: 'message_led_other_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'message_led_other_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'message_led_other_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             },{
                                 columnWidth: .27,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [new Ext.ux.form.TriCheckbox({
-                                        fieldLabel: translation._('global_missed_counter'),
-                                        name: 'global_missed_counter',
-                                        id: 'global_missed_counter',                                        
-                                        anchor: '98%'
-                                    })    ]
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('global_missed_counter'),
+                                    name: 'global_missed_counter',
+                                    id: 'global_missed_counter',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '100%',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [[ null,  translation._('- default setting -')],['on', 'on'], ['off', 'off']]
+                                    })
+                                }]
                             }, {
                                 columnWidth: .06,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('global_missed_counter_writable'),
-                                        name: 'global_missed_counter_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'global_missed_counter_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'global_missed_counter_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }]
                         }, {          
                             layout: 'column',
@@ -916,79 +943,127 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [                                    
-                                    new Ext.ux.form.TriCheckbox({
-                                        fieldLabel: translation._('scroll_outgoing'),
-                                        name: 'scroll_outgoing',
-                                        id: 'scroll_outgoing',                                       
-                                        anchor: '98%'
-                                    })  ]
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('scroll_outgoing'),
+                                    name: 'scroll_outgoing',
+                                    id: 'scroll_outgoing',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '100%',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- default setting -')],
+                                            ['on', 'on'],
+                                            ['off', 'off']
+                                        ]
+                                    })
+                                }]
                             }, {
                                 columnWidth: .06,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('scroll_outgoing_writable'),
+                                        hideLabel: true,
                                         name: 'scroll_outgoing_writable',
-                                        hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'scroll_outgoing_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }, {
                                 columnWidth: .27,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [                 
-                                    new Ext.ux.form.TriCheckbox({
-                                        fieldLabel: translation._('show_local_line'),
-                                        name: 'show_local_line',
-                                        id: 'show_local_line',                                  
-                                        anchor: '98%'
-                                    })]
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('show_local_line'),
+                                    name: 'show_local_line',
+                                    id: 'show_local_line',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '100%',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- default setting -')],
+                                            ['on', 'on'],
+                                            ['off', 'off']
+                                        ]
+                                    })
+                                }]
                             }, {
                                 columnWidth: .06,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('show_local_line_writable'),
-                                        name: 'show_local_line_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'show_local_line_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'show_local_line_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }, {
                                 columnWidth: .27,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [     
-                                    new Ext.ux.form.TriCheckbox({
-                                        fieldLabel: translation._('show_call_status'),
-                                        name: 'show_call_status',
-                                        id: 'show_call_status',                                       
-                                        anchor: '98%'
-                                    }) ]
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('show_call_status'),
+                                    name: 'show_call_status',
+                                    id: 'show_call_status',
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '100%',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            [ null,  translation._('- default setting -')],
+                                            ['on', 'on'],
+                                            ['off', 'off']
+                                        ]
+                                    })
+                                }]
                             }, {
                                 columnWidth: .06,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('show_call_status_writable'),
-                                        name: 'show_call_status_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'show_call_status_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'show_call_status_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }]
                         }]
                     }]   // form 
@@ -1074,15 +1149,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('redirect_event_writable'),
-                                        name: 'redirect_event_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'redirect_event_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'redirect_event_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }, {
                                 columnWidth: .27,
                                 layout: 'form',
@@ -1101,15 +1177,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('redirect_number_writable'),
-                                        name: 'redirect_number_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'redirect_number_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'redirect_number_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }, {
                                 columnWidth: .27,
                                 layout: 'form',
@@ -1129,15 +1206,16 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                        xtype: 'checkbox',
+                                items: [
+                                    new Ext.ux.form.ImgCheckbox({
                                         fieldLabel: translation._('redirect_time_writable'),
-                                        name: 'redirect_time_writable',
                                         hideLabel: true,
-                                        cls: 'cboxmiddle',
+                                        name: 'redirect_time_writable',
+                                        tooltip: translation._('enable oder disable write posibility for user'),
                                         id: 'redirect_time_writable',
-                                        anchor: '98%'
-                                }]
+                                        anchor: '100%'
+                                    })                                
+                                ]
                             }]  
                         }]   // column
                     }]

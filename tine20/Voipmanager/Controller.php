@@ -908,7 +908,6 @@ class Voipmanager_Controller
     public function updateSnomSetting(Voipmanager_Model_SnomSetting $_setting)
     {
         $setting = $this->_snomSettingBackend->update($_setting);
-        
         return $this->getSnomSetting($setting);
     }    
     

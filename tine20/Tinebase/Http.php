@@ -105,7 +105,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/form/ImageField.js',
             'Tinebase/js/ux/form/ImageCropper.js',
             'Tinebase/js/ux/form/BrowseButton.js',
-            'Tinebase/js/ux/form/TriCheckbox.js',
+            'Tinebase/js/ux/form/ImgCheckbox.js',
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/DatepickerRange.js',
             // Tine 2.0 specific widgets
@@ -141,7 +141,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	   'Tinebase/css/ux/Wizard.css',
     	   'Tinebase/css/ux/grid/IconTextField.css',
     	   'Tinebase/css/ux/form/ExpandFieldSet.css',
-    	   'Tinebase/css/ux/form/TriCheckbox.css',           
+    	   'Tinebase/css/ux/form/ImgCheckbox.css',           
     	   'Tinebase/css/widgets/TagsPanel.css',
     	   // yui stuff
     	   //'../yui/build/assets/skins/sam/resize.css',

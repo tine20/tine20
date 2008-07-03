@@ -888,7 +888,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         if (empty($settingData['id'])) {
             unset($settingData['id']);
         }
-        
+
 
         //Zend_Registry::get('logger')->debug(print_r($settingData,true));
         $setting = new Voipmanager_Model_SnomSetting();

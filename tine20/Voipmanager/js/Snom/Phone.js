@@ -799,7 +799,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                         plain:true,
                         activeTab: 0,
                         id: 'editPhoneTabPanel',
-                        layoutOnTabChange:true,  
+                        layoutOnTabChange:true, 
+                        deferredRender: false,                         
                         items:[
                             this.editPhoneDialog(),
                             this.editPhoneLinesDialog(2, _lines, _snomLines)                  

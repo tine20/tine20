@@ -1034,37 +1034,37 @@
                 <field>
                     <name>message_led_other</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>on</default>
                 </field>
                 <field>
                     <name>global_missed_counter</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>on</default>
                 </field>
                 <field>
                     <name>scroll_outgoing</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>on</default>
                 </field>
                 <field>
                     <name>show_local_line</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
                 </field>
                 <field>
                     <name>show_call_status</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
                 </field>
                 <field>
                     <name>redirect_event</name>
@@ -1309,9 +1309,8 @@
                 <field>
                     <name>auto_connect_indication</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
                 </field>                   
                 <field>
                     <name>auto_connect_type</name>
@@ -1324,16 +1323,16 @@
                 <field>
                     <name>privacy_out</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
                 </field>             
                 <field>
                     <name>privacy_in</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
                 </field>             
                 <field>
                     <name>presence_timeout</name>
@@ -1344,16 +1343,16 @@
                 <field>
                     <name>enable_keyboard_lock</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>on</default>
                 </field>            
                 <field>
                     <name>keyboard_lock</name>
                     <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
                 </field>     
                 <field>
                     <name>keyboard_lock_pw</name>       
