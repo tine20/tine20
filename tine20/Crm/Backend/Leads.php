@@ -8,8 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add search/count functions and replace old deprecated functions
- * @todo        rename functions (update)
+ * @todo        rename function updateLead -> update
  * @todo        rename container to container_id in leads table
  */
 
@@ -47,8 +46,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
         $select = $this->_getSelect()
             ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
 
-      // echo $select->__toString();
-       
         $stmt = $select->query();
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
@@ -117,7 +114,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
         foreach ($leads as $leadArray) {
             $lead = new Crm_Model_Lead($leadArray, true, true);
             $set->addRecord($lead);
-            //error_log(print_r($Task->toArray(),true));
         }
         
         return $set;
@@ -138,8 +134,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      * get the basic select object to fetch leads from the database 
      *
      * @return Zend_Db_Select
-     * 
-     * @todo add tags or other joins?
      */
     protected function _getSelect()
     {
@@ -158,11 +152,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
                 'probability',
                 'end_scheduled')
             );
-            //->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.id = tag.task_id', array())
-            //->join(array('leadstate' => SQL_TABLE_PREFIX . 'metacrm_leadstate'),
-            //    'lead.leadstate_id = leadstate.id', array( 'leadstate') );        
-            
-            //echo $selectObject->__toString();     
                 
         return $select;
     }
@@ -174,8 +163,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      *
      * @param int|Crm_Model_Lead $_leads lead ids
      * @return void
-     * 
-     * @todo    rename
      */
     public function delete($_leadId)
     {
