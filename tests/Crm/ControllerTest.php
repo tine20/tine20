@@ -238,19 +238,19 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
                 new Crm_Model_Leadsource(array(
                     'id' => 1001,
                     'leadsource' => 'Just a phpunit test lead source #1',
-                    'leadsource_translate' => 0)),
+                    'translate' => 0)),
                 new Crm_Model_Leadsource(array(
                     'id' => 1002,
                     'leadsource' => 'Just a phpunit test lead source #2',
-                    'leadsource_translate' => 0)),
+                    'translate' => 0)),
                 new Crm_Model_Leadsource(array(
                     'id' => 1003,
                     'leadsource' => 'Just a phpunit test lead source #3',
-                    'leadsource_translate' => 0)),
+                    'translate' => 0)),
                 new Crm_Model_Leadsource(array(
                     'id' => 1004,
                     'leadsource' => 'Just a phpunit test lead source #4',
-                    'leadsource_translate' => 0))
+                    'translate' => 0))
         );
         
         // some lead sources to update
@@ -258,11 +258,62 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
                 new Crm_Model_Leadsource(array(
                     'id' => 1002,
                     'leadsource' => 'Just a phpunit test lead source #2 UPDATED',
-                    'leadsource_translate' => 0)),
+                    'translate' => 0)),
                 new Crm_Model_Leadsource(array(
                     'id' => 1003,
                     'leadsource' => 'Just a phpunit test lead source #3 UPDATED',
-                    'leadsource_translate' => 0))
+                    'translate' => 0))
+        );
+        
+        // some lead states
+        $this->_objects['someLeadStates'] = array(
+                new Crm_Model_Leadstate(array(
+                    'id' => 1001,
+                    'leadstate' => 'Just a phpunit test lead state #1',
+                    'probability' => 10,
+                    'endslead' => 0,
+                    'translate' => 0)),
+                new Crm_Model_Leadstate(array(
+                    'id' => 1002,
+                    'leadstate' => 'Just a phpunit test lead state #2',
+                    'probability' => 10,
+                    'endslead' => 0,
+                    'translate' => 0)),
+                new Crm_Model_Leadstate(array(
+                    'id' => 1003,
+                    'leadstate' => 'Just a phpunit test lead state #3',
+                    'probability' => 10,
+                    'endslead' => 0,
+                    'translate' => 0)),
+                new Crm_Model_Leadstate(array(
+                    'id' => 1004,
+                    'leadstate' => 'Just a phpunit test lead state #4',
+                    'probability' => 10,
+                    'endslead' => 0,
+                    'translate' => 0)),
+                new Crm_Model_Leadstate(array(
+                    'id' => 1005,
+                    'leadstate' => 'Just a phpunit test lead state #5',
+                    'probability' => 10,
+                    'endslead' => 0,
+                    'translate' => 0))
+                
+        );
+        
+        // some lead states to update
+        $this->_objects['someLeadStatesToUpdate'] = array(
+                new Crm_Model_Leadstate(array(
+                    'id' => 1002,
+                    'leadstate' => 'Just a phpunit test lead state #2 UPDATED',
+                    'probability' => 10,
+                    'endslead' => 0,
+                    'translate' => 0)),
+                new Crm_Model_Leadstate(array(
+                    'id' => 1003,
+                    'leadstate' => 'Just a phpunit test lead state #3 UPDATED',
+                    'probability' => 10,
+                    'endslead' => 0,
+                    'translate' => 0))
         );
     }
 
@@ -632,5 +683,47 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         Crm_Controller::getInstance()->saveLeadsources($savedLeadSources);
+    }
+    
+    /**
+     * try to save / create, update and delete more than one lead state
+     * 
+     * @todo complete test for lead states to delete
+     */
+    public function testSaveLeadStates() {
+        // save db table content (because of test dependencies)
+        $savedLeadStates = Crm_Controller::getInstance()->getLeadStates();
+        
+        // go!
+        $someLeadStates = new Tinebase_Record_RecordSet('Crm_Model_Leadstate',
+                $this->_objects['someLeadStates']);
+        
+        // save / create some lead states
+        $resultLeadStates = Crm_Controller::getInstance()
+                ->saveLeadstates($someLeadStates);
+        
+        $this->assertEquals($someLeadStates, $resultLeadStates);
+        
+        // get every saved lead state back from database one by one
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
+        
+        foreach ($this->_objects['someLeadStates'] as $leadState) {
+            $this->assertEquals($leadState, $backend->get($leadState->id));
+        }
+        
+        // update some lead states
+        $someLeadStates = new Tinebase_Record_RecordSet('Crm_Model_Leadstate',
+                $this->_objects['someLeadStatesToUpdate']);
+        
+        $resultLeadStates = Crm_Controller::getInstance()
+                ->saveLeadstates($someLeadStates);
+        
+        foreach ($this->_objects['someLeadStatesToUpdate'] as $leadState) {
+            $this->assertEquals($leadState['leadstate'],
+                    $backend->get($leadState->id)->leadstate);
+        }
+        
+        // cleanup
+        Crm_Controller::getInstance()->saveLeadstates($savedLeadStates);
     }
 }
