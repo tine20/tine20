@@ -92,10 +92,19 @@ Tine.Addressbook.Main = {
          */
         exportContact: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
-            var contactId = selectedRows[0].id;
+            var _rowIndexIds = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();            
+            var toExportIds = [];
+        
+            for (var i = 0; i < _rowIndexIds.length; ++i) {
+                toExportIds.push(_rowIndexIds[i].id);
+            }
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 768, 1024);
+            var contactIds = Ext.util.JSON.encode(toExportIds);
+
+            //var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
+            //var contactId = selectedRows[0].id;
+            
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 768, 1024);
         },
 
         /**
@@ -396,7 +405,7 @@ Tine.Addressbook.Main = {
                 // more than one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(true);
-                this.actions.exportContact.setDisabled(true);
+                this.actions.exportContact.setDisabled(false);
                 this.actions.callContact.setDisabled(true);
             } else {
                 // only one row selected
@@ -685,7 +694,7 @@ Tine.Addressbook.ContactEditDialog = {
         var  _export_contact = new Ext.Action({
             text: 'export as pdf',
             handler: function(){
-                var contactId = _contactData.id;
+                var contactIds = Ext.util.JSON.encode([_contactData.id]);
                 Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 200, 150);                   
             },
             iconCls: 'action_exportAsPdf',

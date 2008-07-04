@@ -77,26 +77,43 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
     /**
      * export contact
      * 
-     * @param	integer contact id
+     * @param	string JSON encoded string with contact ids for multi export
      * @param	format	pdf or csv or ...
      * 
      * @todo	implement csv export
      */
-    public function exportContact ($_contactId, $_format = 'pdf')
+    public function exportContact ($_contactIds, $_format = 'pdf')
     {
-        // get contact
-        $contact = Addressbook_Controller::getInstance()->getContact($_contactId);
-        // export
-        if ($_format === "pdf") {
-            $pdf = new Addressbook_Pdf();
-            $pdf->generateContactPdf($contact);
-            $pdfOutput = $pdf->render();
-            
-            header("Content-Disposition: inline; filename=contact.pdf");
-            header("Content-type: application/x-pdf");
-            echo $pdfOutput;
-        }
+        $contactIds = Zend_Json::decode($_contactIds);
+        
+        switch ($_format) {
+            case 'pdf':                             
+                $pdf = new Addressbook_Pdf();
+                
+                foreach ($contactIds as $contactId) {
+                    $contact = Addressbook_Controller::getInstance()->getContact($contactId);
+                    $pdf->generateContactPdf($contact);
+                }
+                    
+                try {
+                    $pdfOutput = $pdf->render();
+                } catch ( Zend_Pdf_Exception $e ) {
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString() );
+                    echo "could not create pdf <br/>". $e->__toString();
+                    exit();            
+                }
+                
+                header("Content-Disposition: inline; filename=contact.pdf"); 
+                header("Content-type: application/x-pdf"); 
+                echo $pdfOutput;            
+                break;
+                
+            default:
+                echo "Format $_format not supported yet.";
+                exit();
+        }        
     }
+    
     /**
      * Returns all JS files which must be included for Addressbook
      * 
