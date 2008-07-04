@@ -154,7 +154,7 @@ Tine.Crm.Main = {
                 relatedApp: 'crm',
                 relatedId: _rowIndex[0].id
             });
-        },
+        }
         
     },        
 
@@ -587,7 +587,7 @@ Tine.Crm.Main = {
     {
         shortContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
             if( Ext.isArray(_data) && _data.length > 0 ) {
-                var org = ( _data[0].org_name != null ) ? _data[0].org_name : '';
+                var org = ( _data[0].org_name !== null ) ? _data[0].org_name : '';
                 return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(_data[0].n_fileas);
             }
         },          
@@ -610,14 +610,14 @@ Tine.Crm.Main = {
                         _style = '';
                     }
                     
-                    contactDetails = contactDetails + '<table width="100%" height="100%" class="' + _style + '">'
-                                         + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(org_name) + '</td></tr>'
-                                         + '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>'
-                                         + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>'
-                                         + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + adr_one_locality + '</td></tr>'
-                                         + '<tr><td width="50%">' + this.translation._('Phone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>'
-                                         + '<tr><td width="50%">' + this.translation._('Cellphone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>'
-                                         + '</table> <br />';
+                    contactDetails = contactDetails + '<table width="100%" height="100%" class="' + _style + '">' +
+                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(org_name) + '</td></tr>' +
+                                         '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>' +
+                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>' +
+                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + adr_one_locality + '</td></tr>' +
+                                         '<tr><td width="50%">' + this.translation._('Phone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>' +
+                                         '<tr><td width="50%">' + this.translation._('Cellphone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>' +
+                                         '</table> <br />';
                 }
                 
                 return contactDetails;
@@ -671,7 +671,7 @@ Tine.Crm.LeadEditDialog = {
                 Ext.Ajax.request({
                     params: {
                         method: 'Crm.saveLead', 
-                        lead: Ext.util.JSON.encode(lead.data),
+                        lead: Ext.util.JSON.encode(lead.data)
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Crm) {
@@ -878,7 +878,7 @@ Tine.Crm.LeadEditDialog = {
          */
         exportLead: function(_button, _event) {            
             Tine.Tinebase.Common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + _button.leadId, 768, 1024);
-        },
+        }
     },       
 
     /**
@@ -892,9 +892,9 @@ Tine.Crm.LeadEditDialog = {
     getAdditionalData: function(lead)
     {
         // collect data of assosicated contacts
-        var linksResponsible = new Array();
-        var linksCustomer = new Array();
-        var linksPartner = new Array();
+        var linksResponsible = [];
+        var linksCustomer = [];
+        var linksPartner = [];
 
         var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
         
@@ -928,7 +928,7 @@ Tine.Crm.LeadEditDialog = {
         lead.data.partner = linksPartner;
         
         // add tasks
-        var linksTasks = new Array();
+        var linksTasks = [];
         var storeTasks = Ext.StoreMgr.lookup('TasksStore');
         
         storeTasks.each(function(record) {
@@ -939,7 +939,7 @@ Tine.Crm.LeadEditDialog = {
         lead.data.tasks = linksTasks;
         
         // add products
-        var linksProducts = new Array();
+        var linksProducts = [];
         var storeProducts = Ext.StoreMgr.lookup('ProductsStore');       
 
         storeProducts.each(function(record) {
@@ -964,8 +964,12 @@ Tine.Crm.LeadEditDialog = {
      */
     getLinksGrid: function(_type, _title)
     {
-    	// store name
+    	// init vars
     	var storeName = _type + 'Store';
+    	var columnModel = null;
+    	var autoExpand = 'n_fileas';
+    	var rowSelectionModel = null;
+    	var bbarItems = [];
     	
     	// set the column / row selection model
     	switch ( _type ) {
@@ -975,7 +979,7 @@ Tine.Crm.LeadEditDialog = {
     		case 'Contacts':
 
                 // @todo   move that to renderer/addressbook ?
-                var columnModel = new Ext.grid.ColumnModel([
+                columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                         function(val, meta, record) {
@@ -1015,9 +1019,7 @@ Tine.Crm.LeadEditDialog = {
                     }
                 ]);
                 
-                var autoExpand = 'n_fileas';                        
-                
-                var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+                rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();                    
                     if(rowCount < 1) {
@@ -1034,7 +1036,7 @@ Tine.Crm.LeadEditDialog = {
                     }
                 }, this);
                 
-                var bbarItems = [                
+                bbarItems = [                
                     this.actions.linkContact,                    
                     this.actions.addContact,
                     this.actions.unlinkContact
@@ -1046,7 +1048,7 @@ Tine.Crm.LeadEditDialog = {
                 
             case 'ContactsSearch':
             
-                var columnModel = new Ext.grid.ColumnModel([
+                columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 120, sortable: true},
                     {id:'org_name', header: this.translation._('Organisation'), dataIndex: 'org_name', width: 120, sortable: true},
@@ -1065,15 +1067,9 @@ Tine.Crm.LeadEditDialog = {
                     }
                 ]);
                 
-                var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-                
-                var autoExpand = 'n_fileas';
+                rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 
                 storeName = 'ContactsStore';
-                
-                var bbarItems = [
-                ];
-
                 
                 break;
 
@@ -1081,7 +1077,7 @@ Tine.Crm.LeadEditDialog = {
 
             case 'Tasks':
             
-                var columnModel = [{
+                columnModel = [{
                     id: 'status_id',
                     header: this.translation._("Status"),
                     width: 45,
@@ -1157,7 +1153,7 @@ Tine.Crm.LeadEditDialog = {
                     })
                 }];
                 
-            	var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+            	rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();                    
                     if(rowCount < 1) {
@@ -1174,9 +1170,9 @@ Tine.Crm.LeadEditDialog = {
                     }
                 }, this);
             	
-                var autoExpand = 'summary';
+                autoExpand = 'summary';
                 
-                var bbarItems = [
+                bbarItems = [
                     this.actions.addTask,
                     this.actions.unlinkTask
                 ]; 
@@ -1187,7 +1183,7 @@ Tine.Crm.LeadEditDialog = {
                 
             case 'Products':
             
-                var columnModel = [
+                columnModel = [
                 {
                     header: this.translation._("Product"),
                     id: 'product_id',
@@ -1239,7 +1235,7 @@ Tine.Crm.LeadEditDialog = {
                 }                
                 ];
                 
-                var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+                rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();                    
                     if(rowCount < 1) {
@@ -1253,9 +1249,9 @@ Tine.Crm.LeadEditDialog = {
                     }
                 }, this);
                 
-                var autoExpand = 'product_desc';
+                autoExpand = 'product_desc';
                 
-                var bbarItems = [
+                bbarItems = [
                     this.actions.unlinkProduct
                 ]; 
                 
@@ -1264,10 +1260,11 @@ Tine.Crm.LeadEditDialog = {
         } // end switch
 
         // get store and create grid
-        var gridStore = Ext.StoreMgr.lookup(storeName);      
+        var gridStore = Ext.StoreMgr.lookup(storeName);  
+        var grid = null;
         
         if ( _type === 'ContactsSearch' ) {
-            var grid = new Tine.widgets.GridPicker({
+            grid = new Tine.widgets.GridPicker({
             	id: 'crmGrid' + _type,
             	title: _title,
                 gridStore: gridStore,
@@ -1277,7 +1274,7 @@ Tine.Crm.LeadEditDialog = {
             });
             
         } else if ( _type === 'Contacts' ) {
-            var grid = new Ext.grid.EditorGridPanel({
+            grid = new Ext.grid.EditorGridPanel({
                 id: 'crmGrid' + _type,
                 title: _title,
                 cm: columnModel,
@@ -1288,9 +1285,8 @@ Tine.Crm.LeadEditDialog = {
                 clicksToEdit: 'auto'
             });            
             
-        } else if ( _type === 'Tasks') {
-        	
-            var grid = new Ext.ux.grid.QuickaddGridPanel({
+        } else if ( _type === 'Tasks') {        	
+            grid = new Ext.ux.grid.QuickaddGridPanel({
                 title: _title,
                 id: 'crmGrid' + _type,
                 disabled: true,
@@ -1361,9 +1357,8 @@ Tine.Crm.LeadEditDialog = {
                 }
             }, this);            
 
-        } else if ( _type === 'Products') {
-        	
-            var grid = new Ext.ux.grid.QuickaddGridPanel({
+        } else if ( _type === 'Products') {        	
+            grid = new Ext.ux.grid.QuickaddGridPanel({
                 title: _title,
                 id: 'crmGrid' + _type,
                 disabled: true,
@@ -1391,7 +1386,7 @@ Tine.Crm.LeadEditDialog = {
             }, this);
             
         } else {        	
-            var grid = {
+            grid = {
                 xtype:'grid',
                 id: 'crmGrid' + _type,
                 title: _title,
@@ -1413,6 +1408,10 @@ Tine.Crm.LeadEditDialog = {
      */
     setLinksContextMenu: function(_type)
     {
+    	// init vars
+    	var rowItems = [];
+    	var gridItems = [];
+    	
         switch ( _type ) {
             case 'Contacts':
                 var addNewItems = {
@@ -1429,7 +1428,7 @@ Tine.Crm.LeadEditDialog = {
                     }
                 }; 
                 // items for row context menu
-                var rowItems = [
+                rowItems = [
                     this.actions.editContact,
                     this.actions.unlinkContact,
                     '-',
@@ -1437,7 +1436,7 @@ Tine.Crm.LeadEditDialog = {
                     addNewItems
                 ];
                 // items for all grid context menu
-                var gridItems = [
+                gridItems = [
                     this.actions.linkContact,
                     addNewItems
                 ];
@@ -1445,7 +1444,7 @@ Tine.Crm.LeadEditDialog = {
                 
             case 'Tasks':
                 // items for row context menu
-                var rowItems = [
+                rowItems = [
                     this.actions.editTask,
                     this.actions.unlinkTask,
                     '-',
@@ -1453,7 +1452,7 @@ Tine.Crm.LeadEditDialog = {
                     this.actions.addTask
                 ];
                 // items for all grid context menu
-                var gridItems = [
+                gridItems = [
                     //this.actions.linkTask,
                     this.actions.addTask
                 ];
@@ -1461,11 +1460,9 @@ Tine.Crm.LeadEditDialog = {
                 
             case 'Products':
                 // items for row context menu
-                var rowItems = [
+                rowItems = [
                     this.actions.unlinkProduct
                 ];
-                // items for all grid context menu
-                var gridItems = [];
                 break;
         }
         
@@ -1508,8 +1505,10 @@ Tine.Crm.LeadEditDialog = {
      */
     loadContactsStore: function(_responsible, _customer, _partner, _reload)
     {
+    	var storeContacts = null;
+    	
     	if (_reload) {
-    	   	var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+    	   	storeContacts = Ext.StoreMgr.lookup('ContactsStore');
 
     	   	// empty store and fill with data
     	   	storeContacts.removeAll();
@@ -1527,7 +1526,7 @@ Tine.Crm.LeadEditDialog = {
             }
     	   	
     	} else {
-            var storeContacts = new Ext.data.JsonStore({
+            storeContacts = new Ext.data.JsonStore({
                 id: 'id',
                 fields: Tine.Crm.Model.ContactLink
             });
@@ -1891,7 +1890,7 @@ Tine.Crm.Model.TaskLink = Ext.data.Record.create([
     {name: 'due'},
     {name: 'creator'},
     {name: 'description'},
-    {name: 'priority'},
+    {name: 'priority'}
 ]);
 
 // product link

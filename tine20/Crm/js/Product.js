@@ -227,4 +227,4 @@ Tine.Crm.Product.renderer = function(data) {
         Ext.getCmp('leadDialog').doLayout();
         return Ext.util.Format.htmlEncode(data);
     }
-}
+};

@@ -239,7 +239,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
                 //title: 'contacts panel',
                 activeTab: 0,
                 height: 350,
-                items: _linkTabpanels,
+                items: _linkTabpanels
             }
             ]
         }]
@@ -256,7 +256,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         defaults: {
             border: true,
             frame: true            
-        },
+        }
     };
 
     /*********** MAIN tab panel ************/
@@ -364,7 +364,7 @@ Tine.Crm.contactType.Renderer = function(type)
             break;
     }
     
-    var icon = '<img class="x-menu-item-icon ' + iconClass + '" src="ExtJS/resources/images/default/s.gif" ext:qtip="' + qTip + '"/>'
+    var icon = '<img class="x-menu-item-icon ' + iconClass + '" src="ExtJS/resources/images/default/s.gif" ext:qtip="' + qTip + '"/>';
     
     return icon;
 };

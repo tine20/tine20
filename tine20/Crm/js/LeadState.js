@@ -67,7 +67,7 @@ Tine.Crm.LeadState.Renderer = function(_leadstateId) {
 	record = leadstateStore.getById(_leadstateId);
 	
 	return record.data.leadstate;
-}
+};
 
 /**
  * lead states edit dialog
