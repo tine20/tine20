@@ -7,9 +7,7 @@
 Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     var translation = new Locale.Gettext();
     translation.textdomain('Addressbook');
-    
-    console.log(_contact);
-    
+
     var savePath = {
         layout: 'column',
         autoHeight: true,
