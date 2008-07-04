@@ -210,11 +210,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // create table
         if ( !empty($data) ) {
-            $this->CreateTable($data, 50, 730, $_tableBorder);
+            $this->_CreateTable($data, 50, 730, $_tableBorder);
         }
                 
         // write footer
-        $this->CreateFooter();
+        $this->_CreateFooter();
         
         // increase page number
         $this->_pageNumber++;        
@@ -226,11 +226,10 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @param   array   $_content content
      * @param   integer $_posX xpos (upper left corner)
      * @param   integer $_posY ypos (upper left corner)
-     * @param   integer $_pageNumber pagenumber for table
      * @param   bool    $_border    activate border
      * 
      */
-    public function CreateTable ( $_content, $_posX = 100, $_posY = 700, $_border = true )
+    protected function _CreateTable ( $_content, $_posX = 100, $_posY = 700, $_border = true )
     {
         $cellWidth = 150;
         $padding = 5;
@@ -326,7 +325,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * create footer on all pages
      * 
 	 */
-	public function CreateFooter ()
+	protected function _CreateFooter ()
 	{
 		// get translations from addressbook
 		$locale = Zend_Registry::get('locale');
