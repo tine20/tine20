@@ -89,7 +89,9 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         // export
         if ($_format === "pdf") {
             $pdf = new Addressbook_Pdf();
-            $pdfOutput = $pdf->getContactPdf($contact);
+            $pdf->generateContactPdf($contact);
+            $pdfOutput = $pdf->render();
+            
             header("Content-Disposition: inline; filename=contact.pdf");
             header("Content-type: application/x-pdf");
             echo $pdfOutput;

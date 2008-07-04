@@ -25,7 +25,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      * 
      * @return	string	the contact pdf
      */
-    public function getLeadPdf ( Crm_Model_Lead $_lead )
+    public function generateLeadPdf(Crm_Model_Lead $_lead, $_pageNumber = 0)
     {
         $locale = Zend_Registry::get('locale');
         $translate = Tinebase_Translation::getTranslation('Crm');    
@@ -47,7 +47,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         
         /***************************** generate pdf now! ********************/
                     
-        return $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE);
+        $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE);
         
     }
 
@@ -173,7 +173,6 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         foreach ( $types as $type => /* $headline */ $icon ) {
             
             if ( !empty($_lead->$type)) {
-                //$linkedObjects[] = array ( $headline, 'headline');
                 
                 foreach ( $_lead->$type as $relation ) {
                     try {
@@ -208,7 +207,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         
         /********************** tasks ******************/
 
-        if (!empty($_lead->tasks)) {
+        if (count($_lead->tasks) > 0) {
             
             $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
             
@@ -233,7 +232,6 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     }    
                     
                     // get task priority
-                    //$taskPriority = Tasks_Controller::getInstance()->getTaskPriority($task->priority);
                     $taskPriority = $this->getTaskPriority($task->priority, $_translate);
                     $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
                     
@@ -246,16 +244,16 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 
         /********************** products ******************/
 
-        if (!empty($_lead->products)) {
+        if (count($_lead->products) > 0) {
             
             $linkedObjects[] = array ( $_translate->_('Products'), 'headline');
             
             foreach ($_lead->products as $product) {
                 try {
-                    //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . print_r($product->toArray(), true));
-                    
                     $sourceProduct = Crm_Controller::getInstance()->getProduct($product->product_id);
-                    $price = Zend_Locale_Format::toNumber($product->product_price, array('locale' => $_locale)) . " €";
+                    
+                    // @todo set precision for the price ?
+                    $price = Zend_Locale_Format::toNumber($product->product_price, array('locale' => $_locale)/*, array('precision' => 2)*/) . " €";
                     
                     $linkedObjects[] = array (
                         $sourceProduct->productsource . ' - ' . $product->product_desc . ' (' . $price . ')', 

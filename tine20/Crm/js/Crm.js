@@ -136,10 +136,16 @@ Tine.Crm.Main = {
          * onclick handler for exportBtn
          */
         exportLead: function(_button, _event) {
-            var selectedRows = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            var leadId = selectedRows[0].data.id;
+            var _rowIndexIds = Ext.getCmp('gridCrm').getSelectionModel().getSelections();            
+            var toExportIds = [];
+        
+            for (var i = 0; i < _rowIndexIds.length; ++i) {
+                toExportIds.push(_rowIndexIds[i].data.id);
+            }
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);
+            var leadIds = Ext.util.JSON.encode(toExportIds);
+
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadIds, 768, 1024);
         },
         
         /**
@@ -876,8 +882,11 @@ Tine.Crm.LeadEditDialog = {
         /**
          * onclick handler for exportBtn
          */
-        exportLead: function(_button, _event) {            
-            Tine.Tinebase.Common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + _button.leadId, 768, 1024);
+        exportLead: function(_button, _event) {         
+        	
+        	var leadId = Ext.util.JSON.encode([_button.leadId]);
+        	
+            Tine.Tinebase.Common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadId, 768, 1024);
         }
     },       
 
