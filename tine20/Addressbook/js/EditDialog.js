@@ -4,9 +4,11 @@
  * 
  * @todo make country selection a widget
  */
-Tine.Addressbook.ContactEditDialog.getEditForm = function() {
+Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     var translation = new Locale.Gettext();
     translation.textdomain('Addressbook');
+    
+    console.log(_contact);
     
     var savePath = {
         layout: 'column',
@@ -413,6 +415,27 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
     
+    // @todo set center/markers when tab is clicked 
+    // google maps tab panel
+    var gmapPanel = new Ext.ux.GMapPanel({
+    	id: 'googleMapsPanel',
+    	title: translation._('Map'),
+        region: 'center',
+        zoomLevel: 14,
+        gmapType: 'map',
+        addControl: new GSmallMapControl(),
+        setCenter: {
+            //geoCodeAddr: '4 Yawkey Way, Boston, MA, 02215-3409, USA',
+            //marker: {title: 'Fenway Park'}
+        	geoCodeAddr: _contact.adr_one_street + ', ' + _contact.adr_one_locality,
+            marker: {title: translation._('Business Address')}
+        },
+        markers: [{
+            geoCodeAddr: _contact.adr_two_street + ', ' + _contact.adr_two_locality,
+            marker: {title: translation._('Private Address')}
+        }]        
+    });
+    
     var tabPanel = new Ext.TabPanel({
         id: 'adbEditDialogTabPanel',
         xtype:'tabpanel',
@@ -425,6 +448,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         border: false,
         items:[
             contactTabPanel,
+            gmapPanel,
             {
                 title: sprintf(translation.ngettext('Link', 'Links [%d]', 1), 1),
                 disabled: true

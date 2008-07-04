@@ -711,7 +711,7 @@ Tine.Addressbook.ContactEditDialog = {
             handlerSaveAndClose: this.handlers.saveAndClose,
             handlerDelete: this.handlers.deleteContact,
             handlerExport: this.handlers.exportContact,
-            items: Tine.Addressbook.ContactEditDialog.getEditForm()
+            items: Tine.Addressbook.ContactEditDialog.getEditForm(_contactData)
         });
         dialog.on('render', function(dialog){
             dialog.getForm().findField('n_prefix').focus(false, 250);

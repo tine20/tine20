@@ -5,11 +5,9 @@
  * @package     Tinebase
  * @subpackage  Views
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      ?
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo		add author
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -26,6 +24,9 @@
     <!-- <script type="text/javascript" src="ExtJS/adapter/yui/ext-yui-adapter.js"></script> -->
     <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="ExtJS/ext-all.js"></script>
+
+    <!-- GMaps API Key that works for localhost -->
+    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAJDLv3q8BFBryRorw-851MRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTyuslsNlFqyphYqv1PCUD8WrZA2A" type="text/javascript"></script>
 
     <!-- Tine 2.0 static files -->
     <?php
