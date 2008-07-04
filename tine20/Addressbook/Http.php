@@ -7,7 +7,10 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        put gmaps api key in config
  */
+
 /**
  * backend class for Tinebase_Http_Server
  *
@@ -70,6 +73,10 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         $includeFiles = Tinebase_Http::getAllIncludeFiles();
         $view->jsIncludeFiles = $includeFiles['js'];
         $view->cssIncludeFiles = $includeFiles['css'];
+        
+        // add google api key
+        $view->googleApi = '<!-- GMaps API Key that works for localhost --><script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAJDLv3q8BFBryRorw-851MRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTyuslsNlFqyphYqv1PCUD8WrZA2A" type="text/javascript"></script>';        
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
