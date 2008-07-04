@@ -128,7 +128,8 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     public function testContactPdf()
     {
 		$pdf = new Addressbook_Pdf();
-		$pdfOutput = $pdf->getContactPdf($this->objects['contact']);
+		$pdf->generateContactPdf($this->objects['contact']);
+		$pdfOutput = $pdf->render();
 		
 		//$pdf->save("test.pdf");
 		
@@ -149,7 +150,8 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     	Zend_Registry::set('locale', new Zend_Locale('de_DE'));
     	
         $pdf = new Addressbook_Pdf();
-        $pdfOutput = $pdf->getContactPdf($this->objects['contact']);
+        $pdf->generateContactPdf($this->objects['contact']);
+        $pdfOutput = $pdf->render();
         
         //$pdf->save("test.pdf");
         
