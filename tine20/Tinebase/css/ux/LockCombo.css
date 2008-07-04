@@ -1,0 +1,9 @@
+.x-form-field-wrap .x-form-locked-trigger{
+    background-image: url(../../../images/locked-lockCombo.gif);
+    cursor:pointer;
+}
+
+.x-form-field-wrap .x-form-unlocked-trigger{
+    background-image: url(../../../images/unlocked-lockCombo.gif);
+    cursor:pointer;
+}
