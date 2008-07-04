@@ -208,11 +208,11 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         
         /********************** tasks ******************/
 
-        if ( !empty($_lead->tasks) ) {
+        if (!empty($_lead->tasks)) {
             
             $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
             
-            foreach ( $_lead->tasks as $relation ) {
+            foreach ($_lead->tasks as $relation) {
                 try {
                     $task = Tasks_Controller::getInstance()->getTask($relation->related_id);
                     
@@ -227,7 +227,6 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     }
                     
                     // get due date
-                    // @todo change to zend date in model later on
                     if ( !empty($task->due) ) {
                         $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
                         $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
@@ -245,8 +244,31 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             }
         }
 
-        //@todo add products to export
+        /********************** products ******************/
 
+        if (!empty($_lead->products)) {
+            
+            $linkedObjects[] = array ( $_translate->_('Products'), 'headline');
+            
+            foreach ($_lead->products as $product) {
+                try {
+                    //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . print_r($product->toArray(), true));
+                    
+                    $sourceProduct = Crm_Controller::getInstance()->getProduct($product->product_id);
+                    $price = Zend_Locale_Format::toNumber($product->product_price, array('locale' => $_locale)) . " €";
+                    
+                    $linkedObjects[] = array (
+                        $sourceProduct->productsource . ' - ' . $product->product_desc . ' (' . $price . ')', 
+                        'separator'
+                    );
+                    
+                } catch (Exception $e) {
+                    // do nothing so far
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
+                }
+            }
+        }
+        
         return  $linkedObjects;
        
     }

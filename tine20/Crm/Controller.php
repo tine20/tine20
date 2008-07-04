@@ -422,6 +422,21 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     }     
 
     /**
+     * get product
+     *
+     * @param integer $_productId
+     * @return Crm_Model_Product
+     * 
+     */
+    public function getProduct($_productId)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        $result = $backend->get($_productId);
+        
+        return $result;    
+    }     
+    
+    /**
      * saves products
      *
      * Saving products means to calculate the difference between posted data
