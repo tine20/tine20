@@ -9,13 +9,15 @@
  * @version     $Id: Release0.php 3134 2008-07-02 17:04:25Z twadewitz $
  */
 
-class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
+class Voipmanager_Setup_Update_Release1 extends Setup_Update_Abstract
 {
+
     /**
      * rebuild snom_settings
      */    
-    public function update_1()
+    public function update_0()
     {
+		
         $tableDefinition = "
           <table>
             <name>snom_settings</name>
@@ -110,13 +112,6 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>none</value>
                     <value>headset_rj</value>
                     <default>none</default>
-                </field>
-                <field>
-                    <name>with_flash</name>
-                    <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>message_led_other</name>
@@ -560,4 +555,56 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Voipmanager', '1.1');
     }  
           
+    /**
+     * create asterisk_meetme
+     */    
+    public function update_1()
+    {		  
+		$tableDefinition = "
+	      <table>
+	            <name>asterisk_meetme</name>
+	            <engine>InnoDB</engine>
+	            <charset>utf8</charset>
+	            <version>1</version>
+	            <declaration>
+	                <field>
+	                    <name>id</name>
+	                    <type>text</type>
+	                    <length>40</length>
+	                    <notnull>true</notnull>
+	                </field>
+	                <field>
+	                    <name>confno</name>
+	                    <type>text</type>
+	                    <length>80</length>
+	                    <notnull>true</notnull>
+	                </field>
+	                <field>
+	                    <name>pin</name>
+	                    <type>text</type>
+	                    <length>80</length>
+	                    <notnull>true</notnull>
+	                </field>
+	                <field>
+	                    <name>adminpin</name>
+	                    <type>text</type>
+	                    <length>80</length>
+	                    <notnull>true</notnull>
+	                </field>								
+	                <index>
+	                    <name>id</name>
+	                    <primary>true</primary>
+	                    <field>
+	                        <name>id</name>
+	                    </field>
+	                </index>
+	            </declaration>
+	        </table>" ;
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+
+        $this->_backend->createTable($table);        
+        $this->setApplicationVersion('Voipmanager', '1.2');
+    }  		  
+		  
 }

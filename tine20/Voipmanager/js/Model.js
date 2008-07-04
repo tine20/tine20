@@ -238,3 +238,10 @@ Tine.Voipmanager.Model.Asterisk.Voicemail = Ext.data.Record.create([
     {name: 'hidefromdir'}
 ]);
 
+Tine.Voipmanager.Model.Asterisk.Meetme = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'confno'},
+    {name: 'pin'},
+	{name: 'adminpin'}
+]);
+

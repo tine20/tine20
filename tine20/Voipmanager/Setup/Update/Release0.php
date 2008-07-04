@@ -1226,7 +1226,8 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
      * rebuild snom_settings
      */    
     public function update_8()
-    {
+    {   	
+		
         $tableDefinition = "
           <table>
             <name>snom_settings</name>
@@ -1777,6 +1778,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_9()
     {
+    	
         $declaration = new Setup_Backend_Schema_Field_Xml();
         $declaration->name      = 'attach';
         $declaration->type      = 'enum';

@@ -37,7 +37,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Snom/Settings.js',
             'Voipmanager/js/Asterisk/SipPeer.js',
             'Voipmanager/js/Asterisk/Context.js',
-            'Voipmanager/js/Asterisk/Voicemail.js'
+            'Voipmanager/js/Asterisk/Voicemail.js',
+			'Voipmanager/js/Asterisk/Meetme.js',
         );
     }
     
@@ -422,4 +423,47 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         echo $view->render('mainscreen.php');
     }        
      
+
+    /**
+     * create edit asterisk meetme dialog
+     *
+     * @param int $lineId
+     * 
+     */
+    public function editAsteriskMeetme($meetmeId=NULL)
+    {
+        if (!empty($meetmeId)) {
+            $meetme = Voipmanager_Controller::getInstance()->getAsteriskMeetme($meetmeId);
+            $encodedMeetme = Zend_Json::encode($meetme->toArray());                   
+        } else {
+            $encodedMeetme = '{}';
+        }
+
+        
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Meetme.EditDialog.display(' . $encodedMeetme .');';
+
+        $view->locationData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit asterisk meetme data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }	 
+	 
+	 
 }

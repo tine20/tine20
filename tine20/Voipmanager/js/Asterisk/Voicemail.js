@@ -540,7 +540,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 fieldLabel: translation._('callback'),
                                 name: 'callback',
                                 maxLength: 10,
-                                anchor: '98%',
+                                anchor: '100%',
                                 allowBlank: true
                             }]
                         }]
@@ -549,36 +549,31 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('sayduration'),
                                 id: 'sayduration',
                                 name: 'sayduration',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',
-                                anchor: '100%'
-                            }]
-                        }, {
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('sayduration'),
-                                hideLabel: true,
-                                id: 'sayduration',
-                                name: 'sayduration',
-                                boxLabel: 'no',
-                                checked: false,
-                                ctCls: 'down',                                
-                                value: 'false',
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })								
                             }]
                         }, {
                             columnWidth: .33,
@@ -594,36 +589,31 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }, {
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('attach'),
                                 name: 'attach',
                                 id: 'attach',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',
-                                anchor: '100%'
-                            }]
-                        }, {
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('attach'),
-                                hideLabel: true,
-                                name: 'attach',
-                                id: 'attach',
-                                boxLabel: 'no',
-                                checked: false,
-                                ctCls: 'down',
-                                value: 'false',
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '100%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         }]
                     },{                
@@ -631,100 +621,85 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('saycid'),
                                 name: 'saycid',
                                 id: 'saycid',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         },{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('saycid'),
-                                hideLabel: true,
-                                name: 'saycid',
-                                id: 'saycid',
-                                boxLabel: 'no',
-                                ctCls: 'down',
-                                checked: false,
-                                value: 'false',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('review'),
                                 name: 'review',
                                 id: 'review',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('review'),
-                                hideLabel: true,
-                                name: 'review',
-                                id: 'review',
-                                boxLabel: 'no',
-                                ctCls: 'down',
-                                checked: false,
-                                value: 'false',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         }, {
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('operator'),
                                 name: 'operator',
                                 id: 'operator',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('operator'),
-                                hideLabel: true,
-                                name: 'operator',
-                                id: 'operator',
-                                boxLabel: 'no',
-                                ctCls: 'down',
-                                checked: false,
-                                value: 'false',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '100%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         }]
                     }, {                
@@ -732,100 +707,85 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('envelope'),
                                 name: 'envelope',
                                 id: 'envelope',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('envelope'),
-                                hideLabel: true,
-                                name: 'envelope',
-                                id: 'envelope',
-                                boxLabel: 'no',
-                                checked: false,
-                                ctCls: 'down',
-                                value: 'false',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         }, {
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('sendvoicemail'),
                                 name: 'sendvoicemail',
                                 id: 'sendvoicemail',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         },{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('sendvoicemail'),
-                                hideLabel: true,
-                                name: 'sendvoicemail',
-                                id: 'sendvoicemail',
-                                boxLabel: 'no',
-                                checked: false,
-                                ctCls: 'down',
-                                value: 'false',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('delete'),
                                 name: 'delete',
                                 id: 'delete',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('delete'),
-                                hideLabel: true,
-                                name: 'delete',
-                                id: 'delete',
-                                boxLabel: 'no',
-                                checked: false,
-                                ctCls: 'down',
-                                value: 'false',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '100%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         }]
                     },{
@@ -833,100 +793,85 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('nextaftercmd'),
                                 name: 'nextaftercmd',
                                 id: 'nextaftercmd',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         },{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('nextaftercmd'),
-                                hideLabel: true,
-                                name: 'nextaftercmd',
-                                id: 'nextaftercmd',
-                                boxLabel: 'no',
-                                checked: false,
-                                ctCls: 'down',
-                                value: 'false',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('forcename'),
                                 name: 'forcename',
                                 id: 'forcename',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         },{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('forcename'),
-                                hideLabel: true,
-                                name: 'forcename',
-                                id: 'forcename',
-                                boxLabel: 'no',
-                                checked: false,
-                                value: 'false',     
-                                ctCls: 'down',                           
-                                anchor: '100%'
-                            }] 
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('forcegreetings'),
                                 name: 'forcegreetings',
                                 id: 'forcegreetings',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('forcegreetings'),
-                                hideLabel: true,
-                                name: 'forcegreetings',
-                                id: 'forcegreetings',
-                                boxLabel: 'no',
-                                ctCls: 'down',
-                                checked: false,
-                                value: 'false',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '100%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         }]
                     },{                
@@ -934,36 +879,31 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .166,
+                            columnWidth: .33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                xtype: 'radio',
+                                xtype: 'combo',
                                 fieldLabel: translation._('hidefromdir'),
                                 name: 'hidefromdir',
                                 id: 'hidefromdir',
-                                boxLabel: 'yes',
-                                checked: false,
-                                value: 'true',                                
-                                anchor: '100%'
-                            }]
-                        },{
-                            columnWidth: .166,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                xtype: 'radio',
-                                fieldLabel: translation._('hidefromdir'),
-                                hideLabel: true,
-                                name: 'hidefromdir',
-                                id: 'hidefromdir',
-                                boxLabel: 'no',
-                                ctCls: 'down',
-                                checked: false,
-                                value: 'false',                                
-                                anchor: '100%'
+                                mode: 'local',
+                                displayField: 'value',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.SimpleStore({
+                                    id: 'id',
+                                    fields: ['id', 'value'],
+                                    data: [
+                                        [ '',  translation._('- default setting -')],                                                                                
+                                        ['true', translation._('yes')],
+                                        ['false', translation._('no')]
+                                    ]
+                                })
                             }]
                         }]
                     }]

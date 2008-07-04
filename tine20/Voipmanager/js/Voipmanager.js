@@ -307,7 +307,16 @@ Tine.Voipmanager = function() {
                     } else {
                         Tine.Voipmanager.Snom.Settings.Main.show(_node);
                     }
-                    break;                                                                                            
+                    break;            
+					
+
+                case 'meetme':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerMeetme') {
+                        Ext.getCmp('gridVoipmanagerMeetme').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Voipmanager.Asterisk.Meetme.Main.show(_node);
+                    }
+                    break; 					                                                                                
             }
         }, this);
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.8</version>
+    <version>1.2</version>
     <order>50</order>
     <tables>
         <table>
@@ -1465,6 +1465,46 @@
                 </index>
             </declaration>
         </table>          
+
+       <table>
+            <name>asterisk_meetme</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>confno</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>pin</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>adminpin</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>								
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table> 
         
      </tables>    
 </application>

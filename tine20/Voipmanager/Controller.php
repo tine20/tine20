@@ -925,5 +925,102 @@ class Voipmanager_Controller
     {
         $this->_snomSettingBackend->delete($_identifiers);
     }     
+   
+   
+   
+/********************************
+ * ASTERISK MEETME FUNCTIONS
+ *
+ * 
+ */
+
+    
+    /**
+     * get asterisk_meetme by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
+     */
+    public function getAsteriskMeetme($_id)
+    {
+        $meetme = $this->_asteriskMeetmeBackend->get($_id);
+        
+        return $meetme;    
+    }
+
+
+    /**
+     * get asterisk_meetmes
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
+     */
+    public function getAsteriskMeetmes($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {
+        $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
+
+        $result = $this->_asteriskMeetmeBackend->search($filter, $pagination);
+        
+        return $result;    
+    }
+
+
+    /**
+     * add one meetme
+     *
+     * @param Voipmanager_Model_AsteriskMeetme $_meetme
+     * @return  Voipmanager_Model_AsteriskMeetme
+     */
+    public function createAsteriskMeetme(Voipmanager_Model_AsteriskMeetme $_meetme)
+    {        
+        $meetme = $this->_asteriskMeetmeBackend->create($_meetme);
+      
+        return $this->getAsteriskMeetme($meetme);
+    }
+    
+
+    /**
+     * update one meetme
+     *
+     * @param Voipmanager_Model_AsteriskMeetme $_meetme
+     * @return  Voipmanager_Model_AsteriskMeetme
+     */
+    public function updateAsteriskMeetme(Voipmanager_Model_AsteriskMeetme $_meetme)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+        $meetme = $this->_asteriskMeetmeBackend->update($_meetme);
+        
+        return $this->getAsteriskMeetme($meetme);
+    }    
+    
+  
+    /**
+     * Deletes a set of meetmes.
+     * 
+     * If one of the meetmes could not be deleted, no meetme is deleted
+     * 
+     * @throws Exception
+     * @param array array of meetme identifiers
+     * @return void
+     */
+    public function deleteAsteriskMeetmes($_identifiers)
+    {
+        $this->_asteriskMeetmeBackend->delete($_identifiers);
+    }    
+    
+    
+     
+   
     
 }
