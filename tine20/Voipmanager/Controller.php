@@ -90,6 +90,14 @@ class Voipmanager_Controller
     protected $_snomSettingBackend;    
     
     /**
+     * the asterisk meetme sql backend
+     *
+     * @var Voipmanager_Backend_Asterisk_Meetme
+     */
+    protected $_asteriskMeetmeBackend;	
+	
+	
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -103,7 +111,8 @@ class Voipmanager_Controller
         $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting();              
         $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer();          
         $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context();          
-        $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();                  
+        $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();  
+		$this->_asteriskMeetmeBackend		= new Voipmanager_Backend_Asterisk_Meetme();                  
     }
     
     /**

@@ -49,7 +49,7 @@ class Voipmanager_Backend_Asterisk_Meetme
         $_pagination->appendPagination($select);
 
         if(!empty($_filter->query)) {
-            $select->where($this->_db->quoteInto('(name LIKE ? OR description LIKE ? )', '%' . $_filter->query . '%'));
+            $select->where($this->_db->quoteInto('(confno LIKE ? OR pin LIKE ? OR adminpin LIKE ?)', '%' . $_filter->query . '%'));
         } else {
             // handle the other fields separately
         }
