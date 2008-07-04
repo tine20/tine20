@@ -695,7 +695,7 @@ Tine.Addressbook.ContactEditDialog = {
             text: 'export as pdf',
             handler: function(){
                 var contactIds = Ext.util.JSON.encode([_contactData.id]);
-                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 200, 150);                   
+                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
             },
             iconCls: 'action_exportAsPdf',
             disabled: false
