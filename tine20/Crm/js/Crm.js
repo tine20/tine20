@@ -137,7 +137,7 @@ Tine.Crm.Main = {
          */
         exportLead: function(_button, _event) {
             var selectedRows = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            var leadId = selectedRows[0].id;
+            var leadId = selectedRows[0].data.id;
             
             Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);
         },
