@@ -1251,22 +1251,19 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteSetting,
                 items: [{
-                    layout:'fit',
+                	xtype: 'tabpanel',
                     border: false,
-                    autoHeight: true,
+                    height: 100,
+                    //autoHeight: true,
                     anchor: '100% 100%',
-                    items: new Ext.TabPanel({
-                        plain:true,
-                        activeTab: 0,
-                        id: 'editSettingTabPanel',
-                        layoutOnTabChange:true,  
-                        items:[
-                            this.editSettingMainDialog(),
-                            this.editSettingRedirectDialog()
-                        ]
-                    })
-                   
-                                        
+                    plain:true,
+                    activeTab: 0,
+                    id: 'editSettingTabPanel',
+                    layoutOnTabChange:true,
+                    items:[
+                        this.editSettingMainDialog(),
+                        this.editSettingRedirectDialog()
+                    ]
                 }]
             });
 
@@ -1274,7 +1271,6 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             var viewport = new Ext.Viewport({
                 layout: 'border',
                 frame: true,
-                //height: 300,
                 items: dialog
             });
                
