@@ -268,7 +268,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
         
         if ($_oldName === NULL) {
-            $oldName = SQL_TABLE_PREFIX . $_declaration->name;
+            $oldName = $_declaration->name;
         } else {
             $oldName = $_oldName;
         }
