@@ -1886,8 +1886,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->_backend->alterCol('asterisk_voicemail', $declaration);        
                                                                                 
-        
-        $this->setApplicationVersion('Voipmanager', '1.0');               
+        $this->setApplicationVersion('Voipmanager', '0.10');               
 
     } 
  
