@@ -928,7 +928,6 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
                 id : 'voipmanager_editVoicemailForm',
-                layout: 'fit',
                 //title: 'the title',
                 labelWidth: 120,
                 labelAlign: 'top',
@@ -937,21 +936,18 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteVoicemail,
                 items: [{
-                    layout:'fit',
+                    xtype: 'tabpanel',
                     border: false,
-                    autoHeight: true,
+                    height: 100,
                     anchor: '100% 100%',
-                    items: new Ext.TabPanel({
-                        plain:true,
-                        activeTab: 0,
-                        deferredRender: false,                        
-                        id: 'editVoicemailTabPanel',
-                        layoutOnTabChange:true,  
-                        items:[
-                            this.editVoicemailMainDialog(),
-                            this.editVoicemailAdditionalDialog()
-                        ]
-                    })                      
+                    plain: true,
+                    activeTab: 0,
+                    id: 'editVoicemailTabPanel',
+                    layoutOnTabChange: true,  
+                    items:[
+                        this.editVoicemailMainDialog(),
+                        this.editVoicemailAdditionalDialog()
+                    ]
                 }]
             });
 
