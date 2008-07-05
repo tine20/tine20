@@ -791,23 +791,18 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deletePhone,
                 items: [{
-                    layout:'fit',
+                	xtype: 'tabpanel',
                     border: false,
-                    autoHeight: true,
+                    height: 100,
                     anchor: '100% 100%',
-                    items: new Ext.TabPanel({
-                        plain:true,
-                        activeTab: 0,
-                        id: 'editPhoneTabPanel',
-                        layoutOnTabChange:true, 
-                        deferredRender: false,                         
-                        items:[
-                            this.editPhoneDialog(),
-                            this.editPhoneLinesDialog(2, _lines, _snomLines)                  
-                        ]
-                    })
-                   
-                                        
+                    plain: true,
+                    activeTab: 0,
+                    id: 'editPhoneTabPanel',
+                    layoutOnTabChange: true, 
+                    items:[
+                        this.editPhoneDialog(),
+                        this.editPhoneLinesDialog(2, _lines, _snomLines)                  
+                    ]
                 }]
             });
 
