@@ -266,10 +266,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
-        $oldName = $_oldName ;
         
-        if ($_oldName == NULL) {
+        if ($_oldName === NULL) {
             $oldName = SQL_TABLE_PREFIX . $_declaration->name;
+        } else {
+            $oldName = $_oldName;
         }
         
         $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
