@@ -467,7 +467,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [{
                     layout: 'hfit',
@@ -1087,7 +1087,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [{
                     layout: 'hfit',
@@ -1251,6 +1251,9 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteSetting,
                 items: [{
+                    defaults: {
+                        frame: true,
+                    },
                 	xtype: 'tabpanel',
                     border: false,
                     height: 100,

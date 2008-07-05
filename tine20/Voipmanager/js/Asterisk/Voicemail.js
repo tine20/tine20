@@ -412,7 +412,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [{
                     region: 'center',
@@ -494,7 +494,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [{
                     region: 'center',
@@ -936,6 +936,9 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteVoicemail,
                 items: [{
+	                defaults: {
+	                    frame: true,
+	                },
                     xtype: 'tabpanel',
                     border: false,
                     height: 100,

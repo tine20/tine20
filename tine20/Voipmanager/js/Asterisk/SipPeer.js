@@ -1044,16 +1044,17 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
             handlerSaveAndClose: this.saveChanges,
             handlerDelete: this.deleteSipPeer,
             items: [{
-		        id: 'adbEditDialogTabPanel',
-		        xtype:'tabpanel',
 		        defaults: {
-		            frame: true
+		            frame: true,
 		        },
-		        height: 500,
-		        plain:true,
-		        activeTab: 0,
-                deferredRender: false,                
-		        border: false,
+                xtype: 'tabpanel',
+                border: false,
+                height: 500,
+                anchor: '100% 100%',
+                plain: true,
+                activeTab: 0,
+                id: 'adbEditDialogTabPanel',
+                layoutOnTabChange: true,  
 		        items:[
 		          this.generalTab()
                 ]

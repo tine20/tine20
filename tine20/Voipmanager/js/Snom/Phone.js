@@ -588,7 +588,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [gridPanel]
             };
@@ -610,7 +610,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [{
                     region: 'center',
@@ -791,6 +791,9 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deletePhone,
                 items: [{
+                    defaults: {
+                        frame: true,
+                    },
                 	xtype: 'tabpanel',
                     border: false,
                     height: 100,
