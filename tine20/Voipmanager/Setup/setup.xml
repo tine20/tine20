@@ -725,7 +725,7 @@
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>asterisk_peers</table>
+                        <table>asterisk_sip_peers</table>
                         <field>id</field>
                     </reference>
                 </index>   
