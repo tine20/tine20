@@ -17,8 +17,43 @@
  */
 class Voipmanager_Backend_Snom_Xml
 {
-    protected $_languages = array(
-        'DE'    => 'Deutsch'
+    protected $_guiLanguages = array(
+        'CZ'    => 'Cestina',
+        'CA'    => 'Catalan',
+        'DE'    => 'Deutsch',
+        'DK'    => 'Dansk',
+        'EN'    => 'English',
+        'FI'    => 'Suomi',
+        'FR'    => 'Francais',
+        'IT'    => 'Italiano',
+        'JP'    => 'Japanese',
+        'NL'    => 'Nederlands',
+        'NO'    => 'Norsk',
+        'PL'    => 'Polski',
+        'PR'    => 'Portugues',
+        'RU'    => 'Russian',
+        'SP'    => 'Espanol',
+        'SW'    => 'Svenska',
+        'TR'    => 'Turkce',
+        'UK'    => 'English(UK)'
+    );
+    
+    protected $_webLanguages = array(
+        'CZ'    => 'Cestina',
+        'DE'    => 'Deutsch',
+        'DK'    => 'Dansk',
+        'EN'    => 'English',
+        'FI'    => 'Suomi',
+        'FR'    => 'Francais',
+        'IT'    => 'Italiano',
+        'JP'    => 'Japanese',
+        'NL'    => 'Nederlands',
+        'NO'    => 'Norsk',
+        'PR'    => 'Portugues',
+        'RU'    => 'Russian',
+        'SP'    => 'Espanol',
+        'SW'    => 'Svenska',
+        'TR'    => 'Turkce',
     );
     
     public function __construct()
@@ -71,13 +106,16 @@ class Voipmanager_Backend_Snom_Xml
         }
         
         $guiLanguages = $xml->addChild('gui-languages');
-        $webLanguages = $xml->addChild('web-languages');
     
-        foreach($this->_languages as $iso => $translated) {
+        foreach($this->_guiLanguages as $iso => $translated) {
             $child = $guiLanguages->addChild('language');
             $child->addAttribute('url', $locationSettings['base_download_url'] . '/' . $_phone->current_software . '/snomlang/gui_lang_' . $iso . '.xml');
             $child->addAttribute('name', $translated);
-            
+        }
+      
+        $webLanguages = $xml->addChild('web-languages');
+    
+        foreach($this->_webLanguages as $iso => $translated) {
             $child = $webLanguages->addChild('language');
             $child->addAttribute('url', $locationSettings['base_download_url'] . '/' . $_phone->current_software . '/snomlang/web_lang_' . $iso . '.xml');
             $child->addAttribute('name', $translated);
