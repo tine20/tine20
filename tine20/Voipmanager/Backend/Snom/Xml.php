@@ -81,22 +81,12 @@ class Voipmanager_Backend_Snom_Xml
         // get removed if we have the settings dialogue
         $child = $phonesettings->addChild('vol_handset_mic', 7);
         $child->addAttribute('perm', 'RW');
-        $child = $phonesettings->addChild('web_language', 'Deutsch');
-        $child->addAttribute('perm', 'RW');
-        $child = $phonesettings->addChild('language', 'Deutsch');
-        $child->addAttribute('perm', 'RW');
-        $child = $phonesettings->addChild('tone_scheme', 'GER');
-        $child->addAttribute('perm', 'RW');
-        $child = $phonesettings->addChild('display_method', 'Name+Number');
-        $child->addAttribute('perm', 'RW');
-
-        /*        
+                
         $userSettings = $this->_getUserSettings();
         foreach($userSettings as $key => $value) {
-          $child = $phonesettings->addChild($key, $value);
-          $child->addAttribute('perm', 'RW');
+          $child = $phonesettings->addChild($key, $value['value']);
+          $child->addAttribute('perm', $value['perms']);
         }
-        */
               
         $lines = $this->_getLines($_phone);
         foreach($lines as $lineId => $line) {
@@ -182,6 +172,39 @@ class Voipmanager_Backend_Snom_Xml
         $locationsSettings['firmware_status'] .= '?mac=' . $_phone->macaddress;
         
         return $locationsSettings;
+    }
+    
+    protected function _getUserSettings(Voipmanager_Model_SnomPhone $_phone)
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
+            ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
+            ->join(SQL_TABLE_PREFIX . 'snom_templates', SQL_TABLE_PREFIX . 'snom_phones.template_id = ' . SQL_TABLE_PREFIX . 'snom_templates.id', array())
+            ->join(SQL_TABLE_PREFIX . 'snom_settings', SQL_TABLE_PREFIX . 'snom_templates.seeting_id = ' . SQL_TABLE_PREFIX . 'snom_settings.id');
+                
+        $row = $this->_db->fetchRow($select);
+        
+        unset($row['id']);
+        unset($row['name']);
+        unset($row['description']);
+        
+        $userSettings = array();
+        
+        foreach($row as $key => $value) {
+            if(substr($key, -9) == '_writable') {
+                continue;
+            }
+            if($value !== NULL) {
+                $userSettings[$key]['value'] = $value;
+                if(isset($row[$key . '_writable']) && $row[$key . '_writable'] == true) {
+                    $userSettings[$key]['perms'] = 'RW';
+                } else {
+                    $userSettings[$key]['perms'] = 'RO';
+                }
+            }
+        }
+        
+        return $userSettings;
     }
     
     protected function _getLines(Voipmanager_Model_SnomPhone $_phone)
