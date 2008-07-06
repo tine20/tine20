@@ -194,7 +194,8 @@ class Voipmanager_Backend_Snom_Xml
             if(substr($key, -9) == '_writable') {
                 continue;
             }
-            if($value !== NULL && isset($row[$key . '_writable'])) {
+            #if($value !== NULL && isset($row[$key . '_writable'])) {
+            if(!empty($value) && isset($row[$key . '_writable'])) {
                 $userSettings[$key]['value'] = $value;
                 if($row[$key . '_writable'] == true) {
                     $userSettings[$key]['perms'] = 'RW';
