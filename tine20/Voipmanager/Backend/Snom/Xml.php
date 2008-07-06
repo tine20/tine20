@@ -89,17 +89,15 @@ class Voipmanager_Backend_Snom_Xml
         $child->addAttribute('perm', 'RW');
         $child = $phonesettings->addChild('display_method', 'Name+Number');
         $child->addAttribute('perm', 'RW');
-        $child = $phonesettings->addChild('date_us_format', 'off');
-        $child->addAttribute('perm', 'RW');
-        $child = $phonesettings->addChild('time_24_format', 'on');
-        $child->addAttribute('perm', 'RW');
-/*        
+
+        /*        
         $userSettings = $this->_getUserSettings();
         foreach($userSettings as $key => $value) {
           $child = $phonesettings->addChild($key, $value);
           $child->addAttribute('perm', 'RW');
         }
-  */      
+        */
+              
         $lines = $this->_getLines($_phone);
         foreach($lines as $lineId => $line) {
             foreach($line as $key => $value) {
