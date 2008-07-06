@@ -82,7 +82,7 @@ class Voipmanager_Backend_Snom_Xml
         $child = $phonesettings->addChild('vol_handset_mic', 7);
         $child->addAttribute('perm', 'RW');
                 
-        $userSettings = $this->_getUserSettings();
+        $userSettings = $this->_getUserSettings($_phone);
         foreach($userSettings as $key => $value) {
           $child = $phonesettings->addChild($key, $value['value']);
           $child->addAttribute('perm', $value['perms']);
@@ -180,7 +180,7 @@ class Voipmanager_Backend_Snom_Xml
             ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
             ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
             ->join(SQL_TABLE_PREFIX . 'snom_templates', SQL_TABLE_PREFIX . 'snom_phones.template_id = ' . SQL_TABLE_PREFIX . 'snom_templates.id', array())
-            ->join(SQL_TABLE_PREFIX . 'snom_settings', SQL_TABLE_PREFIX . 'snom_templates.seeting_id = ' . SQL_TABLE_PREFIX . 'snom_settings.id');
+            ->join(SQL_TABLE_PREFIX . 'snom_settings', SQL_TABLE_PREFIX . 'snom_templates.setting_id = ' . SQL_TABLE_PREFIX . 'snom_settings.id');
                 
         $row = $this->_db->fetchRow($select);
         
@@ -194,9 +194,9 @@ class Voipmanager_Backend_Snom_Xml
             if(substr($key, -9) == '_writable') {
                 continue;
             }
-            if($value !== NULL) {
+            if($value !== NULL && isset($row[$key . '_writable'])) {
                 $userSettings[$key]['value'] = $value;
-                if(isset($row[$key . '_writable']) && $row[$key . '_writable'] == true) {
+                if($row[$key . '_writable'] == true) {
                     $userSettings[$key]['perms'] = 'RW';
                 } else {
                     $userSettings[$key]['perms'] = 'RO';
