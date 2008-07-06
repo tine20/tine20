@@ -70,7 +70,7 @@ class Voipmanager_Backend_Snom_Xml
         $locationSettings = $this->_getLocationSettings($_phone);
         foreach($locationSettings as $key => $value) {
             $child = $phonesettings->addChild($key, $value);
-            if($key == 'admin_mode_password') {
+            if($key == 'admin_mode') {
                 $child->addAttribute('perm', 'RW');
             } else {
                 $child->addAttribute('perm', 'RO');
