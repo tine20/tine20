@@ -45,6 +45,10 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
     initComponent : function(){
         Ext.ux.LockCombo.superclass.initComponent.call(this);
 
+        if(!this.hiddenFieldData) {
+            this.hiddenFieldData = '1';
+        }
+
         this.triggerConfig = {
             tag:'span', cls:'x-form-twin-triggers', cn:[
             {tag: "img", id:'trigger1', src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.trigger1Class},
@@ -125,7 +129,9 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
     onTrigger2Click : function(){
 
 		var _currentValue = Ext.getCmp(this.hiddenFieldId).getValue();
+        
         var ts = this.trigger.select('.x-form-trigger', true);	
+
 
 		if (_currentValue == '0') {			
 			Ext.getCmp(this.hiddenFieldId).dom.value = '1';
@@ -137,7 +143,7 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
 				}
 			});
 		}
-		if (_currentValue == '1') {
+		else  {
 			Ext.getCmp(this.hiddenFieldId).dom.value = '0';
 
             var _cssClass = this.trigger2ClassLocked.toString();
