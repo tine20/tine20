@@ -384,10 +384,12 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
         updateWritableFields: function(_settingData)
         {
-             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable","redirect_event_writable","redirect_number_writable","redirect_time_writable");               
+             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable","redirect_event_writable");               
             
             Ext.each(_writableFields, function(_item, _index, _array) {
-                _settingData.data[_item] = Ext.getCmp(_item).getValue();
+                if (Ext.getCmp(_item)) {
+                    _settingData.data[_item] = Ext.getCmp(_item).getValue();
+                }
 
                 this.settingRecord = new Tine.Voipmanager.Model.Snom.Setting(_settingData);
             });
@@ -1014,26 +1016,11 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'lockCombo',
+                                    xtype: 'textfield',
                                     fieldLabel: translation._('redirect_number'),
                                     name: 'redirect_number',
                                     id: 'redirect_number',
-									hiddenFieldId: 'redirect_number_writable',
-									hiddenFieldData: _settingData.redirect_number_writable,                                        
-                                    mode: 'local',
-                                    displayField: 'name',
-                                    valueField: 'id',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: true,
-                                    forceSelection: true,
-                                    store: new Ext.data.SimpleStore({
-                                        id: 'id',
-                                        fields: ['id', 'name'],
-                                        data: [
-                                            []
-                                        ]
-                                    })                                    
+                                    anchor: '95%'                                
                                }]
                             }, {
                                 columnWidth: .33,
@@ -1041,26 +1028,11 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'lockCombo',
+                                    xtype: 'numberfield',
                                     fieldLabel: translation._('redirect_time'),
                                     name: 'redirect_time',
                                     id: 'redirect_time',
-									hiddenFieldId: 'redirect_time_writable',
-									hiddenFieldData: _settingData.redirect_time_writable,                                        
-                                    mode: 'local',
-                                    displayField: 'name',
-                                    valueField: 'id',
-                                    anchor: '100%',
-                                    triggerAction: 'all',
-                                    editable: true,
-                                    forceSelection: true,
-                                    store: new Ext.data.SimpleStore({
-                                        id: 'id',
-                                        fields: ['id', 'name'],
-                                        data: [
-                                            []
-                                        ]
-                                    })                                    
+                                    anchor: '100%'                                                                     
                                }]
                             }]  
                         }]   // column
@@ -1110,8 +1082,8 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                     id: 'editSettingTabPanel',
                     layoutOnTabChange:true,
                     items:[
-                        this.editSettingMainDialog(),
-                        this.editSettingRedirectDialog()
+                        this.editSettingMainDialog(_settingData),
+                        this.editSettingRedirectDialog(_settingData)
                     ]
                 }]
             });
