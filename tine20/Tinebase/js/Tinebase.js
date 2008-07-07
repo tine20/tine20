@@ -174,8 +174,8 @@ Tine.Tinebase.initFramework = function() {
                     } 
                }
         });
-    
-
+        
+        Ext.ux.form.DateField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     };
 	
     initAjax();
