@@ -155,8 +155,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update function 2
      * adds roles (tables and user/admin role)
      *
-     * @todo    get names/ids for user/admin groups from new config table
-     * @todo    remove application_rights tables?
      */    
     function update_2()
     {
@@ -827,5 +825,77 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->createTable($table);        
 
         $this->setApplicationVersion('Tinebase', '0.9');
+    }
+
+    /**
+     * update to 0.10
+     * - rename crm tables
+     * - migrate old links to relations
+     * 
+     * @todo finish update function & test it
+     */
+    function update_9()
+    {
+        //-- rename crm tables
+        
+        /************* migrate old links to relations *************/
+        
+        // get all links
+        $linksTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX.'links'));
+        echo 'fetching links ... <br/>';
+        $links = $linksTable->fetchAll();
+        //print_r($links);
+        
+        // create relations from links
+        $relationsByLeadId = array();
+        foreach ($links as $link) {
+            //print_r($link);
+            if ($link->link_app1 === 'crm') {
+                
+                switch ($link->link_app2) {
+                    case 'tasks':
+                        $relatedModel = 'Tasks_Model_Task';
+                        $backend = Tasks_Backend_Factory::SQL;
+                        $type = 'TASK';
+                        break;
+                    case 'addressbook':
+                        $relatedModel = 'Addressbook_Model_Contact';
+                        $backend = Addressbook_Backend_Factory::SQL;
+                        switch ($link->link_remark) {
+                            case 'account':
+                                $type = 'RESPONSIBLE';
+                                break;
+                            case 'customer':
+                                $type = 'CUSTOMER';
+                                break;
+                            case 'partner':
+                                $type = 'PARTNER';
+                                break;
+                        }
+                        break;
+                }                
+                
+                $relationsByLeadId[$link->link_id1][] = array(
+                    'own_model'              => 'Crm_Model_Lead',
+                    'own_backend'            => 'SQL',
+                    'own_id'                 => $link->link_id1,
+                    'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => $relatedModel,
+                    'related_backend'        => $backend,
+                    'related_id'             => $link->link_id2,
+                    'type'                   => $type
+                );                        
+            }
+        }
+        
+        //print_r($relationsByLeadId);
+        echo 'creating relations ...<br/>';
+        foreach ($relationsByLeadId as $leadId => $relations) {
+            //Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', 'SQL', $leadId, $relations);            
+        }        
+        
+        //-- delete links table
+        
+        //$this->setApplicationVersion('Tinebase', '0.10');        
     }
 }
