@@ -216,17 +216,6 @@ Tine.Voipmanager.Snom.Settings.Main = {
             { resizable: true, id: 'scroll_outgoing', header: this.translation._('scroll_outgoing'), dataIndex: 'scroll_outgoing', width: 10, hidden: true },
             { resizable: true, id: 'show_local_line', header: this.translation._('show_local_line'), dataIndex: 'show_local_line', width: 10, hidden: true },
             { resizable: true, id: 'show_call_status', header: this.translation._('show_call_status'), dataIndex: 'show_call_status', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_event', header: this.translation._('redirect_event'), dataIndex: 'redirect_event', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_number', header: this.translation._('redirect_number'), dataIndex: 'redirect_number', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_always_on_code', header: this.translation._('redirect_always_on_code'), dataIndex: 'redirect_always_on_code', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_always_off_code', header: this.translation._('redirect_always_off_code'), dataIndex: 'redirect_always_off_code', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_busy_number', header: this.translation._('redirect_busy_number'), dataIndex: 'redirect_busy_number', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_busy_on_code', header: this.translation._('redirect_busy_on_code'), dataIndex: 'redirect_busy_on_code', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_busy_off_code', header: this.translation._('redirect_busy_off_code'), dataIndex: 'redirect_busy_off_code', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_time', header: this.translation._('redirect_time'), dataIndex: 'redirect_time', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_time_number', header: this.translation._('redirect_time_number'), dataIndex: 'redirect_time_number', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_time_on_code', header: this.translation._('redirect_time_on_code'), dataIndex: 'redirect_time_on_code', width: 10, hidden: true },
-            { resizable: true, id: 'redirect_time_off_code', header: this.translation._('redirect_time_off_code'), dataIndex: 'redirect_time_off_code', width: 10, hidden: true },
             { resizable: true, id: 'dnd_on_code', header: this.translation._('dnd_on_code'), dataIndex: 'dnd_on_code', width: 10, hidden: true },
             { resizable: true, id: 'dnd_off_code', header: this.translation._('dnd_off_code'), dataIndex: 'dnd_off_code', width: 10, hidden: true },
             { resizable: true, id: 'ringer_headset_device', header: this.translation._('ringer_headset_device'), dataIndex: 'ringer_headset_device', width: 10, hidden: true },
@@ -384,7 +373,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
         updateWritableFields: function(_settingData)
         {
-             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable","redirect_event_writable");               
+             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable");               
             
             Ext.each(_writableFields, function(_item, _index, _array) {
                 if (Ext.getCmp(_item)) {
@@ -399,9 +388,6 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
         updateSettingRecord: function(_settingData)
         {                     
-            if(_settingData.redirect_event == 'time') {
-                Ext.getCmp('redirect_time').setDisabled(false);
-            } 
             this.settingRecord = new Tine.Voipmanager.Model.Snom.Setting(_settingData);
         },
         
@@ -937,117 +923,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             return _dialog;   
         },
         
-        
-        editSettingRedirectDialog: function(_settingData){
-        
-            var translation = new Locale.Gettext();
-            translation.textdomain('Voipmanager');
-            
-        
-            var _dialog = {
-                title: translation._('redirect'),
-                layout: 'border',
-                anchor: '100% 100%',
-                layoutOnTabChange: true,
-                defaults: {
-                    border: true,
-                    frame: false
-                },
-                items: [{
-                    layout: 'hfit',
-                    containsScrollbar: false,
-                    //margins: '0 18 0 5',
-                    autoScroll: false,
-                    id: 'editSettingRedirectDialog',
-                    region: 'center',
-                    items: [{
-                        layout: 'form',
-                        border: false,
-                        anchor: '100%',
-                        items: [{
-                            layout: 'column',
-                            border: false,
-                            anchor: '100%',
-                            items: [{ 
-                                columnWidth: .33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'lockCombo',
-                                    fieldLabel: translation._('redirect_event'),
-                                    name: 'redirect_event',
-                                    id: 'redirect_event',
-									hiddenFieldId: 'redirect_event_writable',
-									hiddenFieldData: _settingData.redirect_event_writable,                                        
-                                    mode: 'local',
-                                    displayField: 'name',
-                                    valueField: 'id',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    listeners: {
-                                        select: function(_combo, _record, _index) {
-                                            if (_record.data.name == 'time') {
-                                                Ext.getCmp('redirect_time').setDisabled(false);
-                                            }
-                                            
-                                            if(_record.data.name != 'time') {
-                                                Ext.getCmp('redirect_time').reset();                                                    
-                                                Ext.getCmp('redirect_time').setDisabled(true);
-                                            }
-                                        }
-                                    },
-                                    store: new Ext.data.SimpleStore({
-                                        id: 'id',
-                                        fields: ['id', 'name'],
-                                        data: [
-                                            ['all', translation._('all')],
-                                            ['busy', translation._('busy')],
-                                            ['none', translation._('none')],
-                                            ['time', translation._('time')]
-                                        ]
-                                    })
-                                }]
-                            }, {
-                                columnWidth: .33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'textfield',
-                                    fieldLabel: translation._('redirect_number'),
-                                    name: 'redirect_number',
-                                    id: 'redirect_number',
-                                    anchor: '95%'                                
-                               }]
-                            }, {
-                                columnWidth: .33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'numberfield',
-                                    fieldLabel: translation._('redirect_time'),
-                                    name: 'redirect_time',
-                                    id: 'redirect_time',
-                                    anchor: '100%'                                                                     
-                               }]
-                            }]  
-                        }]   // column
-                    }]
-                }]
-            };
-            
-            return _dialog;           
-        },
-        
-        
-        
-        
-        
-        
+       
         updateToolbarButtons: function()
         {
             if(this.settingRecord.get('id') > 0) {
@@ -1083,8 +959,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                     layoutOnTabChange:true,
                     deferredRender: false,                         
                     items:[
-                        this.editSettingMainDialog(_settingData),
-                        this.editSettingRedirectDialog(_settingData)
+                        this.editSettingMainDialog(_settingData)
                     ]
                 }]
             });

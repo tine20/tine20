@@ -659,7 +659,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                             },
                                             success: function(_result, _request) {
                                                 _data = Ext.util.JSON.decode(_result.responseText);
-                                                _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','redirect_event','redirect_number','redirect_time','call_waiting');
+                                                _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
                                                 var _notWritable = new Object();
             
                                                 Ext.each(_writableFields, function(_item, _index, _all) {
@@ -1453,40 +1453,11 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'textfield',
                                     fieldLabel: translation._('redirect_event'),
                                     name: 'redirect_event',
-                                    id: 'redirect_event',                          
-                                    disabled: _writable.redirect_event,                                                
-                                    mode: 'local',
-                                    displayField: 'name',
-                                    valueField: 'id',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    listeners: {
-                                        select: function(_combo, _record, _index) {
-                                            if (_record.data.name == 'time') {
-                                                Ext.getCmp('redirect_time').setDisabled(false);
-                                            }
-                                            
-                                            if(_record.data.name != 'time') {
-                                                Ext.getCmp('redirect_time').reset();                                                    
-                                                Ext.getCmp('redirect_time').setDisabled(true);
-                                            }
-                                        }
-                                    },
-                                    store: new Ext.data.SimpleStore({
-                                        id: 'id',
-                                        fields: ['id', 'name'],
-                                        data: [
-                                            ['all', translation._('all')],
-                                            ['busy', translation._('busy')],
-                                            ['none', translation._('none')],
-                                            ['time', translation._('time')]
-                                        ]
-                                    })
+                                    id: 'redirect_event',                                                                       
+                                    anchor: '95%'
                                 }]
                             }, {
                                 columnWidth: .33,
@@ -1498,7 +1469,6 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     fieldLabel: translation._('redirect_number'),
                                     name: 'redirect_number',
                                     id: 'redirect_number',
-                                    disabled: _writable.redirect_event,                                                                                    
                                     anchor: '95%'                                
                                }]
                             }, {
@@ -1511,7 +1481,6 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     fieldLabel: translation._('redirect_time'),
                                     name: 'redirect_time',
                                     id: 'redirect_time',
-                                    disabled: _writable.redirect_event,                                                                                    
                                     anchor: '100%'                                                                     
                                }]
                             }]  
