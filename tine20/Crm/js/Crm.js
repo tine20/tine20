@@ -816,7 +816,6 @@ Tine.Crm.LeadEditDialog = {
         /**
          * onclick handler for add task
          * 
-         * @todo    add task via inline editing (chooseable?)
          */
         addTask: function(_button, _event) 
         {
@@ -896,7 +895,6 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @param   Tine.Crm.Model.Lead lead
      * @return  Tine.Crm.Model.Lead lead
-     * @todo    add other stores and stuff
      */
     getAdditionalData: function(lead)
     {
@@ -968,7 +966,6 @@ Tine.Crm.LeadEditDialog = {
      * @param   string  grid title
      * @return  grid object
      * 
-     * @todo    add products grid
      * @todo    move to LeadEditDialog.js ?
      */
     getLinksGrid: function(_type, _title)
@@ -986,30 +983,35 @@ Tine.Crm.LeadEditDialog = {
             /******************* contacts tabpanel ********************/                
 
     		case 'Contacts':
-
-                // @todo   move that to renderer/addressbook ?
+    		
+                // @todo move that to renderer/addressbook ?
+    		    // @todo remove null and &nbsp; in the grid display 
                 columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                         function(val, meta, record) {
-                            var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
-                            
-                            var formated_return = '<b>' + Ext.util.Format.htmlEncode(record.data.n_fileas) + '</b><br />' + Ext.util.Format.htmlEncode(org_name);
+                            var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : ' ';
+                            var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : ' ';                            
+                            var formated_return = '<b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b><br />' + Ext.util.Format.htmlEncode(org_name);
                             
                             return formated_return;
                         }
                     },
                     {id:'contact_one', header: this.translation._("Address"), dataIndex: 'adr_one_locality', width: 160, sortable: false, renderer: function(val, meta, record) {
+                            var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : ' ';
+                            var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : ' ';
+                            var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : ' ';
                             var formated_return =  
-                                Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />' + 
-                                Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality);
+                                Ext.util.Format.htmlEncode(adr_one_street) + '<br />' + 
+                                Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(adr_one_locality);
                         
                             return formated_return;
                         }
                     },
                     {id:'tel_work', header: this.translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
-                            var formated_return = Tine.Crm.LeadEditDialog.translation._('Phone') + ': ' + Ext.util.Format.htmlEncode(record.data.tel_work) + '<br/>' + 
-                                Tine.Crm.LeadEditDialog.translation._('Cellphone') + ': ' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '<br/>';
+                            var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? Tine.Crm.LeadEditDialog.translation._('Phone') + ': ' + record.data.tel_work : ' ';
+                            var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? Tine.Crm.LeadEditDialog.translation._('Cellphone') + ': ' + record.data.tel_cell : ' ';          
+                            var formated_return = tel_work + '<br/>' + tel_cell + '<br/>';
                             return formated_return;
                         }                        
                     },    
@@ -1343,7 +1345,12 @@ Tine.Crm.LeadEditDialog = {
                     },
                     success: function(_result, _request) {
                     	var newTask = [Ext.util.JSON.decode(_result.responseText)];
+                    	
+                    	console.log(newTask);
+                    	
                         gridStore.loadData(newTask, true);
+                        
+                        console.log(gridStore);
                     },
                     failure: function ( result, request) { 
                         Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
@@ -1555,7 +1562,6 @@ Tine.Crm.LeadEditDialog = {
             storeContacts.setDefaultSort('link_remark', 'asc');   
             
             // remove link_id on update
-            // @todo is that needed?
             /*
             storeContacts.on('update', function(store, record, operation) {
             	if (operation === Ext.data.Record.EDIT) {
@@ -1594,7 +1600,6 @@ Tine.Crm.LeadEditDialog = {
      * get linked products store and put it into store manager
      * 
      * @param   array _products
-     * @todo    implement + use
      */
     loadProductsStore: function(_products)
     {
