@@ -381,6 +381,20 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
         _templateData: null,
         
+        
+        updateWritableFields: function(_settingData)
+        {
+             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable");               
+            
+            Ext.each(_writableFields, function(_item, _index, _array) {
+                _settingData.data[_item] = Ext.getCmp(_item).getValue();
+
+                this.settingRecord = new Tine.Voipmanager.Model.Snom.Setting(_settingData);
+            });
+            
+        },
+        
+        
         updateSettingRecord: function(_settingData)
         {                     
             if(_settingData.redirect_event == 'time') {
@@ -415,9 +429,14 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         {
             var form = Ext.getCmp('voipmanager_editSettingForm').getForm();
 
+            
+            
+
             if(form.isValid()) {
-                form.updateRecord(this.settingRecord);
                 
+                this.updateWritableFields(this.settingRecord);
+                
+                form.updateRecord(this.settingRecord);
                
                 Ext.Ajax.request({
                     params: {
@@ -452,7 +471,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         },
                 
                   
-        editSettingMainDialog: function(){
+        editSettingMainDialog: function(_settingData){
         
             var translation = new Locale.Gettext();
             translation.textdomain('Voipmanager');
@@ -467,7 +486,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: false
+                    frame: true
                 },
                 items: [{
                     layout: 'hfit',
@@ -518,20 +537,22 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
+                                items: [
+									{
+									xtype: 'lockCombo',
                                     fieldLabel: translation._('web_language'),
                                     name: 'web_language',
                                     id: 'web_language',
+									hiddenFieldId: 'web_language_writable',
+									hiddenFieldData: _settingData.web_language_writable,
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                        tooltip: 'bla',                                    
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -555,34 +576,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('web_language_writable'),
-                                        hideLabel: true,
-                                        name: 'web_language_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'web_language_writable',
-                                        anchor: '100%'
-                                    })
-                                ]
-                            }, {
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('language'),
                                     name: 'language',
                                     id: 'language',
+									hiddenFieldId: 'language_writable',
+									hiddenFieldData: _settingData.language_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -611,31 +619,18 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         ]
                                     })
                                 }]
-                            }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('language_writable'),
-                                        hideLabel: true,
-                                        name: 'language_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'language_writable',
-                                        anchor: '100%'
-                                    })
-                                ]
                             },{
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('display_method'),
                                     name: 'display_method',
                                     id: 'display_method',
+									hiddenFieldId: 'display_method_writable',
+									hiddenFieldData: _settingData.display_method_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -656,40 +651,27 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         ]
                                     })
                                 }]
-                            }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('display_method_writable'),
-                                        hideLabel: true,
-                                        name: 'display_method_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'display_method_writable',
-                                        anchor: '100%'
-                                    })                       
-                                ]
                             }]
                         },{          
                             layout: 'column',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('call_waiting'),
                                     name: 'call_waiting',
                                     id: 'call_waiting',
+									hiddenFieldId: 'call_waiting_writable',
+									hiddenFieldData: _settingData.call_waiting_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -706,34 +688,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('tone_scheme_writable'),
-                                        hideLabel: true,
-                                        name: 'tone_scheme_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'tone_scheme_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            },{
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('mwi_notification'),
                                     name: 'mwi_notification',
                                     id: 'mwi_notification',
+									hiddenFieldId: 'mwi_notification_writable',
+									hiddenFieldData: _settingData.mwi_notification_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -749,30 +718,17 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('mwi_notification_writable'),
-                                        hideLabel: true,
-                                        name: 'mwi_notification_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'mwi_notification_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            }, {
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('mwi_dialtone'),
                                     name: 'mwi_dialtone',
                                     id: 'mwi_dialtone',
+									hiddenFieldId: 'mwi_dialtone_writable',
+									hiddenFieldData: _settingData.mwi_dialtone_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -790,40 +746,27 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         ]
                                     })
                                 }]
-                            }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('mwi_dialtone_writable'),
-                                        hideLabel: true,
-                                        name: 'mwi_dialtone_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'mwi_dialtone_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
                             }]
                         }, {          
                             layout: 'column',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('headset_device'),
                                     name: 'headset_device',
                                     id: 'headset_device',
+									hiddenFieldId: 'headset_device_writable',
+									hiddenFieldData: _settingData.headset_device_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -838,34 +781,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('headset_device_writable'),
-                                        hideLabel: true,
-                                        name: 'headset_device_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'headset_device_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            }, {
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                        xtype: 'combo',
+                                        xtype: 'lockCombo',
                                         fieldLabel: translation._('message_led_other'),
                                         name: 'message_led_other',
                                         id: 'message_led_other',
+	    								hiddenFieldId: 'message_led_other_writable',
+    									hiddenFieldData: _settingData.message_led_other_writable,                                        
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
-                                        anchor: '100%',
+                                        anchor: '95%',
                                         triggerAction: 'all',
                                         editable: false,
                                         forceSelection: true,
@@ -878,33 +808,19 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                                 ['off', 'off']
                                             ]
                                         })
-                                    }
-                                ]
+                                }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('message_led_other_writable'),
-                                        hideLabel: true,
-                                        name: 'message_led_other_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'message_led_other_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            },{
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('global_missed_counter'),
                                     name: 'global_missed_counter',
                                     id: 'global_missed_counter',
+									hiddenFieldId: 'global_missed_counter_writable',
+									hiddenFieldData: _settingData.global_missed_counter_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -918,40 +834,27 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         data: [[ '',  translation._('- default setting -')],['on', 'on'], ['off', 'off']]
                                     })
                                 }]
-                            }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('global_missed_counter_writable'),
-                                        hideLabel: true,
-                                        name: 'global_missed_counter_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'global_missed_counter_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
                             }]
                         }, {          
                             layout: 'column',
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('scroll_outgoing'),
                                     name: 'scroll_outgoing',
                                     id: 'scroll_outgoing',
+									hiddenFieldId: 'scroll_outgoing_writable',
+									hiddenFieldData: _settingData.scroll_outgoing_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -966,34 +869,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('scroll_outgoing_writable'),
-                                        hideLabel: true,
-                                        name: 'scroll_outgoing_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'scroll_outgoing_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            }, {
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('show_local_line'),
                                     name: 'show_local_line',
                                     id: 'show_local_line',
+									hiddenFieldId: 'show_local_line_writable',
+									hiddenFieldData: _settingData.show_local_line_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -1008,30 +898,17 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('show_local_line_writable'),
-                                        hideLabel: true,
-                                        name: 'show_local_line_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'show_local_line_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            }, {
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('show_call_status'),
                                     name: 'show_call_status',
                                     id: 'show_call_status',
+									hiddenFieldId: 'show_call_status_writable',
+									hiddenFieldData: _settingData.show_call_status_writable,                                        
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -1049,21 +926,6 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         ]
                                     })
                                 }]
-                            }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('show_call_status_writable'),
-                                        hideLabel: true,
-                                        name: 'show_call_status_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'show_call_status_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
                             }]
                         }]
                     }]   // form 
@@ -1087,7 +949,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: false
+                    frame: true
                 },
                 items: [{
                     layout: 'hfit',
@@ -1251,22 +1113,22 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteSetting,
                 items: [{
-                    defaults: {
-                        frame: true,
-                    },
-                	xtype: 'tabpanel',
+                    layout:'fit',
                     border: false,
-                    height: 100,
-                    //autoHeight: true,
+                    autoHeight: true,
                     anchor: '100% 100%',
-                    plain:true,
-                    activeTab: 0,
-                    id: 'editSettingTabPanel',
-                    layoutOnTabChange:true,
-                    items:[
-                        this.editSettingMainDialog(),
-                        this.editSettingRedirectDialog()
-                    ]
+                    items: new Ext.TabPanel({
+                        plain:true,
+                        activeTab: 0,
+                        id: 'editSettingTabPanel',
+                        layoutOnTabChange:true,  
+                        items:[
+                            this.editSettingMainDialog(_settingData),
+                            this.editSettingRedirectDialog()
+                        ]
+                    })
+                   
+                                        
                 }]
             });
 
@@ -1274,24 +1136,13 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             var viewport = new Ext.Viewport({
                 layout: 'border',
                 frame: true,
+                //height: 300,
                 items: dialog
             });
                
             this.updateSettingRecord(_settingData);
             this.updateToolbarButtons();           
             dialog.getForm().loadRecord(this.settingRecord);
-  /*          
-            new Ext.ToolTip({
-                target: 'web_language_writable',
-                title: 'Mouse Track',
-                width:200,
-                html: 'This tip will follow...',
-                trackMouse:true
-            });
-            
-            
-*/          
-
             
         } 
 };

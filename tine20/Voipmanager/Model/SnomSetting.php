@@ -105,7 +105,7 @@ class Voipmanager_Model_SnomSetting extends Tinebase_Record_Abstract
         'web_language_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'language_writable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'display_method_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'tone_scheme_writable'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'call_waiting_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'mwi_notification_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
         'mwi_dialtone_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headset_device_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),

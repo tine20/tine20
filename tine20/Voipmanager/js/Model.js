@@ -143,7 +143,7 @@ Tine.Voipmanager.Model.Snom.Setting = Ext.data.Record.create([
     {name: 'web_language_writable'},
     {name: 'language_writable'},
     {name: 'display_method_writable'},
-    {name: 'tone_scheme_writable'},
+    {name: 'call_waiting_writable'},
     {name: 'mwi_notification_writable'},
     {name: 'mwi_dialtone_writable'},
     {name: 'headset_device_writable'},
