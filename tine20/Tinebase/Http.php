@@ -101,6 +101,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/form/ColumnFormPanel.js',
             'Tinebase/js/ux/form/ExpandFieldSet.js',
             'Tinebase/js/ux/form/ClearableComboBox.js',
+            'Tinebase/js/ux/form/DateTimeField.js',
             'Tinebase/js/ux/form/ClearableDateField.js',
             'Tinebase/js/ux/form/ImageField.js',
             'Tinebase/js/ux/form/ImageCropper.js',
