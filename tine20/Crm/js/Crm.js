@@ -696,7 +696,7 @@ Tine.Crm.LeadEditDialog = {
 
                         // update stores
                         Tine.Crm.LeadEditDialog.loadContactsStore(lead.data.responsible, lead.data.customer, lead.data.partner, true);        
-                        Tine.Crm.LeadEditDialog.loadTasksStore(lead.data.tasks);
+                        Tine.Crm.LeadEditDialog.loadTasksStore(lead.data.tasks, true);
                         //Tine.Crm.LeadEditDialog.loadProductsStore(lead.data.products);
                         
                         //Ext.StoreMgr.lookup('ContactsStore').commitChanges();
@@ -1343,13 +1343,8 @@ Tine.Crm.LeadEditDialog = {
                         linkedId: ''
                     },
                     success: function(_result, _request) {
-                    	var newTask = [Ext.util.JSON.decode(_result.responseText)];
-                    	
-                    	console.log(newTask);
-                    	
-                        gridStore.loadData(newTask, true);
-                        
-                        console.log(gridStore);
+                    	var newTask = [Ext.util.JSON.decode(_result.responseText)];                    	
+                        gridStore.loadData(newTask, true);                        
                     },
                     failure: function ( result, request) { 
                         Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
@@ -1576,22 +1571,37 @@ Tine.Crm.LeadEditDialog = {
      * get linked tasks store and put it into store manager
      * 
      * @param   array _tasks
+     * @param   boolean _reload reload or create new store
      */
-    loadTasksStore: function(_tasks)
+    loadTasksStore: function(_tasks, _reload)
     {
-        var storeTasks = new Ext.data.JsonStore({
-            id: 'id',
-            fields: Tine.Crm.Model.TaskLink
-        });
+    	var storeTasks = null;
+    	
+    	if (_reload) {
+
+    		storeTasks = Ext.StoreMgr.lookup('TasksStore');
+
+            // empty store and fill with data
+            storeTasks.removeAll();
+    		
+            if(_tasks) {
+                storeTasks.loadData(_tasks);                    
+            }
+
+        } else {
+            var storeTasks = new Ext.data.JsonStore({
+                id: 'id',
+                fields: Tine.Crm.Model.TaskLink
+            });
+                
+            if(_tasks) {
+                storeTasks.loadData(_tasks);                    
+            }
             
-        if(_tasks) {
-            storeTasks.loadData(_tasks);                    
-            //storeTasks.setDefaultSort('remark', 'asc');     
-        }
-        
-        //console.log(storeTasks);
-        
-        Ext.StoreMgr.add('TasksStore', storeTasks);
+            //console.log(storeTasks);
+            
+            Ext.StoreMgr.add('TasksStore', storeTasks);
+    	}
     },
 
     /**
