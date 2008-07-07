@@ -1556,11 +1556,13 @@ Tine.Crm.LeadEditDialog = {
             
             // remove link_id on update
             // @todo is that needed?
+            /*
             storeContacts.on('update', function(store, record, operation) {
             	if (operation === Ext.data.Record.EDIT) {
                     record.data.link_id = null;
             	}
-            }, this);        
+            }, this);
+            */        
             
             Ext.StoreMgr.add('ContactsStore', storeContacts);
     	}
