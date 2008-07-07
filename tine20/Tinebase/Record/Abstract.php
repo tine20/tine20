@@ -343,7 +343,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
         }
         
-        return $this->_properties[$_name];
+        return array_key_exists($_name, $this->_properties) ? $this->_properties[$_name] : NULL;
     }
     
     /**
@@ -449,5 +449,50 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public static function generateUID()
     {
         return sha1(mt_rand(). microtime());
+    }
+    
+    /**
+     * returns an array with differences to the given record
+     * 
+     * @param  Tinebase_Record_Interface $_record record for comparism
+     * @return array with differences field => different value
+     */
+    public function diff($_record)
+    {
+        $diff = array();
+        foreach (array_keys($this->_validators) as $fieldName) {
+            if (in_array($fieldName, $this->_datetimeFields)) {
+                if ($this->__get($fieldName) instanceof Zend_Date
+                    && $_record->$fieldName instanceof Zend_Date
+                    && $this->__get($fieldName)->compare($_record->$fieldName) === 0) {
+                        continue;
+                } elseif (!$_record->$fieldName instanceof Zend_Date
+                          && $this->__get($fieldName) == $_record->$fieldName) {
+                    continue;
+                }
+            } elseif($fieldName == $this->_identifier
+                     && $this->getId() == $_record->getId()) {
+                    continue;
+            } elseif($this->__get($fieldName) == $_record->$fieldName) {
+                continue;
+            }
+            $diff[$fieldName] = $_record->$fieldName;
+        }
+        return $diff;
+    }
+    
+    /**
+     * check if two records are equal
+     * 
+     * @param  Tinebase_Record_Interface $_record record for comparism
+     * $param  array                     $_toOmit fields to omit
+     * @return bool
+     */
+    public function isEqual($_record, array $_toOmmit = array())
+    {
+        $allDiffs = $this->diff($_record);
+        $diff = array_diff(array_keys($allDiffs), $_toOmmit);
+        
+        return count($diff) == 0;
     }
 }

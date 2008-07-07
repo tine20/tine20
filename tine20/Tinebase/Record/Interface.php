@@ -116,5 +116,22 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return array
      */
     public function toArray();
+    
+    /**
+     * returns an array with differences to the given record
+     * 
+     * @param  Tinebase_Record_Interface $_record record for comparism
+     * @return array with differences field => different value
+     */
+    public function diff($_record);
+    
+    /**
+     * check if two records are equal
+     * 
+     * @param  Tinebase_Record_Interface $_record record for comparism
+     * $param  array                     $_toOmit fields to omit
+     * @return bool
+     */
+    public function isEqual($_record, array $_toOmmit = array());
      
 }
