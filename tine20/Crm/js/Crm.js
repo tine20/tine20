@@ -693,7 +693,6 @@ Tine.Crm.LeadEditDialog = {
                         leadForm.loadRecord(lead);
                         
                         Ext.getCmp('crmGridTasks').setDisabled(false);
-                        Ext.getCmp('crmGridProducts').setDisabled(false);
 
                         // update stores
                         Tine.Crm.LeadEditDialog.loadContactsStore(lead.data.responsible, lead.data.customer, lead.data.partner, true);        
@@ -1377,7 +1376,6 @@ Tine.Crm.LeadEditDialog = {
             grid = new Ext.ux.grid.QuickaddGridPanel({
                 title: _title,
                 id: 'crmGrid' + _type,
-                disabled: true,
                 border: false,
                 store: gridStore,
                 clicksToEdit: 'auto',
@@ -1832,7 +1830,6 @@ Tine.Crm.LeadEditDialog = {
         // disable tasks/products grids for new lead
         if (lead.data.id) {
         	Ext.getCmp('crmGridTasks').setDisabled(false);
-            Ext.getCmp('crmGridProducts').setDisabled(false);
         } 
                 
     } // end of function display()
