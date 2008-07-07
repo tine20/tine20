@@ -359,19 +359,22 @@ class Setup_ExtCheck
     {
         foreach ($this->values as $key => $value) {
             if ($value['tag'] == 'ENVIROMENT') {
-                if ($value['attributes']['NAME'] == 'Zend') {
+                switch($value['attributes']['NAME']) {
+                case 'Zend':
                     if (version_compare($value['attributes']['VERSION'], zend_version(), '<')) {
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
                     } else {
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                     }
-                } else if ($value['attributes']['NAME'] == 'PHP') {
+                    break;
+                case 'PHP':
                     if (version_compare($value['attributes']['VERSION'], phpversion(), '<')) {
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
                     } else {
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                     }
-                } else if ($value['attributes']['NAME'] == 'MySQL') {
+                    break;
+                case 'MySQL':
                     // get setup controller for database connection
                     $dbConfig = Zend_Registry::get('configFile')->database;
                     $link = mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
@@ -384,6 +387,10 @@ class Setup_ExtCheck
                     } else {
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                     }
+                    break;
+                default:
+                    $data[] = array($value['attributes']['NAME'], 'FAILURE');
+                    break;
                 }
             } else if ($value['tag'] == 'EXTENSION') {
 
