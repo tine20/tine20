@@ -413,26 +413,38 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         ]
     };
     
-    // @todo set center/markers when tab is clicked 
-    // google maps tab panel
-    var gmapPanel = new Ext.ux.GMapPanel({
-    	id: 'googleMapsPanel',
-    	title: translation._('Map'),
-        region: 'center',
-        zoomLevel: 14,
-        gmapType: 'map',
-        addControl: new GSmallMapControl(),
-        setCenter: {
-            //geoCodeAddr: '4 Yawkey Way, Boston, MA, 02215-3409, USA',
-            //marker: {title: 'Fenway Park'}
-        	geoCodeAddr: _contact.adr_one_street + ', ' + _contact.adr_one_locality,
-            marker: {title: translation._('Business Address')}
-        },
-        markers: [{
-            geoCodeAddr: _contact.adr_two_street + ', ' + _contact.adr_two_locality,
-            marker: {title: translation._('Private Address')}
-        }]        
-    });
+    // check if google api and address info is available 
+    if (window.GSmallMapControl && _contact.adr_one_street && _contact.adr_one_locality) {
+        // @todo set center/markers when tab is clicked 
+    	// @todo add country and other address info
+        // google maps tab panel
+        var gmapPanel = new Ext.ux.GMapPanel({
+        	id: 'googleMapsPanel',
+        	title: translation._('Map'),
+            region: 'center',
+            zoomLevel: 14,
+            gmapType: 'map',
+            addControl: new GSmallMapControl(),
+            setCenter: {
+                //geoCodeAddr: '4 Yawkey Way, Boston, MA, 02215-3409, USA',
+                //marker: {title: 'Fenway Park'}
+            	geoCodeAddr: _contact.adr_one_street + ', ' + _contact.adr_one_locality,
+                marker: {title: translation._('Business Address')}
+            }
+            // @todo make other addresses work
+            /*,
+            markers: [{
+                geoCodeAddr: _contact.adr_two_street + ', ' + _contact.adr_two_locality,
+                marker: {title: translation._('Private Address')}
+            }]
+            */        
+        });
+    } else {
+    	var gmapPanel = {
+            title: translation._('Map'),
+            disabled: true
+        };
+    }
     
     var tabPanel = new Ext.TabPanel({
         id: 'adbEditDialogTabPanel',

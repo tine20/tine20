@@ -75,7 +75,11 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         $view->cssIncludeFiles = $includeFiles['css'];
         
         // add google api key
-        $view->googleApi = '<!-- GMaps API Key that works for localhost --><script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAJDLv3q8BFBryRorw-851MRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTyuslsNlFqyphYqv1PCUD8WrZA2A" type="text/javascript"></script>';        
+        if (isset(Zend_Registry::get('configFile')->addressbook->googleKey)) {
+            $view->googleApi = '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=' . 
+                                Zend_Registry::get('configFile')->addressbook->googleKey . 
+                                '" type="text/javascript"></script>';
+        }        
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
