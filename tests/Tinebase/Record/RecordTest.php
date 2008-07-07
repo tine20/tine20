@@ -111,7 +111,54 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     {
 	
     }
-}		
+    
+    /**
+     * testDiff
+     */
+    public function testDiff()
+    {
+        $record1 = new Tinebase_Record_DummyRecord(array(
+            'string' => 'test',
+            'test_1' => 25,
+            'test_2' => 99,
+            'date_single' => Zend_Date::now()->getIso()
+        ), true);
+        
+        $record2 = clone $record1;
+        $record2->string = 'anders';
+        $record2->test_1 = 26;
+        $diff = $record1->diff($record2);
+        $this->assertEquals(2, count($diff));
+        $this->assertEquals('anders', $diff['string']);        
+        $this->assertEquals(26, $diff['test_1']);
+
+        $record2 = clone $record1;
+        $record2->date_single = clone $record1->date_single;
+        $record2->date_single = $record2->date_single->addDay(1);
+        $diff = $record1->diff($record2);
+        $this->assertEquals(1, count($diff));
+        $this->assertTrue(array_key_exists('date_single', $diff));
+    }
+    
+    public function testIsEqual()
+    {
+        $record1 = new Tinebase_Record_DummyRecord(array(
+            'string' => 'test',
+            'test_1' => 25,
+            'test_2' => 99,
+            'date_single' => Zend_Date::now()->getIso()
+        ), true);
+        $record2 = clone $record1;
+        $this->assertTrue($record1->isEqual($record2), 'records are equal');
+        
+        $record2->string = 'anders';
+        $this->assertFalse($record1->isEqual($record2), 'records are differnet');
+        
+        $this->assertTrue($record1->isEqual($record2, array('string')), 'records are different, but omited');
+        
+    }
+}
+		
 	
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordTest::main') {
