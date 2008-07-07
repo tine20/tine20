@@ -1875,13 +1875,11 @@ Tine.Admin.Accounts.EditDialog = function() {
                     new Ext.ux.form.ClearableDateField({ 
                         fieldLabel: 'Expires',
                         name: 'accountExpires',
-                        format: "d.m.Y",
                         emptyText: 'never'
                     }), {
-                        xtype: 'datefield',
+                        xtype: 'datetimefield',
                         fieldLabel: 'Last login at',
                         name: 'accountLastLogin',
-                        format: "d.m.Y H:i:s",
                         emptyText: 'never logged in',
                         hideTrigger: true,
                         readOnly: true
@@ -1892,10 +1890,9 @@ Tine.Admin.Accounts.EditDialog = function() {
                         emptyText: 'never logged in',
                         readOnly: true
                     }, {
-                        xtype: 'datefield',
+                        xtype: 'datetimefield',
                         fieldLabel: 'Password set',
                         name: 'accountLastPasswordChange',
-                        format: "d.m.Y H:i:s",
                         emptyText: 'never',
                         hideTrigger: true,
                         readOnly: true
