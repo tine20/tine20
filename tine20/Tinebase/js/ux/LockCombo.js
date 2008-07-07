@@ -81,10 +81,12 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
 	
 			if(t.id == 'trigger2') {
 				if(this.hiddenFieldData == '0') {
-		            t.addClass(this.trigger2ClassLocked);		
+                    var _cssClass = this.trigger2ClassLocked.toString();
+		            t.addClass(_cssClass);		
 				}
-				if(this.hiddenFieldData == '1') {
-		            t.addClass(this.trigger2ClassUnlocked);							
+				if(this.hiddenFieldData == '1' || !this.hiddenFieldData) {                                       
+                    var _cssClass = this.trigger2ClassUnlocked.toString();
+		            t.addClass(_cssClass);							
 				}				
 			}
 	
@@ -94,6 +96,13 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
         this.triggers = ts.elements;  
     },
 	
+
+    onRender:function(ct, position) {        
+        Ext.ux.LockCombo.superclass.onRender.call(this, ct, position); // render the Ext.Button
+        this.hiddenBox = ct.parent().createChild({tag:'input', type:'hidden', name: this.hiddenFieldId, id: this.hiddenFieldId, value: this.hiddenFieldData });        
+        Ext.ComponentMgr.register(this.hiddenBox);
+    },
+
 
 	onTrigger1Click: function(){
         if(this.disabled){
@@ -114,30 +123,30 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
     },
 	
     onTrigger2Click : function(){
+
 		var _currentValue = Ext.getCmp(this.hiddenFieldId).getValue();
         var ts = this.trigger.select('.x-form-trigger', true);	
 
-
-
-		if (_currentValue == '0') {
-			
-			Ext.getCmp(this.hiddenFieldId).setValue('1');
+		if (_currentValue == '0') {			
+			Ext.getCmp(this.hiddenFieldId).dom.value = '1';
+     
+            var _cssClass = this.trigger2ClassUnlocked.toString();
 			ts.each(function(t, all, index){
 				if (t.id == 'trigger2') {
-					t.replaceClass("x-form-trigger " + this.trigger2ClassLocked, "x-form-trigger " + this.trigger2ClassUnlocked);
+					t.dom.className = "x-form-trigger " + _cssClass;
 				}
 			});
 		}
-		else {
-			Ext.getCmp(this.hiddenFieldId).setValue('0');
+		if (_currentValue == '1') {
+			Ext.getCmp(this.hiddenFieldId).dom.value = '0';
+
+            var _cssClass = this.trigger2ClassLocked.toString();
 			ts.each(function(t, all, index){
 				if (t.id == 'trigger2') {			
-					t.replaceClass("x-form-trigger " + this.trigger2ClassUnlocked, "x-form-trigger " + this.trigger2ClassLocked);
+					t.dom.className = "x-form-trigger " + _cssClass;
 				}
 			});
 		}
-
-		console.log(Ext.getCmp(this.hiddenFieldId).getValue());
     }	
 });
 Ext.reg('lockCombo', Ext.ux.LockCombo);
