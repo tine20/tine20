@@ -693,7 +693,7 @@ Tine.Tinebase.Common = function(){
      * @return {string} localised date and time
      */
 	_dateTimeRenderer = function($_iso8601){
-		return Ext.util.Format.date($_iso8601, 'd.m.Y H:i:s');
+		return Ext.util.Format.date($_iso8601, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
 	};
 	
 	/**
@@ -704,7 +704,7 @@ Tine.Tinebase.Common = function(){
      * @return {string} localised date
      */
 	_dateRenderer = function(date){
-		return Ext.util.Format.date(date, 'd.m.Y');
+		return Ext.util.Format.date(date, Locale.getTranslationData('Date', 'medium'));
 	};
 	
 	/**
@@ -715,7 +715,7 @@ Tine.Tinebase.Common = function(){
 	 * @return {string} localised time
 	 */
 	_timeRenderer = function(date){
-		return Ext.util.Format.date(date, 'H:i:s');
+		return Ext.util.Format.date(date, Locale.getTranslationData('Time', 'medium'));
 	};
 
     /**
