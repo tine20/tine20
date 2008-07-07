@@ -36,6 +36,7 @@ try {
 
 /**
  * validate environemnt
+ * @todo include ini checks in php envirionment checks
  */
 $check = new Setup_ExtCheck('Setup/essentials.xml');
 
@@ -63,6 +64,13 @@ foreach ($requiredIniSettings as $variable => $newValue) {
     }
 }
 
+/**
+ * Check ExtJS
+ */
+$tine20dir = dirname(__FILE__);
+if (!file_exists("$tine20dir/ExtJS/ext-all.js")) {
+    die("You need to put a copy of <a href='http://extjs.com/products/extjs/download.php'>ExtJS</a> in $tine20dir");
+}
 /**
  * start setup
  */
