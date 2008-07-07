@@ -155,6 +155,30 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
         }
     }
     /**
+     * testUpdateRelationForward
+     */
+    public function testUpdateRelationForward()
+    {
+        $rel = $this->relations[1];
+        $rel->type = 'UPDATE';
+        $this->object->updateRelation($rel);
+        
+        $updated = $this->object->getRelation($rel->getId(), $rel->own_model, $rel->own_backend, $rel->own_id);
+        $this->assertEquals('UPDATE', $updated->type);
+    }
+    /**
+     * testUpdateRelationSwap
+     */
+    public function testUpdateRelationSwap()
+    {
+        $rel = $this->relations[1];
+        $rel->type = 'UPDATE';
+        $this->object->updateRelation($rel);
+        
+        $updatedSwap = $this->object->getRelation($rel->getId(), $rel->related_model, $rel->related_backend, $rel->related_id);
+        $this->assertEquals('UPDATE', $updatedSwap->type);
+    }
+    /**
      * testBreakRelation in forward direktion.
      */
     public function testBreakRelationForward()
