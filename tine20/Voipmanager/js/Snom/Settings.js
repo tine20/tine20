@@ -384,7 +384,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
         updateWritableFields: function(_settingData)
         {
-             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable");               
+             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable","redirect_event_writable","redirect_number_writable","redirect_time_writable");               
             
             Ext.each(_writableFields, function(_item, _index, _array) {
                 _settingData.data[_item] = Ext.getCmp(_item).getValue();
@@ -936,7 +936,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         },
         
         
-        editSettingRedirectDialog: function(){
+        editSettingRedirectDialog: function(_settingData){
         
             var translation = new Locale.Gettext();
             translation.textdomain('Voipmanager');
@@ -967,19 +967,21 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{ 
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'combo',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('redirect_event'),
                                     name: 'redirect_event',
                                     id: 'redirect_event',
+									hiddenFieldId: 'redirect_event_writable',
+									hiddenFieldData: _settingData.redirect_event_writable,                                        
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
-                                    anchor: '100%',
+                                    anchor: '95%',
                                     triggerAction: 'all',
                                     editable: false,
                                     forceSelection: true,
@@ -1007,77 +1009,59 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('redirect_event_writable'),
-                                        hideLabel: true,
-                                        name: 'redirect_event_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'redirect_event_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            }, {
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'textfield',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('redirect_number'),
                                     name: 'redirect_number',
                                     id: 'redirect_number',
-                                    anchor: '100%',
-                                    maxLength: 255
+									hiddenFieldId: 'redirect_number_writable',
+									hiddenFieldData: _settingData.redirect_number_writable,                                        
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '95%',
+                                    triggerAction: 'all',
+                                    editable: true,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            []
+                                        ]
+                                    })                                    
                                }]
                             }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('redirect_number_writable'),
-                                        hideLabel: true,
-                                        name: 'redirect_number_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'redirect_number_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
-                            }, {
-                                columnWidth: .27,
+                                columnWidth: .33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'numberfield',
+                                    xtype: 'lockCombo',
                                     fieldLabel: translation._('redirect_time'),
-                                    disabled: true,
                                     name: 'redirect_time',
                                     id: 'redirect_time',
+									hiddenFieldId: 'redirect_time_writable',
+									hiddenFieldData: _settingData.redirect_time_writable,                                        
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
                                     anchor: '100%',
-                                    maxLength: 5
+                                    triggerAction: 'all',
+                                    editable: true,
+                                    forceSelection: true,
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            []
+                                        ]
+                                    })                                    
                                }]
-                            }, {
-                                columnWidth: .06,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    new Ext.ux.form.ImgCheckbox({
-                                        fieldLabel: translation._('redirect_time_writable'),
-                                        hideLabel: true,
-                                        name: 'redirect_time_writable',
-                                        tooltip: translation._('enable oder disable write posibility for user'),
-                                        id: 'redirect_time_writable',
-                                        anchor: '100%'
-                                    })                                
-                                ]
                             }]  
                         }]   // column
                     }]
@@ -1124,7 +1108,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                         layoutOnTabChange:true,  
                         items:[
                             this.editSettingMainDialog(_settingData),
-                            this.editSettingRedirectDialog()
+                            this.editSettingRedirectDialog(_settingData)
                         ]
                     })
                    
