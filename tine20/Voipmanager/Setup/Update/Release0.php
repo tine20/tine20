@@ -2485,5 +2485,112 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Voipmanager', '0.12');
     }         
           
+   /**
+     * update snom_location
+     */    
+    public function update_12()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'web_language';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('English', 'Deutsch', 'Espanol', 'Francais', 'Italiano', 'Nederlands', 'Portugues', 'Suomi', 'Svenska', 'Dansk', 'Norsk');        
+        $this->_backend->addCol('snom_phones', $declaration);        
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'language';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('English', 'English(UK)', 'Deutsch', 'Espanol', 'Francais', 'Italiano', 'Cestina', 'Nederlands', 'Polski', 'Portugues', 'Slovencina', 'Suomi', 'Svenska', 'Dansk', 'Norsk', 'Japanese', 'Chinese');        
+        $this->_backend->addCol('snom_phones', $declaration);        
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'display_method';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('full_contact', 'display_name', 'display_number', 'display_name_number', 'display_number_name');        
+        $this->_backend->addCol('snom_phones', $declaration);        
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'mwi_notification';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('silent', 'beep', 'reminder');        
+        $this->_backend->addCol('snom_phones', $declaration);        
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'mwi_dialtone';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('normal', 'stutter');        
+        $this->_backend->addCol('snom_phones', $declaration);       
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'headset_device';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('none', 'headset_rj');        
+        $this->_backend->addCol('snom_phones', $declaration);       
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'message_led_other';
+        $declaration->type      = 'int';
+        $declaration->notnull   = 'false';
+        $this->_backend->addCol('snom_phones', $declaration);       
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'global_missed_counter';
+        $declaration->type      = 'int';
+        $declaration->notnull   = 'false';
+        $this->_backend->addCol('snom_phones', $declaration);       
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'scroll_outgoing';
+        $declaration->type      = 'int';
+        $declaration->notnull   = 'false';
+        $this->_backend->addCol('snom_phones', $declaration);       
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'show_local_line';
+        $declaration->type      = 'int';
+        $declaration->notnull   = 'false';
+        $this->_backend->addCol('snom_phones', $declaration);       
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'show_call_status';
+        $declaration->type      = 'int';
+        $declaration->notnull   = 'false';
+        $this->_backend->addCol('snom_phones', $declaration);                               
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'redirect_event';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('none', 'all', 'busy', 'time');        
+        $this->_backend->addCol('snom_phones', $declaration);        
+ 
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'redirect_number';
+        $declaration->type      = 'varchar';
+        $declaration->notnull   = 'false';
+        $this->_backend->addCol('snom_phones', $declaration);       
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'redirect_time';
+        $declaration->type      = 'int';
+        $declaration->notnull   = 'false';
+        $this->_backend->addCol('snom_phones', $declaration);                               
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'call_waiting';
+        $declaration->type      = 'enum';
+        $declaration->notnull   = 'false';
+        $declaration->value     = array('on', 'visual', 'ringer', 'off');        
+        $this->_backend->addCol('snom_phones', $declaration);         
+        
+        $this->setApplicationVersion('Voipmanager', '0.13');               
+
+    }          
+          
     
 }

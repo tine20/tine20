@@ -62,7 +62,22 @@ class Voipmanager_Model_SnomPhone extends Tinebase_Record_Abstract
         'current_model'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'settings_loaded_at'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firmware_checked_at'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lines'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'lines'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'web_language'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'display_method'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'mwi_notification'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'mwi_dialtone'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'headset_device'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'message_led_other'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'global_missed_counter' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'scroll_outgoing'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'show_local_line'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'show_call_status'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'redirect_event'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'redirect_number'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'call_waiting'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
     /**

@@ -1081,6 +1081,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                     activeTab: 0,
                     id: 'editSettingTabPanel',
                     layoutOnTabChange:true,
+                    deferredRender: false,                         
                     items:[
                         this.editSettingMainDialog(_settingData),
                         this.editSettingRedirectDialog(_settingData)

@@ -52,15 +52,43 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editSnomPhone($phoneId=NULL)
     {
         $controller = Voipmanager_Controller::getInstance();
-        
+
         if (!empty($phoneId)) {
             $snomPhone = $controller->getSnomPhone($phoneId);
             $snomLines = $snomPhone->lines;
             unset($phone->lines);
             $asteriskSipPeers = $controller->searchAsteriskSipPeers('name');
 
+            $_phoneData = $snomPhone->toArray();
+
+            $_templateData = $controller->getSnomTemplate($_phoneData['template_id'])->toArray();
+            $_settingsData = $controller->getSnomSetting($_templateData['setting_id'])->toArray();
+            
+//            $_phoneData = array_merge($_settingsData, $_phoneData);
+
+
+            $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','redirect_event','redirect_number','redirect_time','call_waiting');
+
+            foreach($_writableFields AS $wField)
+            {
+                if(empty($_phoneData[$wField])) {
+                    $_phoneData[$wField] = $_settingsData[$wField];    
+                }
+                
+                $_fieldRW = $wField.'_writable';
+                 if($_settingsData[$_fieldRW] == '0')
+                 {
+                     $_phoneData[$wField] = $_settingsData[$wField];
+                     $_notWritable[$wField] = 'true';
+                 } else {
+                     $_notWritable[$wField] = '';    
+                 }
+            }
+
+            $encodedWritable = Zend_Json::encode($_notWritable);
+
             // encode the phone array
-            $encodedSnomPhone = Zend_Json::encode($snomPhone->toArray());
+            $encodedSnomPhone = Zend_Json::encode($_phoneData);
             $encodedSnomLines = Zend_Json::encode($snomLines->toArray());
             $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());              
         } else {
@@ -70,17 +98,20 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedSnomPhone = '{}';
             $encodedSnomLines = '[]';
             $encodedAsteriskSipPeers = '{}';
+            
+            $encodedSettings = '{}';
         }
 
+
         $encodedTemplates = Zend_Json::encode($controller->getSnomTemplates()->toArray());
-        $encodedLocations = Zend_Json::encode($controller->getSnomLocations()->toArray());
+        $encodedLocations = Zend_Json::encode($controller->getSnomLocations()->toArray());        
         
         $currentAccount = Zend_Registry::get('currentAccount');
                 
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ');';
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

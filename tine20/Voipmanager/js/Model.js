@@ -23,7 +23,22 @@ Tine.Voipmanager.Model.Snom.Phone = Ext.data.Record.create([
     {name: 'settings_loaded_at'},
     {name: 'firmware_checked_at'},
     {name: 'location'},
-    {name: 'template'}
+    {name: 'template'},
+    {name: 'web_language'},
+    {name: 'language'},
+    {name: 'display_method'},
+    {name: 'mwi_notification'},
+    {name: 'mwi_dialtone'},
+    {name: 'headset_device'},
+    {name: 'message_led_other'},
+    {name: 'global_missed_counter'},
+    {name: 'scroll_outgoing'},
+    {name: 'show_local_line'},
+    {name: 'show_call_status'},
+    {name: 'redirect_event'},
+    {name: 'redirect_number'},
+    {name: 'redirect_time'},
+    {name: 'call_waiting'}    
 ]);
 
 
