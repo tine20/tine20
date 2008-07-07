@@ -486,7 +486,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [{
                     layout: 'hfit',
@@ -949,7 +949,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 layoutOnTabChange: true,
                 defaults: {
                     border: true,
-                    frame: true
+                    frame: false
                 },
                 items: [{
                     layout: 'hfit',
@@ -1097,22 +1097,22 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteSetting,
                 items: [{
-                    layout:'fit',
+                    defaults: {
+                        frame: true,
+                    },
+                    xtype: 'tabpanel',
                     border: false,
-                    autoHeight: true,
+                    height: 100,
+                    //autoHeight: true,
                     anchor: '100% 100%',
-                    items: new Ext.TabPanel({
-                        plain:true,
-                        activeTab: 0,
-                        id: 'editSettingTabPanel',
-                        layoutOnTabChange:true,  
-                        items:[
-                            this.editSettingMainDialog(_settingData),
-                            this.editSettingRedirectDialog(_settingData)
-                        ]
-                    })
-                   
-                                        
+                    plain:true,
+                    activeTab: 0,
+                    id: 'editSettingTabPanel',
+                    layoutOnTabChange:true,
+                    items:[
+                        this.editSettingMainDialog(),
+                        this.editSettingRedirectDialog()
+                    ]
                 }]
             });
 
@@ -1120,7 +1120,6 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
             var viewport = new Ext.Viewport({
                 layout: 'border',
                 frame: true,
-                //height: 300,
                 items: dialog
             });
                
