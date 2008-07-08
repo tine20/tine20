@@ -159,6 +159,23 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Tests if updateing succseeds when setting Relations
+     *
+     */
+    public function testSetRelationsUpdate()
+    {
+        $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $relations[0]->type = 'UPDATETEST';
+        
+        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
+        $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        
+        $this->assertEquals('UPDATETEST', $updatedRelations[0]->type);
+        //$updatedRelations->related_record = '';
+        //print_r($updatedRelations->toArray());
+    }
+    
     public function testBreakRelations()
     {
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], array());
