@@ -1527,9 +1527,9 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                     deferredRender: false,                                   
                     items:[
                         this.editPhoneDialog(_phoneData),
+                        this.editPhoneSettingsDialog(_writable),                  
                         this.editPhoneLinesDialog(2, _lines, _snomLines),
-                        this.editPhoneOwnerSelection([],[]),
-                        this.editPhoneSettingsDialog(_writable)                  
+                        this.editPhoneOwnerSelection([],[])
                     ]
                 }]
             });
