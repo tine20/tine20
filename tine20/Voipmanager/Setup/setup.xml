@@ -1462,7 +1462,7 @@
                     <default>false</default>
                 </field>     
                 <field>                    
-                    <name>vip_ring_sound</name>
+                    <name>tone_scheme</name>
                     <type>enum</type>
                     <value>AUS</value>
                     <value>AUT</value>
