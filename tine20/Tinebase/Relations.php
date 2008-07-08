@@ -87,7 +87,7 @@ class Tinebase_Relations
         }
         
         foreach ($toAdd as $idx) {
-        	$this->_backend->addRelation($relations[$idx]);
+        	$this->_addRelation($relations[$idx]);
         }
         foreach ($toDel as $relationId) {
             $this->_backend->breakRelation($relationId);
@@ -97,8 +97,9 @@ class Tinebase_Relations
             $update = $relations[$relations->getIndexById($relationId)];
             
             if (!$current->isEqual($update, array('related_record'))) {
-                $this->_backend->updateRelation($update);
+                $this->_updateRelation($update);
             }
+            
         }
     }
     /**
@@ -187,5 +188,32 @@ class Tinebase_Relations
             }
         }
     }
+    
+    /**
+     * adds a new relation
+     * 
+     * @param  Tinebase_Relation_Model_Relation $_relation 
+     * @return Tinebase_Relation_Model_Relation the new relation
+     */
+    protected function _addRelation($_relation)
+    {
+        $_relation->created_by = Zend_Registry::get('currentAccount')->getId();
+        $_relation->creation_time = Zend_Date::now();
         
+        return $this->_backend->addRelation($_relation);
+    }
+    
+    /**
+     * update an existing relation
+     * 
+     * @param  Tinebase_Relation_Model_Relation $_relation 
+     * @return Tinebase_Relation_Model_Relation the updated relation
+     */
+    protected function _updateRelation($_relation)
+    {
+        $_relation->last_modified_by = Zend_Registry::get('currentAccount')->getId();
+        $_relation->last_modified_time = Zend_Date::now();
+        
+        return $this->_backend->updateRelation($_relation);
+    }
 }
