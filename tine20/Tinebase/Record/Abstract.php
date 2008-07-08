@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        add toJson / setFromJson functions?
  */
 
 /**
@@ -243,14 +245,24 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * returns array with record related properties 
      *
+     * @param boolean $_recursive
      * @return array
      */
-    public function toArray()
+    public function toArray($_recursive = TRUE)
     {
         $recordArray = $this->_properties;
         if ($this->convertDates === true) {
             $this->_convertZendDateToISO8601($recordArray);
         }
+        
+        if ($_recursive) {
+            foreach ($recordArray as $property => $value) {
+                if (is_object($value) && in_array('Tinebase_Record_Abstract', class_implements($value)) ) {
+                    $recordArray[$property] = $value->toArray(FALSE);
+                }
+            }
+        }
+        
         return $recordArray;
     }
     
