@@ -79,7 +79,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function updateTask($task)
     {
-        $inTask = $this->_json2task($task);
+        $inTask = $this->json2record($task);
         
         //error_log(print_r($newTask->toArray(),true));
         $outTask = $this->_controller->updateTask($inTask);
@@ -94,7 +94,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveTask($task)
     {
-        $inTask = $this->_json2task($task);
+        $inTask = $this->json2record($task);
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 
@@ -110,7 +110,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @param string JSON encoded task
      * @return Tasks_Model_Task task
      */
-    protected function _json2task($json)
+    public function json2record($json)
     {
         date_default_timezone_set($this->_userTimezone);
         $inTask = new Tasks_Model_Task(Zend_Json::decode($json));

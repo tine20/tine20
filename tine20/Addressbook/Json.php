@@ -16,10 +16,46 @@
  * This class handles all Json requests for the addressbook application
  *
  * @package     Addressbook
+ * @todo        handle timezone management
  */
 class Addressbook_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Addressbook';
+    
+    /**
+     * converts json encoded record in to an instance of a record
+     * 
+     * @param  $contactData
+     * @return Addressbook_Model_Contact
+     */
+    public function json2record($contactData)
+    {
+        $contactData = Zend_Json::decode($contactData);
+        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
+        
+        if (isset($contactData['tags'])) {
+            $contactData['tags'] = Zend_Json::decode($contactData['tags']);
+        }
+        if (isset($contactData['jpegphoto'])) {
+            $imageParams = $this->parseImageLink($contactData['jpegphoto']);
+            if ($imageParams['isNewImage']) {
+                $contactData['jpegphoto'] = $this->getImageData($imageParams);
+            } else {
+                unset($contactData['jpegphoto']);
+            }
+        }
+        
+        // unset if empty
+        if (empty($contactData['id'])) {
+            unset($contactData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
+        $contact = new Addressbook_Model_Contact();
+        $contact->setFromArray($contactData);
+        
+        return $contact;
+    }
     
     /**
      * delete multiple contacts
@@ -50,29 +86,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveContact($contactData)
     {
-        $contactData = Zend_Json::decode($contactData);
-        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
-        
-        if (isset($contactData['tags'])) {
-            $contactData['tags'] = Zend_Json::decode($contactData['tags']);
-        }
-        if (isset($contactData['jpegphoto'])) {
-            $imageParams = $this->parseImageLink($contactData['jpegphoto']);
-            if ($imageParams['isNewImage']) {
-                $contactData['jpegphoto'] = $this->getImageData($imageParams);
-            } else {
-                unset($contactData['jpegphoto']);
-            }
-        }
-        
-        // unset if empty
-        if (empty($contactData['id'])) {
-            unset($contactData['id']);
-        }
-
-        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
-        $contact = new Addressbook_Model_Contact();
-        $contact->setFromArray($contactData);
+        $contact = $this->json2record($contactData);
         
         if (empty($contact->id)) {
             $contact = Addressbook_Controller::getInstance()->addContact($contact);
