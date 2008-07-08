@@ -62,15 +62,15 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      *
      * @param Addressbook_Model_Contact $_contact
      * @return array contact data
-     * 
-     * @todo use it
      */
     public function contactToJson($_contact)
     {
-        $_contact->setTimezone(Zend_Registry::get('userTimeZone'));
-        $_contact->bypassFilters = true;
-        $_contact->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray());
-        return $_contact->toArray();
+        $_contact->tags = $_contact->tags->toArray();
+        $result = $_contact->toArray();
+        $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
+        $result['jpegphoto'] = $this->getImageLink($_contact);
+        
+        return $result;
     }
     
     /**
@@ -113,9 +113,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $contact['contact']
-        ); //$contact->toArray());
+        );         
         
-        //$result['updatedData']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
         return $result;
          
     }
@@ -175,11 +174,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         );
 
         $contact = Addressbook_Controller::getInstance()->getContact($contactId);
-        
-        $contact->tags = $contact->tags->toArray();
-        $result['contact'] = $contact->toArray();
-        $result['contact']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
-        $result['contact']['jpegphoto'] = $this->getImageLink($contact);
+        $result['contact'] = $this->contactToJson($contact);
         
         return $result;
     }
