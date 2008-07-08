@@ -661,46 +661,51 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                                 _data = Ext.util.JSON.decode(_result.responseText);
                                                 _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
                                                 var _notWritable = new Object();
+                                                var _settingsData = new Object();
             
                                                 Ext.each(_writableFields, function(_item, _index, _all) {
                                                     if(!_phoneData[_item]) {
-                                                        _phoneData[_item] = _data[_item];
-                                                    }                                    
-                                                    
-                                                    _rwField = _item.toString() + '_writable';
-                                                    
-                                                    if(_data[_rwField] == '0')
-                                                     {
-                                                         _phoneData[_rwField] = _data[_rwField];
-                                                         _notWritable[_rwField.toString()] = 'true';
-                                                     } else {
-                                                         _notWritable[_rwField.toString()] = 'false';
-                                                     }
-                                                                    
+                                                        _settingsData[_item] = _data[_item];
+                                                    } else {
+                                                        _rwField = _item.toString() + '_writable';
+    
+                                                        if(_data[_rwField] == '0')
+                                                        {
+                                                            _settingsData[_item] = _data[_item];                                                        
+                                                            _notWritable[_rwField.toString()] = 'true';                                                                                                       
+                                                        } else 
+                                                        {
+                                                             _settingsData[_item] = _phoneData[_item];
+                                                             _notWritable[_rwField.toString()] = 'false';                                                        
+                                                        }                                                        
+                                                    }
                                                 });                     
-//TODO : REPLACE SETTINGS TAB
-//console.log(editPhoneSettingsDialog(_notWritable));
+                                                
+                                                Array.prototype.in_array = function(needle) {
+                                                    for(var i=0; i < this.length; i++) if(this[ i] === needle) return true;
+                                                    return false;
+                                                } 
 
-//document.getElementById('settingsBorderLayout').innerHTML = ;
-
-/*
-                                                if(window.opener.Tine.Voipmanager.Snom.Phones) {
-                                                    window.opener.Tine.Voipmanager.Snom.Phones.Main.reload();
-                                                }
-                                                if(_closeWindow === true) {
-                                                    window.close();
-                                                } else {
-                                                    this.updatePhoneRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
-                                                    this.updateToolbarButtons();
-                                                    form.loadRecord(this.phoneRecord);
-                                                }     */
+                                                Ext.getCmp('voipmanager_editPhoneForm').cascade(function(_field) {
+                                                    if(_writableFields.in_array(_field.id)) {
+                                                        if(_notWritable[_field.id.toString()+'_writable'] == 'true') {
+                                            
+                                                            _field.disable();    
+                                                        }
+                                                        if(_notWritable[_field.id.toString()+'_writable'] == 'false') {
+                                                            _field.enable();    
+                                                        }            
+                                                        _field.setValue(_settingsData[_field.id]);
+                                                    }
+                                                });
+                                            
+                                                Ext.getCmp('voipmanager_editPhoneForm').doLayout();
                                             },
                                             failure: function ( result, request) { 
                                                 Ext.MessageBox.alert('Failed', 'No settings data found.'); 
                                             },
                                             scope: this 
                                         });                                   
-                                        
                                     }    
                                 },
                                 store: new Ext.data.JsonStore({
@@ -751,7 +756,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 grow: false,
                                 preventScrollbars: false,
                                 anchor: '100%',
-                                height: 85
+                                height: 70
                             }]
                         }]
                     }, {
@@ -1451,11 +1456,39 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    xtype: 'textfield',
+                                    xtype: 'combo',
                                     fieldLabel: translation._('redirect_event'),
                                     name: 'redirect_event',
                                     id: 'redirect_event',                                                                       
-                                    anchor: '95%'
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '95%',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    listeners: {
+                                        select: function(_combo, _record, _index) {
+                                            if (_record.data.name == 'time') {
+                                                Ext.getCmp('redirect_time').setDisabled(false);
+                                            }
+                                            
+                                            if(_record.data.name != 'time') {
+                                                Ext.getCmp('redirect_time').reset();                                                    
+                                                Ext.getCmp('redirect_time').setDisabled(true);
+                                            }
+                                        }
+                                    },
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            ['all', translation._('all')],
+                                            ['busy', translation._('busy')],
+                                            ['none', translation._('none')],
+                                            ['time', translation._('time')]
+                                        ]
+                                    })
                                 }]
                             }, {
                                 columnWidth: .33,
