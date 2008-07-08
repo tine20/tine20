@@ -147,7 +147,7 @@ class Tinebase_Translation
     {
         $jsContent = "Locale.prototype.TranslationLists = {\n";
     
-        $types = array ( 'Date', 'Time', 'DateTime', 'Month', 'Day', 'Symbols', 'Question' );
+        $types = array ( 'Date', 'Time', 'DateTime', 'Month', 'Day', 'Symbols', 'Question', 'Language', 'Territory' );
         
         $zendLocale = new Zend_Locale($_locale);
                 
