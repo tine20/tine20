@@ -8,8 +8,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        complete code coverage of controller by adding more tests
  * @todo        resolve test dependencies - make them _stand-alone_
+ * @todo        repair the relations tests
  */
 
 /**
