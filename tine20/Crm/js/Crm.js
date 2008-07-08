@@ -1589,7 +1589,7 @@ Tine.Crm.LeadEditDialog = {
             }
 
         } else {
-            var storeTasks = new Ext.data.JsonStore({
+            storeTasks = new Ext.data.JsonStore({
                 id: 'id',
                 fields: Tine.Crm.Model.TaskLink
             });
@@ -1597,8 +1597,6 @@ Tine.Crm.LeadEditDialog = {
             if(_tasks) {
                 storeTasks.loadData(_tasks);                    
             }
-            
-            //console.log(storeTasks);
             
             Ext.StoreMgr.add('TasksStore', storeTasks);
     	}
