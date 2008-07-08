@@ -285,6 +285,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * 
      * @todo add different backend types
      * @todo add creation of new records
+     * @todo move to json
      */
     private function setLeadLinks($_leadId, Crm_Model_Lead $_lead)
     {

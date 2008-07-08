@@ -51,6 +51,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * this validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
+     * @todo replace customer/partner/etc by relations (ONE field)
      */
     protected $_validators = array(
         'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
