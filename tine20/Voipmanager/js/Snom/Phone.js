@@ -798,21 +798,19 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     border: false,
                                     anchor: '100%',
                                     items: [{
-                                        xtype: 'datefield',
+                                        xtype: 'datetimefield',
                                         fieldLabel: translation._('Settings Loaded at'),
                                         name: 'settings_loaded_at',
                                         anchor: '100%',
                                         emptyText: 'never',
-                                        format: "d.m.Y H:i:s",
                                         hideTrigger: true,
                                         readOnly: true
                                     }, {
-                                        xtype: 'datefield',
+                                        xtype: 'datetimefield',
                                         fieldLabel: translation._('Firmware last checked at'),
                                         name: 'firmware_checked_at',
                                         anchor: '100%',
                                         emptyText: 'never',
-                                        format: "d.m.Y H:i:s",
                                         hideTrigger: true,
                                         readOnly: true
                                     }]
