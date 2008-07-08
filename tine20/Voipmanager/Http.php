@@ -94,7 +94,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         } else {
             //$phone = new Voipmanager_Model_SnomPhone();
             //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine');
-            
+            $encodedWritable = '{}';
             $encodedSnomPhone = '{}';
             $encodedSnomLines = '[]';
             $encodedAsteriskSipPeers = '{}';
