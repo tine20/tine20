@@ -37,6 +37,7 @@ class Tinebase_Relation_Backend_Sql
 	 * @var Tinebase_Db_Table
 	 */
 	protected $_db;
+	
 	/**
 	 * constructor
 	 */
@@ -48,21 +49,21 @@ class Tinebase_Relation_Backend_Sql
     	    'primary' => 'id'
     	));
     }
+    
     /**
      * adds a new relation
      * 
      * @param  Tinebase_Relation_Model_Relation $_relation 
      * @return Tinebase_Relation_Model_Relation the new relation
      */
-    public function addRelation( $_relation ) {
+    public function addRelation( $_relation )
+    {
     	if ($_relation->getId()) {
     		throw new Tinebase_Record_Exception_NotAllowed('Could not add existing relation');
     	}
     	
     	$id = $_relation->generateUID();
     	$_relation->setId($id);
-    	$_relation->created_by = Zend_Registry::get('currentAccount')->getId();
-    	$_relation->creation_time = Zend_Date::now();
     	
     	if ($_relation->isValid()) {
     		$data = $_relation->toArray();
@@ -77,16 +78,16 @@ class Tinebase_Relation_Backend_Sql
     		throw new Tinebase_Record_Exception_Validation('relation contains invalid data: ' . print_r($_relation->getValidationErrors(), true) );
     	}
     } // end of member function addRelation
+    
     /**
      * update an existing relation
      * 
      * @param  Tinebase_Relation_Model_Relation $_relation 
      * @return Tinebase_Relation_Model_Relation the updated relation
      */
-    public function updateRelation( $_relation ) {
+    public function updateRelation( $_relation )
+    {
         $id = $_relation->getId();
-        $_relation->last_modified_by = Zend_Registry::get('currentAccount')->getId();
-        $_relation->last_modified_time = Zend_Date::now();
         
         if ($_relation->isValid()) {
             $data = $_relation->toArray();
@@ -108,13 +109,15 @@ class Tinebase_Relation_Backend_Sql
             throw new Tinebase_Record_Exception_Validation('relation contains invalid data: ' . print_r($_relation->getValidationErrors(), true) );
         }
     } // end of member function updateRelation
+    
     /**
      * breaks a relation
      * 
      * @param Tinebase_Relation_Model_Relation $_relation 
      * @return void 
      */
-    public function breakRelation( $_id ) {
+    public function breakRelation( $_id )
+    {
     	$where = array(
     	    'id = ' . $this->_db->getAdapter()->quote($_id)
     	);
@@ -125,6 +128,7 @@ class Tinebase_Relation_Backend_Sql
     	    'deleted_time' => Zend_Date::now()->getIso()
     	), $where);
     } // end of member function breakRelation
+    
     /**
      * breaks all relations, optionally only of given role
      * 
@@ -135,7 +139,8 @@ class Tinebase_Relation_Backend_Sql
      * @param  string $_type     only breaks relations of given type
      * @return void
      */
-    public function breakAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL ) {
+    public function breakAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL )
+    {
         $relationIds = $this->getAllRelations($_model, $_backend, $_id, $_degree, $_type)->getArrayOfIds();
         if (!empty($relationIds)) {
             $where = array(
@@ -149,6 +154,7 @@ class Tinebase_Relation_Backend_Sql
             ), $where);
         }
     } // end of member function breakAllRelations
+    
     /**
      * returns all relations of a given record and optionally only of given role
      * 
@@ -160,7 +166,8 @@ class Tinebase_Relation_Backend_Sql
      * @param  boolean $_returnAll gets all relations (default: only get not deleted/broken relations)
      * @return Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
      */
-    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false  ) {
+    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false  )
+    {
     	$where = array(
     	    'own_model   = ' . $this->_db->getAdapter()->quote($_model),
     	    'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
@@ -186,6 +193,7 @@ class Tinebase_Relation_Backend_Sql
         }
    		return $relations; 
     } // end of member function getAllRelations
+    
     /**
      * returns on side of a relation
      *
