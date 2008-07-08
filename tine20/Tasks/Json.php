@@ -68,7 +68,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function getTask($uid)
     {
         $task = $this->_controller->getTask($uid);
-        return $this->_task2json($task);
+        return $this->record2json($task);
     }
     
     /**
@@ -83,7 +83,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         
         //error_log(print_r($newTask->toArray(),true));
         $outTask = $this->_controller->updateTask($inTask);
-        return $this->_task2json($outTask);
+        return $this->record2json($outTask);
     }
     
     /**
@@ -101,7 +101,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);
 
-        return $this->_task2json($outTask);
+        return $this->record2json($outTask);
     }
     
     /**
@@ -121,11 +121,11 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     }
     
     /**
-     * returns task perpared for json transport
+     * returns task prepared for json transport
      *
      * @param Tasks_Model_Task $_task
      */
-    protected function _task2json($_task)
+    public function record2json($_task)
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;
