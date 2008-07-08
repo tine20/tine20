@@ -79,13 +79,18 @@ $setup = new Setup_Controller();
 /**
  * update already installed applications
  */
+$applicationTable = NULL;
 try {
     // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
-    $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-    $setup->updateApplications($applications);
-} catch (Exception $e) {
+    $applicationTable = Zend_Registry::get('dbAdapter')->describeTable(SQL_TABLE_PREFIX . 'applications');
+} catch (Zend_Db_Statement_Exception $e) {
     // do nothing, no applications installed
 }    
+
+if(is_array($applicationTable)) {
+    $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+    $setup->updateApplications($applications);
+}
 
 
 /**
