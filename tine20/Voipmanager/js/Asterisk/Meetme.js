@@ -24,7 +24,7 @@ Tine.Voipmanager.Asterisk.Meetme.Main = {
          */
         addMeetme: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('meetmeWindow', 'index.php?method=Voipmanager.editAsteriskMeetme&meetmeId=', 450, 350);
+            Tine.Tinebase.Common.openWindow('meetmeWindow', 'index.php?method=Voipmanager.editAsteriskMeetme&meetmeId=', 450, 250);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Asterisk.Meetme.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Meetme_Grid').getSelectionModel().getSelections();
             var meetmeId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('meetmeWindow', 'index.php?method=Voipmanager.editAsteriskMeetme&meetmeId=' + meetmeId, 450, 350);
+            Tine.Tinebase.Common.openWindow('meetmeWindow', 'index.php?method=Voipmanager.editAsteriskMeetme&meetmeId=' + meetmeId, 450, 250);
         },
         
         /**
@@ -258,7 +258,7 @@ Tine.Voipmanager.Asterisk.Meetme.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('meetmeWindow', 'index.php?method=Voipmanager.editAsteriskMeetme&meetmeId=' + record.data.id, 450, 350);
+                Tine.Tinebase.Common.openWindow('meetmeWindow', 'index.php?method=Voipmanager.editAsteriskMeetme&meetmeId=' + record.data.id, 450, 250);
             } catch(e) {
                 // alert(e);
             }

@@ -24,7 +24,7 @@ Tine.Voipmanager.Asterisk.Context.Main = {
          */
         addContext: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=', 450, 350);
+            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=', 450, 250);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Asterisk.Context.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Context_Grid').getSelectionModel().getSelections();
             var contextId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=' + contextId, 450, 350);
+            Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=' + contextId, 450, 250);
         },
         
         /**
@@ -257,7 +257,7 @@ Tine.Voipmanager.Asterisk.Context.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=' + record.data.id, 450, 350);
+                Tine.Tinebase.Common.openWindow('contextWindow', 'index.php?method=Voipmanager.editAsteriskContext&contextId=' + record.data.id, 450, 250);
             } catch(e) {
                 // alert(e);
             }
