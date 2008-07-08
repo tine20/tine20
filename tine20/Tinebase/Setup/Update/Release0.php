@@ -162,188 +162,197 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $tableDefinitions = array( 
             '<table>
-                <name>roles</name>
-                <version>1</version>
-                <declaration>
+            <name>roles</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>                
+                <field>
+                    <name>created_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
                     <field>
                         <name>id</name>
-                        <autoincrement>true</autoincrement>
                     </field>
+                </index>                
+                <index>
+                    <name>name</name>
+                    <unique>true</unique>
                     <field>
                         <name>name</name>
-                        <type>text</type>
-                        <length>128</length>
-                        <notnull>true</notnull>
                     </field>
-                    <field>
-                        <name>description</name>
-                        <type>text</type>
-                        <length>255</length>
-                        <notnull>false</notnull>
-                    </field>                
-                    <field>
-                        <name>created_by</name>
-                        <type>integer</type>
-                    </field>
-                    <field>
-                        <name>creation_time</name>
-                        <type>datetime</type>
-                    </field> 
-                    <field>
-                        <name>last_modified_by</name>
-                        <type>integer</type>
-                    </field>
-                    <field>
-                        <name>last_modified_time</name>
-                        <type>datetime</type>
-                    </field>
-                    <index>
-                        <name>id</name>
-                        <primary>true</primary>
-                        <field>
-                            <name>id</name>
-                        </field>
-                    </index>                
-                    <index>
-                        <name>name</name>
-                        <unique>true</unique>
-                        <field>
-                            <name>name</name>
-                        </field>
-                    </index>
-                </declaration>
-            </table>',
+                </index>
+            </declaration>
+        </table>
+            ',
             '<table>
-                <name>role_rights</name>
-                <version>1</version>
-                <declaration>
-                   <field>
+            <name>role_rights</name>
+            <version>1</version>
+            <declaration>
+               <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>role_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>right</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+
+               <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
                         <name>id</name>
-                        <autoincrement>true</autoincrement>
                     </field>
+                </index>
+                <index>
+                    <name>role_id</name>
                     <field>
                         <name>role_id</name>
-                        <type>integer</type>
-                        <unsigned>true</unsigned>
-                        <notnull>true</notnull>
                     </field>
+                </index>
+                <index>
+                    <name>application_id</name>
                     <field>
                         <name>application_id</name>
-                        <type>integer</type>
-                        <length>11</length>
-                        <unsigned>true</unsigned>
-                        <notnull>true</notnull>
                     </field>
+                </index>
+                <index>
+                    <name>role_rights::application_id--applications::id</name>
                     <field>
-                        <name>right</name>
-                        <type>text</type>
-                        <length>64</length>
-                        <notnull>true</notnull>
-                    </field>
-                   <index>
-                        <name>id</name>
-                        <primary>true</primary>
-                        <field>
-                            <name>id</name>
-                        </field>
-                    </index>
-                    <index>
-                        <name>role_id</name>
-                        <field>
-                            <name>role_id</name>
-                        </field>
-                    </index>
-                    <index>
                         <name>application_id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                    </index>
-                    <index>
-                        <name>role_rights::role_id--roles::id</name>
-                        <field>
-                            <name>role_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>roles</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-                    <index>
-                        <name>role_rights::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-                </declaration>
-            </table>',        
-            '<table>
-                <name>role_accounts</name>
-                <version>1</version>
-                <declaration>
-                    <field>
-                        <name>id</name>
-                        <autoincrement>true</autoincrement>
                     </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>role_rights::role_id--roles::id</name>
                     <field>
                         <name>role_id</name>
-                        <type>integer</type>
-                        <unsigned>true</unsigned>
-                        <notnull>true</notnull>
                     </field>
-                     <field>
-                        <name>account_type</name>
-                        <type>enum</type>
-                        <value>anyone</value>
-                        <value>user</value>
-                        <value>group</value>
-                        <notnull>true</notnull>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+
+
+            </declaration>
+        </table>',        
+            '<table>
+            <name>role_accounts</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>role_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                 <field>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>anyone</value>
+                    <value>user</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>false</notnull>
+                </field>
+                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id-account_type-role_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>role_id</name>
                     </field>
                     <field>
                         <name>account_id</name>
-                        <type>integer</type>
-                        <unsigned>true</unsigned>
-                        <notnull>false</notnull>
-                    </field>                
-                    <index>
-                        <name>id</name>
-                        <primary>true</primary>
-                        <field>
-                            <name>id</name>
-                        </field>
-                    </index>
-                    <index>
-                        <name>account_id-account_type-role_id</name>
-                        <unique>true</unique>
-                        <field>
-                            <name>role_id</name>
-                        </field>
-                        <field>
-                            <name>account_id</name>
-                        </field>
-                        <field>
-                            <name>account_type</name>
-                        </field>
-                    </index>
-                    <index>
-                        <name>role_accounts::role_id--roles::id</name>
-                        <field>
-                            <name>role_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>roles</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-                </declaration>
-            </table>'     
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                </index>
+                <index>
+                    <name>role_accounts::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>'     
         );
 
         foreach ( $tableDefinitions as $tableDefinition ) {                    
@@ -829,27 +838,22 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
 
     /**
      * update to 0.10
-     * - rename crm tables
      * - migrate old links to relations
      * 
-     * @todo finish update function & test it
      */
     function update_9()
     {
-        //-- rename crm tables
-        
         /************* migrate old links to relations *************/
         
         // get all links
         $linksTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX.'links'));
         echo 'fetching links ... <br/>';
         $links = $linksTable->fetchAll();
-        //print_r($links);
         
         // create relations from links
         $relationsByLeadId = array();
         foreach ($links as $link) {
-            //print_r($link);
+
             if ($link->link_app1 === 'crm') {
                 
                 switch ($link->link_app2) {
@@ -873,9 +877,12 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                                 break;
                         }
                         break;
+                        
+                    default:
+                        echo 'link type not supported<br/>';
                 }                
                 
-                $relationsByLeadId[$link->link_id1][] = array(
+                $relationsByLeadId[$link->link_id1][] = new Tinebase_Relation_Model_Relation(array(
                     'own_model'              => 'Crm_Model_Lead',
                     'own_backend'            => 'SQL',
                     'own_id'                 => $link->link_id1,
@@ -883,19 +890,26 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     'related_model'          => $relatedModel,
                     'related_backend'        => $backend,
                     'related_id'             => $link->link_id2,
-                    'type'                   => $type
-                );                        
+                    'type'                   => $type,
+                    'created_by'             => $link->link_owner,
+                    'creation_time'          => Zend_Date::now()
+                ));                        
             }
         }
         
-        //print_r($relationsByLeadId);
         echo 'creating relations ...<br/>';
+
+        $relationsBackend = new Tinebase_Relation_Backend_Sql();
         foreach ($relationsByLeadId as $leadId => $relations) {
-            //Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', 'SQL', $leadId, $relations);            
-        }        
+            foreach ($relations as $relation) {
+                try {
+                    $relationsBackend->addRelation($relation);
+                } catch (Exception $e) {
+                    echo 'do not add duplicate relation ' . $relation->own_id . '-' . $relation->related_id . '...<br/>';
+                }
+            }
+        }
         
-        //-- delete links table
-        
-        //$this->setApplicationVersion('Tinebase', '0.10');        
+        $this->setApplicationVersion('Tinebase', '0.10');        
     }
 }
