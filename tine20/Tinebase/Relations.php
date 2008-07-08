@@ -73,11 +73,14 @@ class Tinebase_Relations
         // create new records to relate to
         $this->_createNewAppRecords($relations);
         
-        // compute relations to add/delete 
+        // compute relations to add/delete
+        $currentRelations = $this->getRelations($_model, $_backend, $_id, $_ignoreAcl);
+        $currentIds   = $currentRelations->getArrayOfIds();
         $relationsIds = $relations->getArrayOfIds();
-        $currentIds   = $this->getRelations($_model, $_backend, $_id, $_ignoreAcl)->getArrayOfIds();
+        
         $toAdd = $relations->getIdLessIndexes();
         $toDel = array_diff($currentIds, $relationsIds);
+        $toUpdate = array_intersect($currentIds, $relationsIds);
         
         if (!$relations->isValid()) {
             throw new Exception('relations not valid' . print_r($relations->getValidationErrors(),true));
@@ -88,6 +91,14 @@ class Tinebase_Relations
         }
         foreach ($toDel as $relationId) {
             $this->_backend->breakRelation($relationId);
+        }
+        foreach ($toUpdate as $relationId) {
+            $current = $currentRelations[$currentRelations->getIndexById($relationId)];
+            $update = $relations[$relations->getIndexById($relationId)];
+            
+            if (!$current->isEqual($update, array('related_record'))) {
+                $this->_backend->updateRelation($update);
+            }
         }
     }
     /**
