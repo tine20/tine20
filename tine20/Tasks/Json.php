@@ -68,7 +68,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function getTask($uid)
     {
         $task = $this->_controller->getTask($uid);
-        return $this->record2json($task);
+        return $this->taskToJson($task);
     }
     
     /**
@@ -79,11 +79,11 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function updateTask($task)
     {
-        $inTask = $this->json2record($task);
+        $inTask = $this->jsonToTask($task);
         
         //error_log(print_r($newTask->toArray(),true));
         $outTask = $this->_controller->updateTask($inTask);
-        return $this->record2json($outTask);
+        return $this->taskToJson($outTask);
     }
     
     /**
@@ -94,14 +94,14 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveTask($task)
     {
-        $inTask = $this->json2record($task);
+        $inTask = $this->jsonToTask($task);
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);
 
-        return $this->record2json($outTask);
+        return $this->taskToJson($outTask);
     }
     
     /**
@@ -110,7 +110,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @param string JSON encoded task
      * @return Tasks_Model_Task task
      */
-    public function json2record($json)
+    public function jsonToTask($json)
     {
         date_default_timezone_set($this->_userTimezone);
         $inTask = new Tasks_Model_Task(Zend_Json::decode($json));
@@ -124,8 +124,9 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * returns task prepared for json transport
      *
      * @param Tasks_Model_Task $_task
+     * @return array task data
      */
-    public function record2json($_task)
+    public function taskToJson($_task)
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;

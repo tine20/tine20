@@ -257,6 +257,40 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
+
+    /**
+     * returns instance of Crm_Model_Lead from json encoded data
+     * 
+     * @param string JSON encoded lead
+     * @return Crm_Model_Lead lead
+     * 
+     * @todo use it
+     */
+    public function jsonToLead($json)
+    {
+        date_default_timezone_set($this->_userTimezone);
+        $inTask = new Tasks_Model_Task(Zend_Json::decode($json));
+        $inTask->setTimezone($this->_serverTimezone);
+        date_default_timezone_set($this->_serverTimezone);
+        
+        return $inTask;
+    }
+    
+    /**
+     * returns lead prepared for json transport
+     *
+     * @param Crm_Model_Lead $_lead
+     * @return array lead data
+     * 
+     * @todo use it
+     */
+    public function leadToJson($_lead)
+    {
+        $_task->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_task->bypassFilters = true;
+        $_task->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray());
+        return $_task->toArray();
+    }
     
     /********************** handling of lead types/sources/states and products *************************/
     

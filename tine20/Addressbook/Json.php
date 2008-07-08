@@ -25,10 +25,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * converts json encoded record in to an instance of a record
      * 
-     * @param  $contactData
+     * @param  $contactData json encoded data
      * @return Addressbook_Model_Contact
      */
-    public function json2record($contactData)
+    public function jsonToContact($contactData)
     {
         $contactData = Zend_Json::decode($contactData);
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
@@ -55,6 +55,22 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $contact->setFromArray($contactData);
         
         return $contact;
+    }
+
+    /**
+     * returns contact prepared for json transport
+     *
+     * @param Addressbook_Model_Contact $_contact
+     * @return array contact data
+     * 
+     * @todo use it
+     */
+    public function contactToJson($_contact)
+    {
+        $_contact->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_contact->bypassFilters = true;
+        $_contact->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray());
+        return $_contact->toArray();
     }
     
     /**
@@ -86,7 +102,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveContact($contactData)
     {
-        $contact = $this->json2record($contactData);
+        $contact = $this->jsonToContact($contactData);
         
         if (empty($contact->id)) {
             $contact = Addressbook_Controller::getInstance()->addContact($contact);
