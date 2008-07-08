@@ -65,18 +65,14 @@ class Tinebase_Relation_Backend_Sql
     	$id = $_relation->generateUID();
     	$_relation->setId($id);
     	
-    	if ($_relation->isValid()) {
-    		$data = $_relation->toArray();
-    		unset($data['related_record']);
+		$data = $_relation->toArray();
+		unset($data['related_record']);
 
-    		$this->_db->insert($data);
-    		$this->_db->insert($this->_swapRoles($data));
+		$this->_db->insert($data);
+		$this->_db->insert($this->_swapRoles($data));
+		
+		return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
     		
-    		return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
-    		
-    	} else {
-    		throw new Tinebase_Record_Exception_Validation('relation contains invalid data: ' . print_r($_relation->getValidationErrors(), true) );
-    	}
     } // end of member function addRelation
     
     /**
@@ -89,25 +85,21 @@ class Tinebase_Relation_Backend_Sql
     {
         $id = $_relation->getId();
         
-        if ($_relation->isValid()) {
-            $data = $_relation->toArray();
-            unset($data['related_record']);
-            
-            foreach (array($data, $this->_swapRoles($data)) as $toUpdate) {
-                $where = array(
-                    'id          = ' . $this->_db->getAdapter()->quote($id),
-                    'own_model   = ' . $this->_db->getAdapter()->quote($toUpdate['own_model']),
-                    'own_backend = ' . $this->_db->getAdapter()->quote($toUpdate['own_backend']),
-                    'own_id      = ' . $this->_db->getAdapter()->quote($toUpdate['own_id']),
-                );
-                $this->_db->update($toUpdate, $where);
-            }
-            
-            return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
-            
-        } else {
-            throw new Tinebase_Record_Exception_Validation('relation contains invalid data: ' . print_r($_relation->getValidationErrors(), true) );
+        $data = $_relation->toArray();
+        unset($data['related_record']);
+        
+        foreach (array($data, $this->_swapRoles($data)) as $toUpdate) {
+            $where = array(
+                'id          = ' . $this->_db->getAdapter()->quote($id),
+                'own_model   = ' . $this->_db->getAdapter()->quote($toUpdate['own_model']),
+                'own_backend = ' . $this->_db->getAdapter()->quote($toUpdate['own_backend']),
+                'own_id      = ' . $this->_db->getAdapter()->quote($toUpdate['own_id']),
+            );
+            $this->_db->update($toUpdate, $where);
         }
+        
+        return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
+            
     } // end of member function updateRelation
     
     /**
