@@ -2645,4 +2645,144 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Voipmanager', '0.14');               
     }   
     
+    
+   /**
+     * update asterisk_sip_peers, asterisk_voicemail, snom_location
+     */    
+    public function update_14()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'canreinvite';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);                                              
+   
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'nat';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);                                              
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'qualify';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);                                              
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'cancallforward';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);                                              
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'notifyringing';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);                                                      
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'useclientcode';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);                                                                 
+   
+   
+   
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'attach';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'saycid';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'review';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'operator';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'envelope';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'sayduration';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'sendvoicemail';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'delete';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'nextaftercmd';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'forcename';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'forcegreetings';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'hidefromdir';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);                                                                                                                                                   
+   
+   
+   
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'admin_mode';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('snom_location', $declaration);        
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'date_us_format';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('snom_location', $declaration);        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'time_24_format';
+        $declaration->type      = 'boolean';
+        $declaration->notnull   = 'false';     
+        $this->_backend->alterCol('snom_location', $declaration);                
+        
+        $this->setApplicationVersion('Voipmanager', '0.15');         
+        
+    }    
+    
 }

@@ -550,7 +550,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                     autoLoad: true,
                     id: 'key',
                     fields: ['key', 'value'],
-                    data: [['yes', 'yes'], ['no', 'no']]
+                    data: [['1', 'on'], ['0', 'off']]
                 })
             }, {
                 xtype: 'combo',
@@ -567,7 +567,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                     autoLoad: true,
                     id: 'key',
                     fields: ['key', 'value'],
-                    data: [['yes', 'yes'], ['no', 'no']]
+                    data: [['1', 'on'], ['0', 'off']]
                 })
             }]]
         }
@@ -650,7 +650,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                             autoLoad: true,
                             id: 'key',
                             fields: ['key', 'value'],
-                            data: [['yes', 'yes'], ['no', 'no']]
+                            data: [['1', 'on'], ['0', 'off']]
                         })
                     }, {
                         xtype: 'textfield',
@@ -771,7 +771,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                             autoLoad: true,
                             id: 'key',
                             fields: ['key', 'value'],
-                            data: [['yes', 'yes'], ['no', 'no']]
+                            data: [['1', 'on'], ['0', 'off']]
                         })
                     }, {
                         xtype: 'textfield',
@@ -830,7 +830,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                             autoLoad: true,
                             id: 'key',
                             fields: ['key', 'value'],
-                            data: [['yes', 'yes'], ['no', 'no']]
+                            data: [['1', 'on'], ['0', 'off']]
                         })
                     }, {
                         xtype: 'textfield',
@@ -948,7 +948,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                             autoLoad: true,
                             id: 'key',
                             fields: ['key', 'value'],
-                            data: [['yes', 'yes'], ['no', 'no']]
+                            data: [['1', 'on'], ['0', 'off']]
                         })
                     }, {
                         xtype: 'textfield',
@@ -972,7 +972,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                             autoLoad: true,
                             id: 'key',
                             fields: ['key', 'value'],
-                            data: [['yes', 'yes'], ['no', 'no']]
+                            data: [['1', 'on'], ['0', 'off']]
                         })
                     }, {
                         xtype: 'combo',
@@ -989,7 +989,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                             autoLoad: true,
                             id: 'key',
                             fields: ['key', 'value'],
-                            data: [['yes', 'yes'], ['no', 'no']]
+                            data: [['1', 'on'], ['0', 'off']]
                         })
                     }, {
                         xtype: 'textfield',

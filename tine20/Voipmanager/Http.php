@@ -67,7 +67,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 //            $_phoneData = array_merge($_settingsData, $_phoneData);
 
 
-            $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','redirect_event','redirect_number','redirect_time','call_waiting');
+            $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 
             foreach($_writableFields AS $wField)
             {

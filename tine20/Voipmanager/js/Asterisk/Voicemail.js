@@ -569,8 +569,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                 
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })								
                             }]
@@ -608,8 +608,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                        
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -639,8 +639,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                                
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -665,8 +665,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                               
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -691,8 +691,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                            
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -722,8 +722,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                        
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -748,8 +748,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                               
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -774,8 +774,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                             
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -805,8 +805,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                             
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -831,8 +831,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                              
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -857,8 +857,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                             
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]
@@ -888,8 +888,8 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'value'],
                                     data: [                                                                        
-                                        ['true', translation._('yes')],
-                                        ['false', translation._('no')]
+                                        ['1', translation._('on')],
+                                        ['0', translation._('off')]
                                     ]
                                 })
                             }]

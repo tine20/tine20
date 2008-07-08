@@ -337,10 +337,10 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
         
         updateLocationRecord: function(_locationData)
         {            
-            if(_locationData.admin_mode == 'true') {
+            if(_locationData.admin_mode == '1') {
                 Ext.getCmp('admin_mode_switch').expand();
             }  
-            if(_locationData.admin_mode == 'false') {
+            if(_locationData.admin_mode == '0') {
                 Ext.getCmp('admin_mode_switch').collapse();
             }
 
@@ -559,7 +559,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                    store: new Ext.data.SimpleStore({
                                        id: 'id',
                                        fields: ['id', 'name'],
-                                       data: [['on', 'on'], ['off', 'off']]
+                                       data: [['1', 'on'], ['0', 'off']]
                                    })
                                }]
                            }, {
@@ -582,7 +582,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                    store: new Ext.data.SimpleStore({
                                        id: 'id',
                                        fields: ['id', 'name'],
-                                       data: [['on', 'on'], ['off', 'off']]
+                                       data: [['1', 'on'], ['0', 'off']]
                                    })
                                }]
                            }]
@@ -647,10 +647,10 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                         id: 'admin_mode_switch',
                         listeners: {
                             expand: function(){
-                                Ext.getCmp('admin_mode').setValue(true);
+                                Ext.getCmp('admin_mode').setValue('1');
                             },
                             collapse: function(){
-                                Ext.getCmp('admin_mode').setValue(false);
+                                Ext.getCmp('admin_mode').setValue('0');
                             }
                         },
                         title: translation._('Enable admin mode'),
