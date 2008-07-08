@@ -2594,8 +2594,55 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->addCol('snom_phones', $declaration);         
         
         $this->setApplicationVersion('Voipmanager', '0.13');               
-
     }          
-          
+    
+    
+   /**
+     * update snom_settings and snom_phones
+     */    
+    public function update_13()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'message_led_other';
+        $declaration->type      = 'varchar';
+        $declaration->length    = '4';
+        $declaration->notnull   = 'false';
+        $this->_backend->alterCol('snom_settings', $declaration);        
+        $this->_backend->alterCol('snom_phones', $declaration);                
+
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'global_missed_counter';
+        $declaration->type      = 'varchar';
+        $declaration->length    = '4';
+        $declaration->notnull   = 'false';
+        $this->_backend->alterCol('snom_settings', $declaration);        
+        $this->_backend->alterCol('snom_phones', $declaration);          
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'scroll_outgoing';
+        $declaration->type      = 'varchar';
+        $declaration->length    = '4';
+        $declaration->notnull   = 'false';
+        $this->_backend->alterCol('snom_settings', $declaration);
+        $this->_backend->alterCol('snom_phones', $declaration);                  
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'show_local_line';
+        $declaration->type      = 'varchar';
+        $declaration->length    = '4';
+        $declaration->notnull   = 'false';
+        $this->_backend->alterCol('snom_settings', $declaration);
+        $this->_backend->alterCol('snom_phones', $declaration);                  
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml();
+        $declaration->name      = 'show_call_status';
+        $declaration->type      = 'varchar';
+        $declaration->length    = '4';
+        $declaration->notnull   = 'false';
+        $this->_backend->alterCol('snom_settings', $declaration);
+        $this->_backend->alterCol('snom_phones', $declaration);                                              
+   
+        $this->setApplicationVersion('Voipmanager', '0.14');               
+    }   
     
 }

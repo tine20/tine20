@@ -568,8 +568,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                 
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -608,8 +607,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                        
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -640,8 +638,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                                
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -667,8 +664,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                               
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -694,8 +690,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                            
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -726,8 +721,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                        
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -753,8 +747,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                               
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -780,8 +773,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                             
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -812,8 +804,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                             
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -839,8 +830,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                              
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -866,8 +856,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                             
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]
@@ -898,8 +887,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 store: new Ext.data.SimpleStore({
                                     id: 'id',
                                     fields: ['id', 'value'],
-                                    data: [
-                                        [ '',  translation._('- default setting -')],                                                                                
+                                    data: [                                                                        
                                         ['true', translation._('yes')],
                                         ['false', translation._('no')]
                                     ]

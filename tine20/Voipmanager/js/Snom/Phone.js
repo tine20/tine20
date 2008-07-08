@@ -664,21 +664,23 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                                 var _settingsData = new Object();
             
                                                 Ext.each(_writableFields, function(_item, _index, _all) {
+                                                    _rwField = _item.toString() + '_writable';
+                                                    
                                                     if(!_phoneData[_item]) {
-                                                        _settingsData[_item] = _data[_item];
+                                                         _settingsData[_item] = _data[_item];
                                                     } else {
-                                                        _rwField = _item.toString() + '_writable';
-    
-                                                        if(_data[_rwField] == '0')
-                                                        {
+                                                        if(_data[_rwField] == '0') {
                                                             _settingsData[_item] = _data[_item];                                                        
-                                                            _notWritable[_rwField.toString()] = 'true';                                                                                                       
-                                                        } else 
-                                                        {
+                                                        } else  {
                                                              _settingsData[_item] = _phoneData[_item];
-                                                             _notWritable[_rwField.toString()] = 'false';                                                        
                                                         }                                                        
                                                     }
+                                                    
+                                                    if(_data[_rwField] == '0') {
+                                                        _notWritable[_rwField.toString()] = 'true';                                                                                                       
+                                                    } else  {
+                                                         _notWritable[_rwField.toString()] = 'false';                                                        
+                                                    }   
                                                 });                     
                                                 
                                                 Array.prototype.in_array = function(needle) {
@@ -689,7 +691,6 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                                 Ext.getCmp('voipmanager_editPhoneForm').cascade(function(_field) {
                                                     if(_writableFields.in_array(_field.id)) {
                                                         if(_notWritable[_field.id.toString()+'_writable'] == 'true') {
-                                            
                                                             _field.disable();    
                                                         }
                                                         if(_notWritable[_field.id.toString()+'_writable'] == 'false') {
