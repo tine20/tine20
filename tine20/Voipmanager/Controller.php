@@ -219,11 +219,6 @@ class Voipmanager_Controller
      */
     public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone)
     {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
         $phone = $this->_snomPhoneBackend->update($_phone);
         
         $this->_snomLineBackend->deletePhoneLines($phone->getId());

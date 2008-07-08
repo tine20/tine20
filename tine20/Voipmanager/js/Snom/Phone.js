@@ -354,6 +354,21 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         
         _templateData: null,
         
+        _maxLines: function(_val) {
+         
+            var _data = new Object();
+            _data['snom300'] = '4';
+            _data['snom320'] = '12';
+            _data['snom360'] = '12';
+            _data['snom370'] = '12';   
+            
+            if(!_val) {
+                return _data;
+            }        
+            return _data[_val];
+        },
+        
+        
         updatePhoneRecord: function(_phoneData)
         {                     
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
@@ -365,6 +380,10 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
             if(_phoneData.firmware_checked_at && _phoneData.firmware_checked_at !== null) {
                 _phoneData.firmware_checked_at = Date.parseDate(_phoneData.firmware_checked_at, 'c');
             }
+            if(_phoneData.redirect_event != 'time') {
+                Ext.getCmp('redirect_time').disable();
+            }
+            
             this.phoneRecord = new Tine.Voipmanager.Model.Snom.Phone(_phoneData);
 
         },
@@ -565,7 +584,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 			
             var gridPanel = new Ext.grid.EditorGridPanel({
             	region: 'center',
-				id: 'Voipmanager_Software_Grid',
+				id: 'Voipmanager_PhoneLines_Grid',
 				store: snomLinesDS,
 				cm: columnModel,
 				autoSizeColumns: false,
@@ -601,12 +620,12 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         },                
                  
                   
-        editPhoneDialog: function(_phoneData){
+        editPhoneDialog: function(_phoneData, _maxLines){
         
             var translation = new Locale.Gettext();
             translation.textdomain('Voipmanager');
         
-               
+   
             var _dialog = {
                 title: 'Phone',
                 layout: 'border',
@@ -749,6 +768,28 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 triggerAction: 'all',
                                 editable: false,
                                 forceSelection: true,
+                                listeners: {
+                                    select: function(_combo, _record, _index) {
+                                        _store = Ext.getCmp('Voipmanager_PhoneLines_Grid').getStore();
+
+                                        while (_store.getCount() > _maxLines[_record.data.id] ) {
+                                            var _id = _store.getCount();
+                                            _store.remove(_store.getAt((_id-1)));
+                                        }
+      
+                                        while (_store.getCount() < _maxLines[_record.data.id]) {
+                            				_snomRecord = new Tine.Voipmanager.Model.Snom.Line({
+                            					'asteriskline_id':'',
+                            					'id':'',
+                            					'idletext':'',
+                            					'lineactive':0,
+                            					'linenumber':_store.getCount()+1,
+                            					'snomphone_id':''
+                            				});			
+                            				_store.add(_snomRecord);
+                            			}                                        
+                                    }
+                                },
                                 store: Tine.Voipmanager.Data.loadPhoneModelData()
                             }), {
                                 xtype: 'textarea',
@@ -768,7 +809,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                             xtype: 'fieldset',
                             checkboxToggle: false,
                             id: 'infos',
-                            title: 'Infos',
+                            title: translation._('infos'),
                             autoHeight: true,
                             anchor: '100%',
                             defaults: {
@@ -823,8 +864,87 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 }]
                             }]
                         }]
+                    },{
+                        xtype: 'fieldset',
+                        checkboxToggle: false,
+                        id: 'redirectionFieldset',
+                        title: translation._('redirection'),
+                        autoHeight: true,
+                        anchor: '100%',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        items: [{
+                            layout: 'column',
+                            border: false,
+                            anchor: '100%',
+                            items: [{ 
+                                columnWidth: .33,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('redirect_event'),
+                                    name: 'redirect_event',
+                                    id: 'redirect_event',                                                                       
+                                    mode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    anchor: '95%',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    forceSelection: true,
+                                    listeners: {
+                                        select: function(_combo, _record, _index) {
+                                            if (_record.data.name == 'time') {
+                                                Ext.getCmp('redirect_time').setDisabled(false);
+                                            }
+                                            
+                                            if(_record.data.name != 'time') {
+                                                Ext.getCmp('redirect_time').reset();                                                    
+                                                Ext.getCmp('redirect_time').setDisabled(true);
+                                            }
+                                        }
+                                    },
+                                    store: new Ext.data.SimpleStore({
+                                        id: 'id',
+                                        fields: ['id', 'name'],
+                                        data: [
+                                            ['all', translation._('all')],
+                                            ['busy', translation._('busy')],
+                                            ['none', translation._('none')],
+                                            ['time', translation._('time')]
+                                        ]
+                                    })
+                                }]
+                            }, {
+                                columnWidth: .33,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: translation._('redirect_number'),
+                                    name: 'redirect_number',
+                                    id: 'redirect_number',
+                                    anchor: '95%'                                
+                               }]
+                            }, {
+                                columnWidth: .33,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items: [{
+                                    xtype: 'numberfield',
+                                    fieldLabel: translation._('redirect_time'),
+                                    name: 'redirect_time',
+                                    id: 'redirect_time',
+                                    anchor: '100%'                                                                     
+                               }]
+                            }]  
+                        }]
                     }]
-                
                 }]
             };
             
@@ -1455,113 +1575,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
             return _dialog;   
         },        
 		      
-              
-       editPhoneRedirectDialog: function(){
-        
-            var translation = new Locale.Gettext();
-            translation.textdomain('Voipmanager');
-            
-            Ext.QuickTips.init();                         
-            
-        
-            var _dialog = {
-                title: translation._('Redirect'),
-                layout: 'border',
-                id: 'redirectBorderLayout',
-                anchor: '100% 100%',
-                layoutOnTabChange: true,
-                defaults: {
-                    border: true,
-                    frame: false
-                },
-                items: [{
-                    layout: 'hfit',
-                    containsScrollbar: false,
-                    //margins: '0 18 0 5',
-                    autoScroll: false,
-                    id: 'editSettingMainDialog',
-                    region: 'center',
-                    items: [{
-                        layout: 'form',
-                        border: false,
-                        anchor: '100%',
-                        items: [{
-                            layout: 'column',
-                            border: false,
-                            anchor: '100%',
-                            items: [{ 
-                                columnWidth: .33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: translation._('redirect_event'),
-                                    name: 'redirect_event',
-                                    id: 'redirect_event',                                                                       
-                                    mode: 'local',
-                                    displayField: 'name',
-                                    valueField: 'id',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    listeners: {
-                                        select: function(_combo, _record, _index) {
-                                            if (_record.data.name == 'time') {
-                                                Ext.getCmp('redirect_time').setDisabled(false);
-                                            }
-                                            
-                                            if(_record.data.name != 'time') {
-                                                Ext.getCmp('redirect_time').reset();                                                    
-                                                Ext.getCmp('redirect_time').setDisabled(true);
-                                            }
-                                        }
-                                    },
-                                    store: new Ext.data.SimpleStore({
-                                        id: 'id',
-                                        fields: ['id', 'name'],
-                                        data: [
-                                            ['all', translation._('all')],
-                                            ['busy', translation._('busy')],
-                                            ['none', translation._('none')],
-                                            ['time', translation._('time')]
-                                        ]
-                                    })
-                                }]
-                            }, {
-                                columnWidth: .33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'textfield',
-                                    fieldLabel: translation._('redirect_number'),
-                                    name: 'redirect_number',
-                                    id: 'redirect_number',
-                                    anchor: '95%'                                
-                               }]
-                            }, {
-                                columnWidth: .33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'numberfield',
-                                    fieldLabel: translation._('redirect_time'),
-                                    name: 'redirect_time',
-                                    id: 'redirect_time',
-                                    anchor: '100%'                                                                     
-                               }]
-                            }]  
-                        }]
-                    }]   // form 
-                }]   // center
-            };
-            
-            return _dialog;   
-        },               
-                
+ 
         
         updateToolbarButtons: function()
         {
@@ -1572,8 +1586,6 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         
         display: function(_phoneData, _snomLines, _lines, _templates, _locations, _writable) 
         {
-
-
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
                 id : 'voipmanager_editPhoneForm',
@@ -1598,10 +1610,9 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                     layoutOnTabChange: true, 
                     deferredRender: false,                                   
                     items:[
-                        this.editPhoneDialog(_phoneData),
-                        this.editPhoneSettingsDialog(_writable),                  
-                        this.editPhoneRedirectDialog(),                        
-                        this.editPhoneLinesDialog(2, _lines, _snomLines),
+                        this.editPhoneDialog(_phoneData,this._maxLines()),
+                        this.editPhoneSettingsDialog(_writable),                                      
+                        this.editPhoneLinesDialog(this._maxLines(_phoneData.current_model), _lines, _snomLines),
                         this.editPhoneOwnerSelection([],[])
                     ]
                 }]

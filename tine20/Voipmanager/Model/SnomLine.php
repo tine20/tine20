@@ -55,7 +55,7 @@ class Voipmanager_Model_SnomLine extends Tinebase_Record_Abstract
         'snomphone_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'asteriskline_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'linenumber'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-        'lineactive'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'lineactive'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence' => 'required'),
         'idletext'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
