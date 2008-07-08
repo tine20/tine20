@@ -185,4 +185,40 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         
         return $id;
     }
+    
+    /**
+     * create new record from json data
+     *
+     * @param string $_data json encoded data
+     * @return Addressbook_Model_Contact contact record
+     */
+    public static function setFromJson($_data)
+    {
+        $contactData = Zend_Json::decode($_data);
+        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
+        
+        if (isset($contactData['tags'])) {
+            $contactData['tags'] = Zend_Json::decode($contactData['tags']);
+        }
+        if (isset($contactData['jpegphoto'])) {
+            $imageParams = Tinebase_ImageHelper::parseImageLink($contactData['jpegphoto']);
+            if ($imageParams['isNewImage']) {
+                $contactData['jpegphoto'] = $this->getImageData($imageParams);
+            } else {
+                unset($contactData['jpegphoto']);
+            }
+        }
+        
+        // unset if empty
+        if (empty($contactData['id'])) {
+            unset($contactData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
+        $contact = new Addressbook_Model_Contact();
+        $contact->setFromArray($contactData);
+        
+        return $contact;
+    }
+    
 }

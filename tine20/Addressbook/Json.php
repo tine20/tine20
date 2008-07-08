@@ -27,6 +27,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * 
      * @param  $contactData json encoded data
      * @return Addressbook_Model_Contact
+     * 
+     * @deprecated 
+     * @todo remove function?
      */
     public function jsonToContact($contactData)
     {
@@ -37,7 +40,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             $contactData['tags'] = Zend_Json::decode($contactData['tags']);
         }
         if (isset($contactData['jpegphoto'])) {
-            $imageParams = $this->parseImageLink($contactData['jpegphoto']);
+            $imageParams = Tinebase_ImageHelper::parseImageLink($contactData['jpegphoto']);
             if ($imageParams['isNewImage']) {
                 $contactData['jpegphoto'] = $this->getImageData($imageParams);
             } else {
@@ -102,7 +105,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveContact($contactData)
     {
-        $contact = $this->jsonToContact($contactData);
+        //$contact = $this->jsonToContact($contactData);
+        $contact = Addressbook_Model_Contact::setFromJson($contactData);
         
         if (empty($contact->id)) {
             $contact = Addressbook_Controller::getInstance()->addContact($contact);
@@ -384,24 +388,6 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             $link = 'images/empty_photo.jpg';
         }
         return $link;
-    }
-    /**
-     * parses an image link
-     * 
-     * @param  string $link
-     * @return array
-     */
-    protected function parseImageLink($link)
-    {
-        $params = array();
-        Zend_Registry::get('logger')->debug(parse_url($link, PHP_URL_QUERY));
-        parse_str(parse_url($link, PHP_URL_QUERY), $params);
-        $params['isNewImage'] = false;
-        if (isset($params['application']) && $params['application'] == 'Tinebase') {
-            $params['isNewImage'] = true;
-        }
-        //Zend_Registry::get('logger')->debug(print_r($params,true));
-        return $params;
     }
     /**
      * returns binary image data from a image identified by a imagelink

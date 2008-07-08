@@ -31,6 +31,11 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     protected $_application = 'Tasks';
     
+    /**
+     * validators
+     *
+     * @var array
+     */
     protected $_validators = array(
         // tine record fields
         'container_id'         => array('allowEmpty' => true,  'Int' ),
@@ -76,6 +81,11 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'rrule'                 => array('allowEmpty' => true        ),
     );
     
+    /**
+     * datetime fields
+     *
+     * @var array
+     */
     protected $_datetimeFields = array(
         'creation_time', 
         'last_modified_time', 
@@ -86,4 +96,22 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'exdate', 
         'rdate'
     );
+    
+    /**
+     * create new record from json data
+     *
+     * @param string $_data json encoded data
+     * @return Tasks_Model_Task task record
+     * 
+     * @todo set timezone here?
+     */
+    public static function setFromJson($_data)
+    {
+        //date_default_timezone_set($this->_userTimezone);
+        $task = new Tasks_Model_Task(Zend_Json::decode($_data));
+        //$inTask->setTimezone($this->_serverTimezone);
+        //date_default_timezone_set($this->_serverTimezone);
+        
+        return $task;        
+    }
 }

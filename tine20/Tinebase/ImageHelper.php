@@ -142,4 +142,24 @@ class Tinebase_ImageHelper
         }
         return false;
     }
+    
+    /**
+     * parses an image link
+     * 
+     * @param  string $link
+     * @return array
+     */
+    public static function parseImageLink($link)
+    {
+        $params = array();
+        Zend_Registry::get('logger')->debug(parse_url($link, PHP_URL_QUERY));
+        parse_str(parse_url($link, PHP_URL_QUERY), $params);
+        $params['isNewImage'] = false;
+        if (isset($params['application']) && $params['application'] == 'Tinebase') {
+            $params['isNewImage'] = true;
+        }
+        //Zend_Registry::get('logger')->debug(print_r($params,true));
+        return $params;
+    }
+    
 }

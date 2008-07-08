@@ -109,11 +109,14 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * 
      * @param string JSON encoded task
      * @return Tasks_Model_Task task
+     * 
+     * @todo replace with Tasks_Model_Task::setFromJson() -> how do we handle the timezone setting?
      */
     public function jsonToTask($json)
     {
         date_default_timezone_set($this->_userTimezone);
-        $inTask = new Tasks_Model_Task(Zend_Json::decode($json));
+        //$inTask = new Tasks_Model_Task(Zend_Json::decode($json));
+        $inTask = Tasks_Model_Task::setFromJson($json);
         $inTask->setTimezone($this->_serverTimezone);
         date_default_timezone_set($this->_serverTimezone);
         
