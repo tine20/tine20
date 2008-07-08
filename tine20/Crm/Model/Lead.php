@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo remove old fields customer/partner/tasks/... -> they are covered with the relations field
  */
 
 /**
@@ -51,7 +52,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * this validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
-     * @todo replace customer/partner/etc by relations (ONE field)
      */
     protected $_validators = array(
         'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -72,6 +72,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'tasks'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'products'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'relations'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         #'leadmodified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         #'leadcreated'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadmodifier'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -127,4 +128,79 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         
         return $id;
     }
+    
+    /**
+     * create new record from json data
+     *
+     * @param string $_data json encoded data
+     * @return Crm_Model_Lead task record
+     * 
+     * @todo add related records
+     * @todo add different backend types?
+     * @todo decode tags?
+     */
+    public static function setFromJson($_data)
+    {
+        $decodedLead = Zend_Json::decode($_data);
+        
+        /************* add relations *******************/
+        
+        $relationTypes = array(
+            'responsible' => array(
+                'model'     => 'Addressbook_Model_Contact',
+                'backend'   => Addressbook_Backend_Factory::SQL,
+                'type'      => 'RESPONSIBLE'
+            ),
+            'customer' => array(
+                'model'     => 'Addressbook_Model_Contact',
+                'backend'   => Addressbook_Backend_Factory::SQL,
+                'type'      => 'CUSTOMER'
+            ), 
+            'partner' => array(
+                'model'     => 'Addressbook_Model_Contact',
+                'backend'   => Addressbook_Backend_Factory::SQL,
+                'type'      => 'PARTNER'
+            ), 
+            'tasks' => array(
+                'model'     => 'Tasks_Model_Task',
+                'backend'   => Tasks_Backend_Factory::SQL,
+                'type'      => 'TASK'
+            ), 
+        );
+            
+        // build relation data array
+        $relationData = array();
+        foreach ($relationTypes as $type => $values) {  
+            if (isset($decodedLead[$type])) {          
+                foreach ($decodedLead[$type] as $relation) {
+                    $data = array(
+                        'id'                     => (isset($relation['link_id'])) ? $relation['link_id'] : NULL,
+                        'own_model'              => 'Crm_Model_Lead',
+                        'own_backend'            => Crm_Backend_Factory::SQL,
+                        'own_id'                 => $decodedLead['id'],
+                        'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                        'related_model'          => $values['model'],
+                        'related_backend'        => $values['backend'],
+                        'related_id'             => $relation['id'],
+                        'type'                   => $values['type']                    
+                    );
+                    
+                    $relationData[] = $data;
+                }
+            }
+        }
+        $decodedLead['relations'] = $relationData;
+        
+        /********************** add tags ***********************/
+        
+        if (isset($decodedLead['tags'])) {
+            $decodedLead['tags'] = Zend_Json::decode($decodedLead['tags']);
+        }                             
+        
+        /********************** create record ***********************/
+        
+        $lead = new Crm_Model_Lead($decodedLead);
+        
+        return $lead;         
+    }            
 }

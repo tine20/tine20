@@ -205,6 +205,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      * @return Crm_Model_Lead
      * 
      * @todo    rename
+     * @todo    remove responsible/customer/... -> they are covered with the relations field
      */
     public function updateLead(Crm_Model_Lead $_lead)
     {
@@ -217,7 +218,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
         $leadData = $_lead->toArray();
         
        // unset fields that should not be written into the db
-        $unsetFields = array('id', 'responsible', 'customer', 'partner', 'tasks', 'products', 'tags');
+        $unsetFields = array('id', 'responsible', 'customer', 'partner', 'tasks', 'products', 'tags', 'relations');
         foreach ( $unsetFields as $field ) {
             unset($leadData[$field]);
         }

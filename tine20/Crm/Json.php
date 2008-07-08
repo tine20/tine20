@@ -129,11 +129,10 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      *
      * @param  string  $lead           JSON encoded lead data
      * @return array
-     * 
-     * @todo save all linked objects in recordsets and create new ones if id is empty 
      */ 
     public function saveLead($lead)
     {
+        /*
         $decodedLead = Zend_Json::decode($lead);       
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedLead, true));
         
@@ -155,8 +154,11 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             );
             
             return $result;
-        }      
-          
+        } 
+        */
+
+        $leadData = Crm_Model_Lead::setFromJson($lead);
+                  
         if(empty($leadData->id)) {
             $savedLead = Crm_Controller::getInstance()->createLead($leadData);
         } else {
@@ -202,6 +204,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @return array
      * 
      * @deprecated 
+     * @todo remove function?
      */
     protected function convertLeadToArray(Crm_Model_Lead $_lead, $_getOnlyContacts = TRUE) 
     {

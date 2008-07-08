@@ -282,69 +282,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      *
      * @param integer $_leadId
      * @param Crm_Model_Lead $_lead
-     * 
-     * @todo add different backend types
-     * @todo add creation of new records
-     * @todo move to json
      */
     private function setLeadLinks($_leadId, Crm_Model_Lead $_lead)
     {
-        $relationTypes = array(
-            'responsible' => array(
-                'model'     => 'Addressbook_Model_Contact',
-                'backend'   => Addressbook_Backend_Factory::SQL,
-                'type'      => 'RESPONSIBLE'
-        ),
-            'customer' => array(
-                'model'     => 'Addressbook_Model_Contact',
-                'backend'   => Addressbook_Backend_Factory::SQL,
-                'type'      => 'CUSTOMER'
-            ), 
-            'partner' => array(
-                'model'     => 'Addressbook_Model_Contact',
-                'backend'   => Addressbook_Backend_Factory::SQL,
-                'type'      => 'PARTNER'
-            ), 
-            'tasks' => array(
-                'model'     => 'Tasks_Model_Task',
-                'backend'   => Tasks_Backend_Factory::SQL,
-                'type'      => 'TASK'
-            ), 
-        );
-        
-        // build relation data array
-        $relationData = array();
-        foreach ($relationTypes as $type => $values) {  
-            if (isset($_lead[$type])) {          
-                foreach ($_lead[$type] as $relation) {
-                    if ($relation instanceOf Tinebase_Relation_Model_Relation) {
-                        $relationData[] = $relation->toArray();
-                    } else {
-                        
-                        if (!isset($relation['id'])) {
-                            throw new Exception('Related object id is missing!');
-                        }
-                        
-                        $data = array(
-                            'id'                     => (isset($relation['link_id'])) ? $relation['link_id'] : NULL,
-                            'own_model'              => 'Crm_Model_Lead',
-                            'own_backend'            => Crm_Backend_Factory::SQL,
-                            'own_id'                 => $_leadId,
-                            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
-                            'related_model'          => $values['model'],
-                            'related_backend'        => $values['backend'],
-                            'related_id'             => $relation['id'],
-                            'type'                   => $values['type']                    
-                        );
-                        
-                        $relationData[] = $data;
-                    }
-                }
-            }
-        }
-
         // set relations
-        Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_leadId, $relationData);       
+        Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_leadId, $_lead->relations);
 
         // add product links
         $productsArray = array();
@@ -360,8 +302,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             throw $e;
         }                
         
-        $this->saveLeadProducts($_leadId, $products);                
-        
+        $this->saveLeadProducts($_leadId, $products);                        
     }
 
     /**
@@ -370,6 +311,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param Crm_Model_Lead $_lead
      * 
      * @todo add different backend types
+     * @todo move to json
      */
     private function getLeadLinks(Crm_Model_Lead &$_lead)
     {
