@@ -2416,6 +2416,11 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <type>boolean</type>
                     <default>false</default>
                 </field>   
+                <field>
+                    <name>call_waiting_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
                 <index>
                     <name>id</name>
                     <primary>true</primary>

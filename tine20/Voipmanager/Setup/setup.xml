@@ -1456,6 +1456,47 @@
                     <type>boolean</type>
                     <default>false</default>
                 </field>   
+                <field>
+                    <name>call_waiting_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>                    
+                    <name>vip_ring_sound</name>
+                    <type>enum</type>
+                    <value>AUS</value>
+                    <value>AUT</value>
+                    <value>CHN</value>
+                    <value>DNK</value>
+                    <value>FRA</value>
+                    <value>GER</value>
+                    <value>GBR</value>
+                    <value>IND</value>
+                    <value>ITA</value>
+                    <value>JPN</value>
+                    <value>MEX</value>
+                    <value>NLD</value>
+                    <value>NOR</value>
+                    <value>NZL</value>
+                    <value>ESP</value>
+                    <value>SWE</value>
+                    <value>SWI</value>
+                    <value>USA</value>
+                </field>
+                <field>
+                    <name>date_us_format</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
+                </field>     
+                <field>
+                    <name>keyboard_lock</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
+                </field>     
                 <index>
                     <name>id</name>
                     <primary>true</primary>
