@@ -286,11 +286,13 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     private function setLeadLinks($_leadId, Crm_Model_Lead $_lead)
     {
         // set relations
-        Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_leadId, $_lead->relations);
+        if (isset($_lead->relations) && is_array($_lead->relations)) {
+            Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_leadId, $_lead->relations);
+        }
 
         // add product links
         $productsArray = array();
-        if (is_array($_lead->products)) {
+        if (isset($_lead->products) && is_array($_lead->products)) {
             foreach ($_lead->products as $product) {
                 $product['lead_id'] = $_leadId; 
                 $productsArray[] = $product;     
