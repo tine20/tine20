@@ -167,13 +167,29 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         $relations[0]->type = 'UPDATETEST';
-        
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
-        $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         
+        $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         $this->assertEquals('UPDATETEST', $updatedRelations[0]->type);
         //$updatedRelations->related_record = '';
         //print_r($updatedRelations->toArray());
+    }
+    
+    /**
+     * Test if updateing a related record works
+     *
+     */
+    public function testSetRelationUpdateRelatedRecord()
+    {
+        $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $relations[0]->related_record->note = "Testing to update from relation set";
+        foreach ($relations as $relation) {
+            $relation->related_record = $relation->related_record->toArray();
+        }
+        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
+        
+        $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $this->assertEquals("Testing to update from relation set", $updatedRelations[0]->related_record->note);
     }
     
     public function testBreakRelations()
