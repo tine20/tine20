@@ -426,11 +426,21 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 	}
                 });
                 
+                var ownerStore = Ext.getCmp('phoneUsersGrid').getStore();
+                var owner = [];
+                ownerStore.each(function(record) {
+                	if(record.data.asteriskline_id != '') {
+                        owner.push(record.data);          
+                	}
+                });
+                
+                
                 Ext.Ajax.request({
                     params: {
                         method: 'Voipmanager.saveSnomPhone', 
                         phoneData: Ext.util.JSON.encode(this.phoneRecord.data),
-                        lineData: Ext.util.JSON.encode(lines)
+                        lineData: Ext.util.JSON.encode(lines),
+                        ownerData: Ext.util.JSON.encode(owner)
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Voipmanager.Snom.Phones) {
@@ -952,7 +962,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
     handlers: {
         removeAccount: function(_button, _event) 
         {         	
-            var accountsGrid = Ext.getCmp('accountRightsGrid');
+            var accountsGrid = Ext.getCmp('phoneUsersGrid');
             var selectedRows = accountsGrid.getSelectionModel().getSelections();
             
             var accountsStore = this.dataStore;
@@ -963,7 +973,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         
         addAccount: function(account)
         {        	
-            var accountsGrid = Ext.getCmp('accountRightsGrid');
+            var accountsGrid = Ext.getCmp('phoneUsersGrid');
             
             var dataStore = accountsGrid.getStore();
             var selectionModel = accountsGrid.getSelectionModel();
@@ -987,7 +997,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         	Ext.MessageBox.wait('Please wait', 'Updating Rights');
         	
         	var dlg = Ext.getCmp('adminApplicationEditPermissionsDialog');
-            var accountsGrid = Ext.getCmp('accountRightsGrid');            
+            var accountsGrid = Ext.getCmp('phoneUsersGrid');            
             var dataStore = accountsGrid.getStore();
             
             var rights = [];
