@@ -166,7 +166,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddContact()
     {
-        $contact = Addressbook_Controller::getInstance()->addContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller::getInstance()->createContact($this->objects['initialContact']);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
