@@ -294,7 +294,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @todo get relation objects from json classes for the applications/models
      * @todo add toResolve array ?
      */
-    public function leadToJson($_lead /*, $_getOnlyContacts = TRUE */)
+    public function leadToJson($_lead , $_getOnlyContacts = TRUE )
     {
         // @todo is that needed?
         //$_lead->setTimezone(Zend_Registry::get('userTimeZone'));
