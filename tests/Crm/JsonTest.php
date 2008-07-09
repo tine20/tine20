@@ -209,7 +209,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         try {
             $contact = Addressbook_Controller::getInstance()->getContact($this->objects['contact']->getId());
         } catch ( Exception $e ) {
-            $contact = Addressbook_Controller::getInstance()->addContact($this->objects['contact']);
+            $contact = Addressbook_Controller::getInstance()->createContact($this->objects['contact']);
         }
 
         // create test task    
