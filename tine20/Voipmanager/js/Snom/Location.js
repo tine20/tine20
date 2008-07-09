@@ -536,7 +536,26 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                store: new Ext.data.SimpleStore({
                                    id: 'id',
                                    fields: ['id', 'name'],
-                                   data: [['AUS', translation._('australia')], ['AUT', translation._('austria')], ['CHN', translation._('china')], ['DNK', translation._('dansk')], ['FRA', translation._('france')], ['GER', translation._('germany')], ['GBR', translation._('great britain')], ['IND', translation._('india')], ['ITA', translation._('italy')], ['JPN', translation._('japan')], ['MEX', translation._('mexiko')], ['NLD', translation._('netherlands')], ['NOR', translation._('norway')], ['NZL', translation._('newzealand')], ['ESP', translation._('spain')], ['SWE', translation._('sweden')], ['SWI', translation._('switzerland')], ['USA', translation._('usa')]]
+                                   data: [
+                                       ['AUS', translation._('AUS')], 
+                                       ['AUT', translation._('AUT')], 
+                                       ['CHN', translation._('CHN')], 
+                                       ['DNK', translation._('DNK')], 
+                                       ['FRA', translation._('FRA')], 
+                                       ['GER', translation._('GER')], 
+                                       ['GBR', translation._('GBR')], 
+                                       ['IND', translation._('IND')], 
+                                       ['ITA', translation._('ITA')], 
+                                       ['JPN', translation._('JPN')], 
+                                       ['MEX', translation._('MEX')], 
+                                       ['NLD', translation._('NLD')], 
+                                       ['NOR', translation._('NOR')], 
+                                       ['NZL', translation._('NZL')], 
+                                       ['ESP', translation._('ESP')], 
+                                       ['SWE', translation._('SWE')], 
+                                       ['SWI', translation._('SWI')], 
+                                       ['USA', translation._('USA')]
+                                   ]
                                })
                            }]
                        }, {
