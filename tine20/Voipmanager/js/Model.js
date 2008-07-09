@@ -38,7 +38,10 @@ Tine.Voipmanager.Model.Snom.Phone = Ext.data.Record.create([
     {name: 'redirect_event'},
     {name: 'redirect_number'},
     {name: 'redirect_time'},
-    {name: 'call_waiting'}    
+    {name: 'call_waiting'},
+    {name: 'http_client_info_sent'},    
+    {name: 'http_client_user'},    
+    {name: 'http_client_pass'}    
 ]);
 
 

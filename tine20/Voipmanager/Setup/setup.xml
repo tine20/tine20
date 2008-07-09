@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.15</version>
+    <version>0.16</version>
     <order>50</order>
     <tables>
         <table>
@@ -1490,13 +1490,30 @@
                     <value>off</value>
                     <default>off</default>
                 </field>     
-                <field>
-                    <name>keyboard_lock</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
+<!-- 
+               <field>
+                    <name>http_client_info_sent</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>     
+                <field>
+                    <name>http_client_user</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>  
+                <field>
+                    <name>http_client_pass</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <index>
+                    <name>http_client_user</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>http_client_user</name>
+                    </field>
+                </index>
+-->
                 <index>
                     <name>id</name>
                     <primary>true</primary>

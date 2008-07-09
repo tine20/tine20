@@ -1895,7 +1895,6 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_10()
     {
-        
         $tableDefinition = "
           <table>
             <name>snom_settings</name>
@@ -2596,8 +2595,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Voipmanager', '0.13');               
     }          
     
-    
-   /**
+    /**
      * update snom_settings and snom_phones
      */    
     public function update_13()
@@ -2785,4 +2783,45 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
     }    
     
+    /**
+     * update snom_settings and snom_phones
+     */    
+    public function update_15()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>http_client_info_sent</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>');
+        $this->_backend->addCol('snom_settings', $declaration);        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>http_client_user</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->addCol('snom_settings', $declaration);        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>http_client_pass</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->addCol('snom_settings', $declaration);        
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>http_client_user</name>
+                <unique>true</unique>
+                <field>
+                    <name>http_client_user</name>
+                </field>
+            </index>');
+        $this->_backend->addIndex('snom_settings', $declaration);        
+        
+        $this->setApplicationVersion('Voipmanager', '0.16');               
+    }       
 }
