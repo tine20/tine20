@@ -427,19 +427,23 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         // link task
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
-        $lead->tasks = array(array(
-            'id' => $task->getId()
+        $lead->relations = array(array(
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_id'                 => $this->_objects['initialLead']->getId(),
+            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Tasks_Model_Task',
+            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_id'             => $task->getId(),
+            'type'                   => 'TASK'
         )); 
         $lead = Crm_Controller::getInstance()->updateLead($lead);
         
-        // get linked tasks
-        $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
-        $linkedTasks = $lead->tasks;
+        // check linked tasks
+        $updatedLead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
         
-        //print_r($linkedTasks);
-        
-        $this->assertGreaterThan(0, count($linkedTasks));
-        $this->assertEquals($task->getId(), $linkedTasks[0]->related_id);
+        $this->assertGreaterThan(0, count($updatedLead->relations));
+        $this->assertEquals($task->getId(), $updatedLead->relations[0]->related_id);
         
     }
 
@@ -458,19 +462,24 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         // link contact
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
-        $lead->responsible = array(array(
-            'id' => $contact->getId()
-        )); 
+        $lead->relations = array(array(
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_id'                 => $this->_objects['initialLead']->getId(),
+            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_backend'        => Addressbook_Backend_Factory::SQL,
+            'related_id'             => $contact->getId(),
+            'type'                   => 'RESPONSIBLE'
+        ));
+         
         $lead = Crm_Controller::getInstance()->updateLead($lead);
                 
-        // get linked contacts
-        $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
-        $linkedContacts = $lead->responsible;
+        // check linked contacts
+        $updatedLead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
         
-        //print_r($linkedContacts);
-        
-        $this->assertGreaterThan(0, count($linkedContacts));
-        $this->assertEquals($contact->getId(), $linkedContacts[0]->related_id);
+        $this->assertGreaterThan(0, count($updatedLead->relations));
+        $this->assertEquals($contact->getId(), $updatedLead->relations[0]->related_id);
         
         // delete contact
         Addressbook_Controller::getInstance()->deleteContact($this->_objects['user']->getId());

@@ -239,14 +239,11 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialLead']->description, $result['updatedData']['description']);
         $leadId = $result['updatedData']['id'];
 
-        // check linked contacts
-        //print_r($result['updatedData']['responsible']);
-        $this->assertGreaterThan(0, count($result['updatedData']['responsible']));
-        $this->assertEquals($contact->getId(), $result['updatedData']['responsible'][0]['id']);        
-
-        // check linked tasks
-        $this->assertGreaterThan(0, count($result['updatedData']['tasks']));
-        $this->assertEquals($task->getId(), $result['updatedData']['tasks'][0]['id']);
+        // check linked contacts / tasks
+        //print_r($result['updatedData']['relations']);
+        $this->assertGreaterThan(0, count($result['updatedData']['relations']));
+        $this->assertEquals($contact->getId(), $result['updatedData']['relations'][0]['related_id']);        
+        $this->assertEquals($task->getId(), $result['updatedData']['relations'][1]['related_id']);
 
         // check linked products
         $this->assertGreaterThan(0, count($result['updatedData']['products']));
@@ -270,7 +267,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         //print_r($lead);
         
         $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
-        $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);                
+        $this->assertEquals($lead['relations'][0]['related_record']['assistent'], $this->objects['contact']->assistent);                
         $this->assertEquals($lead['products'][0]['product_desc'], $this->objects['productLink']['product_desc']);
     }
 
@@ -287,7 +284,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $initialLead = $leads[0];
 
         $this->assertEquals($this->objects['initialLead']->description, $initialLead['description']);        
-        $this->assertEquals($this->objects['contact']->assistent, $initialLead['responsible'][0]['assistent']);
+        $this->assertEquals($this->objects['contact']->assistent, $initialLead['relations'][0]['related_record']['assistent']);
     }
     
     /**
@@ -313,17 +310,13 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result['success']); 
         $this->assertEquals($this->objects['updatedLead']->description, $result['updatedData']['description']);
 
-        // check if contact is no longer linked        
+        // check if tasks/contact are no longer linked
         $lead = Crm_Controller::getInstance()->getLead($initialLead['id']);
-        $linkedContacts = $lead->responsible;
-        $this->assertEquals(0, count($linkedContacts));
-                
+        $this->assertEquals(0, count($lead->relations));
+        
         // delete contact
         Addressbook_Controller::getInstance()->deleteContact($this->objects['contact']->getId());
 
-        // check if task is no longer linked        
-        $linkedTasks = $lead->tasks;      
-        $this->assertEquals(0, count($linkedTasks));
     }
 
     /**
