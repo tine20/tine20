@@ -325,7 +325,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * @param Addressbook_Model_Contact $_contact
      * @return  Addressbook_Model_Contact
      */
-    public function addContact(Addressbook_Model_Contact $_contact)
+    public function createContact(Addressbook_Model_Contact $_contact)
     {
         if(empty($_contact->owner)) {
             $currentAccount = Zend_Registry::get('currentAccount');

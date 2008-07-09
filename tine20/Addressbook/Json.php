@@ -71,7 +71,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $contact->setFromJson($contactData);
         
         if (empty($contact->id)) {
-            $contact = Addressbook_Controller::getInstance()->addContact($contact);
+            $contact = Addressbook_Controller::getInstance()->createContact($contact);
         } else {
             $contact = Addressbook_Controller::getInstance()->updateContact($contact);
         }
