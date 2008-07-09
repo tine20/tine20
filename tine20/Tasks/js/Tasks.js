@@ -715,8 +715,7 @@ Tine.Tasks.EditDialog = function(task) {
                 }), 
                 new Ext.ux.form.ClearableDateField({
                     fieldLabel: translation._('Due date'),
-                    name: 'due',
-                    format: "d.m.Y"
+                    name: 'due'
                 }), 
                 new Tine.widgets.container.selectionComboBox({
                     fieldLabel: translation._('Folder'),
