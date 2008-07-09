@@ -2831,8 +2831,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_16()
     {
-
-     $this->_backend->renameTable('snom_settings','snom_default_settings');
+        $this->_backend->renameTable('snom_settings','snom_default_settings');
         
         $tableDefinition = "<table>
             <name>snom_phone_settings</name>
@@ -2841,7 +2840,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
             <version>1</version>
             <declaration>
                 <field>
-                    <name>setting_id</name>
+                    <name>phone_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -2950,11 +2949,23 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>off</value>
                 </field>                
                 <index>
-                    <name>setting_id</name>
+                    <name>phone_id</name>
                     <primary>true</primary>
                     <field>
-                        <name>setting_id</name>
+                        <name>phone_id</name>
                     </field>
+                </index>
+                <index>
+                    <name>snom_phone_settings::phone_id--snom_phone::id</name>
+                    <field>
+                        <name>phone_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_phones</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>                    
+                    </reference>
                 </index>
             </declaration>
         </table>" ;
@@ -2962,110 +2973,76 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);    
         
-        $this->_backend->dropCol('snom_phones','web_language');        
-        $this->_backend->dropCol('snom_phones','language');        
-        $this->_backend->dropCol('snom_phones','display_method');        
-        $this->_backend->dropCol('snom_phones','mwi_notification');        
-        $this->_backend->dropCol('snom_phones','mwi_dialtone');                        
-        $this->_backend->dropCol('snom_phones','headset_device');        
-        $this->_backend->dropCol('snom_phones','message_led_other');        
-        $this->_backend->dropCol('snom_phones','global_missed_counter');        
-        $this->_backend->dropCol('snom_phones','scroll_outgoing');        
-        $this->_backend->dropCol('snom_phones','show_local_line');        
-        $this->_backend->dropCol('snom_phones','show_call_status');        
-        $this->_backend->dropCol('snom_phones','call_waiting');                                                        
+        try {
+            $this->_backend->dropCol('snom_phones','web_language');        
+            $this->_backend->dropCol('snom_phones','language');        
+            $this->_backend->dropCol('snom_phones','display_method');        
+            $this->_backend->dropCol('snom_phones','mwi_notification');        
+            $this->_backend->dropCol('snom_phones','mwi_dialtone');                        
+            $this->_backend->dropCol('snom_phones','headset_device');        
+            $this->_backend->dropCol('snom_phones','message_led_other');        
+            $this->_backend->dropCol('snom_phones','global_missed_counter');        
+            $this->_backend->dropCol('snom_phones','scroll_outgoing');        
+            $this->_backend->dropCol('snom_phones','show_local_line');        
+            $this->_backend->dropCol('snom_phones','show_call_status');        
+            $this->_backend->dropCol('snom_phones','call_waiting');
+        } catch (Exception $e) {
+            // do nothing
+            // it's possible that these columns don't exist                                                        
+        }
                                 
-        $this->_backend->dropCol('snom_default_settings', 'redirect_event');        
-        $this->_backend->dropCol('snom_default_settings', 'redirect_number');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_always_on_code');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_always_off_code');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_busy_number');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_busy_on_code');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_busy_off_code');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_time');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_time_number');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_time_on_code');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_time_off_code');
-        $this->_backend->dropCol('snom_default_settings', 'dnd_on_code');                                                                                        
-        $this->_backend->dropCol('snom_default_settings', 'dnd_off_code');        
-        $this->_backend->dropCol('snom_default_settings', 'ringer_headset_device');
-        $this->_backend->dropCol('snom_default_settings', 'ring_sound');
-        $this->_backend->dropCol('snom_default_settings', 'alert_internal_ring_text');
-        $this->_backend->dropCol('snom_default_settings', 'alert_internal_ring_sound');
-        $this->_backend->dropCol('snom_default_settings', 'alert_external_ring_text');
-        $this->_backend->dropCol('snom_default_settings', 'alert_external_ring_sound');
-        $this->_backend->dropCol('snom_default_settings', 'alert_group_ring_text');
-        $this->_backend->dropCol('snom_default_settings', 'alert_group_ring_sound');
-        $this->_backend->dropCol('snom_default_settings', 'friends_ring_sound');
-        $this->_backend->dropCol('snom_default_settings', 'family_ring_sound');
-        $this->_backend->dropCol('snom_default_settings', 'colleagues_ring_sound');
-        $this->_backend->dropCol('snom_default_settings', 'vip_ring_sound');        
-        $this->_backend->dropCol('snom_default_settings', 'custom_melody_url');
-        $this->_backend->dropCol('snom_default_settings', 'auto_connect_indication');
-        $this->_backend->dropCol('snom_default_settings', 'auto_connect_type');
-        $this->_backend->dropCol('snom_default_settings', 'privacy_out');
-        $this->_backend->dropCol('snom_default_settings', 'privacy_in');
-        $this->_backend->dropCol('snom_default_settings', 'presence_timeout');
-        $this->_backend->dropCol('snom_default_settings', 'enable_keyboard_lock');
-        $this->_backend->dropCol('snom_default_settings', 'keyboard_lock');
-        $this->_backend->dropCol('snom_default_settings', 'keyboard_lock_pw');
-        $this->_backend->dropCol('snom_default_settings', 'keyboard_lock_emergency');
-        $this->_backend->dropCol('snom_default_settings', 'emergency_proxy');        
-        $this->_backend->dropCol('snom_default_settings', 'redirect_event_writable');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_number_writable');
-        $this->_backend->dropCol('snom_default_settings', 'redirect_time_writable');
-        
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>settings_id</name>
-                <type>text</type>
-                <length>40</length>
-            </field>');
-        $this->_backend->addCol('snom_phones', $declaration);      
-          
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-             <index>
-                <name>settings_id</name>
-                <unique>true</unique>
-                <field>
-                    <name>settings_id</name>
-                </field>
-            </index>');
-        $this->_backend->addIndex('snom_phones', $declaration);   
-
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-            <index>
-                <name>snom_phone_settings::setting_id--snom_phone::setting_id</name>
-                <field>
-                    <name>setting_id</name>
-                </field>
-                <foreign>true</foreign>
-                <reference>
-                    <table>snom_phones</table>
-                    <field>settings_id</field>
-                    <ondelete>cascade</ondelete>                    
-                </reference>
-            </index>');
-
-        $this->_backend->addForeignKey('snom_phone_settings', $declaration);                         
-        
+        try {
+            $this->_backend->dropCol('snom_default_settings', 'redirect_event');        
+            $this->_backend->dropCol('snom_default_settings', 'redirect_number');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_always_on_code');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_always_off_code');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_busy_number');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_busy_on_code');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_busy_off_code');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_time');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_time_number');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_time_on_code');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_time_off_code');
+            $this->_backend->dropCol('snom_default_settings', 'dnd_on_code');                                                                                        
+            $this->_backend->dropCol('snom_default_settings', 'dnd_off_code');        
+            $this->_backend->dropCol('snom_default_settings', 'ringer_headset_device');
+            $this->_backend->dropCol('snom_default_settings', 'ring_sound');
+            $this->_backend->dropCol('snom_default_settings', 'alert_internal_ring_text');
+            $this->_backend->dropCol('snom_default_settings', 'alert_internal_ring_sound');
+            $this->_backend->dropCol('snom_default_settings', 'alert_external_ring_text');
+            $this->_backend->dropCol('snom_default_settings', 'alert_external_ring_sound');
+            $this->_backend->dropCol('snom_default_settings', 'alert_group_ring_text');
+            $this->_backend->dropCol('snom_default_settings', 'alert_group_ring_sound');
+            $this->_backend->dropCol('snom_default_settings', 'friends_ring_sound');
+            $this->_backend->dropCol('snom_default_settings', 'family_ring_sound');
+            $this->_backend->dropCol('snom_default_settings', 'colleagues_ring_sound');
+            $this->_backend->dropCol('snom_default_settings', 'vip_ring_sound');        
+            $this->_backend->dropCol('snom_default_settings', 'custom_melody_url');
+            $this->_backend->dropCol('snom_default_settings', 'auto_connect_indication');
+            $this->_backend->dropCol('snom_default_settings', 'auto_connect_type');
+            $this->_backend->dropCol('snom_default_settings', 'privacy_out');
+            $this->_backend->dropCol('snom_default_settings', 'privacy_in');
+            $this->_backend->dropCol('snom_default_settings', 'presence_timeout');
+            $this->_backend->dropCol('snom_default_settings', 'enable_keyboard_lock');
+            $this->_backend->dropCol('snom_default_settings', 'keyboard_lock');
+            $this->_backend->dropCol('snom_default_settings', 'keyboard_lock_pw');
+            $this->_backend->dropCol('snom_default_settings', 'keyboard_lock_emergency');
+            $this->_backend->dropCol('snom_default_settings', 'emergency_proxy');        
+            $this->_backend->dropCol('snom_default_settings', 'redirect_event_writable');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_number_writable');
+            $this->_backend->dropCol('snom_default_settings', 'redirect_time_writable');
+        } catch (Exception $e) {
+            // do nothing
+            // it's possible that these columns don't exist
+        }
         
         $this->setApplicationVersion('Voipmanager', '0.17');                       
     }   
     
     /**
-     * remove settings_id from snom_phone
-     */    
-    public function update_17()
-    {  
-        $this->_backend->dropCol('snom_phones', 'settings_id');   
-        $this->setApplicationVersion('Voipmanager', '0.18');              
-    }    
-    
-    /**
      * add field 'name' to snom_software
      */    
-    public function update_18()
+    public function update_17()
     {  
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -3075,7 +3052,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
             </field>');
         $this->_backend->addCol('snom_software', $declaration); 
         
-        $this->setApplicationVersion('Voipmanager', '0.19');              
+        $this->setApplicationVersion('Voipmanager', '0.18');              
     }        
            
 }

@@ -1569,7 +1569,7 @@
             <version>1</version>
             <declaration>
                 <field>
-                    <name>setting_id</name>
+                    <name>phone_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -1680,12 +1680,24 @@
                     <default>off</default>
                 </field>               
                 <index>
-                    <name>settings_id</name>
+                    <name>phone_id</name>
                     <unique>true</unique>
                     <field>
-                        <name>settings_id</name>
+                        <name>phone_id</name>
                     </field>
                 </index>       
+                <index>
+                    <name>snom_phone_settings::phone_id--snom_phone::id</name>
+                    <field>
+                        <name>phone_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_phones</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>                    
+                    </reference>
+                </index>
             </declaration>
         </table>         
         
