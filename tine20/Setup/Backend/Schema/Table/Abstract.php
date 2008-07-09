@@ -79,7 +79,7 @@ abstract class Setup_Backend_Schema_Table_Abstract
     /**
      * add one index to the table definition
      *
-     * @param Setup_Backend_Schema_Index $_definition
+     * @param Setup_Backend_Schema_Index_Abstract $_definition
      */
     public function addIndex(Setup_Backend_Schema_Index_Abstract $_index)
     {

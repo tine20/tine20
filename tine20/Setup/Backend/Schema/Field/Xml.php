@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Setup
- * @license     http://www.gnu.org/licenses/agpl.html
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @version     $Id: XML.php 1703 2008-04-03 18:16:32Z lkneschke $
@@ -12,10 +12,18 @@
 
 class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
 {
-    public function __construct($_definition = NULL)
+    /**
+     * constructor of this class
+     *
+     * @param string|SimpleXMLElement $_declaration the xml definition of the field
+     */
+    public function __construct($_declaration = NULL)
     {
-        if($_definition !== NULL) {
-            $this->_setField($_definition);
+        if(is_a($_declaration, 'SimpleXMLElement')) {
+            $this->_setField($_declaration);
+        } elseif ($_declaration !== NULL) {
+            $declaration = new SimpleXMLElement($_declaration);
+            $this->_setField($declaration);
         }
     }
 

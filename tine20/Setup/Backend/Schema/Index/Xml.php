@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Setup
- * @license     http://www.gnu.org/licenses/agpl.html
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @version     $Id: XML.php 1703 2008-04-03 18:16:32Z lkneschke $
@@ -12,11 +12,20 @@
 
 class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
 {
-
-     public function __construct($_declaration)
-     {
-         $this->_setIndex($_declaration);
-     }
+    /**
+     * constructor of this class
+     *
+     * @param string|SimpleXMLElement $_declaration the xml definition of the index
+     */
+    public function __construct($_declaration)
+    {
+        if(is_a($_declaration, 'SimpleXMLElement')) {
+            $this->_setIndex($_declaration);
+        } elseif ($_declaration !== NULL) {
+            $declaration = new SimpleXMLElement($_declaration);
+            $this->_setIndex($declaration);
+        }
+    }
  
     protected function _setIndex($_declaration)
     {
