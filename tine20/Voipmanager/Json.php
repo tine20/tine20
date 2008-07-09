@@ -26,8 +26,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
 
 
 
-/********************************
- * SNOM PHONE FUNCTIONS
+/****************************************
+ * SNOM PHONE / PHONESETTINGS FUNCTIONS
  *
  * 
  */
@@ -97,6 +97,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }    
     
+   
     
     /**
      * save one phone
@@ -108,9 +109,15 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveSnomPhone($phoneData, $lineData)
     {
+        $phoneSettings = $this->saveSnomPhoneSettings($phoneData);
+
         $phoneData = Zend_Json::decode($phoneData);
         $lineData = Zend_Json::decode($lineData);
-        
+
+        if(empty($phoneData['settings_id'])) {
+            $phoneData['settings_id'] = $phoneSettings['updatedData']['setting_id'];
+        }
+
         // unset if empty
         if (empty($phoneData['id'])) {
             unset($phoneData['id']);
@@ -128,6 +135,10 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             $phone = Voipmanager_Controller::getInstance()->updateSnomPhone($phone);
         }
         $phone = $this->getSnomPhone($phone->getId());
+
+        $phone = array_merge($phoneSettings, $phone);
+        
+
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $phone
@@ -157,7 +168,88 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
     }    
-       
+      
+      
+      
+      
+   /**
+     * get one phoneSettings identified by phoneSettingsId
+     *
+     * @param int $phoneSettingsId
+     * @return array
+     */
+    public function getSnomPhoneSettings($phoneSettingsId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $phoneSettings = Voipmanager_Controller::getInstance()->getSnomPhoneSettings($phoneSettingsId);
+        
+        $result = $phoneSettings->toArray();      
+          
+        return $result;
+    }              
+        
+        
+    /**
+     * save one phoneSettings
+     *
+     * if $phoneSettingsData['id'] is empty the phoneSettings gets added, otherwise it gets updated
+     *
+     * @param string $phoneSettingsData a JSON encoded array of phoneSettings properties
+     * @return array
+     */
+    public function saveSnomPhoneSettings($phoneSettingsData)
+    {
+        $phoneSettingsData = Zend_Json::decode($phoneSettingsData);
+        
+        // unset if empty
+        if (empty($phoneSettingsData['setting_id'])) {
+            unset($phoneSettingsData['setting_id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($phoneSettingsData,true));
+        $phoneSettings = new Voipmanager_Model_SnomPhoneSettings();
+        $phoneSettings->setFromArray($phoneSettingsData);
+
+
+        if (empty($phoneSettings->setting_id)) {
+            $phoneSettings = Voipmanager_Controller::getInstance()->createSnomPhoneSettings($phoneSettings);
+        } else {
+            $phoneSettings = Voipmanager_Controller::getInstance()->updateSnomPhoneSettings($phoneSettings);
+        }
+        $phoneSettings = $this->getSnomPhoneSettings($phoneSettings->getId());
+
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $phoneSettings
+        ); //$phoneSettings->toArray());
+        
+        
+        return $result;
+         
+    }     
+    
+   
+    /**
+     * delete phoneSettings
+     *
+     * @param array $_phoneSettingsID phoneSettingsId to delete
+     * @return array
+     */
+    public function deleteSnomPhoneSettings($_phoneSettingsId)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $phoneSettingsId = Zend_Json::decode($_phoneSettingsId);
+        
+        Voipmanager_Controller::getInstance()->deleteSnomPhoneSettings($phoneSettingsId);
+
+        return $result;
+    }          
         
       
 /********************************

@@ -684,16 +684,13 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
             
                                                 Ext.each(_writableFields, function(_item, _index, _all) {
                                                     _rwField = _item.toString() + '_writable';
-                                                    
-                                                    if(!_phoneData[_item]) {
-                                                         _settingsData[_item] = _data[_item];
-                                                    } else {
-                                                        if(_data[_rwField] == '0') {
-                                                            _settingsData[_item] = _data[_item];                                                        
-                                                        } else  {
-                                                             _settingsData[_item] = _phoneData[_item];
-                                                        }                                                        
-                                                    }
+
+                                                    if(_data[_rwField] == '0') {
+                                                        _settingsData[_item] = _data[_item];                                                        
+                                                    } else  {
+                                                         _settingsData[_item] = _phoneData[_item];
+                                                    }                                                        
+
                                                     
                                                     if(_data[_rwField] == '0') {
                                                         _notWritable[_rwField.toString()] = 'true';                                                                                                       
@@ -1448,8 +1445,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                             fields: ['id', 'name'],
                                             data: [
                                                 [ '',  translation._('- factory default -')],
-                                                ['on', 'on'],
-                                                ['off', 'off']
+                                                ['1', translation._('on')],
+                                                ['0', translation._('off')]
                                             ]
                                         })
                                 }]
@@ -1474,7 +1471,11 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     store: new Ext.data.SimpleStore({
                                         id: 'id',
                                         fields: ['id', 'name'],
-                                        data: [[ '',  translation._('- factory default -')],['on', 'on'], ['off', 'off']]
+                                        data: [
+                                            [ '',  translation._('- factory default -')],
+                                            ['1', translation._('on')], 
+                                            ['0', translation._('off')]
+                                        ]
                                     })
                                 }]
                             }]
@@ -1505,8 +1506,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],
-                                            ['on', 'on'],
-                                            ['off', 'off']
+                                            ['1', translation._('on')],
+                                            ['0', translation._('off')]
                                         ]
                                     })
                                 }]
@@ -1533,8 +1534,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],
-                                            ['on', 'on'],
-                                            ['off', 'off']
+                                            ['1', translation._('on')],
+                                            ['0', translation._('off')]
                                         ]
                                     })
                                 }]
@@ -1561,8 +1562,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],
-                                            ['on', 'on'],
-                                            ['off', 'off']
+                                            ['1', translation._('on')],
+                                            ['0', translation._('off')]
                                         ]
                                     })
                                 }]
@@ -1611,7 +1612,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                     deferredRender: false,                                   
                     items:[
                         this.editPhoneDialog(_phoneData,this._maxLines()),
-                        this.editPhoneSettingsDialog(_writable),                                      
+                        this.editPhoneSettingsDialog(_writable),   
                         this.editPhoneLinesDialog(this._maxLines(_phoneData.current_model), _lines, _snomLines),
                         this.editPhoneOwnerSelection([],[])
                     ]

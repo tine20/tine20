@@ -559,7 +559,10 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                    store: new Ext.data.SimpleStore({
                                        id: 'id',
                                        fields: ['id', 'name'],
-                                       data: [['1', 'on'], ['0', 'off']]
+                                       data: [
+                                           ['1', translation._('on')], 
+                                           ['0', translation._('off')]
+                                       ]
                                    })
                                }]
                            }, {
@@ -582,7 +585,10 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                    store: new Ext.data.SimpleStore({
                                        id: 'id',
                                        fields: ['id', 'name'],
-                                       data: [['1', 'on'], ['0', 'off']]
+                                       data: [
+                                           ['1', translation._('on')], 
+                                           ['0', translation._('off')]
+                                       ]
                                    })
                                }]
                            }]

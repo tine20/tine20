@@ -792,8 +792,8 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             fields: ['id', 'name'],
                                             data: [
                                                 [ '',  translation._('- factory default -')],
-                                                ['on', 'on'],
-                                                ['off', 'off']
+                                                ['1', translation._('on')],
+                                                ['0', translation._('off')]
                                             ]
                                         })
                                 }]
@@ -819,7 +819,11 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     store: new Ext.data.SimpleStore({
                                         id: 'id',
                                         fields: ['id', 'name'],
-                                        data: [[ '',  translation._('- factory default -')],['on', 'on'], ['off', 'off']]
+                                        data: [
+                                            [ '',  translation._('- factory default -')],
+                                            ['1', translation._('on')], 
+                                            ['0', translation._('off')]
+                                        ]
                                     })
                                 }]
                             }]
@@ -851,8 +855,8 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],
-                                            ['on', 'on'],
-                                            ['off', 'off']
+                                            ['1', translation._('on')],
+                                            ['0', translation._('off')]
                                         ]
                                     })
                                 }]
@@ -880,8 +884,8 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],
-                                            ['on', 'on'],
-                                            ['off', 'off']
+                                            ['1', translation._('on')],
+                                            ['0', translation._('off')]
                                         ]
                                     })
                                 }]
@@ -909,8 +913,8 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],
-                                            ['on', 'on'],
-                                            ['off', 'off']
+                                            ['1', translation._('on')],
+                                            ['0', translation._('off')]
                                         ]
                                     })
                                 }]

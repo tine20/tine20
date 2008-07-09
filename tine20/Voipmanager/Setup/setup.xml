@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.16</version>
+    <version>0.17</version>
     <order>50</order>
     <tables>
         <table>
@@ -1561,6 +1561,145 @@
                 </index>
             </declaration>
         </table> 
+        
+      <table>
+            <name>snom_phone_settings</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>setting_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>web_language</name>
+                    <type>enum</type>
+                    <value>English</value>
+                    <value>Deutsch</value>
+                    <value>Espanol</value>
+                    <value>Francais</value>
+                    <value>Italiano</value>
+                    <value>Nederlands</value>
+                    <value>Portugues</value>
+                    <value>Suomi</value>
+                    <value>Svenska</value>
+                    <value>Dansk</value>
+                    <value>Norsk</value>
+                    <default>English</default>
+                </field>
+                <field>
+                    <name>language</name>
+                    <type>enum</type>
+                    <value>English</value>
+                    <value>English(UK)</value>
+                    <value>Deutsch</value>
+                    <value>Espanol</value>
+                    <value>Francais</value>
+                    <value>Italiano</value>
+                    <value>Cestina</value>
+                    <value>Nederlands</value>
+                    <value>Polski</value>
+                    <value>Portugues</value>
+                    <value>Slovencina</value>
+                    <value>Suomi</value>
+                    <value>Svenska</value>
+                    <value>Dansk</value>
+                    <value>Norsk</value>
+                    <value>Japanese</value>
+                    <value>Chinese</value>
+                    <default>English</default>
+                </field>
+                <field>
+                    <name>display_method</name>
+                    <type>enum</type>
+                    <value>full_contact</value>
+                    <value>display_name</value>
+                    <value>display_number</value>
+                    <value>display_name_number</value>
+                    <value>display_number_name</value>
+                    <default>display_name</default>
+                </field>
+                <field>
+                    <name>mwi_notification</name>
+                    <type>enum</type>
+                    <value>silent</value>
+                    <value>beep</value>
+                    <value>reminder</value>
+                    <default>silent</default>
+                </field>
+                <field>
+                    <name>mwi_dialtone</name>
+                    <type>enum</type>
+                    <value>normal</value>
+                    <value>stutter</value>
+                    <default>stutter</default>
+                </field>
+                <field>
+                    <name>headset_device</name>
+                    <type>enum</type>
+                    <value>none</value>
+                    <value>headset_rj</value>
+                    <default>none</default>
+                </field>
+                <field>
+                    <name>message_led_other</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>on</default>
+                </field>
+                <field>
+                    <name>global_missed_counter</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>on</default>
+                </field>
+                <field>
+                    <name>scroll_outgoing</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>on</default>
+                </field>
+                <field>
+                    <name>show_local_line</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
+                </field>
+                <field>
+                    <name>show_call_status</name>
+                    <type>enum</type>
+                    <value>on</value>
+                    <value>off</value>
+                    <default>off</default>
+                </field>               
+                <index>
+                    <name>settings_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>settings_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>snom_phone_settings::setting_id--snom_phone::setting_id</name>
+                    <field>
+                        <name>setting_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_phones</table>
+                        <field>settings_id</field>
+                        <ondelete>cascade</ondelete>                    
+                    </reference>
+            </index>                
+            </declaration>
+        </table>         
         
      </tables>    
 </application>

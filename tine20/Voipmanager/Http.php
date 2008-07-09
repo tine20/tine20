@@ -61,33 +61,44 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
             $_phoneData = $snomPhone->toArray();
 
+            if(!empty($_phoneData['settings_id'])) {
+                $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['settings_id'])->toArray();
+                unset($_phoneSettingsData['id']);
+            } else {
+                $_phoneSettingsData = null;
+            }
+            
+
             $_templateData = $controller->getSnomTemplate($_phoneData['template_id'])->toArray();
             $_settingsData = $controller->getSnomSetting($_templateData['setting_id'])->toArray();
             
-//            $_phoneData = array_merge($_settingsData, $_phoneData);
-
 
             $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 
+            $_empty = false;
+            if(empty($_phoneSettingsData)) { $_empty = true; }
+
             foreach($_writableFields AS $wField)
-            {
-                if(empty($_phoneData[$wField])) {
-                    $_phoneData[$wField] = $_settingsData[$wField];    
-                }
-                
+            {               
                 $_fieldRW = $wField.'_writable';
                  if($_settingsData[$_fieldRW] == '0')
                  {
-                     $_phoneData[$wField] = $_settingsData[$wField];
+                     $_phoneSettingsData[$wField] = $_settingsData[$wField];
                      $_notWritable[$wField] = 'true';
                  } else {
+                     if($_empty) {
+                         $_phoneSettingsData[$wField] = $_settingsData[$wField];
+                     }
                      $_notWritable[$wField] = '';    
                  }
             }
 
             $encodedWritable = Zend_Json::encode($_notWritable);
 
-            // encode the phone array
+                
+            $_phoneData = array_merge($_phoneSettingsData,$_phoneData);
+            
+            // encode the data arrays
             $encodedSnomPhone = Zend_Json::encode($_phoneData);
             $encodedSnomLines = Zend_Json::encode($snomLines->toArray());
             $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());              

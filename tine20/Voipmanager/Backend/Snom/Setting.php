@@ -45,7 +45,7 @@ class Voipmanager_Backend_Snom_Setting
         $where = array();
         
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_settings');
+            ->from(SQL_TABLE_PREFIX . 'snom_default_settings');
             
         $_pagination->appendPagination($select);
 
@@ -73,7 +73,7 @@ class Voipmanager_Backend_Snom_Setting
     public function get($_id)
     {	
         $settingId = Voipmanager_Model_SnomSetting::convertSnomSettingIdToInt($_id);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_settings')->where($this->_db->quoteInto('id = ?', $settingId));
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_default_settings')->where($this->_db->quoteInto('id = ?', $settingId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('setting not found');
@@ -101,7 +101,7 @@ class Voipmanager_Backend_Snom_Setting
         
         $setting = $_setting->toArray();
         
-        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_settings', $setting);
+        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_default_settings', $setting);
 
         return $this->get($_setting->getId());
     }
@@ -122,7 +122,7 @@ class Voipmanager_Backend_Snom_Setting
         unset($settingData['id']);
      
         $where = array($this->_db->quoteInto('id = ?', $settingId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'snom_settings', $settingData, $where);
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_default_settings', $settingData, $where);
         
         return $this->get($settingId);
     }    
@@ -147,7 +147,7 @@ class Voipmanager_Backend_Snom_Setting
             // NOTE: using array for second argument won't work as delete function joins array items using "AND"
             foreach($where AS $where_atom)
             {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'snom_settings', $where_atom);
+                $this->_db->delete(SQL_TABLE_PREFIX . 'snom_default_settings', $where_atom);
             }
 
             $this->_db->commit();

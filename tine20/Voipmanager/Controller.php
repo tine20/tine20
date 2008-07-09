@@ -96,7 +96,13 @@ class Voipmanager_Controller
      */
     protected $_asteriskMeetmeBackend;	
 	
-	
+    /**
+     * the snom phone settings sql backend
+     *
+     * @var Voipmanager_Backend_Snom_PhoneSettings
+     */	
+    protected $_snomPhoneSettingsBackend;
+    
     /**
      * the constructor
      *
@@ -104,6 +110,7 @@ class Voipmanager_Controller
      */
     private function __construct() {
         $this->_snomPhoneBackend            = new Voipmanager_Backend_Snom_Phone();
+        $this->_snomPhoneSettingsBackend    = new Voipmanager_Backend_Snom_PhoneSettings();        
         $this->_snomLineBackend             = new Voipmanager_Backend_Snom_Line();
         $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software();
         $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
@@ -144,8 +151,8 @@ class Voipmanager_Controller
 
 
 
-/********************************
- * SNOM PHONE FUNCTIONS
+/**********************************************
+ * SNOM PHONE / SNOM PHONESETTINGS FUNCTIONS
  *
  * 
  */
@@ -168,7 +175,6 @@ class Voipmanager_Controller
 
         return $phone;    
     }
-
 
     /**
      * get snom_phones
@@ -252,6 +258,60 @@ class Voipmanager_Controller
         $this->_snomPhoneBackend->delete($_identifiers);
     }
 
+
+
+    /**
+     * get snom_phoneSettings by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhoneSettings
+     */
+    public function getSnomPhoneSettings($_id)
+    {
+        $phoneSettings = $this->_snomPhoneSettingsBackend->get($_id);
+        return $phoneSettings;    
+    }
+
+
+    /**
+     * add one phoneSetting
+     *
+     * @param Voipmanager_Model_SnomPhoneSettings $_phone
+     * @return  Voipmanager_Model_SnomPhoneSettings
+     */
+    public function createSnomPhoneSettings(Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    {       
+        $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);
+        return $this->getSnomPhoneSettings($phoneSettings);
+    }
+    
+
+    /**
+     * update one phoneSettings
+     *
+     * @param Voipmanager_Model_SnomPhoneSettings $_phoneSettings
+     * @return  Voipmanager_Model_SnomPhoneSettings
+     */
+    public function updateSnomPhoneSettings(Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    {
+        $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
+        return $this->getSnomPhoneSettings($phoneSettings);
+    }    
+    
+    
+    /**
+     * Deletes phoneSettings.
+     * 
+     * 
+     * 
+     * @throws Exception
+     * @param array array of phone identifiers
+     * @return void
+     */
+    public function deleteSnomPhoneSettings($_identifiers)
+    {
+        $this->_snomPhoneSettingsBackend->delete($_identifiers);
+    }
 
 
 /********************************
