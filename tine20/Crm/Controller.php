@@ -297,13 +297,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $product['lead_id'] = $_leadId; 
                 $productsArray[] = $product;     
             }
-        }
-        try {
-            $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
-        } catch (Exception $e) {
-            throw $e;
-        }                
-        
+        }        
+        $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
         $this->saveLeadProducts($_leadId, $products);                        
     }
 
@@ -311,41 +306,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * get lead links and relations (contacts, tasks, products)
      *
      * @param Crm_Model_Lead $_lead
-     * 
-     * @todo add different backend types
-     * @todo move to json
      */
     private function getLeadLinks(Crm_Model_Lead &$_lead)
     {
-        $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());        
-        
-        $customer = array();
-        $partner = array();
-        $responsible = array();
-        $tasks = array();
-        foreach($relations as $relation) {
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $relation->type . ' for id ' . $_lead->getId());
-            switch(strtolower($relation->type)) {
-                case 'customer':
-                    $customer[] = $relation;
-                    break;
-                case 'partner':
-                    $partner[] = $relation;
-                    break;
-                case 'responsible':
-                    $responsible[] = $relation;
-                    break;
-                case 'task':
-                    $tasks[] = $relation;
-                    break;
-            }
-        }
-        $_lead->customer = $customer;
-        $_lead->partner = $partner;
-        $_lead->responsible = $responsible;
-        $_lead->tasks = $tasks;
         $_lead->products = $this->getLeadProducts($_lead->getId());
-        
+        $_lead->relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
     }    
     
     /*************** products functions *****************/

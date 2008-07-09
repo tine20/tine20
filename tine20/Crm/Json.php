@@ -292,8 +292,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @return array lead data
      * 
      * @todo get relation objects from json classes for the applications/models
+     * @todo add toResolve array ?
      */
-    public function leadToJson($_lead, $_getOnlyContacts = TRUE)
+    public function leadToJson($_lead /*, $_getOnlyContacts = TRUE */)
     {
         // @todo is that needed?
         //$_lead->setTimezone(Zend_Registry::get('userTimeZone'));
@@ -304,7 +305,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         // add container
         $result['container'] = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray());
         
+        // add products ?
+        //$result['products'] = $_lead->products->toArray();
+
+        return $result;
+        
         // add contact links
+        /*
         $types = array(
             'responsible',
             'customer',
@@ -352,8 +359,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $result['tags'] = array();
             $result['products'] = array();
         }
+        */
         
-        return $result;
     }
     
     /********************** handling of lead types/sources/states and products *************************/
