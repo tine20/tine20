@@ -46,6 +46,7 @@ Tine.Voipmanager.Snom.Phones.Main = {
                 if (_button == 'yes') {
                 
                     var phoneIds = [];
+                    
                     var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
                     for (var i = 0; i < selectedRows.length; ++i) {
                         phoneIds.push(selectedRows[i].id);

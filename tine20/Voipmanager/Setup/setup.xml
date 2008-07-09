@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.17</version>
+    <version>0.18</version>
     <order>50</order>
     <tables>
         <table>
@@ -1685,19 +1685,7 @@
                     <field>
                         <name>settings_id</name>
                     </field>
-                </index>
-                <index>
-                    <name>snom_phone_settings::setting_id--snom_phone::setting_id</name>
-                    <field>
-                        <name>setting_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>snom_phones</table>
-                        <field>settings_id</field>
-                        <ondelete>cascade</ondelete>                    
-                    </reference>
-            </index>                
+                </index>       
             </declaration>
         </table>         
         

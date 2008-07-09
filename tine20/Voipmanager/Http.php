@@ -61,12 +61,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
             $_phoneData = $snomPhone->toArray();
 
-            if(!empty($_phoneData['settings_id'])) {
-                $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['settings_id'])->toArray();
-                unset($_phoneSettingsData['id']);
-            } else {
-                $_phoneSettingsData = null;
-            }
+            $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['id'])->toArray();
             
 
             $_templateData = $controller->getSnomTemplate($_phoneData['template_id'])->toArray();

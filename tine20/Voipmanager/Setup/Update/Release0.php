@@ -3051,5 +3051,18 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
         
         $this->setApplicationVersion('Voipmanager', '0.17');                       
-    }          
+    }   
+    
+    /**
+     * remove foreign key from snom_phone_settings <-> snom_phones
+     */    
+    public function update_17()
+    {
+        
+        $this->_backend->dropCol('snom_phones', 'settings_id');
+        
+        $this->setApplicationVersion('Voipmanager', '0.18');              
+    }    
+    
+           
 }

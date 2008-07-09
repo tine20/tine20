@@ -109,14 +109,9 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveSnomPhone($phoneData, $lineData)
     {
-        $phoneSettings = $this->saveSnomPhoneSettings($phoneData);
 
         $phoneData = Zend_Json::decode($phoneData);
         $lineData = Zend_Json::decode($lineData);
-
-        if(empty($phoneData['settings_id'])) {
-            $phoneData['settings_id'] = $phoneSettings['updatedData']['setting_id'];
-        }
 
         // unset if empty
         if (empty($phoneData['id'])) {
@@ -126,18 +121,18 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
         $phone = new Voipmanager_Model_SnomPhone();
         $phone->setFromArray($phoneData);
+        
+        $phoneSettings = new Voipmanager_Model_SnomPhoneSettings();
+        $phoneSettings->setFromArray($phoneData);
 
         $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine', $lineData, true);
         
         if (empty($phone->id)) {
-            $phone = Voipmanager_Controller::getInstance()->createSnomPhone($phone);
+            $phone = Voipmanager_Controller::getInstance()->createSnomPhone($phone, $phoneSettings);
         } else {
-            $phone = Voipmanager_Controller::getInstance()->updateSnomPhone($phone);
+            $phone = Voipmanager_Controller::getInstance()->updateSnomPhone($phone, $phoneSettings);
         }
         $phone = $this->getSnomPhone($phone->getId());
-
-        $phone = array_merge($phoneSettings, $phone);
-        
 
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
@@ -154,17 +149,21 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * delete multiple phones
      *
      * @param array $_phoneIDs list of phoneId's to delete
+     * @param array $_phoneSettingsIDs list of phoneSettingsId's to delete     * 
      * @return array
      */
-    public function deleteSnomPhones($_phoneIds)
+    public function deleteSnomPhones($_phoneIds, $_phoneSettingsIds)
     {
         $result = array(
             'success'   => TRUE
         );
         
         $phoneIds = Zend_Json::decode($_phoneIds);
+        $phoneSettingsIds = Zend_Json::decode($_phoneSettingsIds);
         
-        Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds);
+        Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds, $phoneSettingsIds);
+        
+        
 
         return $result;
     }    

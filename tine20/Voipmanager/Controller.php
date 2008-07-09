@@ -205,13 +205,16 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone)
+    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
     {
         // auto generate random http client username and password        
         $phone->http_client_user = Tinebase_Record_Abstract::generateUID();
         $phone->http_client_pass = Tinebase_Record_Abstract::generateUID();
         
         $phone = $this->_snomPhoneBackend->create($_phone);
+        
+        $_phoneSettings->setId($phone->getId());
+        $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);
         
         foreach($_phone->lines as $line) {
             $line->snomphone_id = $phone->getId();
@@ -228,9 +231,14 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone)
+    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
     {
         $phone = $this->_snomPhoneBackend->update($_phone);
+
+        
+        $this->_snomPhoneSettingsBackend->delete($phone->getId());
+        $_phoneSettings->setId($phone->getId());
+        $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);
         
         $this->_snomLineBackend->deletePhoneLines($phone->getId());
         
