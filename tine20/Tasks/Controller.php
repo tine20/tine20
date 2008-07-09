@@ -181,6 +181,9 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
         if (! $this->_currentAccount->hasGrant($_task->container_id, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('Not allowed!');
         }
+        if(empty($_task->class_id)) {
+            $_task->class_id = 1;
+        }
         return $this->_backend->create($_task);
     }
     
