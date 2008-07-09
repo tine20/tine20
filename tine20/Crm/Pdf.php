@@ -157,26 +157,30 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      * @return  array  the linked objects
      * 
      */
-    protected function getLinkedObjects ( Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate )
+    protected function getLinkedObjects(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {
         $linkedObjects = array ();
 	
-        /********************** contacts ******************/
-        
-        $linkedObjects[] = array($_translate->_('Contacts'), 'headline');
+        // check relations
+        if ($_lead->relations instanceof Tinebase_Record_RecordSet) {
 
-        $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
-                            "partner" => "/images/oxygen/32x32/actions/view-process-own.png", 
-                            "responsible" => "/images/oxygen/32x32/apps/preferences-desktop-user.png",
-                        );        
-        
-        foreach ( $types as $type => /* $headline */ $icon ) {
+            /********************** contacts ******************/
             
-            if ( !empty($_lead->$type)) {
+            $linkedObjects[] = array($_translate->_('Contacts'), 'headline');
+    
+            $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
+                                "partner" => "/images/oxygen/32x32/actions/view-process-own.png", 
+                                "responsible" => "/images/oxygen/32x32/apps/preferences-desktop-user.png",
+                            );        
+            
+            foreach ($types as $type => /* $headline */ $icon) {
+    
+                $contactRelations = $_lead->relations->filter('type', strtoupper($type));
                 
-                foreach ( $_lead->$type as $relation ) {
+                foreach ($contactRelations as $relation) {
                     try {
-                        $contact = Addressbook_Controller::getInstance()->getContact($relation->related_id);
+                        //$contact = Addressbook_Controller::getInstance()->getContact($relation->related_id);
+                        $contact = $relation->related_record;
                         
                         $contactNameAndCompany = $contact->n_fn;
                         if ( !empty($contact->org_name) ) {
@@ -203,41 +207,44 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     }
                 }
             }
-        }
-        
-        /********************** tasks ******************/
+            
+            /********************** tasks ******************/
 
-        if (count($_lead->tasks) > 0) {
+            $taskRelations = $_lead->relations->filter('type', strtoupper('task'));
             
-            $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
+            if (!empty($taskRelations)) {
             
-            foreach ($_lead->tasks as $relation) {
-                try {
-                    $task = Tasks_Controller::getInstance()->getTask($relation->related_id);
-                    
-                    $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
-                    // @todo add big icon to db or preg_replace? 
-                    if ( !empty($task->status_id) ) {
-                        $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
-                        $icon = "/" . $status['status_icon'];
-                        $linkedObjects[] = array ($taskTitle, 'separator', $icon);
-                    } else {
-                        $linkedObjects[] = array ($taskTitle, 'separator');
+                $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
+                
+                foreach ($taskRelations as $relation) {
+                    try {
+                        //$task = Tasks_Controller::getInstance()->getTask($relation->related_id);
+                        $task = $relation->related_record;
+                        
+                        $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
+                        // @todo add big icon to db or preg_replace? 
+                        if ( !empty($task->status_id) ) {
+                            $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
+                            $icon = "/" . $status['status_icon'];
+                            $linkedObjects[] = array ($taskTitle, 'separator', $icon);
+                        } else {
+                            $linkedObjects[] = array ($taskTitle, 'separator');
+                        }
+                        
+                        // get due date
+                        if ( !empty($task->due) ) {
+                            $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
+                            $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
+                        }    
+                        
+                        // get task priority
+                        $taskPriority = $this->getTaskPriority($task->priority, $_translate);
+                        $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
+                        
+                    } catch (Exception $e) {
+                        // do nothing so far
+                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
                     }
-                    
-                    // get due date
-                    if ( !empty($task->due) ) {
-                        $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
-                        $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
-                    }    
-                    
-                    // get task priority
-                    $taskPriority = $this->getTaskPriority($task->priority, $_translate);
-                    $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
-                    
-                } catch (Exception $e) {
-                    // do nothing so far
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
                 }
             }
         }
