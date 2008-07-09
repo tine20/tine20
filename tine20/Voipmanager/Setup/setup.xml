@@ -317,6 +317,21 @@
                     <name>firmware_checked_at</name>
                     <type>datetime</type>
                 </field>
+                <field>
+                    <name>http_client_info_sent</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>     
+                <field>
+                    <name>http_client_user</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>  
+                <field>
+                    <name>http_client_pass</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -353,6 +368,13 @@
                         <field>id</field>
                     </reference>
                 </index>   
+                <index>
+                    <name>http_client_user</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>http_client_user</name>
+                    </field>
+                </index>
             </declaration>
         </table>
         
@@ -1490,30 +1512,6 @@
                     <value>off</value>
                     <default>off</default>
                 </field>     
-<!-- 
-               <field>
-                    <name>http_client_info_sent</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>     
-                <field>
-                    <name>http_client_user</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>  
-                <field>
-                    <name>http_client_pass</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <index>
-                    <name>http_client_user</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>http_client_user</name>
-                    </field>
-                </index>
--->
                 <index>
                     <name>id</name>
                     <primary>true</primary>

@@ -2794,7 +2794,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                 <type>boolean</type>
                 <default>false</default>
             </field>');
-        $this->_backend->addCol('snom_settings', $declaration);        
+        $this->_backend->addCol('snom_phones', $declaration);        
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -2802,7 +2802,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                 <type>text</type>
                 <length>40</length>
             </field>');
-        $this->_backend->addCol('snom_settings', $declaration);        
+        $this->_backend->addCol('snom_phones', $declaration);        
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -2810,7 +2810,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                 <type>text</type>
                 <length>40</length>
             </field>');
-        $this->_backend->addCol('snom_settings', $declaration);        
+        $this->_backend->addCol('snom_phones', $declaration);        
         
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
@@ -2820,7 +2820,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <name>http_client_user</name>
                 </field>
             </index>');
-        $this->_backend->addIndex('snom_settings', $declaration);        
+        $this->_backend->addIndex('snom_phones', $declaration);        
         
         $this->setApplicationVersion('Voipmanager', '0.16');               
     }       
