@@ -80,6 +80,13 @@ class Tinebase_Relation_Model_Relation extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+    
+    /*
+    public function setFromJson($relation)
+    {
+        
+    }
+    */
 
 } // end of Tinebase_Relation_Model_Relation
 ?>
