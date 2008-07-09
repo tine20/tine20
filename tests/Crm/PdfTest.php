@@ -203,11 +203,17 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadPdfLinkedContact()
     {
-    	// create lead + contact + link
-        
+    	// create lead + contact + link    
         $lead = Crm_Controller::getInstance()->getLead($this->objects['leadWithLink']->getId());
-        $lead->customer = array(array(
-            'id' => $this->objects['linkedContact']->id
+        $lead->relations = array(array(
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_id'                 => $lead->getId(),
+            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_backend'        => Addressbook_Backend_Factory::SQL,
+            'related_id'             => $this->objects['linkedContact']->id,
+            'type'                   => 'RESPONSIBLE'
         ));
         $lead = Crm_Controller::getInstance()->updateLead($lead);
         
@@ -222,7 +228,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
 
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();                
-        $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $this->objects['leadWithLink']->getId());        
+        $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $this->objects['leadWithLink']->getId());    
     }
 
     /**
@@ -235,8 +241,15 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         $task = Tasks_Controller::getInstance()->createTask($this->objects['linkedTask']);
 
         $lead = Crm_Controller::getInstance()->getLead($this->objects['leadWithLink']->getId());
-        $lead->tasks = array(array(
-            'id' => $task->getId()
+        $lead->relations = array(array(
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_id'                 => $lead->getId(),
+            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Tasks_Model_Task',
+            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_id'             => $task->getId(),
+            'type'                   => 'TASK'
         ));
         $lead = Crm_Controller::getInstance()->updateLead($lead);
         
