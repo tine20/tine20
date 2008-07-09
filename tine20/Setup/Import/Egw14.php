@@ -342,7 +342,7 @@ class Setup_Import_Egw14
                 ) 
             );
            
-            $tineContact = Addressbook_Backend_Sql::getInstance()->addContact($tineContact);
+            $tineContact = Addressbook_Backend_Sql::getInstance()->create($tineContact);
             echo " ok.<br/>";
             
             // get categories -> tags

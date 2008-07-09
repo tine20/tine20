@@ -352,7 +352,7 @@ class Setup_Import_TineRev949
                 ) 
             );
             
-            Addressbook_Backend_Sql::getInstance()->addContact($tineContact);
+            Addressbook_Backend_Sql::getInstance()->create($tineContact);
             
         }
         echo "done! got ".sizeof($contacts)." contacts.<br>";
