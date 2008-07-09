@@ -200,8 +200,13 @@ class Voipmanager_Controller
      * @return  Voipmanager_Model_SnomPhone
      */
     public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone)
-    {        
+    {
+        // auto generate random http client username and password        
+        $phone->http_client_user = Tinebase_Record_Abstract::generateUID();
+        $phone->http_client_pass = Tinebase_Record_Abstract::generateUID();
+        
         $phone = $this->_snomPhoneBackend->create($_phone);
+        
         foreach($_phone->lines as $line) {
             $line->snomphone_id = $phone->getId();
             $addedLine = $this->_snomLineBackend->create($line);
