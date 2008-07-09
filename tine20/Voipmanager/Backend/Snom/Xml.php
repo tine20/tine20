@@ -187,6 +187,15 @@ class Voipmanager_Backend_Snom_Xml
         unset($row['id']);
         unset($row['name']);
         unset($row['description']);
+        if($row['http_client_info_sent'] == true) {
+            // return username and password only on initial load
+            unset($row['http_client_user']);
+            unset($row['http_client_pass']);
+        } else {
+            $row['http_client_user_writable'] = false;
+            $row['http_client_pass_writable'] = false;            
+        }
+        unset($row['http_client_info_sent']);
         
         $userSettings = array();
         
