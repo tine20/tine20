@@ -89,8 +89,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      *
      * @param array $filter
      * @return array
-     * 
-     * @todo    resolve links/relations every time?
      */
     public function searchLeads($filter)
     {
@@ -175,14 +173,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param boolean           $_getOnlyContacts   resolve only contact links (not working at the moment)
      * @return array lead data
      * 
-     * @todo get relation objects from json classes for the applications/models
      * @todo add toResolve array ?
-     * @todo add timezone?
+     * @todo add timezone ?
      */
     public function leadToJson($_lead , $_getOnlyContacts = TRUE )
     {
         $result = $_lead->toArray();                
-        $result['container'] = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray());
+        $result['container'] = Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray();
         
         return $result;                
     }
