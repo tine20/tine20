@@ -584,7 +584,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-    public function getAsteriskSipPeers($sort, $dir, $query)
+    public function getAsteriskSipPeers($sort, $dir, $query, $context)
     {     
   
         $result = array(
@@ -592,7 +592,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($sort, $dir, $query, $context)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -691,7 +691,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-    public function getAsteriskContexts($sort, $dir, $query)
+    public function getAsteriskContexts($sort = NULL, $dir = NULL, $query = NULL)
     {     
   
         $result = array(
@@ -806,7 +806,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-    public function getAsteriskVoicemails($sort, $dir, $query)
+    public function getAsteriskVoicemails($sort, $dir, $query, $context)
     {     
   
         $result = array(
@@ -814,7 +814,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getAsteriskVoicemails($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->getAsteriskVoicemails($sort, $dir, $query, $context)) {
         
             $_rows = $rows->toArray();
 

@@ -138,6 +138,9 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
             }
         };
         
+        var contextFilter = new Tine.Voipmanager.widgets.ContextCombo();
+        contextFilter.on('change', onFilterChange, this);
+        
         var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width: 240
@@ -153,6 +156,7 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
                 this.actions.editSipPeer,
                 this.actions.deleteSipPeer,
                 '->',
+                this.translation._('Context: '), contextFilter,
                 this.translation._('Search: '), quickSearchField
             ]
         });
@@ -187,6 +191,7 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.context = Ext.getCmp('ContextCombo').getRawValue();
         }, this);   
         
         Ext.StoreMgr.add('SipPeersStore', dataStore);

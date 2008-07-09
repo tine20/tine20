@@ -655,9 +655,9 @@ class Voipmanager_Controller
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
      */
-    public function searchAsteriskSipPeers($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function searchAsteriskSipPeers($_sort = 'id', $_dir = 'ASC', $_query = NULL, $_context = NULL)
     {
-        $result = $this->_asteriskSipPeerBackend->search($_sort, $_dir, $_query);
+        $result = $this->_asteriskSipPeerBackend->search($_sort, $_dir, $_query, $_context);
 
         return $result;    
     }
@@ -852,7 +852,7 @@ class Voipmanager_Controller
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskVoicemail
      */
-    public function getAsteriskVoicemails($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function getAsteriskVoicemails($_sort = 'id', $_dir = 'ASC', $_query = NULL, $_context = NULL)
     {
         $filter = new Voipmanager_Model_AsteriskVoicemailFilter(array(
             'query' => $_query
@@ -862,7 +862,7 @@ class Voipmanager_Controller
             'dir'   => $_dir
         ));
 
-        $result = $this->_asteriskVoicemailBackend->search($filter, $pagination);
+        $result = $this->_asteriskVoicemailBackend->search($filter, $pagination, $_context);
         
         return $result;    
     }

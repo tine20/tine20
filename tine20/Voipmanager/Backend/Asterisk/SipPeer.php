@@ -37,13 +37,17 @@ class Voipmanager_Backend_Asterisk_SipPeer
      * @param string $_dir
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
 	 */
-    public function search($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
+    public function search($_sort = 'id', $_dir = 'ASC', $_filter = NULL, $_context = NULL)
     {	
         $where = array();
         
         if(!empty($_filter)) {
             $_fields = "callerid,context,fullcontact,ipaddr";            
             $where = $this->_getSearchFilter($_filter, $_fields);
+        }
+        
+        if(!empty($_context)) {
+            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('context = ?', $_context);
         }
         
         $select = $this->_db->select()

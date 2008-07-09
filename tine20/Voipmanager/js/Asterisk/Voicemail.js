@@ -133,6 +133,9 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
                 });
             }
         };
+
+        var contextFilter = new Tine.Voipmanager.widgets.ContextCombo();
+        contextFilter.on('change', onFilterChange, this);        
         
         var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
@@ -149,6 +152,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
                 this.actions.editVoicemail,
                 this.actions.deleteVoicemail,
                 '->',
+                this.translation._('Context: '), contextFilter,                
                 this.translation._('Search: '), quickSearchField
             ]
         });
@@ -172,6 +176,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.context = Ext.getCmp('ContextCombo').getRawValue();            
         }, this);   
         
         //Ext.StoreMgr.add('VoicemailStore', dataStore);
