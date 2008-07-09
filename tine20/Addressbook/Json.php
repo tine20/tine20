@@ -21,44 +21,6 @@
 class Addressbook_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Addressbook';
-    
-    /**
-     * converts json encoded record in to an instance of a record
-     * 
-     * @param  $contactData json encoded data
-     * @return Addressbook_Model_Contact
-     * 
-     * @deprecated 
-     * @todo remove function?
-     */
-    public function jsonToContact($contactData)
-    {
-        $contactData = Zend_Json::decode($contactData);
-        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
-        
-        if (isset($contactData['tags'])) {
-            $contactData['tags'] = Zend_Json::decode($contactData['tags']);
-        }
-        if (isset($contactData['jpegphoto'])) {
-            $imageParams = Tinebase_ImageHelper::parseImageLink($contactData['jpegphoto']);
-            if ($imageParams['isNewImage']) {
-                $contactData['jpegphoto'] = $this->getImageData($imageParams);
-            } else {
-                unset($contactData['jpegphoto']);
-            }
-        }
-        
-        // unset if empty
-        if (empty($contactData['id'])) {
-            unset($contactData['id']);
-        }
-
-        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
-        $contact = new Addressbook_Model_Contact();
-        $contact->setFromArray($contactData);
-        
-        return $contact;
-    }
 
     /**
      * returns contact prepared for json transport
@@ -66,7 +28,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param Addressbook_Model_Contact $_contact
      * @return array contact data
      */
-    public function contactToJson($_contact)
+    protected function _contactToJson($_contact)
     {
         $_contact->tags = $_contact->tags->toArray();
         $result = $_contact->toArray();
@@ -105,8 +67,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveContact($contactData)
     {
-        //$contact = $this->jsonToContact($contactData);
-        $contact = Addressbook_Model_Contact::setFromJson($contactData);
+        $contact = new Addressbook_Model_Contact();
+        $contact->setFromJson($contactData);
         
         if (empty($contact->id)) {
             $contact = Addressbook_Controller::getInstance()->addContact($contact);
@@ -178,7 +140,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         );
 
         $contact = Addressbook_Controller::getInstance()->getContact($contactId);
-        $result['contact'] = $this->contactToJson($contact);
+        $result['contact'] = $this->_contactToJson($contact);
         
         return $result;
     }

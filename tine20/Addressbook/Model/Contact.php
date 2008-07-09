@@ -187,12 +187,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     }
     
     /**
-     * create new record from json data
+     * fills a contract from json data
      *
      * @param string $_data json encoded data
-     * @return Addressbook_Model_Contact contact record
+     * @return void
      */
-    public static function setFromJson($_data)
+    public function setFromJson($_data)
     {
         $contactData = Zend_Json::decode($_data);
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
@@ -215,10 +215,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         }
 
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
-        $contact = new Addressbook_Model_Contact();
-        $contact->setFromArray($contactData);
+        $this->setFromArray($contactData);
         
-        return $contact;
+        return;
     }
     
 }
