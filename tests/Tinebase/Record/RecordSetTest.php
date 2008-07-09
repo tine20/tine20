@@ -248,6 +248,23 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(1), $this->object->getArrayOfIds(), 'wrong idFull indexes');
     }
     
+    /**
+     * test filter function 
+     */
+    public function testFilter()
+    {
+        // get subset with filter
+        $subset = $this->object->filter('string', 'idLess1');     
+        
+        $subsetArray = $subset->toArray();
+        $record = array_pop($subsetArray);
+        //print_r($record);
+        
+        $this->assertEquals(1, count($subset));
+        $this->assertEquals(4, count($this->object));
+        $this->assertEquals('idLess1', $record['string']);
+    }    
+    
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordSetTest::main') {
