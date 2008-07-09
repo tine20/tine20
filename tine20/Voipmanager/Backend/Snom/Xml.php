@@ -182,31 +182,44 @@ class Voipmanager_Backend_Snom_Xml
             ->join(SQL_TABLE_PREFIX . 'snom_templates', SQL_TABLE_PREFIX . 'snom_phones.template_id = ' . SQL_TABLE_PREFIX . 'snom_templates.id', array())
             ->join(SQL_TABLE_PREFIX . 'snom_settings', SQL_TABLE_PREFIX . 'snom_templates.setting_id = ' . SQL_TABLE_PREFIX . 'snom_settings.id');
                 
-        $row = $this->_db->fetchRow($select);
+        $defaultSettings = $this->_db->fetchRow($select);
         
-        unset($row['id']);
-        unset($row['name']);
-        unset($row['description']);
-        if($row['http_client_info_sent'] == true) {
+        unset($defaultSettings['id']);
+        unset($defaultSettings['name']);
+        unset($defaultSettings['description']);
+
+/*        
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_phones')
+            ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress);
+                
+        $phoneSettings = $this->_db->fetchRow($select);
+        
+        unset($defaultSettings['id']);
+        unset($defaultSettings['name']);
+        unset($defaultSettings['description']);
+        
+        
+        if($defaultSettings['http_client_info_sent'] == true) {
             // return username and password only on initial load
-            unset($row['http_client_user']);
-            unset($row['http_client_pass']);
+            unset($defaultSettings['http_client_user']);
+            unset($defaultSettings['http_client_pass']);
         } else {
-            $row['http_client_user_writable'] = false;
-            $row['http_client_pass_writable'] = false;            
+            $defaultSettings['http_client_user_writable'] = false;
+            $defaultSettings['http_client_pass_writable'] = false;            
         }
-        unset($row['http_client_info_sent']);
+        unset($defaultSettings['http_client_info_sent']); */
         
         $userSettings = array();
         
-        foreach($row as $key => $value) {
+        foreach($defaultSettings as $key => $value) {
             if(substr($key, -9) == '_writable') {
                 continue;
             }
-            #if($value !== NULL && isset($row[$key . '_writable'])) {
-            if(!empty($value) && isset($row[$key . '_writable'])) {
+            #if($value !== NULL && isset($defaultSettings[$key . '_writable'])) {
+            if(!empty($value) && isset($defaultSettings[$key . '_writable'])) {
                 $userSettings[$key]['value'] = $value;
-                if($row[$key . '_writable'] == true) {
+                if($defaultSettings[$key . '_writable'] == true) {
                     $userSettings[$key]['perms'] = 'RW';
                 } else {
                     $userSettings[$key]['perms'] = 'RO';
