@@ -19,7 +19,7 @@ class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
      */
     public function __construct($_declaration)
     {
-        if(is_a($_declaration, 'SimpleXMLElement')) {
+        if($_declaration instanceof SimpleXMLElement) {
             $this->_setIndex($_declaration);
         } elseif ($_declaration !== NULL) {
             $declaration = new SimpleXMLElement($_declaration);

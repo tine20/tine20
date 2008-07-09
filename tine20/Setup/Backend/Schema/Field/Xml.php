@@ -19,7 +19,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
      */
     public function __construct($_declaration = NULL)
     {
-        if(is_a($_declaration, 'SimpleXMLElement')) {
+        if($_declaration instanceof SimpleXMLElement) {
             $this->_setField($_declaration);
         } elseif ($_declaration !== NULL) {
             $declaration = new SimpleXMLElement($_declaration);
