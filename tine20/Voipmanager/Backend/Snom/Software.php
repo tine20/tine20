@@ -47,7 +47,7 @@ class Voipmanager_Backend_Snom_Software
         $_pagination->appendPagination($select);
 
         if(!empty($_filter->query)) {
-            $select->where($this->_db->quoteInto('(description LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
+            $select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
         } else {
             // handle the other fields separately
         }

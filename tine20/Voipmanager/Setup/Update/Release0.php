@@ -3054,15 +3054,28 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
     }   
     
     /**
-     * remove foreign key from snom_phone_settings <-> snom_phones
+     * remove settings_id from snom_phone
      */    
     public function update_17()
-    {
-        
-        $this->_backend->dropCol('snom_phones', 'settings_id');
-        
+    {  
+        $this->_backend->dropCol('snom_phones', 'settings_id');   
         $this->setApplicationVersion('Voipmanager', '0.18');              
     }    
     
+    /**
+     * add field 'name' to snom_software
+     */    
+    public function update_18()
+    {  
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>name</name>
+                <type>text</type>
+                <length>200</length>
+            </field>');
+        $this->_backend->addCol('snom_software', $declaration); 
+        
+        $this->setApplicationVersion('Voipmanager', '0.19');              
+    }        
            
 }

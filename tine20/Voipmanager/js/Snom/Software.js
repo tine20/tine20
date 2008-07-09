@@ -24,7 +24,7 @@ Tine.Voipmanager.Snom.Software.Main = {
          */
         addSoftware: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=', 450, 300);
+            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=', 450, 350);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Snom.Software.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Software_Grid').getSelectionModel().getSelections();
             var softwareId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + softwareId, 450, 300);
+            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + softwareId, 450, 350);
         },
         
         /**
@@ -197,6 +197,7 @@ Tine.Voipmanager.Snom.Software.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 20, hidden: true },
+            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 150 },            
             { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 250 }
         ]);                        
                 
@@ -265,7 +266,7 @@ Tine.Voipmanager.Snom.Software.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + record.data.id, 450, 300);
+                Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + record.data.id, 450, 350);
             } catch(e) {
                 // alert(e);
             }
@@ -429,6 +430,11 @@ Tine.Voipmanager.Snom.Software.EditDialog =  {
                 width: 440,
                 autoHeight: true,
                 items: [{
+                    xtype:'textfield',
+                    name: 'name',
+                    fieldLabel: translation._('name'),
+                    anchor:'100%'
+                }, {
                     //labelSeparator: '',
                     xtype:'textarea',
                     name: 'description',

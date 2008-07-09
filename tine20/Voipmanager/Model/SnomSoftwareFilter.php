@@ -33,7 +33,8 @@ class Voipmanager_Model_SnomSoftwareFilter extends Tinebase_Record_Abstract
     
     protected $_validators = array(
         'id'                    => array('allowEmpty' => true,  'Int'   ),
-
+        'name'                  => array('allowEmpty' => true           ),
+        'description'           => array('allowEmpty' => true           ),     
         'query'                 => array('allowEmpty' => true           )
 //        'showClosed'          => array('allowEmpty' => true, 'InArray' => array(true,false)),
     );
