@@ -139,8 +139,10 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     {
         $decodedLead = Zend_Json::decode($_data);
         
-        /************* add relations *******************/
+        Zend_Registry::get('logger')->debug("setFromJson:" . print_r($decodedLead,true));
         
+        /************* add relations *******************/
+        /*
         $relationTypes = array(
             'responsible' => array(
                 'model'     => 'Addressbook_Model_Contact',
@@ -186,6 +188,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
             }
         }
         $decodedLead['relations'] = $relationData;
+        */
         
         /********************** add tags ***********************/
         

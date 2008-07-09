@@ -298,7 +298,7 @@ Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
     blurOnSelect: false,
     
     displayField: 'label',
-    valueField: 'link_remark',
+    valueField: 'relation_type',
     mode: 'local',
     triggerAction: 'all',
     lazyInit: false,
@@ -316,7 +316,7 @@ Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
             
         this.store = new Ext.data.SimpleStore({
-            fields: ['label', 'link_remark'],
+            fields: ['label', 'relation_type'],
             data: [
                     [translation._('Responsible'), 'responsible'],
                     [translation._('Customer'), 'customer'],

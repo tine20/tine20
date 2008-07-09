@@ -181,6 +181,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $result = $_lead->toArray();                
         $result['container'] = Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray();
         
+        //Zend_Registry::get('logger')->debug("leadToJson: " . print_r($result,true));
+        
         return $result;                
     }
     

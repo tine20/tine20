@@ -695,9 +695,14 @@ Tine.Crm.LeadEditDialog = {
                         Ext.getCmp('crmGridTasks').setDisabled(false);
 
                         // update stores
-                        Tine.Crm.LeadEditDialog.loadContactsStore(lead.data.responsible, lead.data.customer, lead.data.partner, true);        
-                        Tine.Crm.LeadEditDialog.loadTasksStore(lead.data.tasks, true);
+                        var relations = Tine.Crm.LeadEditDialog.splitRelations(lead.data.relations);
+                        Tine.Crm.LeadEditDialog.loadContactsStore(relations.contacts, true);        
+                        Tine.Crm.LeadEditDialog.loadTasksStore(relations.tasks, true);
                         //Tine.Crm.LeadEditDialog.loadProductsStore(lead.data.products);
+                        
+                        // @todo remove
+                        //Tine.Crm.LeadEditDialog.loadContactsStore(lead.data.responsible, lead.data.customer, lead.data.partner, true);        
+                        //Tine.Crm.LeadEditDialog.loadTasksStore(lead.data.tasks, true);
                         
                         //Ext.StoreMgr.lookup('ContactsStore').commitChanges();
                         //Ext.StoreMgr.lookup('TasksStore').commitChanges();
@@ -752,13 +757,13 @@ Tine.Crm.LeadEditDialog = {
                 contact.data.link_id = null;
                 switch ( _button.contactType ) {
                 	case 'responsible':
-                	   contact.data.link_remark = 'responsible';
+                	   contact.data.relation_type = 'responsible';
                 	   break;
                     case 'customer':
-                       contact.data.link_remark = 'customer';
+                       contact.data.relation_type = 'customer';
                        break;
                     case 'partner':
-                       contact.data.link_remark = 'partner';
+                       contact.data.relation_type = 'partner';
                        break;
                 }
                 
@@ -785,8 +790,8 @@ Tine.Crm.LeadEditDialog = {
             contactPopup.on('update', function(contact) {                
                 // set link properties
                 contact.id = contact.data.id;
-                contact.data.link_id = selectedContact.data.link_id;
-                contact.data.link_remark = selectedContact.data.link_remark;
+                //contact.data.link_id = selectedContact.data.link_id;
+                contact.data.relation_type = selectedContact.data.relation_type;
                 
                 // add contact to store (remove the old one first)
                 var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
@@ -897,7 +902,38 @@ Tine.Crm.LeadEditDialog = {
      */
     getAdditionalData: function(lead)
     {
-        // collect data of assosicated contacts
+        // collect data of relations
+    	var relations = [];
+    	
+    	// contacts
+        var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+        storeContacts.each(function(record) {           
+            var relation = record.data.relation;
+            relation.type = record.data.relation_type.toUpperCase();
+            // don't do recursion!
+            delete record.data.relation;
+            delete record.data.relation_type;
+            relation.related_record = record.data;
+    	
+            relations.push(relation);
+        });
+        
+        // tasks
+        var storeTasks = Ext.StoreMgr.lookup('TasksStore');        
+        storeTasks.each(function(record) {
+            var relation = record.data.relation;
+            relation.type = record.data.relation_type.toUpperCase();
+            // don't do recursion!
+            delete record.data.relation;
+            delete record.data.relation_type;
+            relation.related_record = record.data;
+        
+            relations.push(relation);
+        });
+        
+        console.log(relations);
+        
+    	/*
         var linksResponsible = [];
         var linksCustomer = [];
         var linksPartner = [];
@@ -916,7 +952,7 @@ Tine.Crm.LeadEditDialog = {
         	
         	//console.log(record.data);
         	
-        	switch ( record.data.link_remark ) {
+        	switch ( record.data.relation_type ) {
                 case 'responsible':
                     linksResponsible.push(link);
                     break;
@@ -943,7 +979,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         lead.data.tasks = linksTasks;
-        
+        */
         // add products
         var linksProducts = [];
         var storeProducts = Ext.StoreMgr.lookup('ProductsStore');       
@@ -1015,9 +1051,9 @@ Tine.Crm.LeadEditDialog = {
                         }                        
                     },    
                     {
-                        id:'link_remark', 
+                        id:'relation_type', 
                         header: this.translation._("Type"), 
-                        dataIndex: 'link_remark', 
+                        dataIndex: 'relation_type', 
                         width: 75, 
                         sortable: true,
                         renderer: Tine.Crm.contactType.Renderer,
@@ -1063,9 +1099,9 @@ Tine.Crm.LeadEditDialog = {
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 120, sortable: true},
                     {id:'org_name', header: this.translation._('Organisation'), dataIndex: 'org_name', width: 120, sortable: true},
                     {
-                        id:'link_remark', 
+                        id:'relation_type', 
                         header: this.translation._("Type"), 
-                        dataIndex: 'link_remark', 
+                        dataIndex: 'relation_type', 
                         width: 75, 
                         sortable: false,
                         renderer: Tine.Crm.contactType.Renderer,
@@ -1505,14 +1541,35 @@ Tine.Crm.LeadEditDialog = {
     },
     
     /**
+     * split the relations array in contacts and tasks and switch related_record and relation objects
+     */
+    splitRelations: function(_relations)
+    {
+    	var result = {contacts: [], tasks: []};
+    	
+    	for (var i=0; i < _relations.length; i++) {
+            var newLinkObject = _relations[i]['related_record'];
+            newLinkObject.relation = _relations[i];
+            newLinkObject.relation_type = _relations[i]['type'].toLowerCase();
+    		if (newLinkObject.relation_type === 'responsible' 
+    		  || newLinkObject.relation_type === 'customer' 
+    		  || newLinkObject.relation_type === 'partner') {
+    			result.contacts.push(newLinkObject);
+    		} else if (newLinkObject.relation_type === 'task') {    			
+                result.tasks.push(newLinkObject);
+    		}
+    	}
+    	   
+    	return result;
+    },
+    
+    /**
      * get linked contacts store and put it into store manager
      * 
-     * @param   array _responsible
-     * @param   array _customer
-     * @param   array _partner
+     * @param   array _contacts
      * @param   boolean _reload reload or create new store
      */
-    loadContactsStore: function(_responsible, _customer, _partner, _reload)
+    loadContactsStore: function(_contacts, _reload)
     {
     	var storeContacts = null;
     	
@@ -1522,46 +1579,27 @@ Tine.Crm.LeadEditDialog = {
     	   	// empty store and fill with data
     	   	storeContacts.removeAll();
     	   	
-            if(_responsible) {
-                storeContacts.loadData(_responsible, true);                    
-            }
-    
-            if(_customer) {
-                storeContacts.loadData(_customer, true);                    
-            }
-            
-            if(_partner) {
-                storeContacts.loadData(_partner, true);                    
+            if(_contacts) {
+                storeContacts.loadData(_contacts, true);                    
             }
     	   	
     	} else {
+    		
+    		var contactFields = Tine.Addressbook.Model.ContactArray;
+    		//console.log(contactFields);
+    		contactFields.push({name: 'relation'});   // the relation object           
+            contactFields.push({name: 'relation_type'});     
+    		
             storeContacts = new Ext.data.JsonStore({
                 id: 'id',
-                fields: Tine.Crm.Model.ContactLink
+                fields: contactFields
             });
                 
-            if(_responsible) {
-                storeContacts.loadData(_responsible, true);                    
+            if(_contacts) {
+                storeContacts.loadData(_contacts, true);                    
             }
     
-            if(_customer) {
-                storeContacts.loadData(_customer, true);                    
-            }
-            
-            if(_partner) {
-                storeContacts.loadData(_partner, true);                    
-            }
-    
-            storeContacts.setDefaultSort('link_remark', 'asc');   
-            
-            // remove link_id on update
-            /*
-            storeContacts.on('update', function(store, record, operation) {
-            	if (operation === Ext.data.Record.EDIT) {
-                    record.data.link_id = null;
-            	}
-            }, this);
-            */        
+            storeContacts.setDefaultSort('type', 'asc');   
             
             Ext.StoreMgr.add('ContactsStore', storeContacts);
     	}
@@ -1588,10 +1626,15 @@ Tine.Crm.LeadEditDialog = {
                 storeTasks.loadData(_tasks);                    
             }
 
-        } else {
+        } else {        	
+        	
+            var taskFields = Tine.Tasks.TaskArray;
+            taskFields.push({name: 'relation'});   // the relation object           
+            taskFields.push({name: 'relation_type'});     
+        	
             storeTasks = new Ext.data.JsonStore({
                 id: 'id',
-                fields: Tine.Crm.Model.TaskLink
+                fields: taskFields
             });
                 
             if(_tasks) {
@@ -1795,8 +1838,10 @@ Tine.Crm.LeadEditDialog = {
     	
         /*********** INIT STORES *******************/
         
-        this.loadContactsStore(lead.data.responsible, lead.data.customer, lead.data.partner);        
-        this.loadTasksStore(lead.data.tasks);
+        var relations = this.splitRelations(lead.data.relations);
+        //console.log(relations);
+        this.loadContactsStore(relations.contacts);        
+        this.loadTasksStore(relations.tasks);
         this.loadProductsStore(lead.data.products);
                 
         /*********** the EDIT dialog ************/
@@ -1871,47 +1916,6 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'tasks'},
     {name: 'products'},
     {name: 'tags'}
-]);
-
-// contact link
-Tine.Crm.Model.ContactLink = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'link_id'},              
-    {name: 'link_remark'},                        
-    {name: 'owner'},
-    {name: 'n_family'},
-    {name: 'n_given'},
-    {name: 'n_middle'},
-    {name: 'n_prefix'},
-    {name: 'n_suffix'},
-    {name: 'n_fn'},
-    {name: 'n_fileas'},
-    {name: 'org_name'},
-    {name: 'org_unit'},
-    {name: 'adr_one_street'},
-    {name: 'adr_one_locality'},
-    {name: 'adr_one_region'},
-    {name: 'adr_one_postalcode'},
-    {name: 'adr_one_countryname'},
-    {name: 'tel_work'},
-    {name: 'tel_cell'},
-    {name: 'tel_fax'},
-    {name: 'email'}
-]);
-
-// task link
-Tine.Crm.Model.TaskLink = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'link_id'},
-    {name: 'status_id'},
-    {name: 'status_realname'},
-    {name: 'status_icon'},
-    {name: 'percent'},
-    {name: 'summary'},
-    {name: 'due'},
-    {name: 'creator'},
-    {name: 'description'},
-    {name: 'priority'}
 ]);
 
 // product link
