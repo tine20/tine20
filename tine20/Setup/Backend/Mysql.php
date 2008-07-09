@@ -311,7 +311,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */     
     public function dropForeignKey($_tableName, $_name)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . SQL_TABLE_PREFIX .  $_name . "`" ;
         $this->execQueryVoid($statement);    
     }
     
