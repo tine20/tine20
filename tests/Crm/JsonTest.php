@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        simplify relations tests: create related_records with relations class
  */
 
 /**
@@ -220,12 +221,30 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         }
 
         $leadData = $this->objects['initialLead']->toArray();
-        $leadData['responsible'] = array(array(
-            'id' => $contact->getId()            
-        ));
-        $leadData['tasks'] = array(array(
-            'id' => $task->getId()
-        ));
+        $leadData['relations'] = array(
+            array(
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_id'                 => $this->objects['initialLead']->getId(),
+            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Tasks_Model_Task',
+            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_id'             => $task->getId(),
+            'type'                   => 'TASK'
+            ),
+            array(
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_id'                 => $this->objects['initialLead']->getId(),
+            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_backend'        => Addressbook_Backend_Factory::SQL,
+            'related_id'             => $contact->getId(),
+            'type'                   => 'RESPONSIBLE'
+            )        
+            //'id' => $contact->getId()            
+            //'id' => $task->getId()
+        );
         $leadData['tags'] = Zend_Json::encode(array());
         $leadData['products'] = array($this->objects['productLink']);
         
@@ -301,6 +320,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         $updatedLead = $this->objects['updatedLead'];
         $updatedLead->id = $initialLead['id'];
+        $updatedLead->relations = array();
         $encodedData = Zend_Json::encode($updatedLead->toArray());
         
         $result = $json->saveLead($encodedData);
