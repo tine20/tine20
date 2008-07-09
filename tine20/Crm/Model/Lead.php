@@ -137,7 +137,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     {
         $decodedLead = Zend_Json::decode($_data);
         
-        //Zend_Registry::get('logger')->debug("setFromJson:" . print_r($decodedLead,true));
+        Zend_Registry::get('logger')->debug("setFromJson:" . print_r($decodedLead,true));
         
         /************* add new relations *******************/
         
@@ -173,9 +173,19 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     default:
                         throw new Exception('relation type not supported');
                 }
-                                                                
+
+                if (isset($relation['related_record']['owner']) && is_array($relation['related_record']['owner'])) {
+                    // hack for container
+                    // @todo make that better
+                    $data['related_record']['owner'] = $relation['related_record']['owner']['id'];
+                    
+                    // test
+                    //@todo json encode tags?
+                    $data['related_record']['tags'] = '';
+                }                
+                
                 $decodedLead['relations'][$key] = $data;
-            }
+            } 
         }        
         
         /********************** add tags ***********************/
@@ -186,7 +196,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         
         /********************** create record ***********************/
 
-        //Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
+        Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
         
         $lead = new Crm_Model_Lead($decodedLead);
         
