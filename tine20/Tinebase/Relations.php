@@ -12,6 +12,7 @@
 
 /**
  * Class for handling relations between application records.
+ * @todo move json api specific stuff into the model
  * 
  * @package     Tinebase
  * @subpackage  Relations 
