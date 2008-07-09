@@ -778,7 +778,7 @@ Tine.Tasks.fixTask = function(task) {
 };
 
 // Task model
-Tine.Tasks.Task = Ext.data.Record.create([
+Tine.Tasks.TaskArray = [
     // tine record fields
     { name: 'container_id' },
     { name: 'created_by' },
@@ -821,5 +821,8 @@ Tine.Tasks.Task = Ext.data.Record.create([
     { name: 'exrule' },
     { name: 'rdate' },
     { name: 'rrule' }
-]);
+];
+Tine.Tasks.Task = Ext.data.Record.create(
+    Tine.Tasks.TaskArray
+);
 	

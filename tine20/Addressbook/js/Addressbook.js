@@ -746,7 +746,7 @@ Tine.Addressbook.ContactEditDialog = {
 
 Ext.namespace('Tine.Addressbook.Model');
 
-Tine.Addressbook.Model.Contact = Ext.data.Record.create([
+Tine.Addressbook.Model.ContactArray = [
     {name: 'id'},
     {name: 'tid'},
     {name: 'owner'},
@@ -807,4 +807,9 @@ Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'jpegphoto'},
     {name: 'account_id'},
     {name: 'tags'}
-]);
+];
+
+Tine.Addressbook.Model.Contact = Ext.data.Record.create(
+    Tine.Addressbook.Model.ContactArray
+);
+
