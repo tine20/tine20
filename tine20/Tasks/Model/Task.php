@@ -98,20 +98,20 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     );
     
     /**
-     * create new record from json data
+     * fill record from json data
      *
      * @param string $_data json encoded data
-     * @return Tasks_Model_Task task record
-     * 
-     * @todo set timezone here?
+     * @return void
      */
-    public static function setFromJson($_data)
+    public function setFromJson($_data)
     {
-        //date_default_timezone_set($this->_userTimezone);
-        $task = new Tasks_Model_Task(Zend_Json::decode($_data));
-        //$inTask->setTimezone($this->_serverTimezone);
-        //date_default_timezone_set($this->_serverTimezone);
+        $userTimezone = Zend_Registry::get('userTimeZone');
+        $serverTimezone = date_default_timezone_get();
+        date_default_timezone_set($userTimezone);
         
-        return $task;        
+        $this->setFromArray(Zend_Json::decode($_data));
+        $this->setTimezone($serverTimezone);
+
+        date_default_timezone_set($serverTimezone);
     }
 }

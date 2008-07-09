@@ -68,7 +68,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function getTask($uid)
     {
         $task = $this->_controller->getTask($uid);
-        return $this->taskToJson($task);
+        return $this->_taskToJson($task);
     }
     
     /**
@@ -79,11 +79,12 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function updateTask($task)
     {
-        $inTask = $this->jsonToTask($task);
+        $inTask = new Task_Model_Task();
+        $inTask->setFromJson($task);
         
         //error_log(print_r($newTask->toArray(),true));
         $outTask = $this->_controller->updateTask($inTask);
-        return $this->taskToJson($outTask);
+        return $this->_taskToJson($outTask);
     }
     
     /**
@@ -94,33 +95,15 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveTask($task)
     {
-        $inTask = $this->jsonToTask($task);
+        $inTask = new Task_Model_Task();
+        $inTask->setFromJson($task);
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);
 
-        return $this->taskToJson($outTask);
-    }
-    
-    /**
-     * returns instance of Tasks_Model_Task from json encoded data
-     * 
-     * @param string JSON encoded task
-     * @return Tasks_Model_Task task
-     * 
-     * @todo replace with Tasks_Model_Task::setFromJson() -> how do we handle the timezone setting?
-     */
-    public function jsonToTask($json)
-    {
-        date_default_timezone_set($this->_userTimezone);
-        //$inTask = new Tasks_Model_Task(Zend_Json::decode($json));
-        $inTask = Tasks_Model_Task::setFromJson($json);
-        $inTask->setTimezone($this->_serverTimezone);
-        date_default_timezone_set($this->_serverTimezone);
-        
-        return $inTask;
+        return $this->_taskToJson($outTask);
     }
     
     /**
@@ -129,7 +112,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @param Tasks_Model_Task $_task
      * @return array task data
      */
-    public function taskToJson($_task)
+    protected function _taskToJson($_task)
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;
