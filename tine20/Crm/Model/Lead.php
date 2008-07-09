@@ -131,64 +131,52 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @param string $_data json encoded data
      * @return Crm_Model_Lead task record
      * 
-     * @todo add related records
      * @todo add different backend types?
-     * @todo decode tags?
      */
     public static function setFromJson($_data)
     {
         $decodedLead = Zend_Json::decode($_data);
         
-        Zend_Registry::get('logger')->debug("setFromJson:" . print_r($decodedLead,true));
+        //Zend_Registry::get('logger')->debug("setFromJson:" . print_r($decodedLead,true));
         
-        /************* add relations *******************/
-        /*
-        $relationTypes = array(
-            'responsible' => array(
-                'model'     => 'Addressbook_Model_Contact',
-                'backend'   => Addressbook_Backend_Factory::SQL,
-                'type'      => 'RESPONSIBLE'
-            ),
-            'customer' => array(
-                'model'     => 'Addressbook_Model_Contact',
-                'backend'   => Addressbook_Backend_Factory::SQL,
-                'type'      => 'CUSTOMER'
-            ), 
-            'partner' => array(
-                'model'     => 'Addressbook_Model_Contact',
-                'backend'   => Addressbook_Backend_Factory::SQL,
-                'type'      => 'PARTNER'
-            ), 
-            'tasks' => array(
-                'model'     => 'Tasks_Model_Task',
-                'backend'   => Tasks_Backend_Factory::SQL,
-                'type'      => 'TASK'
-            ), 
-        );
+        /************* add new relations *******************/
+        
+        foreach ($decodedLead['relations'] as $key => $relation) {
             
-        // build relation data array
-        $relationData = array();
-        foreach ($relationTypes as $type => $values) {  
-            if (isset($decodedLead[$type])) {          
-                foreach ($decodedLead[$type] as $relation) {
-                    $data = array(
-                        'id'                     => (isset($relation['link_id'])) ? $relation['link_id'] : NULL,
-                        'own_model'              => 'Crm_Model_Lead',
-                        'own_backend'            => Crm_Backend_Factory::SQL,
-                        'own_id'                 => $decodedLead['id'],
-                        'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
-                        'related_model'          => $values['model'],
-                        'related_backend'        => $values['backend'],
-                        'related_id'             => $relation['id'],
-                        'type'                   => $values['type']                    
-                    );
-                    
-                    $relationData[] = $data;
+            if (!isset($relation['id'])) {
+                $data = array(
+                    'own_model'              => 'Crm_Model_Lead',
+                    'own_backend'            => Crm_Backend_Factory::SQL,
+                    'own_id'                 => $decodedLead['id'],
+                    'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                    'type'                   => $relation['type'],
+                    'related_record'         => $relation['related_record'] 
+                );
+                
+                switch ($relation['type']) {
+                    case 'RESPONSIBLE':                        
+                        $data['related_model'] = 'Addressbook_Model_Contact';
+                        $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                        break;                    
+                    case 'CUSTOMER':
+                        $data['related_model'] = 'Addressbook_Model_Contact';
+                        $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                        break;                    
+                    case 'PARTNER':
+                        $data['related_model'] = 'Addressbook_Model_Contact';
+                        $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                        break;                    
+                    case 'TASK':
+                        $data['related_model'] = 'Tasks_Model_Task';
+                        $data['related_backend'] = Tasks_Backend_Factory::SQL;
+                        break;                    
+                    default:
+                        throw new Exception('relation type not supported');
                 }
+                                                                
+                $decodedLead['relations'][$key] = $data;
             }
-        }
-        $decodedLead['relations'] = $relationData;
-        */
+        }        
         
         /********************** add tags ***********************/
         
@@ -197,6 +185,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         }                             
         
         /********************** create record ***********************/
+
+        //Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
         
         $lead = new Crm_Model_Lead($decodedLead);
         

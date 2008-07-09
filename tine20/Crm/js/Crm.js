@@ -752,9 +752,9 @@ Tine.Crm.LeadEditDialog = {
             
             // update event handler
             contactPopup.on('update', function(contact) {
-                // set id and link properties
+                // set id
                 contact.id = contact.data.id;
-                contact.data.link_id = null;
+                //contact.data.link_id = null;
                 switch ( _button.contactType ) {
                 	case 'responsible':
                 	   contact.data.relation_type = 'responsible';
@@ -769,7 +769,7 @@ Tine.Crm.LeadEditDialog = {
                 
                 // add contact to store
                 var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
-                storeContacts.add(contact);                              
+                storeContacts.add(contact);
 
             }, this);
         },
@@ -835,9 +835,9 @@ Tine.Crm.LeadEditDialog = {
             	
             	//console.log(task);
             	
-            	// set id and link properties
+            	// set id and relation properties
                 task.id = task.data.id;
-                task.data.link_id = null;
+                task.data.relation_type = 'task';
                 
                 // add contact to store
                 var storeTasks = Ext.StoreMgr.lookup('TasksStore');
@@ -899,6 +899,8 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @param   Tine.Crm.Model.Lead lead
      * @return  Tine.Crm.Model.Lead lead
+     * 
+     * @todo move relation handling .each() to extra function
      */
     getAdditionalData: function(lead)
     {
@@ -908,20 +910,39 @@ Tine.Crm.LeadEditDialog = {
     	// contacts
         var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
         storeContacts.each(function(record) {           
-            var relation = record.data.relation;
+            var relation = null; 
+            
+            if (record.data.relation) {
+                relation = record.data.relation;
+            } else {
+            	relation = {};
+            }
+
+            console.log(relation);
+            
             relation.type = record.data.relation_type.toUpperCase();
             // don't do recursion!
             delete record.data.relation;
             delete record.data.relation_type;
             relation.related_record = record.data;
     	
+            
             relations.push(relation);
         });
         
         // tasks
         var storeTasks = Ext.StoreMgr.lookup('TasksStore');        
         storeTasks.each(function(record) {
-            var relation = record.data.relation;
+            var relation = null; 
+            
+            if (record.data.relation) {
+                relation = record.data.relation;
+            } else {
+                relation = {};
+            }
+
+            console.log(relation);
+
             relation.type = record.data.relation_type.toUpperCase();
             // don't do recursion!
             delete record.data.relation;
@@ -932,6 +953,8 @@ Tine.Crm.LeadEditDialog = {
         });
         
         console.log(relations);
+        
+        lead.data.relations = relations;
         
     	/*
         var linksResponsible = [];
@@ -1357,35 +1380,11 @@ Tine.Crm.LeadEditDialog = {
             
             grid.on('newentry', function(taskData){
 
-            	// @todo change that later -> we do not need this ajax request 
-            	// because the new tasks should only be saved on _apply_ or _saveandclose_            	
-
                 // add new task to store
-            	/*
                 var gridStore = Ext.StoreMgr.lookup('TasksStore');      
-                var newTask = [taskData];
-                gridStore.loadData(newTask, true);
-                */
-            	
-                var gridStore = Ext.StoreMgr.lookup('TasksStore');                  	
-                var task = new Tine.Tasks.Task(taskData);
-    
-                Ext.Ajax.request({
-                    scope: this,
-                    params: {
-                        method: 'Tasks.saveTask', 
-                        task: Ext.util.JSON.encode(task.data),
-                        linkingApp: '',
-                        linkedId: ''
-                    },
-                    success: function(_result, _request) {
-                    	var newTask = [Ext.util.JSON.decode(_result.responseText)];                    	
-                        gridStore.loadData(newTask, true);                        
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
-                    }
-                });
+                var newTask = taskData;
+                newTask.relation_type = 'task';
+                gridStore.loadData([newTask], true);
             	
                 return true;
             }, this);
@@ -1839,7 +1838,6 @@ Tine.Crm.LeadEditDialog = {
         /*********** INIT STORES *******************/
         
         var relations = this.splitRelations(lead.data.relations);
-        //console.log(relations);
         this.loadContactsStore(relations.contacts);        
         this.loadTasksStore(relations.tasks);
         this.loadProductsStore(lead.data.products);
