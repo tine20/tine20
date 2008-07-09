@@ -317,4 +317,27 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         return $result;
     }
 
+    /**
+     * filter recordset and return subset
+     *
+     * @param string $_field
+     * @param string $_value
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo add regular expressions as $_value
+     */
+    public function filter($_field, $_value)
+    {
+        $result = clone($this);
+        
+        // remove all entries that don't match the filter
+        foreach ($result as $index => $record) {
+            if ($record->$_field !== $_value) {
+                unset($result[$index]);
+            }
+        }
+        
+        return $result;
+    }
+    
 }
