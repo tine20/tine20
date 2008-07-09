@@ -64,9 +64,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {
         $controller = Crm_Controller::getInstance();
 
-        if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
-            
-            //$leadData = $this->convertLeadToArray($lead, FALSE);
+        if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {            
             $leadData = $this->leadToJson($lead, FALSE);
                         
         } else {
@@ -108,7 +106,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         $result = array();
         foreach ($leads as $lead) {
-            //$result[] = $this->convertLeadToArray($lead);
             $result[] = $this->leadToJson($lead);
         }
         
@@ -132,31 +129,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      */ 
     public function saveLead($lead)
     {
-        /*
-        $decodedLead = Zend_Json::decode($lead);       
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedLead, true));
-        
-        // tags
-        if (isset($decodedLead['tags'])) {
-            $decodedLead['tags'] = Zend_Json::decode($decodedLead['tags']);
-        }                     
-        
-        // lead data
-        $leadData = new Crm_Model_Lead();
-        try {
-            $leadData->setFromArray($decodedLead);
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array(
-                'success'       => false,
-                'errors'        => $leadData->getValidationErrors(),
-                'errorMessage'  => 'invalid data for some fields'
-            );
-            
-            return $result;
-        } 
-        */
-
         $leadData = Crm_Model_Lead::setFromJson($lead);
                   
         if(empty($leadData->id)) {
@@ -165,10 +137,10 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
         }
         
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        //'updatedData'       => $this->convertLeadToArray($savedLead, FALSE)
-                        'updatedData'       => $this->leadToJson($savedLead, FALSE)
+        $result = array(
+            'success'           => true,
+            'welcomeMessage'    => 'Entry updated',
+            'updatedData'       => $this->leadToJson($savedLead, FALSE)
         );
         
         return $result;  
@@ -197,170 +169,22 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     /****************************************** helper functions ***********************************/
     
     /**
-     * converts a lead to an array and resolves contact/tasks/product ids, tags and container
-     *
-     * @param Crm_Model_Lead    $_lead              lead record
-     * @param boolean           $_getOnlyContacts   resolve only contact links
-     * @return array
-     * 
-     * @deprecated 
-     * @todo remove function?
-     */
-    protected function convertLeadToArray(Crm_Model_Lead $_lead, $_getOnlyContacts = TRUE) 
-    {
-        $result = $_lead->toArray();
-
-        // add contact links
-        $types = array(
-            'responsible',
-            'customer',
-            'partner'
-        );
-        foreach ( $types as $type ) {
-            $result[$type] = array();
-            foreach($_lead->$type as $relation) {
-                try {
-                    $contact = Addressbook_Controller::getInstance()->getContact($relation->related_id)->toArray();
-                    $contact['link_id'] = $relation->getId();
-                    $contact['link_remark'] = $type;
-                    $result[$type][] = $contact;
-                } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $relation->related_id);
-                    // ignore, permission denied or contact not found
-                }
-            }
-        }
-
-        if ( !$_getOnlyContacts ) {
-            // add tasks
-            $result['tasks'] = array();
-            foreach($_lead->tasks as $relation) {
-                try {
-                    $task = Tasks_Controller::getInstance()->getTask($relation->related_id)->toArray();
-                    $task['link_id'] = $relation->getId();
-                    $result['tasks'][] = $task;
-                } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped task: ' . $relation->related_id);
-                    // ignore, permission denied or task not found
-                }
-            }
-            
-            // add products
-            $products = Crm_Controller::getInstance()->getLeadProducts($_lead->getId());
-            $result['products'] = $products->toArray();
-                
-            // add tags
-            $result['tags'] = $_lead['tags']->toArray();  
-                              
-        } else {
-            // return empty arrays
-            $result['tasks'] = array();
-            $result['tags'] = array();
-            $result['products'] = array();
-        }
-
-        // add container
-        $folder = Tinebase_Container::getInstance()->getContainerById($_lead->container);            
-        $result['container'] = $folder->toArray();                
-        
-        return $result;
-    }
-
-    /**
-     * returns instance of Crm_Model_Lead from json encoded data
-     * 
-     * @param string JSON encoded lead
-     * @return Crm_Model_Lead lead
-     * 
-     * @todo use it
-     */
-    public function jsonToLead($json)
-    {
-        date_default_timezone_set($this->_userTimezone);
-        $inTask = new Tasks_Model_Task(Zend_Json::decode($json));
-        $inTask->setTimezone($this->_serverTimezone);
-        date_default_timezone_set($this->_serverTimezone);
-        
-        return $inTask;
-    }
-    
-    /**
      * returns lead prepared for json transport
      *
      * @param Crm_Model_Lead    $_lead
-     * @param boolean           $_getOnlyContacts   resolve only contact links
+     * @param boolean           $_getOnlyContacts   resolve only contact links (not working at the moment)
      * @return array lead data
      * 
      * @todo get relation objects from json classes for the applications/models
      * @todo add toResolve array ?
+     * @todo add timezone?
      */
     public function leadToJson($_lead , $_getOnlyContacts = TRUE )
     {
-        // @todo is that needed?
-        //$_lead->setTimezone(Zend_Registry::get('userTimeZone'));
-        //$_lead->bypassFilters = true;
-
-        $result = $_lead->toArray();        
-        
-        // add container
+        $result = $_lead->toArray();                
         $result['container'] = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray());
         
-        // add products ?
-        //$result['products'] = $_lead->products->toArray();
-
-        return $result;
-        
-        // add contact links
-        /*
-        $types = array(
-            'responsible',
-            'customer',
-            'partner'
-        );
-        foreach ( $types as $type ) {
-            $result[$type] = array();
-            foreach($_lead->$type as $relation) {
-                try {
-                    $contact = Addressbook_Controller::getInstance()->getContact($relation->related_id)->toArray();
-                    $contact['link_id'] = $relation->getId();
-                    $contact['link_remark'] = $type;
-                    $result[$type][] = $contact;
-                } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $relation->related_id);
-                    // ignore, permission denied or contact not found
-                }
-            }
-        }
-
-        if ( !$_getOnlyContacts ) {
-            // add tasks
-            $result['tasks'] = array();
-            foreach($_lead->tasks as $relation) {
-                try {
-                    $task = Tasks_Controller::getInstance()->getTask($relation->related_id)->toArray();
-                    $task['link_id'] = $relation->getId();
-                    $result['tasks'][] = $task;
-                } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped task: ' . $relation->related_id);
-                    // ignore, permission denied or task not found
-                }
-            }
-            
-            // add products
-            $products = Crm_Controller::getInstance()->getLeadProducts($_lead->getId());
-            $result['products'] = $products->toArray();
-                
-            // add tags
-            $result['tags'] = $_lead['tags']->toArray();  
-                              
-        } else {
-            // return empty arrays
-            $result['tasks'] = array();
-            $result['tags'] = array();
-            $result['products'] = array();
-        }
-        */
-        
+        return $result;                
     }
     
     /********************** handling of lead types/sources/states and products *************************/
