@@ -81,9 +81,9 @@ interface Setup_Backend_Interface
     * add a foreign key to database table
     * 
     * @param string tableName
-    * @param Setup_Backend_Schema_Index declaration
+    * @param Setup_Backend_Schema_Index_Abstract declaration
     */       
-    public function addForeignKey($_tableName, Setup_Backend_Schema_Index $_declaration);
+    public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration);
 
     /*
     * removes a foreign key from database table
@@ -104,17 +104,17 @@ interface Setup_Backend_Interface
     * add a primary key to database table
     * 
     * @param string tableName 
-    * @param Setup_Backend_Schema_Index declaration
+    * @param Setup_Backend_Schema_Index_Abstract declaration
     */         
-    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index $_declaration);
+    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration);
  
     /*
     * add a key to database table
     * 
     * @param string tableName 
-    * @param Setup_Backend_Schema_Index declaration
+    * @param Setup_Backend_Schema_Index_Abstract declaration
     */     
-    public function addIndex($_tableName ,  Setup_Backend_Schema_Index$_declaration);
+    public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract$_declaration);
     
     /*
     * removes a key from database table

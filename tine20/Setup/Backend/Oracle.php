@@ -337,9 +337,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * add a foreign key to database table
      * 
      * @param string tableName
-     * @param Setup_Backend_Schema_Index declaration
+     * @param Setup_Backend_Schema_Index_Abstract declaration
      */       
-    public function addForeignKey($_tableName, Setup_Backend_Schema_Index $_declaration)
+    public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
                     . $this->getForeignKeyDeclarations($_declaration);
@@ -373,9 +373,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * add a primary key to database table
      * 
      * @param string tableName 
-     * @param Setup_Backend_Schema_Index declaration
+     * @param Setup_Backend_Schema_Index_Abstract declaration
      */         
-    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index $_declaration)
+    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
                     . $this->getIndexDeclarations($_declaration);
@@ -386,9 +386,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * add a key to database table
      * 
      * @param string tableName 
-     * @param Setup_Backend_Schema_Index declaration
+     * @param Setup_Backend_Schema_Index_Abstract declaration
      */     
-    public function addIndex($_tableName ,  Setup_Backend_Schema_Index$_declaration)
+    public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract$_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
                     . $this->getIndexDeclarations($_declaration);
@@ -523,7 +523,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     /**
      * create the right mysql-statement-snippet for keys
      *
-     * @param Setup_Backend_Schema_Index key
+     * @param Setup_Backend_Schema_Index_Abstract key
      * @return string
      */
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
