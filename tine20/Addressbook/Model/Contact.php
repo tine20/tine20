@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        rename some fields (modified, ...)
  */
 
 /**
@@ -59,7 +60,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     protected $_validators = array(
         //'created'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         //'creator'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'modified'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'modified'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         //'modifier'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
