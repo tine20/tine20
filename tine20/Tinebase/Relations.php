@@ -70,8 +70,9 @@ class Tinebase_Relations
         $relations->own_backend = $_backend;
         $relations->own_id      = $_id;
         
-        // create new records to relate to
-        $this->_createNewAppRecords($relations);
+        // convert related_record to record objects
+        // @todo move this to a relation json class / or to model->setFromJson
+        $this->_relatedRecordToObject($relations);
         
         // compute relations to add/delete
         $currentRelations = $this->getRelations($_model, $_backend, $_id, $_ignoreAcl);
@@ -82,19 +83,27 @@ class Tinebase_Relations
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
         
-        if (!$relations->isValid()) {
-            throw new Exception('relations not valid' . print_r($relations->getValidationErrors(),true));
-        }
-        
+        // add new relations
         foreach ($toAdd as $idx) {
+            if(empty($relations[$idx]->related_id)) {
+                $this->_setAppRecord($relations[$idx]);
+            }
         	$this->_addRelation($relations[$idx]);
         }
+        
+        // break relations
         foreach ($toDel as $relationId) {
             $this->_backend->breakRelation($relationId);
         }
+        
+        // update relations
         foreach ($toUpdate as $relationId) {
             $current = $currentRelations[$currentRelations->getIndexById($relationId)];
             $update = $relations[$relations->getIndexById($relationId)];
+            
+            if (! $current->related_record->isEqual($update->related_record)) {
+                $this->_setAppRecord($update);
+            }
             
             if (!$current->isEqual($update, array('related_record'))) {
                 $this->_updateRelation($update);
@@ -119,34 +128,64 @@ class Tinebase_Relations
         $this->resolveAppRecords($relations);
         return $relations;
     }
+    
+    /**
+     * converts related_records into their appropriate record objects
+     * @todo move to model->setFromJson
+     * 
+     * @param  Tinebase_Relation_Model_Relation|Tinebase_Record_RecordSet
+     * @return void
+     */
+    protected function _relatedRecordToObject($_relations)
+    {
+        if(! $_relations instanceof Tinebase_Record_RecordSet) {
+            $_relations = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation', array($_relations));
+        }
+        
+        foreach ($_relations as $relation) {
+            if (empty($relation->related_record) || $relation->related_record instanceof  $relation->related_model) {
+                continue;
+            }
+            
+            // records need to be presented as JSON strings
+            if (is_array($relation->related_record)) {
+                $json = Zend_Json::encode($relation->related_record);
+            }
+            $relation->related_record = new $relation->related_model();
+            $relation->related_record->setFromJson($json);
+        }
+    }
+    
     /**
      * creates application records which do not exist
      * 
      * @param  Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
      * @return void
      */
-    protected function _createNewAppRecords($_relations)
+    protected function _setAppRecord($_relation)
     {
-        foreach ($_relations as $relation) {
-            if(empty($relation->related_id)) {
-                switch ($relation->related_model) {
-                    case 'Addressbook_Model_Contact':
-                        $json = new Addressbook_Json();
-                        $result = $json->saveContact(Zend_Json::encode($relation->related_record));
-                        $relation->related_backend = Addressbook_Backend_Factory::SQL;
-                        $relation->related_id = $result['updatedData']['id'];
-                        break;
-                    case 'Tasks_Model_Task':
-                        $json = new Tasks_Json();
-                        $task = $json->saveTask(Zend_Json::encode($relation->related_record));
-                        $relation->related_backend = Tasks_Backend_Factory::SQL;
-                        $relation->related_id = $task['id'];
-                        break;
-                    default:
-                        throw new Exception('related model not supportet');
-                        break;
-                }
-            }
+        list($appName, $i, $modelName) = explode('_', $_relation->related_model);
+        $appController = Tinebase_Controller::getInstance()->getApplicationInstance($appName);
+        
+        if (!$_relation->related_record->getId()) {
+            $method = 'create' . $modelName;
+        } else {
+            $method = 'update' . $modelName;
+        }
+        
+        $record = $appController->$method($_relation->related_record);
+        $_relation->related_id = $record->getId();
+        
+        switch ($_relation->related_model) {
+            case 'Addressbook_Model_Contact':
+                $_relation->related_backend = Addressbook_Backend_Factory::SQL;
+                break;
+            case 'Tasks_Model_Task':
+                $_relation->related_backend = Tasks_Backend_Factory::SQL;
+                break;
+            default:
+                throw new Exception('related model not supportet');
+                break;
         }
     }
     
@@ -199,7 +238,9 @@ class Tinebase_Relations
     {
         $_relation->created_by = Zend_Registry::get('currentAccount')->getId();
         $_relation->creation_time = Zend_Date::now();
-        
+        if (!$_relation->isValid()) {
+            throw new Exception('relation is not valid' . print_r($_relation->getValidationErrors(),true));
+        }
         return $this->_backend->addRelation($_relation);
     }
     
