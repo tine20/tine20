@@ -201,6 +201,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to add a lead and link a contact
      *
+     * @todo move creation of task & contact to relations class (via related_record)
      */
     public function testAddLead()
     {
@@ -213,7 +214,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             $contact = Addressbook_Controller::getInstance()->createContact($this->objects['contact']);
         }
 
-        // create test task    
+        // create test task
         try {
             $task = Tasks_Controller::getInstance()->getTask($this->objects['task']->getId());
         } catch ( Exception $e ) {
@@ -223,27 +224,27 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $leadData = $this->objects['initialLead']->toArray();
         $leadData['relations'] = array(
             array(
-            'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => Crm_Backend_Factory::SQL,
-            'own_id'                 => $this->objects['initialLead']->getId(),
-            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
-            'related_model'          => 'Tasks_Model_Task',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
-            'related_id'             => $task->getId(),
-            'type'                   => 'TASK'
+                'own_model'              => 'Crm_Model_Lead',
+                'own_backend'            => Crm_Backend_Factory::SQL,
+                'own_id'                 => $this->objects['initialLead']->getId(),
+                'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Tasks_Model_Task',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $this->objects['task']->getId(),
+                'type'                   => 'TASK',
+                //'related_record'         => $this->objects['task']->toArray()
             ),
             array(
-            'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => Crm_Backend_Factory::SQL,
-            'own_id'                 => $this->objects['initialLead']->getId(),
-            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
-            'related_model'          => 'Addressbook_Model_Contact',
-            'related_backend'        => Addressbook_Backend_Factory::SQL,
-            'related_id'             => $contact->getId(),
-            'type'                   => 'RESPONSIBLE'
+                'own_model'              => 'Crm_Model_Lead',
+                'own_backend'            => Crm_Backend_Factory::SQL,
+                'own_id'                 => $this->objects['initialLead']->getId(),
+                'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Addressbook_Model_Contact',
+                'related_backend'        => Addressbook_Backend_Factory::SQL,
+                'related_id'             => $this->objects['contact']->getId(),
+                'type'                   => 'RESPONSIBLE',
+                //'related_record'         => $this->objects['contact']->toArray()
             )        
-            //'id' => $contact->getId()            
-            //'id' => $task->getId()
         );
         $leadData['tags'] = Zend_Json::encode(array());
         $leadData['products'] = array($this->objects['productLink']);
@@ -261,8 +262,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         // check linked contacts / tasks
         //print_r($result['updatedData']['relations']);
         $this->assertGreaterThan(0, count($result['updatedData']['relations']));
-        $this->assertEquals($contact->getId(), $result['updatedData']['relations'][0]['related_id']);        
-        $this->assertEquals($task->getId(), $result['updatedData']['relations'][1]['related_id']);
+        $this->assertEquals($this->objects['contact']->getId(), $result['updatedData']['relations'][0]['related_id']);
+        $this->assertEquals($this->objects['task']->getId(), $result['updatedData']['relations'][1]['related_id']);
 
         // check linked products
         $this->assertGreaterThan(0, count($result['updatedData']['products']));
@@ -365,7 +366,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $json->deleteLeads($encodedLeadIds);        
                 
         $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));
-        $this->assertEquals(0, $result['totalcount']);     
+        $this->assertEquals(0, $result['totalcount']);   
+
     }    
 }		
 	
