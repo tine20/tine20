@@ -630,8 +630,8 @@ Tine.Crm.Main = {
                                          '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>' +
                                          '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>' +
                                          '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + adr_one_locality + '</td></tr>' +
-                                         '<tr><td width="50%">' + this.translation._('Phone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>' +
-                                         '<tr><td width="50%">' + this.translation._('Cellphone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>' +
+                                         '<tr><td width="50%">' + Tine.Crm.Main.translation._('Phone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>' +
+                                         '<tr><td width="50%">' + Tine.Crm.Main.translation._('Cellphone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>' +
                                          '</table> <br />';
                 }
                 
@@ -707,7 +707,7 @@ Tine.Crm.LeadEditDialog = {
                         var relations = Tine.Crm.LeadEditDialog.splitRelations(lead.data.relations);
                         Tine.Crm.LeadEditDialog.loadContactsStore(relations.contacts, true);        
                         Tine.Crm.LeadEditDialog.loadTasksStore(relations.tasks, true);
-                        //Tine.Crm.LeadEditDialog.loadProductsStore(lead.data.products);
+                        Tine.Crm.LeadEditDialog.loadProductsStore(lead.data.products, true);
                         
                         Ext.MessageBox.hide();
                     },
@@ -1624,29 +1624,46 @@ Tine.Crm.LeadEditDialog = {
      * get linked products store and put it into store manager
      * 
      * @param   array _products
+     * @param   boolean _reload reload or create new store
      */
-    loadProductsStore: function(_products)
+    loadProductsStore: function(_products, _reload)
     {
-        var storeProducts = new Ext.data.JsonStore({
-            id: 'id',
-            fields: Tine.Crm.Model.ProductLink
-        });
+    	var storeProducts = null;
+    	
+    	if (_reload) {
+    		
+            storeProducts = Ext.StoreMgr.lookup('ProductsStore');
+
+            // empty store and fill with data
+            storeProducts.removeAll();
             
-        if(_products) {
-            storeProducts.loadData(_products);                    
-            //storeProducts.setDefaultSort('remark', 'asc');     
-        }
-        
-        // update price if new product is chosen
-        storeProducts.on('update', function(store, record, index) {
-            if(record.data.product_id && !arguments[1].modified.product_price) {          
-                var st_productsAvailable = Tine.Crm.Product.getStore();
-                var preset_price = st_productsAvailable.getById(record.data.product_id);
-                record.data.product_price = preset_price.data.price;
+            if(_products) {
+                storeProducts.loadData(_products);                    
             }
-        }); 
-        
-        Ext.StoreMgr.add('ProductsStore', storeProducts);
+
+        } else {
+    	
+            storeProducts = new Ext.data.JsonStore({
+                id: 'id',
+                fields: Tine.Crm.Model.ProductLink
+            });
+                
+            if(_products) {
+                storeProducts.loadData(_products);                    
+                //storeProducts.setDefaultSort('remark', 'asc');     
+            }
+            
+            // update price if new product is chosen
+            storeProducts.on('update', function(store, record, index) {
+                if(record.data.product_id && !arguments[1].modified.product_price) {          
+                    var st_productsAvailable = Tine.Crm.Product.getStore();
+                    var preset_price = st_productsAvailable.getById(record.data.product_id);
+                    record.data.product_price = preset_price.data.price;
+                }
+            }); 
+            
+            Ext.StoreMgr.add('ProductsStore', storeProducts);
+    	}
     },    
     
     /**
