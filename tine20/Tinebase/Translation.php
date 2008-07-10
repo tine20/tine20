@@ -142,12 +142,29 @@ class Tinebase_Translation
      *
      * @param   string $_locale
      * @return  string the file contents
+     * 
+     * @todo    add timezones?
      */
     public static function createJsTranslationLists($_locale)
     {
         $jsContent = "Locale.prototype.TranslationLists = {\n";
     
-        $types = array ( 'Date', 'Time', 'DateTime', 'Month', 'Day', 'Symbols', 'Question', 'Language', 'Territory' );
+        $types = array(
+            'Date', 
+            'Time', 
+            'DateTime', 
+            'Month', 
+            'Day', 
+            'Symbols', 
+            'Question', 
+            'Language', 
+            'Territory',
+            /*
+            'TimezoneToTerritory',            
+            'TimezoneToWindows',
+            'TimezoneToCity'
+            */                    
+        );
         
         $zendLocale = new Zend_Locale($_locale);
                 
@@ -185,7 +202,7 @@ class Tinebase_Translation
      * @param  string  $format  Format string in PHP's date format
      * @return string           Format string in ISO format
      */
-    private function convertIsoToPhpFormat($format)
+    private static function convertIsoToPhpFormat($format)
     {        
         $convert = array(
                             'c' => '/yyyy-MM-ddTHH:mm:ssZZZZ/',
