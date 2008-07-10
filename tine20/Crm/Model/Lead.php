@@ -7,8 +7,6 @@
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo remove old fields customer/partner/tasks/... -> they are covered with the relations field
  */
 
 /**
@@ -130,8 +128,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      *
      * @param string $_data json encoded data
      * @return Crm_Model_Lead task record
-     * 
-     * @todo add different backend types?
      */
     public static function setFromJson($_data)
     {
@@ -177,10 +173,9 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
 
                 if (isset($relation['related_record']['owner']) && is_array($relation['related_record']['owner'])) {
                     // hack for container
-                    // @todo make that better
+                    // @todo make that better ?
                     $data['related_record']['owner'] = $relation['related_record']['owner']['id'];
                     
-                    // test
                     //@todo json encode tags?
                     $data['related_record']['tags'] = '';
                 }                
@@ -197,7 +192,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         
         /********************** create record ***********************/
 
-        Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
+        //Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
         
         $lead = new Crm_Model_Lead($decodedLead);
         
