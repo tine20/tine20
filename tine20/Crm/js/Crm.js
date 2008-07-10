@@ -1498,12 +1498,16 @@ Tine.Crm.LeadEditDialog = {
     splitRelations: function(_relations, _splitAll)
     {
     	var result = null;
-    	
+    	    	
     	if (_splitAll) {
             result = {responsible: [], customer: [], partner: [], tasks: []};
     	} else {
             result = {contacts: [], tasks: []};
     	}
+
+        if (!_relations) {
+            return result;
+        }
     	
     	for (var i=0; i < _relations.length; i++) {
             var newLinkObject = _relations[i]['related_record'];
