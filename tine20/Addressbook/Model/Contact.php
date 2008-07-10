@@ -113,6 +113,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pubkey'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'room'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
