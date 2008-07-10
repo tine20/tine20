@@ -415,9 +415,24 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        $currentContact = $this->getContact($_contact->getId());
+        
+        if ($currentContact->owner != $_contact->owner) {
+            
+            if (!$currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+                throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
+            }
+            // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
+            if (!$currentAccount->hasGrant($currentContact->owner, Tinebase_Container::GRANT_DELETE)) {
+                throw new Exception('delete access to contacts in container ' . $currentContact->owner . ' denied');
+            }
+            
+        } elseif (!$currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
+        
+        
         
         //@todo move this to js frontend later on
         // update fullname
