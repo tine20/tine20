@@ -2948,6 +2948,39 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>ringer</value>
                     <value>off</value>
                 </field>                
+                <field>
+                    <name>redirect_event</name>
+                    <type>enum</type>
+                    <value>none</value>
+                    <value>all</value>
+                    <value>busy</value>
+                    <value>time</value>            
+                    <default>none</default>
+                </field>
+                <field>
+                    <name>redirect_number</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>redirect_busy_number</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>redirect_time</name>
+                    <type>integer</type>
+                    <length>255</length>
+                    <notnull>false</notnull>    
+                </field>                
+                <field>
+                    <name>redirect_time_number</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
                 <index>
                     <name>phone_id</name>
                     <primary>true</primary>

@@ -23,7 +23,7 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'setting_id';
+    protected $_identifier = 'phone_id';
     
     /**
      * application the record belongs to
@@ -51,7 +51,7 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'setting_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'phone_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'web_language'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 	    'display_method'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -63,7 +63,10 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
 	    'scroll_outgoing'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 	    'show_local_line'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 	    'show_call_status'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'call_waiting'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+	    'call_waiting'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_event'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_number'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     

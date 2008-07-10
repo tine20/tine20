@@ -183,7 +183,7 @@ class Voipmanager_Backend_Snom_Phone
         try {
             $this->_db->beginTransaction();
 
-            // NOTE: cascading delete for lines
+            // NOTE: cascading delete for lines and phone_settings
             // SECOND NOTE: using array for second argument won't work as delete function joins array items using "AND"
             foreach($where AS $where_atom)
             {

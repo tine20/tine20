@@ -44,7 +44,7 @@ class Voipmanager_Backend_Snom_PhoneSettings
     public function get($_id)
     {	
         $phoneSettingId = Voipmanager_Model_SnomPhoneSettings::convertSnomPhoneSettingsIdToInt($_id);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phone_settings')->where($this->_db->quoteInto('setting_id = ?', $phoneSettingId));
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phone_settings')->where($this->_db->quoteInto('phone_id = ?', $phoneSettingId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('phoneSetting not found');
@@ -66,7 +66,7 @@ class Voipmanager_Backend_Snom_PhoneSettings
             throw new Exception('invalid phoneSetting');
         }
 
-        if ( empty($_setting->setting_id) ) {
+        if ( empty($_setting->phone_id) ) {
             $_setting->setId(Tinebase_Record_Abstract::generateUID());
         }
         
@@ -90,9 +90,9 @@ class Voipmanager_Backend_Snom_PhoneSettings
         }
         $settingId = $_setting->getId();
         $settingData = $_setting->toArray();
-        unset($settingData['setting_id']);
+        unset($settingData['phone_id']);
      
-        $where = array($this->_db->quoteInto('setting_id = ?', $settingId));
+        $where = array($this->_db->quoteInto('phone_id = ?', $settingId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phone_settings', $settingData, $where);
         
         return $this->get($settingId);
@@ -109,7 +109,7 @@ class Voipmanager_Backend_Snom_PhoneSettings
     {
         foreach ((array)$_id as $id) {
             $settingId = Voipmanager_Model_SnomPhoneSettings::convertSnomPhoneSettingsIdToInt($id);
-            $where[] = $this->_db->quoteInto('setting_id = ?', $settingId);
+            $where[] = $this->_db->quoteInto('phone_id = ?', $settingId);
         }
 
         try {

@@ -234,11 +234,9 @@ class Voipmanager_Controller
     public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
     {
         $phone = $this->_snomPhoneBackend->update($_phone);
-
         
-        $this->_snomPhoneSettingsBackend->delete($phone->getId());
         $_phoneSettings->setId($phone->getId());
-        $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);
+        $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
         
         $this->_snomLineBackend->deletePhoneLines($phone->getId());
         

@@ -135,13 +135,11 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $phone = $this->getSnomPhone($phone->getId());
 
         $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $phone
-        ); //$phone->toArray());
+            'welcomeMessage'    => 'Entry updated',
+            'updatedData'       => $phone
+        );
         
-        
-        return $result;
-         
+        return $result;         
     }     
     
    
@@ -149,19 +147,17 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * delete multiple phones
      *
      * @param array $_phoneIDs list of phoneId's to delete
-     * @param array $_phoneSettingsIDs list of phoneSettingsId's to delete     * 
      * @return array
      */
-    public function deleteSnomPhones($_phoneIds, $_phoneSettingsIds)
+    public function deleteSnomPhones($_phoneIds)
     {
         $result = array(
             'success'   => TRUE
         );
         
         $phoneIds = Zend_Json::decode($_phoneIds);
-        $phoneSettingsIds = Zend_Json::decode($_phoneSettingsIds);
         
-        Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds, $phoneSettingsIds);
+        Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds);
         
         
 
