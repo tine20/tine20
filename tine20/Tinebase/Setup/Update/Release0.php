@@ -879,21 +879,23 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         break;
                         
                     default:
-                        echo 'link type not supported<br/>';
+                        echo 'link type (' . $link->link_app2 . ') not supported<br/>';
                 }                
                 
-                $relationsByLeadId[$link->link_id1][] = new Tinebase_Relation_Model_Relation(array(
-                    'own_model'              => 'Crm_Model_Lead',
-                    'own_backend'            => 'SQL',
-                    'own_id'                 => $link->link_id1,
-                    'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => $relatedModel,
-                    'related_backend'        => $backend,
-                    'related_id'             => $link->link_id2,
-                    'type'                   => $type,
-                    'created_by'             => $link->link_owner,
-                    'creation_time'          => Zend_Date::now()
-                ));                        
+                if (isset($relatedModel) && isset($backend)) {
+                    $relationsByLeadId[$link->link_id1][] = new Tinebase_Relation_Model_Relation(array(
+                        'own_model'              => 'Crm_Model_Lead',
+                        'own_backend'            => 'SQL',
+                        'own_id'                 => $link->link_id1,
+                        'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                        'related_model'          => $relatedModel,
+                        'related_backend'        => $backend,
+                        'related_id'             => $link->link_id2,
+                        'type'                   => $type,
+                        'created_by'             => $link->link_owner,
+                        'creation_time'          => Zend_Date::now()
+                    ));                        
+                }
             }
         }
         
@@ -910,6 +912,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             }
         }
         
-        $this->setApplicationVersion('Tinebase', '0.10');        
+        //$this->setApplicationVersion('Tinebase', '0.10');        
     }
 }
