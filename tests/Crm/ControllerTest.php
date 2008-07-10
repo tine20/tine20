@@ -598,7 +598,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         foreach ($this->_objects['someProductsToUpdate'] as $product) {
             $this->assertEquals($product['productsource'],
-                    $backend->get($product->id)->productsource);
+                    //$backend->get($product->id)->productsource);
+                    Crm_Controller::getInstance()->getProduct($product->id)->productsource);
         }
         
         // cleanup

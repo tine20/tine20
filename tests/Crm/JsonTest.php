@@ -369,5 +369,77 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $result['totalcount']);   
 
     }    
+    
+    /**
+     * test leadsources
+     */
+    public function testLeadSources()
+    {
+        $json = new Crm_Json();
+        
+        // test getLeadsources
+        $leadsources = $json->getLeadsources('id', 'ASC');
+        $this->assertEquals(4, $leadsources['totalcount']);
+
+        // test saveLeadsources
+        $json->saveLeadsources(Zend_Json::encode($leadsources['results']));
+
+        $leadsourcesUpdated = $json->getLeadsources('id', 'ASC');
+        $this->assertEquals(4, $leadsourcesUpdated['totalcount']);
+    }
+
+    /**
+     * test leadstates
+     */
+    public function testLeadStates()
+    {
+        $json = new Crm_Json();
+        
+        // test getLeadstates
+        $leadstates = $json->getLeadstates('id', 'ASC');
+        $this->assertEquals(6, $leadstates['totalcount']);
+
+        // test saveLeadstates
+        $json->saveLeadstates(Zend_Json::encode($leadstates['results']));
+
+        $leadstatesUpdated = $json->getLeadstates('id', 'ASC');
+        $this->assertEquals(6, $leadstatesUpdated['totalcount']);
+    }
+
+    /**
+     * test leadtypes
+     */
+    public function testLeadTypes()
+    {
+        $json = new Crm_Json();
+        
+        // test getLeadtypes
+        $leadtypes = $json->getLeadtypes('id', 'ASC');
+        $this->assertEquals(3, $leadtypes['totalcount']);
+
+        // test saveLeadtypes
+        $json->saveLeadtypes(Zend_Json::encode($leadtypes['results']));
+
+        $leadtypesUpdated = $json->getLeadtypes('id', 'ASC');
+        $this->assertEquals(3, $leadtypesUpdated['totalcount']);
+    }
+
+    /**
+     * test products
+     */
+    public function testProducts()
+    {
+        $json = new Crm_Json();
+        
+        // test getProducts
+        $products = $json->getProducts('id', 'ASC');
+
+        // test saveProducts
+        $json->saveProducts(Zend_Json::encode($products['results']));
+
+        $productsUpdated = $json->getProducts('id', 'ASC');
+        $this->assertEquals($products['totalcount'], $productsUpdated['totalcount']);
+    }
+    
 }		
 	
