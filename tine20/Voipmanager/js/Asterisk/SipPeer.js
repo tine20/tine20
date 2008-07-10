@@ -447,7 +447,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
         translation.textdomain('Voipmanager');
 
         var _dialog = {
-            title: 'General',
+            title: translation._('General'),
             border: false,
             anchor: '100%',
             xtype: 'columnform',

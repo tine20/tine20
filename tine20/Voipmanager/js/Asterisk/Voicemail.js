@@ -260,7 +260,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
             
         });
         
-        gridPanel.on('rowvoicemailmenu', function(_grid, _rowIndex, _eventObject) {
+        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
@@ -411,7 +411,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
             translation.textdomain('Voipmanager');
             
             var _dialog = {
-                title: 'main',
+                title: translation._('General'),
                 layout: 'border',
                 anchor: '100% 100%',
                 layoutOnTabChange: true,
@@ -493,7 +493,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
             translation.textdomain('Voipmanager');
             
             var _dialog = {
-                title: 'additional',
+                title: translation._('additional'),
                 layout: 'border',
                 anchor: '100% 100%',
                 layoutOnTabChange: true,
@@ -940,6 +940,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                     activeTab: 0,
                     id: 'editVoicemailTabPanel',
                     layoutOnTabChange: true,  
+                    deferredRender: false,                            
                     items:[
                         this.editVoicemailMainDialog(),
                         this.editVoicemailAdditionalDialog()

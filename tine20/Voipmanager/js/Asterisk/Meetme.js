@@ -237,7 +237,7 @@ Tine.Voipmanager.Asterisk.Meetme.Main = {
             
         });
         
-        gridPanel.on('rowmeetmemenu', function(_grid, _rowIndex, _eventObject) {
+        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);

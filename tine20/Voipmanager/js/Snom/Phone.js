@@ -222,9 +222,14 @@ Tine.Voipmanager.Snom.Phones.Main = {
                     return _rec.data.template;
                 }                                
             },            
+            { resizable: true, id: 'ipaddress', header: this.translation._('IP Address'), dataIndex: 'ipaddress', width: 50 },            
             { resizable: true, id: 'current_software', header: this.translation._('Software'), dataIndex: 'current_software', width: 50 },
-            { resizable: true, id: 'ipaddress', header: this.translation._('IP Address'), dataIndex: 'ipaddress', width: 50 },
-            { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true },
+            { resizable: true, id: 'current_model', header: this.translation._('current model'), dataIndex: 'current_model', width: 70, hidden: true },
+            { resizable: true, id: 'redirect_event', header: this.translation._('redirect event'), dataIndex: 'redirect_event', width: 70, hidden: true },
+            { resizable: true, id: 'redirect_number', header: this.translation._('redirect number'), dataIndex: 'redirect_number', width: 100, hidden: true },
+            { resizable: true, id: 'redirect_time', header: this.translation._('redirect time'), dataIndex: 'redirect_time', width: 25, hidden: true },
+            { resizable: true, id: 'settings_loaded_at', header: this.translation._('settings loaded at'), dataIndex: 'settings_loaded_at', width: 100, hidden: true },            
+            { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true }            
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -1050,14 +1055,14 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 
 	    	this.actions = {
 	            addAccount: new Ext.Action({
-	                text: 'add account',
+	                text: translation._('add account'),
 	                disabled: true,
 	                scope: this,
 	                handler: this.handlers.addAccount,
 	                iconCls: 'action_addContact'
 	            }),
 	            removeAccount: new Ext.Action({
-	                text: 'remove account',
+	                text: translation._('remove account'),
 	                disabled: true,
 	                scope: this,
 	                handler: this.handlers.removeAccount,
@@ -1106,7 +1111,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 
 	
 	        var columnModel = new Ext.grid.ColumnModel([{ 
-	        	resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 
+	        	resizable: true, id: 'accountDisplayName', header: translation._('Name'), dataIndex: 'accountDisplayName', width: 30 
 	        }]);
 	
 
@@ -1138,7 +1143,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 	        var phoneUsersGridPanel = new Ext.grid.EditorGridPanel({
 	        	id: 'phoneUsersGrid',
 	            region: 'center',
-	            title: 'Owner',
+	            title: translation._('Owner'),
 	            store: this.dataStore,
 	            cm: columnModel,
 	            autoSizeColumns: false,
@@ -1155,7 +1160,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 	        
 	        var editGroupDialog = {
 	            layout:'border',
-                title: 'Users',
+                title: translation._('Users'),
 	            border:false,
 	            width: 600,
 	            height: 500,
