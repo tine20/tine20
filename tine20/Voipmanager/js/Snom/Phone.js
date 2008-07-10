@@ -1226,17 +1226,17 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],                                        
-                                            ['English', translation._('English')],
-                                            ['Deutsch', translation._('Deutsch')],
-                                            ['Espanol', translation._('Espanol')],
-                                            ['Francais', translation._('Francais')],
-                                            ['Italiano', translation._('Italiano')],
-                                            ['Nederlands', translation._('Nederlands')],
-                                            ['Portugues', translation._('Portugues')],
-                                            ['Suomi', translation._('Suomi')],
-                                            ['Svenska', translation._('Svenska')],
-                                            ['Dansk', translation._('Dansk')],
-                                            ['Norsk', translation._('Norsk')]
+                                            ['English', Locale.getTranslationData('Language', 'en')],
+                                            ['Deutsch', Locale.getTranslationData('Language', 'de')],
+                                            ['Espanol', Locale.getTranslationData('Language', 'es')],
+                                            ['Francais', Locale.getTranslationData('Language', 'fr')],
+                                            ['Italiano', Locale.getTranslationData('Language', 'it')],
+                                            ['Nederlands', Locale.getTranslationData('Language', 'nl')],
+                                            ['Portugues', Locale.getTranslationData('Language', 'pt')],
+                                            ['Suomi', Locale.getTranslationData('Language', 'fi')],
+                                            ['Svenska', Locale.getTranslationData('Language', 'sv')],
+                                            ['Dansk', Locale.getTranslationData('Language', 'da')],
+                                            ['Norsk', Locale.getTranslationData('Language', 'no')]
                                         ]
                                     })
                                 }]
@@ -1263,23 +1263,23 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                         fields: ['id', 'name'],
                                         data: [
                                             [ '',  translation._('- factory default -')],                                                                                               
-                                            ['English', translation._('English')],
-                                            ['English(UK)', translation._('English(UK)')],
-                                            ['Deutsch', translation._('Deutsch')],
-                                            ['Espanol', translation._('Espanol')],
-                                            ['Francais', translation._('Francais')],
-                                            ['Italiano', translation._('Italiano')],
-                                            ['Cestina', translation._('Cestina')],
-                                            ['Nederlands', translation._('Nederlands')],
-                                            ['Polski', translation._('Polski')],
-                                            ['Portugues', translation._('Portugues')],
-                                            ['Slovencina', translation._('Slovencina')],
-                                            ['Suomi', translation._('Suomi')],
-                                            ['Svenska', translation._('Svenska')],
-                                            ['Dansk', translation._('Dansk')],
-                                            ['Norsk',translation._('Norsk')],
-                                            ['Japanese', translation._('Japanese')],
-                                            ['Chinese', translation._('Chinese')]
+                                            ['English', Locale.getTranslationData('Language', 'en')],
+                                            ['English(UK)', Locale.getTranslationData('Language', 'en_GB')],
+                                            ['Deutsch', Locale.getTranslationData('Language', 'de')],
+                                            ['Espanol', Locale.getTranslationData('Language', 'es')],
+                                            ['Francais', Locale.getTranslationData('Language', 'fr')],
+                                            ['Italiano', Locale.getTranslationData('Language', 'it')],
+                                            ['Cestina', Locale.getTranslationData('Language', 'cs')],
+                                            ['Nederlands', Locale.getTranslationData('Language', 'nl')],
+                                            ['Polski', Locale.getTranslationData('Language', 'pl')],
+                                            ['Portugues', Locale.getTranslationData('Language', 'pt')],
+                                            ['Slovencina', Locale.getTranslationData('Language', 'sl')],
+                                            ['Suomi', Locale.getTranslationData('Language', 'fi')],
+                                            ['Svenska', Locale.getTranslationData('Language', 'sv')],
+                                            ['Dansk', Locale.getTranslationData('Language', 'da')],
+                                            ['Norsk', Locale.getTranslationData('Language', 'no')],                                            
+                                            ['Japanese', Locale.getTranslationData('Language', 'ja')],
+                                            ['Chinese', Locale.getTranslationData('Language', 'zh')]
                                         ]
                                     })
                                 }]

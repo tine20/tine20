@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-09 18:17+0100\n"
+"POT-Creation-Date: 2008-07-10 14:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -60,7 +60,7 @@ msgstr "id"
 
 #: Voipmanager/js/Asterisk/Context.js:191
 #: Voipmanager/js/Asterisk/SipPeer.js:211
-#: Voipmanager/js/Snom/Phone.js:1304
+#: Voipmanager/js/Snom/Phone.js:1310
 #: Voipmanager/js/Snom/Settings.js:202
 #: Voipmanager/js/Snom/Settings.js:498
 #: Voipmanager/js/Snom/Settings.js:635
@@ -74,7 +74,7 @@ msgstr "Name"
 #: Voipmanager/js/Asterisk/Context.js:404
 #: Voipmanager/js/Snom/Location.js:207
 #: Voipmanager/js/Snom/Location.js:447
-#: Voipmanager/js/Snom/Phone.js:805
+#: Voipmanager/js/Snom/Phone.js:811
 #: Voipmanager/js/Snom/Settings.js:514
 #: Voipmanager/js/Snom/Software.js:201
 #: Voipmanager/js/Snom/Software.js:441
@@ -650,12 +650,12 @@ msgstr "Passwort"
 #: Voipmanager/js/Asterisk/Voicemail.js:896
 #: Voipmanager/js/Snom/Location.js:582
 #: Voipmanager/js/Snom/Location.js:608
-#: Voipmanager/js/Snom/Phone.js:1339
-#: Voipmanager/js/Snom/Phone.js:1459
-#: Voipmanager/js/Snom/Phone.js:1487
-#: Voipmanager/js/Snom/Phone.js:1520
-#: Voipmanager/js/Snom/Phone.js:1548
-#: Voipmanager/js/Snom/Phone.js:1576
+#: Voipmanager/js/Snom/Phone.js:1345
+#: Voipmanager/js/Snom/Phone.js:1465
+#: Voipmanager/js/Snom/Phone.js:1493
+#: Voipmanager/js/Snom/Phone.js:1526
+#: Voipmanager/js/Snom/Phone.js:1554
+#: Voipmanager/js/Snom/Phone.js:1582
 #: Voipmanager/js/Snom/Settings.js:671
 #: Voipmanager/js/Snom/Settings.js:795
 #: Voipmanager/js/Snom/Settings.js:824
@@ -679,12 +679,12 @@ msgstr "ein"
 #: Voipmanager/js/Asterisk/Voicemail.js:897
 #: Voipmanager/js/Snom/Location.js:583
 #: Voipmanager/js/Snom/Location.js:609
-#: Voipmanager/js/Snom/Phone.js:1342
-#: Voipmanager/js/Snom/Phone.js:1460
-#: Voipmanager/js/Snom/Phone.js:1488
-#: Voipmanager/js/Snom/Phone.js:1521
-#: Voipmanager/js/Snom/Phone.js:1549
-#: Voipmanager/js/Snom/Phone.js:1577
+#: Voipmanager/js/Snom/Phone.js:1348
+#: Voipmanager/js/Snom/Phone.js:1466
+#: Voipmanager/js/Snom/Phone.js:1494
+#: Voipmanager/js/Snom/Phone.js:1527
+#: Voipmanager/js/Snom/Phone.js:1555
+#: Voipmanager/js/Snom/Phone.js:1583
 #: Voipmanager/js/Snom/Settings.js:674
 #: Voipmanager/js/Snom/Settings.js:796
 #: Voipmanager/js/Snom/Settings.js:825
@@ -788,78 +788,6 @@ msgstr "Firmware Intervall"
 msgid "tone_scheme"
 msgstr "Ruftonschema"
 
-#: Voipmanager/js/Snom/Location.js:540
-msgid "AUS"
-msgstr "Australien"
-
-#: Voipmanager/js/Snom/Location.js:541
-msgid "AUT"
-msgstr "Österreich"
-
-#: Voipmanager/js/Snom/Location.js:542
-msgid "CHN"
-msgstr "China"
-
-#: Voipmanager/js/Snom/Location.js:543
-msgid "DNK"
-msgstr "Dänemark"
-
-#: Voipmanager/js/Snom/Location.js:544
-msgid "FRA"
-msgstr "Frankreich"
-
-#: Voipmanager/js/Snom/Location.js:545
-msgid "GER"
-msgstr "Deutschland"
-
-#: Voipmanager/js/Snom/Location.js:546
-msgid "GBR"
-msgstr "Großbritannien"
-
-#: Voipmanager/js/Snom/Location.js:547
-msgid "IND"
-msgstr "Indien"
-
-#: Voipmanager/js/Snom/Location.js:548
-msgid "ITA"
-msgstr "Italien"
-
-#: Voipmanager/js/Snom/Location.js:549
-msgid "JPN"
-msgstr "Japan"
-
-#: Voipmanager/js/Snom/Location.js:550
-msgid "MEX"
-msgstr "Mexiko"
-
-#: Voipmanager/js/Snom/Location.js:551
-msgid "NLD"
-msgstr "Niederlande"
-
-#: Voipmanager/js/Snom/Location.js:552
-msgid "NOR"
-msgstr "Norwegen"
-
-#: Voipmanager/js/Snom/Location.js:553
-msgid "NZL"
-msgstr "Neuseeland"
-
-#: Voipmanager/js/Snom/Location.js:554
-msgid "ESP"
-msgstr "Spanien"
-
-#: Voipmanager/js/Snom/Location.js:555
-msgid "SWE"
-msgstr "Schweden"
-
-#: Voipmanager/js/Snom/Location.js:556
-msgid "SWI"
-msgstr "Schweiz"
-
-#: Voipmanager/js/Snom/Location.js:557
-msgid "USA"
-msgstr "USA"
-
 #: Voipmanager/js/Snom/Location.js:568
 #: Voipmanager/js/Snom/Settings.js:211
 msgid "date_us_format"
@@ -932,12 +860,12 @@ msgid "description"
 msgstr "Beschreibung"
 
 #: Voipmanager/js/Snom/Phone.js:208
-#: Voipmanager/js/Snom/Phone.js:746
+#: Voipmanager/js/Snom/Phone.js:752
 msgid "Location"
 msgstr "Standort"
 
 #: Voipmanager/js/Snom/Phone.js:218
-#: Voipmanager/js/Snom/Phone.js:672
+#: Voipmanager/js/Snom/Phone.js:676
 msgid "Template"
 msgstr "Template"
 
@@ -949,103 +877,103 @@ msgstr "Software"
 msgid "last modified"
 msgstr "zuletzt geändert"
 
-#: Voipmanager/js/Snom/Phone.js:516
+#: Voipmanager/js/Snom/Phone.js:520
 msgid "lineactive"
 msgstr "Line aktiv"
 
-#: Voipmanager/js/Snom/Phone.js:575
+#: Voipmanager/js/Snom/Phone.js:579
 msgid "sipCombo"
 msgstr "SIP Combo"
 
-#: Voipmanager/js/Snom/Phone.js:584
+#: Voipmanager/js/Snom/Phone.js:588
 msgid "Idle Text"
 msgstr "Idle Text"
 
-#: Voipmanager/js/Snom/Phone.js:665
+#: Voipmanager/js/Snom/Phone.js:669
 msgid "MAC Address"
 msgstr "MAC Adresse"
 
-#: Voipmanager/js/Snom/Phone.js:769
+#: Voipmanager/js/Snom/Phone.js:775
 msgid "Phone Model"
 msgstr "Telefonmodell"
 
-#: Voipmanager/js/Snom/Phone.js:820
+#: Voipmanager/js/Snom/Phone.js:826
 msgid "infos"
 msgstr "Infos"
 
-#: Voipmanager/js/Snom/Phone.js:837
+#: Voipmanager/js/Snom/Phone.js:843
 msgid "Current IP Address"
 msgstr "aktuelle IP Adresse"
 
-#: Voipmanager/js/Snom/Phone.js:844
+#: Voipmanager/js/Snom/Phone.js:850
 msgid "Current Software Version"
 msgstr "aktuelle Software Version"
 
-#: Voipmanager/js/Snom/Phone.js:857
+#: Voipmanager/js/Snom/Phone.js:863
 msgid "Settings Loaded at"
 msgstr "Einstellungen geladen am"
 
-#: Voipmanager/js/Snom/Phone.js:865
+#: Voipmanager/js/Snom/Phone.js:871
 msgid "Firmware last checked at"
 msgstr "Firmware zuletzt überprüft"
 
-#: Voipmanager/js/Snom/Phone.js:879
+#: Voipmanager/js/Snom/Phone.js:885
 msgid "redirection"
 msgstr "Umleitung"
 
-#: Voipmanager/js/Snom/Phone.js:896
+#: Voipmanager/js/Snom/Phone.js:902
 msgid "redirect_event"
 msgstr "Ereignis"
 
-#: Voipmanager/js/Snom/Phone.js:922
+#: Voipmanager/js/Snom/Phone.js:928
 msgid "all"
 msgstr "alle"
 
-#: Voipmanager/js/Snom/Phone.js:923
+#: Voipmanager/js/Snom/Phone.js:929
 msgid "busy"
 msgstr "besetzt"
 
-#: Voipmanager/js/Snom/Phone.js:924
-#: Voipmanager/js/Snom/Phone.js:1431
+#: Voipmanager/js/Snom/Phone.js:930
+#: Voipmanager/js/Snom/Phone.js:1437
 #: Voipmanager/js/Snom/Settings.js:766
 msgid "none"
 msgstr "keine"
 
-#: Voipmanager/js/Snom/Phone.js:925
+#: Voipmanager/js/Snom/Phone.js:931
 msgid "time"
 msgstr "Zeit"
 
-#: Voipmanager/js/Snom/Phone.js:936
+#: Voipmanager/js/Snom/Phone.js:942
 msgid "redirect_number"
 msgstr "Ziel"
 
-#: Voipmanager/js/Snom/Phone.js:948
+#: Voipmanager/js/Snom/Phone.js:954
 msgid "redirect_time"
 msgstr "Zeitüberschreitung (Sek)"
 
-#: Voipmanager/js/Snom/Phone.js:1175
+#: Voipmanager/js/Snom/Phone.js:1181
 #: Voipmanager/js/Snom/Templates.js:430
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: Voipmanager/js/Snom/Phone.js:1207
+#: Voipmanager/js/Snom/Phone.js:1213
 #: Voipmanager/js/Snom/Settings.js:204
 #: Voipmanager/js/Snom/Settings.js:535
 msgid "web_language"
 msgstr "Webseitensprache"
 
-#: Voipmanager/js/Snom/Phone.js:1222
-#: Voipmanager/js/Snom/Phone.js:1259
-#: Voipmanager/js/Snom/Phone.js:1302
-#: Voipmanager/js/Snom/Phone.js:1338
-#: Voipmanager/js/Snom/Phone.js:1368
-#: Voipmanager/js/Snom/Phone.js:1397
-#: Voipmanager/js/Snom/Phone.js:1430
-#: Voipmanager/js/Snom/Phone.js:1458
-#: Voipmanager/js/Snom/Phone.js:1486
-#: Voipmanager/js/Snom/Phone.js:1519
-#: Voipmanager/js/Snom/Phone.js:1547
-#: Voipmanager/js/Snom/Phone.js:1575
+#: Voipmanager/js/Snom/Phone.js:1228
+#: Voipmanager/js/Snom/Phone.js:1265
+#: Voipmanager/js/Snom/Phone.js:1308
+#: Voipmanager/js/Snom/Phone.js:1344
+#: Voipmanager/js/Snom/Phone.js:1374
+#: Voipmanager/js/Snom/Phone.js:1403
+#: Voipmanager/js/Snom/Phone.js:1436
+#: Voipmanager/js/Snom/Phone.js:1464
+#: Voipmanager/js/Snom/Phone.js:1492
+#: Voipmanager/js/Snom/Phone.js:1525
+#: Voipmanager/js/Snom/Phone.js:1553
+#: Voipmanager/js/Snom/Phone.js:1581
 #: Voipmanager/js/Snom/Settings.js:551
 #: Voipmanager/js/Snom/Settings.js:589
 #: Voipmanager/js/Snom/Settings.js:633
@@ -1061,233 +989,126 @@ msgstr "Webseitensprache"
 msgid "- factory default -"
 msgstr "- Werkseinstellung -"
 
-#: Voipmanager/js/Snom/Phone.js:1223
-#: Voipmanager/js/Snom/Phone.js:1260
-#: Voipmanager/js/Snom/Settings.js:552
-#: Voipmanager/js/Snom/Settings.js:590
-msgid "English"
-msgstr "Englisch"
-
-#: Voipmanager/js/Snom/Phone.js:1224
-#: Voipmanager/js/Snom/Phone.js:1262
-#: Voipmanager/js/Snom/Settings.js:553
-#: Voipmanager/js/Snom/Settings.js:592
-msgid "Deutsch"
-msgstr "Deutsch"
-
-#: Voipmanager/js/Snom/Phone.js:1225
-#: Voipmanager/js/Snom/Phone.js:1263
-#: Voipmanager/js/Snom/Settings.js:554
-#: Voipmanager/js/Snom/Settings.js:593
-msgid "Espanol"
-msgstr "Spanisch"
-
-#: Voipmanager/js/Snom/Phone.js:1226
-#: Voipmanager/js/Snom/Phone.js:1264
-#: Voipmanager/js/Snom/Settings.js:555
-#: Voipmanager/js/Snom/Settings.js:594
-msgid "Francais"
-msgstr "Französisch"
-
-#: Voipmanager/js/Snom/Phone.js:1227
-#: Voipmanager/js/Snom/Phone.js:1265
-#: Voipmanager/js/Snom/Settings.js:556
-#: Voipmanager/js/Snom/Settings.js:595
-msgid "Italiano"
-msgstr "Italienisch"
-
-#: Voipmanager/js/Snom/Phone.js:1228
-#: Voipmanager/js/Snom/Phone.js:1267
-#: Voipmanager/js/Snom/Settings.js:557
-#: Voipmanager/js/Snom/Settings.js:597
-msgid "Nederlands"
-msgstr "Niederländisch"
-
-#: Voipmanager/js/Snom/Phone.js:1229
-#: Voipmanager/js/Snom/Phone.js:1269
-#: Voipmanager/js/Snom/Settings.js:558
-#: Voipmanager/js/Snom/Settings.js:599
-msgid "Portugues"
-msgstr "Portugiesisch"
-
-#: Voipmanager/js/Snom/Phone.js:1230
-#: Voipmanager/js/Snom/Phone.js:1271
-#: Voipmanager/js/Snom/Settings.js:559
-#: Voipmanager/js/Snom/Settings.js:601
-msgid "Suomi"
-msgstr "Finnisch"
-
-#: Voipmanager/js/Snom/Phone.js:1231
-#: Voipmanager/js/Snom/Phone.js:1272
-#: Voipmanager/js/Snom/Settings.js:560
-#: Voipmanager/js/Snom/Settings.js:602
-msgid "Svenska"
-msgstr "Schwedisch"
-
-#: Voipmanager/js/Snom/Phone.js:1232
-#: Voipmanager/js/Snom/Phone.js:1273
-#: Voipmanager/js/Snom/Settings.js:561
-#: Voipmanager/js/Snom/Settings.js:603
-msgid "Dansk"
-msgstr "Dänisch"
-
-#: Voipmanager/js/Snom/Phone.js:1233
-#: Voipmanager/js/Snom/Phone.js:1274
-#: Voipmanager/js/Snom/Settings.js:562
-#: Voipmanager/js/Snom/Settings.js:604
-msgid "Norsk"
-msgstr "Norwegisch"
-
-#: Voipmanager/js/Snom/Phone.js:1244
+#: Voipmanager/js/Snom/Phone.js:1250
 #: Voipmanager/js/Snom/Settings.js:205
 #: Voipmanager/js/Snom/Settings.js:573
 msgid "language"
 msgstr "Sprache"
 
-#: Voipmanager/js/Snom/Phone.js:1261
-#: Voipmanager/js/Snom/Settings.js:591
-msgid "English(UK)"
-msgstr "Englisch (UK)"
-
-#: Voipmanager/js/Snom/Phone.js:1266
-#: Voipmanager/js/Snom/Settings.js:596
-msgid "Cestina"
-msgstr "Tschechisch"
-
-#: Voipmanager/js/Snom/Phone.js:1268
-#: Voipmanager/js/Snom/Settings.js:598
-msgid "Polski"
-msgstr "Polnisch"
-
-#: Voipmanager/js/Snom/Phone.js:1270
-#: Voipmanager/js/Snom/Settings.js:600
-msgid "Slovencina"
-msgstr "Slowakisch"
-
-#: Voipmanager/js/Snom/Phone.js:1275
-#: Voipmanager/js/Snom/Settings.js:605
-msgid "Japanese"
-msgstr "Japanisch"
-
-#: Voipmanager/js/Snom/Phone.js:1276
-#: Voipmanager/js/Snom/Settings.js:606
-msgid "Chinese"
-msgstr "Chinesisch"
-
-#: Voipmanager/js/Snom/Phone.js:1287
+#: Voipmanager/js/Snom/Phone.js:1293
 #: Voipmanager/js/Snom/Settings.js:206
 #: Voipmanager/js/Snom/Settings.js:617
 msgid "display_method"
 msgstr "Nummernanzeigestil"
 
-#: Voipmanager/js/Snom/Phone.js:1303
+#: Voipmanager/js/Snom/Phone.js:1309
 #: Voipmanager/js/Snom/Settings.js:634
 msgid "whole url"
 msgstr "komplette URL"
 
-#: Voipmanager/js/Snom/Phone.js:1305
+#: Voipmanager/js/Snom/Phone.js:1311
 #: Voipmanager/js/Snom/Settings.js:636
 msgid "number"
 msgstr "Nummer"
 
-#: Voipmanager/js/Snom/Phone.js:1306
+#: Voipmanager/js/Snom/Phone.js:1312
 #: Voipmanager/js/Snom/Settings.js:637
 msgid "name + number"
 msgstr "Name + Nummer"
 
-#: Voipmanager/js/Snom/Phone.js:1307
+#: Voipmanager/js/Snom/Phone.js:1313
 #: Voipmanager/js/Snom/Settings.js:638
 msgid "number + name"
 msgstr "Nummer + Name"
 
-#: Voipmanager/js/Snom/Phone.js:1323
+#: Voipmanager/js/Snom/Phone.js:1329
 #: Voipmanager/js/Snom/Settings.js:654
 msgid "call_waiting"
 msgstr "Anklopfen"
 
-#: Voipmanager/js/Snom/Phone.js:1340
+#: Voipmanager/js/Snom/Phone.js:1346
 #: Voipmanager/js/Snom/Settings.js:672
 msgid "visual"
 msgstr "optisch"
 
-#: Voipmanager/js/Snom/Phone.js:1341
+#: Voipmanager/js/Snom/Phone.js:1347
 #: Voipmanager/js/Snom/Settings.js:673
 msgid "ringer"
 msgstr "Ton"
 
-#: Voipmanager/js/Snom/Phone.js:1353
+#: Voipmanager/js/Snom/Phone.js:1359
 #: Voipmanager/js/Snom/Settings.js:208
 #: Voipmanager/js/Snom/Settings.js:685
 msgid "mwi_notification"
 msgstr "Hinweis für 'Nachricht liegt vor'"
 
-#: Voipmanager/js/Snom/Phone.js:1369
+#: Voipmanager/js/Snom/Phone.js:1375
 #: Voipmanager/js/Snom/Settings.js:702
 msgid "silent"
 msgstr "stumm"
 
-#: Voipmanager/js/Snom/Phone.js:1370
+#: Voipmanager/js/Snom/Phone.js:1376
 #: Voipmanager/js/Snom/Settings.js:703
 msgid "beep"
 msgstr "Piepton"
 
-#: Voipmanager/js/Snom/Phone.js:1371
+#: Voipmanager/js/Snom/Phone.js:1377
 #: Voipmanager/js/Snom/Settings.js:704
 msgid "reminder"
 msgstr "Erinnerung"
 
-#: Voipmanager/js/Snom/Phone.js:1382
+#: Voipmanager/js/Snom/Phone.js:1388
 #: Voipmanager/js/Snom/Settings.js:209
 #: Voipmanager/js/Snom/Settings.js:715
 msgid "mwi_dialtone"
 msgstr "Wählton für 'Nachricht liegt vor'"
 
-#: Voipmanager/js/Snom/Phone.js:1398
+#: Voipmanager/js/Snom/Phone.js:1404
 #: Voipmanager/js/Snom/Settings.js:732
 msgid "normal"
 msgstr "normal"
 
-#: Voipmanager/js/Snom/Phone.js:1399
+#: Voipmanager/js/Snom/Phone.js:1405
 #: Voipmanager/js/Snom/Settings.js:733
 msgid "stutter"
 msgstr "stotternd"
 
-#: Voipmanager/js/Snom/Phone.js:1415
+#: Voipmanager/js/Snom/Phone.js:1421
 #: Voipmanager/js/Snom/Settings.js:210
 #: Voipmanager/js/Snom/Settings.js:749
 msgid "headset_device"
 msgstr "Kopfhörernutzung"
 
-#: Voipmanager/js/Snom/Phone.js:1432
+#: Voipmanager/js/Snom/Phone.js:1438
 #: Voipmanager/js/Snom/Settings.js:767
 msgid "headset_rj"
 msgstr "Headseteingang"
 
-#: Voipmanager/js/Snom/Phone.js:1443
+#: Voipmanager/js/Snom/Phone.js:1449
 #: Voipmanager/js/Snom/Settings.js:214
 #: Voipmanager/js/Snom/Settings.js:778
 msgid "message_led_other"
 msgstr "Message LED für verpasste Anrufe"
 
-#: Voipmanager/js/Snom/Phone.js:1471
+#: Voipmanager/js/Snom/Phone.js:1477
 #: Voipmanager/js/Snom/Settings.js:215
 #: Voipmanager/js/Snom/Settings.js:807
 msgid "global_missed_counter"
 msgstr "Globaler 'Verpasste Anrufe' Zähler"
 
-#: Voipmanager/js/Snom/Phone.js:1504
+#: Voipmanager/js/Snom/Phone.js:1510
 #: Voipmanager/js/Snom/Settings.js:216
 #: Voipmanager/js/Snom/Settings.js:841
 msgid "scroll_outgoing"
 msgstr "Scrollen aktiver Identitäten"
 
-#: Voipmanager/js/Snom/Phone.js:1532
+#: Voipmanager/js/Snom/Phone.js:1538
 #: Voipmanager/js/Snom/Settings.js:217
 #: Voipmanager/js/Snom/Settings.js:870
 msgid "show_local_line"
 msgstr "Identitäts-Index anzeigen"
 
-#: Voipmanager/js/Snom/Phone.js:1560
+#: Voipmanager/js/Snom/Phone.js:1566
 #: Voipmanager/js/Snom/Settings.js:218
 #: Voipmanager/js/Snom/Settings.js:899
 msgid "show_call_status"
@@ -1485,6 +1306,76 @@ msgstr "Software Version"
 msgid "Keylayout"
 msgstr "Tastaturlayout"
 
+#~ msgid "AUS"
+#~ msgstr "Australien"
+#~ msgid "AUT"
+#~ msgstr "Österreich"
+#~ msgid "CHN"
+#~ msgstr "China"
+#~ msgid "DNK"
+#~ msgstr "Dänemark"
+#~ msgid "FRA"
+#~ msgstr "Frankreich"
+#~ msgid "GER"
+#~ msgstr "Deutschland"
+#~ msgid "GBR"
+#~ msgstr "Großbritannien"
+#~ msgid "IND"
+#~ msgstr "Indien"
+#~ msgid "ITA"
+#~ msgstr "Italien"
+#~ msgid "JPN"
+#~ msgstr "Japan"
+#~ msgid "MEX"
+#~ msgstr "Mexiko"
+#~ msgid "NLD"
+#~ msgstr "Niederlande"
+#~ msgid "NOR"
+#~ msgstr "Norwegen"
+#~ msgid "NZL"
+#~ msgstr "Neuseeland"
+#~ msgid "ESP"
+#~ msgstr "Spanien"
+#~ msgid "SWE"
+#~ msgstr "Schweden"
+#~ msgid "SWI"
+#~ msgstr "Schweiz"
+#~ msgid "USA"
+#~ msgstr "USA"
+#~ msgid "English"
+#~ msgstr "Englisch"
+#~ msgid "Deutsch"
+#~ msgstr "Deutsch"
+#~ msgid "Espanol"
+#~ msgstr "Spanisch"
+#~ msgid "Francais"
+#~ msgstr "Französisch"
+#~ msgid "Italiano"
+#~ msgstr "Italienisch"
+#~ msgid "Nederlands"
+#~ msgstr "Niederländisch"
+#~ msgid "Portugues"
+#~ msgstr "Portugiesisch"
+#~ msgid "Suomi"
+#~ msgstr "Finnisch"
+#~ msgid "Svenska"
+#~ msgstr "Schwedisch"
+#~ msgid "Dansk"
+#~ msgstr "Dänisch"
+#~ msgid "Norsk"
+#~ msgstr "Norwegisch"
+#~ msgid "English(UK)"
+#~ msgstr "Englisch (UK)"
+#~ msgid "Cestina"
+#~ msgstr "Tschechisch"
+#~ msgid "Polski"
+#~ msgstr "Polnisch"
+#~ msgid "Slovencina"
+#~ msgstr "Slowakisch"
+#~ msgid "Japanese"
+#~ msgstr "Japanisch"
+#~ msgid "Chinese"
+#~ msgstr "Chinesisch"
 #~ msgid "Redirect"
 #~ msgstr "Umleitung"
 #~ msgid "redirect_always_on_code"
