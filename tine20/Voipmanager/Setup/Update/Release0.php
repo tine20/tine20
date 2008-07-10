@@ -2859,7 +2859,6 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>Svenska</value>
                     <value>Dansk</value>
                     <value>Norsk</value>
-                    <default>English</default>
                 </field>
                 <field>
                     <name>language</name>
@@ -2881,7 +2880,6 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>Norsk</value>
                     <value>Japanese</value>
                     <value>Chinese</value>
-                    <default>English</default>
                 </field>
                 <field>
                     <name>display_method</name>
@@ -2891,7 +2889,6 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>display_number</value>
                     <value>display_name_number</value>
                     <value>display_number_name</value>
-                    <default>display_name</default>
                 </field>
                 <field>
                     <name>mwi_notification</name>
@@ -2899,21 +2896,18 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>silent</value>
                     <value>beep</value>
                     <value>reminder</value>
-                    <default>silent</default>
                 </field>
                 <field>
                     <name>mwi_dialtone</name>
                     <type>enum</type>
                     <value>normal</value>
                     <value>stutter</value>
-                    <default>stutter</default>
                 </field>
                 <field>
                     <name>headset_device</name>
                     <type>enum</type>
                     <value>none</value>
                     <value>headset_rj</value>
-                    <default>none</default>
                 </field>
                 <field>
                     <name>message_led_other</name>
@@ -2955,31 +2949,26 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                     <value>all</value>
                     <value>busy</value>
                     <value>time</value>            
-                    <default>none</default>
                 </field>
                 <field>
                     <name>redirect_number</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>redirect_busy_number</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>redirect_time</name>
                     <type>integer</type>
                     <length>255</length>
-                    <notnull>false</notnull>    
                 </field>                
                 <field>
                     <name>redirect_time_number</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>false</notnull>
                 </field>
                 <index>
                     <name>phone_id</name>

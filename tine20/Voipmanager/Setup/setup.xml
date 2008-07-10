@@ -1590,7 +1590,6 @@
                     <value>Svenska</value>
                     <value>Dansk</value>
                     <value>Norsk</value>
-                    <default>English</default>
                 </field>
                 <field>
                     <name>language</name>
@@ -1612,7 +1611,6 @@
                     <value>Norsk</value>
                     <value>Japanese</value>
                     <value>Chinese</value>
-                    <default>English</default>
                 </field>
                 <field>
                     <name>display_method</name>
@@ -1622,7 +1620,6 @@
                     <value>display_number</value>
                     <value>display_name_number</value>
                     <value>display_number_name</value>
-                    <default>display_name</default>
                 </field>
                 <field>
                     <name>mwi_notification</name>
@@ -1630,58 +1627,49 @@
                     <value>silent</value>
                     <value>beep</value>
                     <value>reminder</value>
-                    <default>silent</default>
                 </field>
                 <field>
                     <name>mwi_dialtone</name>
                     <type>enum</type>
                     <value>normal</value>
                     <value>stutter</value>
-                    <default>stutter</default>
                 </field>
                 <field>
                     <name>headset_device</name>
                     <type>enum</type>
                     <value>none</value>
                     <value>headset_rj</value>
-                    <default>none</default>
                 </field>
                 <field>
                     <name>message_led_other</name>
                     <type>enum</type>
                     <value>on</value>
                     <value>off</value>
-                    <default>on</default>
                 </field>
                 <field>
                     <name>global_missed_counter</name>
                     <type>enum</type>
                     <value>on</value>
                     <value>off</value>
-                    <default>on</default>
                 </field>
                 <field>
                     <name>scroll_outgoing</name>
                     <type>enum</type>
                     <value>on</value>
                     <value>off</value>
-                    <default>on</default>
                 </field>
                 <field>
                     <name>show_local_line</name>
                     <type>enum</type>
                     <value>on</value>
                     <value>off</value>
-                    <default>off</default>
                 </field>
                 <field>
                     <name>show_call_status</name>
                     <type>enum</type>
                     <value>on</value>
                     <value>off</value>
-                    <default>off</default>
                 </field>               
-
                 <field>
                     <name>redirect_event</name>
                     <type>enum</type>
@@ -1689,31 +1677,26 @@
                     <value>all</value>
                     <value>busy</value>
                     <value>time</value>            
-                    <default>none</default>
                 </field>
                 <field>
                     <name>redirect_number</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>redirect_busy_number</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>redirect_time</name>
                     <type>integer</type>
                     <length>255</length>
-                    <notnull>false</notnull>    
                 </field>                
                 <field>
                     <name>redirect_time_number</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>false</notnull>
                 </field>
                 <index>
                     <name>phone_id</name>
