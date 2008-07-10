@@ -3006,6 +3006,18 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);    
         
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_phones', array('id'));
+
+        $rows = $this->_db->fetchAll($select);
+        
+        foreach($rows as $row) {
+            $phoneData = array(
+                'phone_id' => $row['id']
+            );
+            $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phone_settings', $phoneData);
+        }
+        
         try {
             $this->_backend->dropCol('snom_phones','web_language');        
             $this->_backend->dropCol('snom_phones','language');        
