@@ -415,6 +415,9 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         {
             var form = Ext.getCmp('voipmanager_editPhoneForm').getForm();
 
+            var _settingId = Ext.getCmp('template_id').store.getById(Ext.getCmp('template_id').getValue());
+            _settingId = _settingId.data.setting_id;
+
             if(form.isValid()) {
                 form.updateRecord(this.phoneRecord);
                 
@@ -440,7 +443,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                         method: 'Voipmanager.saveSnomPhone', 
                         phoneData: Ext.util.JSON.encode(this.phoneRecord.data),
                         lineData: Ext.util.JSON.encode(lines),
-                        ownerData: Ext.util.JSON.encode(owner)
+                        ownerData: Ext.util.JSON.encode(owner),
+                        settingId: Ext.util.JSON.encode(_settingId)
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Voipmanager.Snom.Phones) {
@@ -698,9 +702,11 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 
                                                     if(_data[_rwField] == '0') {
                                                         _settingsData[_item] = _data[_item];                                                        
-                                                    } else  {
+                                                    } else  if(_phoneData[_item]) {
                                                          _settingsData[_item] = _phoneData[_item];
-                                                    }                                                        
+                                                    } else {
+                                                         _settingsData[_item] = _data[_item];                                                        
+                                                    }                                                       
 
                                                     
                                                     if(_data[_rwField] == '0') {

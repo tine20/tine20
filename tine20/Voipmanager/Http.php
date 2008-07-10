@@ -71,19 +71,17 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
             $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 
-            $_empty = false;
-            if(empty($_phoneSettingsData)) { $_empty = true; }
-
             foreach($_writableFields AS $wField)
             {               
                 $_fieldRW = $wField.'_writable';
+                
                  if($_settingsData[$_fieldRW] == '0')
                  {
                      $_phoneSettingsData[$wField] = $_settingsData[$wField];
                      $_notWritable[$wField] = 'true';
                  } else {
-                     if($_empty) {
-                         $_phoneSettingsData[$wField] = $_settingsData[$wField];
+                     if(empty($_phoneSettingsData[$wField])) {
+                         $_phoneSettingsData[$wField] = $_settingsData[$wField];                    
                      }
                      $_notWritable[$wField] = '';    
                  }

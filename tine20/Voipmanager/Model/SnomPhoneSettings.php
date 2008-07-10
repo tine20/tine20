@@ -51,22 +51,19 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'phone_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'web_language'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'display_method'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'mwi_notification'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'mwi_dialtone'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'headset_device'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'message_led_other'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'global_missed_counter' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'scroll_outgoing'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'show_local_line'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'show_call_status'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-	    'call_waiting'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'redirect_event'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'redirect_number'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'phone_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'web_language'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'display_method'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'mwi_notification'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'mwi_dialtone'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'headset_device'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'message_led_other'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'global_missed_counter' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'scroll_outgoing'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'show_local_line'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'show_call_status'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	    'call_waiting'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
     );
     
     
@@ -79,10 +76,10 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
     static public function convertSnomPhoneSettingsIdToInt($_phoneSettingsId)
     {
         if ($_phoneSettingsId instanceof Voipmanager_Model_SnomPhoneSettings) {
-            if (empty($_phoneSettingsId->setting_id)) {
+            if (empty($_phoneSettingsId->phone_id)) {
                 throw new Exception('no phoneSettings id set');
             }
-            $id = (string) $_phoneSettingsId->setting_id;
+            $id = (string) $_phoneSettingsId->phone_id;
         } else {
             $id = (string) $_phoneSettingsId;
         }

@@ -64,6 +64,9 @@ class Voipmanager_Model_SnomPhone extends Tinebase_Record_Abstract
         'settings_loaded_at'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firmware_checked_at'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lines'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_event'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_number'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),        
         'http_client_info_sent' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'http_client_user'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'http_client_pass'      => array(Zend_Filter_Input::ALLOW_EMPTY => true)

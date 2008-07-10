@@ -205,7 +205,7 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings, $_settingId = NULL)
     {
         // auto generate random http client username and password        
         $phone->http_client_user = Tinebase_Record_Abstract::generateUID();
@@ -214,6 +214,25 @@ class Voipmanager_Controller
         $phone = $this->_snomPhoneBackend->create($_phone);
         
         $_phoneSettings->setId($phone->getId());
+        $phoneSettingsData = $_phoneSettings->toArray();
+        
+        
+        if(!empty($_settingId)) {
+            $settingDefaults = $this->_snomSettingBackend->get($_settingId)->toArray();
+            unset($settingDefaults['id']);
+            unset($settingDefaults['name']);
+            unset($settingDefaults['description']);                        
+                   
+            
+            foreach($settingDefaults AS $key=>$value) {
+                if($phoneSettingsData[$key] == $settingDefaults[$key]) {
+                    $phoneSettingsData[$key] = NULL;
+                }    
+            }
+            $_phoneSettings->setFromArray($phoneSettingsData);        
+        }
+        
+        
         $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);
         
         foreach($_phone->lines as $line) {
@@ -231,12 +250,34 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings, $_settingId = NULL)
     {
         $phone = $this->_snomPhoneBackend->update($_phone);
         
         $_phoneSettings->setId($phone->getId());
-        $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
+
+        $phoneSettingsData = $_phoneSettings->toArray();
+         
+        if(!empty($_settingId)) {
+            $settingDefaults = $this->_snomSettingBackend->get($_settingId)->toArray();
+            unset($settingDefaults['id']);
+            unset($settingDefaults['name']);
+            unset($settingDefaults['description']);                        
+                   
+            
+        foreach($settingDefaults AS $key=>$value) {
+                if($phoneSettingsData[$key] == $settingDefaults[$key]) {
+                    $phoneSettingsData[$key] = NULL;
+                }    
+            }
+            $_phoneSettings->setFromArray($phoneSettingsData);        
+        }        
+        
+        if($this->_snomPhoneSettingsBackend->get($phone->getId())) {
+            $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
+        } else {
+            $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);            
+        }
         
         $this->_snomLineBackend->deletePhoneLines($phone->getId());
         

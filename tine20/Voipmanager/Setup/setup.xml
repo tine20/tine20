@@ -354,6 +354,24 @@
                     <type>datetime</type>
                 </field>
                 <field>
+                    <name>redirect_event</name>
+                    <type>enum</type>
+                    <value>none</value>
+                    <value>all</value>
+                    <value>busy</value>
+                    <value>time</value>            
+                </field>
+                <field>
+                    <name>redirect_number</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>redirect_time</name>
+                    <type>integer</type>
+                    <length>255</length>
+                </field>                                
+                <field>
                     <name>http_client_info_sent</name>
                     <type>boolean</type>
                     <default>false</default>
@@ -1670,34 +1688,6 @@
                     <value>on</value>
                     <value>off</value>
                 </field>               
-                <field>
-                    <name>redirect_event</name>
-                    <type>enum</type>
-                    <value>none</value>
-                    <value>all</value>
-                    <value>busy</value>
-                    <value>time</value>            
-                </field>
-                <field>
-                    <name>redirect_number</name>
-                    <type>text</type>
-                    <length>255</length>
-                </field>
-                <field>
-                    <name>redirect_busy_number</name>
-                    <type>text</type>
-                    <length>255</length>
-                </field>
-                <field>
-                    <name>redirect_time</name>
-                    <type>integer</type>
-                    <length>255</length>
-                </field>                
-                <field>
-                    <name>redirect_time_number</name>
-                    <type>text</type>
-                    <length>255</length>
-                </field>
                 <index>
                     <name>phone_id</name>
                     <unique>true</unique>

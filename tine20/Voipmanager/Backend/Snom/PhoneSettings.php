@@ -47,7 +47,8 @@ class Voipmanager_Backend_Snom_PhoneSettings
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phone_settings')->where($this->_db->quoteInto('phone_id = ?', $phoneSettingId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('phoneSetting not found');
+//            throw new UnderflowException('phoneSetting not found');
+            return false;
         }
 #       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneSettings', $row);
         $result = new Voipmanager_Model_SnomPhoneSettings($row);
