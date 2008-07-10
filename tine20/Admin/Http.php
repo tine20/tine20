@@ -43,7 +43,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
             $arrayAccount = array('accountStatus' => 'enabled');
             
             // get default primary group for the group selection combo box
-            $group = $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+            $group = Tinebase_Group::getInstance()->getDefaultGroup();
         }
 
         // encode the account array

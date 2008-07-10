@@ -145,16 +145,20 @@ abstract class Tinebase_Group_Abstract
      */
     public function getDefaultGroup()
     {
-        // get default group name from config.ini
-        //@todo add extra section for group settings?
+        // get default group name from config
+        $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication('Tinebase');
+        
+        /*
         if(isset(Zend_Registry::get('configFile')->registration)) {
             $config = Zend_Registry::get('configFile')->registration;
             $defaultGroupName = ( isset($config->accountPrimaryGroup) ) ? $config->accountPrimaryGroup : 'Users' ;
         } else {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ');
         }
+        */
         
-        $result = $this->getGroupByName($defaultGroupName);
+        //$result = $this->getGroupByName($defaultGroupName);
+        $result = $this->getGroupByName($tinebaseConfig['Default User Group']);
         
         return $result;
     }
