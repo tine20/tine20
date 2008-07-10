@@ -209,6 +209,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
 		if ($exception instanceof Exception) {
 			$error['msg'] = $exception->getMessage();
 			$error['code'] = $exception->getCode();
+			$error['trace'] = $exception->getTrace();
 		} elseif (!is_null($exception)) {
 			$error['msg'] = $exception;
 		}
