@@ -37,9 +37,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.value = this.defaultContainer.name;
         }
         this.onTriggerClick = function(e) {
-            var w = new Tine.widgets.container.selectionDialog({
-                TriggerField: this
-            });
+            if (!this.disabled) {
+                var w = new Tine.widgets.container.selectionDialog({
+                    TriggerField: this
+                });
+            }
         };
     },
     //private
@@ -48,6 +50,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     //private
     setValue: function(container){
+        this.setDisabled(! container.account_grants.deleteGrant);
     	this.container = container;
     	this.setRawValue(container.name);
     }
