@@ -43,7 +43,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
             $addressbook = Tinebase_Container::getInstance()->getContainerById($contact->owner);
             $encodedContact['owner'] = $addressbook->toArray();
             $encodedContact['grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $contact->owner)->toArray();
-            $encodedContact['tags'] = $encodedContact['tags']->toArray();
+            //$encodedContact['tags'] = $encodedContact['tags']->toArray();
             //Zend_Registry::get('logger')->debug(print_r($encodedContact,true));
             if (!empty($encodedContact['jpegphoto'])) {
                 $encodedContact['jpegphoto'] = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $_contactId . '&width=90&height=90&ratiomode=0';
