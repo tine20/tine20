@@ -183,7 +183,19 @@ Tine.Voipmanager = function() {
         expanded: true,
         dataPanelType: 'snom',
         viewRight: 'snom'
-    }];
+    }
+/*    , {
+        text: 'My Phones',
+        cls: 'treemain',
+        containerType: Tine.Tinebase.container.TYPE_PERSONAL,
+        id: 'myPhones',
+        dataPanelType: 'myPhones',        
+        children: [],
+        expanded: true,
+        leaf: null,
+        owner: Tine.Tinebase.Registry.get('currentAccount')
+    } */
+    ];
 
     /**
      * creates the voipmanager menu tree
@@ -317,6 +329,15 @@ Tine.Voipmanager = function() {
                         Tine.Voipmanager.Asterisk.Meetme.Main.show(_node);
                     }
                     break; 					                                                                                
+                    
+                    
+                case 'myPhones':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerMyPhones') {
+                        Ext.getCmp('gridVoipmanagerMyPhones').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Voipmanager.MyPhones.Main.show(_node);
+                    }
+                    break; 					                                                                                                    
             }
         }, this);
 

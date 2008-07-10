@@ -478,7 +478,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .5,
+                            columnWidth: 0.5,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -499,7 +499,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                 })
                             }]
                         }, {
-                            columnWidth: .5,
+                            columnWidth: 0.5,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -517,7 +517,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                        border: false,
                        anchor: '100%',
                        items: [{
-                           columnWidth: .33,
+                           columnWidth: 0.33,
                            layout: 'form',
                            border: false,
                            anchor: '100%',
@@ -559,7 +559,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                })
                            }]
                        }, {
-                               columnWidth: .33,
+                               columnWidth: 0.33,
                                layout: 'form',
                                border: false,
                                anchor: '100%',
@@ -585,7 +585,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                    })
                                }]
                            }, {
-                               columnWidth: .33,
+                               columnWidth: 0.33,
                                layout: 'form',
                                border: false,
                                anchor: '100%',
@@ -627,7 +627,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .7,
+                                columnWidth: 0.7,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -640,7 +640,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                     allowBlank: false
                                 }]
                             }, {
-                                columnWidth: .3,
+                                columnWidth: 0.3,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -721,7 +721,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .5,
+                                columnWidth: 0.5,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -759,7 +759,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .5,
+                                columnWidth: 0.5,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -768,7 +768,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                     border: false,
                                     anchor: '100%',
                                     items: [{
-                                        columnWidth: .5,
+                                        columnWidth: 0.5,
                                         layout: 'form',
                                         border: false,
                                         anchor: '100%',
@@ -782,7 +782,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                             allowBlank: true
                                         }]
                                     }, {
-                                        columnWidth: .5,
+                                        columnWidth: 0.5,
                                         layout: 'form',
                                         border: false,
                                         anchor: '100%',
@@ -803,7 +803,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .5,
+                                columnWidth: 0.5,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -815,7 +815,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                                     anchor: '98%'
                                 }]
                             }, {
-                                columnWidth: .5,
+                                columnWidth: 0.5,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',

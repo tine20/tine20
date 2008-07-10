@@ -39,7 +39,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Asterisk/Context.js',
             'Voipmanager/js/Asterisk/Voicemail.js',
 			'Voipmanager/js/Asterisk/Meetme.js',
-			'Voipmanager/js/widgets.js'            
+			'Voipmanager/js/widgets.js'
         );
     }
     

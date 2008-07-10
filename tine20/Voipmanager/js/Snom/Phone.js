@@ -363,10 +363,10 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         _maxLines: function(_val) {
          
             var _data = new Object();
-            _data['snom300'] = '4';
-            _data['snom320'] = '12';
-            _data['snom360'] = '12';
-            _data['snom370'] = '12';   
+            _data.snom300 = '4';
+            _data.snom320 = '12';
+            _data.snom360 = '12';
+            _data.snom370 = '12';   
             
             if(!_val) {
                 return _data;
@@ -560,7 +560,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 			    var rec = combo.store.getById(value);
 				return (rec == null ? '' : rec.get(combo.displayField) );
 			  };
-			}			
+			};			
 			
 			var combo = new Ext.form.ComboBox({
                 typeAhead: true,
@@ -665,7 +665,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                         anchor: '100%',
                         height: 130,
                         items: [{
-                            columnWidth: .5,
+                            columnWidth: 0.5,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -722,9 +722,13 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                                 });                     
                                                 
                                                 Array.prototype.in_array = function(needle) {
-                                                    for(var i=0; i < this.length; i++) if(this[ i] === needle) return true;
+                                                    for (var i = 0; i < this.length; i++) {
+                                                        if (this[i] === needle) {
+                                                            return true;
+                                                        }
+                                                    }
                                                     return false;
-                                                } 
+                                                }; 
 
                                                 Ext.getCmp('voipmanager_editPhoneForm').cascade(function(_field) {
                                                     if(_writableFields.in_array(_field.id)) {
@@ -771,7 +775,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 })
                             }]
                         }, {
-                            columnWidth: .5,
+                            columnWidth: 0.5,
                             layout: 'form',
                             border: false,
                             anchor: '98%',
@@ -839,7 +843,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 border: false,
                                 anchor: '100%',
                                 items: [{
-                                    columnWidth: .5,
+                                    columnWidth: 0.5,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -859,7 +863,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                         readOnly: true
                                     }]
                                 }, {
-                                    columnWidth: .5,
+                                    columnWidth: 0.5,
                                     layout: 'form',
                                     border: false,
                                     anchor: '100%',
@@ -898,7 +902,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{ 
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -916,13 +920,12 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     forceSelection: true,
                                     listeners: {
                                         select: function(_combo, _record, _index) {
-                                            if (_record.data.name == 'time') {
-                                                Ext.getCmp('redirect_time').setDisabled(false);
+                                            if (_record.data.id == 'time') {
+                                                Ext.getCmp('redirect_time').enable();
                                             }
                                             
-                                            if(_record.data.name != 'time') {
-                                                Ext.getCmp('redirect_time').reset();                                                    
-                                                Ext.getCmp('redirect_time').setDisabled(true);
+                                            if(_record.data.id != 'time') {                                                   
+                                                Ext.getCmp('redirect_time').disable();
                                             }
                                         }
                                     },
@@ -938,7 +941,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -950,7 +953,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     anchor: '95%'                                
                                }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1208,7 +1211,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1246,7 +1249,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1289,7 +1292,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             },{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1325,7 +1328,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1355,7 +1358,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1384,7 +1387,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1417,7 +1420,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1445,7 +1448,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1473,7 +1476,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                         })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1506,7 +1509,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1534,7 +1537,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1562,7 +1565,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -1621,7 +1624,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 handlerDelete: this.deletePhone,
                 items: [{
                     defaults: {
-                        frame: true,
+                        frame: true
                     },
                 	xtype: 'tabpanel',
                     border: false,

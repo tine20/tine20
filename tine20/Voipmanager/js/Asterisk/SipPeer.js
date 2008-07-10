@@ -168,7 +168,7 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
     	regseconds: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
     		if(_data > 0) {
     			var date = Date.parseDate(_data, 'U');
-    			return date.format('d-m-Y H:i:s')
+    			return date.format('d-m-Y H:i:s');
     		} else {
     			return '';
     		}
@@ -575,7 +575,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                     data: [['1', 'on'], ['0', 'off']]
                 })
             }]]
-        }
+        };
     
         return _dialog;
     },     
@@ -601,7 +601,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                 border: false,
                 anchor: '100%',
                 items: [{
-                    columnWidth: .25,
+                    columnWidth: 0.25,
                     layout: 'form',
                     border: false,
                     anchor: '100%',
@@ -686,7 +686,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                             autoLoad: true,
                             id: 'key',
                             fields: ['key', 'value'],
-                            data: [['inband', 'inband', ], ['info', 'info'], ['rfc2833', 'rfc2833']]
+                            data: [['inband', 'inband'], ['info', 'info'], ['rfc2833', 'rfc2833']]
                         })
                     }, {
                         xtype: 'textfield',
@@ -704,7 +704,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                         allowBlank: true
                     }]
                 }, {
-                    columnWidth: .25,
+                    columnWidth: 0.25,
                     layout: 'form',
                     border: false,
                     anchor: '98%',
@@ -808,7 +808,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                         allowBlank: true
                     }]
                 }, {
-                    columnWidth: .25,
+                    columnWidth: 0.25,
                     layout: 'form',
                     border: false,
                     anchor: '98%',
@@ -912,7 +912,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                         allowBlank: false
                     }]
                 }, {
-                    columnWidth: .25,
+                    columnWidth: 0.25,
                     layout: 'form',
                     border: false,
                     anchor: '98%',
@@ -1050,7 +1050,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
             handlerDelete: this.deleteSipPeer,
             items: [{
 		        defaults: {
-		            frame: true,
+		            frame: true
 		        },
                 xtype: 'tabpanel',
                 border: false,

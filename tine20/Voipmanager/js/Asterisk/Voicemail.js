@@ -510,7 +510,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -523,7 +523,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -536,7 +536,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -554,7 +554,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -580,7 +580,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })								
                             }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -593,7 +593,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 allowBlank: true
                             }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -624,7 +624,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -650,7 +650,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })
                             }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -676,7 +676,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })
                             }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -707,7 +707,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -733,7 +733,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })
                             }]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -759,7 +759,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })
                             }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -790,7 +790,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -816,7 +816,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })
                             }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -842,7 +842,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                                 })
                             }]
                         },{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -873,7 +873,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         border: false,
                         anchor: '100%',
                         items: [{
-                            columnWidth: .33,
+                            columnWidth: 0.33,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -930,7 +930,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                 handlerDelete: this.deleteVoicemail,
                 items: [{
 	                defaults: {
-	                    frame: true,
+	                    frame: true
 	                },
                     xtype: 'tabpanel',
                     border: false,

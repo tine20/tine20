@@ -345,7 +345,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
         
         updateWritableFields: function(_settingData)
         {
-             _writableFields = new Array("web_language_writable","language_writable","display_method_writable","call_waiting_writable","mwi_notification_writable","mwi_dialtone_writable","headset_device_writable","message_led_other_writable","global_missed_counter_writable","scroll_outgoing_writable","show_local_line_writable","show_call_status_writable");               
+             _writableFields = [["web_language_writable"],["language_writable"],["display_method_writable"],["call_waiting_writable"],["mwi_notification_writable"],["mwi_dialtone_writable"],["headset_device_writable"],["message_led_other_writable"],["global_missed_counter_writable"],["scroll_outgoing_writable"],["show_local_line_writable"],["show_call_status_writable"]];               
             
             Ext.each(_writableFields, function(_item, _index, _array) {
                 if (Ext.getCmp(_item)) {
@@ -461,7 +461,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                         anchor: '100%',
                         height: 50,
                         items: [{
-                            columnWidth: .35,
+                            columnWidth: 0.35,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
@@ -474,7 +474,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                 allowBlank: false
                             }]
                         }, {
-                            columnWidth: .65,
+                            columnWidth: 0.65,
                             layout: 'form',
                             border: false,
                             anchor: '98%',
@@ -497,7 +497,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -536,7 +536,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -580,7 +580,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             },{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -617,7 +617,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -648,7 +648,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -678,7 +678,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -712,7 +712,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -741,7 +741,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -770,7 +770,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -804,7 +804,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -833,7 +833,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -862,7 +862,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                     })
                                 }]
                             }, {
-                                columnWidth: .33,
+                                columnWidth: 0.33,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -922,7 +922,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 handlerDelete: this.deleteSetting,
                 items: [{
                     defaults: {
-                        frame: true,
+                        frame: true
                     },
                     xtype: 'tabpanel',
                     border: false,
