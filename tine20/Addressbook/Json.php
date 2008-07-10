@@ -351,27 +351,4 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         }
         return $link;
     }
-    /**
-     * returns binary image data from a image identified by a imagelink
-     * 
-     * @param  array  $imageParams
-     * @return string binary data
-     */
-    protected function getImageData($imageParams)
-    {
-        $db = Zend_Registry::get('dbAdapter');
-        $select = $db->select()
-           ->from(SQL_TABLE_PREFIX . 'temp_files')
-           ->where($db->quoteInto('id = ?', $imageParams['id']))
-           ->where($db->quoteInto('session_id = ?', session_id()));
-        $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
-        
-        //Zend_Registry::get('logger')->debug(print_r($tempFile,true));
-        
-        if (! Tinebase_ImageHelper::isImageFile($tempFile['path'])) {
-            throw new Exception('given file is not an image');
-        }
-        
-        return file_get_contents($tempFile['path']);
-    }
 }
