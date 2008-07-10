@@ -724,7 +724,7 @@ Tine.Addressbook.ContactEditDialog = {
         });
 
         this.updateContactRecord(_contactData);
-        this.updateToolbarButtons(_contactData.grants);
+        this.updateToolbarButtons(_contactData.owner.account_grants);
         
         dialog.getForm().loadRecord(this.contactRecord);
         Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contactRecord.get('jpegphoto'));

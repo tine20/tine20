@@ -42,7 +42,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
             $encodedContact = $contact->toArray();
             $addressbook = Tinebase_Container::getInstance()->getContainerById($contact->owner);
             $encodedContact['owner'] = $addressbook->toArray();
-            $encodedContact['grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $contact->owner)->toArray();
+            $encodedContact['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $contact->owner)->toArray();
             //$encodedContact['tags'] = $encodedContact['tags']->toArray();
             //Zend_Registry::get('logger')->debug(print_r($encodedContact,true));
             if (!empty($encodedContact['jpegphoto'])) {
@@ -59,10 +59,11 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
             $personalAddressbooks = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, 
                 'Addressbook', $currentAccount->accountId, Tinebase_Container::GRANT_READ);
             foreach ($personalAddressbooks as $addressbook) {
-                $encodedContact = Zend_Json::encode(array(
-                    'owner' => $addressbook->toArray() ,
-                    'grants' => Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $addressbook)->toArray()
-                ));
+                $contact = array( 
+                    'owner' => $addressbook->toArray()
+                );
+                $contact['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $addressbook)->toArray();
+                $encodedContact = Zend_Json::encode($contact);
                 break;
             }
         }

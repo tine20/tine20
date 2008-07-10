@@ -33,6 +33,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $_contact->tags = $_contact->tags->toArray();
         $result = $_contact->toArray();
         $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
+        $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
         $result['jpegphoto'] = $this->getImageLink($_contact);
         
         return $result;
