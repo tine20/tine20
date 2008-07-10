@@ -3087,6 +3087,40 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->addCol('snom_software', $declaration); 
         
         $this->setApplicationVersion('Voipmanager', '0.18');              
-    }        
+    }
+    
+    /**
+     * add fields to snom_phones
+     */    
+    public function update_18()
+    {  
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>redirect_event</name>
+                    <type>enum</type>
+                    <value>none</value>
+                    <value>all</value>
+                    <value>busy</value>
+                    <value>time</value>            
+                </field>');
+        $this->_backend->addCol('snom_phones', $declaration); 
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>redirect_number</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>');
+        $this->_backend->addCol('snom_phones', $declaration); 
+  
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>redirect_time</name>
+                    <type>integer</type>
+                    <length>11</length>
+                </field>');
+        $this->_backend->addCol('snom_phones', $declaration);                 
+        
+        $this->setApplicationVersion('Voipmanager', '0.19');              
+    }    
+            
            
 }
