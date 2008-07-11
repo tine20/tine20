@@ -210,6 +210,11 @@ class Voipmanager_Controller
         // auto generate random http client username and password        
         $phone->http_client_user = Tinebase_Record_Abstract::generateUID();
         $phone->http_client_pass = Tinebase_Record_Abstract::generateUID();
+        $phone->http_client_info_sent = false;
+        
+        unset($phone->settings_loaded_at);
+        unset($phone->firmware_checked_at);
+        unset($phone->last_modified_time);
         
         $phone = $this->_snomPhoneBackend->create($_phone);
         
@@ -248,6 +253,10 @@ class Voipmanager_Controller
      */
     public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
     {
+        unset($phone->settings_loaded_at);
+        unset($phone->firmware_checked_at);
+        unset($phone->last_modified_time);
+        
         $phone = $this->_snomPhoneBackend->update($_phone);
         
         // force the right phone_id
