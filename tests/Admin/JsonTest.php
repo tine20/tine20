@@ -176,7 +176,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue ( is_array($account) );
         $this->assertEquals('tine20phpunitup', $account['accountLoginName']);
-        $this->assertEquals(Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']);
+        $this->assertEquals(Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']['id']);
         // check password
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
         $this->assertTrue ( $authResult->isValid() );
