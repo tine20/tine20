@@ -248,7 +248,7 @@ Tine.Admin.AccessLog.Main = function() {
     			var logIds = new Array();
                 var selectedRows = Ext.getCmp('gridAdminAccessLog').getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
-                    logIds.push(selectedRows[i].id);
+                    logIds.push(selectedRows[i].data.id);
                 }
                 
                 Ext.Ajax.request( {
