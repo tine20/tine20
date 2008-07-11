@@ -28,53 +28,59 @@
  */
 class Admin_Acl_Rights extends Tinebase_Application_Rights_Abstract
 {
-   /**
-     * the right to manage applications
-     * @staticvar string
-     */
-    const MANAGE_APPS = 'manage_apps';
-    
-   /**
+    /**
      * the right to manage roles
      * @staticvar string
      */
-    const MANAGE_ROLES = 'manage_roles';
-
-   /**
+    const MANAGE_ACCESS_LOG = 'manage_access_log';
+    
+    /**
      * the right to manage accounts
      * @staticvar string
      */
     const MANAGE_ACCOUNTS = 'manage_accounts';
     
    /**
+     * the right to manage applications
+     * @staticvar string
+     */
+    const MANAGE_APPS = 'manage_apps';
+    
+    /**
+     * the right to manage shared tags
+     * @staticvar string
+     */
+    const MANAGE_SHARED_TAGS = 'manage_shared_tags';
+   
+    /**
      * the right to manage roles
      * @staticvar string
      */
-    const MANAGE_ACCESS_LOG = 'manage_access_log';
-
-   /**
-     * the right to view applications
-     * @staticvar string
-     */
-    const VIEW_APPS = 'view_apps';
+    const MANAGE_ROLES = 'manage_roles';
     
-   /**
+    /**
      * the right to view roles
      * @staticvar string
      */
-    const VIEW_ROLES = 'view_roles';
-
-   /**
+    const VIEW_ACCESS_LOG = 'view_access_log';
+    
+    /**
      * the right to view accounts
      * @staticvar string
      */
     const VIEW_ACCOUNTS = 'view_accounts';
     
-   /**
+    /**
+     * the right to view applications
+     * @staticvar string
+     */
+    const VIEW_APPS = 'view_apps';
+    
+    /**
      * the right to view roles
      * @staticvar string
      */
-    const VIEW_ACCESS_LOG = 'view_access_log';
+    const VIEW_ROLES = 'view_roles';
     
     /**
      * holdes the instance of the singleton
@@ -126,16 +132,17 @@ class Admin_Acl_Rights extends Tinebase_Application_Rights_Abstract
         
         $allRights = parent::getAllApplicationRights();
         
-        $addRights = array ( 
-            self::MANAGE_APPS, 
-            self::MANAGE_ROLES, 
-            self::MANAGE_ACCOUNTS, 
+        $addRights = array (
             self::MANAGE_ACCESS_LOG, 
+            self::MANAGE_ACCOUNTS,
+            self::MANAGE_APPS, 
+            self::MANAGE_SHARED_TAGS,
+            self::MANAGE_ROLES, 
+            self::VIEW_ACCESS_LOG,
+            self::VIEW_ACCOUNTS,
             self::VIEW_APPS, 
             self::VIEW_ROLES, 
-            self::VIEW_ACCOUNTS, 
-            self::VIEW_ACCESS_LOG, 
-            );
+        );
         $allRights = array_merge($allRights, $addRights);
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allRights, true));
@@ -153,37 +160,41 @@ class Admin_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Admin');
         
         $rightDescriptions = array(
-            self::MANAGE_ROLES  => array(
-                'text'          => $translate->_('manage roles'),
-                'description'   => $translate->_('manage roles right description'),
-            ),
-            self::MANAGE_APPS   => array(
-                'text'          => $translate->_('manage applications'),
-                'description'   => $translate->_('manage applications right description'),
+            self::MANAGE_ACCESS_LOG   => array(
+                'text'          => $translate->_('manage access log'),
+                'description'   => $translate->_('manage access log right description'),
             ),
             self::MANAGE_ACCOUNTS   => array(
                 'text'          => $translate->_('manage accounts'),
                 'description'   => $translate->_('manage accounts right description'),
             ),
-            self::MANAGE_ACCESS_LOG   => array(
-                'text'          => $translate->_('manage access log'),
-                'description'   => $translate->_('manage access log right description'),
+            self::MANAGE_APPS   => array(
+                'text'          => $translate->_('manage applications'),
+                'description'   => $translate->_('manage applications right description'),
             ),
-            self::VIEW_ROLES  => array(
-                'text'          => $translate->_('view roles'),
-                'description'   => $translate->_('view roles right description'),
+            self::MANAGE_ROLES  => array(
+                'text'          => $translate->_('manage roles'),
+                'description'   => $translate->_('manage roles right description'),
             ),
-            self::VIEW_APPS   => array(
-                'text'          => $translate->_('view applications'),
-                'description'   => $translate->_('view applications right description'),
+            self::MANAGE_SHARED_TAGS    => array(
+                'text'          => $translate->_('manage shared tags'),
+                'description'   => $translate->_('manage shared tags right description'),
+            ),
+            self::VIEW_ACCESS_LOG   => array(
+                'text'          => $translate->_('view access log'),
+                'description'   => $translate->_('view access log right description'),
             ),
             self::VIEW_ACCOUNTS   => array(
                 'text'          => $translate->_('view accounts'),
                 'description'   => $translate->_('view accounts right description'),
             ),
-            self::VIEW_ACCESS_LOG   => array(
-                'text'          => $translate->_('view access log'),
-                'description'   => $translate->_('view access log right description'),
+            self::VIEW_APPS   => array(
+                'text'          => $translate->_('view applications'),
+                'description'   => $translate->_('view applications right description'),
+            ),
+            self::VIEW_ROLES  => array(
+                'text'          => $translate->_('view roles'),
+                'description'   => $translate->_('view roles right description'),
             ),
         );
         
