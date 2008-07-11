@@ -96,6 +96,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @param   array $_record record data
      * @param   string $_title the pdf title
      * @param   string $_subtitle the subtitle
+     * @param   array $_tags the tags
      * @param   string $_note      pdf note (below title)
      * @param   string $_titleIcon icon next to the title      
      * @param   Zend_Pdf_Image $_image image for the upper right corner (i.e. contact photo)
@@ -106,6 +107,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     public function generatePdf(array $_record, 
                                     $_title = "", 
                                     $_subtitle = "", 
+                                    $_tags = array(),
                                     $_note = "", 
                                     $_titleIcon = "",
                                     $_image = NULL, 
@@ -115,6 +117,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $xPos = 50;
         $yPos = 800;
         $yPosImage = 720;
+        $translate = Tinebase_Translation::getTranslation('Tinebase');        
         
         // add page
         if (!isset($this->pages[$this->_pageNumber])) { 
@@ -139,6 +142,19 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $yPos -= 20;
             $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 15); 
             $this->pages[$this->_pageNumber]->drawText($_subtitle, $xPos, $yPos, 'UTF-8');
+        }
+
+        // tags
+        if ( !empty($_tags) ) {
+            // @todo sort tags?
+            $yPos -= 15;
+            $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 11);
+            $tagsString = $translate->_('Tags') . ": ";
+            foreach ($_tags as $tag) {
+                $tagsString .= $tag['name'] . ' ';
+            }            
+            
+            $this->pages[$this->_pageNumber]->drawText($tagsString, $xPos, $yPos, 'UTF-8');
         }
         
         // write note (3 lines)
@@ -210,7 +226,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // create table
         if ( !empty($data) ) {
-            $this->_CreateTable($data, 50, 730, $_tableBorder);
+            $this->_CreateTable($data, 50, 710, $_tableBorder);
         }
                 
         // write footer
@@ -327,7 +343,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	 */
 	protected function _CreateFooter ()
 	{
-		// get translations from addressbook
+		// get translations from tinebase
 		$locale = Zend_Registry::get('locale');
 		$translate = Tinebase_Translation::getTranslation('Tinebase');
 		

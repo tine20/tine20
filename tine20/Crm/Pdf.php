@@ -43,11 +43,13 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 
         /*********************** add linked objects *************************/
 
-        $linkedObjects = $this->getLinkedObjects($_lead, $locale, $translate);        
+        $linkedObjects = $this->getLinkedObjects($_lead, $locale, $translate);       
+        $tags = ($_lead->tags instanceof Tinebase_Record_RecordSet) ? $_lead->tags->toArray() : array();
         
         /***************************** generate pdf now! ********************/
                     
-        $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE);
+        $this->generatePdf($record, $title, $subtitle, $tags,
+            $description, $titleIcon, NULL, $linkedObjects, FALSE);
         
     }
 

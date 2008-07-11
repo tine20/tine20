@@ -188,8 +188,11 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
                 $record[] = $fieldArray;
             }
         }     
+        
+        // tags
+        $tags = (isset($_contact['tags'])) ? $_contact['tags'] : array();
                 
         // generate pdf
-        $this->generatePdf($record, $title, $subtitle, $_contact->note, $titleIcon, $contactPhoto, array(), FALSE);
+        $this->generatePdf($record, $title, $subtitle, $tags, $_contact->note, $titleIcon, $contactPhoto, array(), FALSE);
     }
 }
