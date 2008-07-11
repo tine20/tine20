@@ -50,7 +50,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     //private
     setValue: function(container){
-        this.setDisabled(! container.account_grants.deleteGrant);
+        if (container.account_grants) {
+            this.setDisabled(! container.account_grants.deleteGrant);
+        }
     	this.container = container;
     	this.setRawValue(container.name);
     }
