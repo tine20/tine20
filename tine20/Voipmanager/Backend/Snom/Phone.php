@@ -156,6 +156,7 @@ class Voipmanager_Backend_Snom_Phone
         if (! $_phone->isValid()) {
             throw new Exception('invalid phone');
         }
+        
         $phoneId = $_phone->getId();
         $phoneData = $_phone->toArray();
         unset($phoneData['id']);

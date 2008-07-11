@@ -205,7 +205,7 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings, $_settingId = NULL)
+    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
     {
         // auto generate random http client username and password        
         $phone->http_client_user = Tinebase_Record_Abstract::generateUID();
@@ -213,26 +213,22 @@ class Voipmanager_Controller
         
         $phone = $this->_snomPhoneBackend->create($_phone);
         
+        // force the right phone_id
         $_phoneSettings->setId($phone->getId());
-        $phoneSettingsData = $_phoneSettings->toArray();
-        
-        
-        if(!empty($_settingId)) {
-            $settingDefaults = $this->_snomSettingBackend->get($_settingId)->toArray();
-            unset($settingDefaults['id']);
-            unset($settingDefaults['name']);
-            unset($settingDefaults['description']);                        
-                   
-            
-            foreach($settingDefaults AS $key=>$value) {
-                if($phoneSettingsData[$key] == $settingDefaults[$key]) {
-                    $phoneSettingsData[$key] = NULL;
-                }    
+
+        // set all settings which are equal to the default settings to NULL
+        $template = $this->getSnomTemplate($phone->template_id);
+        $settingDefaults = $this->getSnomSetting($template->setting_id);
+
+        foreach($_phoneSettings AS $key => $value) {
+            if($key == 'phone_id') {
+                continue;
             }
-            $_phoneSettings->setFromArray($phoneSettingsData);        
+            if($_phoneSettings->$key == $settingDefaults->$key) {
+                $_phoneSettings->$key = NULL;
+            }    
         }
-        
-        
+                
         $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);
         
         foreach($_phone->lines as $line) {
@@ -250,28 +246,25 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings, $_settingId = NULL)
+    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
     {
         $phone = $this->_snomPhoneBackend->update($_phone);
         
+        // force the right phone_id
         $_phoneSettings->setId($phone->getId());
 
-        $phoneSettingsData = $_phoneSettings->toArray();
-         
-        if(!empty($_settingId)) {
-            $settingDefaults = $this->_snomSettingBackend->get($_settingId)->toArray();
-            unset($settingDefaults['id']);
-            unset($settingDefaults['name']);
-            unset($settingDefaults['description']);                        
-                   
-            
-        foreach($settingDefaults AS $key=>$value) {
-                if($phoneSettingsData[$key] == $settingDefaults[$key]) {
-                    $phoneSettingsData[$key] = NULL;
-                }    
+        // set all settings which are equal to the default settings to NULL
+        $template = $this->getSnomTemplate($phone->template_id);
+        $settingDefaults = $this->getSnomSetting($template->setting_id);
+
+        foreach($_phoneSettings AS $key => $value) {
+            if($key == 'phone_id') {
+                continue;
             }
-            $_phoneSettings->setFromArray($phoneSettingsData);        
-        }        
+            if($_phoneSettings->$key == $settingDefaults->$key) {
+                $_phoneSettings->$key = NULL;
+            }    
+        }
         
         if($this->_snomPhoneSettingsBackend->get($phone->getId())) {
             $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
@@ -283,7 +276,7 @@ class Voipmanager_Controller
         
         foreach($_phone->lines as $line) {
             $line->snomphone_id = $phone->getId();
-            error_log(print_r($line->toArray(), true));
+            //error_log(print_r($line->toArray(), true));
             $addedLine = $this->_snomLineBackend->create($line);
         }
       
@@ -479,7 +472,7 @@ class Voipmanager_Controller
      * get snom_template by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
+     * @return Voipmanager_Model_SnomTemplate
      */
     public function getSnomTemplate($_id)
     {

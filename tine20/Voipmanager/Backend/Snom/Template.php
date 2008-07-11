@@ -68,18 +68,23 @@ class Voipmanager_Backend_Snom_Template
 	 * get Template by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
+	 * @return Voipmanager_Model_SnomTemplate
 	 */
     public function get($_id)
     {	
         $templateId = Voipmanager_Model_SnomTemplate::convertSnomTemplateIdToInt($_id);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_templates')->where($this->_db->quoteInto('id = ?', $templateId));
+        
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_templates')
+            ->where($this->_db->quoteInto('id = ?', $templateId));
+        
         $row = $this->_db->fetchRow($select);
-        if (! $row) {
+        if (!$row) {
             throw new UnderflowException('template not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomTemplate', $row);
+
         $result = new Voipmanager_Model_SnomTemplate($row);
+        
         return $result;
 	}
 	   

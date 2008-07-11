@@ -56,7 +56,7 @@ class Voipmanager_Model_SnomPhone extends Tinebase_Record_Abstract
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'location_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-        'settings_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'settings_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ipaddress'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'current_software'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
