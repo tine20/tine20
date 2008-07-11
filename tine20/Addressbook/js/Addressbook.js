@@ -608,7 +608,8 @@ Tine.Addressbook.ContactEditDialog = {
                     	}
                     	
                     	// update record
-                    	Tine.Addressbook.ContactEditDialog.updateContactRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                    	var contactData = Ext.util.JSON.decode(_result.responseText).updatedData; 
+                    	Tine.Addressbook.ContactEditDialog.updateContactRecord(contactData);
                     	form.loadRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
                     	
                         // notify opener and return contact data 
@@ -618,7 +619,7 @@ Tine.Addressbook.ContactEditDialog = {
                           	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
                             window.close();
                         } else {
-                            //this.updateToolbarButtons(formData.config.addressbookRights);
+                            this.updateToolbarButtons(contactData.owner.account_grants, contactData.id);
                             Ext.MessageBox.hide();
                         }
                     },
@@ -662,9 +663,10 @@ Tine.Addressbook.ContactEditDialog = {
 	    
 	    exportContact: function(_button, _event) 
 	    {
-	        var contactIds = Ext.util.JSON.encode([formData.values.id]);
+	    	// we have to create an array (json encoded) as param here because exportContact expects one (for multiple contact export)
+	    	var contactIds = Ext.util.JSON.encode([_button.contactId]);
 
-	        //@todo implement
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
 	    }
 	},
 
@@ -679,12 +681,20 @@ Tine.Addressbook.ContactEditDialog = {
         this.contactRecord = new Tine.Addressbook.Model.Contact(_contactData);
     },
 
-    updateToolbarButtons: function(_rights)
-    {
+    updateToolbarButtons: function(_rights, contactId)
+    {    	
         with(_rights) {
             Ext.getCmp('contactDialog').action_saveAndClose.setDisabled(!editGrant);
             Ext.getCmp('contactDialog').action_applyChanges.setDisabled(!editGrant);
             Ext.getCmp('contactDialog').action_delete.setDisabled(!deleteGrant);
+        }
+        
+        // add contact id to export button and enable it if id is set
+        if (contactId) {
+        	Ext.getCmp('exportButton').contactId = contactId;
+            Ext.getCmp('exportButton').setDisabled(false);
+        } else {
+        	Ext.getCmp('exportButton').setDisabled(true);
         }
     },
 
@@ -692,11 +702,9 @@ Tine.Addressbook.ContactEditDialog = {
     {
         // export lead handler for edit contact dialog
         var  _export_contact = new Ext.Action({
+        	id: 'exportButton',
             text: 'export as pdf',
-            handler: function(){
-                var contactIds = Ext.util.JSON.encode([_contactData.id]);
-                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
-            },
+            handler: this.handlers.exportContact,
             iconCls: 'action_exportAsPdf',
             disabled: false
         });         
@@ -724,7 +732,7 @@ Tine.Addressbook.ContactEditDialog = {
         });
 
         this.updateContactRecord(_contactData);
-        this.updateToolbarButtons(_contactData.owner.account_grants);
+        this.updateToolbarButtons(_contactData.owner.account_grants, _contactData.id);
         
         dialog.getForm().loadRecord(this.contactRecord);
         Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contactRecord.get('jpegphoto'));
