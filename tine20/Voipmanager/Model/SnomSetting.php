@@ -39,10 +39,10 @@ class Voipmanager_Model_SnomSetting extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_filters = array(
+    protected $_filters; /* = array(
         '*'                     => 'StringTrim'
     );
-    
+    */
     /**
      * list of zend validator
      * 
@@ -54,30 +54,30 @@ class Voipmanager_Model_SnomSetting extends Tinebase_Record_Abstract
         'id'						=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'name'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'web_language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'language'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'display_method'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'mwi_notification'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),  
-        'mwi_dialtone'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),  
-        'headset_device'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'message_led_other'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'global_missed_counter'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
-        'scroll_outgoing'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'show_local_line'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'show_call_status'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'call_waiting'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'web_language_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'language_writable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'display_method_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'call_waiting_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'mwi_notification_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
-        'mwi_dialtone_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'headset_device_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'message_led_other_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'global_missed_counter_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'scroll_outgoing_writable'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'show_local_line_writable'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'show_call_status_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'web_language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'language'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'display_method'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'mwi_notification'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'mwi_dialtone'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'headset_device'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'message_led_other'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'global_missed_counter'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'scroll_outgoing'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'show_local_line'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'show_call_status'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'call_waiting'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'web_language_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'language_writable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'display_method_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'call_waiting_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'mwi_notification_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'mwi_dialtone_writable'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'headset_device_writable'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'message_led_other_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'global_missed_counter_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'scroll_outgoing_writable'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'show_local_line_writable'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'show_call_status_writable' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
     );
 
     /**

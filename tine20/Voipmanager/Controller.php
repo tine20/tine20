@@ -626,10 +626,6 @@ class Voipmanager_Controller
      */
     public function createSnomSoftware(Voipmanager_Model_SnomSoftware $_software)
     {        
-        unset($_software->current_software);
-        unset($_software->settings_loaded_at);
-        unset($_software->firmware_checked_at);
-        unset($_software->ipaddress);
         
         $software = $this->_snomSoftwareBackend->create($_software);
       
@@ -645,10 +641,6 @@ class Voipmanager_Controller
      */
     public function updateSnomSoftware(Voipmanager_Model_SnomSoftware $_software)
     {
-        unset($_software->current_software);
-        unset($_software->settings_loaded_at);
-        unset($_software->firmware_checked_at);
-        unset($_software->ipaddress);
         
         $software = $this->_snomSoftwareBackend->update($_software);
         

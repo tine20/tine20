@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.19</version>
+    <version>1.00</version>
     <order>50</order>
     <tables>
         <table>
@@ -16,6 +16,11 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>200</length>
+                </field>                
                 <field>
                     <name>softwareimage_snom300</name>
                     <type>text</type>
@@ -163,7 +168,7 @@
                 <field>
                     <name>timezone</name>
                     <type>text</type>
-                    <notnull>24</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>ntp_refresh</name>
@@ -194,17 +199,13 @@
                 </field>
                 <field>
                     <name>date_us_format</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>     
                 <field>
                     <name>time_24_format</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>     
                 <index>
                     <name>id</name>
@@ -369,7 +370,7 @@
                 <field>
                     <name>redirect_time</name>
                     <type>integer</type>
-                    <length>255</length>
+                    <length>11</length>
                 </field>                                
                 <field>
                     <name>http_client_info_sent</name>
@@ -476,10 +477,8 @@
                 </field>
                 <field>
                     <name>canreinvite</name>
-                    <type>enum</type>
-                    <value>yes</value>
-                    <value>no</value>
-                    <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>context</name>
@@ -555,10 +554,8 @@
                 </field>
                 <field>
                     <name>nat</name>
-                    <type>enum</type>
-                    <value>yes</value>
-                    <value>no</value>
-                    <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>deny</name>
@@ -592,10 +589,8 @@
                 </field>
                 <field>
                     <name>qualify</name>
-                    <type>enum</type>
-                    <value>yes</value>
-                    <value>no</value>
-                    <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>restrictcid</name>
@@ -673,10 +668,8 @@
                 </field>
                 <field>
                     <name>cancallforward</name>
-                    <type>enum</type>
-                    <value>yes</value>
-                    <value>no</value>
-                    <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>setvar</name>
@@ -686,17 +679,13 @@
                 </field>
                 <field>
                     <name>notifyringing</name>
-                    <type>enum</type>
-                    <value>yes</value>
-                    <value>no</value>
-                    <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>useclientcode</name>
-                    <type>enum</type>
-                    <value>yes</value>
-                    <value>no</value>
-                    <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>authuser</name>
@@ -753,7 +742,6 @@
                 <field>
                     <name>linenumber</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>lineactive</name>
@@ -898,15 +886,13 @@
                </field>
                <field>
                    <name>attach</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>saycid</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>dialout</name>
@@ -922,27 +908,23 @@
                </field>
                <field>
                    <name>review</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>no</default>
+                   <type>boolean</type>
+                   <default>NULL</default>
                </field>
                <field>
                    <name>operator</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>envelope</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>sayduration</name>
-                   <type>integer</type>
-                   <length>4</length>
-                   <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>saydurationm</name>
@@ -952,39 +934,33 @@
                </field>
                <field>
                    <name>sendvoicemail</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>delete</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>nextaftercmd</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>forcename</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>forcegreetings</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>no</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <field>
                    <name>hidefromdir</name>
-                   <type>text</type>
-                   <length>4</length>
-                   <default>yes</default>
+                    <type>boolean</type>
+                    <default>NULL</default>
                </field>
                <index>
                    <name>id</name>
@@ -1007,7 +983,7 @@
         </table>            
         
       <table>
-            <name>snom_settings</name>
+            <name>snom_default_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>1</version>
@@ -1044,7 +1020,8 @@
                     <value>Svenska</value>
                     <value>Dansk</value>
                     <value>Norsk</value>
-                    <default>English</default>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>language</name>
@@ -1066,7 +1043,8 @@
                     <value>Norsk</value>
                     <value>Japanese</value>
                     <value>Chinese</value>
-                    <default>English</default>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>display_method</name>
@@ -1076,7 +1054,8 @@
                     <value>display_number</value>
                     <value>display_name_number</value>
                     <value>display_number_name</value>
-                    <default>display_name</default>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>mwi_notification</name>
@@ -1084,370 +1063,55 @@
                     <value>silent</value>
                     <value>beep</value>
                     <value>reminder</value>
-                    <default>silent</default>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>mwi_dialtone</name>
                     <type>enum</type>
                     <value>normal</value>
                     <value>stutter</value>
-                    <default>stutter</default>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>headset_device</name>
                     <type>enum</type>
                     <value>none</value>
                     <value>headset_rj</value>
-                    <default>none</default>
-                </field>
-                <field>
-                    <name>with_flash</name>
-                    <type>enum</type>
-                    <value>true</value>
-                    <value>false</value>
                     <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>message_led_other</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>on</default>
+                    <type>boolean</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>global_missed_counter</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>on</default>
+                    <type>boolean</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>scroll_outgoing</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>on</default>
+                    <type>boolean</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>show_local_line</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
+                    <type>boolean</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>show_call_status</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
-                </field>
-                <field>
-                    <name>redirect_event</name>
-                    <type>enum</type>
-                    <value>none</value>
-                    <value>all</value>
-                    <value>busy</value>
-                    <value>time</value>            
-                    <default>none</default>
-                </field>
-                <field>
-                    <name>redirect_number</name>
-                    <type>text</type>
-                    <length>255</length>
+                    <type>boolean</type>
                     <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_always_on_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_always_off_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_busy_number</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_busy_on_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_busy_off_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_time</name>
-                    <type>integer</type>
-                    <length>255</length>
-                    <notnull>false</notnull>    
-                </field>                
-                <field>
-                    <name>redirect_time_number</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_time_on_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>redirect_time_off_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>dnd_on_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>dnd_off_code</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>ringer_headset_device</name>
-                    <type>enum</type>
-                    <value>speaker</value>
-                    <value>headset</value>
-                    <default>speaker</default>
-                </field>
-                <field>
-                    <name>ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>
-                <field>
-                    <name>alert_internal_ring_text</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <default>alert-internal</default>
-                </field>
-                <field>
-                    <name>alert_internal_ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>                    
-                <field>
-                    <name>alert_external_ring_text</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <default>alert-external</default>
-                </field>
-                <field>
-                    <name>alert_external_ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>                    
-                <field>
-                    <name>alert_group_ring_text</name>                    
-                    <type>text</type>
-                    <length>255</length>
-                    <default>alert-group</default>                    
-                </field>
-                <field>
-                    <name>alert_group_ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>
-                <field>                    
-                    <name>friends_ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>
-                <field>                    
-                    <name>family_ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>
-                <field>                    
-                    <name>colleagues_ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>
-                <field>                    
-                    <name>vip_ring_sound</name>
-                    <type>enum</type>
-                    <value>Ringer1</value>
-                    <value>Ringer2</value>
-                    <value>Ringer3</value>
-                    <value>Ringer4</value>
-                    <value>Ringer5</value>
-                    <value>Ringer6</value>
-                    <value>Ringer7</value>
-                    <value>Ringer8</value>
-                    <value>Ringer9</value>
-                    <value>Ringer10</value>
-                    <value>Silent</value>
-                    <default>Ringer1</default>
-                </field>
-                <field>
-                    <name>custom_melody_url</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>                    
-                <field>
-                    <name>auto_connect_indication</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                </field>                   
-                <field>
-                    <name>auto_connect_type</name>
-                    <type>enum</type>
-                    <value>auto_connect_type_handsfree</value>
-                    <value>auto_connect_type_handset</value>
-                    <value>auto_connect_type_headset</value>
-                    <default>auto_connect_type_handsfree</default>
-                </field>
-                <field>
-                    <name>privacy_out</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
-                </field>             
-                <field>
-                    <name>privacy_in</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
-                </field>             
-                <field>
-                    <name>presence_timeout</name>
-                    <type>integer</type>
-                    <length>20</length>
-                    <default>15</default>
-                </field>
-                <field>
-                    <name>enable_keyboard_lock</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>on</default>
-                </field>            
-                <field>
-                    <name>keyboard_lock</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <default>off</default>
-                </field>     
-                <field>
-                    <name>keyboard_lock_pw</name>       
-                    <type>integer</type>
-                    <length>50</length>
-                    <default>15</default>
-                </field>     
-                <field>
-                    <name>keyboard_lock_emergency</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <default>911 112 110 999</default>                                                       
-                </field>
-                <field>
-                    <name>emergency_proxy</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>                                                       
-                </field>  
+                    <default>NULL</default>
+                </field> 
                 <field>
                     <name>call_waiting</name>
                     <type>enum</type>
@@ -1455,7 +1119,8 @@
                     <value>visual</value>
                     <value>ringer</value>
                     <value>off</value>
-                    <default>off</default>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
                 </field>     
                 <field>
                     <name>web_language_writable</name>
@@ -1471,7 +1136,12 @@
                     <name>display_method_writable</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>  
+                <field>
+                    <name>call_waiting_writable</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>                     
                 <field>
                     <name>mwi_notification_writable</name>
                     <type>boolean</type>
@@ -1511,27 +1181,7 @@
                     <name>show_call_status_writable</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
-                <field>
-                    <name>redirect_event_writable</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>     
-                <field>
-                    <name>redirect_number_writable</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>     
-                <field>
-                    <name>redirect_time_writable</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>   
-                <field>
-                    <name>call_waiting_writable</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>     
+                </field>          
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1660,34 +1310,44 @@
                 </field>
                 <field>
                     <name>message_led_other</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
+                    <type>boolean</type>
+                    <notnull>false</notnull>                    
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>global_missed_counter</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
+                    <type>boolean</type>
+                    <notnull>false</notnull>                                        
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>scroll_outgoing</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
+                    <type>boolean</type>
+                    <notnull>false</notnull>                                        
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>show_local_line</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
+                    <type>boolean</type>
+                    <notnull>false</notnull>                                        
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>show_call_status</name>
+                    <type>boolean</type>
+                    <notnull>false</notnull>                                        
+                    <default>NULL</default>
+                </field>               
+                <field>
+                    <name>call_waiting</name>
                     <type>enum</type>
                     <value>on</value>
+                    <value>visual</value>
+                    <value>ringer</value>
                     <value>off</value>
-                </field>               
+                    <notnull>false</notnull>                                                            
+                    <default>NULL</default>
+                </field>                
                 <index>
                     <name>phone_id</name>
                     <unique>true</unique>

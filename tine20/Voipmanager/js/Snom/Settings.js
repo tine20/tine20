@@ -520,7 +520,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],                                        
+                                            [ null,  translation._('- factory default -')],                                        
                                             ['English', Locale.getTranslationData('Language', 'en')],
                                             ['Deutsch', Locale.getTranslationData('Language', 'de')],
                                             ['Espanol', Locale.getTranslationData('Language', 'es')],
@@ -558,7 +558,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],                                                                                               
+                                            [ null,  translation._('- factory default -')],                                                                                               
                                             ['English', Locale.getTranslationData('Language', 'en')],
                                             ['English(UK)', Locale.getTranslationData('Language', 'en_GB')],
                                             ['Deutsch', Locale.getTranslationData('Language', 'de')],
@@ -602,7 +602,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],                                                                                
+                                            [ null,  translation._('- factory default -')],                                                                                
                                             ['full_contact', translation._('whole url')],
                                             ['display_name', translation._('name')],
                                             ['display_number', translation._('number')],
@@ -639,7 +639,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],                                        
+                                            [ null,  translation._('- factory default -')],                                        
                                             ['on', translation._('on')],
                                             ['visual', translation._('visual')],
                                             ['ringer', translation._('ringer')],
@@ -670,7 +670,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],                                        
+                                            [ null,  translation._('- factory default -')],                                        
                                             ['silent', translation._('silent')],
                                             ['beep', translation._('beep')],
                                             ['reminder', translation._('reminder')]
@@ -700,7 +700,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],                                        
+                                            [ null,  translation._('- factory default -')],                                        
                                             ['normal', translation._('normal')],
                                             ['stutter', translation._('stutter')]
                                         ]
@@ -734,7 +734,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],                                        
+                                            [ null,  translation._('- factory default -')],                                        
                                             ['none', translation._('none')],
                                             ['headset_rj', translation._('headset_rj')]
                                         ]
@@ -763,7 +763,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                             id: 'id',
                                             fields: ['id', 'name'],
                                             data: [
-                                                [ '',  translation._('- factory default -')],
+                                                [ null,  translation._('- factory default -')],
                                                 ['1', translation._('on')],
                                                 ['0', translation._('off')]
                                             ]
@@ -792,7 +792,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],
+                                            [ null,  translation._('- factory default -')],
                                             ['1', translation._('on')], 
                                             ['0', translation._('off')]
                                         ]
@@ -826,7 +826,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],
+                                            [ null,  translation._('- factory default -')],
                                             ['1', translation._('on')],
                                             ['0', translation._('off')]
                                         ]
@@ -855,7 +855,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],
+                                            [ null,  translation._('- factory default -')],
                                             ['1', translation._('on')],
                                             ['0', translation._('off')]
                                         ]
@@ -884,7 +884,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                                         id: 'id',
                                         fields: ['id', 'name'],
                                         data: [
-                                            [ '',  translation._('- factory default -')],
+                                            [ null,  translation._('- factory default -')],
                                             ['1', translation._('on')],
                                             ['0', translation._('off')]
                                         ]
