@@ -19,16 +19,14 @@
  * a right is always specific to an application and not to a record
  * examples for rights are: admin, run
  * 
+ * @todo Do we need this class? It could be confusing to have rights 
+ *       in admin and in tinebase for 'general' stuff.
+ * 
  * @package     Tinebase
  * @subpackage  Acl
  */
 class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
 {
-    /**
-     * the right to manage shared tags
-     */
-    const MANAGE_SHARED_TAGS = 'manage_shared_tags';
-    
     /**
      * holdes the instance of the singleton
      *
@@ -79,7 +77,7 @@ class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
                 
         if ( $_application === NULL || $_application === 'Tinebase' ) {
-            $addRights = array( self::MANAGE_SHARED_TAGS );
+            $addRights = array();
         } else {
             $addRights = array();
         }
@@ -99,10 +97,7 @@ class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Tinebase');
 
         $rightDescriptions = array(            
-            self::MANAGE_SHARED_TAGS    => array(
-                'text'          => $translate->_('manage shared tags'),
-                'description'   => $translate->_('manage shared tags right description'),
-            ),
+
         );
         
         return $rightDescriptions;
