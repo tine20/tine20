@@ -26,6 +26,8 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
      */
     public function generateContactPdf ( Addressbook_Model_Contact $_contact )
     {
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_contact->toArray(), true));
+        
         $locale = Zend_Registry::get('locale');
         $translate = Tinebase_Translation::getTranslation('Addressbook');
                  
@@ -69,6 +71,9 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             array(  'label' => $translate->_('Role'), 
                     'value' => array( 'role' ), 
             ),
+            array(  'label' => $translate->_('Room'), 
+                    'value' => array( 'room' ), 
+            ),
             array(  'label' => $translate->_('Assistant'), 
                     'value' => array( 'assistent' ), 
             ),
@@ -107,7 +112,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             array(  'label' => $translate->_('Birthday'), 
                     'value' => array( 'bday' ), 
             ),
-            array(  'label' => $translate->_('Title'), 
+            array(  'label' => $translate->_('Job Title'), 
                     'value' => array( 'title' ), 
             ),
 
@@ -133,8 +138,14 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             $contactPhoto = NULL;
         }
         
-        // build title
+        // build title (name)
         $title = $_contact['n_fn']; 
+        if (!empty($_contact['n_prefix'])) {
+            $title = $_contact['n_prefix'] . ' ' . $title;
+        }
+        if (!empty($_contact['n_suffix'])) {
+            $title .= ' ' . $_contact['n_suffix'];
+        }
         $subtitle = $_contact['org_name'];
         $titleIcon = "/images/oxygen/32x32/apps/system-users.png";
         
