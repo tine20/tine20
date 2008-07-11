@@ -462,7 +462,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             }
         } else {
             $contact = $this->_backend->get($_contactId);
-            if (Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_DELETE)) {
+            $container = Tinebase_Container::getInstance()->getContainerById($contact->owner);
+            
+            if (Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_DELETE &&
+                $container->type != Tinebase_Container::TYPE_INTERNAL)) {
+                    
                 $this->_backend->delete($_contactId);
             } else {
                 throw new Exception('delete access to contact denied');
