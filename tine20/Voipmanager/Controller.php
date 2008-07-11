@@ -215,6 +215,8 @@ class Voipmanager_Controller
         unset($_phone->settings_loaded_at);
         unset($_phone->firmware_checked_at);
         unset($_phone->last_modified_time);
+        unset($_phone->ipaddress);
+        unset($_phone->current_software);
         
         $phone = $this->_snomPhoneBackend->create($_phone);
         
@@ -256,6 +258,8 @@ class Voipmanager_Controller
         unset($_phone->settings_loaded_at);
         unset($_phone->firmware_checked_at);
         unset($_phone->last_modified_time);
+        unset($_phone->ipaddress);
+        unset($_phone->current_software);
         
         $phone = $this->_snomPhoneBackend->update($_phone);
         
