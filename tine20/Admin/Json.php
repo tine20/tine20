@@ -94,7 +94,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             $account = Admin_Controller::getInstance()->updateUser($account, $password, $passwordRepeat);
         }
         
+        $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
         $result = $account->toArray();
+        
         
         return $result;
         
