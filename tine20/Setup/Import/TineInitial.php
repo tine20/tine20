@@ -173,16 +173,14 @@ class Setup_Import_TineInitial
         } // end foreach applications                               
         
         # give Users group read rights to the internal addressbook
-        # give Adminstrators group read/write rights to the internal addressbook
+        # give Adminstrators group read/edit/admin rights to the internal addressbook
         $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
             Tinebase_Container::GRANT_READ
         ), TRUE);
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
             Tinebase_Container::GRANT_READ,
-            Tinebase_Container::GRANT_ADD,
             Tinebase_Container::GRANT_EDIT,
-            Tinebase_Container::GRANT_DELETE,
             Tinebase_Container::GRANT_ADMIN
         ), TRUE);
         
