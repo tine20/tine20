@@ -25,7 +25,7 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {String} emptyText
      */
-    emptyText: 'enter searchfilter',
+    emptyText: 'select entry...',
     
 	hiddenFieldId: '',
 	
