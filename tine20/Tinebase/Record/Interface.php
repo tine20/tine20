@@ -69,6 +69,13 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function __set($_name, $_value);
     
     /**
+     * unsets record related properties
+     * 
+     * @param string name of property
+     */
+    public function __unset($_name);
+    
+    /**
      * gets record related properties
      * 
      * @param string name of property
