@@ -778,7 +778,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $hasRight = FALSE;
         
         foreach ( $rightsToCheck as $rightToCheck ) {
-            if ( Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck) ) {
+            if ( Tinebase_Acl_Roles::getInstance()->hasRight('Crm', $this->_currentAccount->getId(), $rightToCheck) ) {
                 $hasRight = TRUE;
                 break;    
             }
