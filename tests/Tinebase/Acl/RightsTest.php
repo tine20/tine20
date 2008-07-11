@@ -82,12 +82,12 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */   
     public function testGetRightDescription()
     {
-        $text = Tinebase_Acl_Rights::getInstance()->getRightDescription(Tinebase_Acl_Rights::MANAGE_SHARED_TAGS);
+        $text = Admin_Acl_Rights::getInstance()->getRightDescription(Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         
         //print_r($text);
 
         $this->assertNotEquals('', $text['text']);
         $this->assertNotEquals('', $text['description']);
-        $this->assertNotEquals(Tinebase_Acl_Rights::MANAGE_SHARED_TAGS . ' right', $text['description']);
+        $this->assertNotEquals(Admin_Acl_Rights::MANAGE_SHARED_TAGS . ' right', $text['description']);
     } 
 }
