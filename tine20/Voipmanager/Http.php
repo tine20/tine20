@@ -54,11 +54,13 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     {
         $controller = Voipmanager_Controller::getInstance();
 
+        $asteriskSipPeers = $controller->searchAsteriskSipPeers('name');
+        $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());    
+        
         if (!empty($phoneId)) {
             $snomPhone = $controller->getSnomPhone($phoneId);
             $snomLines = $snomPhone->lines;
             unset($phone->lines);
-            $asteriskSipPeers = $controller->searchAsteriskSipPeers('name');
 
             $_phoneData = $snomPhone->toArray();
 
@@ -95,14 +97,12 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             // encode the data arrays
             $encodedSnomPhone = Zend_Json::encode($_phoneData);
             $encodedSnomLines = Zend_Json::encode($snomLines->toArray());
-            $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());              
         } else {
             //$phone = new Voipmanager_Model_SnomPhone();
             //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine');
             $encodedWritable = '{}';
             $encodedSnomPhone = '{}';
             $encodedSnomLines = '[]';
-            $encodedAsteriskSipPeers = '{}';
             
             $encodedSettings = '{}';
         }

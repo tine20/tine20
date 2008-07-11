@@ -425,11 +425,6 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
             translation.textdomain('Voipmanager');
             
             var _dialog = [{
-                layout: 'fit',
-                border: false,
-                autoHeight: true,
-                anchor: '100% 100%',
-                items: [{
                     layout: 'form',
                     //frame: true,
                     border: false,
@@ -830,7 +825,6 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                             }]
                         }]
                     }]
-                }]
             }];
          
          

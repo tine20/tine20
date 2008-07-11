@@ -410,7 +410,8 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                     preventScrollbars: false,
                     anchor: '100%',
                     height: 40
-                }, new Ext.form.ComboBox({
+                }, {
+                    xtype: 'combo',
                     fieldLabel: translation._('Software Version'),
                     name: 'software_id',
                     id: 'software_id',
@@ -426,7 +427,8 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                         id: 'id',
                         fields: ['id', 'model', 'description']
                     })
-                }), new Ext.form.ComboBox({
+                }, {
+                    xtype: 'combo',
                     fieldLabel: translation._('Settings'),
                     name: 'setting_id',
                     id: 'setting_id',
@@ -442,7 +444,8 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                         id: 'id',
                         fields: ['id', 'name']
                     })
-                }), new Ext.form.ComboBox({
+                }, {
+                    xtype: 'combo',
                     fieldLabel: translation._('Keylayout'),
                     name: 'keylayout_id',
                     id: 'keylayout_id',
@@ -459,8 +462,7 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                         id: 'id',
                         fields: ['id', 'model', 'description']
                     })
-                })
-                ]
+                }]
             }];
             
             
@@ -496,7 +498,7 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
             });
 
             Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Software').loadData(_software);
-            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Keylayout').loadData(_keylayout);            
+    //        Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Keylayout').loadData(_keylayout);            
             Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Settings').loadData(_settings);            
 
             var viewport = new Ext.Viewport({
