@@ -340,7 +340,7 @@ Tine.Admin.Groups.EditDialog = {
                     groupMembers.push(_record.data.accountId);
                 });
                 
-                // update form               
+                // update record with form data               
                 form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
 
                 /*********** save group members & form ************/
@@ -358,14 +358,12 @@ Tine.Admin.Groups.EditDialog = {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            //this.updateGroupRecord(Ext.util.JSON.decode(_result.responseText));
-                            //form.loadRecord(this.groupRecord);
+                            this.updateGroupRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            form.loadRecord(Tine.Admin.Groups.EditDialog.groupRecord);
                             
                         	// @todo   get groupMembers from result
-                        	/*
-                        	var groupMembers = Ext.util.JSON.decode(_result.responseText);
-                            dataStore.loadData(groupMembers, false);
-                            */
+                        	// var groupMembers = Ext.util.JSON.decode(_result.responseText).groupMembers;
+                            // dataStore.loadData(groupMembers.results, false);
                         	
                         	Ext.MessageBox.hide();
                         }

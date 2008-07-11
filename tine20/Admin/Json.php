@@ -453,7 +453,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $group->toArray(),
-                        'groupMembers'      => Admin_Controller::getInstance()->getGroupMembers($group->getId())
+                        'groupMembers'      => $this->getGroupMembers($group->getId())
         );
         
         return $result;
