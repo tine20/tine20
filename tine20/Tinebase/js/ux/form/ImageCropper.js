@@ -77,7 +77,7 @@ Ext.extend(Ext.ux.form.ImageCropper, Ext.Component, {
             pinned:true,
             handles: 's e se',
             draggable:true,
-            dynamic:true,
+            dynamic:true
         });
         this.resizeable.dd.fgImageEl = this.fgImageEl;
         this.resizeable.dd.bgImageEl = this.bgImageEl;
