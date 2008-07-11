@@ -48,7 +48,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         triggerAction: 'all',
         editable: false,
         allowBlank: false,
-        listWidth: '25%',
+//        listWidth: '25%',        IE don't like it
         forceSelection: true,
         anchor:'95%',
         lazyInit: false
@@ -76,7 +76,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         valueField:'id',
         typeAhead: true,
         triggerAction: 'all',
-        listWidth: '25%',                
+//        listWidth: '25%',                
         editable: false,
         allowBlank: false,
         forceSelection: true,
@@ -91,7 +91,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
             displayField:'leadsource',
             valueField:'id',
             typeAhead: true,
-            listWidth: '25%',                
+//            listWidth: '25%',                
             mode: 'local',
             triggerAction: 'all',
             editable: false,
@@ -104,7 +104,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         fieldLabel: translation._('Probability'), 
         id: 'combo_probability',
         anchor:'95%',            
-        listWidth: '25%',            
+//        listWidth: '25%',            
         name:'probability'
     });
 
@@ -194,7 +194,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
                 id: 'lead_combos',
                 anchor:'100%',                        
                 items: [{
-                    columnWidth: .33,
+                    columnWidth: 0.33,
                     items:[{
                         layout: 'form',
                         items: [
@@ -204,7 +204,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
                         ]
                     }]                          
                 },{
-                    columnWidth: .33,
+                    columnWidth: 0.33,
                     items:[{
                         layout: 'form',
                         border:false,
@@ -221,7 +221,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
                         ]
                     }]              
                 },{
-                    columnWidth: .33,
+                    columnWidth: 0.33,
                     items:[{
                         layout: 'form',
                         border:false,
