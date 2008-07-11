@@ -341,7 +341,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @throws Tinebase_Record_Exception_NotDefined
      * @return void
      */
-    public function __unset($_name, $_value)
+    public function __unset($_name)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
             throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
