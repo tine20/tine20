@@ -167,8 +167,8 @@ class Tinebase_Tags
                 break;
             case Tinebase_Tags_Model_Tag::TYPE_SHARED:
                 // @todo move to controller later?
-                if ( !Tinebase_Acl_Rights::getInstance()
-                        ->hasRight('Tinebase', $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS) ) {
+                if ( !Tinebase_Acl_Roles::getInstance()
+                        ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS) ) {
                     throw new Exception('Your are not allowed to create this tag');
                 }
                 $_tag->owner = 0;
@@ -194,8 +194,8 @@ class Tinebase_Tags
     public function updateTag(Tinebase_Tags_Model_Tag $_tag)
     {
         $currentAccountId = Zend_Registry::get('currentAccount')->getId();
-        $manageSharedTagsRight = Tinebase_Acl_Rights::getInstance()
-            ->hasRight('Tinebase', $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS);
+        $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
+            ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         
         if ( ($_tag->type == Tinebase_Tags_Model_Tag::TYPE_PERSONAL && $_tag->owner == $currentAccountId) ||
              ($_tag->type == Tinebase_Tags_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
@@ -231,8 +231,8 @@ class Tinebase_Tags
     public function deleteTags($_ids)
     {
         $currentAccountId = Zend_Registry::get('currentAccount')->getId();
-        $manageSharedTagsRight = Tinebase_Acl_Rights::getInstance()
-            ->hasRight('Tinebase', $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS);
+        $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
+            ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         $tags = $this->getTagsById($_ids);
         if (count($tags) != count((array)$_ids)) {
             throw new Exception('You are not allowed to delete this tags');
