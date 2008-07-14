@@ -94,7 +94,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $query,
             'tag'   => $tagFilter
         ));
@@ -160,7 +160,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $query,
             'tag'   => $tagFilter
         ));
@@ -203,7 +203,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $query,
             'tag'   => $tagFilter
         ));
@@ -248,7 +248,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $query,
             'tag'   => $tagFilter
         ));
@@ -293,7 +293,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $query,
             'tag'   => $tagFilter
         ));

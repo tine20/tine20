@@ -14,7 +14,7 @@
  * Addressbook Filter Class
  * @package Addressbook
  */
-class Addressbook_Model_Filter extends Tinebase_Record_Abstract
+class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 

@@ -65,11 +65,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * get list of all contacts
      *
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function getAllContacts(Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination) 
+    public function getAllContacts(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination) 
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
         $_filter->container = $readableContainer;
@@ -81,10 +81,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * get total count of all contacts matching filter
      *
-     * @param  Addressbook_Model_Filter $_filter
+     * @param  Addressbook_Model_ContactFilter $_filter
      * @return int                      total number of matching contacts
      */
-    public function getCountOfAllContacts(Addressbook_Model_Filter $_filter)
+    public function getCountOfAllContacts(Addressbook_Model_ContactFilter $_filter)
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
         $_filter->container = $readableContainer;
@@ -98,11 +98,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * get list of all contacts of one account
      *
      * @param  int                       $_owner account id of the account to get the folders from
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function getContactsByOwner($_owner, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination) 
+    public function getContactsByOwner($_owner, Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination) 
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $_owner, Tinebase_Container::GRANT_READ);
         
@@ -120,10 +120,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * get total count of contacts matching filter
      *
      * @param  int                       $_owner account id of the account to get the folders from
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @return int                       total number of matching contacts
      */
-    public function getCountByOwner($_owner, Addressbook_Model_Filter $_filter)
+    public function getCountByOwner($_owner, Addressbook_Model_ContactFilter $_filter)
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $_owner, Tinebase_Container::GRANT_READ);
                 
@@ -140,11 +140,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * get list of shared contacts
      *
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function getSharedContacts(Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination) 
+    public function getSharedContacts(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination) 
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('addressbook', Tinebase_Container::GRANT_READ);
         
@@ -161,10 +161,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * get total count of all contacts matching filter
      *
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @return int                       total number of matching contacts
      */
-    public function getCountOfSharedContacts(Addressbook_Model_Filter $_filter)
+    public function getCountOfSharedContacts(Addressbook_Model_ContactFilter $_filter)
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('addressbook', Tinebase_Container::GRANT_READ);
         
@@ -181,11 +181,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * get list of other peoples contacts
      *
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function getOtherPeopleContacts(Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination) 
+    public function getOtherPeopleContacts(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination) 
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('Addressbook', Tinebase_Container::GRANT_READ);
         
@@ -202,10 +202,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * get total count of all contacts matching filter
      *
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @return int                       total number of matching contacts
      */
-    public function getCountOfOtherPeopleContacts(Addressbook_Model_Filter $_filter)
+    public function getCountOfOtherPeopleContacts(Addressbook_Model_ContactFilter $_filter)
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('Addressbook', Tinebase_Container::GRANT_READ);
         
@@ -223,11 +223,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * get list of all contacts of one addressbook
      *
      * @param  int                       $_containerId
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function getContactsByAddressbookId($_containerId, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination) 
+    public function getContactsByAddressbookId($_containerId, Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination) 
     {
         $container = Tinebase_Container::getInstance()->getContainerById($_containerId);
         
@@ -246,7 +246,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * get total count of contacts for given addressbook
      *
      * @param  int                      $_containerId container id to get the contacts from
-     * @param  Addressbook_Model_Filter $_filter
+     * @param  Addressbook_Model_ContactFilter $_filter
      * @return int                      total number of matching contacts
      */
     public function getCountByAddressbookId($_containerId, $_filter)

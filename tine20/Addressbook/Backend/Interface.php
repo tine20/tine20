@@ -21,19 +21,19 @@ interface Addressbook_Backend_Interface
     /**
      * Search for records matching given filter
      *
-     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Addressbook_Model_ContactFilter  $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination);
+    public function search(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination);
     
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Addressbook_Model_Filter $_filter
+     * @param Addressbook_Model_ContactFilter $_filter
      * @return int
      */
-    public function searchCount(Addressbook_Model_Filter $_filter);
+    public function searchCount(Addressbook_Model_ContactFilter $_filter);
     
     /**
      * Return a single record
