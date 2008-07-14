@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        replace getXXX functions by searchContacts
  */
 
 /**
@@ -21,24 +22,304 @@
 class Addressbook_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Addressbook';
+    
+    /*************************** get contacts ****************************/
 
     /**
-     * returns contact prepared for json transport
+     * get one contact identified by contactId
      *
-     * @param Addressbook_Model_Contact $_contact
-     * @return array contact data
+     * @param int $contactId
+     * @return array
      */
-    protected function _contactToJson($_contact)
+    public function getContact($contactId)
     {
-        $_contact->tags = $_contact->tags->toArray();
-        $result = $_contact->toArray();
-        $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
-        $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
-        $result['jpegphoto'] = $this->getImageLink($_contact);
+        $result = array(
+            'success'   => true
+        );
+
+        $contact = Addressbook_Controller::getInstance()->getContact($contactId);
+        $result['contact'] = $this->_contactToJson($contact);
         
         return $result;
     }
     
+    /**
+     * Search for contacts matching given arguments
+     *
+     * @param array $filter
+     * @return array
+     * 
+     * @todo create/rename filter and pagination models
+     * @todo create controller->searchContacts()
+     * @todo test it
+     * @todo use it
+     * @todo add timezone?
+     */
+    public function searchContacts($filter)
+    {
+        $paginationFilter = Zend_Json::decode($filter);
+        $filter = new Addressbook_Model_ContactFilter($paginationFilter);
+        $pagination = new Addressbook_Model_ContactPagination($paginationFilter);
+        
+        //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
+        
+        $contacts = Addressbook_Controller::getInstance()->searchContacts($filter, $pagination, TRUE);
+        //$contacts->setTimezone($this->_userTimezone);
+        //$contacts->convertDates = true;
+        
+        $result = array();
+        foreach ($contacts as $contact) {
+            $result[] = $this->_contactToJson($contact);
+        }
+    }    
+    
+    /**
+     * get contacts by owner
+     *
+     * @param  string $query
+     * @param  int    $owner
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @param  int    $start
+     * @param  string $tagFilter
+     * @return array
+     * 
+     * @deprecated
+     */
+    public function getContactsByOwner($query, $owner, $sort, $dir, $limit, $start, $tagFilter)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query,
+            'tag'   => $tagFilter
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        if ($rows = Addressbook_Controller::getInstance()->getContactsByOwner($owner, $filter, $pagination)) {
+            $result['results']    = $rows->toArray();
+            if ($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountByOwner($owner, $filter);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * returns list of accounts
+     *
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @param  int    $start
+     * @param  string $tagFilter
+     * @return array
+     * 
+     * @deprecated
+     */
+    public function getUsers($query, $sort, $dir, $limit, $start, $tagFilter)
+    {
+        $internalContainer = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
+        
+        $result = $this->getContactsByAddressbookId($internalContainer->getId(), $query, $sort, $dir, $limit, $start, $tagFilter);
+
+        return $result;
+    }
+    
+    /**
+     * get all contacts for a given addressbookId (container)
+     *
+     * @param  int    $addressbookId
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @param  int    $start
+     * @param  string $tagFilter
+     * @return array
+     * 
+     * @deprecated
+     */
+    public function getContactsByAddressbookId($addressbookId, $query, $sort, $dir, $limit, $start, $tagFilter)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query,
+            'tag'   => $tagFilter
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        if ($rows = Addressbook_Controller::getInstance()->getContactsByAddressbookId($addressbookId, $filter, $pagination)) {
+            $result['results']    = $rows->toArray();
+            if ($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountByAddressbookId($addressbookId, $filter);
+            }
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get data for the overview
+     *
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @param  int    $start
+     * @param  string $tagFilter
+     * @return array
+     * 
+     * @deprecated
+     */
+    public function getAllContacts($query, $sort, $dir, $limit, $start, $tagFilter)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query,
+            'tag'   => $tagFilter
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        $rows = Addressbook_Controller::getInstance()->getAllContacts($filter, $pagination);
+        
+        if ($rows !== false) {
+            $result['results']    = $rows->toArray();
+            if ($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * get list of shared contacts
+     *
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @param  int    $start
+     * @param  string $tagFilter
+     * @return array
+     * 
+     * @deprecated
+     */
+    public function getSharedContacts($query, $sort, $dir, $limit, $start, $tagFilter)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query,
+            'tag'   => $tagFilter
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        $rows = Addressbook_Controller::getInstance()->getSharedContacts($filter, $pagination);
+        
+        if ($rows !== false) {
+            $result['results']    = $rows->toArray();
+            if ($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts($filter);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * get data for the overview
+     *
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @param  int    $start
+     * @param  string $tagFilter
+     * @return array
+     * 
+     * @deprecated
+     */
+    public function getOtherPeopleContacts($query, $sort, $dir, $limit, $start, $tagFilter)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query,
+            'tag'   => $tagFilter
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        $rows = Addressbook_Controller::getInstance()->getOtherPeopleContacts($filter, $pagination);
+        
+        if ($rows !== false) {
+            $result['results']    = $rows->toArray();
+            if ($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfOtherPeopleContacts($filter);
+            }
+        }
+
+        return $result;
+    }
+    
+    /*************************** save/delete leads ****************************/
+        
     /**
      * delete multiple contacts
      *
@@ -85,265 +366,33 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         return $result;
          
     }
-
-    /**
-     * get contacts by owner
-     *
-     * @param  string $query
-     * @param  int    $owner
-     * @param  int    $sort
-     * @param  string $dir
-     * @param  int    $limit
-     * @param  int    $start
-     * @param  string $tagFilter
-     * @return array
-     */
-    public function getContactsByOwner($query, $owner, $sort, $dir, $limit, $start, $tagFilter)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $filter = new Addressbook_Model_Filter(array(
-            'query' => $query,
-            'tag'   => $tagFilter
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        if ($rows = Addressbook_Controller::getInstance()->getContactsByOwner($owner, $filter, $pagination)) {
-            $result['results']    = $rows->toArray();
-            if ($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountByOwner($owner, $filter);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * get one contact identified by contactId
-     *
-     * @param int $contactId
-     * @return array
-     */
-    public function getContact($contactId)
-    {
-        $result = array(
-            'success'   => true
-        );
-
-        $contact = Addressbook_Controller::getInstance()->getContact($contactId);
-        $result['contact'] = $this->_contactToJson($contact);
-        
-        return $result;
-    }
-
-    /**
-     * returns list of accounts
-     *
-     * @param  string $query
-     * @param  int    $sort
-     * @param  string $dir
-     * @param  int    $limit
-     * @param  int    $start
-     * @param  string $tagFilter
-     * @return array
-     */
-    public function getUsers($query, $sort, $dir, $limit, $start, $tagFilter)
-    {
-        $internalContainer = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
-        
-        $result = $this->getContactsByAddressbookId($internalContainer->getId(), $query, $sort, $dir, $limit, $start, $tagFilter);
-
-        return $result;
-    }
     
+    /****************************************** helper functions ***********************************/
+
     /**
-     * get all contacts for a given addressbookId (container)
+     * returns contact prepared for json transport
      *
-     * @param  int    $addressbookId
-     * @param  string $query
-     * @param  int    $sort
-     * @param  string $dir
-     * @param  int    $limit
-     * @param  int    $start
-     * @param  string $tagFilter
-     * @return array
+     * @param Addressbook_Model_Contact $_contact
+     * @return array contact data
      */
-    public function getContactsByAddressbookId($addressbookId, $query, $sort, $dir, $limit, $start, $tagFilter)
+    protected function _contactToJson($_contact)
     {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $filter = new Addressbook_Model_Filter(array(
-            'query' => $query,
-            'tag'   => $tagFilter
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        if ($rows = Addressbook_Controller::getInstance()->getContactsByAddressbookId($addressbookId, $filter, $pagination)) {
-            $result['results']    = $rows->toArray();
-            if ($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountByAddressbookId($addressbookId, $filter);
-            }
-        }
+        $_contact->tags = $_contact->tags->toArray();
+        $result = $_contact->toArray();
+        $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
+        $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
+        $result['jpegphoto'] = $this->_getImageLink($_contact);
         
         return $result;
     }
-
-    /**
-     * get data for the overview
-     *
-     * @param  string $query
-     * @param  int    $sort
-     * @param  string $dir
-     * @param  int    $limit
-     * @param  int    $start
-     * @param  string $tagFilter
-     * @return array
-     */
-    public function getAllContacts($query, $sort, $dir, $limit, $start, $tagFilter)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
         
-        $filter = new Addressbook_Model_Filter(array(
-            'query' => $query,
-            'tag'   => $tagFilter
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        $rows = Addressbook_Controller::getInstance()->getAllContacts($filter, $pagination);
-        
-        if ($rows !== false) {
-            $result['results']    = $rows->toArray();
-            if ($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * get list of shared contacts
-     *
-     * @param  string $query
-     * @param  int    $sort
-     * @param  string $dir
-     * @param  int    $limit
-     * @param  int    $start
-     * @param  string $tagFilter
-     * @return array
-     */
-    public function getSharedContacts($query, $sort, $dir, $limit, $start, $tagFilter)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $filter = new Addressbook_Model_Filter(array(
-            'query' => $query,
-            'tag'   => $tagFilter
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        $rows = Addressbook_Controller::getInstance()->getSharedContacts($filter, $pagination);
-        
-        if ($rows !== false) {
-            $result['results']    = $rows->toArray();
-            if ($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts($filter);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * get data for the overview
-     *
-     * @param  string $query
-     * @param  int    $sort
-     * @param  string $dir
-     * @param  int    $limit
-     * @param  int    $start
-     * @param  string $tagFilter
-     * @return array
-     */
-    public function getOtherPeopleContacts($query, $sort, $dir, $limit, $start, $tagFilter)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $filter = new Addressbook_Model_Filter(array(
-            'query' => $query,
-            'tag'   => $tagFilter
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        $rows = Addressbook_Controller::getInstance()->getOtherPeopleContacts($filter, $pagination);
-        
-        if ($rows !== false) {
-            $result['results']    = $rows->toArray();
-            if ($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfOtherPeopleContacts($filter);
-            }
-        }
-
-        return $result;
-    }
-    
     /**
      * returns a image link
      * 
      * @param  Addressbook_Model_Contact|array
      * @return string
      */
-    protected function getImageLink($contact)
+    protected function _getImageLink($contact)
     {
         if (!empty($contact->jpegphoto)) {
             $link =  'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contact['id'] . '&width=90&height=90&$ratiomode=0';
