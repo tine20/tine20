@@ -343,7 +343,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
         updateVoicemailRecord: function(_voicemailData)
         {            
             this.voicemailRecord = new Tine.Voipmanager.Model.Asterisk.Voicemail(_voicemailData);
-            console.log(this.voicemailRecord);
+  //          console.log(this.voicemailRecord);
         },
         
         deleteVoicemail: function(_button, _event)

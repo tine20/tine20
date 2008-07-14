@@ -97,6 +97,52 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }    
     
+    
+   /**
+     * get my phones identified by phoneId and 
+     *
+     * @param int $phoneId
+     * @return array
+     */
+    public function getMyPhones($sort, $dir, $query, $accountId)
+    {     
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+
+        
+        if($rows = Voipmanager_Controller::getInstance()->getMyPhones($sort, $dir, $query, $accountId)) {
+        
+            $_rows = $rows->toArray();
+
+            $i = 0; 
+                  
+            foreach($_rows AS $_row)
+            {
+                if($location_row = Voipmanager_Controller::getInstance()->getSnomLocation($_row['location_id']))
+                {
+                    $_location = $location_row->toArray();
+                    $_rows[$i]['location'] = $_location['name'];
+                }
+                
+                if($template_row = Voipmanager_Controller::getInstance()->getSnomTemplate($_row['template_id']))
+                {
+                    $_template = $template_row->toArray();                                        
+                    $_rows[$i]['template'] = $_template['name'];
+                }                
+                
+                $i = $i + 1;
+            }         
+        
+            $result['results']      = $_rows;
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }
+    
+    
     /**
      * save one phone
      *
@@ -111,6 +157,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $phoneData = Zend_Json::decode($phoneData);
         $lineData = Zend_Json::decode($lineData);
         $ownerData = Zend_Json::decode($ownerData);
+
         //$settingId = Zend_Json::decode($settingId);
         
         
@@ -135,13 +182,72 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         }
         $phone = $this->getSnomPhone($phone->getId());
 
+        foreach($ownerData AS $owner) {
+            $owner['phone_id'] = $phone['id'];
+            
+            $_owner = new Voipmanager_Model_SnomPhoneOwner();   
+            $_owner->setFromArray($owner);
+            
+            $_ownerData[] = $_owner;
+        }
+
+        $result = array('success'           => true,
+            'welcomeMessage'    => 'Entry updated',
+            'updatedData'       => $phone
+        );
+
+
+        if(!Voipmanager_Controller::getInstance()->createPhoneACLs($_ownerData, $phone['id'])) {
+            $result = array('success'           => false,
+            'welcomeMessage'    => 'Owner ACL failed',
+            'updatedData'       => $phone
+            );        
+        };
+
+        
+        return $result;         
+    }     
+    
+    
+    /**
+     * save one myPhone
+     *
+     * if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
+     *
+     * @param string $phoneData a JSON encoded array of phone properties
+     * @return array
+     */
+    public function saveMyPhone($phoneData)
+    {
+
+        $phoneData = Zend_Json::decode($phoneData);
+        
+        // unset if empty
+        if (empty($phoneData['id'])) {
+            unset($phoneData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
+        $phone = new Voipmanager_Model_SnomPhone();
+        $phone->setFromArray($phoneData);
+        
+        $phoneSettings = new Voipmanager_Model_SnomPhoneSettings();
+        $phoneSettings->setFromArray($phoneData);
+
+        
+        if (!empty($phone->id)) {
+            $phone = Voipmanager_Controller::getInstance()->updateMyPhone($phone, $phoneSettings);
+        } 
+        
+        $phone = $this->getSnomPhone($phone->getId());
+
         $result = array('success'           => true,
             'welcomeMessage'    => 'Entry updated',
             'updatedData'       => $phone
         );
         
         return $result;         
-    }     
+    }    
     
    
     /**
@@ -160,12 +266,29 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         Voipmanager_Controller::getInstance()->deleteSnomPhones($phoneIds);
         
-        
-
         return $result;
     }    
       
       
+
+    /**
+     * send HTTP Client Info to multiple phones
+     *
+     * @param array $_phoneIDs list of phoneId's to send http client info to
+     * @return array
+     */      
+    public function sendHttpClientInfo($_phoneIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $phoneIds = Zend_Json::decode($_phoneIds);        
+        
+        Voipmanager_Controller::getInstance()->sendHttpClientInfo($phoneIds);
+        
+        return $result;
+    }      
       
       
    /**

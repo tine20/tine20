@@ -39,7 +39,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Asterisk/Context.js',
             'Voipmanager/js/Asterisk/Voicemail.js',
 			'Voipmanager/js/Asterisk/Meetme.js',
-			'Voipmanager/js/widgets.js'
+			'Voipmanager/js/widgets.js',
+			'Voipmanager/js/MyPhones.js'
         );
     }
     
@@ -64,9 +65,10 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
             $_phoneData = $snomPhone->toArray();
 
+            $_phoneOwner = $controller->getPhoneOwner($_phoneData['id']);   
+             
             $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['id'])->toArray();
             
-
             $_templateData = $controller->getSnomTemplate($_phoneData['template_id'])->toArray();
             $_settingsData = $controller->getSnomSetting($_templateData['setting_id'])->toArray();
             
@@ -97,26 +99,32 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             // encode the data arrays
             $encodedSnomPhone = Zend_Json::encode($_phoneData);
             $encodedSnomLines = Zend_Json::encode($snomLines->toArray());
+            
+            if(empty($_phoneOwner)) {
+                $encodedPhoneOwner = '[]'; 
+            } else {
+                $encodedPhoneOwner = Zend_Json::encode($_phoneOwner);
+            }
         } else {
             //$phone = new Voipmanager_Model_SnomPhone();
             //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine');
             $encodedWritable = '{}';
             $encodedSnomPhone = '{}';
             $encodedSnomLines = '[]';
+            $encodedPhoneOwner = '[]';
             
             $encodedSettings = '{}';
         }
 
+        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
 
         $encodedTemplates = Zend_Json::encode($controller->getSnomTemplates()->toArray());
         $encodedLocations = Zend_Json::encode($controller->getSnomLocations()->toArray());        
-        
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
+                        
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .', ' . $encodedPhoneOwner . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
@@ -134,6 +142,87 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
+    
+    
+    /**
+     * create edit MyPhone dialog
+     *
+     * @param int $phoneId
+     * @todo catch permission denied exceptions only
+     * 
+     */
+    public function editMyPhone($phoneId=NULL)
+    {
+        $controller = Voipmanager_Controller::getInstance();
+
+        
+        if (!empty($phoneId)) {
+            $snomPhone = $controller->getSnomPhone($phoneId);
+            unset($phone->lines);
+
+            $_phoneData = $snomPhone->toArray();
+            $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['id'])->toArray();
+            
+            $_templateData = $controller->getSnomTemplate($_phoneData['template_id'])->toArray();            
+            $_settingsData = $controller->getSnomSetting($_templateData['setting_id'])->toArray();
+            
+            $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
+
+            foreach($_writableFields AS $wField)
+            {               
+                $_fieldRW = $wField.'_writable';
+                
+                 if($_settingsData[$_fieldRW] == '0')
+                 {
+                     $_phoneSettingsData[$wField] = $_settingsData[$wField];
+                     $_notWritable[$wField] = 'true';
+                 } else {
+                     if(empty($_phoneSettingsData[$wField])) {
+                         $_phoneSettingsData[$wField] = $_settingsData[$wField];                    
+                     }
+                     $_notWritable[$wField] = '';    
+                 }
+            }
+
+            $encodedWritable = Zend_Json::encode($_notWritable);
+
+                
+            $_phoneData = array_merge($_phoneSettingsData,$_phoneData);
+            
+            // encode the data arrays
+            $encodedSnomPhone = Zend_Json::encode($_phoneData);
+        } else {
+            //$phone = new Voipmanager_Model_SnomPhone();
+            //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine');
+            $encodedWritable = '{}';
+            $encodedSnomPhone = '{}';            
+            $encodedSettings = '{}';
+        }
+       
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->jsExecute = 'Tine.Voipmanager.MyPhones.EditDialog.display(' . $encodedSnomPhone . ', '. $encodedWritable .');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit myPhone data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }    
+    
     
     
     /**

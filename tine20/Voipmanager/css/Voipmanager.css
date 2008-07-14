@@ -22,6 +22,10 @@
     background-image:url(../../images/oxygen/16x16/actions/add-users.png) !important;
 }
 
+.action_sendHttpClientInfo {
+    background-image:url(../../images/oxygen/16x16/actions/document-export.png) !important;
+}
+
 .VoipmanagerIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }

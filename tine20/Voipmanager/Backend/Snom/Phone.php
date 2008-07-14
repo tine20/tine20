@@ -37,7 +37,7 @@ class Voipmanager_Backend_Snom_Phone
      * @param Tinebase_Model_Pagination $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
 	 */
-    public function search(Voipmanager_Model_SnomPhoneFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    public function search(Voipmanager_Model_SnomPhoneFilter $_filter, Tinebase_Model_Pagination $_pagination, $_accountId = NULL)
     {	
         $where = array();
         
@@ -66,6 +66,15 @@ class Voipmanager_Backend_Snom_Phone
             // handle the other fields separately
         }
 
+        if($_accountId) {
+            $_validPhoneIds = $this->getValidPhoneIds($_accountId);   
+            if(empty($_validPhoneIds)) {
+                return false;    
+            }         
+            $select->where($this->_db->quoteInto('id IN (?)', $_validPhoneIds));
+        }
+
+
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -74,6 +83,84 @@ class Voipmanager_Backend_Snom_Phone
 		
         return $result;
 	}
+    
+    
+	/**
+	 * write phone ACL
+	 * 
+     * @param string|Voipmanager_Model_SnomPhone $_id
+	 * @return Voipmanager_Model_SnomPhone the phone
+	 */
+    public function createACL(Voipmanager_Model_SnomPhoneOwner $_acl)
+    {        
+        $result = $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones_acl', $_acl->toArray());
+        
+        return $result;
+    }
+    
+	/**
+	 * delete phone ACLs
+	 * 
+     * @param string|Voipmanager_Model_SnomPhone $_id
+	 * @return Voipmanager_Model_SnomPhone the phone
+	 */
+    public function deleteACLs($_phoneId)
+    {        
+        $where = $this->_db->quoteInto('phone_id = ?', $_phoneId);
+        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones_acl', $where);
+        
+        return $result;
+    }
+        
+    
+   
+	/**
+	 * get valid phone ids according to phones_acl, identified by account id
+	 * 
+     * @param string| $_accountId
+	 * @return Voipmanager_Model_SnomPhone the phone
+	 */    
+    public function getValidPhoneIds($_accountId)
+    {
+        if(empty($_accountId)) 
+        {
+            throw new UnderflowException('no accountId set');
+        }    
+        
+        $select = $this->_db->select()    
+            ->from(array('phoneACL' => SQL_TABLE_PREFIX . 'snom_phones_acl'), array('phone_id'))
+            ->where($this->_db->quoteInto('account_id = ?', $_accountId));            
+
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
+        
+        return $rows;  
+    }
+    
+   
+	/**
+	 * get phone owner
+	 * 
+     * @param string| $_phoneId
+	 * @return 
+	 */    
+    public function getPhoneOwner($_phoneId)
+    {
+        if(empty($_phoneId)) 
+        {
+            throw new UnderflowException('no phoneId');
+        }    
+        
+        $select = $this->_db->select()    
+            ->from(array('phoneACL' => SQL_TABLE_PREFIX . 'snom_phones_acl'), array('account_id'))
+            ->where($this->_db->quoteInto('phone_id = ?', $_phoneId));            
+
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
+        
+        return $rows;        
+    }    
+    
     
 	/**
 	 * get one phone identified by id
@@ -167,6 +254,30 @@ class Voipmanager_Backend_Snom_Phone
         
         return $this->get($_phone);
     }        
+    
+
+    /**
+     * update an existing myPhone
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone the phonedata
+     * @return Voipmanager_Model_SnomPhone
+     */
+    public function updateMyPhone(Voipmanager_Model_MyPhone $_phone)
+    {
+        if (! $_phone->isValid()) {
+            throw new Exception('invalid myPhone');
+        }
+        
+        $phoneId = $_phone->getId();
+        $phoneData = $_phone->toArray();
+        unset($phoneData['id']);
+
+        $where = array($this->_db->quoteInto('id = ?', $phoneId));
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
+        
+        return $this->get($_phone);
+    }      
+    
     
     /**
      * delete phone(s) identified by phone id

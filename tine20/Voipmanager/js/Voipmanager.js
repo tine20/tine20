@@ -183,8 +183,7 @@ Tine.Voipmanager = function() {
         expanded: true,
         dataPanelType: 'snom',
         viewRight: 'snom'
-    }
-/*    , {
+    }, {
         text: 'My Phones',
         cls: 'treemain',
         containerType: Tine.Tinebase.container.TYPE_PERSONAL,
@@ -194,7 +193,7 @@ Tine.Voipmanager = function() {
         expanded: true,
         leaf: null,
         owner: Tine.Tinebase.Registry.get('currentAccount')
-    } */
+    } 
     ];
 
     /**
