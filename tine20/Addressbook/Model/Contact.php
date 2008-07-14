@@ -147,18 +147,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        if (empty($_data['n_fileas'])) {
-            $_data['n_fileas'] = $_data['n_family'];
-            if (!empty($_data['n_given'])) {
-                $_data['n_fileas'] .= ', ' . $_data['n_given'];
-            }
+        // always update fileas and fn
+        $_data['n_fileas'] = $_data['n_family'];
+        if (!empty($_data['n_given'])) {
+            $_data['n_fileas'] .= ', ' . $_data['n_given'];
         }
-        
-        if (empty($_data['n_fn'])) {
-            $_data['n_fn'] = $_data['n_family'];
-            if (!empty($_data['n_given'])) {
-                $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
-            }
+            
+        $_data['n_fn'] = $_data['n_family'];
+        if (!empty($_data['n_given'])) {
+            $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
         
         parent::setFromArray($_data);
@@ -189,7 +186,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     }
     
     /**
-     * fills a contract from json data
+     * fills a contact from json data
      *
      * @param string $_data json encoded data
      * @return void

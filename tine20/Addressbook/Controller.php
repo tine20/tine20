@@ -431,14 +431,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         } elseif (!$currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
-        
-        
-        
-        //@todo move this to js frontend later on
-        // update fullname
-        if ( !empty($_data['n_given']) && !empty($_data['n_family']) ) {
-            $_contact['n_fn'] = $_contact['n_given'] . ' ' . $_contact['n_family'];
-        }
+                
         if (isset($_contact->tags)) {
             Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
         }
