@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        update tests to use new search/count functions
  */
 
 /**
@@ -201,7 +203,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountByOwner()
     {
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $this->objects['initialContact']->n_family
         ));
         $count = Addressbook_Controller::getInstance()->getCountByOwner(Zend_Registry::get('currentAccount'), $filter);
@@ -215,7 +217,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountByAddressbookId()
     {
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => ''
         ));
         $count = Addressbook_Controller::getInstance()->getCountByAddressbookId($this->objects['initialContact']->owner, $filter);
@@ -229,7 +231,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountOfAllContacts()
     {
-        $filter = new Addressbook_Model_Filter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $this->objects['initialContact']->n_family
         ));
         $count = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
