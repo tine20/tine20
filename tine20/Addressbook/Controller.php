@@ -101,7 +101,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * 
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo test and use it
+     * @todo use it
      */
     public function searchContacts(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {
@@ -122,7 +122,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * @param Addressbook_Model_ContactFilter $_filter
      * @return int
      * 
-     * @todo test and use it
+     * @todo use it
      */
     public function searchContactsCount(Addressbook_Model_ContactFilter $_filter) 
     {
@@ -143,7 +143,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * @param Addressbook_Model_ContactFilter $_filter
      * @return void
      * 
-     * @todo test and use it
+     * @todo use it
      */
     protected function _checkContainerACL($_filter)
     {
