@@ -247,32 +247,33 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to get contacts by owner
      *
-     * @todo use new searchContacts()
      */
     public function testGetContactsByAddressbookId()
     {
-        /*
         $json = new Addressbook_Json();
+        $filter = $this->objects['filter'];
         
-        $contacts = $json->getContactsByAddressbookId($this->container->id, NULL, 'id', 'ASC', 0, 10, NULL);
-        */
-        #$this->assertGreaterThan(0, $contacts['totalcount']);
+        //$contacts = $json->getContactsByAddressbookId($this->container->id, NULL, 'id', 'ASC', 0, 10, NULL);
+        $filter['container'] = array($this->container->id);
+        $contacts = $json->searchContacts(Zend_Json::encode($filter));
+        
+        $this->assertGreaterThan(0, $contacts['totalcount']);
     }
     
     /**
      * try to get accounts
      *
-     * @todo use new searchContacts()
      */
     public function testGetAccounts()
     {
-        /*
         $json = new Addressbook_Json();
+        $filter = $this->objects['filter'];
         
-        $contacts = $json->getUsers(NULL, 'id', 'ASC', 10, 0, NULL);
-        
+        //$contacts = $json->getUsers(NULL, 'id', 'ASC', 10, 0, NULL);
+        $filter['containerType'] = 'internal';
+        $contacts = $json->searchContacts(Zend_Json::encode($filter));
+
         $this->assertGreaterThan(0, $contacts['totalcount']);
-        */
     }
     
     /**
