@@ -185,6 +185,41 @@ class Voipmanager_Backend_Snom_Phone
         
         return $result;
 	}
+    
+    
+	/**
+	 * get one myPhone identified by id
+	 * 
+     * @param string|Voipmanager_Model_SnomPhone $_id
+     * @param string $_accountId
+	 * @return Voipmanager_Model_SnomPhone the phone
+	 */
+    public function getMyPhone($_id, $_accountId)
+    {	
+
+        $_validPhoneIds = $this->getValidPhoneIds($_accountId);   
+        if(empty($_validPhoneIds)) {
+            throw new UnderflowException('not enough rights to display/edit phone');
+        }         
+
+    
+        $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($_id);
+        
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_phones')
+            ->where($this->_db->quoteInto('id = ?', $phoneId))
+            ->where($this->_db->quoteInto('id IN (?)', $_validPhoneIds));
+            
+        $row = $this->_db->fetchRow($select);
+        if (!$row) {
+            throw new UnderflowException('phone not found / not enough rights');
+        }
+
+        $result = new Voipmanager_Model_SnomPhone($row);
+        
+        return $result;
+	}    
+    
 	     
     /**
      * get one phone identified by id
@@ -262,20 +297,28 @@ class Voipmanager_Backend_Snom_Phone
      * @param Voipmanager_Model_SnomPhone $_phone the phonedata
      * @return Voipmanager_Model_SnomPhone
      */
-    public function updateMyPhone(Voipmanager_Model_MyPhone $_phone)
+    public function updateMyPhone(Voipmanager_Model_MyPhone $_phone, $_accountId)
     {
         if (! $_phone->isValid()) {
             throw new Exception('invalid myPhone');
         }
         
+        $_validPhoneIds = $this->getValidPhoneIds($_accountId);   
+        if(empty($_validPhoneIds)) {
+            throw new UnderflowException('not enough rights to edit phone');
+        }         
+        
         $phoneId = $_phone->getId();
         $phoneData = $_phone->toArray();
         unset($phoneData['id']);
+        unset($phoneData['template_id']);
 
-        $where = array($this->_db->quoteInto('id = ?', $phoneId));
+        $where = array($this->_db->quoteInto('id = ?', $phoneId), $this->_db->quoteInto('id IN (?)', $_validPhoneIds) );
+
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
-        
-        return $this->get($_phone);
+
+  
+        return $this->get($phoneId);
     }      
     
     

@@ -53,19 +53,11 @@ class Voipmanager_Model_MyPhone extends Tinebase_Record_Abstract
         'id' 			        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'redirect_event'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'redirect_number'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true) 
     );
     
-    /**
-     * name of fields containing datetime or or an array of datetime information
-     *
-     * @var array list of datetime fields
-     */
-    protected $_datetimeFields = array(
-        'last_modified_time',
-        'settings_loaded_at',
-        'firmware_checked_at'
-    );
+
     
     /**
      * converts a int, string or Voipmanager_Model_MyPhone to an phone id

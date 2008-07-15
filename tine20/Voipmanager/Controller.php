@@ -230,6 +230,31 @@ class Voipmanager_Controller
 
 
     /**
+     * get myPhone by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
+     */
+    public function getMyPhone($_id, $_accountId)
+    {
+        if(empty($_accountId)) 
+        {
+            throw new UnderflowException('no accountId set');
+        }   
+        
+        
+        $phone = $this->_snomPhoneBackend->getMyPhone($_id, $_accountId);
+        
+        $filter = new Voipmanager_Model_SnomLineFilter(array(
+            'snomphone_id'  => $phone->id
+        ));
+        $phone->lines = $this->_snomLineBackend->search($filter);
+
+        return $phone;    
+    }
+
+
+    /**
      * add one phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone
@@ -354,15 +379,15 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function updateMyPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    public function updateMyPhone(Voipmanager_Model_MyPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings, $_accountId)
     {
-        unset($_phone->settings_loaded_at);
-        unset($_phone->firmware_checked_at);
-        unset($_phone->last_modified_time);
-        unset($_phone->ipaddress);
-        unset($_phone->current_software);
-        
-        $phone = $this->_snomPhoneBackend->update($_phone);
+       
+        if(empty($_accountId)) 
+        {
+            throw new UnderflowException('no accountId set');
+        }        
+       
+        $phone = $this->_snomPhoneBackend->updateMyPhone($_phone, $_accountId);
         
         // force the right phone_id
         $_phoneSettings->setId($phone->getId());
@@ -384,14 +409,6 @@ class Voipmanager_Controller
             $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
         } else {
             $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);            
-        }
-        
-        $this->_snomLineBackend->deletePhoneLines($phone->getId());
-        
-        foreach($_phone->lines as $line) {
-            $line->snomphone_id = $phone->getId();
-            //error_log(print_r($line->toArray(), true));
-            $addedLine = $this->_snomLineBackend->create($line);
         }
       
         return $this->getSnomPhone($phone);

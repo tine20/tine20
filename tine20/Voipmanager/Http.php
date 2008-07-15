@@ -155,9 +155,10 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     {
         $controller = Voipmanager_Controller::getInstance();
 
+        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
         
         if (!empty($phoneId)) {
-            $snomPhone = $controller->getSnomPhone($phoneId);
+            $snomPhone = $controller->getMyPhone($phoneId, $currentAccount['accountId']);
             unset($phone->lines);
 
             $_phoneData = $snomPhone->toArray();
@@ -177,7 +178,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
                      $_phoneSettingsData[$wField] = $_settingsData[$wField];
                      $_notWritable[$wField] = 'true';
                  } else {
-                     if(empty($_phoneSettingsData[$wField])) {
+                     if($_phoneSettingsData[$wField] === NULL) {
                          $_phoneSettingsData[$wField] = $_settingsData[$wField];                    
                      }
                      $_notWritable[$wField] = '';    
@@ -185,7 +186,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             }
 
             $encodedWritable = Zend_Json::encode($_notWritable);
-
                 
             $_phoneData = array_merge($_phoneSettingsData,$_phoneData);
             
@@ -199,8 +199,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedSettings = '{}';
         }
        
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
+               
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');

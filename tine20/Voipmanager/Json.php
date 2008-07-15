@@ -228,15 +228,16 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         }
 
         //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
-        $phone = new Voipmanager_Model_SnomPhone();
+        $phone = new Voipmanager_Model_MyPhone();
         $phone->setFromArray($phoneData);
         
         $phoneSettings = new Voipmanager_Model_SnomPhoneSettings();
         $phoneSettings->setFromArray($phoneData);
 
+        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
         
         if (!empty($phone->id)) {
-            $phone = Voipmanager_Controller::getInstance()->updateMyPhone($phone, $phoneSettings);
+            $phone = Voipmanager_Controller::getInstance()->updateMyPhone($phone, $phoneSettings, $currentAccount['accountId']);
         } 
         
         $phone = $this->getSnomPhone($phone->getId());

@@ -13,19 +13,10 @@ Ext.namespace('Tine.Voipmanager.MyPhones');
 Tine.Voipmanager.MyPhones.Main = {
        
     actions: {
-        addMyPhone: null,
-        editMyPhone: null,
-        deleteMyPhone: null
+        editMyPhone: null
     },
     
     handlers: {
-        /**
-         * onclick handler for addMyPhone
-         */
-        addMyPhone: function(_button, _event) 
-        {
-            Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=', 700, 250);
-        },
 
         /**
          * onclick handler for editMyPhone
@@ -36,76 +27,7 @@ Tine.Voipmanager.MyPhones.Main = {
             var myphoneId = selectedRows[0].id;
             
             Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=' + myphoneId, 700, 250);
-        },
-        
-        /**
-         * onclick handler for deleteMyPhone
-         */
-        deleteMyPhone: function(_button, _event) {
-            Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected myphones?', function(_button){
-                if (_button == 'yes') {
-                
-                    var myphoneIds = [];
-                    
-                    var selectedRows = Ext.getCmp('Voipmanager_MyPhones_Grid').getSelectionModel().getSelections();
-                    for (var i = 0; i < selectedRows.length; ++i) {
-                        myphoneIds.push(selectedRows[i].id);
-                    }
-                    
-                    myphoneIds = Ext.util.JSON.encode(myphoneIds);
-                    
-                    Ext.Ajax.request({
-                        url: 'index.php',
-                        params: {
-                            method: 'Voipmanager.deleteMyPhones',
-                            _myphoneIds: myphoneIds
-                        },
-                        text: 'Deleting myphone(s)...',
-                        success: function(_result, _request){
-                            Ext.getCmp('Voipmanager_MyPhones_Grid').getStore().reload();
-                        },
-                        failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the myphone.');
-                        }
-                    });
-                }
-            });
-        },
-        
-        /**
-         * onclick handler for sendHttpClientInfo
-         */
-        sendHttpClientInfo: function(_button, _event) {
-            Ext.MessageBox.confirm('Confirm', 'Do you really want to send HTTP Client Info again?', function(_button){
-                if (_button == 'yes') {
-                
-                    var phoneIds = [];
-                    
-                    var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
-                    for (var i = 0; i < selectedRows.length; ++i) {
-                        phoneIds.push(selectedRows[i].id);
-                    }
-                    
-                    phoneIds = Ext.util.JSON.encode(phoneIds);
-                    
-                    Ext.Ajax.request({
-                        url: 'index.php',
-                        params: {
-                            method: 'Voipmanager.sendHttpClientInfo',
-                            _phoneIds: phoneIds
-                        },
-                        text: 'sending HTTP Client Info to phone(s)...',
-                        success: function(_result, _request){
-                            Ext.getCmp('Voipmanager_Phones_Grid').getStore().reload();
-                        },
-                        failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to send HTTP Client Info to the phone(s).');
-                        }
-                    });
-                }
-            });
-        }                    
-            
+        }
     },
     
     renderer: {
@@ -121,14 +43,7 @@ Tine.Voipmanager.MyPhones.Main = {
     {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Voipmanager');
-    
-        this.actions.addMyPhone = new Ext.Action({
-            text: this.translation._('add myphone'),
-            handler: this.handlers.addMyPhone,
-            iconCls: 'action_add',
-            scope: this
-        });
-        
+           
         this.actions.editMyPhone = new Ext.Action({
             text: this.translation._('edit myphone'),
             disabled: true,
@@ -136,22 +51,7 @@ Tine.Voipmanager.MyPhones.Main = {
             iconCls: 'action_edit',
             scope: this
         });
-        
-        this.actions.deleteMyPhone = new Ext.Action({
-            text: this.translation._('delete myphone'),
-            disabled: true,
-            handler: this.handlers.deleteMyPhone,
-            iconCls: 'action_delete',
-            scope: this
-        });
-        
-        this.actions.sendHttpClientInfo = new Ext.Action({
-           text: this.translation._('send HTTP Client Info'), 
-           handler: this.handlers.sendHttpClientInfo,
-           iconCls: 'action_sendHttpClientInfo',
-           scope: this
-        });
-        
+ 
     },
 
     updateMainToolbar : function() 
@@ -201,9 +101,7 @@ Tine.Voipmanager.MyPhones.Main = {
             split: false,
             height: 26,
             items: [
-//                this.actions.addMyPhone, 
-//                this.actions.editMyPhone,
-//                this.actions.deleteMyPhone,
+                this.actions.editMyPhone,
                 '->',
                 this.translation._('Search: '), quickSearchField
             ]
@@ -286,15 +184,12 @@ Tine.Voipmanager.MyPhones.Main = {
 
             if(rowCount < 1) {
                 // no row selected
-                this.actions.deleteMyPhone.setDisabled(true);
                 this.actions.editMyPhone.setDisabled(true);
             } else if(rowCount > 1) {
                 // more than one row selected
-                this.actions.deleteMyPhone.setDisabled(false);
                 this.actions.editMyPhone.setDisabled(true);
             } else {
                 // only one row selected
-                this.actions.deleteMyPhone.setDisabled(false);
                 this.actions.editMyPhone.setDisabled(false);
             }
         }, this);
@@ -328,12 +223,7 @@ Tine.Voipmanager.MyPhones.Main = {
             var contextMenu = new Ext.menu.Menu({
                 id:'ctxMenuMyPhones', 
                 items: [
-                    this.actions.editMyPhone,
-                    this.actions.deleteMyPhone,
-                    '-',
-                    this.actions.addMyPhone,
-                    '-',
-                    this.actions.sendHttpClientInfo
+                    this.actions.editMyPhone
                 ]
             });
             contextMenu.showAt(_eventObject.getXY());
@@ -1042,7 +932,7 @@ Tine.Voipmanager.MyPhones.EditDialog =  {
                 handlerDelete: this.deleteMyPhone,
                 items: [{
                     defaults: {
-                        frame: true,
+                        frame: true
                     },
                 	xtype: 'tabpanel',
                     border: false,
