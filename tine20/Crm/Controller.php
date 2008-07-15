@@ -166,14 +166,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     protected function _checkContainerACL($_filter)
     {
-    	$container = array();
-    	
-        foreach ($_filter->container as $containerId) {
-            if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
-                $container[] = $containerId;
-            }
-        }
-        $_filter->container = $container;
+        $readableContainer = $this->_currentAccount->getContainerByACL('Crm', Tinebase_Container::GRANT_READ);
+        $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
     }    
         
     /*************** add / update / delete lead *****************/    
