@@ -19,6 +19,13 @@
 class Addressbook_Controller extends Tinebase_Container_Abstract implements Tinebase_Events_Interface
 {
     /**
+     * Holds instance of current account
+     *
+     * @var Tinebase_User_Model_User
+     */
+    protected $_currentAccount;
+    
+    /**
      * the contacts backend
      *
      * @var Addressbook_Backend_Sql
@@ -32,6 +39,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     private function __construct() {
         $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
     
     /**
@@ -78,7 +86,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         // only get tags the user has view right for
         Tinebase_Tags::getInstance()->getTagsOfRecord($contact);
 
-        if (!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+        if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
             throw new Exception('read access to contact denied');
         }
         
@@ -99,6 +107,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     {
         $this->_checkContainerACL($_filter);
         
+        if (count($_filter->container) === 0) {
+            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
+        }        
+        
         $contacts = $this->_backend->search($_filter, $_pagination);
         
         return $contacts;
@@ -115,6 +127,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     public function searchContactsCount(Addressbook_Model_ContactFilter $_filter) 
     {
         $this->_checkContainerACL($_filter);
+        
+        if (count($_filter->container) === 0) {
+            return 0;
+        }        
+        
         $count = $this->_backend->searchCount($_filter);
         
         return $count;
@@ -130,14 +147,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     protected function _checkContainerACL($_filter)
     {
-        $container = array();
+        $readableContainer = $this->_currentAccount->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
+        $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
         
-        foreach ($_filter->container as $containerId) {
-            if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
-                $container[] = $containerId;
-            }
-        }
-        $_filter->container = $container;
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' .$_filter->containerType . ' ' . print_r($_filter->container, true));
     }    
 
     /**
@@ -149,10 +162,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     public function getMultipleContacts($_contactIds)
     {
         $contacts = $this->_backend->getMultiple($_contactIds);
-        $currentAccount = Zend_Registry::get('currentAccount');
         
         foreach ($contacts as $contact) {
-            if (! $currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+            if (! $this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
                 $index = $contacts->getIndexOfId($contact->getId());
                 unset($contacts[$index]);
             } 
@@ -396,11 +408,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     public function createContact(Addressbook_Model_Contact $_contact)
     {
         if(empty($_contact->owner)) {
-            $currentAccount = Zend_Registry::get('currentAccount');
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, 'Addressbook', $currentAccount, Tinebase_Container::GRANT_ADD);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, 'Addressbook', $this->_currentAccount, Tinebase_Container::GRANT_ADD);
             $_contact->owner = $containers[0]->getId();
         }
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+        if (! $this->_currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
         
@@ -422,20 +433,19 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
         $currentContact = $this->getContact($_contact->getId());
         
         if ($currentContact->owner != $_contact->owner) {
             
-            if (!$currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+            if (! $this->_currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
                 throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
             }
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-            if (!$currentAccount->hasGrant($currentContact->owner, Tinebase_Container::GRANT_DELETE)) {
+            if (! $this->_currentAccount->hasGrant($currentContact->owner, Tinebase_Container::GRANT_DELETE)) {
                 throw new Exception('delete access to contacts in container ' . $currentContact->owner . ' denied');
             }
             
-        } elseif (!$currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+        } elseif (! $this->_currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
                 
@@ -464,7 +474,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             $contact = $this->_backend->get($_contactId);
             $container = Tinebase_Container::getInstance()->getContainerById($contact->owner);
             
-            if (Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_DELETE &&
+            if ($this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_DELETE &&
                 $container->type != Tinebase_Container::TYPE_INTERNAL)) {
                     
                 $this->_backend->delete($_contactId);

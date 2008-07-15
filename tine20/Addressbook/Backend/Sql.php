@@ -173,6 +173,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         return $this->getById($_contactData->id);
     }*/
+    
     /**
      * get list of contacts from given addressbooks
      *
@@ -187,7 +188,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new Exception('$_container can not be empty');
         }
         $select = $this->_db->select();
-        $select->where($this->_db->quoteInto('owner IN (?)', $_filter->container->getArrayOfIds()));
+        $select->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
         $result = $this->_getsFromTable($select, $_filter, $_pagination);
         return $result;
     }
@@ -206,7 +207,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         $select = $this->_db->select();
         $select->from(SQL_TABLE_PREFIX . 'addressbook', array('count' => 'COUNT(*)'));
-        $select->where($this->_db->quoteInto('owner IN (?)', $_filter->container->getArrayOfIds()));
+        $select->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
         $this->_addFilter($select, $_filter);
         $result = $this->_db->fetchOne($select);
         return $result;

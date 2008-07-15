@@ -49,20 +49,19 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param array $filter
      * @return array
      * 
-     * @todo create controller->searchContacts()
      * @todo test it
      * @todo use it
      * @todo add timezone?
      */
     public function searchContacts($filter)
     {
-        $paginationFilter = Zend_Json::decode($filter);
-        $filter = new Addressbook_Model_ContactFilter($paginationFilter);
-        $pagination = new Tinebase_Model_Pagination($paginationFilter);
+        $decodedFilter = Zend_Json::decode($filter);
+        $filter = new Addressbook_Model_ContactFilter($decodedFilter);
+        $pagination = new Tinebase_Model_Pagination($decodedFilter);
         
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
-        $contacts = Addressbook_Controller::getInstance()->searchContacts($filter, $pagination, TRUE);
+        $contacts = Addressbook_Controller::getInstance()->searchContacts($filter, $pagination);
         //$contacts->setTimezone($this->_userTimezone);
         //$contacts->convertDates = true;
         
@@ -70,6 +69,11 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         foreach ($contacts as $contact) {
             $result[] = $this->_contactToJson($contact);
         }
+        
+        return array(
+            'results'       => $result,
+            'totalcount'    => Addressbook_Controller::getInstance()->searchContactsCount($filter)
+        );
     }    
     
     /**
@@ -373,10 +377,13 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      *
      * @param Addressbook_Model_Contact $_contact
      * @return array contact data
+     * 
+     * @todo what about the tags?
      */
     protected function _contactToJson($_contact)
     {
-        $_contact->tags = $_contact->tags->toArray();
+        //$_contact->tags = $_contact->tags->toArray();
+        
         $result = $_contact->toArray();
         $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
         $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
