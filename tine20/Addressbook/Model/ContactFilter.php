@@ -93,6 +93,9 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
             case 'otherUsers':
                 $containers = Zend_Registry::get('currentAccount')->getOtherUsersContainer($this->_application, Tinebase_Container::GRANT_READ);
                 break;
+            case 'internal':
+                $containers = array(Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook'));
+                break;    
             case 'singleContainer':
                 $this->_properties['container'] = array($this->_properties['container']);
                 return;
