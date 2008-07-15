@@ -181,7 +181,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param  Tinebase_Model_Pagination $_pagination 
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    public function search(Addressbook_Model_ContactFilter  $_filter, Tinebase_Model_Pagination $_pagination)
+    public function search(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {
         if (count($_filter->container) === 0) {
             throw new Exception('$_container can not be empty');
@@ -191,6 +191,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $result = $this->_getsFromTable($select, $_filter, $_pagination);
         return $result;
     }
+    
     /**
      * get total count of contacts from given addressbooks
      *
@@ -210,6 +211,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $result = $this->_db->fetchOne($select);
         return $result;
     }
+    
     /**
      * add the fields to search for to the query
      *

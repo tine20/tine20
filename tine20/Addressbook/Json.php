@@ -49,7 +49,6 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param array $filter
      * @return array
      * 
-     * @todo create/rename filter and pagination models
      * @todo create controller->searchContacts()
      * @todo test it
      * @todo use it
@@ -59,7 +58,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     {
         $paginationFilter = Zend_Json::decode($filter);
         $filter = new Addressbook_Model_ContactFilter($paginationFilter);
-        $pagination = new Addressbook_Model_ContactPagination($paginationFilter);
+        $pagination = new Tinebase_Model_Pagination($paginationFilter);
         
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
