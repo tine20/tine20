@@ -154,6 +154,16 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'tel_work'              => '+49TELWORK',
         )); 
             	
+        // define filter
+        $this->objects['filter'] = array(
+            'start' => 0,
+            'limit' => 10,
+            'sort' => 'n_fileas',
+            'dir' => 'ASC',
+            //'containerType' => 'all',
+            //'query' => $this->objects['initialContact']->lead_name     
+        );
+
         return;
         
     }
@@ -176,8 +186,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetAllContacts()
     {
         $json = new Addressbook_Json();
+        $filter = $this->objects['filter'];
         
-        $contacts = $json->getAllContacts(NULL, 'id', 'ASC', 0, 10, NULL);
+        //$contacts = $json->getAllContacts(NULL, 'id', 'ASC', 0, 10, NULL);
+        $filter['containerType'] = 'all';
+        $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }    
@@ -189,10 +202,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetContactsByOwner()
     {
         $json = new Addressbook_Json();
+        $filter = $this->objects['filter'];
         
-        $contacts = $json->getContactsByOwner(NULL, Zend_Registry::get('currentAccount')->getId(), 'id', 'ASC', 0, 10, NULL);
+        //$contacts = $json->getContactsByOwner(NULL, Zend_Registry::get('currentAccount')->getId(), 'id', 'ASC', 0, 10, NULL);
+        $filter['containerType'] = 'personal';
+        $filter['owner'] = Zend_Registry::get('currentAccount')->getId();
+        $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
-        #$this->assertGreaterThan(0, $contacts['totalcount']);
+        $this->assertGreaterThan(0, $contacts['totalcount']);
     }
         
     /**
@@ -202,10 +219,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetSharedContacts()
     {
         $json = new Addressbook_Json();
+        $filter = $this->objects['filter'];
         
-        $contacts = $json->getSharedContacts(NULL, 'id', 'ASC', 0, 10, NULL);
+        //$contacts = $json->getSharedContacts(NULL, 'id', 'ASC', 0, 10, NULL);
+        $filter['containerType'] = 'shared';
+        $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
-        #$this->assertGreaterThan(0, $contacts['totalcount']);
+        $this->assertGreaterThan(0, $contacts['totalcount']);
     }
         
     /**
@@ -215,40 +235,48 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetOtherPeopleContacts()
     {
         $json = new Addressbook_Json();
+        $filter = $this->objects['filter'];
         
-        $contacts = $json->getOtherPeopleContacts(NULL, 'id', 'ASC', 0, 10, NULL);
+        //$contacts = $json->getOtherPeopleContacts(NULL, 'id', 'ASC', 0, 10, NULL);
+        $filter['containerType'] = 'otherUsers';
+        $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
-        #$this->assertGreaterThan(0, $contacts['totalcount']);
+        $this->assertEquals(0, $contacts['totalcount']);
     }
         
     /**
      * try to get contacts by owner
      *
+     * @todo use new searchContacts()
      */
     public function testGetContactsByAddressbookId()
     {
+        /*
         $json = new Addressbook_Json();
         
         $contacts = $json->getContactsByAddressbookId($this->container->id, NULL, 'id', 'ASC', 0, 10, NULL);
-        
+        */
         #$this->assertGreaterThan(0, $contacts['totalcount']);
     }
     
     /**
      * try to get accounts
      *
+     * @todo use new searchContacts()
      */
     public function testGetAccounts()
     {
+        /*
         $json = new Addressbook_Json();
         
         $contacts = $json->getUsers(NULL, 'id', 'ASC', 10, 0, NULL);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
+        */
     }
     
     /**
-     * try to get accounts
+     * try to delete a contact
      *
      */
     public function testAddGetDeleteContact()
