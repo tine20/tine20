@@ -9,7 +9,6 @@
  * @version     $Id$
  * 
  * @todo        resolve test dependencies - make them _stand-alone_
- * @todo        repair the relations tests
  */
 
 /**
