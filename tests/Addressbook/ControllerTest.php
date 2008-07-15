@@ -9,6 +9,7 @@
  * @version     $Id$
  * 
  * @todo        update tests to use new search/count functions
+ * @todo        remove old function calls
  */
 
 /**
@@ -200,35 +201,34 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * try to get count of contacts
      *
-     * @todo use new searchContacts()
      */
     public function testGetCountByOwner()
     {
-        /*
         $filter = new Addressbook_Model_ContactFilter(array(
-            'query' => $this->objects['initialContact']->n_family
+            'query' => $this->objects['initialContact']->n_family,
+            'containerType' => 'personal',
+            'owner' => Zend_Registry::get('currentAccount')->getId()
         ));
-        $count = Addressbook_Controller::getInstance()->getCountByOwner(Zend_Registry::get('currentAccount'), $filter);
+        //$count = Addressbook_Controller::getInstance()->getCountByOwner(Zend_Registry::get('currentAccount'), $filter);
+        $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
         $this->assertEquals(1, $count);
-        */
     }
     
     /**
      * try to get count of contacts
      *
-     * @todo use new searchContacts()
      */
     public function testGetCountByAddressbookId()
     {
-        /*
         $filter = new Addressbook_Model_ContactFilter(array(
-            'query' => ''
-        ));
-        $count = Addressbook_Controller::getInstance()->getCountByAddressbookId($this->objects['initialContact']->owner, $filter);
+            'query' => '',
+            'containerType' => 'all',
+            ));
+        //$count = Addressbook_Controller::getInstance()->getCountByAddressbookId($this->objects['initialContact']->owner, $filter);
+        $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
         $this->assertGreaterThan(0, $count);
-        */
     }
     
     /**
@@ -238,14 +238,14 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountOfAllContacts()
     {
-        /*
         $filter = new Addressbook_Model_ContactFilter(array(
-            'query' => $this->objects['initialContact']->n_family
+            'query' => $this->objects['initialContact']->n_family,
+            'containerType' => 'all',
         ));
-        $count = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
+        //$count = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
+        $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
         $this->assertEquals(1, $count);
-        */
     }
     
     /**
@@ -283,6 +283,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
     }
     
+    /**
+     * try to create a personal folder 
+     *
+     */
     public function testCreatePersonalFolder()
     {
         $account = Zend_Registry::get('currentAccount');
@@ -291,9 +295,4 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account->getId());
         $this->assertEquals(1, count($folder));
     }
-}		
-	
-
-if (PHPUnit_MAIN_METHOD == 'Addressbook_ControllerTest::main') {
-    Addressbook_ControllerTest::main();
 }

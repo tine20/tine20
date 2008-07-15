@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        remove old function calls
  */
 
 /**
@@ -160,8 +162,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'limit' => 10,
             'sort' => 'n_fileas',
             'dir' => 'ASC',
-            //'containerType' => 'all',
-            //'query' => $this->objects['initialContact']->lead_name     
         );
 
         return;
@@ -307,8 +307,3 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contact = $json->getContact($contactId);
     }
 }		
-	
-
-if (PHPUnit_MAIN_METHOD == 'Addressbook_JsonTest::main') {
-    Addressbook_JsonTest::main();
-}
