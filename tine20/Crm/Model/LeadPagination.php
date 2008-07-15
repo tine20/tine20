@@ -10,6 +10,7 @@
  *
  * @todo        add more fields?
  * @todo        do we need the datetime fields here?
+ * @todo        replace it with the tinebase pagination model?
  */
 
 /**
