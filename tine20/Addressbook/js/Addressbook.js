@@ -14,7 +14,7 @@ Tine.Addressbook = {
             var internalContactsleaf = {
                 text: translation._("Internal Contacts"),
                 cls: "file",
-                containerType: 'internalContainer',
+                containerType: 'internal',
                 id: "internal",
                 children: [],
                 leaf: false,
@@ -56,15 +56,37 @@ Tine.Addressbook.Main = {
 	    callContact: null
 	},
 	
+    /**
+     * holds underlaying store
+     */
+    store: null,
+    
+    /**
+     * holds paging information
+     */
+    paging: {
+        start: 0,
+        limit: 50,
+        sort: 'n_family',
+        dir: 'ASC'
+    },
+    
+    /**
+     * holds current filters
+     */
+    filter: {
+        containerType: 'personal',
+        query: '',
+        container: false,
+        tag: false
+    },        
+    	
 	handlers: {
 	    /**
 	     * onclick handler for addBtn
 	     */
 	    addContact: function(_button, _event) 
 	    {
-	    	
-	        //Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 800, 600);
-
             var popupWindow = new Tine.Addressbook.EditPopup({
                 //contactId:
                 //containerId:
@@ -78,8 +100,6 @@ Tine.Addressbook.Main = {
         {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
-            
-            //Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 800, 600);
             
             var popupWindow = new Tine.Addressbook.EditPopup({
                 contactId: contactId
@@ -101,9 +121,6 @@ Tine.Addressbook.Main = {
             
             var contactIds = Ext.util.JSON.encode(toExportIds);
 
-            //var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
-            //var contactId = selectedRows[0].id;
-            
             Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 768, 1024);
         },
 
@@ -248,6 +265,9 @@ Tine.Addressbook.Main = {
             }),
             scope: this
         });
+        
+        // init grid store
+        this.initStore();
     },
 
     updateMainToolbar : function() 
@@ -273,29 +293,30 @@ Tine.Addressbook.Main = {
 	
     displayContactsToolbar: function()
     {
-        var onFilterChange = function(_field, _newValue, _oldValue){
-            // only refresh data on new query strings
-            if (_newValue != _oldValue) {
-                Ext.getCmp('Addressbook_Contacts_Grid').getStore().load({
-                    params: {
-                        start: 0,
-                        limit: 50
-                    }
-                });
-            }
-        };
-        
+    	// quicksearch filter field
         var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width: 240
         }); 
-        quickSearchField.on('change', onFilterChange, this);
         
+        quickSearchField.on('change', function(field){
+            if(this.filter.query != field.getValue()){
+                this.store.load({params: this.paging});
+            }
+        }, this);        
+        
+        // tag filter field
         var tagFilter = new Tine.widgets.tags.TagCombo({
+        	id: 'tagFilter',
             app: 'Addressbook',
             blurOnSelect: true
         });
-        tagFilter.on('change', onFilterChange, this);
+
+        tagFilter.on('change', function(field){
+            if(this.filter.tag != field.getValue()){
+                this.store.load({params: this.paging});
+            }
+        }, this);        
         
         var contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
@@ -319,29 +340,10 @@ Tine.Addressbook.Main = {
 
     displayContactsGrid: function() 
     {
-    	// the datastore
-        var dataStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Addressbook.Model.Contact,
-            // turn on remote sorting
-            remoteSort: true
-        });
-        
-        dataStore.setDefaultSort('n_family', 'asc');
-
-        dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
-            _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
-        }, this);   
-        
-        //Ext.StoreMgr.add('ContactsStore', dataStore);
-        
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
             pageSize: 50,
-            store: dataStore,
+            store: this.store,
             displayInfo: true,
             displayMsg: this.translation._('Displaying contacts {0} - {1} of {2}'),
             emptyMsg: this.translation._("No contacts to display")
@@ -456,7 +458,7 @@ Tine.Addressbook.Main = {
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
             id: 'Addressbook_Contacts_Grid',
-            store: dataStore,
+            store: this.store,
             cm: columnModel,
             tbar: pagingToolbar,     
             autoSizeColumns: false,
@@ -494,15 +496,11 @@ Tine.Addressbook.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            //console.log('id: ' + record.data.id);
             try {
-            	
-                //Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 800, 600);
                 var popupWindow = new Tine.Addressbook.EditPopup({
                     contactId: record.data.id
                     //containerId:
-                });            
-            
+                });                        
             } catch(e) {
                 // alert(e);
             }
@@ -519,50 +517,60 @@ Tine.Addressbook.Main = {
     },
     
     /**
-     * update datastore with node values and load datastore
+     * init the contacts json grid store
      */
-    loadData: function(_node)
-    {
-        var dataStore = Ext.getCmp('Addressbook_Contacts_Grid').getStore();
-        
-        // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.containerType) {
-            case 'internalContainer':
-                dataStore.baseParams.method = 'Addressbook.getUsers';
-                break;
+    initStore: function(){
 
-            case Tine.Tinebase.container.TYPE_SHARED:
-                dataStore.baseParams.method = 'Addressbook.getSharedContacts';
-                break;
-
-            case 'otherUsers':
-                dataStore.baseParams.method = 'Addressbook.getOtherPeopleContacts';
-                break;
-
-            case 'all':
-                dataStore.baseParams.method = 'Addressbook.getAllContacts';
-                break;
-
-
-            case Tine.Tinebase.container.TYPE_PERSONAL:
-                dataStore.baseParams.method = 'Addressbook.getContactsByOwner';
-                dataStore.baseParams.owner  = _node.attributes.owner.accountId;
-                break;
-
-            case 'singleContainer':
-                dataStore.baseParams.method        = 'Addressbook.getContactsByAddressbookId';
-                dataStore.baseParams.addressbookId = _node.attributes.container.id;
-                break;                
-        }
-        
-        dataStore.load({
-            params:{
-                start:0, 
-                limit:50 
+        this.store = new Ext.data.JsonStore({
+            idProperty: 'id',
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: Tine.Addressbook.Model.Contact,
+            remoteSort: true,
+            baseParams: {
+                method: 'Addressbook.searchContacts'
+            },
+            sortInfo: {
+                field: 'n_family',
+                dir: 'ASC'
             }
         });
-    },
+        
+        // register store
+        Ext.StoreMgr.add('ContactsGridStore', this.store);
+        
+        // prepare filter
+        this.store.on('beforeload', function(store, options){
+            
+            // for some reasons, paging toolbar eats sort and dir
+            if (store.getSortState()) {
+                this.filter.sort = store.getSortState().field;
+                this.filter.dir = store.getSortState().direction;
+            } else {
+                this.filter.sort = this.store.sort;
+                this.filter.dir = this.store.dir;
+            }
+            this.filter.start = options.params.start;
+            this.filter.limit = options.params.limit;
+            
+            // container
+            var nodeAttributes = Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode().attributes || {};
+            this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
+            this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
+            this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
 
+            // toolbar
+            this.filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
+            this.filter.tag = Ext.getCmp('tagFilter') ? Ext.getCmp('tagFilter').getValue() : '';
+
+            options.params.filter = Ext.util.JSON.encode(this.filter);
+        }, this);
+                        
+        this.store.load({
+            params: this.paging
+        });
+    },
+    
     show: function(_node) 
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
@@ -572,8 +580,12 @@ Tine.Addressbook.Main = {
             this.displayContactsToolbar();
             this.displayContactsGrid();
             this.updateMainToolbar();
+        } else {
+            // note: if node is clicked, it is not selected!
+            _node.getOwnerTree().selectPath(_node.getPath());
+        	
+            this.store.load({params: this.paging});        	
         }
-        this.loadData(_node);
     },
     
     reload: function() 
