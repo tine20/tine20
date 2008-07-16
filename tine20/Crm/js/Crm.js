@@ -97,7 +97,7 @@ Tine.Crm.Main = {
 		 */
         handlerEdit: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].id, 1024, 768);
+            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].data.id, 1024, 768);
         },
         
         /**
@@ -110,7 +110,7 @@ Tine.Crm.Main = {
                     var toDelete_Ids = [];
                 
                     for (var i = 0; i < _rowIndexIds.length; ++i) {
-                        toDelete_Ids.push(_rowIndexIds[i].id);
+                        toDelete_Ids.push(_rowIndexIds[i].data.id);
                     }
                     
                     var leadIds = Ext.util.JSON.encode(toDelete_Ids);
@@ -158,7 +158,7 @@ Tine.Crm.Main = {
             
             popupWindow = new Tine.Tasks.EditPopup({
                 relatedApp: 'crm',
-                relatedId: _rowIndex[0].id
+                relatedId: _rowIndex[0].data.id
             });
         }
         
@@ -397,7 +397,7 @@ Tine.Crm.Main = {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
-                this.actions.actionDelete.setDisabled(false);
+                //this.actions.actionDelete.setDisabled(false);
             }
             ctxMenuGrid.showAt(_eventObject.getXY());
         });
