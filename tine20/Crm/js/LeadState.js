@@ -66,7 +66,11 @@ Tine.Crm.LeadState.Renderer = function(_leadstateId) {
 	leadstateStore = Tine.Crm.LeadState.getStore();		
 	record = leadstateStore.getById(_leadstateId);
 	
-	return record.data.leadstate;
+	if (record) {
+	   return record.data.leadstate;
+	} else {
+		return 'undefined';
+	}
 };
 
 /**
