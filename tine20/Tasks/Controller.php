@@ -157,9 +157,10 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
     public function getMultipleTasks($_uids)
     {
         $tasks = $this->_backend->getMultiple($_uids);
+        //Zend_Registry::get('logger')->debug('Tasks_Controller_getMultipleTasks:: ' . print_r($tasks->toArray(), true));
         foreach ($tasks as $task) {
             if (! $this->_currentAccount->hasGrant($task->container_id, Tinebase_Container::GRANT_READ)) {
-                $index = $tasks->getIndexOfId($task->getId());
+                $index = $tasks->getIndexById($task->getId());
                 unset($tasks[$index]);
             } 
         }

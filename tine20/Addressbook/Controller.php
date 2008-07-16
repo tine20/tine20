@@ -160,7 +160,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         
         foreach ($contacts as $contact) {
             if (! $this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
-                $index = $contacts->getIndexOfId($contact->getId());
+                $index = $contacts->getIndexById($contact->getId());
                 unset($contacts[$index]);
             } 
         }

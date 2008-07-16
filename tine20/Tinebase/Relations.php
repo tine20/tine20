@@ -214,6 +214,7 @@ class Tinebase_Relations
             list($appName, $i, $modelName) = explode('_', $modelName);
             $appController = Tinebase_Controller::getInstance()->getApplicationInstance($appName);
             $getMultipleMethod = 'getMultiple' . $modelName . 's';
+            //Zend_Registry::get('logger')->debug('Tinebase_Relations: ' . print_r($relations->related_id, true));
             $records = $appController->$getMultipleMethod($relations->related_id);
             
             foreach ($relations as $relation) {
