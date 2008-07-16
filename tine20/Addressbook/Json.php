@@ -208,7 +208,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         $filter = new Addressbook_Model_ContactFilter(array(
             'query' => $query,
-            'tag'   => $tagFilter
+            'tag'   => $tagFilter,
+            'containerType' => 'all',
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
