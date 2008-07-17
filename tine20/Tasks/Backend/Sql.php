@@ -139,7 +139,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     public function searchCount(Tasks_Model_Filter $_filter)
     {
         if (count($_filter->container) === 0) {
-            throw new Exception('$_container can not be empty');
+            return 0;
         }
         $select = $this->_getSelect(TRUE);
         $this->_addFilter($select, $_filter);

@@ -203,7 +203,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     public function searchCount(Addressbook_Model_ContactFilter $_filter)
     {
         if (count($_filter->container) === 0) {
-            throw new Exception('$_container can not be empty');
+            return 0;
         }
         $select = $this->_db->select();
         $select->from(SQL_TABLE_PREFIX . 'addressbook', array('count' => 'COUNT(*)'));

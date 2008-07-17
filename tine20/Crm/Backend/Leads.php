@@ -109,7 +109,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
     public function searchCount(Crm_Model_LeadFilter $_filter)
     {        
         if (count($_filter->container) === 0) {
-            throw new Exception('$_container can not be empty');
+            return 0;
         }
         $select = $this->_getSelect(TRUE);
         $this->_addFilter($select, $_filter);
