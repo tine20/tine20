@@ -27,7 +27,6 @@ require_once('Interface.php');
  * @package     Tasks
  * @subpackage  Backend
  * 
- * @todo    search: filter..., pageing
  * @todo    Use of special Exceptions
  * @todo    remove current account from sql backend?
  * @todo    add function for complete removal of tasks?
@@ -106,10 +105,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         }
         
         // build query
-        // TODO: abstract filter2sql
-        $select = $this->_getSelect()
-            ->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
-            
+        $select = $this->_getSelect();
+
         if (!empty($_pagination->limit)) {
             $select->limit($_pagination->limit, $_pagination->start);
         }
@@ -119,20 +116,9 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             } 
             $select->order($_pagination->sort . ' ' . $_pagination->dir);
         }
-        if(!empty($_filter->query)){
-            $select->where($this->_db->quoteInto('(summary LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
-        }
-        if(!empty($_filter->status)){
-            $select->where($this->_db->quoteInto('status_id = ?',$_filter->status));
-        }
-        if(!empty($_filter->organizer)){
-            $select->where($this->_db->quoteInto('organizer = ?', (int)$_filter->organizer));
-        }
-        if(isset($_filter->showClosed) && $_filter->showClosed){
-            // nothing to filter
-        } else {
-            $select->where('status.status_is_open = TRUE');
-        }
+        
+        $this->_addFilter($select, $_filter);
+                          
 
         $stmt = $this->_db->query($select);
         $Tasks = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -152,15 +138,17 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function searchCount(Tasks_Model_Filter $_filter)
     {
-        $pagination = new Tasks_Model_Pagination();
-        return count($this->search($_filter, $pagination));
-        /*
-        if(empty($_filter->container)) return 0;
-        return $this->getTableInstance('tasks')->searchCount(array(
-            $this->_db->quoteInto('container IN (?)', $_filter->container),
-            'is_deleted = FALSE'
-        ));
-        */
+        if (count($_filter->container) === 0) {
+            throw new Exception('$_container can not be empty');
+        }
+        $select = $this->_getSelect(TRUE);
+        $this->_addFilter($select, $_filter);
+        $result = $this->_db->fetchOne($select);
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' count: ' . $select->__toString());
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' count: ' . $result);
+        
+        return $result;
     }
     
     /**
@@ -215,19 +203,59 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * 
      * @return Zend_Db_Select
      */
-    protected function _getSelect()
+    protected function _getSelect($_getCount = FALSE)
     {
-        return $this->_db->select()
-            ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
+        $select = $this->_db->select()
+            ->where('tasks.is_deleted = FALSE');
+        
+        $tablename = array('tasks' => $this->_tableNames['tasks']);
+        
+        if ($_getCount) {
+            $fields = array('count' => 'COUNT(tasks.id)');
+            $select->from($tablename, $fields) 
+                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array());
+        } else {
+            $fields = array(
+                'tasks.*', 
                 'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_id)',
                 'is_due'  => 'LENGTH(tasks.due)',
                 //'is_open' => 'status.status_is_open',
-            ))
-            ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
-            ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
-            ->where('tasks.is_deleted = FALSE')
-            ->group('tasks.id');
+            );
+            $select->from($tablename, $fields)
+                ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
+                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
+                ->group('tasks.id');
+        }
+
+        return $select;
     }
+
+    /**
+     * add the fields to search for to the query
+     *
+     * @param  Zend_Db_Select           $_select current where filter
+     * @param  Crm_Model_LeadFilter $_filter the string to search for
+     * @return void
+     */
+    protected function _addFilter(Zend_Db_Select $_select, Tasks_Model_Filter $_filter)
+    {
+        $_select->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
+                                
+        if(!empty($_filter->query)){
+            $_select->where($this->_db->quoteInto('(tasks.summary LIKE ? OR tasks.description LIKE ?)', '%' . $_filter->query . '%'));
+        }
+        if(!empty($_filter->status)){
+            $_select->where($this->_db->quoteInto('tasks.status_id = ?',$_filter->status));
+        }
+        if(!empty($_filter->organizer)){
+            $_select->where($this->_db->quoteInto('tasks.organizer = ?', (int)$_filter->organizer));
+        }
+        if(isset($_filter->showClosed) && $_filter->showClosed){
+            // nothing to filter
+        } else {
+            $_select->where('status.status_is_open = TRUE');
+        }
+    }        
     
     /**
      * Create a new Task
