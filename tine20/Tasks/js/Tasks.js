@@ -15,12 +15,17 @@ Ext.namespace('Tine.Tasks');
 
 /**
  * entry point, required by tinebase
+ * This function is called once when Tinebase collect the available apps
  */
 Tine.Tasks.getPanel =  function() {
+    Tine.Tasks.mainGrid.initComponent();
 	var tree = Tine.Tasks.mainGrid.getTree();
+    
+    // this function is called each time the user activates the Tasks app
     tree.on('beforeexpand', function(panel) {
-        Tine.Tasks.mainGrid.initComponent();
+        // we need to set toolbar first, as the grid filters read out the toolbar
         Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Tasks.mainGrid.getToolbar());
+        Tine.Tasks.mainGrid.initMainScreen();
         Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Tasks.mainGrid.grid);
     }, this);
     
@@ -137,7 +142,7 @@ Tine.Tasks.mainGrid = {
 		
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
-		
+    
     	this.actions = {
             editInPopup: new Ext.Action({
                 text: this.translation._('Edit task'),
@@ -169,6 +174,10 @@ Tine.Tasks.mainGrid = {
                 scope: this
             })
         };
+        
+    },
+    
+    initMainScreen: function() {
         this.filter.owner = Tine.Tinebase.Registry.get('currentAccount').accountId;
         this.initStore();
         this.initGrid();
