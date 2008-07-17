@@ -105,12 +105,18 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      * 
      * @param Crm_Model_LeadFilter $_filter
      * @return int
-     * 
-     * @todo use sql count(*) here
      */
     public function searchCount(Crm_Model_LeadFilter $_filter)
     {        
-        return count($this->search($_filter));
+        //return count($this->search($_filter));
+
+        if (count($_filter->container) === 0) {
+            throw new Exception('$_container can not be empty');
+        }
+        $select = $this->_getSelect(TRUE);
+        $this->_addFilter($select, $_filter);
+        $result = $this->_db->fetchOne($select);
+        return $result;        
     }    
 
     /****************** update / delete *************/
@@ -190,13 +196,16 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
 
     /**
      * get the basic select object to fetch leads from the database 
+     * @param $_getCount only get the count
      *
      * @return Zend_Db_Select
      */
-    protected function _getSelect()
-    {
-        $select = $this->_db->select()
-            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
+    protected function _getSelect($_getCount = FALSE)
+    {        
+        if ($_getCount) {
+            $fields = array('count' => 'COUNT(*)');    
+        } else {
+            $fields = array(
                 'id',
                 'lead_name',
                 'leadstate_id',
@@ -208,9 +217,13 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
                 'end',
                 'turnover',
                 'probability',
-                'end_scheduled')
+                'end_scheduled'
             );
-                
+        }
+
+        $select = $this->_db->select()
+            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), $fields);
+        
         return $select;
     }
     
