@@ -124,12 +124,8 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
      */
     protected function _checkContainerACL($_filter)
     {
-        foreach ($_filter->container as $containerId) {
-            if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
-                $container[] = $containerId;
-            }
-        }
-        $_filter->container = $container;
+        $readableContainer = $this->_currentAccount->getContainerByACL('Tasks', Tinebase_Container::GRANT_READ);
+        $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
     }
     
     /**
