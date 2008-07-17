@@ -229,7 +229,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }
 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $lead = $backend->updateLead($_lead);
+        $lead = $backend->update($_lead);
 
         // set relations & links
         $this->setLeadLinks($lead->getId(), $_lead);        

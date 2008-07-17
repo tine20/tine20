@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        rename function updateLead -> update
  * @todo        rename container to container_id in leads table
  */
 
@@ -161,10 +160,8 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      *
      * @param Crm_Lead $_leadData the leaddata
      * @return Crm_Model_Lead
-     * 
-     * @todo    rename
      */
-    public function updateLead(Crm_Model_Lead $_lead)
+    public function update(Crm_Model_Lead $_lead)
     {
         if(!$_lead->isValid()) {
             throw new Exception('lead object is not valid');
