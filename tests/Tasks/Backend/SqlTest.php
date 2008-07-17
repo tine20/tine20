@@ -27,14 +27,17 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	 * @var Tasks_Backend_Sql SQL Backend in test
 	 */
 	protected $_backend;
+	
 	/**
 	 * @var Tasks_Model_Task test Task 1
 	 */
 	protected $_testTask1;
+	
 	/**
      * @var Tasks_Model_Task persistant (readout from db after persistant creation) test Task 1
      */
 	protected $_persistantTestTask1;
+	
 	/**
 	 * As the backend does not depend on the container classes, we define
 	 * two static containers here.
@@ -70,6 +73,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         ),true, false);
         $this->_persistantTestTask1 = $this->_backend->create($this->_testTask1);
 	}
+	
 	/**
 	 * remove stuff from db
 	 *
@@ -81,6 +85,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $db->delete($db->getAdapter()->quoteInto('id = ?', $this->_persistantTestTask1->getId() ));
         Tinebase_Timemachine_ModificationLogTest::purgeLogs($this->_persistantTestTask1->getId());
 	}
+	
 	/**
 	 * If $this->_testTask1 and $this->_persistantTestTask1 are equal, 
 	 * creation and single readout of task must have been successfull
@@ -92,6 +97,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     		$this->assertEquals($value, $pvalue, "$field shoud be $value but is $pvalue");
     	}
     }
+    
     public function testCreateMinimalTask()
     {
         $task = new Tasks_Model_Task(array(
@@ -113,6 +119,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         Tinebase_Timemachine_ModificationLogTest::purgeLogs($persitantTask->getId());
         
     }
+    
     /**
      * Note: delete sets is_deleted and does not delete records 
      * from table!
@@ -130,6 +137,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         	$this->assertNotEquals($testId, $task->getId());
         }
     }
+    
     /**
      * Note: delete sets is_deleted and does not delete records 
      * from table!
@@ -150,6 +158,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         	$this->assertTrue(true);
         }
     }
+    
     /**
      * test basic update function
      */
@@ -174,6 +183,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     		}
     	}
     }
+    
     /**
      * test if non resolvable concurrency problem gets detected
      */
@@ -198,6 +208,11 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         	$this->assertType('Tinebase_Timemachine_Exception_ConcurrencyConflict', $e);
         }
     }
+    
+    /**
+     * search for a task and test searchCount
+     *
+     */
     public function testSearchTask()
     {
         //create a unique search criteria
@@ -212,6 +227,10 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $tasks = $this->_backend->search($filter, $pagination);
         
         $this->assertEquals(1, count($tasks));
+        
+        // test search count
+        $count = $this->_backend->searchCount($filter);
+        $this->assertEquals(1, $count);
     }
 }		
 	
