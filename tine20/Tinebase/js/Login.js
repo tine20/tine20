@@ -19,6 +19,7 @@ Tine.Login = {
 
     showLoginDialog: function(_defaultUsername, _defaultPassword) {
     	var loginButtons = [{
+            id: 'loginbutton',
             text: 'Login',
             handler: Tine.Login.loginHandler 
         }];

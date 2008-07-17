@@ -202,6 +202,7 @@ Tine.Tinebase.MainScreen = function() {
 		                //disabled: true
 		            }, '-', {
 		                text: 'Logout',
+                        id: 'menulogout',
 		                handler: _logoutButtonHandler,
 		                iconCls: 'action_logOut'
 		            }]                
@@ -224,6 +225,7 @@ Tine.Tinebase.MainScreen = function() {
                 }
             }, '->', {
             	text: _('Logout'),
+                id: 'tblogout',
                 iconCls: 'action_logOut',
                 //cls:     'x-btn-icon',
                 tooltip: {text: _('Logout from Tine 2.0')},
