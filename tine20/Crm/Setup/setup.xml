@@ -5,8 +5,107 @@
     <order>20</order>
     <tables>
         <table>
-            <name>metacrm_lead</name>
+            <name>metacrm_leadsource</name>
             <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>leadsource</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>translate</name>
+                    <type>boolean</type>
+                    <default>true</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>metacrm_leadstate</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>leadstate</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>probability</name>
+                    <type>tinyint</type>
+                </field>
+                <field>
+                    <name>endslead</name>
+                    <type>boolean</type>
+                    <default>true</default>
+                </field>
+                <field>
+                    <name>translate</name>
+                    <type>boolean</type>
+                    <default>true</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>metacrm_leadtype</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>leadtype</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>leadtype_translate</name>
+                    <type>boolean</type>
+                    <default>true</default>
+                </field>
+                <index>
+                    <name>leadtype_id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>                
+        <table>
+            <name>metacrm_lead</name>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -120,74 +219,38 @@
                         <name>id</name>
                     </field>
                 </index>
-            </declaration>
-        </table>
-        <table>
-            <name>metacrm_leadsource</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>leadsource</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>translate</name>
-                    <type>boolean</type>
-                    <default>true</default>
-                </field>
                 <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
+                    <name>metacrm_lead::leadsource_id--metacrm_leadsource::id</name>
                     <field>
-                        <name>id</name>
+                        <name>leadsource_id</name>
                     </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>metacrm_leadsource</table>
+                        <field>id</field>
+                    </reference>
                 </index>
-            </declaration>
-        </table>
-        <table>
-            <name>metacrm_leadstate</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>leadstate</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>probability</name>
-                    <type>tinyint</type>
-                </field>
-                <field>
-                    <name>endslead</name>
-                    <type>boolean</type>
-                    <default>true</default>
-                </field>
-                <field>
-                    <name>translate</name>
-                    <type>boolean</type>
-                    <default>true</default>
-                </field>
                 <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
+                    <name>metacrm_lead::leadtype_id--metacrm_leadtype::id</name>
                     <field>
-                        <name>id</name>
+                        <name>leadtype_id</name>
                     </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>metacrm_leadtype</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>metacrm_lead::leadstate_id--metacrm_leadstate::id</name>
+                    <field>
+                        <name>leadstate_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>metacrm_leadstate</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>
@@ -221,36 +284,6 @@
                 </index>
             </declaration>
         </table>        
-        <table>
-            <name>metacrm_leadtype</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>leadtype</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>leadtype_translate</name>
-                    <type>boolean</type>
-                    <default>true</default>
-                </field>
-                <index>
-                    <name>leadtype_id</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>                
         <table>
             <name>metacrm_leads_products</name>
             <version>1</version>
