@@ -131,6 +131,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @return array contact data
      * 
      * @todo what about the tags?
+     * @todo add account grants again -> improve performance first
      */
     protected function _contactToJson($_contact)
     {
@@ -138,7 +139,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         $result = $_contact->toArray();
         $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
-        $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
+        
+        // removed that because it took 50% of the execution time
+        //$result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
+        
         $result['jpegphoto'] = $this->_getImageLink($_contact);
         
         return $result;
