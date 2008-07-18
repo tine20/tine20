@@ -914,4 +914,92 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.10');        
     }
+
+    /**
+     * update to 0.11
+     * - add notes table
+     * 
+     */
+    function update_10()
+    {
+        $tableDefinition = ('
+        <table>
+            <name>notes</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>note</name>
+                    <type>text</type>
+                    <default>NULL</default>
+                </field>
+                <field>
+                    <name>record_model</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_backend</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>integer</type>
+                </field>            
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        ');
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+
+        //$this->setApplicationVersion('Tinebase', '0.11');
+    }
 }
