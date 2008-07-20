@@ -99,7 +99,7 @@ Tine.Addressbook.Main = {
         editContact: function(_button, _event) 
         {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
-            var contactId = selectedRows[0].id;
+            var contactId = selectedRows[0].data.id;
             
             var popupWindow = new Tine.Addressbook.EditPopup({
                 contactId: contactId
@@ -112,11 +112,11 @@ Tine.Addressbook.Main = {
          */
         exportContact: function(_button, _event) 
         {
-            var _rowIndexIds = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();            
+            var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();            
             var toExportIds = [];
         
-            for (var i = 0; i < _rowIndexIds.length; ++i) {
-                toExportIds.push(_rowIndexIds[i].id);
+            for (var i = 0; i < selectedRows.length; ++i) {
+                toExportIds.push(selectedRows[i].data.id);
             }
             
             var contactIds = Ext.util.JSON.encode(toExportIds);
@@ -185,7 +185,7 @@ Tine.Addressbook.Main = {
 	                var contactIds = [];
 	                var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
-	                    contactIds.push(selectedRows[i].id);
+	                    contactIds.push(selectedRows[i].data.id);
 	                }
 	                
 	                contactIds = Ext.util.JSON.encode(contactIds);
