@@ -1075,14 +1075,20 @@ class Tinebase_Container
      * remove container from cache if cache is available
      *
      * @param string $_cacheId
+     * 
+     * @todo memcached can't use tags -> clear complete cache?
      */
     protected function _removeFromCache($_containerId) 
     {
         // remove container from cache
         try {
             $cache = Zend_Registry::get('cache');
-            $result = $cache->remove('getContainerById' . $_containerId);
-            $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));                
+            if (ucfirst(Zend_Registry::get('configFile')->caching->backend) !== 'Memcached') {
+                $cache->remove('getContainerById' . $_containerId);
+                $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
+            } else {
+                $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
+            }
         } catch (Exception $e) {
             // caching not configured
         }

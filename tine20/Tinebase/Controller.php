@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
- * 
- * @todo        put cache config in configuration
  */
 
 /**
@@ -82,19 +80,32 @@ class Tinebase_Controller
         }
         
         // create zend cache
-        // @todo add cache type to config (file, memcache, ...)
         if ($this->_config->caching && $this->_config->caching->active) {
             $frontendOptions = array(
-               'lifetime' => 7200, // cache lifetime of 2 hours
+               'lifetime' => ($this->_config->caching->lifetime) ? $this->_config->caching->lifetime : 7200,
                'automatic_serialization' => true // turn that off for more speed
             );
                         
-            $backendOptions = array(
-                'cache_dir' => $this->_config->caching->path // Directory where to put the cache files
-            );
+            $backendType = ($this->_config->caching->backend) ? ucfirst($this->_config->caching->backend) : 'File';
+            
+            switch ($backendType) {
+                case 'File':
+                    $backendOptions = array(
+                        'cache_dir' => ($this->_config->caching->path) ? $this->_config->caching->path : '/tmp' // Directory where to put the cache files
+                    );
+                break;
+                case 'Memcached':                        
+                    $backendOptions = array(
+                        'servers' => array(
+                            'host' => ($this->_config->caching->host) ? $this->_config->caching->host :'localhost',
+                            'port' => ($this->_config->caching->port) ? $this->_config->caching->port :11211,
+                            'persistent' => TRUE
+                    ));
+                break;
+            }
             
             // getting a Zend_Cache_Core object
-            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+            $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
             Zend_Registry::set('cache', $cache);
         }
     }
