@@ -290,14 +290,7 @@ class Tinebase_Container
             $this->containerAclTable->insert($data);
         }
 
-        // remove container from cache
-        try {
-            $cache = Zend_Registry::get('cache');
-            $result = $cache->remove('getContainerById' . $containerId);
-            $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));                
-        } catch (Exception $e) {
-            // caching not configured
-        }
+        $this->_removeFromCache($containerId);
         
         return true;
     }
@@ -422,18 +415,18 @@ class Tinebase_Container
      */
     public function getContainerById($_containerId)
     {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
         try {
             $cache = Zend_Registry::get('cache');
-            $result = $cache->load('getContainerById' . $_containerId);
+            $result = $cache->load('getContainerById' . $containerId);
         } catch (Exception $e) {
             // caching not configured
             $result = FALSE;
         }
     
         if(!$result) {
-    
-            $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-            
+                
             $row = $this->containerTable->find($containerId)->current();
             
             if($row === NULL) {
@@ -443,7 +436,7 @@ class Tinebase_Container
             $result = new Tinebase_Model_Container($row->toArray());
             
             if (isset($cache)) {
-                $cache->save($result, 'getContainerById' . $_containerId);
+                $cache->save($result, 'getContainerById' . $containerId);
             }            
         }
         
@@ -759,6 +752,8 @@ class Tinebase_Container
             $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
         );
         $this->containerTable->delete($where);
+        
+        $this->_removeFromCache($containerId);
     }
     
     /**
@@ -785,15 +780,8 @@ class Tinebase_Container
         );
         
         $this->containerTable->update($data, $where);
-        
-        // remove container from cache
-        try {
-            $cache = Zend_Registry::get('cache');
-            $result = $cache->remove('getContainerById' . $_containerId);
-            $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
-        } catch (Exception $e) {
-            // caching not configured
-        }        
+
+        $this->_removeFromCache($containerId);
         
         return $this->getContainerById($_containerId);
     }
@@ -1072,14 +1060,7 @@ class Tinebase_Container
             
             Zend_Registry::get('dbAdapter')->commit();
             
-            // remove container from cache
-            try {
-                $cache = Zend_Registry::get('cache');
-                $result = $cache->remove('getContainerById' . $containerId);
-                $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));                
-            } catch (Exception $e) {
-                // caching not configured
-            }
+            $this->_removeFromCache($containerId);
             
         } catch (Exception $e) {
             Zend_Registry::get('dbAdapter')->rollBack();
@@ -1089,4 +1070,21 @@ class Tinebase_Container
         
         return $this->getGrantsOfContainer($containerId, $_ignoreAcl);
     }
+    
+    /**
+     * remove container from cache if cache is available
+     *
+     * @param string $_cacheId
+     */
+    protected function _removeFromCache($_containerId) 
+    {
+        // remove container from cache
+        try {
+            $cache = Zend_Registry::get('cache');
+            $result = $cache->remove('getContainerById' . $_containerId);
+            $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));                
+        } catch (Exception $e) {
+            // caching not configured
+        }
+    }    
 }
