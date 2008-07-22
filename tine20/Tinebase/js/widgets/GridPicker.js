@@ -258,7 +258,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
      * @cfg {string}
      * request method
      */ 
-    requestMethod: 'Addressbook.getAllContacts',
+    requestMethod: 'Addressbook.searchContacts',
 
     /**
      * @cfg {string}
@@ -316,23 +316,27 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
         this.loadData = function() {
             var searchString = Ext.getCmp('Tinebase_Records_SearchField').getRawValue();
             
-            if (this.requestParams && this.requestParams.query == searchString) {
+            if (this.requestParams && this.requestParams.filter.query == searchString || searchString.length < 1) {
                 return;
             }
-            this.requestParams = { query: searchString, dir: 'asc', start: 0, limit: 50, tagFilter: [] };
-            
+            this.requestParams = { 
+                method: this.requestMethod,
+                filter: Ext.util.JSON.encode({
+                    containerType: 'all',
+                    query: searchString,
+                    dir: 'asc', 
+                    start: 0, 
+                    limit: 50,
+                    sort: this.displayField
+                })
+            };
+
             Ext.getCmp('Tinebase_Records_Grid').getStore().removeAll();
-            if (this.requestParams.query.length < 1) {
-                return;
-            }
-            
-            this.requestParams.method = this.requestMethod;
-            this.requestParams.sort   = this.displayField;
+                        
             Ext.Ajax.request({
                 params: this.requestParams,
                 success: function(response, options){
                     var data = Ext.util.JSON.decode(response.responseText);
-                    //console.log(data.results);
                     var toLoad = [];
                     for (var i=0; i<data.results.length; i++){                        
                         var item = (data.results[i]);
