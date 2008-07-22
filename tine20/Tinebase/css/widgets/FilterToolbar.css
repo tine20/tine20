@@ -1,0 +1,22 @@
+.action_delThisFilter {
+    background-image:url(../../images/clear-left.png) !important;
+}
+
+.action_delAllFilter {
+    background-image:url(../../images/clear-right.png) !important;
+}
+
+.action_addFilter {
+    background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
+}
+
+.action_saveFilter {
+    background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
+}
+
+.action_startFilter {
+    background-image:url(../../images/start-filter.png) !important;
+}
+
+.x-filter  { background-color: #f0f0f0 }
+.x-filter td { padding: 3px }
