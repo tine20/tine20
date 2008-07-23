@@ -87,6 +87,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $this->getLeadLinks($lead);
         
         Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
+        
+        $lead->notes = Tinebase_Notes::getInstance()->getNotes('Crm_Model_Lead', 'Sql', $lead->getId());        
                 
         return $lead;
     }
@@ -202,7 +204,12 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $lead->tags = $_lead->tags;
             Tinebase_Tags::getInstance()->setTagsOfRecord($lead);
         }        
-                
+
+        if (isset($_lead->notes)) {
+            $lead->notes = $_lead->notes;
+            Tinebase_Notes::getInstance()->setNotesOfRecord($lead);
+        }
+        
         //$this->sendNotifications(false, $lead, $_lead->responsible);
         
         return $this->getLead($lead->getId());
@@ -237,6 +244,10 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         if (isset($_lead->tags)) {
             Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
         }
+
+        if (isset($_lead->notes)) {
+            Tinebase_Notes::getInstance()->setNotesOfRecord($_lead);
+        }        
         
         //$this->sendNotifications(true, $lead, $_lead->responsible);
         
@@ -263,6 +274,9 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             
             if($this->_currentAccount->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
                 $backend->delete($_leadId);
+
+                // delete notes
+                Tinebase_Notes::getInstance()->deleteNotesOfRecord('Crm_Model_Lead', 'Sql', $lead->getId());                
             } else {
                 throw new Exception('delete access to lead denied');
             }
