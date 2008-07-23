@@ -311,14 +311,9 @@ class Tinebase_Container
     {
         $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
 
-        try {
-            $cache = Zend_Registry::get('cache');
-            $cacheId = 'getContainerByACL' . $accountId . $_application . $_grant;
-            $result = $cache->load($cacheId);
-        } catch (Exception $e) {
-            // caching not configured
-            $result = FALSE;
-        }
+        $cache = Zend_Registry::get('cache');
+        $cacheId = 'getContainerByACL' . $accountId . $_application . $_grant;
+        $result = $cache->load($cacheId);
         
         if (!$result) {
             $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
@@ -395,10 +390,8 @@ class Tinebase_Container
     
             $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
             
-            if (isset($cache)) {
-                // save result and tag it with 'container'
-                $cache->save($result, $cacheId, array('container'));
-            }                        
+            // save result and tag it with 'container'
+            $cache->save($result, $cacheId, array('container'));
         }
             
         return $result;
@@ -417,14 +410,10 @@ class Tinebase_Container
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        try {
-            $cache = Zend_Registry::get('cache');
-            $result = $cache->load('getContainerById' . $containerId);
-        } catch (Exception $e) {
-            // caching not configured
-            $result = FALSE;
-        }
-    
+        // load from cache
+        $cache = Zend_Registry::get('cache');
+        $result = $cache->load('getContainerById' . $containerId);
+
         if(!$result) {
                 
             $row = $this->containerTable->find($containerId)->current();
@@ -435,9 +424,7 @@ class Tinebase_Container
             
             $result = new Tinebase_Model_Container($row->toArray());
             
-            if (isset($cache)) {
-                $cache->save($result, 'getContainerById' . $containerId);
-            }            
+            $cache->save($result, 'getContainerById' . $containerId);
         }
         
         return $result;

@@ -113,13 +113,10 @@ class Tinebase_Relations
         }
         
         // remove relations from cache
-        try {
-            $cache = Zend_Registry::get('cache');
-            $result = $cache->remove('getRelations' . $_model . $_backend . $_id);
-        } catch (Exception $e) {
-            // caching not configured
-        }                
+        $cache = Zend_Registry::get('cache');
+        $result = $cache->remove('getRelations' . $_model . $_backend . $_id);
     }
+    
     /**
      * get all relations of a given record
      * - cache result if caching is activated
@@ -134,24 +131,17 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_ignoreAcl=false)
     {
-        try {
-            $cache = Zend_Registry::get('cache');
-            $cacheId = 'getRelations' . $_model . $_backend . $_id;
-            $result = $cache->load($cacheId);
-        } catch (Exception $e) {
-            // caching not configured
-            $result = FALSE;
-        }
+        $cache = Zend_Registry::get('cache');
+        $cacheId = 'getRelations' . $_model . $_backend . $_id;
+        $result = $cache->load($cacheId);
         
         if (!$result) {
     
             $result = $this->_backend->getAllRelations($_model, $_backend, $_id);
             $this->resolveAppRecords($result);
 
-            if (isset($cache)) {
-                // save result and tag it with 'container'
-                $cache->save($result, $cacheId, array('relations'));
-            }                        
+            // save result and tag it with 'container'
+            $cache->save($result, $cacheId, array('relations'));
         }
             
         return $result;
