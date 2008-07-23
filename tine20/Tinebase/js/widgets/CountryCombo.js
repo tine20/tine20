@@ -18,6 +18,7 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
     displayField:'translatedName',
     valueField:'shortName',
     typeAhead: true,
+    forceSelection: true,
     mode: 'local',
     triggerAction: 'all',
     emptyText:'Select a country...',
