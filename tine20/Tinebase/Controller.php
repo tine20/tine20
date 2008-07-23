@@ -68,6 +68,8 @@ class Tinebase_Controller
 
         $this->setupUserLocale();
         
+        $this->setupCache();
+        
         $this->session = new Zend_Session_Namespace('tinebase');
         
         if (!isset($this->session->jsonKey)) {
@@ -79,35 +81,6 @@ class Tinebase_Controller
             Zend_Registry::set('currentAccount', $this->session->currentAccount);
         }
         
-        // create zend cache
-        if ($this->_config->caching && $this->_config->caching->active) {
-            $frontendOptions = array(
-               'lifetime' => ($this->_config->caching->lifetime) ? $this->_config->caching->lifetime : 7200,
-               'automatic_serialization' => true // turn that off for more speed
-            );
-                        
-            $backendType = ($this->_config->caching->backend) ? ucfirst($this->_config->caching->backend) : 'File';
-            
-            switch ($backendType) {
-                case 'File':
-                    $backendOptions = array(
-                        'cache_dir' => ($this->_config->caching->path) ? $this->_config->caching->path : '/tmp' // Directory where to put the cache files
-                    );
-                break;
-                case 'Memcached':                        
-                    $backendOptions = array(
-                        'servers' => array(
-                            'host' => ($this->_config->caching->host) ? $this->_config->caching->host :'localhost',
-                            'port' => ($this->_config->caching->port) ? $this->_config->caching->port :11211,
-                            'persistent' => TRUE
-                    ));
-                break;
-            }
-            
-            // getting a Zend_Cache_Core object
-            $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
-            Zend_Registry::set('cache', $cache);
-        }
     }
     
     /**
@@ -274,6 +247,46 @@ class Tinebase_Controller
         Zend_Registry::set('logger', $logger);
 
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
+    }
+    
+    protected function setupCache()
+    {
+        // create zend cache
+        if ($this->_config->caching && $this->_config->caching->active) {
+            $frontendOptions = array(
+                'cache_id_prefix' => SQL_TABLE_PREFIX,
+                'lifetime' => ($this->_config->caching->lifetime) ? $this->_config->caching->lifetime : 7200,
+                'automatic_serialization' => true // turn that off for more speed
+            );
+                        
+            $backendType = ($this->_config->caching->backend) ? ucfirst($this->_config->caching->backend) : 'File';
+            
+            switch ($backendType) {
+                case 'File':
+                    $backendOptions = array(
+                        'cache_dir' => ($this->_config->caching->path) ? $this->_config->caching->path : '/tmp/' // Directory where to put the cache files
+                    );
+                break;
+                case 'Memcached':                        
+                    $backendOptions = array(
+                        'servers' => array(
+                            'host' => ($this->_config->caching->host) ? $this->_config->caching->host : 'localhost',
+                            'port' => ($this->_config->caching->port) ? $this->_config->caching->port : 11211,
+                            'persistent' => TRUE
+                    ));
+                break;
+            }
+        } else {
+            $backendType = 'File';
+            $frontendOptions = array(
+                'caching' => false
+            );
+            $backendOptions = array();
+        }    
+
+        // getting a Zend_Cache_Core object
+        $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
+        Zend_Registry::set('cache', $cache);
     }
     
     /**
