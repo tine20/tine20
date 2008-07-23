@@ -53,10 +53,25 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
     {
         $this->_instance = Tinebase_Notes::getInstance();
         
+        $this->_objects['record'] = array(
+            'id'        => 1,
+            'model'     => 'Addressbook_Model_Contact',
+            'backend'    => 'Sql',
+        );
+        
         $this->_objects['noteType'] = new Tinebase_Notes_Model_NoteType(array(
             'id'        => '5001',
             'name'      => 'phpunit note type',
             'icon'      => '/images/oxygen/16x16/actions/document-properties.png'
+        ));
+        
+        $this->_objects['note'] = new Tinebase_Notes_Model_Note(array(
+            'id'                => 1,
+            'note_type_id'      => $this->_objects['noteType']->getId(),
+            'note'              => 'phpunit test note',    
+            'record_model'      => $this->_objects['record']['model'],
+            'record_backend'    => $this->_objects['record']['backend'],       
+            'record_id'         => $this->_objects['record']['id']
         ));
     }
     
@@ -74,7 +89,58 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(count($noteTypesPre), count($noteTypesPost));
     }
-
+    
+    /**
+     * try to add a note
+     *
+     */
+    public function testAddNote()
+    {
+        $notesPre = $this->_instance->getNotes(
+            $this->_objects['record']['model'], 
+            $this->_objects['record']['backend'], 
+            $this->_objects['record']['id']
+        );
+        
+        $this->_instance->addNote($this->_objects['note']);
+        
+        $notesPost = $this->_instance->getNotes(
+            $this->_objects['record']['model'], 
+            $this->_objects['record']['backend'], 
+            $this->_objects['record']['id']
+        );
+        
+        $this->assertGreaterThan(count($notesPre), count($notesPost));
+        $this->assertEquals($this->_objects['note']->note, $notesPost[0]->note);
+    }
+    
+    /**
+     * try to delete a note
+     *
+     */
+    public function testdeleteNote()
+    {
+        $notesPre = $this->_instance->getNotes(
+            $this->_objects['record']['model'], 
+            $this->_objects['record']['backend'], 
+            $this->_objects['record']['id']
+        );
+        
+        $this->_instance->deleteNotesOfRecord(
+            $this->_objects['record']['model'], 
+            $this->_objects['record']['backend'], 
+            $this->_objects['record']['id']
+        );
+        
+        $notesPost = $this->_instance->getNotes(
+            $this->_objects['record']['model'], 
+            $this->_objects['record']['backend'], 
+            $this->_objects['record']['id']
+        );
+        
+        $this->assertLessThan(count($notesPre), count($notesPost));
+    }
+    
     /**
      * try to delete a note type
      *
