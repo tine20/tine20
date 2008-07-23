@@ -264,7 +264,7 @@ class Tinebase_Controller
             switch ($backendType) {
                 case 'File':
                     $backendOptions = array(
-                        'cache_dir' => ($this->_config->caching->path) ? $this->_config->caching->path : '/tmp/' // Directory where to put the cache files
+                        'cache_dir' => ($this->_config->caching->path) ? $this->_config->caching->path : session_save_path()  // Directory where to put the cache files
                     );
                 break;
                 case 'Memcached':                        
@@ -281,7 +281,9 @@ class Tinebase_Controller
             $frontendOptions = array(
                 'caching' => false
             );
-            $backendOptions = array();
+            $backendOptions = array(
+                'cache_dir' => session_save_path()
+            );
         }    
 
         // getting a Zend_Cache_Core object
