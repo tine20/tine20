@@ -16,6 +16,7 @@ Tine.widgets.FilterToolbar = function(config) {
 
 Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
     
+    frowIdPrefix: 'tw-ftb-frowid-',
     /**
      * @private
      */
@@ -23,7 +24,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         var ts = this.templates || {};
         if(!ts.master) {
             ts.master = new Ext.Template(
-                '<div class="filterGrid" hidefocus="true">',
+                '<div class="tw-filtertoolbar x-toolbar x-small-editor" hidefocus="true">',
                     '<table style="width: auto;" border="1" cellpadding="0" cellspacing="0">',
                          '{tbody}', 
                      '</table>',
@@ -32,22 +33,27 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         }
         if(!ts.filterrow){
             ts.filterrow = new Ext.Template(
-                '<tr id="{id}" class="fw-fgrid-frow">',
-                    '<td class="tw-fgrid-frow-prefix">{prefix}</td>',
-                    '<td class="tw-fgrid-frow-field">{field}</td>',
-                    '<td class="tw-fgrid-frow-operator">{operator}</td>',
-                    '<td class="tw-fgrid-frow-value">{value}</td>',
-                    '<td class="tw-fgrid-frow-deleterow"></td>',
+                '<tr id="{id}" class="fw-ftb-frow">',
+                    '<td class="tw-ftb-frow-prefix">{prefix}</td>',
+                    '<td class="tw-ftb-frow-field">{field}</td>',
+                    '<td class="tw-ftb-frow-operator">{operator}</td>',
+                    '<td class="tw-ftb-frow-value">{value}</td>',
+                    '<td class="tw-ftb-frow-deleterow"></td>',
                 '</tr>'
             );
         }
         if(!ts.actionrow){
             ts.actionrow = new Ext.Template(
-                '<tr>',
+                '<tr class="fw-ftb-actionrow">',
                     '<td></td>',
-                    '<td colspan="2" class="tw-fgrid-actionsbuttons">{actionsbuttons}</td>',
-                    '<td class="tw-fgrid-searchbutton">{searchbutton}</td>',
-                    '<td class="tw-fgrid-deletebutton">{deletebutton}</td>',
+                    '<td colspan="2" class="tw-ftb-actionsbuttons">' +
+                        '<table style="width: auto;" border="0" cellpadding="0" cellspacing="0"><tr>',
+                            '<td class="tw-ftb-newfilterbutton"></td>',
+                            '<td class="tw-ftb-savefilterbutton"></td>',
+                        '</tr></table>',
+                    '</td>',
+                    '<td class="tw-ftb-searchbutton">{searchbutton}</td>',
+                    '<td class="tw-ftb-deletebutton">{deletebutton}</td>',
                 '</tr>'
             );
         }
@@ -61,16 +67,21 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         }
 
         this.templates = ts;
-        this.delRowSelector = 'td[class=tw-fgrid-deleterow]';
+        this.delRowSelector = 'td[class=tw-ftb-deleterow]';
     },
     /**
      * @private
      */
     onRender: function(ct, position) {
         Tine.widgets.FilterToolbar.superclass.onRender.call(this, ct, position);
+        
         this.renderTable();
-        this.renderFilters();
-        //this.renderActionsRow();
+        
+        this.store.each(function(filter) {
+            this.renderFilterRow(filter);
+        }, this);
+        
+        this.renderActionsRow();
     },
     /**
      * renders static table
@@ -79,50 +90,74 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
     renderTable: function() {
         var ts = this.templates;
         var tbody = '';
-        var cnt = 0;
         
         this.store.each(function(filter){
             tbody += ts.filterrow.apply({
-                id: 'tw-fgrid-frowid-' + filter.id,
-                prefix: cnt == 0 ? 'Show' : 'and'
+                id: this.frowIdPrefix + filter.id,
+                prefix: this.store.indexOf(filter) == 0 ? 'Show' : 'and'
             });
-            cnt++;
         }, this);
         
-        tbody += ts.actionrow.apply({
-            actionsbuttons: 'actionsbuttons',
-            searchbutton: 'searchbutton',
-            deletebutton: 'deletebutton'
-        });
+        tbody += ts.actionrow.apply({});
         ts.master.insertFirst(this.el, {tbody: tbody}, true);
-    },
-    /**
-     * @private
-     */
-    renderFilters: function() {
-        this.el.select('tr[class=fw-fgrid-frow]').each(function(fRow){
-            this.renderFilterRow(fRow);
-        },this);
     },
     /**
      * renders a single filter row
      * 
-     * @param {Ext.Element} el representing a filter tr tag
+     * @param {Ext.data.Record} el representing a filter tr tag
      * @private
      */
-    renderFilterRow: function(fRow) {
+    renderFilterRow: function(filter) {
+        var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']')
         new Ext.Button({
-            text: 'delete',
-            renderTo: fRow.child('td[class=tw-fgrid-frow-deleterow]')
+            id: 'tw-ftb-frow-deletebutton-' + filter.id,
+            tooltip: 'Delete this filter',
+            filter: filter,
+            iconCls: 'action_delThisFilter',
+            renderTo: fRow.child('td[class=tw-ftb-frow-deleterow]'),
+            scope: this,
+            handler: function(button) {
+                this.deleteFilter(button.filter);
+            }
         });
+    },
+    renderActionsRow: function() {
+        new Ext.Button({
+            text: 'add new filter',
+            iconCls: 'action_addFilter',
+            renderTo: this.el.child('td[class=tw-ftb-newfilterbutton]'),
+            scope: this,
+            handler: this.addFilter
+        });
+        new Ext.Button({
+            text: 'save filter',
+            iconCls: 'action_saveFilter',
+            renderTo: this.el.child('td[class=tw-ftb-savefilterbutton]')
+        });
+        new Ext.Button({
+            text: 'start search',
+            iconCls: 'action_startFilter',
+            renderTo: this.el.child('td[class=tw-ftb-searchbutton]')
+        });
+        new Ext.Button({
+            //text: 'save filter',
+            iconCls: 'action_delAllFilter',
+            renderTo: this.el.child('td[class=tw-ftb-deletebutton]')
+        });
+        
     },
     /**
      * @private
      */
     initComponent: function() {
         this.initTemplates();
+        this.record = Ext.data.Record.create([
+            {name: 'field'},
+            {name: 'operator'},
+            {name: 'value'}
+        ]);
         this.store = new Ext.data.JsonStore({
-            fields: ['field', 'operator', 'value'],
+            fields: this.record,
             data: [
                 {field: 'Name', operator: 'contains', value: 'Smith'},
                 {field: 'Country', operator: 'equals', value: 'Germany'}
@@ -130,13 +165,34 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         });
     },
     /**
-     * 
+     * adds a new filer row
      */
     addFilter: function() {
-        var fRow = this.templates.filterrow.insertBefore(this.el.child('tr:last'),{}, true)
-        //var actionRow = this.el.child('tr:last');
-        
-        //console.log(actionRow);
+        var filter = new this.record({});
+        this.store.add(filter);
+        var fRow = this.templates.filterrow.insertBefore(this.el.child('tr[class=fw-ftb-actionrow]'),{
+            id: 'tw-ftb-frowid-' + filter.id,
+            prefix: this.store.indexOf(filter) == 0 ? 'Show' : 'and'
+        }, true);
+        this.renderFilterRow(filter);
+        Ext.getCmp('tw-ftb-frow-deletebutton-' + this.store.getAt(0).id).enable();
+    },
+    /**
+     * deletes a filter
+     * @param {String} id
+     */
+    deleteFilter: function(filter) {
+        var fRow = this.el.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
+        // update prefix text
+        if (this.store.indexOf(filter) == 0 && this.store.getCount() > 1) {
+            fRow.next().child('td[class=tw-ftb-frow-prefix]').update('Show');
+        }
+        fRow.remove();
+        this.store.remove(this.store.getById(filter.id));
+        // single row is not deletable
+        if (this.store.getCount() == 1) {
+            Ext.getCmp('tw-ftb-frow-deletebutton-' + this.store.getAt(0).id).disable();
+        }
     }
     
 });
