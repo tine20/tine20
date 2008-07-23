@@ -33,6 +33,14 @@ Ext.namespace('Tine', 'Tine.widgets');
 Tine.widgets.FilterToolbar = function(config) {
     Ext.apply(this, config);
     Tine.widgets.FilterToolbar.superclass.constructor.call(this);
+    this.addEvents(
+      /**
+       * @event filtertrigger
+       * is fired when user request to update list by filter
+       * @param {Tine.widgets.FilterToolbar}
+       */
+      "filtertrigger"
+    );
     
 };
 
@@ -228,6 +236,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             handler: this.addFilter
         });
         new Ext.Button({
+            disabled: true,
             text: this.labels.saveFilter,
             iconCls: 'action_saveFilter',
             renderTo: this.el.child('td[class=tw-ftb-savefilterbutton]')
@@ -235,12 +244,17 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         new Ext.Button({
             text: this.labels.startFilter,
             iconCls: 'action_startFilter',
+            scope: this,
+            handler: function() {
+                this.fireEvent('filtertrigger', this);
+            },
             renderTo: this.el.child('td[class=tw-ftb-searchbutton]')
         });
         new Ext.Button({
-            //text: 'save filter',
             tooltip: this.labels.resetFiltersTip,
             iconCls: 'action_delAllFilter',
+            scope: this,
+            handler: this.deleteAllFilters,
             renderTo: this.el.child('td[class=tw-ftb-deletebutton]')
         });
         
@@ -256,6 +270,11 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             for (text in this.labels) {
                 this.labels[text] = _(this.labels[text])
             }
+        }
+        
+        // init filters
+        if (this.filters.length < 1) {
+            this.filters = [{field: this.defaultFilter}]
         }
         this.filterStore = new Ext.data.JsonStore({
             fields: this.record,
@@ -308,6 +327,15 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         if (this.filterStore.getCount() == 1) {
             Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
         }
+    },
+    /**
+     * deletes all filters
+     */
+    deleteAllFilters: function() {
+        this.filterStore.each(function(filter) {
+            this.deleteFilter(filter);
+        },this);
+        this.addFilter();
     }
     
 });
