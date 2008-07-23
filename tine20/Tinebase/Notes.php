@@ -141,18 +141,28 @@ class Tinebase_Notes
         $model = get_class($_record);
         $backend = ucfirst(strtolower($_backend));        
         
-        $notesToSet = $_record[$_notesProperty]->getArrayOfIds();
-        $currentNotes = $this->getNotes($model, $backend, $_record->getId())->getArrayOfIds();        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record[$_notesProperty], true));
+                
+        $currentNotesIds = $this->getNotes($model, $backend, $_record->getId())->getArrayOfIds();
+                
+        if ($_record[$_notesProperty] instanceOf Tinebase_Record_RecordSet) {
+            $notesToSet = $_record[$_notesProperty];
+        } else {
+            $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', $_record[$_notesProperty]);
+        }
         
-        $toAttach = array_diff($notesToSet, $currentNotes);
-        $toDetach = array_diff($currentNotes, $notesToSet);
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notesToSet->toArray(), true));
+                
+        //$toAttach = array_diff($notesToSet->getArrayOfIds(), $currentNotesIds);
+        $toDetach = array_diff($currentNotesIds, $notesToSet->getArrayOfIds());
 
         // delete detached/deleted notes
         $this->deleteNotes($toDetach);
         
         // add new notes        
-        foreach ($_record[$_notesProperty] as $note) {
-            if (in_array($note->getId(), $toAttach)) {
+        foreach ($notesToSet as $note) {
+            //if (in_array($note->getId(), $toAttach)) {
+            if (!$note->getId()) {
                 $note->record_model = $model;
                 $note->record_backend = $backend;
                 $note->record_id = $_record->getId();                
@@ -175,9 +185,11 @@ class Tinebase_Notes
 
         $_note->created_by = Zend_Registry::get('currentAccount')->getId();
         $_note->creation_time = Zend_Date::now();        
-        
+
         $data = $_note->toArray();
 
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+        
         $this->_notesTable->insert($data);        
     }
     
