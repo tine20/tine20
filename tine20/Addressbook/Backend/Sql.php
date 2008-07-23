@@ -291,6 +291,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         unset($contactData['id']);
         // tags are not property of this backend
         unset($contactData['tags']);
+        unset($contactData['notes']);
         $where = array($this->_db->quoteInto('id = ?', $contactId));
         $this->_db->update(SQL_TABLE_PREFIX . 'addressbook', $contactData, $where);
         return $this->get($contactId);
