@@ -148,6 +148,12 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'tel_work'              => '+49TELWORK',
         )); 
             	
+        $this->objects['note'] = new Tinebase_Notes_Model_Note(array(
+            'id'                => 1001,
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note',    
+        ));
+        
         return;
         
     }
@@ -169,7 +175,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddContact()
     {
-        $contact = Addressbook_Controller::getInstance()->createContact($this->objects['initialContact']);
+        $contact = $this->objects['initialContact'];
+        $contact->notes = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', array($this->objects['note']));
+        $contact = Addressbook_Controller::getInstance()->createContact($contact);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
