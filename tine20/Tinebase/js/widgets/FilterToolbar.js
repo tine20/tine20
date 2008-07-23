@@ -144,6 +144,9 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         this.filterStore.each(function(filter) {
             this.renderFilterRow(filter);
         }, this);
+        if (this.filterStore.getCount() == 1) {
+            Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
+        }
         
         this.renderActionsRow();
     },
@@ -336,6 +339,15 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             this.deleteFilter(filter);
         },this);
         this.addFilter();
+        Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
+    },
+    
+    getFilter: function() {
+        var filters = [];
+        this.filterStore.each(function(filter) {
+            filters.push(filter.data);
+        }, this);
+        return filters;
     }
     
 });
