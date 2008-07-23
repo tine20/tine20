@@ -113,14 +113,14 @@ class Tinebase_Notes
             $where[] = $this->_db->getAdapter()->quoteInto('note_type_id = ?', $_type);
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
         
         $notes = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note');
         foreach ($this->_notesTable->fetchAll($where) as $note) {
             $notes->addRecord(new Tinebase_Notes_Model_Note($note->toArray(), true));
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notes->toArray(), true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notes->toArray(), true));
         
         return $notes;         
     }
@@ -136,6 +136,9 @@ class Tinebase_Notes
             $id = $_note->generateUID();
             $_note->setId($id);
         }
+
+        $_note->created_by = Zend_Registry::get('currentAccount')->getId();
+        $_note->creation_time = Zend_Date::now();        
         
         $data = $_note->toArray();
 
@@ -149,7 +152,7 @@ class Tinebase_Notes
      */
     public function deleteNotes(array $_noteIds)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_noteIds, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_noteIds, true));
         
         if (!empty($_noteIds)) {
             $where = array($this->_db->quoteInto('id in (?)', $_noteIds));
