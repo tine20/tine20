@@ -18,5 +18,5 @@
     background-image:url(../../../images/start-filter.png) !important;
 }
 
-.x-filter  { background-color: #f0f0f0 }
-.x-filter td { padding: 3px }
+.tw-filtertoolbar  { background-color: #f0f0f0 }
+/*.tw-filtertoolbar td { padding: 3px }*/
