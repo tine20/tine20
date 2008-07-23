@@ -149,7 +149,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         )); 
             	
         $this->objects['note'] = new Tinebase_Notes_Model_Note(array(
-            'id'                => 1001,
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',    
         ));

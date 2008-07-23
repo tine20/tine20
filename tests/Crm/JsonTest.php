@@ -222,6 +222,12 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         }
 
         $leadData = $this->objects['initialLead']->toArray();
+        $note = array(
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note',            
+        );
+        $leadData['notes'] = array($note);        
+        
         $leadData['relations'] = array(
             array(
                 'own_model'              => 'Crm_Model_Lead',
@@ -268,6 +274,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         // check linked products
         $this->assertGreaterThan(0, count($result['updatedData']['products']));
         $this->assertEquals($this->objects['productLink']['product_desc'], $result['updatedData']['products'][0]['product_desc']);
+        
+        // check note
+        $this->assertEquals($note['note'], $result['updatedData']['notes'][0]['note']);
     }
 
     /**
