@@ -40,6 +40,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ConfigTest');
         $suite->addTestSuite('Tinebase_ApplicationTest');
         $suite->addTestSuite('Tinebase_Relation_AllTests');
+        $suite->addTestSuite('Tinebase_NotesTest');
         
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
