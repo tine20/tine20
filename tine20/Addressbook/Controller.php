@@ -191,6 +191,12 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             $contact->tags = $_contact->tags;
             Tinebase_Tags::getInstance()->setTagsOfRecord($contact);
         }
+
+        if (isset($_contact->notes)) {
+            $contact->notes = $_contact->notes;
+            Tinebase_Notes::getInstance()->setNotesOfRecord($contact);
+        }
+        
         
         return $contact;
     }
@@ -223,6 +229,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
         }
 
+        if (isset($_contact->notes)) {
+            Tinebase_Notes::getInstance()->setNotesOfRecord($_contact);
+        }
+        
         $contact = $this->_backend->update($_contact);
         
         return $contact;
@@ -248,6 +258,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
                 $container->type != Tinebase_Container::TYPE_INTERNAL)) {
                     
                 $this->_backend->delete($_contactId);
+                
+                // delete notes
+                Tinebase_Notes::getInstance()->deleteNotesOfRecord('Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $contact->getId());
+                
             } else {
                 throw new Exception('delete access to contact denied');
             }

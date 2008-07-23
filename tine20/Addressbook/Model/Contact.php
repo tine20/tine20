@@ -113,7 +113,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pubkey'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'room'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'room'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -124,7 +124,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
     /**

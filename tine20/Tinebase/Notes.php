@@ -97,9 +97,11 @@ class Tinebase_Notes
      */
     public function getNotes($_model, $_backend, $_id, $_type = NULL)
     {
+        $backend = ucfirst(strtolower($_backend));
+
         $where = array(
             'record_model   = ' . $this->_db->quote($_model),
-            'record_backend = ' . $this->_db->quote($_backend),
+            'record_backend = ' . $this->_db->quote($backend),
             'record_id      = ' . $this->_db->quote($_id),
         );
         
@@ -123,6 +125,40 @@ class Tinebase_Notes
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notes->toArray(), true));
         
         return $notes;         
+    }
+    
+    /**
+     * sets notes of a record
+     * 
+     * @param Tinebase_Record_Abstract  $_record            the record object
+     * @param string                    $_backend           backend (default: 'Sql')
+     * @param string                    $_notesProperty     the property in the record where the tags are in (default: 'notes')
+     * 
+     * @todo add update notes
+     */
+    public function setNotesOfRecord($_record, $_backend = 'Sql', $_notesProperty = 'notes')
+    {
+        $model = get_class($_record);
+        $backend = ucfirst(strtolower($_backend));        
+        
+        $notesToSet = $_record[$_notesProperty]->getArrayOfIds();
+        $currentNotes = $this->getNotes($model, $backend, $_record->getId())->getArrayOfIds();        
+        
+        $toAttach = array_diff($notesToSet, $currentNotes);
+        $toDetach = array_diff($currentNotes, $notesToSet);
+
+        // delete detached/deleted notes
+        $this->deleteNotes($toDetach);
+        
+        // add new notes        
+        foreach ($_record[$_notesProperty] as $note) {
+            if (in_array($note->getId(), $toAttach)) {
+                $note->record_model = $model;
+                $note->record_backend = $backend;
+                $note->record_id = $_record->getId();                
+                $this->addNote($note);
+            }
+        }
     }
     
     /**
@@ -169,7 +205,9 @@ class Tinebase_Notes
      */
     public function deleteNotesOfRecord($_model, $_backend, $_id)
     {
-        $notes = $this->getNotes($_model, $_backend, $_id);
+        $backend = ucfirst(strtolower($_backend));
+        
+        $notes = $this->getNotes($_model, $backend, $_id);
         $this->deleteNotes($notes->getArrayOfIds());
     }
     

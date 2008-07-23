@@ -259,8 +259,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         if (empty($_contactData->id)) {
             unset($contactData['id']);
         }
-        // tags are not property of this backend
+        // tags and notes are not property of this backend
         unset($contactData['tags']);
+        unset($contactData['notes']);
+        
         $this->_db->insert(SQL_TABLE_PREFIX . 'addressbook', $contactData);
         $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'addressbook', 'id');
         // if we insert a contact without an id, we need to get back one
