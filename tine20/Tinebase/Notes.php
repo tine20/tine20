@@ -9,8 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        implement functions
- * @todo        add tests
+ * @todo        delete notes completely or just set the is_deleted flag?
  */
 
 /**
@@ -108,10 +107,8 @@ class Tinebase_Notes
         if (!$_returnAll) {
             $where[] = 'is_deleted = FALSE';
         }
-        if ($_degree) {
-            $where[] = $this->_db->getAdapter()->quoteInto('record_degree = ?', $_degree);
-        }
         */
+
         if ($_type) {
             $where[] = $this->_db->getAdapter()->quoteInto('note_type_id = ?', $_type);
         }
