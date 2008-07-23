@@ -924,11 +924,60 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     {
         $tableDefinition = ('
         <table>
+            <name>note_types</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>icon</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        ');
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);    
+
+        $tableDefinition = ('
+        <table>
             <name>notes</name>
             <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>note_type_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -993,13 +1042,26 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         <name>id</name>
                     </field>
                 </index>
+                <index>
+                    <name>notes::note_type_id--note_types::id</name>
+                    <field>
+                        <name>note_type_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>note_types</table>
+                        <field>id</field>
+                    </reference>
+                </index>
             </declaration>
         </table>
         ');
         
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);        
-
+        
+        // @todo add default note types
+        
         //$this->setApplicationVersion('Tinebase', '0.11');
     }
 }

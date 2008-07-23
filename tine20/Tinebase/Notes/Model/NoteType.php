@@ -11,12 +11,12 @@
  */
 
 /**
- * defines the datatype for one note
+ * defines the datatype for note types
  * 
  * @package     Tinebase
  * @subpackage  Notes
  */
-class Tinebase_Notes_Model_Note extends Tinebase_Record_Abstract
+class Tinebase_Notes_Model_NoteType extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -41,7 +41,7 @@ class Tinebase_Notes_Model_Note extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'note'              => 'StringTrim'
+        'name'              => 'StringTrim'
     );
     
     /**
@@ -53,24 +53,10 @@ class Tinebase_Notes_Model_Note extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                     => array('Alnum', 'allowEmpty' => true),
-        'note_type_id'           => array('Alnum', 'allowEmpty' => false),
     
-        'note'                   => array('presence' => 'required', 'allowEmpty' => false),    
-        'record_model'           => array('presence' => 'required', 'allowEmpty' => false),
-        'record_backend'         => array('presence' => 'required', 'allowEmpty' => false),
-    
-        'created_by'             => array('allowEmpty' => true),
-        'creation_time'          => array('allowEmpty' => true),
-        'last_modified_by'       => array('allowEmpty' => true),
-        'last_modified_time'     => array('allowEmpty' => true),
-        'is_deleted'             => array('allowEmpty' => true),
-        'deleted_time'           => array('allowEmpty' => true),
-        'deleted_by'             => array('allowEmpty' => true),
-    );
-    
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
+        'name'                   => array('presence' => 'required', 'allowEmpty' => false),    
+        'icon'                   => array('presence' => 'required', 'allowEmpty' => false),
+
+        'description'            => array('allowEmpty' => true),    
     );    
 }
