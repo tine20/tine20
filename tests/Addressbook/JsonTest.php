@@ -7,8 +7,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
- * 
- * @todo        remove old function calls
  */
 
 /**
@@ -188,7 +186,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         $filter = $this->objects['filter'];
         
-        //$contacts = $json->getAllContacts(NULL, 'id', 'ASC', 0, 10, NULL);
         $filter['containerType'] = 'all';
         $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
@@ -204,7 +201,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         $filter = $this->objects['filter'];
         
-        //$contacts = $json->getContactsByOwner(NULL, Zend_Registry::get('currentAccount')->getId(), 'id', 'ASC', 0, 10, NULL);
         $filter['containerType'] = 'personal';
         $filter['owner'] = Zend_Registry::get('currentAccount')->getId();
         $contacts = $json->searchContacts(Zend_Json::encode($filter));
@@ -221,7 +217,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         $filter = $this->objects['filter'];
         
-        //$contacts = $json->getSharedContacts(NULL, 'id', 'ASC', 0, 10, NULL);
         $filter['containerType'] = 'shared';
         $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
@@ -238,7 +233,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         $filter = $this->objects['filter'];
         
-        //$contacts = $json->getOtherPeopleContacts(NULL, 'id', 'ASC', 0, 10, NULL);
         $filter['containerType'] = 'otherUsers';
         $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
@@ -254,7 +248,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         $filter = $this->objects['filter'];
         
-        //$contacts = $json->getContactsByAddressbookId($this->container->id, NULL, 'id', 'ASC', 0, 10, NULL);
         $filter['container'] = array($this->container->id);
         $contacts = $json->searchContacts(Zend_Json::encode($filter));
         
@@ -271,7 +264,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         $filter = $this->objects['filter'];
         
-        //$contacts = $json->getUsers(NULL, 'id', 'ASC', 10, 0, NULL);
         $filter['containerType'] = 'internal';
         $contacts = $json->searchContacts(Zend_Json::encode($filter));
 
@@ -279,15 +271,21 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to delete a contact
+     * try to add/get/delete a contact with a note
      *
      */
     public function testAddGetDeleteContact()
     {
+        $note = array(
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note',            
+        );
+        
         $newContact = array(
             'n_family'  => 'PHPUNIT',
-            'owner'     => $this->container->id
-        );
+            'owner'     => $this->container->id,
+            'notes'     => array($note)
+        );        
 
         $json = new Addressbook_Json();
 
@@ -298,10 +296,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         $contactId = $contact['updatedData']['id'];
 
-        $contact = $json->getContact($contactId);
-
-        $this->assertEquals($contactId, $contact['contact']['id']);
-
+        $result = $json->getContact($contactId);
+        
+        //print_r($contact);
+        
+        $this->assertEquals($contactId, $result['contact']['id']);
+        $this->assertEquals($note['note'], $result['contact']['notes'][0]['note']);
+        
         $json->deleteContacts($contactId);
 
         $this->setExpectedException('UnderflowException');
