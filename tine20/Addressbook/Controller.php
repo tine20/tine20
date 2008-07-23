@@ -84,6 +84,12 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         $contact = $this->_backend->get($_contactId);
         // only get tags the user has view right for
         Tinebase_Tags::getInstance()->getTagsOfRecord($contact);
+        
+        $contact->notes = Tinebase_Notes::getInstance()->getNotes(
+            'Addressbook_Model_Contact', 
+            Addressbook_Backend_Factory::SQL, 
+            $contact->getId()
+        );
 
         if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
             throw new Exception('read access to contact denied');
