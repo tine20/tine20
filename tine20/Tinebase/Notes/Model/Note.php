@@ -56,6 +56,7 @@ class Tinebase_Notes_Model_Note extends Tinebase_Record_Abstract
         'note_type_id'           => array('Alnum', 'allowEmpty' => false),
     
         'note'                   => array('presence' => 'required', 'allowEmpty' => false),    
+        'record_id'              => array('presence' => 'required', 'allowEmpty' => false),
         'record_model'           => array('presence' => 'required', 'allowEmpty' => false),
         'record_backend'         => array('presence' => 'required', 'allowEmpty' => false),
     
