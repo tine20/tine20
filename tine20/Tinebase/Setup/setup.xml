@@ -1752,6 +1752,10 @@
                 <value>note</value>
             </field>
             <field>
+                <name>description</name>
+                <value>the default note type</value>
+            </field>
+            <field>
                 <name>icon</name>
                 <value>/images/oxygen/16x16/actions/document-properties.png</value>
             </field>
