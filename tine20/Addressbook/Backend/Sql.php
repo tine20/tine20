@@ -187,9 +187,16 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         if (count($_filter->container) === 0) {
             throw new Exception('$_container can not be empty');
         }
-        $select = $this->_db->select();
-        $select->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
-        $result = $this->_getsFromTable($select, $_filter, $_pagination);
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'addressbook')
+            ->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
+        
+        $this->_addFilter($select, $_filter);
+        $_pagination->appendPagination($select);
+        
+        $rows = $this->_db->fetchAssoc($select);
+        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows, true);
+
         return $result;
     }
     
@@ -205,10 +212,12 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         if (count($_filter->container) === 0) {
             return 0;
         }
-        $select = $this->_db->select();
-        $select->from(SQL_TABLE_PREFIX . 'addressbook', array('count' => 'COUNT(*)'));
-        $select->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'addressbook', array('count' => 'COUNT(*)'))
+            ->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
+        
         $this->_addFilter($select, $_filter);
+        
         $result = $this->_db->fetchOne($select);
         return $result;
     }
@@ -227,23 +236,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             Tinebase_Tags::appendSqlFilter($_select, $_filter->tag);
         }
     }
-    /**
-     * internal function to read the contacts from the database
-     *
-     * @param  Zend_Db_Select                     $_where where filter
-     * @param  Addressbook_Model_ContactFilter  $_filter
-     * @param  Tinebase_Model_Pagination $_pagination
-     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
-     */
-    protected function _getsFromTable (Zend_Db_Select $_select, Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination)
-    {
-        $_select->from(SQL_TABLE_PREFIX . 'addressbook');
-        $this->_addFilter($_select, $_filter);
-        $_pagination->appendPagination($_select);
-        $rows = $this->_db->fetchAssoc($_select);
-        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows, true);
-        return $result;
-    }
+    
     /**
      * add a contact
      *
