@@ -215,6 +215,12 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             value: filter.data.value ? filter.data.value : filterModel.data.valdefault,
             renderTo: fRow.child('td[class=tw-ftb-frow-value]'),
         });
+        filter.formFields.value.on('specialkey', function(field, e){
+             if(e.getKey() == e.ENTER){
+                 this.fireEvent('filtertrigger', this);
+             }
+        }, this);
+        
         new Ext.Button({
             id: 'tw-ftb-frow-deletebutton-' + filter.id,
             tooltip: this.labels.deleteFilterTip,
@@ -296,7 +302,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
                 {operator: 'greater',  label: this.labels.opGreater},
                 {operator: 'less',     label: this.labels.opLess},
                 {operator: 'not',      label: this.labels.opNot},
-                {operator: 'in',       label: this.labels.opIn},
+                //{operator: 'in',       label: this.labels.opIn}
             ]
         });
     },
@@ -331,6 +337,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         if (this.filterStore.getCount() == 1) {
             Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
         }
+        this.fireEvent('filtertrigger', this);
     },
     /**
      * deletes all filters
@@ -341,6 +348,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         },this);
         this.addFilter();
         Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
+        this.fireEvent('filtertrigger', this);
     },
     
     getFilter: function() {
