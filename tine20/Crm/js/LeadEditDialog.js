@@ -157,20 +157,12 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
                     border: false,
                     style: 'border:1px solid #B5B8C8;'
                 }),
-                new Ext.Panel({
-                    title: translation._('History'),
-                    height: 200
+                new Tine.widgets.activities.ActivitiesPanel({
+                    height: 400,
+                    customHeight: 400,
+                    border: false,
+                    style: 'border:1px solid #B5B8C8;'
                 })
-                /*
-              new Ext.DataView({
-                tpl: ActivitiesTpl,       
-                autoHeight:true,                    
-                id: 'grid_activities_limited',
-                store: st_activities,
-                overClass: 'x-view-over',
-                itemSelector: 'activities-item-small'
-              })
-              */
             ]
         },{
             region:'center',

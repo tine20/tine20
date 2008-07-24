@@ -1907,7 +1907,8 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'tasks'},
     {name: 'relations'},
     {name: 'products'},
-    {name: 'tags'}
+    {name: 'tags'},
+    {name: 'notes'}
 ]);
 
 // product link

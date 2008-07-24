@@ -124,6 +124,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/widgets/CountryCombo.js',
             'Tinebase/js/widgets/GridPicker.js',
             'Tinebase/js/widgets/FilterToolbar.js',
+            'Tinebase/js/widgets/ActivitiesPanel.js',        
             // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
