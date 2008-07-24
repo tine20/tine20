@@ -50,11 +50,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * 
      * @todo add timezone?
      */
-    public function searchContacts($filter)
+    public function searchContacts($filter, $paging)
     {
-        $decodedFilter = Zend_Json::decode($filter);
-        $filter = new Addressbook_Model_ContactFilter($decodedFilter);
-        $pagination = new Tinebase_Model_Pagination($decodedFilter);
+        $filter = new Addressbook_Model_ContactFilter(Zend_Json::decode($filter));
+        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         //Zend_Registry::get('logger')->debug(print_r($decodedFilter,true));
         
