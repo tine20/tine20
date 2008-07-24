@@ -191,7 +191,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             ->from(SQL_TABLE_PREFIX . 'addressbook')
             ->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
         
-        $this->_addFilter($select, $_filter);
+        //$this->_addFilter($select, $_filter);
+        $_filter->appendFilterSql($select);
         $_pagination->appendPagination($select);
         
         $rows = $this->_db->fetchAssoc($select);
@@ -216,7 +217,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             ->from(SQL_TABLE_PREFIX . 'addressbook', array('count' => 'COUNT(*)'))
             ->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
         
-        $this->_addFilter($select, $_filter);
+        //$this->_addFilter($select, $_filter);
+        $_filter->appendFilterSql($select);
         
         $result = $this->_db->fetchOne($select);
         return $result;

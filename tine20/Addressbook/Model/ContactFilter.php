@@ -17,6 +17,8 @@
  */
 class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
 {
+    
+    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -40,9 +42,95 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
         'container'            => array('allowEmpty' => true           ),
 
         'query'                => array('allowEmpty' => true           ),
+        'n_given'              => array('allowEmpty' => true           ),
+        'n_family'             => array('allowEmpty' => true           ),
+        'org_name'             => array('allowEmpty' => true           ),
+        'adr_one_postalcode'   => array('allowEmpty' => true           ),
+        'adr_one_locality'     => array('allowEmpty' => true           ),
         'tag'                  => array('allowEmpty' => true           ),
         
     );
+    
+    /**
+     * @var array hold selected operators
+     */
+    protected $_operators = array();
+    
+    /**
+     * @var array holds additional options
+     */
+    protected $_options = array();
+    
+    /**
+     * 
+     */
+    //public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    //{
+        
+    //}
+    
+    /**
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data the new data to set
+     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
+     */
+    public function setFromArray(array $_data)
+    {
+        $data = array();
+        foreach ($_data as $filter) {
+            $field = $filter['field'];
+            if (array_key_exists($field, $this->_validators)) {
+                $data[$field] = $filter['value'];
+                $this->_operators[$field] = $filter['operator'];
+                $this->_options[$field] = array_diff_key($filter, array(
+                    'field'    => NULL, 
+                    'operator' => NULL,
+                    'value'    => NULL
+                ));
+            }
+        }
+        
+        if ($this->bypassFilters !== true) {
+            // $this->validateOperators();
+            // $this->validateOptions();
+        }
+        parent::setFromArray($data);
+    }
+    
+    /**
+     * appends current filters to a given select object
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendFilterSql($_select)
+    {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        foreach ($this->_properties as $field => $value)
+        {
+            //$op = $this->_operators[$field];
+            
+            switch ($field) {
+                case 'containerType':
+                case 'container':
+                case 'owner':
+                    // skip container here handling for the moment
+                    break;
+                case 'query':
+                    $_select->where($db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($value) . '%'));
+                    break;
+                case 'tag':
+                    Tinebase_Tags::appendSqlFilter($_select, $this->_properties->tag);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
     
     /**
      * gets record related properties
