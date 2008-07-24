@@ -62,7 +62,7 @@ Tine.Addressbook.Main = {
     store: null,
     
     /**
-     * holds paging information
+     * @cfg {Object} paging defaults
      */
     paging: {
         start: 0,
@@ -72,14 +72,11 @@ Tine.Addressbook.Main = {
     },
     
     /**
-     * holds current filters
+     * @cfg {Array} default filters
+     * @todo container filters not in filter logig yet!
+     * @see store.on(beforeload)
      */
-    filter: {
-        containerType: 'personal',
-        query: '',
-        container: false,
-        tag: false
-    },        
+    //filter: [],
     	
 	handlers: {
 	    /**
@@ -293,6 +290,7 @@ Tine.Addressbook.Main = {
 	
     displayContactsToolbar: function()
     {
+        /*
     	// quicksearch filter field
         var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
@@ -301,7 +299,7 @@ Tine.Addressbook.Main = {
         
         quickSearchField.on('change', function(field){
             if(this.filter.query != field.getValue()){
-                this.store.load({params: this.paging});
+                this.store.load({});
             }
         }, this);        
         
@@ -314,9 +312,10 @@ Tine.Addressbook.Main = {
 
         tagFilter.on('change', function(field){
             if(this.filter.tag != field.getValue()){
-                this.store.load({params: this.paging});
+                this.store.load({});
             }
-        }, this);        
+        }, this);
+        */
         
         var contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
@@ -329,9 +328,9 @@ Tine.Addressbook.Main = {
                 '-',
                 this.actions.exportContact,
                 ( Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
-                '->',
-                this.translation._('Filter: '), tagFilter,
-                this.translation._('Search: '), quickSearchField
+                //'->',
+                //this.translation._('Filter: '), tagFilter,
+                //this.translation._('Search: '), quickSearchField
             ]
         });
 
@@ -340,6 +339,27 @@ Tine.Addressbook.Main = {
 
     displayContactsGrid: function() 
     {
+        // the filter toolbar
+        var filterToolbar = new Tine.widgets.FilterToolbar({
+            id : 'addressbookFilterToolbar',
+            filterModel: [
+                {label: this.translation._('Contact'), field: 'query', opdefault: 'contains'},
+                {label: this.translation._('First Name'), field: 'n_given', opdefault: 'contains'},
+                {label: this.translation._('Last Name'), field: 'n_family', opdefault: 'contains'},
+                {label: this.translation._('Company'), field: 'org_name', opdefault: 'contains'},
+                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', opdefault: 'equals'},
+                {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')', field: 'adr_one_locality', opdefault: 'contains'}
+                //{label: 'Full Name', field: 'n_fn', opdefault: 'equals'},
+                //{label: 'Container', field: 'owner'},
+             ],
+             defaultFilter: 'query',
+             filters: []
+        });
+        
+        filterToolbar.on('filtertrigger', function() {
+            this.store.load({});
+        }, this);
+        
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
             pageSize: 50,
@@ -513,7 +533,12 @@ Tine.Addressbook.Main = {
         }, this);
 
         // add the grid to the layout
-        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
+        //Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel( new Ext.Panel({
+            layout: 'fit',
+            tbar: filterToolbar,
+            items: gridPanel
+        }));
     },
     
     /**
@@ -531,8 +556,8 @@ Tine.Addressbook.Main = {
                 method: 'Addressbook.searchContacts'
             },
             sortInfo: {
-                field: 'n_family',
-                dir: 'ASC'
+                field: this.paging.sort,
+                dir: this.paging.dir
             }
         });
         
@@ -541,34 +566,34 @@ Tine.Addressbook.Main = {
         
         // prepare filter
         this.store.on('beforeload', function(store, options){
-            
-            // for some reasons, paging toolbar eats sort and dir
-            if (store.getSortState()) {
-                this.filter.sort = store.getSortState().field;
-                this.filter.dir = store.getSortState().direction;
-            } else {
-                this.filter.sort = this.store.sort;
-                this.filter.dir = this.store.dir;
+            if (!options.params) {
+                options.params = {};
             }
-            this.filter.start = options.params.start;
-            this.filter.limit = options.params.limit;
             
-            // container
+            // paging toolbar only works with this properties in the options!
+            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort,
+            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir,
+            options.params.start = options.params.start ? options.params.start : this.paging.start,
+            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit
+            
+            options.params.paging = Ext.util.JSON.encode(options.params);
+            
+            var filterToolbar = Ext.getCmp('addressbookFilterToolbar');
+            var filter = filterToolbar ? filterToolbar.getFilter() : [];
+            // console.log(filter);
+            
+            // add container to filter
             var nodeAttributes = Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode().attributes || {};
-            this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
-            this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
-            this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
-
-            // toolbar
-            this.filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
-            this.filter.tag = Ext.getCmp('tagFilter') ? Ext.getCmp('tagFilter').getValue() : '';
-
-            options.params.filter = Ext.util.JSON.encode(this.filter);
+            filter.push(
+                {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
+                {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
+                {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+            );
+            
+            options.params.filter = Ext.util.JSON.encode(filter);
         }, this);
                         
-        this.store.load({
-            params: this.paging
-        });
+        this.store.load({});
     },
     
     show: function(_node) 
@@ -584,7 +609,7 @@ Tine.Addressbook.Main = {
             // note: if node is clicked, it is not selected!
             _node.getOwnerTree().selectPath(_node.getPath());
         	
-            this.store.load({params: this.paging});        	
+            this.store.load({});        	
         }
     },
     
