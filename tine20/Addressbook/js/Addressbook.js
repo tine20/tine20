@@ -290,33 +290,6 @@ Tine.Addressbook.Main = {
 	
     displayContactsToolbar: function()
     {
-        /*
-    	// quicksearch filter field
-        var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
-            width: 240
-        }); 
-        
-        quickSearchField.on('change', function(field){
-            if(this.filter.query != field.getValue()){
-                this.store.load({});
-            }
-        }, this);        
-        
-        // tag filter field
-        var tagFilter = new Tine.widgets.tags.TagCombo({
-        	id: 'tagFilter',
-            app: 'Addressbook',
-            blurOnSelect: true
-        });
-
-        tagFilter.on('change', function(field){
-            if(this.filter.tag != field.getValue()){
-                this.store.load({});
-            }
-        }, this);
-        */
-        
         var contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
             split: false,
@@ -548,6 +521,7 @@ Tine.Addressbook.Main = {
 
         this.store = new Ext.data.JsonStore({
             idProperty: 'id',
+            autoLoad: false,
             root: 'results',
             totalProperty: 'totalcount',
             fields: Tine.Addressbook.Model.Contact,
@@ -580,7 +554,6 @@ Tine.Addressbook.Main = {
             
             var filterToolbar = Ext.getCmp('addressbookFilterToolbar');
             var filter = filterToolbar ? filterToolbar.getFilter() : [];
-            // console.log(filter);
             
             // add container to filter
             var nodeAttributes = Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode().attributes || {};
