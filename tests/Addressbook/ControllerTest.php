@@ -212,11 +212,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testGetCountByOwner()
     {
         $filter = new Addressbook_Model_ContactFilter(array(
-            'query' => $this->objects['initialContact']->n_family,
-            'containerType' => 'personal',
-            'owner' => Zend_Registry::get('currentAccount')->getId()
+            array('field' => 'query',         'operator' => 'contains', 'value' => $this->objects['initialContact']->n_family),
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        //$count = Addressbook_Controller::getInstance()->getCountByOwner(Zend_Registry::get('currentAccount'), $filter);
         $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
         $this->assertEquals(1, $count);
@@ -229,10 +228,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testGetCountByAddressbookId()
     {
         $filter = new Addressbook_Model_ContactFilter(array(
-            'query' => '',
-            'containerType' => 'all',
-            ));
-        //$count = Addressbook_Controller::getInstance()->getCountByAddressbookId($this->objects['initialContact']->owner, $filter);
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
+        ));
         $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
         $this->assertGreaterThan(0, $count);
@@ -246,10 +243,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testGetCountOfAllContacts()
     {
         $filter = new Addressbook_Model_ContactFilter(array(
-            'query' => $this->objects['initialContact']->n_family,
-            'containerType' => 'all',
+            array('field' => 'query',         'operator' => 'contains', 'value' => $this->objects['initialContact']->n_family),
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
-        //$count = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
         $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
         $this->assertEquals(1, $count);
