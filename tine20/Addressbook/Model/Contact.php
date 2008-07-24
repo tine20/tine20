@@ -189,6 +189,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     /**
      * fills a contact from json data
      *
+     * @todo timezone conversion for birthdays?
      * @param string $_data json encoded data
      * @return void
      */
@@ -216,7 +217,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
         $this->setFromArray($contactData);
-        
         return;
     }
     
