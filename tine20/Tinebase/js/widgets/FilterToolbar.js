@@ -283,7 +283,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
     onBodyresize: function() {
         if (! this.supressEvents) {
             var size = this.getSize();
-            this.fireEvent('bodyresize', this, size.widht, size.height);
+            this.fireEvent('bodyresize', this, size.width, size.height);
         }
     },
     onFiltertrigger: function() {
