@@ -39,7 +39,15 @@ Tine.widgets.FilterToolbar = function(config) {
        * is fired when user request to update list by filter
        * @param {Tine.widgets.FilterToolbar}
        */
-      "filtertrigger"
+      'filtertrigger',
+      /**
+       * @event bodyresize
+       * Fires after the FilterToolbar has been resized.
+       * @param {Tine.widgets.FilterToolbar} the FilterToolbar which has been resized.
+       * @param {Number} width The Panel's new width.
+       * @param {Number} height The Panel's new height.
+       */
+      'bodyresize'
     );
     
 };
@@ -217,7 +225,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         });
         filter.formFields.value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
-                 this.fireEvent('filtertrigger', this);
+                 this.onFiltertrigger();
              }
         }, this);
         
@@ -256,7 +264,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             iconCls: 'action_startFilter',
             scope: this,
             handler: function() {
-                this.fireEvent('filtertrigger', this);
+                this.onFiltertrigger();
             },
             renderTo: this.el.child('td[class=tw-ftb-searchbutton]')
         });
@@ -268,6 +276,20 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             renderTo: this.el.child('td[class=tw-ftb-deletebutton]')
         });
         
+    },
+    /**
+     * @private
+     */
+    onBodyresize: function() {
+        if (! this.supressEvents) {
+            var size = this.getSize();
+            this.fireEvent('bodyresize', this, size.widht, size.height);
+        }
+    },
+    onFiltertrigger: function() {
+        if (! this.supressEvents) {
+            this.fireEvent('filtertrigger', this);
+        }
     },
     /**
      * @private
@@ -320,6 +342,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         }, true);
         this.renderFilterRow(filter);
         Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).enable();
+        this.onBodyresize();
     },
     /**
      * deletes a filter
@@ -337,18 +360,21 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         if (this.filterStore.getCount() == 1) {
             Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
         }
-        this.fireEvent('filtertrigger', this);
+        this.onFiltertrigger();
+        this.onBodyresize();
     },
     /**
      * deletes all filters
      */
     deleteAllFilters: function() {
+        this.supressEvents = true;
         this.filterStore.each(function(filter) {
             this.deleteFilter(filter);
         },this);
+        this.supressEvents = false;
         this.addFilter();
         Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
-        this.fireEvent('filtertrigger', this);
+        this.onFiltertrigger();
     },
     
     getFilter: function() {
