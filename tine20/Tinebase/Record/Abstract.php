@@ -205,6 +205,24 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
+     * fill record from json data
+     *
+     * @param string $_data json encoded data
+     * @return void
+     */
+    public function setFromJson($_data)
+    {
+        $userTimezone = Zend_Registry::get('userTimeZone');
+        $serverTimezone = date_default_timezone_get();
+        date_default_timezone_set($userTimezone);
+        
+        $this->setFromArray(Zend_Json::decode($_data));
+        $this->setTimezone($serverTimezone);
+
+        date_default_timezone_set($serverTimezone);
+    }
+    
+    /**
      * Sets timezone of $this->_datetimeFields
      * 
      * @see Zend_Date::setTimezone()
