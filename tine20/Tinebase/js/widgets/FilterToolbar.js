@@ -175,11 +175,12 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
      * @private
      */
     renderFilterRow: function(filter) {
+        filter.formFields = {};
         var filterModel = this.fieldStore.getAt(this.fieldStore.find('field', filter.data.field));
         
         var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         // field
-        new Ext.form.ComboBox({
+        filter.formFields.field = new Ext.form.ComboBox({
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
@@ -194,7 +195,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             renderTo: fRow.child('td[class=tw-ftb-frow-field]'),
         });
         // operator
-        new Ext.form.ComboBox({
+        filter.formFields.operator = new Ext.form.ComboBox({
             id: 'tw-ftb-frow-operatorcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
@@ -209,7 +210,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             renderTo: fRow.child('td[class=tw-ftb-frow-operator]'),
         });
         // value
-        new Ext.form.TextField({
+        filter.formFields.value = new Ext.form.TextField({
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : filterModel.data.valdefault,
             renderTo: fRow.child('td[class=tw-ftb-frow-value]'),
@@ -345,7 +346,11 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
     getFilter: function() {
         var filters = [];
         this.filterStore.each(function(filter) {
-            filters.push(filter.data);
+            var line = {};
+            for (formfield in filter.formFields) {
+                line[formfield] = filter.formFields[formfield].getValue();
+            }
+            filters.push(line);
         }, this);
         return filters;
     }
