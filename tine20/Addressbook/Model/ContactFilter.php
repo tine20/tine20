@@ -62,6 +62,17 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
     protected $_options = array();
     
     /**
+     * @var array maps abstract operators to sql operators
+     */
+    protected $_opSqlMap = array(
+        'contains' => 'LIKE',
+        'equals'   => 'LIKE',
+        'greater'  => '>',
+        'less'     => '<',
+        'not'      => 'NOT LIKE'
+    );
+    
+    /**
      * 
      */
     //public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
@@ -112,7 +123,8 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
         
         foreach ($this->_properties as $field => $value)
         {
-            //$op = $this->_operators[$field];
+            $value = str_replace(array('*', '_'), array('%', '\_'), $value);
+            $op = $this->_operators[$field];
             
             switch ($field) {
                 case 'containerType':
@@ -127,11 +139,18 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
                     Tinebase_Tags::appendSqlFilter($_select, $this->_properties->tag);
                     break;
                 default:
+                    $value = $op == 'contains' ? '%' . trim($value) . '%' : trim($value);
+                    $where = array(
+                        $db->quoteIdentifier($field),
+                        $this->_opSqlMap[$op],
+                        $db->quote($value)
+                    );
+                    $_select->where(implode(' ', $where));
                     break;
             }
         }
     }
-    
+
     /**
      * gets record related properties
      * 
