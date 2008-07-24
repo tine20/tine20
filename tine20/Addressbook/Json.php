@@ -112,10 +112,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         } else {
             $contact = Addressbook_Controller::getInstance()->updateContact($contact);
         }
-        $contact = $this->getContact($contact->getId());
+
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $contact['contact']
+                        'updatedData'       => $this->_contactToJson($contact, TRUE)
         );         
         
         return $result;
@@ -130,18 +130,19 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param Addressbook_Model_Contact $_contact
      * @return array contact data
      * 
-     * @todo what about the tags?
-     * @todo add account grants again -> improve performance first
+     * @todo add account grants again for list view -> improve performance first
      */
-    protected function _contactToJson($_contact)
+    protected function _contactToJson($_contact, $_getAccountGrants = FALSE)
     {
         //$_contact->tags = $_contact->tags->toArray();
         
         $result = $_contact->toArray();
         $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
         
-        // removed that because it took 50% of the execution time
-        //$result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
+        // removed for list view because it took 50% of the execution time
+        if ($_getAccountGrants) {
+            $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
+        }
         
         $result['jpegphoto'] = $this->_getImageLink($_contact);
         
