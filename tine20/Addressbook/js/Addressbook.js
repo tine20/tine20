@@ -505,9 +505,14 @@ Tine.Addressbook.Main = {
              }
         }, this);
 
+        // temporary resizeing
+        filterToolbar.on('bodyresize', function(ftb, w, h) {
+            var availableGridHeight = Ext.getCmp('center-panel').getSize().height;
+            gridPanel.setHeight(availableGridHeight - h);
+        }, this);
+        
         // add the grid to the layout
-        //Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
-        Tine.Tinebase.MainScreen.setActiveContentPanel( new Ext.Panel({
+        Tine.Tinebase.MainScreen.setActiveContentPanel(new Ext.Panel({
             layout: 'fit',
             tbar: filterToolbar,
             items: gridPanel
