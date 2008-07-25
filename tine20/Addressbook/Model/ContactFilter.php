@@ -124,7 +124,6 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
         foreach ($this->_properties as $field => $value)
         {
             $value = str_replace(array('*', '_'), array('%', '\_'), $value);
-            $op = $this->_operators[$field];
             
             switch ($field) {
                 case 'containerType':
@@ -139,6 +138,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
                     Tinebase_Tags::appendSqlFilter($_select, $this->_properties->tag);
                     break;
                 default:
+                    $op = $this->_operators[$field];
                     $value = $op == 'contains' ? '%' . trim($value) . '%' : trim($value);
                     $where = array(
                         $db->quoteIdentifier($field),
