@@ -466,13 +466,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         border: false,
         items:[
             contactTabPanel,
+            new Tine.widgets.activities.ActivitiesTabPanel({}),
             gmapPanel,
             {
                 title: sprintf(translation.ngettext('Link', 'Links [%d]', 1), 1),
-                disabled: true
-            },
-            {
-                title: 'Activity [5/+2]',
                 disabled: true
             },
             {

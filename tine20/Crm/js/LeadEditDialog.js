@@ -240,6 +240,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
     /*********** HISTORY tab panel ************/
 
     // @todo    add implemented histoy tab panel
+    /*
     var tabPanelHistory = {
         title: translation._('History'),
         disabled: true,
@@ -250,6 +251,8 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
             frame: true            
         }
     };
+    */
+    var tabPanelActivities = new Tine.widgets.activities.ActivitiesTabPanel({});
 
     /*********** MAIN tab panel ************/
     
@@ -260,7 +263,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         layoutOnTabChange:true,  
         items:[
             tabPanelOverview,
-            tabPanelHistory                    
+            tabPanelActivities                    
         ]
     });
     

@@ -24,11 +24,6 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     app: '',
     
     /**
-     * @cfg {String} recordId Id of record this panel is displayed for
-     */
-    recordId: '',
-    
-    /**
      * @cfg {Array} notes Initial notes
      */
     notes: [],
@@ -60,6 +55,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             	direction: 'DESC'
             }
         });
+        
+        Ext.StoreMgr.add('NotesStore', this.recordNotesStore);
         
         //console.log(this.recordNotesStore);
         
@@ -138,7 +135,55 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         ];
         
         Tine.widgets.activities.ActivitiesPanel.superclass.initComponent.call(this);
-    },        
+    }      
+});
+
+/**
+ * Class for a activities tab with notes/activities grid
+ */
+Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
+    /**
+     * @var {Ext.data.JsonStore}
+     * Holds activities of the record this panel is displayed for
+     */
+    recordNotesStore: null,
+ 
+	title: 'Activities',
+    layout: 'hfit',
+//    bodyStyle: 'padding: 2px 2px 2px 2px',
+    
+    /**
+     * @private
+     */
+    initComponent: function(){
+        
+        // init recordNotesStore (get store from store manager)
+    	/*
+        this.notes = [];
+        this.recordNotesStore = new Ext.data.JsonStore({
+            id: 'id',
+            fields: Tine.Tinebase.Model.Note,
+            data: this.notes,
+            sortInfo: {
+                field: 'creation_time',
+                direction: 'DESC'
+            }
+        });
+        */
+        
+        this.recordNotesStore = Ext.StoreMgr.lookup('NotesStore');
+        
+        //console.log(this.recordNotesStore);
+
+        //-- init grid
+        this.activitiesGrid = new Ext.Panel({});
+        
+        this.items = [
+            this.activitiesGrid
+        ];
+        
+        Tine.widgets.activities.ActivitiesTabPanel.superclass.initComponent.call(this);
+    }        
 });
 
 /**
