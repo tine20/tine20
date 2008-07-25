@@ -8,7 +8,7 @@
  *
  * @todo add type chooser and icon
  * @todo add layout to the template / tooltip
- * @todo resolve creator
+ * @todo add filter and paging toolbars to tab panel
  * @todo translate
  */
  
@@ -121,17 +121,11 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                     recordNotesStore: this.recordNotesStore
                 })
             ]
-            /*
-            items: new Tine.widgets.tags.TagFormField({
-                recordTagsStore: this.recordTagsStore
-            })
-            */
         };
         
         this.items = [
             this.formFields,
             this.activities
-            //this._getNotesGrid(this.recordNotesStore)
         ];
         
         Tine.widgets.activities.ActivitiesPanel.superclass.initComponent.call(this);
@@ -147,39 +141,221 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * Holds activities of the record this panel is displayed for
      */
     recordNotesStore: null,
+    
+    /**
+     * the translation object
+     */
+    translation: null,
  
 	title: 'Activities',
     layout: 'hfit',
 //    bodyStyle: 'padding: 2px 2px 2px 2px',
     
+    getActivitiesGrid: function() 
+    {
+    	// @todo add filter & paging toolbars
+    	// @todo add context menu ?
+    	
+    	// @todo add renderers
+        // the columnmodel
+        var columnModel = new Ext.grid.ColumnModel([
+            { resizable: true, id: 'note_type_id', header: this.translation._('Type'), dataIndex: 'tid', width: 30 },
+            { resizable: true, id: 'note', header: this.translation._('Note'), dataIndex: 'note'},
+            { resizable: true, id: 'created_by', header: this.translation._('Created By'), dataIndex: 'created_by', width: 100},
+            { resizable: true, id: 'creation_time', header: this.translation._('Timestamp'), dataIndex: 'creation_time', width: 70}
+        ]);
+
+        columnModel.defaultSortable = true; // by default columns are sortable
+        
+        // the rowselection model
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        
+        // the gridpanel
+        var gridPanel = new Ext.grid.GridPanel({
+            id: 'Activities_Grid',
+            store: this.recordNotesStore,
+            cm: columnModel,
+            //tbar: pagingToolbar,     
+            autoSizeColumns: false,
+            selModel: rowSelectionModel,
+            //enableColLock:false,
+            //loadMask: true,
+            autoExpandColumn: 'note',
+            border: false,
+            view: new Ext.grid.GridView({
+                autoFill: true,
+                forceFit:true,
+                ignoreAdd: true,
+                emptyText: 'No activities to display'
+            })            
+            
+        });
+        
+        return gridPanel;
+    	
+    	/*
+        // the filter toolbar
+        var filterToolbar = new Tine.widgets.FilterToolbar({
+            id : 'addressbookFilterToolbar',
+            filterModel: [
+                {label: this.translation._('Contact'), field: 'query', opdefault: 'contains'},
+                {label: this.translation._('First Name'), field: 'n_given', opdefault: 'contains'},
+                {label: this.translation._('Last Name'), field: 'n_family', opdefault: 'contains'},
+                {label: this.translation._('Company'), field: 'org_name', opdefault: 'contains'},
+                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', opdefault: 'equals'},
+                {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')', field: 'adr_one_locality', opdefault: 'contains'}
+                //{label: 'Full Name', field: 'n_fn', opdefault: 'equals'},
+                //{label: 'Container', field: 'owner'},
+             ],
+             defaultFilter: 'query',
+             filters: []
+        });
+        
+        filterToolbar.on('filtertrigger', function() {
+            this.store.load({});
+        }, this);
+        
+        // the paging toolbar
+        var pagingToolbar = new Ext.PagingToolbar({
+            pageSize: 50,
+            store: this.store,
+            displayInfo: true,
+            displayMsg: this.translation._('Displaying contacts {0} - {1} of {2}'),
+            emptyMsg: this.translation._("No contacts to display")
+        }); 
+                
+        columnModel.defaultSortable = true; // by default columns are sortable
+        
+        // the rowselection model
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+
+        rowSelectionModel.on('selectionchange', function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+
+            if(rowCount < 1) {
+                // no row selected
+                this.actions.deleteContact.setDisabled(true);
+                this.actions.editContact.setDisabled(true);
+                this.actions.exportContact.setDisabled(true);
+                this.actions.callContact.setDisabled(true);
+            } else if(rowCount > 1) {
+                // more than one row selected
+                this.actions.deleteContact.setDisabled(false);
+                this.actions.editContact.setDisabled(true);
+                this.actions.exportContact.setDisabled(false);
+                this.actions.callContact.setDisabled(true);
+            } else {
+                // only one row selected
+                this.actions.deleteContact.setDisabled(false);
+                this.actions.editContact.setDisabled(false);
+                this.actions.exportContact.setDisabled(false);
+                
+                if(Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1) {
+                    var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
+                    callMenu.removeAll();
+                    var contact = _selectionModel.getSelected();
+                    if(!Ext.isEmpty(contact.data.tel_work)) {
+                        callMenu.add({
+                           id: 'Addressbook_Contacts_CallContact_Work', 
+                           text: 'work ' + contact.data.tel_work + '',
+                           handler: this.handlers.callContact
+                        });
+                        this.actions.callContact.setDisabled(false);
+                    }
+                    if(!Ext.isEmpty(contact.data.tel_home)) {
+                        callMenu.add({
+                           id: 'Addressbook_Contacts_CallContact_Home', 
+                           text: 'home ' + contact.data.tel_home + '',
+                           handler: this.handlers.callContact
+                        });
+                        this.actions.callContact.setDisabled(false);
+                    }
+                    if(!Ext.isEmpty(contact.data.tel_cell)) {
+                        callMenu.add({
+                           id: 'Addressbook_Contacts_CallContact_Cell', 
+                           text: 'cell ' + contact.data.tel_cell + '',
+                           handler: this.handlers.callContact
+                        });
+                        this.actions.callContact.setDisabled(false);
+                    }
+                    if(!Ext.isEmpty(contact.data.tel_cell_private)) {
+                        callMenu.add({
+                           id: 'Addressbook_Contacts_CallContact_CellPrivate', 
+                           text: 'cell private ' + contact.data.tel_cell_private + '',
+                           handler: this.handlers.callContact
+                        });
+                        this.actions.callContact.setDisabled(false);
+                    }
+                }
+            }
+        }, this);
+                
+        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
+            }
+            var contextMenu = new Ext.menu.Menu({
+                id:'ctxMenuContacts', 
+                items: [
+                    this.actions.editContact,
+                    this.actions.deleteContact,
+                    this.actions.exportContact,
+                    '-',
+                    this.actions.addContact 
+                ]
+            });
+            contextMenu.showAt(_eventObject.getXY());
+        }, this);
+        
+        gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+            var record = _gridPar.getStore().getAt(_rowIndexPar);
+            try {
+                var popupWindow = new Tine.Addressbook.EditPopup({
+                    contactId: record.data.id
+                    //containerId:
+                });                        
+            } catch(e) {
+                // alert(e);
+            }
+        }, this);
+
+        gridPanel.on('keydown', function(e){
+             if(e.getKey() == e.DELETE && Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getCount() > 0){
+                 this.handlers.deleteContact();
+             }
+        }, this);
+
+        // temporary resizeing
+        filterToolbar.on('bodyresize', function(ftb, w, h) {
+            var availableGridHeight = Ext.getCmp('center-panel').getSize().height;
+            gridPanel.setHeight(availableGridHeight - h);
+        }, this);
+        
+        */
+    },
+    
     /**
      * @private
      */
     initComponent: function(){
+    	
+    	// get translations
+    	this.translation = new Locale.Gettext();
+        this.translation.textdomain('Tinebase');
         
-        // init recordNotesStore (get store from store manager)
-    	/*
-        this.notes = [];
-        this.recordNotesStore = new Ext.data.JsonStore({
-            id: 'id',
-            fields: Tine.Tinebase.Model.Note,
-            data: this.notes,
-            sortInfo: {
-                field: 'creation_time',
-                direction: 'DESC'
-            }
-        });
-        */
-        
+    	// get store
         this.recordNotesStore = Ext.StoreMgr.lookup('NotesStore');
-        
-        //console.log(this.recordNotesStore);
 
-        //-- init grid
-        this.activitiesGrid = new Ext.Panel({});
+        // get grid
+        this.activitiesGrid = this.getActivitiesGrid();
         
         this.items = [
-            this.activitiesGrid
+            new Ext.Panel({
+                layout: 'fit',
+                //tbar: filterToolbar,
+                items: this.activitiesGrid
+            })
         ];
         
         Tine.widgets.activities.ActivitiesTabPanel.superclass.initComponent.call(this);
