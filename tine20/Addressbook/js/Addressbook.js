@@ -513,6 +513,7 @@ Tine.Addressbook.Main = {
         
         // add the grid to the layout
         Tine.Tinebase.MainScreen.setActiveContentPanel(new Ext.Panel({
+            border: false,
             layout: 'fit',
             tbar: filterToolbar,
             items: gridPanel
