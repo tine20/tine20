@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        replace getNotes by searchNotes 
  * @todo        delete notes completely or just set the is_deleted flag?
  * @todo        add changelog/historylog
  */
@@ -41,7 +40,13 @@ class Tinebase_Notes
      * default record backend
      */
     const DEFAULT_RECORD_BACKEND = 'Sql';
-    
+
+    /**
+     * number of notes per record for activities panel
+     * (NOT the tab panel)
+     */
+    const NUMBER_RECORD_NOTES = 3;
+        
     /**
      * don't clone. Use the singleton.
      */
@@ -156,36 +161,46 @@ class Tinebase_Notes
      * @param  string $_id        id of record
      * @param  string $_backend   backend of record
      * @return Tinebase_Record_RecordSet of Tinebase_Notes_Model_Note
-     * 
-     * @todo add caching?
      */
     public function getNotesOfRecord($_model, $_id, $_backend = 'Sql')
     {
         $backend = ucfirst(strtolower($_backend));
 
-        $filter = new Tinebase_Notes_Model_NoteFilter(array(
-            array(
-                'field' => 'record_model',
-                'operator' => 'equals',
-                'value' => $_model
-            ),
-            array(
-                'field' => 'record_backend',
-                'operator' => 'equals',
-                'value' => $backend
-            ),
-            array(
-                'field' => 'record_id',
-                'operator' => 'equals',
-                'value' => $_id
-            )
-        ));
+        $cache = Zend_Registry::get('cache');
+        $cacheId = 'getNotesOfRecord' . $_model . $_id . $backend;
+        $result = $cache->load($cacheId);
         
-        $pagination = new Tinebase_Model_Pagination(array(
-            'limit' => 3
-        ));
+        if (!$result) {
+            $filter = new Tinebase_Notes_Model_NoteFilter(array(
+                array(
+                    'field' => 'record_model',
+                    'operator' => 'equals',
+                    'value' => $_model
+                ),
+                array(
+                    'field' => 'record_backend',
+                    'operator' => 'equals',
+                    'value' => $backend
+                ),
+                array(
+                    'field' => 'record_id',
+                    'operator' => 'equals',
+                    'value' => $_id
+                )
+            ));
+            
+            $pagination = new Tinebase_Model_Pagination(array(
+                'limit' => Tinebase_Notes::NUMBER_RECORD_NOTES,
+                'sort'  => 'creation_time',
+                'dir'   => 'DESC'
+            ));
+            
+            $result = $this->searchNotes($filter, $pagination);
+            
+            $cache->save($result, $cacheId, array('notes'));
+        }        
         
-        return $this->searchNotes($filter, $pagination);         
+        return $result;          
     }
 
     /************************** set / add / delete notes ************************/
@@ -232,6 +247,9 @@ class Tinebase_Notes
                 $this->addNote($note);
             }
         }
+        
+        // invalidate cache
+        Zend_Registry::get('cache')->remove('getNotesOfRecord' . $model . $_record->getId() . $backend);
     }
     
     /**
