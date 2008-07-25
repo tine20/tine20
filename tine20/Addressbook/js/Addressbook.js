@@ -537,7 +537,7 @@ Tine.Addressbook.Main = {
             },
             sortInfo: {
                 field: this.paging.sort,
-                dir: this.paging.dir
+                direction: this.paging.dir
             }
         });
         
