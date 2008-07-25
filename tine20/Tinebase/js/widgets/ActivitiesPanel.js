@@ -134,6 +134,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
 
 /**
  * Class for a activities tab with notes/activities grid
+ * 
+ * @todo use new Tinebase.searchNotes function to get grid store
+ * @todo add filter & paging
  */
 Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     /**
@@ -155,6 +158,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     {
     	// @todo add filter & paging toolbars
     	// @todo add context menu ?
+    	// @todo add buttons ?
     	
     	// @todo add renderers
         // the columnmodel
@@ -181,7 +185,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             //enableColLock:false,
             //loadMask: true,
             autoExpandColumn: 'note',
-            border: false,
+            autoHeight:true,
+            border: false,            
             view: new Ext.grid.GridView({
                 autoFill: true,
                 forceFit:true,
@@ -223,73 +228,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             displayMsg: this.translation._('Displaying contacts {0} - {1} of {2}'),
             emptyMsg: this.translation._("No contacts to display")
         }); 
-                
-        columnModel.defaultSortable = true; // by default columns are sortable
-        
-        // the rowselection model
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.deleteContact.setDisabled(true);
-                this.actions.editContact.setDisabled(true);
-                this.actions.exportContact.setDisabled(true);
-                this.actions.callContact.setDisabled(true);
-            } else if(rowCount > 1) {
-                // more than one row selected
-                this.actions.deleteContact.setDisabled(false);
-                this.actions.editContact.setDisabled(true);
-                this.actions.exportContact.setDisabled(false);
-                this.actions.callContact.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.deleteContact.setDisabled(false);
-                this.actions.editContact.setDisabled(false);
-                this.actions.exportContact.setDisabled(false);
-                
-                if(Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1) {
-                    var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
-                    callMenu.removeAll();
-                    var contact = _selectionModel.getSelected();
-                    if(!Ext.isEmpty(contact.data.tel_work)) {
-                        callMenu.add({
-                           id: 'Addressbook_Contacts_CallContact_Work', 
-                           text: 'work ' + contact.data.tel_work + '',
-                           handler: this.handlers.callContact
-                        });
-                        this.actions.callContact.setDisabled(false);
-                    }
-                    if(!Ext.isEmpty(contact.data.tel_home)) {
-                        callMenu.add({
-                           id: 'Addressbook_Contacts_CallContact_Home', 
-                           text: 'home ' + contact.data.tel_home + '',
-                           handler: this.handlers.callContact
-                        });
-                        this.actions.callContact.setDisabled(false);
-                    }
-                    if(!Ext.isEmpty(contact.data.tel_cell)) {
-                        callMenu.add({
-                           id: 'Addressbook_Contacts_CallContact_Cell', 
-                           text: 'cell ' + contact.data.tel_cell + '',
-                           handler: this.handlers.callContact
-                        });
-                        this.actions.callContact.setDisabled(false);
-                    }
-                    if(!Ext.isEmpty(contact.data.tel_cell_private)) {
-                        callMenu.add({
-                           id: 'Addressbook_Contacts_CallContact_CellPrivate', 
-                           text: 'cell private ' + contact.data.tel_cell_private + '',
-                           handler: this.handlers.callContact
-                        });
-                        this.actions.callContact.setDisabled(false);
-                    }
-                }
-            }
-        }, this);
-                
+                                
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
@@ -351,8 +290,10 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         this.activitiesGrid = this.getActivitiesGrid();
         
         this.items = [
+        
             new Ext.Panel({
                 layout: 'fit',
+                autoHeight:true,
                 //tbar: filterToolbar,
                 items: this.activitiesGrid
             })
