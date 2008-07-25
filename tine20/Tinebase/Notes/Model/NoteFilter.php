@@ -108,14 +108,18 @@ class Tinebase_Notes_Model_NoteFilter extends Tinebase_Record_Abstract
      * @param  Zend_Db_Select
      * @return void
      * 
-     * @todo add created_by filter
+     * @todo add created_by filter (join with user table for that?)
      */
     public function appendFilterSql($_select)
     {
         $db = Zend_Registry::get('dbAdapter');
         
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_properties, true));
+        
         foreach ($this->_properties as $field => $value)
         {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $field . ' - ' . $value);
+            
             $value = str_replace(array('*', '_'), array('%', '\_'), $value);
             $op = $this->_operators[$field];
             

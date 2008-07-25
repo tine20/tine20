@@ -97,30 +97,46 @@ class Tinebase_Notes
      *
      * @param Tinebase_Notes_Model_NoteFilter $_filter
      * @param Tinebase_Model_Pagination $_pagination
-     * 
-     * @todo implement
+     * @return Tinebase_Record_RecordSet subtype Tinebase_Notes_Model_Note
      */
     public function searchNotes(Tinebase_Notes_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'notes');
         
+        $_filter->appendFilterSql($select);
+        $_pagination->appendPagination($select);
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($select->__toString(), true));
+        
+        $rows = $this->_db->fetchAssoc($select);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', $rows, true);
+
+        return $result;
     }
     
     /**
      * count notes
      *
      * @param Tinebase_Notes_Model_NoteFilter $_filter
-     * 
-     * @todo implement
+     * @return int notes count
      */
     public function searchNotesCount(Tinebase_Notes_Model_NoteFilter $_filter)
     {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'notes', array('count' => 'COUNT(id)'));
         
+        $_filter->appendFilterSql($select);
+        
+        $result = $this->_db->fetchOne($select);
+        return $result;        
     }
     
     /**
      * get a single note
      *
      * @param string $_noteId
+     * @return Tinebase_Notes_Model_Note
      */
     public function getNote($_noteId)
     {
