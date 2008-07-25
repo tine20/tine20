@@ -107,7 +107,7 @@ class Tinebase_Notes
         $_filter->appendFilterSql($select);
         $_pagination->appendPagination($select);
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($select->__toString(), true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($select->__toString(), true));
         
         $rows = $this->_db->fetchAssoc($select);
         $result = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', $rows, true);
@@ -150,37 +150,42 @@ class Tinebase_Notes
     }
     
     /**
-     * get all notes of a given record
-     * - cache result if caching is activated
+     * get all notes of a given record (calls searchNotes)
      * 
      * @param  string $_model     model of record
-     * @param  string $_backend   backend of record
      * @param  string $_id        id of record
-     * @param  string $_type      type of note
+     * @param  string $_backend   backend of record
      * @return Tinebase_Record_RecordSet of Tinebase_Notes_Model_Note
      * 
-     * @deprecated use searchNotes instead
+     * @todo add caching?
      */
-    public function getNotes($_model, $_backend, $_id, $_type = NULL)
+    public function getNotesOfRecord($_model, $_id, $_backend = 'Sql')
     {
         $backend = ucfirst(strtolower($_backend));
 
-        $where = array(
-            'record_model   = ' . $this->_db->quote($_model),
-            'record_backend = ' . $this->_db->quote($backend),
-            'record_id      = ' . $this->_db->quote($_id),
-        );
+        $filter = new Tinebase_Notes_Model_NoteFilter(array(
+            array(
+                'field' => 'record_model',
+                'operator' => 'equals',
+                'value' => $_model
+            ),
+            array(
+                'field' => 'record_backend',
+                'operator' => 'equals',
+                'value' => $backend
+            ),
+            array(
+                'field' => 'record_id',
+                'operator' => 'equals',
+                'value' => $_id
+            )
+        ));
         
-        if ($_type) {
-            $where[] = $this->_db->getAdapter()->quoteInto('note_type_id = ?', $_type);
-        }
+        $pagination = new Tinebase_Model_Pagination(array(
+            'limit' => 3
+        ));
         
-        $notes = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note');
-        foreach ($this->_notesTable->fetchAll($where) as $note) {
-            $notes->addRecord(new Tinebase_Notes_Model_Note($note->toArray(), true));
-        }
-        
-        return $notes;         
+        return $this->searchNotes($filter, $pagination);         
     }
 
     /************************** set / add / delete notes ************************/
@@ -201,7 +206,7 @@ class Tinebase_Notes
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record[$_notesProperty], true));
                 
-        $currentNotesIds = $this->getNotes($model, $backend, $_record->getId())->getArrayOfIds();
+        $currentNotesIds = $this->getNotesOfRecord($model, $_record->getId(), $backend)->getArrayOfIds();
                 
         if ($_record[$_notesProperty] instanceOf Tinebase_Record_RecordSet) {
             $notesToSet = $_record[$_notesProperty];
@@ -283,7 +288,7 @@ class Tinebase_Notes
     {
         $backend = ucfirst(strtolower($_backend));
         
-        $notes = $this->getNotes($_model, $backend, $_id);
+        $notes = $this->getNotesOfRecord($_model, $_id, $backend);
         $this->deleteNotes($notes->getArrayOfIds());
     }
     

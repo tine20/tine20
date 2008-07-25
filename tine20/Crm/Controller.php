@@ -88,7 +88,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
         
-        $lead->notes = Tinebase_Notes::getInstance()->getNotes('Crm_Model_Lead', 'Sql', $lead->getId());        
+        $lead->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Crm_Model_Lead', $lead->getId());        
                 
         return $lead;
     }
