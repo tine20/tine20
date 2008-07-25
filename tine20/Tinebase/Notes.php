@@ -194,7 +194,7 @@ class Tinebase_Notes
 
         $data = $_note->toArray(FALSE, FALSE);
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
         
         $this->_notesTable->insert($data);        
     }
