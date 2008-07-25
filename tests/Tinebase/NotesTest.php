@@ -111,7 +111,27 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertGreaterThan(count($notesPre), count($notesPost));
-        $this->assertEquals($this->_objects['note']->note, $notesPost[0]->note);
+        $this->assertEquals($this->_objects['note']->note, $notesPost[0]->note);        
+    }
+    
+    /**
+     * test to array and resolution of account display name
+     *
+     */
+    public function testToArray()
+    {
+        $notes = $this->_instance->getNotes(
+            $this->_objects['record']['model'], 
+            $this->_objects['record']['backend'], 
+            $this->_objects['record']['id']
+        );
+        
+        $myNote = $notes[0];
+        
+        $noteArray = $myNote->toArray();
+        //print_r($noteArray);
+        
+        $this->assertEquals('Tine 2.0 Admin Account', $noteArray['created_by']);
     }
     
     /**
