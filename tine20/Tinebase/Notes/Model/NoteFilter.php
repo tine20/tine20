@@ -114,11 +114,11 @@ class Tinebase_Notes_Model_NoteFilter extends Tinebase_Record_Abstract
     {
         $db = Zend_Registry::get('dbAdapter');
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_properties, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_properties, true));
         
         foreach ($this->_properties as $field => $value)
         {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $field . ' - ' . $value);
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $field . ' - ' . $value);
             
             $value = str_replace(array('*', '_'), array('%', '\_'), $value);
             $op = $this->_operators[$field];
