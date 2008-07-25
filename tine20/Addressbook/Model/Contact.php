@@ -201,6 +201,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (isset($contactData['tags'])) {
             $contactData['tags'] = Zend_Json::decode($contactData['tags']);
         }
+
+        if (isset($contactData['notes'])) {
+            $contactData['notes'] = Zend_Json::decode($contactData['notes']);
+        }
+        
         if (isset($contactData['jpegphoto'])) {
             $imageParams = Tinebase_ImageHelper::parseImageLink($contactData['jpegphoto']);
             if ($imageParams['isNewImage']) {

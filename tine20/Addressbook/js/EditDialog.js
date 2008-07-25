@@ -388,11 +388,18 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 bodyStyle: 'padding-left: 5px;',
                 items: [
                     new Tine.widgets.tags.TagPanel({
-                        height: 230,
-                        customHeight: 230,
+                        height: 175,
+                        customHeight: 175,
                         border: false,
                         style: 'border:1px solid #B5B8C8;'
                     }),
+                    new Tine.widgets.activities.ActivitiesPanel({
+                        height: 260,
+                        customHeight: 260,
+                        border: false,
+                        style: 'border:1px solid #B5B8C8;'
+                    })                    
+                    /*
                     {
                         xtype: 'panel',
                         layout: 'form',
@@ -408,6 +415,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                             height: 205
                         }]
                     }
+                    */
                 ]
             }
         ]

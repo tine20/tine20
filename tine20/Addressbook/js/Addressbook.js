@@ -829,7 +829,8 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'modifier'},
     {name: 'jpegphoto'},
     {name: 'account_id'},
-    {name: 'tags'}
+    {name: 'tags'},
+    {name: 'notes'}
 ];
 
 Tine.Addressbook.Model.Contact = Ext.data.Record.create(
