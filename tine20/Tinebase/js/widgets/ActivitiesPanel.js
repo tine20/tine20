@@ -143,20 +143,40 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * @var {Ext.data.JsonStore}
      * Holds activities of the record this panel is displayed for
      */
-    recordNotesStore: null,
+    store: null,
     
     /**
      * the translation object
      */
     translation: null,
- 
+
+    /**
+     * @cfg {Object} paging defaults
+     */
+    paging: {
+        start: 0,
+        limit: 20,
+        sort: 'creation_time',
+        dir: 'DESC'
+    },
+
+    /**
+     * the record id
+     */
+    record_id: null,
+    
+    /**
+     * the record model
+     */
+    record_model: null,
+    
 	title: 'Activities',
     layout: 'hfit',
 //    bodyStyle: 'padding: 2px 2px 2px 2px',
     
     getActivitiesGrid: function() 
     {
-    	// @todo add filter & paging toolbars
+    	// @todo add filter toolbar
     	// @todo add context menu ?
     	// @todo add buttons ?
     	
@@ -173,13 +193,22 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         
         // the rowselection model
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+
+        // the paging toolbar
+        var pagingToolbar = new Ext.PagingToolbar({
+            pageSize: 20,
+            store: this.store,
+            displayInfo: true,
+            displayMsg: this.translation._('Displaying notes {0} - {1} of {2}'),
+            emptyMsg: this.translation._("No notes to display")
+        }); 
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
             id: 'Activities_Grid',
-            store: this.recordNotesStore,
+            store: this.store,
             cm: columnModel,
-            //tbar: pagingToolbar,     
+            tbar: pagingToolbar,     
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             //enableColLock:false,
@@ -219,16 +248,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         filterToolbar.on('filtertrigger', function() {
             this.store.load({});
         }, this);
-        
-        // the paging toolbar
-        var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: 50,
-            store: this.store,
-            displayInfo: true,
-            displayMsg: this.translation._('Displaying contacts {0} - {1} of {2}'),
-            emptyMsg: this.translation._("No contacts to display")
-        }); 
-                                
+                                        
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
@@ -275,6 +295,60 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     },
     
     /**
+     * init the contacts json grid store
+     */
+    initStore: function(){
+
+        this.store = new Ext.data.JsonStore({
+            idProperty: 'id',
+            autoLoad: false,
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: Tine.Tinebase.Model.Note,
+            remoteSort: true,
+            baseParams: {
+                method: 'Tinebase.searchNotes'
+            },
+            sortInfo: {
+                field: this.paging.sort,
+                direction: this.paging.dir
+            }
+        });
+        
+        // register store
+        Ext.StoreMgr.add('NotesGridStore', this.store);
+        
+        // prepare filter
+        this.store.on('beforeload', function(store, options){
+            if (!options.params) {
+                options.params = {};
+            }
+            
+            // paging toolbar only works with this properties in the options!
+            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort,
+            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir,
+            options.params.start = options.params.start ? options.params.start : this.paging.start,
+            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit
+            
+            options.params.paging = Ext.util.JSON.encode(options.params);
+            
+            // @todo add filter toolbar
+            //var filterToolbar = Ext.getCmp('addressbookFilterToolbar');
+            //var filter = filterToolbar ? filterToolbar.getFilter() : [];
+            var filter = [];
+            filter.push(
+                {field: 'record_model', operator: 'equals', value: this.record_model },
+                {field: 'record_id', operator: 'equals', value: this.record_id },
+                {field: 'record_backend', operator: 'equals', value: 'Sql' }
+            );
+                        
+            options.params.filter = Ext.util.JSON.encode(filter);
+        }, this);
+                        
+        this.store.load({});
+    },
+
+    /**
      * @private
      */
     initComponent: function(){
@@ -284,7 +358,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         this.translation.textdomain('Tinebase');
         
     	// get store
-        this.recordNotesStore = Ext.StoreMgr.lookup('NotesStore');
+        //this.store = Ext.StoreMgr.lookup('NotesStore');
+        this.initStore();
 
         // get grid
         this.activitiesGrid = this.getActivitiesGrid();
@@ -298,6 +373,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                 items: this.activitiesGrid
             })
         ];
+        
+        this.store.load({});
         
         Tine.widgets.activities.ActivitiesTabPanel.superclass.initComponent.call(this);
     }        

@@ -18,7 +18,7 @@
  * @todo    add more components/panels
  * @todo    add history
  */
-Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
+Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
 
 	var translation = new Locale.Gettext();
     translation.textdomain('Crm');
@@ -252,7 +252,10 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         }
     };
     */
-    var tabPanelActivities = new Tine.widgets.activities.ActivitiesTabPanel({});
+    var tabPanelActivities = new Tine.widgets.activities.ActivitiesTabPanel({
+        record_id: _lead.id,
+        record_model: 'Crm_Model_Lead'
+    });
 
     /*********** MAIN tab panel ************/
     

@@ -466,7 +466,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         border: false,
         items:[
             contactTabPanel,
-            new Tine.widgets.activities.ActivitiesTabPanel({}),
+            new Tine.widgets.activities.ActivitiesTabPanel({
+                record_id: _contact.id,
+                record_model: 'Addressbook_Model_Contact'
+            }),
             gmapPanel,
             {
                 title: sprintf(translation.ngettext('Link', 'Links [%d]', 1), 1),

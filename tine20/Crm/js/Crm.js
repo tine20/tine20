@@ -1849,7 +1849,7 @@ Tine.Crm.LeadEditDialog = {
                         this.getLinksGrid('Contacts', this.translation._('Contacts')),
                         this.getLinksGrid('Tasks', this.translation._('Tasks')),
                         this.getLinksGrid('Products', this.translation._('Products'))
-                    ])             
+                    ], lead.data)             
         });
 
         // add context menu events
