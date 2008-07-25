@@ -344,7 +344,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
         
-        $notes = Tinebase_Notes::getInstance()->getNotes('Crm_Model_Lead', 'Sql', $lead->getId());
+        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Crm_Model_Lead', $lead->getId());
         $this->assertEquals($this->objects['note']->note, $notes[0]['note']);
     }
     
