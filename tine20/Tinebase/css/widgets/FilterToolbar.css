@@ -21,4 +21,24 @@
 .tw-filtertoolbar  { 
 	background-color: #f0f0f0;
 }
-/*.tw-filtertoolbar td { padding: 3px }*/
+
+.tw-filtertoolbar  td { 
+	padding: 0px 5px 1px;
+}
+.tw-filtertoolbar .tw-ftb-frow-prefix {
+	text-align: right;
+}
+
+/* fix Ext.Button Layout */
+.tw-filtertoolbar .x-btn td {
+    padding: 0px;
+}
+.tw-filtertoolbar .x-btn-icon .x-btn-center {
+    padding:1px;
+}
+
+/*
+.tw-filtertoolbar .fw-ftb-actionrow td { 
+    padding: 0px 5px 1px;
+}
+*/
