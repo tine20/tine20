@@ -29,7 +29,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	protected $_backend;
 	
 	/**
-	 * @var Tasks_Model_Task test Task 1
+	 * @var array test Task 1 data
 	 */
 	protected $_testTask1;
 	
@@ -61,13 +61,13 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	        'completed'            => NULL,
 	        'due'                  => Zend_Date::now()->addMonth(1),
 	        // ical common fields
-	        'class_id'             => 1,
+	        //'class_id'             => 2,
 	        'description'          => str_pad('',1000,'.'),
 	        'geo'                  => 0.2345,
 	        'location'             => 'here and there',
 	        'organizer'            => 4,
 	        'priority'             => 2,
-	        'status_id'            => 1,
+	        //'status_id'            => 2,
 	        'summary'              => 'our fist test task',
 	        'url'                  => 'http://www.testtask.com',
         ),true, false);
@@ -100,22 +100,23 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     
     public function testCreateMinimalTask()
     {
+        $summary = 'minimal task by phpunit';
         $task = new Tasks_Model_Task(array(
-            'summary'       => 'minimal task by phpunit',
+            'summary'       => $summary,
             'container_id'  => 5,
         ));
         $persitantTask = $this->_backend->create($task);
         
         $pagination = new Tasks_Model_Pagination();
         $filter = new Tasks_Model_Filter();
-        $filter->query     = $task->summary;
+        $filter->query     = $summary;
         $filter->container = array($task->container_id);
 
         $tasks = $this->_backend->search($filter, $pagination);
         $this->assertEquals(1, count($tasks));
         
         $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks'));
-        $db->delete($db->getAdapter()->quoteInto('id = ?', $persitantTask->getId() ));
+        $db->delete("summary LIKE '$summary'" );
         Tinebase_Timemachine_ModificationLogTest::purgeLogs($persitantTask->getId());
         
     }
