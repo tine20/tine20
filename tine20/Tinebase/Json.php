@@ -148,6 +148,7 @@ class Tinebase_Json
      * @param   string  $context
      * @param   int     $owner
      * @return array 
+     * @deprecated ? use getTags or searchTags ?
      */
     public function getTags($context, $owner)
     {
@@ -165,6 +166,17 @@ class Tinebase_Json
         );
     }
     
+    /**
+     * search tags
+     *
+     * @param string $query
+     * @param string $context (application)
+     * @param unknown_type $owner
+     * @param unknown_type $findGlobalTags
+     * @param integer $start
+     * @param integer $limit
+     * @return array
+     */
     public function searchTags($query, $context, $owner, $findGlobalTags, $start=0, $limit=0)
     {
         $filter = new Tinebase_Tags_Model_Filter(array(
@@ -186,6 +198,28 @@ class Tinebase_Json
     }
     
     /**
+     * search / get notes
+     * - used by activities grid
+     *
+     * @param string $filter json encoded filter array
+     * @param string $paging json encoded pagination info
+     * 
+     * @todo test & use it
+     */
+    public function searchNotes($filter, $paging)
+    {
+        $filter = new Tinebase_Notes_Model_NoteFilter(Zend_Json::decode($filter));
+        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
+        
+        Zend_Registry::get('logger')->debug(print_r($filter,true));
+        
+        return array(
+            'results'       => Tinebase_Notes::getInstance()->searchNotes($filter, $paging),
+            'totalcount'    => Tinebase_Notes::getInstance()->searchNotesCount($filter)
+        );        
+    }
+    
+    /**
      * deletes tags identified by an array of identifiers
      * 
      * @param  array $ids
@@ -197,6 +231,7 @@ class Tinebase_Json
         return array('success' => true);
     }
     
+
     /**
      * authenticate user by username and password
      *

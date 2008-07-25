@@ -9,7 +9,9 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        replace getNotes by searchNotes 
  * @todo        delete notes completely or just set the is_deleted flag?
+ * @todo        add changelog/historylog
  */
 
 /**
@@ -34,6 +36,11 @@ class Tinebase_Notes
      * @var Tinebase_Db_Table
      */
     protected $_noteTypesTable;
+    
+    /**
+     * default record backend
+     */
+    const DEFAULT_RECORD_BACKEND = 'Sql';
     
     /**
      * don't clone. Use the singleton.
@@ -83,8 +90,49 @@ class Tinebase_Notes
         ));        
     }
     
-    /************************** notes ************************/
+    /************************** get notes ************************/
 
+    /**
+     * search for notes
+     *
+     * @param Tinebase_Notes_Model_NoteFilter $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * 
+     * @todo implement
+     */
+    public function searchNotes(Tinebase_Notes_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    {
+        
+    }
+    
+    /**
+     * count notes
+     *
+     * @param Tinebase_Notes_Model_NoteFilter $_filter
+     * 
+     * @todo implement
+     */
+    public function searchNotesCount(Tinebase_Notes_Model_NoteFilter $_filter)
+    {
+        
+    }
+    
+    /**
+     * get a single note
+     *
+     * @param string $_noteId
+     */
+    public function getNote($_noteId)
+    {
+        $row = $this->_notesTable->fetchRow($this->_db->quoteInto('id = ?', $_noteId));
+        
+        if (!$row) {
+            throw new UnderflowException('note not found');
+        }
+        
+        return new Tinebase_Notes_Model_Note($row->toArray());
+    }
+    
     /**
      * get all notes of a given record
      * - cache result if caching is activated
@@ -94,6 +142,8 @@ class Tinebase_Notes
      * @param  string $_id        id of record
      * @param  string $_type      type of note
      * @return Tinebase_Record_RecordSet of Tinebase_Notes_Model_Note
+     * 
+     * @deprecated use searchNotes instead
      */
     public function getNotes($_model, $_backend, $_id, $_type = NULL)
     {
@@ -105,27 +155,19 @@ class Tinebase_Notes
             'record_id      = ' . $this->_db->quote($_id),
         );
         
-        /*
-        if (!$_returnAll) {
-            $where[] = 'is_deleted = FALSE';
-        }
-        */
-
         if ($_type) {
             $where[] = $this->_db->getAdapter()->quoteInto('note_type_id = ?', $_type);
         }
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
         
         $notes = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note');
         foreach ($this->_notesTable->fetchAll($where) as $note) {
             $notes->addRecord(new Tinebase_Notes_Model_Note($note->toArray(), true));
         }
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notes->toArray(), true));
-        
         return $notes;         
     }
+
+    /************************** set / add / delete notes ************************/
     
     /**
      * sets notes of a record
