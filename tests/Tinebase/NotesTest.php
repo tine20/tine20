@@ -95,40 +95,44 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testAddNote()
-    {
-        $notesPre = $this->_instance->getNotes(
-            $this->_objects['record']['model'], 
-            $this->_objects['record']['backend'], 
-            $this->_objects['record']['id']
-        );
-        
+    {        
         $this->_instance->addNote($this->_objects['note']);
         
-        $notesPost = $this->_instance->getNotes(
-            $this->_objects['record']['model'], 
-            $this->_objects['record']['backend'], 
-            $this->_objects['record']['id']
-        );
+        $note = $this->_instance->getNote($this->_objects['note']->getId());
         
-        $this->assertGreaterThan(count($notesPre), count($notesPost));
-        $this->assertEquals($this->_objects['note']->note, $notesPost[0]->note);        
+        $this->assertEquals($this->_objects['note']->note, $note->note);        
     }
-    
+
+    /**
+     * test search notes
+     *
+     */
+    public function testSearchNotes()
+    {
+        $filter = new Tinebase_Notes_Model_NoteFilter(array(array(
+            'field' => 'query',
+            'operator' => '',
+            'value' => 'phpunit'
+        )));
+        
+        $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
+        $notesCount = $this->_instance->searchNotesCount($filter);
+        
+        //print_r($notes->toArray());
+        
+        $this->assertEquals($this->_objects['note']->note, $notes[0]->note); 
+        $this->assertEquals(1, $notesCount); 
+    }
+
     /**
      * test to array and resolution of account display name
      *
      */
     public function testToArray()
     {
-        $notes = $this->_instance->getNotes(
-            $this->_objects['record']['model'], 
-            $this->_objects['record']['backend'], 
-            $this->_objects['record']['id']
-        );
+        $note = $this->_instance->getNote($this->_objects['note']->getId());
         
-        $myNote = $notes[0];
-        
-        $noteArray = $myNote->toArray();
+        $noteArray = $note->toArray();
         //print_r($noteArray);
         
         $this->assertEquals('Tine 2.0 Admin Account', $noteArray['created_by']);
@@ -140,25 +144,15 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testdeleteNote()
     {
-        $notesPre = $this->_instance->getNotes(
-            $this->_objects['record']['model'], 
-            $this->_objects['record']['backend'], 
-            $this->_objects['record']['id']
-        );
-        
         $this->_instance->deleteNotesOfRecord(
             $this->_objects['record']['model'], 
             $this->_objects['record']['backend'], 
             $this->_objects['record']['id']
         );
         
-        $notesPost = $this->_instance->getNotes(
-            $this->_objects['record']['model'], 
-            $this->_objects['record']['backend'], 
-            $this->_objects['record']['id']
-        );
+        $this->setExpectedException('UnderflowException');
         
-        $this->assertLessThan(count($notesPre), count($notesPost));
+        $note = $this->_instance->getNote($this->_objects['note']->getId());
     }
     
     /**
