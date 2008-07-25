@@ -75,4 +75,25 @@ class Tinebase_Notes_Model_Note extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time',
     );    
+    
+    /**
+     * returns array with record related properties
+     * resolves the creator display name and calls Tinebase_Record_Abstract::toArray() 
+     *
+     * @param boolean $_recursive
+     * @param boolean $_resolveCreator
+     * @return array
+     */    
+    public function toArray($_recursive = TRUE, $_resolveCreator = TRUE)
+    {
+        $result = parent::toArray($_recursive);
+        
+        // get creator
+        if ($this->created_by && $_resolveCreator) {
+            $creator = Tinebase_User::getInstance()->getUserById($this->created_by); 
+            $result['created_by'] = $creator->accountDisplayName; 
+        }
+        
+        return $result;
+    }
 }

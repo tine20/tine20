@@ -66,13 +66,24 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         var ActivitiesTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-activities-activitiesitem" id="{id}">',
-                    '<div class="x-widget-activities-activitiesitem-text" ext:qtip="{[this.encode(values.note)]} <i>({note_type_id})</i><tpl if="note != null && note.length &gt; 1"><hr>{[this.encode(values.note)]}</tpl>" >', 
-                        '&nbsp;{[this.encode(values.note)]}',
+                    '<div class="x-widget-activities-activitiesitem-text" ' +
+                    '   ext:qtip="{[this.encode(values.note)]} <i>({values.note_type_id})</i>' +
+                    '<tpl if="note != null && note.length &gt; 1"><hr>{[this.encode(values.note)]}</tpl>" >', 
+                        '{[this.render(values.created_by, "user")]}&nbsp;{[this.render(values.creation_time, "time")]}<br/>' +
+                        '{[this.encode(values.note)]}<hr>',
                     '</div>',
                 '</div>',
             '</tpl>' ,{
                 encode: function(value) {
                     return Ext.util.Format.htmlEncode(value);
+                },
+                render: function(value, type) {
+                	switch (type) {
+                        case 'user':
+                            return (value) ? value : 'you';
+                        case 'time':
+                            return (value) ? value : 'now';                		
+                	}
                 }
             }
         );

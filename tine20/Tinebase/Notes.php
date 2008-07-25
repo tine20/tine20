@@ -183,12 +183,18 @@ class Tinebase_Notes
             $_note->setId($id);
         }
 
-        $_note->created_by = Zend_Registry::get('currentAccount')->getId();
+        $accountId = Zend_Registry::get('currentAccount')->getId();
+        
+        if (empty($accountId)) {
+            throw new Exception('no account id set');
+        }
+        
+        $_note->created_by = $accountId;
         $_note->creation_time = Zend_Date::now();        
 
-        $data = $_note->toArray();
+        $data = $_note->toArray(FALSE, FALSE);
 
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
         
         $this->_notesTable->insert($data);        
     }
