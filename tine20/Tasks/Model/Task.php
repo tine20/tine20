@@ -58,7 +58,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'location'             => array('allowEmpty' => true         ),
         'organizer'            => array('allowEmpty' => true, 'Int' ),
         'priority'             => array('allowEmpty' => true, 'default' => 1),
-        'status_id'            => array('presence' => 'required', 'default' => 3, 'allowEmpty' => false),
+        'status_id'            => array('allowEmpty' => true         ),
         'summary'              => array('presence' => 'required'     ),
         'url'                  => array('allowEmpty' => true         ),
         // ical common fields with multiple appearance

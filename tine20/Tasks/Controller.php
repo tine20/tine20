@@ -179,11 +179,11 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
             throw new Exception('Not allowed!');
         }
         if(empty($_task->class_id)) {
-            $_task->class_id = 1;
+            //$_task->class_id = $this->_stati[1];
         }
         return $this->_backend->create($_task);
     }
-    
+
     /**
      * Update an existing Task
      * 

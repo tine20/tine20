@@ -253,7 +253,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         if(isset($_filter->showClosed) && $_filter->showClosed){
             // nothing to filter
         } else {
-            $_select->where('status.status_is_open = TRUE');
+            $_select->where('status.status_is_open = TRUE OR tasks.status_id IS NULL');
         }
     }        
     
