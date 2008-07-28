@@ -69,10 +69,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         var ActivitiesTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-activities-activitiesitem" id="{id}">',
-                    '<div class="x-widget-activities-activitiesitem-text" ' +
-                    '   ext:qtip="{[this.encode(values.note)]}' +
-                    '<tpl if="note != null && note.length &gt; 1"><hr>{[this.encode(values.note)]}</tpl>" >', 
-                        '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.created_by, "user")]}&nbsp;{[this.render(values.creation_time, "time")]}<br/>' +
+                    '<div class="x-widget-activities-activitiesitem-text"',
+                    '   ext:qtip="{[this.encode(values.note)]}" >', 
+                        '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.created_by, "user")]}&nbsp;{[this.render(values.creation_time, "time")]}<br/>',
                         '{[this.encode(values.note)]}<hr>',
                     '</div>',
                 '</div>',
@@ -114,7 +113,6 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             emptyText: this.translation._('Note Type...'),
         	hideLabel: true,
             id:'note_type_combo',
-            //name:'note_type_id',
             store: Tine.widgets.activities.getTypesStore(this.app),
             displayField:'name',
             valueField:'id',
@@ -122,7 +120,6 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             mode: 'local',
             triggerAction: 'all',
             editable: false,
-            //allowBlank: false,
             forceSelection: true,
             anchor:'100%'
         });
