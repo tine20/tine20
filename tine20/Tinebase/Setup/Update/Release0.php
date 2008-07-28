@@ -1060,12 +1060,27 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);        
         
-        // @todo add more default note types
         $nodeType = new Tinebase_Notes_Model_NoteType(array(
             'id'            => '1',
             'name'          => 'note',
             'description'   => 'the default note type',
-            'icon'          => '/images/oxygen/16x16/actions/document-properties.png'
+            'icon'          => 'images/oxygen/16x16/actions/document-properties.png'
+        ));
+        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+
+        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+            'id'            => '2',
+            'name'          => 'telephone',
+            'description'   => 'telephone call',
+            'icon'          => 'images/oxygen/16x16/apps/kcall.png'
+        ));
+        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+        
+        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+            'id'            => '3',
+            'name'          => 'email',
+            'description'   => 'email contact',
+            'icon'          => 'images/oxygen/16x16/actions/kontact-mail.png'
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
         

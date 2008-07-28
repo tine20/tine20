@@ -158,6 +158,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
                     style: 'border:1px solid #B5B8C8;'
                 }),
                 new Tine.widgets.activities.ActivitiesPanel({
+                    app: 'Crm',
                     height: 400,
                     customHeight: 400,
                     border: false,
@@ -253,6 +254,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
     };
     */
     var tabPanelActivities = new Tine.widgets.activities.ActivitiesTabPanel({
+        app: 'Crm',
         record_id: _lead.id,
         record_model: 'Crm_Model_Lead'
     });

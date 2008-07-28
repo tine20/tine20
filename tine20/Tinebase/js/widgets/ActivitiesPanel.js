@@ -8,7 +8,6 @@
  *
  * @todo add type chooser and icon
  * @todo add layout to the template / tooltip
- * @todo translate
  */
  
 Ext.namespace('Tine.widgets', 'Tine.widgets.activities');
@@ -30,13 +29,18 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     notes: [],
     
     /**
+     * the translation object
+     */
+    translation: null,
+
+    /**
      * @var {Ext.data.JsonStore}
      * Holds activities of the record this panel is displayed for
      */
     recordNotesStore: null,
     
     title: 'Activities',
-    //iconCls: 'action_tag',
+    iconCls: 'notes_defaultIcon',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
     
@@ -45,6 +49,10 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
      */
     initComponent: function(){
     	
+        // get translations
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Tinebase');
+        
         // init recordNotesStore
         this.notes = [];
         this.recordNotesStore = new Ext.data.JsonStore({
@@ -65,9 +73,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-activities-activitiesitem" id="{id}">',
                     '<div class="x-widget-activities-activitiesitem-text" ' +
-                    '   ext:qtip="{[this.encode(values.note)]} <i>({values.note_type_id})</i>' +
+                    '   ext:qtip="{[this.encode(values.note)]}' +
                     '<tpl if="note != null && note.length &gt; 1"><hr>{[this.encode(values.note)]}</tpl>" >', 
-                        '{[this.render(values.created_by, "user")]}&nbsp;{[this.render(values.creation_time, "time")]}<br/>' +
+                        '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.created_by, "user")]}&nbsp;{[this.render(values.creation_time, "time")]}<br/>' +
                         '{[this.encode(values.note)]}<hr>',
                     '</div>',
                 '</div>',
@@ -77,6 +85,10 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                 },
                 render: function(value, type) {
                 	switch (type) {
+                		case 'icon':
+                		    var typesStore = Tine.widgets.activities.getTypesStore(this.app);
+                		    typeRecord = typesStore.getById(value);
+                		    return '<img src="' + typeRecord.data.icon + '" />';
                         case 'user':
                             return (value) ? value : 'you';
                         case 'time':
@@ -95,9 +107,26 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             itemSelector: 'activities-item-small'
         })        
         
+        var noteTypeCombo = new Ext.form.ComboBox({
+            emptyText: this.translation._('Note Type...'),
+        	hideLabel: true,
+            id:'note_type_combo',
+            //name:'note_type_id',
+            store: Tine.widgets.activities.getTypesStore(this.app),
+            displayField:'name',
+            valueField:'id',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            editable: false,
+            allowBlank: false,
+            forceSelection: true,
+            anchor:'100%'
+            //anchor:'95%'            
+        });
+      
         var noteTextarea =  new Ext.form.TextArea({
-            //emptyText: this.translation._('Add a Note...')
-            emptyText: 'Add a Note...',
+            emptyText: this.translation._('Add a Note...'),
             grow: false,
             preventScrollbars:false,
             anchor:'100%',
@@ -106,16 +135,19 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         }) 
         
         noteTextarea.on('change', function(noteTextarea, newValue, oldValue){        	
-        	var newNote = new Tine.Tinebase.Model.Note({note_type_id: 1, note: newValue});
+        	var note_type_id = Ext.getCmp('note_type_combo').getValue();
+        	
+        	var newNote = new Tine.Tinebase.Model.Note({note_type_id: note_type_id, note: newValue});
         	this.recordNotesStore.insert(0, newNote);
         	
         	noteTextarea.setValue('');
-            noteTextarea.emptyText = 'Add a Note...';
+            noteTextarea.emptyText = this.translation._('Add a Note...');
         },this);
 
         this.formFields = {
             layout: 'form',
             items: [
+                noteTypeCombo,
                 noteTextarea,
                 // this form field is only for fetching and saving notes in the record
                 new Tine.widgets.activities.NotesFormField({
@@ -140,6 +172,12 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
  * 
  */
 Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
+
+    /**
+     * @cfg {String} app Application which uses this panel
+     */
+    app: '',
+    
     /**
      * @var {Ext.data.JsonStore}
      * Holds activities of the record this panel is displayed for
@@ -375,7 +413,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     }        
 });
 
-/************************* notes form field *********************************/
+/************************* helper *********************************/
 
 /**
  * @private Helper class to have activities processing in the standard form/record cycle
@@ -415,3 +453,36 @@ Tine.widgets.activities.NotesFormField = Ext.extend(Ext.form.Field, {
     }
 
 });
+
+/**
+ * get note / activities types store
+ * if available, load data from initial data
+ * 
+ * @return Ext.data.JsonStore with activities types
+ */
+Tine.widgets.activities.getTypesStore = function(app) {
+    
+    var store = Ext.StoreMgr.get('noteTypesStore');
+    if (!store) {
+
+        store = new Ext.data.JsonStore({
+            fields: Tine.Tinebase.Model.NoteType,
+            baseParams: {
+                method: 'Tinebase.getNoteTypes',
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
+        if ( Tine[app]['NoteTypes'] ) {
+            store.loadData(Tine[app]['NoteTypes']);
+        }
+            
+        Ext.StoreMgr.add('noteTypesStore', store);
+    }
+    
+    return store;
+};
+

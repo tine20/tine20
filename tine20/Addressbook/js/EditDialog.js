@@ -394,6 +394,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         style: 'border:1px solid #B5B8C8;'
                     }),
                     new Tine.widgets.activities.ActivitiesPanel({
+                    	app: 'Addressbook',
                         height: 260,
                         customHeight: 260,
                         border: false,
@@ -467,6 +468,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         items:[
             contactTabPanel,
             new Tine.widgets.activities.ActivitiesTabPanel({
+                app: 'Addressbook',
                 record_id: _contact.id,
                 record_model: 'Addressbook_Model_Contact'
             }),

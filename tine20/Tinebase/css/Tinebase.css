@@ -84,3 +84,13 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
 
+/* ----- notes ------------------------------------------------------------*/
+.notes_defaultIcon {
+   background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
+}
+.notes_phoneIcon {
+   background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
+}
+.notes_emailIcon {
+   background-image:url(../../images/oxygen/16x16/actions/kontact-mail.png) !important;
+}

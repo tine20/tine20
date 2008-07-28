@@ -21,6 +21,7 @@
 class Addressbook_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Addressbook';
+    
     /**
      * edit contact dialog
      * 
@@ -34,17 +35,21 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         }
         $locale = Zend_Registry::get('locale');
         $currentAccount = Zend_Registry::get('currentAccount');
+        
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
+        
+        $tinebaseJson = new Tinebase_Json();
+        $view->initialData['Addressbook'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
+        
         $addresses = Addressbook_Controller::getInstance();
         if ($_contactId !== NULL && $contact = $addresses->getContact($_contactId)) {
             $encodedContact = $contact->toArray();
             $addressbook = Tinebase_Container::getInstance()->getContainerById($contact->owner);
             $encodedContact['owner'] = $addressbook->toArray();
             $encodedContact['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $contact->owner)->toArray();
-            //$encodedContact['tags'] = $encodedContact['tags']->toArray();
-            //Zend_Registry::get('logger')->debug(print_r($encodedContact,true));
+
             if (!empty($encodedContact['jpegphoto'])) {
                 $encodedContact['jpegphoto'] = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $_contactId . '&width=90&height=90&ratiomode=0';
             }
@@ -55,6 +60,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
                 $encodedContact['adr_two_countrydisplayname'] = $locale->getCountryTranslation($contact['adr_two_countryname']);
             }
             $encodedContact = Zend_Json::encode($encodedContact);
+            
         } else {
             $personalAddressbooks = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, 
                 'Addressbook', $currentAccount->accountId, Tinebase_Container::GRANT_READ);
@@ -67,6 +73,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
                 break;
             }
         }
+        
         $view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         $view->configData = array('timeZone' => Zend_Registry::get('userTimeZone') , 'currentAccount' => Zend_Registry::get('currentAccount')->toArray());
         $view->title = "edit contact";

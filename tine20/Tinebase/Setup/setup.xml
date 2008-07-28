@@ -1757,7 +1757,49 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>/images/oxygen/16x16/actions/document-properties.png</value>
+                <value>images/oxygen/16x16/actions/document-properties.png</value>
+            </field>
+        </record>
+       <record>
+            <table>
+                <name>note_types</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>2</value>
+            </field>
+            <field>
+                <name>name</name>
+                <value>telephone</value>
+            </field>
+            <field>
+                <name>description</name>
+                <value>telephone call</value>
+            </field>
+            <field>
+                <name>icon</name>
+                <value>images/oxygen/16x16/apps/kcall.png</value>
+            </field>
+        </record>
+       <record>
+            <table>
+                <name>note_types</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>3</value>
+            </field>
+            <field>
+                <name>name</name>
+                <value>email</value>
+            </field>
+            <field>
+                <name>description</name>
+                <value>email contact</value>
+            </field>
+            <field>
+                <name>icon</name>
+                <value>images/oxygen/16x16/actions/kontact-mail.png</value>
             </field>
         </record>
     </defaultRecords>    

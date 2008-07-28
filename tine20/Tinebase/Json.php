@@ -203,8 +203,6 @@ class Tinebase_Json
      *
      * @param string $filter json encoded filter array
      * @param string $paging json encoded pagination info
-     * 
-     * @todo test & use it
      */
     public function searchNotes($filter, $paging)
     {
@@ -217,6 +215,21 @@ class Tinebase_Json
         return array(
             'results'       => Tinebase_Notes::getInstance()->searchNotes($filter, $paging)->toArray(),
             'totalcount'    => Tinebase_Notes::getInstance()->searchNotesCount($filter)
+        );        
+    }
+    
+    /**
+     * get note types
+     *
+     * @todo add test
+     */
+    public function getNoteTypes()
+    {
+        $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes()->toArray();
+        
+        return array(
+            'results'       => $noteTypes,
+            'totalcount'    => count($noteTypes)
         );        
     }
     
