@@ -67,6 +67,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $view->initialData['Crm'] = $this->getInitialMainScreenData();
         $tasksHttp = new Tasks_Http();
         $view->initialData['Tasks'] = $tasksHttp->getInitialMainScreenData();
+        $tinebaseJson = new Tinebase_Json();
+        $view->initialData['Tinebase'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
         
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 
@@ -146,14 +148,12 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
     public function getInitialMainScreenData()
     {   
         $json = new Crm_Json();
-        $tinebaseJson = new Tinebase_Json();
         
         $initialData = array(
             'LeadTypes' => $json->getLeadtypes('leadtype','ASC'),
             'LeadStates' => $json->getLeadStates('leadstate','ASC'),
             'LeadSources' => $json->getLeadSources('leadsource','ASC'),
             'Products' => $json->getProducts('productsource','ASC'),
-            'NoteTypes' => $tinebaseJson->getNoteTypes()
         );
         
         /*

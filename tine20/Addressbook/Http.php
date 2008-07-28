@@ -42,7 +42,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         
         $tinebaseJson = new Tinebase_Json();
         $view->initialData = array();
-        $view->initialData['Addressbook'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
+        $view->initialData['Tinebase'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
         
         $addresses = Addressbook_Controller::getInstance();
         if ($_contactId !== NULL && $contact = $addresses->getContact($_contactId)) {
