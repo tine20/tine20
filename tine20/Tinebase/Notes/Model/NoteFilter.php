@@ -83,7 +83,7 @@ class Tinebase_Notes_Model_NoteFilter extends Tinebase_Record_Abstract
     {
         $data = array();
         foreach ($_data as $filter) {
-            $field = $filter['field'];
+            $field = (isset($filter['field'])) ? $filter['field'] : '';
             if (array_key_exists($field, $this->_validators)) {
                 $data[$field] = $filter['value'];
                 $this->_operators[$field] = $filter['operator'];
