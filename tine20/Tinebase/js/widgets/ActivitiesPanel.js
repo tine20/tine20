@@ -6,7 +6,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo add type chooser and icon
  * @todo add layout to the template / tooltip
  */
  
@@ -67,8 +66,6 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         
         Ext.StoreMgr.add('NotesStore', this.recordNotesStore);
         
-        //console.log(this.recordNotesStore);
-        
         var ActivitiesTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-activities-activitiesitem" id="{id}">',
@@ -86,13 +83,19 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                 render: function(value, type) {
                 	switch (type) {
                 		case 'icon':
-                		    var typesStore = Tine.widgets.activities.getTypesStore(this.app);
-                		    typeRecord = typesStore.getById(value);
-                		    return '<img src="' + typeRecord.data.icon + '" />';
+                		    return Tine.widgets.activities.getTypeIcon(value);
                         case 'user':
-                            return (value) ? value : 'you';
+                            if (!value) {
+                            	value = Tine.Tinebase.Registry.map.currentAccount.accountDisplayName;
+                            }
+                            var username = (value.length > 20) ? value.substr(0,20) + '...' : value;
+                            return '<i>' + username + '</i>';
                         case 'time':
-                            return (value) ? value : 'now';                		
+                            if (!value) {
+                            	value = Tine.Tinebase.Registry.map.currentAccount.accountLastLogin;
+                            }
+                        	var dt = Date.parseDate(value, 'c'); 
+                        	return dt.format(Locale.getTranslationData('Date', 'medium'));
                 	}
                 }
             }
@@ -119,10 +122,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             mode: 'local',
             triggerAction: 'all',
             editable: false,
-            allowBlank: false,
+            //allowBlank: false,
             forceSelection: true,
             anchor:'100%'
-            //anchor:'95%'            
         });
       
         var noteTextarea =  new Ext.form.TextArea({
@@ -137,11 +139,13 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         noteTextarea.on('change', function(noteTextarea, newValue, oldValue){        	
         	var note_type_id = Ext.getCmp('note_type_combo').getValue();
         	
-        	var newNote = new Tine.Tinebase.Model.Note({note_type_id: note_type_id, note: newValue});
-        	this.recordNotesStore.insert(0, newNote);
-        	
-        	noteTextarea.setValue('');
-            noteTextarea.emptyText = this.translation._('Add a Note...');
+        	if (note_type_id) {
+            	var newNote = new Tine.Tinebase.Model.Note({note_type_id: note_type_id, note: newValue});
+            	this.recordNotesStore.insert(0, newNote);
+            	
+            	noteTextarea.setValue('');
+                noteTextarea.emptyText = this.translation._('Add a Note...');
+        	}
         },this);
 
         this.formFields = {
@@ -219,12 +223,13 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     	// @todo add context menu ?
     	// @todo add buttons ?
     	
-    	// @todo add renderers
+    	// @todo add more renderers
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'note_type_id', header: this.translation._('Type'), dataIndex: 'tid', width: 30 },
+            { resizable: true, id: 'note_type_id', header: this.translation._('Type'), dataIndex: 'note_type_id', width: 15, 
+                renderer: Tine.widgets.activities.getTypeIcon },
             { resizable: true, id: 'note', header: this.translation._('Note'), dataIndex: 'note'},
-            { resizable: true, id: 'created_by', header: this.translation._('Created By'), dataIndex: 'created_by', width: 100},
+            { resizable: true, id: 'created_by', header: this.translation._('Created By'), dataIndex: 'created_by', width: 70},
             { resizable: true, id: 'creation_time', header: this.translation._('Timestamp'), dataIndex: 'creation_time', width: 70}
         ]);
 
@@ -460,7 +465,7 @@ Tine.widgets.activities.NotesFormField = Ext.extend(Ext.form.Field, {
  * 
  * @return Ext.data.JsonStore with activities types
  */
-Tine.widgets.activities.getTypesStore = function(app) {
+Tine.widgets.activities.getTypesStore = function() {
     
     var store = Ext.StoreMgr.get('noteTypesStore');
     if (!store) {
@@ -476,8 +481,8 @@ Tine.widgets.activities.getTypesStore = function(app) {
             remoteSort: false
         });
         
-        if ( Tine[app]['NoteTypes'] ) {
-            store.loadData(Tine[app]['NoteTypes']);
+        if (Tine.Tinebase.NoteTypes) {
+            store.loadData(Tine.Tinebase.NoteTypes);
         }
             
         Ext.StoreMgr.add('noteTypesStore', store);
@@ -486,3 +491,18 @@ Tine.widgets.activities.getTypesStore = function(app) {
     return store;
 };
 
+/**
+ * get type icon
+ * 
+ * @param   id of the note type record
+ * @returns img tag with icon source
+ */
+Tine.widgets.activities.getTypeIcon = function(id) {	
+    var typesStore = Tine.widgets.activities.getTypesStore();
+    typeRecord = typesStore.getById(id);
+    if (typeRecord) {
+        return '<img src="' + typeRecord.data.icon + '" ext:qtip="' + typeRecord.data.description + '"/>';
+    } else {
+    	return '';
+    }
+};
