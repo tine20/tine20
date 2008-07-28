@@ -14,6 +14,8 @@
  
 Ext.namespace('Tine.widgets', 'Tine.widgets.activities');
 
+/************************* panel *********************************/
+
 /**
  * Class for a single activities panel
  */
@@ -132,6 +134,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     }      
 });
 
+/************************* tab panel *********************************/
+
 /**
  * Class for a activities tab with notes/activities grid
  * 
@@ -177,6 +181,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     getActivitiesGrid: function() 
     {
     	// @todo add filter toolbar
+        // @todo add row expander on select
     	// @todo add context menu ?
     	// @todo add buttons ?
     	
@@ -202,7 +207,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             displayMsg: this.translation._('Displaying notes {0} - {1} of {2}'),
             emptyMsg: this.translation._("No notes to display")
         }); 
-        
+
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
             id: 'Activities_Grid',
@@ -228,27 +233,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         return gridPanel;
     	
     	/*
-        // the filter toolbar
-        var filterToolbar = new Tine.widgets.FilterToolbar({
-            id : 'addressbookFilterToolbar',
-            filterModel: [
-                {label: this.translation._('Contact'), field: 'query', opdefault: 'contains'},
-                {label: this.translation._('First Name'), field: 'n_given', opdefault: 'contains'},
-                {label: this.translation._('Last Name'), field: 'n_family', opdefault: 'contains'},
-                {label: this.translation._('Company'), field: 'org_name', opdefault: 'contains'},
-                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', opdefault: 'equals'},
-                {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')', field: 'adr_one_locality', opdefault: 'contains'}
-                //{label: 'Full Name', field: 'n_fn', opdefault: 'equals'},
-                //{label: 'Container', field: 'owner'},
-             ],
-             defaultFilter: 'query',
-             filters: []
-        });
-        
-        filterToolbar.on('filtertrigger', function() {
-            this.store.load({});
-        }, this);
-                                        
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
@@ -332,10 +316,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             
             options.params.paging = Ext.util.JSON.encode(options.params);
             
-            // @todo add filter toolbar
-            //var filterToolbar = Ext.getCmp('addressbookFilterToolbar');
-            //var filter = filterToolbar ? filterToolbar.getFilter() : [];
-            var filter = [];
+            var filterToolbar = Ext.getCmp('activitiesFilterToolbar');
+            var filter = filterToolbar ? filterToolbar.getFilter() : [];
             filter.push(
                 {field: 'record_model', operator: 'equals', value: this.record_model },
                 {field: 'record_id', operator: 'equals', value: this.record_id },
@@ -364,12 +346,28 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         // get grid
         this.activitiesGrid = this.getActivitiesGrid();
         
-        this.items = [
+        // the filter toolbar
+        var filterToolbar = new Tine.widgets.FilterToolbar({
+            id : 'activitiesFilterToolbar',
+            filterModel: [
+                {label: this.translation._('Note'), field: 'query', opdefault: 'contains'},
+                {label: this.translation._('User'), field: 'created_by', opdefault: 'contains'},
+                {label: this.translation._('Time'), field: 'creation_time', opdefault: 'contains'},
+                {label: this.translation._('Type'), field: 'note_type_id', opdefault: 'contains'}
+             ],
+             defaultFilter: 'query',
+             filters: []
+        });
         
+        filterToolbar.on('filtertrigger', function() {
+            this.store.load({});
+        }, this);
+                                                
+        this.items = [        
             new Ext.Panel({
                 layout: 'fit',
                 autoHeight:true,
-                //tbar: filterToolbar,
+                tbar: filterToolbar,
                 items: this.activitiesGrid
             })
         ];
@@ -379,6 +377,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         Tine.widgets.activities.ActivitiesTabPanel.superclass.initComponent.call(this);
     }        
 });
+
+/************************* notes form field *********************************/
 
 /**
  * @private Helper class to have activities processing in the standard form/record cycle
