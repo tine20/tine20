@@ -88,7 +88,9 @@ if ($opts->a || $opts->s) {
     foreach ($includeFiles['css'] as $file) {
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
-            fwrite($cssDebug, file_get_contents("$tine20path/$filename") . "\n");
+            $cssContent = file_get_contents("$tine20path/$filename");
+            $cssContent = preg_replace('/(\.\.\/){3,}images/i', '../../images', $cssContent);
+            fwrite($cssDebug, $cssContent . "\n");
         }
     }
     fclose($cssDebug);
