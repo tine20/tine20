@@ -8,7 +8,6 @@
  *
  * @todo add type chooser and icon
  * @todo add layout to the template / tooltip
- * @todo add filter and paging toolbars to tab panel
  * @todo translate
  */
  
@@ -139,8 +138,6 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
 /**
  * Class for a activities tab with notes/activities grid
  * 
- * @todo use new Tinebase.searchNotes function to get grid store
- * @todo add filter & paging
  */
 Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     /**
@@ -180,7 +177,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     
     getActivitiesGrid: function() 
     {
-    	// @todo add filter toolbar
         // @todo add row expander on select
     	// @todo add context menu ?
     	// @todo add buttons ?
@@ -351,7 +347,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             id : 'activitiesFilterToolbar',
             filterModel: [
                 {label: this.translation._('Note'), field: 'query', opdefault: 'contains'},
-                {label: this.translation._('User'), field: 'created_by', opdefault: 'contains'},
+                // user search is note working yet -> see NoteFilter.php
+                //{label: this.translation._('User'), field: 'created_by', opdefault: 'contains'},
                 {label: this.translation._('Time'), field: 'creation_time', opdefault: 'contains'},
                 {label: this.translation._('Type'), field: 'note_type_id', opdefault: 'contains'}
              ],
