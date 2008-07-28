@@ -87,7 +87,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                             if (!value) {
                             	value = Tine.Tinebase.Registry.map.currentAccount.accountDisplayName;
                             }
-                            var username = (value.length > 20) ? value.substr(0,20) + '...' : value;
+                            var username = Ext.util.Format.ellipsis(value, 19);
                             return '<i>' + username + '</i>';
                         case 'time':
                             if (!value) {
@@ -110,10 +110,10 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         })        
         
         var noteTypeCombo = new Ext.form.ComboBox({
-            emptyText: this.translation._('Note Type...'),
+            //emptyText: this.translation._('Note Type...'),
         	hideLabel: true,
             id:'note_type_combo',
-            store: Tine.widgets.activities.getTypesStore(this.app),
+            store: Tine.widgets.activities.getTypesStore(),
             displayField:'name',
             valueField:'id',
             typeAhead: true,
@@ -121,6 +121,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             triggerAction: 'all',
             editable: false,
             forceSelection: true,
+            value: 1,
             anchor:'100%'
         });
       
@@ -461,6 +462,8 @@ Tine.widgets.activities.NotesFormField = Ext.extend(Ext.form.Field, {
  * if available, load data from initial data
  * 
  * @return Ext.data.JsonStore with activities types
+ * 
+ * @todo translate type names / descriptions
  */
 Tine.widgets.activities.getTypesStore = function() {
     

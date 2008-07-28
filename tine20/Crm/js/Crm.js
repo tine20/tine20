@@ -708,7 +708,10 @@ Tine.Crm.LeadEditDialog = {
                         Tine.Crm.LeadEditDialog.loadContactsStore(relations.contacts, true);        
                         Tine.Crm.LeadEditDialog.loadTasksStore(relations.tasks, true);
                         Tine.Crm.LeadEditDialog.loadProductsStore(lead.data.products, true);
-                        
+
+                        // reload notes store
+                        Ext.StoreMgr.get('NotesGridStore').load({});
+                                                
                         Ext.MessageBox.hide();
                     },
                     failure: function ( result, request) { 

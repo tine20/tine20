@@ -635,6 +635,10 @@ Tine.Addressbook.ContactEditDialog = {
                             window.close();
                         } else {
                             this.updateToolbarButtons(contactData.owner.account_grants, contactData.id);
+                            
+                            // reload notes store
+                            Ext.StoreMgr.get('NotesGridStore').load({});
+                            
                             Ext.MessageBox.hide();
                         }
                     },
