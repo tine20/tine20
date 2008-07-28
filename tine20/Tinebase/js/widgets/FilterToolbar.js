@@ -371,7 +371,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         var filterModel = this.fieldStore.getAt(this.fieldStore.find('field', filter.data.field));
         var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         var el = fRow.child('td[class=tw-ftb-frow-operator]');
-        el = Ext.DomHelper.overwrite(el, {tag: 'td', class: 'tw-ftb-frow-operator'});
+        el = Ext.DomHelper.overwrite(el, {'tag': 'td', 'class': 'tw-ftb-frow-operator'});
         
         filterModel.get('oprenderer').call(this, filter, el);
         
