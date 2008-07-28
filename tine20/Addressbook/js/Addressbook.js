@@ -316,7 +316,7 @@ Tine.Addressbook.Main = {
         var filterToolbar = new Tine.widgets.FilterToolbar({
             id : 'addressbookFilterToolbar',
             filterModel: [
-                {label: this.translation._('Contact'), field: 'query', opdefault: 'contains'},
+                {label: this.translation._('Contact'), field: 'query', opfilter: ['contains'], opdefault: 'contains'},
                 {label: this.translation._('First Name'), field: 'n_given', opdefault: 'contains'},
                 {label: this.translation._('Last Name'), field: 'n_family', opdefault: 'contains'},
                 {label: this.translation._('Company'), field: 'org_name', opdefault: 'contains'},
@@ -332,7 +332,6 @@ Tine.Addressbook.Main = {
         filterToolbar.on('filtertrigger', function() {
             this.store.load({});
         }, this);
-        
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
             pageSize: 50,
