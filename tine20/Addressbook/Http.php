@@ -41,6 +41,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();
         
         $tinebaseJson = new Tinebase_Json();
+        $view->initialData = array();
         $view->initialData['Addressbook'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
         
         $addresses = Addressbook_Controller::getInstance();
