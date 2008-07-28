@@ -110,7 +110,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
                 '<tr id="{id}" class="fw-ftb-frow">',
                     '<td class="tw-ftb-frow-prefix">{prefix}</td>',
                     '<td class="tw-ftb-frow-field">{field}</td>',
-                    '<td class="tw-ftb-frow-operator">{operator}</td>',
+                    '<td width="110px" class="tw-ftb-frow-operator">{operator}</td>',
                     '<td class="tw-ftb-frow-value">{value}</td>',
                     '<td class="tw-ftb-frow-deleterow"></td>',
                 '</tr>'
@@ -191,6 +191,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         // field
         filter.formFields.field = new Ext.form.ComboBox({
+            filter: filter,
             width: 300,
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
@@ -202,27 +203,21 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             store: this.fieldStore,
             displayField: 'label',
             valueField: 'field',
-            value: filterModel.data.field,
+            value: filterModel.get('field'),
             renderTo: fRow.child('td[class=tw-ftb-frow-field]'),
         });
+        filter.formFields.field.on('select', function(combo, newRecord, newKey) {
+            if (combo.value != combo.filter.get('field')) {
+                this.onFieldChange(combo.filter, combo.value);
+            }
+        }, this);
+        
         // operator
-        filter.formFields.operator = new Ext.form.ComboBox({
-            width: 100,
-            id: 'tw-ftb-frow-operatorcombo-' + filter.id,
-            mode: 'local',
-            lazyInit: false,
-            emptyText: this.labels.selectOperator,
-            forceSelection: true,
-            typeAhead: true,
-            triggerAction: 'all',
-            store: this.operatorStore,
-            displayField: 'label',
-            valueField: 'operator',
-            value: filter.data.operator ? filter.data.operator : filterModel.data.opdefault,
-            renderTo: fRow.child('td[class=tw-ftb-frow-operator]'),
-        });
+        filter.formFields.operator = filterModel.get('oprenderer').call(this, filter, fRow.child('td[class=tw-ftb-frow-operator]'));
+        
         // value
         filter.formFields.value = new Ext.form.TextField({
+            filter: filter,
             width: 200,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : filterModel.data.valdefault,
@@ -245,6 +240,72 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
                 this.deleteFilter(button.filter);
             }
         });
+    },
+    /**
+     * default operator renderer
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     */
+    renderOperator: function(filter, el) {
+        var filterModel = this.fieldStore.getAt(this.fieldStore.find('field', filter.data.field));
+
+        var operatorStore = new Ext.data.JsonStore({
+            fields: ['operator', 'label'],
+            data: [
+                {operator: 'contains', label: this.labels.opContains},
+                {operator: 'equals',   label: this.labels.opEquals},
+                {operator: 'greater',  label: this.labels.opGreater},
+                {operator: 'less',     label: this.labels.opLess},
+                {operator: 'not',      label: this.labels.opNot},
+                //{operator: 'in',       label: this.labels.opIn}
+            ]
+        });
+        var opFilter = filterModel.get('opfilter');
+        if (opFilter) {
+            operatorStore.each(function(operator) {
+                if (opFilter.indexOf(operator.get('operator')) < 0 ) {
+                    operatorStore.remove(operator);
+                }
+            }, this);
+        }
+        
+        if (operatorStore.getCount() > 1) {
+            var operator = new Ext.form.ComboBox({
+                filter: filter,
+                width: 100,
+                id: 'tw-ftb-frow-operatorcombo-' + filter.id,
+                mode: 'local',
+                lazyInit: false,
+                emptyText: this.labels.selectOperator,
+                forceSelection: true,
+                typeAhead: true,
+                triggerAction: 'all',
+                store: operatorStore,
+                displayField: 'label',
+                valueField: 'operator',
+                value: filter.get('operator'),
+                renderTo: el,
+            });
+            operator.on('select', function(combo, newRecord, newKey) {
+                if (combo.value != combo.filter.get('operator')) {
+                    this.onOperatorChange(combo.filter, combo.value);
+                }
+            }, this);
+        } else {
+            var operator = new Ext.form.Label({
+                filter: filter,
+                width: 100,
+                style: {margin: '0px 10px'},
+                getValue: function() { return operatorStore.getAt(0).get('operator'); },
+                text : operatorStore.getAt(0).get('label'),
+                //hideLabel: true,
+                //readOnly: true,
+                renderTo: el
+            });
+        }
+        
+        return operator;
     },
     /**
      * renders the bottom action row (toolbar like)
@@ -291,10 +352,46 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             this.fireEvent('bodyresize', this, size.width, size.height);
         }
     },
+    /**
+     * called  when a filter action is to be triggered (start new search)
+     * @private
+     */
     onFiltertrigger: function() {
         if (! this.supressEvents) {
             this.fireEvent('filtertrigger', this);
         }
+    },
+    /**
+     * called on field change of a filter row
+     * @private
+     */
+    onFieldChange: function(filter, newField) {
+        filter.set('field', newField);
+        
+        var filterModel = this.fieldStore.getAt(this.fieldStore.find('field', filter.data.field));
+        var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
+        var el = fRow.child('td[class=tw-ftb-frow-operator]');
+        el = Ext.DomHelper.overwrite(el, {tag: 'td', class: 'tw-ftb-frow-operator'});
+        
+        filterModel.get('oprenderer').call(this, filter, el);
+        
+        //console.log('field change');
+    },
+    /**
+     * called on operator change of a filter row
+     * @private
+     */
+    onOperatorChange: function(filter, newOperator) {
+        filter.set('operator', newOperator);
+        //console.log('operator change');
+    },
+    /**
+     * called on value change of a filter row
+     * @private
+     */
+    onValueChange: function(filter, newValue) {
+        filter.set('value', newValue);
+        //console.log('value change');
     },
     /**
      * @private
@@ -318,20 +415,26 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             data: this.filters
         });
         this.fieldStore = new Ext.data.JsonStore({
-            fields: ['field', 'label', 'opdefault', 'oprenderer', 'valrenderer'],
+            fields: ['field', 'label', 'opdefault', 'opfilter', 'oprenderer', 'valrenderer'],
             data: this.filterModel
         });
-        this.operatorStore = new Ext.data.JsonStore({
-            fields: ['operator', 'label'],
-            data: [
-                {operator: 'contains', label: this.labels.opContains},
-                {operator: 'equals',   label: this.labels.opEquals},
-                {operator: 'greater',  label: this.labels.opGreater},
-                {operator: 'less',     label: this.labels.opLess},
-                {operator: 'not',      label: this.labels.opNot},
-                //{operator: 'in',       label: this.labels.opIn}
-            ]
-        });
+        
+        // init operators
+        this.fieldStore.each(function(field) {
+            if (! field.get('oprenderer')) {
+                field.set('oprenderer', this.renderOperator);
+            }
+        }, this);
+        this.filterStore.each(function(filter) {
+            var filterModel = this.fieldStore.getAt(this.fieldStore.find('field', filter.get('field')));
+            if (! filter.get('operator')) {
+                filter.set('operator', filterModel.get('opdefault') 
+                    ? filterModel.get('opdefault') 
+                    : this.operatorStore.getAt(0).get('operator')
+                );
+            }
+        }, this);
+        
     },
     /**
      * adds a new filer row
