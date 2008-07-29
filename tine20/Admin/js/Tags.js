@@ -161,7 +161,7 @@ Tine.Admin.Tags.Main = {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'color', header: 'color', dataIndex: 'color', width: 25, renderer: function(color){return '<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</dev>';} },
+            { resizable: true, id: 'color', header: 'color', dataIndex: 'color', width: 25, renderer: function(color){return '<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>';} },
             { resizable: true, id: 'name', header: 'Name', dataIndex: 'name', width: 200 },
             { resizable: true, id: 'description', header: 'Description', dataIndex: 'description', width: 500}
         ]);
@@ -498,6 +498,44 @@ Tine.Admin.Tags.EditDialog = {
         });
         
         /******* THE edit dialog ********/
+
+        /*
+        var colorPicker = new Ext.form.ComboBox({
+            listWidth: 150,
+            readOnly:true,
+            name: 'color',
+            fieldLabel: 'Color',
+            columnWidth: .1
+        });
+        
+        colorPicker.colorPalette = new Ext.ColorPalette({
+            border: true
+        });
+        colorPicker.colorPalette.on('select', function(cp, color) {
+            color = '#' + color;
+            colorPicker.el.setStyle('background-color', color);
+            //colorPicker.setValue('<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>');
+            colorPicker.setValue(color);
+            colorPicker.colorPalette = color;
+            colorPicker.onTriggerClick();
+        }, this);
+        
+        colorPicker.onTriggerClick = function() {
+            if(this.disabled){
+                return;
+            }
+            if(this.isExpanded()){
+                this.collapse();
+                this.el.focus();
+            }else {
+                colorPicker.initList();
+                colorPicker.list.alignTo(colorPicker.wrap, colorPicker.listAlign);
+                colorPicker.list.show();
+                colorPicker.colorPalette.render(colorPicker.list);
+            }
+        };
+        */
+
         var editTagDialog = {
             layout:'hfit',
             border:false,
@@ -514,16 +552,12 @@ Tine.Admin.Tags.EditDialog = {
                             name:'name',
                             allowBlank: false
                         }, {
-                            columnWidth: .5,
+                            columnWidth: .6,
                             name: 'description',
                             fieldLabel: 'Description',
                             anchor:'100%'
-                        }/*, {
-                            columnWidth: .2,
-                            xtype: 'combo',
-                            name: 'color',
-                            fieldLabel: 'Color'
-                        }*/
+                        }/*,
+                        colorPicker*/
                         ]        
                     ]
                 },{
