@@ -134,7 +134,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             triggerAction: 'all',
             editable: false,
             forceSelection: true,
-            value: 1
+            value: 1,
+            width: 100
         });
               
         var bbar = [
