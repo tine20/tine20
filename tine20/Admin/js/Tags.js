@@ -499,10 +499,11 @@ Tine.Admin.Tags.EditDialog = {
         
         /******* THE edit dialog ********/
 
-        /*
+        /** quick hack for a color chooser **/
         var colorPicker = new Ext.form.ComboBox({
             listWidth: 150,
             readOnly:true,
+            editable: false,
             name: 'color',
             fieldLabel: 'Color',
             columnWidth: .1
@@ -513,10 +514,7 @@ Tine.Admin.Tags.EditDialog = {
         });
         colorPicker.colorPalette.on('select', function(cp, color) {
             color = '#' + color;
-            colorPicker.el.setStyle('background-color', color);
-            //colorPicker.setValue('<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>');
             colorPicker.setValue(color);
-            colorPicker.colorPalette = color;
             colorPicker.onTriggerClick();
         }, this);
         
@@ -531,11 +529,20 @@ Tine.Admin.Tags.EditDialog = {
                 colorPicker.initList();
                 colorPicker.list.alignTo(colorPicker.wrap, colorPicker.listAlign);
                 colorPicker.list.show();
-                colorPicker.colorPalette.render(colorPicker.list);
+                //if (typeof(colorPicker.colorPalette.render) == 'function') {
+                    colorPicker.colorPalette.render(colorPicker.list);
+                //}
             }
         };
-        */
-
+        colorPicker.setValue = function(color) {
+            colorPicker.el.setStyle('background', color);
+            colorPicker.color = color;
+        }
+        colorPicker.getValue = function() {
+            return colorPicker.color;
+        }
+        /** end of color chooser **/
+        
         var editTagDialog = {
             layout:'hfit',
             border:false,
@@ -556,8 +563,8 @@ Tine.Admin.Tags.EditDialog = {
                             name: 'description',
                             fieldLabel: 'Description',
                             anchor:'100%'
-                        }/*,
-                        colorPicker*/
+                        },
+                        colorPicker
                         ]        
                     ]
                 },{
