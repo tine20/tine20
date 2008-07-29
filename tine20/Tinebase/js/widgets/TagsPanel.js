@@ -44,7 +44,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     searchField: null,
     
-    title: 'Tags',
+    title: _('Tags'),
     iconCls: 'action_tag',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
