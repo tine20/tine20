@@ -42,6 +42,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     iconCls: 'notes_defaultIcon',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
+    collapsible: true,
     
     /**
      * @private
@@ -105,11 +106,11 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
 
         this.activities = new Ext.DataView({
             tpl: ActivitiesTpl,       
-            autoHeight:true,                    
             id: 'grid_activities_limited',
             store: this.recordNotesStore,
             overClass: 'x-view-over',
             itemSelector: 'activities-item-small'
+            //style: 'overflow:auto'
         })        
         
         var noteTextarea =  new Ext.form.TextArea({
