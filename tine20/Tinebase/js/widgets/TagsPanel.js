@@ -157,7 +157,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     '-',
                     {
                         text: 'Edit tag',
-                        disabled: !selectedTag,
+                        disabled: !(selectedTag && allowDelete),
                         menu: {
                             items: [
                                 new Ext.Action({
