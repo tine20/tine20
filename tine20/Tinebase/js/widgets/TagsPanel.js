@@ -80,9 +80,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.bbar = [
             this.searchField, '->',
             new Ext.Button({
-            	// not yet implemented
-            	disabled: true,
-                text: 'List'
+                text: '',
+                iconCls: 'action_add',
+                tooltip: 'Add a new personal tag'
             })
         ];
         
@@ -229,9 +229,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     onResize : function(w,h){
         Tine.widgets.tags.TagPanel.superclass.onResize.call(this, w, h);
-        // maximize search field and let space for list button
+        // maximize search field and let space for add button
         if (this.searchField.rendered && w) {
-            this.searchField.setWidth(w-37);
+            this.searchField.setWidth(w-30);
         }
     },
     /**
