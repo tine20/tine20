@@ -38,7 +38,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
      */
     recordNotesStore: null,
     
-    title: 'Activities',
+    title: 'Recent Activities',
     iconCls: 'notes_defaultIcon',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
@@ -51,6 +51,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         // get translations
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tinebase');
+        
+        // translate / update title
+        this.title = this.translation._('Recent Activities');
         
         // init recordNotesStore
         this.notes = [];
@@ -109,9 +112,19 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             itemSelector: 'activities-item-small'
         })        
         
+        var noteTextarea =  new Ext.form.TextArea({
+        	id:'note_textarea',
+            emptyText: this.translation._('Add a Note...'),
+            grow: false,
+            preventScrollbars:false,
+            anchor:'100%',
+            height: 55,
+            hideLabel: true
+        }) 
+
         var noteTypeCombo = new Ext.form.ComboBox({
             //emptyText: this.translation._('Note Type...'),
-        	hideLabel: true,
+            hideLabel: true,
             id:'note_type_combo',
             store: Tine.widgets.activities.getTypesStore(),
             displayField:'name',
@@ -121,45 +134,47 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             triggerAction: 'all',
             editable: false,
             forceSelection: true,
-            value: 1,
-            anchor:'100%'
+            value: 1
         });
-      
-        var noteTextarea =  new Ext.form.TextArea({
-            emptyText: this.translation._('Add a Note...'),
-            grow: false,
-            preventScrollbars:false,
-            anchor:'100%',
-            height: 55,
-            hideLabel: true
-        }) 
+              
+        var bbar = [
+            noteTypeCombo,
+            '->',
+            new Ext.Button({
+                text: this.translation._('Save'),
+                tooltip: this.translation._('Save Note'),
+                iconCls: 'action_saveAndClose',
+                handler: function(_button, _event) { 
+                    var note_type_id = Ext.getCmp('note_type_combo').getValue();
+                    var note = Ext.getCmp('note_textarea').getValue();
+                    notesStore = Ext.StoreMgr.lookup('NotesStore');
+                    
+                    if (note_type_id && note) {
+                        var newNote = new Tine.Tinebase.Model.Note({note_type_id: note_type_id, note: note});
+                        notesStore.insert(0, newNote);
+                        
+                        // clear textarea
+                        noteTextarea.setValue('');
+                        noteTextarea.emptyText = noteTextarea.emptyText;
+                    }
+                }                
+            })
+        ];
         
-        noteTextarea.on('change', function(noteTextarea, newValue, oldValue){        	
-        	var note_type_id = Ext.getCmp('note_type_combo').getValue();
-        	
-        	if (note_type_id) {
-            	var newNote = new Tine.Tinebase.Model.Note({note_type_id: note_type_id, note: newValue});
-            	this.recordNotesStore.insert(0, newNote);
-            	
-            	noteTextarea.setValue('');
-                noteTextarea.emptyText = this.translation._('Add a Note...');
-        	}
-        },this);
-
         this.formFields = {
             layout: 'form',
             items: [
-                noteTypeCombo,
-                noteTextarea,
-                // this form field is only for fetching and saving notes in the record
-                new Tine.widgets.activities.NotesFormField({
-                    recordNotesStore: this.recordNotesStore
-                })
-            ]
+                noteTextarea,                
+            ],
+            bbar: bbar
         };
         
         this.items = [
             this.formFields,
+            // this form field is only for fetching and saving notes in the record
+            new Tine.widgets.activities.NotesFormField({                    
+                recordNotesStore: this.recordNotesStore
+            }),                 
             this.activities
         ];
         
@@ -377,7 +392,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         this.translation.textdomain('Tinebase');
         
     	// get store
-        //this.store = Ext.StoreMgr.lookup('NotesStore');
         this.initStore();
 
         // get grid
@@ -429,7 +443,7 @@ Tine.widgets.activities.NotesFormField = Ext.extend(Ext.form.Field, {
     
     name: 'notes',
     hidden: true,
-    labelSeparator: '',
+    hideLabel: true,
     
     /**
      * @private
