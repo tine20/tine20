@@ -42,3 +42,8 @@
     border: 1px solid black;
     color: black;
 }
+
+.x-widget-tag-qtip-occurrence {
+    font-size: 8px;
+    font-style: bold;
+}
