@@ -406,10 +406,11 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             id : 'activitiesFilterToolbar',
             filterModel: [
                 {label: this.translation._('Note'), field: 'query', opdefault: 'contains'},
+                {label: this.translation._('Time'), field: 'creation_time', opdefault: 'contains'}
                 // user search is note working yet -> see NoteFilter.php
                 //{label: this.translation._('User'), field: 'created_by', opdefault: 'contains'},
-                {label: this.translation._('Time'), field: 'creation_time', opdefault: 'contains'},
-                {label: this.translation._('Type'), field: 'note_type_id', opdefault: 'contains'}
+                // type search isn't implemented yet
+                //{label: this.translation._('Type'), field: 'note_type_id', opdefault: 'contains'}
              ],
              defaultFilter: 'query',
              filters: []
