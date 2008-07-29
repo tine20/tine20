@@ -142,7 +142,7 @@ class Voipmanager_Backend_Snom_Phone
 	 * get phone owner
 	 * 
      * @param string| $_phoneId
-	 * @return 
+	 * @return array with phone owners
 	 */    
     public function getPhoneOwner($_phoneId)
     {

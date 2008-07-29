@@ -451,7 +451,7 @@ class Voipmanager_Controller
     /**
      * get snomPhoneOwner
      *
-     * @return 
+     * @return array with phone owners
      */
     public function getPhoneOwner($_phoneId)
     {
