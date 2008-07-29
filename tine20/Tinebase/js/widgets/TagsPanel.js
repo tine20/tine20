@@ -98,7 +98,12 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-tag-tagitem" id="{id}">',
                     '<div class="x-widget-tag-tagitem-color" style="background-color: {color};">&#160;</div>', 
-                    '<div class="x-widget-tag-tagitem-text" ext:qtip="{[this.encode(values.name)]} <i>({type})</i><tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >', 
+                    '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
+                        '{[this.encode(values.name)]}', 
+                        '<tpl if="type == \'personal\' ">&nbsp;<i>(personal)</i></tpl>',
+                        '</i>&nbsp;[{occurrence}]',
+                        '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
+                        
                         '&nbsp;{[this.encode(values.name)]}',
                     '</div>',
                 '</div>',
@@ -307,7 +312,12 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     initSearchField: function() {
         var tpl = new Ext.XTemplate(
-            '<tpl for="."><div class="x-combo-list-item">',
+            '<tpl for="."><div class="x-combo-list-item" ext:qtip="', 
+                '{[this.encode(values.name)]}', 
+                '<tpl if="type == \'personal\' ">&nbsp;<i>(personal)</i></tpl>',
+                '</i>&nbsp;[{occurrence}]',
+                '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>">',
+                
                 '{[this.encode(values.name)]} <tpl if="type == \'personal\' "><i>(personal)</i></tpl>',
             '</div></tpl>',{
                 encode: function(value) {
