@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
-"POT-Creation-Date: 2008-05-17 17:27+0100\n"
-"PO-Revision-Date: 2008-05-21 17:04+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-07-29 15:27+0100\n"
+"PO-Revision-Date: 2008-07-29 15:28+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,45 +16,101 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Tinebase\n"
 
-#: Tinebase/Export/Pdf.php:342
-msgid "Export Date"
-msgstr "Export Date"
-
-#: Tinebase/Export/Pdf.php:346
-msgid "Created by"
-msgstr "Created by"
-
-#: Tinebase/Acl/Rights.php:369
+#: Tinebase/Application/Rights/Abstract.php:56
 msgid "admin"
 msgstr "admin"
 
-#: Tinebase/Acl/Rights.php:370
+#: Tinebase/Application/Rights/Abstract.php:57
 msgid "admin right description"
 msgstr "the admin right includes all other rights for this application"
 
-#: Tinebase/Acl/Rights.php:373
+#: Tinebase/Application/Rights/Abstract.php:60
 msgid "run"
 msgstr "run"
 
-#: Tinebase/Acl/Rights.php:374
+#: Tinebase/Application/Rights/Abstract.php:61
 msgid "run right description"
 msgstr "the right to run this application"
 
-#: Tinebase/Acl/Rights.php:377
-msgid "manage shared tags"
-msgstr "manage shared tags"
+#: Tinebase/Export/Pdf.php:152
+#: Tinebase/js/widgets/TagsPanel.js:47
+msgid "Tags"
+msgstr "Tags"
 
-#: Tinebase/Acl/Rights.php:378
-msgid "manage shared tags right description"
-msgstr "create, edit and delete shared tags"
+#: Tinebase/Export/Pdf.php:353
+msgid "Export Date"
+msgstr "Export Date"
 
-#: Tinebase/js/Tinebase.js:221
+#: Tinebase/Export/Pdf.php:357
+msgid "Created by"
+msgstr "Created by"
+
+#: Tinebase/js/Tinebase.js:227
 msgid "Logout"
 msgstr "Logout"
 
-#: Tinebase/js/Tinebase.js:224
+#: Tinebase/js/Tinebase.js:231
 msgid "Logout from Tine 2.0"
 msgstr "Logout from Tine 2.0"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:57
+msgid "Recent Activities"
+msgstr "Recent Activities"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:118
+msgid "Add a Note..."
+msgstr "Add a Note..."
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:127
+msgid "Note Type..."
+msgstr "Note Type..."
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:146
+#: Tinebase/js/widgets/ContainerTree.js:304
+msgid "Add"
+msgstr "Add"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:147
+msgid "Add new note"
+msgstr "Add new note"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:243
+#: Tinebase/js/widgets/ActivitiesPanel.js:412
+msgid "Type"
+msgstr "Type"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:245
+#: Tinebase/js/widgets/ActivitiesPanel.js:408
+msgid "Note"
+msgstr "Note"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:246
+msgid "Created By"
+msgstr "Created By"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:247
+msgid "Timestamp"
+msgstr "Timestamp"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:260
+msgid "Displaying notes {0} - {1} of {2}"
+msgstr "Displaying notes {0} - {1} of {2}"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:261
+msgid "No notes to display"
+msgstr "No notes to display"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:396
+msgid "Activities"
+msgstr "Activities"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:410
+msgid "User"
+msgstr "User"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:411
+msgid "Time"
+msgstr "Time"
 
 #: Tinebase/js/widgets/ContainerTree.js:106
 msgid "All"
@@ -105,10 +162,6 @@ msgstr "Please enter the new name of the"
 msgid "Updateing"
 msgstr "Updateing"
 
-#: Tinebase/js/widgets/ContainerTree.js:304
-msgid "Add"
-msgstr "Add"
-
 #: Tinebase/js/widgets/ContainerTree.js:310
 msgid "Delete"
 msgstr "Delete"
@@ -120,4 +173,137 @@ msgstr "Rename"
 #: Tinebase/js/widgets/ContainerTree.js:322
 msgid "Manage permissions"
 msgstr "Manage permissions"
+
+#: Tinebase/js/widgets/FilterToolbar.js:67
+msgid "Show"
+msgstr "Show"
+
+#: Tinebase/js/widgets/FilterToolbar.js:68
+msgid "and"
+msgstr "and"
+
+#: Tinebase/js/widgets/FilterToolbar.js:69
+msgid "add new filter"
+msgstr "add new filter"
+
+#: Tinebase/js/widgets/FilterToolbar.js:70
+msgid "save filter"
+msgstr "save filter"
+
+#: Tinebase/js/widgets/FilterToolbar.js:71
+msgid "start search"
+msgstr "start search"
+
+#: Tinebase/js/widgets/FilterToolbar.js:72
+msgid "Delete this filter"
+msgstr "Delete this filter"
+
+#: Tinebase/js/widgets/FilterToolbar.js:73
+msgid "Reset all filters"
+msgstr "Reset all filters"
+
+#: Tinebase/js/widgets/TagsPanel.js:86
+msgid "Add a new personal tag"
+msgstr "Add a new personal tag"
+
+#: Tinebase/js/widgets/TagsPanel.js:89
+msgid "Add New Personal Tag"
+msgstr "Add New Personal Tag"
+
+#: Tinebase/js/widgets/TagsPanel.js:89
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Please note: You create a personal tag. Only you can see it!"
+
+#: Tinebase/js/widgets/TagsPanel.js:89
+msgid "Enter tag name:"
+msgstr "Enter tag name:"
+
+#: Tinebase/js/widgets/TagsPanel.js:104
+#: Tinebase/js/widgets/TagsPanel.js:393
+#: Tinebase/js/widgets/TagsPanel.js:397
+msgid "personal"
+msgstr "personal"
+
+#: Tinebase/js/widgets/TagsPanel.js:126
+msgid "No Tags to display"
+msgstr "No Tags to display"
+
+#: Tinebase/js/widgets/TagsPanel.js:164
+#: Tinebase/js/widgets/TagsPanel.js:169
+msgid "Rename Tag"
+msgstr "Rename Tag"
+
+#: Tinebase/js/widgets/TagsPanel.js:169
+msgid "Please enter a new name:"
+msgstr "Please enter a new name:"
+
+#: Tinebase/js/widgets/TagsPanel.js:178
+msgid "Edit Description"
+msgstr "Edit Description"
+
+#: Tinebase/js/widgets/TagsPanel.js:183
+msgid "Description for tag"
+msgstr "Description for tag"
+
+#: Tinebase/js/widgets/TagsPanel.js:183
+msgid "Please enter new description:"
+msgstr "Please enter new description:"
+
+#: Tinebase/js/widgets/TagsPanel.js:192
+msgid "Change Color"
+msgstr "Change Color"
+
+#: Tinebase/js/widgets/TagsPanel.js:232
+msgid "Please wait a moment..."
+msgstr "Please wait a moment..."
+
+#: Tinebase/js/widgets/TagsPanel.js:248
+#: Tinebase/js/widgets/TagsPanel.js:346
+#: Tinebase/js/widgets/TagsPanel.js:379
+msgid "Failed"
+msgstr "Failed"
+
+#: Tinebase/js/widgets/TagsPanel.js:248
+msgid "Could not delete Tag(s)."
+msgstr "Could not delete Tag(s)."
+
+#: Tinebase/js/widgets/TagsPanel.js:300
+#: Tinebase/js/widgets/TagsPanel.js:360
+msgid "Notice"
+msgstr "Notice"
+
+#: Tinebase/js/widgets/TagsPanel.js:301
+#: Tinebase/js/widgets/TagsPanel.js:361
+msgid "The minimum tag length is three."
+msgstr "The minimum tag length is three."
+
+#: Tinebase/js/widgets/TagsPanel.js:346
+msgid "Could not create tag."
+msgstr "Could not create tag."
+
+#: Tinebase/js/widgets/TagsPanel.js:379
+msgid "Could not update tag."
+msgstr "Could not update tag."
+
+#: Tinebase/js/widgets/TagsPanel.js:410
+#: Tinebase/js/widgets/TagsPanel.js:464
+msgid "Enter tag name"
+msgstr "Enter tag name"
+
+#: Tinebase/js/widgets/TagsPanel.js:411
+msgid "Searching..."
+msgstr "Searching..."
+
+#: Tinebase/js/widgets/TagsPanel.js:537
+msgid "Description"
+msgstr "Description"
+
+#: Tinebase/js/widgets/TagsPanel.js:541
+msgid "Color"
+msgstr "Color"
+
+#~ msgid "manage shared tags"
+#~ msgstr "manage shared tags"
+#~ msgid "manage shared tags right description"
+#~ msgstr "create, edit and delete shared tags"
 
