@@ -45,7 +45,7 @@ class Tinebase_Notes
      * number of notes per record for activities panel
      * (NOT the tab panel)
      */
-    const NUMBER_RECORD_NOTES = 3;
+    const NUMBER_RECORD_NOTES = 4;
         
     /**
      * don't clone. Use the singleton.

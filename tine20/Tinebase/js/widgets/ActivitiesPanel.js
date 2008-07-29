@@ -45,31 +45,36 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     collapsible: true,
     
     /**
-     * @private
+     * event handler
      */
-    initComponent: function(){
+    handlers: {
     	
-        // get translations
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Tinebase');
-        
-        // translate / update title
-        this.title = this.translation._('Recent Activities');
-        
-        // init recordNotesStore
-        this.notes = [];
-        this.recordNotesStore = new Ext.data.JsonStore({
-            id: 'id',
-            fields: Tine.Tinebase.Model.Note,
-            data: this.notes,
-            sortInfo: {
-            	field: 'creation_time',
-            	direction: 'DESC'
+    	/**
+    	 * add a new note
+    	 */
+    	addNote: function(_button, _event) { 
+            //var note_type_id = Ext.getCmp('note_type_combo').getValue();
+    		var note_type_id = _button.typeId;
+            var noteTextarea = Ext.getCmp('note_textarea');
+            var note = noteTextarea.getValue();
+            
+            if (note_type_id && note) {
+                notesStore = Ext.StoreMgr.lookup('NotesStore');
+                var newNote = new Tine.Tinebase.Model.Note({note_type_id: note_type_id, note: note});
+                notesStore.insert(0, newNote);
+                
+                // clear textarea
+                noteTextarea.setValue('');
+                noteTextarea.emptyText = noteTextarea.emptyText;
             }
-        });
-        
-        Ext.StoreMgr.add('NotesStore', this.recordNotesStore);
-        
+        }    	
+    },
+    
+    /**
+     * init activities data view
+     */
+    initActivitiesDataView: function()
+    {
         var ActivitiesTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-activities-activitiesitem" id="{id}">',
@@ -84,22 +89,22 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                     return Ext.util.Format.htmlEncode(value);
                 },
                 render: function(value, type) {
-                	switch (type) {
-                		case 'icon':
-                		    return Tine.widgets.activities.getTypeIcon(value);
+                    switch (type) {
+                        case 'icon':
+                            return Tine.widgets.activities.getTypeIcon(value);
                         case 'user':
                             if (!value) {
-                            	value = Tine.Tinebase.Registry.map.currentAccount.accountDisplayName;
+                                value = Tine.Tinebase.Registry.map.currentAccount.accountDisplayName;
                             }
                             var username = Ext.util.Format.ellipsis(value, 19);
                             return '<i>' + username + '</i>';
                         case 'time':
                             if (!value) {
-                            	value = Tine.Tinebase.Registry.map.currentAccount.accountLastLogin;
+                                value = Tine.Tinebase.Registry.map.currentAccount.accountLastLogin;
                             }
-                        	var dt = Date.parseDate(value, 'c'); 
-                        	return dt.format(Locale.getTranslationData('Date', 'medium'));
-                	}
+                            var dt = Date.parseDate(value, 'c'); 
+                            return dt.format(Locale.getTranslationData('Date', 'medium'));
+                    }
                 }
             }
         );
@@ -112,9 +117,15 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             itemSelector: 'activities-item-small',
             style: 'overflow:auto'
         })        
-        
+    },
+    
+    /**
+     * init note form
+     */
+    initNoteForm: function()
+    {
         var noteTextarea =  new Ext.form.TextArea({
-        	id:'note_textarea',
+            id:'note_textarea',
             emptyText: this.translation._('Add a Note...'),
             grow: false,
             preventScrollbars:false,
@@ -123,6 +134,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             hideLabel: true
         }) 
 
+        /*
         var noteTypeCombo = new Ext.form.ComboBox({
             //emptyText: this.translation._('Note Type...'),
             hideLabel: true,
@@ -137,7 +149,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             forceSelection: true,
             value: 1,
             width: 100
-        });
+        });        
               
         var bbar = [
             noteTypeCombo,
@@ -162,15 +174,79 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                 }                
             })
         ];
+        */
         
+        var subMenu = [];
+        var typesStore = Tine.widgets.activities.getTypesStore();
+        var defaultTypeRecord = typesStore.getAt(typesStore.find('name', 'note')); 
+        
+        typesStore.each(function(record){
+        	var action = new Ext.Action({
+                text: this.translation._('Add') + ' ' + this.translation._(record.data.name) + ' ' + this.translation._('Note'),
+                tooltip: this.translation._(record.data.description),
+                handler: this.handlers.addNote,
+                iconCls: 'notes_' + record.data.name + 'Icon',
+                typeId: record.data.id,
+                scope: this
+            });            
+            subMenu.push(action);
+        }, this);
+        
+        var addButton = new Ext.SplitButton({
+            text: this.translation._('Add'),
+            tooltip: this.translation._('Add new note'),
+            iconCls: 'action_saveAndClose',
+            menu: {
+                items: subMenu
+            },
+            handler: this.handlers.addNote,
+            typeId: defaultTypeRecord.data.id
+        });
+
         this.formFields = {
             layout: 'form',
             items: [
-                noteTextarea,                
+                noteTextarea
             ],
-            bbar: bbar
+            bbar: [
+                '->',
+                addButton
+            ]
         };
+    },
+
+    /**
+     * @private
+     */
+    initComponent: function(){
+    	
+        // get translations
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Tinebase');
         
+        // translate / update title
+        this.title = this.translation._('Recent Activities');
+        
+        // init recordNotesStore
+        this.notes = [];
+        this.recordNotesStore = new Ext.data.JsonStore({
+            id: 'id',
+            fields: Tine.Tinebase.Model.Note,
+            data: this.notes,
+            sortInfo: {
+            	field: 'creation_time',
+            	direction: 'DESC'
+            }
+        });
+        
+        Ext.StoreMgr.add('NotesStore', this.recordNotesStore);        
+        
+        // set data view with activities
+        this.initActivitiesDataView();
+        
+        // set add new note form
+        this.initNoteForm();
+                
         this.items = [
             this.formFields,
             // this form field is only for fetching and saving notes in the record
@@ -235,9 +311,9 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     {
         // @todo add row expander on select ?
     	// @todo add context menu ?
-    	// @todo add buttons ?
+    	// @todo add buttons ?    	
+    	// @todo add more renderers ?
     	
-    	// @todo add more renderers
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'note_type_id', header: this.translation._('Type'), dataIndex: 'note_type_id', width: 15, 
@@ -283,52 +359,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             
         });
         
-        return gridPanel;
-    	
-    	/*
-        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-            _eventObject.stopEvent();
-            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                _grid.getSelectionModel().selectRow(_rowIndex);
-            }
-            var contextMenu = new Ext.menu.Menu({
-                id:'ctxMenuContacts', 
-                items: [
-                    this.actions.editContact,
-                    this.actions.deleteContact,
-                    this.actions.exportContact,
-                    '-',
-                    this.actions.addContact 
-                ]
-            });
-            contextMenu.showAt(_eventObject.getXY());
-        }, this);
-        
-        gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-            var record = _gridPar.getStore().getAt(_rowIndexPar);
-            try {
-                var popupWindow = new Tine.Addressbook.EditPopup({
-                    contactId: record.data.id
-                    //containerId:
-                });                        
-            } catch(e) {
-                // alert(e);
-            }
-        }, this);
-
-        gridPanel.on('keydown', function(e){
-             if(e.getKey() == e.DELETE && Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getCount() > 0){
-                 this.handlers.deleteContact();
-             }
-        }, this);
-
-        // temporary resizeing
-        filterToolbar.on('bodyresize', function(ftb, w, h) {
-            var availableGridHeight = Ext.getCmp('center-panel').getSize().height;
-            gridPanel.setHeight(availableGridHeight - h);
-        }, this);
-        
-        */
+        return gridPanel;    	
     },
     
     /**

@@ -85,10 +85,10 @@ html, body {
 }
 
 /* ----- notes ------------------------------------------------------------*/
-.notes_defaultIcon {
+.notes_noteIcon {
    background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
 }
-.notes_phoneIcon {
+.notes_telephoneIcon {
    background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }
 .notes_emailIcon {
