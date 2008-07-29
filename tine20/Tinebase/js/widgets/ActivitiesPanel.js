@@ -38,7 +38,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
      */
     recordNotesStore: null,
     
-    title: 'Recent Activities',
+    title: null,
     iconCls: 'notes_defaultIcon',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
@@ -109,8 +109,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             id: 'grid_activities_limited',
             store: this.recordNotesStore,
             overClass: 'x-view-over',
-            itemSelector: 'activities-item-small'
-            //style: 'overflow:auto'
+            itemSelector: 'activities-item-small',
+            style: 'overflow:auto'
         })        
         
         var noteTextarea =  new Ext.form.TextArea({
@@ -143,8 +143,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             noteTypeCombo,
             '->',
             new Ext.Button({
-                text: this.translation._('Save'),
-                tooltip: this.translation._('Save Note'),
+                text: this.translation._('Add'),
+                tooltip: this.translation._('Add new note'),
                 iconCls: 'action_saveAndClose',
                 handler: function(_button, _event) { 
                     var note_type_id = Ext.getCmp('note_type_combo').getValue();
@@ -228,13 +228,12 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      */
     record_model: null,
     
-	title: 'Activities',
+	title: null,
     layout: 'hfit',
-//    bodyStyle: 'padding: 2px 2px 2px 2px',
     
     getActivitiesGrid: function() 
     {
-        // @todo add row expander on select
+        // @todo add row expander on select ?
     	// @todo add context menu ?
     	// @todo add buttons ?
     	
@@ -392,6 +391,9 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     	// get translations
     	this.translation = new Locale.Gettext();
         this.translation.textdomain('Tinebase');
+        
+        // translate / update title
+        this.title = this.translation._('Activities');
         
     	// get store
         this.initStore();
