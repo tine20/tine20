@@ -238,6 +238,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initSearchField: function() {
+
         this.searchField = new Ext.form.ComboBox({
             store: this.availableTagsStore,
             mode: 'local',
@@ -247,10 +248,20 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             loadingText: 'Searching...',
             typeAheadDelay: 10,
             minChars: 1,
-            hideTrigger:true,
-            expand: function(){}
+            hideTrigger:false,
+            triggerAction: 'all',
+            forceSelection: true
+            //expand: function(){}
         });
         
+        // load data once
+        this.searchField.on('focus', function(searchField){
+            if (! searchField.store.lastOptions) {
+                this.availableTagsStore.load({});
+            }
+        }, this);
+        
+        /*
         this.searchField.on('focus', function(searchField){
             searchField.hasFocus = false;
             // hack to supress selecting the first item from the freshly
@@ -262,6 +273,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 }
             });
         }, this);
+        */
         
         this.searchField.on('select', function(searchField, selectedTag){
             if(this.recordTagsStore.getById(selectedTag.id) === undefined) {
@@ -271,6 +283,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             searchField.clearValue();
         },this);
         
+        /*
         this.searchField.on('specialkey', function(searchField, e){
              if(e.getKey() == e.ENTER){
                 var value = searchField.getValue();
@@ -313,6 +326,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 searchField.clearValue();
              }
         }, this);
+        */
         
         // workaround extjs bug:
         this.searchField.on('blur', function(searchField){
