@@ -238,7 +238,16 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initSearchField: function() {
-
+        var tpl = new Ext.XTemplate(
+            '<tpl for="."><div class="x-combo-list-item">',
+                '{[this.encode(values.name)]} <tpl if="type == \'personal\' "><i>(personal)</i></tpl>',
+            '</div></tpl>',{
+                encode: function(value) {
+                    return Ext.util.Format.htmlEncode(value);
+                }
+            }
+        );
+        
         this.searchField = new Ext.form.ComboBox({
             store: this.availableTagsStore,
             mode: 'local',
@@ -250,7 +259,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             minChars: 1,
             hideTrigger:false,
             triggerAction: 'all',
-            forceSelection: true
+            forceSelection: true,
+            tpl: tpl
             //expand: function(){}
         });
         
