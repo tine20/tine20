@@ -133,13 +133,20 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             event.preventDefault();
             
             var selectedTags = this.dataView.getSelectedRecords();
-            var tagString = 'Tag' + (selectedTags.length>1 ? 's' : '');
+            var selectedTag = selectedTags.length == 1 ? selectedTags[0] : null;
+            
+            var allowDelete = true;
+            for (var i=0; i<selectedTags.length; i++) {
+                if (selectedTags[i].get('type') == 'shared') {
+                    allowDelete = false;
+                }
+            }
             
             var menu = new Ext.menu.Menu({
                 items: [
                     new Ext.Action({
                         scope: this,
-                        text: 'Detach ' + tagString,
+                        text: 'Detach tag(s)',
                         iconCls: 'x-widget-tag-action-detach',
                         handler: function() {
                             for (var i=0,j=selectedTags.length; i<j; i++){
@@ -149,38 +156,64 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     }),
                     '-',
                     {
-                        text: 'Edit ' + tagString,
-                        disabled: true,
+                        text: 'Edit tag',
+                        disabled: !selectedTag,
                         menu: {
                             items: [
                                 new Ext.Action({
+                                    text: 'Rename',
+                                    selectedTag: selectedTag,
                                     scope: this,
-                                    disabled: selectedTags.length>1,
-                                    text: 'Rename'
-                                    //iconCls: 'action_edit',
-                                    /*
-                                    handler: function() {
-                                        var dlg = new Tine.widgets.tags.TagEditDialog();
-                                        dlg.show();
+                                    handler: function(action) {
+                                        var tag = action.selectedTag;
+                                        Ext.Msg.prompt('Rename tag "'+ tag.get('name') +'"', 'Please enter new name:', function(btn, text){
+                                            if (btn == 'ok'){
+                                                tag.set('name', text);
+                                                this.onTagUpdate(tag);
+                                            }
+                                        }, this, false, tag.get('name'));
                                     }
-                                    */
                                 }),
                                 new Ext.Action({
                                     text: 'Edit Description',
-                                    disabled: selectedTags.length>1                                
+                                    selectedTag: selectedTag,
+                                    scope: this,
+                                    handler: function(action) {
+                                        var tag = action.selectedTag;
+                                        Ext.Msg.prompt('Description for tag "'+ tag.get('name') +'"', 'Please enter new description:', function(btn, text){
+                                            if (btn == 'ok'){
+                                                tag.set('description', text);
+                                                this.onTagUpdate(tag);
+                                            }
+                                        }, this, 30, tag.get('description'));
+                                    }
                                 }),
                                 new Ext.Action({     
                                     text: 'Change Color',
-                                    disabled: selectedTags.length>1
-                                    //menu: new Ext.menu.ColorMenu({})                                        
+                                    scope: this,
+                                    menu: new Ext.menu.ColorMenu({
+                                        value: selectedTag.get('color'),
+                                        scope: this,
+                                        listeners: {
+                                            select: function(menu, color) {
+                                                color = '#' + color;
+                                                
+                                                if (selectedTag.get('color') != color) {
+                                                    selectedTag.set('color', color);
+                                                    this.onTagUpdate(selectedTag);
+                                                }
+                                            },
+                                            scope: this
+                                        }
+                                    })                                        
                                 })                                    
                             ]
                         }
                     },
                     new Ext.Action({
-                        hidden: true,
+                        disabled: !allowDelete,
                         scope: this,
-                        text: 'Delete ' + tagString,
+                        text: 'Delete tag(s)',
                         iconCls: 'action_delete',
                         handler: function() {
                             var tagsToDelete = [];
@@ -190,24 +223,31 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                     tagsToDelete.push(selectedTags[i].id);
                                 }
                             }
-                            Ext.MessageBox.wait('Please wait a moment...', 'Deleting '+ tagString);
-                            Ext.Ajax.request({
-                                params: {
-                                    method: 'Tinebase.deleteTags', 
-                                    ids: Ext.util.JSON.encode(tagsToDelete)
-                                },
-                                success: function(_result, _request) {
-                                    for (var i=0,j=selectedTags.length; i<j; i++){
-                                        this.recordTagsStore.remove(selectedTags[i]);
-                                    }
-                                    Ext.MessageBox.hide();
-                                },
-                                failure: function ( result, request) { 
-                                    Ext.MessageBox.alert('Failed', 'Could not delete Tag(s).'); 
-                                },
-                                scope: this 
-                            });
                             
+                            Ext.MessageBox.confirm('Realy delete selected tag(s)?', 'The selected tag(s) will disapear for all contacts', function(btn) {
+                                if (btn == 'yes'){
+                                    Ext.MessageBox.wait('Please wait a moment...', 'Deleting tag(s)');
+                                    Ext.Ajax.request({
+                                        params: {
+                                            method: 'Tinebase.deleteTags', 
+                                            ids: Ext.util.JSON.encode(tagsToDelete)
+                                        },
+                                        success: function(_result, _request) {
+                                            // reset avail tag store
+                                            this.availableTagsStore.lastOptions = null;
+                                            
+                                            for (var i=0,j=selectedTags.length; i<j; i++){
+                                                this.recordTagsStore.remove(selectedTags[i]);
+                                            }
+                                            Ext.MessageBox.hide();
+                                        },
+                                        failure: function ( result, request) { 
+                                            Ext.MessageBox.alert('Failed', 'Could not delete Tag(s).'); 
+                                        },
+                                        scope: this 
+                                    });
+                                }
+                            }, this);
                         }
                     })
                 ]
@@ -287,25 +327,57 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     this.el.mask();
                     Ext.Ajax.request({
                         params: {
-                            method: 'Tinebase.createTag', 
+                            method: 'Tinebase.saveTag', 
                             tag: Ext.util.JSON.encode(tagToAttach.data)
                         },
                         success: function(_result, _request) {
+                            var newTag = new Tine.Tinebase.Model.Tag(Ext.util.JSON.decode(_result.responseText));
+                            console.log(newTag);
+                            this.recordTagsStore.add(newTag);
+                            
                             // reset avail tag store
                             this.availableTagsStore.lastOptions = null;
                             this.el.unmask();
                         },
                         failure: function ( result, request) {
-                            this.recordTagsStore.remove(tagToAttach);
                             Ext.MessageBox.alert('Failed', 'Could not create tag.'); 
                             this.el.unmask();
                         },
                         scope: this 
                     });
+                } else {
+                    this.recordTagsStore.add(tagToAttach);
                 }
-                
-                this.recordTagsStore.add(tagToAttach);
             }
+        }
+    },
+    onTagUpdate: function(tag) {
+        if (tag.get('name').length < 3) {
+            Ext.Msg.show({
+               title:'Notice',
+               msg: 'The minimum tag length is three.',
+               buttons: Ext.Msg.OK,
+               animEl: 'elId',
+               icon: Ext.MessageBox.INFO
+            });
+        } else {
+            this.el.mask();
+            Ext.Ajax.request({
+                params: {
+                    method: 'Tinebase.saveTag', 
+                    tag: Ext.util.JSON.encode(tag.data)
+                },
+                success: function(_result, _request) {
+                    // reset avail tag store
+                    this.availableTagsStore.lastOptions = null;
+                    this.el.unmask();
+                },
+                failure: function ( result, request) {
+                    Ext.MessageBox.alert('Failed', 'Could not update tag.'); 
+                    this.el.unmask();
+                },
+                scope: this 
+            });
         }
     },
     /**

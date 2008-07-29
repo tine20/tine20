@@ -145,12 +145,15 @@ class Tinebase_Json
     /**
      * adds a new personal tag
      */
-    public function createTag($tag)
+    public function saveTag($tag)
     {
         $tagData = Zend_Json::decode($tag);
         $inTag = new Tinebase_Tags_Model_Tag($tagData);
-        
-        $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
+        if (strlen($inTag->getId() < 40)) {
+            $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
+        } else {
+            $outTag = Tinebase_Tags::getInstance()->updateTag($inTag);
+        }
         return $outTag->toArray();
     }
     
