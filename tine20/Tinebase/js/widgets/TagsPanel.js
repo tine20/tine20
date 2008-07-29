@@ -48,6 +48,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     iconCls: 'action_tag',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
+    collapsible: true,
     
     /**
      * @private
