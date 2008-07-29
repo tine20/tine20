@@ -149,9 +149,12 @@ class Tinebase_Json
     {
         $tagData = Zend_Json::decode($tag);
         $inTag = new Tinebase_Tags_Model_Tag($tagData);
-        if (strlen($inTag->getId() < 40)) {
+        
+        if (strlen($inTag->getId()) < 40) {
+            Zend_Registry::get('logger')->debug('creating tag: ' . print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
         } else {
+            Zend_Registry::get('logger')->debug('updating tag: ' .print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->updateTag($inTag);
         }
         return $outTag->toArray();
