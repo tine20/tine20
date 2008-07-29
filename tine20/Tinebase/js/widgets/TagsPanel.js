@@ -82,7 +82,15 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             new Ext.Button({
                 text: '',
                 iconCls: 'action_add',
-                tooltip: 'Add a new personal tag'
+                tooltip: 'Add a new personal tag',
+                scope: this,
+                handler: function() {
+                    Ext.Msg.prompt('Add new personal tag', 'Please note: You create a <b>personal</b> tag. Only you can see it! <br />Enter tag name:', function(btn, text){
+                        if (btn == 'ok'){
+                            this.onTagAdd(text);
+                        }
+                    }, this);
+                }
             })
         ];
         
@@ -237,6 +245,66 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     /**
      * @private
      */
+    onTagAdd: function(tagName) {
+        if (tagName.length < 3) {
+            Ext.Msg.show({
+               title:'Notice',
+               msg: 'The minimum tag length is three.',
+               buttons: Ext.Msg.OK,
+               animEl: 'elId',
+               icon: Ext.MessageBox.INFO
+            });
+        } else {
+            var isAttached = false;
+            this.recordTagsStore.each(function(tag){
+                if(tag.data.name == tagName) {
+                    isAttached = true;
+                }
+            },this);
+            
+            if (!isAttached) {
+                var tagToAttach = false;
+                this.availableTagsStore.each(function(tag){
+                    if(tag.data.name == tagName) {
+                        tagToAttach = tag;
+                    }
+                }, this);
+                
+                if (!tagToAttach) {
+                    tagToAttach = new Tine.Tinebase.Model.Tag({
+                        name: tagName,
+                        type: 'personal',
+                        description: '',
+                        color: '#FFFFFF'
+                    });
+                    
+                    this.el.mask();
+                    Ext.Ajax.request({
+                        params: {
+                            method: 'Tinebase.createTag', 
+                            tag: Ext.util.JSON.encode(tagToAttach.data)
+                        },
+                        success: function(_result, _request) {
+                            // reset avail tag store
+                            this.availableTagsStore.lastOptions = null;
+                            this.el.unmask();
+                        },
+                        failure: function ( result, request) {
+                            this.recordTagsStore.remove(tagToAttach);
+                            Ext.MessageBox.alert('Failed', 'Could not create tag.'); 
+                            this.el.unmask();
+                        },
+                        scope: this 
+                    });
+                }
+                
+                this.recordTagsStore.add(tagToAttach);
+            }
+        }
+    },
+    /**
+     * @private
+     */
     initSearchField: function() {
         var tpl = new Ext.XTemplate(
             '<tpl for="."><div class="x-combo-list-item">',
@@ -297,40 +365,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.searchField.on('specialkey', function(searchField, e){
              if(e.getKey() == e.ENTER){
                 var value = searchField.getValue();
-                if (value.length < 3) {
-                    Ext.Msg.show({
-                       title:'Notice',
-                       msg: 'The minimum tag length is three.',
-                       buttons: Ext.Msg.OK,
-                       animEl: 'elId',
-                       icon: Ext.MessageBox.INFO
-                    });
-                } else {
-                    var isAttached = false;
-                    this.recordTagsStore.each(function(tag){
-                        if(tag.data.name == value) {
-                            isAttached = true;
-                        }
-                    },this);
-                    
-                    if (!isAttached) {
-                        var tagToAttach = false;
-                        this.availableTagsStore.each(function(tag){
-                            if(tag.data.name == value) {
-                                tagToAttach = tag;
-                            }
-                        }, this);
-                        
-                        if (!tagToAttach) {
-                            tagToAttach = new Tine.Tinebase.Model.Tag({
-                                name: value,
-                                description: '',
-                                color: '#FFFFFF'
-                            });
-                        }
-                        
-                        this.recordTagsStore.add(tagToAttach);
-                    }
+                
                 }
                 searchField.emptyText = '';
                 searchField.clearValue();

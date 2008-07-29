@@ -143,6 +143,18 @@ class Tinebase_Json
     }    
     
     /**
+     * adds a new personal tag
+     */
+    public function createTag($tag)
+    {
+        $tagData = Zend_Json::decode($tag);
+        $inTag = new Tinebase_Tags_Model_Tag($tagData);
+        
+        $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
+        return $outTag->toArray();
+    }
+    
+    /**
      * gets tags for application / owners
      * 
      * @param   string  $context
