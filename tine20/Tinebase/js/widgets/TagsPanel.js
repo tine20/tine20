@@ -146,7 +146,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 items: [
                     new Ext.Action({
                         scope: this,
-                        text: n_('Detach tag', 'Detach tags', selectedTags.length),
+                        text: Locale.Gettext.ngettext('Detach tag', 'Detach tags', selectedTags.length),
                         iconCls: 'x-widget-tag-action-detach',
                         handler: function() {
                             for (var i=0,j=selectedTags.length; i<j; i++){
@@ -213,7 +213,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     new Ext.Action({
                         disabled: !allowDelete,
                         scope: this,
-                        text: n_('Delete Tag', 'Delete Tags', selectedTags.length),
+                        text: Locale.Gettext.ngettext('Delete Tag', 'Delete Tags', selectedTags.length),
                         iconCls: 'action_delete',
                         handler: function() {
                             var tagsToDelete = [];
@@ -225,11 +225,11 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             }
                             
                             Ext.MessageBox.confirm(
-                                n_('Realy Delete Selected Tag?', 'Realy Delete Selected Tags?', selectedTags.length), 
-                                n_('The selected tag will disapear for all contacts', 'The selected tags,  will disapear for all contacts', selectedTags.length), 
+                                Locale.Gettext.ngettext('Realy Delete Selected Tag?', 'Realy Delete Selected Tags?', selectedTags.length), 
+                                Locale.Gettext.ngettext('The selected tag will disapear for all entries', 'The selected tags,  will disapear for all entries', selectedTags.length), 
                                 function(btn) {
                                     if (btn == 'yes'){
-                                        Ext.MessageBox.wait(_('Please wait a moment...'), n_('Deleting Tag', 'Deleting Tags', selectedTags.length));
+                                        Ext.MessageBox.wait(_('Please wait a moment...'), Locale.Gettext.ngettext('Deleting Tag', 'Deleting Tags', selectedTags.length));
                                         Ext.Ajax.request({
                                             params: {
                                                 method: 'Tinebase.deleteTags', 
