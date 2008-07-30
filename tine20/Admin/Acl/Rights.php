@@ -162,39 +162,39 @@ class Admin_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $rightDescriptions = array(
             self::MANAGE_ACCESS_LOG   => array(
                 'text'          => $translate->_('manage access log'),
-                'description'   => $translate->_('manage access log right description'),
+                'description'   => $translate->_('delete access log entries'),
             ),
             self::MANAGE_ACCOUNTS   => array(
                 'text'          => $translate->_('manage accounts'),
-                'description'   => $translate->_('manage accounts right description'),
+                'description'   => $translate->_('add and edit users and groups, add group members, change user passwords'),
             ),
             self::MANAGE_APPS   => array(
                 'text'          => $translate->_('manage applications'),
-                'description'   => $translate->_('manage applications right description'),
+                'description'   => $translate->_('enable and disable applications, edit application settings'),
             ),
             self::MANAGE_ROLES  => array(
                 'text'          => $translate->_('manage roles'),
-                'description'   => $translate->_('manage roles right description'),
+                'description'   => $translate->_('add and edit roles, add new members to roles, add application rights to roles'),
             ),
             self::MANAGE_SHARED_TAGS    => array(
                 'text'          => $translate->_('manage shared tags'),
-                'description'   => $translate->_('manage shared tags right description'),
+                'description'   => $translate->_('add, delete and edit shared tags'),
             ),
             self::VIEW_ACCESS_LOG   => array(
                 'text'          => $translate->_('view access log'),
-                'description'   => $translate->_('view access log right description'),
+                'description'   => $translate->_('view access log list'),
             ),
             self::VIEW_ACCOUNTS   => array(
                 'text'          => $translate->_('view accounts'),
-                'description'   => $translate->_('view accounts right description'),
+                'description'   => $translate->_('view accounts list and details'),
             ),
             self::VIEW_APPS   => array(
                 'text'          => $translate->_('view applications'),
-                'description'   => $translate->_('view applications right description'),
+                'description'   => $translate->_('view applications list and details'),
             ),
             self::VIEW_ROLES  => array(
                 'text'          => $translate->_('view roles'),
-                'description'   => $translate->_('view roles right description'),
+                'description'   => $translate->_('view roles list and details'),
             ),
         );
         

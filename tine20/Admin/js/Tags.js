@@ -387,7 +387,7 @@ Tine.Admin.Tags.EditDialog = {
      */
     updateTagRecord: function(_tagData)
     {
-        // if tagData is empty (=array), set to empty object because array won't work!
+        // if tagData is empty (=array), set to empty object because array wont work!
         if (_tagData.length === 0) {
             _tagData = {};
         }

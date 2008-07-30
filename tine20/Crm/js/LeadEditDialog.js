@@ -48,7 +48,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
         triggerAction: 'all',
         editable: false,
         allowBlank: false,
-//        listWidth: '25%',        IE don't like it
+//        listWidth: '25%',        IE does not like it
         forceSelection: true,
         anchor:'95%',
         lazyInit: false

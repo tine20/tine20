@@ -105,7 +105,7 @@ class Crm_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $rightDescriptions = array(
             self::MANAGE_LEADS  => array(
                 'text'          => $translate->_('manage leads'),
-                'description'   => $translate->_('manage leads right description'),
+                'description'   => $translate->_('add, edit and delete leads'),
             ),
         );
         

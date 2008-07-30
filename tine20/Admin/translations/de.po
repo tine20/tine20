@@ -1,12 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-07-29 21:13+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-07-30 11:06+0100\n"
+"PO-Revision-Date: 2008-07-30 11:09+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
@@ -16,67 +17,90 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SearchPath-0: Admin\n"
 
-#: Admin/Acl/Rights.php:127
-msgid "manage roles"
-msgstr "Rollen bearbeiten"
-
-#: Admin/Acl/Rights.php:128
-msgid "manage roles right description"
-msgstr "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen Applikations-Rechte zuweisen."
-
-#: Admin/Acl/Rights.php:131
-msgid "manage applications"
-msgstr "Applikationen bearbeiten"
-
-#: Admin/Acl/Rights.php:132
-msgid "manage applications right description"
-msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
-
-#: Admin/Acl/Rights.php:135
-msgid "manage accounts"
-msgstr "Benutzerkonten bearbeiten"
-
-#: Admin/Acl/Rights.php:136
-msgid "manage accounts right description"
-msgstr "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen zuordnen."
-
-#: Admin/Acl/Rights.php:139
+#: Admin/Acl/Rights.php:164
 msgid "manage access log"
 msgstr "Zugriffsprotokoll bearbeiten"
 
-#: Admin/Acl/Rights.php:140
-msgid "manage access log right description"
-msgstr "Dieses Recht erlaubt es, im Zugriffsprotokoll Einträge zu löschen."
+#: Admin/Acl/Rights.php:165
+msgid "delete access log entries"
+msgstr "Zugriffsprotokoll bearbeiten"
 
-#: Admin/Acl/Rights.php:143
-msgid "view roles"
-msgstr "Rollen ansehen"
+#: Admin/Acl/Rights.php:168
+msgid "manage accounts"
+msgstr "Benutzerkonten bearbeiten"
 
-#: Admin/Acl/Rights.php:144
-msgid "view roles right description"
-msgstr "Rollen ansehen"
+#: Admin/Acl/Rights.php:169
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen zuordnen."
 
-#: Admin/Acl/Rights.php:147
-msgid "view applications"
-msgstr "Applikationen ansehen"
+#: Admin/Acl/Rights.php:172
+msgid "manage applications"
+msgstr "Applikationen bearbeiten"
 
-#: Admin/Acl/Rights.php:148
-msgid "view applications right description"
-msgstr "Applikationen ansehen"
+#: Admin/Acl/Rights.php:173
+msgid "enable and disable applications, edit application settings"
+msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
 
-#: Admin/Acl/Rights.php:151
-msgid "view accounts"
-msgstr "Benutzerkonten ansehen"
+#: Admin/Acl/Rights.php:176
+msgid "manage roles"
+msgstr "Rollen bearbeiten"
 
-#: Admin/Acl/Rights.php:152
-msgid "view accounts right description"
-msgstr "Benutzerkonten ansehen"
+#: Admin/Acl/Rights.php:177
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen Applikations-Rechte zuweisen."
 
-#: Admin/Acl/Rights.php:155
+#: Admin/Acl/Rights.php:180
+msgid "manage shared tags"
+msgstr "Gemeinsame Tags bearbeiten"
+
+#: Admin/Acl/Rights.php:181
+msgid "add, delete and edit shared tags"
+msgstr "Gemeinsame Tags anlegen, bearbeiten und löschen"
+
+#: Admin/Acl/Rights.php:184
 msgid "view access log"
 msgstr "Zugriffsprotokoll ansehen"
 
-#: Admin/Acl/Rights.php:156
-msgid "view access log right description"
+#: Admin/Acl/Rights.php:185
+msgid "view access log list"
 msgstr "Zugriffsprotokoll ansehen"
+
+#: Admin/Acl/Rights.php:188
+msgid "view accounts"
+msgstr "Benutzerkonten ansehen"
+
+#: Admin/Acl/Rights.php:189
+msgid "view accounts list and details"
+msgstr "Benutzerkonten ansehen"
+
+#: Admin/Acl/Rights.php:192
+msgid "view applications"
+msgstr "Applikationen ansehen"
+
+#: Admin/Acl/Rights.php:193
+msgid "view applications list and details"
+msgstr "Applikationen ansehen"
+
+#: Admin/Acl/Rights.php:196
+msgid "view roles"
+msgstr "Rollen ansehen"
+
+#: Admin/Acl/Rights.php:197
+msgid "view roles list and details"
+msgstr "Rollen ansehen"
+
+#~ msgid "manage roles right description"
+#~ msgstr ""
+#~ "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
+#~ "Applikations-Rechte zuweisen."
+#~ msgid "manage applications right description"
+#~ msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
+#~ msgid "manage accounts right description"
+#~ msgstr ""
+#~ "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
+#~ "zuordnen."
+#~ msgid "manage access log right description"
+#~ msgstr "Dieses Recht erlaubt es, im Zugriffsprotokoll Einträge zu löschen."
+#~ msgid "view access log right description"
+#~ msgstr "Zugriffsprotokoll ansehen"
 

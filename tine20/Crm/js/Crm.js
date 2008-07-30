@@ -916,7 +916,7 @@ Tine.Crm.LeadEditDialog = {
         // set the relation type
         relation.type = record.data.relation_type.toUpperCase();
         
-        // don't do recursion!
+        // do not do recursion!
         delete record.data.relation;
         delete record.data.relation_type;
         
