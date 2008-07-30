@@ -299,7 +299,7 @@ Tine.Crm.Main = {
      * creates the grid
      * 
      */
-    showGrid: function() 
+    initGridPanel: function() 
     { 
         //var dataStore = this.createDataStore();
         
@@ -391,8 +391,6 @@ Tine.Crm.Main = {
             })            
         });
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
-
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
@@ -408,7 +406,8 @@ Tine.Crm.Main = {
             Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.id, 1024, 768);            
         });
        
-       return;
+        this.gridPanel = gridPanel;
+        //Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
     },    
       
     /**
@@ -471,6 +470,7 @@ Tine.Crm.Main = {
         
         // init grid store
         this.initStore();
+        this.initGridPanel();
     },
 
     /**
@@ -532,10 +532,6 @@ Tine.Crm.Main = {
                 record.data.partner = relations.partner;
             });        
         });
-                
-        this.store.load({
-            params: this.paging
-        });
     },
     
     /**
@@ -545,9 +541,15 @@ Tine.Crm.Main = {
     {    	
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
         if (currentToolbar === false || currentToolbar.id != 'crmToolbar') {
-            this.initComponent();
+            if (!this.girdPanel) {
+                this.initComponent();
+            }
+            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+            this.store.load({
+                params: this.paging
+            });
+            
             this.showCrmToolbar();
-            this.showGrid();
             this.updateMainToolbar();
         } else {
             // note: if node is clicked, it is not selected!
