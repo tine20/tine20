@@ -258,17 +258,17 @@ Tine.Tinebase.MainScreen = function() {
         });
 
         var applicationArcordion = new Ext.Panel({
-            layout:'accordion',
+            //baseCls: 'appleftlayout',
+            title: '&nbsp;',
+            layout:'appleft',
             border: false,
             layoutConfig: {
-                // layout-specific configs go here
                 titleCollapse: true,
-                animate: true,
-                activeOnTop: true,
                 hideCollapseTool: true
             },
             items: _getPanels()
         });
+        //applicationArcordion.header.addClass('appleftlayout');
         
 		var viewport = new Ext.Viewport({
 			layout: 'border',
