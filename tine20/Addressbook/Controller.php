@@ -186,7 +186,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (! $this->_currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
-        
+
         $contact = $this->_backend->create($_contact);
         
         if (!empty($_contact->tags)) {
@@ -201,8 +201,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         
         // add created note to record
         Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'created');
-                
-        return $contact;
+                        
+        return $this->getContact($contact->getId());
     }
     
     /**
@@ -230,6 +230,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         } elseif (! $this->_currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
+                        
+        $contact = $this->_backend->update($_contact);                
                 
         if (isset($_contact->tags)) {
             Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
@@ -239,12 +241,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             Tinebase_Notes::getInstance()->setNotesOfRecord($_contact);
         }
         
-        $contact = $this->_backend->update($_contact);
-
         // add changed note to record
         Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'changed');
-                        
-        return $contact;
+
+        return $this->getContact($contact->getId());
     }
     
     /**
