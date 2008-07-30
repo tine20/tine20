@@ -268,7 +268,6 @@ Tine.Tinebase.MainScreen = function() {
             },
             items: _getPanels()
         });
-        //applicationArcordion.header.addClass('appleftlayout');
         
 		var viewport = new Ext.Viewport({
 			layout: 'border',
@@ -325,7 +324,7 @@ Tine.Tinebase.MainScreen = function() {
 				animate: true,
 				useShim:true,
                 border: false,
-				layout: 'fit'
+				layout: 'card'
 			}, {
 				region: 'west',
 	            id: 'west',
@@ -602,18 +601,26 @@ Tine.Tinebase.MainScreen = function() {
         });
 	};
     
-    var _setActiveContentPanel = function(_panel)
+    var _setActiveContentPanel = function(_panel, _keep)
     {
         // get container to which component will be added
         var centerPanel = Ext.getCmp('center-panel');
+        _panel.keep = _keep;
+        
         if(centerPanel.items) {
             for (var i=0; i<centerPanel.items.length; i++){
-                centerPanel.remove(centerPanel.items.get(i));
+                var p =  centerPanel.items.get(i);
+                if (! p.keep) {
+                    centerPanel.remove(p);
+                }
             }  
         }
-
-        centerPanel.add(_panel);
-        centerPanel.doLayout();
+        if(_panel.keep && _panel.rendered) {
+            centerPanel.layout.setActiveItem(_panel.id);
+        } else {
+            centerPanel.add(_panel);
+            centerPanel.layout.setActiveItem(_panel.id);
+        }
     };
     
     var _getActiveToolbar = function()
