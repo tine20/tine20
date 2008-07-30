@@ -115,5 +115,6 @@ Tine.Tinebase.Model.NoteType = Ext.data.Record.create([
     {name: 'id'             },
     {name: 'name'           },
     {name: 'icon'           },
-    {name: 'description'    }
+    {name: 'description'    },
+    {name: 'is_user_type'   }
 ]);
