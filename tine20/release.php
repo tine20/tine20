@@ -31,6 +31,7 @@ try {
         'css|s'           => 'Build CSS Files',
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
+        'pot'             => 'Build xgettext po template files',
         'help'            => 'Display this help Message',
     ));
     $opts->parse();
@@ -39,7 +40,7 @@ try {
    exit;
 }
 
-if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z)) {
+if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z || $opts->pot)) {
     echo $opts->getUsageMessage();
     exit;
 }
@@ -164,6 +165,24 @@ if ( $opts->z ) {
     }
 }
 
+if($opts->pot) {
+    $d = dir($tine20path);
+    while (false !== ($appName = $d->read())) {
+        $appPath = "$tine20path/$appName";
+        if (is_dir($appPath) && $appName{0} != '.') {
+            $translationPath = "$appPath/translations";
+            if (is_dir($translationPath)) {
+                `cd $appPath 
+                touch translations/template.pot 
+                find . -type f -iname "*.php" -or -type f -iname "*.js"  | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f -
+                cd $translationPath
+                tar -cf $appName.tar *.po *.pot
+                rm template.pot
+                mv $appName.tar ../../`;
+            }
+        }
+    }
+}
 /**
  * returns key of translations object in Locale.Gettext
  *
