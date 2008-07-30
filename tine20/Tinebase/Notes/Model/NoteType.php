@@ -58,5 +58,6 @@ class Tinebase_Notes_Model_NoteType extends Tinebase_Record_Abstract
         'icon'                   => array('presence' => 'required', 'allowEmpty' => false),
 
         'description'            => array('allowEmpty' => true),    
+        'is_user_type'           => array('allowEmpty' => true),    
     );    
 }

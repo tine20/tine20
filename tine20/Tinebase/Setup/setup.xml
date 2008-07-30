@@ -1639,6 +1639,12 @@
                     <length>256</length>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>is_user_type</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>true</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1757,10 +1763,14 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/document-properties.png</value>
+                <value>images/oxygen/16x16/actions/note.png</value>
             </field>
+            <field>
+                <name>is_user_type</name>
+                <value>true</value>
+            </field>            
         </record>
-       <record>
+        <record>
             <table>
                 <name>note_types</name>
             </table>
@@ -1780,8 +1790,12 @@
                 <name>icon</name>
                 <value>images/oxygen/16x16/apps/kcall.png</value>
             </field>
+            <field>
+                <name>is_user_type</name>
+                <value>true</value>
+            </field>            
         </record>
-       <record>
+        <record>
             <table>
                 <name>note_types</name>
             </table>
@@ -1801,6 +1815,60 @@
                 <name>icon</name>
                 <value>images/oxygen/16x16/actions/kontact-mail.png</value>
             </field>
+            <field>
+                <name>is_user_type</name>
+                <value>true</value>
+            </field>            
+        </record>
+        <record>
+            <table>
+                <name>note_types</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>4</value>
+            </field>
+            <field>
+                <name>name</name>
+                <value>created</value>
+            </field>
+            <field>
+                <name>description</name>
+                <value>record created</value>
+            </field>
+            <field>
+                <name>icon</name>
+                <value>images/oxygen/16x16/actions/knewstuff.png</value>
+            </field>
+            <field>
+                <name>is_user_type</name>
+                <value>false</value>
+            </field>            
+        </record>
+        <record>
+            <table>
+                <name>note_types</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>5</value>
+            </field>
+            <field>
+                <name>name</name>
+                <value>changed</value>
+            </field>
+            <field>
+                <name>description</name>
+                <value>record changed</value>
+            </field>
+            <field>
+                <name>icon</name>
+                <value>images/oxygen/16x16/actions/document-properties.png</value>
+            </field>
+            <field>
+                <name>is_user_type</name>
+                <value>false</value>
+            </field>            
         </record>
     </defaultRecords>    
 </application>

@@ -951,6 +951,12 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     <length>256</length>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>is_user_type</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>true</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1064,7 +1070,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'id'            => '1',
             'name'          => 'note',
             'description'   => 'the default note type',
-            'icon'          => 'images/oxygen/16x16/actions/document-properties.png'
+            'icon'          => 'images/oxygen/16x16/actions/note.png',
+            'is_user_type'  => true
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
 
@@ -1072,7 +1079,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'id'            => '2',
             'name'          => 'telephone',
             'description'   => 'telephone call',
-            'icon'          => 'images/oxygen/16x16/apps/kcall.png'
+            'icon'          => 'images/oxygen/16x16/apps/kcall.png',
+            'is_user_type'  => true
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
         
@@ -1080,7 +1088,26 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'id'            => '3',
             'name'          => 'email',
             'description'   => 'email contact',
-            'icon'          => 'images/oxygen/16x16/actions/kontact-mail.png'
+            'icon'          => 'images/oxygen/16x16/actions/kontact-mail.png',
+            'is_user_type'  => true
+        ));
+        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+
+        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+            'id'            => '4',
+            'name'          => 'created',
+            'description'   => 'record created',
+            'icon'          => 'images/oxygen/16x16/actions/knewstuff.png',
+            'is_user_type'  => false
+        ));
+        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+
+        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+            'id'            => '5',
+            'name'          => 'changed',
+            'description'   => 'record changed',
+            'icon'          => 'images/oxygen/16x16/actions/document-properties.png',
+            'is_user_type'  => false
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
         

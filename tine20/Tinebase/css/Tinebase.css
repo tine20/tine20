@@ -86,7 +86,7 @@ html, body {
 
 /* ----- notes ------------------------------------------------------------*/
 .notes_noteIcon {
-   background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
+   background-image:url(../../images/oxygen/16x16/actions/note.png) !important;
 }
 .notes_telephoneIcon {
    background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
