@@ -555,7 +555,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                     autoLoad: true,
                     id: 'key',
                     fields: ['key', 'value'],
-                    data: [['on', 'on'], ['off', 'off']]
+                    data: [['no', 'off'], ['yes', 'on']]
                 })
             }, {
                 xtype: 'combo',
@@ -572,7 +572,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                     autoLoad: true,
                     id: 'key',
                     fields: ['key', 'value'],
-                    data: [['yes', 'on'], ['no', 'off']]
+                    data: [['no', 'off'], ['yes', 'on']]
                 })
             }]]
         };
