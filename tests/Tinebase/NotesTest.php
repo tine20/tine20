@@ -60,9 +60,10 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         );
         
         $this->_objects['noteType'] = new Tinebase_Notes_Model_NoteType(array(
-            'id'        => '5001',
-            'name'      => 'phpunit note type',
-            'icon'      => '/images/oxygen/16x16/actions/document-properties.png'
+            'id'            => '5001',
+            'name'          => 'phpunit note type',
+            'icon'          => '/images/oxygen/16x16/actions/document-properties.png',
+            'is_user_type'  => TRUE
         ));
         
         $this->_objects['note'] = new Tinebase_Notes_Model_Note(array(
@@ -86,8 +87,19 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         $this->_instance->addNoteType($this->_objects['noteType']);
         
         $noteTypesPost = $this->_instance->getNoteTypes();
+
+        // find our note type
+        foreach ($noteTypesPost as $noteType) {
+            if ($noteType->getId() === $this->_objects['noteType']->getId()) {
+                $testNoteType = $noteType;
+            }
+        }
+                
+        //print_r($note->toArray());                
         
         $this->assertGreaterThan(count($noteTypesPre), count($noteTypesPost));
+        $this->assertTrue(isset($testNoteType));
+        $this->assertEquals(1, $testNoteType->is_user_type, 'user type not set');
     }
     
     /**
@@ -135,7 +147,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         $noteArray = $note->toArray();
         //print_r($noteArray);
         
-        $this->assertEquals('Tine 2.0 Admin Account', $noteArray['created_by']);
+        $this->assertEquals(Zend_Registry::get('currentAccount')->accountDisplayName, $noteArray['created_by']);
     }
     
     /**
