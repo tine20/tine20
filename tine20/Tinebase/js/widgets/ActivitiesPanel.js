@@ -100,7 +100,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                             return '<i>' + username + '</i>';
                         case 'time':
                             if (!value) {
-                                value = Tine.Tinebase.Registry.map.currentAccount.accountLastLogin;
+                                return '';
                             }
                             var dt = Date.parseDate(value, 'c'); 
                             return dt.format(Locale.getTranslationData('Date', 'medium'));
