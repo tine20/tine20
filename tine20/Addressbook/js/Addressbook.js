@@ -581,10 +581,11 @@ Tine.Addressbook.Main = {
             if (! this.gridPanel) {
                this.initComponent();
             }
+            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
             this.store.load({});
             this.displayContactsToolbar();
             this.updateMainToolbar();
-            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+            
         } else {
             // note: if node is clicked, it is not selected!
             _node.getOwnerTree().selectPath(_node.getPath());
