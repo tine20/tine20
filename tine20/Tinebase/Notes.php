@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        delete notes completely or just set the is_deleted flag?
- * @todo        add changelog/historylog
  */
 
 /**
@@ -279,6 +278,36 @@ class Tinebase_Notes
         
         $this->_notesTable->insert($data);        
     }
+
+    /**
+     * add new system note
+     *
+     * @param Tinebase_Model_Record $_record
+     * @param int $_userId
+     * @param string $_type (created|changed)
+     * @param string $_backend   backend of record
+     * 
+     * @todo add changed fields to note
+     */
+    public function addSystemNote($_record, $_userId, $_type, $_backend = 'Sql')
+    {
+        $backend = ucfirst(strtolower($_backend));
+        
+        $noteType = $this->getNoteTypeByName($_type);
+        $user = Tinebase_User::getInstance()->getUserById($_userId);
+        
+        $noteText = $_type . ' by ' . $user->accountDisplayName;
+        
+        $note = new Tinebase_Notes_Model_Note(array(
+            'note_type_id'      => $noteType->getId(),
+            'note'              => $noteText,    
+            'record_model'      => get_class($_record),
+            'record_backend'    => $backend,       
+            'record_id'         => $_record->getId()        
+        ));
+        
+        $this->addNote($note);
+    }
     
     /**
      * delete notes
@@ -324,6 +353,23 @@ class Tinebase_Notes
             $types->addRecord(new Tinebase_Notes_Model_NoteType($type->toArray(), true));
         }
         return $types;         
+    }
+
+    /**
+     * get note type by name
+     *
+     * @param string $_name
+     * @return Tinebase_Notes_Model_NoteType
+     */
+    public function getNoteTypeByName($_name)
+    {        
+        $row = $this->_noteTypesTable->fetchRow($this->_db->quoteInto('name = ?', $_name));
+        
+        if (!$row) {
+            throw new UnderflowException('note type not found');
+        }
+        
+        return new Tinebase_Notes_Model_NoteType($row->toArray());        
     }
     
     /**
