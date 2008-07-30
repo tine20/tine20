@@ -129,6 +129,7 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
                 ai.el.dom.insertBefore(p.el.dom.parentNode.firstChild, ai.el.dom.firstChild.nextSibling);
             }
             ai.header.removeClass('activeapp-panel-header');
+            
             if(this.sequence){
                 delete this.activeItem;
                 if (!ai.collapsed){
@@ -152,7 +153,8 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
         p.el.dom.parentNode.parentNode.parentNode.firstChild.firstChild.innerHTML = p.title;
         // highligt current app
         p.header.addClass('activeapp-panel-header');
-        //p.el.dom.parentNode.parentNode.parentNode.firstChild.firstChild.style.height = '46px';
+        // update domument title
+        document.title = 'Tine 2.0 - ' + p.title;
         this.layout();
     },
 
