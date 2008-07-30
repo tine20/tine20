@@ -211,6 +211,9 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }
         
         //$this->sendNotifications(false, $lead, $_lead->responsible);
+                
+        // add created note to record
+        Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'created');
         
         return $this->getLead($lead->getId());
     }     
@@ -222,6 +225,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @return Crm_Model_Lead the updated lead
      * 
      * @todo add notifications later
+     * @todo check if record has been changed for system note
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
@@ -250,6 +254,9 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }        
         
         //$this->sendNotifications(true, $lead, $_lead->responsible);
+        
+        // add changed note to record
+        //Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed');        
         
         return $this->getLead($lead->getId());
     }

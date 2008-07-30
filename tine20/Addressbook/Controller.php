@@ -199,7 +199,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             Tinebase_Notes::getInstance()->setNotesOfRecord($contact);
         }
         
-        
+        // add created note to record
+        Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'created');
+                
         return $contact;
     }
     
@@ -208,6 +210,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      *
      * @param Addressbook_Model_Contact $_contact
      * @return  Addressbook_Model_Contact
+     * 
+     * @todo check if record has been changed for system note
      */
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
@@ -236,7 +240,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         }
         
         $contact = $this->_backend->update($_contact);
-        
+
+        // add changed note to record
+        //Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'changed');
+                        
         return $contact;
     }
     
