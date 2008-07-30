@@ -93,7 +93,7 @@ class Voipmanager_Backend_Snom_Xml
             foreach($line as $key => $value) {
                 $child = $phonesettings->addChild($key, $value);
                 $child->addAttribute('idx', $lineId);
-                $child->addAttribute('perm', 'RW');
+                $child->addAttribute('perm', 'RO');
             }
         }
         
@@ -176,30 +176,38 @@ class Voipmanager_Backend_Snom_Xml
     
     protected function _getUserSettings(Voipmanager_Model_SnomPhone $_phone)
     {
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
-            ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
-            ->join(SQL_TABLE_PREFIX . 'snom_templates', SQL_TABLE_PREFIX . 'snom_phones.template_id = ' . SQL_TABLE_PREFIX . 'snom_templates.id', array())
-            ->join(SQL_TABLE_PREFIX . 'snom_settings', SQL_TABLE_PREFIX . 'snom_templates.setting_id = ' . SQL_TABLE_PREFIX . 'snom_settings.id');
+        $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings();
+        $phoneSettings = $phoneSettinsgBackend->get($_phone->getId());
                 
-        $defaultSettings = $this->_db->fetchRow($select);
+        $templateBackend = new Voipmanager_Backend_Snom_Template();
+        $template = $templateBackend->get($_phone->template_id);
         
-        unset($defaultSettings['id']);
-        unset($defaultSettings['name']);
-        unset($defaultSettings['description']);
+        $defaultPhoneSettingsBackend = new Voipmanager_Backend_Snom_Setting();
+        $defaultPhoneSettings = $defaultPhoneSettingsBackend->get($template->setting_id);
 
+        $userSettings = array();
+        
+        foreach($phoneSettings AS $key => $value) {
+            if($key == 'phone_id') {
+                continue;
+            }
+            $isWriteAbleProperty = $key . '_writable';
+            if($defaultPhoneSettings->$isWriteAbleProperty == true && $value !== NULL) {
+                $userSettings[$key]['value'] = $value;
+                $userSettings[$key]['perms'] = 'RW';
+            } elseif($defaultPhoneSettings->$key !== NULL) {
+                $userSettings[$key]['value'] = $defaultPhoneSettings->$key;
+                if($defaultPhoneSettings->$isWriteAbleProperty == true) {
+                    $userSettings[$key]['perms'] = 'RW';
+                } else {
+                    $userSettings[$key]['perms'] = 'RO';
+                }
+            }            
+        }
+        
+        return $userSettings;
+        
 /*        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_phones')
-            ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress);
-                
-        $phoneSettings = $this->_db->fetchRow($select);
-        
-        unset($defaultSettings['id']);
-        unset($defaultSettings['name']);
-        unset($defaultSettings['description']);
-        
-        
         if($defaultSettings['http_client_info_sent'] == true) {
             // return username and password only on initial load
             unset($defaultSettings['http_client_user']);
@@ -208,26 +216,8 @@ class Voipmanager_Backend_Snom_Xml
             $defaultSettings['http_client_user_writable'] = false;
             $defaultSettings['http_client_pass_writable'] = false;            
         }
-        unset($defaultSettings['http_client_info_sent']); */
-        
-        $userSettings = array();
-        
-        foreach($defaultSettings as $key => $value) {
-            if(substr($key, -9) == '_writable') {
-                continue;
-            }
-            #if($value !== NULL && isset($defaultSettings[$key . '_writable'])) {
-            if(!empty($value) && isset($defaultSettings[$key . '_writable'])) {
-                $userSettings[$key]['value'] = $value;
-                if($defaultSettings[$key . '_writable'] == true) {
-                    $userSettings[$key]['perms'] = 'RW';
-                } else {
-                    $userSettings[$key]['perms'] = 'RO';
-                }
-            }
-        }
-        
-        return $userSettings;
+        unset($defaultSettings['http_client_info_sent']); 
+*/        
     }
     
     protected function _getLines(Voipmanager_Model_SnomPhone $_phone)
