@@ -11,7 +11,6 @@
 Ext.namespace('Tine.Admin.Tags');
 Tine.Admin.Tags.Main = {
     
-    
     actions: {
         addTag: null,
         editTag: null,
