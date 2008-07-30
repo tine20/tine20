@@ -118,6 +118,7 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
         Ext.ux.layout.AppLeftLayout.superclass.renderItem.apply(this, arguments);
         c.header.addClass('x-accordion-hd');
         c.on('beforeexpand', this.beforeExpand, this);
+        c.on('beforecollapse', this.beforeCollapse, this);
     },
 
     // private
@@ -129,6 +130,7 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
                 ai.el.dom.insertBefore(p.el.dom.parentNode.firstChild, ai.el.dom.firstChild.nextSibling);
             }
             ai.header.removeClass('activeapp-panel-header');
+            ai.collapsible = true;
             
             if(this.sequence){
                 delete this.activeItem;
@@ -149,6 +151,7 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
         
         // move body on top
         p.el.dom.parentNode.insertBefore(p.el.dom.lastChild, p.el.dom.parentNode.firstChild);
+        p.collapsible = false;
         // update app title
         p.el.dom.parentNode.parentNode.parentNode.firstChild.firstChild.innerHTML = p.title;
         // highligt current app
@@ -157,7 +160,10 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
         document.title = 'Tine 2.0 - ' + p.title;
         this.layout();
     },
-
+    beforeCollapse : function (p, anim){
+        return p.collapsible;
+        // how to find out what is to be expanded next???
+    },
     // private
     setItemSize : function(item, size){
         if(this.fill && item){
