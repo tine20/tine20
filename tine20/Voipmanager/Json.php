@@ -41,38 +41,33 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     public function getSnomPhones($sort, $dir, $query)
     {     
-  
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getSnomPhones($sort, $dir, $query)) {
+        $rows = Voipmanager_Controller::getInstance()->getSnomPhones($sort, $dir, $query);
         
-            $_rows = $rows->toArray();
+        $_rows = $rows->toArray();
 
-            $i = 0; 
-                  
-            foreach($_rows AS $_row)
-            {
-                if($location_row = Voipmanager_Controller::getInstance()->getSnomLocation($_row['location_id']))
-                {
-                    $_location = $location_row->toArray();
-                    $_rows[$i]['location'] = $_location['name'];
-                }
-                
-                if($template_row = Voipmanager_Controller::getInstance()->getSnomTemplate($_row['template_id']))
-                {
-                    $_template = $template_row->toArray();                                        
-                    $_rows[$i]['template'] = $_template['name'];
-                }                
-                
-                $i = $i + 1;
-            }         
-        
-            $result['results']      = $_rows;
-            $result['totalcount']   = count($result['results']);
-        }
+        $i = 0; 
+              
+        foreach($_rows AS $_row) {
+            if($location_row = Voipmanager_Controller::getInstance()->getSnomLocation($_row['location_id'])) {
+                $_location = $location_row->toArray();
+                $_rows[$i]['location'] = $_location['name'];
+            }
+            
+            if($template_row = Voipmanager_Controller::getInstance()->getSnomTemplate($_row['template_id'])) {
+                $_template = $template_row->toArray();                                        
+                $_rows[$i]['template'] = $_template['name'];
+            }                
+            
+            $i = $i + 1;
+        }         
+    
+        $result['results']      = $_rows;
+        $result['totalcount']   = count($result['results']);
 
         return $result;    
     }
@@ -151,16 +146,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $phoneData a JSON encoded array of phone properties
      * @return array
      */
-    public function saveSnomPhone($phoneData, $lineData, $ownerData)
+    public function saveSnomPhone($phoneData, $lineData, $rightsData)
     {
 
-        $phoneData = Zend_Json::decode($phoneData);
-        $lineData = Zend_Json::decode($lineData);
-        $ownerData = Zend_Json::decode($ownerData);
+        $phoneData  = Zend_Json::decode($phoneData);
+        $lineData   = Zend_Json::decode($lineData);
+        $rightsData = Zend_Json::decode($rightsData);
 
-        //$settingId = Zend_Json::decode($settingId);
-        
-        
         // unset if empty
         if (empty($phoneData['id'])) {
             unset($phoneData['id']);
@@ -174,6 +166,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $phoneSettings->setFromArray($phoneData);
 
         $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine', $lineData, true);
+        $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight', $rightsData);
         
         if (empty($phone->id)) {
             $phone = Voipmanager_Controller::getInstance()->createSnomPhone($phone, $phoneSettings);
@@ -182,14 +175,14 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         }
         $phone = $this->getSnomPhone($phone->getId());
 
-        foreach($ownerData AS $owner) {
+/*        foreach($ownerData AS $owner) {
             $owner['phone_id'] = $phone['id'];
             
             $_owner = new Voipmanager_Model_SnomPhoneOwner();   
             $_owner->setFromArray($owner);
             
             $_ownerData[] = $_owner;
-        }
+        } */
 
         $result = array('success'           => true,
             'welcomeMessage'    => 'Entry updated',
@@ -197,13 +190,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         );
 
 
-        if(!Voipmanager_Controller::getInstance()->createPhoneACLs($_ownerData, $phone['id'])) {
+/*        if(!Voipmanager_Controller::getInstance()->createPhoneACLs($_ownerData, $phone['id'])) {
             $result = array('success'           => false,
             'welcomeMessage'    => 'Owner ACL failed',
             'updatedData'       => $phone
             );        
         };
-
+*/
         
         return $result;         
     }     

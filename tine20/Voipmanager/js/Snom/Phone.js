@@ -477,15 +477,11 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 	}
                 });
                 
-                var ownerStore = Ext.getCmp('phoneUsersGrid').getStore();
-                var owner = [];
+                var rightsStore = Ext.getCmp('phoneUsersGrid').getStore();
+                var rights = [];
 
-                ownerStore.each(function(record) {                   
-                        var _ownerData = new Object();                    
-                        _ownerData.account_id = record.data.accountId;
-                        _ownerData.phone_id = '';
-                        
-                        owner.push(_ownerData);   
+                rightsStore.each(function(record) {
+                    rights.push(record.data);   
                 });
                 
                 
@@ -494,8 +490,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                         method: 'Voipmanager.saveSnomPhone', 
                         phoneData: Ext.util.JSON.encode(this.phoneRecord.data),
                         lineData: Ext.util.JSON.encode(lines),
-                        ownerData: Ext.util.JSON.encode(owner),
-                        settingId: Ext.util.JSON.encode(_settingId)
+                        rightsData: Ext.util.JSON.encode(rights)
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Voipmanager.Snom.Phones) {

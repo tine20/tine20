@@ -15,7 +15,7 @@ Tine.Voipmanager = function() {
      * builds the voipmanager applications tree
      */
         
-    if (Tine.Tinebase.Registry.get('adminAccount') === false) {
+    /*if (Tine.Tinebase.Registry.get('adminAccount') === false) {
     
          var _initialTree = [{
             text: 'My Phones',
@@ -31,9 +31,9 @@ Tine.Voipmanager = function() {
             viewRight: 'myPhones',            
             owner: Tine.Tinebase.Registry.get('currentAccount')
         }];
-    }
+    }*/
     
-    if (Tine.Tinebase.Registry.get('adminAccount') === true) {
+    //if (Tine.Tinebase.Registry.get('adminAccount') === true) {
         
         var _initialTree = [{
             text: 'Asterisk',
@@ -205,7 +205,7 @@ Tine.Voipmanager = function() {
             viewRight: 'snom'
         }];
         
-    }
+    //}
 
 
     /**

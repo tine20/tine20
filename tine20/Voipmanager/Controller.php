@@ -104,6 +104,13 @@ class Voipmanager_Controller
     protected $_snomPhoneSettingsBackend;
     
     /**
+     * the central caching object
+     *
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -119,7 +126,9 @@ class Voipmanager_Controller
         $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer();          
         $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context();          
         $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();  
-		$this->_asteriskMeetmeBackend		= new Voipmanager_Backend_Asterisk_Meetme();   
+		$this->_asteriskMeetmeBackend		= new Voipmanager_Backend_Asterisk_Meetme();
+
+		$this->_cache = Zend_Registry::get('cache');
     }
     
     /**
@@ -171,7 +180,8 @@ class Voipmanager_Controller
         $filter = new Voipmanager_Model_SnomLineFilter(array(
             'snomphone_id'  => $phone->id
         ));
-        $phone->lines = $this->_snomLineBackend->search($filter);
+        $phone->lines  = $this->_snomLineBackend->search($filter);
+        //$phone->rights = $this->getSnomPhoneRights($phone);
 
         return $phone;    
     }
@@ -558,8 +568,12 @@ class Voipmanager_Controller
      */
     public function getSnomLocation($_id)
     {
-        $result = $this->_snomLocationBackend->get($_id);
-
+        $id = Voipmanager_Model_SnomLocation::convertSnomLocationIdToInt($_id);
+        if (($result = $this->_cache->load('snomLocation_' . $id)) === false) {
+            $result = $this->_snomLocationBackend->get($_id);
+            $this->_cache->save($result, 'snomLocation_' . $id, array('SnomLocation'), 5);
+        }
+        
         return $result;    
     }    
     
@@ -598,6 +612,8 @@ class Voipmanager_Controller
         */
        
         $location = $this->_snomLocationBackend->update($_location);
+        
+        $this->_cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('SnomLocation'));
         
         return $location;
     }

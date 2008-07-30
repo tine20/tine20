@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>1.01</version>
+    <version>0.20</version>
     <order>50</order>
     <tables>
         <table>
@@ -1369,6 +1369,86 @@
                 </index>
             </declaration>
         </table>         
+
+        <table>
+            <name>snom_phones_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>snom_phone_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>anyone</value>
+                    <value>user</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>read_right</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>write_right</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>dial_right</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>                
+                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <unique>true</unique>
+                    <name>snom_phone_id-account_type-account_id</name>
+                    <field>
+                        <name>snom_phone_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>snom_phone_acl::snome_phone_id--snome_phones::id</name>
+                    <field>
+                        <name>snom_phone_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_phones</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>                    
+                    </reference>
+                </index>
+            </declaration>
+        </table>
         
      </tables>    
 </application>
