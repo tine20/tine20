@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-07-29 21:13+0100\n"
+"PO-Revision-Date: 2008-07-30 21:16+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,154 +16,156 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
-#: Tasks/js/Tasks.js:98
-msgid "Do you really want to delete the selected task(s)"
-msgstr "Do you really want to delete the selected task(s)"
+#: js/Tasks.js:107
+msgid "Do you really want to delete the selected task"
+msgid_plural "Do you really want to delete the selected task"
+msgstr[0] "Do you really want to delete the selected task"
+msgstr[1] "Do you really want to delete the selected tasks"
 
-#: Tasks/js/Tasks.js:127
-#: Tasks/js/Tasks.js:248
-#: Tasks/js/Tasks.js:553
-#: Tasks/js/Tasks.js:632
-#: Tasks/js/Tasks.js:657
+#: js/Tasks.js:139
+#: js/Tasks.js:267
+#: js/Tasks.js:568
+#: js/Tasks.js:647
+#: js/Tasks.js:672
 msgid "Failed"
 msgstr "Failed"
 
-#: Tasks/js/Tasks.js:127
-#: Tasks/js/Tasks.js:657
+#: js/Tasks.js:139
+#: js/Tasks.js:672
 msgid "Could not delete task(s)."
 msgstr "Could not delete task(s)."
 
-#: Tasks/js/Tasks.js:143
+#: js/Tasks.js:155
 msgid "Edit task"
 msgstr "Edit task"
 
-#: Tasks/js/Tasks.js:152
+#: js/Tasks.js:164
 msgid "Add task"
 msgstr "Add task"
 
-#: Tasks/js/Tasks.js:158
+#: js/Tasks.js:170
 msgid "Delete task"
 msgstr "Delete task"
 
-#: Tasks/js/Tasks.js:165
+#: js/Tasks.js:177
 msgid "Delete tasks"
 msgstr "Delete tasks"
 
-#: Tasks/js/Tasks.js:248
-#: Tasks/js/Tasks.js:553
-#: Tasks/js/Tasks.js:632
+#: js/Tasks.js:267
+#: js/Tasks.js:568
+#: js/Tasks.js:647
 msgid "Could not save task."
 msgstr "Could not save task."
 
-#: Tasks/js/Tasks.js:291
+#: js/Tasks.js:306
 msgid "Tasks"
 msgstr "Tasks"
 
-#: Tasks/js/Tasks.js:292
+#: js/Tasks.js:307
 msgid "to do lists"
 msgstr "ToDo lists"
 
-#: Tasks/js/Tasks.js:314
+#: js/Tasks.js:329
 msgid "Enter searchfilter"
 msgstr "Enter searchfilter"
 
-#: Tasks/js/Tasks.js:329
+#: js/Tasks.js:344
 msgid "Show closed"
 msgstr "Show closed"
 
-#: Tasks/js/Tasks.js:379
+#: js/Tasks.js:394
 msgid "Search:"
 msgstr "Search:"
 
-#: Tasks/js/Tasks.js:391
+#: js/Tasks.js:406
 msgid "Displaying tasks {0} - {1} of {2}"
 msgstr "Displaying tasks {0} - {1} of {2}"
 
-#: Tasks/js/Tasks.js:392
+#: js/Tasks.js:407
 msgid "No tasks to display"
 msgstr "No tasks to display"
 
-#: Tasks/js/Tasks.js:409
-#: Tasks/js/Tasks.js:709
+#: js/Tasks.js:424
+#: js/Tasks.js:724
 msgid "Status"
 msgstr "Status"
 
-#: Tasks/js/Tasks.js:425
+#: js/Tasks.js:440
 msgid "Percent"
 msgstr "Percent"
 
-#: Tasks/js/Tasks.js:440
-#: Tasks/js/Tasks.js:681
+#: js/Tasks.js:455
+#: js/Tasks.js:696
 msgid "Summary"
 msgstr "Summary"
 
-#: Tasks/js/Tasks.js:448
+#: js/Tasks.js:463
 msgid "Add a task..."
 msgstr "Add a task..."
 
-#: Tasks/js/Tasks.js:453
-#: Tasks/js/Tasks.js:713
+#: js/Tasks.js:468
+#: js/Tasks.js:728
 msgid "Priority"
 msgstr "Priority"
 
-#: Tasks/js/Tasks.js:469
+#: js/Tasks.js:484
 msgid "Due Date"
 msgstr "Due Date"
 
-#: Tasks/js/Tasks.js:490
+#: js/Tasks.js:505
 msgid "No Tasks to display"
 msgstr "No Tasks to display"
 
-#: Tasks/js/Tasks.js:599
+#: js/Tasks.js:614
 msgid "Please wait"
 msgstr "Please wait"
 
-#: Tasks/js/Tasks.js:599
-#: Tasks/js/Tasks.js:645
+#: js/Tasks.js:614
+#: js/Tasks.js:660
 msgid "Saving Task"
 msgstr "Saving Task"
 
-#: Tasks/js/Tasks.js:636
+#: js/Tasks.js:651
 msgid "Errors"
 msgstr "Errors"
 
-#: Tasks/js/Tasks.js:636
+#: js/Tasks.js:651
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
-#: Tasks/js/Tasks.js:643
+#: js/Tasks.js:658
 msgid "Confirm"
 msgstr "Confirm"
 
-#: Tasks/js/Tasks.js:643
+#: js/Tasks.js:658
 msgid "Do you really want to delete this task?"
 msgstr "Do you really want to delete this task?"
 
-#: Tasks/js/Tasks.js:645
+#: js/Tasks.js:660
 msgid "Please wait a moment..."
 msgstr "Please wait a moment..."
 
-#: Tasks/js/Tasks.js:685
+#: js/Tasks.js:700
 msgid "Enter short name..."
 msgstr "Enter short name..."
 
-#: Tasks/js/Tasks.js:688
+#: js/Tasks.js:703
 msgid "Notes"
 msgstr "Notes"
 
-#: Tasks/js/Tasks.js:690
+#: js/Tasks.js:705
 msgid "Enter description..."
 msgstr "Enter description..."
 
-#: Tasks/js/Tasks.js:704
+#: js/Tasks.js:719
 msgid "Percentage"
 msgstr "Percentage"
 
-#: Tasks/js/Tasks.js:717
+#: js/Tasks.js:732
 msgid "Due date"
 msgstr "Due date"
 
-#: Tasks/js/Tasks.js:722
+#: js/Tasks.js:736
 msgid "Folder"
 msgstr "Folder"
 
