@@ -14,7 +14,7 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * add the asterisk_peers table
      */    
-    public function update_19()
+    public function update_18()
     {
         $tableDefinition = "
         <table>
