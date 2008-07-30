@@ -168,6 +168,11 @@ class Voipmanager_Backend_Snom_Xml
         unset($locationsSettings['id']);
         unset($locationsSettings['name']);
         unset($locationsSettings['description']);
+        // see http://wiki.snom.com/Interoperability/Asterisk#Basic_Asterisk_configuration
+        $locationsSettings['user_phone'] = 'off';
+        $locationsSettings['filter_registrar'] = 'off';
+        $locationsSettings['challenge_response'] = 'off';
+        $locationsSettings['call_completion'] = 'off';
         
         $locationsSettings['firmware_status'] .= '?mac=' . $_phone->macaddress;
         
