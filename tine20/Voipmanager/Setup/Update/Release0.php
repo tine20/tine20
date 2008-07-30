@@ -127,4 +127,33 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '0.21');
     }
+
+    public function update_21()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>read_right</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>');
+        $this->_backend->alterCol('snom_phones_acl', $declaration, 'read');
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>write_right</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>');
+        $this->_backend->alterCol('snom_phones_acl', $declaration, 'write');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>dial_right</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>');
+        $this->_backend->alterCol('snom_phones_acl', $declaration, 'dial');
+        
+        $this->setApplicationVersion('Voipmanager', '0.22');
+    }
 }
