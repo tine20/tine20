@@ -228,17 +228,22 @@ class Tinebase_Controller
         $logger = new Zend_Log();
         
         if (isset($this->_config->logger)) {
-            $loggerConfig = $this->_config->logger;
-            
-            $filename = $loggerConfig->filename;
-            $priority = (int)$loggerConfig->priority;
-
-            $writer = new Zend_Log_Writer_Stream($filename);
-            $logger->addWriter($writer);
-
-            $filter = new Zend_Log_Filter_Priority($priority);
-            $logger->addFilter($filter);
-
+            try {
+                $loggerConfig = $this->_config->logger;
+                
+                $filename = $loggerConfig->filename;
+                $priority = (int)$loggerConfig->priority;
+    
+                $writer = new Zend_Log_Writer_Stream($filename);
+                $logger->addWriter($writer);
+    
+                $filter = new Zend_Log_Filter_Priority($priority);
+                $logger->addFilter($filter);
+            } catch (Exception $e) {
+                error_log("Tine 2.0 can't setup the configured logger! The Server responded: $e");
+                $writer = new Zend_Log_Writer_Null;
+                $logger->addWriter($writer);
+            }
         } else {
             $writer = new Zend_Log_Writer_Null;
             $logger->addWriter($writer);
