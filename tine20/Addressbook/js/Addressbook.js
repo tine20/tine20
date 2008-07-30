@@ -36,7 +36,8 @@ Tine.Addressbook = {
         treePanel.on('click', function(_node, _event) {
             Tine.Addressbook.Main.show(_node);
         }, this);
-
+        
+        // executed when adb gets activated
         treePanel.on('beforeexpand', function(_panel) {
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
@@ -265,6 +266,7 @@ Tine.Addressbook.Main = {
         
         // init grid store
         this.initStore();
+        this.initContactsGrid();
     },
 
     updateMainToolbar : function() 
@@ -310,7 +312,7 @@ Tine.Addressbook.Main = {
         Tine.Tinebase.MainScreen.setActiveToolbar(contactToolbar);
     },
 
-    displayContactsGrid: function() 
+    initContactsGrid: function() 
     {
         // the filter toolbar
         var filterToolbar = new Tine.widgets.FilterToolbar({
@@ -510,13 +512,7 @@ Tine.Addressbook.Main = {
             gridPanel.setHeight(availableGridHeight - h);
         }, this);
         
-        // add the grid to the layout
-        Tine.Tinebase.MainScreen.setActiveContentPanel(new Ext.Panel({
-            border: false,
-            layout: 'fit',
-            tbar: filterToolbar,
-            items: gridPanel
-        }));
+        this.gridPanel = gridPanel;
     },
     
     /**
@@ -579,10 +575,12 @@ Tine.Addressbook.Main = {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         if(currentToolbar === false || currentToolbar.id != 'Addressbook_Contacts_Toolbar') {
-            this.initComponent();
+            if (! this.gridPanel) {
+               this.initComponent();
+            }
             this.displayContactsToolbar();
-            this.displayContactsGrid();
             this.updateMainToolbar();
+            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
         } else {
             // note: if node is clicked, it is not selected!
             _node.getOwnerTree().selectPath(_node.getPath());
