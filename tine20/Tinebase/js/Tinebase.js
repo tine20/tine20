@@ -361,17 +361,13 @@ Tine.Tinebase.MainScreen = function() {
      * returns array of panels to display in south region
      */
     var _getPanels = function() {
-		
+		var userApps = Tine.Tinebase.Registry.get('userApplications');
     	var panels = [];
         
-        for(var _application in Tine) {
-        	try{
-                for (var i=0, j=Tine[_application]['rights'].length; i<j; i++) {
-                    if (Tine[_application]['rights'][i] == 'run') {
-                        panels.push(Tine[_application].getPanel());
-                        break;
-                    }
-                }
+        for(var i=0; i<userApps.length; i++) {
+            var app = userApps[i];
+            try{
+                panels.push(Tine[app.name].getPanel());
         	} catch(e) {
         		//console.log(_application + ' failed');
         		//console.log(e);

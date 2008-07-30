@@ -182,10 +182,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         $view->cssIncludeFiles = $includeFiles['css'];
         
         $view->configData = array(
-            'timeZone'        => Zend_Registry::get('userTimeZone'),
-            'locale'          => Zend_Registry::get('locale')->toString(),
-            'currentAccount'  => Zend_Registry::get('currentAccount')->toArray(),
-            'accountBackend'  => Tinebase_User::getConfiguredBackend()
+            'timeZone'         => Zend_Registry::get('userTimeZone'),
+            'locale'           => Zend_Registry::get('locale')->toString(),
+            'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
+            'accountBackend'   => Tinebase_User::getConfiguredBackend(),
+            'userApplications' => $userApplications->toArray(),
         );
         
         
