@@ -68,18 +68,23 @@ class Voipmanager_Backend_Snom_Setting
 	 * get Setting by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Setting
+	 * @return Voipmanager_Model_SnomSetting
 	 */
     public function get($_id)
     {	
         $settingId = Voipmanager_Model_SnomSetting::convertSnomSettingIdToInt($_id);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_default_settings')->where($this->_db->quoteInto('id = ?', $settingId));
+        
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_default_settings')
+            ->where($this->_db->quoteInto('id = ?', $settingId));
+        
         $row = $this->_db->fetchRow($select);
-        if (! $row) {
+        if (!$row) {
             throw new UnderflowException('setting not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomSetting', $row);
+
         $result = new Voipmanager_Model_SnomSetting($row);
+        
         return $result;
 	}
 	   
