@@ -153,7 +153,8 @@ class Tinebase_Acl_Roles
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right') . ' = ?', Tinebase_Acl_Rights::RUN))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'applications.status') . ' = ?', Tinebase_Application::ENABLED))
-            ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
+            ->group(SQL_TABLE_PREFIX . 'role_rights.application_id')
+            ->order('order', 'ASC');
             
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
