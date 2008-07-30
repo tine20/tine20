@@ -256,7 +256,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         //$this->sendNotifications(true, $lead, $_lead->responsible);
         
         // add changed note to record
-        //Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed');        
+        Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed');        
         
         return $this->getLead($lead->getId());
     }

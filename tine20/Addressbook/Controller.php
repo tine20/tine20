@@ -242,7 +242,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         $contact = $this->_backend->update($_contact);
 
         // add changed note to record
-        //Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'changed');
+        Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'changed');
                         
         return $contact;
     }
