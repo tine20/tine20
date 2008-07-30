@@ -58,6 +58,11 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
             'model'     => 'Addressbook_Model_Contact',
             'backend'    => 'Sql',
         );
+
+        $this->_objects['contact'] = new Addressbook_Model_Contact(array(
+            'id'        => 1,
+            'n_family'  => 'phpunit notes contact'
+        ));
         
         $this->_objects['noteType'] = new Tinebase_Notes_Model_NoteType(array(
             'id'            => '5001',
@@ -82,23 +87,12 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testAddNoteType()
     {
-        $noteTypesPre = $this->_instance->getNoteTypes();
-        
         $this->_instance->addNoteType($this->_objects['noteType']);
         
-        $noteTypesPost = $this->_instance->getNoteTypes();
-
         // find our note type
-        foreach ($noteTypesPost as $noteType) {
-            if ($noteType->getId() === $this->_objects['noteType']->getId()) {
-                $testNoteType = $noteType;
-            }
-        }
+        $testNoteType = $this->_instance->getNoteTypeByName($this->_objects['noteType']->name);
                 
-        //print_r($note->toArray());                
-        
-        $this->assertGreaterThan(count($noteTypesPre), count($noteTypesPost));
-        $this->assertTrue(isset($testNoteType));
+        $this->assertEquals($this->_objects['noteType']->name, $testNoteType->name);
         $this->assertEquals(1, $testNoteType->is_user_type, 'user type not set');
     }
     
@@ -115,6 +109,27 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_objects['note']->note, $note->note);        
     }
 
+    /**
+     * try to add a system note
+     *
+     */
+    public function testAddSystemNote()
+    {        
+        $this->_instance->addSystemNote($this->_objects['contact'], Zend_Registry::get('currentAccount')->getId(), 'created');
+        
+        $filter = new Tinebase_Notes_Model_NoteFilter(array(array(
+            'field' => 'query',
+            'operator' => '',
+            'value' => 'created by'
+        )));
+        $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
+        
+        //print_r($notes->toArray());
+        
+        $this->assertGreaterThan(0, count($notes));
+        $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $notes[0]->note); 
+    }
+    
     /**
      * test search notes
      *
