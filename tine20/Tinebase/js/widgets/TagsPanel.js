@@ -86,11 +86,14 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 tooltip: _('Add a new personal tag'),
                 scope: this,
                 handler: function() {
-                    Ext.Msg.prompt(_('Add New Personal Tag'), _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'), function(btn, text){
-                        if (btn == 'ok'){
-                            this.onTagAdd(text);
-                        }
-                    }, this);
+                    Ext.Msg.prompt(_('Add New Personal Tag'),
+                                   _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'), 
+                        function(btn, text) {
+                            if (btn == 'ok'){
+                                this.onTagAdd(text);
+                            }
+                        }, 
+                    this, false, this.searchField.lastQuery);
                 }
             })
         ];
@@ -406,6 +409,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.searchField = new Ext.form.ComboBox({
             store: this.availableTagsStore,
             mode: 'local',
+            enableKeyEvents: true,
             displayField:'name',
             typeAhead: true,
             emptyText: _('Enter tag name'),
@@ -422,23 +426,17 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         // load data once
         this.searchField.on('focus', function(searchField){
             if (! searchField.store.lastOptions) {
-                this.availableTagsStore.load({});
+                // hack to supress selecting the first item from the freshly
+                // retrieved store
+                searchField.hasFocus = false;
+                this.availableTagsStore.load({
+                    scope: this,
+                    callback: function() {
+                        searchField.hasFocus = true;
+                    }
+                });
             }
         }, this);
-        
-        /*
-        this.searchField.on('focus', function(searchField){
-            searchField.hasFocus = false;
-            // hack to supress selecting the first item from the freshly
-            // retrieved store
-            this.availableTagsStore.load({
-                scope: this,
-                callback: function() {
-                    searchField.hasFocus = true;
-                }
-            });
-        }, this);
-        */
         
         this.searchField.on('select', function(searchField, selectedTag){
             if(this.recordTagsStore.getById(selectedTag.id) === undefined) {
@@ -448,6 +446,16 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             searchField.clearValue();
         },this);
         
+        /*
+        // filter invalid
+        this.searchField.on('beforequery', function(qe) {
+            var query = qe.query;
+            if (this.searchField.store.find('name', query) < 0) {
+                console.log(query);
+            }
+            //var val = searchField.el.dom.value;
+        }, this);
+        */
         /*
         this.searchField.on('specialkey', function(searchField, e){
              if(e.getKey() == e.ENTER){
