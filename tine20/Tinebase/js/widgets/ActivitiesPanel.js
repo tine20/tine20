@@ -420,7 +420,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             options.params.filter = Ext.util.JSON.encode(filter);
         }, this);
                         
-        this.store.load({});
+        //this.store.load({});
     },
 
     /**
@@ -468,11 +468,14 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                 items: this.activitiesGrid
             })
         ];
-        
-        this.store.load({});
+                
+        // load store on activate
+        this.on('activate', function(panel){
+            panel.store.load({});
+        });
         
         Tine.widgets.activities.ActivitiesTabPanel.superclass.initComponent.call(this);
-    }        
+    }
 });
 
 /************************* helper *********************************/
