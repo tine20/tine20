@@ -23,11 +23,14 @@ Tine.Tasks.getPanel =  function() {
     
     // this function is called each time the user activates the Tasks app
     tree.on('beforeexpand', function(panel) {
-        // we need to set toolbar first, as the grid filters read out the toolbar
-        Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Tasks.mainGrid.getToolbar());
-        Tine.Tasks.mainGrid.initMainScreen();
-        Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Tasks.mainGrid.grid);
-    }, this);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.getToolbar());
+        this.updateMainToolbar();
+        
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.grid, true);
+        this.store.load({
+            params: this.paging
+        });
+    }, Tine.Tasks.mainGrid);
     
     return tree;
 };
@@ -175,14 +178,17 @@ Tine.Tasks.mainGrid = {
             })
         };
         
-    },
-    
-    initMainScreen: function() {
         this.filter.owner = Tine.Tinebase.Registry.get('currentAccount').accountId;
         this.initStore();
         this.initGrid();
+        
+    },
+    
+    /*
+    initMainScreen: function() {
         this.updateMainToolbar();
 	},
+    */
 	
 	initStore: function(){
 	    this.store = new Ext.data.JsonStore({
@@ -263,10 +269,6 @@ Tine.Tasks.mainGrid = {
 				break;
 			}
 		}, this);
-        
-		this.store.load({
-			params: this.paging
-		});
 	},
 	
     updateMainToolbar : function() 
