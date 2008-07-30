@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.20</version>
+    <version>0.21</version>
     <order>50</order>
     <tables>
         <table>
@@ -554,8 +554,10 @@
                 </field>
                 <field>
                     <name>nat</name>
-                    <type>boolean</type>
-                    <default>NULL</default>
+                    <type>enum</type>
+                    <value>yes</value>
+                    <value>no</value>
+                    <default>no</default>
                 </field>
                 <field>
                     <name>deny</name>
@@ -589,8 +591,10 @@
                 </field>
                 <field>
                     <name>qualify</name>
-                    <type>boolean</type>
-                    <default>NULL</default>
+                    <type>enum</type>
+                    <value>yes</value>
+                    <value>no</value>
+                    <default>no</default>
                 </field>
                 <field>
                     <name>restrictcid</name>

@@ -103,4 +103,28 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Voipmanager', '0.20');
     }       
    
+    public function update_20()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>nat</name>
+                <type>enum</type>
+                <value>yes</value>
+                <value>no</value>
+                <default>no</default>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+
+       $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>qualify</name>
+                <type>enum</type>
+                <value>yes</value>
+                <value>no</value>
+                <default>no</default>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $this->setApplicationVersion('Voipmanager', '0.21');
+    }
 }
