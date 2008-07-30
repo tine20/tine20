@@ -315,7 +315,17 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         //print_r($contact);
         
         $this->assertEquals($contactId, $result['contact']['id']);
-        $this->assertEquals($note['note'], $result['contact']['notes'][0]['note']);
+        
+        $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
+        foreach ($result['contact']['notes'] as $note) {
+            if ($note['note_type_id'] === $createdNoteType->getId()) {
+                $createdNote = $note;
+            } else {
+                $addedNote = $note;
+            }
+        }        
+        $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $createdNote['note']); 
+        $this->assertEquals($note['note'], $addedNote['note']);
         
         $json->deleteContacts($contactId);
 
