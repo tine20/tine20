@@ -512,7 +512,12 @@ Tine.Addressbook.Main = {
             gridPanel.setHeight(availableGridHeight - h);
         }, this);
         
-        this.gridPanel = gridPanel;
+        this.gridPanel = new Ext.Panel({
+            border: false,
+            layout: 'fit',
+            tbar: filterToolbar,
+            items: gridPanel
+        });
     },
     
     /**
@@ -566,8 +571,6 @@ Tine.Addressbook.Main = {
             
             options.params.filter = Ext.util.JSON.encode(filter);
         }, this);
-                        
-        this.store.load({});
     },
     
     show: function(_node) 
@@ -578,6 +581,7 @@ Tine.Addressbook.Main = {
             if (! this.gridPanel) {
                this.initComponent();
             }
+            this.store.load({});
             this.displayContactsToolbar();
             this.updateMainToolbar();
             Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
