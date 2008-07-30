@@ -39,7 +39,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     recordNotesStore: null,
     
     title: null,
-    iconCls: 'notes_defaultIcon',
+    iconCls: 'notes_noteIcon',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
     collapsible: true,
@@ -178,18 +178,20 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         
         var subMenu = [];
         var typesStore = Tine.widgets.activities.getTypesStore();
-        var defaultTypeRecord = typesStore.getAt(typesStore.find('name', 'note')); 
+        var defaultTypeRecord = typesStore.getAt(typesStore.find('is_user_type', '1')); 
         
         typesStore.each(function(record){
-        	var action = new Ext.Action({
-                text: this.translation._('Add') + ' ' + this.translation._(record.data.name) + ' ' + this.translation._('Note'),
-                tooltip: this.translation._(record.data.description),
-                handler: this.handlers.addNote,
-                iconCls: 'notes_' + record.data.name + 'Icon',
-                typeId: record.data.id,
-                scope: this
-            });            
-            subMenu.push(action);
+        	if (record.data.is_user_type == 1) {
+            	var action = new Ext.Action({
+                    text: this.translation._('Add') + ' ' + this.translation._(record.data.name) + ' ' + this.translation._('Note'),
+                    tooltip: this.translation._(record.data.description),
+                    handler: this.handlers.addNote,
+                    iconCls: 'notes_' + record.data.name + 'Icon',
+                    typeId: record.data.id,
+                    scope: this
+                });            
+                subMenu.push(action);
+        	}
         }, this);
         
         var addButton = new Ext.SplitButton({
