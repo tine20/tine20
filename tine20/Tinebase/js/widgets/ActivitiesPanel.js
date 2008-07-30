@@ -79,7 +79,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-activities-activitiesitem" id="{id}">',
                     '<div class="x-widget-activities-activitiesitem-text"',
-                    '   ext:qtip="{[this.encode(values.note)]}" >', 
+                    '   ext:qtip="{[this.encode(values.note)]} - {[this.render(values.creation_time, "timefull")]}" >', 
                         '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.created_by, "user")]}&nbsp;{[this.render(values.creation_time, "time")]}<br/>',
                         '{[this.encode(values.note)]}<hr>',
                     '</div>',
@@ -104,6 +104,13 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                             }
                             var dt = Date.parseDate(value, 'c'); 
                             return dt.format(Locale.getTranslationData('Date', 'medium'));
+                        case 'timefull':
+                            if (!value) {
+                                return '';
+                            }
+                            var dt = Date.parseDate(value, 'c'); 
+                            return dt.format(Locale.getTranslationData('Date', 'medium')) + ' ' +
+                                dt.format(Locale.getTranslationData('Time', 'medium'));
                     }
                 }
             }
