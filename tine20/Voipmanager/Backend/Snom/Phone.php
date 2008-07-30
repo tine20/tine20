@@ -155,9 +155,9 @@ class Voipmanager_Backend_Snom_Phone
             ->from(SQL_TABLE_PREFIX . 'snom_phones_acl', array('account_id'))
             ->where($this->_db->quoteInto('account_type = ?', 'user'))
             ->where($this->_db->quoteInto('snom_phone_id = ?', $_phoneId))
-            ->where($this->_db->quoteIdentifier('read'). '= 1')
-            ->where($this->_db->quoteIdentifier('write'). '= 1')
-            ->where($this->_db->quoteIdentifier('dial'). '= 1');            
+            ->where($this->_db->quoteIdentifier('read_right'). '= 1')
+            ->where($this->_db->quoteIdentifier('write_right'). '= 1')
+            ->where($this->_db->quoteIdentifier('dial_right'). '= 1');            
 
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
