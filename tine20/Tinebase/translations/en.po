@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-29 15:27+0100\n"
-"PO-Revision-Date: 2008-07-29 21:12+0100\n"
+"POT-Creation-Date: 2008-07-30 10:01+0100\n"
+"PO-Revision-Date: 2008-07-30 10:01+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -220,14 +220,20 @@ msgid "Enter tag name:"
 msgstr "Enter tag name:"
 
 #: Tinebase/js/widgets/TagsPanel.js:104
-#: Tinebase/js/widgets/TagsPanel.js:393
-#: Tinebase/js/widgets/TagsPanel.js:397
+#: Tinebase/js/widgets/TagsPanel.js:394
+#: Tinebase/js/widgets/TagsPanel.js:398
 msgid "personal"
 msgstr "personal"
 
 #: Tinebase/js/widgets/TagsPanel.js:126
 msgid "No Tags to display"
 msgstr "No Tags to display"
+
+#: Tinebase/js/widgets/TagsPanel.js:149
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Tinebase/js/widgets/TagsPanel.js:164
 #: Tinebase/js/widgets/TagsPanel.js:169
@@ -254,52 +260,78 @@ msgstr "Please enter new description:"
 msgid "Change Color"
 msgstr "Change Color"
 
-#: Tinebase/js/widgets/TagsPanel.js:232
+#: Tinebase/js/widgets/TagsPanel.js:216
+#, fuzzy
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Delete"
+msgstr[1] "Delete"
+
+#: Tinebase/js/widgets/TagsPanel.js:228
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Tinebase/js/widgets/TagsPanel.js:229
+msgid "The selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Tinebase/js/widgets/TagsPanel.js:233
 msgid "Please wait a moment..."
 msgstr "Please wait a moment..."
 
-#: Tinebase/js/widgets/TagsPanel.js:248
-#: Tinebase/js/widgets/TagsPanel.js:346
-#: Tinebase/js/widgets/TagsPanel.js:379
+#: Tinebase/js/widgets/TagsPanel.js:233
+#, fuzzy
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Deleting"
+msgstr[1] "Deleting"
+
+#: Tinebase/js/widgets/TagsPanel.js:249
+#: Tinebase/js/widgets/TagsPanel.js:347
+#: Tinebase/js/widgets/TagsPanel.js:380
 msgid "Failed"
 msgstr "Failed"
 
-#: Tinebase/js/widgets/TagsPanel.js:248
+#: Tinebase/js/widgets/TagsPanel.js:249
 msgid "Could not delete Tag(s)."
 msgstr "Could not delete Tag(s)."
 
-#: Tinebase/js/widgets/TagsPanel.js:300
-#: Tinebase/js/widgets/TagsPanel.js:360
+#: Tinebase/js/widgets/TagsPanel.js:301
+#: Tinebase/js/widgets/TagsPanel.js:361
 msgid "Notice"
 msgstr "Notice"
 
-#: Tinebase/js/widgets/TagsPanel.js:301
-#: Tinebase/js/widgets/TagsPanel.js:361
+#: Tinebase/js/widgets/TagsPanel.js:302
+#: Tinebase/js/widgets/TagsPanel.js:362
 msgid "The minimum tag length is three."
 msgstr "The minimum tag length is three."
 
-#: Tinebase/js/widgets/TagsPanel.js:346
+#: Tinebase/js/widgets/TagsPanel.js:347
 msgid "Could not create tag."
 msgstr "Could not create tag."
 
-#: Tinebase/js/widgets/TagsPanel.js:379
+#: Tinebase/js/widgets/TagsPanel.js:380
 msgid "Could not update tag."
 msgstr "Could not update tag."
 
-#: Tinebase/js/widgets/TagsPanel.js:410
-#: Tinebase/js/widgets/TagsPanel.js:464
+#: Tinebase/js/widgets/TagsPanel.js:411
+#: Tinebase/js/widgets/TagsPanel.js:465
 msgid "Enter tag name"
 msgstr "Enter tag name"
 
-#: Tinebase/js/widgets/TagsPanel.js:411
+#: Tinebase/js/widgets/TagsPanel.js:412
 msgid "Searching..."
 msgstr "Searching..."
 
-#: Tinebase/js/widgets/TagsPanel.js:537
+#: Tinebase/js/widgets/TagsPanel.js:538
 msgid "Description"
 msgstr "Description"
 
-#: Tinebase/js/widgets/TagsPanel.js:541
+#: Tinebase/js/widgets/TagsPanel.js:542
 msgid "Color"
 msgstr "Color"
 

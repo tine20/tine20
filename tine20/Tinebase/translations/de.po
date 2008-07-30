@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-29 15:50+0100\n"
-"PO-Revision-Date: 2008-07-29 21:12+0100\n"
+"POT-Creation-Date: 2008-07-30 09:59+0100\n"
+"PO-Revision-Date: 2008-07-30 10:00+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -165,7 +165,7 @@ msgstr "Aktualisiere"
 
 #: Tinebase/js/widgets/ContainerTree.js:310
 msgid "Delete"
-msgstr "Entfernen"
+msgstr "Löschen"
 
 #: Tinebase/js/widgets/ContainerTree.js:316
 msgid "Rename"
@@ -220,8 +220,8 @@ msgid "Enter tag name:"
 msgstr "Tag-Namen eingeben:"
 
 #: Tinebase/js/widgets/TagsPanel.js:104
-#: Tinebase/js/widgets/TagsPanel.js:393
-#: Tinebase/js/widgets/TagsPanel.js:397
+#: Tinebase/js/widgets/TagsPanel.js:394
+#: Tinebase/js/widgets/TagsPanel.js:398
 msgid "personal"
 msgstr "Persönlich"
 
@@ -263,8 +263,8 @@ msgstr "Farbe ändern"
 #: Tinebase/js/widgets/TagsPanel.js:216
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
-msgstr[0] "Tag entfernen"
-msgstr[1] "Tags entfernen"
+msgstr[0] "Tag löschen"
+msgstr[1] "Tags löschen"
 
 #: Tinebase/js/widgets/TagsPanel.js:228
 msgid "Realy Delete Selected Tag?"
@@ -273,63 +273,63 @@ msgstr[0] "Ausgewählten Tag wirklich löschen?"
 msgstr[1] "Ausgewählte Tags wirklich löschen?"
 
 #: Tinebase/js/widgets/TagsPanel.js:229
-msgid "The selected tag will disapear for all entries"
-msgid_plural "The selected tags,  will disapear for all entries"
-msgstr[0] "Der ausgewählte Tag wird bei allen Einträgen entfernt"
-msgstr[1] "Die ausgewählten Tags werden bei allen Einträgen entfernt"
+msgid "The selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "Der ausgewählte Tag wird gelöscht und bei allen Einträgen entfernt"
+msgstr[1] "Die ausgewählten Tags werden gelöscht und bei allen Einträgen entfernt"
 
-#: Tinebase/js/widgets/TagsPanel.js:232
+#: Tinebase/js/widgets/TagsPanel.js:233
 msgid "Please wait a moment..."
 msgstr "Bitte warten Sie einen Moment ..."
 
-#: Tinebase/js/widgets/TagsPanel.js:232
+#: Tinebase/js/widgets/TagsPanel.js:233
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Lösche Tag"
 msgstr[1] "Lösche Tags"
 
-#: Tinebase/js/widgets/TagsPanel.js:248
-#: Tinebase/js/widgets/TagsPanel.js:346
-#: Tinebase/js/widgets/TagsPanel.js:379
+#: Tinebase/js/widgets/TagsPanel.js:249
+#: Tinebase/js/widgets/TagsPanel.js:347
+#: Tinebase/js/widgets/TagsPanel.js:380
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: Tinebase/js/widgets/TagsPanel.js:248
+#: Tinebase/js/widgets/TagsPanel.js:249
 msgid "Could not delete Tag(s)."
 msgstr "Konnte Tag(s) nicht löschen."
 
-#: Tinebase/js/widgets/TagsPanel.js:300
-#: Tinebase/js/widgets/TagsPanel.js:360
+#: Tinebase/js/widgets/TagsPanel.js:301
+#: Tinebase/js/widgets/TagsPanel.js:361
 msgid "Notice"
 msgstr "Beachten Sie"
 
-#: Tinebase/js/widgets/TagsPanel.js:301
-#: Tinebase/js/widgets/TagsPanel.js:361
+#: Tinebase/js/widgets/TagsPanel.js:302
+#: Tinebase/js/widgets/TagsPanel.js:362
 msgid "The minimum tag length is three."
 msgstr "Ein Tag muss mindestens aus 3 Zeichen bestehen."
 
-#: Tinebase/js/widgets/TagsPanel.js:346
+#: Tinebase/js/widgets/TagsPanel.js:347
 msgid "Could not create tag."
 msgstr "Konnte Tag nicht erzeugen."
 
-#: Tinebase/js/widgets/TagsPanel.js:379
+#: Tinebase/js/widgets/TagsPanel.js:380
 msgid "Could not update tag."
 msgstr "Konnte Tag nicht aktualisieren."
 
-#: Tinebase/js/widgets/TagsPanel.js:410
-#: Tinebase/js/widgets/TagsPanel.js:464
+#: Tinebase/js/widgets/TagsPanel.js:411
+#: Tinebase/js/widgets/TagsPanel.js:465
 msgid "Enter tag name"
 msgstr "Tag-Name eingegeben"
 
-#: Tinebase/js/widgets/TagsPanel.js:411
+#: Tinebase/js/widgets/TagsPanel.js:412
 msgid "Searching..."
 msgstr "Suche ..."
 
-#: Tinebase/js/widgets/TagsPanel.js:537
+#: Tinebase/js/widgets/TagsPanel.js:538
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Tinebase/js/widgets/TagsPanel.js:541
+#: Tinebase/js/widgets/TagsPanel.js:542
 msgid "Color"
 msgstr "Farbe"
 
