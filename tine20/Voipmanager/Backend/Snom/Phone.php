@@ -141,7 +141,7 @@ class Voipmanager_Backend_Snom_Phone
 	/**
 	 * get phone owner
 	 * 
-     * @param string| $_phoneId
+     * @param string $_phoneId
 	 * @return array with phone owners
 	 */    
     public function getPhoneOwner($_phoneId)
@@ -152,8 +152,12 @@ class Voipmanager_Backend_Snom_Phone
         }    
         
         $select = $this->_db->select()    
-            ->from(array('phoneACL' => SQL_TABLE_PREFIX . 'snom_phones_acl'), array('account_id'))
-            ->where($this->_db->quoteInto('phone_id = ?', $_phoneId));            
+            ->from(SQL_TABLE_PREFIX . 'snom_phones_acl', array('account_id'))
+            ->where($this->_db->quoteInto('account_type = ?', 'user'))
+            ->where($this->_db->quoteInto('snom_phone_id = ?', $_phoneId))
+            ->where($this->_db->quoteIdentifier('read'). '= 1')
+            ->where($this->_db->quoteIdentifier('write'). '= 1')
+            ->where($this->_db->quoteIdentifier('dial'). '= 1');            
 
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
@@ -261,6 +265,7 @@ class Voipmanager_Backend_Snom_Phone
         
         $phoneData = $_phone->toArray();
         unset($phoneData['lines']);
+        unset($phoneData['rights']);
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones', $phoneData);
 
@@ -283,7 +288,8 @@ class Voipmanager_Backend_Snom_Phone
         $phoneData = $_phone->toArray();
         unset($phoneData['id']);
         unset($phoneData['lines']);
-
+        unset($phoneData['rights']);
+        
         $where = array($this->_db->quoteInto('id = ?', $phoneId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
         
