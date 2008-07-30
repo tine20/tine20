@@ -122,7 +122,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             store: this.recordNotesStore,
             overClass: 'x-view-over',
             itemSelector: 'activities-item-small',
-            style: 'overflow:auto'
+            style: 'overflow:auto',
+            // substract the height of form and title -> for the scrollbars
+            height: this.height - 116
         })        
     },
     
