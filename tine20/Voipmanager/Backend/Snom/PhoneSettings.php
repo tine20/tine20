@@ -35,15 +35,15 @@ class Voipmanager_Backend_Snom_PhoneSettings
 	/**
 	 * get PhoneSetting by id
 	 * 
-     * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_PhoneSetting
+     * @param string $_id the id of the telephone
+	 * @return Voipmanager_Model_SnomPhoneSettings
 	 */
     public function get($_id)
     {	
         $phoneSettingId = Voipmanager_Model_SnomPhoneSettings::convertSnomPhoneSettingsIdToInt($_id);
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phone_settings')->where($this->_db->quoteInto('phone_id = ?', $phoneSettingId));
         $row = $this->_db->fetchRow($select);
-        if (! $row) {
+        if (!$row) {
             throw new UnderflowException('Snom_PhoneSettings id ' . $phoneSettingId . ' not found');
         }
 
