@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:  $
+ * @version     $Id$
  *
  */
  
@@ -31,9 +31,6 @@ class Voipmanager_Backend_Snom_PhoneSettings
     {
         $this->_db      = Zend_Db_Table_Abstract::getDefaultAdapter();
     }
-   
-  
-  
       
 	/**
 	 * get PhoneSetting by id
@@ -47,10 +44,9 @@ class Voipmanager_Backend_Snom_PhoneSettings
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phone_settings')->where($this->_db->quoteInto('phone_id = ?', $phoneSettingId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-//            throw new UnderflowException('phoneSetting not found');
-            return false;
+            throw new UnderflowException('Snom_PhoneSettings id ' . $phoneSettingId . ' not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneSettings', $row);
+
         $result = new Voipmanager_Model_SnomPhoneSettings($row);
         return $result;
 	}
