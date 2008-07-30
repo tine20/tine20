@@ -1767,7 +1767,7 @@
             </field>
             <field>
                 <name>is_user_type</name>
-                <value>true</value>
+                <value>1</value>
             </field>            
         </record>
         <record>
@@ -1792,7 +1792,7 @@
             </field>
             <field>
                 <name>is_user_type</name>
-                <value>true</value>
+                <value>1</value>
             </field>            
         </record>
         <record>
@@ -1817,7 +1817,7 @@
             </field>
             <field>
                 <name>is_user_type</name>
-                <value>true</value>
+                <value>1</value>
             </field>            
         </record>
         <record>
