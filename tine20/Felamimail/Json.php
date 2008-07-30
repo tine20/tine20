@@ -2,9 +2,9 @@
 /**
  * json frontend for Felamimail
  *
- * This class handles all Json requests for the FeLaMiMail application
+ * This class handles all Json requests for the Felamimail application
  *
- * @package     FeLaMiMail
+ * @package     Felamimail
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
