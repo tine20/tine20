@@ -72,7 +72,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         ));
         
         $this->_objects['note'] = new Tinebase_Notes_Model_Note(array(
-            'id'                => 1,
+            'id'                => 123,
             'note_type_id'      => $this->_objects['noteType']->getId(),
             'note'              => 'phpunit test note',    
             'record_model'      => $this->_objects['record']['model'],
@@ -148,7 +148,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         //print_r($notes->toArray());
         
         $this->assertEquals($this->_objects['note']->note, $notes[0]->note); 
-        $this->assertEquals(1, $notesCount); 
+        $this->assertGreaterThan(1, $notesCount); 
     }
 
     /**
@@ -169,7 +169,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      * try to delete a note
      *
      */
-    public function testdeleteNote()
+    public function testDeleteNote()
     {
         $this->_instance->deleteNotesOfRecord(
             $this->_objects['record']['model'], 
