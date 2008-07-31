@@ -63,24 +63,6 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
      */
     defaultFilter: null,
     
-    labels: {
-        show: 'Show',                            // _('Show')
-        and: 'and',                              // _('and')
-        addFilter: 'add new filter',             // _('add new filter')
-        saveFilter: 'save filter',               // _('save filter')
-        startFilter: 'start search',             // _('start search')
-        deleteFilterTip: 'Delete this filter',   // _('Delete this filter')
-        resetFiltersTip: 'Reset all filters',    // _('Reset all filters')
-        selectField: 'select a field',
-        selectOperator: 'select a operator',
-        opEquals: 'is equal to',
-        opContains: 'contains',
-        opGreater: 'is greater than',
-        opLess: 'is less than',
-        opNot: 'is not',
-        opIn: 'is in'
-    },
-    
     border: false,
     
     record: Ext.data.Record.create([
@@ -126,7 +108,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
                             '<td class="tw-ftb-savefilterbutton"></td>',
                         '</tr></table>',
                     '</td>',
-                    '<td class="tw-ftb-searchbutton">{searchbutton}</td>',
+                    '<td align="right" class="tw-ftb-searchbutton">{searchbutton}</td>',
                     '<td class="tw-ftb-deletebutton">{deletebutton}</td>',
                 '</tr>'
             );
@@ -154,9 +136,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         this.filterStore.each(function(filter) {
             this.renderFilterRow(filter);
         }, this);
-        if (this.filterStore.getCount() == 1) {
-            Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
-        }
+        this.onFilterRowsChange();
         
         this.renderActionsRow();
     },
@@ -171,7 +151,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         this.filterStore.each(function(filter){
             tbody += ts.filterrow.apply({
                 id: this.frowIdPrefix + filter.id,
-                prefix: this.filterStore.indexOf(filter) == 0 ? this.labels.show : this.labels.and
+                prefix: this.filterStore.indexOf(filter) == 0 ? _('Show') : _('and')
             });
         }, this);
         
@@ -196,7 +176,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
-            emptyText: this.labels.selectField,
+            emptyText: _('select a field'),
             forceSelection: true,
             typeAhead: true,
             triggerAction: 'all',
@@ -231,7 +211,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         
         new Ext.Button({
             id: 'tw-ftb-frow-deletebutton-' + filter.id,
-            tooltip: this.labels.deleteFilterTip,
+            tooltip: _('Delete this filter'),
             filter: filter,
             iconCls: 'action_delThisFilter',
             renderTo: fRow.child('td[class=tw-ftb-frow-deleterow]'),
@@ -249,16 +229,16 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
      */
     renderOperator: function(filter, el) {
         var filterModel = this.fieldStore.getAt(this.fieldStore.find('field', filter.data.field));
-
+        
         var operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: [
-                {operator: 'contains', label: this.labels.opContains},
-                {operator: 'equals',   label: this.labels.opEquals},
-                {operator: 'greater',  label: this.labels.opGreater},
-                {operator: 'less',     label: this.labels.opLess},
-                {operator: 'not',      label: this.labels.opNot},
-                //{operator: 'in',       label: this.labels.opIn}
+                {operator: 'contains', label: _('contains')},
+                {operator: 'equals',   label: _('is equal to')},
+                {operator: 'greater',  label: _('is greater than')},
+                {operator: 'less',     label: _('is less than')},
+                {operator: 'not',      label: _('is not')},
+                //{operator: 'in',       label: _('is in')}
             ]
         });
         var opFilter = filterModel.get('opfilter');
@@ -277,7 +257,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
                 id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
-                emptyText: this.labels.selectOperator,
+                emptyText: _('select a operator'),
                 forceSelection: true,
                 typeAhead: true,
                 triggerAction: 'all',
@@ -313,7 +293,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
      */
     renderActionsRow: function() {
         new Ext.Button({
-            text: this.labels.addFilter,
+            text: _('add new filter'),
             iconCls: 'action_addFilter',
             renderTo: this.el.child('td[class=tw-ftb-newfilterbutton]'),
             scope: this,
@@ -321,12 +301,13 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         });
         new Ext.Button({
             disabled: true,
-            text: this.labels.saveFilter,
+            text: _('save filter'),
             iconCls: 'action_saveFilter',
             renderTo: this.el.child('td[class=tw-ftb-savefilterbutton]')
         });
         new Ext.Button({
-            text: this.labels.startFilter,
+            ctCls: 'x-btn-over',
+            text: _('start search'),
             iconCls: 'action_startFilter',
             scope: this,
             handler: function() {
@@ -335,7 +316,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
             renderTo: this.el.child('td[class=tw-ftb-searchbutton]')
         });
         new Ext.Button({
-            tooltip: this.labels.resetFiltersTip,
+            tooltip: _('Delete all filters'),
             iconCls: 'action_delAllFilter',
             scope: this,
             handler: this.deleteAllFilters,
@@ -398,13 +379,6 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
      */
     initComponent: function() {
         this.initTemplates();
-
-        // init i18n
-        if (typeof _ == 'function') {
-            for (text in this.labels) {
-                this.labels[text] = _(this.labels[text])
-            }
-        }
         
         // init filters
         if (this.filters.length < 1) {
@@ -437,6 +411,21 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         
     },
     /**
+     * called when a filter row gets added/deleted
+     * @private
+     */
+    onFilterRowsChange: function() {
+        var firstFilter = this.filterStore.getAt(0);
+        if (firstFilter) {
+            var firstDeleteButton = Ext.getCmp('tw-ftb-frow-deletebutton-' + firstFilter.id);
+            if (this.filterStore.getCount() == 1) {
+                firstDeleteButton.disable();
+            } else {
+                firstDeleteButton.enable();
+            }
+        }
+    },
+    /**
      * adds a new filer row
      */
     addFilter: function() {
@@ -446,29 +435,34 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         this.filterStore.add(filter);
         var fRow = this.templates.filterrow.insertBefore(this.el.child('tr[class=fw-ftb-actionrow]'),{
             id: 'tw-ftb-frowid-' + filter.id,
-            prefix: this.filterStore.indexOf(filter) == 0 ? this.labels.show : this.labels.and
+            prefix: this.filterStore.indexOf(filter) == 0 ? _('Show') : _('and')
         }, true);
         this.renderFilterRow(filter);
-        Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).enable();
+        this.onFilterRowsChange();
         this.onBodyresize();
     },
     /**
+     * resets a filter
+     * @param {Ext.Record} filter to reset
+     */
+    resetFilter: function(filter) {
+        
+    },
+    /**
      * deletes a filter
-     * @param {String} id
+     * @param {Ext.Record} filter to delete
      */
     deleteFilter: function(filter) {
         var fRow = this.el.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
         // update prefix text
         if (this.filterStore.indexOf(filter) == 0 && this.filterStore.getCount() > 1) {
-            fRow.next().child('td[class=tw-ftb-frow-prefix]').update(this.labels.show);
+            fRow.next().child('td[class=tw-ftb-frow-prefix]').update(_('Show'));
         }
         fRow.remove();
         this.filterStore.remove(this.filterStore.getById(filter.id));
-        // single row is not deletable
-        if (this.filterStore.getCount() == 1) {
-            Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
-        }
+
         this.onFiltertrigger();
+        this.onFilterRowsChange();
         this.onBodyresize();
     },
     /**
@@ -481,9 +475,11 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
         },this);
         this.supressEvents = false;
         this.addFilter();
-        Ext.getCmp('tw-ftb-frow-deletebutton-' + this.filterStore.getAt(0).id).disable();
+        this.onFilterRowsChange();
         this.onFiltertrigger();
     },
+    
+    
     
     getFilter: function() {
         var filters = [];
