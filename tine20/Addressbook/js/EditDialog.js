@@ -247,7 +247,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     var companyInformation = {
         xtype: 'tabpanel',
         deferredRender:false,
-        height: 160,
+        height: 180,
         activeTab: 0,
         border: false,
         defaults: {
@@ -395,8 +395,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                     }),
                     new Tine.widgets.activities.ActivitiesPanel({
                     	app: 'Addressbook',
-                        height: 260,
-                        customHeight: 260,
+                        height: 280,
+                        customHeight: 280,
                         border: false,
                         style: 'border:1px solid #B5B8C8;'
                     })                    
