@@ -443,18 +443,12 @@ class Voipmanager_Controller
     /**
      * send http client info to a set of phones.
      * 
-     * 
-     * @throws Exception
      * @param array array of phone identifiers
      * @return void
      */
     public function sendHttpClientInfo($_identifiers)
     {
-        
-       //TODO
-       // DO SOMETHING
-       
-        return true;
+        $this->_snomPhoneBackend->setHttpClientInfoSent($_identifiers, false);
     }
 
 

@@ -383,6 +383,40 @@ class Voipmanager_Backend_Snom_Phone
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $statusData, $where);
         
         return $this->get($_phone);
-    }      
-      
+    }
+          
+    /**
+     * set value of http_client_info_sent
+     *
+     * @param string|array|Tinebase_Record_RecordSet $_id
+     * @param boolean $_status
+     */
+    public function setHttpClientInfoSent($_id, $_status)
+    {
+        foreach ((array)$_id as $id) {
+            $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($id);
+            $where[] = $this->_db->quoteInto('id = ?', $phoneId);
+        }
+
+        try {
+            $this->_db->beginTransaction();
+
+            // NOTE: cascading delete for lines and phone_settings
+            // SECOND NOTE: using array for second argument won't work as delete function joins array items using "AND"
+            #foreach($where AS $where_atom)
+            #{
+            #    $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones', $where_atom);
+            #}
+    
+            $phoneData = array(
+                'http_client_info_sent' => (bool) $_status
+            );
+            $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
+            
+            $this->_db->commit();
+        } catch (Exception $e) {
+            $this->_db->rollBack();
+            throw $e;
+        }
+    }
 }
