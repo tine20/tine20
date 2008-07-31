@@ -47,7 +47,7 @@ header('Content-Type: text/xml');
 $xmlBackend = new Voipmanager_Backend_Snom_Xml();        
 echo $xmlBackend->getConfig($phone);
 
-$phoneBackend->setHttpClientInfoSent($phone, true);
+$phoneBackend->setHttpClientInfoSent($phone->getId(), true);
 
 function updateStatus($_phone, $_userAgent)
 {
