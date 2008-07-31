@@ -96,7 +96,8 @@ Tine.Voipmanager.Snom.Phones.Main = {
                         },
                         text: 'sending HTTP Client Info to phone(s)...',
                         success: function(_result, _request){
-                            Ext.getCmp('Voipmanager_Phones_Grid').getStore().reload();
+                        	// not really needed to reload store
+                            //Ext.getCmp('Voipmanager_Phones_Grid').getStore().reload();
                         },
                         failure: function(result, request){
                             Ext.MessageBox.alert('Failed', 'Some error occured while trying to send HTTP Client Info to the phone(s).');
