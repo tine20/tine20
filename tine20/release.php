@@ -173,11 +173,13 @@ if($opts->pot) {
             $translationPath = "$appPath/translations";
             if (is_dir($translationPath)) {
                 `cd $appPath 
-                touch translations/template.pot 
-                find . -type f -iname "*.php" -or -type f -iname "*.js"  | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f -
+                touch translations/$appName.pot 
+                find . -type f -iname "*.php" -or -type f -iname "*.js"  | xgettext --force-po --omit-header -o translations/$appName.pot -L Python --from-code=utf-8 -k=_ -f -
                 cd $translationPath
-                tar -cf $appName.tar *.po *.pot
-                rm template.pot
+                cp de.po $appName-de.po
+                cp en.po $appName-en.po
+                tar -cf $appName.tar $appName-de.po $appName-en.po $appName.pot
+                rm $appName-de.po $appName-en.po $appName.pot
                 mv $appName.tar ../../`;
             }
         }
