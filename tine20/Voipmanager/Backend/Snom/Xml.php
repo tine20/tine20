@@ -65,33 +65,34 @@ class Voipmanager_Backend_Snom_Xml
     {
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><settings></settings>');
 
-        $phonesettings = $xml->addChild('phone-settings');
+        $xmlPhoneSettings = $xml->addChild('phone-settings');
         
         $locationSettings = $this->_getLocationSettings($_phone);
         foreach($locationSettings as $key => $value) {
-            $child = $phonesettings->addChild($key, $value);
+            $child = $xmlPhoneSettings->addChild($key, $value);
             if($key == 'admin_mode') {
                 $child->addAttribute('perm', 'RW');
             } else {
                 $child->addAttribute('perm', 'RO');
             }
         }
-        
-        // set the microphone volume temporarly and other things
-        // get removed if we have the settings dialogue
-        $child = $phonesettings->addChild('vol_handset_mic', 7);
-        $child->addAttribute('perm', 'RW');
-                
+                        
+        $phoneSettings = $this->_getPhoneSettings($_phone);
+        foreach($phoneSettings as $key => $value) {
+          $child = $xmlPhoneSettings->addChild($key, $value['value']);
+          $child->addAttribute('perm', $value['perms']);
+        }
+              
         $userSettings = $this->_getUserSettings($_phone);
         foreach($userSettings as $key => $value) {
-          $child = $phonesettings->addChild($key, $value['value']);
+          $child = $xmlPhoneSettings->addChild($key, $value['value']);
           $child->addAttribute('perm', $value['perms']);
         }
               
         $lines = $this->_getLines($_phone);
         foreach($lines as $lineId => $line) {
             foreach($line as $key => $value) {
-                $child = $phonesettings->addChild($key, $value);
+                $child = $xmlPhoneSettings->addChild($key, $value);
                 $child->addAttribute('idx', $lineId);
                 $child->addAttribute('perm', 'RO');
             }
@@ -156,6 +157,32 @@ class Voipmanager_Backend_Snom_Xml
         return $xml->asXML();        
     }
     
+    /**
+     * get general phonesettings like http client username/password and
+     * call forward settings
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return array
+     */
+    protected function _getPhoneSettings(Voipmanager_Model_SnomPhone $_phone)
+    {
+        if($_phone->http_client_info_sent == false) {
+            $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
+            $phoneSettings['http_client_user']['perms'] = 'RO';
+            $phoneSettings['http_client_pass']['perms'] = $_phone->http_client_pass;
+            $phoneSettings['http_client_pass']['perms'] = 'RO';
+        }        
+        
+        $phoneSettings['redirect_event']['value'] = $_phone->redirect_event;
+        $phoneSettings['redirect_event']['perms'] = 'RW';
+        $phoneSettings['redirect_number']['value'] = $_phone->redirect_number;
+        $phoneSettings['redirect_number']['perms'] = 'RW';
+        $phoneSettings['redirect_time']['value'] = $_phone->redirect_time;
+        $phoneSettings['redirect_time']['perms'] = 'RW';
+        
+        return $phoneSettings;
+    }
+    
     protected function _getLocationSettings(Voipmanager_Model_SnomPhone $_phone)
     {
         $select = $this->_db->select()
@@ -210,19 +237,7 @@ class Voipmanager_Backend_Snom_Xml
             }            
         }
         
-        return $userSettings;
-        
-/*        
-        if($defaultSettings['http_client_info_sent'] == true) {
-            // return username and password only on initial load
-            unset($defaultSettings['http_client_user']);
-            unset($defaultSettings['http_client_pass']);
-        } else {
-            $defaultSettings['http_client_user_writable'] = false;
-            $defaultSettings['http_client_pass_writable'] = false;            
-        }
-        unset($defaultSettings['http_client_info_sent']); 
-*/        
+        return $userSettings;        
     }
     
     protected function _getLines(Voipmanager_Model_SnomPhone $_phone)
