@@ -87,7 +87,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         $notes = $this->_instance->searchNotes(Zend_Json::encode($filter), Zend_Json::encode($paging));
         
-        $this->assertGreaterThan(1, $notes['totalcount']);        
+        $this->assertGreaterThan(0, $notes['totalcount']);        
         $this->assertEquals($this->_objects['note']->note, $notes['results'][0]['note']);
         
         // delete note

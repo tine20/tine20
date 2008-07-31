@@ -148,7 +148,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         //print_r($notes->toArray());
         
         $this->assertEquals($this->_objects['note']->note, $notes[0]->note); 
-        $this->assertGreaterThan(1, $notesCount); 
+        $this->assertGreaterThan(0, $notesCount); 
     }
 
     /**
