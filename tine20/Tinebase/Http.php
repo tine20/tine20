@@ -114,8 +114,9 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/GMapPanel.js',
             'Tinebase/js/DatepickerRange.js',
             // Tine 2.0 specific widgets
-            'Tinebase/js/Widgets.js',
-            'Tinebase/js/AccountpickerPanel.js',
+            'Tinebase/js/widgets/EditRecord.js',
+            'Tinebase/js/widgets/Priority.js',
+            'Tinebase/js/widgets/AccountpickerPanel.js',
             'Tinebase/js/widgets/account/PickerPanel.js',
             'Tinebase/js/widgets/account/ConfigGrid.js',
             'Tinebase/js/widgets/ContainerSelect.js',
