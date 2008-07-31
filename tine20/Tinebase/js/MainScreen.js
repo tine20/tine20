@@ -15,7 +15,31 @@ Ext.namespace('Tine', 'Tine.Tinebase');
  * Tine 2.0 ExtJS client Mainscreen.
  */
 Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
+    /**
+     * direct actions of MainScreen
+     */
+    actions: {
+        changePassword: null,
+        logout: null,
+    },
+    
     initComponent: function() {
+        // init actions
+        this.actions.changePassword = new Ext.Action({
+            text: _('Change password'),
+            handler: this.onChangePassword
+            //disabled: true
+        });
+        
+        this.actions.logout = new Ext.Action({
+            text: _('Logout'),
+            tooltip:  _('Logout from Tine 2.0'),
+            id: 'tblogout',
+            iconCls: 'action_logOut',
+            handler: this.onLogout
+        });
+        
+        // init main menu
         var tineMenu = new Ext.Toolbar({
             id: 'tineMenu',
             height: 26,
@@ -23,19 +47,12 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 text: 'Tine 2.0',
                 menu: {
                     id: 'Tinebase_System_Menu',     
-                    items: [{
-                        text: 'Change password',
-                        handler: this.changePasswordHandler
-                        //disabled: true
-                    }, '-', {
-                        text: 'Logout',
-                        id: 'menulogout',
-                        handler: this.logoutButtonHandler,
-                        iconCls: 'action_logOut'
-                    }]                
+                    items: [
+                        this.actions.changePassword, '-', this.actions.logout
+                    ]                
                 }
             }, {
-                text: 'Admin',
+                text: _('Admin'),
                 id: 'Tinebase_System_AdminButton',
                 iconCls: 'AddressbookTreePanel',
                 disabled: true,
@@ -43,39 +60,34 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                     id: 'Tinebase_System_AdminMenu'
                 }     
             }, {
-                text: 'Preferences',
+                text: _('Preferences'),
                 id: 'Tinebase_System_PreferencesButton',
                 iconCls: 'AddressbookTreePanel',
                 disabled: true,
                 menu: {
                     id: 'Tinebase_System_PreferencesMenu'
                 }
-            }, '->', {
-                text: _('Logout'),
-                id: 'tblogout',
-                iconCls: 'action_logOut',
-                //cls:     'x-btn-icon',
-                tooltip: {text: _('Logout from Tine 2.0')},
-                handler: this.logoutButtonHandler
-            }]
-    
-        });
-    
+            }, '->', 
+            this.actions.logout
+        ]});
+        
+        // init footer
         var tineFooter = new Ext.Toolbar({
             id: 'tineFooter',
             height: 26,
             items:[
-                'Account name: ' + Tine.Tinebase.Registry.get('currentAccount').accountDisplayName + ' ',
-                'Timezone: ' +  Tine.Tinebase.Registry.get('timeZone')
+                sprintf(_('Account name: %s'), Tine.Tinebase.Registry.get('currentAccount').accountDisplayName), '-',
+                sprintf(_('Timezone: %s'), Tine.Tinebase.Registry.get('timeZone'))
             ]
     
         });
-    
+        
+        // init application toolbar
         var applicationToolbar = new Ext.Toolbar({
             id: 'applicationToolbar',
             height: 26
         });
-        // default app
+        // activate default app
         applicationToolbar.on('render', function(){
             var appPanel = Ext.getCmp('Addressbook_Tree');
             if (appPanel) {
@@ -83,6 +95,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             }
         });
     
+        // init app chooser
         var applicationArcordion = new Ext.Panel({
             //baseCls: 'appleftlayout',
             title: '&nbsp;',
@@ -95,6 +108,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             items: this.getPanels()
         });
         
+        // init generic mainscreen layout
         this.items = [{
             region: 'north',
             id:     'north-panel',
@@ -103,7 +117,6 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             border: false,
             layout:'border',
             items: [{
-                //title:  'North Panel 1',
                 region: 'north',
                 height: 26,
                 border: false,
@@ -161,20 +174,6 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             containerScroll: true,
             collapseMode: 'mini',
             layout: 'fit',
-            //layout:'accordion',
-            defaults: {
-                // applied to each contained panel
-                // bodyStyle: 'padding:15px'
-            },
-            /*
-            layoutConfig: {
-                // layout-specific configs go here
-                titleCollapse: true,
-                animate: true,
-                activeOnTop: true,
-                hideCollapseTool: true
-            },
-            */
             items: applicationArcordion
         }];
         
@@ -218,108 +217,13 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         });
     },
     
-    changePasswordHandler: function(_event) {
+    /**
+     * @private
+     */
+    onChangePassword: function() {
         
-        var oldPassword = new Ext.form.TextField({
-            inputType: 'password',
-            hideLabel: false,
-            id: 'oldPassword',
-            fieldLabel:'old password', 
-            name:'oldPassword',
-            allowBlank: false,
-            anchor: '100%',            
-            selectOnFocus: true
-        });
-        
-        var newPassword = new Ext.form.TextField({
-            inputType: 'password',            
-            hideLabel: false,
-            id: 'newPassword',
-            fieldLabel:'new password', 
-            name:'newPassword',
-            allowBlank: false,
-            anchor: '100%',
-            selectOnFocus: true      
-        });
-        
-        var newPasswordSecondTime = new Ext.form.TextField({
-            inputType: 'password',            
-            hideLabel: false,
-            id: 'newPasswordSecondTime',
-            fieldLabel:'new password again', 
-            name:'newPasswordSecondTime',
-            allowBlank: false,
-            anchor: '100%',           
-            selectOnFocus: true                  
-        });   
-
-        var changePasswordForm = new Ext.FormPanel({
-            baseParams: {method :'Tinebase.changePassword'},
-            labelAlign: 'top',
-            bodyStyle:'padding:5px',
-      //      tbar: changePasswordToolbar,
-            anchor:'100%',
-            region: 'center',
-            id: 'changePasswordPanel',
-            deferredRender: false,
-            items: [
-                oldPassword,
-                newPassword,
-                newPasswordSecondTime
-            ]
-        });
-
-        _savePassword = function() {
-            if (changePasswordForm.getForm().isValid()) {
-
-                var oldPassword = changePasswordForm.getForm().getValues().oldPassword;
-                var newPassword = changePasswordForm.getForm().getValues().newPassword;
-                var newPasswordRepeat = changePasswordForm.getForm().getValues().newPasswordSecondTime;
-                
-                if (newPassword == newPasswordRepeat) {
-                    Ext.Ajax.request({
-                        url: 'index.php',
-                        waitTitle: 'Please wait!',
-                        waitMsg: 'changing password...',
-                        params: {
-                            method: 'Tinebase.changePassword',
-                            oldPassword: oldPassword,
-                            newPassword: newPassword
-                        },
-                        success: function(form, action, o){
-                            Ext.getCmp('changePassword_window').close(); 
-                            Ext.MessageBox.show({
-                                title: 'Success',
-                                msg: 'Your password has been changed.',
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.SUCCESS  /*,
-                                fn: function() {} */
-                            });
-                        },
-                        failure: function(form, action){
-                            Ext.MessageBox.show({
-                                title: 'Failure',
-                                msg: 'Your old password is incorrect.',
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR  /*,
-                                fn: function() {} */
-                            });
-                        }
-                    });
-                } else {
-                    Ext.MessageBox.show({
-                        title: 'Failure',
-                        msg: 'The new passwords mismatch, please correct them.',
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.ERROR  /*,
-                        fn: function() {} */
-                    });    
-                }
-            }
-          };
-          
         var passwordDialog = new Ext.Window({
-            title: 'Change password for ' + Tine.Tinebase.Registry.get('currentAccount').accountDisplayName,
+            title: sprintf(_('Change Password For "%s"'), Tine.Tinebase.Registry.get('currentAccount').accountDisplayName),
             id: 'changePassword_window',
             closeAction: 'close',
             modal: true,
@@ -329,35 +233,97 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             minHeight: 230,
             layout: 'fit',
             plain: true,
-            buttons: [
-                {
-                    text: 'Ok',
-             //       iconCls: 'action_saveAndClose',
-                    handler: _savePassword                    
-                } ,
-                {
-                    text: 'Cancel',
-//                    iconCls: 'action_saveAndClose',
+            items: new Ext.FormPanel({
+                bodyStyle: 'padding:5px;',
+                buttonAlign: 'right',
+                labelAlign: 'top',
+                anchor:'100%',
+                id: 'changePasswordPanel',
+                defaults: {
+                    xtype: 'textfield',
+                    inputType: 'password',
+                    anchor: '100%',
+                    allowBlank: false
+                },
+                items: [{
+                    id: 'oldPassword',
+                    fieldLabel: _('Old Password'), 
+                    name:'oldPassword'
+                },{
+                    id: 'newPassword',
+                    fieldLabel: _('New Password'), 
+                    name:'newPassword'
+                },{
+                    id: 'newPasswordSecondTime',
+                    fieldLabel: _('Repeat new Password'), 
+                    name:'newPasswordSecondTime'
+                }],
+                buttons: [{
+                    text: _('Cancel'),
+                    iconCls: 'action_cancel',
                     handler: function() {
                         Ext.getCmp('changePassword_window').close();
                     }
-                }
-            ],
-            bodyStyle: 'padding:5px;',
-            buttonAlign: 'center'
+                }, {
+                    text: _('Ok'),
+                    iconCls: 'action_saveAndClose',
+                    handler: function() {
+                        var form = Ext.getCmp('changePasswordPanel').getForm();
+                        if (form.isValid()) {
+                            var values = form.getValues();
+                            if (values.newPassword == values.newPasswordSecondTime) {
+                                Ext.Ajax.request({
+                                    waitTitle: _('Please Wait!'),
+                                    waitMsg: _('changing password...'),
+                                    params: {
+                                        method: 'Tinebase.changePassword',
+                                        oldPassword: values.oldPassword,
+                                        newPassword: values.newPassword
+                                    },
+                                    success: function(_result, _request){
+                                        var response = Ext.util.JSON.decode(_result.responseText);
+                                        if (response.success) {
+                                            Ext.getCmp('changePassword_window').close(); 
+                                            Ext.MessageBox.show({
+                                                title: _('Success'),
+                                                msg: _('Your password has been changed.'),
+                                                buttons: Ext.MessageBox.OK,
+                                                icon: Ext.MessageBox.INFO
+                                            });
+                                        } else {
+                                            Ext.MessageBox.show({
+                                                title: _('Failure'),
+                                                msg: response.errorMessage,
+                                                buttons: Ext.MessageBox.OK,
+                                                icon: Ext.MessageBox.ERROR  
+                                            });
+                                        }
+                                    }
+                                });
+                            } else {
+                                Ext.MessageBox.show({
+                                    title: _('Failure'),
+                                    msg: _('The new passwords mismatch, please correct them.'),
+                                    buttons: Ext.MessageBox.OK,
+                                    icon: Ext.MessageBox.ERROR 
+                                });    
+                            }
+                        }
+                    }                    
+                }]
+            })
         });
-        passwordDialog.add(changePasswordForm);
-        passwordDialog.show();            
+        passwordDialog.show();  
     },
     
     /**
      * the logout button handler function
      * @private
      */
-    logoutButtonHandler: function(_event) {
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to logout?', function(btn, text) {
+    onLogout: function() {
+        Ext.MessageBox.confirm(_('Confirm'), _('Are you sure you want to logout?'), function(btn, text) {
             if (btn == 'yes') {
-                Ext.MessageBox.wait('Logging you out...', 'Please wait!');
+                Ext.MessageBox.wait(_('Logging you out...'), _('Please wait!'));
                 Ext.Ajax.request( {
                     params : {
                         method : 'Tinebase.logout'
