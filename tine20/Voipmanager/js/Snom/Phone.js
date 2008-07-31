@@ -1035,11 +1035,10 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
             var selectionModel = accountsGrid.getSelectionModel();
             
             // check if exists
-            var recordIndex = Tine.Admin.Applications.EditPermissionsDialog.getRecordIndex(account, dataStore);
+            var record = dataStore.getById(account.data.id);
             
-            if (recordIndex === false) {
+            if (!record) {
             	var record = new Ext.data.Record({
-            		id: 0,
                     account_id: account.data.id,
                     account_type: account.data.type,
                     accountDisplayName: account.data.name
@@ -1094,10 +1093,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         
             var translation = new Locale.Gettext();
             translation.textdomain('Voipmanager');
-        
 		
-		
- 		  /******* actions ********/
+ 		    /******* actions ********/
 
 	    	this.actions = {
 	            addAccount: new Ext.Action({
@@ -1115,9 +1112,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 	                iconCls: 'action_deleteContact'
 	            })
 	        };
-	
 
-	        
 	        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
 	            enableBbar: true,
 	            region: 'west',
@@ -1133,16 +1128,10 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 	            this.account = account;
 	            this.handlers.addAccount(account);
 	        }, this);
-	        
-	
-
-	
+	        	
 	        this.dataStore = new Ext.data.JsonStore({
-	            root: 'results',
-	            totalProperty: 'totalcount',
 	            id: 'account_id',
-	            // @todo create new model for phone right
-	            fields: Tine.Tinebase.Model.User
+	            fields: Tine.Voipmanager.Model.Snom.Owner
 	        });
 	
 	        Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
@@ -1155,14 +1144,10 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 this.dataStore.loadData(_groupMembers);    
 	        }
 	
-
-	
 	        var columnModel = new Ext.grid.ColumnModel([{ 
 	        	resizable: true, id: 'accountDisplayName', header: translation._('Name'), dataIndex: 'accountDisplayName', width: 30 
 	        }]);
-	
 
-	
 	        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
 	
 	        rowSelectionModel.on('selectionchange', function(_selectionModel) {
@@ -1644,9 +1629,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
             
             return _dialog;   
         },        
-		      
- 
-        
+		              
         updateToolbarButtons: function()
         {
             if(this.phoneRecord.get('id') > 0) {
@@ -1654,7 +1637,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
             }
         },
         
-        display: function(_phoneData, _snomLines, _lines, _templates, _locations, _writable, _phoneOwner) 
+        display: function(_phoneData, _snomLines, _lines, _templates, _locations, _writable) 
         {
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
@@ -1683,7 +1666,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                         this.editPhoneDialog(_phoneData,this._maxLines()),
                         this.editPhoneSettingsDialog(_writable),   
                         this.editPhoneLinesDialog(this._maxLines(_phoneData.current_model), _lines, _snomLines),
-                        this.editPhoneOwnerSelection(_phoneOwner)
+                        this.editPhoneOwnerSelection(_phoneData.rights)
                     ]
                 }]
             });

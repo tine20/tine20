@@ -65,7 +65,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
             $_phoneData = $snomPhone->toArray();
 
-            $_phoneOwner = $controller->getPhoneOwner($_phoneData['id']);   
+            //$_phoneOwner = $controller->getPhoneOwner($_phoneData['id']);   
              
             $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['id'])->toArray();
             
@@ -124,7 +124,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .', ' . $encodedPhoneOwner . ');';
+        //$view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .', ' . $encodedPhoneOwner . ');';
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

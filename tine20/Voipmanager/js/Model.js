@@ -239,3 +239,8 @@ Tine.Voipmanager.Model.Asterisk.Meetme = Ext.data.Record.create([
 	{name: 'adminpin'}
 ]);
 
+Tine.Voipmanager.Model.Snom.Owner = Ext.data.Record.create([
+    {name: 'account_id'},
+    {name: 'account_type'},
+    {name: 'accountDisplayName'}
+]);

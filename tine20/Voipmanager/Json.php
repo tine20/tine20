@@ -191,15 +191,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'updatedData'       => $phone
         );
 
-
-/*        if(!Voipmanager_Controller::getInstance()->createPhoneACLs($_ownerData, $phone['id'])) {
-            $result = array('success'           => false,
-            'welcomeMessage'    => 'Owner ACL failed',
-            'updatedData'       => $phone
-            );        
-        };
-*/
-        
         return $result;         
     }     
     

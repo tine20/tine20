@@ -99,6 +99,8 @@ class Voipmanager_Backend_Snom_Phone
             $_acl->setId($id);
         }
         
+        unset($_acl->accountDisplayName);
+        
         $result = $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones_acl', $_acl->toArray());
         
         return $result;
@@ -107,33 +109,51 @@ class Voipmanager_Backend_Snom_Phone
 	/**
 	 * delete phone ACLs
 	 * 
-     * @param string|array $_phoneIds
+     * @param string $_phoneId
 	 * @return query result
 	 */
-    public function deleteACLs($_phoneIds)
+    public function deleteACLs($_phoneId)
     {        
-        if (empty($_phoneIds)) {
-            return;
-        }
-        
-        $where = $this->_db->quoteInto('phone_id in (?)', $_phoneIds);
+        $where = $this->_db->quoteInto('snom_phone_id = ?', $_phoneId);
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones_acl', $where);
         
         return $result;
     }
-        
+
     /**
-     * get phone rights
-     *
-     * @param Voipmanager_Model_SnomPhone $_phone
-     * @return Tinebase_Record_RecordSet of Voipmanager_Model_SnomPhoneRight
+     * get phone owner
      * 
-     * @todo implement and test
-     */
-    public function getPhoneRights($_phone)
+     * @param string $_phoneId
+     * @return Tinebase_Record_RecordSet of Voipmanager_Model_SnomPhoneRight with phone owners
+     */    
+    public function getPhoneRights($_phoneId)
     {
-        return new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight'); 
-    }
+        if (empty($_phoneId)) {
+            throw new UnderflowException('no phoneId');
+        }    
+        
+        $select = $this->_db->select()    
+            ->from(SQL_TABLE_PREFIX . 'snom_phones_acl')
+            ->where($this->_db->quoteInto('account_type = ?', 'user'))
+            ->where($this->_db->quoteInto('snom_phone_id = ?', $_phoneId))
+            ->where($this->_db->quoteIdentifier('read_right'). '= 1')
+            ->where($this->_db->quoteIdentifier('write_right'). '= 1')
+            ->where($this->_db->quoteIdentifier('dial_right'). '= 1');            
+
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
+        
+        $result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight');
+        // add accountDisplayName
+        foreach ($rows as $row) {
+            $user = Tinebase_User::getInstance()->getUserById($row['account_id']);
+            $row['accountDisplayName'] = $user->accountDisplayName;
+            
+            $result->addRecord(new Voipmanager_Model_SnomPhoneRight($row));
+        }
+        
+        return $result;        
+    }    
     
     /**
      * set phone rights
@@ -142,22 +162,16 @@ class Voipmanager_Backend_Snom_Phone
      * 
      * @todo test
      */
-    public function setPhoneRights($_phone)
+    public function setPhoneRights(Voipmanager_Model_SnomPhone $_phone)
     {
-        $currentRightIds = $this->getPhoneRights($_phone)->getArrayOfIds();
-                
         if ($_phone->rights instanceOf Tinebase_Record_RecordSet) {
             $rightsToSet = $_phone->rights;
         } else {
-            $rightsToSet = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', $_phone->rights);
+            $rightsToSet = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight', $_phone->rights);
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rightsToSet->toArray(), true));
-                
-        $toDetach = array_diff($currentRightIds, $rightsToSet->getArrayOfIds());
-
-        // delete detached/deleted rights
-        $this->deleteACLs($toDetach);
+        // delete old rights
+        $this->deleteACLs($_phone->getId());
         
         // add new rights        
         foreach ($rightsToSet as $right) {
@@ -191,35 +205,6 @@ class Voipmanager_Backend_Snom_Phone
         
         return $rows;  
     }
-    
-   
-	/**
-	 * get phone owner
-	 * 
-     * @param string $_phoneId
-	 * @return array with phone owners
-	 */    
-    public function getPhoneOwner($_phoneId)
-    {
-        if(empty($_phoneId)) 
-        {
-            throw new UnderflowException('no phoneId');
-        }    
-        
-        $select = $this->_db->select()    
-            ->from(SQL_TABLE_PREFIX . 'snom_phones_acl', array('account_id'))
-            ->where($this->_db->quoteInto('account_type = ?', 'user'))
-            ->where($this->_db->quoteInto('snom_phone_id = ?', $_phoneId))
-            ->where($this->_db->quoteIdentifier('read_right'). '= 1')
-            ->where($this->_db->quoteIdentifier('write_right'). '= 1')
-            ->where($this->_db->quoteIdentifier('dial_right'). '= 1');            
-
-        $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
-        
-        return $rows;        
-    }    
-    
     
 	/**
 	 * get one phone identified by id

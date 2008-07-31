@@ -181,7 +181,7 @@ class Voipmanager_Controller
             'snomphone_id'  => $phone->id
         ));
         $phone->lines  = $this->_snomLineBackend->search($filter);
-        $phone->rights = $this->_snomPhoneBackend->getPhoneRights($phone);
+        $phone->rights = $this->getPhoneOwner($phone->id);
 
         return $phone;    
     }
@@ -316,28 +316,6 @@ class Voipmanager_Controller
         return $this->getSnomPhone($phone);
     }
     
-
-    public function createPhoneACLs($_aclData, $_phoneId)
-    {
-        $result = TRUE;
-        
-        $result = $this->_snomPhoneBackend->deleteACLs($_phoneId);            
-
-        if(is_array($_aclData)) {
-            
-            foreach($_aclData AS $acl) 
-            {
-                $insertResult = $this->_snomPhoneBackend->createACL($acl);                    
-                if($insertResult === FALSE) {
-                    $result = FALSE;    
-                }
-            }
-        }        
-        
-        return $result;
-    }
-
-
     /**
      * update one phone
      *
@@ -465,20 +443,12 @@ class Voipmanager_Controller
     /**
      * get snomPhoneOwner
      *
-     * @return array with phone owners
+     * @return Tinebase_Record_RecordSet of Voipmanager_Model_SnomPhoneRight with phone owners
      */
     public function getPhoneOwner($_phoneId)
     {
-        $_ids = $this->_snomPhoneBackend->getPhoneOwner($_phoneId);        
-  
-        $result['results'] = array();
-        foreach ($_ids AS $_id) {
-            $result['results'][] = Tinebase_User::getInstance()->getUserById($_id['account_id'])->toArray();
-        }
-  
-        return $result;    
+        return $this->_snomPhoneBackend->getPhoneRights($_phoneId);          
     }
-
 
     /**
      * get snom_phoneSettings by id
