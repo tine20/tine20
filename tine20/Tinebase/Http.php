@@ -112,7 +112,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/ux/layout/AppLeftLayout.js',
             'Tinebase/js/ux/GMapPanel.js',
-            'Tinebase/js/DatepickerRange.js',
+            'Tinebase/js/ux/DatepickerRange.js',
             // Tine 2.0 specific widgets
             'Tinebase/js/widgets/EditRecord.js',
             'Tinebase/js/widgets/Priority.js',
