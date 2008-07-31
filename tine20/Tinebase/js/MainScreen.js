@@ -76,7 +76,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             id: 'tineFooter',
             height: 26,
             items:[
-                sprintf(_('Account name: %s'), Tine.Tinebase.Registry.get('currentAccount').accountDisplayName), '-',
+                sprintf(_('User: %s'), Tine.Tinebase.Registry.get('currentAccount').accountDisplayName), '-',
                 sprintf(_('Timezone: %s'), Tine.Tinebase.Registry.get('timeZone'))
             ]
     

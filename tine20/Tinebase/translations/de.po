@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-31 19:25+0100\n"
-"PO-Revision-Date: 2008-07-31 19:30+0100\n"
+"POT-Creation-Date: 2008-07-31 20:42+0100\n"
+"PO-Revision-Date: 2008-07-31 20:42+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -69,8 +69,8 @@ msgstr "Einstellungen"
 
 #: Tinebase/js/MainScreen.js:79
 #, python-format
-msgid "Account name: %s"
-msgstr "Benutzername: %s"
+msgid "User: %s"
+msgstr "Benutzer: %s"
 
 #: Tinebase/js/MainScreen.js:80
 #, python-format
@@ -462,6 +462,8 @@ msgstr "Beschreibung"
 msgid "Color"
 msgstr "Farbe"
 
+#~ msgid "Account name: %s"
+#~ msgstr "Benutzername: %s"
 #~ msgid "manage shared tags"
 #~ msgstr "Shared Tags bearbeiten"
 #~ msgid "manage shared tags right description"
