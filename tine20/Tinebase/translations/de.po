@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-30 09:59+0100\n"
-"PO-Revision-Date: 2008-07-30 10:00+0100\n"
+"POT-Creation-Date: 2008-07-31 19:25+0100\n"
+"PO-Revision-Date: 2008-07-31 19:30+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgid "run right description"
 msgstr "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
 #: Tinebase/Export/Pdf.php:152
-#: Tinebase/js/widgets/TagsPanel.js:47
+#: Tinebase/js/widgets/TagsPanel.js:56
 msgid "Tags"
 msgstr "Tags"
 
@@ -46,72 +46,169 @@ msgstr "Export Datum"
 msgid "Created by"
 msgstr "Aktualisiert von"
 
-#: Tinebase/js/Tinebase.js:227
+#: Tinebase/js/MainScreen.js:29
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: Tinebase/js/MainScreen.js:35
 msgid "Logout"
 msgstr "Beenden"
 
-#: Tinebase/js/Tinebase.js:231
+#: Tinebase/js/MainScreen.js:36
 msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:57
-msgid "Recent Activities"
-msgstr "Letzte Aktivitäten"
+#: Tinebase/js/MainScreen.js:55
+#, fuzzy
+msgid "Admin"
+msgstr "Admin"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:118
+#: Tinebase/js/MainScreen.js:63
+msgid "Preferences"
+msgstr "Einstellungen"
+
+#: Tinebase/js/MainScreen.js:79
+#, python-format
+msgid "Account name: %s"
+msgstr "Benutzername: %s"
+
+#: Tinebase/js/MainScreen.js:80
+#, python-format
+msgid "Timezone: %s"
+msgstr "Zeitzone: %s"
+
+#: Tinebase/js/MainScreen.js:226
+#, python-format
+msgid "Change Password For \"%s\""
+msgstr "Passwort für \"%s\" ändern"
+
+#: Tinebase/js/MainScreen.js:250
+msgid "Old Password"
+msgstr "Altes Passwort"
+
+#: Tinebase/js/MainScreen.js:254
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: Tinebase/js/MainScreen.js:258
+msgid "Repeat new Password"
+msgstr "Wiederholung neues Passwort"
+
+#: Tinebase/js/MainScreen.js:262
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: Tinebase/js/MainScreen.js:268
+msgid "Ok"
+msgstr "Ok"
+
+#: Tinebase/js/MainScreen.js:276
+#, fuzzy
+msgid "Please Wait!"
+msgstr "Bitte warten"
+
+#: Tinebase/js/MainScreen.js:277
+msgid "changing password..."
+msgstr "Passwort wird geändert"
+
+#: Tinebase/js/MainScreen.js:288
+msgid "Success"
+msgstr "Erfolg"
+
+#: Tinebase/js/MainScreen.js:289
+msgid "Your password has been changed."
+msgstr "Ihr Passwort wurde geändert"
+
+#: Tinebase/js/MainScreen.js:295
+#: Tinebase/js/MainScreen.js:305
+#, fuzzy
+msgid "Failure"
+msgstr "Fehlgeschlagen"
+
+#: Tinebase/js/MainScreen.js:306
+msgid "The new passwords mismatch, please correct them."
+msgstr "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die Eingabe."
+
+#: Tinebase/js/MainScreen.js:324
+#: Tinebase/js/widgets/ContainerTree.js:231
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: Tinebase/js/MainScreen.js:324
+msgid "Are you sure you want to logout?"
+msgstr "Wollen sie das Programm wirklich beenden?"
+
+#: Tinebase/js/MainScreen.js:326
+msgid "Logging you out..."
+msgstr "Sie werden abgemeldet..."
+
+#: Tinebase/js/MainScreen.js:326
+#, fuzzy
+msgid "Please wait!"
+msgstr "Bitte warten"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:138
 msgid "Add a Note..."
 msgstr "Notiz hinzufügen"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:127
+#: Tinebase/js/widgets/ActivitiesPanel.js:148
 msgid "Note Type..."
 msgstr "Notiztyp"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:146
+#: Tinebase/js/widgets/ActivitiesPanel.js:167
+#: Tinebase/js/widgets/ActivitiesPanel.js:195
+#: Tinebase/js/widgets/ActivitiesPanel.js:207
 #: Tinebase/js/widgets/ContainerTree.js:304
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:147
+#: Tinebase/js/widgets/ActivitiesPanel.js:168
+#: Tinebase/js/widgets/ActivitiesPanel.js:208
 msgid "Add new note"
 msgstr "Neue Notiz hinzufügen"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:243
-#: Tinebase/js/widgets/ActivitiesPanel.js:412
-msgid "Type"
-msgstr "Typ"
-
-#: Tinebase/js/widgets/ActivitiesPanel.js:245
-#: Tinebase/js/widgets/ActivitiesPanel.js:408
+#: Tinebase/js/widgets/ActivitiesPanel.js:195
+#: Tinebase/js/widgets/ActivitiesPanel.js:332
+#: Tinebase/js/widgets/ActivitiesPanel.js:450
 msgid "Note"
 msgstr "Notiz"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:246
+#: Tinebase/js/widgets/ActivitiesPanel.js:239
+msgid "Recent Activities"
+msgstr "Letzte Aktivitäten"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:330
+#: Tinebase/js/widgets/ActivitiesPanel.js:455
+msgid "Type"
+msgstr "Typ"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:333
 msgid "Created By"
 msgstr "Erstellt von"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:247
+#: Tinebase/js/widgets/ActivitiesPanel.js:334
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:260
+#: Tinebase/js/widgets/ActivitiesPanel.js:347
 msgid "Displaying notes {0} - {1} of {2}"
 msgstr "Zeige Akivität {0} - {1} von {2}"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:261
+#: Tinebase/js/widgets/ActivitiesPanel.js:348
 msgid "No notes to display"
 msgstr "Keine Notizen vorhanden"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:396
+#: Tinebase/js/widgets/ActivitiesPanel.js:438
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Tinebase/js/widgets/ActivitiesPanel.js:410
-msgid "User"
-msgstr "Benutzer"
-
-#: Tinebase/js/widgets/ActivitiesPanel.js:411
+#: Tinebase/js/widgets/ActivitiesPanel.js:451
 msgid "Time"
 msgstr "Zeit"
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:453
+msgid "User"
+msgstr "Benutzer"
 
 #: Tinebase/js/widgets/ContainerTree.js:106
 msgid "All"
@@ -144,10 +241,6 @@ msgid "Creating"
 msgstr "Lege an"
 
 #: Tinebase/js/widgets/ContainerTree.js:231
-msgid "Confirm"
-msgstr "Bestätigen"
-
-#: Tinebase/js/widgets/ContainerTree.js:231
 msgid "Do you really want to delete the"
 msgstr "Wirklich löschen:"
 
@@ -175,33 +268,69 @@ msgstr "Umbenennen"
 msgid "Manage permissions"
 msgstr "Zugriffsrechte bearbeiten"
 
-#: Tinebase/js/widgets/FilterToolbar.js:67
+#: Tinebase/js/widgets/FilterToolbar.js:154
+#: Tinebase/js/widgets/FilterToolbar.js:438
+#: Tinebase/js/widgets/FilterToolbar.js:459
 msgid "Show"
 msgstr "Zeige"
 
-#: Tinebase/js/widgets/FilterToolbar.js:68
+#: Tinebase/js/widgets/FilterToolbar.js:154
+#: Tinebase/js/widgets/FilterToolbar.js:438
 msgid "and"
 msgstr "und"
 
-#: Tinebase/js/widgets/FilterToolbar.js:69
+#: Tinebase/js/widgets/FilterToolbar.js:179
+msgid "select a field"
+msgstr "Wählen sie ein Feld"
+
+#: Tinebase/js/widgets/FilterToolbar.js:214
+msgid "Delete this filter"
+msgstr "Diesen Filter löschen"
+
+#: Tinebase/js/widgets/FilterToolbar.js:236
+msgid "contains"
+msgstr "enthält"
+
+#: Tinebase/js/widgets/FilterToolbar.js:237
+msgid "is equal to"
+msgstr "is gleich"
+
+#: Tinebase/js/widgets/FilterToolbar.js:238
+msgid "is greater than"
+msgstr "ist größer als"
+
+#: Tinebase/js/widgets/FilterToolbar.js:239
+msgid "is less than"
+msgstr "ist kleiner als"
+
+#: Tinebase/js/widgets/FilterToolbar.js:240
+msgid "is not"
+msgstr "ist nicht"
+
+#: Tinebase/js/widgets/FilterToolbar.js:241
+msgid "is in"
+msgstr "ist in"
+
+#: Tinebase/js/widgets/FilterToolbar.js:260
+msgid "select a operator"
+msgstr "Wählen sie einen Operator"
+
+#: Tinebase/js/widgets/FilterToolbar.js:296
 msgid "add new filter"
 msgstr "neuen Filter hinzufügen"
 
-#: Tinebase/js/widgets/FilterToolbar.js:70
+#: Tinebase/js/widgets/FilterToolbar.js:304
 msgid "save filter"
 msgstr "Filter speichern"
 
-#: Tinebase/js/widgets/FilterToolbar.js:71
+#: Tinebase/js/widgets/FilterToolbar.js:310
 msgid "start search"
 msgstr "Suche starten"
 
-#: Tinebase/js/widgets/FilterToolbar.js:72
-msgid "Delete this filter"
-msgstr "Filter löschen"
-
-#: Tinebase/js/widgets/FilterToolbar.js:73
-msgid "Reset all filters"
-msgstr "Filter zurücksetzen"
+#: Tinebase/js/widgets/FilterToolbar.js:319
+#, fuzzy
+msgid "Delete all filters"
+msgstr "Alle Filter löschen"
 
 #: Tinebase/js/widgets/TagsPanel.js:86
 msgid "Add a new personal tag"
@@ -211,125 +340,125 @@ msgstr "Neuen persönlichen Tag hinzufügen"
 msgid "Add New Personal Tag"
 msgstr "Neuen persönlichen Tag hinzufügen"
 
-#: Tinebase/js/widgets/TagsPanel.js:89
+#: Tinebase/js/widgets/TagsPanel.js:90
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Bitte beachten: Einen persönlichen Tag können nur Sie sehen!"
 
-#: Tinebase/js/widgets/TagsPanel.js:89
+#: Tinebase/js/widgets/TagsPanel.js:90
 msgid "Enter tag name:"
 msgstr "Tag-Namen eingeben:"
 
-#: Tinebase/js/widgets/TagsPanel.js:104
-#: Tinebase/js/widgets/TagsPanel.js:394
-#: Tinebase/js/widgets/TagsPanel.js:398
+#: Tinebase/js/widgets/TagsPanel.js:107
+#: Tinebase/js/widgets/TagsPanel.js:397
+#: Tinebase/js/widgets/TagsPanel.js:401
 msgid "personal"
 msgstr "Persönlich"
 
-#: Tinebase/js/widgets/TagsPanel.js:126
+#: Tinebase/js/widgets/TagsPanel.js:129
 msgid "No Tags to display"
 msgstr "Keine Tags vorhanden"
 
-#: Tinebase/js/widgets/TagsPanel.js:149
+#: Tinebase/js/widgets/TagsPanel.js:152
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Tag entfernen"
 msgstr[1] "Tags entfernen"
 
-#: Tinebase/js/widgets/TagsPanel.js:164
-#: Tinebase/js/widgets/TagsPanel.js:169
+#: Tinebase/js/widgets/TagsPanel.js:167
+#: Tinebase/js/widgets/TagsPanel.js:172
 msgid "Rename Tag"
 msgstr "Tag umbenennen"
 
-#: Tinebase/js/widgets/TagsPanel.js:169
+#: Tinebase/js/widgets/TagsPanel.js:172
 msgid "Please enter a new name:"
 msgstr "Neuen Namen eingeben"
 
-#: Tinebase/js/widgets/TagsPanel.js:178
+#: Tinebase/js/widgets/TagsPanel.js:181
 msgid "Edit Description"
 msgstr "Beschreibung editieren"
 
-#: Tinebase/js/widgets/TagsPanel.js:183
+#: Tinebase/js/widgets/TagsPanel.js:186
 msgid "Description for tag"
 msgstr "Tag-Beschreibung"
 
-#: Tinebase/js/widgets/TagsPanel.js:183
+#: Tinebase/js/widgets/TagsPanel.js:186
 msgid "Please enter new description:"
 msgstr "Neue Beschreibung eingeben:"
 
-#: Tinebase/js/widgets/TagsPanel.js:192
+#: Tinebase/js/widgets/TagsPanel.js:195
 msgid "Change Color"
 msgstr "Farbe ändern"
 
-#: Tinebase/js/widgets/TagsPanel.js:216
+#: Tinebase/js/widgets/TagsPanel.js:219
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Tag löschen"
 msgstr[1] "Tags löschen"
 
-#: Tinebase/js/widgets/TagsPanel.js:228
+#: Tinebase/js/widgets/TagsPanel.js:231
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Ausgewählten Tag wirklich löschen?"
 msgstr[1] "Ausgewählte Tags wirklich löschen?"
 
-#: Tinebase/js/widgets/TagsPanel.js:229
+#: Tinebase/js/widgets/TagsPanel.js:232
 msgid "The selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Der ausgewählte Tag wird gelöscht und bei allen Einträgen entfernt"
 msgstr[1] "Die ausgewählten Tags werden gelöscht und bei allen Einträgen entfernt"
 
-#: Tinebase/js/widgets/TagsPanel.js:233
+#: Tinebase/js/widgets/TagsPanel.js:236
 msgid "Please wait a moment..."
 msgstr "Bitte warten Sie einen Moment ..."
 
-#: Tinebase/js/widgets/TagsPanel.js:233
+#: Tinebase/js/widgets/TagsPanel.js:236
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Lösche Tag"
 msgstr[1] "Lösche Tags"
 
-#: Tinebase/js/widgets/TagsPanel.js:249
-#: Tinebase/js/widgets/TagsPanel.js:347
-#: Tinebase/js/widgets/TagsPanel.js:380
+#: Tinebase/js/widgets/TagsPanel.js:252
+#: Tinebase/js/widgets/TagsPanel.js:350
+#: Tinebase/js/widgets/TagsPanel.js:383
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: Tinebase/js/widgets/TagsPanel.js:249
+#: Tinebase/js/widgets/TagsPanel.js:252
 msgid "Could not delete Tag(s)."
 msgstr "Konnte Tag(s) nicht löschen."
 
-#: Tinebase/js/widgets/TagsPanel.js:301
-#: Tinebase/js/widgets/TagsPanel.js:361
+#: Tinebase/js/widgets/TagsPanel.js:304
+#: Tinebase/js/widgets/TagsPanel.js:364
 msgid "Notice"
 msgstr "Beachten Sie"
 
-#: Tinebase/js/widgets/TagsPanel.js:302
-#: Tinebase/js/widgets/TagsPanel.js:362
+#: Tinebase/js/widgets/TagsPanel.js:305
+#: Tinebase/js/widgets/TagsPanel.js:365
 msgid "The minimum tag length is three."
 msgstr "Ein Tag muss mindestens aus 3 Zeichen bestehen."
 
-#: Tinebase/js/widgets/TagsPanel.js:347
+#: Tinebase/js/widgets/TagsPanel.js:350
 msgid "Could not create tag."
 msgstr "Konnte Tag nicht erzeugen."
 
-#: Tinebase/js/widgets/TagsPanel.js:380
+#: Tinebase/js/widgets/TagsPanel.js:383
 msgid "Could not update tag."
 msgstr "Konnte Tag nicht aktualisieren."
 
-#: Tinebase/js/widgets/TagsPanel.js:411
-#: Tinebase/js/widgets/TagsPanel.js:465
+#: Tinebase/js/widgets/TagsPanel.js:415
+#: Tinebase/js/widgets/TagsPanel.js:473
 msgid "Enter tag name"
 msgstr "Tag-Name eingegeben"
 
-#: Tinebase/js/widgets/TagsPanel.js:412
+#: Tinebase/js/widgets/TagsPanel.js:416
 msgid "Searching..."
 msgstr "Suche ..."
 
-#: Tinebase/js/widgets/TagsPanel.js:538
+#: Tinebase/js/widgets/TagsPanel.js:546
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Tinebase/js/widgets/TagsPanel.js:542
+#: Tinebase/js/widgets/TagsPanel.js:550
 msgid "Color"
 msgstr "Farbe"
 
