@@ -44,7 +44,6 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     searchField: null,
     
-    title: _('Tags'),
     iconCls: 'action_tag',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
@@ -54,6 +53,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function(){
+        this.title =  _('Tags'),
         // init recordTagsStore
         this.tags = [];
         this.recordTagsStore = new Ext.data.JsonStore({

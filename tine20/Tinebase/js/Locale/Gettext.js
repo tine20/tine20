@@ -81,10 +81,12 @@ Locale.Gettext.prototype._url = function (category, domain) {
 };
 
 Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
+  //console.log(msgid);
   return this.getmsg(domain, category).get(msgid) || msgid;
 };
 
 Locale.Gettext.prototype.dcngettext = function (domain, msgid, msgid_plural, n, category) {
+  //console.log(msgid);
   var msg = this.getmsg(domain, category);
   return (msg.get(msgid, msgid_plural) || [msgid, msgid_plural])[msg.plural(n)];
 };
