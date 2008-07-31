@@ -275,8 +275,14 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($result['updatedData']['products']));
         $this->assertEquals($this->objects['productLink']['product_desc'], $result['updatedData']['products'][0]['product_desc']);
         
-        // check note
-        $this->assertEquals($note['note'], $result['updatedData']['notes'][0]['note']);
+        // check notes
+        $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
+        foreach ($result['updatedData']['notes'] as $leadNote) {
+            if ($leadNote['note_type_id'] !== $createdNoteType->getId()) {
+                $addedNote = $leadNote;
+            }
+        }                
+        $this->assertEquals($note['note'], $addedNote['note']);
     }
 
     /**
