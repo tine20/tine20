@@ -75,12 +75,11 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             id: 'applicationToolbar',
             height: 26
         });
-        // defualt app
+        // default app
         applicationToolbar.on('render', function(){
             var appPanel = Ext.getCmp('Addressbook_Tree');
             if (appPanel) {
                 appPanel.expand();
-                appPanel.fireEvent('click', appPanel.getSelectionModel().getSelectedNode());
             }
         });
     
