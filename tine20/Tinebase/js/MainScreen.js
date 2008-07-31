@@ -287,7 +287,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                             newPassword: newPassword
                         },
                         success: function(form, action, o){
-                            Ext.getCmp('changePassword_window').hide(); 
+                            Ext.getCmp('changePassword_window').close(); 
                             Ext.MessageBox.show({
                                 title: 'Success',
                                 msg: 'Your password has been changed.',
@@ -317,10 +317,11 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 }
             }
           };
-
+          
         var passwordDialog = new Ext.Window({
             title: 'Change password for ' + Tine.Tinebase.Registry.get('currentAccount').accountDisplayName,
             id: 'changePassword_window',
+            closeAction: 'close',
             modal: true,
             width: 350,
             height: 230,
@@ -338,14 +339,13 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                     text: 'Cancel',
 //                    iconCls: 'action_saveAndClose',
                     handler: function() {
-                        Ext.getCmp('changePassword_window').hide();
+                        Ext.getCmp('changePassword_window').close();
                     }
                 }
             ],
             bodyStyle: 'padding:5px;',
             buttonAlign: 'center'
         });
-            
         passwordDialog.add(changePasswordForm);
         passwordDialog.show();            
     },
