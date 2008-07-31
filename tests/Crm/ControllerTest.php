@@ -350,14 +350,11 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
         foreach ($notes as $note) {
             if ($note->note_type_id === $createdNoteType->getId()) {
-                $createdNote = $note;
+                $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $note->note);
             } else {
-                $addedNote = $note;
+                $this->assertEquals($this->objects['note']->note, $note->note);
             }
         }
-        
-        $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $createdNote->note); 
-        $this->assertEquals($this->objects['note']->note, $addedNote->note);
     }
     
     /**

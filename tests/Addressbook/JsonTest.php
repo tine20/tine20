@@ -312,21 +312,21 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         $result = $json->getContact($contactId);
         
-        //print_r($contact);
-        
         $this->assertEquals($contactId, $result['contact']['id']);
         
+        //print_r($result['contact']['notes']);
+        
+        // check notes
         $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
         foreach ($result['contact']['notes'] as $note) {
             if ($note['note_type_id'] === $createdNoteType->getId()) {
-                $createdNote = $note;
+                $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $note['note']); 
             } else {
-                $addedNote = $note;
+                $this->assertEquals($note['note'], $note['note']);
             }
         }        
-        $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $createdNote['note']); 
-        $this->assertEquals($note['note'], $addedNote['note']);
         
+        // delete contact
         $json->deleteContacts($contactId);
 
         $this->setExpectedException('UnderflowException');

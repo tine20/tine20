@@ -279,10 +279,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
         foreach ($result['updatedData']['notes'] as $leadNote) {
             if ($leadNote['note_type_id'] !== $createdNoteType->getId()) {
-                $addedNote = $leadNote;
+                $this->assertEquals($note['note'], $leadNote['note']);
             }
-        }                
-        $this->assertEquals($note['note'], $addedNote['note']);
+        }                       
     }
 
     /**
