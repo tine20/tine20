@@ -1039,13 +1039,14 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
             
             if (recordIndex === false) {
             	var record = new Ext.data.Record({
-                    accountId: account.data.id,
+            		id: 0,
+                    account_id: account.data.id,
                     account_type: account.data.type,
                     accountDisplayName: account.data.name
                 }, account.data.id);
                 dataStore.addSorted(record);
             }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.accountId));   
+            selectionModel.selectRow(dataStore.indexOfId(account.data.account_id));   
         },
 
         applyChanges: function(_button, _event, _closeWindow) 
@@ -1139,7 +1140,8 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
 	        this.dataStore = new Ext.data.JsonStore({
 	            root: 'results',
 	            totalProperty: 'totalcount',
-	            id: 'accountId',
+	            id: 'account_id',
+	            // @todo create new model for phone right
 	            fields: Tine.Tinebase.Model.User
 	        });
 	

@@ -159,6 +159,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         }
 
         //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
+        Zend_Registry::get('logger')->debug(print_r($rightsData,true));
+        
         $phone = new Voipmanager_Model_SnomPhone();
         $phone->setFromArray($phoneData);
         

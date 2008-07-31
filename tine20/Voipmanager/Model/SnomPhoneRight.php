@@ -23,7 +23,7 @@ class Voipmanager_Model_SnomPhoneRight extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'account_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -50,9 +50,13 @@ class Voipmanager_Model_SnomPhoneRight extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'account_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-        'read_right'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'write_right' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'dial_right'  => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'snom_phone_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'account_type'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+    
+        'read_right'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'write_right'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'dial_right'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );    
 }

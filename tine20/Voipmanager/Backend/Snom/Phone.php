@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo add save rights function
  */
 
 /**
@@ -88,11 +89,16 @@ class Voipmanager_Backend_Snom_Phone
 	/**
 	 * write phone ACL
 	 * 
-     * @param string|Voipmanager_Model_SnomPhone $_id
+     * @param Voipmanager_Model_SnomPhoneRight $_acl
 	 * @return Voipmanager_Model_SnomPhone the phone
 	 */
-    public function createACL(Voipmanager_Model_SnomPhoneOwner $_acl)
-    {        
+    public function createACL(Voipmanager_Model_SnomPhoneRight $_acl)
+    {
+        if (!$_acl->getId()) {
+            $id = $_acl->generateUID();
+            $_acl->setId($id);
+        }
+        
         $result = $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones_acl', $_acl->toArray());
         
         return $result;
@@ -101,18 +107,67 @@ class Voipmanager_Backend_Snom_Phone
 	/**
 	 * delete phone ACLs
 	 * 
-     * @param string|Voipmanager_Model_SnomPhone $_id
-	 * @return Voipmanager_Model_SnomPhone the phone
+     * @param string|array $_phoneIds
+	 * @return query result
 	 */
-    public function deleteACLs($_phoneId)
+    public function deleteACLs($_phoneIds)
     {        
-        $where = $this->_db->quoteInto('phone_id = ?', $_phoneId);
+        if (empty($_phoneIds)) {
+            return;
+        }
+        
+        $where = $this->_db->quoteInto('phone_id in (?)', $_phoneIds);
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones_acl', $where);
         
         return $result;
     }
         
+    /**
+     * get phone rights
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return Tinebase_Record_RecordSet of Voipmanager_Model_SnomPhoneRight
+     * 
+     * @todo implement and test
+     */
+    public function getPhoneRights($_phone)
+    {
+        return new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight'); 
+    }
     
+    /**
+     * set phone rights
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * 
+     * @todo test
+     */
+    public function setPhoneRights($_phone)
+    {
+        $currentRightIds = $this->getPhoneRights($_phone)->getArrayOfIds();
+                
+        if ($_phone->rights instanceOf Tinebase_Record_RecordSet) {
+            $rightsToSet = $_phone->rights;
+        } else {
+            $rightsToSet = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', $_phone->rights);
+        }
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rightsToSet->toArray(), true));
+                
+        $toDetach = array_diff($currentRightIds, $rightsToSet->getArrayOfIds());
+
+        // delete detached/deleted rights
+        $this->deleteACLs($toDetach);
+        
+        // add new rights        
+        foreach ($rightsToSet as $right) {
+            $right->snom_phone_id = $_phone->getId();
+            $right->read_right = 1;
+            $right->write_right = 1;
+            $right->dial_right = 1;
+            $this->createACL($right);
+        }        
+    }
    
 	/**
 	 * get valid phone ids according to phones_acl, identified by account id

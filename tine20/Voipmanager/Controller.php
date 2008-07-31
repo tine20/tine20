@@ -181,7 +181,7 @@ class Voipmanager_Controller
             'snomphone_id'  => $phone->id
         ));
         $phone->lines  = $this->_snomLineBackend->search($filter);
-        //$phone->rights = $this->getSnomPhoneRights($phone);
+        $phone->rights = $this->_snomPhoneBackend->getPhoneRights($phone);
 
         return $phone;    
     }
@@ -307,6 +307,11 @@ class Voipmanager_Controller
             $line->snomphone_id = $phone->getId();
             $addedLine = $this->_snomLineBackend->create($line);
         }
+        
+        // save phone rights
+        if (isset($phone->rights)) {
+            $this->_snomPhoneBackend->setPhoneRights($phone);
+        }        
       
         return $this->getSnomPhone($phone);
     }
@@ -378,7 +383,12 @@ class Voipmanager_Controller
             //error_log(print_r($line->toArray(), true));
             $addedLine = $this->_snomLineBackend->create($line);
         }
-      
+        
+        // save phone rights
+        if (isset($_phone->rights)) {
+            $this->_snomPhoneBackend->setPhoneRights($_phone);
+        }
+              
         return $this->getSnomPhone($phone);
     }    
     
@@ -461,8 +471,8 @@ class Voipmanager_Controller
     {
         $_ids = $this->_snomPhoneBackend->getPhoneOwner($_phoneId);        
   
-        foreach($_ids AS $_id)
-        {
+        $result['results'] = array();
+        foreach ($_ids AS $_id) {
             $result['results'][] = Tinebase_User::getInstance()->getUserById($_id['account_id'])->toArray();
         }
   
