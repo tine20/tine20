@@ -96,6 +96,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/SearchField.js',
             'Tinebase/js/ux/grid/CheckColumn.js',
             'Tinebase/js/ux/grid/QuickaddGridPanel.js',
+            'Tinebase/js/ux/grid/RowExpander.js',
             'Tinebase/js/ux/file/Uploader.js',
             'Tinebase/js/ux/form/IconTextField.js',
             'Tinebase/js/ux/form/MirrorTextField.js',

@@ -321,7 +321,7 @@ Tine.Crm.Main = {
 	        ]
 	    });
 
-/*        var expander = new Ext.grid.RowExpander({
+/*        var expander = new Ext.ux.grid.RowExpander({
             enableCaching: false,
             tpl : new Ext.Template(
                 '<b>Notes:</b> {description}</div></td>',
