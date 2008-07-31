@@ -85,6 +85,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             // Tinebase
             'Tinebase/js/Tinebase.js',
             'Tinebase/js/Models.js',
+            'Tinebase/js/MainScreen.js',
             'Tinebase/js/Container.js',
             // Ext user extensions
             'Tinebase/js/ux/ButtonLockedToggle.js',

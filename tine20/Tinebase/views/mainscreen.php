@@ -82,7 +82,8 @@
     // onReady, fired by ExtJS
         Ext.onReady(function(){
             Tine.Tinebase.initFramework();
-            <?php if(empty($this->isPopup)) echo "Tine.Tinebase.MainScreen.display(); \n" ?>
+            <?php if(empty($this->isPopup)) echo "Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass(); \n" ?>
+            <?php if(empty($this->isPopup)) echo "Tine.Tinebase.MainScreen.render(); \n" ?>
             <?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . "; \n" ?>
             <?php if(isset($this->jsExecute)) echo "$this->jsExecute \n" ?>
             window.focus();
