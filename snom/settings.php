@@ -29,10 +29,11 @@ $phoneBackend = new Voipmanager_Backend_Snom_Phone();
 
 $phone = $phoneBackend->getByMacAddress($_GET['mac']);
 
-// legacy code, generate http_client username and password
-if(empty($phone->http_client_user)) {
+// legacy code, generate http_client username and password on demand
+if(empty($phone->http_client_user) || empty($phone->http_client_pass)) {
     $phone->http_client_user = Tinebase_Record_Abstract::generateUID();
     $phone->http_client_pass = Tinebase_Record_Abstract::generateUID();
+    $phone->http_client_info_sent = false;
     
     $phoneBackend->update($phone);
 }
