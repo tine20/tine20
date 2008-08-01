@@ -269,7 +269,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         	$newId = $_task->generateUID();
         	$_task->setId($newId);
         }
-        Tinebase_Timemachine_ModificationLog::setRecordModData($_task, 'create');
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_task, 'create');
         $taskParts = $this->seperateTaskData($_task);
         
         try {
@@ -334,7 +334,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
 
                 unset($dbMods['last_modified_time']);
             }
-            $modLog->setRecordModData($_task, 'update', $oldTask);
+            $modLog->setRecordMetaData($_task, 'update', $oldTask);
             $modLog->writeModLog($_task, $oldTask, 'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $id);
             
             

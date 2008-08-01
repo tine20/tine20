@@ -257,11 +257,11 @@ class Tinebase_Timemachine_ModificationLog
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
      * @return void
      */
-    public static function setRecordModData($_newRecord, $_action, $_curRecord=NULL)
+    public static function setRecordMetaData($_newRecord, $_action, $_curRecord=NULL)
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
+        $currentAccount   = Zend_Registry::get('currentAccount');
         $currentAccountId = $currentAccount instanceof Tinebase_Record_Abstract ? $currentAccount->getId(): NULL;
-        $currentTime    = Zend_Date::now();
+        $currentTime      = Zend_Date::now();
         
         // spoofing protection
         $_newRecord->created_by         = $_curRecord ? $_curRecord->created_by : NULL;
@@ -290,7 +290,7 @@ class Tinebase_Timemachine_ModificationLog
                 throw new Exception('action must be one of {create|update|delete}');
                 break;
         }
-    } // end of static function setRecordModData
+    } // end of static function setRecordMetaData
     
 } // end of Tinebase_Timemachine_ModificationLog
 ?>

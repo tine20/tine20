@@ -187,7 +187,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
 
-        Tinebase_Timemachine_ModificationLog::setRecordModData($_contact, 'create');
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_contact, 'create');
         $contact = $this->_backend->create($_contact);
         
         if (!empty($_contact->tags)) {
@@ -232,7 +232,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
         
-        Tinebase_Timemachine_ModificationLog::setRecordModData($_contact, 'update', $currentContact);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_contact, 'update', $currentContact);
         $contact = $this->_backend->update($_contact);                
                 
         if (isset($_contact->tags)) {
