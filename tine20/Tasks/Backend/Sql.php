@@ -339,9 +339,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             }
             
             // database update
+            Tinebase_Timemachine_ModificationLog::setRecordModData($_task, $oldTask, 'update');
             $taskParts = $this->seperateTaskData($_task);
-            $taskParts['tasks']['last_modified_time'] = Zend_Date::now()->getIso();
-            $taskParts['tasks']['last_modified_by'] = $this->_currentAccount->getId();
+            //$taskParts['tasks']['last_modified_time'] = Zend_Date::now()->getIso();
+            //$taskParts['tasks']['last_modified_by'] = $this->_currentAccount->getId();
         
             $tasksTable = $this->getTableInstance('tasks');
             $numAffectedRows = $tasksTable->update($taskParts['tasks'], array(

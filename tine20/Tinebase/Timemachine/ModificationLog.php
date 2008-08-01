@@ -198,5 +198,47 @@ class Tinebase_Timemachine_ModificationLog
         return $id;
     } // end of member function setModification
     
+    /**
+     * sets record modification data and protects it from spoofing
+     * 
+     * @param  Tinbebase_Record_Abstract $_newRecord record from user data
+     * @param  Tinbebase_Record_Abstract $_curRecord record from storage
+     * @param  string                    $_action    one of {create|update|delete}
+     * @return void
+     */
+    public static function setRecordModData($_newRecord, $_curRecord, $_action)
+    {
+        $currentAccount = Zend_Registry::get('currentAccount')->getId();
+        $currentTime    = Zend_Date::now();
+        
+        // spoofing protection
+        $_newRecord->created_by         = $_curRecord->created_by;
+        $_newRecord->creation_time      = $_curRecord->creation_time;
+        $_newRecord->last_modified_by   = $_curRecord->last_modified_by;
+        $_newRecord->last_modified_time = $_curRecord->last_modified_time;
+        $_newRecord->is_deleted         = $_curRecord->is_deleted;
+        $_newRecord->deleted_time       = $_curRecord->deleted_time;
+        $_newRecord->deleted_by         = $_curRecord->deleted_by;
+        
+        switch ($_action) {
+            case 'create':
+                $_newRecord->created_by    = $currentAccount;
+                $_newRecord->creation_time = $currentTime;
+                break;
+            case 'update':
+                $_newRecord->last_modified_by   = $currentAccount;
+                $_newRecord->last_modified_time = $currentTime;
+                break;
+            case 'update':
+                $_newRecord->deleted_by   = $currentAccount;
+                $_newRecord->deleted_time = $currentTime;
+                $_newRecord->is_deleted   = true;
+                break;
+            default:
+                throw new Exception('action must be one of {create|update|delete}');
+                break;
+        }
+    } // end of static function setRecordModData
+    
 } // end of Tinebase_Timemachine_ModificationLog
 ?>
