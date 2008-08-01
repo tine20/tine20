@@ -15,14 +15,30 @@ Ext.namespace('Tine', 'Tine.Tinebase');
  * Tine 2.0 ExtJS client Mainscreen.
  */
 Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
+    
+    /**
+     * @cfg {String} Appname of default app
+     */
+    defaultAppName: 'Addressbook',
+    
+    /**
+     * holds default app panel
+     * @private
+     */
+    defaultAppPanel: null,
+    
     /**
      * direct actions of MainScreen
+     * @private
      */
     actions: {
         changePassword: null,
         logout: null,
     },
     
+    /**
+     * @private
+     */
     initComponent: function() {
         // init actions
         this.actions.changePassword = new Ext.Action({
@@ -87,16 +103,19 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             id: 'applicationToolbar',
             height: 26
         });
-        // activate default app
+        
+        // default app
         applicationToolbar.on('render', function(){
-            var appPanel = Ext.getCmp('Addressbook_Tree');
-            if (appPanel) {
-                appPanel.expand();
+            if(! this.defaultAppPanel.collapsed) {
+                this.defaultAppPanel.fireEvent('beforeexpand', this.defaultAppPanel);
             }
-        });
+            this.defaultAppPanel.expand();
+            
+        }, this);
+        
     
         // init app chooser
-        var applicationArcordion = new Ext.Panel({
+        this.applicationArcordion = new Ext.Panel({
             //baseCls: 'appleftlayout',
             title: '&nbsp;',
             layout:'appleft',
@@ -174,7 +193,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             containerScroll: true,
             collapseMode: 'mini',
             layout: 'fit',
-            items: applicationArcordion
+            items: this.applicationArcordion
         }];
         
         Tine.Tinebase.MainScreenClass.superclass.initComponent.call(this);
@@ -188,12 +207,20 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      */
     getPanels:  function() {
         var userApps = Tine.Tinebase.Registry.get('userApplications');
-        var panels = [];
         
+        var panels = [];
         for(var i=0; i<userApps.length; i++) {
             var app = userApps[i];
+            if(app.status != 'enabled') {
+                continue;
+            }
             try{
-                panels.push(Tine[app.name].getPanel());
+                var appPanel = Tine[app.name].getPanel();
+                panels.push(appPanel);
+                
+                if (i == 0 || app.name == this.defaultAppName) {
+                    this.defaultAppPanel = appPanel;
+                }
             } catch(e) {
                 //console.log(_application + ' failed');
                 //console.log(e);
