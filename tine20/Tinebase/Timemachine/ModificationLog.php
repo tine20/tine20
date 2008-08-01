@@ -238,8 +238,15 @@ class Tinebase_Timemachine_ModificationLog
         $diffs = $_curRecord->diff($_newRecord);
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
         
+        // ommit second order records for the moment
+        $toOmmit = $this->_metaProperties + array(
+            'tags',
+            'relations',
+            'notes'
+        );
+        
         foreach ($diffs as $field => $newValue) {
-            if(! in_array($field, $this->_metaProperties)) {
+            if(! in_array($field, $toOmmit)) {
                 $curValue = $_curRecord->$field;
                 Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " field '$field' changed from '$curValue' to '$newValue'");
                 
