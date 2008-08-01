@@ -58,10 +58,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        //'created'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'creator'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'modified'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'modifier'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
