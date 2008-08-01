@@ -219,19 +219,23 @@ class Tinebase_Timemachine_ModificationLog
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
      * @return resolved concurrent updates
      */
-    public function manageConcurrentUpdates($_newRecord, $_curRecord)
+    public function manageConcurrentUpdates($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
+        list($appName, $i, $modelName) = explode('_', $_model);
+        
         $resolved = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
         
         if($_curRecord->last_modified_time instanceof Zend_Date && ! $_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
                 $_curRecord->last_modified_time . "' where record to be updated was last updated '" . $_newRecord->last_modified_time . "'");
             
-            $loggedMods = $this->getModifications('Tasks', $_newRecord->getId(),
-                    'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $_newRecord->last_modified_time, $_curRecord->last_modified_time);
+            $loggedMods = $this->getModifications($appName, $_id,
+                    $_model, $_backend, $_newRecord->last_modified_time, $_curRecord->last_modified_time);
             // effective modifications made to the record after current user got his record
             $diffs = $this->computeDiff($loggedMods);
-
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " during the concurrent update, the following changes have been made: " .
+                print_r($diffs->toArray(),true));
+            
             // we loop over the diffs! -> changes over fields which have no diff in storage are not in the loop!
             foreach ($diffs as $diff) {
                 if ($_newRecord[$diff->modified_attribute] instanceof Zend_Date) {
@@ -242,11 +246,11 @@ class Tinebase_Timemachine_ModificationLog
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " user updated to same value for field '" . 
                     $diff->modified_attribute . "', nothing to do.");
                     $resolved->addRecord($diff);
-                } /* elseif ($_newRecord[$diff->modified_attribute]  == $diff->old_value) {
+                } elseif ($_newRecord[$diff->modified_attribute]  == $diff->old_value) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " merge current value into update data, as it was not changed in update request.");
                     $_newRecord[$diff->modified_attribute] = $diff->new_value;
                     $resolved->addRecord($diff);
-                } */ else {
+                } else {
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " non resolvable conflict!");
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency confilict!');
                 }

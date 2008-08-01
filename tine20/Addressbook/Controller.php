@@ -218,8 +218,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     {
         $currentContact = $this->getContact($_contact->getId());
         
+        // ACL checks
         if ($currentContact->owner != $_contact->owner) {
-            
             if (! $this->_currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
                 throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
             }
@@ -227,12 +227,19 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             if (! $this->_currentAccount->hasGrant($currentContact->owner, Tinebase_Container::GRANT_DELETE)) {
                 throw new Exception('delete access to contacts in container ' . $currentContact->owner . ' denied');
             }
-            
         } elseif (! $this->_currentAccount->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
         
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_contact, 'update', $currentContact);
+        // concurrency management & history log
+        $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+        $modLog->manageConcurrentUpdates($_contact, $currentContact, 'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $_contact->getId());
+        $modLog->setRecordMetaData($_contact, 'update', $currentContact);
+        $currentMods = $modLog->writeModLog($_contact, $currentContact, 'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $_contact->getId());
+        /**
+         * @philp: place generation of changelog notes somwhere arround here!
+         */
+        
         $contact = $this->_backend->update($_contact);                
                 
         if (isset($_contact->tags)) {

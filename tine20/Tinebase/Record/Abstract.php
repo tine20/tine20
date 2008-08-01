@@ -491,6 +491,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * returns an array with differences to the given record
      * 
+     * @todo test this! 
      * @param  Tinebase_Record_Interface $_record record for comparism
      * @return array with differences field => different value
      */
@@ -511,9 +512,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } elseif($fieldName == $this->_identifier
                      && $this->getId() == $_record->getId()) {
                     continue;
-            } elseif (is_array($_record->$fieldName)) {
+            } /*elseif (is_array($_record->$fieldName)) {
                 throw new Exception('Arrays are not allowed as values in records. use recordSets instead!');
-            } elseif ($_record->$fieldName instanceof Tinebase_Record_RecordSet 
+            } */elseif ($_record->$fieldName instanceof Tinebase_Record_RecordSet 
                       || $_record->$fieldName instanceof Tinebase_Record_Abstract) {
                  $subdiv = $_record->$fieldName->diff($this->__get($fieldName));
                  if (!empty($subdiv)) {

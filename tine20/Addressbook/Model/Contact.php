@@ -137,7 +137,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */
     protected $_datetimeFields = array(
-        'bday'
+        'bday',
+        'creation_time',
+        'last_modified_time',
+        'deleted_time'
     );
     
     /**

@@ -306,7 +306,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
             
             // concurrency management
-            $resolved = $modLog->manageConcurrentUpdates($_task, $oldTask);
+            $modLog->manageConcurrentUpdates($_task, $oldTask, 'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $id);
             
             // meta data sanetizing
             $modLog->setRecordMetaData($_task, 'update', $oldTask);
