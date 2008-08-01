@@ -377,9 +377,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
             },
             {
                 // tags & notes
-                layout: 'hfit',
+            	//layout: 'hfit',
+            	layout: 'accordion',
+            	animate: true,
                 region: 'east',
-                width: 200,
+                width: 210,
                 split: true,
                 collapsible: true,
                 collapseMode: 'mini',
@@ -387,36 +389,32 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 //bodyStyle: 'border:1px solid #B5B8C8;',
                 bodyStyle: 'padding-left: 5px;',
                 items: [
-                    new Tine.widgets.tags.TagPanel({
-                        height: 175,
-                        customHeight: 175,
-                        border: false,
-                        style: 'border:1px solid #B5B8C8;'
-                    }),
-                    new Tine.widgets.activities.ActivitiesPanel({
-                    	app: 'Addressbook',
-                        height: 280,
-                        customHeight: 280,
-                        border: false,
-                        style: 'border:1px solid #B5B8C8;'
-                    })                    
-                    /*
-                    {
-                        xtype: 'panel',
+                    new Ext.Panel({
+                    	// @todo generalise!
+                        //xtype: 'panel',
+                        title: translation._('Description'),
+                        iconCls: 'descriptionIcon',
                         layout: 'form',
                         labelAlign: 'top',
                         items: [{
                             labelSeparator: '',
                             xtype:'textarea',
                             name: 'note',
-                            fieldLabel: translation._('Notes'),
+                            hideLabel: true,
                             grow: false,
                             preventScrollbars:false,
-                            anchor:'100%',
-                            height: 205
+                            anchor:'100% 100%'
                         }]
-                    }
-                    */
+                    }),
+                    new Tine.widgets.tags.TagPanel({
+                        border: false,
+                        style: 'border:1px solid #B5B8C8;'
+                    }),
+                    new Tine.widgets.activities.ActivitiesPanel({
+                    	app: 'Addressbook',
+                        border: false,
+                        style: 'border:1px solid #B5B8C8;'
+                    })                    
                 ]
             }
         ]

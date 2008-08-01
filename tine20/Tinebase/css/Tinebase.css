@@ -95,6 +95,10 @@ html, body {
    background-image:url(../../images/oxygen/16x16/actions/kontact-mail.png) !important;
 }
 
+.descriptionIcon {
+   background-image:url(../../images/oxygen/16x16/apps/kwrite.png) !important;
+}
+
 /* ----- appchooser panel-----------------------------------------------------*/
 .activeapp-panel-header {
 background:transparent url(../../ExtJS/resources/images/default/panel/light-hd.gif) repeat-x scroll 0pt -9px;
