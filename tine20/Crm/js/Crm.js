@@ -478,7 +478,7 @@ Tine.Crm.Main = {
      */
     initStore: function(){
         this.store = new Ext.data.JsonStore({
-            idProperty: 'id',
+            id: 'id',
             root: 'results',
             totalProperty: 'totalcount',
             fields: Tine.Crm.Model.Lead,

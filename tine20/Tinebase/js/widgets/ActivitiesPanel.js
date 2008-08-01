@@ -379,7 +379,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     initStore: function(){
 
         this.store = new Ext.data.JsonStore({
-            idProperty: 'id',
+            id: 'id',
             autoLoad: false,
             root: 'results',
             totalProperty: 'totalcount',

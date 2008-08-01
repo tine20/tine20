@@ -526,7 +526,7 @@ Tine.Addressbook.Main = {
     initStore: function(){
 
         this.store = new Ext.data.JsonStore({
-            idProperty: 'id',
+        	id: 'id',
             autoLoad: false,
             root: 'results',
             totalProperty: 'totalcount',
@@ -590,7 +590,7 @@ Tine.Addressbook.Main = {
             // note: if node is clicked, it is not selected!
             _node.getOwnerTree().selectPath(_node.getPath());
         	
-            this.store.load({});        	
+            this.store.load({});  
         }
     },
     

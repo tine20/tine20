@@ -196,7 +196,7 @@ Tine.Tasks.mainGrid = {
 	
 	initStore: function(){
 	    this.store = new Ext.data.JsonStore({
-			idProperty: 'id',
+			id: 'id',
             root: 'results',
             totalProperty: 'totalcount',
 			successProperty: 'status',
