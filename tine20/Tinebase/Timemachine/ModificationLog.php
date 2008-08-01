@@ -220,7 +220,7 @@ class Tinebase_Timemachine_ModificationLog
      * 
      * @param  Tinebase_Record_Abstract $_newRecord record from user data
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
-     * @return void
+     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Timemachine_Model_ModificationLog
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
@@ -236,6 +236,8 @@ class Tinebase_Timemachine_ModificationLog
         ),true);
             
         $diffs = $_curRecord->diff($_newRecord);
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
+        
         foreach ($diffs as $field => $newValue) {
             if(! in_array($field, $this->_metaProperties)) {
                 $curValue = $_curRecord->$field;
@@ -244,9 +246,11 @@ class Tinebase_Timemachine_ModificationLog
                 $modLogEntry->modified_attribute = $field;
                 $modLogEntry->old_value = $curValue;
                 $modLogEntry->new_value = $newValue;
-                $this->setModification($modLogEntry);
+                $modLogEntry->setId($this->setModification($modLogEntry));
+                $modifications->addRecord(clone $modLogEntry);
             }
         }
+        return $modifications;
     }
     
     /**
