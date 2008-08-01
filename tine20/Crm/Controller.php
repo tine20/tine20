@@ -194,6 +194,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
         }
         
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_lead, 'create');
         $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $leadBackend->create($_lead);
         
