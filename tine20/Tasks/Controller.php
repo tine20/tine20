@@ -171,7 +171,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
      */
     public function createTask(Tasks_Model_Task $_task)
     {
-        Zend_Registry::get('logger')->debug('Tasks_Controller->createTask');
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' $_task: '. print_r($_task->toArray(), true));
     	if (empty($_task->container_id) || (int)$_task->container_id < 0) {
     		$_task->container_id = $this->getDefaultContainer()->getId();
     	}
@@ -179,7 +179,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
             throw new Exception('Not allowed!');
         }
         if(empty($_task->class_id)) {
-            //$_task->class_id = $this->_stati[1];
+            $_task->class_id = NULL;
         }
         return $this->_backend->create($_task);
     }
