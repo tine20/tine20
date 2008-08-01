@@ -300,11 +300,12 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         try {
             $this->_db->beginTransaction();
             
+            $id = $_task->getId();
             $oldTask = $this->get($_task->id);
             
-            $dbMods = array_diff_assoc($oldTask->toArray(), $_task->toArray());
             $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
             
+            $dbMods = array_diff_assoc($oldTask->toArray(), $_task->toArray());
             if (empty($dbMods)) {
                 // nothing canged!
                 $this->_db->rollBack();
@@ -333,33 +334,18 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
 
                 unset($dbMods['last_modified_time']);
             }
+            $modLog->setRecordModData($_task, 'update', $oldTask);
+            $modLog->writeModLog($_task, $oldTask, 'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $id);
+            
             
             // database update
-            Tinebase_Timemachine_ModificationLog::setRecordModData($_task, 'update', $oldTask);
             $taskParts = $this->seperateTaskData($_task);
-        
             $tasksTable = $this->getTableInstance('tasks');
             $numAffectedRows = $tasksTable->update($taskParts['tasks'], array(
                 $this->_db->quoteInto('id = ?', $_task->id),
             ));
             $this->deleteDependentRows($_task->id);
             $this->insertDependentRows($taskParts);
-
-            // modification log
-            $modLogEntry = new Tinebase_Timemachine_Model_ModificationLog(array(
-                'application_id'       => 'tasks',
-                'record_id'            => $_task->getId(),
-                'record_type'          => 'Tasks_Model_Task',
-                'record_backend'       => Tasks_Backend_Factory::SQL,
-                'modification_time'    => $taskParts['tasks']['last_modified_time'],
-                'modification_account' => $this->_currentAccount->getId()
-            ),true);
-            foreach ($dbMods as $modified_attribute => $modified_to) {
-                $modLogEntry->modified_attribute = $modified_attribute;
-                $modLogEntry->old_value = $oldTask->$modified_attribute;
-                $modLogEntry->new_value = $modified_to;
-                $modLog->setModification($modLogEntry);
-            }
             
             $this->_db->commit();
 

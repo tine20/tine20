@@ -56,6 +56,20 @@ class Tinebase_Timemachine_ModificationLog
      */
     protected $_table = NULL;
     
+    /**
+     * holds names of meta properties in record
+     * 
+     * @var array
+     */
+    protected $_metaProperties = array(
+        'created_by',
+        'creation_time',
+        'last_modified_by',
+        'last_modified_time',
+        'is_deleted',
+        'deleted_time',
+        'deleted_by'
+    );
     
     /**
      * holdes the instance of the singleton
@@ -199,11 +213,48 @@ class Tinebase_Timemachine_ModificationLog
     } // end of member function setModification
     
     /**
+     * computes changes of records and writes them to the logbook
+     * 
+     * NOTE: expects last_modified_by and last_modified_time to be set
+     * properly in the $_newRecord
+     * 
+     * @param  Tinebase_Record_Abstract $_newRecord record from user data
+     * @param  Tinebase_Record_Abstract $_curRecord record from storage
+     * @return void
+     */
+    public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
+    {
+        list($appName, $i, $modelName) = explode('_', $_model);
+        
+        $modLogEntry = new Tinebase_Timemachine_Model_ModificationLog(array(
+            'application_id'       => $appName,
+            'record_id'            => $_id,
+            'record_type'          => $_model,
+            'record_backend'       => $_backend,
+            'modification_time'    => $_newRecord->last_modified_time,
+            'modification_account' => $_newRecord->last_modified_by
+        ),true);
+            
+        $diffs = $_curRecord->diff($_newRecord);
+        foreach ($diffs as $field => $newValue) {
+            if(! in_array($field, $this->_metaProperties)) {
+                $curValue = $_curRecord->$field;
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " field '$field' changed from '$curValue' to '$newValue'");
+                
+                $modLogEntry->modified_attribute = $field;
+                $modLogEntry->old_value = $curValue;
+                $modLogEntry->new_value = $newValue;
+                $this->setModification($modLogEntry);
+            }
+        }
+    }
+    
+    /**
      * sets record modification data and protects it from spoofing
      * 
-     * @param  Tinbebase_Record_Abstract $_newRecord record from user data
+     * @param  Tinebase_Record_Abstract $_newRecord record from user data
      * @param  string                    $_action    one of {create|update|delete}
-     * @param  Tinbebase_Record_Abstract $_curRecord record from storage
+     * @param  Tinebase_Record_Abstract $_curRecord record from storage
      * @return void
      */
     public static function setRecordModData($_newRecord, $_action, $_curRecord=NULL)
