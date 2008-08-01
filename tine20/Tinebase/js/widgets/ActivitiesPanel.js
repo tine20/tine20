@@ -23,6 +23,11 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     app: '',
     
     /**
+     * @cfg
+     */
+    showAddNoteForm: true,
+    
+    /**
      * @cfg {Array} notes Initial notes
      */
     notes: [],
@@ -130,6 +135,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     
     /**
      * init note form
+     * 
      */
     initNoteForm: function()
     {
@@ -142,48 +148,6 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             height: 55,
             hideLabel: true
         }) 
-
-        /*
-        var noteTypeCombo = new Ext.form.ComboBox({
-            //emptyText: this.translation._('Note Type...'),
-            hideLabel: true,
-            id:'note_type_combo',
-            store: Tine.widgets.activities.getTypesStore(),
-            displayField:'name',
-            valueField:'id',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            editable: false,
-            forceSelection: true,
-            value: 1,
-            width: 100
-        });        
-              
-        var bbar = [
-            noteTypeCombo,
-            '->',
-            new Ext.Button({
-                text: this.translation._('Add'),
-                tooltip: this.translation._('Add new note'),
-                iconCls: 'action_saveAndClose',
-                handler: function(_button, _event) { 
-                    var note_type_id = Ext.getCmp('note_type_combo').getValue();
-                    var note = Ext.getCmp('note_textarea').getValue();
-                    notesStore = Ext.StoreMgr.lookup('NotesStore');
-                    
-                    if (note_type_id && note) {
-                        var newNote = new Tine.Tinebase.Model.Note({note_type_id: note_type_id, note: note});
-                        notesStore.insert(0, newNote);
-                        
-                        // clear textarea
-                        noteTextarea.setValue('');
-                        noteTextarea.emptyText = noteTextarea.emptyText;
-                    }
-                }                
-            })
-        ];
-        */
         
         var subMenu = [];
         var typesStore = Tine.widgets.activities.getTypesStore();
@@ -255,20 +219,112 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         // set data view with activities
         this.initActivitiesDataView();
         
-        // set add new note form
-        this.initNoteForm();
+        if (this.showAddNoteForm) {
+            // set add new note form
+            this.initNoteForm();
                 
-        this.items = [
-            this.formFields,
-            // this form field is only for fetching and saving notes in the record
-            new Tine.widgets.activities.NotesFormField({                    
-                recordNotesStore: this.recordNotesStore
-            }),                 
-            this.activities
-        ];
+            this.items = [
+                this.formFields,
+                // this form field is only for fetching and saving notes in the record
+                new Tine.widgets.activities.NotesFormField({                    
+                    recordNotesStore: this.recordNotesStore
+                }),                 
+                this.activities
+            ];
+        } else {
+            this.items = [
+                new Tine.widgets.activities.NotesFormField({                    
+                    recordNotesStore: this.recordNotesStore
+                }),                 
+                this.activities
+            ];        	
+        }
         
         Tine.widgets.activities.ActivitiesPanel.superclass.initComponent.call(this);
     }      
+});
+
+/************************* add note button ***************************/
+
+/**
+ * button for adding notes
+ * 
+ */
+Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
+
+    iconCls: 'notes_noteIcon',
+
+    /**
+     * event handler
+     */
+    handlers: {
+        
+        /**
+         * add a new note
+         */
+        addNote: function(_button, _event) {
+            Ext.Msg.prompt(
+                this.translation._('Add Note'),
+                this.translation._('Enter new note:'), 
+                function(btn, text) {
+                    if (btn == 'ok'){
+                        this.handlers.onNoteAdd(text, _button.typeId);
+                    }
+                }, 
+                this,
+                40
+            );            
+        },       
+        
+        /**
+         * on add note
+         */
+        onNoteAdd: function(_text, _typeId) {
+            if (_text && _typeId) {
+                notesStore = Ext.StoreMgr.lookup('NotesStore');
+                var newNote = new Tine.Tinebase.Model.Note({note_type_id: _typeId, note: _text});
+                notesStore.insert(0, newNote);                
+            }
+        }
+    },
+    
+    /**
+     * @private
+     */
+    initComponent: function(){
+
+        // get translations
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Tinebase');
+
+        var subMenu = [];
+        var typesStore = Tine.widgets.activities.getTypesStore();
+        var defaultTypeRecord = typesStore.getAt(typesStore.find('is_user_type', '1')); 
+        
+        typesStore.each(function(record){
+            if (record.data.is_user_type == 1) {
+                var action = new Ext.Action({
+                    text: this.translation._('Add') + ' ' + this.translation._(record.data.name) + ' ' + this.translation._('Note'),
+                    tooltip: this.translation._(record.data.description),
+                    handler: this.handlers.addNote,
+                    iconCls: 'notes_' + record.data.name + 'Icon',
+                    typeId: record.data.id,
+                    scope: this
+                });            
+                subMenu.push(action);
+            }
+        }, this);
+        
+        this.text = this.translation._('Add Note');
+        this.tooltip = this.translation._('Add new note');
+        this.menu = {
+            items: subMenu
+        };
+        this.handler = this.handlers.addNote;
+        this.typeId = defaultTypeRecord.data.id;
+        
+        Tine.widgets.activities.ActivitiesAddButton.superclass.initComponent.call(this);
+    }
 });
 
 /************************* tab panel *********************************/

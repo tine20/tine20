@@ -412,6 +412,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                     }),
                     new Tine.widgets.activities.ActivitiesPanel({
                     	app: 'Addressbook',
+                    	showAddNoteForm: false,
                         border: false,
                         style: 'border:1px solid #B5B8C8;'
                     })                    

@@ -720,19 +720,21 @@ Tine.Addressbook.ContactEditDialog = {
     display: function(_contactData) 
     {
         // export lead handler for edit contact dialog
-        var  _export_contact = new Ext.Action({
+        var exportContactButton = new Ext.Action({
         	id: 'exportButton',
             text: 'export as pdf',
             handler: this.handlers.exportContact,
             iconCls: 'action_exportAsPdf',
             disabled: false
         });         
+        
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
 
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
             layout: 'hfit',
             id : 'contactDialog',
-            tbarItems: [_export_contact],
+            tbarItems: [exportContactButton, addNoteButton],
             handlerScope: this,
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
