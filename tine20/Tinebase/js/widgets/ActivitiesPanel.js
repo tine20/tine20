@@ -84,9 +84,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-activities-activitiesitem" id="{id}">',
                     '<div class="x-widget-activities-activitiesitem-text"',
-                    '   ext:qtip="{[this.encode(values.note)]} - {[this.render(values.creation_time, "timefull")]}" >', 
-                        '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.created_by, "user")]}&nbsp;{[this.render(values.creation_time, "time")]}<br/>',
-                        '{[this.encode(values.note)]}<hr>',
+                    '   ext:qtip="{[this.encode(values.note)]} - {[this.render(values.creation_time, "timefull")]} - {[this.render(values.created_by, "user")]}" >', 
+                        '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.creation_time, "timefull")]}<br/>',
+                        '{[this.encode(values.note)]}<hr color="#aaaaaa">',
                     '</div>',
                 '</div>',
             '</tpl>' ,{
@@ -101,7 +101,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                             if (!value) {
                                 value = Tine.Tinebase.Registry.map.currentAccount.accountDisplayName;
                             }
-                            var username = Ext.util.Format.ellipsis(value, 19);
+                            //var username = Ext.util.Format.ellipsis(value, 19);
+                            var username = value;
                             return '<i>' + username + '</i>';
                         case 'time':
                             if (!value) {
@@ -260,7 +261,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
     handlers: {
         
         /**
-         * add a new note
+         * add a new note (show prompt)
          */
         addNote: function(_button, _event) {
             Ext.Msg.prompt(
@@ -272,7 +273,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
                     }
                 }, 
                 this,
-                40
+                40 // height of input area
             );            
         },       
         
@@ -297,6 +298,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tinebase');
 
+        // get types for split button
         var subMenu = [];
         var typesStore = Tine.widgets.activities.getTypesStore();
         var defaultTypeRecord = typesStore.getAt(typesStore.find('is_user_type', '1')); 
