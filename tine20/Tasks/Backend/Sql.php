@@ -305,25 +305,20 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             
             $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
             
-            $dbMods = array_diff_assoc($oldTask->toArray(), $_task->toArray());
-            if (empty($dbMods)) {
-                // nothing canged!
-                $this->_db->rollBack();
-                return $_task;
-            }
-            
             // concurrency management            
-            if(!empty($dbMods['last_modified_time'])) {
+            if($oldTask->last_modified_time instanceof Zend_Date && ! $_task->last_modified_time->equals($oldTask->last_modified_time)) {
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Performing concurrency check...");
+                
                 $loggedMods = $modLog->getModifications('Tasks', $_task->id,
                         'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $_task->last_modified_time, $oldTask->last_modified_time);
+                // effective modifications made to the record after current user got his record
                 $diffs = $modLog->computeDiff($loggedMods);
 
                 foreach ($diffs as $diff) {
                     $modified_attribute = $diff->modified_attribute;
-                    if (!array_key_exists($modified_attribute, $dbMods)) {
+                    if ($diff->new_value == $_task[$diff->modified_attribute]) {
                         // user updated to same value, nothing to do.
-                    }  elseif ($diff->old_value == $_task->$modified_attribute ) {
-                        unset($dbMods[$modified_attribute]);
+                    }  elseif ($diff->old_value == $_task[$diff->modified_attribute] ) {
                         // merge diff into current contact, as it was not changed in current update request.
                         $_task->$modified_attribute = $diff->new_value;
                     }  else {
@@ -331,12 +326,19 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
                         throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency confilict!');
                     }
                 }
-
-                unset($dbMods['last_modified_time']);
             }
-            $modLog->setRecordMetaData($_task, 'update', $oldTask);
-            $modLog->writeModLog($_task, $oldTask, 'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $id);
             
+            // meta data sanetizing
+            $modLog->setRecordMetaData($_task, 'update', $oldTask);
+            
+            // write modification log
+            $currentMods = $modLog->writeModLog($_task, $oldTask, 'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $id);
+            
+            // are there changes?
+            if (empty($currentMods)) {
+                $this->_db->rollBack();
+                return $_task;
+            }
             
             // database update
             $taskParts = $this->seperateTaskData($_task);
