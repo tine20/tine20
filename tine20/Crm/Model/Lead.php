@@ -52,22 +52,29 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_name'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'leadstate_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'leadtype_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'leadsource_id' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'container'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'start'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'end'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'turnover'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'probability'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'end_scheduled' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'products'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'relations'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'notes'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'leadstate_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'leadtype_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'leadsource_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'container'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'end'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'turnover'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'probability'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'end_scheduled'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'products'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadmodified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         #'leadcreated'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadmodifier'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -84,7 +91,10 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     protected $_datetimeFields = array(
         'start',
         'end',
-        'end_scheduled'
+        'end_scheduled',
+        'creation_time',
+        'last_modified_time',
+        'deleted_time'
     );
     
     /**

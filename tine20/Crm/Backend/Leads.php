@@ -215,7 +215,14 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
                 'end',
                 'turnover',
                 'probability',
-                'end_scheduled'
+                'end_scheduled',
+                'created_by',
+                'creation_time',
+                'last_modified_by',
+                'last_modified_time',
+                'is_deleted',
+                'deleted_time',
+                'deleted_by',
             );
         }
 

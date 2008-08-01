@@ -234,11 +234,31 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         if(!$_lead->isValid()) {
             throw new Exception('lead object is not valid');
         }
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $currentLead = $backend->get($_lead->getId());
         
-        if(!$this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
+        // ACL checks
+        if ($currentLead->container != $_lead->container) {
+            if (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
+                throw new Exception('add access in container ' . $_lead->container . ' denied');
+            }
+            // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
+            if (! $this->_currentAccount->hasGrant($currentLead->container, Tinebase_Container::GRANT_DELETE)) {
+                throw new Exception('delete access in container ' . $currentLead->container . ' denied');
+            }
+        } elseif (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access in container ' . $_lead->container . ' denied');
         }
 
+        // concurrency management & history log
+        $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+        $modLog->manageConcurrentUpdates($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
+        $modLog->setRecordMetaData($_lead, 'update', $currentLead);
+        $currentMods = $modLog->writeModLog($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
+        /**
+         * @philp: place generation of changelog notes somwhere arround here!
+         */
+        
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $backend->update($_lead);
 

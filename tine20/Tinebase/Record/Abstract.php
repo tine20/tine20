@@ -497,6 +497,12 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function diff($_record)
     {
+        if(! $_record instanceof Tinebase_Record_Abstract) {
+            return $_record;
+        }
+        
+        //echo '---------------' ."n";
+        //print_r($_record->toArray());
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
             //echo $fieldName . "\n";
