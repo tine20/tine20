@@ -498,6 +498,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
+            //echo $fieldName . "\n";
             if (in_array($fieldName, $this->_datetimeFields)) {
                 if ($this->__get($fieldName) instanceof Zend_Date
                     && $_record->$fieldName instanceof Zend_Date
@@ -510,9 +511,19 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } elseif($fieldName == $this->_identifier
                      && $this->getId() == $_record->getId()) {
                     continue;
+            } elseif (is_array($_record->$fieldName)) {
+                throw new Exception('Arrays are not allowed as values in records. use recordSets instead!');
+            } elseif ($_record->$fieldName instanceof Tinebase_Record_RecordSet 
+                      || $_record->$fieldName instanceof Tinebase_Record_Abstract) {
+                 $subdiv = $_record->$fieldName->diff($this->__get($fieldName));
+                 if (!empty($subdiv)) {
+                     $diff[$fieldName] = $subdiv;
+                 }
+                 continue;
             } elseif($this->__get($fieldName) == $_record->$fieldName) {
                 continue;
             }
+            
             $diff[$fieldName] = $_record->$fieldName;
         }
         return $diff;
