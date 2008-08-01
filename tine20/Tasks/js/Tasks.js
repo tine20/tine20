@@ -103,13 +103,13 @@ Tine.Tasks.mainGrid = {
             
         },
 		deleteTasks: function(_button, _event){
+            var selectedRows = this.grid.getSelectionModel().getSelections();
 			Ext.MessageBox.confirm('Confirm', this.translation.ngettext(
                 'Do you really want to delete the selected task', 
                 'Do you really want to delete the selected task', 
                  selectedRows.length), function(_button) {
                 
                 if(_button == 'yes') {
-				    var selectedRows = this.grid.getSelectionModel().getSelections();
 				    if (selectedRows.length < 1) {
 				        return;
 				    }
