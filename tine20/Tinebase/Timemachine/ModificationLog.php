@@ -281,14 +281,15 @@ class Tinebase_Timemachine_ModificationLog
         ),true);
             
         $diffs = $_curRecord->diff($_newRecord);
+        
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
         
         // ommit second order records for the moment
-        $toOmmit = $this->_metaProperties + array(
+        $toOmmit = array_merge($this->_metaProperties, array(
             'tags',
             'relations',
             'notes'
-        );
+        ));
         
         foreach ($diffs as $field => $newValue) {
             if(! in_array($field, $toOmmit)) {
