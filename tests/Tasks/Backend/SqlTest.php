@@ -196,8 +196,9 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $utask = $this->_backend->update($task);
         
         sleep(1);
-        $utask->summary = 'Second Update of test task 1';
-        $this->_backend->update($utask);
+        $nonConflictTask = clone $utask;
+        $nonConflictTask->summary = 'Second Update of test task 1';
+        $this->_backend->update($nonConflictTask);
         
         sleep(1);
         $conflictTask = clone $utask;
