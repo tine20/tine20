@@ -167,10 +167,11 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
     	$nowTs = Zend_Date::now()->getTimestamp();
     	$task = clone $this->_persistantTestTask1;
+    	
     	$task->summary = 'Update of test task 1';
-    	$task->due->addWeek(1);
+    	//$task->due->addWeek(1);
     	$utask = $this->_backend->update($task);
-    	//$this->assertEquals($task, $utask);
+    	
     	foreach ($task as $field => $value) {
     		switch ($field) {
     			case 'last_modified_time':
@@ -183,32 +184,64 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     				$this->assertEquals($value, $utask->$field);
     		}
     	}
+    	return $utask;
     }
     
-    /**
-     * test if non resolvable concurrency problem gets detected
-     */
-    public function testConcurrency()
+    public function testNonConcurrentUpdate()
     {
-        sleep(1);
-        $task = clone $this->_persistantTestTask1;
-        $task->summary = 'First Update of test task 1';
-        $utask = $this->_backend->update($task);
+        $utask = $this->testUpdateTask();
         
         sleep(1);
         $nonConflictTask = clone $utask;
         $nonConflictTask->summary = 'Second Update of test task 1';
-        $this->_backend->update($nonConflictTask);
+        return $this->_backend->update($nonConflictTask);
+    }
+    
+    public function testConcurrencyResolveableSameValue() {
+        $utask = $this->testUpdateTask();
+        
+        sleep(1);
+        $resolvableConcurrencyTask = clone $utask;
+        $resolvableConcurrencyTask->last_modified_time = Zend_Date::now()->addHour(-1);
+        $resolvableConcurrencyTask->percent = 50;
+        $resolvableConcurrencyTask->summary = 'Update of test task 1';
+        
+        return $this->_backend->update($resolvableConcurrencyTask);
+    }
+    
+    public function testConcurrencyResolveableOtherField() {
+        $utask = $this->testUpdateTask();
+        
+        sleep(1);
+        $resolvableConcurrencyTask = clone $utask;
+        $resolvableConcurrencyTask->last_modified_time = Zend_Date::now()->addHour(-1);
+        $resolvableConcurrencyTask->percent = 50;
+        $resolvableConcurrencyTask->summary = 'Update of test task 1';
+        $this->_backend->update($resolvableConcurrencyTask);
+        
+        sleep(1);
+        $resolvableConcurrencyTask = clone $utask;
+        $resolvableConcurrencyTask->last_modified_time = Zend_Date::now()->addHour(-1);
+        $resolvableConcurrencyTask->description = 'other field';
+        $resolvableConcurrencyTask->percent = 50;
+        $resolvableConcurrencyTask->summary = 'Update of test task 1';
+        $this->_backend->update($resolvableConcurrencyTask);
+    }
+
+    
+    /**
+     * test if non resolvable concurrency problem gets detected
+     */
+    public function testConcurrencyFail()
+    {
+        $utask = $this->testUpdateTask();
         
         sleep(1);
         $conflictTask = clone $utask;
+        $conflictTask->last_modified_time = Zend_Date::now()->addHour(-1);
         $conflictTask->summary = 'Non resolvable conflict';
-        try {
-            $this->_backend->update($conflictTask);
-        	$this->fail('Not detected concurrency conflict');
-        } catch (Exception $e) {
-        	$this->assertType('Tinebase_Timemachine_Exception_ConcurrencyConflict', $e);
-        }
+        $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
+        $this->_backend->update($conflictTask);
     }
     
     /**
