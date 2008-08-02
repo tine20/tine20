@@ -481,11 +481,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * returns a random 40-character hexadecimal number to be used as 
      * universal identifier (UID)
      * 
+     * @param int|optional $_length the length of the uid, defaults to 40
      * @return string 40-character hexadecimal number
      */
-    public static function generateUID()
+    public static function generateUID($_length = false)
     {
-        return sha1(mt_rand(). microtime());
+        $uid = sha1(mt_rand(). microtime());
+        
+        if($_length !== false) {
+            $uid = substr($uid, 0, $_length);
+        }
+        
+        return $uid;
     }
     
     /**
