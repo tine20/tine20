@@ -169,7 +169,7 @@ class Voipmanager_Backend_Snom_Xml
         if($_phone->http_client_info_sent == false) {
             $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
             $phoneSettings['http_client_user']['perms'] = 'RO';
-            $phoneSettings['http_client_pass']['perms'] = $_phone->http_client_pass;
+            $phoneSettings['http_client_pass']['value'] = $_phone->http_client_pass;
             $phoneSettings['http_client_pass']['perms'] = 'RO';
         }        
         
