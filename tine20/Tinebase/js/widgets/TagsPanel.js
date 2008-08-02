@@ -338,8 +338,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             tag: Ext.util.JSON.encode(tagToAttach.data)
                         },
                         success: function(_result, _request) {
-                            var newTag = new Tine.Tinebase.Model.Tag(Ext.util.JSON.decode(_result.responseText));
-                            console.log(newTag);
+                            var tagData = Ext.util.JSON.decode(_result.responseText);
+                            var newTag = new Tine.Tinebase.Model.Tag(tagData, tagData.id);
                             this.recordTagsStore.add(newTag);
                             
                             // reset avail tag store
