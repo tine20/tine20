@@ -436,7 +436,17 @@ class Voipmanager_Controller
      */
     public function resetHttpClientInfo($_identifiers)
     {
-        $this->_snomPhoneBackend->setHttpClientInfoSent($_identifiers, false);
+        if(!is_array($_identifiers) || !is_object($_identifiers)) {
+            $_identifiers = (array)$_identifiers;
+        }
+        foreach ($_identifiers as $id) {
+            $phone = $this->getSnomPhone($id);
+            $phone->http_client_user = Tinebase_Record_Abstract::generateUID(20);
+            $phone->http_client_pass = Tinebase_Record_Abstract::generateUID(20);
+            $phone->http_client_info_sent = false;
+            
+            $phone = $this->_snomPhoneBackend->update($phone);
+        }
     }
 
 
