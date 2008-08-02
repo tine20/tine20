@@ -434,7 +434,7 @@ class Voipmanager_Controller
      * @param array array of phone identifiers
      * @return void
      */
-    public function sendHttpClientInfo($_identifiers)
+    public function resetHttpClientInfo($_identifiers)
     {
         $this->_snomPhoneBackend->setHttpClientInfoSent($_identifiers, false);
     }

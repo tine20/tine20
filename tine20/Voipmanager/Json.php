@@ -264,7 +264,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_phoneIDs list of phoneId's to send http client info to
      * @return array
      */      
-    public function sendHttpClientInfo($_phoneIds)
+    public function resetHttpClientInfo($_phoneIds)
     {
         $result = array(
             'success'   => TRUE
@@ -272,7 +272,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $phoneIds = Zend_Json::decode($_phoneIds);        
         
-        Voipmanager_Controller::getInstance()->sendHttpClientInfo($phoneIds);
+        Voipmanager_Controller::getInstance()->resetHttpClientInfo($phoneIds);
         
         return $result;
     }      

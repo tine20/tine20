@@ -73,9 +73,9 @@ Tine.Voipmanager.Snom.Phones.Main = {
         },
         
         /**
-         * onclick handler for sendHttpClientInfo
+         * onclick handler for resetHttpClientInfo
          */
-        sendHttpClientInfo: function(_button, _event) {
+        resetHttpClientInfo: function(_button, _event) {
             Ext.MessageBox.confirm('Confirm', 'Do you really want to send HTTP Client Info again?', function(_button){
                 if (_button == 'yes') {
                 
@@ -91,7 +91,7 @@ Tine.Voipmanager.Snom.Phones.Main = {
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
-                            method: 'Voipmanager.sendHttpClientInfo',
+                            method: 'Voipmanager.resetHttpClientInfo',
                             _phoneIds: phoneIds
                         },
                         text: 'sending HTTP Client Info to phone(s)...',
@@ -145,10 +145,10 @@ Tine.Voipmanager.Snom.Phones.Main = {
             scope: this
         });
         
-        this.actions.sendHttpClientInfo = new Ext.Action({
+        this.actions.resetHttpClientInfo = new Ext.Action({
            text: this.translation._('send HTTP Client Info'), 
-           handler: this.handlers.sendHttpClientInfo,
-           iconCls: 'action_sendHttpClientInfo',
+           handler: this.handlers.resetHttpClientInfo,
+           iconCls: 'action_resetHttpClientInfo',
            scope: this
         });
     },
@@ -331,7 +331,7 @@ Tine.Voipmanager.Snom.Phones.Main = {
                     '-',
                     this.actions.addPhone,
                     '-',
-                    this.actions.sendHttpClientInfo 
+                    this.actions.resetHttpClientInfo 
                 ]
             });
             contextMenu.showAt(_eventObject.getXY());
