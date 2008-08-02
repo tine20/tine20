@@ -117,6 +117,7 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
         }
         Ext.ux.layout.AppLeftLayout.superclass.renderItem.apply(this, arguments);
         c.header.addClass('x-accordion-hd');
+        c.header.addClassOnOver('app-panel-header-over');
         c.on('beforeexpand', this.beforeExpand, this);
         c.on('beforecollapse', this.beforeCollapse, this);
     },
@@ -129,7 +130,7 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
             if (!ai.el.down('div[class=x-panel-bwrap]')) {
                 ai.el.dom.insertBefore(p.el.dom.parentNode.firstChild, ai.el.dom.firstChild.nextSibling);
             }
-            ai.header.removeClass('activeapp-panel-header');
+            ai.header.removeClass('app-panel-header-active');
             ai.collapsible = true;
             
             if(this.sequence){
@@ -155,7 +156,7 @@ Ext.ux.layout.AppLeftLayout = Ext.extend(Ext.layout.FitLayout, {
         // update app title
         p.el.dom.parentNode.parentNode.parentNode.firstChild.firstChild.innerHTML = p.title;
         // highligt current app
-        p.header.addClass('activeapp-panel-header');
+        p.header.addClass('app-panel-header-active');
         // update domument title
         document.title = 'Tine 2.0 - ' + p.title;
         this.layout();
