@@ -211,7 +211,7 @@ class Tinebase_Notes
      * @param string                    $_backend           backend (default: 'Sql')
      * @param string                    $_notesProperty     the property in the record where the tags are in (default: 'notes')
      * 
-     * @todo add update notes
+     * @todo add update notes ?
      */
     public function setNotesOfRecord($_record, $_backend = 'Sql', $_notesProperty = 'notes')
     {
@@ -263,19 +263,10 @@ class Tinebase_Notes
             $_note->setId($id);
         }
 
-        $accountId = Zend_Registry::get('currentAccount')->getId();
+        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
         
-        if (empty($accountId)) {
-            throw new Exception('no account id set');
-        }
-        
-        $_note->created_by = $accountId;
-        $_note->creation_time = Zend_Date::now();        
-
         $data = $_note->toArray(FALSE, FALSE);
 
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-        
         $this->_notesTable->insert($data);        
     }
 
