@@ -135,7 +135,11 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
                     // skip container here handling for the moment
                     break;
                 case 'query':
-                    $_select->where($db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($value) . '%'));
+                    $queries = explode(' ', $value);
+                    foreach ($queries as $query) {
+                        $_select->where($db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($query) . '%'));
+                    
+                    }
                     break;
                 case 'tag':
                     if (strlen($value) == 40) {
