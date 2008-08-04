@@ -107,4 +107,19 @@ class Voipmanager_Model_SnomPhone extends Tinebase_Record_Abstract
         return $id;
     }
 
+    /**
+     * function to validate crendentials sent by the phone
+     *
+     * @param string $_httpClientUser
+     * @param string $_httpClientPassword
+     * @return boolean
+     */
+    public function validateCredentials($_httpClientUser, $_httpClientPassword)
+    {
+        if($this->http_client_user == $_httpClientUser && $this->http_client_pass == $_httpClientPassword) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
