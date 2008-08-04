@@ -315,7 +315,7 @@ Tine.Addressbook.Main = {
     initContactsGrid: function() 
     {
         // the filter toolbar
-        var filterToolbar = new Tine.widgets.FilterToolbar({
+        var filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'addressbookFilterToolbar',
             filterModels: [
                 {label: this.translation._('Contact'),    field: 'query',    defaultOperator: 'contains', operators: ['contains']},

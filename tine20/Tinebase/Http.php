@@ -123,12 +123,12 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/widgets/container/ContainerGrants.js',
             'Tinebase/js/widgets/container/ContainerTree.js',
             'Tinebase/js/widgets/grid/FilterModel.js',
+            'Tinebase/js/widgets/grid/FilterToolbar.js',
             'Tinebase/js/widgets/GroupSelect.js',
             'Tinebase/js/widgets/TagsPanel.js',
             'Tinebase/js/widgets/TagCombo.js',
             'Tinebase/js/widgets/CountryCombo.js',
             'Tinebase/js/widgets/GridPicker.js',
-            'Tinebase/js/widgets/FilterToolbar.js',
             'Tinebase/js/widgets/ActivitiesPanel.js',        
             // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',

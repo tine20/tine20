@@ -7,14 +7,14 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Tine', 'Tine.widgets');
+Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
 
 /**
- * @class Tine.widgets.FilterToolbar
+ * @class Tine.widgets.grid.FilterToolbar
  * @extends Ext.Panel
  * <br>Usage:<br>
      <pre><code>
-     tb = new Tine.widgets.FilterToolbar({
+     tb = new Tine.widgets.grid.FilterToolbar({
          filterModels: [
             {name: 'Full Name', field: 'n_fn', defaultOperator: 'contains'},
             {name: 'Container', field: 'owner', operatorRenderer: function() {...}, valueRenderer: function() {...}},
@@ -30,21 +30,21 @@ Ext.namespace('Tine', 'Tine.widgets');
  * @constructor
  * @param {Object} config
  */
-Tine.widgets.FilterToolbar = function(config) {
+Tine.widgets.grid.FilterToolbar = function(config) {
     Ext.apply(this, config);
-    Tine.widgets.FilterToolbar.superclass.constructor.call(this);
+    Tine.widgets.grid.FilterToolbar.superclass.constructor.call(this);
     
     this.addEvents(
       /**
        * @event filtertrigger
        * is fired when user request to update list by filter
-       * @param {Tine.widgets.FilterToolbar}
+       * @param {Tine.widgets.grid.FilterToolbar}
        */
       'filtertrigger',
       /**
        * @event bodyresize
        * Fires after the FilterToolbar has been resized.
-       * @param {Tine.widgets.FilterToolbar} the FilterToolbar which has been resized.
+       * @param {Tine.widgets.grid.FilterToolbar} the FilterToolbar which has been resized.
        * @param {Number} width The Panel's new width.
        * @param {Number} height The Panel's new height.
        */
@@ -53,7 +53,7 @@ Tine.widgets.FilterToolbar = function(config) {
     
 };
 
-Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
+Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     /**
      * @cfg {Array} array of filter models (possible filters in this toolbar)
@@ -131,7 +131,7 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
      * @private
      */
     onRender: function(ct, position) {
-        Tine.widgets.FilterToolbar.superclass.onRender.call(this, ct, position);
+        Tine.widgets.grid.FilterToolbar.superclass.onRender.call(this, ct, position);
         
         this.renderTable();
         
@@ -426,4 +426,4 @@ Ext.extend(Tine.widgets.FilterToolbar, Ext.Panel, {
     
 });
 
-Ext.reg('tinewidgetsfiltertoolbar', Tine.widgets.FilterToolbar);
+Ext.reg('tinewidgetsfiltertoolbar', Tine.widgets.grid.FilterToolbar);

@@ -507,7 +507,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         this.activitiesGrid = this.getActivitiesGrid();
         
         // the filter toolbar
-        var filterToolbar = new Tine.widgets.FilterToolbar({
+        var filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'activitiesFilterToolbar',
             filterModels: [
                 {label: this.translation._('Note'), field: 'query', defaultOperator: 'contains'},
