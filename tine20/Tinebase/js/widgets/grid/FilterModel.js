@@ -152,6 +152,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         //console.log('operator change');
     },
     
+    /**
+     * value renderer
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     */
     valueRenderer: function(filter, el) {
         // value
         var value = new Ext.form.TextField({

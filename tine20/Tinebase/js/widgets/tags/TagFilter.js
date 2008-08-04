@@ -10,9 +10,13 @@
 
 Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
 
-field: 'tags',
-
 Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
+    
+    field: 'tag',
+    
+    /**
+     * @private
+     */
     initComponent: function() {
         Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
         
@@ -20,6 +24,30 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         this.operators = ['equals'];
         
         
+    },
+    /**
+     * value renderer
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     */
+    valueRenderer: function(filter, el) {
+        // value
+        var value = new Tine.widgets.tags.TagCombo({
+            filter: filter,
+            width: 200,
+            id: 'tw-ftb-frow-valuefield-' + filter.id,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            renderTo: el,
+        });
+        value.on('specialkey', function(field, e){
+             if(e.getKey() == e.ENTER){
+                 this.onFiltertrigger();
+             }
+        }, this);
+        value.on('select', this.onFiltertrigger, this);
+        
+        return value;
     }
 });
 
