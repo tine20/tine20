@@ -386,12 +386,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 collapsible: true,
                 collapseMode: 'mini',
                 margins: '0 5 0 5',
-                //bodyStyle: 'border:1px solid #B5B8C8;',
                 bodyStyle: 'padding-left: 5px;',
                 items: [
                     new Ext.Panel({
                     	// @todo generalise!
-                        //xtype: 'panel',
                         title: translation._('Description'),
                         iconCls: 'descriptionIcon',
                         layout: 'form',
@@ -403,7 +401,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                             hideLabel: true,
                             grow: false,
                             preventScrollbars:false,
-                            anchor:'100% 100%'
+                            anchor:'100% 100%',
+                            emptyText: translation._('Enter description')                            
                         }]
                     }),
                     new Tine.widgets.tags.TagPanel({
