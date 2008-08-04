@@ -19,6 +19,15 @@ Tine.widgets.grid.FilterModel = function(config) {
     Ext.apply(this, config);
     Tine.widgets.grid.FilterModel.superclass.constructor.call(this);
     
+    this.addEvents(
+      /**
+       * @event filtertrigger
+       * is fired when user request to update list by filter
+       * @param {Tine.widgets.grid.FilterToolbar}
+       */
+      'filtertrigger'
+    );
+    
 };
 
 Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
@@ -168,5 +177,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     onValueChange: function(filter, newValue) {
         filter.set('value', newValue);
         //console.log('value change');
+    },
+    
+    /**
+     * @private
+     */
+    onFiltertrigger: function() {
+        this.fireEvent('filtertrigger', this);
     }
 });

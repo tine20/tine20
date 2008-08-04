@@ -283,8 +283,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         var opEl = fRow.child('td[class=tw-ftb-frow-operator]');
         var valEl = fRow.child('td[class=tw-ftb-frow-value]');
-        opEl = Ext.DomHelper.overwrite(opEl, {'tag': 'td', 'class': 'tw-ftb-frow-operator'});
-        valEl = Ext.DomHelper.overwrite(valEl, {'tag': 'td', 'class': 'tw-ftb-frow-value'});
         
         filter.formFields.operator = filterModel.operatorRenderer(filter, opEl);
         filter.formFields.value = filterModel.valueRenderer(filter, valEl);
@@ -316,6 +314,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
             // store reference in internal map
             this.filterModelMap[fm.field] = fm;
+            
+            // register trigger events
+            fm.on('filtertrigger', this.onFiltertrigger, this);
         }
         
         // init filter selection
