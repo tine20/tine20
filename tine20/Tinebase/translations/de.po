@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2008-07-31 20:42+0100\n"
+"PO-Revision-Date: 2008-08-04 19:03+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -293,7 +293,7 @@ msgstr "enthält"
 
 #: Tinebase/js/widgets/FilterToolbar.js:237
 msgid "is equal to"
-msgstr "is gleich"
+msgstr "ist gleich"
 
 #: Tinebase/js/widgets/FilterToolbar.js:238
 msgid "is greater than"
