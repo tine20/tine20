@@ -128,14 +128,12 @@ class Voipmanager_Backend_Snom_Phone
      */    
     public function getPhoneRights($_phoneId)
     {
-        if (empty($_phoneId)) {
-            throw new UnderflowException('no phoneId');
-        }    
+        $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($_phoneId);
         
         $select = $this->_db->select()    
             ->from(SQL_TABLE_PREFIX . 'snom_phones_acl')
             ->where($this->_db->quoteInto('account_type = ?', 'user'))
-            ->where($this->_db->quoteInto('snom_phone_id = ?', $_phoneId))
+            ->where($this->_db->quoteInto('snom_phone_id = ?', $phoneId))
             ->where($this->_db->quoteIdentifier('read_right'). '= 1')
             ->where($this->_db->quoteIdentifier('write_right'). '= 1')
             ->where($this->_db->quoteIdentifier('dial_right'). '= 1');            
