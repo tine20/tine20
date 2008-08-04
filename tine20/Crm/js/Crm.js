@@ -1899,9 +1899,7 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'leadtype_id',   type: 'int'},
     {name: 'leadsource_id', type: 'int'},
     {name: 'container',     type: 'int'},
-    {name: 'modifier',      type: 'int'},
     {name: 'start',         type: 'date', dateFormat: 'c'},
-    {name: 'modified'},
     {name: 'description',   type: 'string'},
     {name: 'end',           type: 'date', dateFormat: 'c'},
     {name: 'turnover',      type: 'int'},
@@ -1916,7 +1914,14 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'relations'},
     {name: 'products'},
     {name: 'tags'},
-    {name: 'notes'}
+    {name: 'notes'},
+    {name: 'creation_time',      type: 'date', dateFormat: 'c'},
+    {name: 'created_by',         type: 'int'                  },
+    {name: 'last_modified_time', type: 'date', dateFormat: 'c'},
+    {name: 'last_modified_by',   type: 'int'                  },
+    {name: 'is_deleted',         type: 'boolean'              },
+    {name: 'deleted_time',       type: 'date', dateFormat: 'c'},
+    {name: 'deleted_by',         type: 'int'                  }
 ]);
 
 // product link

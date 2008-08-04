@@ -795,14 +795,14 @@ Tine.Tasks.fixTask = function(task) {
 // Task model
 Tine.Tasks.TaskArray = [
     // tine record fields
-    { name: 'container_id' },
-    { name: 'created_by' },
-    { name: 'creation_time', type: 'date', dateFormat: 'c' },
-    { name: 'last_modified_by' },
-    { name: 'last_modified_time', type: 'date', dateFormat: 'c' },
-    { name: 'is_deleted' },
-    { name: 'deleted_time', type: 'date', dateFormat: 'c' },
-    { name: 'deleted_by' },
+    { name: 'container_id'                                     },
+    { name: 'creation_time',      type: 'date', dateFormat: 'c'},
+    { name: 'created_by',         type: 'int'                  },
+    { name: 'last_modified_time', type: 'date', dateFormat: 'c'},
+    { name: 'last_modified_by',   type: 'int'                  },
+    { name: 'is_deleted',         type: 'boolean'              },
+    { name: 'deleted_time',       type: 'date', dateFormat: 'c'},
+    { name: 'deleted_by',         type: 'int'                  },
     // task only fields
     { name: 'id' },
     { name: 'percent' },
