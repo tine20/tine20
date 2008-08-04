@@ -226,7 +226,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @return Crm_Model_Lead the updated lead
      * 
      * @todo add notifications later
-     * @todo check if record has been changed for system note
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
@@ -256,9 +255,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $modLog->manageConcurrentUpdates($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
         $modLog->setRecordMetaData($_lead, 'update', $currentLead);
         $currentMods = $modLog->writeModLog($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
-        /**
-         * @philp: place generation of changelog notes somwhere arround here!
-         */
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $backend->update($_lead);
@@ -277,7 +273,9 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         //$this->sendNotifications(true, $lead, $_lead->responsible);
         
         // add changed note to record
-        Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed');        
+        if (count($currentMods) > 0) {
+            Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed', $currentMods);
+        }        
         
         return $this->getLead($lead->getId());
     }

@@ -44,7 +44,7 @@ class Tinebase_Notes
      * number of notes per record for activities panel
      * (NOT the tab panel)
      */
-    const NUMBER_RECORD_NOTES = 4;
+    const NUMBER_RECORD_NOTES = 8;
         
     /**
      * don't clone. Use the singleton.
@@ -285,11 +285,10 @@ class Tinebase_Notes
      * @param Tinebase_Model_Record $_record
      * @param int $_userId
      * @param string $_type (created|changed)
+     * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Timemachine_Model_ModificationLog)
      * @param string $_backend   backend of record
-     * 
-     * @todo add changed fields to note
      */
-    public function addSystemNote($_record, $_userId, $_type, $_backend = 'Sql')
+    public function addSystemNote($_record, $_userId, $_type, $_mods = NULL, $_backend = 'Sql')
     {
         $backend = ucfirst(strtolower($_backend));
         
@@ -297,6 +296,13 @@ class Tinebase_Notes
         $user = Tinebase_User::getInstance()->getUserById($_userId);
         
         $noteText = $_type . ' by ' . $user->accountDisplayName;
+        
+        if ($_mods !== NULL ) {
+            $noteText .= ' | changed fields:';
+            foreach ($_mods as $mod) {
+                $noteText .= ' ' . $mod->modified_attribute;
+            }
+        }
         
         $note = new Tinebase_Notes_Model_Note(array(
             'note_type_id'      => $noteType->getId(),

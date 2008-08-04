@@ -211,8 +211,6 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      *
      * @param Addressbook_Model_Contact $_contact
      * @return  Addressbook_Model_Contact
-     * 
-     * @todo check if record has been changed for system note
      */
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
@@ -236,9 +234,6 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         $modLog->manageConcurrentUpdates($_contact, $currentContact, 'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $_contact->getId());
         $modLog->setRecordMetaData($_contact, 'update', $currentContact);
         $currentMods = $modLog->writeModLog($_contact, $currentContact, 'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $_contact->getId());
-        /**
-         * @philp: place generation of changelog notes somwhere arround here!
-         */
         
         $contact = $this->_backend->update($_contact);                
                 
@@ -251,7 +246,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         }
         
         // add changed note to record
-        Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'changed');
+        if (count($currentMods) > 0) {
+            Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'changed', $currentMods);
+        }
 
         return $this->getContact($contact->getId());
     }
