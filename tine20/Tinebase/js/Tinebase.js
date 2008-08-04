@@ -172,6 +172,16 @@ Tine.Tinebase.initFramework = function() {
                     if(!isNaN(v)) {
                         return v + " %";                        
                     } 
+               },
+               pad: function(v,l,s){
+                    if (!s) {
+                        s = '&nbsp;';
+                    }
+                    var plen = l-v.length;
+                    for (var i=0;i<plen;i++) {
+                        v += s;
+                    }
+                    return v;
                }
         });
         
