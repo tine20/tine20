@@ -822,7 +822,7 @@ Tine.Crm.LeadEditDialog = {
         	contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
         	
         	// add grid to tabpanel & activate
-        	var linkTabPanel = Ext.getCmp('linkPanel');
+        	var linkTabPanel = Ext.getCmp('linkPanelTop');
         	linkTabPanel.add(contactSearchGrid);
             linkTabPanel.activate(contactSearchGrid);            	
         },
@@ -1853,11 +1853,11 @@ Tine.Crm.LeadEditDialog = {
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
             labelAlign: 'top',
-            items: Tine.Crm.LeadEditDialog.getEditForm([
-                        this.getLinksGrid('Contacts', this.translation._('Contacts')),
-                        this.getLinksGrid('Tasks', this.translation._('Tasks')),
-                        this.getLinksGrid('Products', this.translation._('Products'))
-                    ], lead.data)             
+            items: Tine.Crm.LeadEditDialog.getEditForm({
+                        contactsPanel: this.getLinksGrid('Contacts', this.translation._('Contacts')),
+                        tasksPanel: this.getLinksGrid('Tasks', this.translation._('Tasks')),
+                        productsPanel: this.getLinksGrid('Products', this.translation._('Products'))
+                }, lead.data)             
         });
 
         // add context menu events
