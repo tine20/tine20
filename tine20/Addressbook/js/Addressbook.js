@@ -318,15 +318,14 @@ Tine.Addressbook.Main = {
         var filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'addressbookFilterToolbar',
             filterModels: [
-                {label: this.translation._('Contact'),    field: 'query',    defaultOperator: 'contains', operators: ['contains']},
-                {label: this.translation._('First Name'), field: 'n_given',  defaultOperator: 'contains'},
-                {label: this.translation._('Last Name'),  field: 'n_family', defaultOperator: 'contains'},
-                {label: this.translation._('Company'),    field: 'org_name', defaultOperator: 'contains'},
+                {label: this.translation._('Contact'),    field: 'query',    operators: ['contains']},
+                {label: this.translation._('First Name'), field: 'n_given' },
+                {label: this.translation._('Last Name'),  field: 'n_family'},
+                {label: this.translation._('Company'),    field: 'org_name'},
                 {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals', valueType: 'int'},
-                {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality',   defaultOperator: 'contains'},
-                new Tine.widgets.grid.FilterModel({
-                    label: this.translation._('Job Role'),    field: 'role'
-                })
+                {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality'},
+                {label: this.translation._('Job Role'),    field: 'role'},
+                new Tine.widgets.tags.TagFilter({})
                 //new Tine.widgets.container.ContainerFilter({ field: 'owner'})
                 //{label: 'Full Name', field: 'n_fn', defaultOperator: 'equals'},
                 //{label: 'Container', field: 'owner'},
