@@ -198,18 +198,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         filter.formFields.operator = filterModel.operatorRenderer(filter, fRow.child('td[class=tw-ftb-frow-operator]'));
         
         // value
-        filter.formFields.value = new Ext.form.TextField({
-            filter: filter,
-            width: 200,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
-            value: filter.data.value ? filter.data.value : filterModel.valdefault,
-            renderTo: fRow.child('td[class=tw-ftb-frow-value]'),
-        });
-        filter.formFields.value.on('specialkey', function(field, e){
-             if(e.getKey() == e.ENTER){
-                 this.onFiltertrigger();
-             }
-        }, this);
+        filter.formFields.value = filterModel.valueRenderer(filter, fRow.child('td[class=tw-ftb-frow-value]'));
         
         new Ext.Button({
             id: 'tw-ftb-frow-deletebutton-' + filter.id,
@@ -286,16 +275,19 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     onFieldChange: function(filter, newField) {
         filter.set('field', newField);
         
-        //var myEl = filter.formFields.operator.getEl();
         filter.formFields.operator.destroy();
-        
+        filter.formFields.value.destroy();
         
         var filterModel = this.getFilterModel(filter.get('field'));
         var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
-        var el = fRow.child('td[class=tw-ftb-frow-operator]');
-        el = Ext.DomHelper.overwrite(el, {'tag': 'td', 'class': 'tw-ftb-frow-operator'});
         
-        filter.formFields.operator = filterModel.operatorRenderer(filter, el);
+        var opEl = fRow.child('td[class=tw-ftb-frow-operator]');
+        var valEl = fRow.child('td[class=tw-ftb-frow-value]');
+        opEl = Ext.DomHelper.overwrite(opEl, {'tag': 'td', 'class': 'tw-ftb-frow-operator'});
+        valEl = Ext.DomHelper.overwrite(valEl, {'tag': 'td', 'class': 'tw-ftb-frow-value'});
+        
+        filter.formFields.operator = filterModel.operatorRenderer(filter, opEl);
+        filter.formFields.value = filterModel.valueRenderer(filter, valEl);
     },
     
     /**

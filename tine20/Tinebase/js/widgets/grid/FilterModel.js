@@ -38,6 +38,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     valueType: 'string',
     
     /**
+     * @cfg {string} default value
+     */
+    defaultValue: '',
+    
+    /**
      * @cfg {Array} valid operators
      */
     operators: null,
@@ -136,6 +141,24 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     onOperatorChange: function(filter, newOperator) {
         filter.set('operator', newOperator);
         //console.log('operator change');
+    },
+    
+    valueRenderer: function(filter, el) {
+        // value
+        var value = new Ext.form.TextField({
+            filter: filter,
+            width: 200,
+            id: 'tw-ftb-frow-valuefield-' + filter.id,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            renderTo: el,
+        });
+        value.on('specialkey', function(field, e){
+             if(e.getKey() == e.ENTER){
+                 this.onFiltertrigger();
+             }
+        }, this);
+        
+        return value;
     },
     
     /**
