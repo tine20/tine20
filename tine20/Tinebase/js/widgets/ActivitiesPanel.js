@@ -5,8 +5,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo add layout to the template / tooltip
  */
  
 Ext.namespace('Tine.widgets', 'Tine.widgets.activities');
@@ -223,7 +221,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         Ext.StoreMgr.add('NotesStore', this.recordNotesStore);        
         
         // set data view with activities
-        this.initActivitiesDataView(100);
+        this.initActivitiesDataView();
         
         if (this.showAddNoteForm) {
             // set add new note form
