@@ -63,7 +63,7 @@ Tine.Tinebase.initFramework = function() {
      */
     var initAjax = function(){
         Ext.Ajax.on('beforerequest', function(connection, options){
-            options.url = 'index.php';
+            options.url = options.url ? options.url : 'index.php';
             options.params.jsonKey = Tine.Tinebase.Registry.get('jsonKey');
         }, this);
         
@@ -122,11 +122,18 @@ Tine.Tinebase.initFramework = function() {
                          '<b>' + data.trace[i]['function'] + '</b>' +
                         '(' + (data.trace[i]['args'][0] ? data.trace[i]['args'][0] : '') + ')<br/>';
             }
-
-            var windowHeight = 600;
+            data.traceHTML = trace;
+            
+            var windowHeight = 400;
             if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
                 windowHeight = Ext.getBody().getHeight(true) * 0.7;
             }
+            
+            var win = new Tine.Tinebase.ExceptionDialog({
+                height: windowHeight,
+                exceptionInfo: data
+            });
+            /*
             var win = new Ext.Window({
                 width: 800,
                 height: windowHeight,
@@ -139,7 +146,7 @@ Tine.Tinebase.initFramework = function() {
                 })],
                  buttonAlign: 'center'
             });
-            
+            */
             win.show();
             
         }, this);
