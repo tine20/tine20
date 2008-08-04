@@ -1845,10 +1845,13 @@ Tine.Crm.LeadEditDialog = {
                 
         /*********** the EDIT dialog ************/
         
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
+
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
             tbarItems: [
-                this.actions.exportLead
+                this.actions.exportLead,
+                addNoteButton
             ],
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
