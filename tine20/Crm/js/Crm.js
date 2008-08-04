@@ -93,11 +93,14 @@ Tine.Crm.Main = {
 	handlers: {
 		/**
 		 * edit lead
-		 * @todo use Tine.Crm.EditPopup here
 		 */
         handlerEdit: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].data.id, 1024, 768);
+            var leadId = _rowIndex[0].data.id;
+            //Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + leadId, 1024, 768);
+            var popupWindow = new Tine.Crm.LeadEditDialog.Popup({
+                leadId: leadId
+            });
         },
         
         /**
@@ -402,8 +405,11 @@ Tine.Crm.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            // @todo use generic popup
-            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.id, 1024, 768);            
+            var leadId = record.data.id;
+            //Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.id, 1024, 768);
+            var popupWindow = new Tine.Crm.LeadEditDialog.Popup({
+                leadId: leadId
+            });            
         });
        
         this.gridPanel = gridPanel;
@@ -425,11 +431,11 @@ Tine.Crm.Main = {
             tooltip: this.translation._('Add new lead'),
             iconCls: 'actionAdd',
             handler: function(){
-                //  var tree = Ext.getCmp('venues-tree');
-                //  var curSelNode = tree.getSelectionModel().getSelectedNode();
-                //  var RootNode   = tree.getRootNode();
-                Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 1024, 768);
-            }
+                //Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 1024, 768);
+                var popupWindow = new Tine.Crm.LeadEditDialog.Popup({
+                    leadId: 0
+                });                
+            }   
         });
         
         this.actions.editLead = new Ext.Action({
