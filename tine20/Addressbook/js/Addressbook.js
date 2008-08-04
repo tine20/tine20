@@ -317,14 +317,18 @@ Tine.Addressbook.Main = {
         // the filter toolbar
         var filterToolbar = new Tine.widgets.FilterToolbar({
             id : 'addressbookFilterToolbar',
-            filterModel: [
-                {label: this.translation._('Contact'), field: 'query', opfilter: ['contains'], opdefault: 'contains'},
-                {label: this.translation._('First Name'), field: 'n_given', opdefault: 'contains'},
-                {label: this.translation._('Last Name'), field: 'n_family', opdefault: 'contains'},
-                {label: this.translation._('Company'), field: 'org_name', opdefault: 'contains'},
-                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', opdefault: 'equals'},
-                {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')', field: 'adr_one_locality', opdefault: 'contains'}
-                //{label: 'Full Name', field: 'n_fn', opdefault: 'equals'},
+            filterModels: [
+                {label: this.translation._('Contact'),    field: 'query',    defaultOperator: 'contains', operators: ['contains']},
+                {label: this.translation._('First Name'), field: 'n_given',  defaultOperator: 'contains'},
+                {label: this.translation._('Last Name'),  field: 'n_family', defaultOperator: 'contains'},
+                {label: this.translation._('Company'),    field: 'org_name', defaultOperator: 'contains'},
+                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals'},
+                {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality',   defaultOperator: 'contains'},
+                new Tine.widgets.grid.FilterModel({
+                    label: this.translation._('Job Role'),    field: 'role'
+                })
+                //new Tine.widgets.container.ContainerFilter({ field: 'owner'})
+                //{label: 'Full Name', field: 'n_fn', defaultOperator: 'equals'},
                 //{label: 'Container', field: 'owner'},
              ],
              defaultFilter: 'query',
