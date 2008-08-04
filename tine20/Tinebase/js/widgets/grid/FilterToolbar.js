@@ -286,14 +286,16 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     onFieldChange: function(filter, newField) {
         filter.set('field', newField);
         
+        //var myEl = filter.formFields.operator.getEl();
+        filter.formFields.operator.destroy();
+        
+        
         var filterModel = this.getFilterModel(filter.get('field'));
         var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         var el = fRow.child('td[class=tw-ftb-frow-operator]');
         el = Ext.DomHelper.overwrite(el, {'tag': 'td', 'class': 'tw-ftb-frow-operator'});
         
         filter.formFields.operator = filterModel.operatorRenderer(filter, el);
-        
-        //console.log('field change');
     },
     
     /**

@@ -322,7 +322,7 @@ Tine.Addressbook.Main = {
                 {label: this.translation._('First Name'), field: 'n_given',  defaultOperator: 'contains'},
                 {label: this.translation._('Last Name'),  field: 'n_family', defaultOperator: 'contains'},
                 {label: this.translation._('Company'),    field: 'org_name', defaultOperator: 'contains'},
-                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals'},
+                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals', valueType: 'int'},
                 {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality',   defaultOperator: 'contains'},
                 new Tine.widgets.grid.FilterModel({
                     label: this.translation._('Job Role'),    field: 'role'

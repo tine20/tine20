@@ -33,6 +33,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     field: '',
     
     /**
+     * @cfg {string} type of value
+     */
+    valueType: 'string',
+    
+    /**
      * @cfg {Array} valid operators
      */
     operators: null,
@@ -49,24 +54,10 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         Tine.widgets.grid.FilterModel.superclass.initComponent.call(this);
         this.isFilterModel = true;
         
-         /*
-        // init operators
-        this.fieldStore.each(function(field) {
-            console.log
-            if (! field.get('operatorRenderer')) {
-                field.set('operatorRenderer', this.renderOperator);
-            }
-        }, this);
-        this.filterStore.each(function(filter) {
-            var filterModel = this.fieldStore.getAt(this.fieldStore.find('field', filter.get('field')));
-            if (! filter.get('operator')) {
-                filter.set('operator', filterModel.get('defaultOperator') 
-                    ? filterModel.get('defaultOperator') 
-                    : this.operatorStore.getAt(0).get('operator')
-                );
-            }
-        }, this);
-        */
+        if (! this.operators) {
+            this.operators = [];
+        }
+        
     },
     
     /**
@@ -87,7 +78,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 //{operator: 'in',       label: _('is in')}
             ]
         });
-        if (this.operators) {
+
+        // filter operators
+        if (this.operators.length == 0 && this.valueType == 'string') {
+            this.operators.push('contains', 'equals', 'not');
+        }
+        if (this.operators.length > 0) {
             operatorStore.each(function(operator) {
                 if (this.operators.indexOf(operator.get('operator')) < 0 ) {
                     operatorStore.remove(operator);
@@ -109,7 +105,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 store: operatorStore,
                 displayField: 'label',
                 valueField: 'operator',
-                value: filter.get('operator'),
+                value: filter.get('operator') ? filter.get('operator') : this.defaultOperator,
                 renderTo: el,
             });
             operator.on('select', function(combo, newRecord, newKey) {
