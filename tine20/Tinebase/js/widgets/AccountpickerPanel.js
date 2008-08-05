@@ -98,7 +98,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	
     // private
     initComponent: function(){
-		Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
+		Tine.widgets.AccountpickerDialog.superclass.initComponent.call(this);
 		
 		var ok_button = new Ext.Button({
             disabled: true,
