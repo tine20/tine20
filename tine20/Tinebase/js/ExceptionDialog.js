@@ -81,36 +81,99 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         Tine.Tinebase.ExceptionDialog.superclass.initComponent.call(this);
     },
     
+    /**
+     * send the report to tine20.org bugracker
+     * 
+     * NOTE: due to same domain policy, we need to send data via a img get request
+     * @private
+     */
     onSendReport: function() {
-        Ext.Ajax.request({
-            waitTitle: _('Please Wait!'),
-            waitMsg: _('sending report...'),
-            //url: 'http://www.tine20.org/bugreport.php',
-            params: {
-                msg: this.exceptionInfo.msg,
-                trace: Ext.util.JSON.encode(this.exceptionInfo.trace),
-                description: Ext.getCmp('tb-exceptiondialog-descrioption').getValue(),
-                localtime: new Date().getTime()
-            },
-            scope: this,
-            success: function(_result, _request){
-                //var response = Ext.util.JSON.decode(_result.responseText);
-                this.close(); 
-                Ext.MessageBox.show({
-                    title: _('Transmission Completed'),
-                    msg: _('Your report has been send. Thanks for your contribution'),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.INFO
-                });
-            },
-            failure: function(_result, _request){
-                Ext.MessageBox.show({
-                    title: _('Failure'),
-                    msg: _('Your report could not be send.'),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR  
-                });
-            }
+        var baseUrl = 'http://www.tine20.org/bugreport.php';
+        var hash = this.geerateHash();
+
+        var info = {
+           msg:  this.exceptionInfo,
+           trace: this.exceptionInfo.traceHTML
+        };
+        var chunks = this.strChunk(Ext.util.JSON.encode(info), 1000);
+        
+        var img = [];
+        for (var i=0;i<chunks.length;i++) {
+            var part = i+1 + '/' + chunks.length;
+            var data = {data : this.base64encode('hash=' + hash + '&part=' + part + '&data=' + chunks[i])};
+            
+            var url = baseUrl + '?' + Ext.urlEncode(data);
+            img.push(Ext.DomHelper.insertFirst(this.el, {tag: 'img', src: url, hidden: true}, true));
+        }
+        
+        Ext.MessageBox.show({
+            title: _('Transmission Completed'),
+            msg: _('Your report has been send. Thanks for your contribution'),
+            buttons: Ext.MessageBox.OK,
+            icon: Ext.MessageBox.INFO
         });
+    },
+    /**
+     * @private
+     */
+    strChunk: function(str, chunklen) {
+        var chunks = [];
+        
+        var numChunks = Math.ceil(str.length / chunklen);
+        for (var i=0;i<str.length; i+=chunklen) {
+            chunks.push(str.substr(i,chunklen))
+        }
+        return chunks;
+    },
+    /**
+     * @private
+     */
+    geerateHash: function(){
+        // if the time isn't unique enough, the addition 
+        // of random chars should be
+        var t = String(new Date().getTime()).substr(4);
+        var s = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for(var i = 0; i < 4; i++){
+            t += s.charAt(Math.floor(Math.random()*26));
+        }
+        return t;
+    },
+    
+
+    /**
+     * base 64 encode given string
+     * @private
+     */
+    base64encode : function (input) {
+        var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        var output = "";
+        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+        var i = 0;
+
+        while (i < input.length) {
+
+            chr1 = input.charCodeAt(i++);
+            chr2 = input.charCodeAt(i++);
+            chr3 = input.charCodeAt(i++);
+
+            enc1 = chr1 >> 2;
+            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+            enc4 = chr3 & 63;
+
+            if (isNaN(chr2)) {
+                enc3 = enc4 = 64;
+            } else if (isNaN(chr3)) {
+                enc4 = 64;
+            }
+
+            output = output +
+            keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+            keyStr.charAt(enc3) + keyStr.charAt(enc4);
+
+        }
+
+        return output;
     }
+
 });
