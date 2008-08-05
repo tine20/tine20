@@ -392,7 +392,7 @@ Tine.Addressbook.Main = {
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
-        
+                
         // the rowselection model
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
 
@@ -454,7 +454,22 @@ Tine.Addressbook.Main = {
 	                    this.actions.callContact.setDisabled(false);
 	                }
                 }
+                
+                
             }
+        }, this);
+
+        // define a template to use for the detail view
+        // @todo add fields & layout
+        var detailTplMarkup = [
+            this.translation._('Name') + ': {n_family}<br/>',
+            this.translation._('Company') + ': {org_name}<br/>'
+        ];
+        var detailTpl = new Ext.Template(detailTplMarkup);
+        
+        rowSelectionModel.on('rowselect', function(sm, rowIdx, r) {
+            var detailPanel = Ext.getCmp('adr-preview-panel');
+            detailTpl.overwrite(detailPanel.body, r.data);
         }, this);
         
         // the gridpanel
@@ -521,11 +536,38 @@ Tine.Addressbook.Main = {
         }, this);
         
         this.gridPanel = new Ext.Panel({
+            layout: 'border',
+            items: [
+            {
+                id: 'adr-center-panel',
+                region: 'center',
+                border: false,
+                layout: 'fit',              
+                tbar: filterToolbar,
+                items: gridPanel
+            },{
+                // the new preview panel
+                id: 'adr-preview-panel',
+                region: 'south',
+                collapsible:true,
+                collapseMode: 'mini',
+                collapsed: true,
+                split: true,
+                layout: 'fit',
+                height: 100,
+                html: this.translation._('Select contact') 
+            }]
+        });
+        
+    	/*{
+        this.gridPanel = new Ext.Panel({
             border: false,
             layout: 'fit',
             tbar: filterToolbar,
             items: gridPanel
-        });
+            }
+        );
+        */
     },
     
     /**
