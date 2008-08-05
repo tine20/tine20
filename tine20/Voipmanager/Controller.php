@@ -181,11 +181,17 @@ class Voipmanager_Controller
             'snomphone_id'  => $phone->id
         ));
         $phone->lines  = $this->_snomLineBackend->search($filter);
-        $phone->rights = $this->getPhoneOwner($phone->id);
-
+        $phone->rights = $this->_snomPhoneBackend->getPhoneRights($phone->id);
+        
+        // add accountDisplayName
+        foreach ($phone->rights as &$right) {
+            $user = Tinebase_User::getInstance()->getUserById($right->account_id);
+            $right->accountDisplayName = $user->accountDisplayName;
+        }
+        
         return $phone;    
     }
-
+        
     /**
      * get snom_phones
      *
@@ -448,17 +454,6 @@ class Voipmanager_Controller
             
             $phone = $this->_snomPhoneBackend->update($phone);
         }
-    }
-
-
-    /**
-     * get snomPhoneOwner
-     *
-     * @return Tinebase_Record_RecordSet of Voipmanager_Model_SnomPhoneRight with phone owners
-     */
-    public function getPhoneOwner($_phoneId)
-    {
-        return $this->_snomPhoneBackend->getPhoneRights($_phoneId);          
     }
 
     /**

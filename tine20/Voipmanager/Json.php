@@ -87,8 +87,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
 
         $phone = Voipmanager_Controller::getInstance()->getSnomPhone($phoneId);
         
-        $result = $phone->toArray();      
-          
+        $result = $phone->toArray();    
+
         return $result;
     }    
     

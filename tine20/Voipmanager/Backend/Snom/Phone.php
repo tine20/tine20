@@ -141,14 +141,7 @@ class Voipmanager_Backend_Snom_Phone
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
         
-        $result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight');
-        // add accountDisplayName
-        foreach ($rows as $row) {
-            $user = Tinebase_User::getInstance()->getUserById($row['account_id']);
-            $row['accountDisplayName'] = $user->accountDisplayName;
-            
-            $result->addRecord(new Voipmanager_Model_SnomPhoneRight($row));
-        }
+        $result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight', $rows);
         
         return $result;        
     }    
