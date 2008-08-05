@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-07-30 21:15+0100\n"
+"PO-Revision-Date: 2008-08-05 17:12+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "Aufgaben löschen"
 #: js/Tasks.js:568
 #: js/Tasks.js:647
 msgid "Could not save task."
-msgstr "Konnte Aufgabe nicht löschen."
+msgstr "Konnte Aufgabe nicht speichern."
 
 #: js/Tasks.js:306
 msgid "Tasks"
