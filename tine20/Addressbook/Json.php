@@ -130,13 +130,15 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @return array contact data
      * 
      * @todo add account grants again for list view -> improve performance first
+     * @todo get tags (?) / account grants for all records at once 
      */
     protected function _contactToJson($_contact, $_getAccountGrants = FALSE)
-    {
-        //$_contact->tags = $_contact->tags->toArray();
-        
+    {        
         $result = $_contact->toArray();
         $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
+        
+        // get tags for preview ?
+        //$result['tags'] = Tinebase_Tags::getInstance()->getTagsOfRecord($_contact)->toArray();
         
         // removed for list view because it took 50% of the execution time
         if ($_getAccountGrants) {

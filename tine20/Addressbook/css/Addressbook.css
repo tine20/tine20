@@ -86,19 +86,26 @@
     padding:3px 0pt;
 }
 
+/******** preview panel classes ********/
+
 .preview-panel {
-	font-size: 11px;
+	font-size: 12px;
 	float:left;
-	width: 200px;
+	margin-left: 5px;
+	margin-top: 5px; 
+	width: 180px;
+	white-space: normal;
 }
 
 .preview-panel-image {
-    float:left;
+    margin-left: 5px;
+    margin-top: 5px; 
+	float:left;
     width: 100px;
 }
 
 .preview-panel-empty {
-    font-size: 11px;
+    font-size: 15px;
     width: 100%;
     text-align: center;
     margin-top: 20px;
