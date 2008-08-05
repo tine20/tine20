@@ -256,7 +256,13 @@ Tine.Tasks.mainGrid = {
     						linkedId: ''					
     	                },
     	                success: function(_result, _request) {
-    						store.commitChanges();
+                            store.commitChanges();
+                            
+                            // update task in grid store to prevent concurrency problems
+                            var updatedTask = new Tine.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
+                            updatedTask.set('container_id', Ext.util.JSON.decode(updatedTask.get('container_id')).id);
+                            Tine.Tasks.fixTask(updatedTask);
+                            task.data = updatedTask.data;
     
     						// reloading the store feels like 1.x
     						// maybe we should reload if the sort critera changed, 
@@ -623,7 +629,6 @@ Tine.Tasks.EditDialog = function(task) {
 		                task: Ext.util.JSON.encode(task.data),
 						linkingApp: formData.linking.link_app1,
 						linkedId: formData.linking.link_id1 //,
-						//jsonKey: Tine.Tinebase.Registry.get('jsonKey')
 		            },
 		            success: function(_result, _request) {
 		                
