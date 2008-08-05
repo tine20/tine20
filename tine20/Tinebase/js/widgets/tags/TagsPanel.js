@@ -291,6 +291,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     onResize : function(w,h){
         Tine.widgets.tags.TagPanel.superclass.onResize.call(this, w, h);
         // maximize search field and let space for add button
+        // does not work in safari with ext 2.2
         if (this.searchField.rendered && w) {
             if (w == 'auto' && !Ext.isSafari) {
                 w = this.getSize().width -18;
