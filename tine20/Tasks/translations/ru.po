@@ -1,0 +1,172 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tasks\n"
+"POT-Creation-Date: 2008-08-05 17:49+0100\n"
+"PO-Revision-Date: 2008-08-05 17:49+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Poedit-SearchPath-0: Tasks\n"
+
+#: Tasks/js/Tasks.js:108
+msgid "Do you really want to delete the selected task"
+msgid_plural "Do you really want to delete the selected task"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Tasks/js/Tasks.js:139
+#: Tasks/js/Tasks.js:267
+#: Tasks/js/Tasks.js:568
+#: Tasks/js/Tasks.js:647
+#: Tasks/js/Tasks.js:672
+msgid "Failed"
+msgstr ""
+
+#: Tasks/js/Tasks.js:139
+#: Tasks/js/Tasks.js:672
+msgid "Could not delete task(s)."
+msgstr ""
+
+#: Tasks/js/Tasks.js:155
+msgid "Edit task"
+msgstr ""
+
+#: Tasks/js/Tasks.js:164
+msgid "Add task"
+msgstr ""
+
+#: Tasks/js/Tasks.js:170
+msgid "Delete task"
+msgstr ""
+
+#: Tasks/js/Tasks.js:177
+msgid "Delete tasks"
+msgstr ""
+
+#: Tasks/js/Tasks.js:267
+#: Tasks/js/Tasks.js:568
+#: Tasks/js/Tasks.js:647
+msgid "Could not save task."
+msgstr ""
+
+#: Tasks/js/Tasks.js:306
+msgid "Tasks"
+msgstr ""
+
+#: Tasks/js/Tasks.js:307
+msgid "to do lists"
+msgstr ""
+
+#: Tasks/js/Tasks.js:329
+msgid "Enter searchfilter"
+msgstr ""
+
+#: Tasks/js/Tasks.js:344
+msgid "Show closed"
+msgstr ""
+
+#: Tasks/js/Tasks.js:394
+msgid "Search:"
+msgstr ""
+
+#: Tasks/js/Tasks.js:406
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr ""
+
+#: Tasks/js/Tasks.js:407
+msgid "No tasks to display"
+msgstr ""
+
+#: Tasks/js/Tasks.js:424
+#: Tasks/js/Tasks.js:724
+msgid "Status"
+msgstr ""
+
+#: Tasks/js/Tasks.js:440
+msgid "Percent"
+msgstr ""
+
+#: Tasks/js/Tasks.js:455
+#: Tasks/js/Tasks.js:696
+msgid "Summary"
+msgstr ""
+
+#: Tasks/js/Tasks.js:463
+msgid "Add a task..."
+msgstr ""
+
+#: Tasks/js/Tasks.js:468
+#: Tasks/js/Tasks.js:728
+msgid "Priority"
+msgstr ""
+
+#: Tasks/js/Tasks.js:484
+msgid "Due Date"
+msgstr ""
+
+#: Tasks/js/Tasks.js:505
+msgid "No Tasks to display"
+msgstr ""
+
+#: Tasks/js/Tasks.js:614
+msgid "Please wait"
+msgstr ""
+
+#: Tasks/js/Tasks.js:614
+#: Tasks/js/Tasks.js:660
+msgid "Saving Task"
+msgstr ""
+
+#: Tasks/js/Tasks.js:651
+msgid "Errors"
+msgstr ""
+
+#: Tasks/js/Tasks.js:651
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: Tasks/js/Tasks.js:658
+msgid "Confirm"
+msgstr ""
+
+#: Tasks/js/Tasks.js:658
+msgid "Do you really want to delete this task?"
+msgstr ""
+
+#: Tasks/js/Tasks.js:660
+msgid "Please wait a moment..."
+msgstr ""
+
+#: Tasks/js/Tasks.js:700
+msgid "Enter short name..."
+msgstr ""
+
+#: Tasks/js/Tasks.js:703
+msgid "Notes"
+msgstr ""
+
+#: Tasks/js/Tasks.js:705
+msgid "Enter description..."
+msgstr ""
+
+#: Tasks/js/Tasks.js:719
+msgid "Percentage"
+msgstr ""
+
+#: Tasks/js/Tasks.js:732
+msgid "Due date"
+msgstr ""
+
+#: Tasks/js/Tasks.js:736
+msgid "Folder"
+msgstr ""
+

@@ -1,0 +1,518 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tinebase\n"
+"POT-Creation-Date: 2008-08-05 17:49+0100\n"
+"PO-Revision-Date: 2008-08-05 17:49+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Poedit-SearchPath-0: Tinebase\n"
+
+#: Tinebase/Application/Rights/Abstract.php:56
+msgid "admin"
+msgstr ""
+
+#: Tinebase/Application/Rights/Abstract.php:57
+msgid "admin right description"
+msgstr ""
+
+#: Tinebase/Application/Rights/Abstract.php:60
+msgid "run"
+msgstr ""
+
+#: Tinebase/Application/Rights/Abstract.php:61
+msgid "run right description"
+msgstr ""
+
+#: Tinebase/Export/Pdf.php:152
+#: Tinebase/js/widgets/tags/TagsPanel.js:56
+msgid "Tags"
+msgstr ""
+
+#: Tinebase/Export/Pdf.php:353
+msgid "Export Date"
+msgstr ""
+
+#: Tinebase/Export/Pdf.php:357
+msgid "Created by"
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:26
+msgid "Abnormal End"
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:34
+#: Tinebase/js/MainScreen.js:289
+msgid "Cancel"
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:41
+msgid "Send Report"
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:50
+msgid "An error occurred, the program ended abnormal."
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:51
+msgid "The last action you made was potentially not performed correctly."
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:52
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occoured."
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:58
+#: Tinebase/js/widgets/tags/TagsPanel.js:552
+msgid "Description"
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:68
+msgid "Show Details:"
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:110
+msgid "Transmission Completed"
+msgstr ""
+
+#: Tinebase/js/ExceptionDialog.js:111
+msgid "Your report has been send. Thanks for your contribution"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:45
+msgid "Change password"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:51
+msgid "Logout"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:52
+msgid "Logout from Tine 2.0"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:71
+msgid "Admin"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:79
+msgid "Preferences"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:95
+#, python-format
+msgid "User: %s"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:96
+#, python-format
+msgid "Timezone: %s"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:253
+#, python-format
+msgid "Change Password For \"%s\""
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:277
+msgid "Old Password"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:281
+msgid "New Password"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:285
+msgid "Repeat new Password"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:295
+msgid "Ok"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:303
+msgid "Please Wait!"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:304
+msgid "changing password..."
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:315
+msgid "Success"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:316
+msgid "Your password has been changed."
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:322
+#: Tinebase/js/MainScreen.js:332
+msgid "Failure"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:333
+msgid "The new passwords mismatch, please correct them."
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:351
+#: Tinebase/js/widgets/container/ContainerTree.js:231
+msgid "Confirm"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:351
+msgid "Are you sure you want to logout?"
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:353
+msgid "Logging you out..."
+msgstr ""
+
+#: Tinebase/js/MainScreen.js:353
+msgid "Please wait!"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:148
+msgid "Add a Note..."
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:163
+#: Tinebase/js/widgets/ActivitiesPanel.js:175
+#: Tinebase/js/widgets/ActivitiesPanel.js:312
+#: Tinebase/js/widgets/container/ContainerTree.js:304
+msgid "Add"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:163
+#: Tinebase/js/widgets/ActivitiesPanel.js:312
+#: Tinebase/js/widgets/ActivitiesPanel.js:393
+#: Tinebase/js/widgets/ActivitiesPanel.js:511
+msgid "Note"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:176
+#: Tinebase/js/widgets/ActivitiesPanel.js:324
+msgid "Add new note"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:207
+msgid "Recent Activities"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:271
+#: Tinebase/js/widgets/ActivitiesPanel.js:323
+msgid "Add Note"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:272
+msgid "Enter new note:"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:391
+#: Tinebase/js/widgets/ActivitiesPanel.js:516
+msgid "Type"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:394
+msgid "Created By"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:395
+msgid "Timestamp"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:408
+msgid "Displaying notes {0} - {1} of {2}"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:409
+msgid "No notes to display"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:499
+msgid "Activities"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:512
+msgid "Time"
+msgstr ""
+
+#: Tinebase/js/widgets/ActivitiesPanel.js:514
+msgid "User"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:55
+msgid "container"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:70
+#: Tinebase/js/widgets/grid/FilterModel.js:87
+msgid "contains"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:71
+#: Tinebase/js/widgets/grid/FilterModel.js:88
+msgid "is equal to"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:72
+#: Tinebase/js/widgets/grid/FilterModel.js:89
+msgid "is greater than"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:73
+#: Tinebase/js/widgets/grid/FilterModel.js:90
+msgid "is less than"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:74
+#: Tinebase/js/widgets/grid/FilterModel.js:91
+msgid "is not"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:75
+#: Tinebase/js/widgets/grid/FilterModel.js:92
+msgid "is in"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerFilter.js:94
+#: Tinebase/js/widgets/grid/FilterModel.js:115
+msgid "select a operator"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:106
+msgid "All"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:111
+msgid "My"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:118
+msgid "Shared"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:125
+msgid "Other Users"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:203
+msgid "New"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:205
+#: Tinebase/js/widgets/container/ContainerTree.js:233
+#: Tinebase/js/widgets/container/ContainerTree.js:265
+msgid "Please wait"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:205
+msgid "Creating"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:231
+msgid "Do you really want to delete the"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:233
+msgid "Deleting"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:260
+msgid "Please enter the new name of the"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:265
+msgid "Updateing"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:310
+msgid "Delete"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:316
+msgid "Rename"
+msgstr ""
+
+#: Tinebase/js/widgets/container/ContainerTree.js:322
+msgid "Manage permissions"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:156
+#: Tinebase/js/widgets/grid/FilterToolbar.js:364
+#: Tinebase/js/widgets/grid/FilterToolbar.js:385
+msgid "Show"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:156
+#: Tinebase/js/widgets/grid/FilterToolbar.js:364
+msgid "and"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:181
+msgid "select a field"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:205
+msgid "Delete this filter"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:222
+msgid "add new filter"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:230
+msgid "save filter"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:236
+msgid "start search"
+msgstr ""
+
+#: Tinebase/js/widgets/grid/FilterToolbar.js:245
+msgid "Delete all filters"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagFilter.js:23
+msgid "Tag"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:86
+msgid "Add a new personal tag"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:89
+msgid "Add New Personal Tag"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:90
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:90
+msgid "Enter tag name:"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:107
+#: Tinebase/js/widgets/tags/TagsPanel.js:402
+#: Tinebase/js/widgets/tags/TagsPanel.js:406
+msgid "personal"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:129
+msgid "No Tags to display"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:152
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:167
+#: Tinebase/js/widgets/tags/TagsPanel.js:172
+msgid "Rename Tag"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:172
+msgid "Please enter a new name:"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:181
+msgid "Edit Description"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:186
+msgid "Description for tag"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:186
+msgid "Please enter new description:"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:195
+msgid "Change Color"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:219
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:231
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:232
+msgid "The selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:236
+msgid "Please wait a moment..."
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:236
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:252
+#: Tinebase/js/widgets/tags/TagsPanel.js:355
+#: Tinebase/js/widgets/tags/TagsPanel.js:388
+msgid "Failed"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:252
+msgid "Could not delete Tag(s)."
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:309
+#: Tinebase/js/widgets/tags/TagsPanel.js:369
+msgid "Notice"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:310
+#: Tinebase/js/widgets/tags/TagsPanel.js:370
+msgid "The minimum tag length is three."
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:355
+msgid "Could not create tag."
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:388
+msgid "Could not update tag."
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:421
+#: Tinebase/js/widgets/tags/TagsPanel.js:479
+msgid "Enter tag name"
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:422
+msgid "Searching..."
+msgstr ""
+
+#: Tinebase/js/widgets/tags/TagsPanel.js:556
+msgid "Color"
+msgstr ""
+
