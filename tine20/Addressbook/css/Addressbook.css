@@ -85,3 +85,22 @@
 .x-tab-strip span.x-tab-strip-text {
     padding:3px 0pt;
 }
+
+.preview-panel {
+	font-size: 11px;
+	float:left;
+	width: 200px;
+}
+
+.preview-panel-image {
+    float:left;
+    width: 100px;
+}
+
+.preview-panel-empty {
+    font-size: 11px;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+

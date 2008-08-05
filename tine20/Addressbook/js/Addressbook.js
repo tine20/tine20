@@ -454,18 +454,71 @@ Tine.Addressbook.Main = {
 	                    this.actions.callContact.setDisabled(false);
 	                }
                 }
-                
-                
             }
         }, this);
 
         // define a template to use for the detail view
-        // @todo add fields & layout
-        var detailTplMarkup = [
-            this.translation._('Name') + ': {n_family}<br/>',
-            this.translation._('Company') + ': {org_name}<br/>'
-        ];
-        var detailTpl = new Ext.Template(detailTplMarkup);
+        // @todo add tags
+        var detailTpl = new Ext.XTemplate(
+            '<tpl for=".">',
+                '<div class="x-combo-list-item">',
+                    '<div class="preview-panel-image">',
+                        '<img src="{[this.getPhoto(values.jpegphoto)]}" />',
+                    '</div>',
+                    '<div class="preview-panel">',
+                        this.translation._('Company') + ': {[this.encode(values.org_name)]}<br/>',
+                        this.translation._('Unit') + ': {[this.encode(values.org_unit)]}<br/>',
+                        this.translation._('Job Title') + ': {[this.encode(values.title)]}<br/>',
+                        this.translation._('Job Role') + ': {[this.encode(values.role)]}<br/>',
+                        this.translation._('Room') + ': {[this.encode(values.room)]}<br/>',
+                    '</div>',
+                    '<div class="preview-panel">',
+                        //this.translation._('Company Address') + '<br/>',
+                        this.translation._('Street') + ': {[this.encode(values.adr_one_street)]}<br/>',
+                        this.translation._('City') + ': {[this.encode(values.adr_one_locality)]}<br/>',
+                        this.translation._('Region') + ': {[this.encode(values.adr_one_region)]}<br/>',
+                        this.translation._('Postalcode') + ': {[this.encode(values.adr_one_postalcode)]}<br/>',
+                        this.translation._('Country') + ': {[this.encode(values.adr_one_countryname, "country")]}<br/>',
+                    '</div>',
+                    '<div class="preview-panel">',
+                        this.translation._('Phone') + ': {[this.encode(values.tel_work)]}<br/>',
+                        this.translation._('Mobile') + ': {[this.encode(values.tel_cell)]}<br/>',
+                        this.translation._('Fax') + ': {[this.encode(values.tel_fax)]}<br/>',
+                        this.translation._('Email') + ': <a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email)]}</a><br/>',
+                        this.translation._('Web') + ': <a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url)]}</a><br/>',
+                    '</div>',
+                    '<div class="preview-panel">',
+                        //this.translation._('Private Address') + '<br/>',
+                        this.translation._('Street (private)') + ': {[this.encode(values.adr_two_street)]}<br/>',
+                        this.translation._('City (private)') + ': {[this.encode(values.adr_two_locality)]}<br/>',
+                        this.translation._('Region (private)') + ': {[this.encode(values.adr_two_region)]}<br/>',
+                        this.translation._('Postalcode (private)') + ': {[this.encode(values.adr_two_postalcode)]}<br/>',
+                        this.translation._('Country (private)') + ': {[this.encode(values.adr_two_countryname, "country")]}<br/>',
+                    '</div>',
+                    '<div class="preview-panel">',
+                        this.translation._('Phone (private)') + ': {[this.encode(values.tel_home)]}<br/>',
+                        this.translation._('Mobile (private)') + ': {[this.encode(values.tel_cell_private)]}<br/>',
+                        this.translation._('Email (private)') + ': <a href="mailto:{[this.encode(values.email_home)]}">{[this.encode(values.email_home)]}</a><br/>',
+                        this.translation._('URL (private)') + ': <a href="{[this.encode(values.url_home)]}" target="_blank">{[this.encode(values.url_home)]}</a><br/>',
+                    '</div>',
+                '</div>',
+            '</tpl>',
+        	{
+                encode: function(value, type) {
+                	if (value) {
+                		if (type && type == 'country') {
+                			value = Locale.getTranslationData('Territory', value);
+                		}
+                        return Ext.util.Format.htmlEncode(value);
+                	} else {
+                		return '';
+                	}
+                },
+                getPhoto: function(value) {
+                    return value;
+                }
+            }
+        );
         
         rowSelectionModel.on('rowselect', function(sm, rowIdx, r) {
             var detailPanel = Ext.getCmp('adr-preview-panel');
@@ -489,8 +542,7 @@ Tine.Addressbook.Main = {
                 forceFit:true,
                 ignoreAdd: true,
                 emptyText: 'No contacts to display'
-            })            
-            
+            })                        
         });
         
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
@@ -551,23 +603,13 @@ Tine.Addressbook.Main = {
                 region: 'south',
                 collapsible:true,
                 collapseMode: 'mini',
-                collapsed: true,
+                //collapsed: true,
                 split: true,
                 layout: 'fit',
                 height: 100,
-                html: this.translation._('Select contact') 
+                html: '<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>' 
             }]
-        });
-        
-    	/*{
-        this.gridPanel = new Ext.Panel({
-            border: false,
-            layout: 'fit',
-            tbar: filterToolbar,
-            items: gridPanel
-            }
-        );
-        */
+        });        
     },
     
     /**
