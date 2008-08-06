@@ -125,20 +125,17 @@ class Tinebase_Controller
     }
     
     /**
-     * the main function where any request needs to go trough
+     * handler for HTTP api requests
+     * @todo session expre handling
      * 
-     * @todo implement json key check
-     *
+     * @return HTTP
      */
     public function handleHttp()
     {
-        $auth = Zend_Auth::getInstance();
-
-        $this->_initFramework();
         
+        $this->_initFramework();
         Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
-        // HTTP request
-
+        
         $server = new Tinebase_Http_Server();
 
         $server->setClass('Tinebase_Http', 'Tinebase');
@@ -154,8 +151,8 @@ class Tinebase_Controller
                     // do nothing
                 }
             }
-        }
-
+        } 
+        
         if (empty($_REQUEST['method'])) {
             if (Zend_Auth::getInstance()->hasIdentity()) {
                 $_REQUEST['method'] = 'Tinebase.mainScreen';
@@ -167,85 +164,42 @@ class Tinebase_Controller
         $server->handle($_REQUEST);
     }
 
-
     /**
-     * the main function where any request needs to go trough
+     * handler for JSON api requests
+     * @todo session expre handling
      * 
-     * @todo implement json key check
-     *
-     */
-    public function handleSnom()
-    {
-        if(isset($_REQUEST['PHPSESSID'])) {
-            Zend_Session::setId($_REQUEST['PHPSESSID']);
-        }
-        
-        $this->_initFramework();
-        
-        Zend_Registry::get('logger')->debug('is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
-        
-        $server = new Tinebase_Http_Server();
-        
-        $server->setClass('Voipmanager_Snom', 'Voipmanager');
-                    
-        $server->handle($_REQUEST);
-    }
-    
-
-    /**
-     * the main function to handle json requests
-     * 
-     * @todo implement json key check
-     *
+     * @return JSON
      */
     public function handleJson()
     {
-        $auth = Zend_Auth::getInstance();
-
         $this->_initFramework();
-        
         Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
         
-        // is it save to use the jsonKey from $_GET too???
-        // check jsonkey in HTTP request as well?
-        // can we move this to the Zend_Json_Server???
-        // create jsonkey only on login
-        
-        //Zend_Registry::get('logger')->debug('is json request. json key from registry: ' . Zend_Registry::get('jsonKey'));
-        //Zend_Registry::get('logger')->debug('is json request. json key from POST: ' . $_POST['jsonKey']);
-        if (!($_POST['method'] === 'Tinebase.login' || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
+        // check json key for all methods but login and user registration
+        if (    !($_POST['method'] === 'Tinebase.login' || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
                 && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
                     
-            error_log('wrong JSON Key sent!!! expected: ' . Zend_Registry::get('jsonKey') . ' got: ' . $_POST['jsonKey'] . ' :: ' . $_REQUEST['method']);                
-            throw new Exception('wrong JSON Key sent!!!');
-        
-            //Zend_Registry::get('logger')->debug('POST: ' . print_r($_POST, true));
-                            
-            // goto login screen / show popup with login (but how?)
-            // try to handle the request after the (re-)login
-            // @todo make it work!
-            /*
-            //unset($_REQUEST);
-            $_REQUEST['method'] = 'Tinebase.login';
+            Zend_Registry::get('logger')->WARN(__METHOD__ . '::' . __LINE__ . '  Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
+                ' affected account: ' . print_r(Zend_Registry::get('currentAccount')->toArray(), true) .
+                ' request: ' . print_r($_REQUEST, true)
+            );
             
-            $server = new Tinebase_Http_Server();        
-            $server->setClass('Tinebase_Http', 'Tinebase');
-            $server->handle($_REQUEST);
-            return;
-            */                
-        } 
-        
+            throw new Exception('Possible CSRF attempt detected!');
+        }
+
         $server = new Zend_Json_Server();
         
+        // add json apis which require no auth
         $server->setClass('Tinebase_Json', 'Tinebase');
+        $server->setClass('Tinebase_Json_UserRegistration', 'Tinebase_UserRegistration');
         
-        // register addidional Tinebase Json servers (i.e. UserRegistration)
-        Tinebase_Json::setJsonServers($server);
-        
+        // register addidional Json apis only available for authorised users
         if (Zend_Auth::getInstance()->hasIdentity()) {
-            
+            // addidional Tinebase json apis
+            $server->setClass('Tinebase_Json_Container', 'Tinebase_Container');
+
+            // application apis
             $userApplications = Zend_Registry::get('currentAccount')->getApplications();
-            
             foreach ($userApplications as $application) {
                 $applicationName = ucfirst((string) $application);
                 try {
@@ -255,8 +209,39 @@ class Tinebase_Controller
                 }
             }
         }
+            /*
+             if (session expired) {
+                unset($_REQUEST);
+                $_REQUEST['method'] = 'Tinebase.login';
+                
+                $server = new Tinebase_Http_Server();        
+                $server->setClass('Tinebase_Http', 'Tinebase');
+                $server->handle($_REQUEST);
+                return;
+             }
+            */ 
+         
+        $server->handle($_REQUEST);
+    }
+    
+    /**
+     * handler for SNOM api requests
+     * 
+     * @return xml
+     */
+    public function handleSnom()
+    {
+        if(isset($_REQUEST['PHPSESSID'])) {
+            Zend_Session::setId($_REQUEST['PHPSESSID']);
+        }
         
-        $server->handle($_REQUEST);            
+        $this->_initFramework();
+        Zend_Registry::get('logger')->debug('is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+        
+        $server = new Tinebase_Http_Server();
+        $server->setClass('Voipmanager_Snom', 'Voipmanager');
+                    
+        $server->handle($_REQUEST);
     }
     
     /**

@@ -19,15 +19,6 @@
 class Tinebase_Json
 {
 	
-	/**
-	 * register dependend classes
-	 */
-	public static function setJsonServers($_server)
-	{
-	    $_server->setClass('Tinebase_Json_Container', 'Tinebase_Container');
-	    $_server->setClass('Tinebase_Json_UserRegistration', 'Tinebase_UserRegistration');
-	}
-	
     /**
      * get list of translated country names
      *
