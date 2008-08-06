@@ -66,7 +66,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
             $phone->redirect_number = NULL;
         }
         
-        if($phone->redirect_event = 'time') {
+        if($phone->redirect_event == 'time') {
             $phone->redirect_time = $time;
         } else {
             $phone->redirect_time = NULL;
