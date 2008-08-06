@@ -288,12 +288,13 @@ class Tinebase_Timemachine_ModificationLog
         
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
         
-        // ommit second order records for the moment
+        // ommit second order records and jpegphoto for the moment
         $toOmmit = array_merge($this->_metaProperties, array(
             'tags',
             'relations',
             'notes',
-            'products'
+            'products',
+            'jpegphoto'
         ));
         
         foreach ($diffs as $field => $newValue) {
