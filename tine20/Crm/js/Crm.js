@@ -801,7 +801,8 @@ Tine.Crm.LeadEditDialog = {
                 // set link properties
                 contact.id = contact.data.id;
                 //contact.data.link_id = selectedContact.data.link_id;
-                contact.data.relation_type = selectedContact.data.relation_type;
+                //contact.data.relation_type = selectedContact.data.relation_type;
+                contact.data.relation = selectedContact.data.relation;
                 
                 // add contact to store (remove the old one first)
                 var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
@@ -870,6 +871,7 @@ Tine.Crm.LeadEditDialog = {
             taskPopup.on('update', function(task) {           
                 // set link properties
                 task.id = task.data.id;
+                task.data.relation = selectedTask.data.relation;
                 
                 // add task to store (remove the old one first)
                 var storeContacts = Ext.StoreMgr.lookup('TasksStore');
@@ -919,7 +921,9 @@ Tine.Crm.LeadEditDialog = {
         }
 
         // set the relation type
-        relation.type = record.data.relation_type.toUpperCase();
+        if (!relation.type) {
+            relation.type = record.data.relation_type.toUpperCase();
+        }
         
         // do not do recursion!
         delete record.data.relation;
@@ -947,12 +951,14 @@ Tine.Crm.LeadEditDialog = {
     	
     	// contacts
         var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+        //console.log(storeContacts);
         storeContacts.each(function(record) {                     
             relations.push(this.getRelationData(record));
         }, this);
         
         // tasks
-        var storeTasks = Ext.StoreMgr.lookup('TasksStore');        
+        var storeTasks = Ext.StoreMgr.lookup('TasksStore');    
+        //console.log(storeTasks);
         storeTasks.each(function(record) {
             relations.push(this.getRelationData(record));
         }, this);
