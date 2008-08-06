@@ -105,11 +105,19 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     public function setFromJson($_data)
     {
+        $data = Zend_Json::decode($_data);
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+        
         $userTimezone = Zend_Registry::get('userTimeZone');
         $serverTimezone = date_default_timezone_get();
         date_default_timezone_set($userTimezone);
         
-        $this->setFromArray(Zend_Json::decode($_data));
+        // sanitize container id
+        if (is_array($data['container_id'])) {
+            $data['container_id'] = $data['container_id']['id'];
+        }
+        
+        $this->setFromArray($data);
         $this->setTimezone($serverTimezone);
 
         date_default_timezone_set($serverTimezone);
