@@ -20,7 +20,7 @@ class Dialer_Backend_Asterisk
     /**
      * Enter description here...
      *
-     * @var Asterisk_Ajam_Connection
+     * @var Voipmanager_Ajam_Connection
      */
     protected $_ajam;
     

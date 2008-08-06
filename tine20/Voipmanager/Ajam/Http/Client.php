@@ -35,7 +35,7 @@
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Asterisk_Ajam_Http_Client extends Zend_Http_Client
+class Voipmanager_Ajam_Http_Client extends Zend_Http_Client
 {
     /**
      * Send the HTTP request and return an HTTP response object

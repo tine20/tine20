@@ -16,7 +16,7 @@
  * http://www.voip-info.org/wiki/view/Aynchronous+Javascript+Asterisk+Manager+%28AJAM%29
  * @package     Asterisk
  */
-class Asterisk_Ajam_Connection extends Asterisk_Ajam_Http_Client
+class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
 {
     /**
      * status of debug modus
