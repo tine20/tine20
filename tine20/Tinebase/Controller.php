@@ -132,14 +132,15 @@ class Tinebase_Controller
      */
     public function handleHttp()
     {
-        
         $this->_initFramework();
         Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
         
         $server = new Tinebase_Http_Server();
-
+        
+        //NOTE: auth check for Tinebase HTTP api is done via Tinebase_Http::checkAuth  
         $server->setClass('Tinebase_Http', 'Tinebase');
 
+        // register addidional HTTP apis only available for authorised users
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $userApplications = Zend_Registry::get('currentAccount')->getApplications();
             

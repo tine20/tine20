@@ -21,7 +21,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     /**
      * checes if a user is loged in. If not we redirect to login
      */
-    protected function checkLogin()
+    protected function checkAuth()
     {
         try {
             Zend_Registry::get('currentAccount');
@@ -166,7 +166,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 */
     public function mainScreen()
     {
-        $this->checkLogin();
+        $this->checkAuth();
         $userApplications = Zend_Registry::get('currentAccount')->getApplications();
 
         $view = new Zend_View();
