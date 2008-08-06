@@ -405,12 +405,20 @@ Tine.Addressbook.Main = {
                 this.actions.editContact.setDisabled(true);
                 this.actions.exportContact.setDisabled(true);
                 this.actions.callContact.setDisabled(true);
+                
+                // clear preview
+                var clearTpl = new Ext.Template(
+                    '<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>'
+                );
+                clearTpl.overwrite(Ext.getCmp('adr-preview-panel').body);    
+                
             } else if(rowCount > 1) {
                 // more than one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(true);
                 this.actions.exportContact.setDisabled(false);
                 this.actions.callContact.setDisabled(true);
+                
             } else {
                 // only one row selected
                 this.actions.deleteContact.setDisabled(false);
@@ -462,41 +470,35 @@ Tine.Addressbook.Main = {
         var detailTpl = new Ext.XTemplate(
             '<tpl for=".">',
                 '<div class="x-combo-list-item">',
-                    '<div class="preview-panel">',
+                    '<div class="preview-panel preview-panel-company">',
                         '{[this.encode(values.org_unit, " / ")]}{[this.encode(values.org_name)]}<br/>',
+                        '{[this.encode(values.adr_one_street)]}<br/>',
+                        '{[this.encode(values.adr_one_postalcode, " ")]}{[this.encode(values.adr_one_locality)]}<br/>',
+                        '{[this.encode(values.adr_one_region, " / ")]}{[this.encode(values.adr_one_countryname, "country")]}<br/>',
+                    '</div>',
+                    '<div class="preview-panel preview-panel-company">',
                         this.translation._('Phone') + ': {[this.encode(values.tel_work)]}<br/>',
                         this.translation._('Mobile') + ': {[this.encode(values.tel_cell)]}<br/>',
                         this.translation._('Fax') + ': {[this.encode(values.tel_fax)]}<br/>',
                         '<a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email)]}</a><br/>',
                         '<a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url)]}</a><br/>',
                         /*
-                        this.translation._('Company') + ': {[this.encode(values.org_name)]}<br/>',
-                        this.translation._('Email') + ': <a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email)]}</a><br/>',
-                        this.translation._('Web') + ': <a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url)]}</a><br/>',
-                        this.translation._('Unit') + ': {[this.encode(values.org_unit)]}<br/>',
                         this.translation._('Job Title') + ': {[this.encode(values.title)]}<br/>',
                         this.translation._('Job Role') + ': {[this.encode(values.role)]}<br/>',
                         this.translation._('Room') + ': {[this.encode(values.room)]}<br/>',
                         */
                     '</div>',
                     '<div class="preview-panel">',
-                        '<u>' + this.translation._('Company Address') + '</u><br/>',
-                        '{[this.encode(values.adr_one_street)]}<br/>',
-                        '{[this.encode(values.adr_one_postalcode, " ")]}{[this.encode(values.adr_one_locality)]}<br/>',
-                        '{[this.encode(values.adr_one_region, " / ")]}{[this.encode(values.adr_one_countryname, "country")]}<br/>',
+                        '{[this.encode(values.n_fn)]}<br/>',
+                        '{[this.encode(values.adr_two_street)]}<br/>',
+                        '{[this.encode(values.adr_two_postalcode, " ")]}{[this.encode(values.adr_two_locality)]}<br/>',
+                        '{[this.encode(values.adr_two_region, " / ")]}{[this.encode(values.adr_two_countryname, "country")]}<br/>',
                     '</div>',
                     '<div class="preview-panel">',
-                        '<u>' + this.translation._('Private Contact') + '</u><br/>',
                         this.translation._('Phone') + ': {[this.encode(values.tel_home)]}<br/>',
                         this.translation._('Mobile') + ': {[this.encode(values.tel_cell_private)]}<br/>',
                         '<a href="mailto:{[this.encode(values.email_home)]}">{[this.encode(values.email_home)]}</a><br/>',
                         '<a href="{[this.encode(values.url_home)]}" target="_blank">{[this.encode(values.url_home)]}</a><br/>',
-                    '</div>',
-                    '<div class="preview-panel">',
-                        '<u>' + this.translation._('Private Address') + '</u><br/>',
-                        '{[this.encode(values.adr_two_street)]}<br/>',
-                        '{[this.encode(values.adr_two_postalcode, " ")]}{[this.encode(values.adr_two_locality)]}<br/>',
-                        '{[this.encode(values.adr_two_region, " / ")]}{[this.encode(values.adr_two_countryname, "country")]}<br/>',
                     '</div>',
                     /*
                     '<div class="preview-panel">',
@@ -504,12 +506,12 @@ Tine.Addressbook.Main = {
                         '{[this.getTags(values.tags)]}',
                     '</div>',
                     */
-                    '<div class="preview-panel">',
-                        '<u>' + this.translation._('Description') + '</u><br/>',
+                    '<div class="preview-panel preview-panel-description">',
+                        //'<u>' + this.translation._('Description') + '</u><br/>',
                         '{[this.encode(values.note, "longtext")]}',
                     '</div>',
                     '<div class="preview-panel-image">',
-                        '<img src="{[this.getPhoto(values.jpegphoto)]}" />',
+                        '<img src="{jpegphoto}" />',
                     '</div>',
                 '</div>',
             '</tpl>',
@@ -522,7 +524,7 @@ Tine.Addressbook.Main = {
                 				    value = Locale.getTranslationData('Territory', value);
                 				    break;
                                 case 'longtext':
-                                    value = Ext.util.Format.ellipsis(value, 180);
+                                    value = Ext.util.Format.ellipsis(value, 300);
                                     break;
                                 default:
                                     value += type;
@@ -532,9 +534,6 @@ Tine.Addressbook.Main = {
                 	} else {
                 		return '';
                 	}
-                },
-                getPhoto: function(value) {
-                    return value;
                 },
                 getTags: function(value) {
                 	var result = '';
