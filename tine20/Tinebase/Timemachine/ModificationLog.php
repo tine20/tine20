@@ -292,7 +292,8 @@ class Tinebase_Timemachine_ModificationLog
         $toOmmit = array_merge($this->_metaProperties, array(
             'tags',
             'relations',
-            'notes'
+            'notes',
+            'products'
         ));
         
         foreach ($diffs as $field => $newValue) {
