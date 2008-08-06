@@ -91,7 +91,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
             <SnomIPPhoneInput>
                 <Prompt>Prompt</Prompt>
-                <URL>http://phonebox01.hh.metaways.de/snom_v3/directory.php</URL>
+                <URL>http://phonebox01.hh.metaways.de/tine20/index.php</URL>
                 <InputItem>
                     <DisplayName>Search for</DisplayName>
                     <QueryStringParam>' . SID . '&method=Voipmanager.directory&query</QueryStringParam>
