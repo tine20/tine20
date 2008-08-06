@@ -33,4 +33,71 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', '2');
         $this->setApplicationVersion('Addressbook', '0.3');
     }
+    
+    /**
+     * correct modlog field definitions
+     */    
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>created_by</name>
+                <type>integer</type>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>creation_time</name>
+                <type>datetime</type>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>integer</type>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_time</name>
+                <type>datetime</type>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>integer</type>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $this->setApplicationVersion('Addressbook', '0.4');
+    }
+    
+                
+                 
+                
+                
+                
+                            
+                
+    
 }
