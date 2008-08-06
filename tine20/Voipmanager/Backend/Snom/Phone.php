@@ -330,7 +330,31 @@ class Voipmanager_Backend_Snom_Phone
         return $this->get($_phone);
     }        
     
-
+    /**
+     * update redirect for an existing phone
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone the phonedata
+     * @return Voipmanager_Model_SnomPhone
+     */
+    public function updateRedirect(Voipmanager_Model_SnomPhone $_phone)
+    {
+        if (! $_phone->isValid()) {
+            throw new Exception('invalid phone');
+        }
+        
+        $phoneId = $_phone->getId();
+        $redirectData = array(
+            'redirect_event'    => $_phone->redirect_event,
+            'redirect_number'   => $_phone->redirect_number,
+            'redirect_time'     => $_phone->redirect_time
+        );
+        
+        $where = array($this->_db->quoteInto('id = ?', $phoneId));
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $redirectData, $where);
+        
+        return $this->get($_phone);
+    }            
+    
     /**
      * update an existing myPhone
      *

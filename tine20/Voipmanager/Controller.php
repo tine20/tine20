@@ -394,9 +394,20 @@ class Voipmanager_Controller
     }
     
     /**
+     * set redirect settings only
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     */
+    public function updateSnomPhoneRedirect(Voipmanager_Model_SnomPhone $_phone)
+    {
+        $this->_snomPhoneBackend->updateRedirect($_phone);
+    }
+    
+    /**
      * update one phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_SnomPhoneSettings $_phoneSettings
      * @return  Voipmanager_Model_SnomPhone
      */
     public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)

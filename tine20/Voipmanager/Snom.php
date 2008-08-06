@@ -59,7 +59,11 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         
         $phone = $vmController->getSnomPhoneByMacAddress($mac);
 
-        error_log("$event, $number, $time");
+        $phone->redirect_event = $event;
+        $phone->redirect_number = $number;
+        $phone->redirect_time = $time;
+        
+        $vmController->updateSnomPhoneRedirect($phone);
     }
     
     /**
