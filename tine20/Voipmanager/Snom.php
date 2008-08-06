@@ -144,8 +144,18 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         foreach($contacts as $contact) {
             if(!empty($contact->tel_work)) {
                 $directoryEntry = $xml->addChild('DirectoryEntry');
-                $directoryEntry->addChild('Name', $contact->n_fileas);
+                $directoryEntry->addChild('Name', $contact->n_fileas . 'W');
                 $directoryEntry->addChild('Telephone', $contact->tel_work);
+            }
+            if(!empty($contact->tel_cell)) {
+                $directoryEntry = $xml->addChild('DirectoryEntry');
+                $directoryEntry->addChild('Name', $contact->n_fileas . 'C');
+                $directoryEntry->addChild('Telephone', $contact->tel_cell);
+            }
+            if(!empty($contact->tel_home)) {
+                $directoryEntry = $xml->addChild('DirectoryEntry');
+                $directoryEntry->addChild('Name', $contact->n_fileas . 'H');
+                $directoryEntry->addChild('Telephone', $contact->tel_home);
             }
         }
         
