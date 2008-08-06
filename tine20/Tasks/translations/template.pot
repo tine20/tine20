@@ -1,160 +1,142 @@
-msgid ""
-msgstr ""
-"Project-Id-Version: Tine 2.0 - Tasks\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-08-05 17:12+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: ../../\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Poedit-SearchPath-0: Tasks\n"
-
 #: js/Tasks.js:108
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Wollen Sie die ausgewählten Aufgabe wirklich löschen?"
-msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Tasks.js:139 js/Tasks.js:273 js/Tasks.js:574 js/Tasks.js:652
 #: js/Tasks.js:677
 msgid "Failed"
-msgstr "Fehlgeschlagen"
+msgstr ""
 
 #: js/Tasks.js:139 js/Tasks.js:677
 msgid "Could not delete task(s)."
-msgstr "Konnte Aufgabe(n) nicht löschen."
+msgstr ""
 
 #: js/Tasks.js:155
 msgid "Edit task"
-msgstr "Aufgabe bearbeiten"
+msgstr ""
 
 #: js/Tasks.js:164
 msgid "Add task"
-msgstr "Aufgabe hinzufügen"
+msgstr ""
 
 #: js/Tasks.js:170
 msgid "Delete task"
-msgstr "Aufgabe löschen"
+msgstr ""
 
 #: js/Tasks.js:177
 msgid "Delete tasks"
-msgstr "Aufgaben löschen"
+msgstr ""
 
 #: js/Tasks.js:273 js/Tasks.js:574 js/Tasks.js:652
 msgid "Could not save task."
-msgstr "Konnte Aufgabe nicht speichern."
+msgstr ""
 
 #: js/Tasks.js:312
 msgid "Tasks"
-msgstr "Aufgaben"
+msgstr ""
 
 #: js/Tasks.js:313
 msgid "to do lists"
-msgstr "Aufgabenlisten"
+msgstr ""
 
 #: js/Tasks.js:335
 msgid "Enter searchfilter"
-msgstr "Suchfilter eingeben"
+msgstr ""
 
 #: js/Tasks.js:350
 msgid "Show closed"
-msgstr "Geschlossene Aufgaben anzeigen"
+msgstr ""
 
 #: js/Tasks.js:400
 msgid "Search:"
-msgstr "Suchen nach:"
+msgstr ""
 
 #: js/Tasks.js:412
 msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zeige Aufgabe {0} - {1} von {2}"
+msgstr ""
 
 #: js/Tasks.js:413
 msgid "No tasks to display"
-msgstr "Keine Aufgaben vorhanden"
+msgstr ""
 
 #: js/Tasks.js:430 js/Tasks.js:729
 msgid "Status"
-msgstr "Status"
+msgstr ""
 
 #: js/Tasks.js:446
 msgid "Percent"
-msgstr "Prozent"
+msgstr ""
 
 #: js/Tasks.js:461 js/Tasks.js:701
 msgid "Summary"
-msgstr "Beschreibung"
+msgstr ""
 
 #: js/Tasks.js:469
 msgid "Add a task..."
-msgstr "Aufgabe hinzufügen..."
+msgstr ""
 
 #: js/Tasks.js:474 js/Tasks.js:733
 msgid "Priority"
-msgstr "Priorität"
+msgstr ""
 
 #: js/Tasks.js:490
 msgid "Due Date"
-msgstr "Fällig am"
+msgstr ""
 
 #: js/Tasks.js:511
 msgid "No Tasks to display"
-msgstr "Keine Aufgaben vorhanden"
+msgstr ""
 
 #: js/Tasks.js:620
 msgid "Please wait"
-msgstr "Bitte warten"
+msgstr ""
 
 #: js/Tasks.js:620 js/Tasks.js:665
 msgid "Saving Task"
-msgstr "Aufgabe speichern"
+msgstr ""
 
 #: js/Tasks.js:656
 msgid "Errors"
-msgstr "Fehler"
+msgstr ""
 
 #: js/Tasks.js:656
 msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie die angezeigten Fehler."
+msgstr ""
 
 #: js/Tasks.js:663
 msgid "Confirm"
-msgstr "Bestätigen"
+msgstr ""
 
 #: js/Tasks.js:663
 msgid "Do you really want to delete this task?"
-msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+msgstr ""
 
 #: js/Tasks.js:665
 msgid "Please wait a moment..."
-msgstr "Einen Moment noch..."
+msgstr ""
 
 #: js/Tasks.js:705
 msgid "Enter short name..."
-msgstr "Kurzbezeichnung eingeben..."
+msgstr ""
 
 #: js/Tasks.js:708
 msgid "Notes"
-msgstr "Anmerkungen"
+msgstr ""
 
 #: js/Tasks.js:710
 msgid "Enter description..."
-msgstr "Beschreibung eingeben..."
+msgstr ""
 
 #: js/Tasks.js:724
 msgid "Percentage"
-msgstr "Prozent"
+msgstr ""
 
 #: js/Tasks.js:737
 msgid "Due date"
-msgstr "Fälligkeitsdatum"
+msgstr ""
 
 #: js/Tasks.js:741
 msgid "Folder"
-msgstr "Ordner"
+msgstr ""

@@ -16,67 +16,102 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SearchPath-0: Admin\n"
 
-#: Admin/Acl/Rights.php:127
-msgid "manage roles"
-msgstr "manage roles"
-
-#: Admin/Acl/Rights.php:128
-msgid "manage roles right description"
-msgstr "add and edit roles, add new members to roles, add application rights to roles"
-
-#: Admin/Acl/Rights.php:131
-msgid "manage applications"
-msgstr "manage applications"
-
-#: Admin/Acl/Rights.php:132
-msgid "manage applications right description"
-msgstr "enable and disable applications, edit application settings"
-
-#: Admin/Acl/Rights.php:135
-msgid "manage accounts"
-msgstr "manage accounts"
-
-#: Admin/Acl/Rights.php:136
-msgid "manage accounts right description"
-msgstr "add and edit users and groups, add group members, change user passwords"
-
-#: Admin/Acl/Rights.php:139
+#: Acl/Rights.php:164
 msgid "manage access log"
 msgstr "manage access log"
 
-#: Admin/Acl/Rights.php:140
-msgid "manage access log right description"
-msgstr "delete access log entries"
+#: Acl/Rights.php:165
+msgid "delete access log entries"
+msgstr ""
 
-#: Admin/Acl/Rights.php:143
-msgid "view roles"
-msgstr "view roles"
+#: Acl/Rights.php:168
+msgid "manage accounts"
+msgstr "manage accounts"
 
-#: Admin/Acl/Rights.php:144
-msgid "view roles right description"
-msgstr "view roles list and details"
+#: Acl/Rights.php:169
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr ""
 
-#: Admin/Acl/Rights.php:147
-msgid "view applications"
-msgstr "view applications"
+#: Acl/Rights.php:172
+msgid "manage applications"
+msgstr "manage applications"
 
-#: Admin/Acl/Rights.php:148
-msgid "view applications right description"
-msgstr "view applications list and details"
+#: Acl/Rights.php:173
+msgid "enable and disable applications, edit application settings"
+msgstr ""
 
-#: Admin/Acl/Rights.php:151
-msgid "view accounts"
-msgstr "view accounts"
+#: Acl/Rights.php:176
+msgid "manage roles"
+msgstr "manage roles"
 
-#: Admin/Acl/Rights.php:152
-msgid "view accounts right description"
-msgstr "view accounts list and details"
+#: Acl/Rights.php:177
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
 
-#: Admin/Acl/Rights.php:155
+#: Acl/Rights.php:180
+msgid "manage shared tags"
+msgstr ""
+
+#: Acl/Rights.php:181
+msgid "add, delete and edit shared tags"
+msgstr ""
+
+#: Acl/Rights.php:184
 msgid "view access log"
 msgstr "view access log"
 
-#: Admin/Acl/Rights.php:156
-msgid "view access log right description"
-msgstr "view access log list"
+#: Acl/Rights.php:185
+msgid "view access log list"
+msgstr ""
 
+#: Acl/Rights.php:188
+msgid "view accounts"
+msgstr "view accounts"
+
+#: Acl/Rights.php:189
+msgid "view accounts list and details"
+msgstr ""
+
+#: Acl/Rights.php:192
+msgid "view applications"
+msgstr "view applications"
+
+#: Acl/Rights.php:193
+msgid "view applications list and details"
+msgstr ""
+
+#: Acl/Rights.php:196
+msgid "view roles"
+msgstr "view roles"
+
+#: Acl/Rights.php:197
+msgid "view roles list and details"
+msgstr ""
+
+#~ msgid "manage roles right description"
+#~ msgstr ""
+#~ "add and edit roles, add new members to roles, add application rights to "
+#~ "roles"
+
+#~ msgid "manage applications right description"
+#~ msgstr "enable and disable applications, edit application settings"
+
+#~ msgid "manage accounts right description"
+#~ msgstr ""
+#~ "add and edit users and groups, add group members, change user passwords"
+
+#~ msgid "manage access log right description"
+#~ msgstr "delete access log entries"
+
+#~ msgid "view roles right description"
+#~ msgstr "view roles list and details"
+
+#~ msgid "view applications right description"
+#~ msgstr "view applications list and details"
+
+#~ msgid "view accounts right description"
+#~ msgstr "view accounts list and details"
+
+#~ msgid "view access log right description"
+#~ msgstr "view access log list"
