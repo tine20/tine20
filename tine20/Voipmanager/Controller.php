@@ -220,7 +220,33 @@ class Voipmanager_Controller
         
         return $phone;    
     }
+    
+    /**
+     * get snom_phone by macAddress
+     *
+     * @param string $_macAddress
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
+     */
+    public function getSnomPhone($_macAddress)
+    {
+        $phone = $this->_snomPhoneBackend->getByMacAddress($_macAddress);
         
+        $filter = new Voipmanager_Model_SnomLineFilter(array(
+            'snomphone_id'  => $phone->id
+        ));
+        $phone->lines  = $this->_snomLineBackend->search($filter);
+        $phone->rights = $this->_snomPhoneBackend->getPhoneRights($phone->id);
+        
+        // add accountDisplayName
+        foreach ($phone->rights as &$right) {
+            $user = Tinebase_User::getInstance()->getUserById($right->account_id);
+            $right->accountDisplayName = $user->accountDisplayName;
+        }
+        
+        return $phone;    
+    }
+        
+    
     /**
      * get snom_phones
      *

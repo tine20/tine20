@@ -35,9 +35,9 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         if (!$session->phone instanceof Voipmanager_Model_SnomPhone) {
             $this->_authenticate();
             
-            $phoneBackend = new Voipmanager_Backend_Snom_Phone();
+            $vmController = Voipmanager_Controller::getInstance();
             
-            $phone = $phoneBackend->getByMacAddress($_REQUEST['mac']);
+            $phone = $vmController->getSnomPhoneByMacAddress($_REQUEST['mac']);
             $phone->rights = $phoneBackend->getPhoneRights($phone);
             
             $session->phone = $phone;
