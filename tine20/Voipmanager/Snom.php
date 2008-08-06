@@ -33,7 +33,6 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         $session = new Zend_Session_Namespace('SnomDirectory');
         
         if (!$session->phone instanceof Voipmanager_Model_SnomPhone) {
-            error_log('phone not found');
             $this->_authenticate();
             
             $phoneBackend = new Voipmanager_Backend_Snom_Phone();
@@ -42,8 +41,6 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
             $phone->rights = $phoneBackend->getPhoneRights($phone);
             
             $session->phone = $phone;
-        } else {
-            error_log('found phone');
         }
         
         if(!isset($_REQUEST['query'])) {
