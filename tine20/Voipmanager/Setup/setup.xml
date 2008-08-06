@@ -361,7 +361,8 @@
                     <value>all</value>
                     <value>busy</value>
                     <value>time</value>   
-                    <default>none</default>         
+                    <default>none</default>
+                    <notnull>true</notnull>         
                 </field>
                 <field>
                     <name>redirect_number</name>

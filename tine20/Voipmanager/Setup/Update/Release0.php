@@ -171,7 +171,8 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
                 <value>all</value>
                 <value>busy</value>
                 <value>time</value>   
-                <default>none</default>         
+                <default>none</default>     
+                <notnull>true</notnull>    
             </field>');
         $this->_backend->alterCol('snom_phones', $declaration);
        
