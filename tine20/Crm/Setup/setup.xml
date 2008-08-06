@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>0.2</version>
+    <version>0.3</version>
     <order>20</order>
     <tables>
         <table>
@@ -147,25 +147,11 @@
                     <type>tinyint</type>
                 </field>
                 <field>
-                    <name>modifier</name>
-                    <type>integer</type>
-                </field>
-                <field>
                     <name>lastreader</name>
                     <type>integer</type>
                 </field>                
                 <field>
                     <name>start</name>
-                    <type>datetime</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>modified</name>
-                    <type>datetime</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>created</name>
                     <type>datetime</type>
                     <notnull>true</notnull>
                 </field>

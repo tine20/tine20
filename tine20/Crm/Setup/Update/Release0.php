@@ -44,4 +44,72 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Crm', '0.2');
     }
+    
+    /**
+     * update function 2
+     * adds created_by, creation_time, etc meta fields to leads table
+     */    
+    public function update_2()
+    {
+        $this->validateTableVersion('metacrm_lead', '1');        
+        
+        $alterFields = array(
+            'created' =>
+                '<field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>', 
+            'modifier' => 
+                '<field>
+                    <name>last_modified_by</name>
+                    <type>integer</type>
+                </field>',
+            'modified' => 
+                '<field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>',
+        );
+        
+        $newFields = array(
+            '<field>
+                <name>created_by</name>
+                <type>integer</type>
+            </field>',
+            '<field>
+                <name>is_deleted</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>',
+            '<field>
+                <name>deleted_by</name>
+                <type>integer</type>
+            </field>',            
+            '<field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+            </field>'
+        );
+
+        foreach ($alterFields as $old => $field) {
+            try {
+                $declaration = new Setup_Backend_Schema_Field_Xml($field);
+                $this->_backend->alterCol('metacrm_lead', $declaration, $old);
+            } catch (Zend_Db_Statement_Exception $e) {
+                echo $e->getMessage() . '<br/>';
+            }
+        }
+        
+        foreach ($newFields as $field) {
+            try {
+                $declaration = new Setup_Backend_Schema_Field_Xml($field);
+                $this->_backend->addCol('metacrm_lead', $declaration);
+            } catch (Zend_Db_Statement_Exception $e) {
+                echo $e->getMessage() . '<br/>';
+            }
+        }
+
+        $this->setTableVersion('metacrm_lead', '2');
+        $this->setApplicationVersion('Crm', '0.3');
+    }
 }

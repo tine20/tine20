@@ -75,9 +75,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'leadmodified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'leadcreated'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'leadmodifier'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadlastread'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadlastreader'     => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
     );
