@@ -64,7 +64,9 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
             exit;
         }
         
-        $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Registry::get('dbAdapter'));
+        $vmController = Voipmanager_Controller::getInstance();
+        
+        $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDBInstance());
         $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
             ->setIdentityColumn('http_client_user')
             ->setCredentialColumn('http_client_pass')
