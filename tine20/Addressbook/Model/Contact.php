@@ -198,17 +198,19 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @todo timezone conversion for birthdays?
      * @param string $_data json encoded data
      * @return void
+     * 
+     * @todo check in calling functions where these tags/notes/owner arrays are coming from and get down to the root of the trouble    
      */
     public function setFromJson($_data)
     {
         $contactData = Zend_Json::decode($_data);
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
         
-        if (isset($contactData['tags'])) {
+        if (isset($contactData['tags']) && !is_array($contactData['tags'])) {
             $contactData['tags'] = Zend_Json::decode($contactData['tags']);
         }
 
-        if (isset($contactData['notes'])) {
+        if (isset($contactData['notes']) && !is_array($contactData['notes'])) {
             $contactData['notes'] = Zend_Json::decode($contactData['notes']);
         }
         
@@ -225,6 +227,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (empty($contactData['id'])) {
             unset($contactData['id']);
         }
+        
+        // sanitize container id / owner
+        if (isset($contactData['owner']) && is_array($contactData['owner'])) {
+            $contactData['owner'] = $contactData['owner']['id'];
+        }        
 
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
         $this->setFromArray($contactData);
