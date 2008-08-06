@@ -27,12 +27,15 @@ class Voipmanager_Backend_Snom_Template
 	/**
 	 * the constructor
 	 */
-    public function __construct()
+    public function __construct($_db = NULL)
     {
-        $this->_db      = Zend_Db_Table_Abstract::getDefaultAdapter();
+        if($_db instanceof Zend_Db_Adapter_Abstract) {
+            $this->_db = $_db;
+        } else {
+            $this->_db = Zend_Registry::get('dbAdapter');
+        }
     }
-   
-  
+      
 	/**
 	 * search templates
 	 * 

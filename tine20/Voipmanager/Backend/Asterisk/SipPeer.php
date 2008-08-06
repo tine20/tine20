@@ -25,9 +25,13 @@ class Voipmanager_Backend_Asterisk_SipPeer
 	/**
 	 * the constructor
 	 */
-    public function __construct()
+    public function __construct($_db = NULL)
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
+        if($_db instanceof Zend_Db_Adapter_Abstract) {
+            $this->_db = $_db;
+        } else {
+            $this->_db = Zend_Registry::get('dbAdapter');
+        }
     }
     
     /**

@@ -56,11 +56,15 @@ class Voipmanager_Backend_Snom_Xml
         'TR'    => 'Turkce',
     );
     
-    public function __construct()
+    public function __construct($_db = NULL)
     {
-        $this->_db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        if($_db instanceof Zend_Db_Adapter_Abstract) {
+            $this->_db = $_db;
+        } else {
+            $this->_db = Zend_Registry::get('dbAdapter');
+        }
     }
-    
+        
     public function getConfig(Voipmanager_Model_SnomPhone $_phone)
     {
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><settings></settings>');
