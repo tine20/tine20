@@ -26,7 +26,13 @@ Ext.ux.file.Uploader = function(config) {
          * Fires when the upload was done successfully 
          * @param {Ext.ux.file.Uploader} this
          */
-         'uploadcomplete'
+         'uploadcomplete',
+        /**
+         * @event uploadfailure
+         * Fires when the upload failed 
+         * @param {Ext.ux.file.Uploader} this
+         */
+         'uploadfailure'
     );
 };
  
@@ -79,6 +85,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             form: form,
             scope: this,
             success: this.onUploadSuccess,
+            failure: this.onUploadFail,
             params: {
                 method: 'Tinebase.uploadTempFile'
             }
@@ -103,6 +110,14 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         this.record.set('tempFile', tempFile);
         
         this.fireEvent('uploadcomplete', this, this.record);
+    },
+    /**
+     * executed if a file upload failed
+     */
+    onUploadFail: function(response, request) {
+        this.record.set('status', 'failure');
+        
+        this.fireEvent('uploadfailure', this, this.record);
     },
     /**
      * get file name
