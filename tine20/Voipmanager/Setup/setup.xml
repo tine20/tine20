@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.22</version>
+    <version>0.23</version>
     <order>50</order>
     <tables>
         <table>
@@ -360,7 +360,8 @@
                     <value>none</value>
                     <value>all</value>
                     <value>busy</value>
-                    <value>time</value>            
+                    <value>time</value>   
+                    <default>none</default>         
                 </field>
                 <field>
                     <name>redirect_number</name>

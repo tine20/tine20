@@ -156,4 +156,25 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '0.22');
     }
+    
+    /**
+     * set default value
+     *
+     */
+    public function update_22()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>redirect_event</name>
+                <type>enum</type>
+                <value>none</value>
+                <value>all</value>
+                <value>busy</value>
+                <value>time</value>   
+                <default>none</default>         
+            </field>');
+        $this->_backend->alterCol('snom_phones', $declaration);
+       
+        $this->setApplicationVersion('Voipmanager', '0.23');
+    }
 }
