@@ -110,25 +110,54 @@ class Voipmanager_Controller
      */
     protected $_cache;
     
+    const PDO_MYSQL = 'Pdo_Mysql';
+    
+    const PDO_OCI = 'Pdo_Oci';
+    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_snomPhoneBackend            = new Voipmanager_Backend_Snom_Phone();
-        $this->_snomPhoneSettingsBackend    = new Voipmanager_Backend_Snom_PhoneSettings();        
-        $this->_snomLineBackend             = new Voipmanager_Backend_Snom_Line();
-        $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software();
-        $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
-        $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();      
-        $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting();              
-        $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer();          
-        $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context();          
-        $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail();  
-		$this->_asteriskMeetmeBackend		= new Voipmanager_Backend_Asterisk_Meetme();
+        if(isset(Zend_Registry::get('configFile')->voipmanager) && isset(Zend_Registry::get('configFile')->voipmanager->database)) {
+            $backend = $this->_getDatabaseBackend(Zend_Registry::get('configFile')->voipmanager->database);
+        } else {
+            $backend = NULL;
+        }
+        
+        $this->_snomPhoneBackend            = new Voipmanager_Backend_Snom_Phone($backend);
+        $this->_snomPhoneSettingsBackend    = new Voipmanager_Backend_Snom_PhoneSettings($backend);        
+        $this->_snomLineBackend             = new Voipmanager_Backend_Snom_Line($backend);
+        $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software($backend);
+        $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location($backend);
+        $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template($backend);      
+        $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting($backend);              
+        $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer($backend);          
+        $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context($backend);          
+        $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail($backend);  
+		$this->_asteriskMeetmeBackend		= new Voipmanager_Backend_Asterisk_Meetme($backend);
 
 		$this->_cache = Zend_Registry::get('cache');
+    }
+    
+    protected function _getDatabaseBackend($_dbConfig) 
+    {
+        $dbBackend = constant('self::' . strtoupper($_dbConfig->get('backend', self::PDO_MYSQL)));
+        
+        switch($dbBackend) {
+            case self::PDO_MYSQL:
+                $db = Zend_Db::factory('Pdo_Mysql', $_dbConfig->toArray());
+                break;
+            case self::PDO_OCI:
+                $db = Zend_Db::factory('Pdo_Oci', $_dbConfig->toArray());
+                break;
+            default:
+                throw new Exception('Invalid database backend type defined. Please set backend to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.ini.');
+                break;
+        }
+        
+        return $db;
     }
     
     /**
