@@ -268,6 +268,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 */
 	public function uploadTempFile()
 	{
+	    $this->checkAuth();
+	    
 	    $uploadedFile = $_FILES['file'];
 	    
 	    $path = tempnam(session_save_path(), 'tine_tempfile_');
@@ -307,6 +309,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
      */
 	public function getImage($application, $id, $location, $width, $height, $ratiomode)
 	{
+	    $this->checkAuth();
+	    
 	    if ($application == 'Tinebase' && $location=='tempFile') {
 	        $db = Zend_Registry::get('dbAdapter');
             $select = $db->select()
@@ -345,6 +349,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 */
 	public function cropImage($imageurl, $left, $top, $widht, $height)
 	{
+	    $this->checkAuth();
+	    
 	    $image = Tinebase_Model_Image::getImageFromImageURL($imageurl);
 	    Tinebase_ImageHelper::crop($image, $left, $top, $widht, $height);
 	    
