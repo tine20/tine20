@@ -42,7 +42,15 @@ class Tinebase_Controller
      * the constructor
      *
      */
-    private function __construct()
+    private function __construct() 
+    {    
+    }
+    
+    /**
+     * initialize the framework
+     *
+     */
+    protected function _initFramework()
     {
         Zend_Session::start();
 
@@ -130,6 +138,8 @@ class Tinebase_Controller
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && isset($_REQUEST['method']) 
               && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['method'])) {
                   
+            $this->_initFramework();
+            
             Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
             //Json request from ExtJS
 
@@ -184,8 +194,40 @@ class Tinebase_Controller
             }
 
             $server->handle($_REQUEST);
-
+            
+        } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            if(isset($_REQUEST['PHPSESSID'])) {
+                Zend_Session::setId($_REQUEST['PHPSESSID']);
+            }
+            
+            $this->_initFramework();
+            
+            error_log('SID:: ' . SID);
+            
+            Zend_Registry::get('logger')->debug('is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+            // Snom HTTP request
+            
+            $server = new Tinebase_Http_Server();
+            
+            $server->setClass('Voipmanager_Snom', 'Voipmanager');
+            
+/*            if (Zend_Auth::getInstance()->hasIdentity()) {
+                $phoneApplications = Zend_Registry::get('currentPhone')->getApplications();
+                
+                foreach ($phoneApplications as $application) {
+                    $applicationName = ucfirst((string) $application);
+                    try {
+                        $server->setClass($applicationName.'_Snom', $applicationName);
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
+                }
+            }*/
+            
+            $server->handle($_REQUEST);
         } else {
+            $this->_initFramework();
+            
             Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
             // HTTP request
     
@@ -215,7 +257,6 @@ class Tinebase_Controller
             }
     
             $server->handle($_REQUEST);
-    
         }
     }
     
