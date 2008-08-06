@@ -37,6 +37,7 @@ class Voipmanager_Model_SnomPhoneFilter extends Tinebase_Record_Abstract
         'macaddress'            => array('allowEmpty' => true           ),
         'ipaddress'             => array('allowEmpty' => true           ),
         'description'           => array('allowEmpty' => true           ),
+        'accountId'             => array('allowEmpty' => true           ),
         'query'                 => array('allowEmpty' => true           )
         //'showClosed'          => array('allowEmpty' => true, 'InArray' => array(true,false)),
     );

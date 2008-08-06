@@ -53,10 +53,18 @@ class Dialer_Controller
     
     public function dialNumber($_number)
     {
-        $backend = Dialer_Backend_Factory::factory(Dialer_Backend_Factory::ASTERISK);
-        
-        $extension = $backend->getPreferedExtension(Zend_Registry::get('currentAccount'));
-
-        $backend->dialNumber($extension['device'], $extension['context'], $_number, 1, $extension['callerid']);        
+        $vmController = Voipmanager_Controller::getInstance();
+        $filter = new Voipmanager_Model_SnomPhoneFilter(array(
+            'accountId' => Zend_Registry::get('currentAccount')->getId()
+        ));
+        $phones = $vmController->getSnomPhones($filter);
+        if(count($phones) > 0) {
+            $phone = $vmController->getSnomPhone($phones[0]->id);
+            if(count($phone->lines) > 0) {
+                $asteriskLine = $vmController->getAsteriskSipPeer($phone->lines[0]->asteriskline_id);
+                $backend = Dialer_Backend_Factory::factory(Dialer_Backend_Factory::ASTERISK);
+                $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskLine->context, $_number, 1, $asteriskLine->callerid);
+            }
+        }        
     }    
 }

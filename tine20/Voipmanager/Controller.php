@@ -133,8 +133,6 @@ class Voipmanager_Controller
             $this->_dbBbackend = Zend_Registry::get('dbAdapter');
         }
         
-        $this->_dbBbackend = $this->_getDatabaseBackend(Zend_Registry::get('configFile')->voipmanager->database);
-        
         $this->_snomPhoneBackend            = new Voipmanager_Backend_Snom_Phone($this->_dbBbackend);
         $this->_snomPhoneSettingsBackend    = new Voipmanager_Backend_Snom_PhoneSettings($this->_dbBbackend);        
         $this->_snomLineBackend             = new Voipmanager_Backend_Snom_Line($this->_dbBbackend);
@@ -275,21 +273,13 @@ class Voipmanager_Controller
     /**
      * get snom_phones
      *
-     * @param string $_sort
-     * @param string $_dir
+     * @param Voipmanager_Model_SnomPhoneFilter $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
      */
-    public function getSnomPhones($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function getSnomPhones(Voipmanager_Model_SnomPhoneFilter $_filter, $_pagination = NULL)
     {
-        $filter = new Voipmanager_Model_SnomPhoneFilter(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_snomPhoneBackend->search($filter, $pagination);
+        $result = $this->_snomPhoneBackend->search($_filter, $_pagination);
         
         return $result;    
     }
