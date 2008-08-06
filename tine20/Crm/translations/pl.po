@@ -1,0 +1,436 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Crm\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Poedit-SearchPath-0: Crm\n"
+
+#: Acl/Rights.php:107
+msgid "manage leads"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "add, edit and delete leads"
+msgstr ""
+
+#: Controller.php:765
+msgid "State"
+msgstr ""
+
+#: Controller.php:766 js/Crm.js:1041 js/Crm.js:1089
+msgid "Type"
+msgstr ""
+
+#: Controller.php:767
+msgid "Source"
+msgstr ""
+
+#: Controller.php:768 js/LeadEditDialog.js:112 Pdf.php:87
+msgid "Start"
+msgstr ""
+
+#: Controller.php:769
+msgid "Scheduled end"
+msgstr ""
+
+#: Controller.php:770 js/LeadEditDialog.js:126 Pdf.php:90
+msgid "End"
+msgstr ""
+
+#: Controller.php:771 js/Crm.js:342 Pdf.php:81
+msgid "Turnover"
+msgstr ""
+
+#: Controller.php:772 js/Crm.js:211 js/Crm.js:212 js/Crm.js:213 js/Crm.js:341
+#: js/LeadEditDialog.js:104 Pdf.php:84
+msgid "Probability"
+msgstr ""
+
+#: Controller.php:773
+msgid "Folder"
+msgstr ""
+
+#: Controller.php:774
+msgid "Updated by"
+msgstr ""
+
+#: Controller.php:780
+msgid "Lead updated"
+msgstr ""
+
+#: Controller.php:782
+msgid "Lead added"
+msgstr ""
+
+#: js/Crm.js:110
+msgid "Are you sure you want to delete this lead?"
+msgstr ""
+
+#: js/Crm.js:126
+msgid "Deleting lead"
+msgstr ""
+
+#: js/Crm.js:131
+msgid "Some error occured while trying to delete the lead."
+msgstr ""
+
+#: js/Crm.js:178
+msgid "Enter searchfilter"
+msgstr ""
+
+#: js/Crm.js:189 js/Crm.js:190 js/Crm.js:340 js/LeadEditDialog.js:41
+#: Pdf.php:72
+msgid "Leadstate"
+msgstr ""
+
+#: js/Crm.js:191
+msgid "leadstate"
+msgstr ""
+
+#: js/Crm.js:269
+msgid "Show details"
+msgstr ""
+
+#: js/Crm.js:278
+msgid "Show closed leads"
+msgstr ""
+
+#: js/Crm.js:313
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr ""
+
+#: js/Crm.js:314 js/Crm.js:393
+msgid "No leads found."
+msgstr ""
+
+#: js/Crm.js:336
+msgid "Lead id"
+msgstr ""
+
+#: js/Crm.js:337
+msgid "Lead name"
+msgstr ""
+
+#: js/Crm.js:338 js/LeadEditDialog.js:348 js/LeadEditDialog.js:388
+msgid "Partner"
+msgstr ""
+
+#: js/Crm.js:339 js/LeadEditDialog.js:347 js/LeadEditDialog.js:384
+msgid "Customer"
+msgstr ""
+
+#: js/Crm.js:430
+msgid "Add lead"
+msgstr ""
+
+#: js/Crm.js:431
+msgid "Add new lead"
+msgstr ""
+
+#: js/Crm.js:442
+msgid "Edit lead"
+msgstr ""
+
+#: js/Crm.js:443
+msgid "Edit selected lead"
+msgstr ""
+
+#: js/Crm.js:451
+msgid "Delete lead"
+msgstr ""
+
+#: js/Crm.js:452
+msgid "Delete selected leads"
+msgstr ""
+
+#: js/Crm.js:460 js/Crm.js:1819 js/Crm.js:1820
+msgid "Export as PDF"
+msgstr ""
+
+#: js/Crm.js:461
+msgid "Export selected lead as PDF"
+msgstr ""
+
+#: js/Crm.js:469 js/Crm.js:1770 js/Crm.js:1786
+msgid "Add task"
+msgstr ""
+
+#: js/Crm.js:470
+msgid "Add task for selected lead"
+msgstr ""
+
+#: js/Crm.js:577
+msgid "Lead states"
+msgstr ""
+
+#: js/Crm.js:578
+msgid "Lead sources"
+msgstr ""
+
+#: js/Crm.js:579
+msgid "Lead types"
+msgstr ""
+
+#: js/Crm.js:580 js/Crm.js:1868 Pdf.php:258
+msgid "Products"
+msgstr ""
+
+#: js/Crm.js:641 js/Crm.js:1033
+msgid "Phone"
+msgstr ""
+
+#: js/Crm.js:642 js/Crm.js:1034
+msgid "Cellphone"
+msgstr ""
+
+#: js/Crm.js:688
+msgid "Please wait"
+msgstr ""
+
+#: js/Crm.js:688
+msgid "Saving lead"
+msgstr ""
+
+#: js/Crm.js:723
+msgid "Could not save lead."
+msgstr ""
+
+#: js/Crm.js:728
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/Crm.js:823
+msgid "Search Contacts"
+msgstr ""
+
+#: js/Crm.js:1012 js/Crm.js:1085
+msgid "Name"
+msgstr ""
+
+#: js/Crm.js:1021 Pdf.php:198
+msgid "Address"
+msgstr ""
+
+#: js/Crm.js:1032
+msgid "Contactdata"
+msgstr ""
+
+#: js/Crm.js:1086
+msgid "Organisation"
+msgstr ""
+
+#: js/Crm.js:1114
+msgid "Status"
+msgstr ""
+
+#: js/Crm.js:1130
+msgid "Percent"
+msgstr ""
+
+#: js/Crm.js:1145
+msgid "Summary"
+msgstr ""
+
+#: js/Crm.js:1153
+msgid "Add a task..."
+msgstr ""
+
+#: js/Crm.js:1158 Pdf.php:244
+msgid "Priority"
+msgstr ""
+
+#: js/Crm.js:1174 Pdf.php:239
+msgid "Due Date"
+msgstr ""
+
+#: js/Crm.js:1220
+msgid "Product"
+msgstr ""
+
+#: js/Crm.js:1229
+msgid "Add a product..."
+msgstr ""
+
+#: js/Crm.js:1238 js/LeadEditDialog.js:160
+msgid "Description"
+msgstr ""
+
+#: js/Crm.js:1251
+msgid "Price"
+msgstr ""
+
+#: js/Crm.js:1340
+msgid "No Tasks to display"
+msgstr ""
+
+#: js/Crm.js:1425 js/Crm.js:1727
+msgid "Add new contact"
+msgstr ""
+
+#: js/Crm.js:1699
+msgid "Add responsible"
+msgstr ""
+
+#: js/Crm.js:1700
+msgid "Add new responsible contact"
+msgstr ""
+
+#: js/Crm.js:1708
+msgid "Add customer"
+msgstr ""
+
+#: js/Crm.js:1709 js/Crm.js:1728
+msgid "Add new customer contact"
+msgstr ""
+
+#: js/Crm.js:1717
+msgid "Add partner"
+msgstr ""
+
+#: js/Crm.js:1718
+msgid "Add new partner contact"
+msgstr ""
+
+#: js/Crm.js:1741
+msgid "Edit contact"
+msgstr ""
+
+#: js/Crm.js:1742
+msgid "Edit selected contact"
+msgstr ""
+
+#: js/Crm.js:1749
+msgid "Add existing contact"
+msgstr ""
+
+#: js/Crm.js:1750
+msgid "Add existing contact to lead"
+msgstr ""
+
+#: js/Crm.js:1758
+msgid "Unlink contact"
+msgstr ""
+
+#: js/Crm.js:1759
+msgid "Unlink selected contacts"
+msgstr ""
+
+#: js/Crm.js:1771
+msgid "Add new task"
+msgstr ""
+
+#: js/Crm.js:1778
+msgid "Edit task"
+msgstr ""
+
+#: js/Crm.js:1779
+msgid "Edit selected task"
+msgstr ""
+
+#: js/Crm.js:1787
+msgid "Add existing task to lead"
+msgstr ""
+
+#: js/Crm.js:1795
+msgid "Remove tasks"
+msgstr ""
+
+#: js/Crm.js:1796
+msgid "Remove selected tasks"
+msgstr ""
+
+#: js/Crm.js:1807
+msgid "Remove products"
+msgstr ""
+
+#: js/Crm.js:1808
+msgid "Remove selected products"
+msgstr ""
+
+#: js/Crm.js:1866 Pdf.php:171
+msgid "Contacts"
+msgstr ""
+
+#: js/Crm.js:1867 Pdf.php:219
+msgid "Tasks"
+msgstr ""
+
+#: js/LeadEditDialog.js:32
+msgid "Enter short name"
+msgstr ""
+
+#: js/LeadEditDialog.js:70 Pdf.php:75
+msgid "Leadtype"
+msgstr ""
+
+#: js/LeadEditDialog.js:87 Pdf.php:78
+msgid "Leadsource"
+msgstr ""
+
+#: js/LeadEditDialog.js:119
+msgid "Estimated end"
+msgstr ""
+
+#: js/LeadEditDialog.js:132
+msgid "folder"
+msgstr ""
+
+#: js/LeadEditDialog.js:142
+msgid "Overview"
+msgstr ""
+
+#: js/LeadEditDialog.js:172
+msgid "Enter description"
+msgstr ""
+
+#: js/LeadEditDialog.js:224
+msgid "Expected turnover"
+msgstr ""
+
+#: js/LeadEditDialog.js:346 js/LeadEditDialog.js:380
+msgid "Responsible"
+msgstr ""
+
+#: Pdf.php:69
+msgid "Lead Data"
+msgstr ""
+
+#: Pdf.php:93
+msgid "End Scheduled"
+msgstr ""
+
+#: Pdf.php:205
+msgid "Telephone"
+msgstr ""
+
+#: Pdf.php:206
+msgid "Email"
+msgstr ""
+
+#: Pdf.php:296
+msgid "low"
+msgstr ""
+
+#: Pdf.php:297
+msgid "normal"
+msgstr ""
+
+#: Pdf.php:298
+msgid "high"
+msgstr ""
+
+#: Pdf.php:299
+msgid "urgent"
+msgstr ""
