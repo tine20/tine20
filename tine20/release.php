@@ -32,6 +32,10 @@ try {
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
         'pot'             => 'Build xgettext po template files',
+        'newlang=s'       => 'Add new language',
+        'language=s'      => '  new language',
+        'country=s'       => '  country for new language',
+        'pluralforms=s'   => '  NOTE: must be set in code sorry. Zend_Getopt cant deal with =',
         'help'            => 'Display this help Message',
     ));
     $opts->parse();
@@ -40,7 +44,7 @@ try {
    exit;
 }
 
-if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z || $opts->pot)) {
+if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z || $opts->pot || $opts->newlang)) {
     echo $opts->getUsageMessage();
     exit;
 }
@@ -200,6 +204,49 @@ if($opts->pot) {
         }
     }
 }
+
+if ($opts->newlang) {
+    $newlang = $opts->newlang;
+    $language = $opts->language;
+    $country = $opts->country;
+    $pluralForms = 'nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;';
+    if (! ($language && $country && $pluralForms)) {
+        die("Error: you have to specify language, country and pluralforms of the new language! \n");
+    }
+    
+    $d = dir($tine20path);
+    while (false !== ($appName = $d->read())) {
+        $appPath = "$tine20path/$appName";
+        if (is_dir($appPath) && $appName{0} != '.') {
+            $translationPath = "$appPath/translations";
+            if (is_dir($translationPath)) {
+                    $poHeader = 
+'msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ' . $appName . '\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: ' . $language . '\n"
+"X-Poedit-Country: ' . $country . '\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+"Plural-Forms: ' . $pluralForms . '\n"
+"X-Poedit-SearchPath-0: ' . $appName . '\n"';
+                    
+                    file_put_contents($translationPath . '/' . $opts->newlang . '.po', $poHeader);
+            }
+        }
+    }
+    echo $poHeader .'\n';
+    
+}
+
 /**
  * returns key of translations object in Locale.Gettext
  *
