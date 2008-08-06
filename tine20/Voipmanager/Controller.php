@@ -252,7 +252,7 @@ class Voipmanager_Controller
      * @param string $_macAddress
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
      */
-    public function getSnomPhone($_macAddress)
+    public function getSnomPhoneByMacAddress($_macAddress)
     {
         $phone = $this->_snomPhoneBackend->getByMacAddress($_macAddress);
         
