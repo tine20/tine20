@@ -170,12 +170,20 @@ class Tinebase_ImageHelper
      */
     public static function getImageData($imageParams)
     {
-        $db = Zend_Registry::get('dbAdapter');
-        $select = $db->select()
-           ->from(SQL_TABLE_PREFIX . 'temp_files')
-           ->where($db->quoteInto('id = ?', $imageParams['id']))
-           ->where($db->quoteInto('session_id = ?', session_id()));
-        $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
+        try {
+            $db = Zend_Registry::get('dbAdapter');
+            $select = $db->select()
+               ->from(SQL_TABLE_PREFIX . 'temp_files')
+               ->where($db->quoteInto('id = ?', $imageParams['id']))
+               ->where($db->quoteInto('session_id = ?', session_id()));
+            $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " could not fetch row from temp_files table." .
+                ' given $imageParams : ' . print_r($imageParams,true) . 
+                ' thrown exception : ' . $e
+            );
+            return NULL;
+        }
         
         //Zend_Registry::get('logger')->debug(print_r($tempFile,true));
         
