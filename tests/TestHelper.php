@@ -47,10 +47,12 @@ define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 $_SERVER['DOCUMENT_ROOT'] = '/var/www';
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
-$tinebaseController = Tinebase_Controller::getInstance();
+
+$tinebaseController = TestController::getInstance();
+$tinebaseController->initFramework();
+
 if (!$tinebaseController->login('tine20admin', 'lars', '127.0.0.1')){
     throw new Exception("could't login, user session required for tests! \n");
 }
 
-//Zend_Registry::set('logger', new Zend_Log(new Zend_Log_Writer_Null));
  
