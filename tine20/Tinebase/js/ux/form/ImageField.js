@@ -64,6 +64,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.imageSrc = value ? Ext.ux.util.ImageURL.prototype.parseURL(value) : this.defaultImage;
         this.updateImage();
     },
+    /**
+     * @private
+     */
     onFileSelect: function(bb) {
         var input = bb.detachInputFile();
         var uploader = new Ext.ux.file.Uploader({
@@ -73,9 +76,6 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             Ext.MessageBox.alert('Not An Image', 'Plase select an image file (gif/png/jpeg)').setIcon(Ext.MessageBox.ERROR);
             return;
         }
-        
-        this.buttonCt.mask('Loading', 'x-mask-loading');
-        uploader.upload();
         uploader.on('uploadcomplete', function(uploader, record){
             //var method = Ext.util.Format.htmlEncode('');
             this.imageSrc = new Ext.ux.util.ImageURL({
@@ -88,6 +88,17 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             
             this.updateImage();
         }, this);
+        uploader.on('uploadfailure', this.onUploadFail, this);
+        
+        this.buttonCt.mask('Loading', 'x-mask-loading');
+        uploader.upload();
+        
+    },
+    /**
+     * @private
+     */
+    onUploadFail: function() {
+        Ext.MessageBox.alert('Upload Failed', 'Could not upload image. Please notify your Administrator').setIcon(Ext.MessageBox.ERROR);
     },
     /**
      * executed on image contextmenu
@@ -177,6 +188,10 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         img.on('load', function(){
             this.imageCt.remove();
             this.imageCt = img;
+            this.buttonCt.unmask();
+        }, this);
+        img.on('error', function() {
+            Ext.MessageBox.alert('Image Failed', 'Could not load image. Please notify your Administrator').setIcon(Ext.MessageBox.ERROR);
             this.buttonCt.unmask();
         }, this);
     }
