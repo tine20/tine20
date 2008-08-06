@@ -130,134 +130,133 @@ class Tinebase_Controller
      * @todo implement json key check
      *
      */
-    public function handle()
+    public function handleHttp()
     {
-
         $auth = Zend_Auth::getInstance();
 
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && isset($_REQUEST['method']) 
-              && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['method'])) {
-                  
-            $this->_initFramework();
+        $this->_initFramework();
+        
+        Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+        // HTTP request
+
+        $server = new Tinebase_Http_Server();
+
+        $server->setClass('Tinebase_Http', 'Tinebase');
+
+        if (Zend_Auth::getInstance()->hasIdentity()) {
+            $userApplications = Zend_Registry::get('currentAccount')->getApplications();
             
-            Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
-            //Json request from ExtJS
-
-            // is it save to use the jsonKey from $_GET too???
-            // check jsonkey in HTTP request as well?
-            // can we move this to the Zend_Json_Server???
-            // create jsonkey only on login
-            
-            //Zend_Registry::get('logger')->debug('is json request. json key from registry: ' . Zend_Registry::get('jsonKey'));
-            //Zend_Registry::get('logger')->debug('is json request. json key from POST: ' . $_POST['jsonKey']);
-            if (    !($_POST['method'] === 'Tinebase.login' || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
-                    && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
-                        
-                error_log('wrong JSON Key sent!!! expected: ' . Zend_Registry::get('jsonKey') . ' got: ' . $_POST['jsonKey'] . ' :: ' . $_REQUEST['method']);                
-                throw new Exception('wrong JSON Key sent!!!');
-
-                //Zend_Registry::get('logger')->debug('POST: ' . print_r($_POST, true));
-                                
-                // goto login screen / show popup with login (but how?)
-                // try to handle the request after the (re-)login
-                // @todo make it work!
-                /*
-                //unset($_REQUEST);
-                $_REQUEST['method'] = 'Tinebase.login';
-                
-                $server = new Tinebase_Http_Server();        
-                $server->setClass('Tinebase_Http', 'Tinebase');
-                $server->handle($_REQUEST);
-                return;
-                */                
-            } 
-
-            $server = new Zend_Json_Server();
-
-            $server->setClass('Tinebase_Json', 'Tinebase');
-
-            // register addidional Tinebase Json servers (i.e. UserRegistration)
-            Tinebase_Json::setJsonServers($server);
-            
-            if (Zend_Auth::getInstance()->hasIdentity()) {
-                
-                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
-                
-                foreach ($userApplications as $application) {
-                    $applicationName = ucfirst((string) $application);
-                    try {
-                        $server->setClass($applicationName.'_Json', $applicationName);
-                    } catch (Exception $e) {
-                        // do nothing
-                    }
+            foreach ($userApplications as $application) {
+                $applicationName = ucfirst((string) $application);
+                try {
+                    $server->setClass($applicationName.'_Http', $applicationName);
+                } catch (Exception $e) {
+                    // do nothing
                 }
             }
-
-            $server->handle($_REQUEST);
-            
-        } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            if(isset($_REQUEST['PHPSESSID'])) {
-                Zend_Session::setId($_REQUEST['PHPSESSID']);
-            }
-            
-            $this->_initFramework();
-            
-            error_log('SID:: ' . SID);
-            
-            Zend_Registry::get('logger')->debug('is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
-            // Snom HTTP request
-            
-            $server = new Tinebase_Http_Server();
-            
-            $server->setClass('Voipmanager_Snom', 'Voipmanager');
-            
-/*            if (Zend_Auth::getInstance()->hasIdentity()) {
-                $phoneApplications = Zend_Registry::get('currentPhone')->getApplications();
-                
-                foreach ($phoneApplications as $application) {
-                    $applicationName = ucfirst((string) $application);
-                    try {
-                        $server->setClass($applicationName.'_Snom', $applicationName);
-                    } catch (Exception $e) {
-                        // do nothing
-                    }
-                }
-            }*/
-            
-            $server->handle($_REQUEST);
-        } else {
-            $this->_initFramework();
-            
-            Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
-            // HTTP request
-    
-            $server = new Tinebase_Http_Server();
-    
-            $server->setClass('Tinebase_Http', 'Tinebase');
-    
-            if (Zend_Auth::getInstance()->hasIdentity()) {
-                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
-                
-                foreach ($userApplications as $application) {
-                    $applicationName = ucfirst((string) $application);
-                    try {
-                        $server->setClass($applicationName.'_Http', $applicationName);
-                    } catch (Exception $e) {
-                        // do nothing
-                    }
-                }
-            }
-    
-            if (empty($_REQUEST['method'])) {
-                if (Zend_Auth::getInstance()->hasIdentity()) {
-                    $_REQUEST['method'] = 'Tinebase.mainScreen';
-                } else {
-                    $_REQUEST['method'] = 'Tinebase.login';
-                }
-            }
-    
-            $server->handle($_REQUEST);
         }
+
+        if (empty($_REQUEST['method'])) {
+            if (Zend_Auth::getInstance()->hasIdentity()) {
+                $_REQUEST['method'] = 'Tinebase.mainScreen';
+            } else {
+                $_REQUEST['method'] = 'Tinebase.login';
+            }
+        }
+
+        $server->handle($_REQUEST);
+    }
+
+
+    /**
+     * the main function where any request needs to go trough
+     * 
+     * @todo implement json key check
+     *
+     */
+    public function handleSnom()
+    {
+        if(isset($_REQUEST['PHPSESSID'])) {
+            Zend_Session::setId($_REQUEST['PHPSESSID']);
+        }
+        
+        $this->_initFramework();
+        
+        Zend_Registry::get('logger')->debug('is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+        
+        $server = new Tinebase_Http_Server();
+        
+        $server->setClass('Voipmanager_Snom', 'Voipmanager');
+                    
+        $server->handle($_REQUEST);
+    }
+    
+
+    /**
+     * the main function to handle json requests
+     * 
+     * @todo implement json key check
+     *
+     */
+    public function handleJson()
+    {
+        $auth = Zend_Auth::getInstance();
+
+        $this->_initFramework();
+        
+        Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
+        
+        // is it save to use the jsonKey from $_GET too???
+        // check jsonkey in HTTP request as well?
+        // can we move this to the Zend_Json_Server???
+        // create jsonkey only on login
+        
+        //Zend_Registry::get('logger')->debug('is json request. json key from registry: ' . Zend_Registry::get('jsonKey'));
+        //Zend_Registry::get('logger')->debug('is json request. json key from POST: ' . $_POST['jsonKey']);
+        if (!($_POST['method'] === 'Tinebase.login' || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
+                && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
+                    
+            error_log('wrong JSON Key sent!!! expected: ' . Zend_Registry::get('jsonKey') . ' got: ' . $_POST['jsonKey'] . ' :: ' . $_REQUEST['method']);                
+            throw new Exception('wrong JSON Key sent!!!');
+        
+            //Zend_Registry::get('logger')->debug('POST: ' . print_r($_POST, true));
+                            
+            // goto login screen / show popup with login (but how?)
+            // try to handle the request after the (re-)login
+            // @todo make it work!
+            /*
+            //unset($_REQUEST);
+            $_REQUEST['method'] = 'Tinebase.login';
+            
+            $server = new Tinebase_Http_Server();        
+            $server->setClass('Tinebase_Http', 'Tinebase');
+            $server->handle($_REQUEST);
+            return;
+            */                
+        } 
+        
+        $server = new Zend_Json_Server();
+        
+        $server->setClass('Tinebase_Json', 'Tinebase');
+        
+        // register addidional Tinebase Json servers (i.e. UserRegistration)
+        Tinebase_Json::setJsonServers($server);
+        
+        if (Zend_Auth::getInstance()->hasIdentity()) {
+            
+            $userApplications = Zend_Registry::get('currentAccount')->getApplications();
+            
+            foreach ($userApplications as $application) {
+                $applicationName = ucfirst((string) $application);
+                try {
+                    $server->setClass($applicationName.'_Json', $applicationName);
+                } catch (Exception $e) {
+                    // do nothing
+                }
+            }
+        }
+        
+        $server->handle($_REQUEST);            
     }
     
     /**
