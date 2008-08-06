@@ -471,7 +471,7 @@ Tine.Addressbook.Main = {
             '<tpl for=".">',
                 '<div class="x-combo-list-item">',
                     '<div class="preview-panel preview-panel-company">',
-                        '{[this.encode(values.org_unit, " / ")]}{[this.encode(values.org_name)]}<br/>',
+                        '{[this.encode(values.org_name)]}{[this.encode(values.org_unit, "prefix", " / ")]}<br/>',
                         '{[this.encode(values.adr_one_street)]}<br/>',
                         '{[this.encode(values.adr_one_postalcode, " ")]}{[this.encode(values.adr_one_locality)]}<br/>',
                         '{[this.encode(values.adr_one_region, " / ")]}{[this.encode(values.adr_one_countryname, "country")]}<br/>',
@@ -516,7 +516,7 @@ Tine.Addressbook.Main = {
                 '</div>',
             '</tpl>',
         	{
-                encode: function(value, type) {
+                encode: function(value, type, prefix) {
                 	if (value) {
                 		if (type) {
                 			switch (type) {
@@ -525,6 +525,11 @@ Tine.Addressbook.Main = {
                 				    break;
                                 case 'longtext':
                                     value = Ext.util.Format.ellipsis(value, 300);
+                                    break;
+                                case 'prefix':
+                                    if (prefix) {
+                                        value = prefix + value;
+                                    }
                                     break;
                                 default:
                                     value += type;
