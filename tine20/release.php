@@ -75,6 +75,10 @@ if ($opts->clean) {
             }
         }
     }
+    
+    // remove translation backups of msgmerge
+    `cd $tine20path
+    find . -type f -iname "*.po~" -exec rm {} \;`;
 }
 
 
