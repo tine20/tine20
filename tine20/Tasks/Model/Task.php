@@ -113,7 +113,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         date_default_timezone_set($userTimezone);
         
         // sanitize container id
-        if (is_array($data['container_id'])) {
+        if (isset($data['container_id']) && is_array($data['container_id'])) {
             $data['container_id'] = $data['container_id']['id'];
         }
         
