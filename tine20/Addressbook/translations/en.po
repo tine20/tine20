@@ -68,12 +68,11 @@ msgstr "First Name"
 msgid "Last Name"
 msgstr "Last Name"
 
-#: js/Addressbook.js:324 js/Addressbook.js:361 js/Addressbook.js:473
-#: js/EditDialog.js:139
+#: js/Addressbook.js:324 js/Addressbook.js:361 js/EditDialog.js:139
 msgid "Company"
 msgstr "Company"
 
-#: js/Addressbook.js:325 js/Addressbook.js:364 js/Addressbook.js:478
+#: js/Addressbook.js:325 js/Addressbook.js:364 js/Addressbook.js:487
 #: js/EditDialog.js:67
 #, fuzzy
 msgid "Job Role"
@@ -85,7 +84,7 @@ msgid "Street"
 msgstr "Street"
 
 #: js/Addressbook.js:327 js/Addressbook.js:328 js/Addressbook.js:329
-#: js/Addressbook.js:483 js/EditDialog.js:259
+#: js/EditDialog.js:259
 msgid "Company Address"
 msgstr "Company Address"
 
@@ -100,7 +99,7 @@ msgid "City"
 msgstr "City"
 
 #: js/Addressbook.js:330 js/Addressbook.js:331 js/Addressbook.js:332
-#: js/Addressbook.js:496 js/EditDialog.js:308 js/EditDialog.js:445 Pdf.php:86
+#: js/EditDialog.js:308 js/EditDialog.js:445 Pdf.php:86
 msgid "Private Address"
 msgstr "Private Address"
 
@@ -124,18 +123,18 @@ msgstr "Full Name"
 msgid "Display Name"
 msgstr "Display Name"
 
-#: js/Addressbook.js:362 js/Addressbook.js:476 js/EditDialog.js:72
+#: js/Addressbook.js:362 js/EditDialog.js:72
 #, fuzzy
 msgid "Unit"
 msgstr "Unit"
 
-#: js/Addressbook.js:363 js/Addressbook.js:477 js/EditDialog.js:144
+#: js/Addressbook.js:363 js/Addressbook.js:486 js/EditDialog.js:144
 #: Pdf.php:115
 #, fuzzy
 msgid "Job Title"
 msgstr "Title"
 
-#: js/Addressbook.js:365 js/Addressbook.js:479 js/EditDialog.js:77 Pdf.php:74
+#: js/Addressbook.js:365 js/Addressbook.js:488 js/EditDialog.js:77 Pdf.php:74
 msgid "Room"
 msgstr "Room"
 
@@ -171,21 +170,21 @@ msgstr "Postalcode (private)"
 msgid "Country (private)"
 msgstr "Country (private)"
 
-#: js/Addressbook.js:376 js/Addressbook.js:474 Pdf.php:50
+#: js/Addressbook.js:376 Pdf.php:50
 msgid "Email"
 msgstr "Email"
 
-#: js/Addressbook.js:377 js/Addressbook.js:467 js/Addressbook.js:490
+#: js/Addressbook.js:377 js/Addressbook.js:480 js/Addressbook.js:498
 #: js/EditDialog.js:179
 msgid "Phone"
 msgstr "Phone"
 
-#: js/Addressbook.js:378 js/Addressbook.js:468 js/Addressbook.js:491
+#: js/Addressbook.js:378 js/Addressbook.js:481 js/Addressbook.js:499
 #: js/EditDialog.js:184
 msgid "Mobile"
 msgstr "Mobile"
 
-#: js/Addressbook.js:379 js/Addressbook.js:469 js/EditDialog.js:189
+#: js/Addressbook.js:379 js/Addressbook.js:482 js/EditDialog.js:189
 #, fuzzy
 msgid "Fax"
 msgstr "Telephone Fax"
@@ -216,7 +215,7 @@ msgstr "Mobile (private)"
 msgid "Email (private)"
 msgstr "Email (private)"
 
-#: js/Addressbook.js:386 js/Addressbook.js:475 js/EditDialog.js:226
+#: js/Addressbook.js:386 js/EditDialog.js:226
 msgid "Web"
 msgstr "Web"
 
@@ -240,20 +239,16 @@ msgstr "Geo"
 msgid "Birthday"
 msgstr "Birthday"
 
-#: js/Addressbook.js:489
-msgid "Private Contact"
+#: js/Addressbook.js:411 js/Addressbook.js:640
+msgid "Select contact"
 msgstr ""
 
-#: js/Addressbook.js:503
+#: js/Addressbook.js:505
 msgid "Tags"
 msgstr ""
 
-#: js/Addressbook.js:508 js/EditDialog.js:393
+#: js/Addressbook.js:510 js/EditDialog.js:393
 msgid "Description"
-msgstr ""
-
-#: js/Addressbook.js:636
-msgid "Select contact"
 msgstr ""
 
 #: js/EditDialog.js:31
