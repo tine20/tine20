@@ -121,8 +121,9 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;
         //$_task->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray());
-        $_task->container_id = Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray();
-        $_task->container_id['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
+        $container = Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray();
+        $container['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
+        $_task->container_id = $container;
         return $_task->toArray();
     }
     
