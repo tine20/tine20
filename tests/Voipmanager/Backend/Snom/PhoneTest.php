@@ -78,7 +78,8 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
             'macaddress' => "1234567890cd",
             'location_id' => $this->_objects['location']->getId(),
             'template_id' => $this->_objects['template']->getId(),
-            'current_model' => 'snom320'
+            'current_model' => 'snom320',
+            'redirect_event' => 'none'
         ));
         
         $this->_objects['phoneOwner'] = array(
