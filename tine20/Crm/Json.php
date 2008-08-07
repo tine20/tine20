@@ -65,7 +65,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $controller = Crm_Controller::getInstance();
 
         if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {            
-            $leadData = $this->leadToJson($lead, FALSE);
+            $leadData = $this->_leadToJson($lead);
                         
         } else {
 
@@ -104,7 +104,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         $result = array();
         foreach ($leads as $lead) {
-            $result[] = $this->leadToJson($lead);
+            $result[] = $this->_leadToJson($lead);
         }
         
         //Zend_Registry::get('logger')->debug(print_r($result,true));
@@ -138,7 +138,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $result = array(
             'success'           => true,
             'welcomeMessage'    => 'Entry updated',
-            'updatedData'       => $this->leadToJson($savedLead, FALSE)
+            'updatedData'       => $this->_leadToJson($savedLead)
         );
         
         return $result;  
@@ -176,12 +176,11 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @todo add toResolve array ?
      * @todo add timezone ?
      */
-    public function leadToJson($_lead , $_getOnlyContacts = TRUE )
+    protected function _leadToJson($_lead)
     {
         $result = $_lead->toArray();                
         $result['container'] = Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray();
-        
-        //Zend_Registry::get('logger')->debug("leadToJson: " . print_r($result,true));
+        $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_lead->container)->toArray();
         
         return $result;                
     }
