@@ -797,17 +797,13 @@ Tine.Crm.LeadEditDialog = {
             });          
             
             // update event handler
-            contactPopup.on('update', function(contact) {                
-                // set link properties
-                contact.id = contact.data.id;
-                //contact.data.link_id = selectedContact.data.link_id;
-                //contact.data.relation_type = selectedContact.data.relation_type;
-                contact.data.relation = selectedContact.data.relation;
-                
-                // add contact to store (remove the old one first)
-                var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
-                storeContacts.remove(selectedContact);
-                storeContacts.add(contact);                                
+            contactPopup.on('update', function(contact) {
+            	
+            	selectedContact.beginEdit();
+            	for (var p in contact.data) { 
+                    selectedContact.set(p, contact.get(p));
+                }
+                selectedContact.endEdit();
             }, this);            
         },
 
@@ -927,7 +923,7 @@ Tine.Crm.LeadEditDialog = {
         
         // do not do recursion!
         delete record.data.relation;
-        delete record.data.relation_type;
+        //delete record.data.relation_type;
         
         // save record data        
         relation.related_record = record.data;
