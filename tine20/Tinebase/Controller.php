@@ -89,6 +89,7 @@ class Tinebase_Controller
             Zend_Registry::set('currentAccount', $this->session->currentAccount);
         }
         
+        header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
     
     /**
