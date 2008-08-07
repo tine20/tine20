@@ -61,13 +61,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         //$contacts->setTimezone($this->_userTimezone);
         //$contacts->convertDates = true;
         
-        $result = array();
-        foreach ($contacts as $contact) {
-            $result[] = $this->_contactToJson($contact);
-        }
-        
         return array(
-            'results'       => $result,
+            'results'       => $this->_multipleContactsToJson($contacts),
             'totalcount'    => Addressbook_Controller::getInstance()->searchContactsCount($filter)
         );
     }    
@@ -134,18 +129,40 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     protected function _contactToJson($_contact)
     {        
         $result = $_contact->toArray();
+        
         $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
-        
-        // get tags for preview ?
-        //$result['tags'] = Tinebase_Tags::getInstance()->getTagsOfRecord($_contact)->toArray();
-        
         $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
+        
+        // get tags?
+        //$result['tags'] = Tinebase_Tags::getInstance()->getTagsOfRecord($_contact)->toArray();        
         
         $result['jpegphoto'] = $this->_getImageLink($_contact);
         
         return $result;
     }
-            
+
+    /**
+     * returns multiple contacts prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_contacts Addressbook_Model_Contact
+     * @return array contacts data
+     */
+    protected function _multipleContactsToJson(Tinebase_Record_RecordSet $_contacts)
+    {        
+        // get acls for contacts
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_contacts, Zend_Registry::get('currentAccount'), 'owner');
+        
+        $result = $_contacts->toArray();
+        
+        foreach ($result as &$contact) {
+            $contact['jpegphoto'] = $this->_getImageLink($contact);
+        }
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        
+        return $result;
+    }
+    
     /**
      * returns a image link
      * 

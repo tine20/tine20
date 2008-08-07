@@ -843,7 +843,8 @@ class Tinebase_Container
         
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container', array('id'))
-            ->join(SQL_TABLE_PREFIX . 'container_acl', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id', 'account_type', 'account_id', 'account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
+            ->join(SQL_TABLE_PREFIX . 'container_acl', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', 
+                array('id', 'account_type', 'account_id', 'account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
             ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
             ->group(array(SQL_TABLE_PREFIX . 'container.id', SQL_TABLE_PREFIX . 'container_acl.account_type', SQL_TABLE_PREFIX . 'container_acl.account_id'));
 
@@ -855,6 +856,7 @@ class Tinebase_Container
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
 
+        // @todo use _getGrantsFromArray here
         foreach($rows as $row) {
             $containerGrant = new Tinebase_Model_Grants( array(
                 'id'            => $row['id'],
@@ -940,33 +942,75 @@ class Tinebase_Container
     
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
     
-            $grants = new Tinebase_Model_Grants( array(
-                'accountId'     => $accountId,
-                'accountType'   => 'account',
-            ));
+	        $grants = $this->_getGrantsFromArray($rows, $accountId);
             
-            foreach($rows as $row) {
-                switch($row['account_grant']) {
-                    case self::GRANT_READ:
-                        $grants->readGrant = TRUE; 
-                        break;
-                    case self::GRANT_ADD:
-                        $grants->addGrant = TRUE; 
-                        break;
-                    case self::GRANT_EDIT:
-                        $grants->editGrant = TRUE; 
-                        break;
-                    case self::GRANT_DELETE:
-                        $grants->deleteGrant = TRUE; 
-                        break;
-                    case self::GRANT_ADMIN:
-                        $grants->adminGrant = TRUE; 
-                        break;
-                }
-            }
             $cache->save($grants, $cacheKey);
         }
         return $grants;
+    }
+    
+    /**
+     * get grants assigned to multiple records
+     *
+     * @param Tinebase_Record_RecordSet $_records records to get the grants for
+     * @param int|Tinebase_User_Model_User $_accountId the account to get the grants for
+     * @param string $_containerProperty container property
+     * 
+     * @todo write test
+     */
+    public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id')
+    {
+        $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
+
+        // get container ids
+        $containers = array();
+        foreach ($_records as $record) {
+            if (!isset($containers[$record[$_containerProperty]])) {
+                $containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])] = array();
+            }
+        }
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
+        
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $select = $db->select()
+            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
+            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+
+            ->where(SQL_TABLE_PREFIX . 'container.id in (?)', array_keys($containers))
+            ->group(SQL_TABLE_PREFIX . 'container.id');
+
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+
+        $stmt = $db->query($select);
+
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        // add results to container ids and get grants array
+        foreach ($rows as $row) {
+            $grantsArray = array_unique(explode(',', $row['account_grants']));
+            $row['account_grants'] = $this->_getGrantsFromArray($grantsArray, $accountId)->toArray();
+            $containers[$row['id']] = $row;
+        }
+
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
+        
+        // add container & grants to records
+        foreach ($_records as &$record) {
+            $containerId = $record[$_containerProperty];
+            $record[$_containerProperty] = $containers[$containerId];
+        }
     }
     
     /**
@@ -1087,5 +1131,45 @@ class Tinebase_Container
         } catch (Exception $e) {
             // caching not configured
         }
+    }
+
+    /**
+     * get grants record from an array with grant values
+     *
+     * @param array $_grantsArray
+     * @param int $_accountId
+     * @return Tinebase_Model_Grants
+     */
+    protected function _getGrantsFromArray(array $_grantsArray, $_accountId)
+    {
+        $grants = new Tinebase_Model_Grants( array(
+            'accountId'     => $_accountId,
+            'accountType'   => 'account',
+        ));
+        
+        foreach($_grantsArray as $key => $value) {
+            
+            $grantValue = (is_array($value)) ? $value['account_grant'] : $value; 
+            
+            switch($grantValue) {
+                case self::GRANT_READ:
+                    $grants->readGrant = TRUE; 
+                    break;
+                case self::GRANT_ADD:
+                    $grants->addGrant = TRUE; 
+                    break;
+                case self::GRANT_EDIT:
+                    $grants->editGrant = TRUE; 
+                    break;
+                case self::GRANT_DELETE:
+                    $grants->deleteGrant = TRUE; 
+                    break;
+                case self::GRANT_ADMIN:
+                    $grants->adminGrant = TRUE; 
+                    break;
+            }
+        }
+        
+        return $grants;
     }    
 }
