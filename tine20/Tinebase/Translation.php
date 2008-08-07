@@ -35,6 +35,7 @@ class Tinebase_Translation
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)Zend_Registry::get('locale'));
             // the locale of the user is not available
         }
+        return $translate;
     }
     
     /**
