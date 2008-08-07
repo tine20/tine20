@@ -88,6 +88,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      * @private
      */
     onSendReport: function() {
+        Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
         var baseUrl = 'http://www.tine20.org/bugreport.php';
         var hash = this.geerateHash();
 
@@ -106,6 +107,11 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             img.push(Ext.DomHelper.insertFirst(this.el, {tag: 'img', src: url, hidden: true}, true));
         }
         
+        window.setTimeout(this.showTransmissionCompleted, 3000);
+        
+        this.close();
+    },
+    showTransmissionCompleted: function() {
         Ext.MessageBox.show({
             title: _('Transmission Completed'),
             msg: _('Your report has been send. Thanks for your contribution'),
