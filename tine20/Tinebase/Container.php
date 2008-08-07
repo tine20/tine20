@@ -979,8 +979,8 @@ class Tinebase_Container
             }
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), true));
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -996,7 +996,7 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.id IN (?)', array_keys($containers))
             ->group(SQL_TABLE_PREFIX . 'container.id');
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $db->query($select);
 
