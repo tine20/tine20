@@ -61,7 +61,7 @@ class Tinebase_Translation
         	case 'ext':
         	   $dir = 'ExtJS/build/locale/';
                $prefix = 'ext-lang-';
-               $suffix = '-min.js';
+               $suffix = '.js';
                break;
         	default:
         		throw new Exception('no such location');
