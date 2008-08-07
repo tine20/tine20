@@ -291,12 +291,11 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     onResize : function(w,h){
         Tine.widgets.tags.TagPanel.superclass.onResize.call(this, w, h);
         // maximize search field and let space for add button
-        // does not work in safari with ext 2.2
         if (this.searchField.rendered && w) {
-            if (w == 'auto' && !Ext.isSafari) {
-                w = this.getSize().width -18;
-            }
-            this.searchField.setWidth(w-30);
+            
+            w = this.getSize().width - 12;
+            this.searchField.setWidth(w);
+            this.searchField.syncSize();
         }
     },
     
@@ -414,7 +413,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.searchField = new Ext.form.ComboBox({
             store: this.availableTagsStore,
             mode: 'local',
-            width: 170,
+            //width: 170,
             enableKeyEvents: true,
             displayField:'name',
             typeAhead: true,
