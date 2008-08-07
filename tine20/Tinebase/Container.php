@@ -960,6 +960,10 @@ class Tinebase_Container
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id')
     {
+        if (count($_records) === 0) {
+            return;
+        }
+        
         $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
@@ -975,7 +979,8 @@ class Tinebase_Container
             }
         }
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), true));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -988,10 +993,10 @@ class Tinebase_Container
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
 
-            ->where(SQL_TABLE_PREFIX . 'container.id in (?)', array_keys($containers))
+            ->where(SQL_TABLE_PREFIX . 'container.id IN (?)', array_keys($containers))
             ->group(SQL_TABLE_PREFIX . 'container.id');
 
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $db->query($select);
 
