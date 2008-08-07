@@ -102,8 +102,10 @@ html, body {
 /* ----- appchooser panel-----------------------------------------------------*/
 .app-panel-header-active {
     background:transparent url(../../ExtJS/resources/images/default/panel/light-hd.gif) repeat-x scroll 0pt -9px;
+    /*background:#EBF3FD url(../../ExtJS/resources/images/default/grid/grid3-hrow-over.gif) repeat-x scroll left bottom;*/
 }
 .app-panel-header-over {
-    background:transparent url(../../ExtJS/resources/images/default/panel/light-hd.gif) repeat-x scroll 0pt -9px;
+    /*background:transparent url(../../ExtJS/resources/images/default/panel/light-hd.gif) repeat-x scroll 0pt -9px;*/
+    background:#EBF3FD url(../../ExtJS/resources/images/default/grid/grid3-hrow-over.gif) repeat-x scroll left bottom;
 }
 }
