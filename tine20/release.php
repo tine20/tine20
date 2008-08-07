@@ -32,6 +32,7 @@ try {
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
         'pot'             => 'Build xgettext po template files',
+        'mo'              => 'Build mo files',
         'newlang=s'       => 'Add new language',
         'language=s'      => '  new language',
         'country=s'       => '  country for new language',
@@ -44,7 +45,7 @@ try {
    exit;
 }
 
-if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z || $opts->pot || $opts->newlang)) {
+if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z || $opts->pot || $opts->newlang || $opts->mo)) {
     echo $opts->getUsageMessage();
     exit;
 }
@@ -246,6 +247,30 @@ msgstr ""
     echo $poHeader .'\n';
     
 }
+
+if ($opts->mo) {
+    $d = dir($tine20path);
+    while (false !== ($appName = $d->read())) {
+        $appPath = "$tine20path/$appName";
+        if (is_dir($appPath) && $appName{0} != '.') {
+            $translationPath = "$appPath/translations";
+            if (is_dir($translationPath)) {
+                foreach (scandir($translationPath) as $poFile) {
+                    if (substr($poFile, -3) == '.po') {
+                        $langName = substr($poFile, 0, -3);
+                        if ( $opts->v ) {
+                            echo "Processing $appName/$poFile \n";
+                        }
+                        // create mo file
+                        `cd $translationPath
+                        msgfmt -o $langName.mo $poFile`;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 /**
  * returns key of translations object in Locale.Gettext
