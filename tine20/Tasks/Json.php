@@ -50,11 +50,15 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
         $tasks = $this->_controller->searchTasks($filter, $pagination);
-        $tasks->setTimezone($this->_userTimezone);
-        $tasks->convertDates = true;
+        //$tasks->setTimezone($this->_userTimezone);
+        //$tasks->convertDates = true;
+        $results = array();
+        foreach ($tasks as $task) {
+            $results[] = $this->_taskToJson($task);
+        }
         
         return array(
-            'results' => $tasks->toArray(),
+            'results' => $results,
             'totalcount' => $this->_controller->searchTasksCount($filter)
         );
     }
@@ -116,7 +120,9 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;
-        $_task->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray());
+        //$_task->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray());
+        $_task->container_id = Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray();
+        $_task->container_id['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
         return $_task->toArray();
     }
     

@@ -260,11 +260,10 @@ Tine.Tasks.mainGrid = {
                             
                             // update task in grid store to prevent concurrency problems
                             var updatedTask = new Tine.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
-                            updatedTask.set('container_id', Ext.util.JSON.decode(updatedTask.get('container_id')).id);
                             Tine.Tasks.fixTask(updatedTask);
                             task.data = updatedTask.data;
     
-    						// reloading the store feels like 1.x
+    						// reloading the store feels like http 1.x
     						// maybe we should reload if the sort critera changed, 
     						// but even this might be confusing
     						//store.load({params: this.paging});
@@ -789,9 +788,6 @@ Tine.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
 
 // fixes a task
 Tine.Tasks.fixTask = function(task) {
-	if (task.data.container_id) {
-        task.data.container_id = Ext.util.JSON.decode(task.data.container_id);
-    }
     if (task.data.due) {
         task.data.due = Date.parseDate(task.data.due, 'c');
     }

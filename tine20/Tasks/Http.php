@@ -80,9 +80,9 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         	// prepare initial data (temporary, this should become part of json interface)
         	$newTask = new Tasks_Model_Task(array(), true);
         	if ($containerId > 0) {
-        	    $newTask->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($containerId)->toArray());
+        	    $newTask->container_id = Tinebase_Container::getInstance()->getContainerById($containerId)->toArray();
         	} else {
-        	   $newTask->container_id = Zend_Json::encode(Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray());
+        	   $newTask->container_id = Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray();
         	}
         	$task = Zend_Json::encode($newTask->toArray());
         }
