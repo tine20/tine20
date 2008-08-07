@@ -797,8 +797,8 @@ Tine.Crm.LeadEditDialog = {
             });          
             
             // update event handler
-            contactPopup.on('update', function(contact) {
-            	
+            contactPopup.on('update', function(contact) {            	
+            	// copy values from edited contact
             	selectedContact.beginEdit();
             	for (var p in contact.data) { 
                     selectedContact.set(p, contact.get(p));
@@ -864,15 +864,13 @@ Tine.Crm.LeadEditDialog = {
             });          
             
             // update event handler
-            taskPopup.on('update', function(task) {           
-                // set link properties
-                task.id = task.data.id;
-                task.data.relation = selectedTask.data.relation;
-                
-                // add task to store (remove the old one first)
-                var storeContacts = Ext.StoreMgr.lookup('TasksStore');
-                storeContacts.remove(selectedTask);
-                storeContacts.add(task);                                
+            taskPopup.on('update', function(task) {
+                // copy values from edited task
+                selectedTask.beginEdit();
+                for (var p in task.data) { 
+                    selectedTask.set(p, task.get(p));
+                }
+                selectedTask.endEdit();
             }, this);
         },
 
