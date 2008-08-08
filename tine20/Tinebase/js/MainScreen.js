@@ -98,6 +98,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
     
         });
         
+        /*
         // init application toolbar
         var applicationToolbar = new Ext.Toolbar({
             id: 'applicationToolbar',
@@ -106,13 +107,15 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         
         // default app
         applicationToolbar.on('render', function(){
+            console.log('applicationToolbar rendered');
+            /*
             if(! this.defaultAppPanel.collapsed) {
                 this.defaultAppPanel.fireEvent('beforeexpand', this.defaultAppPanel);
             }
             this.defaultAppPanel.expand();
             
         }, this);
-        
+        */
     
         // init app chooser
         this.applicationArcordion = new Ext.Panel({
@@ -126,7 +129,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             },
             items: this.getPanels()
         });
-        
+                    
         // init generic mainscreen layout
         this.items = [{
             region: 'north',
@@ -145,12 +148,16 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 ]
             },{
                 region: 'center',
+                layout: 'card',
+                activeItem: 0,
                 height: 26,
                 border: false,
                 id:     'north-panel-2',
+                /*
                 items: [
                     applicationToolbar
                 ]
+                */
             }]
         }, {
             region: 'south',
@@ -238,12 +245,26 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      * @private
      */
     render: function() {
-        new Ext.Viewport({
+        var viewport = new Ext.Viewport({
             layout: 'border',
-            items: this.items
+            items: this.items,
+            listeners: {
+                scope: this,
+                render: this.ativateDefaultApp
+            }
         });
     },
     
+    ativateDefaultApp: function() {
+        if (this.defaultAppPanel.rendered) {
+            if(! this.defaultAppPanel.collapsed) {
+                this.defaultAppPanel.fireEvent('beforeexpand', this.defaultAppPanel);
+            }
+            this.defaultAppPanel.expand();
+        } else {
+            this.ativateDefaultApp.defer(10, this);
+        }
+    },
     /**
      * @private
      */
@@ -398,12 +419,16 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      * @return {Ext.Toolbar}
      */
     getActiveToolbar: function() {
+        //console.log('getActiveToolbar');
         var northPanel = Ext.getCmp('north-panel-2');
         
-        if(northPanel.items) {
-            return northPanel.items.get(0);
+        //console.log(northPanel.activeItem)
+        //eturn northPanel.activeItem;
+        
+        if(northPanel.activeItem) {
+            return northPanel.activeItem;
         } else {
-            return false;
+            return {};            
         }
     },
     
@@ -412,17 +437,30 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      * 
      * @param {Ext.Toolbar}
      */
-    setActiveToolbar: function(_toolbar) {
+    setActiveToolbar: function(_toolbar, _keep) {
+        //console.log('setActiveToolbar');
         var northPanel = Ext.getCmp('north-panel-2');
+        _toolbar.keep = _keep;
+        
         if(northPanel.items) {
             for (var i=0; i<northPanel.items.length; i++){
-                northPanel.remove(northPanel.items.get(i));
+                var t = northPanel.items.get(i);
+                if (! t.keep) {
+                    northPanel.remove(t);
+                }
             }  
+        }
+        
+        if(_toolbar.keep && _toolbar.rendered) {
+            northPanel.layout.setActiveItem(_toolbar.id);
+        } else {
+            northPanel.add(_toolbar);
+            northPanel.layout.setActiveItem(_toolbar.id);
         }
         //var toolbarPanel = Ext.getCmp('applicationToolbar');
         
-        northPanel.add(_toolbar);
-        northPanel.doLayout();
+        //northPanel.add(_toolbar);
+        //northPanel.doLayout();
     }
 
 });
