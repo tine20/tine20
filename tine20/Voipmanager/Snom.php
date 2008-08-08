@@ -1,4 +1,4 @@
-<?php
+ l<?php
 /**
  * Tine 2.0
  * @package     Voipmanager Management
@@ -113,10 +113,15 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     protected function _getSearchDialogue()
     {
+        $prefix = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
+        $serverName = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+        $port = ($_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443) ? ':' . $_SERVER['SERVER_PORT'] : '';
+        $url = $prefix . $serverName . $port . $_SERVER['PHP_SELF'];
+        
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
             <SnomIPPhoneInput>
                 <Prompt>Prompt</Prompt>
-                <URL>http://phonebox01.hh.metaways.de/tine20/index.php</URL>
+                <URL>' . $url . '</URL>
                 <InputItem>
                     <DisplayName>Search for</DisplayName>
                     <QueryStringParam>' . SID . '&method=Voipmanager.directory&query</QueryStringParam>
