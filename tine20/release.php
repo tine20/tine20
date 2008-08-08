@@ -50,6 +50,8 @@ if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s ||
     exit;
 }
 
+$build = trim(`whoami`) . ' '. Zend_Date::now()->getIso();
+
 /**
  * --clean 
  */
@@ -116,7 +118,9 @@ if ($opts->a || $opts->j) {
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
             fwrite($jsDebug, '// file: ' . "$tine20path/$filename" . "\n");
-            fwrite($jsDebug, file_get_contents("$tine20path/$filename") . "\n");
+            $jsContent = file_get_contents("$tine20path/$filename");
+            $jsContent = preg_replace('/\$.*Build:.*\$/i', $build, $jsContent);
+            fwrite($jsDebug, $jsContent . "\n");
         }
     }
     fclose($jsDebug);
