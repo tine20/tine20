@@ -48,7 +48,8 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             'apply'
         );
         this.action_saveAndClose = new Ext.Action({
-            text: 'Ok',
+            requiredGrant: 'editGrant',
+            text: _('Ok'),
             //tooltip: 'Save changes and close this window',
             minWidth: 70,
             //handler: this.onSaveAndClose,
@@ -58,7 +59,8 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         });
     
         this.action_applyChanges =new Ext.Action({
-            text: 'Apply',
+            requiredGrant: 'editGrant',
+            text: _('Apply'),
             //tooltip: 'Save changes',
             minWidth: 70,
             handler: this.handlerApplyChanges,
@@ -68,6 +70,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         });
         
         this.action_delete = new Ext.Action({
+            requiredGrant: 'deleteGrant',
             text: 'delete',
             minWidth: 70,
             handler: this.handlerDelete,
@@ -76,7 +79,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             disabled: true
         });
         this.action_cancel = new Ext.Action({
-            text: 'Cancel',
+            text: _('Cancel'),
             //tooltip: 'Reject changes and close this window',
             minWidth: 70,
             handler: this.handlerCancle ? this.handlerCancle : function(){window.close();},
@@ -105,6 +108,16 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 		
 		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	},
+    updateToolbars: function(record, containerField) {
+        var actions = [
+            this.action_saveAndClose,
+            this.action_applyChanges,
+            this.action_delete,
+            this.action_cancel
+        ];
+        Tine.widgets.ActionUpdater(record, actions, containerField);
+        Tine.widgets.ActionUpdater(record, this.getTopToolbar(), containerField);
+    },
 	getToolbar: function() {
 		return this.getTopToolbar();
 	},
