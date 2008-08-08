@@ -97,25 +97,6 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             ]
     
         });
-        
-        /*
-        // init application toolbar
-        var applicationToolbar = new Ext.Toolbar({
-            id: 'applicationToolbar',
-            height: 26
-        });
-        
-        // default app
-        applicationToolbar.on('render', function(){
-            console.log('applicationToolbar rendered');
-            /*
-            if(! this.defaultAppPanel.collapsed) {
-                this.defaultAppPanel.fireEvent('beforeexpand', this.defaultAppPanel);
-            }
-            this.defaultAppPanel.expand();
-            
-        }, this);
-        */
     
         // init app chooser
         this.applicationArcordion = new Ext.Panel({
@@ -152,12 +133,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 activeItem: 0,
                 height: 26,
                 border: false,
-                id:     'north-panel-2',
-                /*
-                items: [
-                    applicationToolbar
-                ]
-                */
+                id:     'north-panel-2'
             }]
         }, {
             region: 'south',
@@ -419,16 +395,12 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      * @return {Ext.Toolbar}
      */
     getActiveToolbar: function() {
-        //console.log('getActiveToolbar');
         var northPanel = Ext.getCmp('north-panel-2');
-        
-        //console.log(northPanel.activeItem)
-        //eturn northPanel.activeItem;
-        
+
         if(northPanel.activeItem) {
             return northPanel.activeItem;
         } else {
-            return {};            
+            return false;            
         }
     },
     
@@ -438,7 +410,6 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      * @param {Ext.Toolbar}
      */
     setActiveToolbar: function(_toolbar, _keep) {
-        //console.log('setActiveToolbar');
         var northPanel = Ext.getCmp('north-panel-2');
         _toolbar.keep = _keep;
         
@@ -457,10 +428,6 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             northPanel.add(_toolbar);
             northPanel.layout.setActiveItem(_toolbar.id);
         }
-        //var toolbarPanel = Ext.getCmp('applicationToolbar');
-        
-        //northPanel.add(_toolbar);
-        //northPanel.doLayout();
     }
 
 });
