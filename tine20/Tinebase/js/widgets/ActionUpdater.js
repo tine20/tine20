@@ -25,7 +25,7 @@ Tine.widgets.ActionUpdater = function(records, actions, containerField) {
     if (!containerField) {
         containerField = 'container_id';
     }
-    
+
     if (typeof(records.getSelections) == 'function') {
         records = records.getSelections();
     } else if (typeof(records.beginEdit) == 'function') {
@@ -54,18 +54,18 @@ Tine.widgets.ActionUpdater = function(records, actions, containerField) {
      * action iterator
      */
     var actionIterator = function(action) {
-        action.initialConfig = action.initialConfig ? action.initialConfig : {};
+        initialConfig = action.initialConfig ? action.initialConfig : {};
         
         // NOTE: we don't handle add action for the moment!
-        var requiredGrant = action.initialConfig.requiredGrant;
+        var requiredGrant = initialConfig.requiredGrant;
         if (requiredGrant && requiredGrant != 'addGrant') {
             var enable = grants[requiredGrant];
-            if (records.length > 1 && ! action.initialConfig.allowMultiple) {
+            if (records.length > 1 && ! initialConfig.allowMultiple) {
                 enable = false;
             }
             action.setDisabled(!enable);
-            if (action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
-                var text = action.initialConfig.translationObject.n_(action.initialConfig.singularText, action.initialConfig.pluralText, records.length);
+            if (initialConfig.singularText && initialConfig.pluralText && initialConfig.translationObject) {
+                var text = initialConfig.translationObject.n_(initialConfig.singularText, initialConfig.pluralText, records.length);
                 action.setText(text);
                 
             }
