@@ -25,9 +25,7 @@ if(Zend_Version::compareVersion('1.5.000') === 1) {
 */
 
 $tineBase = Tinebase_Controller::getInstance();
-
-if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && isset($_REQUEST['method']) 
-    && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['method'])) {
+if (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON' && isset($_REQUEST['method'])) {
     $tineBase->handleJson();        
 } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])) {
     // SNOM api
