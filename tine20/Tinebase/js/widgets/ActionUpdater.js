@@ -22,13 +22,14 @@
  * @param {containerField}       string
  */
 Tine.widgets.ActionUpdater = function(records, actions, containerField) {
-    
     if (!containerField) {
         containerField = 'container_id';
     }
     
     if (typeof(records.getSelections) == 'function') {
         records = records.getSelections();
+    } else if (typeof(records.beginEdit) == 'function') {
+        records = [records];
     }
     
     // init grants
@@ -53,6 +54,8 @@ Tine.widgets.ActionUpdater = function(records, actions, containerField) {
      * action iterator
      */
     var actionIterator = function(action) {
+        action.initialConfig = action.initialConfig ? action.initialConfig : {};
+        
         // NOTE: we don't handle add action for the moment!
         var requiredGrant = action.initialConfig.requiredGrant;
         if (requiredGrant && requiredGrant != 'addGrant') {
