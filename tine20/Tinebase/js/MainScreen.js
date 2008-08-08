@@ -19,7 +19,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
     /**
      * @cfg {String} Appname of default app
      */
-    defaultAppName: 'Tasks',
+    defaultAppName: 'Addressbook',
     
     /**
      * holds default app panel
