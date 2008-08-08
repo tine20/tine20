@@ -47,6 +47,10 @@ Tine.Tasks.mainGrid = {
      */
     tree: null,
     /**
+     * {Ext.Toolbar}
+     */
+    toolbar: null,
+    /**
      * holds grid
      */
     grid: null,
@@ -152,6 +156,8 @@ Tine.Tasks.mainGrid = {
     
     	this.actions = {
             editInPopup: new Ext.Action({
+                requiredGrant: 'readGrant',
+                
                 text: this.translation._('Edit task'),
     			disabled: true,
     			actionType: 'edit',
@@ -166,20 +172,25 @@ Tine.Tasks.mainGrid = {
                 iconCls: 'TasksIconCls',
                 scope: this
             }),
-            deleteSingle: new Ext.Action({
-                text: this.translation._('Delete task'),
+            deleteTasks: new Ext.Action({
+                requiredGrant: 'deleteGrant',
+                allowMultiple: true,
+                singularText: 'Delete task',
+                pluralText: 'Delete tasks',
+                translationObject: this.translation,
+                text: this.translation.ngettext('Delete task', 'Delete tasks', 1),
                 handler: this.handlers.deleteTasks,
     			disabled: true,
                 iconCls: 'action_delete',
                 scope: this
-            }),
+            })/*,
     		deleteMultiple: new Ext.Action({
                 text: this.translation._('Delete tasks'),
                 handler: this.handlers.deleteTasks,
     			disabled: true,
                 iconCls: 'action_delete',
                 scope: this
-            })
+            })*/
         };
         
         this.filter.owner = Tine.Tinebase.Registry.get('currentAccount').accountId;
@@ -381,14 +392,14 @@ Tine.Tasks.mainGrid = {
             //combo.triggers[0].show();
         }, this);
 		
-		var toolbar = new Ext.Toolbar({
+		this.toolbar = new Ext.Toolbar({
 			id: 'Tasks_Toolbar',
 			split: false,
 			height: 26,
 			items: [
 			    this.actions.addInPopup,
 				this.actions.editInPopup,
-				this.actions.deleteSingle,
+				this.actions.deleteTasks,
 				new Ext.Toolbar.Separator(),
 				'->',
 				showClosedToggle,
@@ -399,7 +410,7 @@ Tine.Tasks.mainGrid = {
 				this.translation._('Search:'), ' ', ' ', quickSearchField]
 		});
 	   
-	    return toolbar;
+	    return this.toolbar;
 	},
 	
     initGrid: function(){
@@ -516,10 +527,10 @@ Tine.Tasks.mainGrid = {
 		}, this);
 		
 		this.grid.getSelectionModel().on('selectionchange', function(sm){
-			var disabled = sm.getCount() != 1;
-			this.actions.editInPopup.setDisabled(disabled);
-			this.actions.deleteSingle.setDisabled(disabled);
-			this.actions.deleteMultiple.setDisabled(!disabled);
+            Tine.widgets.ActionUpdater(sm, this.actions);
+			//var disabled = sm.getCount() != 1;
+			//this.actions.editInPopup.setDisabled(disabled);
+			//this.actions.deleteTasks.setDisabled(disabled);
 		}, this);
 		
 		this.grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
@@ -533,9 +544,9 @@ Tine.Tasks.mainGrid = {
 			//	return;
 			//}
 			
-			var items = numSelected > 1 ? [this.actions.deleteMultiple] : [
+			var items = numSelected > 1 ? [this.actions.deleteTasks] : [
 			    this.actions.editInPopup,
-                this.actions.deleteSingle,
+                this.actions.deleteTasks,
                 '-',
                 this.actions.addInPopup
 			];
