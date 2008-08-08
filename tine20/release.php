@@ -1,4 +1,5 @@
-#!/usr/bin/env php
+#!/usr/bin/env /opt/local/php5/bin/php -d include_path=".:/opt/local/php5/lib/php:/opt/local/ZendFramework/1.5/library"
+### hm klappt noch nicht, richtigen include path fuer zend setzen
 <?php
 
 if (isset($_SERVER['HTTP_HOST'])) {
@@ -16,7 +17,7 @@ $tine20path = dirname(__FILE__);
 /**
  * path to yui compressor
  */
-$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.4/build/yuicompressor-2.3.4.jar';
+$yuiCompressorPath = dirname(__FILE__) . '/yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
 
 /**
  * options
