@@ -539,22 +539,15 @@ Tine.Tasks.mainGrid = {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
 
-			var numSelected = _grid.getSelectionModel().getCount();
-			//if (numSelected < 1) {
-			//	return;
-			//}
-			
-			var items = numSelected > 1 ? [this.actions.deleteTasks] : [
-			    this.actions.editInPopup,
-                this.actions.deleteTasks,
-                '-',
-                this.actions.addInPopup
-			];
-            
 			var ctxMenu = new Ext.menu.Menu({
-		        //id:'ctxMenuAddress1', 
-		        items: items
+		        items: [
+                    this.actions.editInPopup,
+                    this.actions.deleteTasks,
+                    '-',
+                    this.actions.addInPopup
+                ]
 		    });
+            
             ctxMenu.showAt(_eventObject.getXY());
         }, this);
 		
