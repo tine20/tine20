@@ -1,5 +1,4 @@
-#!/usr/bin/env /opt/local/php5/bin/php -d include_path=".:/opt/local/php5/lib/php:/opt/local/ZendFramework/1.5/library"
-### hm klappt noch nicht, richtigen include path fuer zend setzen
+#!/usr/bin/env php
 <?php
 
 if (isset($_SERVER['HTTP_HOST'])) {
@@ -17,7 +16,7 @@ $tine20path = dirname(__FILE__);
 /**
  * path to yui compressor
  */
-$yuiCompressorPath = dirname(__FILE__) . '/yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
+$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
 
 /**
  * options
@@ -105,7 +104,10 @@ if ($opts->a || $opts->s) {
         }
     }
     fclose($cssDebug);
-    system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
+    if ($opts->v) {
+        $verbose = ' --verbose ';
+    }
+    system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
 }
 
 if ($opts->a || $opts->j) {
@@ -118,7 +120,10 @@ if ($opts->a || $opts->j) {
         }
     }
     fclose($jsDebug);
-    system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
+    if ($opts->v) {
+        $verbose = ' --verbose ';
+    }
+    system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
 }
 
 if ($opts->a || $opts->t) {
