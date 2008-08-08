@@ -820,14 +820,6 @@ Tine.Addressbook.ContactEditDialog = {
         var dialog = Ext.getCmp('contactDialog');
         dialog.updateToolbars.defer(10, dialog, [contact, 'owner']);
         
-        /*
-        with(_rights) {
-            Ext.getCmp('contactDialog').action_saveAndClose.setDisabled(!editGrant);
-            Ext.getCmp('contactDialog').action_applyChanges.setDisabled(!editGrant);
-            Ext.getCmp('contactDialog').action_delete.setDisabled(!deleteGrant);
-        }
-        */
-        
         // add contact id to export button and enable it if id is set
         var contactId = contact.get('id');
         if (contactId) {
