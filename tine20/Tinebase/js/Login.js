@@ -92,6 +92,9 @@ Tine.Login = {
                 params: {
                     jsonKey: Tine.Tinebase.jsonKey
                 },
+                headers: {
+                    'X-Tine20-Request-Type': 'JSON'
+                },
                 success:function(form, action, o) {
                     Ext.MessageBox.wait('Login successful. Loading Tine 2.0...', 'Please wait!');
                     window.location = window.location;
