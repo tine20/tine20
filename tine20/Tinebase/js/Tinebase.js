@@ -9,7 +9,10 @@
  * @version     $Id$
  *
  */
- 
+
+Ext.namespace('Tine');
+Tine.revision = '$Id$';
+
 Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
 
 Ext.QuickTips.init();
@@ -32,6 +35,8 @@ Locale.Gettext.textdomain('Tinebase');
 // shorthands
 _ = Locale.Gettext._;
 n_ = Locale.Gettext.n_;
+
+
 
 Ext.namespace('Tine', 'Tine.Tinebase');
 
