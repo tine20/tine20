@@ -222,6 +222,7 @@ Tine.Addressbook.Main = {
         this.translation.textdomain('Addressbook');
     
         this.actions.addContact = new Ext.Action({
+            requiredGrant: 'addGrant',
             text: this.translation._('add contact'),
             handler: this.handlers.addContact,
             iconCls: 'action_addContact',
@@ -229,6 +230,7 @@ Tine.Addressbook.Main = {
         });
         
         this.actions.editContact = new Ext.Action({
+            requiredGrant: 'readGrant',
             text: this.translation._('edit contact'),
             disabled: true,
             handler: this.handlers.editContact,
@@ -237,7 +239,12 @@ Tine.Addressbook.Main = {
         });
         
         this.actions.deleteContact = new Ext.Action({
-            text: this.translation._('delete contact'),
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true,
+            singularText: 'delete contact',
+            pluralText: 'delete contacts',
+            translationObject: this.translation,
+            text: this.translation.ngettext('delete contact', 'delete contacts', 1),
             disabled: true,
             handler: this.handlers.deleteContact,
             iconCls: 'action_delete',
@@ -245,6 +252,8 @@ Tine.Addressbook.Main = {
         });
 
         this.actions.exportContact = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
             text: this.translation._('export as pdf'),
             disabled: true,
             handler: this.handlers.exportContact,
@@ -253,6 +262,7 @@ Tine.Addressbook.Main = {
         });
 
         this.actions.callContact = new Ext.Action({
+            requiredGrant: 'readGrant',
         	id: 'Addressbook_Contacts_CallContact',
             text: this.translation._('call contact'),
             disabled: true,
@@ -397,34 +407,19 @@ Tine.Addressbook.Main = {
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
 
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
+            // update toolbars
+            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'owner');
+            
             var rowCount = _selectionModel.getCount();
-
             if(rowCount < 1) {
-                // no row selected
-                this.actions.deleteContact.setDisabled(true);
-                this.actions.editContact.setDisabled(true);
-                this.actions.exportContact.setDisabled(true);
-                this.actions.callContact.setDisabled(true);
-                
                 // clear preview
                 var clearTpl = new Ext.Template(
                     '<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>'
                 );
                 clearTpl.overwrite(Ext.getCmp('adr-preview-panel').body);    
                 
-            } else if(rowCount > 1) {
-                // more than one row selected
-                this.actions.deleteContact.setDisabled(false);
-                this.actions.editContact.setDisabled(true);
-                this.actions.exportContact.setDisabled(false);
-                this.actions.callContact.setDisabled(true);
-                
-            } else {
+            }  else if (rowCount == 1) {
                 // only one row selected
-                this.actions.deleteContact.setDisabled(false);
-                this.actions.editContact.setDisabled(false);
-                this.actions.exportContact.setDisabled(false);
-                
                 if(Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1) {
 	                var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
 	                callMenu.removeAll();
@@ -645,7 +640,7 @@ Tine.Addressbook.Main = {
     /**
      * init the contacts json grid store
      */
-    initStore: function(){
+    initStore: function() {
 
         this.store = new Ext.data.JsonStore({
         	id: 'id',
@@ -695,8 +690,7 @@ Tine.Addressbook.Main = {
         }, this);
     },
     
-    show: function(_node) 
-    {
+    show: function(_node) {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         if(currentToolbar === false || currentToolbar.id != 'Addressbook_Contacts_Toolbar') {
@@ -706,19 +700,16 @@ Tine.Addressbook.Main = {
             Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
             this.store.load({});
             Tine.Tinebase.MainScreen.setActiveToolbar(this.contactToolbar, true);
-            //this.displayContactsToolbar();
             this.updateMainToolbar();
             
         } else {
             // note: if node is clicked, it is not selected!
             _node.getOwnerTree().selectPath(_node.getPath());
-        	
             this.store.load({});  
         }
     },
     
-    reload: function() 
-    {
+    reload: function() {
         if(Ext.ComponentMgr.all.containsKey('Addressbook_Contacts_Grid')) {
             setTimeout ("Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload()", 200);
         }
@@ -760,7 +751,7 @@ Tine.Addressbook.ContactEditDialog = {
                           	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
                             window.close();
                         } else {
-                            this.updateToolbarButtons(contactData.owner.account_grants, contactData.id);
+                            this.updateToolbarButtons(this.contactRecord);
                             
                             Ext.MessageBox.hide();
                         }
@@ -823,15 +814,22 @@ Tine.Addressbook.ContactEditDialog = {
         this.contactRecord = new Tine.Addressbook.Model.Contact(_contactData);
     },
 
-    updateToolbarButtons: function(_rights, contactId)
-    {    	
+    
+    updateToolbarButtons: function(contact)
+    {
+        var dialog = Ext.getCmp('contactDialog');
+        dialog.updateToolbars.defer(10, dialog, [contact, 'owner']);
+        
+        /*
         with(_rights) {
             Ext.getCmp('contactDialog').action_saveAndClose.setDisabled(!editGrant);
             Ext.getCmp('contactDialog').action_applyChanges.setDisabled(!editGrant);
             Ext.getCmp('contactDialog').action_delete.setDisabled(!deleteGrant);
         }
+        */
         
         // add contact id to export button and enable it if id is set
+        var contactId = contact.get('id');
         if (contactId) {
         	Ext.getCmp('exportButton').contactId = contactId;
             Ext.getCmp('exportButton').setDisabled(false);
@@ -876,7 +874,7 @@ Tine.Addressbook.ContactEditDialog = {
         });
 
         this.updateContactRecord(_contactData);
-        this.updateToolbarButtons(_contactData.owner.account_grants, _contactData.id);
+        this.updateToolbarButtons(this.contactRecord);
         
         dialog.getForm().loadRecord(this.contactRecord);
         Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contactRecord.get('jpegphoto'));
