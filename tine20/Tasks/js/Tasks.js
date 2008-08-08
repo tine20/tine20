@@ -23,7 +23,7 @@ Tine.Tasks.getPanel =  function() {
     
     // this function is called each time the user activates the Tasks app
     tree.on('beforeexpand', function(panel) {
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.getToolbar());
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.toolbar, true);
         this.updateMainToolbar();
         
         Tine.Tinebase.MainScreen.setActiveContentPanel(this.grid, true);
@@ -166,6 +166,7 @@ Tine.Tasks.mainGrid = {
                 scope: this
             }),
             addInPopup: new Ext.Action({
+                requiredGrant: 'addGrant',
     			actionType: 'add',
                 text: this.translation._('Add task'),
                 handler: this.handlers.editInPopup,
@@ -183,28 +184,16 @@ Tine.Tasks.mainGrid = {
     			disabled: true,
                 iconCls: 'action_delete',
                 scope: this
-            })/*,
-    		deleteMultiple: new Ext.Action({
-                text: this.translation._('Delete tasks'),
-                handler: this.handlers.deleteTasks,
-    			disabled: true,
-                iconCls: 'action_delete',
-                scope: this
-            })*/
+            })
         };
         
         this.filter.owner = Tine.Tinebase.Registry.get('currentAccount').accountId;
         this.initStore();
+        this.initToolbar();
         this.initGrid();
         
     },
     
-    /*
-    initMainScreen: function() {
-        this.updateMainToolbar();
-	},
-    */
-	
 	initStore: function(){
 	    this.store = new Ext.data.JsonStore({
 			id: 'id',
@@ -295,17 +284,11 @@ Tine.Tasks.mainGrid = {
     {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
         menu.removeAll();
-        /*menu.add(
-            {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
-        );*/
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('TasksTreePanel');
-        //if(Tine.Tasks.rights.indexOf('admin') > -1) {
-        //    adminButton.setDisabled(false);
-        //} else {
-            adminButton.setDisabled(true);
-        //}
+
+        adminButton.setDisabled(true);
 
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
         preferencesButton.setIconClass('TasksTreePanel');
@@ -338,7 +321,7 @@ Tine.Tasks.mainGrid = {
     
 	// toolbar must be generated each time this fn is called, 
 	// as tinebase destroys the old toolbar when setting a new one.
-	getToolbar: function(){
+	initToolbar: function(){
 		var quickSearchField = new Ext.ux.SearchField({
 			id: 'quickSearchField',
 			width: 200,
@@ -409,8 +392,6 @@ Tine.Tasks.mainGrid = {
 				'->',
 				this.translation._('Search:'), ' ', ' ', quickSearchField]
 		});
-	   
-	    return this.toolbar;
 	},
 	
     initGrid: function(){
@@ -528,9 +509,6 @@ Tine.Tasks.mainGrid = {
 		
 		this.grid.getSelectionModel().on('selectionchange', function(sm){
             Tine.widgets.ActionUpdater(sm, this.actions);
-			//var disabled = sm.getCount() != 1;
-			//this.actions.editInPopup.setDisabled(disabled);
-			//this.actions.deleteTasks.setDisabled(disabled);
 		}, this);
 		
 		this.grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
@@ -623,7 +601,6 @@ Tine.Tasks.EditDialog = function(task) {
 				Ext.MessageBox.wait(translation._('Please wait'), translation._('Saving Task'));
 				
 				// merge changes from form into task record
-				// @todo here is a problem with the linking-form values, if "apply" is clicked, the linking params are lost 
 				form.updateRecord(task);
 				
 	            Ext.Ajax.request({
