@@ -11,7 +11,7 @@
  */
 
 Ext.namespace('Tine');
-Tine.revision = '$Id$';
+Tine.Build = '$Build: $';
 
 Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
 
