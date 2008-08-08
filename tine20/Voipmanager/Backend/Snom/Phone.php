@@ -31,7 +31,7 @@ class Voipmanager_Backend_Snom_Phone
         if($_db instanceof Zend_Db_Adapter_Abstract) {
             $this->_db = $_db;
         } else {
-            $this->_db = Zend_Registry::get('dbAdapter');
+            $this->_db = Zend_Db_Table_Abstract::getDefaultAdapter();
         }
     }
         
