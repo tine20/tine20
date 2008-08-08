@@ -266,7 +266,9 @@ Tine.Addressbook.Main = {
         
         // init grid store
         this.initStore();
+        this.initToolbar();
         this.initContactsGrid();
+        
     },
 
     updateMainToolbar : function() 
@@ -290,9 +292,9 @@ Tine.Addressbook.Main = {
         preferencesButton.setDisabled(true);
     },
 	
-    displayContactsToolbar: function()
+    initToolbar: function()
     {
-        var contactToolbar = new Ext.Toolbar({
+        this.contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
             split: false,
             height: 26,
@@ -308,8 +310,6 @@ Tine.Addressbook.Main = {
                 //this.translation._('Search: '), quickSearchField
             ]
         });
-
-        Tine.Tinebase.MainScreen.setActiveToolbar(contactToolbar);
     },
 
     initContactsGrid: function() 
@@ -705,7 +705,8 @@ Tine.Addressbook.Main = {
             }
             Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
             this.store.load({});
-            this.displayContactsToolbar();
+            Tine.Tinebase.MainScreen.setActiveToolbar(this.contactToolbar, true);
+            //this.displayContactsToolbar();
             this.updateMainToolbar();
             
         } else {
