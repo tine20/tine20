@@ -762,15 +762,17 @@ Tine.Tasks.EditDialog = function(task) {
 	
 	var viewport = new Ext.Viewport({
         layout: 'border',
-        items: dlg
+        items: dlg,
+        listeners: {
+            scope: this,
+            render: function() {
+                dlg.updateToolbars.defer(10, dlg, [task]);
+            }
+        }
     });
-    
+
     // load form with initial data
     dlg.getForm().loadRecord(task);
-    
-    if(task.get('id') > 0) {
-        dlg.action_delete.enable();
-    }
 };
 
 // generalised popup
