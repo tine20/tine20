@@ -99,6 +99,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     '<td class="tw-ftb-frow-value">{value}</td>',
                     '<td class="tw-ftb-frow-deleterow"></td>',
                     '<td class="tw-ftb-frow-searchbutton"></td>',
+                    '<td class="tw-ftb-frow-deleteallfilters"></td>',
                     '<td class="tw-ftb-frow-savefilterbutton"></td>',
                 '</tr>'
             );
@@ -269,6 +270,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 // move start search button
                 tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
                 this.actions.startSearch.show();
+                // move delete all filters
+                tr.child('td[class=tw-ftb-frow-deleteallfilters]').insertFirst(this.actions.removeAllFilters.getEl());
+                this.actions.removeAllFilters.setVisible(numFilters > 1);
                 // move save filter button
                 tr.child('td[class=tw-ftb-frow-savefilterbutton]').insertFirst(this.actions.saveFilter.getEl());
                 this.actions.saveFilter.setVisible(numFilters > 1);
@@ -276,7 +280,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             
             if (filter.id == firstId) {
                 tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('Show');
-                tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.removeAllFilters.getEl());
+                //tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.removeAllFilters.getEl());
                 //this.actions.removeAllFilters.setVisible(numFilters > 1);
             }
         }, this);
