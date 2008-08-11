@@ -95,7 +95,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     '<td class="tw-ftb-frow-pmbutton"></td>',
                     '<td class="tw-ftb-frow-prefix">{prefix}</td>',
                     '<td class="tw-ftb-frow-field">{field}</td>',
-                    '<td class="tw-ftb-frow-operator" width="110px" >{operator}</td>',
+                    '<td class="tw-ftb-frow-operator" width="90px" >{operator}</td>',
                     '<td class="tw-ftb-frow-value">{value}</td>',
                     '<td class="tw-ftb-frow-deleterow"></td>',
                     '<td class="tw-ftb-frow-searchbutton"></td>',
@@ -121,6 +121,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     initActions: function() {
         this.actions = {
             addFilterRow: new Ext.Button({
+                //disabled: true,
                 tooltip: _('add new filter'),
                 iconCls: 'action_addFilter',
                 scope: this,
@@ -207,7 +208,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // field
         filter.formFields.field = new Ext.form.ComboBox({
             filter: filter,
-            width: 300,
+            width: 260,
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,

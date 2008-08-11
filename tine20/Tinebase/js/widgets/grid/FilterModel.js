@@ -108,7 +108,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         if (operatorStore.getCount() > 1) {
             var operator = new Ext.form.ComboBox({
                 filter: filter,
-                width: 100,
+                width: 80,
                 id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
