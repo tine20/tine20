@@ -465,9 +465,10 @@ Tine.Addressbook.Main = {
 
         // define a template to use for the detail view
         // @todo add tags?
+        // @todo use Ext.util.TextMetrics?
         var detailTpl = new Ext.XTemplate(
             '<tpl for=".">',
-                '<div>',
+                '<div id="previewPanel">',
                     '<div class="preview-panel preview-panel-company">',
                         '{[this.encode(values.org_name)]}{[this.encode(values.org_unit, "prefix", " / ")]}<br/>',
                         '{[this.encode(values.adr_one_street)]}<br/>',
@@ -475,11 +476,13 @@ Tine.Addressbook.Main = {
                         '{[this.encode(values.adr_one_region, " / ")]}{[this.encode(values.adr_one_countryname, "country")]}<br/>',
                     '</div>',
                     '<div class="preview-panel preview-panel-company">',
-                        this.translation._('Phone') + ': {[this.encode(values.tel_work)]}<br/>',
-                        this.translation._('Mobile') + ': {[this.encode(values.tel_cell)]}<br/>',
-                        this.translation._('Fax') + ': {[this.encode(values.tel_fax)]}<br/>',
-                        '<a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email)]}</a><br/>',
-                        '<a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url)]}</a><br/>',
+                        '<img src="images/oxygen/16x16/apps/kcall.png"/>&nbsp;{[this.encode(values.tel_work)]}<br/>',
+                        '<img src="images/oxygen/16x16/devices/phone.png"/>&nbsp;{[this.encode(values.tel_cell)]}<br/>',
+                        '<img src="images/oxygen/16x16/devices/printer.png"/>&nbsp;{[this.encode(values.tel_fax)]}<br/>',
+                        '<img src="images/oxygen/16x16/actions/kontact-mail.png"/>&nbsp;',
+                            '<a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email, "shorttext")]}</a><br/>',
+                        '<img src="images/oxygen/16x16/actions/network.png"/>&nbsp;',
+                            '<a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url, "shorttext")]}</a><br/>',
                         /*
                         this.translation._('Job Title') + ': {[this.encode(values.title)]}<br/>',
                         this.translation._('Job Role') + ': {[this.encode(values.role)]}<br/>',
@@ -493,10 +496,13 @@ Tine.Addressbook.Main = {
                         '{[this.encode(values.adr_two_region, " / ")]}{[this.encode(values.adr_two_countryname, "country")]}<br/>',
                     '</div>',
                     '<div class="preview-panel">',
-                        this.translation._('Phone') + ': {[this.encode(values.tel_home)]}<br/>',
-                        this.translation._('Mobile') + ': {[this.encode(values.tel_cell_private)]}<br/>',
-                        '<a href="mailto:{[this.encode(values.email_home)]}">{[this.encode(values.email_home)]}</a><br/>',
-                        '<a href="{[this.encode(values.url_home)]}" target="_blank">{[this.encode(values.url_home)]}</a><br/>',
+                        '<img src="images/oxygen/16x16/apps/kcall.png"/>&nbsp;{[this.encode(values.tel_home)]}<br/>',
+                        '<img src="images/oxygen/16x16/devices/phone.png"/>&nbsp;{[this.encode(values.tel_cell_private)]}<br/>',
+                        '<img src="images/oxygen/16x16/devices/printer.png"/>&nbsp;{[this.encode(values.tel_fax_home)]}<br/>',
+                        '<img src="images/oxygen/16x16/actions/kontact-mail.png"/>&nbsp;',
+                            '<a href="mailto:{[this.encode(values.email_home)]}">{[this.encode(values.email_home, "shorttext")]}</a><br/>',
+                        '<img src="images/oxygen/16x16/actions/network.png"/>&nbsp;',
+                            '<a href="{[this.encode(values.url_home)]}" target="_blank">{[this.encode(values.url_home, "shorttext")]}</a><br/>',
                     '</div>',
                     /*
                     '<div class="preview-panel">',
@@ -515,6 +521,7 @@ Tine.Addressbook.Main = {
             '</tpl>',
         	{
                 encode: function(value, type, prefix) {
+                	//var metrics = Ext.util.TextMetrics.createInstance('previewPanel');
                 	if (value) {
                 		if (type) {
                 			switch (type) {
@@ -523,6 +530,10 @@ Tine.Addressbook.Main = {
                 				    break;
                                 case 'longtext':
                                     value = Ext.util.Format.ellipsis(value, 300);
+                                    break;
+                                case 'shorttext':
+                                    //console.log(metrics.getWidth(value));
+                                    value = Ext.util.Format.ellipsis(value, 26);
                                     break;
                                 case 'prefix':
                                     if (prefix) {
