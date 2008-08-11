@@ -128,7 +128,7 @@ class Voipmanager_Backend_Snom_Xml
         $child->addAttribute('user', 'phone');
         
         $child = $dialPlan->addChild('template');
-        $child->addAttribute('match', '5[0-9].');
+        $child->addAttribute('match', '5..');
         $child->addAttribute('timeout', 0);
         $child->addAttribute('scheme', 'sip');
         $child->addAttribute('user', 'phone');
