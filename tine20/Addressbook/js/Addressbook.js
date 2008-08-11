@@ -209,10 +209,13 @@ Tine.Addressbook.Main = {
 	
 	renderer: {
         contactTid: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-            //switch(_data) {
-            //    default:
+            //console.log(_record.get('owner').type);
+            switch(_record.get('owner').type) {
+                case 'internal':
+                    return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + Tine.Addressbook.Main.translation._("Internal Contacts") + "'/>";
+                default:
                     return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
-            //}
+            }
 	    }		
 	},
 
