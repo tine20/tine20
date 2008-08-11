@@ -61,7 +61,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         );        
 
         $this->_objects['note'] = new Tinebase_Notes_Model_Note(array(
-            'id'                => 1,
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',    
             'record_model'      => $this->_objects['record']['model'],
