@@ -82,7 +82,7 @@ class Voipmanager_Backend_Snom_Xml
         }
         
         // reset old dialplan
-        $child = $xmlPhoneSettings->addChild('user_dp_str1', '');
+        $child = $xmlPhoneSettings->addChild('user_dp_str1');
         $child->addAttribute('perm', 'RW');
         
         $phoneSettings = $this->_getPhoneSettings($_phone);
@@ -104,6 +104,10 @@ class Voipmanager_Backend_Snom_Xml
                 $child->addAttribute('idx', $lineId);
                 $child->addAttribute('perm', 'RO');
             }
+            // reset old dialplan
+            $child = $xmlPhoneSettings->addChild('user_dp_str');
+            $child->addAttribute('idx', $lineId);
+            $child->addAttribute('perm', 'RO');
         }
         
         $guiLanguages = $xml->addChild('gui-languages');
