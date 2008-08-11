@@ -467,7 +467,7 @@ Tine.Addressbook.Main = {
         // @todo add tags?
         var detailTpl = new Ext.XTemplate(
             '<tpl for=".">',
-                '<div class="x-combo-list-item">',
+                '<div>',
                     '<div class="preview-panel preview-panel-company">',
                         '{[this.encode(values.org_name)]}{[this.encode(values.org_unit, "prefix", " / ")]}<br/>',
                         '{[this.encode(values.adr_one_street)]}<br/>',
