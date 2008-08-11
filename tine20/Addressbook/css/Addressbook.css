@@ -36,9 +36,16 @@
 	float:left;
 	padding-left: 5px;
 	padding-top: 5px; 
-	width: 190px;
 	white-space: normal;
 	height: 130px;
+}
+
+.preview-panel-contact {
+    width: 190px;
+}
+
+.preview-panel-address {
+	width: 170px;
 }
 
 .preview-panel img {
