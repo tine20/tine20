@@ -122,11 +122,23 @@ class Voipmanager_Backend_Snom_Xml
         $dialPlan = $xml->addChild('dialplan');
     
         $child = $dialPlan->addChild('template');
-        $child->addAttribute('match', '[1-8].');
+        $child->addAttribute('match', '[1-4].');
         $child->addAttribute('timeout', 0);
         $child->addAttribute('scheme', 'sip');
         $child->addAttribute('user', 'phone');
-    
+        
+        $child = $dialPlan->addChild('template');
+        $child->addAttribute('match', '5[0-9].');
+        $child->addAttribute('timeout', 0);
+        $child->addAttribute('scheme', 'sip');
+        $child->addAttribute('user', 'phone');
+        
+        $child = $dialPlan->addChild('template');
+        $child->addAttribute('match', '[6-8].');
+        $child->addAttribute('timeout', 0);
+        $child->addAttribute('scheme', 'sip');
+        $child->addAttribute('user', 'phone');
+        
         $child = $dialPlan->addChild('template');
         $child->addAttribute('match', '9..');
         $child->addAttribute('timeout', 0);
