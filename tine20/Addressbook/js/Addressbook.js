@@ -622,8 +622,8 @@ Tine.Addressbook.Main = {
 
         // temporary resizeing
         filterToolbar.on('bodyresize', function(ftb, w, h) {
-            var availableGridHeight = Ext.getCmp('center-panel').getSize().height;
-            gridPanel.setHeight(availableGridHeight - h);
+            var availableGridHeight = Ext.getCmp('center-panel').getSize().height - Ext.getCmp('adr-preview-panel').getSize().height - h;
+            gridPanel.setHeight(availableGridHeight);
         }, this);
         
         this.gridPanel = new Ext.Panel({
@@ -648,7 +648,18 @@ Tine.Addressbook.Main = {
                 height: 125,
                 html: '<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>' 
             }]
-        });        
+        });
+        this.gridPanel.on('resize', function(panel) {
+            //panel.syncSize();
+            /*
+            panel.items.each(function(item) {
+                console.log(item);
+                if (item.rendered){
+                item.syncSize();
+                }
+            }, this);
+            */
+        }, this);
     },
     
     /**
