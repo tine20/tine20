@@ -167,6 +167,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.actions[action].render(this.el);
         }
         
+        // wrap search button an set it always mouse-overed
+        this.searchButtonWrap = this.actions.startSearch.getEl().wrap();
+        this.searchButtonWrap.addClass('x-btn-over');
+        
         // arrange static action buttons
         this.arrangeButtons();
         
@@ -183,11 +187,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterStore.each(function(filter){
             tbody += ts.filterrow.apply({
                 id: this.frowIdPrefix + filter.id
-                //prefix: this.filterStore.indexOf(filter) == 0 ? _('Show') : _('and')
             });
         }, this);
         
-        //tbody += ts.actionrow.apply({});
         ts.master.insertFirst(this.el, {tbody: tbody}, true);
     },
     /**
@@ -263,8 +265,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.addFilterRow.getEl());
                 this.actions.addFilterRow.show();
                 // move start search button
-                tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.startSearch.getEl());
-                this.actions.startSearch.getEl().addClass('x-btn-over');
+                tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
                 this.actions.startSearch.show();
                 // move save filter button
                 tr.child('td[class=tw-ftb-frow-savefilterbutton]').insertFirst(this.actions.saveFilter.getEl());
