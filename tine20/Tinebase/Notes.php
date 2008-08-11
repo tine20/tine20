@@ -278,6 +278,8 @@ class Tinebase_Notes
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Timemachine_Model_ModificationLog)
      * @param string $_backend   backend of record
+     * 
+     * @todo translate strings and field labels
      */
     public function addSystemNote($_record, $_userId, $_type, $_mods = NULL, $_backend = 'Sql')
     {
@@ -288,10 +290,12 @@ class Tinebase_Notes
         
         $noteText = $_type . ' by ' . $user->accountDisplayName;
         
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_mods->toArray(), true));
+        
         if ($_mods !== NULL ) {
             $noteText .= ' | changed fields:';
             foreach ($_mods as $mod) {
-                $noteText .= ' ' . $mod->modified_attribute;
+                $noteText .= ' ' . $mod->modified_attribute .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
             }
         }
         
