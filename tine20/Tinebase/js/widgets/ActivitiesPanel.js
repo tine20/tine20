@@ -98,22 +98,19 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                             if (!value) {
                                 value = Tine.Tinebase.Registry.map.currentAccount.accountDisplayName;
                             }
-                            //var username = Ext.util.Format.ellipsis(value, 19);
                             var username = value;
                             return '<i>' + username + '</i>';
                         case 'time':
                             if (!value) {
                                 return '';
                             }
-                            var dt = Date.parseDate(value, 'c'); 
-                            return dt.format(Locale.getTranslationData('Date', 'medium'));
+                            return value.format(Locale.getTranslationData('Date', 'medium'));
                         case 'timefull':
                             if (!value) {
                                 return '';
                             }
-                            var dt = Date.parseDate(value, 'c'); 
-                            return dt.format(Locale.getTranslationData('Date', 'medium')) + ' ' +
-                                dt.format(Locale.getTranslationData('Time', 'medium'));
+                            return value.format(Locale.getTranslationData('Date', 'medium')) + ' ' +
+                                value.format(Locale.getTranslationData('Time', 'medium'));
                     }
                 }
             }
@@ -376,8 +373,11 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      */
     record_model: null,
     
+    /**
+     * other config options
+     */
 	title: null,
-    layout: 'hfit',
+	layout: 'fit',
     
     getActivitiesGrid: function() 
     {
@@ -392,7 +392,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                 renderer: Tine.widgets.activities.getTypeIcon },
             { resizable: true, id: 'note', header: this.translation._('Note'), dataIndex: 'note'},
             { resizable: true, id: 'created_by', header: this.translation._('Created By'), dataIndex: 'created_by', width: 70},
-            { resizable: true, id: 'creation_time', header: this.translation._('Timestamp'), dataIndex: 'creation_time', width: 70}
+            { resizable: true, id: 'creation_time', header: this.translation._('Timestamp'), dataIndex: 'creation_time', width: 50, 
+                renderer: Tine.Tinebase.Common.dateTimeRenderer }
         ]);
 
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -415,20 +416,19 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             store: this.store,
             cm: columnModel,
             tbar: pagingToolbar,     
-            autoSizeColumns: false,
             selModel: rowSelectionModel,
+            border: false,                  
+            //autoExpandColumn: 'note',
             //enableColLock:false,
-            //loadMask: true,
-            autoExpandColumn: 'note',
-            autoHeight:true,
-            border: false,            
+            //autoHeight: true,
+            //loadMask: true,            
             view: new Ext.grid.GridView({
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
+                autoScroll: true,
                 emptyText: 'No activities to display'
             })            
-            
         });
         
         return gridPanel;    	
@@ -526,7 +526,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         this.items = [        
             new Ext.Panel({
                 layout: 'fit',
-                autoHeight:true,
                 tbar: filterToolbar,
                 items: this.activitiesGrid
             })

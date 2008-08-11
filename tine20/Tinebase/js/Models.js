@@ -102,7 +102,7 @@ Tine.Tinebase.Model.Note = Ext.data.Record.create([
     {name: 'id'             },
     {name: 'note_type_id'   },
     {name: 'note'           },
-    {name: 'creation_time'  },
+    {name: 'creation_time', type: 'date', dateFormat: 'c' },
     {name: 'created_by'     }
 ]);
 
