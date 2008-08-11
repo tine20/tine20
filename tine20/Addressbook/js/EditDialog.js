@@ -474,10 +474,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
             {
                 title: sprintf(translation.ngettext('Link', 'Links [%d]', 1), 1),
                 disabled: true
-            },
-            {
-                title: translation._('History'),
-                disabled: true
             }
         ]
     });
