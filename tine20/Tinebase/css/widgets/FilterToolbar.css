@@ -1,5 +1,6 @@
 .action_delThisFilter {
-    background-image:url(../../../images/oxygen/16x16/actions/edit-clear-locationbar-rtl.png) !important;
+    /*background-image:url(../../../images/oxygen/16x16/actions/edit-clear-locationbar-rtl.png) !important;*/
+    background-image:url(../../../images/minus-gray.png) !important;
 }
 
 .action_delAllFilter {

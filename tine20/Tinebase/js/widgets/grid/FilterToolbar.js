@@ -239,7 +239,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             tooltip: _('Delete this filter'),
             filter: filter,
             iconCls: 'action_delThisFilter',
-            renderTo: fRow.child('td[class=tw-ftb-frow-deleterow]'),
+            //renderTo: fRow.child('td[class=tw-ftb-frow-deleterow]'),
+            renderTo: fRow.child('td[class=tw-ftb-frow-pmbutton]'),
             scope: this,
             handler: function(button) {
                 this.deleteFilter(button.filter);
@@ -259,7 +260,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             
             // prefix
             tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('and');
-            filter.deleteRowButton.setDisabled(numFilters == 1)
+            filter.deleteRowButton.setVisible(filter.id != lastId);
                 
             if (filter.id == lastId) {
                 // move add filter button
@@ -276,7 +277,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             if (filter.id == firstId) {
                 tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('Show');
                 tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.removeAllFilters.getEl());
-                this.actions.removeAllFilters.setVisible(numFilters > 1);
+                //this.actions.removeAllFilters.setVisible(numFilters > 1);
             }
         }, this);
     },
