@@ -1126,15 +1126,19 @@ class Tinebase_Container
     {
         $accountId          = Tinebase_User_Model_User::convertUserIdToInt(Zend_Registry::get('currentAccount'));
         
-        // remove container from cache
-        $cache = Zend_Registry::get('cache');
-        if (ucfirst(Zend_Registry::get('configFile')->caching->backend) !== 'Memcached') {
-            $cache->remove('getContainerById' . $_containerId);
-            $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
-            $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
-            $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
-        } else {
-            $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
+        try {
+            // remove container from cache
+            $cache = Zend_Registry::get('cache');
+            if (ucfirst(Zend_Registry::get('configFile')->caching->backend) !== 'Memcached') {
+                $cache->remove('getContainerById' . $_containerId);
+                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
+                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
+                $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
+            } else {
+                $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
+            }
+        } catch (Exception $e) {
+            // caching not configured
         }
     }
 
