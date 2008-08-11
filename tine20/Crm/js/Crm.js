@@ -347,27 +347,8 @@ Tine.Crm.Main = {
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                this.actions.editLead.setDisabled(true);
-                this.actions.deleteLead.setDisabled(true);
-                this.actions.exportLead.setDisabled(true);
-                this.actions.addTask.setDisabled(true);
-            } 
-            if (rowCount == 1) {
-               this.actions.editLead.setDisabled(false);
-               this.actions.deleteLead.setDisabled(false);               
-               this.actions.exportLead.setDisabled(false);
-               // @todo reactivate?
-               //this.actions.addTask.setDisabled(false);
-            }    
-            if(rowCount > 1) {                
-               this.actions.editLead.setDisabled(true);
-               this.actions.deleteLead.setDisabled(false);
-               this.actions.exportLead.setDisabled(false);
-               this.actions.addTask.setDisabled(true);
-            }
+            // update toolbars
+            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'container');
         }, this);
         
         var gridPanel = new Ext.grid.GridPanel({
@@ -427,6 +408,7 @@ Tine.Crm.Main = {
     
         // set actions
         this.actions.addLead = new Ext.Action({
+            requiredGrant: 'addGrant',
             text: this.translation._('Add lead'),
             tooltip: this.translation._('Add new lead'),
             iconCls: 'actionAdd',
@@ -439,6 +421,7 @@ Tine.Crm.Main = {
         });
         
         this.actions.editLead = new Ext.Action({
+            requiredGrant: 'readGrant',
             text: this.translation._('Edit lead'),
             tooltip: this.translation._('Edit selected lead'),
             disabled: true,
@@ -448,7 +431,12 @@ Tine.Crm.Main = {
         });
         
         this.actions.deleteLead = new Ext.Action({
-            text: this.translation._('Delete lead'),
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true,
+            singularText: 'Delete lead',
+            pluralText: 'Delete leads',
+            translationObject: this.translation,
+            text: this.translation.ngettext('Delete lead', 'Delete leads', 1),
             tooltip: this.translation._('Delete selected leads'),
             disabled: true,
             handler: this.handlers.handlerDelete,
@@ -457,6 +445,8 @@ Tine.Crm.Main = {
         });
         
         this.actions.exportLead = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
             text: this.translation._('Export as PDF'),
             tooltip: this.translation._('Export selected lead as PDF'),
             disabled: true,
@@ -466,6 +456,7 @@ Tine.Crm.Main = {
         });
         
         this.actions.addTask = new Ext.Action({
+            requiredGrant: 'readGrant',
             text: this.translation._('Add task'),
             tooltip: this.translation._('Add task for selected lead'),
             handler: this.handlers.handlerAddTask,
@@ -1047,6 +1038,9 @@ Tine.Crm.LeadEditDialog = {
                 
                 rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
+                    // update toolbars
+                    //Tine.widgets.ActionUpdater(_selectionModel, this.actions);
+                    
                     var rowCount = _selectionModel.getCount();                    
                     if(rowCount < 1) {
                         this.actions.editContact.setDisabled(true);
@@ -1060,6 +1054,7 @@ Tine.Crm.LeadEditDialog = {
                         this.actions.editContact.setDisabled(true);
                         this.actions.unlinkContact.setDisabled(false);
                     }
+                    
                 }, this);
                 
                 bbarItems = [                
@@ -1901,7 +1896,7 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'leadstate_id',  type: 'int'},
     {name: 'leadtype_id',   type: 'int'},
     {name: 'leadsource_id', type: 'int'},
-    {name: 'container',     type: 'int'},
+    {name: 'container'                 },
     {name: 'start',         type: 'date', dateFormat: 'c'},
     {name: 'description',   type: 'string'},
     {name: 'end',           type: 'date', dateFormat: 'c'},
