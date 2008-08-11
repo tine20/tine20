@@ -151,6 +151,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	return array(
     	   'Tinebase/css/Tinebase.css',
     	   'Tinebase/css/ux/Wizard.css',
+    	   'Tinebase/css/ux/grid/QuickaddGridPanel.css',
     	   'Tinebase/css/ux/grid/IconTextField.css',
     	   'Tinebase/css/ux/form/ExpandFieldSet.css',                  
     	   'Tinebase/css/ux/LockCombo.css',           

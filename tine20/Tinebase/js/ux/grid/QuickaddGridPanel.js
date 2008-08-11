@@ -58,10 +58,10 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             'newentry'
         );
         
+        this.cls = 'x-grid3-quickadd';
+        
         // The customized header template
-        this.getView().templates = {
-            header: this.makeHeaderTemplate()
-        };
+        this.initTemplates();
         
         // init handlers
         this.quickaddHandlers = {
@@ -151,14 +151,16 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * @private
      */
-    makeHeaderTemplate: function() {
-    	var newRows = '';
-    	
+    initTemplates: function() {
+        //this.getView().templates 
+        var ts = this.getView().templates = this.getView().templates ? this.getView().templates : {};
+        
+        var newRows = '';
     	Ext.each(this.getVisibleCols(), function(item){
     	    newRows += '<td><div class="x-small-editor" id="new-' + item.id + '"></div></td>';
     	}, this);
         
-    	return new Ext.Template(
+    	ts.header = new Ext.Template(
             '<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
             '<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
             '<tbody><tr class="new-row">',
@@ -166,6 +168,23 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             '</tr></tbody>',
             '</table>'
         );
+        
+        /*
+        ts.master = new Ext.Template(
+            '<div class="x-grid3" hidefocus="true">',
+                '<div class="x-grid3-viewport">',
+                    '<div class="x-grid3-header x-grid3-quickadd"><div class="x-grid3-header-inner"><div class="x-grid3-header-offset">{header}</div></div><div class="x-clear"></div></div>',
+                    '<div class="x-grid3-scroller"><div class="x-grid3-body">{body}</div><a href="#" class="x-grid3-focus" tabIndex="-1"></a></div>',
+                "</div>",
+                '<div class="x-grid3-resize-marker">&#160;</div>',
+                '<div class="x-grid3-resize-proxy">&#160;</div>',
+            "</div>"
+            );
+        
+        this.getView().templates = {
+            header: this.makeHeaderTemplate()
+        };
+        */
     },
     /**
      * @private
