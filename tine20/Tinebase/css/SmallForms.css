@@ -1,0 +1,64 @@
+/**
+ * make form elements small in text and height 
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+ 
+.x-tool-toggle-expander {
+    position: relative;
+    top: -23px;
+    left: 1px;
+    margin-bottom: -15px;
+}
+
+.x-ux-form-icontextfield-labelicon {
+    width: 13px;
+    height: 13px;
+}
+
+.ext-strict .x-form-text {
+    height: 15px;
+}
+
+.ext-safari .x-form-text {
+    height: 17px;
+}
+
+.x-form-field {
+    font-size: 11px;
+}
+
+.x-form-item {
+    font-size: 11px;
+    /*font-weight: bold;*/
+    margin-bottom: 2px;
+}
+
+.x-fieldset {
+    padding: 5px 5px 0px 5px;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.x-form-field-wrap .x-form-trigger {
+    height: 18px;
+}
+
+.ext-safari .x-form-field-wrap .x-form-trigger {
+    height: 18px;
+}
+
+.ext-safari .x-small-editor .x-form-trigger {
+    height: 17px;
+}
+
+.x-tab-strip-top .x-tab-strip-active .x-tab-right span.x-tab-strip-text {
+    padding-bottom: 3px;
+}
+
+.x-tab-strip span.x-tab-strip-text {
+    padding:3px 0pt;
+}
