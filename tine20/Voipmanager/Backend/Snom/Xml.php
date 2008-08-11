@@ -80,7 +80,11 @@ class Voipmanager_Backend_Snom_Xml
                 $child->addAttribute('perm', 'RO');
             }
         }
-                        
+        
+        // reset old dialplan
+        $child = $xmlPhoneSettings->addChild('user_dp_str1', '');
+        $child->addAttribute('perm', 'RW');
+        
         $phoneSettings = $this->_getPhoneSettings($_phone);
         foreach($phoneSettings as $key => $value) {
           $child = $xmlPhoneSettings->addChild($key, $value['value']);
