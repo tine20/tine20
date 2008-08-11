@@ -397,8 +397,8 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
     getActiveToolbar: function() {
         var northPanel = Ext.getCmp('north-panel-2');
 
-        if(northPanel.activeItem) {
-            return northPanel.activeItem;
+        if(northPanel.activeItem && northPanel.activeItem.el) {
+            return northPanel.activeItem.el;
         } else {
             return false;            
         }
