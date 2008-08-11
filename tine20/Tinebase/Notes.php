@@ -337,7 +337,11 @@ class Tinebase_Notes
         $backend = ucfirst(strtolower($_backend));
         
         $notes = $this->getNotesOfRecord($_model, $_id, $backend);
+        
         $this->deleteNotes($notes->getArrayOfIds());
+        
+        // invalidate cache
+        Zend_Registry::get('cache')->remove('getNotesOfRecord' . $_model . $_id . $backend);
     }
     
     /************************** note types *******************/
