@@ -152,6 +152,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	   'Tinebase/css/Tinebase.css',
     	   'Tinebase/css/SmallForms.css',
     	   'Tinebase/css/ux/Wizard.css',
+    	   'Tinebase/css/ux/Percentage.css',
     	   'Tinebase/css/ux/grid/QuickaddGridPanel.css',
     	   'Tinebase/css/ux/grid/IconTextField.css',
     	   'Tinebase/css/ux/form/ExpandFieldSet.css',                  

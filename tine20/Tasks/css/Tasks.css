@@ -21,18 +21,3 @@
 .TasksMainGridStatus-show_closed {
     background-image:url(../../images/oxygen/16x16/actions/checkmark-korganizer.png) !important;
 }
-
-.TasksProgress {
-    height: 12px;
-}
-
-.TasksProgressText {
-	color:#000000;
-	font-size:9px;
-	font-weight:bold;
-	left:0pt;
-	overflow:hidden;
-	padding:0px 5px;
-	position:absolute;
-	text-align:center;
-}

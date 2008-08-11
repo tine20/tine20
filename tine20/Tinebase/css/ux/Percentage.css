@@ -1,0 +1,20 @@
+/*
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+.PercentRenderer {
+    height: 12px;
+}
+
+.PercentRendererText {
+    color:#000000;
+    font-size:9px;
+    font-weight:bold;
+    left:0pt;
+    overflow:hidden;
+    padding:0px 5px;
+    position:absolute;
+    text-align:center;
+}
