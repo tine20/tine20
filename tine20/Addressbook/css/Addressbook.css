@@ -41,6 +41,10 @@
 	height: 130px;
 }
 
+.preview-panel img {
+	vertical-align: middle;
+}
+	
 .preview-panel-company {
 	background-color: #eeeeee;
 }
