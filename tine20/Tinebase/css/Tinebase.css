@@ -53,7 +53,7 @@ html, body {
 }
 
 .action_selectUser {
-    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
 }
 
 .action_selectGroup {
@@ -77,7 +77,7 @@ html, body {
 }
 
 .renderer_accountUserIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
 }
 
 .renderer_accountGroupIcon {
