@@ -130,7 +130,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
         
         foreach ($this->_properties as $field => $value)
         {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " append sql for filter '$field' width value '$value'");
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " append sql for filter '$field' width value '$value'");
             $value = str_replace(array('*', '_'), array('%', '\_'), $value);
             
             switch ($field) {
