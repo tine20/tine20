@@ -1872,7 +1872,13 @@ Tine.Crm.LeadEditDialog = {
         var viewport = new Ext.Viewport({
             layout: 'border',
             id: 'editViewport',
-            items: leadEdit
+            items: leadEdit,
+            listeners: {
+                scope: this,
+                render: function() {
+                    leadEdit.updateToolbars.defer(10, leadEdit, [lead, 'container']);
+                }
+            }
         });
 
         leadEdit.getForm().loadRecord(lead);
