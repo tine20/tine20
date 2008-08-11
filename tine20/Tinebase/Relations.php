@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
  */
 
 /**
@@ -113,8 +115,8 @@ class Tinebase_Relations
         }
         
         // remove relations from cache
-        $cache = Zend_Registry::get('cache');
-        $result = $cache->remove('getRelations' . $_model . $_backend . $_id);
+        #$cache = Zend_Registry::get('cache');
+        #$result = $cache->remove('getRelations' . $_model . $_backend . $_id);
     }
     
     /**
@@ -131,18 +133,18 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_ignoreAcl=false)
     {
-        $cache = Zend_Registry::get('cache');
-        $cacheId = 'getRelations' . $_model . $_backend . $_id;
-        $result = $cache->load($cacheId);
+        #$cache = Zend_Registry::get('cache');
+        #$cacheId = 'getRelations' . $_model . $_backend . $_id;
+        #$result = $cache->load($cacheId);
         
-        if (!$result) {
+        #if (!$result) {
     
             $result = $this->_backend->getAllRelations($_model, $_backend, $_id);
             $this->resolveAppRecords($result);
 
             // save result and tag it with 'container'
-            $cache->save($result, $cacheId, array('relations'));
-        }
+            #$cache->save($result, $cacheId, array('relations'));
+        #}
             
         return $result;
     }
