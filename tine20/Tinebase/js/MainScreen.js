@@ -33,7 +33,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      */
     actions: {
         changePassword: null,
-        logout: null,
+        logout: null
     },
     
     /**
@@ -192,16 +192,17 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         var userApps = Tine.Tinebase.Registry.get('userApplications');
         
         var panels = [];
+        var app, appPanel;
         for(var i=0; i<userApps.length; i++) {
-            var app = userApps[i];
+            app = userApps[i];
             if(app.status != 'enabled') {
                 continue;
             }
             try{
-                var appPanel = Tine[app.name].getPanel();
+                appPanel = Tine[app.name].getPanel();
                 panels.push(appPanel);
                 
-                if (i == 0 || app.name == this.defaultAppName) {
+                if (i === 0 || app.name == this.defaultAppName) {
                     this.defaultAppPanel = appPanel;
                 }
             } catch(e) {
@@ -293,8 +294,9 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                     iconCls: 'action_saveAndClose',
                     handler: function() {
                         var form = Ext.getCmp('changePasswordPanel').getForm();
+                        var values;
                         if (form.isValid()) {
-                            var values = form.getValues();
+                            values = form.getValues();
                             if (values.newPassword == values.newPasswordSecondTime) {
                                 Ext.Ajax.request({
                                     waitTitle: _('Please Wait!'),
@@ -372,10 +374,11 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         // get container to which component will be added
         var centerPanel = Ext.getCmp('center-panel');
         _panel.keep = _keep;
-        
+
+        var i,p;
         if(centerPanel.items) {
-            for (var i=0; i<centerPanel.items.length; i++){
-                var p =  centerPanel.items.get(i);
+            for (i=0; i<centerPanel.items.length; i++){
+                p =  centerPanel.items.get(i);
                 if (! p.keep) {
                     centerPanel.remove(p);
                 }
@@ -413,9 +416,10 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         var northPanel = Ext.getCmp('north-panel-2');
         _toolbar.keep = _keep;
         
+        var i,t;
         if(northPanel.items) {
-            for (var i=0; i<northPanel.items.length; i++){
-                var t = northPanel.items.get(i);
+            for (i=0; i<northPanel.items.length; i++){
+                t = northPanel.items.get(i);
                 if (! t.keep) {
                     northPanel.remove(t);
                 }
