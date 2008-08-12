@@ -18,6 +18,8 @@ $tine20path = dirname(__FILE__);
  */
 $yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
 
+$jslintPath = dirname(__FILE__) . '/../jslint4java-1.1/jslint4java-1.1+rhino.jar';
+
 /**
  * options
  */
@@ -28,6 +30,7 @@ try {
         'clean|c'         => 'Cleanup all build files',
         'translations|t'  => 'Build tranlations',
         'js|j'            => 'Build Java Script',
+        'lint'            => 'JSLint',
         'css|s'           => 'Build CSS Files',
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
@@ -45,7 +48,7 @@ try {
    exit;
 }
 
-if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z || $opts->pot || $opts->newlang || $opts->mo)) {
+if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->lint || $opts->s || $opts->z || $opts->pot || $opts->newlang || $opts->mo)) {
     echo $opts->getUsageMessage();
     exit;
 }
@@ -128,6 +131,22 @@ if ($opts->a || $opts->j) {
         $verbose = ' --verbose ';
     }
     system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
+}
+
+if ($opts->lint) {
+    foreach ($includeFiles['js'] as $file) {
+        list($filename) = explode('?', $file);
+        if (file_exists("$tine20path/$filename")) {
+            $lint = `java -jar $jslintPath --laxbreak $tine20path/$filename`;
+            if ($lint) {
+                echo "$tine20path/$filename: \n";
+                echo "------------------------------------------------------------------\n";
+                echo $lint;
+                echo "\n\n";
+            }
+                
+        }
+    }
 }
 
 if ($opts->a || $opts->t) {
