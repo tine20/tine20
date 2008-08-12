@@ -686,10 +686,10 @@ Tine.Addressbook.Main = {
             }
             
             // paging toolbar only works with this properties in the options!
-            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort,
-            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir,
-            options.params.start = options.params.start ? options.params.start : this.paging.start,
-            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit
+            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;
+            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir;
+            options.params.start = options.params.start ? options.params.start : this.paging.start;
+            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;
             
             options.params.paging = Ext.util.JSON.encode(options.params);
             
