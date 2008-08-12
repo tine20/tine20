@@ -160,14 +160,15 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      */
     valueRenderer: function(filter, el) {
         // value
-        var value = new Ext.form.TriggerField({
-            hideTrigger: true,
-            triggerClass: 'x-form-clear-trigger',
+        var value = new Ext.form.TextField({
+            //hideTrigger: true,
+            //triggerClass: 'x-form-clear-trigger',
             filter: filter,
             width: 200,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el,
+            renderTo: el
+            /*,
             listeners: {
                 scope: this,
                 specialkey: function(field, e){
@@ -184,7 +185,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 value.setValue(null);
                 //value.trigger.hide();
                 this.fireEvent('change');
-            }
+            }*/
         });
         /*
         value.on('specialkey', function(field, e){
