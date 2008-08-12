@@ -147,7 +147,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 tooltip: _('save filter'),
                 iconCls: 'action_saveFilter'
             })
-        }
+        };
     },
     /**
      * @private
@@ -332,7 +332,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         // init filters
         if (this.filters.length < 1) {
-            this.filters = [{field: this.defaultFilter}]
+            this.filters = [{field: this.defaultFilter}];
         }
         this.filterStore = new Ext.data.JsonStore({
             fields: this.record,

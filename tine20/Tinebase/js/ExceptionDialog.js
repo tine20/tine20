@@ -127,7 +127,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         
         var numChunks = Math.ceil(str.length / chunklen);
         for (var i=0;i<str.length; i+=chunklen) {
-            chunks.push(str.substr(i,chunklen))
+            chunks.push(str.substr(i,chunklen));
         }
         return chunks;
     },

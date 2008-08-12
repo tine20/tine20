@@ -152,8 +152,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initTemplates: function() {
-        //this.getView().templates 
-        var ts = this.getView().templates = this.getView().templates ? this.getView().templates : {};
+        this.getView().templates = this.getView().templates ? this.getView().templates : {};
+        var ts = this.getView().templates;
         
         var newRows = '';
     	Ext.each(this.getVisibleCols(), function(item){

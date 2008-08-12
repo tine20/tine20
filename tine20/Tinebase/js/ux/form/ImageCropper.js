@@ -82,7 +82,7 @@ Ext.extend(Ext.ux.form.ImageCropper, Ext.Component, {
         this.resizeable.dd.fgImageEl = this.fgImageEl;
         this.resizeable.dd.bgImageEl = this.bgImageEl;
         
-        this.resizeable.dd.onDrag = this.syncImageEls
+        this.resizeable.dd.onDrag = this.syncImageEls;
         
         // fix opacity, which might be broken by the inherited window properties
         var rhs = this.resizeable.getEl().query('div.x-resizable-handle');

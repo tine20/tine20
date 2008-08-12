@@ -31,7 +31,7 @@ Ext.ux.GMapPanel = Ext.extend(Ext.Panel, {
             zoom: 0,
             gmapType: 'map',
             border: false
-        }
+        };
         
         Ext.applyIf(this,defConfig);
         

@@ -67,10 +67,9 @@ Tine.widgets.ActionUpdater = function(records, actions, containerField) {
             if (initialConfig.singularText && initialConfig.pluralText && initialConfig.translationObject) {
                 var text = initialConfig.translationObject.n_(initialConfig.singularText, initialConfig.pluralText, records.length);
                 action.setText(text);
-                
             }
         }
-    }
+    };
     
     /**
      * call action iterator

@@ -52,7 +52,7 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
      * @private store has static content
      */
     getCountryStore: function(){
-        var store = Ext.StoreMgr.get('Countries')
+        var store = Ext.StoreMgr.get('Countries');
         if(!store) {
             store = new Ext.data.JsonStore({
                 baseParams: {

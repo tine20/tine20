@@ -152,7 +152,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                         title: 'Crop Image',
                         layout: 'fit',
                         items: dlg
-                    })
+                    });
                     win.show();
                 }
             

@@ -131,7 +131,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             style: 'overflow:auto',
             // substract the height of form and title -> for the scrollbars
             height: templateHeight            
-        })        
+        }); 
     },
     
     /**
@@ -148,7 +148,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             anchor:'100%',
             height: 55,
             hideLabel: true
-        }) 
+        });
         
         var subMenu = [];
         var typesStore = Tine.widgets.activities.getTypesStore();
@@ -465,10 +465,10 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             }
             
             // paging toolbar only works with this properties in the options!
-            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort,
-            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir,
-            options.params.start = options.params.start ? options.params.start : this.paging.start,
-            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit
+            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;
+            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir;
+            options.params.start = options.params.start ? options.params.start : this.paging.start;
+            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;
             
             options.params.paging = Ext.util.JSON.encode(options.params);
             
@@ -597,7 +597,7 @@ Tine.widgets.activities.getTypesStore = function() {
         store = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.NoteType,
             baseParams: {
-                method: 'Tinebase.getNoteTypes',
+                method: 'Tinebase.getNoteTypes'
             },
             root: 'results',
             totalProperty: 'totalcount',
