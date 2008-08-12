@@ -64,7 +64,7 @@ class Voipmanager_Model_AsteriskSipPeer extends Tinebase_Record_Abstract
         'fromuser'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'fromdomain'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'fullcontact'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'dynamic'),
         'insecure'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'mailbox'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
