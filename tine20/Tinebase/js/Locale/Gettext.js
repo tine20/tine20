@@ -52,6 +52,11 @@ Locale.Gettext.prototype.textdomain = function (domain) {
 };
 
 Locale.Gettext.prototype.getmsg = function (domain, category, reload) {
+  var locale = Tine.Tinebase.Registry.get('locale');
+  if (! locale || locale == 'en') {
+    return Locale.Gettext.prototype._msgs.emptyDomain;
+  }
+  
   var key = this._getkey(category, domain);
   return reload || typeof Locale.Gettext.prototype._msgs[key] == 'undefined'
     ? Locale.Gettext.prototype._msgs[key] = new Locale.Gettext.PO(this._url(category, domain))
@@ -186,3 +191,6 @@ Locale.Gettext.PO.prototype.plural = function (n) {
       ? 0
       : plural;
 };
+
+// create dummy domain
+Locale.Gettext.prototype._msgs.emptyDomain = new Locale.Gettext.PO(({}));

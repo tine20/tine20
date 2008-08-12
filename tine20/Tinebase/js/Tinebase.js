@@ -33,6 +33,7 @@ if (! ("console" in window) || !("firebug" in console)) {
 /**
  * config locales
  */
+Locale.Gettext.prototype._msgs.en = {};
 Locale.setlocale(Locale.LC_ALL, '');
 Locale.Gettext.textdomain('Tinebase');
 // shorthands
