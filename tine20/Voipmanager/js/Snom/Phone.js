@@ -1666,7 +1666,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                         this.editPhoneDialog(_phoneData,this._maxLines()),
                         this.editPhoneSettingsDialog(_writable),   
                         this.editPhoneLinesDialog(this._maxLines(_phoneData.current_model), _lines, _snomLines),
-                        this.editPhoneOwnerSelection(_phoneData.rights)
+                        this.editPhoneOwnerSelection((_phoneData.rights ? _phoneData.rights : {}))
                     ]
                 }]
             });
