@@ -366,6 +366,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     onFilterRowsChange: function() {
         this.arrangeButtons();
+        this.onBodyresize();
     },
     
     /**
@@ -394,7 +395,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.renderFilterRow(filter);
         if (!this.supressEvents) {
             this.onFilterRowsChange();
-            this.onBodyresize();
         }
         return filter;
     },
@@ -411,17 +411,20 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     deleteFilter: function(filter) {
         var fRow = this.el.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
-        // update prefix text
-        //if (this.filterStore.indexOf(filter) == 0 && this.filterStore.getCount() > 1) {
-        //    fRow.next().child('td[class=tw-ftb-frow-prefix]').update(_('Show'));
-        //}
-        fRow.remove();
+        var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
         this.filterStore.remove(this.filterStore.getById(filter.id));
+        // save buttons somewhere
+        if (isLast) {
+        	for (action in this.actions) {
+	            this.actions[action].hide();
+	            this.el.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
+	        }
+        }
+        fRow.remove();
         
         if (!this.supressEvents) {
             this.onFiltertrigger();
             this.onFilterRowsChange();
-            this.onBodyresize();
         }
     },
     /**
@@ -439,8 +442,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterStore.insert(0, firstFilter);
         
         this.supressEvents = false;
-        this.onFilterRowsChange();
         this.onFiltertrigger();
+        this.onFilterRowsChange();
     },
     
     
