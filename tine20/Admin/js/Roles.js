@@ -743,7 +743,7 @@ Tine.Admin.Roles.EditDialog = {
  */
 Tine.Admin.Roles.Right = Ext.data.Record.create([
     {name: 'application_id'},
-    {name: 'right'},
+    {name: 'right'}
 ]);
 
 
