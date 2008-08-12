@@ -250,7 +250,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
                 height: 250,
                 items: [
                     _linkTabpanels.tasksPanel,
-                    _linkTabpanels.productsPanel,
+                    _linkTabpanels.productsPanel
                 ]
             }
             ]
