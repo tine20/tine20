@@ -536,10 +536,10 @@ Tine.Admin.Tags.EditDialog = {
         colorPicker.setValue = function(color) {
             colorPicker.el.setStyle('background', color);
             colorPicker.color = color;
-        }
+        };
         colorPicker.getValue = function() {
             return colorPicker.color;
-        }
+        };
         /** end of color chooser **/
         
         var editTagDialog = {
