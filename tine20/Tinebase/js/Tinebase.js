@@ -21,10 +21,13 @@ Ext.QuickTips.init();
  * create console pseudo object when firebug is disabled/not installed
  */
 if (! ("console" in window) || !("firebug" in console)) {
-    var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml", "group"
-                 , "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
-    window.console = {};
-    for (var i = 0; i <names.length; ++i) window.console[names[i]] = function() {};
+    window.console = {
+        log: null , debug: null, info: null, warn: null, error: null, assert: null, dir: null, dirxml: null, group: null,
+        groupEnd: null, time: null, timeEnd: null, count: null, trace: null, profile: null, profileEnd: null
+    };
+    for (f in window.console) {
+        window.console[f] = function() {};
+    }
 }
 
 /**
@@ -77,13 +80,14 @@ Tine.Tinebase.initFramework = function() {
         
 		
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
+            var windowHeight, win;
             // detect resoponse errors (e.g. html from xdebug)
             if (response.responseText.charAt(0) == '<') {
-                var windowHeight = 600;
+                windowHeight = 600;
                 if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
                     windowHeight = Ext.getBody().getHeight(true) * 0.7;
                 }
-                var win = new Ext.Window({
+                win = new Ext.Window({
                     width: 600,
                     height: windowHeight,
                     autoScroll: true,
@@ -126,9 +130,9 @@ Tine.Tinebase.initFramework = function() {
             for (var i=0,j=data.trace.length; i<j; i++) {
                 trace += (data.trace[i].file ? data.trace[i].file : '[internal function]') +
                          (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
-                         (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i]['type'] + '</b>' : '') +
+                         (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i].type + '</b>' : '') +
                          '<b>' + data.trace[i]['function'] + '</b>' +
-                        '(' + (data.trace[i]['args'][0] ? data.trace[i]['args'][0] : '') + ')<br/>';
+                        '(' + (data.trace[i].args[0] ? data.trace[i].args[0] : '') + ')<br/>';
             }
             data.traceHTML = trace;
             
@@ -284,7 +288,7 @@ Tine.Tinebase.Common = function(){
      * @return {string} formated user display name
      */
     _usernameRenderer = function(_accountObject, _metadata, _record, _rowIndex, _colIndex, _store){
-        return Ext.util.Format.htmlEncode(_accountObject.accountDisplayName)
+        return Ext.util.Format.htmlEncode(_accountObject.accountDisplayName);
     };
 	
     /**
@@ -297,10 +301,10 @@ Tine.Tinebase.Common = function(){
             type = 'user';
             displayName = _accountObject.accountDisplayName;
         } else if (_accountObject.name){
-            type = 'group'
+            type = 'group';
             displayName = _accountObject.name;
         } else if (_record.data.name) {
-            type = _record.data.type
+            type = _record.data.type;
             displayName = _record.data.name;
         } else if (_record.data.account_name) {
             type = _record.data.account_type;
@@ -324,9 +328,10 @@ Tine.Tinebase.Common = function(){
 			
 		var data = _dataSrc.data;
 		var dataLen = data.getCount();
-		var jsonData = [];		
+		var jsonData = [];
+        var curRecData;
 		for(i=0; i < dataLen; i++) {
-			var curRecData = data.itemAt(i).data;
+			curRecData = data.itemAt(i).data;
 			jsonData.push(curRecData);
 		}	
 
@@ -355,9 +360,9 @@ Tine.Tinebase.Common = function(){
             return false;
         }
         
+        var curRecData;
 		for(var i=0; i < dataLen; i++) {
-
-                var curRecData = [];
+                curRecData = [];
                 curRecData[0] = {};
                 curRecData[0][_switchKeys[0]] = data.itemAt(i).data.key;
                 curRecData[0][_switchKeys[1]] = data.itemAt(i).data.value;                
