@@ -54,7 +54,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editSnomPhone($phoneId=NULL)
     {
         $controller = Voipmanager_Controller::getInstance();
-
+        $snomTemplates = $controller->getSnomTemplates();
+        $snomLocations = $controller->getSnomLocations();
+        
         $asteriskSipPeers = $controller->searchAsteriskSipPeers('name');
         $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());    
         
@@ -101,7 +103,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             
         } else {
             $encodedWritable = '{}';
-            $encodedSnomPhone = '{}';
+            $encodedSnomPhone = "{current_model:'snom320',redirect_event:'none'}";
             $encodedSnomLines = '[]';
 
             $encodedSettings = '{}';
@@ -109,8 +111,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
         $currentAccount = Zend_Registry::get('currentAccount')->toArray();
 
-        $encodedTemplates = Zend_Json::encode($controller->getSnomTemplates()->toArray());
-        $encodedLocations = Zend_Json::encode($controller->getSnomLocations()->toArray());        
+        $encodedTemplates = Zend_Json::encode($snomTemplates->toArray());
+        $encodedLocations = Zend_Json::encode($snomLocations->toArray());        
                         
         $view = new Zend_View();
          
