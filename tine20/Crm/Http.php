@@ -118,6 +118,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                     exit();            
                 }
                 
+                header("Pragma: public");
+                header("Cache-Control: max-age=0");
                 header("Content-Disposition: inline; filename=lead.pdf"); 
                 header("Content-type: application/x-pdf"); 
                 echo $pdfOutput;            
