@@ -317,10 +317,7 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact,
                 '-',
                 this.actions.exportContact,
-                ( Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
-                //'->',
-                //this.translation._('Filter: '), tagFilter,
-                //this.translation._('Search: '), quickSearchField
+                ( Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
             ]
         });
     },
@@ -342,11 +339,7 @@ Tine.Addressbook.Main = {
                 {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality'},
                 {label: this.translation._('Street') + ' (' + this.translation._('Private Address') + ')',      field: 'adr_two_street', defaultOperator: 'equals', valueType: 'int'},
                 {label: this.translation._('Postal Code') + ' (' + this.translation._('Private Address') + ')', field: 'adr_two_postalcode', defaultOperator: 'equals', valueType: 'int'},
-                {label: this.translation._('City') + '  (' + this.translation._('Private Address') + ')',       field: 'adr_two_locality'},
-                
-                //new Tine.widgets.container.ContainerFilter({ field: 'owner'})
-                //{label: 'Full Name', field: 'n_fn', defaultOperator: 'equals'},
-                //{label: 'Container', field: 'owner'},
+                {label: this.translation._('City') + '  (' + this.translation._('Private Address') + ')',       field: 'adr_two_locality'}
              ],
              defaultFilter: 'query',
              filters: []
