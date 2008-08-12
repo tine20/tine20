@@ -310,5 +310,5 @@ Tine.Dialer.Main = {
             this.updateMainToolbar();
         }
         //this.loadData(_node);		
-	}
+	};
 }
