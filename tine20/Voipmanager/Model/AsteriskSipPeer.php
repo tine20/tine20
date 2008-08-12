@@ -75,7 +75,7 @@ class Voipmanager_Model_AsteriskSipPeer extends Tinebase_Record_Abstract
         'mask'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pickupgroup'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'qualify'               => array(array('InArray', array('yes', 'no')), Zend_Filter_Input::DEFAULT_VALUE => 'off'),
+        'qualify'               => array(array('InArray', array('yes', 'no')), Zend_Filter_Input::DEFAULT_VALUE => 'no'),
         'restrictcid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'rtptimeout'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'rtpholdtimeout'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
