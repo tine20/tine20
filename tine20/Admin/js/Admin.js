@@ -975,7 +975,7 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             {name: 'id'},
             {name: 'account_id'},
             {name: 'account_type'},
-            {name: 'accountDisplayName'},            
+            {name: 'accountDisplayName'}            
             ].concat(rights)
         );
         
