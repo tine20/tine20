@@ -40,7 +40,7 @@ class Voipmanager_Model_SnomPhone extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'macaddress'            => 'StringTrim'
+        'macaddress'            => array('StringTrim','StringToUpper')
     );
     
     /**
