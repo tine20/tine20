@@ -132,7 +132,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 tooltip: _('Delete all filters'),
                 iconCls: 'action_delAllFilter',
                 scope: this,
-                handler: this.deleteAllFilters,
+                handler: this.deleteAllFilters
             }),
             startSearch: new Ext.Button({
                 text: _('start search'),
@@ -140,12 +140,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 scope: this,
                 handler: function() {
                     this.onFiltertrigger();
-                },
+                }
             }),
             saveFilter: new Ext.Button({
                 disabled: true,
                 tooltip: _('save filter'),
-                iconCls: 'action_saveFilter',
+                iconCls: 'action_saveFilter'
             })
         }
     },
@@ -221,7 +221,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             displayField: 'label',
             valueField: 'field',
             value: filterModel.field,
-            renderTo: fRow.child('td[class=tw-ftb-frow-field]'),
+            renderTo: fRow.child('td[class=tw-ftb-frow-field]')
         });
         filter.formFields.field.on('select', function(combo, newRecord, newKey) {
             if (combo.value != combo.filter.get('field')) {

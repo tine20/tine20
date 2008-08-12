@@ -69,7 +69,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     defaults: {
                         xtype: 'textfield',
                         readOnly: true,
-                        anchor: '95%',
+                        anchor: '95%'
                     },
                     html:  '<div class="tb-exceptiondialog-details">' +
                                 '<p class="tb-exceptiondialog-msg">' + this.exceptionInfo.msg + '</p>' +

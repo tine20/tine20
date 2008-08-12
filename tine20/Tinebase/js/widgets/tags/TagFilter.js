@@ -38,7 +38,7 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             width: 200,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el,
+            renderTo: el
         });
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){

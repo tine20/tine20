@@ -88,7 +88,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'equals',   label: _('is equal to')},
                 {operator: 'greater',  label: _('is greater than')},
                 {operator: 'less',     label: _('is less than')},
-                {operator: 'not',      label: _('is not')},
+                {operator: 'not',      label: _('is not')}
                 //{operator: 'in',       label: _('is in')}
             ]
         });
@@ -120,7 +120,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 displayField: 'label',
                 valueField: 'operator',
                 value: filter.get('operator') ? filter.get('operator') : this.defaultOperator,
-                renderTo: el,
+                renderTo: el
             });
             operator.on('select', function(combo, newRecord, newKey) {
                 if (combo.value != combo.filter.get('operator')) {
