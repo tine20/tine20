@@ -60,6 +60,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     border: false,
     monitorResize: true,
     
+    // fix layout bug IE
+    bodyStyle: 'margin-bottom: -16px;',
+    
     record: Ext.data.Record.create([
         {name: 'field'},
         {name: 'operator'},
