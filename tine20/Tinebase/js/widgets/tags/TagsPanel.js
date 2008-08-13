@@ -45,9 +45,10 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     searchField: null,
     
     iconCls: 'action_tag',
-    layout: 'hfit',
+    layout: 'fit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
     collapsible: true,
+    border: false,
     
     /**
      * @private
@@ -78,25 +79,28 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         
         this.initSearchField();
         
-        this.bbar = [
-            this.searchField, '->',
-            new Ext.Button({
-                text: '',
-                iconCls: 'action_add',
-                tooltip: _('Add a new personal tag'),
-                scope: this,
-                handler: function() {
-                    Ext.Msg.prompt(_('Add New Personal Tag'),
-                                   _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'), 
-                        function(btn, text) {
-                            if (btn == 'ok'){
-                                this.onTagAdd(text);
-                            }
-                        }, 
-                    this, false, this.searchField.lastQuery);
-                }
-            })
-        ];
+        this.bottomBar = new Ext.Toolbar({
+            style: 'border: 0px;',
+            items:[
+                this.searchField, '->',
+                new Ext.Button({
+                    text: '',
+                    iconCls: 'action_add',
+                    tooltip: _('Add a new personal tag'),
+                    scope: this,
+                    handler: function() {
+                        Ext.Msg.prompt(_('Add New Personal Tag'),
+                                       _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'), 
+                            function(btn, text) {
+                                if (btn == 'ok'){
+                                    this.onTagAdd(text);
+                                }
+                            }, 
+                        this, false, this.searchField.lastQuery);
+                    }
+                })
+            ]
+        });
         
         var tagTpl = new Ext.XTemplate(
             '<tpl for=".">',
@@ -269,10 +273,15 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             })
         };
         
-        this.items = [
-            this.dataView,
-            this.formField
-        ];
+        this.items = [{
+            xtype: 'panel',
+            layout: 'fit',
+            bbar: this.bottomBar,
+            items: [
+                this.dataView,
+                this.formField
+            ]
+        }];
         Tine.widgets.tags.TagPanel.superclass.initComponent.call(this);
     },
     /**
@@ -350,7 +359,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             
                             // reset avail tag store
                             this.availableTagsStore.lastOptions = null;
-                            //this.el.unmask();
+                            this.el.unmask();
                         },
                         failure: function ( result, request) {
                             Ext.MessageBox.alert(_('Failed'), _('Could not create tag.')); 

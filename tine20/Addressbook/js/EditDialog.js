@@ -377,7 +377,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
             },
             {
                 // tags & notes
-            	//layout: 'hfit',
             	layout: 'accordion',
             	animate: true,
                 region: 'east',
@@ -386,7 +385,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 collapsible: true,
                 collapseMode: 'mini',
                 margins: '0 5 0 5',
-                bodyStyle: 'padding-left: 5px;',
+                border: true,
                 items: [
                     new Ext.Panel({
                     	// @todo generalise!
@@ -394,7 +393,9 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         iconCls: 'descriptionIcon',
                         layout: 'form',
                         labelAlign: 'top',
+                        border: false,
                         items: [{
+                            style: 'margin-top: -4px; border 0px;',
                             labelSeparator: '',
                             xtype:'textarea',
                             name: 'note',
@@ -407,13 +408,13 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                     }),
                     new Tine.widgets.tags.TagPanel({
                         border: false,
-                        style: 'border:1px solid #B5B8C8;'
+                        bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
                     new Tine.widgets.activities.ActivitiesPanel({
                     	app: 'Addressbook',
                     	showAddNoteForm: false,
                         border: false,
-                        style: 'border:1px solid #B5B8C8;'
+                        bodyStyle: 'border:1px solid #B5B8C8;'
                     })                    
                 ]
             }
