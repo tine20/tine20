@@ -335,7 +335,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                         color: '#FFFFFF'
                     });
                     
-                    this.el.mask();
+                    if (! Ext.isIE) {
+                    	this.el.mask();
+                    }
                     Ext.Ajax.request({
                         params: {
                             method: 'Tinebase.saveTag', 
@@ -348,7 +350,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             
                             // reset avail tag store
                             this.availableTagsStore.lastOptions = null;
-                            this.el.unmask();
+                            //this.el.unmask();
                         },
                         failure: function ( result, request) {
                             Ext.MessageBox.alert(_('Failed'), _('Could not create tag.')); 
