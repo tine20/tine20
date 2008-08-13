@@ -52,6 +52,17 @@ class Tinebase_Controller
      */
     protected function _initFramework()
     {
+        Zend_Session::setOptions(array(
+            'name'              => 'TINE20SESSID',
+            //'cookie_httponly'   => true, // not supported by ZF as of 2008-08-13
+            'hash_function'     => 1,
+        
+        ));
+        if(isset($_SERVER['HTTPS'])) {
+            Zend_Session::setOptions(array(
+                'cookie_secure'     => true,
+            ));
+        }
         Zend_Session::start();
 
         if(file_exists(dirname(__FILE__) . '/../config.inc.php')) {
@@ -233,8 +244,8 @@ class Tinebase_Controller
      */
     public function handleSnom()
     {
-        if(isset($_REQUEST['PHPSESSID'])) {
-            Zend_Session::setId($_REQUEST['PHPSESSID']);
+        if(isset($_REQUEST['TINE20SESSID'])) {
+            Zend_Session::setId($_REQUEST['TINE20SESSID']);
         }
         
         $this->_initFramework();
