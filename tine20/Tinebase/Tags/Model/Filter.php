@@ -41,7 +41,7 @@ class Tinebase_Tags_Model_Filter extends Tinebase_Record_Abstract
         'owner'                => array('allowEmpty' => true),
         'application'          => array('allowEmpty' => true),
         'name'                 => array('allowEmpty' => true),
-    
+        'description'          => array('allowEmpty' => true),
         'type'                 => array('presence'   => 'required',
                                         'allowEmpty' => true,
                                         'InArray'    => array(Tinebase_Tags_Model_Tag::TYPE_PERSONAL, Tinebase_Tags_Model_Tag::TYPE_SHARED),
@@ -71,6 +71,9 @@ class Tinebase_Tags_Model_Filter extends Tinebase_Record_Abstract
         
         if (!empty($this->name)) {
             $select->where($db->quoteInto('tags.name LIKE ?', $this->name));
+        }
+        if (!empty($this->description)) {
+            $select->where($db->quoteInto('tags.description LIKE ?', $this->description));
         }
         if ($this->type) {
             $select->where($db->quoteInto('tags.type = ?', $this->type));
