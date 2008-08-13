@@ -62,10 +62,10 @@ class Tinebase_Acl_Model_RoleFilter extends Tinebase_Record_Abstract
             ->from(array('roles' => SQL_TABLE_PREFIX . 'roles'));
         
         if (!empty($this->name)) {
-            $select->where($db->quoteInto('roles.name LIKE ?', '%'. $this->name . '%'));
+            $select->where($db->quoteInto('roles.name LIKE ?', $this->name));
         }
         if (!empty($this->description)) {
-            $select->where($db->quoteInto('roles.description LIKE ?', '%'. $this->description . '%'));
+            $select->where($db->quoteInto('roles.description LIKE ?', $this->description));
         }
         return $select;
     }

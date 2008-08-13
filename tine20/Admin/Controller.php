@@ -546,8 +546,8 @@ class Admin_Controller
         $this->checkRight('VIEW_ROLES');
        
         $filter = new Tinebase_Acl_Model_RoleFilter(array(
-            'name'        => $query,
-            'description' => $query
+            'name'        => '%' . $query . '%',
+            'description' => '%' . $query . '%'
         ));
         $paging = new Tinebase_Model_Pagination(array(
             'start' => $start,
