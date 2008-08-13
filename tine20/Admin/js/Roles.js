@@ -98,12 +98,12 @@ Tine.Admin.Roles.Main = {
     
     displayRolesToolbar: function()
     {
-        var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
+        var RolesQuickSearchField = new Ext.ux.SearchField({
+            id: 'RolesQuickSearchField',
             width:240,
             emptyText: 'enter searchfilter'
         }); 
-        quickSearchField.on('change', function(){
+        RolesQuickSearchField.on('change', function(){
             Ext.getCmp('AdminRolesGrid').getStore().load({
                 params: {
                     start: 0,
@@ -123,7 +123,7 @@ Tine.Admin.Roles.Main = {
                 '->', 
                 'Search:', 
                 ' ',
-                quickSearchField
+                RolesQuickSearchField
             ]
         });
 
@@ -152,7 +152,7 @@ Tine.Admin.Roles.Main = {
         dataStore.setDefaultSort('id', 'asc');
 
         dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.query = Ext.getCmp('RolesQuickSearchField').getValue();
         }, this);        
         
         // the paging toolbar
