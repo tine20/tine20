@@ -446,7 +446,8 @@ class Admin_Controller
     public function getTags($query, $sort, $dir, $start, $limit)
     {
         $filter = new Tinebase_Tags_Model_Filter(array(
-            'name'        => $query,
+            'name'        => '%' . $query . '%',
+            'description' => '%' . $query . '%',
             'type'        => Tinebase_Tags_Model_Tag::TYPE_SHARED
         ));
         $paging = new Tinebase_Model_Pagination(array(
