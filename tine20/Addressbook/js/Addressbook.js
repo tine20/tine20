@@ -615,14 +615,38 @@ Tine.Addressbook.Main = {
 
         // temporary resizeing
         filterToolbar.on('bodyresize', function(ftb, w, h) {
-            var availableGridHeight = Ext.getCmp('center-panel').getSize().height - Ext.getCmp('adr-preview-panel').getSize().height - h;
-            gridPanel.setHeight(availableGridHeight);
+            /*
+            var layout = Ext.getCmp('adr-filtertoolbar-panel');
+            layout.setHeight(h);
+            if (layout.rendered) {
+                layout.el.setSize(w,h);
+                console.log(layout);
+                layout.doLayout();
+                //layout.layout();
+            }
+            */
+            var c = Ext.getCmp('center-panel');
+            var p = Ext.getCmp('adr-preview-panel');
+            if (c.rendered && p.rendered) {
+                var availableGridHeight = Ext.getCmp('center-panel').getSize().height - Ext.getCmp('adr-preview-panel').getSize().height - h;
+                gridPanel.setHeight(availableGridHeight);
+            }
+            
         }, this);
-        
         this.gridPanel = new Ext.Panel({
             layout: 'border',
-            items: [
-            {
+            items: [/*{
+                id: 'adr-filtertoolbar-panel',
+                region: 'north',
+                layout: 'fit',
+                border: false,
+                collapsible:true,
+                collapseMode: 'mini',
+                //collapsed: true,
+                split: true,
+                height: 27,
+                items: filterToolbar
+            }, */{
                 id: 'adr-center-panel',
                 region: 'center',
                 border: false,
