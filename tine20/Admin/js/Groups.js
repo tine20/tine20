@@ -98,12 +98,12 @@ Tine.Admin.Groups.Main = {
     
     displayGroupsToolbar: function()
     {
-        var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
+        var GroupsAdminQuickSearchField = new Ext.ux.SearchField({
+            id: 'GroupsAdminQuickSearchField',
             width:240,
             emptyText: 'enter searchfilter'
         }); 
-        quickSearchField.on('change', function(){
+        GroupsAdminQuickSearchField.on('change', function(){
             Ext.getCmp('AdminGroupsGrid').getStore().load({
                 params: {
                     start: 0,
@@ -123,7 +123,7 @@ Tine.Admin.Groups.Main = {
                 '->', 
                 'Search:', 
                 ' ',
-                quickSearchField
+                GroupsAdminQuickSearchField
             ]
         });
 
@@ -152,7 +152,7 @@ Tine.Admin.Groups.Main = {
         dataStore.setDefaultSort('id', 'asc');
 
         dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.filter = Ext.getCmp('GroupsAdminQuickSearchField').getValue();
         }, this);        
         
         // the paging toolbar
