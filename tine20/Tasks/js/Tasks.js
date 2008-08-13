@@ -237,7 +237,7 @@ Tine.Tasks.mainGrid = {
             // toolbar
 			this.filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
 			this.filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
-			this.filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
+			this.filter.query = Ext.getCmp('TasksQuickSearchField') ? Ext.getCmp('TasksQuickSearchField').getValue() : '';
 			this.filter.status_id = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
 			//this.filter.due
 			//this.filter.tag
@@ -322,12 +322,12 @@ Tine.Tasks.mainGrid = {
 	// toolbar must be generated each time this fn is called, 
 	// as tinebase destroys the old toolbar when setting a new one.
 	initToolbar: function(){
-		var quickSearchField = new Ext.ux.SearchField({
-			id: 'quickSearchField',
+		var TasksQuickSearchField = new Ext.ux.SearchField({
+			id: 'TasksQuickSearchField',
 			width: 200,
 			emptyText: this.translation._('Enter searchfilter')
 		});
-		quickSearchField.on('change', function(field){
+		TasksQuickSearchField.on('change', function(field){
 			if(this.filter.query != field.getValue()){
 				this.store.load({params: this.paging});
 			}
@@ -390,7 +390,7 @@ Tine.Tasks.mainGrid = {
 				//'Organizer: ', ' ',	organizerFilter,
 				new Ext.Toolbar.Separator(),
 				'->',
-				this.translation._('Search:'), ' ', ' ', quickSearchField]
+				this.translation._('Search:'), ' ', ' ', TasksQuickSearchField]
 		});
 	},
 	
