@@ -40,15 +40,7 @@ Tine.widgets.grid.FilterToolbar = function(config) {
        * is fired when user request to update list by filter
        * @param {Tine.widgets.grid.FilterToolbar}
        */
-      'filtertrigger',
-      /**
-       * @event bodyresize
-       * Fires after the FilterToolbar has been resized.
-       * @param {Tine.widgets.grid.FilterToolbar} the FilterToolbar which has been resized.
-       * @param {Number} width The Panel's new width.
-       * @param {Number} height The Panel's new height.
-       */
-      'bodyresize'
+      'filtertrigger'
     );
     
 };
@@ -174,9 +166,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.searchButtonWrap.addClass('x-btn-over');
         
         // arrange static action buttons
-        this.arrangeButtons();
-        
-        
+        this.onFilterRowsChange();
     },
     /**
      * renders static table
@@ -192,7 +182,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             });
         }, this);
         
-        ts.master.insertFirst(this.el, {tbody: tbody}, true);
+        this.tableEl = ts.master.insertFirst(this.el, {tbody: tbody}, true);
     },
     /**
      * renders the filter specific stuff of a single filter row
@@ -286,15 +276,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }, this);
     },
     /**
-     * @private
-     */
-    onBodyresize: function() {
-        if (! this.supressEvents) {
-            var size = this.getSize();
-            this.fireEvent('bodyresize', this, size.width, size.height);
-        }
-    },
-    /**
      * called  when a filter action is to be triggered (start new search)
      * @private
      */
@@ -366,7 +347,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     onFilterRowsChange: function() {
         this.arrangeButtons();
-        this.onBodyresize();
+        if (! this.supressEvents) {
+            var size = this.tableEl.getSize();
+            this.setSize(size.width, size.height);
+            //this.syncSize();
+            //this.fireEvent('bodyresize', this, size.width, size.height);
+        }
     },
     
     /**
@@ -393,9 +379,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }, true);
         
         this.renderFilterRow(filter);
-        if (!this.supressEvents) {
-            this.onFilterRowsChange();
-        }
+        this.onFilterRowsChange();
+
         return filter;
     },
     /**
@@ -421,10 +406,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 	        }
         }
         fRow.remove();
-        
+        this.onFilterRowsChange();
+         
         if (!this.supressEvents) {
             this.onFiltertrigger();
-            this.onFilterRowsChange();
         }
     },
     /**
