@@ -58,6 +58,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     defaultFilter: null,
     
     border: false,
+    monitorResize: true,
     
     record: Ext.data.Record.create([
         {name: 'field'},
@@ -349,9 +350,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.arrangeButtons();
         if (! this.supressEvents) {
             var size = this.tableEl.getSize();
-            this.setSize(size.width, size.height);
+            //this.setSize(size.width, size.height);
             //this.syncSize();
-            //this.fireEvent('bodyresize', this, size.width, size.height);
+            this.fireEvent('bodyresize', this, size.width, size.height);
         }
     },
     
@@ -406,9 +407,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 	        }
         }
         fRow.remove();
-        this.onFilterRowsChange();
-         
         if (!this.supressEvents) {
+            this.onFilterRowsChange();
             this.onFiltertrigger();
         }
     },
