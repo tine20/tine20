@@ -324,7 +324,7 @@ Tine.Admin.AccessLog.Main = function() {
         ds_accessLog.setDefaultSort('li', 'desc');
 
         ds_accessLog.on('beforeload', function(_dataSource) {
-        	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+        	_dataSource.baseParams.filter = Ext.getCmp('AccessLogQuickSearchField').getValue();
         	
         	//var dateFormatShort = Locale.getTranslationData('Date', 'medium');
         	
@@ -345,12 +345,12 @@ Tine.Admin.AccessLog.Main = function() {
 
     var _showToolbar = function()
     {
-        var quickSearchField = new Ext.ux.SearchField({
-            id:        'quickSearchField',
+        var AccessLogQuickSearchField = new Ext.ux.SearchField({
+            id:        'AccessLogQuickSearchField',
             width:     200,
             emptyText: 'enter searchfilter'
         }); 
-        quickSearchField.on('change', function() {
+        AccessLogQuickSearchField.on('change', function() {
             Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
         });
         
@@ -401,7 +401,7 @@ Tine.Admin.AccessLog.Main = function() {
                   displayField: 'text'
                 }), */
                 ' ',
-                quickSearchField
+                AccessLogQuickSearchField
             ]
         });
         
@@ -711,7 +711,7 @@ Tine.Admin.Applications.Main = function() {
         ds_applications.setDefaultSort('name', 'asc');
 
         ds_applications.on('beforeload', function(_dataSource) {
-            _dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+            _dataSource.baseParams.filter = Ext.getCmp('ApplicationsAdminQuickSearchField').getValue();
         });        
         
         ds_applications.load({params:{start:0, limit:50}});
@@ -721,12 +721,12 @@ Tine.Admin.Applications.Main = function() {
 
 	var _showApplicationsToolbar = function()
     {
-        var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
+        var ApplicationsAdminQuickSearchField = new Ext.ux.SearchField({
+            id: 'ApplicationsAdminQuickSearchField',
             width:240,
             emptyText: 'enter searchfilter'
         }); 
-        quickSearchField.on('change', function() {
+        ApplicationsAdminQuickSearchField.on('change', function() {
             Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
         });
         
@@ -755,7 +755,7 @@ Tine.Admin.Applications.Main = function() {
                   displayField: 'text'
                 }), */
                 ' ',
-                quickSearchField
+                ApplicationsAdminQuickSearchField
             ]
         });
         
@@ -1298,7 +1298,7 @@ Tine.Admin.Accounts.Main = function() {
         dataStore.setDefaultSort('accountLoginName', 'asc');
 
         dataStore.on('beforeload', function(_dataSource) {
-            _dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+            _dataSource.baseParams.filter = Ext.getCmp('UserAdminQuickSearchField').getValue();
         });        
         
         dataStore.load({params:{start:0, limit:50}});
@@ -1475,12 +1475,12 @@ Tine.Admin.Accounts.Main = function() {
 	    
 	    showToolbar: function()
 	    {
-	        var quickSearchField = new Ext.ux.SearchField({
-	            id: 'quickSearchField',
+	        var UserAdminQuickSearchField = new Ext.ux.SearchField({
+	            id: 'UserAdminQuickSearchField',
 	            width:240,
 	            emptyText: 'enter searchfilter'
 	        }); 
-	        quickSearchField.on('change', function() {
+	        UserAdminQuickSearchField.on('change', function() {
 	            Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
 	        });
 	        
@@ -1508,7 +1508,7 @@ Tine.Admin.Accounts.Main = function() {
 	                  displayField: 'text'
 	                }), */
 	                ' ',
-	                quickSearchField
+	                UserAdminQuickSearchField
 	            ]
 	        });
 	        
