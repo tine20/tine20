@@ -96,12 +96,12 @@ Tine.Admin.Tags.Main = {
     
     displayTagsToolbar: function()
     {
-        var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
+        var TagsQuickSearchField = new Ext.ux.SearchField({
+            id: 'TagsQuickSearchField',
             width:240,
             emptyText: 'enter searchfilter'
         }); 
-        quickSearchField.on('change', function(){
+        TagsQuickSearchField.on('change', function(){
             Ext.getCmp('AdminTagsGrid').getStore().load({
                 params: {
                     start: 0,
@@ -121,7 +121,7 @@ Tine.Admin.Tags.Main = {
                 '->', 
                 'Search:', 
                 ' ',
-                quickSearchField
+                TagsQuickSearchField
             ]
         });
 
@@ -146,7 +146,7 @@ Tine.Admin.Tags.Main = {
         dataStore.setDefaultSort('name', 'asc');
 
         dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.query = Ext.getCmp('TagsQuickSearchField').getRawValue();
         }, this);        
         
         // the paging toolbar
