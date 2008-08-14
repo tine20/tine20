@@ -1,0 +1,87 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Admin\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Acl/Rights.php:164
+msgid "manage access log"
+msgstr ""
+
+#: Acl/Rights.php:165
+msgid "delete access log entries"
+msgstr ""
+
+#: Acl/Rights.php:168
+msgid "manage accounts"
+msgstr ""
+
+#: Acl/Rights.php:169
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr ""
+
+#: Acl/Rights.php:172
+msgid "manage applications"
+msgstr ""
+
+#: Acl/Rights.php:173
+msgid "enable and disable applications, edit application settings"
+msgstr ""
+
+#: Acl/Rights.php:176
+msgid "manage roles"
+msgstr ""
+
+#: Acl/Rights.php:177
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+
+#: Acl/Rights.php:180
+msgid "manage shared tags"
+msgstr ""
+
+#: Acl/Rights.php:181
+msgid "add, delete and edit shared tags"
+msgstr ""
+
+#: Acl/Rights.php:184
+msgid "view access log"
+msgstr ""
+
+#: Acl/Rights.php:185
+msgid "view access log list"
+msgstr ""
+
+#: Acl/Rights.php:188
+msgid "view accounts"
+msgstr ""
+
+#: Acl/Rights.php:189
+msgid "view accounts list and details"
+msgstr ""
+
+#: Acl/Rights.php:192
+msgid "view applications"
+msgstr ""
+
+#: Acl/Rights.php:193
+msgid "view applications list and details"
+msgstr ""
+
+#: Acl/Rights.php:196
+msgid "view roles"
+msgstr ""
+
+#: Acl/Rights.php:197
+msgid "view roles list and details"
+msgstr ""
