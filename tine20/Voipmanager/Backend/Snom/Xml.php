@@ -84,13 +84,18 @@ class Voipmanager_Backend_Snom_Xml
         // reset old dialplan
         $child = $xmlPhoneSettings->addChild('user_dp_str1');
         $child->addAttribute('perm', 'RW');
-        // disable redundant keys
-        $child = $xmlPhoneSettings->addChild('dkey_directory', 'url http://erp2.mwdev.net/index.php?mac=$mac&amp;method=Voipmanager.directory');
-        $child->addAttribute('perm', 'RW');
         // add directory button
+        $child = $xmlPhoneSettings->addChild('dkey_directory', 'url http://erp2.mwdev.net/index.php?mac=$mac&amp;method=Voipmanager.directory');
+        $child->addAttribute('perm', 'RO');
+        // add redirect on/off action url
+        $child = $xmlPhoneSettings->addChild('action_redirection_on_url', 'http://erp2.mwdev.net/index.php?mac=$mac&amp;method=Voipmanager.redirect&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
+        $child->addAttribute('perm', 'RO');
+        $child = $xmlPhoneSettings->addChild('action_redirection_off_url', 'http://erp2.mwdev.net/index.php?mac=$mac&amp;method=Voipmanager.redirect&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
+        $child->addAttribute('perm', 'RO');
+        // disable redundant keys
         $child = $xmlPhoneSettings->addChild('redundant_fkeys', 'off');
         $child->addAttribute('perm', 'RO');
-        
+                
         $phoneSettings = $this->_getPhoneSettings($_phone);
         foreach($phoneSettings as $key => $value) {
           $child = $xmlPhoneSettings->addChild($key, $value['value']);
