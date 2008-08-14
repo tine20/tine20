@@ -34,12 +34,6 @@ try {
         'css|s'           => 'Build CSS Files',
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
-        'pot'             => 'Build xgettext po template files',
-        'mo'              => 'Build mo files',
-        'newlang=s'       => 'Add new language',
-        'language=s'      => '  new language',
-        'country=s'       => '  country for new language',
-        'pluralforms=s'   => '  NOTE: must be set in code sorry. Zend_Getopt cant deal with =',
         'help'            => 'Display this help Message',
     ));
     $opts->parse();
@@ -48,7 +42,7 @@ try {
    exit;
 }
 
-if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->lint || $opts->s || $opts->z || $opts->pot || $opts->newlang || $opts->mo)) {
+if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->lint || $opts->s || $opts->z)) {
     echo $opts->getUsageMessage();
     exit;
 }
@@ -85,12 +79,7 @@ if ($opts->clean) {
             }
         }
     }
-    
-    // remove translation backups of msgmerge
-    `cd $tine20path
-    find . -type f -iname "*.po~" -exec rm {} \;`;
 }
-
 
 $includeFiles = Tinebase_Http::getAllIncludeFiles(array(
     'Asterisk',
@@ -202,104 +191,6 @@ if ( $opts->z ) {
         system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/static/generic-$locale.js $tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js");
     }
 }
-
-if($opts->pot) {
-    $d = dir($tine20path);
-    while (false !== ($appName = $d->read())) {
-        $appPath = "$tine20path/$appName";
-        if (is_dir($appPath) && $appName{0} != '.') {
-            $translationPath = "$appPath/translations";
-            if (is_dir($translationPath)) {
-                // generate new pot template
-                if ( $opts->v ) {
-                    echo "Creating $appName template \n";
-                }
-                `cd $appPath 
-                touch translations/template.pot 
-                find . -type f -iname "*.php" -or -type f -iname "*.js"  | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
-                
-                // merge template into translation po files
-                foreach (scandir($translationPath) as $poFile) {
-                    if (substr($poFile, -3) == '.po') {
-                        $output = '2> /dev/null';
-                        if ( $opts->v ) {
-                	       echo $poFile . ": ";
-                	       $output = '';
-                        }
-                	    `cd $translationPath
-                	     msgmerge --no-fuzzy-matching --update $poFile template.pot $output`;
-                    }
-                }
-            }
-        }
-    }
-}
-
-if ($opts->newlang) {
-    $newlang = $opts->newlang;
-    $language = $opts->language;
-    $country = $opts->country;
-    $pluralForms = 'nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;';
-    if (! ($language && $country && $pluralForms)) {
-        die("Error: you have to specify language, country and pluralforms of the new language! \n");
-    }
-    
-    $d = dir($tine20path);
-    while (false !== ($appName = $d->read())) {
-        $appPath = "$tine20path/$appName";
-        if (is_dir($appPath) && $appName{0} != '.') {
-            $translationPath = "$appPath/translations";
-            if (is_dir($translationPath)) {
-                    $poHeader = 
-'msgid ""
-msgstr ""
-"Project-Id-Version: Tine 2.0 - ' . $appName . '\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: ' . $language . '\n"
-"X-Poedit-Country: ' . $country . '\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: ../../\n"
-"Plural-Forms: ' . $pluralForms . '\n"
-"X-Poedit-SearchPath-0: ' . $appName . '\n"';
-                    
-                    file_put_contents($translationPath . '/' . $opts->newlang . '.po', $poHeader);
-            }
-        }
-    }
-    echo $poHeader .'\n';
-    
-}
-
-if ($opts->mo) {
-    $d = dir($tine20path);
-    while (false !== ($appName = $d->read())) {
-        $appPath = "$tine20path/$appName";
-        if (is_dir($appPath) && $appName{0} != '.') {
-            $translationPath = "$appPath/translations";
-            if (is_dir($translationPath)) {
-                foreach (scandir($translationPath) as $poFile) {
-                    if (substr($poFile, -3) == '.po') {
-                        $langName = substr($poFile, 0, -3);
-                        if ( $opts->v ) {
-                            echo "Processing $appName/$poFile \n";
-                        }
-                        // create mo file
-                        `cd $translationPath
-                        msgfmt -o $langName.mo $poFile`;
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 /**
  * returns key of translations object in Locale.Gettext
