@@ -131,172 +131,174 @@ msgid "Id"
 msgstr "Id"
 
 #: js/Asterisk/SipPeer.js:212
-msgid "ASTERISK_LINES_account code"
-msgstr "Account Code"
+msgid "account code"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:213
-msgid "ASTERISK_LINES_ama flags"
-msgstr "AMA flags"
+msgid "ama flags"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:214
-msgid "ASTERISK_LINES_call group"
-msgstr "Anrufergruppe"
+msgid "call group"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:215
-msgid "ASTERISK_LINES_caller id"
-msgstr "Anrufer ID"
+msgid "caller id"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:216
-msgid "ASTERISK_LINES_can reinvite"
-msgstr "Can Re-Invite"
+msgid "can reinvite"
+msgstr ""
 
-#: js/Asterisk/SipPeer.js:217
-msgid "ASTERISK_LINES_context"
+#: js/Asterisk/SipPeer.js:217 js/Asterisk/Voicemail.js:197
+msgid "context"
 msgstr "Kontext"
 
 #: js/Asterisk/SipPeer.js:218
-msgid "ASTERISK_LINES_default ip"
-msgstr "Default IP"
+msgid "default ip"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:219
-msgid "ASTERISK_LINES_dtmf mode"
-msgstr "DTMF Modus"
+msgid "dtmf mode"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:220
-msgid "ASTERISK_LINES_from user"
-msgstr "Absender"
+msgid "from user"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:221
-msgid "ASTERISK_LINES_from domain"
-msgstr "Absenderdomain"
+msgid "from domain"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:222
-msgid "ASTERISK_LINES_full contact"
-msgstr "kompletter Kontakt"
+msgid "full contact"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:223
-msgid "ASTERISK_LINES_host"
-msgstr "Host"
+msgid "host"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:224
-msgid "ASTERISK_LINES_insecure"
-msgstr "unsicher"
+msgid "insecure"
+msgstr ""
 
-#: js/Asterisk/SipPeer.js:225
-msgid "ASTERISK_LINES_language"
+#: js/Asterisk/SipPeer.js:225 js/MyPhones.js:564 js/Snom/Phone.js:1287
+#: js/Snom/Settings.js:205 js/Snom/Settings.js:545
+msgid "language"
 msgstr "Sprache"
 
-#: js/Asterisk/SipPeer.js:226
-msgid "ASTERISK_LINES_mailbox"
+#: js/Asterisk/SipPeer.js:226 js/Asterisk/Voicemail.js:196
+#: js/Asterisk/Voicemail.js:433
+msgid "mailbox"
 msgstr "Mailbox"
 
 #: js/Asterisk/SipPeer.js:227
-msgid "ASTERISK_LINES_md5 secret"
-msgstr "MD5 Secret"
+msgid "md5 secret"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:228
-msgid "ASTERISK_LINES_nat"
-msgstr "NAT"
+msgid "nat"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:229
-msgid "ASTERISK_LINES_deny"
-msgstr "verbieten"
+msgid "deny"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:230
-msgid "ASTERISK_LINES_permit"
-msgstr "erlauben"
+msgid "permit"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:231
-msgid "ASTERISK_LINES_mask"
-msgstr "Maske"
+msgid "mask"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:232
-msgid "ASTERISK_LINES_pickup group"
-msgstr "Pickup Group"
+msgid "pickup group"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:233
-msgid "ASTERISK_LINES_port"
-msgstr "Port"
+msgid "port"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:234
-msgid "ASTERISK_LINES_qualify"
-msgstr "Qualify"
+msgid "qualify"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:235
-msgid "ASTERISK_LINES_retrict cid"
-msgstr "Restrict CID"
+msgid "retrict cid"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:236
-msgid "ASTERISK_LINES_rtp timeout"
-msgstr "RTP Timeout"
+msgid "rtp timeout"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:237
-msgid "ASTERISK_LINES_rtp hold timeout"
-msgstr "RTP Hold Timeout"
+msgid "rtp hold timeout"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:238
-msgid "ASTERISK_LINES_secret"
-msgstr "Secret"
+msgid "secret"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:239
-msgid "ASTERISK_LINES_type"
-msgstr "Typ"
+msgid "type"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:240
-msgid "ASTERISK_LINES_username"
-msgstr "Benutzername"
+msgid "username"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:241
-msgid "ASTERISK_LINES_disallow"
-msgstr "nicht erlauben"
+msgid "disallow"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:242
-msgid "ASTERISK_LINES_allow"
-msgstr "erlauben"
+msgid "allow"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:243
-msgid "ASTERISK_LINES_music on hold"
-msgstr "Music On Hold"
+msgid "music on hold"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:244
-msgid "ASTERISK_LINES_reg seconds"
-msgstr "Reg Seconds"
+msgid "reg seconds"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:245
-msgid "ASTERISK_LINES_ip address"
-msgstr "IP Addresse"
+msgid "ip address"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:246
-msgid "ASTERISK_LINES_reg exten"
-msgstr "Reg Exten"
+msgid "reg exten"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:247
-msgid "ASTERISK_LINES_can call forward"
-msgstr "Can Call Forward"
+msgid "can call forward"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:248
-msgid "ASTERISK_LINES_set var"
-msgstr "Set Var"
+msgid "set var"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:249
-msgid "ASTERISK_LINES_notify ringing"
-msgstr "Notify Ringing"
+msgid "notify ringing"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:250
-msgid "ASTERISK_LINES_use client code"
-msgstr "Use Client Code"
+msgid "use client code"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:251
-msgid "ASTERISK_LINES_auth user"
-msgstr "Auth Benutzer"
+msgid "auth user"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:252
-msgid "ASTERISK_LINES_call limit"
-msgstr "Call Limit"
+msgid "call limit"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:253
-msgid "ASTERISK_LINES_busy level"
-msgstr "Busy Level"
+msgid "busy level"
+msgstr ""
 
 #: js/Asterisk/SipPeer.js:450 js/Asterisk/Voicemail.js:414
 msgid "General"
@@ -490,14 +492,6 @@ msgstr "Zeige Voicemail {0} - {1} von {2}"
 #: js/Asterisk/Voicemail.js:190
 msgid "No voicemail to display"
 msgstr "Keine Voicemail vorhanden"
-
-#: js/Asterisk/Voicemail.js:196 js/Asterisk/Voicemail.js:433
-msgid "mailbox"
-msgstr "Mailbox"
-
-#: js/Asterisk/Voicemail.js:197
-msgid "context"
-msgstr "Kontext"
 
 #: js/Asterisk/Voicemail.js:198
 msgid "fullname"
@@ -726,11 +720,6 @@ msgstr "Webseitensprache"
 #: js/Snom/Settings.js:829 js/Snom/Settings.js:858 js/Snom/Settings.js:887
 msgid "- factory default -"
 msgstr "- Werkseinstellung -"
-
-#: js/MyPhones.js:564 js/Snom/Phone.js:1287 js/Snom/Settings.js:205
-#: js/Snom/Settings.js:545
-msgid "language"
-msgstr "Sprache"
 
 #: js/MyPhones.js:607 js/Snom/Phone.js:1330 js/Snom/Settings.js:206
 #: js/Snom/Settings.js:589
@@ -1125,6 +1114,132 @@ msgstr "Software Version"
 #: js/Snom/Templates.js:449
 msgid "Keylayout"
 msgstr "Tastaturlayout"
+
+#~ msgid "ASTERISK_LINES_account code"
+#~ msgstr "Account Code"
+
+#~ msgid "ASTERISK_LINES_ama flags"
+#~ msgstr "AMA flags"
+
+#~ msgid "ASTERISK_LINES_call group"
+#~ msgstr "Anrufergruppe"
+
+#~ msgid "ASTERISK_LINES_caller id"
+#~ msgstr "Anrufer ID"
+
+#~ msgid "ASTERISK_LINES_can reinvite"
+#~ msgstr "Can Re-Invite"
+
+#~ msgid "ASTERISK_LINES_context"
+#~ msgstr "Kontext"
+
+#~ msgid "ASTERISK_LINES_default ip"
+#~ msgstr "Default IP"
+
+#~ msgid "ASTERISK_LINES_dtmf mode"
+#~ msgstr "DTMF Modus"
+
+#~ msgid "ASTERISK_LINES_from user"
+#~ msgstr "Absender"
+
+#~ msgid "ASTERISK_LINES_from domain"
+#~ msgstr "Absenderdomain"
+
+#~ msgid "ASTERISK_LINES_full contact"
+#~ msgstr "kompletter Kontakt"
+
+#~ msgid "ASTERISK_LINES_host"
+#~ msgstr "Host"
+
+#~ msgid "ASTERISK_LINES_insecure"
+#~ msgstr "unsicher"
+
+#~ msgid "ASTERISK_LINES_language"
+#~ msgstr "Sprache"
+
+#~ msgid "ASTERISK_LINES_mailbox"
+#~ msgstr "Mailbox"
+
+#~ msgid "ASTERISK_LINES_md5 secret"
+#~ msgstr "MD5 Secret"
+
+#~ msgid "ASTERISK_LINES_nat"
+#~ msgstr "NAT"
+
+#~ msgid "ASTERISK_LINES_deny"
+#~ msgstr "verbieten"
+
+#~ msgid "ASTERISK_LINES_permit"
+#~ msgstr "erlauben"
+
+#~ msgid "ASTERISK_LINES_mask"
+#~ msgstr "Maske"
+
+#~ msgid "ASTERISK_LINES_pickup group"
+#~ msgstr "Pickup Group"
+
+#~ msgid "ASTERISK_LINES_port"
+#~ msgstr "Port"
+
+#~ msgid "ASTERISK_LINES_qualify"
+#~ msgstr "Qualify"
+
+#~ msgid "ASTERISK_LINES_retrict cid"
+#~ msgstr "Restrict CID"
+
+#~ msgid "ASTERISK_LINES_rtp timeout"
+#~ msgstr "RTP Timeout"
+
+#~ msgid "ASTERISK_LINES_rtp hold timeout"
+#~ msgstr "RTP Hold Timeout"
+
+#~ msgid "ASTERISK_LINES_secret"
+#~ msgstr "Secret"
+
+#~ msgid "ASTERISK_LINES_type"
+#~ msgstr "Typ"
+
+#~ msgid "ASTERISK_LINES_username"
+#~ msgstr "Benutzername"
+
+#~ msgid "ASTERISK_LINES_disallow"
+#~ msgstr "nicht erlauben"
+
+#~ msgid "ASTERISK_LINES_allow"
+#~ msgstr "erlauben"
+
+#~ msgid "ASTERISK_LINES_music on hold"
+#~ msgstr "Music On Hold"
+
+#~ msgid "ASTERISK_LINES_reg seconds"
+#~ msgstr "Reg Seconds"
+
+#~ msgid "ASTERISK_LINES_ip address"
+#~ msgstr "IP Addresse"
+
+#~ msgid "ASTERISK_LINES_reg exten"
+#~ msgstr "Reg Exten"
+
+#~ msgid "ASTERISK_LINES_can call forward"
+#~ msgstr "Can Call Forward"
+
+#~ msgid "ASTERISK_LINES_set var"
+#~ msgstr "Set Var"
+
+#~ msgid "ASTERISK_LINES_notify ringing"
+#~ msgstr "Notify Ringing"
+
+#~ msgid "ASTERISK_LINES_use client code"
+#~ msgstr "Use Client Code"
+
+#~ msgid "ASTERISK_LINES_auth user"
+#~ msgstr "Auth Benutzer"
+
+#~ msgid "ASTERISK_LINES_call limit"
+#~ msgstr "Call Limit"
+
+#~ msgid "ASTERISK_LINES_busy level"
+#~ msgstr "Busy Level"
 
 #~ msgid "with_flash"
 #~ msgstr "Benutze Flashplugin"
