@@ -1,0 +1,497 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tinebase\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: Application/Rights/Abstract.php:56
+msgid "admin"
+msgstr ""
+
+#: Application/Rights/Abstract.php:57
+msgid "admin right description"
+msgstr ""
+
+#: Application/Rights/Abstract.php:60
+msgid "run"
+msgstr ""
+
+#: Application/Rights/Abstract.php:61
+msgid "run right description"
+msgstr ""
+
+#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:57
+msgid "Tags"
+msgstr ""
+
+#: Export/Pdf.php:353
+msgid "Export Date"
+msgstr ""
+
+#: Export/Pdf.php:357
+msgid "Created by"
+msgstr ""
+
+#: js/ExceptionDialog.js:26
+msgid "Abnormal End"
+msgstr ""
+
+#: js/ExceptionDialog.js:34 js/MainScreen.js:287 js/widgets/EditRecord.js:82
+msgid "Cancel"
+msgstr ""
+
+#: js/ExceptionDialog.js:41
+msgid "Send Report"
+msgstr ""
+
+#: js/ExceptionDialog.js:50
+msgid "An error occurred, the program ended abnormal."
+msgstr ""
+
+#: js/ExceptionDialog.js:51
+msgid "The last action you made was potentially not performed correctly."
+msgstr ""
+
+#: js/ExceptionDialog.js:52
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occoured."
+msgstr ""
+
+#: js/ExceptionDialog.js:58 js/widgets/tags/TagsPanel.js:562
+msgid "Description"
+msgstr ""
+
+#: js/ExceptionDialog.js:68
+msgid "Show Details:"
+msgstr ""
+
+#: js/ExceptionDialog.js:91
+msgid "Sending report..."
+msgstr ""
+
+#: js/ExceptionDialog.js:91
+msgid "Please wait a moment"
+msgstr ""
+
+#: js/ExceptionDialog.js:116
+msgid "Transmission Completed"
+msgstr ""
+
+#: js/ExceptionDialog.js:117
+msgid "Your report has been send. Thanks for your contribution"
+msgstr ""
+
+#: js/MainScreen.js:45
+msgid "Change password"
+msgstr ""
+
+#: js/MainScreen.js:51
+msgid "Logout"
+msgstr ""
+
+#: js/MainScreen.js:52
+msgid "Logout from Tine 2.0"
+msgstr ""
+
+#: js/MainScreen.js:71
+msgid "Admin"
+msgstr ""
+
+#: js/MainScreen.js:79
+msgid "Preferences"
+msgstr ""
+
+#: js/MainScreen.js:95
+#, python-format
+msgid "User: %s"
+msgstr ""
+
+#: js/MainScreen.js:96
+#, python-format
+msgid "Timezone: %s"
+msgstr ""
+
+#: js/MainScreen.js:251
+#, python-format
+msgid "Change Password For \"%s\""
+msgstr ""
+
+#: js/MainScreen.js:275
+msgid "Old Password"
+msgstr ""
+
+#: js/MainScreen.js:279
+msgid "New Password"
+msgstr ""
+
+#: js/MainScreen.js:283
+msgid "Repeat new Password"
+msgstr ""
+
+#: js/MainScreen.js:293 js/widgets/EditRecord.js:52
+msgid "Ok"
+msgstr ""
+
+#: js/MainScreen.js:302
+msgid "Please Wait!"
+msgstr ""
+
+#: js/MainScreen.js:303
+msgid "changing password..."
+msgstr ""
+
+#: js/MainScreen.js:314
+msgid "Success"
+msgstr ""
+
+#: js/MainScreen.js:315
+msgid "Your password has been changed."
+msgstr ""
+
+#: js/MainScreen.js:321 js/MainScreen.js:331
+msgid "Failure"
+msgstr ""
+
+#: js/MainScreen.js:332
+msgid "The new passwords mismatch, please correct them."
+msgstr ""
+
+#: js/MainScreen.js:350 js/widgets/container/ContainerTree.js:231
+msgid "Confirm"
+msgstr ""
+
+#: js/MainScreen.js:350
+msgid "Are you sure you want to logout?"
+msgstr ""
+
+#: js/MainScreen.js:352
+msgid "Logging you out..."
+msgstr ""
+
+#: js/MainScreen.js:352
+msgid "Please wait!"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:145
+msgid "Add a Note..."
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
+#: js/widgets/ActivitiesPanel.js:309 js/widgets/container/ContainerTree.js:304
+msgid "Add"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:309
+#: js/widgets/ActivitiesPanel.js:393 js/widgets/ActivitiesPanel.js:511
+msgid "Note"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:173 js/widgets/ActivitiesPanel.js:321
+msgid "Add new note"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:204
+msgid "Recent Activities"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:268 js/widgets/ActivitiesPanel.js:320
+msgid "Add Note"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:269
+msgid "Enter new note:"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:391 js/widgets/ActivitiesPanel.js:516
+msgid "Type"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:394
+msgid "Created By"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:395
+msgid "Timestamp"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:409
+msgid "Displaying notes {0} - {1} of {2}"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:410
+msgid "No notes to display"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:499
+msgid "Activities"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:512
+msgid "Time"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:514
+msgid "User"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:55
+msgid "container"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:70
+#: js/widgets/grid/FilterModel.js:87
+msgid "contains"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:71
+#: js/widgets/grid/FilterModel.js:88
+msgid "is equal to"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:72
+#: js/widgets/grid/FilterModel.js:89
+msgid "is greater than"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:73
+#: js/widgets/grid/FilterModel.js:90
+msgid "is less than"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:74
+#: js/widgets/grid/FilterModel.js:91
+msgid "is not"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:75
+#: js/widgets/grid/FilterModel.js:92
+msgid "is in"
+msgstr ""
+
+#: js/widgets/container/ContainerFilter.js:94
+#: js/widgets/grid/FilterModel.js:115
+msgid "select a operator"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:106
+msgid "All"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:111
+msgid "My"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:118
+msgid "Shared"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:125
+msgid "Other Users"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:203
+msgid "New"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:205
+#: js/widgets/container/ContainerTree.js:233
+#: js/widgets/container/ContainerTree.js:265
+msgid "Please wait"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:205
+msgid "Creating"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:231
+msgid "Do you really want to delete the"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:233
+msgid "Deleting"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:260
+msgid "Please enter the new name of the"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:265
+msgid "Updateing"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:310
+msgid "Delete"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:316
+msgid "Rename"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:322
+msgid "Manage permissions"
+msgstr ""
+
+#: js/widgets/EditRecord.js:63
+msgid "Apply"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:122
+msgid "add new filter"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:128
+msgid "Delete all filters"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:134
+msgid "start search"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:143
+msgid "save filter"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:210
+msgid "select a field"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:234
+msgid "Delete this filter"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:257
+msgid "and"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:276
+msgid "Show"
+msgstr ""
+
+#: js/widgets/tags/TagFilter.js:23
+msgid "Tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:89
+msgid "Add a new personal tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:92
+msgid "Add New Personal Tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:93
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:93
+msgid "Enter tag name:"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:111 js/widgets/tags/TagsPanel.js:412
+#: js/widgets/tags/TagsPanel.js:416
+msgid "personal"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:133
+msgid "No Tags to display"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:156
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] ""
+
+#: js/widgets/tags/TagsPanel.js:171 js/widgets/tags/TagsPanel.js:176
+msgid "Rename Tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:176
+msgid "Please enter a new name:"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:185
+msgid "Edit Description"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:190
+msgid "Description for tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:190
+msgid "Please enter new description:"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:199
+msgid "Change Color"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:223
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] ""
+
+#: js/widgets/tags/TagsPanel.js:235
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] ""
+
+#: js/widgets/tags/TagsPanel.js:236
+msgid "The selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] ""
+
+#: js/widgets/tags/TagsPanel.js:240
+msgid "Please wait a moment..."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:240
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] ""
+
+#: js/widgets/tags/TagsPanel.js:256 js/widgets/tags/TagsPanel.js:365
+#: js/widgets/tags/TagsPanel.js:398
+msgid "Failed"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:256
+msgid "Could not delete Tag(s)."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
+msgid "Notice"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:318 js/widgets/tags/TagsPanel.js:380
+msgid "The minimum tag length is three."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:365
+msgid "Could not create tag."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:398
+msgid "Could not update tag."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:431 js/widgets/tags/TagsPanel.js:489
+msgid "Enter tag name"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:432
+msgid "Searching..."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:566
+msgid "Color"
+msgstr ""
