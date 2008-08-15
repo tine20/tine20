@@ -21,8 +21,10 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 */
 
-class Tinebase_Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
+class Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
 {
+    protected $backupGlobals = false;
+    
     /**
      * @var Tinebase_Connection
      */
@@ -32,6 +34,27 @@ class Tinebase_Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
      * @var Addressbook_Service
      */
     protected $_service = NULL;
+    
+    /**
+     * @var array
+     */
+    protected $_contactData = array(
+        'n_family'              => 'Weiss',
+        'n_fileas'              => 'Weiss Cornelius',
+        'n_given'               => 'Cornelius',
+        'org_name'              => 'Metaways Infosystems GmbH',
+        'org_unit'              => 'Tine 2.0',
+        'adr_one_countryname'   => 'DE',
+        'adr_one_locality'      => 'Hamburg',
+        'adr_one_postalcode'    => '24xxx',
+        'adr_one_region'        => 'Hamburg',
+        'adr_one_street'        => 'Pickhuben 4',
+        'assistent'             => '',
+        'bday'                  => '1979-06-05 03:04:05',
+        'email'                 => 'c.weiss@metawyas.de',
+        'role'                  => 'Core Developer',
+        'title'                 => 'Dipl. Phys.',
+    );
     
     /**
      * Runs the test methods of this class.
@@ -57,7 +80,9 @@ class Tinebase_Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testAddContact()
     {
-        
+        $newContact = $this->_service->addContact( new Addressbook_Model_Contact($this->_contactData, true));
+        $this->assertEquals($this->_contactData['email'], $newContact->email);
+        $GLOBALS['Addressbook_ServiceTest']['newContactId'] = $newContact->getId();
     }
     
     /**
@@ -66,6 +91,7 @@ class Tinebase_Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContact()
     {
-        
+        $remoteContact = $this->_service->getContact($GLOBALS['Addressbook_ServiceTest']['newContactId']);
+        $this->assertEquals($this->_contactData['email'], $remoteContact->email);
     }
 }
