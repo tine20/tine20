@@ -12,6 +12,7 @@
 /**
  * Addressbook Service
  *
+ * @todo clear Post Parameters from test to test
  */
 class Addressbook_Service extends Tinebase_Service_Abstract
 {
@@ -51,6 +52,36 @@ class Addressbook_Service extends Tinebase_Service_Abstract
         
         $contact = new Addressbook_Model_Contact($responseData['contact']);
         return $contact;
+    }
+    
+    /**
+     * gets image of contact identified by its id
+     *
+     * @param  int $_id
+     * @return binary image data
+     */
+    public function getImage($_id, $_width=130, $_height=130, $_ratiomode=0)
+    {
+        $client = $this->getConnection();
+        $client->setHeaders('X-Requested-With', '');
+        $client->setParameterPost(array(
+            'method'        =>  'Tinebase.getImage',
+            //'jsonKey'   => $client->jsonKey,
+            'application'   => 'Addressbook',
+            'id'            =>  $_id,
+            'location'      =>  '', 
+            'width'         => $_width,
+            'height'        =>  $_height,
+            'ratiomode'     =>  $_ratiomode,
+         ));  
+         
+        $response = $client->request('POST');
+        if($this->debugEnabled === true) {
+            var_dump( $client->getLastRequest());
+            var_dump( $response );
+        }
+        
+        return($response->getBody());
     }
     
     /**
