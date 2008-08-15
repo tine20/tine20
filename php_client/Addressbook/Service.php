@@ -57,6 +57,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
     /**
      * gets image of contact identified by its id
      *
+     * @todo move to Tinebase_Service
      * @param  int $_id
      * @return binary image data
      */
@@ -64,7 +65,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
     {
         $client = $this->getConnection();
         $client->setHeaders('X-Requested-With', '');
-        $client->setParameterPost(array(
+        $client->setParameterGet(array(
             'method'        =>  'Tinebase.getImage',
             //'jsonKey'   => $client->jsonKey,
             'application'   => 'Addressbook',
@@ -75,7 +76,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'ratiomode'     =>  $_ratiomode,
          ));  
          
-        $response = $client->request('POST');
+        $response = $client->request('GET');
         if($this->debugEnabled === true) {
             var_dump( $client->getLastRequest());
             var_dump( $response );
