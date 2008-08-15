@@ -112,6 +112,13 @@ class Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
     {
         $image = $this->_service->getImage(566);
     }
+    
+    public function testDeleteContact()
+    {
+        $this->_service->deleteContact($GLOBALS['Addressbook_ServiceTest']['newContactId']);
+        $this->setExpectedException('Exception');
+        $remoteContact = $this->_service->getContact($GLOBALS['Addressbook_ServiceTest']['newContactId']);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_ServiceTest::main') {
