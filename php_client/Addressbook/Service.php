@@ -15,6 +15,17 @@
  */
 class Addressbook_Service extends Tinebase_Service_Abstract
 {
+    /**
+     * @var bool
+     */
+    public $debugEnabled = false;
+    
+    /**
+     * retreaves a remote contact identified by its id
+     *
+     * @param  int $_contactId
+     * @return Addressbook_Model_Contact
+     */
     public function getContact($_contactId)
     {
         $client = $this->getConnection();
@@ -24,7 +35,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'contactId' => $_contactId
         ));        
         $response = $client->request('POST');
-        
         if($this->debugEnabled === true) {
             var_dump( $client->getLastRequest());
             var_dump( $response );
@@ -35,16 +45,20 @@ class Addressbook_Service extends Tinebase_Service_Abstract
         }
                 
         $responseData = Zend_Json::decode($response->getBody());
-        
         if($this->debugEnabled === true) {
             var_dump($responseData);
         }
         
-        $contact = new Addressbook_Model_Contact($responseData['contactData']);
-        
+        $contact = new Addressbook_Model_Contact($responseData['contact']);
         return $contact;
     }
     
+    /**
+     * adds / creates a new contact in remote installation
+     *
+     * @param  Addressbook_Model_Contact $_contact
+     * @return Addressbook_Model_Contact
+     */
     public function addContact(Addressbook_Model_Contact $_contact)
     {
         if(!$_contact->isValid()) {
@@ -58,7 +72,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'contactData'  => Zend_Json::encode($_contact->toArray())
         ));        
         $response = $client->request('POST');
-        
         if($this->debugEnabled === true) {
             var_dump( $client->getLastRequest());
             var_dump( $response );
@@ -69,18 +82,11 @@ class Addressbook_Service extends Tinebase_Service_Abstract
         }
                 
         $responseData = Zend_Json::decode($response->getBody());
-        
         if($this->debugEnabled === true) {
             var_dump($responseData);
         }
         
         $contact = new Addressbook_Model_Contact($responseData['updatedData']);
-        
         return $contact;
-    }
-    
-    public function updateContact(Addressbook_Model_Contact $_contact)
-    {
-        
     }
 }

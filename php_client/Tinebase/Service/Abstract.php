@@ -15,6 +15,11 @@
  */
 abstract class Tinebase_Service_Abstract
 {
+    /**
+     * @var bool
+     */
+    public $debugEnabled = false;
+    
 	/**
 	 * @var Tinebase_Connection
 	 */
