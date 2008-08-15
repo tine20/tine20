@@ -93,10 +93,24 @@ class Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_contactData['email'], $remoteContact->email);
     }
     
+    /**
+     * test retrivial of all contacts
+     *
+     */
     public function testGetAllContacts()
     {
         $contacts = $this->_service->getAllContacts();
         $this->assertGreaterThan(0, count($contacts));
+    }
+    
+    /**
+     * test retrivial of remote image data
+     * 
+     * NOTE : disabled till we have an upload test
+     */
+    public function noTestGetImage()
+    {
+        $image = $this->_service->getImage(566);
     }
 }
 
