@@ -4,12 +4,15 @@
  *
  * @package     Tineclient
  * @subpackage  Service
- * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @license     yet unknown
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
+/**
+ * Abstract Service Class
+ */
 abstract class Tinebase_Service_Abstract
 {
 	/**
@@ -22,22 +25,32 @@ abstract class Tinebase_Service_Abstract
 	 */
     protected $_connection = NULL;
     
+    /**
+     * constructs new Service
+     *
+     * @param Tinebase_Connection $_connection
+     */
     public function __construct($_connection = NULL)
     {
-        if($_connection instanceof Tinebase_Connection) {
+        if ($_connection instanceof Tinebase_Connection) {
             $this->_connection = $_connection;
         }
     }
     
+    /**
+     * sets connection
+     *
+     * @param  Tinebase_Connection $_connection
+     * @return Tinebase_Service_Abstract
+     */
     public function setConnection(Tinebase_Connection $_connection)
     {
         $this->_connection = $_connection;
-        
         return $this;
     }
     
     /**
-     * Enter description here...
+     * get connection
      *
      * @return Tinebase_Connection
      */
@@ -50,9 +63,16 @@ abstract class Tinebase_Service_Abstract
         }
     }
     
+    /**
+     * sets the default connection
+     *
+     * @param  Tinebase_Connection $_connection
+     * @return Tinebase_Connection
+     */
     public static final function setDefaultConnection(Tinebase_Connection $_connection)
     {
         self::$_defaultConnection = $_connection;
+        return self::$_defaultConnection;
     }
 
     /**
