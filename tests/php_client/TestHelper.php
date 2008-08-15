@@ -28,10 +28,12 @@ PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__));
 /*
  * Set include path
  */
-$tineRoot = dirname(dirname(dirname(__FILE__)));
+$testRoot = dirname(__File__);
+$tineRoot = dirname(dirname($testRoot));
 $phpClientPath = $tineRoot . DIRECTORY_SEPARATOR . 'php_client';
 
 $path = array(
+    $testRoot,
     $tineRoot,
     $phpClientPath,
     get_include_path(),
