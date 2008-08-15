@@ -16,10 +16,10 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_LoginTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_LogoutTest::main');
 }
 
-class Tinebase_LoginTest extends PHPUnit_Framework_TestCase
+class Tinebase_LogoutTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Tinebase_Connection
@@ -34,7 +34,7 @@ class Tinebase_LoginTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_LoginTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_LogoutTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -42,14 +42,15 @@ class Tinebase_LoginTest extends PHPUnit_Framework_TestCase
     {
         $this->_connection = Tinebase_Connection::getInstance();
     }
-    
-    public function testLogin()
+
+    public function testLogout()
     {
+        $this->_connection->logout();
         $user = $this->_connection->getUser();
-        $this->assertTrue(count(array_keys($user)) > 1);
+        $this->assertEquals(0, count(array_keys($user)));
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'Tinebase_LoginTest::main') {
+if (PHPUnit_MAIN_METHOD == 'Tinebase_LogoutTest::main') {
     AllTests::main();
 }
