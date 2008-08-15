@@ -175,4 +175,34 @@ class Addressbook_Service extends Tinebase_Service_Abstract
         $contact = new Addressbook_Model_Contact($responseData['updatedData']);
         return $contact;
     }
+    
+    /**
+     * deletes a remote contact identified by its id
+     *
+     * @param  int $_id
+     * @return void
+     */
+    public function deleteContact($_id)
+    {
+        $client = $this->getConnection();
+        
+        $client->setParameterPost(array(
+            'method'   => 'Addressbook.deleteContacts',
+            '_contactIds'  => Zend_Json::encode(array($_id))
+        ));        
+        $response = $client->request('POST');
+        if($this->debugEnabled === true) {
+            var_dump( $client->getLastRequest());
+            var_dump( $response );
+        }
+
+        if(!$response->isSuccessful()) {
+            throw new Exception('deleting contact failed');
+        }
+                
+        $responseData = Zend_Json::decode($response->getBody());
+        if($this->debugEnabled === true) {
+            var_dump($responseData);
+        }
+    }
 }
