@@ -11,8 +11,8 @@
  */
 
 $url      = 'http://demo.tine20.org';
-$username = 'tine20demo';
-$password = 'demo';
+$username = 'utester';
+$password = 'utester1234';
 
 /*
  * Set error reporting 
@@ -44,6 +44,7 @@ Zend_Loader::registerAutoload();
 /*
  * login to remote install
  */
+date_default_timezone_set('UTC');
 $client = Tinebase_Connection::getInstance($url, $username, $password);
 //$client->setDebugEnabled(true);
 $client->login();

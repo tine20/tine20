@@ -24,6 +24,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Tinebase_LoginTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Tinebase_Connection
+     */
+    protected $_connection = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -35,10 +40,21 @@ class Tinebase_LoginTest extends PHPUnit_Framework_TestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
+    public function setup()
+    {
+        $this->_connection = Tinebase_Connection::getInstance();
+    }
+    
     public function testLogin()
     {
-        $client = Tinebase_Connection::getInstance();
-        $user = $client->getUser();
+        $user = $this->_connection->getUser();
         $this->assertTrue(count(array_keys($user)) > 1);
+    }
+    
+    public function testLogout()
+    {
+        $this->_connection->logout();
+        $user = $this->_connection->getUser();
+        $this->assertEquals(0, count(array_keys($user)));
     }
 }
