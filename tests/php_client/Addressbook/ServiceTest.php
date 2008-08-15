@@ -15,11 +15,9 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-/*
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_UserTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Addressbook_ServiceTest::main');
 }
-*/
 
 class Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
 {
@@ -94,4 +92,8 @@ class Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
         $remoteContact = $this->_service->getContact($GLOBALS['Addressbook_ServiceTest']['newContactId']);
         $this->assertEquals($this->_contactData['email'], $remoteContact->email);
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'Addressbook_ServiceTest::main') {
+    AllTests::main();
 }
