@@ -54,6 +54,64 @@ class Addressbook_Service extends Tinebase_Service_Abstract
     }
     
     /**
+     * gets all contacts readable for the current user
+     *
+     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     */
+    public function getAllContacts()
+    {
+        $client = $this->getConnection();
+        
+        $client->setParameterPost(array(
+            'method' => 'Addressbook.searchContacts',
+            'jsonKey' => $client->jsonKey,
+            'filter' => array(
+                array(
+                    'field'    => 'containerType',
+                    'operator' => 'equals',
+                    'value'    => 'all'
+                ),
+                array(
+                    'field'    => 'container',
+                    'operator' => 'equals',
+                    'value'    => NULL
+                ),
+                array(
+                    'field'    => 'owner',
+                    'operator' => 'equals',
+                    'value'    => NULL
+                ),
+            ),
+           'filter' => array(
+               'containerType' => 'all',
+           ),
+           'paging' => array(
+               'sort' => 'n_fileas', 
+               'dir' => 'ASC', 
+           )
+        ));
+         
+        $response = $client->request('POST');
+        if($this->debugEnabled === true) {
+            var_dump( $client->getLastRequest());
+            var_dump( $response );
+        }
+
+        if(!$response->isSuccessful()) {
+            throw new Exception('getting all contacts failed');
+        }
+                
+        $responseData = Zend_Json::decode($response->getBody());
+        if($this->debugEnabled === true) {
+            var_dump($responseData);
+        }
+        
+        $contacts = new Tinebase_Record_RecordSet('Addressbook_Model_Contact',$responseData);
+        return $contacts;
+    }
+        
+    
+    /**
      * adds / creates a new contact in remote installation
      *
      * @param  Addressbook_Model_Contact $_contact
