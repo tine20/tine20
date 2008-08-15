@@ -38,14 +38,14 @@ class Tinebase_Connection
      *
      * @var string
      */
-    protected  $_jsonKey = NULL;
+    public  $jsonKey = NULL;
     
     /**
      * Account data for the current users session
      *
      * @var array
      */
-    protected $_user = array();
+    public $user = array();
     
     /**
      * @var Zend_Http_Client
@@ -112,7 +112,7 @@ class Tinebase_Connection
      */
     public function getUser()
     {
-        return $this->_user;
+        return $this->user;
     }
     
     /**
@@ -133,7 +133,7 @@ class Tinebase_Connection
      * @param  string $_configName
      * @param  mixed  $_configValue
      * @return void
-     *
+     */
     public function __set($_configName, $_configValue)
     {
         $this->_config[$_configName] = $_configValue;
@@ -144,7 +144,7 @@ class Tinebase_Connection
      *
      * @param  string $_configName
      * @return mixed
-     *
+     */
     public function __get($_configName)
     {
         return $this->_config[$_configName];
@@ -161,86 +161,20 @@ class Tinebase_Connection
         switch ($method) {
             case 'POST' :
                 $this->_httpClient->setParameterPost(array(
-                    'jsonKey'    => $this->_jsonKey
+                    'jsonKey'    => $this->jsonKey
                 ));
                 $this->_httpClient->setHeaders('X-Requested-With', 'XMLHttpRequest');
                 $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'JSON');
                 break;
             case 'GET' :
                 $this->_httpClient->setParameterGet(array(
-                    'jsonKey'    => $this->_jsonKey
+                    'jsonKey'    => $this->jsonKey
                 ));
                 $this->_httpClient->setHeaders('X-Requested-With', '');
                 $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'HTTP');
                 break;
         }
         return $this->_httpClient->request($method);
-    }
-    
-    /**
-     * login to remote Tine 2.0 installation
-     *
-     * @return void
-     */
-    public function login()
-    {
-        $this->_httpClient->setParameterPost(array(
-            'username'  => $this->_config['username'],
-            'password'  => $this->_config['password'],
-            'method'    => 'Tinebase.login'
-        ));
-        
-        $response = $this->request('POST');
-        
-        if($this->_debugEnabled === true) {
-            var_dump( $this->_httpClient->getLastRequest());
-            var_dump( $response );
-        }
-
-        if(!$response->isSuccessful()) {
-            throw new Exception('login failed');
-        }
-                
-        $responseData = Zend_Json::decode($response->getBody());
-        
-        if($this->_debugEnabled === true) {
-            var_dump($responseData);
-        }
-        
-        $this->_jsonKey = $responseData['jsonKey'];
-        $this->_user = $responseData['account'];
-    }
-    
-    /**
-     * logout from remote Tine 2.0 installation
-     * 
-     * @return void
-     */
-    public function logout()
-    {
-        $this->_httpClient->setParameterPost(array(
-            'method'   => 'Tinebase.logout'
-        ));
-        
-        $response = $this->request('POST');
-        
-        if($this->_debugEnabled === true) {
-            var_dump( $this->_httpClient->getLastRequest());
-            var_dump( $response );
-        }
-
-        if(!$response->isSuccessful()) {
-            throw new Exception('logout failed');
-        }
-
-        $responseData = Zend_Json::decode($response->getBody());
-        
-        if($this->_debugEnabled === true) {
-            var_dump($responseData);
-        }
-        
-        $this->_jsonKey = NULL;
-        $this->_user = array();
     }
     
     /**
