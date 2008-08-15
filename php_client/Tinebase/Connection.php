@@ -116,6 +116,18 @@ class Tinebase_Connection
     }
     
     /**
+     * route function calls to Http_Client
+     *
+     * @param  string $_functionName
+     * @param  array  $_arguments
+     * @return mixed
+     */
+    public function __call($_functionName, $_arguments)
+    {
+        return call_user_func_array(array($this->_httpClient, $_functionName), $_arguments);
+    }
+    
+    /**
      * sets config values
      *
      * @param  string $_configName
