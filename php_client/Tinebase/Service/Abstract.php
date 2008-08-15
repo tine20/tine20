@@ -10,26 +10,26 @@
  * @version     $Id$
  */
 
-abstract class TineClient_Service_Abstract
+abstract class Tinebase_Service_Abstract
 {
 	/**
-	 * @var TineClient_Connection
+	 * @var Tinebase_Connection
 	 */
     protected static $_defaultConnection = NULL;
     
     /**
-	 * @var TineClient_Connection
+	 * @var Tinebase_Connection
 	 */
     protected $_connection = NULL;
     
     public function __construct($_connection = NULL)
     {
-        if($_connection instanceof TineClient_Connection) {
+        if($_connection instanceof Tinebase_Connection) {
             $this->_connection = $_connection;
         }
     }
     
-    public function setConnection(TineClient_Connection $_connection)
+    public function setConnection(Tinebase_Connection $_connection)
     {
         $this->_connection = $_connection;
         
@@ -39,18 +39,18 @@ abstract class TineClient_Service_Abstract
     /**
      * Enter description here...
      *
-     * @return TineClient_Connection
+     * @return Tinebase_Connection
      */
     public function getConnection()
     {
-        if($this->_connection instanceof TineClient_Connection) {
+        if($this->_connection instanceof Tinebase_Connection) {
             return $this->_connection;
         } else {
             return self::$_defaultConnection;
         }
     }
     
-    public static final function setDefaultConnection(TineClient_Connection $_connection)
+    public static final function setDefaultConnection(Tinebase_Connection $_connection)
     {
         self::$_defaultConnection = $_connection;
     }
@@ -58,7 +58,7 @@ abstract class TineClient_Service_Abstract
     /**
      * get the default connection
      *
-     * @return TineClient_Connection
+     * @return Tinebase_Connection
      */
     public static final function getDefaultConnection()
     {

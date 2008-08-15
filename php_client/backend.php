@@ -15,9 +15,9 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
-$client = new TineClient_Connection($_POST['url']);
+$client = new Tinebase_Connection($_POST['url']);
 
-TineClient_Service_Abstract::setDefaultConnection($client);
+Tinebase_Service_Abstract::setDefaultConnection($client);
 
 if($_POST['debug'] == 'yes') {
     $client->setDebugEnabled(true);

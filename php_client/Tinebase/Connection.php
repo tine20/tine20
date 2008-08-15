@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class TineClient_Connection extends Zend_Http_Client
+class Tinebase_Connection extends Zend_Http_Client
 {
     /**
      * status of debug modus

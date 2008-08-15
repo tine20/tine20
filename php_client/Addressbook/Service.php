@@ -9,7 +9,7 @@
  * @version     $Id$
  */
 
-class Addressbook_Service extends TineClient_Service_Abstract
+class Addressbook_Service extends Tinebase_Service_Abstract
 {
     public function getContact($_contactId)
     {
