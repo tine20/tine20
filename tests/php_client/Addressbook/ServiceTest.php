@@ -92,6 +92,12 @@ class Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
         $remoteContact = $this->_service->getContact($GLOBALS['Addressbook_ServiceTest']['newContactId']);
         $this->assertEquals($this->_contactData['email'], $remoteContact->email);
     }
+    
+    public function testGetAllContacts()
+    {
+        $contacts = $this->_service->getAllContacts();
+        $this->assertGreaterThan(0, count($contacts));
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_ServiceTest::main') {
