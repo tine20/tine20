@@ -3,12 +3,16 @@
  * Tine 2.0
  *
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @license     yet unknown
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
+/**
+ * Addressbook Service
+ *
+ */
 class Addressbook_Service extends Tinebase_Service_Abstract
 {
     public function getContact($_contactId)
