@@ -2,22 +2,36 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
- * @subpackage  Server
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @package     php_client
+ * @subpackage  Tinebase
+ * @license     yet unknown
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
 
-class Tinebase_Connection extends Zend_Http_Client
+/**
+ * Class all Connections / Request to remote Tine 2.0 installation are handled via
+ * 
+ * @todo $this->_user: array -> model
+ *
+ */
+class Tinebase_Connection
 {
+    /**
+     * holds config of connection
+     *
+     * @var array
+     */
+    protected $_config = array();
+    
     /**
      * status of debug modus
      *
      * @var bool
      */
-    protected $debugEnabled = false;
+    protected $_debugEnabled = false;
     
     /**
      * Json key of the current session
@@ -27,50 +41,134 @@ class Tinebase_Connection extends Zend_Http_Client
     protected  $_jsonKey = NULL;
     
     /**
-     * Account data for the current session
+     * Account data for the current users session
      *
      * @var array
      */
-    public $account = array();
+    protected $_user = array();
+    
+    /**
+     * @var Zend_Http_Client
+     */
+    protected $_httpClient = NULL;
+    
+    /**
+     * holds array of selfs (one for each connection)
+     * 
+     * @var Tinebase_Connection
+     */
+    private static $_instance = array();
+    
+    
+    /**
+     * singleton per url and username
+     *
+     * @return Tinebase_Connection
+     */
+    public static function getInstance($_url=NULL, $_username='', $_password='') 
+    {
+        // return connection if we have _one_
+        if (! $_url) {
+            $urls = array_keys(self::$_instance);
+            if (count($urls) === 1) {
+                $users = array_keys(self::$_instance[$urls[0]]);
+                if (count($users) === 1) {
+                    return self::$_instance[$urls[0]][$users[0]];
+                }
+            }
+            throw new Exception('instance not specified');
+        }
+        
+        if (! isset(self::$_instance[$_url]) || ! isset(self::$_instance[$_url][$_username])) {
+            self::$_instance[$_url][$_username] = new Tinebase_Connection($_url, $_username, $_password);
+        }
+        return self::$_instance[$_url][$_username];
+    }
+    
     /**
      * @see Zend_Http_Client
      */
-    public function __construct($_uri, array $_config = array())
+    private function __construct($_url, $_username, $_password)
     {
-        $_config['useragent'] = 'Tine 2.0 remote client (rv: 0.1)';
-        $_config['keepalive'] = TRUE;
+        $this->_config = array(
+            'url'       => $_url,
+            'username'  => $_username,
+            'password'  => $_password,
+            'useragent' => 'Tine 2.0 remote client (rv: 0.2)',
+            'keepalive' => true
+        );
+
+        $this->_httpClient = new Zend_Http_Client($_url, $this->_config);
         
-        parent::__construct($_uri, $_config);
-        
-        $this->setCookieJar();
-        $this->setHeaders('X-Requested-With', 'XMLHttpRequest');
+        $this->_httpClient->setCookieJar();
+        $this->_httpClient->setHeaders('X-Requested-With', 'XMLHttpRequest');
+        $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'JSON');
+    }
+    
+    /**
+     * returns the authenticated user
+     * 
+     * @return array()
+     */
+    public function getUser()
+    {
+        return $this->_user;
+    }
+    
+    /**
+     * sets config values
+     *
+     * @param  string $_configName
+     * @param  mixed  $_configValue
+     * @return void
+     *
+    public function __set($_configName, $_configValue)
+    {
+        $this->_config[$_configName] = $_configValue;
+    }
+    
+    /**
+     * gets config value
+     *
+     * @param  string $_configName
+     * @return mixed
+     *
+    public function __get($_configName)
+    {
+        return $this->_config[$_configName];
     }
     
     /**
      * Send the HTTP request and return an HTTP response object
      *
+     * @todo route all requests throug here??
      * @param string $method
      */
     public function request($method)
     {
-         $this->setParameterPost(array(
+         $this->_httpClient->setParameterPost(array(
             'jsonKey'    => $this->_jsonKey
         ));
-        return parent::request($method);
+        return $this->_httpClient->request($method);
     }
     
-    public function login($_username, $_password)
+    /**
+     * login to remote Tine 2.0 installation
+     *
+     * @return void
+     */
+    public function login()
     {
-        $this->setParameterPost(array(
-            'username'  => $_username,
-            'password'  => $_password,
+        $this->_httpClient->setParameterPost(array(
+            'username'  => $this->_config['username'],
+            'password'  => $this->_config['password'],
             'method'    => 'Tinebase.login'
         ));
         
         $response = $this->request('POST');
         
-        if($this->debugEnabled === true) {
-            var_dump( $this->getLastRequest());
+        if($this->_debugEnabled === true) {
+            var_dump( $this->_httpClient->getLastRequest());
             var_dump( $response );
         }
 
@@ -80,24 +178,29 @@ class Tinebase_Connection extends Zend_Http_Client
                 
         $responseData = Zend_Json::decode($response->getBody());
         
-        if($this->debugEnabled === true) {
+        if($this->_debugEnabled === true) {
             var_dump($responseData);
         }
         
         $this->_jsonKey = $responseData['jsonKey'];
-        $this->account = $responseData['account'];
+        $this->_user = $responseData['account'];
     }
     
+    /**
+     * logout from remote Tine 2.0 installation
+     * 
+     * @return void
+     */
     public function logout()
     {
-        $this->setParameterPost(array(
+        $this->_httpClient->setParameterPost(array(
             'method'   => 'Tinebase.logout'
         ));
         
         $response = $this->request('POST');
         
-        if($this->debugEnabled === true) {
-            var_dump( $this->getLastRequest());
+        if($this->_debugEnabled === true) {
+            var_dump( $this->_httpClient->getLastRequest());
             var_dump( $response );
         }
 
@@ -107,16 +210,22 @@ class Tinebase_Connection extends Zend_Http_Client
 
         $responseData = Zend_Json::decode($response->getBody());
         
-        if($this->debugEnabled === true) {
+        if($this->_debugEnabled === true) {
             var_dump($responseData);
         }
         
         $this->_jsonKey = NULL;
-        $this->account = array();
+        $this->_user = array();
     }
     
+    /**
+     * enable/disable debugging
+     *
+     * @param  bool $_status
+     * @return void
+     */
     public function setDebugEnabled($_status)
     {
-        $this->debugEnabled = (bool)$_status;
+        $this->_debugEnabled = (bool)$_status;
     }
 }
