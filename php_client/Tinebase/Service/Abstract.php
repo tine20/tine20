@@ -2,8 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Tineclient
- * @subpackage  Service
+ * @package     Tinebase
  * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -12,6 +11,8 @@
 
 /**
  * Abstract Service Class
+ * 
+ * @package     Tinebase
  */
 abstract class Tinebase_Service_Abstract
 {

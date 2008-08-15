@@ -12,7 +12,8 @@
 /**
  * Addressbook Service
  *
- * @todo clear Post Parameters from test to test
+ * @package     Addressbook
+ * @todo        clear Post Parameters from test to test
  */
 class Addressbook_Service extends Tinebase_Service_Abstract
 {

@@ -2,7 +2,7 @@
 /**
  * this is just an usage example for the Tine 2.0 PHP Client
  *
- * @package     Remote API
+ * @package     Remote API Example
  * @license     New BSD License
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)

@@ -2,8 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     php_client
- * @subpackage  Tinebase
+ * @package     Tinebase
  * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -14,8 +13,8 @@
 /**
  * Class all Connections / Request to remote Tine 2.0 installation are handled via
  * 
- * @todo $this->_user: array -> model
- *
+ * @todo        $this->_user: array -> model
+ * @package     Tinebase
  */
 class Tinebase_Connection
 {

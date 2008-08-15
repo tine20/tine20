@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Addressbook
+ * @package     Tinebase
  * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -12,7 +12,8 @@
 /**
  * Tinebase Service
  *
- * @todo clear Post Parameters from test to test
+ * @todo        clear Post Parameters from test to test
+ * @package     Tinebase
  */
 class Tinebase_Service extends Tinebase_Service_Abstract
 {
