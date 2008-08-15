@@ -25,7 +25,7 @@ PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__));
  * Set include path
  */
  
-define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../tine20');
+define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
 define('PATH_TO_TEST_DIR', dirname(__FILE__));
 
 $path = array(
