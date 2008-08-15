@@ -64,8 +64,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
         
         $client->setParameterPost(array(
             'method' => 'Addressbook.searchContacts',
-            'jsonKey' => $client->jsonKey,
-            'filter' => array(
+            'filter' => Zend_Json::encode(array(
                 array(
                     'field'    => 'containerType',
                     'operator' => 'equals',
@@ -81,14 +80,11 @@ class Addressbook_Service extends Tinebase_Service_Abstract
                     'operator' => 'equals',
                     'value'    => NULL
                 ),
-            ),
-           'filter' => array(
-               'containerType' => 'all',
-           ),
-           'paging' => array(
+            )),
+           'paging' => Zend_Json::encode(array(
                'sort' => 'n_fileas', 
                'dir' => 'ASC', 
-           )
+           ))
         ));
          
         $response = $client->request('POST');
@@ -106,7 +102,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             var_dump($responseData);
         }
         
-        $contacts = new Tinebase_Record_RecordSet('Addressbook_Model_Contact',$responseData);
+        $contacts = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $responseData['results']);
         return $contacts;
     }
         
