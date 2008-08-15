@@ -106,11 +106,11 @@ class Addressbook_ServiceTest extends PHPUnit_Framework_TestCase
     /**
      * test retrivial of remote image data
      * 
-     * NOTE : disabled till we have an upload test
+     * NOTE : useless till we have an upload test
      */
-    public function noTestGetImage()
+    public function testGetImage()
     {
-        $image = $this->_service->getImage(566);
+        $image = $this->_service->getImage($GLOBALS['Addressbook_ServiceTest']['newContactId']);
     }
     
     public function testDeleteContact()
