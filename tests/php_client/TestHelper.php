@@ -47,8 +47,9 @@ Zend_Loader::registerAutoload();
  * login to remote install
  */
 date_default_timezone_set('UTC');
-$client = Tinebase_Connection::getInstance($url, $username, $password);
+$connection = Tinebase_Connection::getInstance($url, $username, $password);
+$service = new Tinebase_Service($connection);
 //$client->setDebugEnabled(true);
-$client->login();
+$service->login();
 
-unset($url, $username, $password, $tineRoot, $phpClientPath, $client);
+unset($url, $username, $password, $testRoot, $tineRoot, $phpClientPath, $connection, $service);
