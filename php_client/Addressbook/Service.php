@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @package     Addressbook
- * @license     yet unknown
+ * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$

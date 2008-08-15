@@ -4,7 +4,7 @@
  *
  * @package     php_client
  * @subpackage  Tinebase
- * @license     yet unknown
+ * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @author      Cornelius Weiss <c.weiss@metaways.de>

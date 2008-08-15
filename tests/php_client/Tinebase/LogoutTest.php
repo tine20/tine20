@@ -4,7 +4,7 @@
  * 
  * @package     tests
  * @subpackage  php_client
- * @license     yet unknown
+ * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
