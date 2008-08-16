@@ -14,25 +14,28 @@ var_dump($_POST);
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
-echo "Try to login...<br>";
+echo "Fetching connection...<br>";
 // feteching the connection
-$connection = Tinebase_Connection::getInstance($_POST['url'], $_POST['username'], $_POST['password']);
+$connection = new Tinebase_Connection($_POST['url'], $_POST['username'], $_POST['password']);
 // setting default connection
-Tinebase_Service_Abstract::setDefaultConnection($connection);
-
-if($_POST['debug'] == 'yes') {
-    $connection->setDebugEnabled(true);
-}
-// login to remote tine installation
-$connection->login();
-
-echo "<hr>Try to add contact...<br>";
-
-// NOTE: all data are expected to be UTF-8 encoded!
-$contactData = $_POST['contact'];
+Tinebase_Connection::setDefaultConnection($connection);
 
 // getting Addressbook service
 $addressbook = new Addressbook_Service();
+
+if($_POST['debug'] == 'yes') {
+    $connection->debugEnabled;
+    $addressbook->debugEnabled;
+}
+
+echo "Loggin in...<br>";
+// login to remote tine installation
+$connection->login();
+
+echo "<hr>Adding contact...<br>";
+
+// NOTE: all data are expected to be UTF-8 encoded!
+$contactData = $_POST['contact'];
 
 // creating a _local_ model of the contact data
 // NOTE: with this we do client side data validation
@@ -43,7 +46,7 @@ $updatedContact = $addressbook->addContact($contact);
 
 var_dump($updatedContact->toArray());
 
-echo "<hr>Try to logout...<br>";
+echo "<hr>Logging out...<br>";
 $connection->logout();
 
 echo '<a href="index.html">Back to contact form</a>';

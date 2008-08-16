@@ -2,8 +2,8 @@
 /**
  * Tine 2.0 PHP HTTP Client
  * 
- * @package   Tinebase
- * @license     yet unknown
+ * @package     Tinebase
+ * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -20,18 +20,14 @@
 class Tinebase_Connection
 {
     /**
-     * holds config of connection
-     *
-     * @var array
-     */
-    protected $_config = array();
-    
-    /**
-     * status of debug modus
-     *
      * @var bool
      */
-    protected $_debugEnabled = false;
+    public $debugEnabled = false;
+    
+    /**
+     * @var array config of this connection
+     */
+    protected $_config = array();
     
     /**
      * Json key of the current session
@@ -53,42 +49,14 @@ class Tinebase_Connection
     protected $_httpClient = NULL;
     
     /**
-     * holds array of selfs (one for each connection)
-     * 
      * @var Tinebase_Connection
      */
-    private static $_instance = array();
-    
-    
-    /**
-     * singleton per url and username
-     *
-     * @return Tinebase_Connection
-     */
-    public static function getInstance($_url=NULL, $_username='', $_password='') 
-    {
-        // return connection if we have _one_
-        if (! $_url) {
-            $urls = array_keys(self::$_instance);
-            if (count($urls) === 1) {
-                $users = array_keys(self::$_instance[$urls[0]]);
-                if (count($users) === 1) {
-                    return self::$_instance[$urls[0]][$users[0]];
-                }
-            }
-            throw new Exception('instance not specified');
-        }
-        
-        if (! isset(self::$_instance[$_url]) || ! isset(self::$_instance[$_url][$_username])) {
-            self::$_instance[$_url][$_username] = new Tinebase_Connection($_url, $_username, $_password);
-        }
-        return self::$_instance[$_url][$_username];
-    }
+    protected static $_defaultConnection = NULL;
     
     /**
-     * @see Zend_Http_Client
+     * creates a new connection
      */
-    private function __construct($_url, $_username, $_password)
+    public function __construct($_url, $_username, $_password)
     {
         $this->_config = array(
             'url'       => $_url,
@@ -99,10 +67,30 @@ class Tinebase_Connection
         );
 
         $this->_httpClient = new Zend_Http_Client($_url, $this->_config);
-        
         $this->_httpClient->setCookieJar();
-        $this->_httpClient->setHeaders('X-Requested-With', 'XMLHttpRequest');
-        $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'JSON');
+    }
+
+    
+    /**
+     * sets the default connection
+     *
+     * @param  Tinebase_Connection $_connection
+     * @return Tinebase_Connection
+     */
+    public static final function setDefaultConnection(Tinebase_Connection $_connection)
+    {
+        self::$_defaultConnection = $_connection;
+        return self::$_defaultConnection;
+    }
+    
+    /**
+     * get the default connection
+     *
+     * @return Tinebase_Connection
+     */
+    public static final function getDefaultConnection()
+    {
+        return self::$_defaultConnection;
     }
     
     /**
@@ -169,7 +157,7 @@ class Tinebase_Connection
         
         $response = $this->request('POST');
         
-        if($this->_debugEnabled === true) {
+        if($this->debugEnabled === true) {
             var_dump( $this->_httpClient->getLastRequest());
             var_dump( $response );
         }
@@ -180,7 +168,7 @@ class Tinebase_Connection
                 
         $responseData = Zend_Json::decode($response->getBody());
         
-        if($this->_debugEnabled === true) {
+        if($this->debugEnabled === true) {
             var_dump($responseData);
         }
         
@@ -201,7 +189,7 @@ class Tinebase_Connection
         
         $response = $this->request('POST');
 
-        if($this->_debugEnabled === true) {
+        if($this->debugEnabled === true) {
             var_dump( $this->_httpClient->getLastRequest());
             var_dump( $response );
         }
@@ -212,22 +200,11 @@ class Tinebase_Connection
 
         $responseData = Zend_Json::decode($response->getBody());
         
-        if($this->_debugEnabled === true) {
+        if($this->debugEnabled === true) {
             var_dump($responseData);
         }
         
         $this->_jsonKey = NULL;
         $this->_user = array();
-    }
-    
-    /**
-     * enable/disable debugging
-     *
-     * @param  bool $_status
-     * @return void
-     */
-    public function setDebugEnabled($_status)
-    {
-        $this->_debugEnabled = (bool)$_status;
     }
 }
