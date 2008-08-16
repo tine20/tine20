@@ -14,6 +14,7 @@
  * Class all Connections / Request to remote Tine 2.0 installation are handled via
  * 
  * @todo    $this->_user: array -> model
+ * @todo    resetParameters for each request
  * @package Tinebase
  */
 class Tinebase_Connection
@@ -134,9 +135,22 @@ class Tinebase_Connection
      */
     public function request($method)
     {
-         $this->_httpClient->setParameterPost(array(
-            'jsonKey'    => $this->_jsonKey
-        ));
+        switch ($method) {
+            case 'POST' :
+                $this->_httpClient->setParameterPost(array(
+                    'jsonKey'    => $this->_jsonKey
+                ));
+                $this->_httpClient->setHeaders('X-Requested-With', 'XMLHttpRequest');
+                $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'JSON');
+                break;
+            case 'GET' :
+                $this->_httpClient->setParameterGet(array(
+                    'jsonKey'    => $this->_jsonKey
+                ));
+                $this->_httpClient->setHeaders('X-Requested-With', '');
+                $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'HTTP');
+                break;
+        }
         return $this->_httpClient->request($method);
     }
     

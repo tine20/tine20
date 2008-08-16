@@ -13,7 +13,7 @@
  * Addressbook Service
  *
  * @package     Addressbook
- * @todo        clear Post Parameters from test to test
+ * @todo        clear (resetParameters) for each request
  */
 class Addressbook_Service extends Tinebase_Service_Abstract
 {
@@ -65,7 +65,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
     public function getImage($_id, $_width=130, $_height=130, $_ratiomode=0)
     {
         $client = $this->getConnection();
-        $client->setHeaders('X-Requested-With', '');
         $client->setParameterGet(array(
             'method'        =>  'Tinebase.getImage',
             'application'   => 'Addressbook',

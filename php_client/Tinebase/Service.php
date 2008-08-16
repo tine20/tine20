@@ -12,7 +12,7 @@
 /**
  * Tinebase Service
  *
- * @todo        clear Post Parameters from test to test
+ * @todo        resetParameters
  * @package     Tinebase
  */
 class Tinebase_Service extends Tinebase_Service_Abstract
