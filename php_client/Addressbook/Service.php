@@ -1,7 +1,7 @@
 <?php
 /**
- * Tine 2.0
- *
+ * Tine 2.0 PHP HTTP Client
+ * 
  * @package     Addressbook
  * @license     New BSD License
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)

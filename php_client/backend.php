@@ -1,6 +1,6 @@
 <?php
 /**
- * this is just an usage example for the Tine 2.0 PHP Client
+ * this is just an usage example for the Tine 2.0 PHP HTTP Client
  *
  * @package     Remote API Example
  * @license     New BSD License
@@ -20,14 +20,11 @@ $connection = Tinebase_Connection::getInstance($_POST['url'], $_POST['username']
 // setting default connection
 Tinebase_Service_Abstract::setDefaultConnection($connection);
 
-// getting the Tinebase service
-$TinbaseService = new Tinebase_Service($connection);
 if($_POST['debug'] == 'yes') {
     $connection->setDebugEnabled(true);
-    $TinbaseService->debugEnabled = true;
 }
 // login to remote tine installation
-$TinbaseService->login();
+$connection->login();
 
 echo "<hr>Try to add contact...<br>";
 
@@ -47,6 +44,6 @@ $updatedContact = $addressbook->addContact($contact);
 var_dump($updatedContact->toArray());
 
 echo "<hr>Try to logout...<br>";
-$TinbaseService->logout();
+$connection->logout();
 
 echo '<a href="index.html">Back to contact form</a>';
