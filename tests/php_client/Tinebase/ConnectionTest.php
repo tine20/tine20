@@ -57,6 +57,15 @@ class Tinebase_ConnectionTest extends PHPUnit_Framework_TestCase
         Tinebase_Connection::setDefaultConnection($connection);
         $this->assertEquals($connection, Tinebase_Connection::getDefaultConnection());
     }
+    
+    /**
+     * tests __call method
+     *
+     */
+    public function test__call()
+    {
+        Tinebase_Connection::getDefaultConnection()->resetParameters();
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_ConnectionTest::main') {
