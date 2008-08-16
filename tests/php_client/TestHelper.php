@@ -48,6 +48,9 @@ date_default_timezone_set('UTC');
 // copy connection data to global scope
 $GLOBALS['TestHelper']['url'] = $url;
 $GLOBALS['TestHelper']['username'] = $username;
-$GLOBALS['TestHelper']['passowrd'] = $password;
+$GLOBALS['TestHelper']['password'] = $password;
 
-unset($url, $username, $password, $testRoot, $tineRoot, $phpClientPath);
+$connection = new Tinebase_Connection($url, $username, $password);
+Tinebase_Connection::setDefaultConnection($connection);
+
+unset($url, $username, $password, $testRoot, $tineRoot, $phpClientPath, $connection);

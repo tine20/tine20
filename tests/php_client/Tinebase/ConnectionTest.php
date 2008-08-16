@@ -38,41 +38,24 @@ class Tinebase_ConnectionTest extends PHPUnit_Framework_TestCase
 
     }
     
-    public function testGetConnection()
+    public function testCreateConnection()
     {
-        $connection = Tinebase_Connection::getInstance(
+        $connection = new Tinebase_Connection(
             $GLOBALS['TestHelper']['url'],
             $GLOBALS['TestHelper']['username'],
-            $GLOBALS['TestHelper']['passowrd']
+            $GLOBALS['TestHelper']['password']
         );
-        $this->assertEquals($connection, Tinebase_Connection::getInstance());
     }
     
-    public function testSecondConnection()
+    public function testDefaultConnection()
     {
-        $connection1 = Tinebase_Connection::getInstance(
+        $connection = new Tinebase_Connection(
             $GLOBALS['TestHelper']['url'],
             $GLOBALS['TestHelper']['username'],
-            $GLOBALS['TestHelper']['passowrd']
+            $GLOBALS['TestHelper']['password']
         );
-        $this->assertEquals($connection1, Tinebase_Connection::getInstance());
-        
-        $connection2 = Tinebase_Connection::getInstance(
-            $GLOBALS['TestHelper']['url'], 'notauser', 'notapassword'
-        );
-        
-        $this->setExpectedException('Exception');
-        Tinebase_Connection::getInstance();
-    }
-    
-    public function testToggleDebug()
-    {
-        $connection = Tinebase_Connection::getInstance(
-            $GLOBALS['TestHelper']['url'],
-            $GLOBALS['TestHelper']['username'],
-            $GLOBALS['TestHelper']['passowrd']
-        );
-        $connection->setDebugEnabled(false);
+        Tinebase_Connection::setDefaultConnection($connection);
+        $this->assertEquals($connection, Tinebase_Connection::getDefaultConnection());
     }
 }
 

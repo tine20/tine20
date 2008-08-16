@@ -40,17 +40,25 @@ class Tinebase_Service_AbstractTest extends PHPUnit_Framework_TestCase
     
     public function setup()
     {
-        $this->_connection = Tinebase_Connection::getInstance(
-            $GLOBALS['TestHelper']['url'],
-            $GLOBALS['TestHelper']['username'],
-            $GLOBALS['TestHelper']['passowrd']
-        );
+        $this->_connection = Tinebase_Connection::getDefaultConnection();
+    }
+
+    public function testServiceCreationWithConnection()
+    {
+        $service = new Tinebase_Service_ConcreteService($this->_connection);
+        $this->assertTrue($service instanceof Tinebase_Service_Abstract);
     }
     
-    public function testSetDefaultConnection()
+    public function testServiceCreationWithoutConnection()
     {
-        Tinebase_Service_Abstract::setDefaultConnection($this->_connection);
-        $this->assertEquals($this->_connection, Tinebase_Service_Abstract::getDefaultConnection());
+        $service = new Tinebase_Service_ConcreteService();
+        $this->assertTrue($service instanceof Tinebase_Service_Abstract);
+    }
+    
+    public function testServiceCreationFail()
+    {
+        $this->setExpectedException('Exception');
+        $service = new Tinebase_Service_ConcreteService('No Connection');
     }
 }
 

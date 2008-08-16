@@ -40,11 +40,7 @@ class Tinebase_LoginTest extends PHPUnit_Framework_TestCase
     
     public function setup()
     {
-        $this->_connection = Tinebase_Connection::getInstance(
-            $GLOBALS['TestHelper']['url'],
-            $GLOBALS['TestHelper']['username'],
-            $GLOBALS['TestHelper']['passowrd']
-        );
+        $this->_connection = Tinebase_Connection::getDefaultConnection();
     }
     
     public function testLogin()
