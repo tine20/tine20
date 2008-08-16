@@ -43,12 +43,11 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
-/*
- * login to remote install
- */
 date_default_timezone_set('UTC');
 
-$connection = Tinebase_Connection::getInstance($url, $username, $password);
-Tinebase_Service_Abstract::setDefaultConnection($connection);
+// copy connection data to global scope
+$GLOBALS['TestHelper']['url'] = $url;
+$GLOBALS['TestHelper']['username'] = $username;
+$GLOBALS['TestHelper']['passowrd'] = $password;
 
-unset($url, $username, $password, $testRoot, $tineRoot, $phpClientPath, $connection);
+unset($url, $username, $password, $testRoot, $tineRoot, $phpClientPath);
