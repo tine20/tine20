@@ -115,29 +115,6 @@ class Tinebase_Connection
     }
     
     /**
-     * sets config values
-     *
-     * @param  string $_configName
-     * @param  mixed  $_configValue
-     * @return void
-     *
-    public function __set($_configName, $_configValue)
-    {
-        $this->_config[$_configName] = $_configValue;
-    }
-    
-    /**
-     * gets config value
-     *
-     * @param  string $_configName
-     * @return mixed
-     *
-    public function __get($_configName)
-    {
-        return $this->_config[$_configName];
-    }
-    
-    /**
      * route function calls to Http_Client
      *
      * @param  string $_functionName

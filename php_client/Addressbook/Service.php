@@ -68,15 +68,14 @@ class Addressbook_Service extends Tinebase_Service_Abstract
         $client->setHeaders('X-Requested-With', '');
         $client->setParameterGet(array(
             'method'        =>  'Tinebase.getImage',
-            //'jsonKey'   => $client->jsonKey,
             'application'   => 'Addressbook',
             'id'            =>  $_id,
             'location'      =>  '', 
             'width'         => $_width,
             'height'        =>  $_height,
             'ratiomode'     =>  $_ratiomode,
-         ));  
-         
+        ));  
+        
         $response = $client->request('GET');
         if($this->debugEnabled === true) {
             var_dump( $client->getLastRequest());
