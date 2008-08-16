@@ -14,7 +14,6 @@
  * Class all Connections / Request to remote Tine 2.0 installation are handled via
  * 
  * @todo    $this->_user: array -> model
- * @todo    resetParameters for each request
  * @package Tinebase
  */
 class Tinebase_Connection

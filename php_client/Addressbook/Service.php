@@ -13,7 +13,6 @@
  * Addressbook Service
  *
  * @package     Addressbook
- * @todo        clear (resetParameters) for each request
  */
 class Addressbook_Service extends Tinebase_Service_Abstract
 {

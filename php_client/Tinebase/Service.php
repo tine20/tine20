@@ -12,7 +12,6 @@
 /**
  * Tinebase Service
  *
- * @todo        resetParameters
  * @package     Tinebase
  */
 class Tinebase_Service extends Tinebase_Service_Abstract
