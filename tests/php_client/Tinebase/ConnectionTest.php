@@ -64,6 +64,16 @@ class Tinebase_ConnectionTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         Tinebase_Connection::getInstance();
     }
+    
+    public function testToggleDebug()
+    {
+        $connection = Tinebase_Connection::getInstance(
+            $GLOBALS['TestHelper']['url'],
+            $GLOBALS['TestHelper']['username'],
+            $GLOBALS['TestHelper']['passowrd']
+        );
+        $connection->setDebugEnabled(false);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_ConnectionTest::main') {

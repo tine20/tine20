@@ -31,6 +31,7 @@ class AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 PHP Client');
         $suite->addTestSuite('Tinebase_ConnectionTest');
         $suite->addTestSuite('Tinebase_LoginTest');
+        $suite->addTestSuite('Tinebase_Service_AbstractTest');
         $suite->addTestSuite('Addressbook_ServiceTest');
         $suite->addTestSuite('Tinebase_LogoutTest');
         return $suite;
