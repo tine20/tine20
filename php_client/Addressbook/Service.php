@@ -34,10 +34,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'method'    => 'Addressbook.getContact',
             'contactId' => $_contactId
         ));
-        if($this->debugEnabled === true) {
-            var_dump( $this->_connection->getLastRequest());
-            var_dump( $response );
-        }
 
         if(!$response->isSuccessful()) {
             throw new Exception('getting contact failed');
@@ -70,10 +66,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'height'        =>  $_height,
             'ratiomode'     =>  $_ratiomode,
         ), 'GET');
-        if($this->debugEnabled === true) {
-            var_dump( $this->_connection->getLastRequest());
-            var_dump( $response );
-        }
         
         return($response->getBody());
     }
@@ -109,10 +101,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
                'dir' => 'ASC', 
            ))
         ));
-        if($this->debugEnabled === true) {
-            var_dump( $this->_connection->getLastRequest());
-            var_dump( $response );
-        }
 
         if(!$response->isSuccessful()) {
             throw new Exception('getting all contacts failed');
@@ -144,10 +132,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'method'   => 'Addressbook.saveContact',
             'contactData'  => Zend_Json::encode($_contact->toArray())
         ));
-        if($this->debugEnabled === true) {
-            var_dump( $this->_connection->getLastRequest());
-            var_dump( $response );
-        }
 
         if(!$response->isSuccessful()) {
             throw new Exception('adding contact failed');
@@ -174,10 +158,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'method'   => 'Addressbook.deleteContacts',
             '_contactIds'  => Zend_Json::encode(array($_id))
         ));
-        if($this->debugEnabled === true) {
-            var_dump( $this->_connection->getLastRequest());
-            var_dump( $response );
-        }
 
         if(!$response->isSuccessful()) {
             throw new Exception('deleting contact failed');

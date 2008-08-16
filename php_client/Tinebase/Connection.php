@@ -137,7 +137,13 @@ class Tinebase_Connection
                 $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'HTTP');
                 break;
         }
-        return $this->_httpClient->request($_method);
+        
+        $response = $this->_httpClient->request($_method);
+        if($this->debugEnabled === true) {
+            var_dump( $this->_httpClient->getLastRequest());
+            var_dump( $response );
+        }
+        return $response;
     }
     
     /**
@@ -153,11 +159,6 @@ class Tinebase_Connection
             'method'    => 'Tinebase.login'
         ));
         
-        if($this->debugEnabled === true) {
-            var_dump( $this->_httpClient->getLastRequest());
-            var_dump( $response );
-        }
-
         if(!$response->isSuccessful()) {
             throw new Exception('login failed');
         }
@@ -182,11 +183,6 @@ class Tinebase_Connection
         $response = $this->request(array(
             'method'   => 'Tinebase.logout'
         ));
-
-        if($this->debugEnabled === true) {
-            var_dump( $this->_httpClient->getLastRequest());
-            var_dump( $response );
-        }
 
         if(!$response->isSuccessful()) {
             throw new Exception('logout failed');
