@@ -1,6 +1,6 @@
 <?php
 /**
- * Tine 2.0
+ * Tine 2.0 PHP HTTP Client
  * 
  * @package     tests
  * @subpackage  php_client
@@ -27,11 +27,6 @@ class Tinebase_LogoutTest extends PHPUnit_Framework_TestCase
     protected $_connection = NULL;
     
     /**
-     * @var Tinebase_Service
-     */
-    protected $_service;
-    
-    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -46,12 +41,11 @@ class Tinebase_LogoutTest extends PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->_connection = Tinebase_Connection::getInstance();
-        $this->_service = new Tinebase_Service($this->_connection);
     }
 
     public function testLogout()
     {
-        $this->_service->logout();
+        $this->_connection->logout();
         $user = $this->_connection->getUser();
         $this->assertEquals(0, count(array_keys($user)));
     }

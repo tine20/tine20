@@ -1,6 +1,6 @@
 <?php
 /**
- * Tine 2.0
+ * Tine 2.0 PHP HTTP Client
  * 
  * @package     tests
  * @subpackage  php_client
