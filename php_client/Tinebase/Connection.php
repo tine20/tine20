@@ -121,25 +121,23 @@ class Tinebase_Connection
      * @todo route all requests throug here??
      * @param string $method
      */
-    public function request($method)
+    public function request($_params, $_method='POST')
     {
-        switch ($method) {
+        $this->_httpClient->resetParameters();
+        $_params['jsonKey'] = $this->_jsonKey;
+        switch ($_method) {
             case 'POST' :
-                $this->_httpClient->setParameterPost(array(
-                    'jsonKey'    => $this->_jsonKey
-                ));
+                $this->_httpClient->setParameterPost($_params);
                 $this->_httpClient->setHeaders('X-Requested-With', 'XMLHttpRequest');
                 $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'JSON');
                 break;
             case 'GET' :
-                $this->_httpClient->setParameterGet(array(
-                    'jsonKey'    => $this->_jsonKey
-                ));
+                $this->_httpClient->setParameterGet($_params);
                 $this->_httpClient->setHeaders('X-Requested-With', '');
                 $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'HTTP');
                 break;
         }
-        return $this->_httpClient->request($method);
+        return $this->_httpClient->request($_method);
     }
     
     /**
@@ -149,13 +147,11 @@ class Tinebase_Connection
      */
     public function login()
     {
-        $this->_httpClient->setParameterPost(array(
+        $response = $this->request(array(
             'username'  => $this->_config['username'],
             'password'  => $this->_config['password'],
             'method'    => 'Tinebase.login'
         ));
-        
-        $response = $this->request('POST');
         
         if($this->debugEnabled === true) {
             var_dump( $this->_httpClient->getLastRequest());
@@ -183,11 +179,9 @@ class Tinebase_Connection
      */
     public function logout()
     {
-        $this->_httpClient->setParameterPost(array(
+        $response = $this->request(array(
             'method'   => 'Tinebase.logout'
         ));
-        
-        $response = $this->request('POST');
 
         if($this->debugEnabled === true) {
             var_dump( $this->_httpClient->getLastRequest());

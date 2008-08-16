@@ -30,11 +30,10 @@ class Addressbook_Service extends Tinebase_Service_Abstract
      */
     public function getContact($_contactId)
     {
-        $this->_connection->setParameterPost(array(
+        $response = $this->_connection->request(array(
             'method'    => 'Addressbook.getContact',
             'contactId' => $_contactId
-        ));        
-        $response = $this->_connection->request('POST');
+        ));
         if($this->debugEnabled === true) {
             var_dump( $this->_connection->getLastRequest());
             var_dump( $response );
@@ -62,7 +61,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
      */
     public function getImage($_id, $_width=130, $_height=130, $_ratiomode=0)
     {
-        $this->_connection->setParameterGet(array(
+        $response = $this->_connection->request(array(
             'method'        =>  'Tinebase.getImage',
             'application'   => 'Addressbook',
             'id'            =>  $_id,
@@ -70,9 +69,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'width'         => $_width,
             'height'        =>  $_height,
             'ratiomode'     =>  $_ratiomode,
-        ));  
-        
-        $response = $this->_connection->request('GET');
+        ), 'GET');
         if($this->debugEnabled === true) {
             var_dump( $this->_connection->getLastRequest());
             var_dump( $response );
@@ -88,7 +85,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
      */
     public function getAllContacts()
     {
-        $this->_connection->setParameterPost(array(
+        $response = $this->_connection->request(array(
             'method' => 'Addressbook.searchContacts',
             'filter' => Zend_Json::encode(array(
                 array(
@@ -112,8 +109,6 @@ class Addressbook_Service extends Tinebase_Service_Abstract
                'dir' => 'ASC', 
            ))
         ));
-         
-        $response = $this->_connection->request('POST');
         if($this->debugEnabled === true) {
             var_dump( $this->_connection->getLastRequest());
             var_dump( $response );
@@ -145,11 +140,10 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             throw new Exception('contact is not valid');
         }
         
-        $this->_connection->setParameterPost(array(
+        $response = $this->_connection->request(array(
             'method'   => 'Addressbook.saveContact',
             'contactData'  => Zend_Json::encode($_contact->toArray())
-        ));        
-        $response = $this->_connection->request('POST');
+        ));
         if($this->debugEnabled === true) {
             var_dump( $this->_connection->getLastRequest());
             var_dump( $response );
@@ -176,11 +170,10 @@ class Addressbook_Service extends Tinebase_Service_Abstract
      */
     public function deleteContact($_id)
     {
-        $this->_connection->setParameterPost(array(
+        $response = $this->_connection->request(array(
             'method'   => 'Addressbook.deleteContacts',
             '_contactIds'  => Zend_Json::encode(array($_id))
-        ));        
-        $response = $this->_connection->request('POST');
+        ));
         if($this->debugEnabled === true) {
             var_dump( $this->_connection->getLastRequest());
             var_dump( $response );
