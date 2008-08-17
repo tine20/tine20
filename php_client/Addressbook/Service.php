@@ -71,6 +71,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
     
     /**
      * gets all contacts readable for the current user
+     * NOTE: This could be quite a huge resultset.  
      *
      * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
      */
@@ -97,7 +98,9 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             )),
            'paging' => Zend_Json::encode(array(
                'sort' => 'n_fileas', 
-               'dir' => 'ASC', 
+               'dir' => 'ASC',
+               'start' => 0,
+               'limit' => 0
            ))
         ));
 
