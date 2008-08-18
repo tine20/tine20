@@ -67,7 +67,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         
         this.actions = {
             addAccount: new Ext.Action({
-                text: 'add account',
+                text: _('add account'),
                 disabled: true,
                 scope: this,
                 handler: function(){
@@ -163,7 +163,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
                 resizable: false,
                 sortable: false, 
                 id: 'name', 
-                header: 'Name', 
+                header: _('Name'), 
                 dataIndex: 'name', 
                 width: 70
             }
@@ -174,7 +174,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         //var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         this.quickSearchField = new Ext.ux.SearchField({
             id: 'Tinebase_Accounts_SearchField',
-            emptyText: 'enter searchfilter'
+            emptyText: _('enter searchfilter')
         }); 
         this.quickSearchField.on('change', function(){
             this.loadData();
@@ -218,7 +218,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         }
 
         this.searchPanel = new Ext.grid.GridPanel({
-            title: 'Search',
+            title: _('Search'),
             id: 'Tinebase_Accounts_Grid',
             store: this.ugStore,
             cm: columnModel,
@@ -255,8 +255,8 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         }, this);
         
         this.items = [this.searchPanel, {
-           title: 'Browse',
-           html: 'Browse',
+           title: _('Browse'),
+           html: _('Browse'),
            disabled: true
         }];
         
