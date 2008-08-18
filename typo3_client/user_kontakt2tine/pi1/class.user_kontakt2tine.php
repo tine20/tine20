@@ -100,7 +100,7 @@ class user_kontakt2tine extends tslib_pibase {
 		
 		
 		$markerArray['###ACTION###'] = $this->pi_getPageLink($GLOBALS['TSFE']->id);
-		//Language allerdings per Post übergeben im GGS zu den restlichen Links auf der Homepage (wird deswegen über "GP" in Typoscript abgefragt)
+		//Language allerdings per Post ï¿½bergeben im GGS zu den restlichen Links auf der Homepage (wird deswegen ï¿½ber "GP" in Typoscript abgefragt)
 		$markerArray['###LANGUAGE###'] =  t3lib_div::GPvar('L');
 		$senden =  t3lib_div::GPvar('senden');
 
@@ -153,7 +153,7 @@ class user_kontakt2tine extends tslib_pibase {
 			$markerArray['###'.$fFieldName.'###'] = $fFieldValues[$fFieldName];	 
 		}					
 				
-		//Formularfelder - Labels sprachabhängig eintragen
+		//Formularfelder - Labels sprachabhï¿½ngig eintragen
 		foreach($this->fLabelKeys as $fLabelKey => $fLabelKeyValue ) {
 			$markerArray['###'.$fLabelKey.'###'] = $this->pi_getLL($fLabelKeyValue, "");
 		}
@@ -165,7 +165,7 @@ class user_kontakt2tine extends tslib_pibase {
 		$markerArray['###DANKE###'] = $this->pi_getLL('danke', "");
 		$markerArray['###ERRABSTAND###'] = ''; 
 		
-		// ****************** NACH ERSTAUFRUF bzw. bei Bestätigung *********************
+		// ****************** NACH ERSTAUFRUF bzw. bei Bestï¿½tigung *********************
 		if ( $senden == 1 )
 		{		
 			$codewrong = false;
@@ -219,26 +219,26 @@ class user_kontakt2tine extends tslib_pibase {
 				set_include_path(implode(PATH_SEPARATOR, $path));
 					
 				// zend auto loader will load any classes - can not use it
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/TineClient/Connection.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/TineClient/Service/Abstract.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tin20_client/Tinebase/Connection.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tin20_client/Tinebase/Service/Abstract.php');
 				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
 				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Registry.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Addressbook/Model/Contact.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Addressbook/Service.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Model/Contact.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Service.php');
 				
 				
 				try
 				{
 					// open connection
-					$client = new TineClient_Connection($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehost'));
+					$client = new Tinebase_Connection(
+					   $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehost'),
+					   $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostlogin'), 
+                       $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostpassword')
+				   );
 					//$client->setDebugEnabled(true);
-					TineClient_Service_Abstract::setDefaultConnection($client);
-
+					Tinebase_Service_Abstract::setDefaultConnection($client);
 					// login to tine2.0
-					$client->login(
-								$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostlogin'), 
-								$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostpassword')
-								);
+					$client->login();
 							
 				}
 				catch (Exception $e) 

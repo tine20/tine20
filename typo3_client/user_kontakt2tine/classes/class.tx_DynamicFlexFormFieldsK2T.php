@@ -131,24 +131,28 @@ class tx_DynamicFlexFormFieldsK2T extends tslib_pibase
 	
 	
 		// zend auto loader will load any classes - can not use it in this enviroment
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/TineClient/Connection.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/TineClient/Service/Abstract.php');
+		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Record/Interface.php');
+		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Record/Abstract.php');
+		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Record/RecordSet.php');
+		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Connection.php');
+		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Service/Abstract.php');
 		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Addressbook/Model/Contact.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Addressbook/Service.php');
+		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Model/Contact.php');
+		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Service.php');
 		
 		try
 		{
 			// open connection
-			$client = new TineClient_Connection($this->pi_getFFvalue($this->flexform, 'tinehost'));
+			$client = new Tinebase_Connection(
+			    $this->pi_getFFvalue($this->flexform, 'tinehost'),
+			    $this->pi_getFFvalue($this->flexform, 'tinehostlogin'), 
+                $this->pi_getFFvalue($this->flexform, 'tinehostpassword')
+		    );
 			//$client->setDebugEnabled(true);
-			TineClient_Service_Abstract::setDefaultConnection($client);
+			Tinebase_Service_Abstract::setDefaultConnection($client);
 
 			// login to tine2.0
-			$client->login(
-						$this->pi_getFFvalue($this->flexform, 'tinehostlogin'), 
-						$this->pi_getFFvalue($this->flexform, 'tinehostpassword')
-						);
+			$client->login();
 		}
 		catch (Exception $e) 
 		{
@@ -170,7 +174,8 @@ class tx_DynamicFlexFormFieldsK2T extends tslib_pibase
 		
 		
 		try { 
-			$container = $client->getContainer();
+		    //TODO: add this again when tine20_client is ready
+			//$container = $client->getContainer();
 		
 		} catch(Exception $e) {
 		//	echo "can not get container" . $e;
