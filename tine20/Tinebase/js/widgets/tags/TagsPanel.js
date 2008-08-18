@@ -27,10 +27,6 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     tags: [],
     /**
-     * @cfg {Bool} findGlobalTags true to find global tags during search (default: true)
-     */
-    findGlobalTags: true,
-    /**
      * @var {Ext.data.JsonStore}
      * Holds tags of the record this panel is displayed for
      */
@@ -71,9 +67,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             fields: Tine.Tinebase.Model.Tag,
             baseParams: {
                 method: 'Tinebase.getTags',
-                context: this.app,
-                owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
-                findGlobalTags: this.findGlobalTags
+                context: this.app
             }
         });
         

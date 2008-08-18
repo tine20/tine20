@@ -41,9 +41,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             fields: Tine.Tinebase.Model.Tag,
             baseParams: {
                 method: 'Tinebase.getTags',
-                context: this.app,
-                owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
-                findGlobalTags: this.findGlobalTags
+                context: this.app
             }
         });
         Tine.widgets.tags.TagCombo.superclass.initComponent.call(this);
