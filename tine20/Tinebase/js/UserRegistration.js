@@ -83,7 +83,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     cardNames: function () {
         
         var accountFirstName = new Ext.form.TextField({
-            fieldLabel: 'Given name',
+            fieldLabel: _('Given name'),
             name: 'accountFirstName',
             id: 'accountFirstName',
             allowBlank: true
@@ -94,7 +94,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         }, this);
         
         var accountLastName = new Ext.form.TextField({
-            fieldLabel: 'Family name',
+            fieldLabel: _('Family name'),
             name: 'accountLastName',
             id: 'accountLastName',
             allowBlank: false
@@ -105,7 +105,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         }, this);
         
         var accountLoginName = new Ext.form.TextField({
-            fieldLabel: 'Login name',
+            fieldLabel: _('Login name'),
             name: 'accountLoginName',
             id: 'accountLoginName',
             allowBlank: false
@@ -118,7 +118,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         }, this);        
 
         var accountEmailAddress = new Ext.form.TextField({
-            fieldLabel: 'Emailaddress',
+            fieldLabel: _('Emailaddress'),
             name: 'accountEmailAddress',
             id: 'accountEmailAddress',
             vtype: 'email',
@@ -164,7 +164,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                 {
                     id: 'card-1',
                     style: {'padding': '5px'},
-                    html: '<h1>Congratulations!</h1><p>You have entered all needed information. If you press the Finish button we will send you the registration email.</p>'
+                    html: '<h1>'+_('Congratulations!')+'</h1><p>'+_('You have entered all needed information. If you press the Finish button we will send you the registration email.')+'</p>'
                 }/*,{
                     id: 'card-2',
                     style: {'padding': '5px'},
