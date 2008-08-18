@@ -13,7 +13,7 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 
 Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     name: 'userRegistration',
-    title: 'Registration Wizard',
+    
     //layout: 'card',
     //activeItem: 0,
     layout: 'fit',
@@ -30,7 +30,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
      */
     initComponent: function() {
         this.items = [this.getWizard()];
-
+		this.title = _('Registration Wizard');
         Tine.Tinebase.UserRegistration.superclass.initComponent.call(this);
         
     },
