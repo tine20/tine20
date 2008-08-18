@@ -92,10 +92,10 @@ Tine.Tinebase.initFramework = function() {
                     width: 600,
                     height: windowHeight,
                     autoScroll: true,
-                    title: 'There where Errors',
+                    title: _('There Where Errors'),
                     html: response.responseText,
                     buttons: [ new Ext.Action({
-                        text: 'ok',
+                        text: _('Ok'),
                         handler: function(){ win.close(); }
                     })],
                      buttonAlign: 'center'
@@ -123,7 +123,7 @@ Tine.Tinebase.initFramework = function() {
 
             // if communication is lost, we can't create a nice ext window.
             if (response.status === 0) {
-                alert('Connection lost, please check your network!');
+                alert(_('Connection lost, please check your network!'));
             }
             
             var data = Ext.util.JSON.decode(response.responseText);
