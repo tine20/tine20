@@ -52,7 +52,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         this.recordPrefix = this.hasAccountPrefix ? 'account_' : '';
         
         this.action_removeAccount = new Ext.Action({
-            text: 'remove account',
+            text: _('remove account'),
             disabled: true,
             scope: this,
             handler: this.removeAccount,
@@ -76,7 +76,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         var columnModel = new Ext.grid.ColumnModel([{
                 resizable: true, 
                 id: this.recordPrefix + 'name', 
-                header: 'Name', 
+                header: _('Name'), 
                 dataIndex: this.recordPrefix + 'name', 
                 renderer: Tine.Tinebase.Common.accountRenderer,
                 width: 70
