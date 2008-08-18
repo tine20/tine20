@@ -20,7 +20,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	 * @cfg {string}
 	 * Name of container folders, e.g. Addressbook
 	 */
-	folderName: 'Folder',
+	folderName: _('Folder'),
 	/**
 	 * @property {Object}
 	 * Models 
@@ -72,7 +72,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             var cgd = Ext.getCmp('ContainerGrantsDialog');
 			if (cgd.grantContainer) {
 				var container = cgd.grantContainer;
-				Ext.MessageBox.wait('Please wait', 'Updateing Grants');
+				Ext.MessageBox.wait(_('Please wait'), _('Updateing Grants'));
 				
 				var grants = [];
 				var grantsStore = cgd.dataStore;
@@ -123,7 +123,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	            iconCls: 'action_addContact'
 	        }),
 	        removeAccount: new Ext.Action({
-	            text: 'remove account',
+	            text: _('remove account'),
 	            disabled: true,
 				scope: this,
 	            handler: this.handlers.removeAccount,
@@ -155,22 +155,22 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
         
         var columns = [
             new Ext.ux.grid.CheckColumn({
-                header: 'Read',
+                header: _('Read'),
                 dataIndex: 'readGrant',
                 width: 55
             }),
             new Ext.ux.grid.CheckColumn({
-                header: 'Add',
+                header: _('Add'),
                 dataIndex: 'addGrant',
                 width: 55
             }),
             new Ext.ux.grid.CheckColumn({
-                header: "Edit",
+                header: _('Edit'),
                 dataIndex: 'editGrant',
                 width: 55
             }),
             new Ext.ux.grid.CheckColumn({
-                header: "Delete",
+                header: _('Delete'),
                 dataIndex: 'deleteGrant',
                 width: 55
             })
@@ -178,7 +178,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
         
         if (this.grantContainer.type == 'shared') {
             columns.push(new Ext.ux.grid.CheckColumn({
-                header: "Admin",
+                header: _('Admin'),
                 dataIndex: 'adminGrant',
                 width: 55
             }));
@@ -188,7 +188,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             {
                 resizable: true, 
                 id: 'accountId', 
-                header: 'Name', 
+                header: _('Name'), 
                 dataIndex: 'accountId', 
                 renderer: Tine.Tinebase.Common.accountRenderer,
                 width: 70
@@ -221,7 +221,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
         
         this.GrantsGridPanel = new Ext.grid.EditorGridPanel({
             region: 'center',
-            title: 'Permissions',
+            title: _('Permissions'),
             store: this.dataStore,
             cm: columnModel,
             autoSizeColumns: false,
