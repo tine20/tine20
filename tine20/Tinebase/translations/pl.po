@@ -30,7 +30,7 @@ msgstr ""
 msgid "run right description"
 msgstr ""
 
-#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:57
+#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgid ""
 "description of what you where doing when the error occoured."
 msgstr ""
 
-#: js/ExceptionDialog.js:58 js/widgets/tags/TagsPanel.js:562
+#: js/ExceptionDialog.js:58 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
 msgstr ""
 
@@ -245,45 +245,6 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: js/widgets/container/ContainerFilter.js:55
-msgid "container"
-msgstr ""
-
-#: js/widgets/container/ContainerFilter.js:70
-#: js/widgets/grid/FilterModel.js:87
-msgid "contains"
-msgstr ""
-
-#: js/widgets/container/ContainerFilter.js:71
-#: js/widgets/grid/FilterModel.js:88
-msgid "is equal to"
-msgstr ""
-
-#: js/widgets/container/ContainerFilter.js:72
-#: js/widgets/grid/FilterModel.js:89
-msgid "is greater than"
-msgstr ""
-
-#: js/widgets/container/ContainerFilter.js:73
-#: js/widgets/grid/FilterModel.js:90
-msgid "is less than"
-msgstr ""
-
-#: js/widgets/container/ContainerFilter.js:74
-#: js/widgets/grid/FilterModel.js:91
-msgid "is not"
-msgstr ""
-
-#: js/widgets/container/ContainerFilter.js:75
-#: js/widgets/grid/FilterModel.js:92
-msgid "is in"
-msgstr ""
-
-#: js/widgets/container/ContainerFilter.js:94
-#: js/widgets/grid/FilterModel.js:115
-msgid "select a operator"
-msgstr ""
-
 #: js/widgets/container/ContainerTree.js:106
 msgid "All"
 msgstr ""
@@ -346,6 +307,34 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+#: js/widgets/grid/FilterModel.js:87
+msgid "contains"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:88
+msgid "is equal to"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:89
+msgid "is greater than"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:90
+msgid "is less than"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:91
+msgid "is not"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:92
+msgid "is in"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:115
+msgid "select a operator"
+msgstr ""
+
 #: js/widgets/grid/FilterToolbar.js:122
 msgid "add new filter"
 msgstr ""
@@ -382,127 +371,127 @@ msgstr ""
 msgid "Tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:89
+#: js/widgets/tags/TagsPanel.js:83
 msgid "Add a new personal tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:92
+#: js/widgets/tags/TagsPanel.js:86
 msgid "Add New Personal Tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:93
+#: js/widgets/tags/TagsPanel.js:87
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:93
+#: js/widgets/tags/TagsPanel.js:87
 msgid "Enter tag name:"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:111 js/widgets/tags/TagsPanel.js:412
-#: js/widgets/tags/TagsPanel.js:416
+#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:410
 msgid "personal"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:133
+#: js/widgets/tags/TagsPanel.js:127
 msgid "No Tags to display"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:156
+#: js/widgets/tags/TagsPanel.js:150
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/tags/TagsPanel.js:171 js/widgets/tags/TagsPanel.js:176
+#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:176
+#: js/widgets/tags/TagsPanel.js:170
 msgid "Please enter a new name:"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:185
+#: js/widgets/tags/TagsPanel.js:179
 msgid "Edit Description"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:190
+#: js/widgets/tags/TagsPanel.js:184
 msgid "Description for tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:190
+#: js/widgets/tags/TagsPanel.js:184
 msgid "Please enter new description:"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:199
+#: js/widgets/tags/TagsPanel.js:193
 msgid "Change Color"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:223
+#: js/widgets/tags/TagsPanel.js:217
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/tags/TagsPanel.js:235
+#: js/widgets/tags/TagsPanel.js:229
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/tags/TagsPanel.js:236
+#: js/widgets/tags/TagsPanel.js:230
 msgid "The selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/tags/TagsPanel.js:240
+#: js/widgets/tags/TagsPanel.js:234
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:240
+#: js/widgets/tags/TagsPanel.js:234
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/tags/TagsPanel.js:256 js/widgets/tags/TagsPanel.js:365
-#: js/widgets/tags/TagsPanel.js:398
+#: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
+#: js/widgets/tags/TagsPanel.js:392
 msgid "Failed"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:256
+#: js/widgets/tags/TagsPanel.js:250
 msgid "Could not delete Tag(s)."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
+#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
 msgid "Notice"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:318 js/widgets/tags/TagsPanel.js:380
+#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
 msgid "The minimum tag length is three."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:365
+#: js/widgets/tags/TagsPanel.js:359
 msgid "Could not create tag."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:398
+#: js/widgets/tags/TagsPanel.js:392
 msgid "Could not update tag."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:431 js/widgets/tags/TagsPanel.js:489
+#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
 msgid "Enter tag name"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:432
+#: js/widgets/tags/TagsPanel.js:426
 msgid "Searching..."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:566
+#: js/widgets/tags/TagsPanel.js:560
 msgid "Color"
 msgstr ""

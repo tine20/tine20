@@ -1,18 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
-"POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-05 17:49+0100\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: \n"
+"Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Russian\n"
-"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Application/Rights/Abstract.php:56
 msgid "admin"
@@ -401,7 +400,6 @@ msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
@@ -432,21 +430,18 @@ msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/widgets/tags/TagsPanel.js:229
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/widgets/tags/TagsPanel.js:230
 msgid "The selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Please wait a moment..."
@@ -457,7 +452,6 @@ msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
 #: js/widgets/tags/TagsPanel.js:392
