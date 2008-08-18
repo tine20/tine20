@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-08-05 17:12+0100\n"
+"PO-Revision-Date: 2008-08-18 16:08+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,15 +16,19 @@ msgstr ""
 #: js/Tasks.js:112
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Wollen Sie die ausgewählten Aufgabe wirklich löschen?"
+msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/Tasks.js:143 js/Tasks.js:272 js/Tasks.js:555 js/Tasks.js:632
+#: js/Tasks.js:143
+#: js/Tasks.js:272
+#: js/Tasks.js:555
+#: js/Tasks.js:632
 #: js/Tasks.js:657
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/Tasks.js:143 js/Tasks.js:657
+#: js/Tasks.js:143
+#: js/Tasks.js:657
 msgid "Could not delete task(s)."
 msgstr "Konnte Aufgabe(n) nicht löschen."
 
@@ -37,13 +41,14 @@ msgid "Add task"
 msgstr "Aufgabe hinzufügen"
 
 #: js/Tasks.js:182
-#, fuzzy
 msgid "Delete task"
 msgid_plural "Delete tasks"
 msgstr[0] "Aufgabe löschen"
-msgstr[1] "Aufgabe löschen"
+msgstr[1] "Aufgaben löschen"
 
-#: js/Tasks.js:272 js/Tasks.js:555 js/Tasks.js:632
+#: js/Tasks.js:272
+#: js/Tasks.js:555
+#: js/Tasks.js:632
 msgid "Could not save task."
 msgstr "Konnte Aufgabe nicht speichern."
 
@@ -75,7 +80,8 @@ msgstr "Zeige Aufgabe {0} - {1} von {2}"
 msgid "No tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:421 js/Tasks.js:709
+#: js/Tasks.js:421
+#: js/Tasks.js:709
 msgid "Status"
 msgstr "Status"
 
@@ -83,7 +89,8 @@ msgstr "Status"
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/Tasks.js:452 js/Tasks.js:681
+#: js/Tasks.js:452
+#: js/Tasks.js:681
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -91,7 +98,8 @@ msgstr "Beschreibung"
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/Tasks.js:465 js/Tasks.js:713
+#: js/Tasks.js:465
+#: js/Tasks.js:713
 msgid "Priority"
 msgstr "Priorität"
 
@@ -107,7 +115,8 @@ msgstr "Keine Aufgaben vorhanden"
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Tasks.js:601 js/Tasks.js:645
+#: js/Tasks.js:601
+#: js/Tasks.js:645
 msgid "Saving Task"
 msgstr "Aufgabe speichern"
 
@@ -157,3 +166,4 @@ msgstr "Ordner"
 
 #~ msgid "Delete tasks"
 #~ msgstr "Aufgaben löschen"
+
