@@ -28,7 +28,6 @@
  * @comment this plugin is designed for TINE20 http://www.tine20.org
  * @version     $$
  */
- 
 require_once( 'class.factoryK2T.php' );
 
 if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) 
@@ -51,9 +50,14 @@ if (PATH_tslib=='') {
 }
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 
+/**
+ * register autoloading for tine20 client
+ */
+require_once(PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/loader.php');
 
 class tx_DynamicFlexFormFieldsK2T extends tslib_pibase 
 {
+	var $TineClientLoader;
 	var $UID;
 	var $flexform;
 	var $prefixId = 'tx_DynamicFlexFormFieldsK2T';		// Same as class name
@@ -128,17 +132,6 @@ class tx_DynamicFlexFormFieldsK2T extends tslib_pibase
 	{
 	if (!empty($this->UID)) {
 		$this->flexform = $this->getXML($this->UID);
-	
-	
-		// zend auto loader will load any classes - can not use it in this enviroment
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Record/Interface.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Record/Abstract.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Record/RecordSet.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Connection.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Tinebase/Service/Abstract.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Model/Contact.php');
-		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Service.php');
 		
 		try
 		{
@@ -148,9 +141,6 @@ class tx_DynamicFlexFormFieldsK2T extends tslib_pibase
 			    $this->pi_getFFvalue($this->flexform, 'tinehostlogin'), 
                 $this->pi_getFFvalue($this->flexform, 'tinehostpassword')
 		    );
-			//$client->setDebugEnabled(true);
-			Tinebase_Service_Abstract::setDefaultConnection($client);
-
 			// login to tine2.0
 			$client->login();
 		}
@@ -165,7 +155,7 @@ class tx_DynamicFlexFormFieldsK2T extends tslib_pibase
 		try 
 		{
 			// get all contacts of the user
-			$addressbook = new Addressbook_Service();
+			$addressbook = new Addressbook_Service($client);
 		}
 		catch (Exception $e) 
 		{
