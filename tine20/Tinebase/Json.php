@@ -155,16 +155,14 @@ class Tinebase_Json
      * gets tags for application / owners
      * 
      * @param   string  $context
-     * @param   int     $owner
      * @return array 
      * @deprecated ? use getTags or searchTags ?
      */
-    public function getTags($context, $owner)
+    public function getTags($context)
     {
         $filter = new Tinebase_Tags_Model_Filter(array(
             'name'        => '%',
             'application' => $context,
-            'owner'       => $owner,
         ));
         $paging = new Tinebase_Model_Pagination();
         
@@ -180,18 +178,15 @@ class Tinebase_Json
      *
      * @param string $query
      * @param string $context (application)
-     * @param unknown_type $owner
-     * @param unknown_type $findGlobalTags
      * @param integer $start
      * @param integer $limit
      * @return array
      */
-    public function searchTags($query, $context, $owner, $findGlobalTags, $start=0, $limit=0)
+    public function searchTags($query, $context, $start=0, $limit=0)
     {
         $filter = new Tinebase_Tags_Model_Filter(array(
             'name'        => $query . '%',
             'application' => $context,
-            'owner'       => $owner,
         ));
         $paging = new Tinebase_Model_Pagination(array(
             'start' => $start,
