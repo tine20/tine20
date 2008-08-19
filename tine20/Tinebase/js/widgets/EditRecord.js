@@ -71,7 +71,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         
         this.action_delete = new Ext.Action({
             requiredGrant: 'deleteGrant',
-            text: 'delete',
+            text: _('delete'),
             minWidth: 70,
             handler: this.handlerDelete,
             iconCls: 'action_delete',
