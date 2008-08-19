@@ -19,6 +19,31 @@
 class Tinebase_Translation
 {
     /**
+     * returns list of all available translations
+     * NOTE available are those, having a Tinebase translation
+     * 
+     * @return array list of all available translation 'localecode' => localised lang name
+     *
+     */
+    public static function getAvailableTranslations()
+    {
+        $userLocale = Zend_Registry::get('locale');
+        $availableTranslations = array();
+        foreach (scandir(dirname(__FILE__) . '/translations') as $poFile) {
+            list ($localestring, $suffix) = explode('.', $poFile);
+            if ($suffix == 'po') {
+                $locale = new Zend_Locale($localestring);
+                $availableTranslations[] = array(
+                    'locale'   => $localestring,
+                    'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                    'region'   => $locale->getCountryTranslation($locale->getRegion())
+                );
+            }
+        }
+        return $availableTranslations;
+    }
+    
+    /**
      * get zend translate for an application
      * 
      * @param  string $_applicationName
