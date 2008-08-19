@@ -206,16 +206,7 @@ class user_kontakt2tine extends tslib_pibase {
 			}
 			//wenn keine Fehler mehr auftreten, dann EMail versenden
 			else {
-				
 				// begin contact2tine: 
-				// first: add own classes to include path
-				/*
-				$path = array(
-					get_include_path(),
-					dirname(__FILE__),
-				);
-				set_include_path(implode(PATH_SEPARATOR, $path));
-				*/
 				try
 				{
 					// open connection
