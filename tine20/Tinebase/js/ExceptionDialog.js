@@ -56,7 +56,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     height: 200,
                     xtype: 'textfield',
                     fieldLabel: _('Description'),
-                    name: _('description'),
+                    name: 'description',
                     anchor: '95%',
                     readOnly: false
                 }, {
