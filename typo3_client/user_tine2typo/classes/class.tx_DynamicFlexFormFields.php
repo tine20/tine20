@@ -125,30 +125,26 @@ class tx_DynamicFlexFormFields extends tslib_pibase
      * @return array
      */
 	 function getNames($config)
-	{
-	if (!empty($this->UID)) {
+	 {
+	 if (!empty($this->UID)) {
 		$this->flexform = $this->getXML($this->UID);
-	
-	
-		// zend auto loader will load any classes - can not use it in this enviroment
-		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Connection.php');
-		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Service/Abstract.php');
-		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Http/Client.php');
-		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Addressbook/Model/Contact.php');
-		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Addressbook/Service.php');
+		
+        /**
+         * register autoloading for tine20 client
+         */
+        require_once(PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/loader.php');
 		
 		try
 		{
 			// open connection
-			$client = new TineClient_Connection($this->pi_getFFvalue($this->flexform, 'tinehost'));
-			//$client->setDebugEnabled(true);
-			TineClient_Service_Abstract::setDefaultConnection($client);
+			$connection = new Tinebase_Connection(
+			    $this->pi_getFFvalue($this->flexform, 'tinehost'),
+			    $this->pi_getFFvalue($this->flexform, 'tinehostlogin'), 
+                $this->pi_getFFvalue($this->flexform, 'tinehostpassword')
+			);
 
 			// login to tine2.0
-			$client->login(
-						$this->pi_getFFvalue($this->flexform, 'tinehostlogin'), 
-						$this->pi_getFFvalue($this->flexform, 'tinehostpassword')
-						);
+			$connection->login();
 		}
 		catch (Exception $e) 
 		{
@@ -161,34 +157,27 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		try 
 		{
 			// get all contacts of the user
-			$addressbook = new Addressbook_Service();
-			//echo "<hr>";
-			//var_dump($addressbook);
-			
-			$Contact = $addressbook->getAllContacts();
-	//		var_dump($Contact);
-	//		echo "<hr>";
+			$addressbook = new Addressbook_Service($connection);
+			$contacts = $addressbook->getAllContacts();
 		}
 		catch (Exception $e) 
 		{
-		//	var_dump($e);
 		
 		}
 		
 		try
 		{
-			$client->logout();
+			$connection->logout();
 		}
 		catch (Exception $e) 
 		{
-		//	var_dump($e);
 		
 		}
 		
 		// bring it to typo3- interna formatting
-		if (is_array($Contact)) 
+		if (is_array($contacts)) 
 		{
-			foreach ($Contact as $key => $val)
+			foreach ($contacts as $key => $val)
 			{
 				$config['items'][$key] = array('[' . $key . ']' . utf8_decode($val),  '[' . $key . ']' . utf8_decode($val) );
 			}
