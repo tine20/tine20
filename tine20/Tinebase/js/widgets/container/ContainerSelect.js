@@ -71,7 +71,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	 * @cfg {string}
 	 * title of dialog
 	 */
-    title: 'please select a container',
+    title: _('please select a container'),
 
     // private
     initComponent: function(){
