@@ -107,7 +107,7 @@ Tine.widgets.group.selectionDialog = Ext.extend(Ext.Component, {
 	 * @cfg {string}
 	 * title of dialog
 	 */
-    title: 'please select a group',
+    title: _('please select a group'),
 
     // private
     
@@ -139,8 +139,8 @@ Tine.widgets.group.selectionDialog = Ext.extend(Ext.Component, {
 
 Ext.namespace('Tine.Admin.Model');
 Tine.Admin.Model.Group = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'name'},
-    {name: 'description'}
+    {name: _('id')},
+    {name: _('name')},
+    {name: _('description')}
     // @todo add accounts array to group model?
 ]);
