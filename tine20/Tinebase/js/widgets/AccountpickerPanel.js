@@ -91,7 +91,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
      * @cfg {string}
      * title of dialog
      */
-	title: 'please select an account',
+	title: _('please select an account'),
 	
 	// holds currently selected account
 	account: false,
@@ -103,7 +103,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 		var ok_button = new Ext.Button({
             disabled: true,
             handler: this.handler_okbutton,
-            text: 'Ok',
+            text: _('Ok'),
             scope: this
         });
 			
@@ -197,19 +197,19 @@ Tine.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 		// set standart buttons if no buttons are given
 		if (!this.buttons) {
 			this.buttons = [{
-				text: 'Save',
+				text: _('Save'),
 				id: 'AccountsActionSaveButton',
 				disabled: true,
 				scope: this,
 				handler: this.handlers.accountsActionSave
 			}, {
-				text: 'Apply',
+				text: _('Apply'),
 				id: 'AccountsActionApplyButton',
 				disabled: true,
 				scope: this,
 				handler: this.handlers.accountsActionApply
 			}, {
-				text: 'Close',
+				text: _('Close'),
 				scope: this,
 				handler: function(){this.close();}
 			}];
