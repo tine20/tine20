@@ -184,6 +184,7 @@ class tx_DynamicFlexFormFieldsK2T extends tslib_pibase
 		}
 		
 		// bring it to typo3- interna formatting
+		// rubish, fix charset and data structure!
 		if (is_array($container)) 
 		{
 			foreach ($container as $key => $val)

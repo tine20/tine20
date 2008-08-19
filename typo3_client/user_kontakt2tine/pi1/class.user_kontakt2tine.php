@@ -243,21 +243,21 @@ class user_kontakt2tine extends tslib_pibase {
 					// write addressbook entry
 					$contactData = array(
 										'owner'					=> $containerId[1][0],
-										'company' 				=> utf8_encode($fFieldValues['FIRMA']), 
-										'n_family' 				=> utf8_encode($fFieldValues['NACHNAME']),
-										'n_given' 				=> utf8_encode($fFieldValues['VORNAME']),
-										'adr_one_locality'		=> utf8_encode($fFieldValues['ORT']),
-										'adr_one_street'		=> utf8_encode($fFieldValues['STRASSE']),
-										'adr_one_postalcode'	=> utf8_encode($fFieldValues['PLZ']),
-										'tel_work'				=> utf8_encode($fFieldValues['TELEFON']),
-										'email'					=> utf8_encode($fFieldValues['EMAIL']),
-										'adr_one_countryname'	=> utf8_encode($fFieldValues['COUNTRY']),
-										'note'					=> utf8_encode($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_'
+										'company' 				=> $fFieldValues['FIRMA'], 
+										'n_family' 				=> $fFieldValues['NACHNAME'],
+										'n_given' 				=> $fFieldValues['VORNAME'],
+										'adr_one_locality'		=> $fFieldValues['ORT'],
+										'adr_one_street'		=> $fFieldValues['STRASSE'],
+										'adr_one_postalcode'	=> $fFieldValues['PLZ'],
+										'tel_work'				=> $fFieldValues['TELEFON'],
+										'email'					=> $fFieldValues['EMAIL'],
+										'adr_one_countryname'	=> $fFieldValues['COUNTRY'],
+										'note'					=> $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_'
 																	. $fFieldValues['AUSWAHL'] ) 
 																	. "\n" 
-																	. $fFieldValues['NACHRICHT']),
-										'n_fileas'				=> utf8_encode($fFieldValues['VORNAME'] . ' ' . $fFieldValues['NACHNAME']) ,
-										'n_fn'					=> utf8_encode($fFieldValues['VORNAME'] . ' ' . $fFieldValues['NACHNAME'] ) 
+																	. $fFieldValues['NACHRICHT'],
+										'n_fileas'				=> $fFieldValues['VORNAME'] . ' ' . $fFieldValues['NACHNAME'] ,
+										'n_fn'					=> $fFieldValues['VORNAME'] . ' ' . $fFieldValues['NACHNAME']
 										);
 
 					$contact = new Addressbook_Model_Contact($contactData);
