@@ -20,12 +20,12 @@ Tine.Login = {
     showLoginDialog: function(_defaultUsername, _defaultPassword) {
     	var loginButtons = [{
             id: 'loginbutton',
-            text: 'Login',
+            text: _('Login'),
             handler: Tine.Login.loginHandler 
         }];
         if ( userRegistration === true ) {
             loginButtons.push({
-                text: 'Register',
+                text: _('Register'),
                 handler: Tine.Login.UserRegistrationHandler
             });
         }
@@ -38,7 +38,7 @@ Tine.Login = {
             	method: 'Tinebase.login'
             },
             frame:true,
-            title: 'Please enter your login data',
+            title: _('Please enter your login data'),
             bodyStyle:'padding:5px 5px 0',
             width: 350,
             defaults: {
@@ -46,14 +46,14 @@ Tine.Login = {
             },
             defaultType: 'textfield',
             items: [{
-                fieldLabel: 'Username',
+                fieldLabel: _('Username'),
                 id: 'username',
                 name: 'username',
                 value: _defaultUsername,
                 width:225
             }, {
                 inputType: 'password',
-                fieldLabel: 'Password',
+                fieldLabel: _('Password'),
                 id: 'password',
                 name: 'password',
                 //allowBlank: false,
@@ -87,8 +87,8 @@ Tine.Login = {
     	
         if (loginDialog.getForm().isValid()) {
             loginDialog.getForm().submit({
-                waitTitle: 'Please wait!', 
-                waitMsg:'Logging you in...',
+                waitTitle: _('Please wait!'), 
+                waitMsg:_('Logging you in...'),
                 params: {
                     jsonKey: Tine.Tinebase.jsonKey
                 },
@@ -96,13 +96,13 @@ Tine.Login = {
                     'X-Tine20-Request-Type': 'JSON'
                 },
                 success:function(form, action, o) {
-                    Ext.MessageBox.wait('Login successful. Loading Tine 2.0...', 'Please wait!');
+                    Ext.MessageBox.wait(_('Login successful. Loading Tine 2.0...'), _('Please wait!'));
                     window.location = window.location;
                 },
                 failure:function(form, action) {
                     Ext.MessageBox.show({
-                        title: 'Login failure',
-                        msg: 'Your username and/or your password are wrong!!!',
+                        title: _('Login failure'),
+                        msg: _('Your username and/or your password are wrong!!!'),
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR /*,
                         fn: function() {} */
