@@ -81,7 +81,7 @@ class user_tine2typo extends tslib_pibase {
         /**
          * register autoloading for tine20 client
          */
-        require_once(PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/loader.php');
+        require_once(PATH_site . 'typo3conf/ext/user_tine2typo/pi1/tine20_client/loader.php');
         
         try
         {
@@ -161,10 +161,10 @@ class user_tine2typo extends tslib_pibase {
             foreach ($Contact as $contact)
             {
 				$markerArray['###IMG###'] = ' src="fileadmin/images/tineContactPics/contactPic' . $contact['id'] . '.jpg"';
-				$markerArray['###VORNAME###'] = htmlentities(utf8_decode($contact['n_given'])) ;
-				$markerArray['###NAME###'] = htmlentities(utf8_decode($contact['n_family'])) ;
-				$markerArray['###EMAIL###'] = htmlentities(utf8_decode($contact['email'])) ;
-				$markerArray['###TELEFON###'] = htmlentities(utf8_decode($contact['tel_work'])) ;
+				$markerArray['###VORNAME###'] = htmlentities($contact['n_given']) ;
+				$markerArray['###NAME###'] = htmlentities($contact['n_family']) ;
+				$markerArray['###EMAIL###'] = htmlentities($contact['email']) ;
+				$markerArray['###TELEFON###'] = htmlentities($contact['tel_work']);
             }
         }
         /*

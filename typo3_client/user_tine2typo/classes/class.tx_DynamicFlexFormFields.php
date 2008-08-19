@@ -24,8 +24,8 @@
 /**
  * Plugin 'user_tine2typo' for the 'user_tine2typo' extension.
  *
- * @author  Matthias Greiling <typo3@metaways.de>
- * @comment this plugin is designed for TINE20 http://www.tine20.org
+ * @author      Matthias Greiling <typo3@metaways.de>
+ * @comment     this plugin is designed for TINE20 http://www.tine20.org
  * @version     $Id$
  */
  
@@ -132,7 +132,7 @@ class tx_DynamicFlexFormFields extends tslib_pibase
         /**
          * register autoloading for tine20 client
          */
-        require_once(PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/loader.php');
+        require_once(PATH_site . 'typo3conf/ext/user_tine2typo/pi1/tine20_client/loader.php');
 		
 		try
 		{
@@ -142,7 +142,7 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 			    $this->pi_getFFvalue($this->flexform, 'tinehostlogin'), 
                 $this->pi_getFFvalue($this->flexform, 'tinehostpassword')
 			);
-
+			//$connection->debugEnabled = true;
 			// login to tine2.0
 			$connection->login();
 		}
@@ -175,12 +175,9 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		}
 		
 		// bring it to typo3- interna formatting
-		if (is_array($contacts)) 
+		foreach ($contacts as $contact)
 		{
-			foreach ($contacts as $key => $val)
-			{
-				$config['items'][$key] = array('[' . $key . ']' . utf8_decode($val),  '[' . $key . ']' . utf8_decode($val) );
-			}
+			$config['items'][] = array('[' . $contact->id . ']' . $contact->n_fileas, '[' . $contact->id . ']' . $contact->n_fileas);
 		}
 	}
 	
