@@ -63,6 +63,22 @@ class Tinebase_Json
             die(Tinebase_Translation::po2jsObject(dirname(__FILE__) . "/../$application/translations/$language.po"));
         }
     }
+
+    /**
+     * returns list of all available translations
+     * NOTE available are those, having a Tinebase translation
+     * 
+     * @return array list of all available translations
+     *
+     */
+    public function getAvailableTranslations()
+    {
+        $availableTranslations = Tinebase_Translation::getAvailableTranslations();
+        return array(
+            'results'    => $availableTranslations,
+            'totalcount' => count($availableTranslations)
+        );
+    }
     
     public function getUsers($filter, $sort, $dir, $start, $limit)
     {
