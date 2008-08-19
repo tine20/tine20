@@ -72,7 +72,7 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
      */
     initComponent: function(){
         this.action_removeRecord = new Ext.Action({
-            text: 'remove record',
+            text: _('remove record'),
             disabled: true,
             scope: this,
             handler: this.removeRecord,
@@ -383,7 +383,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
         
         this.quickSearchField = new Ext.ux.SearchField({
             id: 'Tinebase_Records_SearchField',
-            emptyText: 'enter searchfilter'
+            emptyText: _('enter searchfilter')
         }); 
         this.quickSearchField.on('change', function(){
             this.loadData();
@@ -404,7 +404,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
         //console.log(this.bbar);
 
         this.searchPanel = new Ext.grid.GridPanel({
-            title: 'Search',
+            title: _('Search'),
             id: 'Tinebase_Records_Grid',
             store: this.ugStore,
             cm: columnModel,
@@ -442,8 +442,8 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
         */
         
         this.items = [this.searchPanel, {
-           title: 'Browse',
-           html: 'Browse',
+           title: _('Browse'),
+           html: _('Browse'),
            disabled: true
         }];
         
