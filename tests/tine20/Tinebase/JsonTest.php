@@ -28,7 +28,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
      * unit under test (UIT)
-     * @var Tinebase_Notes
+     * @var Tinebase_Json
      */
     protected $_instance;
 
@@ -95,6 +95,22 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             $this->_objects['record']['backend'], 
             $this->_objects['record']['id']
         );        
+    }
+    
+    /**
+     * test getCountryList
+     *
+     */
+    public function testGetCountryList()
+    {
+        $list = $this->_instance->getCountryList();
+        $this->assertTrue(count($list['results']) >= 263);
+    }
+    
+    public function testGetAvailableTranslations()
+    {
+        $list = $this->_instance->getAvailableTranslations();
+        $this->assertTrue(count($list['results']) > 3);
     }
 }
 
