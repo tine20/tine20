@@ -1,7 +1,10 @@
 (add new changes on top of this file)
-08-03-26 Metaways  <info@metaways.de>
-	* added Tine 2.0 backend & client classes
-
-06-08-03 Metaways  <info@metaways.de>
-
-	* Initial release
+08-08-19 Metaways <c.weiss@metawasy.de>
+    * massive code cleanup
+        * use autoloading
+        * use standard Tine 2.0 Classes
+        * use standard Zend Framework
+    * cleanup with svn externals and svn keywords
+    * adopt to latest Tine 2.0 php_client (Summer 2008 Milestone 2 Release)
+08-03-26 Metaways  <m.greiling@metaways.de>
+    * first development draft

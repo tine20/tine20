@@ -26,7 +26,7 @@
  *
  * @author  Matthias Greiling <typo3@metaways.de>
  * @comment this plugin is designed for TINE20 http://www.tine20.org
- * @version     $$
+ * @version     $Id$
  */
  
 require_once( 'class.factory.php' );
