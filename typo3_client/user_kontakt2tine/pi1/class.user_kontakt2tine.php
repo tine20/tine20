@@ -26,7 +26,7 @@
  *
  * @author  Matthias Greiling <typo3@metaways.de>
  * @comment this plugin is designed for TINE20 http://www.tine20.org
- * @version     $$
+ * @version     $Id$
  */
 
 
@@ -74,10 +74,9 @@ class user_kontakt2tine extends tslib_pibase {
 
 	function main($content,$conf)	
 	{
-	
 		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/config_inc.php' );
 		require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/constants_inc.php' );
-
+        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/loader.php');
 		//global $countryAbbrNameRel;
 		//global $kontaktnumlinks;
 		
@@ -210,71 +209,48 @@ class user_kontakt2tine extends tslib_pibase {
 				
 				// begin contact2tine: 
 				// first: add own classes to include path
-				
+				/*
 				$path = array(
 					get_include_path(),
 					dirname(__FILE__),
 				);
-	
 				set_include_path(implode(PATH_SEPARATOR, $path));
-					
-				// zend auto loader will load any classes - can not use it
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tin20_client/Tinebase/Connection.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tin20_client/Tinebase/Service/Abstract.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Registry.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Model/Contact.php');
-				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/tine20_client/Addressbook/Service.php');
-				
-				
+				*/
 				try
 				{
 					// open connection
-					$client = new Tinebase_Connection(
+					$connection = new Tinebase_Connection(
 					   $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehost'),
 					   $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostlogin'), 
                        $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostpassword')
 				   );
-					//$client->setDebugEnabled(true);
-					Tinebase_Service_Abstract::setDefaultConnection($client);
 					// login to tine2.0
-					$client->login();
-							
+					$connection->login();
 				}
 				catch (Exception $e) 
 				{
-					echo "can not login";
-					var_dump($e);
-					exit;
+					//echo "can not login";
+					//exit;
 				}
-				
-				
 				
 				try {
-					$addressbook = new Addressbook_Service();
+					$addressbook = new Addressbook_Service($connection);
 				}
 				catch (Exception $e) 
 				{
-					echo "kein service";
-					var_dump($e);
-					exit;
+					//echo "kein service";
+					//exit;
 				}	
-				
-				//print_r( $addressbook->getTags($client->getAccountId()));
-				//exit;
 				
 				try 
 				{
-				
-				$pattern =  "/\w*\[(\d*)\]/";
-				$containerId = array();
-				preg_match_all($pattern, $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'addressbook'), $containerId );
-				
+				    // :-) to be cleaned up when container support comes into php_client
+				    $pattern =  "/\w*\[(\d*)\]/";
+				    $containerId = array();
+				    preg_match_all($pattern, $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'addressbook'), $containerId );
 				
 					// write addressbook entry
 					$contactData = array(
-										
-										'created_by'					=> $client->getAccountId(),
 										'owner'					=> $containerId[1][0],
 										'company' 				=> utf8_encode($fFieldValues['FIRMA']), 
 										'n_family' 				=> utf8_encode($fFieldValues['NACHNAME']),
@@ -297,12 +273,9 @@ class user_kontakt2tine extends tslib_pibase {
 				}
 				catch (Exception $e) 
 				{
-					echo "kein model";
-				var_dump($e);
-					exit;
+					//echo "kein model";
+					//exit;
 				}
-				//print_r($contactData);
-				
 
 				try{
 					$updatedContact = $addressbook->addContact($contact);
@@ -310,21 +283,18 @@ class user_kontakt2tine extends tslib_pibase {
 				}
 				catch (Exception $e) 
 				{
-					echo "kein add";
-					var_dump($updatedContact);
-					exit;
+					//echo "kein add";
+					//exit;
 				}
-				
-				
 				
 				try
 				{
-					$client->logout();
+					$connection->logout();
 				}
 				catch (Exception $e) 
 				{
-					var_dump($e);
-				
+				    //echo "could no logout";
+				    //exit;
 				}
 				
 								
@@ -347,9 +317,7 @@ class user_kontakt2tine extends tslib_pibase {
 					
 					mail($this->empfaenger, $this->betreff, $this->nachricht, $this->header);
 				}
-				
 				header ("Location:$danke");
-				
 			}
 		
 		}

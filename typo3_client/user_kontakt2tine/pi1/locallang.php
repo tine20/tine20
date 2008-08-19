@@ -1,7 +1,8 @@
 ﻿<?php
 /**
  * Language labels for plugin "user_kontakt2tine"
- *
+ * @version     $Id$
+ * 
  * This file is detected by the translation tool.
  */
 

@@ -26,7 +26,7 @@
  *
  * @author  Matthias Greiling <typo3@metaways.de>
  * @comment this plugin is designed for TINE20 http://www.tine20.org
- * @version     $$
+ * @version     $Id$
  */
  
 if (!defined ('TYPO3_MODE'))   die ('Access denied.');
@@ -37,17 +37,17 @@ require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/classes/class.tx_Dyna
 
 if (TYPO3_MODE=="BE")  $TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["user_kontakt2tine_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.user_kontakt2tine_pi1_wizicon.php';
 
-# Vor jeder Änderung eins $TCA Bereiches im Front End müssen wir es sicherheitshalber laden.
+# Vor jeder ï¿½nderung eins $TCA Bereiches im Front End mï¿½ssen wir es sicherheitshalber laden.
 t3lib_div::loadTCA('tt_content');
 
 # Wir blenden die Standard Felder layout,select_key,pages,recursive  von Plugins aus
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY]='header,layout,select_key,pages,recursive';
 
-# Dafür blenden wir das tt_content Feld pi_flexform ein
+# Dafï¿½r blenden wir das tt_content Feld pi_flexform ein
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY]='pi_flexform';
 
 
-# Wir definieren die Datei, die unser Flexform Schema enthält
+# Wir definieren die Datei, die unser Flexform Schema enthï¿½lt
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '
 <T3DataStructure>
   <ROOT>

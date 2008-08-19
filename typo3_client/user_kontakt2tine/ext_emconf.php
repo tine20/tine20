@@ -26,7 +26,7 @@
  *
  * @author  Matthias Greiling <typo3@metaways.de>
  * @comment this plugin is designed for TINE20 http://www.tine20.org
- * @version     $$
+ * @version     $Id$
  */
 ########################################################################
 # Extension Manager/Repository config file for ext: "user_kontakt2tine"
