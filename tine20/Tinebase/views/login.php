@@ -25,10 +25,14 @@
     <!-- <script type="text/javascript" src="ExtJS/adapter/yui/ext-yui-adapter.js"></script> -->
     <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="ExtJS/ext-all.js"></script>
-
+    <!-- Static Localisation -->
+    
     <!-- Tine -->
     <link rel="stylesheet" type="text/css" href="Tinebase/css/Tinebase.css"/>
     <link rel="stylesheet" type="text/css" href="Tinebase/css/ux/Wizard.css"/>
+    <script type="text/javascript" language="javascript" src="Tinebase/js/Locale.js"></script>
+    <script type="text/javascript" language="javascript" src="Tinebase/js/Locale/Gettext.js"></script>
+    <script type="text/javascript" language="javascript" src="Tinebase/js/Tinebase.js"></script>
     <script type="text/javascript" language="javascript" src="Tinebase/js/ux/Wizard.js"></script>
     <script type="text/javascript" language="javascript">
             <?php
@@ -46,8 +50,17 @@
             ?>
     </script>
 	
+	<!-- Static Localisation -->
+    <?php  
+        $locale = Zend_Registry::get('locale');
+        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . '"></script>' . "\n";
+        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . '"></script>' . "\n";
+        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . '"></script>' . "\n";
+    ?>
+    
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function() {
+		    
 			Tine.Login.showLoginDialog(<?php echo "'{$this->defaultUsername}', '{$this->defaultPassword}'"?>);
 		});
 	</script>
