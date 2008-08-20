@@ -80,6 +80,21 @@ class Tinebase_Json
         );
     }
     
+    /**
+     * sets locale
+     *
+     * @param  string $locale
+     * @param  bool   $saveaspreference
+     * @return array
+     */
+    public function setLocale($locale, $saveaspreference)
+    {
+        Tinebase_Controller::getInstance()->setupUserLocale($locale);
+        return array(
+            'success' => true
+        );
+    }
+    
     public function getUsers($filter, $sort, $dir, $start, $limit)
     {
         $result = array(

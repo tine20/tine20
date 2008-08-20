@@ -30,7 +30,7 @@ class Tinebase_Controller
      *
      * @var Zend_Session_Namespace
      */
-    protected $session;
+    protected $_session;
     
     protected $_config;
     
@@ -76,6 +76,17 @@ class Tinebase_Controller
         }
         Zend_Registry::set('configFile', $this->_config);
         
+        $this->_session = new Zend_Session_Namespace('tinebase');
+        
+        if (!isset($this->_session->jsonKey)) {
+            $this->_session->jsonKey = Tinebase_Record_Abstract::generateUID();
+        }
+        Zend_Registry::set('jsonKey', $this->_session->jsonKey);
+
+        if (isset($this->_session->currentAccount)) {
+            Zend_Registry::set('currentAccount', $this->_session->currentAccount);
+        }
+        
         // Timezones must be setup before logger, as logger has timehandling!
         $this->setupTimezones();
         
@@ -88,17 +99,6 @@ class Tinebase_Controller
         $this->setupUserLocale();
         
         $this->setupCache();
-        
-        $this->session = new Zend_Session_Namespace('tinebase');
-        
-        if (!isset($this->session->jsonKey)) {
-            $this->session->jsonKey = Tinebase_Record_Abstract::generateUID();
-        }
-        Zend_Registry::set('jsonKey', $this->session->jsonKey);
-
-        if (isset($this->session->currentAccount)) {
-            Zend_Registry::set('currentAccount', $this->session->currentAccount);
-        }
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
@@ -369,15 +369,22 @@ class Tinebase_Controller
     
     /**
      * sets the user locale
+     * 
+     * $param  string $_locale 
      *
-     * @todo $locale = new Zend_Locale('auto');
+     * @todo $_localeString = new Zend_Locale('auto');
      */
-    protected function setupUserLocale()
+    public function setupUserLocale($_localeString='auto')
     {
-        try {
-            $locale = new Zend_Locale();
-        } catch (Zend_Locale_Exception $e) {
-            $locale = new Zend_Locale('en_US');
+        if ($_localeString == 'auto' && isset($this->_session->userLocale)) {
+            $locale = $this->_session->userLocale;
+        } else {
+            try {
+                $locale = new Zend_Locale($_localeString);
+            } catch (Zend_Locale_Exception $e) {
+                $locale = new Zend_Locale('en_US');
+            }
+            $this->_session->userLocale = $locale;
         }
         Zend_Registry::set('locale', $locale);
     }
@@ -419,7 +426,7 @@ class Tinebase_Controller
             
             Zend_Registry::set('currentAccount', $account);
 
-            $this->session->currentAccount = $account;
+            $this->_session->currentAccount = $account;
             
             $account->setLoginTime($_ipAddress);
             
