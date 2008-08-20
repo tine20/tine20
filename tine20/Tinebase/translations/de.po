@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2008-08-20 16:02+0100\n"
+"PO-Revision-Date: 2008-08-20 17:00+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -549,7 +549,7 @@ msgstr "Bitte wählen sie eine Gruppe aus"
 
 #: js/widgets/LangChooser.js:39
 msgid "setting new language..."
-msgstr "neue sprache wird eingestellt..."
+msgstr "neue Sprache wird eingestellt..."
 
 #: js/widgets/tags/TagCombo.js:37
 msgid "tag name"
