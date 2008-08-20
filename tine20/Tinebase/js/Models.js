@@ -22,6 +22,15 @@ Tine.Tinebase.Model.User = Ext.data.Record.create([
 ]);
 
 /**
+ * Model of a language
+ */
+Tine.Tinebase.Model.Language = Ext.data.Record.create([
+    { name: 'locale' },
+    { name: 'language' },
+    { name: 'region' }
+]);
+
+/**
  * Model of a user group account
  */
 Tine.Tinebase.Model.Group = Ext.data.Record.create([
