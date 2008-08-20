@@ -21,7 +21,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     findGlobalTags: true,
     
     id: 'TagCombo',
-    emptyText: _('tag name'),
+    emptyText: null,
     typeAhead: true,
     //editable: false,
     mode: 'remote',
@@ -34,6 +34,8 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      * @private
      */
     initComponent: function() {
+        this.emptyText = this.emptyText ? this.emptyText : _('tag name');
+        
         this.store = new Ext.data.JsonStore({
             id: 'id',
             root: 'results',

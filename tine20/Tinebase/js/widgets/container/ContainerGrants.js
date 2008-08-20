@@ -20,7 +20,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	 * @cfg {string}
 	 * Name of container folders, e.g. Addressbook
 	 */
-	folderName: _('Folder'),
+	folderName: null,
 	/**
 	 * @property {Object}
 	 * Models 
@@ -113,6 +113,8 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	},
 	//private
     initComponent: function(){
+        
+        this.folderName = this.folderName ? this.folderName : _('Folder');
         this.title = 'Manage permissions for ' + this.folderName + ': "' + Ext.util.Format.htmlEncode(this.grantContainer.name) + '"';
 		this.actions = {
 	        addAccount: new Ext.Action({

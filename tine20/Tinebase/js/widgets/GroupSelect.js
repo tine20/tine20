@@ -107,11 +107,12 @@ Tine.widgets.group.selectionDialog = Ext.extend(Ext.Component, {
 	 * @cfg {string}
 	 * title of dialog
 	 */
-    title: _('please select a group'),
+    title: null,
 
     // private
     
     initComponent: function(){
+        this.title = this.title ? this.title : _('Please Select a Group');
         Tine.widgets.group.selectionDialog.superclass.initComponent.call(this);
         
 		var windowHeight = 400;
@@ -139,8 +140,8 @@ Tine.widgets.group.selectionDialog = Ext.extend(Ext.Component, {
 
 Ext.namespace('Tine.Admin.Model');
 Tine.Admin.Model.Group = Ext.data.Record.create([
-    {name: _('id')},
-    {name: _('name')},
-    {name: _('description')}
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'}
     // @todo add accounts array to group model?
 ]);
