@@ -71,11 +71,13 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	 * @cfg {string}
 	 * title of dialog
 	 */
-    title: _('please select a container'),
+    title: null,
 
     // private
     initComponent: function(){
         Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
+        
+        this.title = this.title ? this.title : _('please select a container');
         
 		var windowHeight = 400;
 		if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {

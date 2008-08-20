@@ -91,7 +91,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
      * @cfg {string}
      * title of dialog
      */
-	title: _('please select an account'),
+	title: null,
 	
 	// holds currently selected account
 	account: false,
@@ -100,7 +100,9 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
     initComponent: function(){
 		Tine.widgets.AccountpickerDialog.superclass.initComponent.call(this);
 		
-		var ok_button = new Ext.Button({
+        this.title = this.title ? this.title : _('please select an account');
+        
+        var ok_button = new Ext.Button({
             disabled: true,
             handler: this.handler_okbutton,
             text: _('Ok'),
