@@ -19,6 +19,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     valueField: 'locale',
     triggerAction: 'all',
     width: 100,
+    listWidth: 200,
     
     initComponent: function() {
         this.value = Tine.Tinebase.Registry.get('locale').language;
