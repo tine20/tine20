@@ -79,34 +79,28 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         } else {
         	// prepare initial data (temporary, this should become part of json interface)
         	$newTask = new Tasks_Model_Task(array(), true);
+        	$newTaskArray= $newTask->toArray();
+        
         	if ($containerId > 0) {
-        	    $newTask->container_id = Tinebase_Container::getInstance()->getContainerById($containerId)->toArray();
+        	    $newTaskArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($containerId)->toArray();
         	} else {
-        	   $newTask->container_id = Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray();
+        	    $newTaskArray['container_id'] = Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray();
         	}
-        	$task = Zend_Json::encode($newTask->toArray());
+            $newTaskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $newTaskArray['container_id'])->toArray();
+        
+        	$task = Zend_Json::encode($newTaskArray);
         }
         
         
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
+        
         $view->formData = array();
-		$view->formData['linking']['link_app1'] = $linkingApp;
-		$view->formData['linking']['link_id1'] = $linkedId;		
-		
-        $view->title="edit task";
         
         $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
-
-        $view->jsExecute = 'Tine.Tasks.EditDialog(' . $task . ');';
-
         $view->configData = Tinebase_Http::getRegistryData();
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->title="edit task";
+        $view->jsExecute = 'Tine.Tasks.EditDialog(' . $task . ');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');

@@ -75,13 +75,9 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
             }
         }
         
-        $view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title = "edit contact";
-        $view->isPopup = true;
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         
         // add google api key
         if (isset(Zend_Registry::get('configFile')->addressbook->googleKey)) {

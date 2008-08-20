@@ -62,7 +62,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         if (!empty($phoneId)) {
             $snomPhone = $controller->getSnomPhone($phoneId);
-            $snomLines = $snomPhone->lines;
+            //$snomLines = $snomPhone->lines;
             //unset($phone->lines);
 
             $_phoneData = $snomPhone->toArray();
@@ -106,27 +106,18 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedSnomPhone = "{current_model:'snom320',redirect_event:'none'}";
             $encodedSnomLines = '[]';
 
-            $encodedSettings = '{}';
+            //$encodedSettings = '{}';
         }
-
-        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
 
         $encodedTemplates = Zend_Json::encode($snomTemplates->toArray());
         $encodedLocations = Zend_Json::encode($snomLocations->toArray());        
                         
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
-
+        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom phone data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -148,7 +139,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         if (!empty($phoneId)) {
             $snomPhone = $controller->getMyPhone($phoneId, $currentAccount['accountId']);
-            unset($phone->lines);
+            //unset($phone->lines);
 
             $_phoneData = $snomPhone->toArray();
             $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['id'])->toArray();
@@ -185,23 +176,15 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine');
             $encodedWritable = '{}';
             $encodedSnomPhone = '{}';            
-            $encodedSettings = '{}';
+            //$encodedSettings = '{}';
         }
        
-               
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
-        $view->jsExecute = 'Tine.Voipmanager.MyPhones.EditDialog.display(' . $encodedSnomPhone . ', '. $encodedWritable .');';
-
+        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit myPhone data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.MyPhones.EditDialog.display(' . $encodedSnomPhone . ', '. $encodedWritable .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -230,22 +213,13 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $encodedContexts = Zend_Json::encode(Voipmanager_Controller::getInstance()->getAsteriskContexts()->toArray());
         
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Asterisk.SipPeers.EditDialog.display(' . $encodedSipPeer .','. $encodedContexts .');';
-
+        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk sip peer data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.Asterisk.SipPeers.EditDialog.display(' . $encodedSipPeer .','. $encodedContexts .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -266,24 +240,14 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         } else {
             $encodedContext = '{}';
         }
-
         
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Context.EditDialog.display(' . $encodedContext .');';
-
+        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk context data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Context.EditDialog.display(' . $encodedContext .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -305,26 +269,16 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedVoicemail = '{}';
         }
 
-
         $encodedContexts = Zend_Json::encode(Voipmanager_Controller::getInstance()->getAsteriskContexts()->toArray());
         
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Voicemail.EditDialog.display(' . $encodedVoicemail .','.$encodedContexts.');';
-
+        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk voicemail data";
+        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Voicemail.EditDialog.display(' . $encodedVoicemail .','.$encodedContexts.');';
 
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
-        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -353,19 +307,12 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $encodedLocation = Zend_Json::encode($location->toArray());                   
         
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Location.EditDialog.display(' . $encodedLocation .');';
-
+       
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom location data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Location.EditDialog.display(' . $encodedLocation .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -388,22 +335,13 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedSoftware = '{}';
         }
 
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Software.EditDialog.display(' . $encodedSoftware .');';
-
+        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom software data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Software.EditDialog.display(' . $encodedSoftware .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -426,23 +364,14 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedSetting = '{}';
         }
 
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Settings.EditDialog.display(' . $encodedSetting .');';
-
+        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom setting data";
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Settings.EditDialog.display(' . $encodedSetting .');';
 
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
-        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }  
@@ -485,20 +414,13 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $encodedSettings = Zend_Json::encode($settings->toArray());
         
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');';
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->configData['softwareVersions'] = $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray();
         $view->title="edit snom template data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.Snom.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -520,31 +442,16 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $encodedMeetme = '{}';
         }
 
-        
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Meetme.EditDialog.display(' . $encodedMeetme .');';
-
-        $view->locationData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
         
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk meetme data";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Voipmanager.Asterisk.Meetme.EditDialog.display(' . $encodedMeetme .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }	 
-	 
 	 
 }

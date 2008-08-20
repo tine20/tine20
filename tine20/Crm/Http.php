@@ -50,11 +50,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             $_leadId = NULL;
         }
         
-        $locale = Zend_Registry::get('locale');
-        $currentAccount = Zend_Registry::get('currentAccount');
-        
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
 
@@ -70,17 +66,10 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $tinebaseJson = new Tinebase_Json();
         $view->initialData['Tinebase'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
         
-        $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
-
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit lead";
+        $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
-        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

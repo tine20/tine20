@@ -172,12 +172,13 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public function mainScreen()
     {
         $this->checkAuth();
-        $userApplications = Zend_Registry::get('currentAccount')->getApplications();
-
+        
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-
+        
+        $userApplications = Zend_Registry::get('currentAccount')->getApplications();
         $view->initialData = array();
+        
         foreach($userApplications as $application) {
             $httpAppName = ucfirst((string) $application) . '_Http';
             if(class_exists($httpAppName)) {
@@ -188,17 +189,17 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             }
         }
         
-        $includeFiles = self::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
-        
         $view->configData = self::getRegistryData();
         $view->configData['userApplications'] = $userApplications->toArray();
         
         $view->title="Tine 2.0";
-        
+        $view->jsExecute =  "
+            Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass();
+            Tine.Tinebase.MainScreen.render();
+        ";
         // temporary tweak to fill generalised popup
         // todo: move js code to ext.ux.popupwindow!
+        /*
         if (isset($_GET['isPopup']) && $_GET['isPopup']) {
             $view->isPopup = true;
             $view->jsExecute = "
@@ -212,6 +213,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 });
             ";
         }
+        */
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');

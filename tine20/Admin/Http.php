@@ -53,20 +53,13 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $currentAccount = Zend_Registry::get('currentAccount');
                 
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
+        
         $view->formData = array();
         
-        $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $encodedAccount .');';
-
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit account";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $encodedAccount .');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -93,21 +86,14 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $currentAccount = Zend_Registry::get('currentAccount');
         
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();
         
-        //@todo move Groups.js to Admin.js later
-        $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ', ' . $encodedGroupMembers . ');';
+        $view->formData = array();
 
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit group";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
+        //@todo move Groups.js to Admin.js later
+        $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ', ' . $encodedGroupMembers . ');';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -180,7 +166,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         }
 
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
         
@@ -190,12 +175,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit tag";
 
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
-        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -227,7 +206,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $encodedAllRights = Zend_Json::encode($json->getAllRoleRights());
         
         $view = new Zend_View();
-         
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
         
@@ -242,12 +220,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit role";
 
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
-        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

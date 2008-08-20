@@ -31,19 +31,22 @@
     <!-- Tine 2.0 static files -->
     <?php
         $TinebasePath = dirname(dirname(__FILE__));
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
         
+        // include css files
         if (file_exists("$TinebasePath/css/tine-all.css")) {
             echo "\n    " . '<link rel="stylesheet" type="text/css" href="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/css/tine-all.css') . '" />';
         } else {
-            foreach ($this->cssIncludeFiles as $name) {
+            foreach ($includeFiles['css'] as $name) {
                 echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'" />';
             }
         }
         
+        // include js files
         if (file_exists("$TinebasePath/js/tine-all.js")) {
             echo "\n    " . '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/js/tine-all.js') . '"></script>';
         } else {
-        	foreach ($this->jsIncludeFiles as $name) {
+        	foreach ($includeFiles['js'] as $name) {
         		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'"></script>';
         	}
         }
@@ -82,8 +85,6 @@
     // onReady, fired by ExtJS
         Ext.onReady(function(){
             Tine.Tinebase.initFramework();
-            <?php if(empty($this->isPopup)) echo "Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass(); \n" ?>
-            <?php if(empty($this->isPopup)) echo "Tine.Tinebase.MainScreen.render(); \n" ?>
             <?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . "; \n" ?>
             <?php if(isset($this->jsExecute)) echo "$this->jsExecute \n" ?>
             window.focus();
