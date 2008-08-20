@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * Tine 2.0 - this file starts the setup process
@@ -15,23 +16,55 @@ define ( 'IMPORT_EGW_14_ADDRESSBOOK', FALSE );
 define ( 'IMPORT_TINE_REV_949', FALSE );
 
 /**
+ * location of config.ini
+ */
+$configPath = $_SERVER['DOCUMENT_ROOT'] . '/../config.ini';
+
+/**
  * initialize autoloader
  */
 require_once 'Zend/Loader.php';
-
 Zend_Loader::registerAutoload();
+
+/**
+ * cli api
+ */
+if (php_sapi_name() == 'cli') {
+    try {
+        $opts = new Zend_Console_Getopt(
+        array(
+            'config|c=s'      => 'Path to config.ini file',
+            'help|h'          => 'Display this help Message',
+        ));
+        $opts->parse();
+    } catch (Zend_Console_Getopt_Exception $e) {
+       echo $e->getUsageMessage();
+       exit;
+    }
+    
+    if (count($opts->toArray()) === 0 || $opts->h) {
+        echo $opts->getUsageMessage();
+        exit;
+    }
+    
+    if($opts->c) {
+        $configPath = $opts->c;
+    }
+}
+
 
 /**
  * load central configuration once and put it in the registry
  */
+if (!is_file($configPath)) {
+    echo "Configuration file: '$configPath' not found \n";
+    exit;
+}
 try {
-    if (isset($argv[1]) && is_file($argv[1])) {
-        Zend_Registry::set('configFile', new Zend_Config_Ini($argv[1]));
-    } else {
-        Zend_Registry::set('configFile', new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini'));
-    }
+    Zend_Registry::set('configFile', new Zend_Config_Ini($configPath));
 } catch (Zend_Config_Exception $e) {
-    die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
+    echo "Error could not parse config file: '$configPath' \n";
+    exit;
 }
 
 /**
