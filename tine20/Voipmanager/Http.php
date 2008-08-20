@@ -119,11 +119,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->setScriptPath('Tinebase/views');
         $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom phone data";
 
         $view->isPopup = true;
@@ -198,11 +194,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->setScriptPath('Tinebase/views');
         $view->jsExecute = 'Tine.Voipmanager.MyPhones.EditDialog.display(' . $encodedSnomPhone . ', '. $encodedWritable .');';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit myPhone data";
 
         $view->isPopup = true;
@@ -246,11 +238,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();        
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.SipPeers.EditDialog.display(' . $encodedSipPeer .','. $encodedContexts .');';
 
-        $view->locationData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk sip peer data";
 
         $view->isPopup = true;
@@ -288,11 +276,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();        
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Context.EditDialog.display(' . $encodedContext .');';
 
-        $view->locationData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk context data";
 
         $view->isPopup = true;
@@ -332,11 +316,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();        
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Voicemail.EditDialog.display(' . $encodedVoicemail .','.$encodedContexts.');';
 
-        $view->locationData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk voicemail data";
 
         $view->isPopup = true;
@@ -378,11 +358,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();        
         $view->jsExecute = 'Tine.Voipmanager.Snom.Location.EditDialog.display(' . $encodedLocation .');';
 
-        $view->locationData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom location data";
 
         $view->isPopup = true;
@@ -420,11 +396,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();        
         $view->jsExecute = 'Tine.Voipmanager.Snom.Software.EditDialog.display(' . $encodedSoftware .');';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom software data";
 
         $view->isPopup = true;
@@ -462,11 +434,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();        
         $view->jsExecute = 'Tine.Voipmanager.Snom.Settings.EditDialog.display(' . $encodedSetting .');';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom setting data";
 
         $view->isPopup = true;
@@ -521,13 +489,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
         $view->jsExecute = 'Tine.Voipmanager.Snom.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');';
-
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray(),
-            'softwareVersions' => $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray() 
-        );
         
+        $view->configData = Tinebase_Http::getRegistryData();
+        $view->configData['softwareVersions'] = $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray();
         $view->title="edit snom template data";
 
         $view->isPopup = true;
