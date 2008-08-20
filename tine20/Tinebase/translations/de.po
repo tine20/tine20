@@ -47,7 +47,7 @@ msgstr "Aktualisiert von"
 msgid "Abnormal End"
 msgstr ""
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:287 js/widgets/EditRecord.js:82
+#: js/ExceptionDialog.js:34 js/MainScreen.js:288 js/widgets/EditRecord.js:82
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -93,6 +93,47 @@ msgstr ""
 msgid "Your report has been send. Thanks for your contribution"
 msgstr ""
 
+#: js/Login.js:23
+msgid "Login"
+msgstr ""
+
+#: js/Login.js:28
+msgid "Register"
+msgstr ""
+
+#: js/Login.js:41
+msgid "Please enter your login data"
+msgstr ""
+
+#: js/Login.js:49
+msgid "Username"
+msgstr ""
+
+#: js/Login.js:56
+msgid "Password"
+msgstr ""
+
+#: js/Login.js:90 js/Login.js:99 js/MainScreen.js:353
+#, fuzzy
+msgid "Please wait!"
+msgstr "Bitte warten"
+
+#: js/Login.js:91
+msgid "Logging you in..."
+msgstr ""
+
+#: js/Login.js:99
+msgid "Login successful. Loading Tine 2.0..."
+msgstr ""
+
+#: js/Login.js:104
+msgid "Login failure"
+msgstr ""
+
+#: js/Login.js:105
+msgid "Your username and/or your password are wrong!!!"
+msgstr ""
+
 #: js/MainScreen.js:45
 msgid "Change password"
 msgstr "Passwort ändern"
@@ -105,7 +146,7 @@ msgstr "Beenden"
 msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
-#: js/MainScreen.js:71
+#: js/MainScreen.js:71 js/widgets/container/ContainerGrants.js:183
 #, fuzzy
 msgid "Admin"
 msgstr "Admin"
@@ -124,78 +165,161 @@ msgstr "Benutzer: %s"
 msgid "Timezone: %s"
 msgstr "Zeitzone: %s"
 
-#: js/MainScreen.js:251
+#: js/MainScreen.js:97
+msgid "Language: "
+msgstr ""
+
+#: js/MainScreen.js:252
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr "Passwort für \"%s\" ändern"
 
-#: js/MainScreen.js:275
+#: js/MainScreen.js:276
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#: js/MainScreen.js:279
+#: js/MainScreen.js:280
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: js/MainScreen.js:283
+#: js/MainScreen.js:284
 msgid "Repeat new Password"
 msgstr "Wiederholung neues Passwort"
 
-#: js/MainScreen.js:293 js/widgets/EditRecord.js:52
+#: js/MainScreen.js:294 js/Tinebase.js:98 js/widgets/AccountpickerPanel.js:108
+#: js/widgets/EditRecord.js:52
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:302
+#: js/MainScreen.js:303 js/widgets/LangChooser.js:39
 #, fuzzy
 msgid "Please Wait!"
 msgstr "Bitte warten"
 
-#: js/MainScreen.js:303
+#: js/MainScreen.js:304
 msgid "changing password..."
 msgstr "Passwort wird geändert"
 
-#: js/MainScreen.js:314
+#: js/MainScreen.js:315
 msgid "Success"
 msgstr "Erfolg"
 
-#: js/MainScreen.js:315
+#: js/MainScreen.js:316
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert"
 
-#: js/MainScreen.js:321 js/MainScreen.js:331
+#: js/MainScreen.js:322 js/MainScreen.js:332
 #, fuzzy
 msgid "Failure"
 msgstr "Fehlgeschlagen"
 
-#: js/MainScreen.js:332
+#: js/MainScreen.js:333
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
 "Eingabe."
 
-#: js/MainScreen.js:350 js/widgets/container/ContainerTree.js:231
+#: js/MainScreen.js:351 js/widgets/container/ContainerTree.js:231
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/MainScreen.js:350
+#: js/MainScreen.js:351
 msgid "Are you sure you want to logout?"
 msgstr "Wollen sie das Programm wirklich beenden?"
 
-#: js/MainScreen.js:352
+#: js/MainScreen.js:353
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
-#: js/MainScreen.js:352
-#, fuzzy
-msgid "Please wait!"
-msgstr "Bitte warten"
+#: js/Tinebase.js:95
+msgid "There Where Errors"
+msgstr ""
+
+#: js/Tinebase.js:126
+msgid "Connection lost, please check your network!"
+msgstr ""
+
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr ""
+
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr ""
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr ""
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr ""
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr ""
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr ""
+
+#: js/UserRegistration.js:167
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+
+#: js/widgets/account/ConfigGrid.js:55
+#: js/widgets/container/ContainerGrants.js:128
+msgid "remove account"
+msgstr ""
+
+#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
+#: js/widgets/container/ContainerGrants.js:193
+msgid "Name"
+msgstr ""
+
+#: js/widgets/account/PickerPanel.js:70
+msgid "add account"
+msgstr ""
+
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
+msgid "enter searchfilter"
+msgstr ""
+
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
+msgid "Search"
+msgstr ""
+
+#: js/widgets/account/PickerPanel.js:258 js/widgets/account/PickerPanel.js:259
+#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+msgid "Browse"
+msgstr ""
+
+#: js/widgets/AccountpickerPanel.js:103
+msgid "please select an account"
+msgstr ""
+
+#: js/widgets/AccountpickerPanel.js:202
+msgid "Save"
+msgstr ""
+
+#: js/widgets/AccountpickerPanel.js:208 js/widgets/EditRecord.js:63
+msgid "Apply"
+msgstr ""
+
+#: js/widgets/AccountpickerPanel.js:214
+msgid "Close"
+msgstr ""
 
 #: js/widgets/ActivitiesPanel.js:145
 msgid "Add a Note..."
 msgstr "Notiz hinzufügen"
 
 #: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
-#: js/widgets/ActivitiesPanel.js:309 js/widgets/container/ContainerTree.js:304
+#: js/widgets/ActivitiesPanel.js:309
+#: js/widgets/container/ContainerGrants.js:165
+#: js/widgets/container/ContainerTree.js:304
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -252,6 +376,42 @@ msgstr "Zeit"
 msgid "User"
 msgstr "Benutzer"
 
+#: js/widgets/container/ContainerGrants.js:75
+#: js/widgets/container/ContainerTree.js:205
+#: js/widgets/container/ContainerTree.js:233
+#: js/widgets/container/ContainerTree.js:265
+msgid "Please wait"
+msgstr "Bitte warten"
+
+#: js/widgets/container/ContainerGrants.js:75
+msgid "Updateing Grants"
+msgstr ""
+
+#: js/widgets/container/ContainerGrants.js:117
+msgid "Folder"
+msgstr ""
+
+#: js/widgets/container/ContainerGrants.js:160
+msgid "Read"
+msgstr ""
+
+#: js/widgets/container/ContainerGrants.js:170
+msgid "Edit"
+msgstr ""
+
+#: js/widgets/container/ContainerGrants.js:175
+#: js/widgets/container/ContainerTree.js:310
+msgid "Delete"
+msgstr "Löschen"
+
+#: js/widgets/container/ContainerGrants.js:226
+msgid "Permissions"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:80
+msgid "please select a container"
+msgstr ""
+
 #: js/widgets/container/ContainerTree.js:106
 msgid "All"
 msgstr "Alle"
@@ -273,12 +433,6 @@ msgid "New"
 msgstr "Neu"
 
 #: js/widgets/container/ContainerTree.js:205
-#: js/widgets/container/ContainerTree.js:233
-#: js/widgets/container/ContainerTree.js:265
-msgid "Please wait"
-msgstr "Bitte warten"
-
-#: js/widgets/container/ContainerTree.js:205
 msgid "Creating"
 msgstr "Lege an"
 
@@ -298,10 +452,6 @@ msgstr "Bitte geben Sie einen Namen ein für "
 msgid "Updateing"
 msgstr "Aktualisiere"
 
-#: js/widgets/container/ContainerTree.js:310
-msgid "Delete"
-msgstr "Löschen"
-
 #: js/widgets/container/ContainerTree.js:316
 msgid "Rename"
 msgstr "Umbenennen"
@@ -310,8 +460,8 @@ msgstr "Umbenennen"
 msgid "Manage permissions"
 msgstr "Zugriffsrechte bearbeiten"
 
-#: js/widgets/EditRecord.js:63
-msgid "Apply"
+#: js/widgets/EditRecord.js:74
+msgid "delete"
 msgstr ""
 
 #: js/widgets/grid/FilterModel.js:87
@@ -375,6 +525,22 @@ msgstr "und"
 msgid "Show"
 msgstr "Zeige"
 
+#: js/widgets/GridPicker.js:75
+msgid "remove record"
+msgstr ""
+
+#: js/widgets/GroupSelect.js:115
+msgid "Please Select a Group"
+msgstr ""
+
+#: js/widgets/LangChooser.js:39
+msgid "setting new language..."
+msgstr ""
+
+#: js/widgets/tags/TagCombo.js:37
+msgid "tag name"
+msgstr ""
+
 #: js/widgets/tags/TagFilter.js:23
 msgid "Tag"
 msgstr ""
@@ -405,10 +571,17 @@ msgid "No Tags to display"
 msgstr "Keine Tags vorhanden"
 
 #: js/widgets/tags/TagsPanel.js:150
+#, fuzzy
 msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Tag entfernen"
-msgstr[1] "Tags entfernen"
+msgstr "Tag entfernen"
+
+#: js/widgets/tags/TagsPanel.js:150
+msgid "Detach tags"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:160
+msgid "Edit tag"
+msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
@@ -435,33 +608,43 @@ msgid "Change Color"
 msgstr "Farbe ändern"
 
 #: js/widgets/tags/TagsPanel.js:217
+#, fuzzy
 msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Tag löschen"
-msgstr[1] "Tags löschen"
+msgstr "Tag löschen"
+
+#: js/widgets/tags/TagsPanel.js:217
+msgid "Delete Tags"
+msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:229
+#, fuzzy
 msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Ausgewählten Tag wirklich löschen?"
-msgstr[1] "Ausgewählte Tags wirklich löschen?"
+msgstr "Ausgewählten Tag wirklich löschen?"
+
+#: js/widgets/tags/TagsPanel.js:229
+msgid "Realy Delete Selected Tags?"
+msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:230
-msgid "The selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Der ausgewählte Tag wird gelöscht und bei allen Einträgen entfernt"
-msgstr[1] ""
-"Die ausgewählten Tags werden gelöscht und bei allen Einträgen entfernt"
+msgid "he selected tag will be deleted and disapear for all entries"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:231
+msgid "The selected tags will be removed and disapear for all entries"
+msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Please wait a moment..."
 msgstr "Bitte warten Sie einen Moment ..."
 
 #: js/widgets/tags/TagsPanel.js:234
+#, fuzzy
 msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Lösche Tag"
-msgstr[1] "Lösche Tags"
+msgstr "Lösche Tag"
+
+#: js/widgets/tags/TagsPanel.js:234
+msgid "Deleting Tags"
+msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
 #: js/widgets/tags/TagsPanel.js:392
@@ -499,6 +682,14 @@ msgstr "Suche ..."
 #: js/widgets/tags/TagsPanel.js:560
 msgid "Color"
 msgstr "Farbe"
+
+#~ msgid "The selected tag will be deleted and disapear for all entries"
+#~ msgid_plural ""
+#~ "The selected tags will be removed and disapear for all entries"
+#~ msgstr[0] ""
+#~ "Der ausgewählte Tag wird gelöscht und bei allen Einträgen entfernt"
+#~ msgstr[1] ""
+#~ "Die ausgewählten Tags werden gelöscht und bei allen Einträgen entfernt"
 
 #~ msgid "Note Type..."
 #~ msgstr "Notiztyp"
