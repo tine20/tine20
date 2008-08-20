@@ -76,7 +76,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         }
         
         $view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
-        $view->configData = array('timeZone' => Zend_Registry::get('userTimeZone') , 'currentAccount' => Zend_Registry::get('currentAccount')->toArray());
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title = "edit contact";
         $view->isPopup = true;
         $includeFiles = Tinebase_Http::getAllIncludeFiles();
