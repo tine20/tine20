@@ -27,9 +27,14 @@ class Tinebase_Translation
      */
     public static function getAvailableTranslations()
     {
-        $userLocale = Zend_Registry::get('locale');
         $availableTranslations = array();
-        foreach (scandir(dirname(__FILE__) . '/translations') as $poFile) {
+        
+        // look for po files in Tinebase an fill in en.po virtually
+        $dirContents = scandir(dirname(__FILE__) . '/translations');
+        array_push($dirContents, 'en.po');
+        sort($dirContents);
+        
+        foreach ($dirContents as $poFile) {
             list ($localestring, $suffix) = explode('.', $poFile);
             if ($suffix == 'po') {
                 $locale = new Zend_Locale($localestring);
