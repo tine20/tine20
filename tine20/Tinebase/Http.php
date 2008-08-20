@@ -192,19 +192,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         $view->jsIncludeFiles  = $includeFiles['js'];
         $view->cssIncludeFiles = $includeFiles['css'];
         
-        $locale = Zend_Registry::get('locale');
-        $view->configData = array(
-            'timeZone'         => Zend_Registry::get('userTimeZone'),
-            'locale'           => array(
-                'locale'   => $locale->toString(), 
-                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion())
-            ),
-            'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
-            'accountBackend'   => Tinebase_User::getConfiguredBackend(),
-            'userApplications' => $userApplications->toArray(),
-        );
-        
+        $view->configData = self::getRegistryData();
+        $view->configData['userApplications'] = $userApplications->toArray();
         
         $view->title="Tine 2.0";
         
@@ -228,6 +217,25 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         echo $view->render('mainscreen.php');
     }
     
+    /**
+     * returns registry data
+     * 
+     * @return array
+     */
+    public static function getRegistryData()
+    {
+        $locale = Zend_Registry::get('locale');
+        return array(
+            'timeZone'         => Zend_Registry::get('userTimeZone'),
+            'locale'           => array(
+                'locale'   => $locale->toString(), 
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion())
+            ),
+            'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
+            'accountBackend'   => Tinebase_User::getConfiguredBackend(),
+        );
+    }
 	/**
 	 * activate user account
 	 *
