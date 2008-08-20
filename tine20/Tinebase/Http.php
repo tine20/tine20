@@ -115,6 +115,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/GMapPanel.js',
             'Tinebase/js/ux/DatepickerRange.js',
             // Tine 2.0 specific widgets
+            'Tinebase/js/widgets/LangChooser.js',
             'Tinebase/js/widgets/ActionUpdater.js',
             'Tinebase/js/widgets/EditRecord.js',
             'Tinebase/js/widgets/Priority.js',
@@ -191,9 +192,14 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         $view->jsIncludeFiles  = $includeFiles['js'];
         $view->cssIncludeFiles = $includeFiles['css'];
         
+        $locale = Zend_Registry::get('locale');
         $view->configData = array(
             'timeZone'         => Zend_Registry::get('userTimeZone'),
-            'locale'           => Zend_Registry::get('locale')->toString(),
+            'locale'           => array(
+                'locale'   => $locale->toString(), 
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion())
+            ),
             'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
             'accountBackend'   => Tinebase_User::getConfiguredBackend(),
             'userApplications' => $userApplications->toArray(),
