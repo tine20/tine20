@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
-
-if (isset($_SERVER['HTTP_HOST'])) {
+if (php_sapi_name() != 'cli') {
     die('not allowed!');
 }
 
@@ -16,9 +15,9 @@ $tine20path = dirname(__FILE__);
 /**
  * path to yui compressor
  */
-$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
+$yuiCompressorPath = dirname(__FILE__) . '/../../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
 
-$jslintPath = dirname(__FILE__) . '/../jslint4java-1.1/jslint4java-1.1+rhino.jar';
+$jslintPath = dirname(__FILE__) . '/../../jslint4java-1.1/jslint4java-1.1+rhino.jar';
 
 /**
  * options
@@ -42,7 +41,7 @@ try {
    exit;
 }
 
-if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->lint || $opts->s || $opts->z)) {
+if (count($opts->toArray()) === 0 || $opts->h) {
     echo $opts->getUsageMessage();
     exit;
 }
