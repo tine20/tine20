@@ -563,11 +563,9 @@ msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:150
 msgid "Detach tag"
-msgstr ""
-
-#: js/widgets/tags/TagsPanel.js:150
-msgid "Detach tags"
-msgstr ""
+msgid_plural "Detach tags"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:160
 msgid "Edit tag"
@@ -599,27 +597,21 @@ msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:217
 msgid "Delete Tag"
-msgstr ""
-
-#: js/widgets/tags/TagsPanel.js:217
-msgid "Delete Tags"
-msgstr ""
+msgid_plural "Delete Tags"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:229
 msgid "Realy Delete Selected Tag?"
-msgstr ""
-
-#: js/widgets/tags/TagsPanel.js:229
-msgid "Realy Delete Selected Tags?"
-msgstr ""
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:230
-msgid "he selected tag will be deleted and disapear for all entries"
-msgstr ""
-
-#: js/widgets/tags/TagsPanel.js:231
-msgid "The selected tags will be removed and disapear for all entries"
-msgstr ""
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Please wait a moment..."
@@ -627,11 +619,9 @@ msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Deleting Tag"
-msgstr ""
-
-#: js/widgets/tags/TagsPanel.js:234
-msgid "Deleting Tags"
-msgstr ""
+msgid_plural "Deleting Tags"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
 #: js/widgets/tags/TagsPanel.js:392
