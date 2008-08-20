@@ -59,11 +59,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         
         $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $encodedAccount .');';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit account";
 
         $view->isPopup = true;
@@ -104,11 +100,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         //@todo move Groups.js to Admin.js later
         $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ', ' . $encodedGroupMembers . ');';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit group";
 
         $view->isPopup = true;
@@ -195,11 +187,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $appList = Zend_Json::encode(Tinebase_Application::getInstance()->getApplications('%')->toArray());
         $view->jsExecute = "Tine.Admin.Tags.EditDialog.display($encodedTag, $appList);";
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit tag";
 
         $view->isPopup = true;
@@ -251,11 +239,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
             $encodedAllRights .  
         ');';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit role";
 
         $view->isPopup = true;
