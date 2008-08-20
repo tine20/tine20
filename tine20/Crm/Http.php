@@ -72,11 +72,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 
-        $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
-        );
-        
+        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit lead";
 
         $view->isPopup = true;
