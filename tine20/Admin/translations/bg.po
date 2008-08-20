@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-08-19 13:31+0100\n"
+"Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,73 +15,73 @@ msgstr ""
 
 #: Acl/Rights.php:164
 msgid "manage access log"
-msgstr ""
+msgstr "Обработка протокол за влизане"
 
 #: Acl/Rights.php:165
 msgid "delete access log entries"
-msgstr ""
+msgstr "Изтриване протокол за влизане"
 
 #: Acl/Rights.php:168
 msgid "manage accounts"
-msgstr ""
+msgstr "Обработка на потребителско конто"
 
 #: Acl/Rights.php:169
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
+msgstr "Създаване и обработка на групи и потребители, вкарване на потребители в групи, създаване и промяна на пароли"
 
 #: Acl/Rights.php:172
 msgid "manage applications"
-msgstr ""
+msgstr "Обработка на апликации"
 
 #: Acl/Rights.php:173
 msgid "enable and disable applications, edit application settings"
-msgstr ""
+msgstr "Активиране, деактивиране и промяна на апликации"
 
 #: Acl/Rights.php:176
 msgid "manage roles"
-msgstr ""
+msgstr "Обработка правата на достъп (роли)"
 
 #: Acl/Rights.php:177
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "Създаване, подреждане и обработка правата на достъп (роли), вкарване на потребители в определена роля, създаване на апликационни права за роли"
 
 #: Acl/Rights.php:180
 msgid "manage shared tags"
-msgstr ""
+msgstr "Обработка на общодостъпни тагове"
 
 #: Acl/Rights.php:181
 msgid "add, delete and edit shared tags"
-msgstr ""
+msgstr "Обработка, изтриване и вкарване на общодостъпните тагове"
 
 #: Acl/Rights.php:184
 msgid "view access log"
-msgstr ""
+msgstr "Виж протокол за влизане"
 
 #: Acl/Rights.php:185
 msgid "view access log list"
-msgstr ""
+msgstr "Виж листата на направени влизания"
 
 #: Acl/Rights.php:188
 msgid "view accounts"
-msgstr ""
+msgstr "Виж потребителско конто"
 
 #: Acl/Rights.php:189
 msgid "view accounts list and details"
-msgstr ""
+msgstr "Виж листата на потребителски конта и детайли"
 
 #: Acl/Rights.php:192
 msgid "view applications"
-msgstr ""
+msgstr "Виж апликации"
 
 #: Acl/Rights.php:193
 msgid "view applications list and details"
-msgstr ""
+msgstr "Виж листата с апликации и детайли"
 
 #: Acl/Rights.php:196
 msgid "view roles"
-msgstr ""
+msgstr "Виж правата на достъп (роли)"
 
 #: Acl/Rights.php:197
 msgid "view roles list and details"
-msgstr ""
+msgstr "Виж листата с правата на достъп (роли) и детайли"
+
