@@ -29,7 +29,7 @@ Locale.Gettext.prototype.textdomain = function (domain) {
 };
 
 Locale.Gettext.prototype.getmsg = function (domain, category, reload) {
-  var locale = Tine.Tinebase.Registry.get('locale');
+  var locale = Tine.Tinebase.Registry.get('locale').locale;
   if (! locale) {
     console.error('attempt to gain translation at include time. Requested domain: "' + domain + '"');
   }
