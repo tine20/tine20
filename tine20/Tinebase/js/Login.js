@@ -12,8 +12,14 @@
 
 Ext.namespace('Tine.Tinebase.Registry');
 
+/**
+ * @todo make registration working again!
+ */
 Tine.Login = {
-
+    
+    /**
+     * show the login dialog
+     */
     showLoginDialog: function(_defaultUsername, _defaultPassword) {
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';  
@@ -21,93 +27,114 @@ Tine.Login = {
     	var loginButtons = [{
             id: 'loginbutton',
             text: _('Login'),
-            handler: Tine.Login.loginHandler 
+            scope: this,
+            handler: this.doLogin
         }];
         
-        if ( false &&  userRegistration === true ) {
+        if ( false && userRegistration === true ) {
             loginButtons.push({
                 text: _('Register'),
                 handler: Tine.Login.UserRegistrationHandler
             });
         }
         
-        var loginDialog = new Ext.FormPanel({
-            id: 'loginDialog',
-            labelWidth: 75,
-            url:'index.php',
-            baseParams:{
-            	method: 'Tinebase.login'
-            },
-            frame:true,
+        var loginWindow = new Ext.Window({
+            xtype: 'panel',
+            layout: 'fit',
+            modal: true,
+            closable: false,
+            resizable: false,
+            
+            width: 335,
+            height: 200,
             title: _('Please enter your login data'),
-            bodyStyle:'padding:5px 5px 0',
-            width: 350,
-            defaults: {
-            	width: 230
-            },
-            defaultType: 'textfield',
-            items: [{
-                fieldLabel: _('Username'),
-                id: 'username',
-                name: 'username',
-                value: _defaultUsername,
-                width:225
-            }, {
-                inputType: 'password',
-                fieldLabel: _('Password'),
-                id: 'password',
-                name: 'password',
-                //allowBlank: false,
-                value: _defaultPassword,
-                width:225
-            }],
+            items: new Ext.FormPanel({
+                frame:true,
+                id: 'loginDialog',
+                labelWidth: 130,
+                defaults: {
+                    xtype: 'textfield',
+                    width: 170
+                },
+                items: [{
+                    xtype: 'panel',
+                    width: 300,
+                    border: false,
+                    html: '<img src="http://www.tine20.org/fileadmin/templates/images/tine20.jpg" width="300"/><br /><br />'
+                }, {
+                    fieldLabel: _('Username'),
+                    id: 'username',
+                    name: 'username',
+                    value: _defaultUsername,
+                }, {
+                    inputType: 'password',
+                    fieldLabel: _('Password'),
+                    id: 'password',
+                    name: 'password',
+                    //allowBlank: false,
+                    value: _defaultPassword,
+                }]
+            }),
             buttons: loginButtons
+            
         });
         
-        loginDialog.render(document.body);
-
-        Ext.Element.get('loginDialog').center();
-        
-        Ext.getCmp('username').focus();
+        new Ext.Viewport({
+            layout: 'fit',
+            html: '',
+            listeners: {
+                scope: this,
+                render: function() {
+                    loginWindow.show();
+                    Ext.getCmp('username').focus(false, 250);
+                },
+                resize: function() {
+                    loginWindow.center();
+                }
+            }
+        });
         
         Ext.getCmp('username').on('specialkey', function(_field, _event) {
         	if(_event.getKey() == _event.ENTER){
-        		Tine.Login.loginHandler();
+        		this.doLogin();
         	}
-        });
+        }, this);
 
         Ext.getCmp('password').on('specialkey', function(_field, _event) {
             if(_event.getKey() == _event.ENTER){
-                Tine.Login.loginHandler();
+                this.doLogin();
             }
-        });
+        }, this);
     },
     
-    loginHandler: function(){
-    	var loginDialog = Ext.getCmp('loginDialog');
-    	
-        if (loginDialog.getForm().isValid()) {
-            loginDialog.getForm().submit({
-                waitTitle: _('Please wait!'), 
-                waitMsg:_('Logging you in...'),
-                params: {
-                    jsonKey: Tine.Tinebase.jsonKey
+    /**
+     * do the actual login
+     */
+    doLogin: function(){
+    	var form = Ext.getCmp('loginDialog').getForm();
+        var values = form.getValues();
+        if (form.isValid()) {
+            Ext.MessageBox.wait(_('Logging you in...'), _('Please wait'));
+            
+            Ext.Ajax.request({
+                params : {
+                    method: 'Tinebase.login',
+                    username: values.username,
+                    password: values.password
                 },
-                headers: {
-                    'X-Tine20-Request-Type': 'JSON'
-                },
-                success:function(form, action, o) {
-                    Ext.MessageBox.wait(_('Login successful. Loading Tine 2.0...'), _('Please wait!'));
-                    window.location = window.location;
-                },
-                failure:function(form, action) {
-                    Ext.MessageBox.show({
-                        title: _('Login failure'),
-                        msg: _('Your username and/or your password are wrong!!!'),
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.ERROR /*,
-                        fn: function() {} */
-                    });
+                callback: function(request, httpStatus, response) {
+                    var responseData = Ext.util.JSON.decode(response.responseText);
+                    if (responseData.success === true) {
+                        Ext.MessageBox.wait(_('Login successful. Loading Tine 2.0...'), _('Please wait!'));
+                        window.location = window.location;
+                    } else {
+                        Ext.MessageBox.show({
+                            title: _('Login failure'),
+                            msg: _('Your username and/or your password are wrong!!!'),
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR 
+                        });
+                    }
                 }
             });
         }

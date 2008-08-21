@@ -355,7 +355,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                     params : {
                         method : 'Tinebase.logout'
                     },
-                    callback : function(options, bSuccess, response) {
+                    callback : function(options, Success, response) {
                         // remove the event handler
                         // the reload() trigers the unload event
                         window.location = window.location;
