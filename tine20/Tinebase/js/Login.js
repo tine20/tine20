@@ -58,9 +58,9 @@ Tine.Login = {
                 },
                 items: [{
                     xtype: 'panel',
-                    width: 300,
+                    width: 250,
                     border: false,
-                    html: '<img src="http://www.tine20.org/fileadmin/templates/images/tine20.jpg" width="300"/><br /><br />'
+                    html: '<img src="http://stats.egroupware20.org/tine_logo_enjoy.gif" width="250"/><br /><br />'
                 }, {
                     fieldLabel: _('Username'),
                     id: 'username',
