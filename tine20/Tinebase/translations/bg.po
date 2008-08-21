@@ -187,7 +187,7 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
-#: js/MainScreen.js:303 js/widgets/LangChooser.js:39
+#: js/MainScreen.js:303
 msgid "Please Wait!"
 msgstr ""
 
@@ -524,8 +524,16 @@ msgstr ""
 msgid "Please Select a Group"
 msgstr ""
 
-#: js/widgets/LangChooser.js:39
+#: js/widgets/LangChooser.js:53
 msgid "setting new language..."
+msgstr ""
+
+#: js/widgets/LangChooser.js:53 js/widgets/LangChooser.js:74
+msgid "Please Wait"
+msgstr ""
+
+#: js/widgets/LangChooser.js:74
+msgid "loading new language..."
 msgstr ""
 
 #: js/widgets/tags/TagCombo.js:37

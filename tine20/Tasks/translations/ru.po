@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-05 17:49+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-08-07 15:09+0100\n"
+"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11,79 +11,83 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Poedit-SearchPath-0: Tasks\n"
 
 #: js/Tasks.js:112
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Вы уверены что хотите удалить выбранное задание"
+msgstr[1] "Вы уверены что хотите удалить выбранные задания"
 msgstr[2] ""
 
 #: js/Tasks.js:143 js/Tasks.js:272 js/Tasks.js:555 js/Tasks.js:632
 #: js/Tasks.js:657
 msgid "Failed"
-msgstr ""
+msgstr "Неудача"
 
 #: js/Tasks.js:143 js/Tasks.js:657
 msgid "Could not delete task(s)."
-msgstr ""
+msgstr "Задание(я) не могло быть удалино."
 
 #: js/Tasks.js:161
 msgid "Edit task"
-msgstr ""
+msgstr "Введите задание"
 
 #: js/Tasks.js:171
 msgid "Add task"
-msgstr ""
+msgstr "Добавть задание"
 
 #: js/Tasks.js:182
+#, fuzzy
 msgid "Delete task"
 msgid_plural "Delete tasks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Удолить задание"
+msgstr[1] "Удолить задание"
+msgstr[2] "Удолить задание"
 
 #: js/Tasks.js:272 js/Tasks.js:555 js/Tasks.js:632
 msgid "Could not save task."
-msgstr ""
+msgstr "Задание не смогла быть сохранино"
 
 #: js/Tasks.js:305
 msgid "Tasks"
-msgstr ""
+msgstr "Задания"
 
 #: js/Tasks.js:306
 msgid "to do lists"
-msgstr ""
+msgstr "Делать списки"
 
 #: js/Tasks.js:328
 msgid "Enter searchfilter"
-msgstr ""
+msgstr "Введите поисковый фильтр"
 
 #: js/Tasks.js:343
 msgid "Show closed"
-msgstr ""
+msgstr "Показ закрылся"
 
 #: js/Tasks.js:393
 msgid "Search:"
-msgstr ""
+msgstr "Поиск:"
 
 #: js/Tasks.js:403
 msgid "Displaying tasks {0} - {1} of {2}"
-msgstr ""
+msgstr "Показ задач {0} - {1} of {2}"
 
 #: js/Tasks.js:404
 msgid "No tasks to display"
-msgstr ""
+msgstr "Никаких заданий не было найдено"
 
 #: js/Tasks.js:421 js/Tasks.js:709
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: js/Tasks.js:437
 msgid "Percent"
-msgstr ""
+msgstr "Процент"
 
 #: js/Tasks.js:452 js/Tasks.js:681
 msgid "Summary"
@@ -91,31 +95,31 @@ msgstr ""
 
 #: js/Tasks.js:460
 msgid "Add a task..."
-msgstr ""
+msgstr "Добавить задание..."
 
 #: js/Tasks.js:465 js/Tasks.js:713
 msgid "Priority"
-msgstr ""
+msgstr "Приоритет"
 
 #: js/Tasks.js:481
 msgid "Due Date"
-msgstr ""
+msgstr "Число истечения срока"
 
 #: js/Tasks.js:502
 msgid "No Tasks to display"
-msgstr ""
+msgstr "Никаких заданий не было найдено"
 
 #: js/Tasks.js:601
 msgid "Please wait"
-msgstr ""
+msgstr "Пожалуйста подождите"
 
 #: js/Tasks.js:601 js/Tasks.js:645
 msgid "Saving Task"
-msgstr ""
+msgstr "Сохранить задание"
 
 #: js/Tasks.js:636
 msgid "Errors"
-msgstr ""
+msgstr "Ошибки"
 
 #: js/Tasks.js:636
 msgid "Please fix the errors noted."
@@ -123,19 +127,19 @@ msgstr ""
 
 #: js/Tasks.js:643
 msgid "Confirm"
-msgstr ""
+msgstr "Подтвердить"
 
 #: js/Tasks.js:643
 msgid "Do you really want to delete this task?"
-msgstr ""
+msgstr "Вы уверены что хотите удалить задание?"
 
 #: js/Tasks.js:645
 msgid "Please wait a moment..."
-msgstr ""
+msgstr "Пожалуйста подождите момент..."
 
 #: js/Tasks.js:685
 msgid "Enter short name..."
-msgstr ""
+msgstr "Введите короткое имя..."
 
 #: js/Tasks.js:688
 msgid "Notes"
@@ -143,16 +147,19 @@ msgstr ""
 
 #: js/Tasks.js:690
 msgid "Enter description..."
-msgstr ""
+msgstr "Введите описание..."
 
 #: js/Tasks.js:704
 msgid "Percentage"
-msgstr ""
+msgstr "Подтвердить"
 
 #: js/Tasks.js:717
 msgid "Due date"
-msgstr ""
+msgstr "Число истечения срока"
 
 #: js/Tasks.js:721
 msgid "Folder"
-msgstr ""
+msgstr "Папка"
+
+#~ msgid "Delete tasks"
+#~ msgstr "Удолить задания"
