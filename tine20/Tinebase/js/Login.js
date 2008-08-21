@@ -46,7 +46,7 @@ Tine.Login = {
             resizable: false,
             
             width: 335,
-            height: 200,
+            height: 220,
             title: _('Please enter your login data'),
             items: new Ext.FormPanel({
                 frame:true,
@@ -60,8 +60,10 @@ Tine.Login = {
                     xtype: 'panel',
                     width: 250,
                     border: false,
-                    html: '<img src="http://stats.tine20.org/tine_logo_enjoy.gif" width="250"/><br /><br />'
-                }, {
+                    html: '<img src="http://stats.egroupware20.org/tine_logo_enjoy.gif" width="250" height="43"/><br /><br />'
+                }, new Tine.widgets.LangChooser({
+                    
+                }), {
                     fieldLabel: _('Username'),
                     id: 'username',
                     name: 'username',

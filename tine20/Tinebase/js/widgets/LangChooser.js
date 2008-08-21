@@ -14,7 +14,12 @@ Ext.namespace('Tine.widgets');
  * lang chooser widget
  */
 Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
-
+    
+    /**
+     * @cfg {Sring}
+     */
+    fieldLabel: null,
+    
     displayField: 'language',
     valueField: 'locale',
     triggerAction: 'all',
@@ -32,6 +37,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     
     initComponent: function() {
         this.value = Tine.Tinebase.Registry.get('locale').language;
+        this.fieldLabel = this.fieldLabel ? this.fieldLabel : _('Language');
         
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">' +
