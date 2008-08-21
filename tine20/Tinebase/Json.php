@@ -83,16 +83,25 @@ class Tinebase_Json
     /**
      * sets locale
      *
-     * @param  string $locale
+     * @param  string $localeString
      * @param  bool   $saveaspreference
      * @return array
      */
-    public function setLocale($locale, $saveaspreference)
+    public function setLocale($localeString, $saveaspreference)
     {
-        Tinebase_Controller::getInstance()->setupUserLocale($locale);
+        $locale = Tinebase_Controller::getInstance()->setupUserLocale($localeString);
+        
         return array(
-            'success' => true
-        );
+            'locale' => array(
+                'locale'   => $locale->toString(), 
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion())
+            ),
+            'translationFiles' => array(
+                'generic' => Tinebase_Translation::getJsTranslationFile($locale, 'generic'),
+                'tine'    => Tinebase_Translation::getJsTranslationFile($locale, 'tine'),
+                'ext'     => Tinebase_Translation::getJsTranslationFile($locale, 'ext')
+            ));
     }
     
     public function getUsers($filter, $sort, $dir, $start, $limit)

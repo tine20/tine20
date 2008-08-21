@@ -71,7 +71,7 @@ class Tinebase_Translation
     /**
      * returns the available language java script from a given locale
      * 
-     * @param  Zend_Locale|String $_locale
+     * @param  Zend_Locale        $_locale
      * @param  string             $_location required location on of {generic|tine|ext}
      * @return string             filepath relative to tine installation
      */

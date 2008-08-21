@@ -30,18 +30,6 @@ if (! ("console" in window) || !("firebug" in console)) {
     }
 }
 
-/**
- * config locales
- */
-Locale.Gettext.prototype._msgs.en = {};
-Locale.setlocale(Locale.LC_ALL, '');
-Locale.Gettext.textdomain('Tinebase');
-// shorthands
-_ = Locale.Gettext._;
-n_ = Locale.Gettext.n_;
-
-
-
 Ext.namespace('Tine', 'Tine.Tinebase');
 
 /**
@@ -53,6 +41,18 @@ Tine.Tinebase.Registry = new Ext.util.MixedCollection(true);
  * html encode all grid columns per defaut
  */
 Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
+
+/**
+ * config locales
+ */
+Locale.setlocale(Locale.LC_ALL, '');
+Tine.Tinebase.tranlation = new Locale.Gettext();
+Tine.Tinebase.tranlation.textdomain('Tinebase');
+_ = function(msgid) {
+    return Tine.Tinebase.tranlation.dgettext('Tinebase', msgid);
+}
+
+//n_ = Tine.Tinebase.tranlation.n_;
 
 /**
  * Initialise Tine 2.0 ExtJs framework

@@ -8,39 +8,16 @@ if (typeof ActiveXObject != 'undefined' && typeof XMLHttpRequest == 'undefined')
   } catch (e) { return new ActiveXObject("Microsoft.XMLHTTP"); } };
 }
 
-if (typeof Locale.Gettext == 'undefined') {
-  Locale.Gettext = function (locale) {
+/**
+ * @constuctor
+ */
+Locale.Gettext = function (locale) {
     this.locale = typeof locale == 'string' ? new Locale(Locale.LC_ALL, locale) : locale || Locale;
     this.domain = 'messages';
     this.category = Locale.LC_MESSAGES;
     this.suffix = 'po';
     this.dir = '.';
-  };
-
-  Locale.Gettext.call(Locale.Gettext); // init
 }
-
-Locale.Gettext.VERSION = '0.0.1';
-Locale.Gettext.EXPORT = [
-  'bindtextdomain',
-  'textdomain',
-  'dcgettext',
-  'dcngettext',
-  'dgettext',
-  'dngettext',
-  'gettext',
-  'ngettext',
-  'gettext_noop'
-];
-Locale.Gettext.EXPORT_OK = [
-  '_',
-  'n_',
-  'N_'
-];
-Locale.Gettext.EXPORT_TAGS = {
-  ':common': Locale.Gettext.EXPORT,
-  ':all': Locale.Gettext.EXPORT.concat(Locale.Gettext.EXPORT_OK)
-};
 
 Locale.Gettext.prototype.bindtextdomain = function (domain, dir) {
   this.dir = dir;

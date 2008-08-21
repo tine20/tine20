@@ -370,9 +370,8 @@ class Tinebase_Controller
     /**
      * sets the user locale
      * 
-     * $param  string $_locale 
-     *
-     * @todo $_localeString = new Zend_Locale('auto');
+     * $param  string $_locale
+     * @return Zend_Locale
      */
     public function setupUserLocale($_localeString='auto')
     {
@@ -387,6 +386,7 @@ class Tinebase_Controller
             $this->_session->userLocale = $locale;
         }
         Zend_Registry::set('locale', $locale);
+        return $locale;
     }
     
     /**
