@@ -28,8 +28,7 @@
 
     <?php echo (isset($this->googleApi)) ? $this->googleApi : '' ?>
 
-    <!-- Tine 2.0 static files -->
-    <?php
+    <!-- Tine 2.0 static files --><?php
         $TinebasePath = dirname(dirname(__FILE__));
         $includeFiles = Tinebase_Http::getAllIncludeFiles();
         
@@ -52,43 +51,42 @@
         }
     ?>
     
-    <!-- Static Localisation -->
-    <?php  
-        $locale = Zend_Registry::get('locale');
-        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . '"></script>' . "\n";
-        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . '"></script>' . "\n";
-        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . '"></script>' . "\n";
-    ?>
+    <!-- Static Localisation --><?php
+    $locale = Zend_Registry::get('locale');
+    echo "
+    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . "'></script>'
+    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . "'></script>'
+    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . "'></script>'
+    ";?>
     
     
     <!-- Tine 2.0 dynamic initialisation -->
-    <script type="text/javascript" language="javascript">
-    // registry
-        <?php
-                foreach ((array)$this->configData as $index => $value) {
-                    echo "\n    Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");";
+    <script type="text/javascript" language="javascript"><?php
+        // registry data
+        foreach (Tinebase_Http::getRegistryData() as $index => $value) {
+            echo "
+        Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");";
+        }
+        
+        // initial data
+        foreach ((array)$this->initialData as $appname => $data) {
+            if (!empty($data) ) {
+                foreach ($data as $var => $content) {
+                    echo "
+        Tine.$appname.$var = ". Zend_Json::encode($content). ';';
                 }
-                echo "\n    Tine.Tinebase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');";
-        ?>
+            }
+        }?>
         
-    // initialData
-        <?php
-           foreach ((array)$this->initialData as $appname => $data) {
-               if (!empty($data) ) {
-                   foreach ($data as $var => $content) {
-                       echo "\n    Tine.$appname.$var = ". Zend_Json::encode($content). ';';
-                   }
-               }
-           }
-        ?>
-        
-    // onReady, fired by ExtJS
+        // onReady, fired by ExtJS
         Ext.onReady(function(){
-            Tine.Tinebase.initFramework();
-            <?php if(isset($this->jsExecute)) echo "$this->jsExecute \n" ?>
+            Tine.Tinebase.initFramework();<?php
+            if(isset($this->jsExecute)) {
+                echo "$this->jsExecute";
+            }?>
+            
             window.focus();
     	});
-    	
     </script>
 </head>
 <body>

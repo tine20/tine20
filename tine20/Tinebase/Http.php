@@ -32,43 +32,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     }
     
     /**
-     * displays the login dialog
-     *
-     */
-    public function login()
-    {
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        // default credentials
-        if(isset(Zend_Registry::get('configFile')->login)) {
-            $loginConfig = Zend_Registry::get('configFile')->login;
-            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
-            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
-        } else {
-            $defaultUsername = '';
-            $defaultPassword = '';
-        }
-
-        // check if registration is active
-        if(isset(Zend_Registry::get('configFile')->login)) {
-            $registrationConfig = Zend_Registry::get('configFile')->registration;
-            $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
-        } else {
-            $view->userRegistration = 0;
-        }
-        
-        $view->title="Tine 2.0";
-        $view->configData = self::getRegistryData();
-        $view->jsExecute =  "
-           Tine.Login.showLoginDialog('$defaultUsername', '$defaultPassword');
-        ";
-        
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-    }
-    
-    /**
      * Returns all JS files which must be included for Tinebase
      *
      * @todo refactor js stuff so that all js files could be included
@@ -172,6 +135,42 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	);
     }
     
+    /**
+     * renders the login dialog
+     *
+     */
+    public function login()
+    {
+        $view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+        
+        // default credentials
+        if(isset(Zend_Registry::get('configFile')->login)) {
+            $loginConfig = Zend_Registry::get('configFile')->login;
+            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
+            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
+        } else {
+            $defaultUsername = '';
+            $defaultPassword = '';
+        }
+
+        // check if registration is active
+        if(isset(Zend_Registry::get('configFile')->login)) {
+            $registrationConfig = Zend_Registry::get('configFile')->registration;
+            $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
+        } else {
+            $view->userRegistration = 0;
+        }
+        
+        $view->title="Tine 2.0";
+        $view->jsExecute =  "
+            Tine.Login.showLoginDialog('$defaultUsername', '$defaultPassword');
+        ";
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+    
 	/**
 	 * renders the tine main screen 
 	 */
@@ -194,9 +193,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 $view->initialData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
-        
-        $view->configData = self::getRegistryData();
-        $view->configData['userApplications'] = $userApplications->toArray();
         
         $view->title="Tine 2.0";
         $view->jsExecute =  "
@@ -246,6 +242,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             $registryData += array(    
                 'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
                 'accountBackend'   => Tinebase_User::getConfiguredBackend(),
+                'jsonKey'          => Zend_Registry::get('jsonKey'),
+                'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray()
             );
         }
         return $registryData;

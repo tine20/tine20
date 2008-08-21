@@ -115,7 +115,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom phone data";
         $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
         
@@ -182,7 +181,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit myPhone data";
         $view->jsExecute = 'Tine.Voipmanager.MyPhones.EditDialog.display(' . $encodedSnomPhone . ', '. $encodedWritable .');';
         
@@ -216,7 +214,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk sip peer data";
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.SipPeers.EditDialog.display(' . $encodedSipPeer .','. $encodedContexts .');';
         
@@ -243,7 +240,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk context data";
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Context.EditDialog.display(' . $encodedContext .');';
         
@@ -272,7 +268,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk voicemail data";
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Voicemail.EditDialog.display(' . $encodedVoicemail .','.$encodedContexts.');';
 
@@ -306,7 +301,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
        
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom location data";
         $view->jsExecute = 'Tine.Voipmanager.Snom.Location.EditDialog.display(' . $encodedLocation .');';
         
@@ -334,7 +328,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom software data";
         $view->jsExecute = 'Tine.Voipmanager.Snom.Software.EditDialog.display(' . $encodedSoftware .');';
         
@@ -362,7 +355,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom setting data";
         $view->jsExecute = 'Tine.Voipmanager.Snom.Settings.EditDialog.display(' . $encodedSetting .');';
 
@@ -376,6 +368,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
      *
      * @param int $templateId
      * @todo catch permission denied exceptions only
+     * @todo move stuff out of registry. Registry is reserved for Tinebase!!!
      * 
      */
     public function editSnomTemplate($templateId=NULL)
@@ -410,10 +403,11 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
-        $view->configData['softwareVersions'] = $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray();
         $view->title="edit snom template data";
-        $view->jsExecute = 'Tine.Voipmanager.Snom.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');';
+        $view->jsExecute = '
+            Tine.Tinebase.Registry.add("softwareVersions", ' . $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray() .' );
+            Tine.Voipmanager.Snom.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');
+        ';
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -438,7 +432,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk meetme data";
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Meetme.EditDialog.display(' . $encodedMeetme .');';
         

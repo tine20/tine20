@@ -97,7 +97,6 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         
         
         $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit task";
         $view->jsExecute = 'Tine.Tasks.EditDialog(' . $task . ');';
         

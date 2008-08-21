@@ -74,7 +74,6 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
             }
         }
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title = "edit contact";
         $view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         

@@ -65,7 +65,6 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $tinebaseJson = new Tinebase_Json();
         $view->initialData['Tinebase'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
         
-        $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit lead";
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 
