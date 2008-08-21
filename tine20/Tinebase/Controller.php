@@ -188,8 +188,13 @@ class Tinebase_Controller
         $this->_initFramework();
         Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
         
-        // check json key for all methods but login and user registration
-        if (    !($_POST['method'] === 'Tinebase.login' || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
+        $anonymnousMethods = array(
+            'Tinebase.login',
+            'Tinebase.getAvailableTranslations',
+            'Tinebase.setLocale'
+        );
+        // check json key for all methods but some exceptoins
+        if ( !(in_array($_POST['method'], $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
                 && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
                     
             Zend_Registry::get('logger')->WARN(__METHOD__ . '::' . __LINE__ . '  Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
