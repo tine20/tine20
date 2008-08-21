@@ -76,43 +76,50 @@ msgstr ""
 msgid "Your report has been send. Thanks for your contribution"
 msgstr ""
 
-#: js/Login.js:23
+#: js/Login.js:29
 msgid "Login"
 msgstr ""
 
-#: js/Login.js:28
+#: js/Login.js:36
 msgid "Register"
 msgstr ""
 
-#: js/Login.js:41
+#: js/Login.js:50
 msgid "Please enter your login data"
 msgstr ""
 
-#: js/Login.js:49
+#: js/Login.js:67
 msgid "Username"
 msgstr ""
 
-#: js/Login.js:56
+#: js/Login.js:73
 msgid "Password"
 msgstr ""
 
-#: js/Login.js:90 js/Login.js:99 js/MainScreen.js:353
-msgid "Please wait!"
-msgstr ""
-
-#: js/Login.js:91
+#: js/Login.js:119
 msgid "Logging you in..."
 msgstr ""
 
-#: js/Login.js:99
+#: js/Login.js:119 js/widgets/container/ContainerGrants.js:75
+#: js/widgets/container/ContainerTree.js:205
+#: js/widgets/container/ContainerTree.js:233
+#: js/widgets/container/ContainerTree.js:265
+msgid "Please wait"
+msgstr ""
+
+#: js/Login.js:130
 msgid "Login successful. Loading Tine 2.0..."
 msgstr ""
 
-#: js/Login.js:104
+#: js/Login.js:130 js/MainScreen.js:353
+msgid "Please wait!"
+msgstr ""
+
+#: js/Login.js:134
 msgid "Login failure"
 msgstr ""
 
-#: js/Login.js:105
+#: js/Login.js:135
 msgid "Your username and/or your password are wrong!!!"
 msgstr ""
 
@@ -146,8 +153,8 @@ msgstr ""
 msgid "Timezone: %s"
 msgstr ""
 
-#: js/MainScreen.js:97
-msgid "Language: "
+#: js/MainScreen.js:97 js/widgets/LangChooser.js:40
+msgid "Language"
 msgstr ""
 
 #: js/MainScreen.js:252
@@ -354,13 +361,6 @@ msgid "User"
 msgstr ""
 
 #: js/widgets/container/ContainerGrants.js:75
-#: js/widgets/container/ContainerTree.js:205
-#: js/widgets/container/ContainerTree.js:233
-#: js/widgets/container/ContainerTree.js:265
-msgid "Please wait"
-msgstr ""
-
-#: js/widgets/container/ContainerGrants.js:75
 msgid "Updateing Grants"
 msgstr ""
 
@@ -509,15 +509,15 @@ msgstr ""
 msgid "Please Select a Group"
 msgstr ""
 
-#: js/widgets/LangChooser.js:53
+#: js/widgets/LangChooser.js:72
 msgid "setting new language..."
 msgstr ""
 
-#: js/widgets/LangChooser.js:53 js/widgets/LangChooser.js:74
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
 msgid "Please Wait"
 msgstr ""
 
-#: js/widgets/LangChooser.js:74
+#: js/widgets/LangChooser.js:93
 msgid "loading new language..."
 msgstr ""
 
