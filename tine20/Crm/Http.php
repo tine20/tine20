@@ -52,7 +52,6 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();
 
         // get lead data
         $crmJson = new Crm_Json;                       

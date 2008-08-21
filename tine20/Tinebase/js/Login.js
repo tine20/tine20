@@ -12,18 +12,19 @@
 
 Ext.namespace('Tine.Tinebase.Registry');
 
-// turn on validation errors beside the field globally
-Ext.form.Field.prototype.msgTarget = 'side';    
-
 Tine.Login = {
 
     showLoginDialog: function(_defaultUsername, _defaultPassword) {
+        // turn on validation errors beside the field globally
+        Ext.form.Field.prototype.msgTarget = 'side';  
+
     	var loginButtons = [{
             id: 'loginbutton',
             text: _('Login'),
             handler: Tine.Login.loginHandler 
         }];
-        if ( userRegistration === true ) {
+        
+        if ( false &&  userRegistration === true ) {
             loginButtons.push({
                 text: _('Register'),
                 handler: Tine.Login.UserRegistrationHandler

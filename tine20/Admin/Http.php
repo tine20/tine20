@@ -55,8 +55,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->formData = array();
-        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit account";
         $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $encodedAccount .');';
@@ -88,8 +86,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->formData = array();
-
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit group";
         //@todo move Groups.js to Admin.js later
@@ -123,7 +119,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();
         
         $view->jsExecute = 'Tine.Admin.Applications.EditPermissionsDialog.display(' . 
             $encodedApplication . ', ' . $encodedPermissions . ', ' . $encodedRights . ');';
@@ -167,7 +162,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
 
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();
         
         $appList = Zend_Json::encode(Tinebase_Application::getInstance()->getApplications('%')->toArray());
         $view->jsExecute = "Tine.Admin.Tags.EditDialog.display($encodedTag, $appList);";
@@ -207,7 +201,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();
         
         //@todo move Roles.js to Admin.js later
         $view->jsExecute = 'Tine.Admin.Roles.EditDialog.display(' . 

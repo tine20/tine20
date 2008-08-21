@@ -38,17 +38,16 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public function login()
     {
         $view = new Zend_View();
-        $view->title="Tine 2.0";
-
         $view->setScriptPath('Tinebase/views');
-
+        
+        // default credentials
         if(isset(Zend_Registry::get('configFile')->login)) {
             $loginConfig = Zend_Registry::get('configFile')->login;
-            $view->defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
-            $view->defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
+            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
+            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
         } else {
-            $view->defaultUsername = '';
-            $view->defaultPassword = '';
+            $defaultUsername = '';
+            $defaultPassword = '';
         }
 
         // check if registration is active
@@ -59,8 +58,14 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             $view->userRegistration = 0;
         }
         
+        $view->title="Tine 2.0";
+        $view->configData = self::getRegistryData();
+        $view->jsExecute =  "
+           Tine.Login.showLoginDialog('$defaultUsername', '$defaultPassword');
+        ";
+        
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('login.php');
+        echo $view->render('mainscreen.php');
     }
     
     /**
@@ -86,6 +91,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/Tinebase.js',
             'Tinebase/js/Models.js',
             'Tinebase/js/MainScreen.js',
+            'Tinebase/js/Login.js',
             'Tinebase/js/ExceptionDialog.js',
             'Tinebase/js/Container.js',
             // Ext user extensions
@@ -227,16 +233,22 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public static function getRegistryData()
     {
         $locale = Zend_Registry::get('locale');
-        return array(
+        
+        $registryData =  array(
             'timeZone'         => Zend_Registry::get('userTimeZone'),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
                 'region'   => $locale->getCountryTranslation($locale->getRegion())
-            ),
-            'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
-            'accountBackend'   => Tinebase_User::getConfiguredBackend(),
-        );
+        ));
+
+        if (Zend_Registry::isRegistered('currentAccount')) {
+            $registryData += array(    
+                'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
+                'accountBackend'   => Tinebase_User::getConfiguredBackend(),
+            );
+        }
+        return $registryData;
     }
 	/**
 	 * activate user account

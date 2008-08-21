@@ -95,7 +95,6 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->formData = array();
         
         $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
         $view->configData = Tinebase_Http::getRegistryData();

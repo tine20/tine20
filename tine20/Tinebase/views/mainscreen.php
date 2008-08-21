@@ -85,7 +85,6 @@
     // onReady, fired by ExtJS
         Ext.onReady(function(){
             Tine.Tinebase.initFramework();
-            <?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . "; \n" ?>
             <?php if(isset($this->jsExecute)) echo "$this->jsExecute \n" ?>
             window.focus();
     	});

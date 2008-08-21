@@ -215,7 +215,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk sip peer data";
@@ -243,7 +242,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk context data";
@@ -273,7 +271,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk voicemail data";
@@ -308,7 +305,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
        
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom location data";
@@ -337,7 +333,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom software data";
@@ -366,7 +361,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit snom setting data";
@@ -415,7 +409,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->configData['softwareVersions'] = $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray();
@@ -444,7 +437,6 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
         
         $view->configData = Tinebase_Http::getRegistryData();
         $view->title="edit asterisk meetme data";

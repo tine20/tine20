@@ -38,7 +38,6 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();
         
         $tinebaseJson = new Tinebase_Json();
         $view->initialData = array();
