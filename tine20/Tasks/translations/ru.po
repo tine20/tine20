@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-07 15:09+0100\n"
+"PO-Revision-Date: 2008-08-21 14:53+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Вы уверены что хотите удалить выбранное задание"
 msgstr[1] "Вы уверены что хотите удалить выбранные задания"
-msgstr[2] ""
+msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
 
 #: js/Tasks.js:143 js/Tasks.js:272 js/Tasks.js:555 js/Tasks.js:632
 #: js/Tasks.js:657
@@ -91,7 +91,7 @@ msgstr "Процент"
 
 #: js/Tasks.js:452 js/Tasks.js:681
 msgid "Summary"
-msgstr ""
+msgstr "Содержание"
 
 #: js/Tasks.js:460
 msgid "Add a task..."
@@ -123,7 +123,7 @@ msgstr "Ошибки"
 
 #: js/Tasks.js:636
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Пожалуйста, устраните показанные ошибки."
 
 #: js/Tasks.js:643
 msgid "Confirm"
@@ -143,7 +143,7 @@ msgstr "Введите короткое имя..."
 
 #: js/Tasks.js:688
 msgid "Notes"
-msgstr ""
+msgstr "Примечания"
 
 #: js/Tasks.js:690
 msgid "Enter description..."
@@ -161,5 +161,5 @@ msgstr "Число истечения срока"
 msgid "Folder"
 msgstr "Папка"
 
-#~ msgid "Delete tasks"
-#~ msgstr "Удолить задания"
+msgid "Delete tasks"
+msgstr "Удолить задания"

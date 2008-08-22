@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-08-05 17:42+0100\n"
-"PO-Revision-Date: 2008-08-07 12:31+0100\n"
+"PO-Revision-Date: 2008-08-21 13:12+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -186,7 +186,7 @@ msgstr "Автомобильный телефон"
 
 #: js/Addressbook.js:387
 msgid "Pager"
-msgstr ""
+msgstr "Пейджер"
 
 #: js/Addressbook.js:388 js/EditDialog.js:196
 msgid "Phone (private)"
@@ -314,7 +314,7 @@ msgstr "Телефон (офис)"
 
 #: Pdf.php:56
 msgid "Telephone Cellphone"
-msgstr ""
+msgstr "Телефонный толефон"
 
 #: Pdf.php:59
 msgid "Telephone Car"
@@ -326,7 +326,7 @@ msgstr "Телефон (факс)"
 
 #: Pdf.php:65
 msgid "Telephone Page"
-msgstr ""
+msgstr "Пейджер"
 
 #: Pdf.php:68
 msgid "URL"
@@ -350,19 +350,19 @@ msgstr "Личные данные контактов"
 
 #: Pdf.php:94
 msgid "Email Home"
-msgstr ""
+msgstr "Электронная почта"
 
 #: Pdf.php:97
 msgid "Telephone Home"
-msgstr ""
+msgstr "Телефон"
 
 #: Pdf.php:100
 msgid "Telephone Cellphone Private"
-msgstr ""
+msgstr "Личный сотовый телефон"
 
 #: Pdf.php:103
 msgid "Telephone Fax Home"
-msgstr ""
+msgstr "Факс"
 
 #: Pdf.php:106
 msgid "URL Home"
@@ -372,14 +372,14 @@ msgstr ""
 msgid "Other Data"
 msgstr "Другая дата"
 
-#~ msgid "Filter: "
-#~ msgstr "Фильтр:"
+msgid "Filter: "
+msgstr "Фильтр:"
 
-#~ msgid "Search: "
-#~ msgstr "Поиск:"
+msgid "Search: "
+msgstr "Поиск:"
 
-#~ msgid "Name"
-#~ msgstr "Имя"
+msgid "Name"
+msgstr "Имя"
 
-#~ msgid "History"
-#~ msgstr "История"
+msgid "History"
+msgstr "История"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-07 09:25+0100\n"
+"PO-Revision-Date: 2008-08-21 16:22+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -85,11 +85,11 @@ msgstr "показа детали:"
 
 #: js/ExceptionDialog.js:91
 msgid "Sending report..."
-msgstr ""
+msgstr "Сообщение посылается..."
 
 #: js/ExceptionDialog.js:91
 msgid "Please wait a moment"
-msgstr ""
+msgstr "Пожалуйста подождите момент"
 
 #: js/ExceptionDialog.js:116
 msgid "Transmission Completed"
@@ -101,27 +101,27 @@ msgstr "Ваш отчет был отправлен. Спасибо за Ваш�
 
 #: js/Login.js:29
 msgid "Login"
-msgstr ""
+msgstr "вход в систему"
 
 #: js/Login.js:36
 msgid "Register"
-msgstr ""
+msgstr "Регистрироваться"
 
 #: js/Login.js:50
 msgid "Please enter your login data"
-msgstr ""
+msgstr "Пожалуйста введите свои данные входа в систему"
 
 #: js/Login.js:67
 msgid "Username"
-msgstr ""
+msgstr "Имя пользователя"
 
 #: js/Login.js:73
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: js/Login.js:119
 msgid "Logging you in..."
-msgstr ""
+msgstr "Регистрирую Вас в..."
 
 #: js/Login.js:119 js/widgets/container/ContainerGrants.js:75
 #: js/widgets/container/ContainerTree.js:205
@@ -132,7 +132,7 @@ msgstr "Пожалуйста подождите"
 
 #: js/Login.js:130
 msgid "Login successful. Loading Tine 2.0..."
-msgstr ""
+msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
 #: js/Login.js:130 js/MainScreen.js:353
 msgid "Please wait!"
@@ -140,11 +140,11 @@ msgstr "Пожалуйста подождите!"
 
 #: js/Login.js:134
 msgid "Login failure"
-msgstr ""
+msgstr "Регистрация не удался"
 
 #: js/Login.js:135
 msgid "Your username and/or your password are wrong!!!"
-msgstr ""
+msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
 #: js/MainScreen.js:45
 msgid "Change password"
@@ -174,7 +174,7 @@ msgstr "Пользователь"
 #: js/MainScreen.js:96
 #, python-format
 msgid "Timezone: %s"
-msgstr ""
+msgstr "Часовой пояс: %s"
 
 #: js/MainScreen.js:97 js/widgets/LangChooser.js:40
 msgid "Language"
@@ -240,84 +240,86 @@ msgstr "выключаю программу..."
 
 #: js/Tinebase.js:95
 msgid "There Where Errors"
-msgstr ""
+msgstr "Возникли ошибки"
 
 #: js/Tinebase.js:126
 msgid "Connection lost, please check your network!"
-msgstr ""
+msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
-msgstr ""
+msgstr "Помощник регистрации"
 
 #: js/UserRegistration.js:86
 msgid "Given name"
-msgstr ""
+msgstr "Имя"
 
 #: js/UserRegistration.js:97
 msgid "Family name"
-msgstr ""
+msgstr "Фамилия"
 
 #: js/UserRegistration.js:108
 msgid "Login name"
-msgstr ""
+msgstr "Имя пользователя"
 
 #: js/UserRegistration.js:121
 msgid "Emailaddress"
-msgstr ""
+msgstr "Электронный адрес"
 
 #: js/UserRegistration.js:167
 msgid "Congratulations!"
-msgstr ""
+msgstr "Поздравления!"
 
 #: js/UserRegistration.js:167
 msgid ""
 "You have entered all needed information. If you press the Finish button we "
 "will send you the registration email."
 msgstr ""
+"Вы ввели всю информацию. Как только вы нажмете кнопку готово, вам будет "
+"отправлен Подтверждающие электронное письмо."
 
 #: js/widgets/account/ConfigGrid.js:55
 #: js/widgets/container/ContainerGrants.js:128
 msgid "remove account"
-msgstr ""
+msgstr "Уберите счет"
 
 #: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
 #: js/widgets/container/ContainerGrants.js:193
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 #: js/widgets/account/PickerPanel.js:70
 msgid "add account"
-msgstr ""
+msgstr "Добавить счет"
 
 #: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
 msgid "enter searchfilter"
-msgstr ""
+msgstr "Ввести поисковый фильтр"
 
 #: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
 msgid "Search"
-msgstr ""
+msgstr "Поиск"
 
 #: js/widgets/account/PickerPanel.js:258 js/widgets/account/PickerPanel.js:259
 #: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
 msgid "Browse"
-msgstr ""
+msgstr "Листать"
 
 #: js/widgets/AccountpickerPanel.js:103
 msgid "please select an account"
-msgstr ""
+msgstr "Пожалуйста выберите счет"
 
 #: js/widgets/AccountpickerPanel.js:202
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #: js/widgets/AccountpickerPanel.js:208 js/widgets/EditRecord.js:63
 msgid "Apply"
-msgstr ""
+msgstr "Применять"
 
 #: js/widgets/AccountpickerPanel.js:214
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 #: js/widgets/ActivitiesPanel.js:145
 msgid "Add a Note..."
@@ -385,19 +387,19 @@ msgstr "Пользователь"
 
 #: js/widgets/container/ContainerGrants.js:75
 msgid "Updateing Grants"
-msgstr ""
+msgstr "Права сохраняются"
 
 #: js/widgets/container/ContainerGrants.js:117
 msgid "Folder"
-msgstr ""
+msgstr "Папка"
 
 #: js/widgets/container/ContainerGrants.js:160
 msgid "Read"
-msgstr ""
+msgstr "Читать"
 
 #: js/widgets/container/ContainerGrants.js:170
 msgid "Edit"
-msgstr ""
+msgstr "Редактировать"
 
 #: js/widgets/container/ContainerGrants.js:175
 #: js/widgets/container/ContainerTree.js:310
@@ -406,11 +408,11 @@ msgstr "Удалить"
 
 #: js/widgets/container/ContainerGrants.js:226
 msgid "Permissions"
-msgstr ""
+msgstr "Разрешения"
 
 #: js/widgets/container/ContainerSelect.js:80
 msgid "please select a container"
-msgstr ""
+msgstr "Пожалуйста выберите контейнер"
 
 #: js/widgets/container/ContainerTree.js:106
 msgid "All"
@@ -462,7 +464,7 @@ msgstr "Управлять правами доступа"
 
 #: js/widgets/EditRecord.js:74
 msgid "delete"
-msgstr ""
+msgstr "Удолить"
 
 #: js/widgets/grid/FilterModel.js:87
 msgid "contains"
@@ -526,27 +528,27 @@ msgstr "Показать"
 
 #: js/widgets/GridPicker.js:75
 msgid "remove record"
-msgstr ""
+msgstr "Убрать отчет"
 
 #: js/widgets/GroupSelect.js:115
 msgid "Please Select a Group"
-msgstr ""
+msgstr "Пожалуйста выберите группу"
 
 #: js/widgets/LangChooser.js:72
 msgid "setting new language..."
-msgstr ""
+msgstr "Урегулирование нового языка..."
 
 #: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
 msgid "Please Wait"
-msgstr ""
+msgstr "Пожалуйста подождите"
 
 #: js/widgets/LangChooser.js:93
 msgid "loading new language..."
-msgstr ""
+msgstr "загрузка нового языка..."
 
 #: js/widgets/tags/TagCombo.js:37
 msgid "tag name"
-msgstr ""
+msgstr "Название тэга"
 
 #: js/widgets/tags/TagFilter.js:23
 msgid "Tag"
@@ -588,7 +590,7 @@ msgstr[2] "Detach tags"
 
 #: js/widgets/tags/TagsPanel.js:160
 msgid "Edit tag"
-msgstr ""
+msgstr "Редактировать тэг"
 
 #: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
@@ -631,9 +633,9 @@ msgstr[2] ""
 #: js/widgets/tags/TagsPanel.js:230
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Выбранный тэг будет удален и исчезнет из всех записях."
+msgstr[1] "Выбранные тэги будут удалены и исчезнут из всех записях."
+msgstr[2] "Выбранные тэгоф будут удалены и исчезнут из всех записях."
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Please wait a moment..."
@@ -644,7 +646,7 @@ msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Тэг удаляется"
 msgstr[1] "Тэги удаляются"
-msgstr[2] ""
+msgstr[2] "Тэгоф удаляются"
 
 #: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
 #: js/widgets/tags/TagsPanel.js:392
@@ -683,12 +685,14 @@ msgstr "Поиск..."
 msgid "Color"
 msgstr "Цвет"
 
-#~ msgid "container"
-#~ msgstr "контейнер"
+msgid "container"
+msgstr "контейнер"
 
-#~ msgid "The selected tag will be deleted and disapear for all entries"
-#~ msgid_plural ""
-#~ "The selected tags will be removed and disapear for all entries"
-#~ msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
-#~ msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
-#~ msgstr[2] ""
+msgid "The selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
+msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
+msgstr[2] ""
+
+#~ msgid "Language: "
+#~ msgstr "Язык:"
