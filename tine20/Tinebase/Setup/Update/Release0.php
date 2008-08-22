@@ -847,7 +847,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         // get all links
         $linksTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX.'links'));
-        echo 'fetching links ... <br/>';
+        echo "fetching links ... <br/>\n";
         $links = $linksTable->fetchAll();
         
         // create relations from links
@@ -856,10 +856,11 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
 
             if ($link->link_app1 === 'crm') {
                 
-                switch ($link->link_app2) {
+                switch (strtolower($link->link_app2)) {
                     case 'tasks':
                         $relatedModel = 'Tasks_Model_Task';
                         $backend = Tasks_Backend_Factory::SQL;
+                        $degree = Tinebase_Relation_Model_Relation::DEGREE_SIBLING;
                         $type = 'TASK';
                         break;
                     case 'addressbook':
@@ -868,18 +869,21 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         switch ($link->link_remark) {
                             case 'account':
                                 $type = 'RESPONSIBLE';
+                                $degree = Tinebase_Relation_Model_Relation::DEGREE_CHILD;
                                 break;
                             case 'customer':
                                 $type = 'CUSTOMER';
+                                $degree = Tinebase_Relation_Model_Relation::DEGREE_SIBLING;
                                 break;
                             case 'partner':
                                 $type = 'PARTNER';
+                                $degree = Tinebase_Relation_Model_Relation::DEGREE_SIBLING;
                                 break;
                         }
                         break;
                         
                     default:
-                        echo 'link type (' . $link->link_app2 . ') not supported<br/>';
+                        echo 'link type (' . $link->link_app2 . ") not supported<br/>\n";
                 }                
                 
                 if (isset($relatedModel) && isset($backend)) {
@@ -887,7 +891,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         'own_model'              => 'Crm_Model_Lead',
                         'own_backend'            => 'SQL',
                         'own_id'                 => $link->link_id1,
-                        'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                        'own_degree'             => $degree,
                         'related_model'          => $relatedModel,
                         'related_backend'        => $backend,
                         'related_id'             => $link->link_id2,
@@ -899,19 +903,19 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             }
         }
         
-        echo 'creating relations ...<br/>';
-
+        echo "creating relations ...<br/>\n";
+        
         $relationsBackend = new Tinebase_Relation_Backend_Sql();
         foreach ($relationsByLeadId as $leadId => $relations) {
             foreach ($relations as $relation) {
                 try {
                     $relationsBackend->addRelation($relation);
                 } catch (Exception $e) {
-                    echo 'do not add duplicate relation ' . $relation->own_id . '-' . $relation->related_id . '...<br/>';
+                    // cweiss 2008-08-25 this duplicates come from an earlier upgrading failure don't confuse user with verbosity ;-) 
+                    // echo 'do not add duplicate relation ' . $relation->own_id . '-' . $relation->related_id . "...<br/>\n";
                 }
             }
         }
-        
         $this->setApplicationVersion('Tinebase', '0.10');        
     }
 
