@@ -44,7 +44,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'SQL',
             'own_id'                 => '268d586e46aad336de8fa2530b5b8faf921e494d',
-            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_PARENT,
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
             'related_model'          => 'Tasks_Model_Task',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => '8a572723e867dd73dd68d1740dd94f586eff5432',
@@ -54,7 +54,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'SQL',
             'own_id'                 => '268d586e46aad336de8fa2530b5b8faf921e494d',
-            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_PARENT,
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
             'related_model'          => 'Addressbook_Model_Contact',
             'related_backend'        => Addressbook_Backend_Factory::SQL,
             'related_id'             => 'ad59dd6d2e75aa0aca0abf2ab46b55bdcb0d6b18',
@@ -64,11 +64,11 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'own_model'              => 'Tasks_Model_Task',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => '8a572723e867dd73dd68d1740dd94f586eff5432',
-            'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
             'related_backend'        => Addressbook_Backend_Factory::SQL,
             'related_id'             => 'ad59dd6d2e75aa0aca0abf2ab46b55bdcb0d6b18',
-            'type'                   => Tinebase_Relation_Model_Relation::TYPE_MANUAL,
+            'type'                   => Tinebase_Model_Relation::TYPE_MANUAL,
             'remark'                 => 'Manually created relation by PHPUNIT'
         ),
     );
@@ -102,7 +102,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         $this->object = new Tinebase_Relation_Backend_Sql();
         foreach ($this->relationData as $num => $relation) {
-        	$this->relations[$num] = $this->object->addRelation(new Tinebase_Relation_Model_Relation($relation, true));
+        	$this->relations[$num] = $this->object->addRelation(new Tinebase_Model_Relation($relation, true));
         }
     }
 

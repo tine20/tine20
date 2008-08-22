@@ -152,7 +152,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     'own_model'              => 'Crm_Model_Lead',
                     'own_backend'            => Crm_Backend_Factory::SQL,
                     'own_id'                 => (isset($decodedLead['id'])) ? $decodedLead['id'] : 0,
-                    'own_degree'             => Tinebase_Relation_Model_Relation::DEGREE_SIBLING,
+                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'type'                   => $relation['type'],
                     'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
                     'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : array(),

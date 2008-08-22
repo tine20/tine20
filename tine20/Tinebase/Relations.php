@@ -67,7 +67,7 @@ class Tinebase_Relations
      */
     public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreAcl=false)
     {
-        $relations = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation', $_relationData, true);
+        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', $_relationData, true);
         // own id sanitising
         $relations->own_model   = $_model;
         $relations->own_backend = $_backend;
@@ -129,7 +129,7 @@ class Tinebase_Relations
      * @param  string $_backend   own backend to get relations for
      * @param  string $_id        own id to get relations for 
      * @param  bool   $_ignoreAcl get relations without checking permissions
-     * @return Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
     public function getRelations($_model, $_backend, $_id, $_ignoreAcl=false)
     {
@@ -153,13 +153,13 @@ class Tinebase_Relations
      * converts related_records into their appropriate record objects
      * @todo move to model->setFromJson
      * 
-     * @param  Tinebase_Relation_Model_Relation|Tinebase_Record_RecordSet
+     * @param  Tinebase_Model_Relation|Tinebase_Record_RecordSet
      * @return void
      */
     protected function _relatedRecordToObject($_relations)
     {
         if(! $_relations instanceof Tinebase_Record_RecordSet) {
-            $_relations = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation', array($_relations));
+            $_relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array($_relations));
         }
         
         foreach ($_relations as $relation) {
@@ -179,7 +179,7 @@ class Tinebase_Relations
     /**
      * creates application records which do not exist
      * 
-     * @param  Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
+     * @param  Tinebase_Record_RecordSet of Tinebase_Model_Relation
      * @return void
      */
     protected function _setAppRecord($_relation)
@@ -214,7 +214,7 @@ class Tinebase_Relations
      * 
      * NOTE: With this, READ ACL is implicitly checked as non readable records woun't get retuned!
      * 
-     * @param  Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
+     * @param  Tinebase_Record_RecordSet of Tinebase_Model_Relation
      * @return void
      */
     protected function resolveAppRecords($_relations)
@@ -223,7 +223,7 @@ class Tinebase_Relations
         $modelMap = array();
         foreach ($_relations as $relation) {
             if (!array_key_exists($relation->related_model, $modelMap)) {
-                $modelMap[$relation->related_model] = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation');
+                $modelMap[$relation->related_model] = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
             }
             $modelMap[$relation->related_model]->addRecord($relation);
         }
@@ -252,8 +252,8 @@ class Tinebase_Relations
     /**
      * adds a new relation
      * 
-     * @param  Tinebase_Relation_Model_Relation $_relation 
-     * @return Tinebase_Relation_Model_Relation the new relation
+     * @param  Tinebase_Model_Relation $_relation 
+     * @return Tinebase_Model_Relation the new relation
      */
     protected function _addRelation($_relation)
     {
@@ -268,8 +268,8 @@ class Tinebase_Relations
     /**
      * update an existing relation
      * 
-     * @param  Tinebase_Relation_Model_Relation $_relation 
-     * @return Tinebase_Relation_Model_Relation the updated relation
+     * @param  Tinebase_Model_Relation $_relation 
+     * @return Tinebase_Model_Relation the updated relation
      */
     protected function _updateRelation($_relation)
     {

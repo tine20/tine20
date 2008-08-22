@@ -18,7 +18,7 @@
  * It acts as a gneralised storage backend for the records relation property of these records.
  * 
  * Relations between records have a certain degree (PARENT, CHILD and SIBLING). This degrees are defined
- * in Tinebase_Relation_Model_Relation. Moreover Relations are of a type which is defined by the application defining 
+ * in Tinebase_Model_Relation. Moreover Relations are of a type which is defined by the application defining 
  * the relation. In case of users manually created relations this type is 'MANUAL'. This manually created
  * relatiions can also hold a free-form remark.
  * 
@@ -53,8 +53,8 @@ class Tinebase_Relation_Backend_Sql
     /**
      * adds a new relation
      * 
-     * @param  Tinebase_Relation_Model_Relation $_relation 
-     * @return Tinebase_Relation_Model_Relation the new relation
+     * @param  Tinebase_Model_Relation $_relation 
+     * @return Tinebase_Model_Relation the new relation
      */
     public function addRelation( $_relation )
     {
@@ -78,8 +78,8 @@ class Tinebase_Relation_Backend_Sql
     /**
      * update an existing relation
      * 
-     * @param  Tinebase_Relation_Model_Relation $_relation 
-     * @return Tinebase_Relation_Model_Relation the updated relation
+     * @param  Tinebase_Model_Relation $_relation 
+     * @return Tinebase_Model_Relation the updated relation
      */
     public function updateRelation( $_relation )
     {
@@ -105,7 +105,7 @@ class Tinebase_Relation_Backend_Sql
     /**
      * breaks a relation
      * 
-     * @param Tinebase_Relation_Model_Relation $_relation 
+     * @param Tinebase_Model_Relation $_relation 
      * @return void 
      */
     public function breakRelation( $_id )
@@ -156,7 +156,7 @@ class Tinebase_Relation_Backend_Sql
      * @param  string $_degree   only breaks relations of given degree
      * @param  string $_type     only breaks relations of given type
      * @param  boolean $_returnAll gets all relations (default: only get not deleted/broken relations)
-     * @return Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
     public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false  )
     {
@@ -179,9 +179,9 @@ class Tinebase_Relation_Backend_Sql
         
        // Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
         
-        $relations = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation');
+        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         foreach ($this->_db->fetchAll($where) as $relation) {
-        	$relations->addRecord(new Tinebase_Relation_Model_Relation($relation->toArray(), true));
+        	$relations->addRecord(new Tinebase_Model_Relation($relation->toArray(), true));
         }
    		return $relations; 
     } // end of member function getAllRelations
@@ -194,7 +194,7 @@ class Tinebase_Relation_Backend_Sql
      * @param  string $_ownBackend
      * @param  string $_ownId
      * @param  bool   $_returnBroken
-     * @return Tinebase_Relation_Model_Relation
+     * @return Tinebase_Model_Relation
      */
     public function getRelation($_id, $_ownModel, $_ownBackend, $_ownId, $_returnBroken = false)
     {
@@ -210,7 +210,7 @@ class Tinebase_Relation_Backend_Sql
     	$relationRow = $this->_db->fetchRow($where);
     	
     	if($relationRow) {
-    		return new Tinebase_Relation_Model_Relation($relationRow->toArray(), true);
+    		return new Tinebase_Model_Relation($relationRow->toArray(), true);
     	} else {
     		throw new Tinebase_Record_Exception_NotDefined("No relation found.");
     	}
@@ -257,11 +257,11 @@ class Tinebase_Relation_Backend_Sql
         $data['related_backend'] = $_data['own_backend'];
         $data['related_id']      = $_data['own_id'];
         switch ($_data['own_degree']) {
-            case Tinebase_Relation_Model_Relation::DEGREE_PARENT:
-                $data['own_degree'] = Tinebase_Relation_Model_Relation::DEGREE_CHILD;
+            case Tinebase_Model_Relation::DEGREE_PARENT:
+                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_CHILD;
                 break;
-            case Tinebase_Relation_Model_Relation::DEGREE_CHILD:
-                $data['own_degree'] = Tinebase_Relation_Model_Relation::DEGREE_PARENT;
+            case Tinebase_Model_Relation::DEGREE_CHILD:
+                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_PARENT;
                 break;
         }
         return $data;

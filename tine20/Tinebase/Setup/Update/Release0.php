@@ -860,7 +860,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     case 'tasks':
                         $relatedModel = 'Tasks_Model_Task';
                         $backend = Tasks_Backend_Factory::SQL;
-                        $degree = Tinebase_Relation_Model_Relation::DEGREE_SIBLING;
+                        $degree = Tinebase_Model_Relation::DEGREE_SIBLING;
                         $type = 'TASK';
                         break;
                     case 'addressbook':
@@ -869,15 +869,15 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         switch ($link->link_remark) {
                             case 'account':
                                 $type = 'RESPONSIBLE';
-                                $degree = Tinebase_Relation_Model_Relation::DEGREE_CHILD;
+                                $degree = Tinebase_Model_Relation::DEGREE_CHILD;
                                 break;
                             case 'customer':
                                 $type = 'CUSTOMER';
-                                $degree = Tinebase_Relation_Model_Relation::DEGREE_SIBLING;
+                                $degree = Tinebase_Model_Relation::DEGREE_SIBLING;
                                 break;
                             case 'partner':
                                 $type = 'PARTNER';
-                                $degree = Tinebase_Relation_Model_Relation::DEGREE_SIBLING;
+                                $degree = Tinebase_Model_Relation::DEGREE_SIBLING;
                                 break;
                         }
                         break;
@@ -887,7 +887,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 }                
                 
                 if (isset($relatedModel) && isset($backend)) {
-                    $relationsByLeadId[$link->link_id1][] = new Tinebase_Relation_Model_Relation(array(
+                    $relationsByLeadId[$link->link_id1][] = new Tinebase_Model_Relation(array(
                         'own_model'              => 'Crm_Model_Lead',
                         'own_backend'            => 'SQL',
                         'own_id'                 => $link->link_id1,

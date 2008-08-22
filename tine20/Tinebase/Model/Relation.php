@@ -11,13 +11,13 @@
  */
 
 /**
- * Tinebase_Relation_Model_Relation
+ * Tinebase_Model_Relation
  * Model of a record relation
  * 
  * @package     Tinebase
  * @subpackage  Record
  */
-class Tinebase_Relation_Model_Relation extends Tinebase_Record_Abstract 
+class Tinebase_Model_Relation extends Tinebase_Record_Abstract 
 {
     /**
      * degree parent
@@ -88,5 +88,5 @@ class Tinebase_Relation_Model_Relation extends Tinebase_Record_Abstract
     }
     */
 
-} // end of Tinebase_Relation_Model_Relation
+} // end of Tinebase_Model_Relation
 ?>
