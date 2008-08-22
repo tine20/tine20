@@ -122,7 +122,7 @@ class Setup_Import_Egw14
         $groups = $groupsTable->fetchAll($where);
         
         foreach($groups as $group) {
-            $tineGroup = new Tinebase_Group_Model_Group(array(
+            $tineGroup = new Tinebase_Model_Group(array(
                 'id'            => $group->account_id,
                 'name'          => $group->account_lid,
                 'description'   => 'imported from eGroupWare 1.4'

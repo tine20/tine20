@@ -266,7 +266,7 @@ class Tinebase_Container
                 $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
                 break;
             case 'group':
-                $accountId = Tinebase_Group_Model_Group::convertGroupIdToInt($_accountId);
+                $accountId = Tinebase_Model_Group::convertGroupIdToInt($_accountId);
                 break;
             case 'anyone':
                 $accountId = 0;

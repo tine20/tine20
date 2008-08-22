@@ -102,7 +102,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function getGroupMembers($_groupId)
     {
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $members = array();
         
@@ -149,7 +149,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function addGroupMember($_groupId, $_accountId)
     {
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
 
         $data = array(
@@ -173,7 +173,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function removeGroupMember($_groupId, $_accountId)
     {
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         $colNameGroup = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
         $colNameAccount = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
@@ -193,7 +193,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @param string $_groupName
      * @return unknown
      */
-    public function addGroup(Tinebase_Group_Model_Group $_group)
+    public function addGroup(Tinebase_Model_Group $_group)
     {
         if(!$_group->isValid()) {
             throw(new Exception('invalid group object'));
@@ -225,9 +225,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @param string $_groupName
      * @return unknown
      */
-    public function updateGroup(Tinebase_Group_Model_Group $_group)
+    public function updateGroup(Tinebase_Model_Group $_group)
     {
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_group);
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
         
         $data = array(
             'name'          => $_group->name,
@@ -246,7 +246,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * delete groups
      *
-     * @param int|Tinebase_Group_Model_Group $_groupId
+     * @param int|Tinebase_Model_Group $_groupId
      * @return void
      */
     public function deleteGroups($_groupId)
@@ -255,10 +255,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         if(is_array($_groupId) or $_groupId instanceof Tinebase_Record_RecordSet) {
             foreach($_groupId as $groupId) {
-                $groupIds[] = Tinebase_Group_Model_Group::convertGroupIdToInt($groupId);
+                $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($groupId);
             }
         } else {
-            $groupIds[] = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+            $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         }        
         
         try {
@@ -286,7 +286,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {        
@@ -306,7 +306,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         $rows = $this->groupsTable->fetchAll($select);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Group_Model_Group', $rows->toArray());
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $rows->toArray());
         
         return $result;
     }
@@ -315,7 +315,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * get group by name
      *
      * @param string $_name
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
     public function getGroupByName($_name)
     {        
@@ -330,7 +330,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             throw new Tinebase_Record_Exception_NotDefined('group not found');
         }
         
-        $result = new Tinebase_Group_Model_Group($row->toArray());
+        $result = new Tinebase_Model_Group($row->toArray());
         
         return $result;
     }
@@ -339,11 +339,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * get group by id
      *
      * @param string $_name
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
     public function getGroupById($_groupId)
     {   
-        $groupdId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);     
+        $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         $select = $this->groupsTable->select();
 
@@ -356,7 +356,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             throw new Tinebase_Record_Exception_NotDefined('group not found');
         }
 
-        $result = new Tinebase_Group_Model_Group($row->toArray());
+        $result = new Tinebase_Model_Group($row->toArray());
         
         return $result;
     }

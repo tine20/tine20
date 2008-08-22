@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Group
  */
-class Tinebase_Group_Model_Group extends Tinebase_Record_Abstract
+class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -53,14 +53,14 @@ class Tinebase_Group_Model_Group extends Tinebase_Record_Abstract
     protected $_identifier = 'id';    
     
     /**
-     * converts a int, string or Tinebase_Group_Model_Group to a groupid
+     * converts a int, string or Tinebase_Model_Group to a groupid
      *
-     * @param int|string|Tinebase_Group_Model_Group $_groupId the groupid to convert
+     * @param int|string|Tinebase_Model_Group $_groupId the groupid to convert
      * @return int
      */
     static public function convertGroupIdToInt($_groupId)
     {
-        if($_groupId instanceof Tinebase_Group_Model_Group) {
+        if($_groupId instanceof Tinebase_Model_Group) {
             if(empty($_groupId->id)) {
                 throw new Exception('no group id set');
             }

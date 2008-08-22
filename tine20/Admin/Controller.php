@@ -339,7 +339,7 @@ class Admin_Controller
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function getGroups($filter, $sort, $dir, $start, $limit)
     {
@@ -352,7 +352,7 @@ class Admin_Controller
      * fetch one group identified by groupid
      *
      * @param int $_groupId
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
     public function getGroup($_groupId)
     {
@@ -370,12 +370,12 @@ class Admin_Controller
    /**
      * add new group
      *
-     * @param Tinebase_Group_Model_Group $_group
+     * @param Tinebase_Model_Group $_group
      * @param array $_groupMembers
      * 
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
-    public function AddGroup(Tinebase_Group_Model_Group $_group, array $_groupMembers = array ())
+    public function AddGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -391,12 +391,12 @@ class Admin_Controller
    /**
      * update existing group
      *
-     * @param Tinebase_Group_Model_Group $_group
+     * @param Tinebase_Model_Group $_group
      * @param array $_groupMembers
      * 
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
-    public function UpdateGroup(Tinebase_Group_Model_Group $_group, array $_groupMembers = array ())
+    public function UpdateGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         

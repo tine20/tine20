@@ -101,7 +101,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function getGroupMembers($_groupId)
     {
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);     
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         try {
             $groupMembers = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('member', 'memberuid'));
@@ -137,7 +137,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * get group by name
      *
      * @param string $_name
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
     public function getGroupByName($_name)
     {        
@@ -149,7 +149,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             throw new Tinebase_Record_Exception_NotDefined('group not found');
         }
 
-        $result = new Tinebase_Group_Model_Group(array(
+        $result = new Tinebase_Model_Group(array(
             'id'            => $group['gidnumber'][0],
             'name'          => $group['cn'][0],
             'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
@@ -162,11 +162,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * get group by id
      *
      * @param string $_name
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
     public function getGroupById($_groupId)
     {   
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);     
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         try {
             $group = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('cn','description','gidnumber'));
@@ -174,7 +174,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             throw new Tinebase_Record_Exception_NotDefined('group not found');
         }
 
-        $result = new Tinebase_Group_Model_Group(array(
+        $result = new Tinebase_Model_Group(array(
             'id'            => $group['gidnumber'][0],
             'name'          => $group['cn'][0],
             'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
@@ -191,7 +191,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {        
@@ -206,10 +206,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $groups = $this->_ldap->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, $filter, array('cn','description','gidnumber'), 'cn');
         
-        $result = new Tinebase_Record_RecordSet('Tinebase_Group_Model_Group');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
         
         foreach($groups as $group) {
-            $groupObject = new Tinebase_Group_Model_Group(array(
+            $groupObject = new Tinebase_Model_Group(array(
                 'id'            => $group['gidnumber'][0],
                 'name'          => $group['cn'][0],
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
@@ -263,7 +263,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * @param string $_groupName
      * @return unknown
      */
-    public function addGroup(Tinebase_Group_Model_Group $_group) 
+    public function addGroup(Tinebase_Model_Group $_group) 
     {
         throw new Exception('not yet implemented');
     }
@@ -271,10 +271,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * updates an existing group
      *
-     * @param Tinebase_Group_Model_Group $_account
-     * @return Tinebase_Group_Model_Group
+     * @param Tinebase_Model_Group $_account
+     * @return Tinebase_Model_Group
      */
-    public function updateGroup(Tinebase_Group_Model_Group $_group) 
+    public function updateGroup(Tinebase_Model_Group $_group) 
     {
         throw new Exception('not yet implemented');
     }

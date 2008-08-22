@@ -102,15 +102,15 @@ abstract class Tinebase_Group_Abstract
      * @param string $_groupName
      * @return unknown
      */
-    abstract public function addGroup(Tinebase_Group_Model_Group $_group);
+    abstract public function addGroup(Tinebase_Model_Group $_group);
     
     /**
      * updates an existing group
      *
-     * @param Tinebase_Group_Model_Group $_account
-     * @return Tinebase_Group_Model_Group
+     * @param Tinebase_Model_Group $_account
+     * @return Tinebase_Model_Group
      */
-    abstract public function updateGroup(Tinebase_Group_Model_Group $_group);
+    abstract public function updateGroup(Tinebase_Model_Group $_group);
 
     /**
      * remove groups
@@ -124,7 +124,7 @@ abstract class Tinebase_Group_Abstract
      * get group by id
      *
      * @param int $_groupId
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
     abstract public function getGroupById($_groupId);
     
@@ -132,14 +132,14 @@ abstract class Tinebase_Group_Abstract
      * get group by name
      *
      * @param string $_groupName
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      */
     abstract public function getGroupByName($_groupName);
 
     /**
      * get default group
      *
-     * @return Tinebase_Group_Model_Group
+     * @return Tinebase_Model_Group
      * 
      * @todo    add to unit tests
      */
@@ -171,7 +171,7 @@ abstract class Tinebase_Group_Abstract
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     abstract public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL);
  }

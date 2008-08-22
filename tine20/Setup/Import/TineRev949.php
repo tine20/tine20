@@ -160,7 +160,7 @@ class Setup_Import_TineRev949
         
         echo "Import Groups from table " . $this->oldTablePrefix.'accounts' ." ... ";
         foreach($groups as $group) {
-            $tineGroup = new Tinebase_Group_Model_Group(array(
+            $tineGroup = new Tinebase_Model_Group(array(
                 'id'            => $group->account_id,
                 'name'          => ( isset($groupMapping[$group->account_lid]) ) ? $groupMapping[$group->account_lid] : $group->account_lid,
                 'description'   => 'imported'

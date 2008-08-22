@@ -431,7 +431,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             unset($decodedGroupData['id']);
         }
         
-        $group = new Tinebase_Group_Model_Group();
+        $group = new Tinebase_Model_Group();
         
         try {
             $group->setFromArray($decodedGroupData);

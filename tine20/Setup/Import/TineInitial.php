@@ -55,14 +55,14 @@ class Setup_Import_TineInitial
         # add the admin group
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
 
-        $adminGroup = new Tinebase_Group_Model_Group(array(
+        $adminGroup = new Tinebase_Model_Group(array(
             'name'          => $configAdminGroupName->value,
             'description'   => 'Group of administrative accounts'
         ));
         $adminGroup = $groupsBackend->addGroup($adminGroup);
 
         # add the user group
-        $userGroup = new Tinebase_Group_Model_Group(array(
+        $userGroup = new Tinebase_Model_Group(array(
             'name'          => $configUserGroupName->value,
             'description'   => 'Group of user accounts'
         ));

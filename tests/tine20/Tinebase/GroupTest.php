@@ -49,19 +49,19 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objects['initialGroup'] = new Tinebase_Group_Model_Group(array(
+        $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
             'id'            => 12,
             'name'          => 'tine20phpunit',
             'description'   => 'initial group'
         )); 
         
-        $this->objects['updatedGroup'] = new Tinebase_Group_Model_Group(array(
+        $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
             'id'            => 12,
             'name'          => 'tine20phpunit updated',
             'description'   => 'updated group'
         )); 
 
-        $this->objects['noIdGroup'] = new Tinebase_Group_Model_Group(array(
+        $this->objects['noIdGroup'] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit noid',
             'description'   => 'noid group'
         )); 
@@ -259,7 +259,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_Group_Model_Group::convertGroupIdToInt (0);
+        Tinebase_Model_Group::convertGroupIdToInt (0);
   
     }
 
@@ -271,7 +271,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_Group_Model_Group::convertGroupIdToInt ( $this->objects['noIdGroup'] );
+        Tinebase_Model_Group::convertGroupIdToInt ( $this->objects['noIdGroup'] );
   
     }
 }
