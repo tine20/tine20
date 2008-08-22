@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  */
-class Tinebase_Tags_Model_FullTag extends Tinebase_Tags_Model_Tag
+class Tinebase_Model_FullTag extends Tinebase_Model_Tag
 {
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {

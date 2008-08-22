@@ -441,14 +441,14 @@ class Admin_Controller
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Tags_Model_Tag
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Tag
      */
     public function getTags($query, $sort, $dir, $start, $limit)
     {
-        $filter = new Tinebase_Tags_Model_TagFilter(array(
+        $filter = new Tinebase_Model_TagFilter(array(
             'name'        => '%' . $query . '%',
             'description' => '%' . $query . '%',
-            'type'        => Tinebase_Tags_Model_Tag::TYPE_SHARED
+            'type'        => Tinebase_Model_Tag::TYPE_SHARED
         ));
         $paging = new Tinebase_Model_Pagination(array(
             'start' => $start,
@@ -464,12 +464,12 @@ class Admin_Controller
      * fetch one tag identified by tagid
      *
      * @param int $_tagId
-     * @return Tinebase_Tags_Model_FullTag
+     * @return Tinebase_Model_FullTag
      */
     public function getTag($_tagId)
     {
         $tag = Tinebase_Tags::getInstance()->getTagsById($_tagId);
-        $fullTag = new Tinebase_Tags_Model_FullTag($tag[0]->toArray(), true);
+        $fullTag = new Tinebase_Model_FullTag($tag[0]->toArray(), true);
         $fullTag->rights =  Tinebase_Tags::getInstance()->getRights($_tagId);
         $fullTag->contexts = Tinebase_Tags::getInstance()->getContexts($_tagId);
         
@@ -479,15 +479,15 @@ class Admin_Controller
    /**
      * add new tag
      *
-     * @param  Tinebase_Tags_Model_FullTag $_tag
-     * @return Tinebase_Tags_Model_FullTag
+     * @param  Tinebase_Model_FullTag $_tag
+     * @return Tinebase_Model_FullTag
      */
-    public function AddTag(Tinebase_Tags_Model_FullTag $_tag)
+    public function AddTag(Tinebase_Model_FullTag $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
-        $_tag->type = Tinebase_Tags_Model_Tag::TYPE_SHARED;
-        $newTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
+        $_tag->type = Tinebase_Model_Tag::TYPE_SHARED;
+        $newTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag($_tag->toArray(), true));
 
         $_tag->rights->tag_id = $newTag->getId();
         Tinebase_Tags::getInstance()->setRights($_tag->rights);
@@ -499,14 +499,14 @@ class Admin_Controller
    /**
      * update existing tag
      *
-     * @param  Tinebase_Tags_Model_FullTag $_tag
-     * @return Tinebase_Tags_Model_FullTag
+     * @param  Tinebase_Model_FullTag $_tag
+     * @return Tinebase_Model_FullTag
      */
-    public function UpdateTag(Tinebase_Tags_Model_FullTag $_tag)
+    public function UpdateTag(Tinebase_Model_FullTag $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
-        Tinebase_Tags::getInstance()->updateTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
+        Tinebase_Tags::getInstance()->updateTag(new Tinebase_Model_Tag($_tag->toArray(), true));
         
         $_tag->rights->tag_id = $_tag->getId();
         Tinebase_Tags::getInstance()->purgeRights($_tag->getId());

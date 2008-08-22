@@ -348,27 +348,27 @@ class Setup_Import_Egw14
             // get categories -> tags
             if ( !empty($contact->cat_id) ) {
                 $catIds = explode ( ',', $contact->cat_id );
-                $filter = new Tinebase_Tags_Model_TagFilter(array(
+                $filter = new Tinebase_Model_TagFilter(array(
                     'name'        => '%',
                     'application' => 'Addressbook',
                     //'owner'       => $owner,
                 ));
                 $paging = new Tinebase_Model_Pagination();
                     
-                $contactTags = new Tinebase_Record_RecordSet ('Tinebase_Tags_Model_Tag');
+                $contactTags = new Tinebase_Record_RecordSet ('Tinebase_Model_Tag');
                 foreach ( $catIds as $catId ) {
                     if ( isset($categories[$catId]) ) {
                         $filter->name = $categories[$catId]->cat_name;
                         $tags = Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray();
                         if ( empty($tags) ) {
-                            $tag = new Tinebase_Tags_Model_Tag (array(
-                                'type'  => Tinebase_Tags_Model_Tag::TYPE_SHARED,
+                            $tag = new Tinebase_Model_Tag (array(
+                                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
                                 'name'  => $categories[$catId]->cat_name,
                             ));
                             $tag = Tinebase_Tags::getInstance()->createTag($tag);
                             $contactTags->addRecord($tag);
                         } else {
-                            $contactTags->addRecord(new Tinebase_Tags_Model_Tag($tags[0]));
+                            $contactTags->addRecord(new Tinebase_Model_Tag($tags[0]));
                         }
                     }
                 }        

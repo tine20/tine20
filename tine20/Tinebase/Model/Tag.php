@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  */
-class Tinebase_Tags_Model_Tag extends Tinebase_Record_Abstract
+class Tinebase_Model_Tag extends Tinebase_Record_Abstract
 {
     /**
      * Type of a shared tag

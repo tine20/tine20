@@ -18,7 +18,7 @@
  * @package    Tinebase
  * @subpackage Tags
  */
-class Tinebase_Tags_Model_TagFilter extends Tinebase_Record_Abstract
+class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -44,7 +44,7 @@ class Tinebase_Tags_Model_TagFilter extends Tinebase_Record_Abstract
         'description'          => array('allowEmpty' => true),
         'type'                 => array('presence'   => 'required',
                                         'allowEmpty' => true,
-                                        'InArray'    => array(Tinebase_Tags_Model_Tag::TYPE_PERSONAL, Tinebase_Tags_Model_Tag::TYPE_SHARED),
+                                        'InArray'    => array(Tinebase_Model_Tag::TYPE_PERSONAL, Tinebase_Model_Tag::TYPE_SHARED),
                                         'default'    => ''
                                   ),
     );

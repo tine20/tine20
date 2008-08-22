@@ -47,8 +47,8 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     
     public function testCreateTags()
     {
-        $sharedTag = new Tinebase_Tags_Model_Tag(array(
-            'type'  => Tinebase_Tags_Model_Tag::TYPE_SHARED,
+        $sharedTag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
             'name'  => 'tag::shared',
             'description' => 'this is a shared tag',
             'color' => '#009B31',
@@ -56,8 +56,8 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         $savedSharedTag = $this->_instance->createTag($sharedTag);
         $this->assertEquals($sharedTag->name, $savedSharedTag->name);
         
-        $personalTag = new Tinebase_Tags_Model_Tag(array(
-            'type'  => Tinebase_Tags_Model_Tag::TYPE_PERSONAL,
+        $personalTag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
             'name'  => 'tag::personal',
             'description' => 'this is a personal tag of account 1',
             'color' => '#FF0000',
@@ -73,7 +73,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     
     public function testSearchTags()
     {
-        $filter = new Tinebase_Tags_Model_TagFilter(array(
+        $filter = new Tinebase_Model_TagFilter(array(
             'name' => 'tag::%'
         ));
         $paging = new Tinebase_Model_Pagination();

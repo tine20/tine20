@@ -179,7 +179,7 @@ class Tinebase_Json
     public function saveTag($tag)
     {
         $tagData = Zend_Json::decode($tag);
-        $inTag = new Tinebase_Tags_Model_Tag($tagData);
+        $inTag = new Tinebase_Model_Tag($tagData);
         
         if (strlen($inTag->getId()) < 40) {
             Zend_Registry::get('logger')->debug('creating tag: ' . print_r($inTag->toArray(), true));
@@ -200,7 +200,7 @@ class Tinebase_Json
      */
     public function getTags($context)
     {
-        $filter = new Tinebase_Tags_Model_TagFilter(array(
+        $filter = new Tinebase_Model_TagFilter(array(
             'name'        => '%',
             'application' => $context,
         ));
@@ -224,7 +224,7 @@ class Tinebase_Json
      */
     public function searchTags($query, $context, $start=0, $limit=0)
     {
-        $filter = new Tinebase_Tags_Model_TagFilter(array(
+        $filter = new Tinebase_Model_TagFilter(array(
             'name'        => $query . '%',
             'application' => $context,
         ));
