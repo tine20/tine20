@@ -60,7 +60,7 @@ Tine.Login = {
                     xtype: 'panel',
                     width: 250,
                     border: false,
-                    html: '<img src="http://stats.egroupware20.org/tine_logo_enjoy.gif" width="250" height="43"/><br /><br />'
+                    html: '<img src="http://stats.tine20.org/tine_logo_enjoy.gif" width="250" height="43"/><br /><br />'
                 }, new Tine.widgets.LangChooser({
                     
                 }), {
