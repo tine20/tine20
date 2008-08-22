@@ -60,7 +60,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'description'   => 'updated group'
         )); 
             	
-        $this->objects['account'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['account'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
@@ -72,7 +72,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        $this->objects['accountUpdate'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['accountUpdate'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunitup',
             'accountDisplayName'    => 'tine20phpunit',

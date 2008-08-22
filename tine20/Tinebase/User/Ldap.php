@@ -93,10 +93,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param int $_start
      * @param int $_limit
      * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
-     * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_User
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
      */
     public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, 
-        $_limit = NULL, $_accountClass = 'Tinebase_User_Model_User')
+        $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {        
         if (!empty($_filter)) {
             $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
@@ -146,11 +146,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * get user by login name
      *
      * @param string $_loginName the loginname of the user
-     * @return Tinebase_User_Model_User the user object
+     * @return Tinebase_Model_User the user object
      *
      * @throws Tinebase_Record_Exception_NotDefined when row is empty
      */
-    public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_User_Model_User')
+    public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {
         $loginName = Zend_Ldap::filterEscape($_loginName);
         $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $loginName);
@@ -194,11 +194,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * get user by userId
      *
      * @param int $_accountId the account id
-     * @return Tinebase_User_Model_User the user object
+     * @return Tinebase_Model_User the user object
      */
-    public function getUserById($_accountId, $_accountClass = 'Tinebase_User_Model_User')
+    public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
                 
@@ -246,7 +246,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function setLoginTime($_accountId, $_ipAddress) 
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
@@ -327,10 +327,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * updates an existing user
      *
-     * @param Tinebase_User_Model_FullUser $_account
-     * @return Tinebase_User_Model_FullUser
+     * @param Tinebase_Model_FullUser $_account
+     * @return Tinebase_Model_FullUser
      */
-    public function updateUser(Tinebase_User_Model_FullUser $_account) 
+    public function updateUser(Tinebase_Model_FullUser $_account) 
     {
         throw new Exception('not yet implemented');
     }
@@ -338,10 +338,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * adds a new user
      *
-     * @param Tinebase_User_Model_FullUser $_account
-     * @return Tinebase_User_Model_FullUser
+     * @param Tinebase_Model_FullUser $_account
+     * @return Tinebase_Model_FullUser
      */
-    public function addUser(Tinebase_User_Model_FullUser $_account) 
+    public function addUser(Tinebase_Model_FullUser $_account) 
     {
         throw new Exception('not yet implemented');
     }

@@ -22,7 +22,7 @@
  * @package     Tinebase
  * @subpackage  User
  */
-class Tinebase_User_Model_User extends Tinebase_Record_Abstract
+class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -256,14 +256,14 @@ class Tinebase_User_Model_User extends Tinebase_Record_Abstract
     }
     
     /**
-     * converts a int, string or Tinebase_User_Model_User to an accountid
+     * converts a int, string or Tinebase_Model_User to an accountid
      *
-     * @param int|string|Tinebase_User_Model_User $_accountId the accountid to convert
+     * @param int|string|Tinebase_Model_User $_accountId the accountid to convert
      * @return int
      */
     static public function convertUserIdToInt($_accountId)
     {
-        if ($_accountId instanceof Tinebase_User_Model_User) {
+        if ($_accountId instanceof Tinebase_Model_User) {
             if (empty($_accountId->accountId)) {
                 throw new Exception('no accountId set');
             }

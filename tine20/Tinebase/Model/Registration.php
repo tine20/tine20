@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  User
  */
-class Tinebase_User_Model_Registration extends Tinebase_Record_Abstract
+class Tinebase_Model_Registration extends Tinebase_Record_Abstract
 {
     /**
      * list of zend inputfilter

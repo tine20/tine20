@@ -74,13 +74,13 @@ class Tinebase_User_RegistrationTest extends PHPUnit_Framework_TestCase
             'accountLoginName' => 'ptestet',
         ); 
         
-        $this->objects['registration'] = new Tinebase_User_Model_Registration ( array(
+        $this->objects['registration'] = new Tinebase_Model_Registration ( array(
         	'email' => $this->userData['accountEmailAddress'],
         	'login_hash' => md5($this->userData['accountLoginName']),
             'login_name' => $this->userData['accountLoginName'],
         )); 
 
-        $this->objects['registrationDummy'] = new Tinebase_User_Model_Registration ( array(
+        $this->objects['registrationDummy'] = new Tinebase_Model_Registration ( array(
         	'email' => 'test@example.org',
         	'login_hash' => md5('dummy_test'),
             'login_name' => 'dummy_test',
@@ -228,7 +228,7 @@ class Tinebase_User_RegistrationTest extends PHPUnit_Framework_TestCase
 		Tinebase_User_Registration::getInstance()->deleteRegistrationByLoginName ( $this->objects['registration']->login_name );
 
     	// delete account afterwards
-		$account = Tinebase_User::getInstance()->getUserByLoginName($this->objects['registration']->login_name, 'Tinebase_User_Model_FullUser');
+		$account = Tinebase_User::getInstance()->getUserByLoginName($this->objects['registration']->login_name, 'Tinebase_Model_FullUser');
 		Tinebase_User::getInstance()->deleteUser( $account );
 		
 		// delete email account
@@ -237,7 +237,7 @@ class Tinebase_User_RegistrationTest extends PHPUnit_Framework_TestCase
 		Tinebase_User_Registration::getInstance()->deleteRegistrationByLoginName ( $this->userDataMail['accountLoginName'] );
 
     	// delete account afterwards
-		$account = Tinebase_User::getInstance()->getUserByLoginName($this->userDataMail['accountLoginName'], 'Tinebase_User_Model_FullUser');
+		$account = Tinebase_User::getInstance()->getUserByLoginName($this->userDataMail['accountLoginName'], 'Tinebase_Model_FullUser');
 		Tinebase_User::getInstance()->deleteUser( $account );
         */		
     }

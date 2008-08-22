@@ -86,7 +86,7 @@ class Setup_Import_Egw14
         $accounts = $accountsTable->fetchAll($where);
         
         foreach($accounts as $account) {
-            $tineAccount = new Tinebase_User_Model_FullUser(array(
+            $tineAccount = new Tinebase_Model_FullUser(array(
                 'accountId'                 => $account->account_id,
                 'accountLoginName'          => $account->account_lid,
                 'accountLastLogin'          => $account->account_lastlogin > 0 ? new Zend_Date($account->account_lastlogin, Zend_Date::TIMESTAMP) : NULL,

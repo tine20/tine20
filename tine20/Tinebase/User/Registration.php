@@ -201,7 +201,7 @@ class Tinebase_User_Registration
             $regData['accountExpires'] = NULL;
         }
         // get model & save user data (account & contact) via the User and Addressbook controllers
-        $account = new Tinebase_User_Model_FullUser($regData);
+        $account = new Tinebase_Model_FullUser($regData);
         Tinebase_User::getInstance()->addUser($account);
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
             ' saved user ' . $regData['accountLoginName']);
@@ -212,7 +212,7 @@ class Tinebase_User_Registration
         // create hash from username
         $regData['accountLoginNameHash'] = md5($regData['accountLoginName']);
         // save in registrations table 
-        $registration = new Tinebase_User_Model_Registration(array(
+        $registration = new Tinebase_Model_Registration(array(
             "login_name" => $regData['accountLoginName'] , 
             "login_hash" => $regData['accountLoginNameHash'] , 
             "email" => $regData['accountEmailAddress'])
@@ -231,7 +231,7 @@ class Tinebase_User_Registration
      * create user hash, send registration mail and save registration in database
      *
      * @param 	array $_regData
-     * @param 	Tinebase_User_Model_Registration $_registration
+     * @param 	Tinebase_Model_Registration $_registration
      * @return 	bool
      *
      * @access	protected
@@ -365,7 +365,7 @@ class Tinebase_User_Registration
      * activate user
      *
      * @param 	string $_login_hash
-     * @return	Tinebase_User_Model_FullUser
+     * @return	Tinebase_Model_FullUser
      * 
      */
     public function activateUser($_loginHash)
@@ -417,8 +417,8 @@ class Tinebase_User_Registration
     /**
      * add new registration
      *
-     * @param	Tinebase_User_Model_Registration	$_registration
-     * @return 	Tinebase_User_Model_Registration the new registration object
+     * @param	Tinebase_Model_Registration	$_registration
+     * @return 	Tinebase_Model_Registration the new registration object
      * 
      * @access	protected
      */
@@ -442,11 +442,11 @@ class Tinebase_User_Registration
     /**
      * update registration
      *
-     * @param	Tinebase_User_Model_Registration	$_registration
-     * @return 	Tinebase_User_Model_Registration the updated registration object
+     * @param	Tinebase_Model_Registration	$_registration
+     * @return 	Tinebase_Model_Registration the updated registration object
      * 
      */
-    public function updateRegistration (Tinebase_User_Model_Registration $_registration)
+    public function updateRegistration (Tinebase_Model_Registration $_registration)
     {
         if (! $_registration->isValid()) {
             throw (new Exception('invalid registration object'));
@@ -482,7 +482,7 @@ class Tinebase_User_Registration
      * get registration by hash
      *
      * @param string $_hash the hash (md5 coded username) from the registration mail
-     * @return Tinebase_User_Model_Registration the registration object
+     * @return Tinebase_Model_Registration the registration object
      *
      */
     public function getRegistrationByHash ($_hash)
@@ -495,14 +495,14 @@ class Tinebase_User_Registration
             //Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
         }
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
-            "Tinebase_User_Model_Registration::row values: \n" . print_r($row, true));
+            "Tinebase_Model_Registration::row values: \n" . print_r($row, true));
         try {
-            $registration = new Tinebase_User_Model_Registration();
+            $registration = new Tinebase_Model_Registration();
             $registration->setFromArray($row);
         } catch (Exception $e) {
             $validationErrors = $registration->getValidationErrors();
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
-                $e->getMessage() . "\n" . "Tinebase_User_Model_Registration::validation_errors: \n" . 
+                $e->getMessage() . "\n" . "Tinebase_Model_Registration::validation_errors: \n" . 
                 print_r($validationErrors, true));
             throw ($e);
         }

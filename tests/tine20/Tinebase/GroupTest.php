@@ -66,7 +66,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'description'   => 'noid group'
         )); 
 
-        $this->objects['account1'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['account1'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit1',
             'accountStatus'         => 'enabled',
@@ -77,7 +77,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        $this->objects['account2'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['account2'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 11,
             'accountLoginName'      => 'tine20phpunit2',
             'accountStatus'         => 'disabled',
@@ -88,7 +88,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
 
-        $this->objects['account3'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['account3'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 12,
             'accountLoginName'      => 'tine20phpunit3',
             'accountStatus'         => 'disabled',

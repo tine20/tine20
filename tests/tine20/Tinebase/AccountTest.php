@@ -49,7 +49,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-       $this->objects['initialAccount'] = new Tinebase_User_Model_FullUser(array(
+       $this->objects['initialAccount'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountStatus'         => 'enabled',
@@ -60,7 +60,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        $this->objects['updatedAccount'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['updatedAccount'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit-updated',
             'accountStatus'         => 'disabled',
@@ -71,7 +71,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
     	
-        $this->objects['deleteAccount'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['deleteAccount'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 11,
             'accountLoginName'      => 'tine20phpunit-delete',
             'accountStatus'         => 'disabled',
@@ -82,7 +82,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
 
-        $this->objects['noIdAccount'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['noIdAccount'] = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunit-noid',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
@@ -158,7 +158,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         $account = Tinebase_User::getInstance()->getUserByLoginName('tine20phpunit');
         
-        // Tinebase_User_Model_User has no accountLoginName
+        // Tinebase_Model_User has no accountLoginName
         $this->assertEquals('10', $account->accountId);
     }
     
@@ -275,7 +275,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
 
         Tinebase_User::getInstance()->deleteUser($this->objects['initialAccount']);
 
-        $account = Tinebase_User::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');
     }
 
    /**
@@ -290,7 +290,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
 
         Tinebase_User::getInstance()->deleteUsers( $todelete );
 
-        $account = Tinebase_User::getInstance()->getUserById($this->objects['deleteAccount'], 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User::getInstance()->getUserById($this->objects['deleteAccount'], 'Tinebase_Model_FullUser');
     }
 
    /**
@@ -301,7 +301,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_User_Model_User::convertUserIdToInt(0);
+        Tinebase_Model_User::convertUserIdToInt(0);
   
     }
 
@@ -313,7 +313,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_User_Model_User::convertUserIdToInt( $this->objects['noIdAccount'] );
+        Tinebase_Model_User::convertUserIdToInt( $this->objects['noIdAccount'] );
   
     }
 }		

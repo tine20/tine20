@@ -19,7 +19,7 @@
  * @package     Tinebase
  * @subpackage  User
  */
-class Tinebase_User_Model_FullUser extends Tinebase_User_Model_User
+class Tinebase_Model_FullUser extends Tinebase_Model_User
 {
     /**
      * list of zend inputfilter
@@ -88,11 +88,11 @@ class Tinebase_User_Model_FullUser extends Tinebase_User_Model_User
     /**
      * return the public informations of this user only
      *
-     * @return Tinebase_User_Model_User
+     * @return Tinebase_Model_User
      */
     public function getPublicUser()
     {
-        $result = new Tinebase_User_Model_User($this->toArray(), true);
+        $result = new Tinebase_Model_User($this->toArray(), true);
         
         return $result;
     }

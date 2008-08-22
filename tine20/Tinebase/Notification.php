@@ -58,13 +58,13 @@ class Tinebase_Notification
     /**
      * send notifications to a list a receipients
      *
-     * @param Tinebase_User_Model_FullUser $_updater
+     * @param Tinebase_Model_FullUser $_updater
      * @param Tinebase_Record_RecordSet $_recipients
      * @param string $_subject
      * @param string $_messagePlain
      * @param string $_messageHtml
      */
-    public function send(Tinebase_User_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send(Tinebase_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 

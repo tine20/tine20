@@ -263,7 +263,7 @@ class Tinebase_Container
         
         switch($_accountType) {
             case 'user':
-                $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+                $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
                 break;
             case 'group':
                 $accountId = Tinebase_Model_Group::convertGroupIdToInt($_accountId);
@@ -309,7 +309,7 @@ class Tinebase_Container
      */
     public function getContainerByACL($_accountId, $_application, $_grant)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
         $cache = Zend_Registry::get('cache');
         $cacheId = 'getContainerByACL' . $accountId . $_application . $_grant;
@@ -469,7 +469,7 @@ class Tinebase_Container
     /**
      * returns the internal conatainer for a given application
      *
-     * @param int|Tinebase_User_Model_User $_accountId
+     * @param int|Tinebase_Model_User $_accountId
      * @param string $_application name of the application
      * @return Tinebase_Model_Container the internal container
      */
@@ -499,20 +499,20 @@ class Tinebase_Container
     /**
      * returns the personal container of a given account accessible by a another given account
      *
-     * @param int|Tinebase_User_Model_User $_accountId
+     * @param int|Tinebase_Model_User $_accountId
      * @param string $_application
-     * @param int|Tinebase_User_Model_User $_owner
+     * @param int|Tinebase_Model_User $_owner
      * @param int $_grant
      * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      */
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant)
     {
-        $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         if(count($groupMemberships) === 0) {
             throw new Exception('account must be in at least one group');
         }
-        $ownerId            = Tinebase_User_Model_User::convertUserIdToInt($_owner);
+        $ownerId            = Tinebase_Model_User::convertUserIdToInt($_owner);
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -564,14 +564,14 @@ class Tinebase_Container
     /**
      * returns the shared container for a given application accessible by the current user
      *
-     * @param int|Tinebase_User_Model_User $_accountId
+     * @param int|Tinebase_Model_User $_accountId
      * @param string $_application the name of the application
      * @param int $_grant
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getSharedContainer($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -609,13 +609,13 @@ class Tinebase_Container
     /**
      * return users which made personal containers accessible to current account
      *
-     * @param int|Tinebase_User_Model_User $_accountId
+     * @param int|Tinebase_Model_User $_accountId
      * @param string $_application the name of the application
-     * @return Tinebase_Record_RecordSet set of Tinebase_User_Model_User
+     * @return Tinebase_Record_RecordSet set of Tinebase_Model_User
      */
     public function getOtherUsers($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -649,7 +649,7 @@ class Tinebase_Container
         $stmt = $db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_User_Model_User');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_User');
         
         foreach($rows as $row) {
             $account = Tinebase_User::getInstance()->getUserById($row['account_id']);
@@ -662,13 +662,13 @@ class Tinebase_Container
     /**
      * return set of all personal container of other users made accessible to the current account 
      *
-     * @param int|Tinebase_User_Model_User $_accountId
+     * @param int|Tinebase_Model_User $_accountId
      * @param string $_application the name of the application
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getOtherUsersContainer($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -783,7 +783,7 @@ class Tinebase_Container
      */
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
@@ -895,13 +895,13 @@ class Tinebase_Container
     /**
      * get grants assigned to one account of one container
      *
-     * @param int|Tinebase_User_Model_User $_accountId the account to get the grants for
+     * @param int|Tinebase_Model_User $_accountId the account to get the grants for
      * @param int|Tinebase_Model_Container $_containerId
      * @return Tinebase_Model_Grants
      */
     public function getGrantsOfAccount($_accountId, $_containerId, $_ignoreAcl = FALSE) 
     {
-        $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         $cacheKey = 'getGrantsOfAccount' . $containerId . $accountId . (int)$_ignoreAcl;
@@ -953,7 +953,7 @@ class Tinebase_Container
      * get grants assigned to multiple records
      *
      * @param Tinebase_Record_RecordSet $_records records to get the grants for
-     * @param int|Tinebase_User_Model_User $_accountId the account to get the grants for
+     * @param int|Tinebase_Model_User $_accountId the account to get the grants for
      * @param string $_containerProperty container property
      * 
      * @todo write test
@@ -964,7 +964,7 @@ class Tinebase_Container
             return;
         }
         
-        $accountId          = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -1124,7 +1124,7 @@ class Tinebase_Container
      */
     protected function _removeFromCache($_containerId) 
     {
-        $accountId          = Tinebase_User_Model_User::convertUserIdToInt(Zend_Registry::get('currentAccount'));
+        $accountId          = Tinebase_Model_User::convertUserIdToInt(Zend_Registry::get('currentAccount'));
         
         try {
             // remove container from cache

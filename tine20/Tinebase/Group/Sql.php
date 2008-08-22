@@ -73,12 +73,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * return all groups an account is member of
      *
-     * @param mixed $_accountId the account as integer or Tinebase_User_Model_User
+     * @param mixed $_accountId the account as integer or Tinebase_Model_User
      * @return array
      */
     public function getGroupMemberships($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $memberships = array();
         $colName = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
@@ -150,7 +150,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function addGroupMember($_groupId, $_accountId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
         $data = array(
             'group_id'      => $groupId,
@@ -174,7 +174,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function removeGroupMember($_groupId, $_accountId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $colNameGroup = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
         $colNameAccount = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
         

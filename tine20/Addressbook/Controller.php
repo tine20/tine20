@@ -20,7 +20,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * Holds instance of current account
      *
-     * @var Tinebase_User_Model_User
+     * @var Tinebase_Model_User
      */
     protected $_currentAccount;
     
@@ -333,12 +333,12 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_User_Model_User] $_account   the accountd object
+     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
      * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_account)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_account);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_account);
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Contacts',
             'type'              => Tinebase_Container::TYPE_PERSONAL,
@@ -357,7 +357,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * delete all personal user folders and the contacts associated with these folders
      *
-     * @param Tinebase_User_Model_User $_account the accountd object
+     * @param Tinebase_Model_User $_account the accountd object
      * @todo implement and write test
      */
     public function deletePersonalFolder($_account)

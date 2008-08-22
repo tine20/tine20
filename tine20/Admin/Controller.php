@@ -19,7 +19,7 @@
 class Admin_Controller
 {
     /**
-     * @var Tinebase_User_Model_User
+     * @var Tinebase_Model_User
      */
     protected $_currentAccount;
     
@@ -70,7 +70,7 @@ class Admin_Controller
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_User
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
      */
     public function getUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
@@ -91,7 +91,7 @@ class Admin_Controller
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_FullUser
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_FullUser
      */
     public function getFullUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
@@ -108,7 +108,7 @@ class Admin_Controller
      * get account
      *
      * @param   int $_accountId account id to get
-     * @return  Tinebase_User_Model_User
+     * @return  Tinebase_Model_User
      */
     public function getAccount($_accountId)
     {        
@@ -137,12 +137,12 @@ class Admin_Controller
     /**
      * set the password for a given account
      *
-     * @param Tinebase_User_Model_FullUser $_account the account
+     * @param Tinebase_Model_FullUser $_account the account
      * @param string $_password the new password
      * @param string $_passwordRepeat the new password again
      * @return unknown
      */
-    public function setAccountPassword(Tinebase_User_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -158,12 +158,12 @@ class Admin_Controller
     /**
      * save or update account
      *
-     * @param Tinebase_User_Model_FullUser $_account the account
+     * @param Tinebase_Model_FullUser $_account the account
      * @param string $_password the new password
      * @param string $_passwordRepeat the new password again
-     * @return Tinebase_User_Model_FullUser
+     * @return Tinebase_Model_FullUser
      */
-    public function updateUser(Tinebase_User_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function updateUser(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -185,12 +185,12 @@ class Admin_Controller
     /**
      * save or update account
      *
-     * @param Tinebase_User_Model_FullUser $_account the account
+     * @param Tinebase_Model_FullUser $_account the account
      * @param string $_password the new password
      * @param string $_passwordRepeat the new password again
-     * @return Tinebase_User_Model_FullUser
+     * @return Tinebase_Model_FullUser
      */
-    public function addUser(Tinebase_User_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function addUser(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -424,7 +424,7 @@ class Admin_Controller
      * get list of groupmembers
      *
      * @param int $_groupId
-     * @return array with Tinebase_User_Model_User arrays
+     * @return array with Tinebase_Model_User arrays
      */
     public function getGroupMembers($_groupId)
     {

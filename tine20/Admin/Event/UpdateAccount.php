@@ -19,7 +19,7 @@ class Admin_Event_UpdateAccount extends Tinebase_Events_Abstract
     /**
      * the just added account
      *
-     * @var Tinebase_User_Model_FullUser
+     * @var Tinebase_Model_FullUser
      */
     public $account;
 }

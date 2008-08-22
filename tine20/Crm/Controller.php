@@ -23,7 +23,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     /**
      * Holds instance of current account
      *
-     * @var Tinebase_User_Model_User
+     * @var Tinebase_Model_User
      */
     protected $_currentAccount;
     
@@ -681,12 +681,12 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_User_Model_User] $_account   the accountd object
+     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
      * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Leads',
@@ -706,14 +706,14 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     /**
      * delets the personal folder for deleted accounts
      *
-     * @param mixed[int|Tinebase_User_Model_User] $_account   the accountd object
+     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
      * @return void
      * 
      * @todo    implement
      */
     public function deletePersonalFolder($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         // delete personal folder here
     }

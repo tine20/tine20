@@ -52,7 +52,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
-        $this->objects['user'] = new Tinebase_User_Model_FullUser(array(
+        $this->objects['user'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',

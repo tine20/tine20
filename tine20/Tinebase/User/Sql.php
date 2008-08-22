@@ -87,9 +87,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param int $_start
      * @param int $_limit
      * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
-     * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_User
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
      */
-    public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_User_Model_User')
+    public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {        
         $select = $this->_getUserSelectObject()
             ->limit($_limit, $_start);
@@ -109,7 +109,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
         // return only active users, when searching for simple users
-        if($_accountClass == 'Tinebase_User_Model_User') {
+        if($_accountClass == 'Tinebase_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
         }
         //error_log("getUsers:: " . $select->__toString());
@@ -127,11 +127,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * get user by login name
      *
      * @param string $_loginName the loginname of the user
-     * @return Tinebase_User_Model_User the user object
+     * @return Tinebase_Model_User the user object
      *
      * @throws Tinebase_Record_Exception_NotDefined when row is empty
      */
-    public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_User_Model_User')
+    public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {
 //        $db = Zend_Registry::get('dbAdapter');
         // quote into expects 2 params
@@ -154,7 +154,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
-                "Tinebase_User_Model_User::validation_errors: \n" .
+                "Tinebase_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
         }
@@ -166,11 +166,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * get user by userId
      *
      * @param int $_accountId the user id
-     * @return Tinebase_User_Model_User the user object
+     * @return Tinebase_Model_User the user object
      */
-    public function getUserById($_accountId, $_accountClass = 'Tinebase_User_Model_User')
+    public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         #$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.id') . ' = ?', $accountId));
@@ -188,7 +188,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
-                "Tinebase_User_Model_User::validation_errors: \n" .
+                "Tinebase_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
         }
@@ -200,11 +200,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * get full user by id
      *
      * @param   int         $_accountId
-     * @return  Tinebase_User_Model_FullUser full user
+     * @return  Tinebase_Model_FullUser full user
      */
     public function getFullUserById($_accountId)
     {
-        return $this->getUserById($_accountId, 'Tinebase_User_Model_FullUser');
+        return $this->getUserById($_accountId, 'Tinebase_Model_FullUser');
     }
     
     protected function _getUserSelectObject()
@@ -249,7 +249,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setStatus($_accountId, $_status)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         switch($_status) {
             case 'enabled':
@@ -285,7 +285,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         if($_expiryDate instanceof Zend_Date) {
             $accountData['expires_at'] = $_expiryDate->getIso();
@@ -312,7 +312,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         if($_blockedUntilDate instanceof Zend_Date) {
             $accountData['blocked_until'] = $_blockedUntilDate->getIso();
@@ -339,7 +339,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setLoginTime($_accountId, $_ipAddress) 
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
@@ -360,16 +360,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * 
      * this function updates an user 
      *
-     * @param Tinebase_User_Model_FullUser $_account
-     * @return Tinebase_User_Model_FullUser
+     * @param Tinebase_Model_FullUser $_account
+     * @return Tinebase_Model_FullUser
      */
-    public function updateUser(Tinebase_User_Model_FullUser $_account)
+    public function updateUser(Tinebase_Model_FullUser $_account)
     {
         if(!$_account->isValid()) {
             throw(new Exception('invalid user object'));
         }
 
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_account);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_account);
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
@@ -412,7 +412,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw($e);
         }
         
-        return $this->getUserById($accountId, 'Tinebase_User_Model_FullUser');
+        return $this->getUserById($accountId, 'Tinebase_Model_FullUser');
     }
     
     /**
@@ -420,11 +420,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * 
      * this function adds an user 
      *
-     * @param Tinebase_User_Model_FullUser $_account
+     * @param Tinebase_Model_FullUser $_account
      * @todo fix $contactData['owner'] = 1;
-     * @return Tinebase_User_Model_FullUser
+     * @return Tinebase_Model_FullUser
      */
-    public function addUser(Tinebase_User_Model_FullUser $_account)
+    public function addUser(Tinebase_Model_FullUser $_account)
     {
         if(!$_account->isValid()) {
             throw(new Exception('invalid user object'));
@@ -488,7 +488,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // add group membership (primary group)
         Tinebase_Group::getInstance()->addGroupMember($_account->accountPrimaryGroup,$accountId);
         
-        return $this->getUserById($accountId, 'Tinebase_User_Model_FullUser');
+        return $this->getUserById($accountId, 'Tinebase_Model_FullUser');
     }
     
     /**
@@ -498,7 +498,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function deleteUser($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $account = $this->getFullUserById($accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
