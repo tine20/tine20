@@ -94,7 +94,7 @@ class Setup_Import_TineInitial
         Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
         
         # add roles and add the groups to the roles
-        $adminRole = new Tinebase_Acl_Model_Role(array(
+        $adminRole = new Tinebase_Model_Role(array(
             'name'                  => 'admin role',
             'description'           => 'admin role for tine. this role has all rights per default.',
         ));
@@ -106,7 +106,7 @@ class Setup_Import_TineInitial
             )
         ));
         
-        $userRole = new Tinebase_Acl_Model_Role(array(
+        $userRole = new Tinebase_Model_Role(array(
             'name'                  => 'user role',
             'description'           => 'userrole for tine. this role has only the run rights for all applications per default.',
         ));

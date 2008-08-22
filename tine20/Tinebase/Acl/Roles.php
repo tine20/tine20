@@ -220,9 +220,9 @@ class Tinebase_Acl_Roles
     /**
      * Searches roles according to filter and paging
      * 
-     * @param  Tinebase_Acl_Model_RoleFilter    $_filter
+     * @param  Tinebase_Model_RoleFilter    $_filter
      * @param  Tinebase_Model_Pagination        $_paging
-     * @return Tinebase_Record_RecordSet  Set of Tinebase_Acl_Model_Role
+     * @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Role
      */
     public function searchRoles($_filter, $_paging)
     {
@@ -230,14 +230,14 @@ class Tinebase_Acl_Roles
         
         $_paging->appendPagination($select);
         
-        return new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Role', $this->_db->fetchAssoc($select));
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Role', $this->_db->fetchAssoc($select));
     }
 
     /**
      * Returns role identified by its id
      * 
      * @param  int  $_roleId
-     * @return Tinebase_Acl_Model_Role  
+     * @return Tinebase_Model_Role  
      */
     public function getRoleById($_roleId)
     {
@@ -251,7 +251,7 @@ class Tinebase_Acl_Roles
             throw new Exception("role with id $roleId not found");
         }
         
-        $result = new Tinebase_Acl_Model_Role($row->toArray());
+        $result = new Tinebase_Model_Role($row->toArray());
         
         return $result;
         
@@ -261,7 +261,7 @@ class Tinebase_Acl_Roles
      * Returns role identified by its name
      * 
      * @param  string $_roleName
-     * @return Tinebase_Acl_Model_Role  
+     * @return Tinebase_Model_Role  
      */
     public function getRoleByName($_roleName)
     {            
@@ -271,7 +271,7 @@ class Tinebase_Acl_Roles
             throw new Exception("role $_roleName not found");
         }
         
-        $result = new Tinebase_Acl_Model_Role($row->toArray());
+        $result = new Tinebase_Model_Role($row->toArray());
         
         return $result;
     }
@@ -279,10 +279,10 @@ class Tinebase_Acl_Roles
     /**
      * Creates a single role
      * 
-     * @param  Tinebase_Acl_Model_Role
-     * @return Tinebase_Acl_Model_Role
+     * @param  Tinebase_Model_Role
+     * @return Tinebase_Model_Role
      */
-    public function createRole(Tinebase_Acl_Model_Role $_role)
+    public function createRole(Tinebase_Model_Role $_role)
     {
         $data = $_role->toArray();
         if(Zend_Registry::isRegistered('currentAccount')) {
@@ -305,10 +305,10 @@ class Tinebase_Acl_Roles
     /**
      * updates a single role
      * 
-     * @param  Tinebase_Acl_Model_Role $_role
-     * @return Tinebase_Acl_Model_Role
+     * @param  Tinebase_Model_Role $_role
+     * @return Tinebase_Model_Role
      */
-    public function updateRole(Tinebase_Acl_Model_Role $_role)
+    public function updateRole(Tinebase_Model_Role $_role)
     {
         $data = $_role->toArray();
         $data['last_modified_by'] = Zend_Registry::get('currentAccount')->getId();

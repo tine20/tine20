@@ -63,7 +63,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
-        $this->objects['role'] = new Tinebase_Acl_Model_Role(array(
+        $this->objects['role'] = new Tinebase_Model_Role(array(
             'id'                    => 10,
             'name'                  => 'phpunitrole',
             'description'           => 'test role for phpunit',

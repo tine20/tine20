@@ -609,7 +609,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             unset($decodedRoleData['id']);
         }
         
-        $role = new Tinebase_Acl_Model_Role();
+        $role = new Tinebase_Model_Role();
         
         try {
             $role->setFromArray($decodedRoleData);

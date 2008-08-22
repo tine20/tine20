@@ -96,7 +96,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
        
-        $this->objects['role'] = new Tinebase_Acl_Model_Role ( array(
+        $this->objects['role'] = new Tinebase_Model_Role ( array(
             'name'                  => 'phpunit test role',
             'description'           => 'phpunit test role',
         ));

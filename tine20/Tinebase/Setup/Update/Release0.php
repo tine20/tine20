@@ -377,7 +377,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default User Group']);
         
         # add roles and add the groups to the roles
-        $adminRole = new Tinebase_Acl_Model_Role(array(
+        $adminRole = new Tinebase_Model_Role(array(
             'name'                  => 'admin role',
             'description'           => 'admin role for tine. this role has all rights per default.',
         ));
@@ -389,7 +389,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             )
         ));
         
-        $userRole = new Tinebase_Acl_Model_Role(array(
+        $userRole = new Tinebase_Model_Role(array(
             'name'                  => 'user role',
             'description'           => 'userrole for tine. this role has only the run rights for all applications per default.',
         ));

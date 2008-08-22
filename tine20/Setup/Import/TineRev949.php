@@ -582,7 +582,7 @@ class Setup_Import_TineRev949
                 }
                 
                 if ( $tableData['name'] === 'application_rights' ) {
-                    $right = new Tinebase_Acl_Model_RoleRight ( $values );
+                    $right = new Tinebase_Model_RoleRight ( $values );
                     try {
                         // try to get user account
                         if ( $right->account_type === 'user' ) {

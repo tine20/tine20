@@ -539,13 +539,13 @@ class Admin_Controller
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Acl_Model_Role
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Role
      */
     public function getRoles($query, $sort, $dir, $start, $limit)
     {
         $this->checkRight('VIEW_ROLES');
        
-        $filter = new Tinebase_Acl_Model_RoleFilter(array(
+        $filter = new Tinebase_Model_RoleFilter(array(
             'name'        => '%' . $query . '%',
             'description' => '%' . $query . '%'
         ));
@@ -564,7 +564,7 @@ class Admin_Controller
      * fetch one role identified by $_roleId
      *
      * @param int $_roleId
-     * @return Tinebase_Acl_Model_Role
+     * @return Tinebase_Model_Role
      */
     public function getRole($_roleId)
     {
@@ -578,12 +578,12 @@ class Admin_Controller
    /**
      * add new role
      *
-     * @param   Tinebase_Acl_Model_Role $_role
+     * @param   Tinebase_Model_Role $_role
      * @param   array role members
      * @param   array role rights
-     * @return  Tinebase_Acl_Model_Role
+     * @return  Tinebase_Model_Role
      */
-    public function AddRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
+    public function AddRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         $this->checkRight('MANAGE_ROLES');
         
@@ -597,12 +597,12 @@ class Admin_Controller
    /**
      * update existing role
      *
-     * @param  Tinebase_Acl_Model_Role $_role
+     * @param  Tinebase_Model_Role $_role
      * @param   array role members
      * @param   array role rights
-     * @return Tinebase_Acl_Model_Role
+     * @return Tinebase_Model_Role
      */
-    public function UpdateRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
+    public function UpdateRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         $this->checkRight('MANAGE_ROLES');
         

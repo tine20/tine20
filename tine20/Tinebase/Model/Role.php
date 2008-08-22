@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  *  */
-class Tinebase_Acl_Model_Role extends Tinebase_Record_Abstract
+class Tinebase_Model_Role extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
