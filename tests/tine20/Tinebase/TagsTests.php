@@ -73,7 +73,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     
     public function testSearchTags()
     {
-        $filter = new Tinebase_Tags_Model_Filter(array(
+        $filter = new Tinebase_Tags_Model_TagFilter(array(
             'name' => 'tag::%'
         ));
         $paging = new Tinebase_Model_Pagination();

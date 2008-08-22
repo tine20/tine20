@@ -18,7 +18,7 @@
  * @package    Tinebase
  * @subpackage Tags
  */
-class Tinebase_Tags_Model_Filter extends Tinebase_Record_Abstract
+class Tinebase_Tags_Model_TagFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 

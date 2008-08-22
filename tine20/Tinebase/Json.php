@@ -200,7 +200,7 @@ class Tinebase_Json
      */
     public function getTags($context)
     {
-        $filter = new Tinebase_Tags_Model_Filter(array(
+        $filter = new Tinebase_Tags_Model_TagFilter(array(
             'name'        => '%',
             'application' => $context,
         ));
@@ -224,7 +224,7 @@ class Tinebase_Json
      */
     public function searchTags($query, $context, $start=0, $limit=0)
     {
-        $filter = new Tinebase_Tags_Model_Filter(array(
+        $filter = new Tinebase_Tags_Model_TagFilter(array(
             'name'        => $query . '%',
             'application' => $context,
         ));

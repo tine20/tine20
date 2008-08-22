@@ -348,7 +348,7 @@ class Setup_Import_Egw14
             // get categories -> tags
             if ( !empty($contact->cat_id) ) {
                 $catIds = explode ( ',', $contact->cat_id );
-                $filter = new Tinebase_Tags_Model_Filter(array(
+                $filter = new Tinebase_Tags_Model_TagFilter(array(
                     'name'        => '%',
                     'application' => 'Addressbook',
                     //'owner'       => $owner,

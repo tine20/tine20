@@ -445,7 +445,7 @@ class Admin_Controller
      */
     public function getTags($query, $sort, $dir, $start, $limit)
     {
-        $filter = new Tinebase_Tags_Model_Filter(array(
+        $filter = new Tinebase_Tags_Model_TagFilter(array(
             'name'        => '%' . $query . '%',
             'description' => '%' . $query . '%',
             'type'        => Tinebase_Tags_Model_Tag::TYPE_SHARED

@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  */
-class Tinebase_Tags_Model_Right extends Tinebase_Record_Abstract
+class Tinebase_Tags_Model_TagRight extends Tinebase_Record_Abstract
 {
     /**
      * Right to view/see/read the tag

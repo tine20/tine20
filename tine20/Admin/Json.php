@@ -522,7 +522,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         $tag = new Tinebase_Tags_Model_FullTag($decodedTagData);
-        $tag->rights = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Right', $decodedTagData['rights']);
+        $tag->rights = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_TagRight', $decodedTagData['rights']);
         //Zend_Registry::get('logger')->debug(print_r($tag->toArray(),true));
         
         if ( empty($tag->id) ) {
