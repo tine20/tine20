@@ -299,7 +299,7 @@ class Tinebase_Application
         /*
         $tineAclRights = Tinebase_Acl_Rights::getInstance();
         
-        $tineRights = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
+        $tineRights = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_RoleRight');
         foreach ( $_applicationRights as $right ) {
             $right['application_id'] = $_applicationId;
             
@@ -311,7 +311,7 @@ class Tinebase_Application
                 if ( isset($right[$key]) && $right[$key] === TRUE ) {
                     unset ( $right['id'] );
                     $right['right'] = $key;
-                    $tineRight = new Tinebase_Acl_Model_Right ( $right );
+                    $tineRight = new Tinebase_Acl_Model_RoleRight ( $right );
                     $tineRights->addRecord( $tineRight );
                 }
             }
