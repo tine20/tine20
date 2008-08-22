@@ -86,7 +86,7 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         	} else {
         	    $newTaskArray['container_id'] = Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray();
         	}
-            $newTaskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $newTaskArray['container_id'])->toArray();
+            $newTaskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $newTaskArray['container_id']['id'])->toArray();
         
         	$task = Zend_Json::encode($newTaskArray);
         }
