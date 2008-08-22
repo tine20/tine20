@@ -66,10 +66,10 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     {
     	$now = Zend_Date::now();
     	$this->_modLogClass = Tinebase_Timemachine_ModificationLog::getInstance();
-    	$this->_persistantLogEntries = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
+    	$this->_persistantLogEntries = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
     	$this->_recordIds = array('5dea69be9c72ea3d263613277c3b02d529fbd8bc');
     	
-    	$this->_logEntries = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog', array(
+    	$this->_logEntries = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array(
         array(
             'application_id'       => 'Tinebase',
             'record_id'            => $this->_recordIds[0],

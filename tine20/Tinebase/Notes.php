@@ -276,7 +276,7 @@ class Tinebase_Notes
      * @param Tinebase_Model_Record $_record
      * @param int $_userId
      * @param string $_type (created|changed)
-     * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Timemachine_Model_ModificationLog)
+     * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Model_ModificationLog)
      * @param string $_backend   backend of record
      * 
      * @todo translate strings and field labels

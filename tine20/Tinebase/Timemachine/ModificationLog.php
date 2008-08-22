@@ -101,7 +101,7 @@ class Tinebase_Timemachine_ModificationLog
         $this->_tablename = SQL_TABLE_PREFIX . $this->_tablename;
         
         $this->_table = new Tinebase_Db_Table(array('name' => $this->_tablename));
-        $this->_table->setRowClass('Tinebase_Timemachine_Model_ModificationLog');
+        $this->_table->setRowClass('Tinebase_Model_ModificationLog');
     }
     
     /**
@@ -114,7 +114,7 @@ class Tinebase_Timemachine_ModificationLog
      * @param Zend_Date _from beginning point of timespan, excluding point itself
      * @param Zend_Date _until end point of timespan, including point itself 
      * @param int _modifierId optional
-     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Timemachine_Model_ModificationLog
+     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      */
     public function getModifications( $_application,  $_id, $_type = NULL, $_backend, Zend_Date $_from, Zend_Date $_until,  $_modifierId = NULL ) {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -143,7 +143,7 @@ class Tinebase_Timemachine_ModificationLog
        $stmt = $db->query($select);
        $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
        
-       $modifications = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog', $resultArray);
+       $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $resultArray);
        return $modifications;
     } // end of member function getModifications
 
@@ -165,14 +165,14 @@ class Tinebase_Timemachine_ModificationLog
             }
             $diff[$modification->modified_attribute] = $modification;
         }
-        return new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog', $diff);
+        return new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $diff);
     }
     
     /**
      * Returns a single logbook entry identified by an logbook identifier
      * 
      * @param string _id
-     * @return Tinebase_Timemachine_Model_ModificationLog
+     * @return Tinebase_Model_ModificationLog
      */
     public function getModification( $_id ) {
     	$db = $this->_table->getAdapter();
@@ -185,17 +185,17 @@ class Tinebase_Timemachine_ModificationLog
         if (empty($RawLogEntry)) {
             throw new Exception("Modification Log with id: $_id not found!");
         }
-        return new Tinebase_Timemachine_Model_ModificationLog($RawLogEntry[0], true); 
+        return new Tinebase_Model_ModificationLog($RawLogEntry[0], true); 
         
     } // end of member function getModification
     
     /**
      * Saves a logbook record
      * 
-     * @param Tinebase_Timemachine_Model_ModificationLog _modification 
+     * @param Tinebase_Model_ModificationLog _modification 
      * @return string id;
      */
-    public function setModification( Tinebase_Timemachine_Model_ModificationLog $_modification ) {
+    public function setModification( Tinebase_Model_ModificationLog $_modification ) {
         if ($_modification->isValid()) {
         	$id = $_modification->generateUID();
             $_modification->setId($id);
@@ -223,7 +223,7 @@ class Tinebase_Timemachine_ModificationLog
     {
         list($appName, $i, $modelName) = explode('_', $_model);
         
-        $resolved = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
+        $resolved = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
         if($_curRecord->last_modified_time instanceof Zend_Date && ! $_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
@@ -269,13 +269,13 @@ class Tinebase_Timemachine_ModificationLog
      * 
      * @param  Tinebase_Record_Abstract $_newRecord record from user data
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
-     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Timemachine_Model_ModificationLog
+     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
         list($appName, $i, $modelName) = explode('_', $_model);
         
-        $modLogEntry = new Tinebase_Timemachine_Model_ModificationLog(array(
+        $modLogEntry = new Tinebase_Model_ModificationLog(array(
             'application_id'       => $appName,
             'record_id'            => $_id,
             'record_type'          => $_model,
@@ -286,7 +286,7 @@ class Tinebase_Timemachine_ModificationLog
             
         $diffs = $_curRecord->diff($_newRecord);
         
-        $modifications = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
         // ommit second order records and jpegphoto for the moment
         $toOmmit = array_merge($this->_metaProperties, array(
