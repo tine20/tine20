@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Notes
  */
-class Tinebase_Notes_Model_NoteType extends Tinebase_Record_Abstract
+class Tinebase_Model_NoteType extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 

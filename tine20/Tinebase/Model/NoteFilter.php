@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Notes 
  */
-class Tinebase_Notes_Model_NoteFilter extends Tinebase_Record_Abstract
+class Tinebase_Model_NoteFilter extends Tinebase_Record_Abstract
 {
     
     

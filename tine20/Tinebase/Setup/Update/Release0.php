@@ -1070,7 +1070,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);        
         
-        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+        $nodeType = new Tinebase_Model_NoteType(array(
             'id'            => '1',
             'name'          => 'note',
             'description'   => 'the default note type',
@@ -1079,7 +1079,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
 
-        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+        $nodeType = new Tinebase_Model_NoteType(array(
             'id'            => '2',
             'name'          => 'telephone',
             'description'   => 'telephone call',
@@ -1088,7 +1088,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
         
-        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+        $nodeType = new Tinebase_Model_NoteType(array(
             'id'            => '3',
             'name'          => 'email',
             'description'   => 'email contact',
@@ -1097,7 +1097,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
 
-        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+        $nodeType = new Tinebase_Model_NoteType(array(
             'id'            => '4',
             'name'          => 'created',
             'description'   => 'record created',
@@ -1106,7 +1106,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ));
         Tinebase_Notes::getInstance()->addNoteType($nodeType);
 
-        $nodeType = new Tinebase_Notes_Model_NoteType(array(
+        $nodeType = new Tinebase_Model_NoteType(array(
             'id'            => '5',
             'name'          => 'changed',
             'description'   => 'record changed',

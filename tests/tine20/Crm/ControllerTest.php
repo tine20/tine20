@@ -315,7 +315,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
                     'translate' => 0))
         );
 
-        $this->objects['note'] = new Tinebase_Notes_Model_Note(array(
+        $this->objects['note'] = new Tinebase_Model_Note(array(
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',    
         ));
@@ -338,7 +338,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     public function testAddLead()
     {
         $lead = $this->_objects['initialLead'];
-        $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', array($this->objects['note']));
+        $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
         $lead = Crm_Controller::getInstance()->createLead($lead);
         
         $this->assertEquals($this->_objects['initialLead']->id, $lead->id);

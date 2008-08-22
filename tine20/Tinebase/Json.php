@@ -250,7 +250,7 @@ class Tinebase_Json
      */
     public function searchNotes($filter, $paging)
     {
-        $filter = new Tinebase_Notes_Model_NoteFilter(Zend_Json::decode($filter));
+        $filter = new Tinebase_Model_NoteFilter(Zend_Json::decode($filter));
         $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         //Zend_Registry::get('logger')->debug(print_r($filter->toArray(),true));

@@ -64,14 +64,14 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
             'n_family'  => 'phpunit notes contact'
         ));
         
-        $this->_objects['noteType'] = new Tinebase_Notes_Model_NoteType(array(
+        $this->_objects['noteType'] = new Tinebase_Model_NoteType(array(
             'id'            => '5001',
             'name'          => 'phpunit note type',
             'icon'          => '/images/oxygen/16x16/actions/document-properties.png',
             'is_user_type'  => TRUE
         ));
         
-        $this->_objects['note'] = new Tinebase_Notes_Model_Note(array(
+        $this->_objects['note'] = new Tinebase_Model_Note(array(
             'id'                => 123,
             'note_type_id'      => $this->_objects['noteType']->getId(),
             'note'              => 'phpunit test note',    
@@ -117,7 +117,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
     {        
         $this->_instance->addSystemNote($this->_objects['contact'], Zend_Registry::get('currentAccount')->getId(), 'created');
         
-        $filter = new Tinebase_Notes_Model_NoteFilter(array(array(
+        $filter = new Tinebase_Model_NoteFilter(array(array(
             'field' => 'query',
             'operator' => '',
             'value' => 'created by'
@@ -136,7 +136,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchNotes()
     {
-        $filter = new Tinebase_Notes_Model_NoteFilter(array(array(
+        $filter = new Tinebase_Model_NoteFilter(array(array(
             'field' => 'query',
             'operator' => '',
             'value' => 'phpunit'

@@ -99,11 +99,11 @@ class Tinebase_Notes
     /**
      * search for notes
      *
-     * @param Tinebase_Notes_Model_NoteFilter $_filter
+     * @param Tinebase_Model_NoteFilter $_filter
      * @param Tinebase_Model_Pagination $_pagination
-     * @return Tinebase_Record_RecordSet subtype Tinebase_Notes_Model_Note
+     * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
      */
-    public function searchNotes(Tinebase_Notes_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'notes');
@@ -114,7 +114,7 @@ class Tinebase_Notes
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($select->__toString(), true));
         
         $rows = $this->_db->fetchAssoc($select);
-        $result = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', $rows, true);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
 
         return $result;
     }
@@ -122,10 +122,10 @@ class Tinebase_Notes
     /**
      * count notes
      *
-     * @param Tinebase_Notes_Model_NoteFilter $_filter
+     * @param Tinebase_Model_NoteFilter $_filter
      * @return int notes count
      */
-    public function searchNotesCount(Tinebase_Notes_Model_NoteFilter $_filter)
+    public function searchNotesCount(Tinebase_Model_NoteFilter $_filter)
     {
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'notes', array('count' => 'COUNT(id)'));
@@ -140,7 +140,7 @@ class Tinebase_Notes
      * get a single note
      *
      * @param string $_noteId
-     * @return Tinebase_Notes_Model_Note
+     * @return Tinebase_Model_Note
      */
     public function getNote($_noteId)
     {
@@ -150,7 +150,7 @@ class Tinebase_Notes
             throw new UnderflowException('note not found');
         }
         
-        return new Tinebase_Notes_Model_Note($row->toArray());
+        return new Tinebase_Model_Note($row->toArray());
     }
     
     /**
@@ -159,7 +159,7 @@ class Tinebase_Notes
      * @param  string $_model     model of record
      * @param  string $_id        id of record
      * @param  string $_backend   backend of record
-     * @return Tinebase_Record_RecordSet of Tinebase_Notes_Model_Note
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
      */
     public function getNotesOfRecord($_model, $_id, $_backend = 'Sql')
     {
@@ -170,7 +170,7 @@ class Tinebase_Notes
         $result = $cache->load($cacheId);
         
         if (!$result) {
-            $filter = new Tinebase_Notes_Model_NoteFilter(array(
+            $filter = new Tinebase_Model_NoteFilter(array(
                 array(
                     'field' => 'record_model',
                     'operator' => 'equals',
@@ -225,7 +225,7 @@ class Tinebase_Notes
         if ($_record[$_notesProperty] instanceOf Tinebase_Record_RecordSet) {
             $notesToSet = $_record[$_notesProperty];
         } else {
-            $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_Note', $_record[$_notesProperty]);
+            $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $_record[$_notesProperty]);
         }
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notesToSet->toArray(), true));
@@ -254,9 +254,9 @@ class Tinebase_Notes
     /**
      * add new note
      *
-     * @param Tinebase_Notes_Model_Note $_note
+     * @param Tinebase_Model_Note $_note
      */
-    public function addNote(Tinebase_Notes_Model_Note $_note)
+    public function addNote(Tinebase_Model_Note $_note)
     {
         if (!$_note->getId()) {
             $id = $_note->generateUID();
@@ -299,7 +299,7 @@ class Tinebase_Notes
             }
         }
         
-        $note = new Tinebase_Notes_Model_Note(array(
+        $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $noteType->getId(),
             'note'              => $noteText,    
             'record_model'      => get_class($_record),
@@ -349,13 +349,13 @@ class Tinebase_Notes
     /**
      * get all note types
      *
-     * @return Tinebase_Record_RecordSet of Tinebase_Notes_Model_NoteType
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_NoteType
      */
     public function getNoteTypes()
     {
-        $types = new Tinebase_Record_RecordSet('Tinebase_Notes_Model_NoteType');
+        $types = new Tinebase_Record_RecordSet('Tinebase_Model_NoteType');
         foreach ($this->_noteTypesTable->fetchAll() as $type) {
-            $types->addRecord(new Tinebase_Notes_Model_NoteType($type->toArray(), true));
+            $types->addRecord(new Tinebase_Model_NoteType($type->toArray(), true));
         }
         return $types;         
     }
@@ -364,7 +364,7 @@ class Tinebase_Notes
      * get note type by name
      *
      * @param string $_name
-     * @return Tinebase_Notes_Model_NoteType
+     * @return Tinebase_Model_NoteType
      */
     public function getNoteTypeByName($_name)
     {        
@@ -374,15 +374,15 @@ class Tinebase_Notes
             throw new UnderflowException('note type not found');
         }
         
-        return new Tinebase_Notes_Model_NoteType($row->toArray());        
+        return new Tinebase_Model_NoteType($row->toArray());        
     }
     
     /**
      * add new note type
      *
-     * @param Tinebase_Notes_Model_NoteType $_noteType
+     * @param Tinebase_Model_NoteType $_noteType
      */
-    public function addNoteType(Tinebase_Notes_Model_NoteType $_noteType)
+    public function addNoteType(Tinebase_Model_NoteType $_noteType)
     {
         if (!$_noteType->getId()) {
             $id = $_noteType->generateUID();
