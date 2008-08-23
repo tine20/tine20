@@ -47,12 +47,24 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         // the image container        
         this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, this.getImgTpl().apply(this), true);
         
+        // the text container
+        this.textCt = Ext.DomHelper.insertFirst(this.buttonCt, '<div>' + _('click to edit') + '</div>', true);
+        this.textCt.setSize(this.width, this.height);
+        this.textCt.setStyle({
+            //'z-index': 0,
+            'text-align': 'center',
+            'position': 'absolute',
+            'top': '63px'
+            
+            
+        });
+        
         this.bb = new Ext.ux.form.BrowseButton({
+            //debug: true,
             buttonCt: this.buttonCt,
             renderTo: this.buttonCt,
             scope: this,
             handler: this.onFileSelect
-            //debug: true
         });
     },
     getValue: function() {
