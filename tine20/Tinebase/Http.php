@@ -245,7 +245,12 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
                 'accountBackend'   => Tinebase_User::getConfiguredBackend(),
                 'jsonKey'          => Zend_Registry::get('jsonKey'),
-                'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray()
+                'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray(),
+                'version'          => array(
+                    'codename'      => 'Summer 2008 Milestone 2',
+                    'packageString' => 'summer-MS2-1',
+                    'releasedate'   => '2008/08/14'
+                )
             );
         }
         return $registryData;
