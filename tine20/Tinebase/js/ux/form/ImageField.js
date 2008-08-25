@@ -120,7 +120,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         var ct = Ext.DomHelper.append(this.buttonCt, '<div>&nbsp;</div>', true);
         
         var upload = new Ext.menu.Item({
-            text: 'Change Image',
+            text: _('Change Image'),
             iconCls: 'action_uploadImage'
         });
         upload.on('render', function(){
@@ -141,7 +141,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             items: [
             upload,
             {
-                text: _('Edit Image'),
+                text: _('Crop Image'),
                 iconCls: 'action_cropImage',
                 scope: this,
                 disabled: true, //this.imageSrc == this.defaultImage,

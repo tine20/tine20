@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2008-08-25 11:20+0100\n"
+"PO-Revision-Date: 2008-08-25 11:23+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -301,6 +301,10 @@ msgstr "Fehler beim Hochladen"
 #: js/ux/form/ImageField.js:111
 msgid "Could not upload image. Please notify your Administrator"
 msgstr "Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren Administrator"
+
+#: js/ux/form/ImageField.js:123
+msgid "Change Image"
+msgstr "Bild ändern"
 
 #: js/ux/form/ImageField.js:144
 msgid "Edit Image"

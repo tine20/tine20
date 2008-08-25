@@ -292,6 +292,10 @@ msgstr ""
 msgid "Could not upload image. Please notify your Administrator"
 msgstr ""
 
+#: js/ux/form/ImageField.js:123
+msgid "Change Image"
+msgstr ""
+
 #: js/ux/form/ImageField.js:144
 msgid "Edit Image"
 msgstr ""
