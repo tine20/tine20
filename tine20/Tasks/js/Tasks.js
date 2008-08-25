@@ -93,17 +93,12 @@ Tine.Tasks.mainGrid = {
 			} else {
                 var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
             }
-			var popupWindow = new Tine.Tasks.EditPopup({
-				id: taskId,
-                containerId: (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1
-                //relatedApp: 'tasks',
-                //relatedId: 
-            });
+            var containerId = (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1;
+			var popupWindow = new Tine.Tasks.EditPopup(taskId, containerId);
             
             popupWindow.on('update', function(task) {
             	this.store.load({params: this.paging});
             }, this);
-            //var popup = Tine.Tinebase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
             
         },
 		deleteTasks: function(_button, _event){
@@ -574,7 +569,28 @@ Tine.Tasks.mainGrid = {
 };
 
 /*********************************** EDIT DIALOG ********************************************/
+/**
+ * Tasks Edit Popup
+ * @todo is the linking stuff stille used?
+ */
+Tine.Tasks.EditPopup = function (taskId, containerId, relatedId, relatedApp) {
+    taskId      = taskId      ? taskId      : -1;
+    containerId = containerId ? containerId : -1;
+    relatedApp  = relatedApp  ? relatedApp  : '';
+    relatedId   = relatedId   ? relatedId   : -1;
+    
+    var window = new Ext.ux.PopupWindowMgr.getWindow({
+        url: 'index.php?method=Tasks.editTask&taskId=' + taskId + '&linkingApp='+ relatedApp + '&linkedId=' + relatedId + '&containerId=' + containerId,
+        name: 'TasksEditWindow' + taskId,
+        width: 700,
+        height: 300
+    });
+    return window;
+}
 
+/**
+ * Tasks Edit Dialog
+ */
 Tine.Tasks.EditDialog = function(task) {
 	
 	// get translation object
@@ -595,7 +611,6 @@ Tine.Tasks.EditDialog = function(task) {
 			
 			var dlg = Ext.getCmp('TasksEditFormPanel');
 			var form = dlg.getForm();
-			form.render();
 			
 			if(form.isValid()) {
 				Ext.MessageBox.wait(translation._('Please wait'), translation._('Saving Task'));
@@ -606,9 +621,7 @@ Tine.Tasks.EditDialog = function(task) {
 	            Ext.Ajax.request({
 					params: {
 		                method: 'Tasks.saveTask', 
-		                task: Ext.util.JSON.encode(task.data),
-						linkingApp: formData.linking.link_app1,
-						linkedId: formData.linking.link_id1 //,
+		                task: Ext.util.JSON.encode(task.data)
 		            },
 		            success: function(_result, _request) {
 		                
@@ -752,22 +765,6 @@ Tine.Tasks.EditDialog = function(task) {
     dlg.getForm().loadRecord(task);
 };
 
-// generalised popup
-Tine.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
-   relatedApp: '',
-   relatedId: -1,
-   id: -1,
-   containerId: -1,
-   
-   name: 'TasksEditWindow',
-   width: 700,
-   height: 300,
-   initComponent: function(){
-        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.id + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId + '&containerId=' + this.containerId;
-        this.onReadyFn = 'Tine.Tasks.EditDialog();';
-        Tine.Tasks.EditPopup.superclass.initComponent.call(this);
-   }
-});
 
 // fixes a task
 Tine.Tasks.fixTask = function(task) {
