@@ -24,8 +24,32 @@ Tine.widgets.VersionCheck = function() {
     });
     ds.on('load', function(store, records) {
         var version = records[0];
-        console.log(version.data);
+        
+        var local = new Date(Tine.Tinebase.Registry.get('version').releasedate);
+        var latest = new Date(version.get('releasedate'));
+        
+        if (latest > local && Tine.Tinebase.hasRight('run', 'admin')) {
+            if (version.get('critical') == true) {
+                Ext.MessageBox.show({
+                    title: _('New version of Tine 2.0 available'), 
+                    msg: sprintf(_('Version "%s" of Tine 2.0 is available.'), version.get('codename')) + "\n" +
+                                 _("It's a critical update and must be installed as soon as possible!"),
+                    width: 500,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+            } else {
+                Ext.MessageBox.show({
+                    title: _('New version of Tine 2.0 available'),
+                    msg: sprintf(_('Version "%s" of Tine 2.0 is available.'), version.get('codename')) + "\n" +
+                                 _('Please consider updateing!'),
+                    width: 400,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO
+                });
+            }
+        }
     }, this);
     
-    ds.load({params: {version: Ext.util.JSON.encode(Tine.Build)}});
+    ds.load({params: {version: Ext.util.JSON.encode(Tine.Tinebase.Registry.get('version'))}});
 }
