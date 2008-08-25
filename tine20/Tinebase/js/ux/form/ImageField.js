@@ -46,6 +46,11 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
         // the image container        
         this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, this.getImgTpl().apply(this), true);
+        this.imageCt.setOpacity(0.4);
+        this.imageCt.on('load', function(){
+            //console.log(arguments);
+            this.imageCt.setOpacity(0.4);
+        }, this);
         
         // the text container
         this.textCt = Ext.DomHelper.insertFirst(this.buttonCt, '<div>' + _('click to edit') + '</div>', true);
@@ -55,9 +60,8 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             'text-align': 'center',
             'position': 'absolute',
             'top': '63px'
-            
-            
         });
+        //this.textCt.setOpacity(1);
         
         this.bb = new Ext.ux.form.BrowseButton({
             //debug: true,

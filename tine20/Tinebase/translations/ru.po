@@ -278,6 +278,10 @@ msgstr ""
 "Вы ввели всю информацию. Как только вы нажмете кнопку готово, вам будет "
 "отправлен Подтверждающие электронное письмо."
 
+#: js/ux/form/ImageField.js:56
+msgid "click to edit"
+msgstr ""
+
 #: js/widgets/account/ConfigGrid.js:55
 #: js/widgets/container/ContainerGrants.js:128
 msgid "remove account"
@@ -685,14 +689,15 @@ msgstr "Поиск..."
 msgid "Color"
 msgstr "Цвет"
 
-msgid "container"
-msgstr "контейнер"
+#~ msgid "container"
+#~ msgstr "контейнер"
 
-msgid "The selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
-msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
-msgstr[2] ""
+#~ msgid "The selected tag will be deleted and disapear for all entries"
+#~ msgid_plural ""
+#~ "The selected tags will be removed and disapear for all entries"
+#~ msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
+#~ msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
+#~ msgstr[2] ""
 
 #~ msgid "Language: "
 #~ msgstr "Язык:"

@@ -269,6 +269,10 @@ msgid ""
 "will send you the registration email."
 msgstr ""
 
+#: js/ux/form/ImageField.js:56
+msgid "click to edit"
+msgstr ""
+
 #: js/widgets/account/ConfigGrid.js:55
 #: js/widgets/container/ContainerGrants.js:128
 msgid "remove account"
