@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-08-05 17:42+0100\n"
-"PO-Revision-Date: 2008-08-21 13:12+0100\n"
+"PO-Revision-Date: 2008-08-22 18:29+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -64,15 +64,14 @@ msgstr "Добавить контакт"
 
 #: js/Addressbook.js:238
 msgid "edit contact"
-msgstr "Обработать контакт"
+msgstr "Редактировать контакт"
 
 #: js/Addressbook.js:251
-#, fuzzy
 msgid "delete contact"
 msgid_plural "delete contacts"
 msgstr[0] "Удалить контакт"
-msgstr[1] "Удалить контакт"
-msgstr[2] "Удалить контакт"
+msgstr[1] "Удалить контакты"
+msgstr[2] "Удалить контактов"
 
 #: js/Addressbook.js:261 js/Addressbook.js:893
 msgid "export as pdf"
@@ -130,11 +129,11 @@ msgstr "Личный адрес"
 
 #: js/Addressbook.js:357
 msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Показание контакты {0} - {1} of {2}"
+msgstr "Показ контактов {0} - {1} of {2}"
 
 #: js/Addressbook.js:358 js/Addressbook.js:577
 msgid "No contacts to display"
-msgstr "Никаких контактов не найдено"
+msgstr "Никаких контактов в наличие"
 
 #: js/Addressbook.js:363
 msgid "Type"
@@ -346,7 +345,7 @@ msgstr "Фирменный адрес"
 msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] "Линк"
-msgstr[1] "Линки"
+msgstr[1] "Линка"
 msgstr[2] "Линков"
 
 #: Pdf.php:35
@@ -421,14 +420,14 @@ msgstr ""
 msgid "Other Data"
 msgstr "Другая дата"
 
-#~ msgid "Filter: "
-#~ msgstr "Фильтр:"
+msgid "Filter: "
+msgstr "Фильтр:"
 
-#~ msgid "Search: "
-#~ msgstr "Поиск:"
+msgid "Search: "
+msgstr "Поиск:"
 
-#~ msgid "Name"
-#~ msgstr "Имя"
+msgid "Name"
+msgstr "Имя"
 
-#~ msgid "History"
-#~ msgstr "История"
+msgid "History"
+msgstr "История"

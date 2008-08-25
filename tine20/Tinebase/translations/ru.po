@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-21 16:22+0100\n"
+"PO-Revision-Date: 2008-08-22 16:47+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -140,7 +140,7 @@ msgstr "Пожалуйста подождите!"
 
 #: js/Login.js:134
 msgid "Login failure"
-msgstr "Регистрация не удался"
+msgstr "Регистрация не удалась"
 
 #: js/Login.js:135
 msgid "Your username and/or your password are wrong!!!"
@@ -359,7 +359,7 @@ msgstr "Сохранить"
 
 #: js/widgets/AccountpickerPanel.js:208 js/widgets/EditRecord.js:63
 msgid "Apply"
-msgstr "Применять"
+msgstr "Применить"
 
 #: js/widgets/AccountpickerPanel.js:214
 msgid "Close"
@@ -415,7 +415,7 @@ msgstr "Показываю действия {0} - {1} of {2}"
 
 #: js/widgets/ActivitiesPanel.js:410
 msgid "No notes to display"
-msgstr "Никаких примечание в наличии"
+msgstr "Никаких примечаний в наличии"
 
 #: js/widgets/ActivitiesPanel.js:499
 msgid "Activities"
@@ -733,18 +733,26 @@ msgstr "Поиск..."
 msgid "Color"
 msgstr "Цвет"
 
-#~ msgid "My"
-#~ msgstr "Мое"
+msgid "My"
+msgstr "Мое"
 
-#~ msgid "container"
-#~ msgstr "контейнер"
+msgid "container"
+msgstr "контейнер"
 
-#~ msgid "The selected tag will be deleted and disapear for all entries"
-#~ msgid_plural ""
-#~ "The selected tags will be removed and disapear for all entries"
-#~ msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
-#~ msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
-#~ msgstr[2] ""
+msgid "The selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
+msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
+msgstr[2] ""
 
-#~ msgid "Language: "
-#~ msgstr "Язык:"
+msgid "Language: "
+msgstr "Язык:"
+
+#~ msgid "All"
+#~ msgstr "Все"
+
+#~ msgid "Shared"
+#~ msgstr "Разделение"
+
+#~ msgid "Other Users"
+#~ msgstr "Другие пользователи"
