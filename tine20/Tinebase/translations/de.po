@@ -28,10 +28,10 @@ msgstr "Ausführen"
 
 #: Application/Rights/Abstract.php:61
 msgid "run right description"
-msgstr "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
+msgstr ""
+"Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
-#: Export/Pdf.php:152
-#: js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Tags"
 
@@ -47,9 +47,7 @@ msgstr "Angelegt von"
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: js/ExceptionDialog.js:34
-#: js/MainScreen.js:288
-#: js/widgets/EditRecord.js:82
+#: js/ExceptionDialog.js:34 js/MainScreen.js:289 js/widgets/EditRecord.js:82
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -66,11 +64,15 @@ msgid "The last action you made was potentially not performed correctly."
 msgstr "Ihre letzte Aktion wurde möglicherweise nicht korrekt ausgeführt."
 
 #: js/ExceptionDialog.js:52
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occoured."
-msgstr "Mit dem Senden eines Fehlerberichtes helfen sie mit die Software zu verbessern. Bitte beschreiben sie was genau sie gemacht haben bevor der Fehler aufgetreten ist. "
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occoured."
+msgstr ""
+"Mit dem Senden eines Fehlerberichtes helfen sie mit die Software zu "
+"verbessern. Bitte beschreiben sie was genau sie gemacht haben bevor der "
+"Fehler aufgetreten ist. "
 
-#: js/ExceptionDialog.js:58
-#: js/widgets/tags/TagsPanel.js:556
+#: js/ExceptionDialog.js:58 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -118,8 +120,7 @@ msgstr "Passwort"
 msgid "Logging you in..."
 msgstr "Sie werden angemeldet..."
 
-#: js/Login.js:119
-#: js/widgets/container/ContainerGrants.js:75
+#: js/Login.js:119 js/widgets/container/ContainerGrants.js:75
 #: js/widgets/container/ContainerTree.js:205
 #: js/widgets/container/ContainerTree.js:233
 #: js/widgets/container/ContainerTree.js:265
@@ -130,8 +131,7 @@ msgstr "Bitte warten"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Anmeldung erfolgreich. Tine 2.0 wird geladen..."
 
-#: js/Login.js:130
-#: js/MainScreen.js:353
+#: js/Login.js:130 js/MainScreen.js:354
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
@@ -155,8 +155,7 @@ msgstr "Abmelden"
 msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
-#: js/MainScreen.js:71
-#: js/widgets/container/ContainerGrants.js:183
+#: js/MainScreen.js:71 js/widgets/container/ContainerGrants.js:183
 msgid "Admin"
 msgstr "Admin"
 
@@ -174,70 +173,67 @@ msgstr "Benutzer: %s"
 msgid "Timezone: %s"
 msgstr "Zeitzone: %s"
 
-#: js/MainScreen.js:97
-#: js/widgets/LangChooser.js:40
+#: js/MainScreen.js:97 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Sprache"
 
-#: js/MainScreen.js:252
+#: js/MainScreen.js:253
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr "Passwort für \"%s\" ändern"
 
-#: js/MainScreen.js:276
+#: js/MainScreen.js:277
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#: js/MainScreen.js:280
+#: js/MainScreen.js:281
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: js/MainScreen.js:284
+#: js/MainScreen.js:285
 msgid "Repeat new Password"
 msgstr "Wiederholung neues Passwort"
 
-#: js/MainScreen.js:294
-#: js/Tinebase.js:98
-#: js/widgets/AccountpickerPanel.js:108
+#: js/MainScreen.js:295 js/Tinebase.js:98 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/EditRecord.js:52
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:303
+#: js/MainScreen.js:304
 msgid "Please Wait!"
 msgstr "Bitte warten!"
 
-#: js/MainScreen.js:304
+#: js/MainScreen.js:305
 msgid "changing password..."
 msgstr "Passwort wird geändert..."
 
-#: js/MainScreen.js:315
+#: js/MainScreen.js:316
 msgid "Success"
 msgstr "Erfolg"
 
-#: js/MainScreen.js:316
+#: js/MainScreen.js:317
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert"
 
-#: js/MainScreen.js:322
-#: js/MainScreen.js:332
+#: js/MainScreen.js:323 js/MainScreen.js:333
 msgid "Failure"
 msgstr "Fehler"
 
-#: js/MainScreen.js:333
+#: js/MainScreen.js:334
 msgid "The new passwords mismatch, please correct them."
-msgstr "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die Eingabe."
+msgstr ""
+"Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
+"Eingabe."
 
-#: js/MainScreen.js:351
-#: js/widgets/container/ContainerTree.js:231
+#: js/MainScreen.js:352 js/widgets/container/ContainerTree.js:231
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/MainScreen.js:351
+#: js/MainScreen.js:352
 msgid "Are you sure you want to logout?"
 msgstr "Wollen sie sich wirklich Abmelden?"
 
-#: js/MainScreen.js:353
+#: js/MainScreen.js:354
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
@@ -274,8 +270,12 @@ msgid "Congratulations!"
 msgstr "Herzlichen Glückwunsch!"
 
 #: js/UserRegistration.js:167
-msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
-msgstr "Sie haben all benötigten Informationen eingegeben. Wenn sie nun den Fertig Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+"Sie haben all benötigten Informationen eingegeben. Wenn sie nun den Fertig "
+"Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
 
 #: js/ux/form/ImageField.js:48
 msgid "click to edit"
@@ -299,14 +299,15 @@ msgstr "Fehler beim Hochladen"
 
 #: js/ux/form/ImageField.js:111
 msgid "Could not upload image. Please notify your Administrator"
-msgstr "Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren Administrator"
+msgstr ""
+"Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren "
+"Administrator"
 
 #: js/ux/form/ImageField.js:123
 msgid "Change Image"
 msgstr "Bild ändern"
 
-#: js/ux/form/ImageField.js:144
-#: js/ux/form/ImageField.js:162
+#: js/ux/form/ImageField.js:144 js/ux/form/ImageField.js:162
 msgid "Crop Image"
 msgstr "Bild zuschneiden"
 
@@ -320,15 +321,16 @@ msgstr "Fehler bei Bildverarbeitung"
 
 #: js/ux/form/ImageField.js:208
 msgid "Could not load image. Please notify your Administrator"
-msgstr "Das Bild konnte nicht geladen werden. Bitte informieren sie ihren Administrator"
+msgstr ""
+"Das Bild konnte nicht geladen werden. Bitte informieren sie ihren "
+"Administrator"
 
 #: js/widgets/account/ConfigGrid.js:55
 #: js/widgets/container/ContainerGrants.js:128
 msgid "remove account"
 msgstr "Zugang löschen"
 
-#: js/widgets/account/ConfigGrid.js:79
-#: js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
 #: js/widgets/container/ContainerGrants.js:193
 msgid "Name"
 msgstr "Name"
@@ -337,20 +339,16 @@ msgstr "Name"
 msgid "add account"
 msgstr "Zugang Hinzufügen"
 
-#: js/widgets/account/PickerPanel.js:177
-#: js/widgets/GridPicker.js:386
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
 msgid "enter searchfilter"
 msgstr "suchfilter eingeben"
 
-#: js/widgets/account/PickerPanel.js:221
-#: js/widgets/GridPicker.js:407
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
 msgid "Search"
 msgstr "Suchen"
 
-#: js/widgets/account/PickerPanel.js:258
-#: js/widgets/account/PickerPanel.js:259
-#: js/widgets/GridPicker.js:445
-#: js/widgets/GridPicker.js:446
+#: js/widgets/account/PickerPanel.js:258 js/widgets/account/PickerPanel.js:259
+#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
 msgid "Browse"
 msgstr "Blättern"
 
@@ -362,8 +360,7 @@ msgstr "bitte wählen sie einen Zugang"
 msgid "Save"
 msgstr "Speichern"
 
-#: js/widgets/AccountpickerPanel.js:208
-#: js/widgets/EditRecord.js:63
+#: js/widgets/AccountpickerPanel.js:208 js/widgets/EditRecord.js:63
 msgid "Apply"
 msgstr "Anwenden"
 
@@ -375,23 +372,19 @@ msgstr "Schließen"
 msgid "Add a Note..."
 msgstr "Notiz hinzufügen"
 
-#: js/widgets/ActivitiesPanel.js:160
-#: js/widgets/ActivitiesPanel.js:172
+#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
 #: js/widgets/ActivitiesPanel.js:309
 #: js/widgets/container/ContainerGrants.js:165
 #: js/widgets/container/ContainerTree.js:304
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: js/widgets/ActivitiesPanel.js:160
-#: js/widgets/ActivitiesPanel.js:309
-#: js/widgets/ActivitiesPanel.js:393
-#: js/widgets/ActivitiesPanel.js:511
+#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:309
+#: js/widgets/ActivitiesPanel.js:393 js/widgets/ActivitiesPanel.js:511
 msgid "Note"
 msgstr "Notiz"
 
-#: js/widgets/ActivitiesPanel.js:173
-#: js/widgets/ActivitiesPanel.js:321
+#: js/widgets/ActivitiesPanel.js:173 js/widgets/ActivitiesPanel.js:321
 msgid "Add new note"
 msgstr "Neue Notiz hinzufügen"
 
@@ -399,8 +392,7 @@ msgstr "Neue Notiz hinzufügen"
 msgid "Recent Activities"
 msgstr "Letzte Aktivitäten"
 
-#: js/widgets/ActivitiesPanel.js:268
-#: js/widgets/ActivitiesPanel.js:320
+#: js/widgets/ActivitiesPanel.js:268 js/widgets/ActivitiesPanel.js:320
 msgid "Add Note"
 msgstr "Notiz hinzufügen"
 
@@ -408,8 +400,7 @@ msgstr "Notiz hinzufügen"
 msgid "Enter new note:"
 msgstr "Neue Notiz eingeben:"
 
-#: js/widgets/ActivitiesPanel.js:391
-#: js/widgets/ActivitiesPanel.js:516
+#: js/widgets/ActivitiesPanel.js:391 js/widgets/ActivitiesPanel.js:516
 msgid "Type"
 msgstr "Typ"
 
@@ -598,8 +589,7 @@ msgstr "Bitte wählen sie eine Gruppe aus"
 msgid "setting new language..."
 msgstr "neue Sprache wird eingestellt..."
 
-#: js/widgets/LangChooser.js:72
-#: js/widgets/LangChooser.js:93
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
 msgid "Please Wait"
 msgstr "Bitte Warten"
 
@@ -631,8 +621,7 @@ msgstr "Bitte beachten: Einen persönlichen Tag können nur Sie sehen!"
 msgid "Enter tag name:"
 msgstr "Tag-Namen eingeben:"
 
-#: js/widgets/tags/TagsPanel.js:105
-#: js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
 #: js/widgets/tags/TagsPanel.js:410
 msgid "personal"
 msgstr "Persönlich"
@@ -651,8 +640,7 @@ msgstr[1] "Tags entfernen"
 msgid "Edit tag"
 msgstr "Tag bearbeiten"
 
-#: js/widgets/tags/TagsPanel.js:165
-#: js/widgets/tags/TagsPanel.js:170
+#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
 msgstr "Tag umbenennen"
 
@@ -691,8 +679,10 @@ msgstr[1] "Ausgewählte Tags wirklich löschen?"
 #: js/widgets/tags/TagsPanel.js:230
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
-msgstr[1] "Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
+msgstr[0] ""
+"Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
+msgstr[1] ""
+"Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Please wait a moment..."
@@ -704,8 +694,7 @@ msgid_plural "Deleting Tags"
 msgstr[0] "Lösche Tag"
 msgstr[1] "Lösche Tags"
 
-#: js/widgets/tags/TagsPanel.js:250
-#: js/widgets/tags/TagsPanel.js:359
+#: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
 #: js/widgets/tags/TagsPanel.js:392
 msgid "Failed"
 msgstr "Fehlgeschlagen"
@@ -714,13 +703,11 @@ msgstr "Fehlgeschlagen"
 msgid "Could not delete Tag(s)."
 msgstr "Konnte Tag(s) nicht löschen."
 
-#: js/widgets/tags/TagsPanel.js:311
-#: js/widgets/tags/TagsPanel.js:373
+#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
 msgid "Notice"
 msgstr "Beachten Sie"
 
-#: js/widgets/tags/TagsPanel.js:312
-#: js/widgets/tags/TagsPanel.js:374
+#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
 msgid "The minimum tag length is three."
 msgstr "Ein Tag muss mindestens aus 3 Zeichen bestehen."
 
@@ -732,8 +719,7 @@ msgstr "Konnte Tag nicht erzeugen."
 msgid "Could not update tag."
 msgstr "Konnte Tag nicht aktualisieren."
 
-#: js/widgets/tags/TagsPanel.js:425
-#: js/widgets/tags/TagsPanel.js:483
+#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
 msgid "Enter tag name"
 msgstr "Tag-Name eingegeben"
 
@@ -745,12 +731,32 @@ msgstr "Suche ..."
 msgid "Color"
 msgstr "Farbe"
 
+#: js/widgets/VersionCheck.js:34 js/widgets/VersionCheck.js:43
+msgid "New version of Tine 2.0 available"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:35 js/widgets/VersionCheck.js:44
+#, python-format
+msgid "Version \"%s\" of Tine 2.0 is available."
+msgstr ""
+
+#: js/widgets/VersionCheck.js:36
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:45
+msgid "Please consider updateing!"
+msgstr ""
+
 #~ msgid "My"
 #~ msgstr "Meine"
+
 #~ msgid "Edit Image"
 #~ msgstr "Bild ändern"
+
 #~ msgid "Language: "
 #~ msgstr "Sprache:"
+
 #~ msgid "The selected tag will be deleted and disapear for all entries"
 #~ msgid_plural ""
 #~ "The selected tags will be removed and disapear for all entries"
@@ -758,12 +764,15 @@ msgstr "Farbe"
 #~ "Der ausgewählte Tag wird gelöscht und bei allen Einträgen entfernt"
 #~ msgstr[1] ""
 #~ "Die ausgewählten Tags werden gelöscht und bei allen Einträgen entfernt"
+
 #~ msgid "Note Type..."
 #~ msgstr "Notiztyp"
+
 #~ msgid "Account name: %s"
 #~ msgstr "Benutzername: %s"
+
 #~ msgid "manage shared tags"
 #~ msgstr "Shared Tags bearbeiten"
+
 #~ msgid "manage shared tags right description"
 #~ msgstr "Erlaubt das Ändern/Hinzufügen/Löschen von Shared Tags"
-
