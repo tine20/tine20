@@ -278,8 +278,48 @@ msgstr ""
 "Sie haben all benötigten Informationen eingegeben. Wenn sie nun den Fertig "
 "Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
 
-#: js/ux/form/ImageField.js:56
+#: js/ux/form/ImageField.js:48
 msgid "click to edit"
+msgstr ""
+
+#: js/ux/form/ImageField.js:86
+msgid "Not An Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:86
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr ""
+
+#: js/ux/form/ImageField.js:103
+msgid "Loading"
+msgstr ""
+
+#: js/ux/form/ImageField.js:111
+msgid "Upload Failed"
+msgstr ""
+
+#: js/ux/form/ImageField.js:111
+msgid "Could not upload image. Please notify your Administrator"
+msgstr ""
+
+#: js/ux/form/ImageField.js:144
+msgid "Edit Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:162
+msgid "Crop Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:170
+msgid "Delete Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:208
+msgid "Image Failed"
+msgstr ""
+
+#: js/ux/form/ImageField.js:208
+msgid "Could not load image. Please notify your Administrator"
 msgstr ""
 
 #: js/widgets/account/ConfigGrid.js:55
