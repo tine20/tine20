@@ -83,7 +83,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             input: input
         });
         if(! uploader.isImage()) {
-            Ext.MessageBox.alert('Not An Image', 'Plase select an image file (gif/png/jpeg)').setIcon(Ext.MessageBox.ERROR);
+            Ext.MessageBox.alert(_('Not An Image'), _('Plase select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
             return;
         }
         uploader.on('uploadcomplete', function(uploader, record){
@@ -100,7 +100,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }, this);
         uploader.on('uploadfailure', this.onUploadFail, this);
         
-        this.buttonCt.mask('Loading', 'x-mask-loading');
+        this.buttonCt.mask(_('Loading'), 'x-mask-loading');
         uploader.upload();
         
     },
@@ -108,7 +108,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      * @private
      */
     onUploadFail: function() {
-        Ext.MessageBox.alert('Upload Failed', 'Could not upload image. Please notify your Administrator').setIcon(Ext.MessageBox.ERROR);
+        Ext.MessageBox.alert(_('Upload Failed'), _('Could not upload image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
     },
     /**
      * executed on image contextmenu
@@ -141,7 +141,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             items: [
             upload,
             {
-                text: 'Edit Image',
+                text: _('Edit Image'),
                 iconCls: 'action_cropImage',
                 scope: this,
                 disabled: true, //this.imageSrc == this.defaultImage,
@@ -159,7 +159,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                     var win = new Ext.Window({
                         width: 320,
                         height: 320,
-                        title: 'Crop Image',
+                        title: _('Crop Image'),
                         layout: 'fit',
                         items: dlg
                     });
@@ -167,7 +167,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 }
             
             },{
-                text: 'Delete Image',
+                text: _('Delete Image'),
                 iconCls: 'action_delete',
                 disabled: this.imageSrc == this.defaultImage,
                 scope: this,
@@ -205,7 +205,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 this.buttonCt.unmask();
             }, this);
             img.on('error', function() {
-                Ext.MessageBox.alert('Image Failed', 'Could not load image. Please notify your Administrator').setIcon(Ext.MessageBox.ERROR);
+                Ext.MessageBox.alert(_('Image Failed'), _('Could not load image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
                 this.buttonCt.unmask();
             }, this);
         }
