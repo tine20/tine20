@@ -231,6 +231,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 render: this.ativateDefaultApp
             }
         });
+        Tine.widgets.VersionCheck();
     },
     
     ativateDefaultApp: function() {

@@ -88,6 +88,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/widgets/ActionUpdater.js',
             'Tinebase/js/widgets/EditRecord.js',
             'Tinebase/js/widgets/Priority.js',
+            'Tinebase/js/widgets/VersionCheck.js',
             'Tinebase/js/widgets/AccountpickerPanel.js',
             'Tinebase/js/widgets/account/PickerPanel.js',
             'Tinebase/js/widgets/account/ConfigGrid.js',
