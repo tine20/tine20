@@ -159,10 +159,7 @@ Tine.Crm.Main = {
         handlerAddTask: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             
-            popupWindow = new Tine.Tasks.EditPopup({
-                relatedApp: 'crm',
-                relatedId: _rowIndex[0].data.id
-            });
+            popupWindow = new Tine.Tasks.EditPopup(-1, -1, _rowIndex[0].data.id, 'Crm');
         }
         
     },        
@@ -818,12 +815,7 @@ Tine.Crm.LeadEditDialog = {
          */
         addTask: function(_button, _event) 
         {
-            var taskPopup = new Tine.Tasks.EditPopup({
-            	id: -1
-                //relatedApp: 'crm'
-            	//containerId:
-                //relatedId: 
-            });          
+            var taskPopup = new Tine.Tasks.EditPopup(-1);
             
             // update event handler
             taskPopup.on('update', function(task) {
@@ -847,9 +839,7 @@ Tine.Crm.LeadEditDialog = {
             var selectedRows = Ext.getCmp('crmGridTasks').getSelectionModel().getSelections();
             var selectedTask = selectedRows[0];
             
-            var taskPopup = new Tine.Tasks.EditPopup({
-                id: selectedTask.id
-            });          
+            var taskPopup = new Tine.Tasks.EditPopup(selectedTask.id);
             
             // update event handler
             taskPopup.on('update', function(task) {
