@@ -748,8 +748,7 @@ Tine.Crm.LeadEditDialog = {
          */
         addContact: function(_button, _event) 
         {
-            var contactPopup = new Tine.Addressbook.EditPopup({
-            });        	
+            var contactPopup = new Tine.Addressbook.EditPopup();        	
             
             // update event handler
             contactPopup.on('update', function(contact) {
@@ -783,9 +782,7 @@ Tine.Crm.LeadEditDialog = {
             var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
             var selectedContact = selectedRows[0];
             
-            var contactPopup = new Tine.Addressbook.EditPopup({
-                contactId: selectedContact.id
-            });          
+            var contactPopup = new Tine.Addressbook.EditPopup(selectedContact.id);          
             
             // update event handler
             contactPopup.on('update', function(contact) {            	
