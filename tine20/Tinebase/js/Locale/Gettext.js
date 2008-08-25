@@ -137,7 +137,7 @@ Locale.Gettext.PO.po2json = function (po) {
   return '({\n' + po
     .replace(/\r?\n/g, '\n')
     .replace(/#.*\n/g, '')
-    .replace(/"(\s+)"/g, '')
+    .replace(/"(\n+)"/g, '')
     .replace(/msgid "(.*?)"\nmsgid_plural "(.*?)"/g, 'msgid "$1, $2"')
     .replace(/msg(\S+) /g, function (match, op) {
       switch (op) {

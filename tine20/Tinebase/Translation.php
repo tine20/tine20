@@ -136,7 +136,8 @@ class Tinebase_Translation
         
         $po = preg_replace('/\r?\n/', "\n", $po);
         $po = preg_replace('/#.*\n/', '', $po);
-        $po = preg_replace('/"(\s+)"/', '', $po);
+        // 2008-08-25 \s -> \n as there are situations when whitespace like space breaks the thing!
+        $po = preg_replace('/"(\n+)"/', '', $po);
         $po = preg_replace('/msgid "(.*?)"\nmsgid_plural "(.*?)"/', 'msgid "$1, $2"', $po);
         $po = preg_replace_callback('/msg(\S+) /', create_function('$matches','
             global $first, $plural;
