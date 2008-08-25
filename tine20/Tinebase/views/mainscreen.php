@@ -54,9 +54,9 @@
     <!-- Static Localisation --><?php
     $locale = Zend_Registry::get('locale');
     echo "
-    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . "'></script>'
-    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . "'></script>'
-    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . "'></script>'
+    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . "'></script>
+    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . "'></script>
+    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . "'></script>
     ";?>
     
     
