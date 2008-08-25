@@ -174,7 +174,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         if (!empty($contact->jpegphoto)) {
             $link =  'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contact['id'] . '&width=90&height=90&ratiomode=0';
         } else {
-            $link = 'images/empty_photo.jpg';
+            $link = 'images/empty_photo.png';
         }
         return $link;
     }

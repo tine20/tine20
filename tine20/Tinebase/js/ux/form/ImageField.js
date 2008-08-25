@@ -28,7 +28,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {String}
      */
-    defaultImage: 'images/empty_photo.jpg',
+    defaultImage: 'images/empty_photo.png',
     
     defaultAutoCreate : {tag:'input', type:'hidden'},
     
