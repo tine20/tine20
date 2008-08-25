@@ -188,7 +188,6 @@ Ext.ux.PopupWindowGroup = function(){
          * NOTE: this dosn't work when the popup got reloaded
          */
         getWindow: function(config){
-            console.log(frames.length);
             var popupWindow = list[config.name];
             if (popupWindow) {
                 popupWindow.popup.focus();
