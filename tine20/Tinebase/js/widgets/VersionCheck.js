@@ -12,11 +12,16 @@
 
 Ext.namespace('Tine.widgets');
 
+/**
+ * check if newer version of Tine 2.0 is available
+ * @class Tine.widgets.VersionCheck
+ * @constructor
+ */
 Tine.widgets.VersionCheck = function() {
     
     var ds = new Ext.data.Store({
         proxy: new Ext.data.ScriptTagProxy({
-            url: 'http://localhost/versionCheck.php'
+            url: 'http://tine20.org/versionCheck.php'
         }),
         reader: new Ext.data.JsonReader({
             root: 'version',
