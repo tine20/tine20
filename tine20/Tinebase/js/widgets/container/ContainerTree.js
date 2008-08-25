@@ -103,26 +103,26 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	    });
 	    
 	    var initialTree = [{
-	        text: translation._('All') + ' ' + this.itemName,
+	        text: sprintf(translation._('All %s'), this.itemName),
 	        cls: "treemain",
 	        containerType: 'all',
 	        id: 'all',
 	        children: [{
-	            text: translation._('My') + ' ' + this.itemName,
+	            text: sprintf(translation._('My %s'), this.itemName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
 	            id: 'user',
 	            leaf: null,
 	            owner: Tine.Tinebase.Registry.get('currentAccount')
 	        }, {
-	            text: translation._('Shared') + ' ' + this.itemName,
+	            text: sprintf(translation._('Shared %s'), this.itemName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_SHARED,
 	            children: null,
 	            leaf: null,
 				owner: null
 	        }, {
-	            text: translation._('Other Users'),
+	            text: sprintf(translation._('Other Users %s'), this.itemName),
 	            cls: 'file',
 	            containerType: 'otherUsers',
 	            children: null,
