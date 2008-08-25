@@ -454,19 +454,23 @@ msgid "please select a container"
 msgstr "Моля иэберете контейнер"
 
 #: js/widgets/container/ContainerTree.js:106
-msgid "All"
+#, fuzzy, python-format
+msgid "All %s"
 msgstr "Всички"
 
 #: js/widgets/container/ContainerTree.js:111
-msgid "My"
-msgstr "Моите"
+#, python-format
+msgid "My %s"
+msgstr ""
 
 #: js/widgets/container/ContainerTree.js:118
-msgid "Shared"
+#, fuzzy, python-format
+msgid "Shared %s"
 msgstr "Общите"
 
 #: js/widgets/container/ContainerTree.js:125
-msgid "Other Users"
+#, fuzzy, python-format
+msgid "Other Users %s"
 msgstr "Други потребители"
 
 #: js/widgets/container/ContainerTree.js:203
@@ -718,6 +722,9 @@ msgstr "Търси..."
 #: js/widgets/tags/TagsPanel.js:560
 msgid "Color"
 msgstr "Цвят"
+
+#~ msgid "My"
+#~ msgstr "Моите"
 
 #~ msgid "Language: "
 #~ msgstr "Език:"

@@ -450,19 +450,23 @@ msgid "please select a container"
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:106
-msgid "All"
+#, python-format
+msgid "All %s"
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:111
-msgid "My"
+#, python-format
+msgid "My %s"
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:118
-msgid "Shared"
+#, python-format
+msgid "Shared %s"
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:125
-msgid "Other Users"
+#, python-format
+msgid "Other Users %s"
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:203
