@@ -296,11 +296,7 @@ msgstr ""
 msgid "Change Image"
 msgstr ""
 
-#: js/ux/form/ImageField.js:144
-msgid "Edit Image"
-msgstr ""
-
-#: js/ux/form/ImageField.js:162
+#: js/ux/form/ImageField.js:144 js/ux/form/ImageField.js:162
 msgid "Crop Image"
 msgstr ""
 
