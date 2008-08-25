@@ -292,20 +292,16 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
 
 /**
  * Lead Edit Popup
- * 
  */
-Tine.Crm.LeadEditDialog.Popup = Ext.extend(Ext.ux.PopupWindow, {
-   leadId: '',
-   //containerId: -1,
-    
-   name: 'CrmLeadEditWindow',
-   width: 800,
-   height: 750,
-   initComponent: function(){
-       this.url = 'index.php?method=Crm.editLead&_leadId=' + this.leadId;
-       Tine.Crm.LeadEditDialog.Popup.superclass.initComponent.call(this);
-   }
-});
+Tine.Crm.LeadEditDialog.Popup = function (leadId) {
+    var window = new Ext.ux.PopupWindowMgr.getWindow({
+        url: 'index.php?method=Crm.editLead&_leadId=' + leadId,
+        name: 'CrmLeadEditWindow' + leadId,
+        width: 800,
+        height: 750
+    });
+    return window;
+}
 
 /*********************** crm widgets ************************/
 

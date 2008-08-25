@@ -98,9 +98,7 @@ Tine.Crm.Main = {
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             var leadId = _rowIndex[0].data.id;
             //Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + leadId, 1024, 768);
-            var popupWindow = new Tine.Crm.LeadEditDialog.Popup({
-                leadId: leadId
-            });
+            var popupWindow = new Tine.Crm.LeadEditDialog.Popup(leadId);
         },
         
         /**
@@ -385,9 +383,7 @@ Tine.Crm.Main = {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
             var leadId = record.data.id;
             //Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.id, 1024, 768);
-            var popupWindow = new Tine.Crm.LeadEditDialog.Popup({
-                leadId: leadId
-            });            
+            var popupWindow = new Tine.Crm.LeadEditDialog.Popup(leadId);            
         });
        
         this.gridPanel = gridPanel;
@@ -411,9 +407,7 @@ Tine.Crm.Main = {
             iconCls: 'actionAdd',
             handler: function(){
                 //Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 1024, 768);
-                var popupWindow = new Tine.Crm.LeadEditDialog.Popup({
-                    leadId: 0
-                });                
+                var popupWindow = new Tine.Crm.LeadEditDialog.Popup(0);                
             }   
         });
         
