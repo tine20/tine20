@@ -26,7 +26,7 @@ sprintf = function() {
             numSubstitutions++;
             if (numSubstitutions >= arguments.length)
             {
-                alert('Error! Not enough function arguments (' + (arguments.length - 1) + ', excluding the string)\nfor the number of substitution parameters in string (' + numSubstitutions + ' so far).');
+                console.error('Error! Not enough function arguments (' + (arguments.length - 1) + ', excluding the string) for the number of substitution parameters in string (' + numSubstitutions + ' so far).');
             }
             var param = arguments[numSubstitutions];
             var pad = '';
