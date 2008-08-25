@@ -177,11 +177,16 @@ Tine.Addressbook.Main = {
 	     * onclick handler for deleteBtn
 	     */
 	    deleteContact: function(_button, _event) {
-	        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected contacts?', function(_button){
+            var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
+	        Ext.MessageBox.confirm(
+                this.translation._('Are you Sure?'), 
+                this.translation.ngettext('Do you really want to delete the selected contact?',
+                                          'Do you really want to delete the selected contacts?', 
+                                          selectedRows.length),
+                function(_button){
 	            if (_button == 'yes') {
 	            
 	                var contactIds = [];
-	                var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
 	                    contactIds.push(selectedRows[i].data.id);
 	                }
@@ -190,20 +195,26 @@ Tine.Addressbook.Main = {
 	                
 	                Ext.Ajax.request({
 	                    url: 'index.php',
+                        scope: this,
 	                    params: {
 	                        method: 'Addressbook.deleteContacts',
 	                        _contactIds: contactIds
 	                    },
-	                    text: 'Deleting contact(s)...',
+	                    text: this.translation.ngettext('Deleting contact...', 'Deleting contacts...', selectedRows.length),
 	                    success: function(_result, _request){
 	                        Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
 	                    },
 	                    failure: function(result, request){
-	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
+	                        Ext.MessageBox.alert(
+                                this.translation._('Failed'),
+                                this.translation.ngettext('Some error occured while trying to delete the conctact.',
+                                                          'Some error occured while trying to delete the conctacts.',
+                                                          selectedRows.length
+                              ));
 	                    }
 	                });
 	            }
-	        });
+	        }, this);
 	    }    
 	},
 	
@@ -573,7 +584,7 @@ Tine.Addressbook.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: 'No contacts to display'
+                emptyText: this.translation._('No contacts to display')
             })                        
         });
         
@@ -762,12 +773,11 @@ Tine.Addressbook.Main = {
 
 Tine.Addressbook.ContactEditDialog = {
 	handlers: {
-	    applyChanges: function(_button, _event, _closeWindow) 
-	    {
+	    applyChanges: function(_button, _event, _closeWindow) {
             var form = Ext.getCmp('contactDialog').getForm();
 
             if(form.isValid()) {
-                Ext.MessageBox.wait('Please wait a moment...', 'Saving Contact');
+                Ext.MessageBox.wait(this.translation.gettext('Please wait a moment...'), this.translation.gettext('Saving Contact'));
                 form.updateRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
                 Tine.Addressbook.ContactEditDialog.contactRecord.set('jpegphoto', Ext.getCmp('addressbookeditdialog-jpegimage').getValue());
         
@@ -799,22 +809,20 @@ Tine.Addressbook.ContactEditDialog = {
                         }
                     },
                     failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', 'Could not save contact.'); 
+                        Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save contact.')); 
                     },
                     scope: this 
                 });
             } else {
-                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+                Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
             }
 	    },
 
-	    saveAndClose: function(_button, _event) 
-        {
+	    saveAndClose: function(_button, _event) {
             this.handlers.applyChanges(_button, _event, true);
         },
 
-	    deleteContact: function(_button, _event) 
-	    {
+	    deleteContact: function(_button, _event) {
 	        var contactIds = Ext.util.JSON.encode([Tine.Addressbook.ContactEditDialog.contactRecord.data.id]);
 	            
 	        Ext.Ajax.request({
@@ -823,7 +831,7 @@ Tine.Addressbook.ContactEditDialog = {
 	                method: 'Addressbook.deleteContacts', 
 	                _contactIds: contactIds
 	            },
-	            text: 'Deleting contact...',
+	            text: this.translation.gettext('Deleting contact...'),
 	            success: function(_result, _request) {
                     if(window.opener.Tine.Addressbook) {
                         window.opener.Tine.Addressbook.Main.reload();
@@ -831,13 +839,12 @@ Tine.Addressbook.ContactEditDialog = {
                     window.close();
 	            },
 	            failure: function ( result, request) { 
-	                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
+	                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the conctact.')); 
 	            } 
 	        });                           
 	    },
 	    
-	    exportContact: function(_button, _event) 
-	    {
+	    exportContact: function(_button, _event) {
 	    	// we have to create an array (json encoded) as param here because exportContact expects one (for multiple contact export)
 	    	var contactIds = Ext.util.JSON.encode([_button.contactId]);
 
@@ -847,8 +854,7 @@ Tine.Addressbook.ContactEditDialog = {
 
     contactRecord: null,
     
-    updateContactRecord: function(_contactData)
-    {
+    updateContactRecord: function(_contactData) {
         if(_contactData.bday && _contactData.bday !== null) {
             _contactData.bday = Date.parseDate(_contactData.bday, 'c');
         }
@@ -857,8 +863,7 @@ Tine.Addressbook.ContactEditDialog = {
     },
 
     
-    updateToolbarButtons: function(contact)
-    {
+    updateToolbarButtons: function(contact) {
         var dialog = Ext.getCmp('contactDialog');
         dialog.updateToolbars.defer(10, dialog, [contact, 'owner']);
         
@@ -871,13 +876,18 @@ Tine.Addressbook.ContactEditDialog = {
         	Ext.getCmp('exportButton').setDisabled(true);
         }
     },
-
-    display: function(_contactData) 
-    {
+    
+    /**
+     * main function of edit dialog, gets called by jsExecute in view
+     */
+    display: function(_contactData) {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Addressbook');
+        
         // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
         	id: 'exportButton',
-            text: 'export as pdf',
+            text: this.translation.gettext('export as pdf'),
             handler: this.handlers.exportContact,
             iconCls: 'action_exportAsPdf',
             disabled: false
