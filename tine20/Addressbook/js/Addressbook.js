@@ -83,33 +83,24 @@ Tine.Addressbook.Main = {
 	    /**
 	     * onclick handler for addBtn
 	     */
-	    addContact: function(_button, _event) 
-	    {
-            var popupWindow = new Tine.Addressbook.EditPopup({
-                //contactId:
-                //containerId:
-            });
+	    addContact: function(_button, _event) {
+            var popupWindow = new Tine.Addressbook.EditPopup(0);
         },
 
         /**
          * onclick handler for editBtn
          */
-        editContact: function(_button, _event) 
-        {
+        editContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].data.id;
             
-            var popupWindow = new Tine.Addressbook.EditPopup({
-                contactId: contactId
-                //containerId:
-            });            
+            var popupWindow = new Tine.Addressbook.EditPopup(contactId /*,containerId*/);            
         },
 
         /**
          * onclick handler for exportBtn
          */
-        exportContact: function(_button, _event) 
-        {
+        exportContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();            
             var toExportIds = [];
         
@@ -125,8 +116,7 @@ Tine.Addressbook.Main = {
         /**
          * onclick handler for exportBtn
          */
-        callContact: function(_button, _event) 
-        {
+        callContact: function(_button, _event) {
             var number;
 
             var contact = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelected();
@@ -609,10 +599,7 @@ Tine.Addressbook.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             try {
-                var popupWindow = new Tine.Addressbook.EditPopup({
-                    contactId: record.data.id
-                    //containerId:
-                });                        
+                var popupWindow = new Tine.Addressbook.EditPopup(record.data.id /*,containerId*/);                        
             } catch(e) {
                 // alert(e);
             }
@@ -771,6 +758,22 @@ Tine.Addressbook.Main = {
 
 /**************************** edit dialog **********************************/
 
+/**
+ * Addressbook Edit Popup
+ */
+Tine.Addressbook.EditPopup = function (contactId) {
+    var window = new Ext.ux.PopupWindowMgr.getWindow({
+        url: 'index.php?method=Addressbook.editContact&_contactId=' + contactId,
+        name: 'AddressbookEditWindow' + contactId,
+        width: 800,
+        height: 600
+    });
+    return window;
+}
+
+/**
+ * The edit dialog
+ */
 Tine.Addressbook.ContactEditDialog = {
 	handlers: {
 	    applyChanges: function(_button, _event, _closeWindow) {
