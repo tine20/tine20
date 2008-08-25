@@ -126,6 +126,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	   'Tinebase/css/ux/grid/QuickaddGridPanel.css',
     	   'Tinebase/css/ux/grid/IconTextField.css',
     	   'Tinebase/css/ux/form/ExpandFieldSet.css',                  
+    	   'Tinebase/css/ux/form/ImageField.css',                  
     	   'Tinebase/css/ux/LockCombo.css',           
     	   'Tinebase/css/widgets/TagsPanel.css',
     	   'Tinebase/css/widgets/FilterToolbar.css',

@@ -44,25 +44,19 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.buttonCt.setSize(this.width, this.height);
         this.buttonCt.on('contextmenu', this.onContextMenu, this);
         
-        // the image container        
-        this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, this.getImgTpl().apply(this), true);
-        this.imageCt.setOpacity(0.4);
-        this.imageCt.on('load', function(){
-            //console.log(arguments);
-            this.imageCt.setOpacity(0.4);
-        }, this);
-        
-        // the text container
-        this.textCt = Ext.DomHelper.insertFirst(this.buttonCt, '<div>' + _('click to edit') + '</div>', true);
+        // the click to edit text container
+        var clickToEditText = _('click to edit');
+        this.textCt = Ext.DomHelper.insertFirst(this.buttonCt, '<div class="x-ux-from-imagefield-text">' + clickToEditText + '</div>', true);
         this.textCt.setSize(this.width, this.height);
-        this.textCt.setStyle({
-            //'z-index': 0,
-            'text-align': 'center',
-            'position': 'absolute',
-            'top': '63px'
-        });
-        //this.textCt.setOpacity(1);
+        var tm = Ext.util.TextMetrics.createInstance(this.textCt);
+        tm.setFixedWidth(this.width);
+        this.textCt.setStyle({top: ((this.height - tm.getHeight(clickToEditText)) / 2) + 'px'});
         
+        // the image container
+        // NOTE: this will atm. always be the default image for the first few miliseconds
+        this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, this.getImgTpl().apply(this), true);
+        this.imageCt.setOpacity(0.2);
+
         this.bb = new Ext.ux.form.BrowseButton({
             //debug: true,
             buttonCt: this.buttonCt,
@@ -198,18 +192,23 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         return this.imgTpl;
     },
     updateImage: function() {
-        var ct = this.imageCt.up('div');
-        var img = Ext.DomHelper.insertAfter(this.imageCt, this.getImgTpl().apply(this), true);
-        // replace image after load
-        img.on('load', function(){
-            this.imageCt.remove();
-            this.imageCt = img;
-            this.buttonCt.unmask();
-        }, this);
-        img.on('error', function() {
-            Ext.MessageBox.alert('Image Failed', 'Could not load image. Please notify your Administrator').setIcon(Ext.MessageBox.ERROR);
-            this.buttonCt.unmask();
-        }, this);
+        // only update when new image differs from current
+        if(this.imageCt.dom.src.substr(-1 * this.imageSrc.length) != this.imageSrc) {
+            var ct = this.imageCt.up('div');
+            var img = Ext.DomHelper.insertAfter(this.imageCt, this.getImgTpl().apply(this), true);
+            // replace image after load
+            img.on('load', function(){
+                this.imageCt.remove();
+                this.imageCt = img;
+                this.textCt.setVisible(this.imageSrc == this.defaultImage);
+                this.imageCt.setOpacity(this.imageSrc == this.defaultImage ? 0.2 : 1);
+                this.buttonCt.unmask();
+            }, this);
+            img.on('error', function() {
+                Ext.MessageBox.alert('Image Failed', 'Could not load image. Please notify your Administrator').setIcon(Ext.MessageBox.ERROR);
+                this.buttonCt.unmask();
+            }, this);
+        }
     }
 });
 
