@@ -179,6 +179,23 @@ Ext.ux.PopupWindowGroup = function(){
                     }
                 }
             }
+        },
+        
+        /**
+         * Returns requested window and create it if necessary
+         * If the window already exists, it's just focused
+         * 
+         * NOTE: this dosn't work when the popup got reloaded
+         */
+        getWindow: function(config){
+            console.log(frames.length);
+            var popupWindow = list[config.name];
+            if (popupWindow) {
+                popupWindow.popup.focus();
+            } else {
+                popupWindow = new Ext.ux.PopupWindow(config);
+            }
+            return popupWindow;
         }
     };
 };

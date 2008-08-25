@@ -23,7 +23,12 @@ Ext.namespace('Ext.ux');
  });
  * </code></pre>
  */
-Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
+Ext.ux.PopupWindow = function(config) {
+    Ext.apply(this, config);
+    Ext.ux.PopupWindow.superclass.constructor.call(this);
+};
+
+Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 	/**
 	 * @cfg 
 	 * @param {String} url
@@ -51,9 +56,10 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
 	 */
 	initComponent: function(){
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
-        
+
         // open popup window first to save time
         this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
+        this.popup.PopupWindow = this;
         //this.injectFramework(this.popup);
 
         this.addEvents({
@@ -76,10 +82,6 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
             "close" : true
         });
         
-        // register popup
-        window.Ext.ux.PopupWindowMgr.register(this);
-        
-        /*
         if (this.popup.addEventListener) {
             this.popup.addEventListener('load', this.onLoad, true);
             this.popup.addEventListener('unload', this.onClose, true);
@@ -90,7 +92,6 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
             this.popup.onload = this.onLoad;
             this.popup.onunload = this.onClose;
         }
-        */
 	},
 	/**
 	 * @private
@@ -99,6 +100,8 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
 	 */
 	onLoad: function() {
         this.Ext.onReady(function() {
+            //window.console.log('register');
+            window.Ext.ux.PopupWindowMgr.register(this.PopupWindow);
         	//console.log(this);
         	//console.log(window);
         }, this);
@@ -108,6 +111,8 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
      * note: 'this' references the popup, whereas window references the parent
      */
     onClose: function() {
+        //window.console.log('unregister')
+        window.Ext.ux.PopupWindowMgr.unregister(this.PopupWindow);
     },
     /**
      * injects document with framework html (head)
