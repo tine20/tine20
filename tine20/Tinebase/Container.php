@@ -1070,7 +1070,7 @@ class Tinebase_Container
         //error_log(print_r($_grants->toArray(), true));
         
         try {
-            Zend_Registry::get('dbAdapter')->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Zend_Registry::get('dbAdapter'));
             
             $where = $this->containerAclTable->getAdapter()->quoteInto('container_id = ?', $containerId);
             $this->containerAclTable->delete($where);
@@ -1102,12 +1102,12 @@ class Tinebase_Container
                 }
             }
             
-            Zend_Registry::get('dbAdapter')->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
             $this->_removeFromCache($containerId);
             
         } catch (Exception $e) {
-            Zend_Registry::get('dbAdapter')->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             
             throw($e);
         }

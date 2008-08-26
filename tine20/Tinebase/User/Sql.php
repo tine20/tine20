@@ -389,7 +389,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         );
 
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
@@ -405,10 +405,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             );
             $contactsTable->update($contactData, $where);
             
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
         
@@ -452,7 +452,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         );
 
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
@@ -478,10 +478,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             //var_dump($contactData);
             $contactsTable->insert($contactData);
             
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
         
@@ -508,7 +508,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $userRegistrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
         
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
@@ -536,10 +536,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             );
             $userRegistrationsTable->delete($where);
             
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
         

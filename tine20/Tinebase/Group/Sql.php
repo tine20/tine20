@@ -262,7 +262,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }        
         
         try {
-            Zend_Registry::get('dbAdapter')->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Zend_Registry::get('dbAdapter'));
+            
             $colNameGroup = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
             $where = Zend_Registry::get('dbAdapter')->quoteInto($colNameGroup . ' IN (?)', $groupIds);
             $this->groupMembersTable->delete($where);
@@ -270,9 +271,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $where = Zend_Registry::get('dbAdapter')->quoteInto($colName . ' IN (?)', $groupIds);
             $this->groupsTable->delete($where);
             
-            Zend_Registry::get('dbAdapter')->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
-            Zend_Registry::get('dbAdapter')->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             
             throw($e);
         }
