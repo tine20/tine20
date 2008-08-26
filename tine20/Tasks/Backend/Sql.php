@@ -273,17 +273,17 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         $taskParts = $this->seperateTaskData($_task);
         
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             $tasksTable = $this->getTableInstance('tasks');
             $tasksTable->insert($taskParts['tasks']);
             $this->insertDependentRows($taskParts);
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
             return $this->get($_task->getId());
             
         } catch (Exception $e) {
         	echo $e;
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
     }
@@ -298,7 +298,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     public function update(Tasks_Model_Task $_task)
     {
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             $id = $_task->getId();
             $oldTask = $this->get($_task->id);
@@ -316,7 +316,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             
             // are there changes?
             if (empty($currentMods)) {
-                $this->_db->rollBack();
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 return $_task;
             }
             
@@ -329,12 +329,12 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $this->deleteDependentRows($_task->id);
             $this->insertDependentRows($taskParts);
             
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
             return $this->get($_task->id);
             
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
     }
@@ -356,7 +356,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         );
         
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             foreach ((array)$_id as $id) {
                 // NOTE: cascading delete through the use of forign keys!
                 //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('id = ?', $_uid));
@@ -364,10 +364,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
                     $this->_db->quoteInto('id = ?', $id)
                 ));
             }
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
     }
