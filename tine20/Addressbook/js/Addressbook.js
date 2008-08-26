@@ -777,6 +777,9 @@ Tine.Addressbook.EditPopup = function (contactId) {
 Tine.Addressbook.ContactEditDialog = {
 	handlers: {
 	    applyChanges: function(_button, _event, _closeWindow) {
+            this.translation = new Locale.Gettext();
+            this.translation.textdomain('Addressbook');
+            
             var form = Ext.getCmp('contactDialog').getForm();
 
             if(form.isValid()) {
