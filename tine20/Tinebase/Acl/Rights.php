@@ -19,14 +19,26 @@
  * a right is always specific to an application and not to a record
  * examples for rights are: admin, run
  * 
- * @todo Do we need this class? It could be confusing to have rights 
- *       in admin and in tinebase for 'general' stuff.
- * 
+ * NOTE: This is a hibrite class. On the one hand it serves as the general
+ *       Rights class to retreave rights for all apss for.
+ *       On the other hand it also handles the Tinebase specific rights.
  * @package     Tinebase
  * @subpackage  Acl
  */
 class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
 {
+    /**
+     * the right to send bugreports
+     * @staticvar string
+     */
+    const REPORT_BUGS = 'report_bugs';
+    
+    /**
+     * the right to check for new versions
+     * @staticvar string
+     */
+    const CHECK_VERSION = 'check_version';
+    
     /**
      * holdes the instance of the singleton
      *
@@ -77,7 +89,10 @@ class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
                 
         if ( $_application === NULL || $_application === 'Tinebase' ) {
-            $addRights = array();
+            $addRights = array(
+                self::REPORT_BUGS,
+                self::CHECK_VERSION 
+            );
         } else {
             $addRights = array();
         }
@@ -97,7 +112,14 @@ class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Tinebase');
 
         $rightDescriptions = array(            
-
+            self::REPORT_BUGS  => array(
+                'text'          => $translate->_('Report bugs'),
+                'description'   => $translate->_('Report bugs to tine20.org directly when they occour'),
+            ),
+            self::CHECK_VERSION  => array(
+                'text'          => $translate->_('Check version'),
+                'description'   => $translate->_('Check tine20.org for new versions'),
+            ),
         );
         
         return $rightDescriptions;
