@@ -131,32 +131,22 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
 
         $db = Zend_Registry::get('dbAdapter');
         
-        $db->beginTransaction();
+        $where = array(
+            $db->quoteInto('lead_id = ?', $leadId)
+        );          
+        $db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
+
+        $where = array(
+            $db->quoteInto('link_app1 = ?', 'crm'),
+            $db->quoteInto('link_id1 = ?', $leadId),
+            $db->quoteInto('link_app2 = ?', 'addressbook')
+        );                                  
+        $db->delete(SQL_TABLE_PREFIX . 'links', $where);               
         
-        try {
-            $where = array(
-                $db->quoteInto('lead_id = ?', $leadId)
-            );          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
-
-            $where = array(
-                $db->quoteInto('link_app1 = ?', 'crm'),
-                $db->quoteInto('link_id1 = ?', $leadId),
-                $db->quoteInto('link_app2 = ?', 'addressbook')
-            );                                  
-            $db->delete(SQL_TABLE_PREFIX . 'links', $where);               
-            
-            $where = array(
-                $db->quoteInto('id = ?', $leadId)
-            );
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where);
-
-            $db->commit();
-
-        } catch (Exception $e) {
-            $db->rollBack();
-            throw $e;
-        }
+        $where = array(
+            $db->quoteInto('id = ?', $leadId)
+        );
+        $db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where);
     }
 
     /**

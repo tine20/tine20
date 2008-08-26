@@ -65,19 +65,18 @@ class Crm_Backend_LeadProducts extends Tinebase_Abstract_SqlTableBackend
             return $_productData;  
         }
           
-        $this->_db->beginTransaction();
-        
         try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', 'lead_id = '.$_leadId);
 
             foreach($products as $data) {
                 $this->_db->insert(SQL_TABLE_PREFIX . 'metacrm_leads_products', $data);                
             }
 
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             error_log($e->getMessage());
         }
     }    

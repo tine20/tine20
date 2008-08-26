@@ -184,37 +184,48 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function createLead(Crm_Model_Lead $_lead)
     {
-        $this->checkRight('MANAGE_LEADS');
-        
-        if(!$_lead->isValid()) {
-            throw new Exception('lead object is not valid');
+        try {
+            $db = Zend_Registry::get('dbAdapter');
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            $this->checkRight('MANAGE_LEADS');
+            
+            if(!$_lead->isValid()) {
+                throw new Exception('lead object is not valid');
+            }
+            
+            if(!$this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
+                throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
+            }
+            
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_lead, 'create');
+            $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+            $lead = $leadBackend->create($_lead);
+            
+            // set relations & links
+            $this->setLeadLinks($lead->getId(), $_lead);        
+            
+            if (!empty($_lead->tags)) {
+                $lead->tags = $_lead->tags;
+                Tinebase_Tags::getInstance()->setTagsOfRecord($lead);
+            }        
+    
+            if (isset($_lead->notes)) {
+                $lead->notes = $_lead->notes;
+                Tinebase_Notes::getInstance()->setNotesOfRecord($lead);
+            }
+            
+            //$this->sendNotifications(false, $lead, $_lead->responsible);
+                    
+            // add created note to record
+            Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'created');
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
-        
-        if(!$this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
-            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
-        }
-        
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_lead, 'create');
-        $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $lead = $leadBackend->create($_lead);
-        
-        // set relations & links
-        $this->setLeadLinks($lead->getId(), $_lead);        
-        
-        if (!empty($_lead->tags)) {
-            $lead->tags = $_lead->tags;
-            Tinebase_Tags::getInstance()->setTagsOfRecord($lead);
-        }        
-
-        if (isset($_lead->notes)) {
-            $lead->notes = $_lead->notes;
-            Tinebase_Notes::getInstance()->setNotesOfRecord($lead);
-        }
-        
-        //$this->sendNotifications(false, $lead, $_lead->responsible);
-                
-        // add created note to record
-        Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'created');
         
         return $this->getLead($lead->getId());
     }     
@@ -229,54 +240,64 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
-        $this->checkRight('MANAGE_LEADS');
-        
-        if(!$_lead->isValid()) {
-            throw new Exception('lead object is not valid');
-        }
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $currentLead = $backend->get($_lead->getId());
-        
-        // ACL checks
-        if ($currentLead->container != $_lead->container) {
-            if (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
-                throw new Exception('add access in container ' . $_lead->container . ' denied');
+        try {
+            $db = Zend_Registry::get('dbAdapter');
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            $this->checkRight('MANAGE_LEADS');
+            
+            if(!$_lead->isValid()) {
+                throw new Exception('lead object is not valid');
             }
-            // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-            if (! $this->_currentAccount->hasGrant($currentLead->container, Tinebase_Container::GRANT_DELETE)) {
-                throw new Exception('delete access in container ' . $currentLead->container . ' denied');
+            $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+            $currentLead = $backend->get($_lead->getId());
+            
+            // ACL checks
+            if ($currentLead->container != $_lead->container) {
+                if (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
+                    throw new Exception('add access in container ' . $_lead->container . ' denied');
+                }
+                // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
+                if (! $this->_currentAccount->hasGrant($currentLead->container, Tinebase_Container::GRANT_DELETE)) {
+                    throw new Exception('delete access in container ' . $currentLead->container . ' denied');
+                }
+            } elseif (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
+                throw new Exception('edit access in container ' . $_lead->container . ' denied');
             }
-        } elseif (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access in container ' . $_lead->container . ' denied');
+    
+            // concurrency management & history log
+            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+            $modLog->manageConcurrentUpdates($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
+            $modLog->setRecordMetaData($_lead, 'update', $currentLead);
+            $currentMods = $modLog->writeModLog($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
+            
+            $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+            $lead = $backend->update($_lead);
+    
+            // set relations & links
+            $this->setLeadLinks($lead->getId(), $_lead);        
+            
+            if (isset($_lead->tags)) {
+                Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
+            }
+    
+            if (isset($_lead->notes)) {
+                Tinebase_Notes::getInstance()->setNotesOfRecord($_lead);
+            }        
+            
+            //$this->sendNotifications(true, $lead, $_lead->responsible);
+            
+            // add changed note to record
+            if (count($currentMods) > 0) {
+                Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed', $currentMods);
+            }        
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
-
-        // concurrency management & history log
-        $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-        $modLog->manageConcurrentUpdates($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
-        $modLog->setRecordMetaData($_lead, 'update', $currentLead);
-        $currentMods = $modLog->writeModLog($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $lead = $backend->update($_lead);
-
-        // set relations & links
-        $this->setLeadLinks($lead->getId(), $_lead);        
-        
-        if (isset($_lead->tags)) {
-            Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
-        }
-
-        if (isset($_lead->notes)) {
-            Tinebase_Notes::getInstance()->setNotesOfRecord($_lead);
-        }        
-        
-        //$this->sendNotifications(true, $lead, $_lead->responsible);
-        
-        // add changed note to record
-        if (count($currentMods) > 0) {
-            Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed', $currentMods);
-        }        
-        
         return $this->getLead($lead->getId());
     }
 
@@ -288,24 +309,35 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function deleteLead($_leadId)
     {
-        $this->checkRight('MANAGE_LEADS');
-        
-        if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
-            foreach($_leadId as $leadId) {
-                $this->deleteLead($leadId);
-            }
-        } else {
-            $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);            
-            $lead = $backend->get($_leadId);
+        try {
+            $db = Zend_Registry::get('dbAdapter');
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            if($this->_currentAccount->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
-                $backend->delete($_leadId);
-
-                // delete notes
-                Tinebase_Notes::getInstance()->deleteNotesOfRecord('Crm_Model_Lead', 'Sql', $lead->getId());                
+            $this->checkRight('MANAGE_LEADS');
+            
+            if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
+                foreach($_leadId as $leadId) {
+                    $this->deleteLead($leadId);
+                }
             } else {
-                throw new Exception('delete access to lead denied');
+                $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);            
+                $lead = $backend->get($_leadId);
+                
+                if($this->_currentAccount->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
+                    $backend->delete($_leadId);
+    
+                    // delete notes
+                    Tinebase_Notes::getInstance()->deleteNotesOfRecord('Crm_Model_Lead', 'Sql', $lead->getId());                
+                } else {
+                    throw new Exception('delete access to lead denied');
+                }
             }
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
     }
 
