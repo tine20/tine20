@@ -168,6 +168,20 @@ class Setup_Import_TineInitial
                     Crm_Acl_Rights::MANAGE_LEADS
                 );                
             }
+            
+            // enable bug reporting and version check
+            if ($application->name  === 'Tinebase') { 
+                Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                    $userRole->getId(), 
+                    $application->getId(), 
+                    Tinebase_Acl_Rights::CHECK_VERSION
+                );
+                Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                    $userRole->getId(), 
+                    $application->getId(), 
+                    Tinebase_Acl_Rights::REPORT_BUGS
+                );     
+            }
            
             
         } // end foreach applications                               
