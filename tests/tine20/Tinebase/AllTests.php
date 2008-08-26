@@ -42,6 +42,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_Relation_AllTests');
         $suite->addTestSuite('Tinebase_NotesTest');
         $suite->addTestSuite('Tinebase_JsonTest');
+        $suite->addTestSuite('Tinebase_TransactionManagerTest');
         
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
