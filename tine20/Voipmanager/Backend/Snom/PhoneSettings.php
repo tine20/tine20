@@ -114,7 +114,7 @@ class Voipmanager_Backend_Snom_PhoneSettings
         }
 
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
 
             // NOTE: using array for second argument won't work as delete function joins array items using "AND"
             foreach($where AS $where_atom)
@@ -122,9 +122,9 @@ class Voipmanager_Backend_Snom_PhoneSettings
                 $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phone_settings', $where_atom);
             }
 
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
     }

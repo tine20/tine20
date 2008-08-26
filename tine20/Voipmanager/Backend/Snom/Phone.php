@@ -400,7 +400,7 @@ class Voipmanager_Backend_Snom_Phone
         }
 
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
 
             // NOTE: cascading delete for lines and phone_settings
             // SECOND NOTE: using array for second argument won't work as delete function joins array items using "AND"
@@ -409,9 +409,9 @@ class Voipmanager_Backend_Snom_Phone
                 $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones', $where_atom);
             }
 
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
     }
@@ -457,7 +457,7 @@ class Voipmanager_Backend_Snom_Phone
         }
 
         try {
-            $this->_db->beginTransaction();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
 
             // NOTE: cascading delete for lines and phone_settings
             // SECOND NOTE: using array for second argument won't work as delete function joins array items using "AND"
@@ -471,9 +471,9 @@ class Voipmanager_Backend_Snom_Phone
             );
             $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
             
-            $this->_db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
-            $this->_db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
     }
