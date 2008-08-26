@@ -231,7 +231,10 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 render: this.ativateDefaultApp
             }
         });
-        Tine.widgets.VersionCheck();
+        // check for new version 
+        if (Tine.Tinebase.hasRight('check_version', 'Tinebase')) {
+            Tine.widgets.VersionCheck();
+        }
     },
     
     ativateDefaultApp: function() {
