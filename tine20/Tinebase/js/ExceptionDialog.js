@@ -34,6 +34,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     text: _('Cancel'),
                     iconCls: 'action_cancel',
                     scope: this,
+                    enabled: Tine.Tinebase.hasRight('report_bugs', 'Tinebase'),
                     handler: function() {
                         this.close();
                     }
