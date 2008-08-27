@@ -24,6 +24,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var bool allow the use of GLOBALS to excange data between tests
+     */
+    protected $backupGlobals = false;
+    
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -55,6 +60,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        // initialise global for this test suite
+        $GLOBALS['Addressbook_JsonTest'] = array_key_exists('Addressbook_JsonTest', $GLOBALS) ? $GLOBALS['Addressbook_JsonTest'] : array();
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -245,7 +253,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         $contacts = $json->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
         
-        $this->assertEquals(0, $contacts['totalcount']);
+        $this->assertGreaterThanOrEqual(0, $contacts['totalcount'], 'getting other peoples contacts failed');
     }
         
     /**
@@ -285,17 +293,17 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to add/get/delete a contact with a note
+     * test to add a contact
      *
      */
-    public function testAddGetDeleteContact()
+    public function testAddContact()
     {
         $note = array(
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',            
         );
         
-        $newContact = array(
+        $newContactData = array(
             'n_family'  => 'PHPUNIT',
             'owner'     => $this->container->id,
             'notes'     => Zend_Json::encode(array($note))
@@ -303,34 +311,62 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         $json = new Addressbook_Json();
 
-        $contact = $json->saveContact(Zend_Json::encode($newContact));
-
-        $this->assertArrayNotHasKey('errorMessage', $contact);
-        $this->assertGreaterThan(0, $contact['updatedData']['id'], 'returned contactId not > 0');
-
-        $contactId = $contact['updatedData']['id'];
-
-        $result = $json->getContact($contactId);
+        $newContact = $json->saveContact(Zend_Json::encode($newContactData));
+        $this->assertEquals($newContactData['n_family'], $newContact['updatedData']['n_family'], 'Adding contact failed');
         
-        $this->assertEquals($contactId, $result['contact']['id']);
-        
-        //print_r($result['contact']['notes']);
-        
-        // check notes
-        $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
-        foreach ($result['contact']['notes'] as $note) {
-            if ($note['note_type_id'] === $createdNoteType->getId()) {
-                $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $note['note']); 
-            } else {
-                $this->assertEquals($note['note'], $note['note']);
-            }
-        }        
-        
-        // delete contact
-        $json->deleteContacts($contactId);
-
-        $this->setExpectedException('UnderflowException');
+        $GLOBALS['Addressbook_JsonTest']['addedContactId'] = $newContact['updatedData']['id'];
+    }
+    
+    /**
+     * test getting contact
+     *
+     */
+    public function testGetContct()
+    {
+        $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
+        $json = new Addressbook_Json();
         
         $contact = $json->getContact($contactId);
+        $contact = $contact['contact'];
+        
+        $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
     }
+
+    /**
+     * test updateing of a contct
+     *
+     */
+    public function testUpdateContact()
+    {
+        $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
+        $json = new Addressbook_Json();
+        
+        $contact = $json->getContact($contactId);
+        $contact = $contact['contact'];
+        
+        $contact['n_family'] = 'PHPUNIT UPDATE';
+        $updatedContact = $json->saveContact(Zend_Json::encode($contact));
+        $updatedContact = $updatedContact['updatedData'];
+        
+        $this->assertEquals($contactId, $updatedContact['id'], 'updated produced a new contact');
+        $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
+        
+    }
+    
+    /**
+     * test deleting contact
+     *
+     */
+    public function testDeleteContact()
+    {
+        $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
+        $json = new Addressbook_Json();
+        
+        $json->deleteContacts($contactId);
+        
+        $this->setExpectedException('Exception');
+        $contact = $json->getContact($contactId);
+        
+    }
+    
 }		
