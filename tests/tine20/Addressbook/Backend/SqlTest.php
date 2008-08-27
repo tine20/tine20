@@ -240,7 +240,15 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
     }
-
+    
+    public function testRemoveImage()
+    {
+        $contact = Addressbook_Backend_Sql::getInstance()->get($this->objects['initialContact']);
+        $contact->jpegphoto = '';
+        $updatedContact = Addressbook_Backend_Sql::getInstance()->update($contact);
+        $this->assertEquals('', $updatedContact->jpegphoto);
+    }
+    
     /**
      * try to delete a contact
      *
