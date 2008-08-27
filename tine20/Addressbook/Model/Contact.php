@@ -215,11 +215,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         }
         
         if (isset($contactData['jpegphoto'])) {
-            $imageParams = Tinebase_ImageHelper::parseImageLink($contactData['jpegphoto']);
-            if ($imageParams['isNewImage']) {
-                $contactData['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
-            } else {
-                unset($contactData['jpegphoto']);
+            if ($contactData['jpegphoto'] != '') {
+                $imageParams = Tinebase_ImageHelper::parseImageLink($contactData['jpegphoto']);
+                if ($imageParams['isNewImage']) {
+                    $contactData['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
+                } else {
+                    unset($contactData['jpegphoto']);
+                }
             }
         }
         
