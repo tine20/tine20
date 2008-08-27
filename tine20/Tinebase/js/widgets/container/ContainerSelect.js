@@ -24,6 +24,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * default container
      */
     defaultContainer: false,
+    /**
+     * @cfg {Number} how many chars of the containername to display
+     */
+    displayLength: 25,
     
     allowBlank: false,
     readOnly:true,
@@ -43,6 +47,18 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
                 });
             }
         };
+        //+ '<i>(' + (attr.containerType == Tine.Tinebase.container.TYPE_PERSONAL ? _('shared') : _('personal')) + ')</i>';
+    },
+    onRender: function(ct, position) {
+        Tine.widgets.container.selectionComboBox.superclass.onRender.call(this, ct, position);
+        this.getEl().on('mouseover', function(e, el) {
+            this.qtip = new Ext.QuickTip({
+                target: el,
+                targetXY : e.getXY(),
+                html: Ext.util.Format.htmlEncode(this.container.name) + 
+                    '<i> (' + (this.container.type == Tine.Tinebase.container.TYPE_PERSONAL ?  _('personal') : _('shared')) + ')</i>'
+            }).show();
+        }, this);
     },
     //private
     getValue: function(){
@@ -53,8 +69,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if (container.account_grants) {
             this.setDisabled(! container.account_grants.deleteGrant);
         }
+        if(this.qtip) {
+            this.qtip.remove();
+        }
     	this.container = container;
-    	this.setRawValue(container.name);
+        this.setRawValue(Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(container.name, this.displayLength)));
+    	//this.setRawValue(container.name);
     }
 });
 Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
