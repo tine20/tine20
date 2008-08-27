@@ -54,6 +54,10 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
      * additional items to display under all
      */
     extraItems: null,
+    /**
+     * @cfg {Number} how many chars of the containername to display
+     */
+    displayLength: 25,
 	// presets
 	iconCls: 'x-new-application',
 	rootVisible: false,
@@ -139,6 +143,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	    
 	    this.loader = new Tine.widgets.container.TreeLoader({
 	        dataUrl:'index.php',
+            displayLength: this.displayLength,
 	        baseParams: {
 	            jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
 				method: 'Tinebase_Container.getContainer',
@@ -349,9 +354,15 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
  * @param {Object} attr
  */
 Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
-	//private
- 	createNode: function(attr)
- 	{
+    /**
+     * @cfg {Number} how many chars of the containername to display
+     */
+    displayLength: 25,
+    
+	/**
+     * @private
+     */
+ 	createNode: function(attr) {
 		// map attributes from Tinebase_Container to attrs from ExtJS
 		if (attr.name) {
             if (!attr.account_grants.accountId){
@@ -361,20 +372,23 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
             attr = {
                 containerType: 'singleContainer',
                 container: attr,
-                text: Ext.util.Format.htmlEncode(attr.name),
+                text: attr.name,
                 cls: 'file',
                 leaf: true
             };
         } else if (attr.accountDisplayName) {
             attr = {
                 containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-                text: Ext.util.Format.htmlEncode(attr.accountDisplayName),
+                text: attr.accountDisplayName,
                 cls: 'folder',
                 leaf: false,
                 owner: attr
             };
         }
-
+        
+        attr.qtip = Ext.util.Format.htmlEncode(attr.text);
+        attr.text = Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(attr.text, this.displayLength));
+        
 		// apply baseAttrs, nice idea Corey!
         if(this.baseAttrs){
             Ext.applyIf(attr, this.baseAttrs);
