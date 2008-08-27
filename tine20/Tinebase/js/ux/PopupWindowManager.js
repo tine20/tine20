@@ -18,6 +18,16 @@ Ext.ux.PopupWindowGroup = function(){
     var accessList = [];
     var front = null;
 
+    // private
+    var cleanupClosedWindows = function() {
+        for(var id in list){
+            // remove closed windows
+            if (! list[id].popup.document) {
+                delete list[list[id].name];
+                accessList.remove(list[id]);
+            }
+        }
+    };
     /*
     // private
     var sortWindows = function(d1, d2){
@@ -87,6 +97,7 @@ Ext.ux.PopupWindowGroup = function(){
          * @return {Ext.ux.PopupWindow}
          */
         get : function(name){
+            cleanupClosedWindows();
             return typeof name == "object" ? list[name.name] : list[name];
         },
 
@@ -155,6 +166,7 @@ Ext.ux.PopupWindowGroup = function(){
          * @return {Array} An array of zero or more matching windows
          */
         getBy : function(fn, scope){
+            cleanupClosedWindows();
             var r = [];
             for(var i = accessList.length-1; i >=0; --i) {
                 var win = accessList[i];
@@ -172,6 +184,7 @@ Ext.ux.PopupWindowGroup = function(){
          * @param {Object} scope (optional) The scope in which to execute the function
          */
         each : function(fn, scope){
+            cleanupClosedWindows();
             for(var id in list){
                 if(list[id] && typeof list[id] != "function"){
                     if(fn.call(scope || list[id], list[id]) === false){
@@ -182,12 +195,13 @@ Ext.ux.PopupWindowGroup = function(){
         },
         
         /**
-         * Returns requested window and create it if necessary
+         * Returns requested window and create it on the fly if necessary
          * If the window already exists, it's just focused
          * 
-         * NOTE: this dosn't work when the popup got reloaded
+         * //NOTE: this dosn't work when the popup got reloaded
          */
-        getWindow: function(config){
+        fly: function(config){
+            cleanupClosedWindows();
             var popupWindow = list[config.name];
             if (popupWindow) {
                 popupWindow.popup.focus();

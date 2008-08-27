@@ -59,7 +59,14 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 
         // open popup window first to save time
         this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
-        this.popup.PopupWindow = this;
+        
+        //. register window ( in fact register complete PopupWindow )
+        Ext.ux.PopupWindowMgr.register(this);
+        
+        // does not work on reload!
+        //this.popup.PopupWindow = this;
+        
+        // strange problems in FF
         //this.injectFramework(this.popup);
 
         this.addEvents({
@@ -82,6 +89,10 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             "close" : true
         });
         
+        
+        // NOTE: Do not register unregister with this events, 
+        //       as it would be broken on window reloads!
+        /*
         if (this.popup.addEventListener) {
             this.popup.addEventListener('load', this.onLoad, true);
             this.popup.addEventListener('unload', this.onClose, true);
@@ -92,30 +103,31 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             this.popup.onload = this.onLoad;
             this.popup.onunload = this.onClose;
         }
+        */
 	},
 	/**
 	 * @private
+     * 
 	 * called after this.popups native onLoad
      * note: 'this' references the popup, whereas window references the parent
 	 */
 	onLoad: function() {
         this.Ext.onReady(function() {
-            //window.console.log('register');
-            window.Ext.ux.PopupWindowMgr.register(this.PopupWindow);
         	//console.log(this);
         	//console.log(window);
         }, this);
     },
     /**
      * @private
+     * 
      * note: 'this' references the popup, whereas window references the parent
      */
     onClose: function() {
-        //window.console.log('unregister')
-        window.Ext.ux.PopupWindowMgr.unregister(this.PopupWindow);
+
     },
     /**
      * injects document with framework html (head)
+     * NOTE: has strange layout problems in FF
      */
     injectFramework: function(popup) {
         var framework = new Ext.XTemplate('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n' ,

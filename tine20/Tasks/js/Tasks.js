@@ -579,7 +579,7 @@ Tine.Tasks.EditPopup = function (taskId, containerId, relatedId, relatedApp) {
     relatedApp  = relatedApp  ? relatedApp  : '';
     relatedId   = relatedId   ? relatedId   : -1;
     
-    var window = new Ext.ux.PopupWindowMgr.getWindow({
+    var window = new Ext.ux.PopupWindowMgr.fly({
         url: 'index.php?method=Tasks.editTask&taskId=' + taskId + '&linkingApp='+ relatedApp + '&linkedId=' + relatedId + '&containerId=' + containerId,
         name: 'TasksEditWindow' + taskId,
         width: 700,
