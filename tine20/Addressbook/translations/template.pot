@@ -1,3 +1,8 @@
+#: Controller.php:379
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
 #: js/Addressbook.js:15 js/Addressbook.js:216
 msgid "Internal Contacts"
 msgstr ""
@@ -20,17 +25,17 @@ msgid_plural "Do you really want to delete the selected contacts?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:193 js/Addressbook.js:837
+#: js/Addressbook.js:193 js/Addressbook.js:840
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:199 js/Addressbook.js:815 js/Addressbook.js:845
+#: js/Addressbook.js:199 js/Addressbook.js:818 js/Addressbook.js:848
 msgid "Failed"
 msgstr ""
 
-#: js/Addressbook.js:200 js/Addressbook.js:845
+#: js/Addressbook.js:200 js/Addressbook.js:848
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] ""
@@ -50,7 +55,7 @@ msgid_plural "delete contacts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:261 js/Addressbook.js:893
+#: js/Addressbook.js:261 js/Addressbook.js:896
 msgid "export as pdf"
 msgstr ""
 
@@ -245,23 +250,23 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: js/Addressbook.js:783
+#: js/Addressbook.js:786
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/Addressbook.js:783
+#: js/Addressbook.js:786
 msgid "Saving Contact"
 msgstr ""
 
-#: js/Addressbook.js:815
+#: js/Addressbook.js:818
 msgid "Could not save contact."
 msgstr ""
 
-#: js/Addressbook.js:820
+#: js/Addressbook.js:823
 msgid "Errors"
 msgstr ""
 
-#: js/Addressbook.js:820
+#: js/Addressbook.js:823
 msgid "Please fix the errors noted."
 msgstr ""
 

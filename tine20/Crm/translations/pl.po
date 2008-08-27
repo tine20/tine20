@@ -22,52 +22,52 @@ msgstr ""
 msgid "add, edit and delete leads"
 msgstr ""
 
-#: Controller.php:765
+#: Controller.php:797
 msgid "State"
 msgstr ""
 
-#: Controller.php:766 js/Crm.js:1007 js/Crm.js:1059
+#: Controller.php:798 js/Crm.js:1007 js/Crm.js:1059
 msgid "Type"
 msgstr ""
 
-#: Controller.php:767
+#: Controller.php:799
 msgid "Source"
 msgstr ""
 
-#: Controller.php:768 js/LeadEditDialog.js:112 Pdf.php:87
+#: Controller.php:800 js/LeadEditDialog.js:112 Pdf.php:87
 msgid "Start"
 msgstr ""
 
-#: Controller.php:769
+#: Controller.php:801
 msgid "Scheduled end"
 msgstr ""
 
-#: Controller.php:770 js/LeadEditDialog.js:126 Pdf.php:90
+#: Controller.php:802 js/LeadEditDialog.js:126 Pdf.php:90
 msgid "End"
 msgstr ""
 
-#: Controller.php:771 js/Crm.js:337 Pdf.php:81
+#: Controller.php:803 js/Crm.js:337 Pdf.php:81
 msgid "Turnover"
 msgstr ""
 
-#: Controller.php:772 js/Crm.js:206 js/Crm.js:207 js/Crm.js:208 js/Crm.js:336
+#: Controller.php:804 js/Crm.js:206 js/Crm.js:207 js/Crm.js:208 js/Crm.js:336
 #: js/LeadEditDialog.js:104 Pdf.php:84
 msgid "Probability"
 msgstr ""
 
-#: Controller.php:773
+#: Controller.php:805
 msgid "Folder"
 msgstr ""
 
-#: Controller.php:774
+#: Controller.php:806
 msgid "Updated by"
 msgstr ""
 
-#: Controller.php:780
+#: Controller.php:812
 msgid "Lead updated"
 msgstr ""
 
-#: Controller.php:782
+#: Controller.php:814
 msgid "Lead added"
 msgstr ""
 

@@ -13,6 +13,22 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
+#: Acl/Rights.php:116
+msgid "Report bugs"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr ""
+
+#: Acl/Rights.php:120
+msgid "Check version"
+msgstr ""
+
+#: Acl/Rights.php:121
+msgid "Check tine20.org for new versions"
+msgstr ""
+
 #: Application/Rights/Abstract.php:56
 msgid "admin"
 msgstr ""
@@ -45,49 +61,49 @@ msgstr ""
 msgid "Abnormal End"
 msgstr ""
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:289 js/widgets/EditRecord.js:82
+#: js/ExceptionDialog.js:34 js/MainScreen.js:292 js/widgets/EditRecord.js:82
 msgid "Cancel"
 msgstr ""
 
-#: js/ExceptionDialog.js:41
+#: js/ExceptionDialog.js:42
 msgid "Send Report"
 msgstr ""
 
-#: js/ExceptionDialog.js:50
+#: js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
-#: js/ExceptionDialog.js:51
+#: js/ExceptionDialog.js:52
 msgid "The last action you made was potentially not performed correctly."
 msgstr ""
 
-#: js/ExceptionDialog.js:52
+#: js/ExceptionDialog.js:53
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occoured."
 msgstr ""
 
-#: js/ExceptionDialog.js:58 js/widgets/tags/TagsPanel.js:556
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
 msgstr ""
 
-#: js/ExceptionDialog.js:68
+#: js/ExceptionDialog.js:69
 msgid "Show Details:"
 msgstr ""
 
-#: js/ExceptionDialog.js:91
+#: js/ExceptionDialog.js:92
 msgid "Sending report..."
 msgstr ""
 
-#: js/ExceptionDialog.js:91
+#: js/ExceptionDialog.js:92
 msgid "Please wait a moment"
 msgstr ""
 
-#: js/ExceptionDialog.js:116
+#: js/ExceptionDialog.js:117
 msgid "Transmission Completed"
 msgstr ""
 
-#: js/ExceptionDialog.js:117
+#: js/ExceptionDialog.js:118
 msgid "Your report has been send. Thanks for your contribution"
 msgstr ""
 
@@ -126,7 +142,7 @@ msgstr ""
 msgid "Login successful. Loading Tine 2.0..."
 msgstr ""
 
-#: js/Login.js:130 js/MainScreen.js:354
+#: js/Login.js:130 js/MainScreen.js:357
 msgid "Please wait!"
 msgstr ""
 
@@ -172,61 +188,61 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: js/MainScreen.js:253
+#: js/MainScreen.js:256
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr ""
 
-#: js/MainScreen.js:277
+#: js/MainScreen.js:280
 msgid "Old Password"
 msgstr ""
 
-#: js/MainScreen.js:281
+#: js/MainScreen.js:284
 msgid "New Password"
 msgstr ""
 
-#: js/MainScreen.js:285
+#: js/MainScreen.js:288
 msgid "Repeat new Password"
 msgstr ""
 
-#: js/MainScreen.js:295 js/Tinebase.js:98 js/widgets/AccountpickerPanel.js:108
+#: js/MainScreen.js:298 js/Tinebase.js:98 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/EditRecord.js:52
 msgid "Ok"
 msgstr ""
 
-#: js/MainScreen.js:304
+#: js/MainScreen.js:307
 msgid "Please Wait!"
 msgstr ""
 
-#: js/MainScreen.js:305
+#: js/MainScreen.js:308
 msgid "changing password..."
 msgstr ""
 
-#: js/MainScreen.js:316
+#: js/MainScreen.js:319
 msgid "Success"
 msgstr ""
 
-#: js/MainScreen.js:317
+#: js/MainScreen.js:320
 msgid "Your password has been changed."
 msgstr ""
 
-#: js/MainScreen.js:323 js/MainScreen.js:333
+#: js/MainScreen.js:326 js/MainScreen.js:336
 msgid "Failure"
 msgstr ""
 
-#: js/MainScreen.js:334
+#: js/MainScreen.js:337
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 
-#: js/MainScreen.js:352 js/widgets/container/ContainerTree.js:231
+#: js/MainScreen.js:355 js/widgets/container/ContainerTree.js:231
 msgid "Confirm"
 msgstr ""
 
-#: js/MainScreen.js:352
+#: js/MainScreen.js:355
 msgid "Are you sure you want to logout?"
 msgstr ""
 
-#: js/MainScreen.js:354
+#: js/MainScreen.js:357
 msgid "Logging you out..."
 msgstr ""
 
@@ -716,19 +732,19 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:34 js/widgets/VersionCheck.js:43
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
 msgid "New version of Tine 2.0 available"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:35 js/widgets/VersionCheck.js:44
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
 #, python-format
 msgid "Version \"%s\" of Tine 2.0 is available."
 msgstr ""
 
-#: js/widgets/VersionCheck.js:36
+#: js/widgets/VersionCheck.js:41
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:45
+#: js/widgets/VersionCheck.js:50
 msgid "Please consider updateing!"
 msgstr ""
