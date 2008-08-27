@@ -263,6 +263,14 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
     }
 
+    public function testRemoveContactImage()
+    {
+        $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
+        $contact->jpegphoto = '';
+        $this->setExpectedException('Exception');
+        $image = Addressbook_Controller::getInstance()->getImage($contact->id);
+    }
+    
     /**
      * tests that exception gets thrown when contact has no image
      *
