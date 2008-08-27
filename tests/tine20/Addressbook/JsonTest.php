@@ -354,6 +354,18 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test setting a contact image
+     * 
+     * NOTE: we can't test the upload yet, so we needd to simulate the upload
+     *
+     *
+    public function testSetImage()
+    {
+        
+    }
+    */
+    
+    /**
      * test deleting contact
      *
      */
