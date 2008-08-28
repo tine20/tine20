@@ -1,0 +1,435 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 Addressbook\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:379
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
+#: js/Addressbook.js:15 js/Addressbook.js:216
+msgid "Internal Contacts"
+msgstr "Interní kontakty"
+
+#: js/Addressbook.js:28
+msgid "Addressbook"
+msgstr "Adresář"
+
+#: js/Addressbook.js:29 js/EditDialog.js:34
+msgid "contacts"
+msgstr "kontakty"
+
+#: js/Addressbook.js:172
+msgid "Are you Sure?"
+msgstr ""
+
+#: js/Addressbook.js:173
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Addressbook.js:193 js/Addressbook.js:840
+msgid "Deleting contact..."
+msgid_plural "Deleting contacts..."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Addressbook.js:199 js/Addressbook.js:818 js/Addressbook.js:848
+msgid "Failed"
+msgstr ""
+
+#: js/Addressbook.js:200 js/Addressbook.js:848
+msgid "Some error occured while trying to delete the conctact."
+msgid_plural "Some error occured while trying to delete the conctacts."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Addressbook.js:230
+msgid "add contact"
+msgstr "přidat kontakt"
+
+#: js/Addressbook.js:238
+msgid "edit contact"
+msgstr "editovat kontakt"
+
+#: js/Addressbook.js:251
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "smazat kontakt"
+msgstr[1] "smazat kontakty"
+msgstr[2] "smazat kontakty"
+
+#: js/Addressbook.js:261 js/Addressbook.js:896
+msgid "export as pdf"
+msgstr "exportovat do pdf"
+
+#: js/Addressbook.js:271
+msgid "call contact"
+msgstr "volat kontakt"
+
+#: js/Addressbook.js:332 js/EditDialog.js:360
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/Addressbook.js:333 js/Addressbook.js:365 js/EditDialog.js:125
+msgid "First Name"
+msgstr "Křestní jméno"
+
+#: js/Addressbook.js:334 js/Addressbook.js:364 js/EditDialog.js:130
+msgid "Last Name"
+msgstr "Příjmení"
+
+#: js/Addressbook.js:335 js/Addressbook.js:368 js/EditDialog.js:139
+msgid "Company"
+msgstr "Firma"
+
+#: js/Addressbook.js:336 js/Addressbook.js:371 js/Addressbook.js:482
+#: js/EditDialog.js:67
+msgid "Job Role"
+msgstr "Pracovní funkce"
+
+#: js/Addressbook.js:338 js/Addressbook.js:341 js/Addressbook.js:373
+#: js/EditDialog.js:275 js/EditDialog.js:320
+msgid "Street"
+msgstr "Ulice"
+
+#: js/Addressbook.js:338 js/Addressbook.js:339 js/Addressbook.js:340
+#: js/EditDialog.js:259
+msgid "Company Address"
+msgstr "Firemní adresa"
+
+#: js/Addressbook.js:339 js/Addressbook.js:342 js/EditDialog.js:285
+#: js/EditDialog.js:330
+msgid "Postal Code"
+msgstr "PSČ"
+
+#: js/Addressbook.js:340 js/Addressbook.js:343 js/Addressbook.js:374
+#: js/EditDialog.js:289 js/EditDialog.js:334
+msgid "City"
+msgstr "Město"
+
+#: js/Addressbook.js:341 js/Addressbook.js:342 js/Addressbook.js:343
+#: js/EditDialog.js:308 js/EditDialog.js:446 Pdf.php:86
+msgid "Private Address"
+msgstr "Soukromá adresa"
+
+#: js/Addressbook.js:357
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Zobrazuji kontakty {0} - {1} z {2}"
+
+#: js/Addressbook.js:358 js/Addressbook.js:577
+msgid "No contacts to display"
+msgstr "Žádné kontakty ke zobrazení"
+
+#: js/Addressbook.js:363
+msgid "Type"
+msgstr "Typ"
+
+#: js/Addressbook.js:366
+msgid "Full Name"
+msgstr "Celé jméno"
+
+#: js/Addressbook.js:367 js/EditDialog.js:52
+msgid "Display Name"
+msgstr "Zobrazované jméno"
+
+#: js/Addressbook.js:369 js/EditDialog.js:72
+msgid "Unit"
+msgstr "Útvar"
+
+#: js/Addressbook.js:370 js/Addressbook.js:481 js/EditDialog.js:144
+#: Pdf.php:115
+msgid "Job Title"
+msgstr "Povolání"
+
+#: js/Addressbook.js:372 js/Addressbook.js:483 js/EditDialog.js:77 Pdf.php:74
+msgid "Room"
+msgstr "Místnost"
+
+#: js/Addressbook.js:375 js/EditDialog.js:293 js/EditDialog.js:338
+msgid "Region"
+msgstr "Region / Kraj"
+
+#: js/Addressbook.js:376
+msgid "Postalcode"
+msgstr "PSČ"
+
+#: js/Addressbook.js:377 js/EditDialog.js:300 js/EditDialog.js:345
+msgid "Country"
+msgstr "Stát"
+
+#: js/Addressbook.js:378
+msgid "Street (private)"
+msgstr "Ulice (privátní adresa)"
+
+#: js/Addressbook.js:379
+msgid "City (private)"
+msgstr "Město (privátní adresa)"
+
+#: js/Addressbook.js:380
+msgid "Region (private)"
+msgstr "Region / Kraj (privátní adresa)"
+
+#: js/Addressbook.js:381
+msgid "Postalcode (private)"
+msgstr "PSČ (privátní adresa)"
+
+#: js/Addressbook.js:382
+msgid "Country (private)"
+msgstr "Stát (privátní adresa)"
+
+#: js/Addressbook.js:383 Pdf.php:50
+msgid "Email"
+msgstr "Email"
+
+#: js/Addressbook.js:384 js/EditDialog.js:179
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/Addressbook.js:385 js/EditDialog.js:184
+msgid "Mobile"
+msgstr "Mobil"
+
+#: js/Addressbook.js:386 js/EditDialog.js:189
+msgid "Fax"
+msgstr "Fax"
+
+#: js/Addressbook.js:387
+msgid "Car phone"
+msgstr "Telefon do auta"
+
+#: js/Addressbook.js:388
+msgid "Pager"
+msgstr "Pager"
+
+#: js/Addressbook.js:389 js/EditDialog.js:196
+msgid "Phone (private)"
+msgstr "Telefon (privátní)"
+
+#: js/Addressbook.js:390 js/EditDialog.js:206
+msgid "Fax (private)"
+msgstr "Fax (privátní)"
+
+#: js/Addressbook.js:391 js/EditDialog.js:201
+msgid "Mobile (private)"
+msgstr "Mobil (privátní)"
+
+#: js/Addressbook.js:392
+msgid "Email (private)"
+msgstr "Email (privátní)"
+
+#: js/Addressbook.js:393 js/EditDialog.js:226
+msgid "Web"
+msgstr "WWW"
+
+#: js/Addressbook.js:394
+msgid "URL (private)"
+msgstr "URL (privátní)"
+
+#: js/Addressbook.js:395
+msgid "Note"
+msgstr "Poznámka"
+
+#: js/Addressbook.js:396
+msgid "Timezone"
+msgstr "Časová zóna"
+
+#: js/Addressbook.js:397
+msgid "Geo"
+msgstr "GPS souřadnice"
+
+#: js/Addressbook.js:398 js/EditDialog.js:95 Pdf.php:112
+msgid "Birthday"
+msgstr "Narozeniny"
+
+#: js/Addressbook.js:414 js/Addressbook.js:664
+msgid "Select contact"
+msgstr "Vybrat kontakt"
+
+#: js/Addressbook.js:503
+msgid "Tags"
+msgstr "Štítky"
+
+#: js/Addressbook.js:508 js/EditDialog.js:392
+msgid "Description"
+msgstr "Popis"
+
+#: js/Addressbook.js:786
+msgid "Please wait a moment..."
+msgstr ""
+
+#: js/Addressbook.js:786
+msgid "Saving Contact"
+msgstr ""
+
+#: js/Addressbook.js:818
+msgid "Could not save contact."
+msgstr ""
+
+#: js/Addressbook.js:823
+msgid "Errors"
+msgstr ""
+
+#: js/Addressbook.js:823
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/EditDialog.js:31
+msgid "Saved in"
+msgstr "Uloženo v"
+
+#: js/EditDialog.js:84
+msgid "Middle Name"
+msgstr "Prostřední jméno"
+
+#: js/EditDialog.js:89
+msgid "Suffix"
+msgstr "Dodatek za jménem"
+
+#: js/EditDialog.js:103
+msgid "Personal Information"
+msgstr "Osobní informace"
+
+#: js/EditDialog.js:119
+msgid "Title"
+msgstr "Titul"
+
+#: js/EditDialog.js:213
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: js/EditDialog.js:219
+msgid "E-Mail (private)"
+msgstr "E-mail (privátní)"
+
+#: js/EditDialog.js:236
+msgid "Contact Information"
+msgstr "Kontaktní informace"
+
+#: js/EditDialog.js:279 js/EditDialog.js:324
+msgid "Street 2"
+msgstr "Ulice 2"
+
+#: js/EditDialog.js:352
+msgid "Custom Fields"
+msgstr "Volitelné položky"
+
+#: js/EditDialog.js:406
+msgid "Enter description"
+msgstr "Vložit popis"
+
+#: js/EditDialog.js:431 js/EditDialog.js:452
+msgid "Map"
+msgstr "Mapa"
+
+#: js/EditDialog.js:440 Pdf.php:42
+msgid "Business Address"
+msgstr "Firemní adresa"
+
+#: js/EditDialog.js:476
+#, python-format
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] "Odkaz [%d] "
+msgstr[1] "Odkazy [%d]"
+msgstr[2] "Odkazů [%d]"
+
+#: Pdf.php:35
+msgid "Business Contact Data"
+msgstr "Firemní kotaktní údaje"
+
+#: Pdf.php:37
+msgid "Organisation / Unit"
+msgstr "Organizace / Útvar"
+
+#: Pdf.php:53
+msgid "Telephone Work"
+msgstr "Služební telefon"
+
+#: Pdf.php:56
+msgid "Telephone Cellphone"
+msgstr "Mobilní telefon"
+
+#: Pdf.php:59
+msgid "Telephone Car"
+msgstr "Telefon do auta"
+
+#: Pdf.php:62
+msgid "Telephone Fax"
+msgstr "Fax"
+
+#: Pdf.php:65
+msgid "Telephone Page"
+msgstr "Pager"
+
+#: Pdf.php:68
+msgid "URL"
+msgstr "URL"
+
+#: Pdf.php:71
+msgid "Role"
+msgstr "Funkce"
+
+#: Pdf.php:77
+msgid "Assistant"
+msgstr "Asistentka"
+
+#: Pdf.php:80
+msgid "Assistant Telephone"
+msgstr "Telefon asistentky"
+
+#: Pdf.php:84
+msgid "Private Contact Data"
+msgstr "Soukromé kontaktní údaje"
+
+#: Pdf.php:94
+msgid "Email Home"
+msgstr "Email domů"
+
+#: Pdf.php:97
+msgid "Telephone Home"
+msgstr "Telefon domů"
+
+#: Pdf.php:100
+msgid "Telephone Cellphone Private"
+msgstr "Soukromý mobilní telefon"
+
+#: Pdf.php:103
+msgid "Telephone Fax Home"
+msgstr "Fax domů"
+
+#: Pdf.php:106
+msgid "URL Home"
+msgstr "Domácí URL"
+
+#: Pdf.php:110
+msgid "Other Data"
+msgstr "Ostatní údaje"
+
+#~ msgid "Filter: "
+#~ msgstr "Filtr:"
+
+#~ msgid "Search: "
+#~ msgstr "Hledat:"
+
+#~ msgid "History"
+#~ msgstr "Historie"
+
+#~ msgid "Notes"
+#~ msgstr "Poznámky"

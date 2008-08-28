@@ -22,52 +22,57 @@ msgid "add, edit and delete leads"
 msgstr ""
 "Създаване, обработка и изтриване на осъществените контакти (предложения)"
 
-#: Controller.php:797
+#: Controller.php:726
+#, python-format
+msgid "%s's personal leads"
+msgstr ""
+
+#: Controller.php:799
 msgid "State"
 msgstr "Статус"
 
-#: Controller.php:798 js/Crm.js:1007 js/Crm.js:1059
+#: Controller.php:800 js/Crm.js:1007 js/Crm.js:1059
 msgid "Type"
 msgstr "Тип"
 
-#: Controller.php:799
+#: Controller.php:801
 msgid "Source"
 msgstr "Код"
 
-#: Controller.php:800 js/LeadEditDialog.js:112 Pdf.php:87
+#: Controller.php:802 js/LeadEditDialog.js:112 Pdf.php:87
 msgid "Start"
 msgstr "Старт"
 
-#: Controller.php:801
+#: Controller.php:803
 msgid "Scheduled end"
 msgstr "Запланувана продължителност"
 
-#: Controller.php:802 js/LeadEditDialog.js:126 Pdf.php:90
+#: Controller.php:804 js/LeadEditDialog.js:126 Pdf.php:90
 msgid "End"
 msgstr "Крайна дата"
 
-#: Controller.php:803 js/Crm.js:337 Pdf.php:81
+#: Controller.php:805 js/Crm.js:337 Pdf.php:81
 msgid "Turnover"
 msgstr "Оборот"
 
-#: Controller.php:804 js/Crm.js:206 js/Crm.js:207 js/Crm.js:208 js/Crm.js:336
+#: Controller.php:806 js/Crm.js:206 js/Crm.js:207 js/Crm.js:208 js/Crm.js:336
 #: js/LeadEditDialog.js:104 Pdf.php:84
 msgid "Probability"
 msgstr "вероятност"
 
-#: Controller.php:805
+#: Controller.php:807
 msgid "Folder"
 msgstr "Папка"
 
-#: Controller.php:806
+#: Controller.php:808
 msgid "Updated by"
 msgstr "Осъвременено от"
 
-#: Controller.php:812
+#: Controller.php:814
 msgid "Lead updated"
 msgstr "Осъщественият контакт (предложение) е актуализиран"
 
-#: Controller.php:814
+#: Controller.php:816
 msgid "Lead added"
 msgstr "Осъщественият контакт (предложение) е прибавен"
 

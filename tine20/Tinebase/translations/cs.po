@@ -1,21 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Tinebase\n"
-"POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-25 17:24+0100\n"
-"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
+"Project-Id-Version: Tine 2.0 Tinebase\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Russian\n"
-"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: ../../\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Poedit-SearchPath-0: Tinebase\n"
 
 #: Acl/Rights.php:116
 msgid "Report bugs"
@@ -35,442 +31,439 @@ msgstr ""
 
 #: Application/Rights/Abstract.php:56
 msgid "admin"
-msgstr "Администратор"
+msgstr "administrovat"
 
 #: Application/Rights/Abstract.php:57
 msgid "admin right description"
-msgstr "Права администратора позволяют пользователю делать все..."
+msgstr "popis práva na administraci"
 
 #: Application/Rights/Abstract.php:60
 msgid "run"
-msgstr "Исполнить"
+msgstr "spustit"
 
 #: Application/Rights/Abstract.php:61
 msgid "run right description"
-msgstr "Исполнимое право необходимо, чтобы иметь доступ к программе."
+msgstr "popis práva na spuštění"
 
 #: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
-msgstr "Тэги"
+msgstr "Štítky"
 
 #: Export/Pdf.php:353
 msgid "Export Date"
-msgstr "Экспортировать число"
+msgstr "Datum exportu"
 
 #: Export/Pdf.php:357
 msgid "Created by"
-msgstr "Установлено"
+msgstr "Vytvořil(a)"
 
 #: js/ExceptionDialog.js:26
 msgid "Abnormal End"
-msgstr "Неправильное завершение"
+msgstr "Abnormální ukončení"
 
 #: js/ExceptionDialog.js:34 js/MainScreen.js:292 js/widgets/EditRecord.js:82
 msgid "Cancel"
-msgstr "Отмена"
+msgstr "Storno"
 
 #: js/ExceptionDialog.js:42
 msgid "Send Report"
-msgstr "Послать Сообщение"
+msgstr "Odeslat hlášení"
 
 #: js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
-msgstr "Произошла Ошибка, программа закончилась неправильно."
+msgstr "Došlo k chybě, program se neukončil korektně."
 
 #: js/ExceptionDialog.js:52
 msgid "The last action you made was potentially not performed correctly."
 msgstr ""
-"Последнее действие, которое Вы сделали, было потенциально не правильно "
-"выполнено."
+"Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
 
 #: js/ExceptionDialog.js:53
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occoured."
 msgstr ""
-"Пожалуйста помогите улучшению этого программного обеспечения. И сообщите "
-"издателю коротким описанием, что и где Вы делаете если возникла ошибка. "
+"Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
+"uveďte stručný popis to co jste dělal(a), když došlo k chybě."
 
 #: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
-msgstr "Описание"
+msgstr "Popis"
 
 #: js/ExceptionDialog.js:69
 msgid "Show Details:"
-msgstr "показ детали:"
+msgstr "Zobrazit detaily:"
 
 #: js/ExceptionDialog.js:92
 msgid "Sending report..."
-msgstr "Сообщение посылается..."
+msgstr "Odesílám hlášení..."
 
 #: js/ExceptionDialog.js:92
 msgid "Please wait a moment"
-msgstr "Пожалуйста подождите момент"
+msgstr "Počkejte prosím okamžik"
 
 #: js/ExceptionDialog.js:117
 msgid "Transmission Completed"
-msgstr "Передача завершена"
+msgstr "Přenos dokončen"
 
 #: js/ExceptionDialog.js:118
 msgid "Your report has been send. Thanks for your contribution"
-msgstr "Ваш отчет был отправлен. Спасибо за Ваше содействие"
+msgstr "Vaše hlášení bylo odesláno. Děkujeme za Vaši spolupráci."
 
 #: js/Login.js:29
 msgid "Login"
-msgstr "вход в систему"
+msgstr "Přihlásit"
 
 #: js/Login.js:36
 msgid "Register"
-msgstr "Регистрироваться"
+msgstr "Registrovat"
 
 #: js/Login.js:50
 msgid "Please enter your login data"
-msgstr "Пожалуйста введите свои данные входа в систему"
+msgstr "Zadejte prosím Vaše přihlašovací údaje"
 
 #: js/Login.js:67
 msgid "Username"
-msgstr "Имя пользователя"
+msgstr "Uživatelské jméno"
 
 #: js/Login.js:73
 msgid "Password"
-msgstr "Пароль"
+msgstr "Heslo"
 
 #: js/Login.js:119
 msgid "Logging you in..."
-msgstr "Регистрирую Вас в..."
+msgstr "Přihlašuji Vás..."
 
 #: js/Login.js:119 js/widgets/container/ContainerGrants.js:75
 #: js/widgets/container/ContainerTree.js:210
 #: js/widgets/container/ContainerTree.js:238
 #: js/widgets/container/ContainerTree.js:270
 msgid "Please wait"
-msgstr "Пожалуйста подождите"
+msgstr "Prosím čekejte"
 
 #: js/Login.js:130
 msgid "Login successful. Loading Tine 2.0..."
-msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
+msgstr "Přihlášení bylo úspěšné. Načítám Tine 2.0..."
 
 #: js/Login.js:130 js/MainScreen.js:357
 msgid "Please wait!"
-msgstr "Пожалуйста подождите!"
+msgstr "Prosím čekejte!"
 
 #: js/Login.js:134
 msgid "Login failure"
-msgstr "Регистрация не удалась"
+msgstr "Chybné přihlášení"
 
 #: js/Login.js:135
 msgid "Your username and/or your password are wrong!!!"
-msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
+msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
 
 #: js/MainScreen.js:45
 msgid "Change password"
-msgstr "Изменить пароль"
+msgstr "Změnit heslo"
 
 #: js/MainScreen.js:51
 msgid "Logout"
-msgstr "Выход"
+msgstr "Odhlásit"
 
 #: js/MainScreen.js:52
 msgid "Logout from Tine 2.0"
-msgstr "Выход из Tine 2.0"
+msgstr "Odhlásit z Tine 2.0"
 
 #: js/MainScreen.js:71 js/widgets/container/ContainerGrants.js:183
 msgid "Admin"
-msgstr "Администратор"
+msgstr "Administrace"
 
 #: js/MainScreen.js:79
 msgid "Preferences"
-msgstr "Предпочтение"
+msgstr "Předvolby"
 
 #: js/MainScreen.js:95
 #, python-format
 msgid "User: %s"
-msgstr "Пользователь"
+msgstr "Uživatel: %s"
 
 #: js/MainScreen.js:96
 #, python-format
 msgid "Timezone: %s"
-msgstr "Часовой пояс: %s"
+msgstr "Časové pásmo: %s"
 
 #: js/MainScreen.js:97 js/widgets/LangChooser.js:40
 msgid "Language"
-msgstr "Язык"
+msgstr "Jazyk"
 
 #: js/MainScreen.js:256
 #, python-format
 msgid "Change Password For \"%s\""
-msgstr "Изменить пароль для \"%s\""
+msgstr "Změnit heslo pro \"%s\""
 
 #: js/MainScreen.js:280
 msgid "Old Password"
-msgstr "Старый пароль"
+msgstr "Staré heslo"
 
 #: js/MainScreen.js:284
 msgid "New Password"
-msgstr "Новый пароль"
+msgstr "Nové heslo"
 
 #: js/MainScreen.js:288
 msgid "Repeat new Password"
-msgstr "Повторите новый пароль"
+msgstr "Zopakujte nové heslo"
 
 #: js/MainScreen.js:298 js/Tinebase.js:98 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/EditRecord.js:52
 msgid "Ok"
-msgstr "Ок"
+msgstr "OK"
 
 #: js/MainScreen.js:307
 msgid "Please Wait!"
-msgstr "Пожалуйста подождите!"
+msgstr "Čekejte prosím!"
 
 #: js/MainScreen.js:308
 msgid "changing password..."
-msgstr "Пароль изменяется"
+msgstr "měním heslo..."
 
 #: js/MainScreen.js:319
 msgid "Success"
-msgstr "Успех"
+msgstr "Podařilo se"
 
 #: js/MainScreen.js:320
 msgid "Your password has been changed."
-msgstr "Ваш пароль  изменен."
+msgstr "Vaše heslo bylo změněno."
 
 #: js/MainScreen.js:326 js/MainScreen.js:336
 msgid "Failure"
-msgstr "Провал "
+msgstr "Došlo k chybě"
 
 #: js/MainScreen.js:337
 msgid "The new passwords mismatch, please correct them."
-msgstr "Новие пароли не соответствуют, пожалуйста исправьте их."
+msgstr "Nová hesla se neshodují, opravte je prosím."
 
 #: js/MainScreen.js:355 js/widgets/container/ContainerTree.js:236
 msgid "Confirm"
-msgstr "Подтверждение"
+msgstr "Potvrdit"
 
 #: js/MainScreen.js:355
 msgid "Are you sure you want to logout?"
-msgstr "Вы уверены что хотите покинуть программу?"
+msgstr "Určitě se chcete odhlásit?"
 
 #: js/MainScreen.js:357
 msgid "Logging you out..."
-msgstr "выключаю программу..."
+msgstr "Odhlašuji Vás..."
 
 #: js/Tinebase.js:95
 msgid "There Where Errors"
-msgstr "Возникли ошибки"
+msgstr "Došlo k chybám."
 
 #: js/Tinebase.js:126
 msgid "Connection lost, please check your network!"
-msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
+msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
-msgstr "Помощник регистрации"
+msgstr "Průvodce registrací"
 
 #: js/UserRegistration.js:86
 msgid "Given name"
-msgstr "Имя"
+msgstr "Křestní jméno"
 
 #: js/UserRegistration.js:97
 msgid "Family name"
-msgstr "Фамилия"
+msgstr "Příjmení"
 
 #: js/UserRegistration.js:108
 msgid "Login name"
-msgstr "Имя пользователя"
+msgstr "Přihlašovací jméno"
 
 #: js/UserRegistration.js:121
 msgid "Emailaddress"
-msgstr "Электронный адрес"
+msgstr "Emailová adresa"
 
 #: js/UserRegistration.js:167
 msgid "Congratulations!"
-msgstr "Поздравления!"
+msgstr "Gratulujeme!"
 
 #: js/UserRegistration.js:167
 msgid ""
 "You have entered all needed information. If you press the Finish button we "
 "will send you the registration email."
 msgstr ""
-"Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, "
-"вам будет отправлено подтверждающие электронное письмо."
+"Zadal(a) jste všechny potřebné informace. Až kliknete na tlačítko Dokončit, "
+"pošleme Vám registrační e-mail."
 
 #: js/ux/form/ImageField.js:48
 msgid "click to edit"
-msgstr "нажмите, чтобы отредактировать"
+msgstr ""
 
 #: js/ux/form/ImageField.js:86
 msgid "Not An Image"
-msgstr "Никакого файла рисунка"
+msgstr ""
 
 #: js/ux/form/ImageField.js:86
 msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Пожалуйста, выберите действительный файл рисунка (gif/png/jpeg)"
+msgstr ""
 
 #: js/ux/form/ImageField.js:103
 msgid "Loading"
-msgstr "загрузка"
+msgstr ""
 
 #: js/ux/form/ImageField.js:111
 msgid "Upload Failed"
-msgstr "Загрузка не удалась"
+msgstr ""
 
 #: js/ux/form/ImageField.js:111
 msgid "Could not upload image. Please notify your Administrator"
 msgstr ""
-"Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
 
 #: js/ux/form/ImageField.js:123
 msgid "Change Image"
-msgstr "Поменять картинку"
+msgstr ""
 
 #: js/ux/form/ImageField.js:144 js/ux/form/ImageField.js:162
 msgid "Crop Image"
-msgstr "Обрезать картинку"
+msgstr ""
 
 #: js/ux/form/ImageField.js:170
 msgid "Delete Image"
-msgstr "Удалить картинку"
+msgstr ""
 
 #: js/ux/form/ImageField.js:208
 msgid "Image Failed"
-msgstr "Ошибка при обработке картины"
+msgstr ""
 
 #: js/ux/form/ImageField.js:208
 msgid "Could not load image. Please notify your Administrator"
 msgstr ""
-"Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
 
 #: js/widgets/account/ConfigGrid.js:55
 #: js/widgets/container/ContainerGrants.js:128
 msgid "remove account"
-msgstr "Уберите счет"
+msgstr "odstranit účet"
 
 #: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
 #: js/widgets/container/ContainerGrants.js:193
 msgid "Name"
-msgstr "Имя"
+msgstr "Jméno"
 
 #: js/widgets/account/PickerPanel.js:70
 msgid "add account"
-msgstr "Добавить счет"
+msgstr "přidat účet"
 
 #: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
 msgid "enter searchfilter"
-msgstr "Ввести поисковый фильтр"
+msgstr "zadejte hledaný výraz"
 
 #: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
 msgid "Search"
-msgstr "Поиск"
+msgstr "Hledat"
 
 #: js/widgets/account/PickerPanel.js:258 js/widgets/account/PickerPanel.js:259
 #: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
 msgid "Browse"
-msgstr "Листать"
+msgstr "Procházet"
 
 #: js/widgets/AccountpickerPanel.js:103
 msgid "please select an account"
-msgstr "Пожалуйста выберите счет"
+msgstr "vyberte prosím účet"
 
 #: js/widgets/AccountpickerPanel.js:202
 msgid "Save"
-msgstr "Сохранить"
+msgstr "Uložit"
 
 #: js/widgets/AccountpickerPanel.js:208 js/widgets/EditRecord.js:63
 msgid "Apply"
-msgstr "Применить"
+msgstr "Použít"
 
 #: js/widgets/AccountpickerPanel.js:214
 msgid "Close"
-msgstr "Закрыть"
+msgstr "Zavřít"
 
 #: js/widgets/ActivitiesPanel.js:145
 msgid "Add a Note..."
-msgstr "Добавить одно Примечание"
+msgstr "Přidat poznámku..."
 
 #: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
 #: js/widgets/ActivitiesPanel.js:309
 #: js/widgets/container/ContainerGrants.js:165
 #: js/widgets/container/ContainerTree.js:309
 msgid "Add"
-msgstr "Добавить"
+msgstr "Přidat"
 
 #: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:309
 #: js/widgets/ActivitiesPanel.js:393 js/widgets/ActivitiesPanel.js:511
 msgid "Note"
-msgstr "Примечание"
+msgstr "Poznámka"
 
 #: js/widgets/ActivitiesPanel.js:173 js/widgets/ActivitiesPanel.js:321
 msgid "Add new note"
-msgstr "Добавить новое Примечание"
+msgstr "Přidat novou poznámku"
 
 #: js/widgets/ActivitiesPanel.js:204
 msgid "Recent Activities"
-msgstr "Последние действия"
+msgstr "Poslední činnosti"
 
 #: js/widgets/ActivitiesPanel.js:268 js/widgets/ActivitiesPanel.js:320
 msgid "Add Note"
-msgstr "Добавить Примечание"
+msgstr "Přidat poznámku"
 
 #: js/widgets/ActivitiesPanel.js:269
 msgid "Enter new note:"
-msgstr "Введите новое примечание:"
+msgstr "Zadejte novou poznámku:"
 
 #: js/widgets/ActivitiesPanel.js:391 js/widgets/ActivitiesPanel.js:516
 msgid "Type"
-msgstr "Тип"
+msgstr "Typ"
 
 #: js/widgets/ActivitiesPanel.js:394
 msgid "Created By"
-msgstr "Установлено"
+msgstr "Vytvořil(a)"
 
 #: js/widgets/ActivitiesPanel.js:395
 msgid "Timestamp"
-msgstr "Timestamp"
+msgstr "Časové razítko"
 
 #: js/widgets/ActivitiesPanel.js:409
 msgid "Displaying notes {0} - {1} of {2}"
-msgstr "Показываю действия {0} - {1} of {2}"
+msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #: js/widgets/ActivitiesPanel.js:410
 msgid "No notes to display"
-msgstr "Никаких примечаний в наличии"
+msgstr "Žádné poznámky ke zobrazení"
 
 #: js/widgets/ActivitiesPanel.js:499
 msgid "Activities"
-msgstr "Действия"
+msgstr "Činnosti"
 
 #: js/widgets/ActivitiesPanel.js:512
 msgid "Time"
-msgstr "Время"
+msgstr "Čas"
 
 #: js/widgets/ActivitiesPanel.js:514
 msgid "User"
-msgstr "Пользователь"
+msgstr "Uživatel"
 
 #: js/widgets/container/ContainerGrants.js:75
 msgid "Updateing Grants"
-msgstr "Права обновляются"
+msgstr "Aktualizuji oprávnění"
 
 #: js/widgets/container/ContainerGrants.js:117
 msgid "Folder"
-msgstr "Папка"
+msgstr "Složka"
 
 #: js/widgets/container/ContainerGrants.js:160
 msgid "Read"
-msgstr "Читать"
+msgstr "Číst"
 
 #: js/widgets/container/ContainerGrants.js:170
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "Editovat"
 
 #: js/widgets/container/ContainerGrants.js:175
 #: js/widgets/container/ContainerTree.js:315
 msgid "Delete"
-msgstr "Удалить"
+msgstr "Smazat"
 
 #: js/widgets/container/ContainerGrants.js:226
 msgid "Permissions"
-msgstr "Разрешения"
+msgstr "Oprávnění"
 
 #: js/widgets/container/ContainerSelect.js:50
 #: js/widgets/container/ContainerSelect.js:59
@@ -481,281 +474,279 @@ msgstr ""
 #: js/widgets/container/ContainerSelect.js:59 js/widgets/tags/TagsPanel.js:105
 #: js/widgets/tags/TagsPanel.js:406 js/widgets/tags/TagsPanel.js:410
 msgid "personal"
-msgstr "Личное"
+msgstr "osobní"
 
 #: js/widgets/container/ContainerSelect.js:100
 msgid "please select a container"
-msgstr "Пожалуйста выберите контейнер"
+msgstr "vyberte prosím zásobník"
 
 #: js/widgets/container/ContainerTree.js:110
 #, python-format
 msgid "All %s"
-msgstr "Все %s"
+msgstr ""
 
 #: js/widgets/container/ContainerTree.js:115
 #, python-format
 msgid "My %s"
-msgstr "Мои %s"
+msgstr ""
 
 #: js/widgets/container/ContainerTree.js:122
 #, python-format
 msgid "Shared %s"
-msgstr "Разделение %s"
+msgstr ""
 
 #: js/widgets/container/ContainerTree.js:129
 #, python-format
 msgid "Other Users %s"
-msgstr "Другие пользователи %s"
+msgstr ""
 
 #: js/widgets/container/ContainerTree.js:208
 msgid "New"
-msgstr "Новое"
+msgstr "Nový"
 
 #: js/widgets/container/ContainerTree.js:210
 msgid "Creating"
-msgstr "устанавливается"
+msgstr "Vytvářím"
 
 #: js/widgets/container/ContainerTree.js:236
 msgid "Do you really want to delete the"
-msgstr "Вы уверены что хотите удалить"
+msgstr "Opravdu chcete smazat"
 
 #: js/widgets/container/ContainerTree.js:238
 msgid "Deleting"
-msgstr "Удаляю"
+msgstr "Mažu"
 
 #: js/widgets/container/ContainerTree.js:265
 msgid "Please enter the new name of the"
-msgstr "Пожалуйста введите новое имя"
+msgstr "Zadejte prosím nový název pro"
 
 #: js/widgets/container/ContainerTree.js:270
 msgid "Updateing"
-msgstr "Обновление"
+msgstr "Aktualizuji"
 
 #: js/widgets/container/ContainerTree.js:321
 msgid "Rename"
-msgstr "Переименовать"
+msgstr "Přejmenovat"
 
 #: js/widgets/container/ContainerTree.js:327
 msgid "Manage permissions"
-msgstr "Управлять правами доступа"
+msgstr "Spravovat oprávnění"
 
 #: js/widgets/EditRecord.js:74
 msgid "delete"
-msgstr "Удалить"
+msgstr "smazat"
 
 #: js/widgets/grid/FilterModel.js:87
 msgid "contains"
-msgstr "Содержит"
+msgstr "obsahuje"
 
 #: js/widgets/grid/FilterModel.js:88
 msgid "is equal to"
-msgstr "Равно"
+msgstr "je roven"
 
 #: js/widgets/grid/FilterModel.js:89
 msgid "is greater than"
-msgstr "Больше чем"
+msgstr "je větší než"
 
 #: js/widgets/grid/FilterModel.js:90
 msgid "is less than"
-msgstr "Меньше чем"
+msgstr "je menší než"
 
 #: js/widgets/grid/FilterModel.js:91
 msgid "is not"
-msgstr "Не"
+msgstr "není"
 
 #: js/widgets/grid/FilterModel.js:92
 msgid "is in"
-msgstr "В"
+msgstr "je v"
 
 #: js/widgets/grid/FilterModel.js:115
 msgid "select a operator"
-msgstr "Выберите оператора"
+msgstr "vyberte operátor"
 
 #: js/widgets/grid/FilterToolbar.js:122
 msgid "add new filter"
-msgstr "Добавить новый фильтр"
+msgstr "zadat nový filtr"
 
 #: js/widgets/grid/FilterToolbar.js:128
 msgid "Delete all filters"
-msgstr "Удалить все фильтры"
+msgstr "Smazat všechny filtry"
 
 #: js/widgets/grid/FilterToolbar.js:134
 msgid "start search"
-msgstr "Ночять поиск"
+msgstr "zahájit hledání"
 
 #: js/widgets/grid/FilterToolbar.js:143
 msgid "save filter"
-msgstr "Сохранить фильтр"
+msgstr "uložit filtr"
 
 #: js/widgets/grid/FilterToolbar.js:210
 msgid "select a field"
-msgstr "Выберите поле"
+msgstr "vybrat pole"
 
 #: js/widgets/grid/FilterToolbar.js:234
 msgid "Delete this filter"
-msgstr "Удалить этот фильтр"
+msgstr "Smazat filtr"
 
 #: js/widgets/grid/FilterToolbar.js:257
 msgid "and"
-msgstr "и"
+msgstr "a"
 
 #: js/widgets/grid/FilterToolbar.js:276
 msgid "Show"
-msgstr "Показать"
+msgstr "Zobrazit"
 
 #: js/widgets/GridPicker.js:75
 msgid "remove record"
-msgstr "Убрать отчет"
+msgstr "odstranit záznam"
 
 #: js/widgets/GroupSelect.js:115
 msgid "Please Select a Group"
-msgstr "Пожалуйста выберите группу"
+msgstr "Vyberte prosím skupinu"
 
 #: js/widgets/LangChooser.js:72
 msgid "setting new language..."
-msgstr "Урегулирование нового языка..."
+msgstr "nastavuji nový jazyk..."
 
 #: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
 msgid "Please Wait"
-msgstr "Пожалуйста подождите"
+msgstr "Prosím čekejte"
 
 #: js/widgets/LangChooser.js:93
 msgid "loading new language..."
-msgstr "Загрузка нового языка..."
+msgstr "nahrávám nový jazyk..."
 
 #: js/widgets/tags/TagCombo.js:37
 msgid "tag name"
-msgstr "Название тэга"
+msgstr "název štítku"
 
 #: js/widgets/tags/TagFilter.js:23
 msgid "Tag"
-msgstr "Тэг"
+msgstr "Štítek"
 
 #: js/widgets/tags/TagsPanel.js:83
 msgid "Add a new personal tag"
-msgstr "Добавить новый личный тэг"
+msgstr "Přidat nový osobní štítek"
 
 #: js/widgets/tags/TagsPanel.js:86
 msgid "Add New Personal Tag"
-msgstr "Добавить новый личный тэг"
+msgstr "Přidat nový osobní štítek"
 
 #: js/widgets/tags/TagsPanel.js:87
 msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr ""
-"Пожалуйста обратите внимание: Вы устанавливаете личный тэг. Только Вы можете "
-"видеть его!"
+msgstr "Pamatujte prosím, že vytváříte osobní štítek. Uvidíte ho jen Vy!"
 
 #: js/widgets/tags/TagsPanel.js:87
 msgid "Enter tag name:"
-msgstr "Введите название тэга"
+msgstr "Zadejte název štítku:"
 
 #: js/widgets/tags/TagsPanel.js:127
 msgid "No Tags to display"
-msgstr "Никаких тэгов в наличии не имеется"
+msgstr "Žádné štítky ke zobrazení"
 
 #: js/widgets/tags/TagsPanel.js:150
 msgid "Detach tag"
 msgid_plural "Detach tags"
-msgstr[0] "Отделите тэг"
-msgstr[1] "Отделите тэга"
-msgstr[2] "Отделите тэгоф"
+msgstr[0] "Odpojit štítek"
+msgstr[1] "Odpojit štítky"
+msgstr[2] "Odpojit štítky"
 
 #: js/widgets/tags/TagsPanel.js:160
 msgid "Edit tag"
-msgstr "Редактировать тэг"
+msgstr "Editovat štítek"
 
 #: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
-msgstr "Переименовать тэг"
+msgstr "Přejmenovat štítek"
 
 #: js/widgets/tags/TagsPanel.js:170
 msgid "Please enter a new name:"
-msgstr "Пожалуйста введите новое имя"
+msgstr "Zadejte prosím nový název:"
 
 #: js/widgets/tags/TagsPanel.js:179
 msgid "Edit Description"
-msgstr "Редактировать описание"
+msgstr "Editovat popis"
 
 #: js/widgets/tags/TagsPanel.js:184
 msgid "Description for tag"
-msgstr "Описание тэга"
+msgstr "Popis štítku"
 
 #: js/widgets/tags/TagsPanel.js:184
 msgid "Please enter new description:"
-msgstr "Пожалуйста введите новое описание:"
+msgstr "Zadejte prosím nový popis:"
 
 #: js/widgets/tags/TagsPanel.js:193
 msgid "Change Color"
-msgstr "Изменить цвет"
+msgstr "Změnit barvu"
 
 #: js/widgets/tags/TagsPanel.js:217
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
-msgstr[0] "Удалить тэг"
-msgstr[1] "Удалить тэги"
-msgstr[2] "Удалить тэгов"
+msgstr[0] "Smazat štítek"
+msgstr[1] "Smazat štítky"
+msgstr[2] "Smazat štítky"
 
 #: js/widgets/tags/TagsPanel.js:229
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Вы уверены, что хотите удалить тэг?"
-msgstr[1] "Вы уверени, что хотите удалить выбранные тэги?"
-msgstr[2] "Вы уверени, что хотите удалить выбранных тэгов?"
+msgstr[0] "Opravdu chcete smazat vybraný štítek?"
+msgstr[1] "Opravdu chcete smazat vybrané štítky?"
+msgstr[2] "Opravdu chcete smazat vybrané štítky?"
 
 #: js/widgets/tags/TagsPanel.js:230
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Выбранный тэг будет удален и исчезнет из всех записях."
-msgstr[1] "Выбранные тэги будут удалены и исчезнут из всех записях."
-msgstr[2] "Выбранные тэгоф будут удалены и исчезнут из всех записях."
+msgstr[0] "Vybraný štítek bude smazán a zmizí u všech záznamů"
+msgstr[1] "Vybrané štítky budou smazány a zmizí u všech záznamů"
+msgstr[2] "Vybrané štítky budou smazány a zmizí u všech záznamů"
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Please wait a moment..."
-msgstr "Пожалуйста подождите момент..."
+msgstr "Počkejte prosím okamžik..."
 
 #: js/widgets/tags/TagsPanel.js:234
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
-msgstr[0] "Тэг удаляется"
-msgstr[1] "Тэги удаляются"
-msgstr[2] "Тэгоф удаляются"
+msgstr[0] "Mažu štítek"
+msgstr[1] "Mažu štítky"
+msgstr[2] "Mažu štítky"
 
 #: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
 #: js/widgets/tags/TagsPanel.js:392
 msgid "Failed"
-msgstr "Неудалось"
+msgstr "Nepodařilo se"
 
 #: js/widgets/tags/TagsPanel.js:250
 msgid "Could not delete Tag(s)."
-msgstr "Не смог удалить тэг(и)."
+msgstr "Nepodařilo se smazat štítek/štítky."
 
 #: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
 msgid "Notice"
-msgstr "Обратите внимание"
+msgstr "Upozornění"
 
 #: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
 msgid "The minimum tag length is three."
-msgstr "Один тэг должен состоять, по меньшей мере из 3 знаков."
+msgstr "Minimální délka štítku jsou tři znaky."
 
 #: js/widgets/tags/TagsPanel.js:359
 msgid "Could not create tag."
-msgstr "Не мог установить  тэг."
+msgstr "Nepodařilo se vytvořit štítek."
 
 #: js/widgets/tags/TagsPanel.js:392
 msgid "Could not update tag."
-msgstr "Не мог обновить тэг."
+msgstr "Nepodařilo se aktualizovat štítek."
 
 #: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
 msgid "Enter tag name"
-msgstr "Введите название тэга"
+msgstr "Zadejte název štítku"
 
 #: js/widgets/tags/TagsPanel.js:426
 msgid "Searching..."
-msgstr "Поиск..."
+msgstr "Vyhledávám..."
 
 #: js/widgets/tags/TagsPanel.js:560
 msgid "Color"
-msgstr "Цвет"
+msgstr "Barva"
 
 #: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
 msgid "New version of Tine 2.0 available"
@@ -774,27 +765,14 @@ msgstr ""
 msgid "Please consider updateing!"
 msgstr ""
 
-#~ msgid "My"
-#~ msgstr "Мое"
-
-#~ msgid "container"
-#~ msgstr "контейнер"
-
-#~ msgid "The selected tag will be deleted and disapear for all entries"
-#~ msgid_plural ""
-#~ "The selected tags will be removed and disapear for all entries"
-#~ msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
-#~ msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
-#~ msgstr[2] "Выбранные тэгов будут удалени и стерти из всех Записей"
-
-#~ msgid "Language: "
-#~ msgstr "Язык:"
-
 #~ msgid "All"
-#~ msgstr "Все"
+#~ msgstr "Všechny"
+
+#~ msgid "My"
+#~ msgstr "Moje"
 
 #~ msgid "Shared"
-#~ msgstr "Разделение"
+#~ msgstr "Sdílené"
 
 #~ msgid "Other Users"
-#~ msgstr "Другие пользователи"
+#~ msgstr "Ostatní uživatelé"

@@ -17,6 +17,11 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
+#: Controller.php:302
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
 #: js/Tasks.js:107
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"

@@ -1,18 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Tasks\n"
+"Project-Id-Version: Tine 2.0 Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Polish\n"
-"X-Poedit-Country: POLAND\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
 
 #: Controller.php:302
 #, python-format
@@ -22,142 +21,142 @@ msgstr ""
 #: js/Tasks.js:107
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Opravdu chcete smazat vybraný úkol"
+msgstr[1] "Opravdu chcete smazat vybrané úkoly"
+msgstr[2] "Opravdu chcete smazat vybrané úkoly"
 
 #: js/Tasks.js:138 js/Tasks.js:267 js/Tasks.js:550 js/Tasks.js:645
 #: js/Tasks.js:670
 msgid "Failed"
-msgstr ""
+msgstr "Nepodařilo se"
 
 #: js/Tasks.js:138 js/Tasks.js:670
 msgid "Could not delete task(s)."
-msgstr ""
+msgstr "Nepodařilo se smazat úkol(y)."
 
 #: js/Tasks.js:156
 msgid "Edit task"
-msgstr ""
+msgstr "Editovat úkol"
 
 #: js/Tasks.js:166
 msgid "Add task"
-msgstr ""
+msgstr "Přidat úkol"
 
 #: js/Tasks.js:177
 msgid "Delete task"
 msgid_plural "Delete tasks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Smazat úkol"
+msgstr[1] "Smazat úkoly"
+msgstr[2] "Smazat úkoly"
 
 #: js/Tasks.js:267 js/Tasks.js:550 js/Tasks.js:645
 msgid "Could not save task."
-msgstr ""
+msgstr "Nepodařilo se uložit úkol."
 
 #: js/Tasks.js:300
 msgid "Tasks"
-msgstr ""
+msgstr "Úkoly"
 
 #: js/Tasks.js:301
 msgid "to do lists"
-msgstr ""
+msgstr "Seznamy úkolů"
 
 #: js/Tasks.js:323
 msgid "Enter searchfilter"
-msgstr ""
+msgstr "Zadejte hledaný výraz"
 
 #: js/Tasks.js:338
 msgid "Show closed"
-msgstr ""
+msgstr "Zobrazit uzavřené"
 
 #: js/Tasks.js:388
 msgid "Search:"
-msgstr ""
+msgstr "Hledat:"
 
 #: js/Tasks.js:398
 msgid "Displaying tasks {0} - {1} of {2}"
-msgstr ""
+msgstr "Zobrazuji úkoly {0} - {1} z {2}"
 
 #: js/Tasks.js:399
 msgid "No tasks to display"
-msgstr ""
+msgstr "Žádné úkoly ke zobrazení"
 
 #: js/Tasks.js:416 js/Tasks.js:722
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/Tasks.js:432
 msgid "Percent"
-msgstr ""
+msgstr "Procent"
 
 #: js/Tasks.js:447 js/Tasks.js:694
 msgid "Summary"
-msgstr ""
+msgstr "Přehled"
 
 #: js/Tasks.js:455
 msgid "Add a task..."
-msgstr ""
+msgstr "Přidat úkol..."
 
 #: js/Tasks.js:460 js/Tasks.js:726
 msgid "Priority"
-msgstr ""
+msgstr "Priorita"
 
 #: js/Tasks.js:476
 msgid "Due Date"
-msgstr ""
+msgstr "Termín dokončení"
 
 #: js/Tasks.js:497
 msgid "No Tasks to display"
-msgstr ""
+msgstr "Žádné úkoly ke zobrazení"
 
 #: js/Tasks.js:616
 msgid "Please wait"
-msgstr ""
+msgstr "Prosím čekejte"
 
 #: js/Tasks.js:616 js/Tasks.js:658
 msgid "Saving Task"
-msgstr ""
+msgstr "Ukládám úkol"
 
 #: js/Tasks.js:649
 msgid "Errors"
-msgstr ""
+msgstr "Chyby"
 
 #: js/Tasks.js:649
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Opravte prosím vyznačené chyby."
 
 #: js/Tasks.js:656
 msgid "Confirm"
-msgstr ""
+msgstr "Povrdit"
 
 #: js/Tasks.js:656
 msgid "Do you really want to delete this task?"
-msgstr ""
+msgstr "Opravdu chcete smazat tento úkol?"
 
 #: js/Tasks.js:658
 msgid "Please wait a moment..."
-msgstr ""
+msgstr "Počkejte prosím okmažik..."
 
 #: js/Tasks.js:698
 msgid "Enter short name..."
-msgstr ""
+msgstr "Zadejte stručný název..."
 
 #: js/Tasks.js:701
 msgid "Notes"
-msgstr ""
+msgstr "Poznámky"
 
 #: js/Tasks.js:703
 msgid "Enter description..."
-msgstr ""
+msgstr "Zadejte popis..."
 
 #: js/Tasks.js:717
 msgid "Percentage"
-msgstr ""
+msgstr "Procenta"
 
 #: js/Tasks.js:730
 msgid "Due date"
-msgstr ""
+msgstr "Termín dokončení"
 
 #: js/Tasks.js:734
 msgid "Folder"
-msgstr ""
+msgstr "Složka"

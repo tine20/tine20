@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
+#: Controller.php:302
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
 #: js/Tasks.js:107
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
