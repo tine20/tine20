@@ -149,7 +149,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             this.action_cancel
         ];
         Tine.widgets.ActionUpdater(record, actions, containerField);
-        Tine.widgets.ActionUpdater(record, this.getTopToolbar(), containerField);
+        Tine.widgets.ActionUpdater(record, this.tbarItems, containerField);
     },
     /**
      * get top toolbar
