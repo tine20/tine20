@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-08-29 14:30-0800\n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,10 +25,16 @@ msgstr ""
 msgid "delete context"
 msgstr ""
 
-#: js/Asterisk/Context.js:152 js/Asterisk/Meetme.js:152
-#: js/Asterisk/SipPeer.js:160 js/Asterisk/Voicemail.js:156 js/MyPhones.js:106
-#: js/Snom/Location.js:152 js/Snom/Phone.js:206 js/Snom/Settings.js:163
-#: js/Snom/Software.js:160 js/Snom/Templates.js:152
+#: js/Asterisk/Context.js:152
+#: js/Asterisk/Meetme.js:152
+#: js/Asterisk/SipPeer.js:160
+#: js/Asterisk/Voicemail.js:156
+#: js/MyPhones.js:106
+#: js/Snom/Location.js:152
+#: js/Snom/Phone.js:206
+#: js/Snom/Settings.js:163
+#: js/Snom/Software.js:160
+#: js/Snom/Templates.js:152
 msgid "Search: "
 msgstr ""
 
@@ -40,29 +46,48 @@ msgstr ""
 msgid "No context to display"
 msgstr ""
 
-#: js/Asterisk/Context.js:190 js/Asterisk/Meetme.js:190
-#: js/Asterisk/Voicemail.js:195 js/Snom/Location.js:199
-#: js/Snom/Software.js:199 js/Snom/Templates.js:190
+#: js/Asterisk/Context.js:190
+#: js/Asterisk/Meetme.js:190
+#: js/Asterisk/Voicemail.js:195
+#: js/Snom/Location.js:199
+#: js/Snom/Software.js:199
+#: js/Snom/Templates.js:190
 msgid "id"
 msgstr ""
 
-#: js/Asterisk/Context.js:191 js/Asterisk/SipPeer.js:211 js/MyPhones.js:624
-#: js/Snom/Phone.js:1347 js/Snom/Settings.js:202 js/Snom/Settings.js:470
-#: js/Snom/Settings.js:607 js/Snom/Software.js:200 js/Snom/Software.js:435
+#: js/Asterisk/Context.js:191
+#: js/Asterisk/SipPeer.js:211
+#: js/MyPhones.js:624
+#: js/Snom/Phone.js:1347
+#: js/Snom/Settings.js:202
+#: js/Snom/Settings.js:470
+#: js/Snom/Settings.js:607
+#: js/Snom/Software.js:200
+#: js/Snom/Software.js:435
 #: js/Snom/Templates.js:191
 msgid "name"
 msgstr ""
 
-#: js/Asterisk/Context.js:192 js/Asterisk/Context.js:404
-#: js/Snom/Location.js:207 js/Snom/Location.js:442 js/Snom/Phone.js:862
-#: js/Snom/Settings.js:486 js/Snom/Software.js:201 js/Snom/Software.js:441
-#: js/Snom/Templates.js:192 js/Snom/Templates.js:408
+#: js/Asterisk/Context.js:192
+#: js/Asterisk/Context.js:404
+#: js/Snom/Location.js:207
+#: js/Snom/Location.js:442
+#: js/Snom/Phone.js:862
+#: js/Snom/Settings.js:486
+#: js/Snom/Software.js:201
+#: js/Snom/Software.js:441
+#: js/Snom/Templates.js:192
+#: js/Snom/Templates.js:408
 msgid "Description"
 msgstr ""
 
-#: js/Asterisk/Context.js:396 js/Asterisk/SipPeer.js:456
-#: js/Asterisk/SipPeer.js:610 js/Asterisk/Voicemail.js:456
-#: js/Snom/Location.js:203 js/Snom/Location.js:434 js/Snom/Phone.js:1148
+#: js/Asterisk/Context.js:396
+#: js/Asterisk/SipPeer.js:456
+#: js/Asterisk/SipPeer.js:610
+#: js/Asterisk/Voicemail.js:456
+#: js/Snom/Location.js:203
+#: js/Snom/Location.js:434
+#: js/Snom/Phone.js:1148
 #: js/Snom/Templates.js:400
 msgid "Name"
 msgstr ""
@@ -87,15 +112,18 @@ msgstr ""
 msgid "No meetme to display"
 msgstr ""
 
-#: js/Asterisk/Meetme.js:191 js/Asterisk/Meetme.js:397
+#: js/Asterisk/Meetme.js:191
+#: js/Asterisk/Meetme.js:397
 msgid "confno"
 msgstr ""
 
-#: js/Asterisk/Meetme.js:192 js/Asterisk/Meetme.js:405
+#: js/Asterisk/Meetme.js:192
+#: js/Asterisk/Meetme.js:405
 msgid "pin"
 msgstr ""
 
-#: js/Asterisk/Meetme.js:193 js/Asterisk/Meetme.js:413
+#: js/Asterisk/Meetme.js:193
+#: js/Asterisk/Meetme.js:413
 msgid "adminpin"
 msgstr ""
 
@@ -111,7 +139,8 @@ msgstr ""
 msgid "delete sipPeer"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:159 js/Asterisk/Voicemail.js:155
+#: js/Asterisk/SipPeer.js:159
+#: js/Asterisk/Voicemail.js:155
 msgid "Context: "
 msgstr ""
 
@@ -119,11 +148,14 @@ msgstr ""
 msgid "Displaying sipPeers {0} - {1} of {2}"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:205 js/Asterisk/SipPeer.js:295
+#: js/Asterisk/SipPeer.js:205
+#: js/Asterisk/SipPeer.js:295
 msgid "No sipPeers to display"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:210 js/MyPhones.js:144 js/Snom/Phone.js:244
+#: js/Asterisk/SipPeer.js:210
+#: js/MyPhones.js:144
+#: js/Snom/Phone.js:244
 #: js/Snom/Settings.js:201
 msgid "Id"
 msgstr ""
@@ -148,7 +180,8 @@ msgstr ""
 msgid "can reinvite"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:217 js/Asterisk/Voicemail.js:197
+#: js/Asterisk/SipPeer.js:217
+#: js/Asterisk/Voicemail.js:197
 msgid "context"
 msgstr ""
 
@@ -180,12 +213,16 @@ msgstr ""
 msgid "insecure"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:225 js/MyPhones.js:564 js/Snom/Phone.js:1287
-#: js/Snom/Settings.js:205 js/Snom/Settings.js:545
+#: js/Asterisk/SipPeer.js:225
+#: js/MyPhones.js:564
+#: js/Snom/Phone.js:1287
+#: js/Snom/Settings.js:205
+#: js/Snom/Settings.js:545
 msgid "language"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:226 js/Asterisk/Voicemail.js:196
+#: js/Asterisk/SipPeer.js:226
+#: js/Asterisk/Voicemail.js:196
 #: js/Asterisk/Voicemail.js:433
 msgid "mailbox"
 msgstr ""
@@ -298,52 +335,64 @@ msgstr ""
 msgid "busy level"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:450 js/Asterisk/Voicemail.js:414
+#: js/Asterisk/SipPeer.js:450
+#: js/Asterisk/Voicemail.js:414
 msgid "General"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:463 js/Asterisk/SipPeer.js:662
+#: js/Asterisk/SipPeer.js:463
+#: js/Asterisk/SipPeer.js:662
 #: js/Asterisk/Voicemail.js:440
 msgid "Context"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:479 js/Asterisk/SipPeer.js:870
+#: js/Asterisk/SipPeer.js:479
+#: js/Asterisk/SipPeer.js:870
 msgid "Type"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:496 js/Asterisk/SipPeer.js:863
+#: js/Asterisk/SipPeer.js:496
+#: js/Asterisk/SipPeer.js:863
 msgid "Secret"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:503 js/Asterisk/SipPeer.js:638
+#: js/Asterisk/SipPeer.js:503
+#: js/Asterisk/SipPeer.js:638
 msgid "Callerid"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:510 js/Asterisk/SipPeer.js:752
+#: js/Asterisk/SipPeer.js:510
+#: js/Asterisk/SipPeer.js:752
 msgid "Mailbox"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:517 js/Asterisk/SipPeer.js:631
+#: js/Asterisk/SipPeer.js:517
+#: js/Asterisk/SipPeer.js:631
 msgid "Callgroup"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:524 js/Asterisk/SipPeer.js:804
+#: js/Asterisk/SipPeer.js:524
+#: js/Asterisk/SipPeer.js:804
 msgid "Pickup group"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:531 js/Asterisk/SipPeer.js:617
+#: js/Asterisk/SipPeer.js:531
+#: js/Asterisk/SipPeer.js:617
 msgid "Accountcode"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:538 js/Asterisk/SipPeer.js:745
+#: js/Asterisk/SipPeer.js:538
+#: js/Asterisk/SipPeer.js:745
 msgid "Language"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:545 js/Asterisk/SipPeer.js:766
+#: js/Asterisk/SipPeer.js:545
+#: js/Asterisk/SipPeer.js:766
 msgid "NAT"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:562 js/Asterisk/SipPeer.js:825
+#: js/Asterisk/SipPeer.js:562
+#: js/Asterisk/SipPeer.js:825
 msgid "Qualify"
 msgstr ""
 
@@ -435,7 +484,9 @@ msgstr ""
 msgid "Reg Seconds"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:929 js/MyPhones.js:167 js/Snom/Phone.js:267
+#: js/Asterisk/SipPeer.js:929
+#: js/MyPhones.js:167
+#: js/Snom/Phone.js:267
 msgid "IP Address"
 msgstr ""
 
@@ -495,75 +546,93 @@ msgstr ""
 msgid "fullname"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:199 js/Asterisk/Voicemail.js:471
+#: js/Asterisk/Voicemail.js:199
+#: js/Asterisk/Voicemail.js:471
 msgid "email"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:200 js/Asterisk/Voicemail.js:477
+#: js/Asterisk/Voicemail.js:200
+#: js/Asterisk/Voicemail.js:477
 msgid "pager"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:201 js/Asterisk/Voicemail.js:519
+#: js/Asterisk/Voicemail.js:201
+#: js/Asterisk/Voicemail.js:519
 msgid "tz"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:202 js/Asterisk/Voicemail.js:602
+#: js/Asterisk/Voicemail.js:202
+#: js/Asterisk/Voicemail.js:602
 msgid "attach"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:203 js/Asterisk/Voicemail.js:633
+#: js/Asterisk/Voicemail.js:203
+#: js/Asterisk/Voicemail.js:633
 msgid "saycid"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:204 js/Asterisk/Voicemail.js:532
+#: js/Asterisk/Voicemail.js:204
+#: js/Asterisk/Voicemail.js:532
 msgid "dialout"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:205 js/Asterisk/Voicemail.js:545
+#: js/Asterisk/Voicemail.js:205
+#: js/Asterisk/Voicemail.js:545
 msgid "callback"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:206 js/Asterisk/Voicemail.js:659
+#: js/Asterisk/Voicemail.js:206
+#: js/Asterisk/Voicemail.js:659
 msgid "review"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:207 js/Asterisk/Voicemail.js:685
+#: js/Asterisk/Voicemail.js:207
+#: js/Asterisk/Voicemail.js:685
 msgid "operator"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:208 js/Asterisk/Voicemail.js:716
+#: js/Asterisk/Voicemail.js:208
+#: js/Asterisk/Voicemail.js:716
 msgid "envelope"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:209 js/Asterisk/Voicemail.js:563
+#: js/Asterisk/Voicemail.js:209
+#: js/Asterisk/Voicemail.js:563
 msgid "sayduration"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:210 js/Asterisk/Voicemail.js:589
+#: js/Asterisk/Voicemail.js:210
+#: js/Asterisk/Voicemail.js:589
 msgid "saydurationm"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:211 js/Asterisk/Voicemail.js:742
+#: js/Asterisk/Voicemail.js:211
+#: js/Asterisk/Voicemail.js:742
 msgid "sendvoicemail"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:212 js/Asterisk/Voicemail.js:768
+#: js/Asterisk/Voicemail.js:212
+#: js/Asterisk/Voicemail.js:768
 msgid "delete"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:213 js/Asterisk/Voicemail.js:799
+#: js/Asterisk/Voicemail.js:213
+#: js/Asterisk/Voicemail.js:799
 msgid "nextaftercmd"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:214 js/Asterisk/Voicemail.js:825
+#: js/Asterisk/Voicemail.js:214
+#: js/Asterisk/Voicemail.js:825
 msgid "forcename"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:215 js/Asterisk/Voicemail.js:851
+#: js/Asterisk/Voicemail.js:215
+#: js/Asterisk/Voicemail.js:851
 msgid "forcegreetings"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:216 js/Asterisk/Voicemail.js:882
+#: js/Asterisk/Voicemail.js:216
+#: js/Asterisk/Voicemail.js:882
 msgid "hidefromdir"
 msgstr ""
 
@@ -575,34 +644,72 @@ msgstr ""
 msgid "additional"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:577 js/Asterisk/Voicemail.js:616
-#: js/Asterisk/Voicemail.js:647 js/Asterisk/Voicemail.js:673
-#: js/Asterisk/Voicemail.js:699 js/Asterisk/Voicemail.js:730
-#: js/Asterisk/Voicemail.js:756 js/Asterisk/Voicemail.js:782
-#: js/Asterisk/Voicemail.js:813 js/Asterisk/Voicemail.js:839
-#: js/Asterisk/Voicemail.js:865 js/Asterisk/Voicemail.js:896
-#: js/MyPhones.js:659 js/MyPhones.js:779 js/MyPhones.js:807 js/MyPhones.js:840
-#: js/MyPhones.js:868 js/MyPhones.js:896 js/Snom/Location.js:577
-#: js/Snom/Location.js:603 js/Snom/Phone.js:1382 js/Snom/Phone.js:1502
-#: js/Snom/Phone.js:1530 js/Snom/Phone.js:1563 js/Snom/Phone.js:1591
-#: js/Snom/Phone.js:1619 js/Snom/Settings.js:643 js/Snom/Settings.js:767
-#: js/Snom/Settings.js:796 js/Snom/Settings.js:830 js/Snom/Settings.js:859
+#: js/Asterisk/Voicemail.js:577
+#: js/Asterisk/Voicemail.js:616
+#: js/Asterisk/Voicemail.js:647
+#: js/Asterisk/Voicemail.js:673
+#: js/Asterisk/Voicemail.js:699
+#: js/Asterisk/Voicemail.js:730
+#: js/Asterisk/Voicemail.js:756
+#: js/Asterisk/Voicemail.js:782
+#: js/Asterisk/Voicemail.js:813
+#: js/Asterisk/Voicemail.js:839
+#: js/Asterisk/Voicemail.js:865
+#: js/Asterisk/Voicemail.js:896
+#: js/MyPhones.js:659
+#: js/MyPhones.js:779
+#: js/MyPhones.js:807
+#: js/MyPhones.js:840
+#: js/MyPhones.js:868
+#: js/MyPhones.js:896
+#: js/Snom/Location.js:577
+#: js/Snom/Location.js:603
+#: js/Snom/Phone.js:1382
+#: js/Snom/Phone.js:1502
+#: js/Snom/Phone.js:1530
+#: js/Snom/Phone.js:1563
+#: js/Snom/Phone.js:1591
+#: js/Snom/Phone.js:1619
+#: js/Snom/Settings.js:643
+#: js/Snom/Settings.js:767
+#: js/Snom/Settings.js:796
+#: js/Snom/Settings.js:830
+#: js/Snom/Settings.js:859
 #: js/Snom/Settings.js:888
 msgid "on"
 msgstr ""
 
-#: js/Asterisk/Voicemail.js:578 js/Asterisk/Voicemail.js:617
-#: js/Asterisk/Voicemail.js:648 js/Asterisk/Voicemail.js:674
-#: js/Asterisk/Voicemail.js:700 js/Asterisk/Voicemail.js:731
-#: js/Asterisk/Voicemail.js:757 js/Asterisk/Voicemail.js:783
-#: js/Asterisk/Voicemail.js:814 js/Asterisk/Voicemail.js:840
-#: js/Asterisk/Voicemail.js:866 js/Asterisk/Voicemail.js:897
-#: js/MyPhones.js:662 js/MyPhones.js:780 js/MyPhones.js:808 js/MyPhones.js:841
-#: js/MyPhones.js:869 js/MyPhones.js:897 js/Snom/Location.js:578
-#: js/Snom/Location.js:604 js/Snom/Phone.js:1385 js/Snom/Phone.js:1503
-#: js/Snom/Phone.js:1531 js/Snom/Phone.js:1564 js/Snom/Phone.js:1592
-#: js/Snom/Phone.js:1620 js/Snom/Settings.js:646 js/Snom/Settings.js:768
-#: js/Snom/Settings.js:797 js/Snom/Settings.js:831 js/Snom/Settings.js:860
+#: js/Asterisk/Voicemail.js:578
+#: js/Asterisk/Voicemail.js:617
+#: js/Asterisk/Voicemail.js:648
+#: js/Asterisk/Voicemail.js:674
+#: js/Asterisk/Voicemail.js:700
+#: js/Asterisk/Voicemail.js:731
+#: js/Asterisk/Voicemail.js:757
+#: js/Asterisk/Voicemail.js:783
+#: js/Asterisk/Voicemail.js:814
+#: js/Asterisk/Voicemail.js:840
+#: js/Asterisk/Voicemail.js:866
+#: js/Asterisk/Voicemail.js:897
+#: js/MyPhones.js:662
+#: js/MyPhones.js:780
+#: js/MyPhones.js:808
+#: js/MyPhones.js:841
+#: js/MyPhones.js:869
+#: js/MyPhones.js:897
+#: js/Snom/Location.js:578
+#: js/Snom/Location.js:604
+#: js/Snom/Phone.js:1385
+#: js/Snom/Phone.js:1503
+#: js/Snom/Phone.js:1531
+#: js/Snom/Phone.js:1564
+#: js/Snom/Phone.js:1592
+#: js/Snom/Phone.js:1620
+#: js/Snom/Settings.js:646
+#: js/Snom/Settings.js:768
+#: js/Snom/Settings.js:797
+#: js/Snom/Settings.js:831
+#: js/Snom/Settings.js:860
 #: js/Snom/Settings.js:889
 msgid "off"
 msgstr ""
@@ -619,200 +726,297 @@ msgstr ""
 msgid "No myphones to display"
 msgstr ""
 
-#: js/MyPhones.js:145 js/Snom/Phone.js:245
+#: js/MyPhones.js:145
+#: js/Snom/Phone.js:245
 msgid "MAC address"
 msgstr ""
 
-#: js/MyPhones.js:146 js/Snom/Phone.js:246 js/Snom/Settings.js:203
+#: js/MyPhones.js:146
+#: js/Snom/Phone.js:246
+#: js/Snom/Settings.js:203
 msgid "description"
 msgstr ""
 
-#: js/MyPhones.js:150 js/Snom/Phone.js:250 js/Snom/Phone.js:803
+#: js/MyPhones.js:150
+#: js/Snom/Phone.js:250
+#: js/Snom/Phone.js:803
 msgid "Location"
 msgstr ""
 
-#: js/MyPhones.js:160 js/Snom/Phone.js:260 js/Snom/Phone.js:723
+#: js/MyPhones.js:160
+#: js/Snom/Phone.js:260
+#: js/Snom/Phone.js:723
 msgid "Template"
 msgstr ""
 
-#: js/MyPhones.js:168 js/Snom/Phone.js:268
+#: js/MyPhones.js:168
+#: js/Snom/Phone.js:268
 msgid "Software"
 msgstr ""
 
-#: js/MyPhones.js:169 js/Snom/Phone.js:269
+#: js/MyPhones.js:169
+#: js/Snom/Phone.js:269
 msgid "current model"
 msgstr ""
 
-#: js/MyPhones.js:170 js/Snom/Phone.js:270
+#: js/MyPhones.js:170
+#: js/Snom/Phone.js:270
 msgid "redirect event"
 msgstr ""
 
-#: js/MyPhones.js:171 js/Snom/Phone.js:271
+#: js/MyPhones.js:171
+#: js/Snom/Phone.js:271
 msgid "redirect number"
 msgstr ""
 
-#: js/MyPhones.js:172 js/Snom/Phone.js:272
+#: js/MyPhones.js:172
+#: js/Snom/Phone.js:272
 msgid "redirect time"
 msgstr ""
 
-#: js/MyPhones.js:173 js/Snom/Phone.js:273
+#: js/MyPhones.js:173
+#: js/Snom/Phone.js:273
 msgid "settings loaded at"
 msgstr ""
 
-#: js/MyPhones.js:174 js/Snom/Phone.js:274
+#: js/MyPhones.js:174
+#: js/Snom/Phone.js:274
 msgid "last modified"
 msgstr ""
 
-#: js/MyPhones.js:403 js/Snom/Phone.js:936
+#: js/MyPhones.js:403
+#: js/Snom/Phone.js:936
 msgid "redirection"
 msgstr ""
 
-#: js/MyPhones.js:420 js/Snom/Phone.js:953
+#: js/MyPhones.js:420
+#: js/Snom/Phone.js:953
 msgid "redirect_event"
 msgstr ""
 
-#: js/MyPhones.js:445 js/Snom/Phone.js:978
+#: js/MyPhones.js:445
+#: js/Snom/Phone.js:978
 msgid "all"
 msgstr ""
 
-#: js/MyPhones.js:446 js/Snom/Phone.js:979
+#: js/MyPhones.js:446
+#: js/Snom/Phone.js:979
 msgid "busy"
 msgstr ""
 
-#: js/MyPhones.js:447 js/MyPhones.js:751 js/Snom/Phone.js:980
-#: js/Snom/Phone.js:1474 js/Snom/Settings.js:738
+#: js/MyPhones.js:447
+#: js/MyPhones.js:751
+#: js/Snom/Phone.js:980
+#: js/Snom/Phone.js:1474
+#: js/Snom/Settings.js:738
 msgid "none"
 msgstr ""
 
-#: js/MyPhones.js:448 js/Snom/Phone.js:981
+#: js/MyPhones.js:448
+#: js/Snom/Phone.js:981
 msgid "time"
 msgstr ""
 
-#: js/MyPhones.js:459 js/Snom/Phone.js:992
+#: js/MyPhones.js:459
+#: js/Snom/Phone.js:992
 msgid "redirect_number"
 msgstr ""
 
-#: js/MyPhones.js:471 js/Snom/Phone.js:1004
+#: js/MyPhones.js:471
+#: js/Snom/Phone.js:1004
 msgid "redirect_time"
 msgstr ""
 
-#: js/MyPhones.js:495 js/Snom/Phone.js:1218 js/Snom/Templates.js:432
+#: js/MyPhones.js:495
+#: js/Snom/Phone.js:1218
+#: js/Snom/Templates.js:432
 msgid "Settings"
 msgstr ""
 
-#: js/MyPhones.js:527 js/Snom/Phone.js:1250 js/Snom/Settings.js:204
+#: js/MyPhones.js:527
+#: js/Snom/Phone.js:1250
+#: js/Snom/Settings.js:204
 #: js/Snom/Settings.js:507
 msgid "web_language"
 msgstr ""
 
-#: js/MyPhones.js:542 js/MyPhones.js:579 js/MyPhones.js:622 js/MyPhones.js:658
-#: js/MyPhones.js:688 js/MyPhones.js:717 js/MyPhones.js:750 js/MyPhones.js:778
-#: js/MyPhones.js:806 js/MyPhones.js:839 js/MyPhones.js:867 js/MyPhones.js:895
-#: js/Snom/Phone.js:1265 js/Snom/Phone.js:1302 js/Snom/Phone.js:1345
-#: js/Snom/Phone.js:1381 js/Snom/Phone.js:1411 js/Snom/Phone.js:1440
-#: js/Snom/Phone.js:1473 js/Snom/Phone.js:1501 js/Snom/Phone.js:1529
-#: js/Snom/Phone.js:1562 js/Snom/Phone.js:1590 js/Snom/Phone.js:1618
-#: js/Snom/Settings.js:523 js/Snom/Settings.js:561 js/Snom/Settings.js:605
-#: js/Snom/Settings.js:642 js/Snom/Settings.js:673 js/Snom/Settings.js:703
-#: js/Snom/Settings.js:737 js/Snom/Settings.js:766 js/Snom/Settings.js:795
-#: js/Snom/Settings.js:829 js/Snom/Settings.js:858 js/Snom/Settings.js:887
+#: js/MyPhones.js:542
+#: js/MyPhones.js:579
+#: js/MyPhones.js:622
+#: js/MyPhones.js:658
+#: js/MyPhones.js:688
+#: js/MyPhones.js:717
+#: js/MyPhones.js:750
+#: js/MyPhones.js:778
+#: js/MyPhones.js:806
+#: js/MyPhones.js:839
+#: js/MyPhones.js:867
+#: js/MyPhones.js:895
+#: js/Snom/Phone.js:1265
+#: js/Snom/Phone.js:1302
+#: js/Snom/Phone.js:1345
+#: js/Snom/Phone.js:1381
+#: js/Snom/Phone.js:1411
+#: js/Snom/Phone.js:1440
+#: js/Snom/Phone.js:1473
+#: js/Snom/Phone.js:1501
+#: js/Snom/Phone.js:1529
+#: js/Snom/Phone.js:1562
+#: js/Snom/Phone.js:1590
+#: js/Snom/Phone.js:1618
+#: js/Snom/Settings.js:523
+#: js/Snom/Settings.js:561
+#: js/Snom/Settings.js:605
+#: js/Snom/Settings.js:642
+#: js/Snom/Settings.js:673
+#: js/Snom/Settings.js:703
+#: js/Snom/Settings.js:737
+#: js/Snom/Settings.js:766
+#: js/Snom/Settings.js:795
+#: js/Snom/Settings.js:829
+#: js/Snom/Settings.js:858
+#: js/Snom/Settings.js:887
 msgid "- factory default -"
 msgstr ""
 
-#: js/MyPhones.js:607 js/Snom/Phone.js:1330 js/Snom/Settings.js:206
+#: js/MyPhones.js:607
+#: js/Snom/Phone.js:1330
+#: js/Snom/Settings.js:206
 #: js/Snom/Settings.js:589
 msgid "display_method"
 msgstr ""
 
-#: js/MyPhones.js:623 js/Snom/Phone.js:1346 js/Snom/Settings.js:606
+#: js/MyPhones.js:623
+#: js/Snom/Phone.js:1346
+#: js/Snom/Settings.js:606
 msgid "whole url"
 msgstr ""
 
-#: js/MyPhones.js:625 js/Snom/Phone.js:1348 js/Snom/Settings.js:608
+#: js/MyPhones.js:625
+#: js/Snom/Phone.js:1348
+#: js/Snom/Settings.js:608
 msgid "number"
 msgstr ""
 
-#: js/MyPhones.js:626 js/Snom/Phone.js:1349 js/Snom/Settings.js:609
+#: js/MyPhones.js:626
+#: js/Snom/Phone.js:1349
+#: js/Snom/Settings.js:609
 msgid "name + number"
 msgstr ""
 
-#: js/MyPhones.js:627 js/Snom/Phone.js:1350 js/Snom/Settings.js:610
+#: js/MyPhones.js:627
+#: js/Snom/Phone.js:1350
+#: js/Snom/Settings.js:610
 msgid "number + name"
 msgstr ""
 
-#: js/MyPhones.js:643 js/Snom/Phone.js:1366 js/Snom/Settings.js:215
+#: js/MyPhones.js:643
+#: js/Snom/Phone.js:1366
+#: js/Snom/Settings.js:215
 #: js/Snom/Settings.js:626
 msgid "call_waiting"
 msgstr ""
 
-#: js/MyPhones.js:660 js/Snom/Phone.js:1383 js/Snom/Settings.js:644
+#: js/MyPhones.js:660
+#: js/Snom/Phone.js:1383
+#: js/Snom/Settings.js:644
 msgid "visual"
 msgstr ""
 
-#: js/MyPhones.js:661 js/Snom/Phone.js:1384 js/Snom/Settings.js:645
+#: js/MyPhones.js:661
+#: js/Snom/Phone.js:1384
+#: js/Snom/Settings.js:645
 msgid "ringer"
 msgstr ""
 
-#: js/MyPhones.js:673 js/Snom/Phone.js:1396 js/Snom/Settings.js:207
+#: js/MyPhones.js:673
+#: js/Snom/Phone.js:1396
+#: js/Snom/Settings.js:207
 #: js/Snom/Settings.js:657
 msgid "mwi_notification"
 msgstr ""
 
-#: js/MyPhones.js:689 js/Snom/Phone.js:1412 js/Snom/Settings.js:674
+#: js/MyPhones.js:689
+#: js/Snom/Phone.js:1412
+#: js/Snom/Settings.js:674
 msgid "silent"
 msgstr ""
 
-#: js/MyPhones.js:690 js/Snom/Phone.js:1413 js/Snom/Settings.js:675
+#: js/MyPhones.js:690
+#: js/Snom/Phone.js:1413
+#: js/Snom/Settings.js:675
 msgid "beep"
 msgstr ""
 
-#: js/MyPhones.js:691 js/Snom/Phone.js:1414 js/Snom/Settings.js:676
+#: js/MyPhones.js:691
+#: js/Snom/Phone.js:1414
+#: js/Snom/Settings.js:676
 msgid "reminder"
 msgstr ""
 
-#: js/MyPhones.js:702 js/Snom/Phone.js:1425 js/Snom/Settings.js:208
+#: js/MyPhones.js:702
+#: js/Snom/Phone.js:1425
+#: js/Snom/Settings.js:208
 #: js/Snom/Settings.js:687
 msgid "mwi_dialtone"
 msgstr ""
 
-#: js/MyPhones.js:718 js/Snom/Phone.js:1441 js/Snom/Settings.js:704
+#: js/MyPhones.js:718
+#: js/Snom/Phone.js:1441
+#: js/Snom/Settings.js:704
 msgid "normal"
 msgstr ""
 
-#: js/MyPhones.js:719 js/Snom/Phone.js:1442 js/Snom/Settings.js:705
+#: js/MyPhones.js:719
+#: js/Snom/Phone.js:1442
+#: js/Snom/Settings.js:705
 msgid "stutter"
 msgstr ""
 
-#: js/MyPhones.js:735 js/Snom/Phone.js:1458 js/Snom/Settings.js:209
+#: js/MyPhones.js:735
+#: js/Snom/Phone.js:1458
+#: js/Snom/Settings.js:209
 #: js/Snom/Settings.js:721
 msgid "headset_device"
 msgstr ""
 
-#: js/MyPhones.js:752 js/Snom/Phone.js:1475 js/Snom/Settings.js:739
+#: js/MyPhones.js:752
+#: js/Snom/Phone.js:1475
+#: js/Snom/Settings.js:739
 msgid "headset_rj"
 msgstr ""
 
-#: js/MyPhones.js:763 js/Snom/Phone.js:1486 js/Snom/Settings.js:210
+#: js/MyPhones.js:763
+#: js/Snom/Phone.js:1486
+#: js/Snom/Settings.js:210
 #: js/Snom/Settings.js:750
 msgid "message_led_other"
 msgstr ""
 
-#: js/MyPhones.js:791 js/Snom/Phone.js:1514 js/Snom/Settings.js:211
+#: js/MyPhones.js:791
+#: js/Snom/Phone.js:1514
+#: js/Snom/Settings.js:211
 #: js/Snom/Settings.js:779
 msgid "global_missed_counter"
 msgstr ""
 
-#: js/MyPhones.js:824 js/Snom/Phone.js:1547 js/Snom/Settings.js:212
+#: js/MyPhones.js:824
+#: js/Snom/Phone.js:1547
+#: js/Snom/Settings.js:212
 #: js/Snom/Settings.js:813
 msgid "scroll_outgoing"
 msgstr ""
 
-#: js/MyPhones.js:852 js/Snom/Phone.js:1575 js/Snom/Settings.js:213
+#: js/MyPhones.js:852
+#: js/Snom/Phone.js:1575
+#: js/Snom/Settings.js:213
 #: js/Snom/Settings.js:842
 msgid "show_local_line"
 msgstr ""
 
-#: js/MyPhones.js:880 js/Snom/Phone.js:1603 js/Snom/Settings.js:214
+#: js/MyPhones.js:880
+#: js/Snom/Phone.js:1603
+#: js/Snom/Settings.js:214
 #: js/Snom/Settings.js:871
 msgid "show_call_status"
 msgstr ""
@@ -845,7 +1049,8 @@ msgstr ""
 msgid "FW Status"
 msgstr ""
 
-#: js/Snom/Location.js:192 js/Snom/Location.js:482
+#: js/Snom/Location.js:192
+#: js/Snom/Location.js:482
 msgid "Update Policy"
 msgstr ""
 
@@ -857,19 +1062,23 @@ msgstr ""
 msgid "Admin Mode"
 msgstr ""
 
-#: js/Snom/Location.js:195 js/Snom/Location.js:614
+#: js/Snom/Location.js:195
+#: js/Snom/Location.js:614
 msgid "NTP Server"
 msgstr ""
 
-#: js/Snom/Location.js:196 js/Snom/Location.js:725
+#: js/Snom/Location.js:196
+#: js/Snom/Location.js:725
 msgid "Webserver Type"
 msgstr ""
 
-#: js/Snom/Location.js:197 js/Snom/Location.js:786
+#: js/Snom/Location.js:197
+#: js/Snom/Location.js:786
 msgid "HTTPS Port"
 msgstr ""
 
-#: js/Snom/Location.js:198 js/Snom/Location.js:807
+#: js/Snom/Location.js:198
+#: js/Snom/Location.js:807
 msgid "HTTP User"
 msgstr ""
 
@@ -1112,3 +1321,4 @@ msgstr ""
 #: js/Snom/Templates.js:449
 msgid "Keylayout"
 msgstr ""
+
