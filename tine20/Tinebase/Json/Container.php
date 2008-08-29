@@ -148,15 +148,15 @@ class Tinebase_Json_Container
         $result['totalcount'] = count($result['results']);
         
         foreach($result['results'] as &$value) {
-            switch($value['accountType']) {
+            switch($value['account_type']) {
                 case 'user':
-                    $value['accountId'] = Tinebase_User::getInstance()->getUserById($value['accountId'])->toArray();
+                    $value['account_id'] = Tinebase_User::getInstance()->getUserById($value['account_id'])->toArray();
                     break;
                 case 'group':
-                    $value['accountId'] = Tinebase_Group::getInstance()->getGroupById($value['accountId'])->toArray();
+                    $value['account_id'] = Tinebase_Group::getInstance()->getGroupById($value['account_id'])->toArray();
                     break;
                 case 'anyone':
-                    $value['accountId'] = array('accountDisplayName' => 'Anyone');
+                    $value['account_id'] = array('accountDisplayName' => 'Anyone');
                     break;
                 default:
                     throw new Exception('unsupported accountType');

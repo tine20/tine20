@@ -60,14 +60,14 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         $this->objects['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
             array(
-                'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                'accountType'   => 'user',
-                'accountName'   => 'not used',
-                'readGrant'     => true,
-                'addGrant'      => true,
-                'editGrant'     => true,
-                'deleteGrant'   => true,
-                'adminGrant'    => true
+                'account_id'     => Zend_Registry::get('currentAccount')->getId(),
+                'account_type'   => 'user',
+                //'account_name'   => 'not used',
+                'readGrant'      => true,
+                'addGrant'       => true,
+                'editGrant'      => true,
+                'deleteGrant'    => true,
+                'adminGrant'     => true
             )            
         ));
         
@@ -233,14 +233,14 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $newGrants->addRecord(
             new Tinebase_Model_Grants(
                 array(
-                    'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                    'accountType'   => 'user',
-                    'accountName'   => 'not used',
-                    'readGrant'     => true,
-                    'addGrant'      => false,
-                    'editGrant'     => true,
-                    'deleteGrant'     => true,
-                    'adminGrant'    => true
+                    'account_id'     => Zend_Registry::get('currentAccount')->getId(),
+                    'account_type'   => 'user',
+                    //'account_name'   => 'not used',
+                    'readGrant'      => true,
+                    'addGrant'       => false,
+                    'editGrant'      => true,
+                    'deleteGrant'    => true,
+                    'adminGrant'     => true
              ))
          );
         

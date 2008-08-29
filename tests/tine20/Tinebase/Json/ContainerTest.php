@@ -146,7 +146,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $grants['totalcount']);
         $this->assertTrue($grants['results'][0]["readGrant"]);
-        $this->assertEquals(Zend_Registry::get('currentAccount')->getId(), $grants['results'][0]["accountId"]["accountId"]);
+        $this->assertEquals(Zend_Registry::get('currentAccount')->getId(), $grants['results'][0]["account_id"]["accountId"]);
 
         $json->deleteContainer($container['id']);
 
@@ -169,14 +169,14 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         
         $newGrants = array(
             array(
-                'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                'accountType'   => 'user',
-                'accountName'   => 'not used',
-                'readGrant'     => true,
-                'addGrant'      => true,
-                'editGrant'     => true,
-                'deleteGrant'   => false,
-                'adminGrant'    => true
+                'account_id'     => Zend_Registry::get('currentAccount')->getId(),
+                'account_type'   => 'user',
+                //'account_name'   => 'not used',
+                'readGrant'      => true,
+                'addGrant'       => true,
+                'editGrant'      => true,
+                'deleteGrant'    => false,
+                'adminGrant'     => true
             )
         );
         

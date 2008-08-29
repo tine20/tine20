@@ -204,34 +204,34 @@ class Tinebase_Container
                 // add read grants to any other user
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
-                        'accountId'     => $accountId,
-                        'accountType'   => 'user',
-                        'accountName'   => 'not used',
-                        'readGrant'     => true,
-                        'addGrant'      => true,
-                        'editGrant'     => true,
-                        'deleteGrant'   => true,
-                        'adminGrant'    => true
+                        'account_id'     => $accountId,
+                        'account_type'   => 'user',
+                        //'account_name'   => 'not used',
+                        'readGrant'      => true,
+                        'addGrant'       => true,
+                        'editGrant'      => true,
+                        'deleteGrant'    => true,
+                        'adminGrant'     => true
                     ),            
                     array(
-                        'accountId'     => 0,
-                        'accountType'   => 'anyone',
-                        'accountName'   => 'not used',
-                        'readGrant'     => true
+                        'account_id'      => 0,
+                        'account_type'    => 'anyone',
+                        //'account_name'    => 'not used',
+                        'readGrant'       => true
                     )            
                 ));
             } else {
                 // add all grants to creator only
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
-                        'accountId'     => $accountId,
-                        'accountType'   => 'user',
-                        'accountName'   => 'not used',
-                        'readGrant'     => true,
-                        'addGrant'      => true,
-                        'editGrant'     => true,
-                        'deleteGrant'   => true,
-                        'adminGrant'    => true
+                        'account_id'     => $accountId,
+                        'account_type'   => 'user',
+                        //'account_name'   => 'not used',
+                        'readGrant'      => true,
+                        'addGrant'       => true,
+                        'editGrant'      => true,
+                        'deleteGrant'    => true,
+                        'adminGrant'     => true
                     )            
                 ));
             }
@@ -858,12 +858,7 @@ class Tinebase_Container
 
         // @todo use _getGrantsFromArray here
         foreach($rows as $row) {
-            $containerGrant = new Tinebase_Model_Grants( array(
-                'id'            => $row['id'],
-                'accountType'   => $row['account_type'],
-                'accountId'     => $row['account_id'],
-            ));
-
+            $containerGrant = new Tinebase_Model_Grants($row);
             $grants = explode(',', $row['account_grants']);
 
             foreach($grants as $grant) {
@@ -1055,14 +1050,14 @@ class Tinebase_Container
             } else {
                 $_grants[$currentAccountId] = new Tinebase_Model_Grants(
                     array(
-                        'accountId'     => $currentAccountId,
-                        'accountType'   => 'account',
-                        'accountName'   => 'not used',
-                        'readGrant'     => true,
-                        'addGrant'      => true,
-                        'editGrant'     => true,
-                        'deleteGrant'   => true,
-                        'adminGrant'    => true
+                        'account_id'     => $currentAccountId,
+                        'account_type'   => 'account',
+                        //'account_name'   => 'not used',
+                        'readGrant'      => true,
+                        'addGrant'       => true,
+                        'editGrant'      => true,
+                        'deleteGrant'    => true,
+                        'adminGrant'     => true
                     ), true);
             }
         } */
@@ -1079,8 +1074,8 @@ class Tinebase_Container
                 $data = array(
                     'id'            => $recordGrants->getId(),
                     'container_id'  => $containerId,
-                    'account_id'    => $recordGrants['accountId'],
-                    'account_type'  => $recordGrants['accountType'],
+                    'account_id'    => $recordGrants['account_id'],
+                    'account_type'  => $recordGrants['account_type'],
                 );
                 if(empty($data['id'])) {
                     $data['id'] = $recordGrants->generateUID();
@@ -1152,8 +1147,8 @@ class Tinebase_Container
     protected function _getGrantsFromArray(array $_grantsArray, $_accountId)
     {
         $grants = new Tinebase_Model_Grants( array(
-            'accountId'     => $_accountId,
-            'accountType'   => 'account',
+            'account_id'     => $_accountId,
+            'account_type'   => 'account',
         ));
         
         foreach($_grantsArray as $key => $value) {
