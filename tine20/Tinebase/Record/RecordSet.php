@@ -124,8 +124,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     
     /**
      * converts RecordSet to array
+     * NOTE: keys of the array are numeric and have _noting_ to do with internal indexes or identifiers
      * 
-     * @return array identifier => recordarray
+     * @return array 
      */
     public function toArray()
     {
@@ -134,7 +135,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $resultArray[$index] = $record->toArray();
         }
          
-        return $resultArray;
+        return array_values($resultArray);
     }
     
     /**
