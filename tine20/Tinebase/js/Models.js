@@ -64,8 +64,9 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
  */
 Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'id'},
-    {name: 'accountId'},
-    {name: 'accountType'},
+    {name: 'account_id'},
+    {name: 'account_type'},
+    {name: 'account_name'},
     {name: 'readGrant',   type: 'boolean'},
     {name: 'addGrant',    type: 'boolean'},
     {name: 'editGrant',   type: 'boolean'},

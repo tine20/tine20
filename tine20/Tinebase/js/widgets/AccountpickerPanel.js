@@ -199,12 +199,6 @@ Tine.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 		// set standart buttons if no buttons are given
 		if (!this.buttons) {
 			this.buttons = [{
-				text: _('Save'),
-				id: 'AccountsActionSaveButton',
-				disabled: true,
-				scope: this,
-				handler: this.handlers.accountsActionSave
-			}, {
 				text: _('Apply'),
 				id: 'AccountsActionApplyButton',
 				disabled: true,
@@ -214,7 +208,13 @@ Tine.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 				text: _('Close'),
 				scope: this,
 				handler: function(){this.close();}
-			}];
+			}, {
+                text: _('Save'),
+                id: 'AccountsActionSaveButton',
+                disabled: true,
+                scope: this,
+                handler: this.handlers.accountsActionSave
+            }];
 		}
 		Tine.widgets.AccountpickerActiondialog.superclass.initComponent.call(this);
 	},

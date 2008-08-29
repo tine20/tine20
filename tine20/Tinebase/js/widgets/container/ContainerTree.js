@@ -294,10 +294,19 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 			managePermissions: function() {
 				if (this.ctxNode) {
 					var node = this.ctxNode;
-					var win = new Tine.widgets.container.grantDialog({
-						folderName: this.folderName,
-						grantContainer: node.attributes.container
-					});
+                    var win = new Ext.Window({
+                        title: sprintf(_('Manage Permissions for %s :"%s"'), this.folderName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                        id: 'ContainerGrantsDialog',
+                        modal: true,
+                        layout:'fit',
+                        width:700,
+                        height:450,
+                        closeAction:'close',
+                        items: new Tine.widgets.container.grantDialog({
+                            folderName: this.folderName,
+                            grantContainer: node.attributes.container
+                        })
+                    });
 					win.show();
 				    //this.fireEvent('containerpermissionchange', '');
 				}
