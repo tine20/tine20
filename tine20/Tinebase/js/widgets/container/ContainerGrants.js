@@ -115,15 +115,8 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
     initComponent: function(){
         
         this.folderName = this.folderName ? this.folderName : _('Folder');
-        this.title = 'Manage permissions for ' + this.folderName + ': "' + Ext.util.Format.htmlEncode(this.grantContainer.name) + '"';
+        this.title = sprintf(_('Manage Permissions for %s :"%s"'), this.folderName, Ext.util.Format.htmlEncode(this.grantContainer.name));
 		this.actions = {
-	        addAccount: new Ext.Action({
-	            text: 'add account',
-	            disabled: true,
-				scope: this,
-	            handler: this.handlers.addAccount,
-	            iconCls: 'action_addContact'
-	        }),
 	        removeAccount: new Ext.Action({
 	            text: _('remove account'),
 	            disabled: true,
