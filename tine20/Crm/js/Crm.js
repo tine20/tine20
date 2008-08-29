@@ -1665,6 +1665,7 @@ Tine.Crm.LeadEditDialog = {
         
         // contacts
         this.actions.addResponsible = new Ext.Action({
+            requiredGrant: 'editGrant',
         	contactType: 'responsible',
             text: this.translation._('Add responsible'),
             tooltip: this.translation._('Add new responsible contact'),
@@ -1674,6 +1675,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.addCustomer = new Ext.Action({
+            requiredGrant: 'editGrant',
             contactType: 'customer',
             text: this.translation._('Add customer'),
             tooltip: this.translation._('Add new customer contact'),
@@ -1683,6 +1685,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.addPartner = new Ext.Action({
+            requiredGrant: 'editGrant',
             contactType: 'partner',
             text: this.translation._('Add partner'),
             tooltip: this.translation._('Add new partner contact'),
@@ -1693,6 +1696,7 @@ Tine.Crm.LeadEditDialog = {
 
         // split button with all contact types
         this.actions.addContact = new Ext.SplitButton({
+            requiredGrant: 'editGrant',
             contactType: 'customer',
             text: this.translation._('Add new contact'),
             tooltip: this.translation._('Add new customer contact'),
@@ -1708,6 +1712,7 @@ Tine.Crm.LeadEditDialog = {
         }); 
         
         this.actions.editContact = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Edit contact'),
             tooltip: this.translation._('Edit selected contact'),
             disabled: true,
@@ -1716,6 +1721,7 @@ Tine.Crm.LeadEditDialog = {
         });
 
         this.actions.linkContact = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Add existing contact'),
             tooltip: this.translation._('Add existing contact to lead'),
             //disabled: true,
@@ -1725,6 +1731,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.unlinkContact = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Unlink contact'),
             tooltip: this.translation._('Unlink selected contacts'),
             disabled: true,
@@ -1737,6 +1744,7 @@ Tine.Crm.LeadEditDialog = {
         
         // tasks
         this.actions.addTask = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Add task'),
             tooltip: this.translation._('Add new task'),
             iconCls: 'actionAdd',
@@ -1745,6 +1753,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.editTask = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Edit task'),
             tooltip: this.translation._('Edit selected task'),
             disabled: true,
@@ -1753,6 +1762,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.linkTask = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Add task'),
             tooltip: this.translation._('Add existing task to lead'),
             disabled: true,
@@ -1762,6 +1772,7 @@ Tine.Crm.LeadEditDialog = {
         });
 
         this.actions.unlinkTask = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Remove tasks'),
             tooltip: this.translation._('Remove selected tasks'),
             disabled: true,
@@ -1774,6 +1785,7 @@ Tine.Crm.LeadEditDialog = {
 
         // products
         this.actions.unlinkProduct = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Remove products'),
             tooltip: this.translation._('Remove selected products'),
             disabled: true,
@@ -1786,6 +1798,7 @@ Tine.Crm.LeadEditDialog = {
 
         // other
         this.actions.exportLead = new Ext.Action({
+            requiredGrant: 'editGrant',
             text: this.translation._('Export as PDF'),
             tooltip: this.translation._('Export as PDF'),
             iconCls: 'action_exportAsPdf',
@@ -1858,6 +1871,7 @@ Tine.Crm.LeadEditDialog = {
                 scope: this,
                 render: function() {
                     leadEdit.updateToolbars.defer(10, leadEdit, [lead, 'container']);
+                    Tine.widgets.ActionUpdater(lead, this.actions, 'container');
                 }
             }
         });
