@@ -739,7 +739,7 @@ Tine.Crm.LeadEditDialog = {
          */
         addContact: function(_button, _event) 
         {
-            var contactPopup = new Tine.Addressbook.EditPopup();        	
+            var contactPopup = new Tine.Addressbook.EditPopup(0);        	
             
             // update event handler
             contactPopup.on('update', function(contact) {
