@@ -12,11 +12,22 @@
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html manifest="tine20.manifest">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo $this->escape($this->title) ?></title>
+    <!-- <script type="text/javascript" src="gears_init.js"></script>
+    
+    <script type="text/javascript" language="javascript">
+        if (window.google && google.gears) {
+            var localServer = google.gears.factory.create('beta.localserver');
+            var store = localServer.createManagedStore('tine20-store');
+            store.manifestUrl = 'Tinebase/js/tine20-manifest.js';
+            store.checkForUpdate();
+        }
+    </script> -->
+
     <!-- EXT JS -->
     <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/xtheme-gray.css" />
@@ -76,8 +87,7 @@
         Tine.$appname.$var = ". Zend_Json::encode($content). ';';
                 }
             }
-        }?>
-        
+        }?>        
         // onReady, fired by ExtJS
         Ext.onReady(function(){
             Tine.Tinebase.initFramework();<?php
