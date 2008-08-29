@@ -107,6 +107,15 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
             bbar: [this.action_removeAccount],
             border: false
         });
+        this.configGridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
+            }
+            new Ext.menu.Menu({
+                items: [this.action_removeAccount]
+            }).showAt(_eventObject.getXY());
+        }, this);
         
         this.items = this.getConfigGridLayout();
         
