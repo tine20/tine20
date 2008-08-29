@@ -133,6 +133,7 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_ignoreAcl=false)
     {
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  get relations $_model, $_backend, $_id");
         #$cache = Zend_Registry::get('cache');
         #$cacheId = 'getRelations' . $_model . $_backend . $_id;
         #$result = $cache->load($cacheId);
@@ -219,6 +220,7 @@ class Tinebase_Relations
      */
     protected function resolveAppRecords($_relations)
     {
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolve app records for " . count($_relations) . " relations");
         // seperate relations by model
         $modelMap = array();
         foreach ($_relations as $relation) {
@@ -230,11 +232,13 @@ class Tinebase_Relations
         
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
-            list($appName, $i, $modelName) = explode('_', $modelName);
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolving " . count($relations) . " relation(s) of $modelName");
+            list($appName, $i, $itemName) = explode('_', $modelName);
             $appController = Tinebase_Controller::getInstance()->getApplicationInstance($appName);
-            $getMultipleMethod = 'getMultiple' . $modelName . 's';
+            $getMultipleMethod = 'getMultiple' . $itemName . 's';
             //Zend_Registry::get('logger')->debug('Tinebase_Relations: ' . print_r($relations->related_id, true));
             $records = $appController->$getMultipleMethod($relations->related_id);
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $appName returned " . count($records) . " record(s)");
             
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
@@ -243,6 +247,8 @@ class Tinebase_Relations
                     $_relations[$relationIndex]->related_record = $records[$recordIndex];
                 } else {
                     // delete relation from set, as READ ACL is abviously not granted
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
+                        " removing $relation->related_model $relation->related_backend $relation->related_id (ACL)");
                     unset($_relations[$relationIndex]);
                 }
             }
