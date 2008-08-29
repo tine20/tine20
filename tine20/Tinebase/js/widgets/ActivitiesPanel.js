@@ -306,6 +306,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         typesStore.each(function(record){
             if (record.data.is_user_type == 1) {
                 var action = new Ext.Action({
+                    requiredGrant: 'editGrant',
                     text: sprintf(this.translation._('Add a %s Note'), this.translation._(record.data.name)),
                     tooltip: this.translation._(record.data.description),
                     handler: this.handlers.addNote,
@@ -317,6 +318,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
             }
         }, this);
         
+        this.requiredGrant = 'editGrant';
         this.text = this.translation._('Add Note');
         this.tooltip = this.translation._('Add new note');
         this.menu = {
