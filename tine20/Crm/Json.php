@@ -77,6 +77,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
             foreach($personalFolders as $folder) {
                 $leadData['container']     = $folder->toArray();
+                $leadData['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $folder->getId())->toArray();
+                
                 break;
             }            
         }    
