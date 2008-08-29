@@ -1006,23 +1006,9 @@ Tine.Crm.LeadEditDialog = {
                 
                 rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
-                    // update toolbars
-                    //Tine.widgets.ActionUpdater(_selectionModel, this.actions);
-                    
-                    var rowCount = _selectionModel.getCount();                    
-                    if(rowCount < 1) {
-                        this.actions.editContact.setDisabled(true);
-                        this.actions.unlinkContact.setDisabled(true);
-                    } 
-                    if (rowCount == 1) {
-                        this.actions.editContact.setDisabled(false);
-                        this.actions.unlinkContact.setDisabled(false);
-                    }    
-                    if(rowCount > 1) {                
-                        this.actions.editContact.setDisabled(true);
-                        this.actions.unlinkContact.setDisabled(false);
-                    }
-                    
+                    var rowCount = _selectionModel.getCount();
+                    this.actions.unlinkContact.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    this.actions.editContact.setDisabled(rowCount != 1);
                 }, this);
                 
                 bbarItems = [                
@@ -1144,21 +1130,11 @@ Tine.Crm.LeadEditDialog = {
                 
             	rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
-                    var rowCount = _selectionModel.getCount();                    
-                    if(rowCount < 1) {
-                        this.actions.editTask.setDisabled(true);
-                        this.actions.unlinkTask.setDisabled(true);
-                    } 
-                    if (rowCount == 1) {
-                        this.actions.editTask.setDisabled(false);
-                        this.actions.unlinkTask.setDisabled(false);
-                    }    
-                    if(rowCount > 1) {                
-                        this.actions.editTask.setDisabled(true);
-                        this.actions.unlinkTask.setDisabled(false);
-                    }
+                    var rowCount = _selectionModel.getCount();
+                    this.actions.unlinkTask.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    this.actions.editTask.setDisabled(rowCount != 1);
                 }, this);
-            	
+
                 autoExpand = 'summary';
                 
                 bbarItems = [
@@ -1853,7 +1829,16 @@ Tine.Crm.LeadEditDialog = {
                 scope: this,
                 render: function() {
                     leadEdit.updateToolbars.defer(10, leadEdit, [lead, 'container']);
-                    Tine.widgets.ActionUpdater(lead, this.actions, 'container');
+                    Tine.widgets.ActionUpdater(lead, [
+                        this.actions.addResponsible,
+                        this.actions.addCustomer,
+                        this.actions.addPartner,
+                        this.actions.addContact,
+                        this.actions.linkContact,
+                        this.actions.addTask,
+                        this.actions.linkTask,
+                        this.actions.exportLead
+                    ], 'container');
                 }
             }
         });
