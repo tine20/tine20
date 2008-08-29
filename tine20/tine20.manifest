@@ -78,9 +78,14 @@ ExtJS/resources/images/default/window/icon-question.gif
 ExtJS/resources/images/default/form/date-trigger.gif
 ExtJS/resources/images/default/grid/sort_desc.gif
 ExtJS/resources/images/default/menu/item-over.gif
-
-
-
+ExtJS/resources/images/default/grid/page-next.gif
+ExtJS/resources/images/default/grid/page-last.gif
+ExtJS/resources/images/default/grid/row-over.gif
+ExtJS/resources/images/default/grid/grid3-hrow-over.gif
+ExtJS/resources/images/default/grid/grid3-hd-btn.gif
+ExtJS/resources/images/default/grid/refresh.gif
+ExtJS/resources/images/default/grid/page-next.gif
+ExtJS/resources/images/default/grid/page-last.gif
 
 images/oxygen/16x16/apps/systemtray.png
 images/oxygen/16x16/actions/rss-tag.png
@@ -116,7 +121,7 @@ images/oxygen/16x16/actions/document-save.png
 images/oxygen/16x16/actions/view-process-own.png
 images/oxygen/16x16/actions/knewstuff.png
 images/oxygen/16x16/actions/list-add.png
-
+images/oxygen/16x16/actions/user.png
 
 
 
