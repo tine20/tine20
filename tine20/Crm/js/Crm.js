@@ -157,7 +157,7 @@ Tine.Crm.Main = {
         handlerAddTask: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             
-            popupWindow = new Tine.Tasks.EditPopup(-1, -1, _rowIndex[0].data.id, 'Crm');
+            var popupWindow = new Tine.Tasks.EditPopup(-1, -1, _rowIndex[0].data.id, 'Crm');
         }
         
     },        
@@ -599,8 +599,8 @@ Tine.Crm.Main = {
         
         detailedContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
             if(typeof(_data) == 'object' && !Ext.isEmpty(_data)) {
-                var contactDetails = '';
-                for(i=0; i < _data.length; i++){
+                var contactDetails = '', style = '';
+                for(var i=0; i < _data.length; i++){
                     var org_name           = Ext.isEmpty(_data[i].org_name) === false ? _data[i].org_name : ' ';
                     var n_fileas           = Ext.isEmpty(_data[i].n_fileas) === false ? _data[i].n_fileas : ' ';
                     var adr_one_street     = Ext.isEmpty(_data[i].adr_one_street) === false ? _data[i].adr_one_street : ' ';
@@ -610,12 +610,10 @@ Tine.Crm.Main = {
                     var tel_cell           = Ext.isEmpty(_data[i].tel_cell) === false ? _data[i].tel_cell : ' ';
                     
                     if(i > 0) {
-                        _style = 'borderTop';
-                    } else {
-                        _style = '';
+                        style = 'borderTop';
                     }
                     
-                    contactDetails = contactDetails + '<table width="100%" height="100%" class="' + _style + '">' +
+                    contactDetails = contactDetails + '<table width="100%" height="100%" class="' + style + '">' +
                                          '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(org_name) + '</td></tr>' +
                                          '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>' +
                                          '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>' +
@@ -662,9 +660,9 @@ Tine.Crm.LeadEditDialog = {
     	/**
     	 * apply changes
     	 */
-        applyChanges: function(_button, _event, _closeWindow) 
-        {
+        applyChanges: function(_button, _event, _closeWindow) {
             var leadForm = Ext.getCmp('leadDialog').getForm();
+            var lead = Tine.Crm.LeadEditDialog.lead;
             
             if(leadForm.isValid()) {  
                 Ext.MessageBox.wait(Tine.Crm.LeadEditDialog.translation._('Please wait'), Tine.Crm.LeadEditDialog.translation._('Saving lead') + '...');                
@@ -714,8 +712,7 @@ Tine.Crm.LeadEditDialog = {
         /**
          * save and close
          */
-        saveAndClose: function(_button, _event) 
-        {     
+        saveAndClose: function(_button, _event) {     
         	Tine.Crm.LeadEditDialog.handlers.applyChanges(_button, _event, true);
         },
         
@@ -725,8 +722,7 @@ Tine.Crm.LeadEditDialog = {
          * remove selected objects from store
          * needs _button.gridId and _button.storeName
          */
-        unlink: function(_button, _event)
-        {        	        	                	
+        unlink: function(_button, _event) {        	        	                	
             var selectedRows = Ext.getCmp(_button.gridId).getSelectionModel().getSelections();
             var store = Ext.StoreMgr.lookup(_button.storeName);
             for (var i = 0; i < selectedRows.length; ++i) {
@@ -737,8 +733,7 @@ Tine.Crm.LeadEditDialog = {
         /**
          * onclick handler for addContact
          */
-        addContact: function(_button, _event) 
-        {
+        addContact: function(_button, _event) {
             var contactPopup = new Tine.Addressbook.EditPopup(0);        	
             
             // update event handler
@@ -768,8 +763,7 @@ Tine.Crm.LeadEditDialog = {
         /**
          * onclick handler for editContact
          */
-        editContact: function(_button, _event) 
-        {
+        editContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
             var selectedContact = selectedRows[0];
             
@@ -792,10 +786,9 @@ Tine.Crm.LeadEditDialog = {
          * link an existing contact -> create and activate contact picker/search dialog
          * @todo    add bigger & better search dialog later
          */
-        linkContact: function(_button, _event)
-        {
+        linkContact: function(_button, _event) {
         	// create new contact search grid
-        	contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
+        	var contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
         	
         	// add grid to tabpanel & activate
         	var linkTabPanel = Ext.getCmp('linkPanelTop');
@@ -807,8 +800,7 @@ Tine.Crm.LeadEditDialog = {
          * onclick handler for add task
          * 
          */
-        addTask: function(_button, _event) 
-        {
+        addTask: function(_button, _event) {
             var taskPopup = new Tine.Tasks.EditPopup(-1);
             
             // update event handler
@@ -828,8 +820,7 @@ Tine.Crm.LeadEditDialog = {
          * onclick handler for editBtn
          * 
          */
-        editTask: function(_button, _event) 
-        {
+        editTask: function(_button, _event) {
             var selectedRows = Ext.getCmp('crmGridTasks').getSelectionModel().getSelections();
             var selectedTask = selectedRows[0];
             
@@ -852,8 +843,7 @@ Tine.Crm.LeadEditDialog = {
          * link an existing task, open 'object' picker dialog
          * @todo implement
          */
-        linkTask: function(_button, _event)
-        {
+        linkTask: function(_button, _event) {
             
         },
 
@@ -875,8 +865,7 @@ Tine.Crm.LeadEditDialog = {
      * @param   Object record with relation data
      * @return  Object relation with record data
      */
-    getRelationData: function(record)
-    {
+    getRelationData: function(record) {
         var relation = null; 
         
         if (record.data.relation) {
@@ -910,8 +899,7 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @todo move relation handling .each() to extra function
      */
-    getAdditionalData: function(lead)
-    {
+    getAdditionalData: function(lead) {
         // collect data of relations
     	var relations = [];
     	
@@ -955,8 +943,7 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @todo    move to LeadEditDialog.js ?
      */
-    getLinksGrid: function(_type, _title)
-    {
+    getLinksGrid: function(_type, _title) {
     	// init vars
     	var storeName = _type + 'Store';
     	var columnModel = null;
@@ -1383,8 +1370,7 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @param   string _type (Contacts|Tasks|Products)
      */
-    setLinksContextMenu: function(_type)
-    {
+    setLinksContextMenu: function(_type) {
     	// init vars
     	var rowItems = [];
     	var gridItems = [];
@@ -1479,8 +1465,7 @@ Tine.Crm.LeadEditDialog = {
      * @param boolean _splitAll if set, all different relation types are splitted into arrays
      * @return Object with arrays containing the different relation types
      */
-    splitRelations: function(_relations, _splitAll)
-    {
+    splitRelations: function(_relations, _splitAll) {
     	var result = null;
     	    	
     	if (_splitAll) {
@@ -1528,8 +1513,7 @@ Tine.Crm.LeadEditDialog = {
      * @param   array _contacts
      * @param   boolean _reload reload or create new store
      */
-    loadContactsStore: function(_contacts, _reload)
-    {
+    loadContactsStore: function(_contacts, _reload) {
     	var storeContacts = null;
     	
     	if (_reload) {
@@ -1570,8 +1554,7 @@ Tine.Crm.LeadEditDialog = {
      * @param   array _tasks
      * @param   boolean _reload reload or create new store
      */
-    loadTasksStore: function(_tasks, _reload)
-    {
+    loadTasksStore: function(_tasks, _reload) {
     	var storeTasks = null;
     	
     	if (_reload) {
@@ -1610,8 +1593,7 @@ Tine.Crm.LeadEditDialog = {
      * @param   array _products
      * @param   boolean _reload reload or create new store
      */
-    loadProductsStore: function(_products, _reload)
-    {
+    loadProductsStore: function(_products, _reload) {
     	var storeProducts = null;
     	
     	if (_reload) {
@@ -1656,8 +1638,7 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @param   Tine.Crm.Model.Lead lead lead data
      */
-    initComponent: function(lead)
-    {
+    initComponent: function(lead) {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Crm');
         
@@ -1813,10 +1794,11 @@ Tine.Crm.LeadEditDialog = {
      *
      * @param   array   _lead
      */
-    display: function(_lead) 
-    {	
+    display: function(_lead) {	
         // put lead data into model
-        lead = new Tine.Crm.Model.Lead(_lead);
+        var lead = new Tine.Crm.Model.Lead(_lead);
+        Tine.Crm.LeadEditDialog.lead = lead;
+        
         Tine.Crm.Model.Lead.FixDates(lead);  
         
         this.initComponent(lead);
@@ -1835,7 +1817,7 @@ Tine.Crm.LeadEditDialog = {
         /*********** the EDIT dialog ************/
         
         var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
-
+        
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
             tbarItems: [
