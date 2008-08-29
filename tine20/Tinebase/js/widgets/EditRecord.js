@@ -88,7 +88,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             text: _('Cancel'),
             //tooltip: 'Reject changes and close this window',
             minWidth: 70,
-            handler: this.handlerCancle ? this.handlerCancle : function(){window.close();},
+            handler: this.handlerCancle,
             iconCls: 'action_cancel',
             scope: this.handlerScope
         });
@@ -184,6 +184,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      */
     closeWindow: function() {
         // find out if its modal or native
+        window.close();
         //console.log(this.el.getStyle('z-index'));
     }
 });
