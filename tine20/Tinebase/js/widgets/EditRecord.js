@@ -18,9 +18,22 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	 */
 	tbarItems: false,
     /**
-     * @cfg {reference} handlerScope scope to be aplied to the handlers
+     * @cfg {Object} handlerScope scope, the defined handlers will be executed in 
      */
     handlerScope: null,
+    /**
+     * @cfg {function} handler for generic save and close action
+     */
+    handlerSaveAndClose: null,
+    /**
+     * @cfg {function} handler for generic save and close action
+     */
+    handlerApplyChanges: null,
+    /**
+     * @cfg {function} handler for generic save and close action
+     */
+    handlerCancle: null,
+    
     bodyStyle:'padding:5px',
     //layout: 'fit',
     anchor:'100% 100%',
@@ -47,6 +60,8 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
              */
             'apply'
         );
+        
+        this.initHandlers();
         this.action_saveAndClose = new Ext.Action({
             requiredGrant: 'editGrant',
             text: _('Ok'),
@@ -69,6 +84,15 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             //disabled: true
         });
         
+        this.action_cancel = new Ext.Action({
+            text: _('Cancel'),
+            //tooltip: 'Reject changes and close this window',
+            minWidth: 70,
+            handler: this.handlerCancle ? this.handlerCancle : function(){window.close();},
+            iconCls: 'action_cancel',
+            scope: this.handlerScope
+        });
+        
         this.action_delete = new Ext.Action({
             requiredGrant: 'deleteGrant',
             text: _('delete'),
@@ -77,14 +101,6 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             iconCls: 'action_delete',
             scope: this.handlerScope,
             disabled: true
-        });
-        this.action_cancel = new Ext.Action({
-            text: _('Cancel'),
-            //tooltip: 'Reject changes and close this window',
-            minWidth: 70,
-            handler: this.handlerCancle ? this.handlerCancle : function(){window.close();},
-            iconCls: 'action_cancel',
-            scope: this.handlerScope
         });
         
         var genericButtons = [
@@ -108,6 +124,23 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 		
 		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	},
+    /**
+     * @private
+     */
+    initHandlers: function() {
+        this.handlerScope = this.handlerScope ? this.handlerScope : this;
+        
+        this.handlerSaveAndClose = this.handlerSaveAndClose ? this.handlerSaveAndClose : function(e, button) {
+            this.handlerApplyChanges(e, button, true);
+        };
+        
+        this.handlerCancle = this.handlerCancle ? this.handlerCancle : function() {
+            this.closeWindow();
+        }
+    },
+    /**
+     * update (action updateer) top and bottom toolbars
+     */
     updateToolbars: function(record, containerField) {
         var actions = [
             this.action_saveAndClose,
@@ -118,21 +151,40 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         Tine.widgets.ActionUpdater(record, actions, containerField);
         Tine.widgets.ActionUpdater(record, this.getTopToolbar(), containerField);
     },
+    /**
+     * get top toolbar
+     */
 	getToolbar: function() {
 		return this.getTopToolbar();
 	},
+    /**
+     * @private
+     */
     onCancel: function(){
-        
         this.fireEvent('cancle');
         //console.log('cancel');
     },
+    /**
+     * @private
+     */
     onSaveAndClose: function(){
         this.fireEvent('saveAndClose');
         //console.log('save');
     },
+    /**
+     * @private
+     */
     onApply: function(){
         this.fireEvent('apply');
         //console.log('apply');
+    },
+    /**
+     * helper function to close window
+     * @todo implemet ;-)
+     */
+    closeWindow: function() {
+        // find out if its modal or native
+        //console.log(this.el.getStyle('z-index'));
     }
 });
 
