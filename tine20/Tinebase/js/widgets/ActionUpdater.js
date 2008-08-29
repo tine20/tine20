@@ -54,19 +54,32 @@ Tine.widgets.ActionUpdater = function(records, actions, containerField) {
      * action iterator
      */
     var actionIterator = function(action) {
-        initialConfig = action.initialConfig ? action.initialConfig : {};
-        
-        // NOTE: we don't handle add action for the moment!
-        var requiredGrant = initialConfig.requiredGrant;
-        if (requiredGrant && requiredGrant != 'addGrant') {
-            var enable = grants[requiredGrant];
-            if (records.length > 1 && ! initialConfig.allowMultiple) {
-                enable = false;
+        var initialConfig = action.initialConfig;
+        if (initialConfig) {
+            
+            // happens for direct extensions of button class, like the notes button
+            if (action.requiredGrant) {
+                initialConfig = {
+                    requiredGrant: action.requiredGrant,
+                    allowMultiple: action.allowMultiple,
+                    singularText: action.singularText,
+                    pluralText: action.pluralText,
+                    translationObject: action.translationObject
+                };
             }
-            action.setDisabled(!enable);
-            if (initialConfig.singularText && initialConfig.pluralText && initialConfig.translationObject) {
-                var text = initialConfig.translationObject.n_(initialConfig.singularText, initialConfig.pluralText, records.length);
-                action.setText(text);
+            
+            // NOTE: we don't handle add action for the moment!
+            var requiredGrant = initialConfig.requiredGrant;
+            if (requiredGrant && requiredGrant != 'addGrant') {
+                var enable = grants[requiredGrant];
+                if (records.length > 1 && ! initialConfig.allowMultiple) {
+                    enable = false;
+                }
+                action.setDisabled(!enable);
+                if (initialConfig.singularText && initialConfig.pluralText && initialConfig.translationObject) {
+                    var text = initialConfig.translationObject.n_(initialConfig.singularText, initialConfig.pluralText, records.length);
+                    action.setText(text);
+                }
             }
         }
     };
