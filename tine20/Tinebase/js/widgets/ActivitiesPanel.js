@@ -623,7 +623,7 @@ Tine.widgets.activities.getTypesStore = function() {
  */
 Tine.widgets.activities.getTypeIcon = function(id) {	
     var typesStore = Tine.widgets.activities.getTypesStore();
-    typeRecord = typesStore.getById(id);
+    var typeRecord = typesStore.getById(id);
     if (typeRecord) {
         return '<img src="' + typeRecord.data.icon + '" ext:qtip="' + typeRecord.data.description + '"/>';
     } else {
