@@ -134,9 +134,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             this.handlerApplyChanges(e, button, true);
         };
         
-        this.handlerCancle = this.handlerCancle ? this.handlerCancle : function() {
-            this.closeWindow();
-        }
+        this.handlerCancle = this.handlerCancle ? this.handlerCancle : this.closeWindow;
     },
     /**
      * update (action updateer) top and bottom toolbars
