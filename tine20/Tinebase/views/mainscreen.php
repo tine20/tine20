@@ -87,16 +87,13 @@
         Tine.$appname.$var = ". Zend_Json::encode($content). ';';
                 }
             }
+        }
+        if(isset($this->jsExecute)) {
+            echo "
+            Tine.onReady = function() {
+                $this->jsExecute
+            };";
         }?>        
-        // onReady, fired by ExtJS
-        Ext.onReady(function(){
-            Tine.Tinebase.initFramework();<?php
-            if(isset($this->jsExecute)) {
-                echo "$this->jsExecute";
-            }?>
-            
-            window.focus();
-    	});
     </script>
 </head>
 <body>
