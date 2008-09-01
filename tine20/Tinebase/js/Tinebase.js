@@ -30,30 +30,74 @@ if (! ("console" in window) || !("firebug" in console)) {
     }
 }
 
-Ext.namespace('Tine', 'Tine.Tinebase');
-
 /**
- * @class Tine.Tinebase.RegistryClass
- * @constructor 
- * Generic registry class helps to manage global data per session
+ * Main entry point of each Tine 2.0 window
  * 
- * NOTE: The 'real' storage is done in the Mainscreen window. Other windows calls
- * to the registry are routed through
  */
-Tine.Tinebase.RegistryClass = Ext.extend(Ext.util.MixedCollection, {
-    get: function(key) {
-        if (Tine.Tinebase.RegistryClass.superclass.containsKey.call(this, key)) {
-            return Tine.Tinebase.RegistryClass.superclass.get.call(this, key);
+Ext.onReady(function(){
+    // Tine Framework initialisation for each window
+    Tine.Tinebase.initFramework();
+    /** temporary login **/
+    if (!Tine.Tinebase.Registry.get('currentAccount')) {
+        Tine.Login.showLoginDialog(Tine.Tinebase.Registry.get('defaultUsername'), Tine.Tinebase.Registry.get('defaultPassword'));
+        return;
+    }
+    
+    
+    if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+        // mainscreen request
+        window.name = Ext.ux.PopupWindowGroup.MainScreenName;
+        Ext.ux.PopupWindowMgr.register({
+            name: window.name,
+            popup: window
+        });
+        Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass();
+        Tine.Tinebase.MainScreen.render();
+        window.focus();
+    } else {
+        // @todo move PopupWindowMgr to generic WindowMgr
+        // init WindowMgr like registry!
+        var c = Ext.ux.PopupWindowMgr.get(window) || {};
+        window.document.title = c.title;
+
+        var items;
+        if (c.itemsConstructor) {
+            var parts = c.itemsConstructor.split('.');
+            var ref = window;
+            for (var i=0; i<parts.length; i++) {
+                ref = ref[parts[i]];
+            }
+            var items = new ref(c.itemsConstructorConfig);
         } else {
-            return opener.Tine.Tinebase.Registry.get(key);
+            items = c.items ? c.items : {}
         }
+        
+        /** temporary Tine.onRady for smooth transition to new window handling **/
+        if (typeof(Tine.onReady) == 'function') {
+            Tine.onReady();
+        } else {
+            c.viewport = new Ext.Viewport({
+                title: c.title,
+                layout: c.layout ? c.layout : 'fit',
+                items: items
+            });
+        }
+        window.focus();
     }
 });
+
+
+Ext.namespace('Tine', 'Tine.Tinebase');
+
 /**
  * @singleton
  * Instance of Tine.Tinebase.RegistryClass
  */
-Tine.Tinebase.Registry = new Tine.Tinebase.RegistryClass();
+if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+    Tine.Tinebase.Registry = new Ext.util.MixedCollection;
+} else {
+    Tine.Tinebase.Registry = Ext.ux.PopupWindowGroup.getMainScreen().Tine.Tinebase.Registry;
+}
 
 /**
  * html encode all grid columns per defaut
