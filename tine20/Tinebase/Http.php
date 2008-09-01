@@ -50,13 +50,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             // Locale support
             'Tinebase/js/Locale.js',
             'Tinebase/js/Locale/Gettext.js',
-            // Tinebase
-            'Tinebase/js/Tinebase.js',
-            'Tinebase/js/Models.js',
-            'Tinebase/js/MainScreen.js',
-            'Tinebase/js/Login.js',
-            'Tinebase/js/ExceptionDialog.js',
-            'Tinebase/js/Container.js',
             // Ext user extensions
             'Tinebase/js/ux/ButtonLockedToggle.js',
             'Tinebase/js/ux/Percentage.js',
@@ -108,6 +101,14 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
             //'../yui/build/imagecropper/imagecropper-beta-min.js',
+            // Tinebase
+            'Tinebase/js/ExceptionDialog.js',
+            'Tinebase/js/Container.js',
+            'Tinebase/js/Models.js',
+            'Tinebase/js/MainScreen.js',
+            'Tinebase/js/Login.js',
+            // include Tinebase.js at last!
+            'Tinebase/js/Tinebase.js'
             );
     }
     
@@ -164,10 +165,10 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             $view->userRegistration = 0;
         }
         
-        $view->title="Tine 2.0";
-        $view->jsExecute =  "
-            Tine.Login.showLoginDialog('$defaultUsername', '$defaultPassword');
-        ";
+        //$view->title="Tine 2.0";
+        //$view->jsExecute =  "
+        //    Tine.Login.showLoginDialog('$defaultUsername', '$defaultPassword');
+        //";
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -196,11 +197,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             }
         }
         
-        $view->title="Tine 2.0";
-        $view->jsExecute =  "
-            Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass();
-            Tine.Tinebase.MainScreen.render();
-        ";
+        //$view->title="Tine 2.0";
+        //$view->jsExecute =  "
+        //    Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass();
+        //    Tine.Tinebase.MainScreen.render();
+        //";
         // temporary tweak to fill generalised popup
         // todo: move js code to ext.ux.popupwindow!
         /*
@@ -232,13 +233,26 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     {
         $locale = Zend_Registry::get('locale');
         
+        // default credentials
+        if(isset(Zend_Registry::get('configFile')->login)) {
+            $loginConfig = Zend_Registry::get('configFile')->login;
+            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
+            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
+        } else {
+            $defaultUsername = '';
+            $defaultPassword = '';
+        }
+        
         $registryData =  array(
             'timeZone'         => Zend_Registry::get('userTimeZone'),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion())
-        ));
+                'region'   => $locale->getCountryTranslation($locale->getRegion()),
+            ),
+            'defaultUsername' => $defaultUsername,
+            'defaultPassword' => $defaultPassword
+        );
 
         if (Zend_Registry::isRegistered('currentAccount')) {
             $registryData += array(    
