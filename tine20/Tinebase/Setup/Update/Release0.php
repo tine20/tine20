@@ -1117,4 +1117,15 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.11');
     }
+
+    /**
+     * update to 0.12
+     * - delete links table
+     */
+    function update_11()
+    {
+        $this->_backend->dropTable('links');
+        
+        $this->setApplicationVersion('Tinebase', '0.12');
+    }
 }

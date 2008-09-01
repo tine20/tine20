@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.11</version>
+    <version>0.12</version>
     <tables>
         <table>
             <name>applications</name>
@@ -838,90 +838,6 @@
                     </field>
                     <field>
                         <name>related_id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-        
-        <table>
-            <name>links</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>link_id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>link_app1</name>
-                    <type>text</type>
-                    <length>25</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>link_app2</name>
-                    <type>text</type>
-                    <length>25</length>
-                    <notnull>true</notnull>
-                </field>
-
-                <field>
-                    <name>link_id1</name>
-                    <type>text</type>
-                    <length>50</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>link_id2</name>
-                    <type>text</type>
-                    <length>50</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>link_lastmod</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>link_owner</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>link_remark</name>
-                    <type>text</type>
-                    <length>100</length>
-                    <notnull>false</notnull>
-                </field>
-                <index>
-                    <name>link_id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>link_id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>egw_links_app1_id1_lastmod</name>
-                    <field>
-                        <name>link_app1</name>
-                    </field>
-                    <field>
-                        <name>link_id1</name>
-                    </field>
-                    <field>
-                        <name>link_lastmod</name>
-                    </field>
-                </index>
-                <index>
-                    <name>egw_links_app2_id2_lastmod</name>
-                    <field>
-                        <name>link_app2</name>
-                    </field>
-                    <field>
-                        <name>link_id2</name>
-                    </field>
-                    <field>
-                        <name>link_lastmod</name>
                     </field>
                 </index>
             </declaration>
