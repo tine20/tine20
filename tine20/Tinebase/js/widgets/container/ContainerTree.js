@@ -294,21 +294,20 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 			managePermissions: function() {
 				if (this.ctxNode) {
 					var node = this.ctxNode;
-                    var win = new Ext.Window({
-                        title: sprintf(_('Manage Permissions for %s :"%s"'), this.folderName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
-                        id: 'ContainerGrantsDialog',
+                    new Ext.ux.PopupWindow({
+                        url: 'index.php',
+                        name: 'TinebaseManageContainerGrants' + node.attributes.container.id,
+                        layout: 'fit',
                         modal: true,
-                        layout:'fit',
-                        width:700,
-                        height:450,
-                        closeAction:'close',
-                        items: new Tine.widgets.container.grantDialog({
+                        width: 700,
+                        height: 450,
+                        title: sprintf(_('Manage Permissions for %s :"%s"'), this.folderName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                        itemsConstructor: 'Tine.widgets.container.grantDialog',
+                        itemsConstructorConfig: {
                             folderName: this.folderName,
                             grantContainer: node.attributes.container
-                        })
+                        }
                     });
-					win.show();
-				    //this.fireEvent('containerpermissionchange', '');
 				}
             }
 		};

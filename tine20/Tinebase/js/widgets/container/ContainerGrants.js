@@ -56,7 +56,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
 		});
 	},
     handlerCancle: function() {
-        Ext.getCmp('ContainerGrantsDialog').close();
+        window.close();
     },
 	/**
      * @private
