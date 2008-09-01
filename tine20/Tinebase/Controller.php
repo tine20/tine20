@@ -32,10 +32,23 @@ class Tinebase_Controller
      */
     protected $_session;
     
+    /**
+     * config
+     *
+     * @var unknown_type
+     */
     protected $_config;
     
+    /**
+     * const PDO_MYSQL
+     *
+     */
     const PDO_MYSQL = 'Pdo_Mysql';
     
+    /**
+     * const PDO_OCI
+     *
+     */
     const PDO_OCI = 'Pdo_Oci';
     
     /**
@@ -297,6 +310,10 @@ class Tinebase_Controller
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
     }
     
+    /**
+     * setup the cache and add it to zend registry
+     *
+     */
     protected function setupCache()
     {
         // create zend cache
@@ -377,6 +394,8 @@ class Tinebase_Controller
      * 
      * $param  string $_locale
      * @return Zend_Locale
+     * 
+     * @todo get locale from preferences
      */
     public function setupUserLocale($_localeString='auto')
     {
@@ -465,6 +484,13 @@ class Tinebase_Controller
         }
     }
     
+    /**
+     * change user password
+     *
+     * @param string $_oldPassword
+     * @param string $_newPassword1
+     * @param string $_newPassword2
+     */
     public function changePassword($_oldPassword, $_newPassword1, $_newPassword2)
     {
         //error_log(print_r(Zend_Registry::get('currentAccount')->toArray(), true));
