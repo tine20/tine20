@@ -33,9 +33,27 @@ if (! ("console" in window) || !("firebug" in console)) {
 Ext.namespace('Tine', 'Tine.Tinebase');
 
 /**
- * generic storage class helps to manage global data
+ * @class Tine.Tinebase.RegistryClass
+ * @constructor 
+ * Generic registry class helps to manage global data per session
+ * 
+ * NOTE: The 'real' storage is done in the Mainscreen window. Other windows calls
+ * to the registry are routed through
  */
-Tine.Tinebase.Registry = new Ext.util.MixedCollection(true);
+Tine.Tinebase.RegistryClass = Ext.extend(Ext.util.MixedCollection, {
+    get: function(key) {
+        if (Tine.Tinebase.RegistryClass.superclass.containsKey.call(this, key)) {
+            return Tine.Tinebase.RegistryClass.superclass.get.call(this, key);
+        } else {
+            return opener.Tine.Tinebase.Registry.get(key);
+        }
+    }
+});
+/**
+ * @singleton
+ * Instance of Tine.Tinebase.RegistryClass
+ */
+Tine.Tinebase.Registry = new Tine.Tinebase.RegistryClass();
 
 /**
  * html encode all grid columns per defaut
