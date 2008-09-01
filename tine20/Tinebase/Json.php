@@ -86,6 +86,8 @@ class Tinebase_Json
      * @param  string $localeString
      * @param  bool   $saveaspreference
      * @return array
+     * 
+     * @todo save as preference
      */
     public function setLocale($localeString, $saveaspreference)
     {
@@ -104,6 +106,16 @@ class Tinebase_Json
             ));
     }
     
+    /**
+     * get users
+     *
+     * @param string $filter
+     * @param string $sort
+     * @param string $dir
+     * @param int $start
+     * @param int $limit
+     * @return array with results array & totalcount (int)
+     */
     public function getUsers($filter, $sort, $dir, $start, $limit)
     {
         $result = array(
