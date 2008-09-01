@@ -92,7 +92,7 @@ Locale.setlocale.LC_NUMERIC =  'C';
 Locale.setlocale.LC_TIME =     'C';
 
 /**
- * get translation data from generic locale object
+ * get translation data from generic locale object (partial clone of Zend Frameworks locale data)
  * 
  * @param   type (Date, Symbol, ...)
  * @param   key  the key
@@ -102,7 +102,7 @@ Locale.getTranslationData = function(type, key) {
     
     var value = '';
  
-    if ( Locale.prototype.TranslationLists[type][key] ) {
+    if ( Locale.prototype.TranslationLists[type] && Locale.prototype.TranslationLists[type][key] ) {
         value = Locale.prototype.TranslationLists[type][key];
     }
     
