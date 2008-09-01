@@ -8,6 +8,7 @@
  *
  */
  
+
 /**
  * @class Ext.ux.PopupWindowGroup
  * An object that represents a group of {@link Ext.ux.PopupWindow}
@@ -213,6 +214,19 @@ Ext.ux.PopupWindowGroup = function(){
     };
 };
 
+Ext.ux.PopupWindowGroup.MainScreenName = 'MainScreen';
+/**
+ * returns main screen window
+ * 
+ * @todo move to WindowManager
+ */
+Ext.ux.PopupWindowGroup.getMainScreen = function() {
+    var w = window;
+    while ( w.name != Ext.ux.PopupWindowGroup.MainScreenName) {
+        w = w.opener;
+    }
+    return w;
+}
 
 /**
  * @class Ext.ux.PopupWindowMgr
@@ -221,4 +235,8 @@ Ext.ux.PopupWindowGroup = function(){
  * popup windows, create additional instances of {@link Ext.ux.PopupWindowGroup} as needed.
  * @singleton
  */
-Ext.ux.PopupWindowMgr = new Ext.ux.PopupWindowGroup();
+if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+    Ext.ux.PopupWindowMgr = new Ext.ux.PopupWindowGroup();
+} else {
+    Ext.ux.PopupWindowMgr = Ext.ux.PopupWindowGroup.getMainScreen().Ext.ux.PopupWindowMgr;
+}

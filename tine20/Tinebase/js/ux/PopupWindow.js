@@ -48,6 +48,26 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 	 */
 	height: 500,
     /**
+     * @cfg {Bolean}
+     */
+    modal: false,
+    /**
+     * @cfg {String}
+     */
+    layout: 'fit',
+    /**
+     * @cfg {String}
+     */
+    title: 'Tine 2.0',
+    /**
+     * @cfg {String} Name of a constructor to create item property
+     */
+    itemsConstructor: null,
+    /**
+     * @cfg {Object} Config object to pass to itemContructor
+     */
+    itemsConstructorConfig: {},
+    /**
      * @property {Browser Window}
      */
     popup: null,
