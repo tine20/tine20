@@ -81,7 +81,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function getContact($_contactId)
     {
-        if (!$contactId) { // yes, we mean 0, null, false, ''
+        if (! $_contactId) { // yes, we mean 0, null, false, ''
             $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, 'Addressbook', $this->_currentAccount, Tinebase_Container::GRANT_ADD);
 
             $contact = new Addressbook_Model_Contact(array(), true);
