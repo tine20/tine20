@@ -2,14 +2,14 @@
 /**
  * Tine 2.0
  *
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
-class Dialer_Setup_Update_Release0 extends Setup_Update_Common
+class Phone_Setup_Update_Release0 extends Setup_Update_Common
 {
     public function update_1()
     {
@@ -32,8 +32,21 @@ class Dialer_Setup_Update_Release0 extends Setup_Update_Common
         
         $this->_backend->alterCol('application_rights', $declaration);
         
-        $this->setTableVersion('dialer_extensions', '1');
-        $this->setApplicationVersion('Dialer', '0.2'); */
+        $this->setTableVersion('phone_extensions', '1');
+        $this->setApplicationVersion('Phone', '0.2'); */
     }
 
+    /**
+     * rename application (Dialer -> Phone)
+     *
+     */
+    public function update_2()
+    {
+        // rename database table
+        $this->_backend->renameTable('dialer_extensions', 'phone_extensions');
+        
+        //-- rename application
+        
+        //$this->setApplicationVersion('Phone', '0.3');
+    }    
 }

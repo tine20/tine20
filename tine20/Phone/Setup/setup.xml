@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
-    <name>Dialer</name>
-    <version>0.2</version>
+    <name>Phone</name>
+    <version>0.3</version>
     <order>11</order>
     <status>disabled</status>
     <tables>
         <table>
-            <name>dialer_extensions</name>
+            <name>phone_extensions</name>
             <version>1</version>
             <declaration>
                 <field>

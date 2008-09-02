@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,13 +13,13 @@
 /**
  * backend class for Zend_Json_Server
  *
- * This class handles all Json requests for the dialer application
+ * This class handles all Json requests for the phone application
  *
- * @package     Dialer
+ * @package     Phone
  */
-class Dialer_Json extends Tinebase_Application_Json_Abstract
+class Phone_Json extends Tinebase_Application_Json_Abstract
 {
-    protected $_appname = 'Dialer';
+    protected $_appname = 'Phone';
     
     /**
      * delete multiple contacts
@@ -33,7 +33,7 @@ class Dialer_Json extends Tinebase_Application_Json_Abstract
             'success'   => TRUE
         );
         
-        Dialer_Controller::getInstance()->dialNumber($number);
+        Phone_Controller::getInstance()->dialNumber($number);
         
         return $result;
     }

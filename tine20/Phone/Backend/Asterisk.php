@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,11 +11,11 @@
  */
 
 /**
- * asterisk backend for the Dialer application
+ * asterisk backend for the Phone application
  * 
- * @package     Dialer
+ * @package     Phone
  */
-class Dialer_Backend_Asterisk
+class Phone_Backend_Asterisk
 {
     /**
      * Enter description here...
@@ -49,19 +49,19 @@ class Dialer_Backend_Asterisk
     /**
      * holdes the instance of the singleton
      *
-     * @var Dialer_Backend_Asterisk
+     * @var Phone_Backend_Asterisk
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Dialer_Backend_Asterisk
+     * @return Phone_Backend_Asterisk
      */
     public static function getInstance($_url, $_username, $_password) 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Dialer_Backend_Asterisk($_url, $_username, $_password);
+            self::$_instance = new Phone_Backend_Asterisk($_url, $_username, $_password);
         }
         
         return self::$_instance;
@@ -95,7 +95,7 @@ class Dialer_Backend_Asterisk
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        $extensionsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'dialer_extensions'));
+        $extensionsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'phone_extensions'));
         
         $select  = $extensionsTable->select()
             ->where('account_id = ?', $accountId);

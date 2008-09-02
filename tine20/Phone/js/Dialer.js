@@ -1,24 +1,24 @@
 /**
  * Tine 2.0
  * 
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
-Ext.namespace('Tine.Dialer');
+Ext.namespace('Tine.Phone');
 
 /**
  * entry point, required by tinebase
  * creates and returnes app tree panel
  */
-Tine.Dialer.getPanel = function(){
+Tine.Phone.getPanel = function(){
     var tree = new Ext.tree.TreePanel({
-        id: 'dialerTree',
-        iconCls: 'DialerIconCls',
-        title: 'Dialer',
+        id: 'phoneTree',
+        iconCls: 'PhoneIconCls',
+        title: 'Phone',
         border: false,
         root: new Ext.tree.TreeNode({
             text: 'root',
@@ -30,7 +30,7 @@ Tine.Dialer.getPanel = function(){
 
     
     tree.on('click', function(node){
-        Tine.Dialer.Main.show(node);
+        Tine.Phone.Main.show(node);
     }, this);
         
     tree.on('beforeexpand', function(panel) {
@@ -46,7 +46,7 @@ Tine.Dialer.getPanel = function(){
 
 
 
-Tine.Dialer.Main = {
+Tine.Phone.Main = {
 	actions: 
 	{
 	   	dialNumber: null
@@ -73,7 +73,7 @@ Tine.Dialer.Main = {
 		            Ext.Ajax.request({
 		                url: 'index.php',
 		                params: {
-		                    method: 'Dialer.dialNumber',
+		                    method: 'Phone.dialNumber',
 		                    number: _number
 		                },
 		                success: function(_result, _request){
@@ -96,7 +96,7 @@ Tine.Dialer.Main = {
             emptyText: 'enter searchfilter'
         }); 
         quickSearchField.on('change', function(){
-            Ext.getCmp('Dialer_Grid').getStore().load({
+            Ext.getCmp('Phone_Grid').getStore().load({
                 params: {
                     start: 0,
                     limit: 50
@@ -105,7 +105,7 @@ Tine.Dialer.Main = {
         }, this);
         
         var toolbar = new Ext.Toolbar({
-            id: 'Dialer_Toolbar',
+            id: 'Phone_Toolbar',
             split: false,
             height: 26,
             items: [
@@ -286,7 +286,7 @@ Tine.Dialer.Main = {
         );*/
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-        adminButton.setIconClass('DialerTreePanel');
+        adminButton.setIconClass('PhoneTreePanel');
         //if(Tine.Addressbook.rights.indexOf('admin') > -1) {
         //    adminButton.setDisabled(false);
         //} else {
@@ -294,7 +294,7 @@ Tine.Dialer.Main = {
         //}
 
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('DialerTreePanel');
+        preferencesButton.setIconClass('PhoneTreePanel');
         preferencesButton.setDisabled(true);
     },
     
@@ -304,7 +304,7 @@ Tine.Dialer.Main = {
         
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        if(currentToolbar === false || currentToolbar.id != 'Dialer_Toolbar') {
+        if(currentToolbar === false || currentToolbar.id != 'Phone_Toolbar') {
             this.displayToolbar();
             this.displayGrid();
             this.updateMainToolbar();

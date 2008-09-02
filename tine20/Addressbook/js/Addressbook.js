@@ -150,7 +150,7 @@ Tine.Addressbook.Main = {
             Ext.Ajax.request({
                 url: 'index.php',
                 params: {
-                    method: 'Dialer.dialNumber',
+                    method: 'Phone.dialNumber',
                     number: number
                 },
                 success: function(_result, _request){
@@ -271,7 +271,7 @@ Tine.Addressbook.Main = {
             text: this.translation._('call contact'),
             disabled: true,
             handler: this.handlers.callContact,
-            iconCls: 'DialerIconCls',
+            iconCls: 'PhoneIconCls',
             menu: new Ext.menu.Menu({
                 id: 'Addressbook_Contacts_CallContact_Menu'
             }),
@@ -318,7 +318,7 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact,
                 '-',
                 this.actions.exportContact,
-                ( Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
+                ( Tine.Phone && Tine.Phone.rights && Tine.Phone.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
             ]
         });
     },
@@ -417,7 +417,7 @@ Tine.Addressbook.Main = {
                 
             }  else if (rowCount == 1) {
                 // only one row selected
-                if(Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1) {
+                if(Tine.Phone && Tine.Phone.rights && Tine.Phone.rights.indexOf('run') > -1) {
 	                var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
 	                callMenu.removeAll();
 	                var contact = _selectionModel.getSelected();

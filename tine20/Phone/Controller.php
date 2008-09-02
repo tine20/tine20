@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,11 +11,11 @@
  */
 
 /**
- * controller class for the Dialer application
+ * controller class for the Phone application
  * 
- * @package     Dialer
+ * @package     Phone
  */
-class Dialer_Controller
+class Phone_Controller
 {
     /**
      * the constructor
@@ -33,19 +33,19 @@ class Dialer_Controller
     /**
      * holdes the instance of the singleton
      *
-     * @var Dialer_Controller
+     * @var Phone_Controller
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Dialer_Controller
+     * @return Phone_Controller
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Dialer_Controller;
+            self::$_instance = new Phone_Controller;
         }
         
         return self::$_instance;
@@ -62,7 +62,7 @@ class Dialer_Controller
             $phone = $vmController->getSnomPhone($phones[0]->id);
             if(count($phone->lines) > 0) {
                 $asteriskLine = $vmController->getAsteriskSipPeer($phone->lines[0]->asteriskline_id);
-                $backend = Dialer_Backend_Factory::factory(Dialer_Backend_Factory::ASTERISK);
+                $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::ASTERISK);
                 $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskLine->context, $_number, 1, $asteriskLine->callerid);
             }
         }        

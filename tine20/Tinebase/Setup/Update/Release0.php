@@ -1128,4 +1128,20 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.12');
     }
+
+    /**
+     * update to 0.13
+     * - rename Dialer app to 'Phone'
+     */
+    function update_12()
+    {
+        // rename app in application table
+        $appTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX.'applications'));
+        $appTable->update(
+            array( 'name' => 'Phone' ),
+            "name = 'Dialer'"
+        );
+        
+        //$this->setApplicationVersion('Tinebase', '0.13');
+    }
 }

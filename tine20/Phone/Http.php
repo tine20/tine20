@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,13 +12,13 @@
 
 /**
  * backend class for Tinebase_Http_Server
- * This class handles all Http requests for the dialer application
+ * This class handles all Http requests for the phone application
  * 
- * @package Dialer
+ * @package Phone
  */
-class Dialer_Http extends Tinebase_Application_Http_Abstract
+class Phone_Http extends Tinebase_Application_Http_Abstract
 {
-    protected $_appname = 'Dialer';
+    protected $_appname = 'Phone';
     
     /**
      * Returns all JS files which must be included for this app
@@ -28,7 +28,7 @@ class Dialer_Http extends Tinebase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Dialer/js/Dialer.js'
+            'Phone/js/Phone.js'
         );
     }
 }

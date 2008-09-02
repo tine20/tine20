@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,11 +10,11 @@
  */
 
 /**
- * dialer backend factory class
+ * phone backend factory class
  * 
- * @package     Dialer
+ * @package     Phone
  */
-class Dialer_Backend_Factory
+class Phone_Backend_Factory
 {
     /**
      * constant for the asterisk backend class
@@ -23,10 +23,10 @@ class Dialer_Backend_Factory
     const ASTERISK = 'Asterisk';
     
     /**
-     * factory function to return a selected dialer backend class
+     * factory function to return a selected phone backend class
      *
      * @param string $type
-     * @return Dialer_Backend_Interface
+     * @return Phone_Backend_Interface
      */
     static public function factory($type)
     {
@@ -39,11 +39,11 @@ class Dialer_Backend_Factory
                 } else {
                     throw new Exception('no settings found for asterisk backend in config.ini');
                 }
-                $instance = Dialer_Backend_Asterisk::getInstance($url, $username, $password);
+                $instance = Phone_Backend_Asterisk::getInstance($url, $username, $password);
                 break;
                 
             default:
-                throw new Exception('unsupported dialer backend');
+                throw new Exception('unsupported phone backend');
         }
 
         return $instance;
