@@ -1142,6 +1142,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             "name = 'Dialer'"
         );
         
-        //$this->setApplicationVersion('Tinebase', '0.13');
+        $this->setApplicationVersion('Tinebase', '0.13');
     }
 }
