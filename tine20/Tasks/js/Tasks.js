@@ -89,12 +89,11 @@ Tine.Tasks.mainGrid = {
 			if (_button.actionType == 'edit') {
 			    var selectedRows = this.grid.getSelectionModel().getSelections();
                 var task = selectedRows[0];
-				taskId = task.data.id;
 			} else {
                 var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
             }
             var containerId = (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1;
-			var popupWindow = new Tine.Tasks.EditPopup(taskId, containerId);
+			var popupWindow = new Tine.Tasks.EditPopup(task, containerId);
             
             popupWindow.on('update', function(task) {
             	this.store.load({params: this.paging});
@@ -569,21 +568,23 @@ Tine.Tasks.mainGrid = {
 };
 
 /*********************************** EDIT DIALOG ********************************************/
+
 /**
  * Tasks Edit Popup
- * @todo is the linking stuff stille used?
  */
-Tine.Tasks.EditPopup = function (taskId, containerId, relatedId, relatedApp) {
-    taskId      = taskId      ? taskId      : -1;
-    containerId = containerId ? containerId : -1;
-    relatedApp  = relatedApp  ? relatedApp  : '';
-    relatedId   = relatedId   ? relatedId   : -1;
-    
+Tine.Tasks.EditPopup = function (task, containerId, relatedApp) {
+    task = task ? task : new Tine.Tasks.Task({}, 0);
     var window = new Ext.ux.PopupWindowMgr.fly({
-        url: 'index.php?method=Tasks.editTask&taskId=' + taskId + '&linkingApp='+ relatedApp + '&linkedId=' + relatedId + '&containerId=' + containerId,
-        name: 'TasksEditWindow' + taskId,
+        layout: 'border',
+        name: 'TasksEditWindow' + task.id,
         width: 700,
-        height: 300
+        height: 300,
+        itemsConstructor: 'Tine.Tasks.EditDialog',
+        itemsConstructorConfig: {
+            task: task,
+            containerId: containerId,
+            relatedApp: relatedApp
+        }
     });
     return window;
 }
@@ -591,92 +592,131 @@ Tine.Tasks.EditPopup = function (taskId, containerId, relatedId, relatedApp) {
 /**
  * Tasks Edit Dialog
  */
-Tine.Tasks.EditDialog = function(task) {
-	
-	// get translation object
-    translation = new Locale.Gettext();
-    translation.textdomain('Tasks');
-	
-	if (!arguments[0]) {
-		task = {};
-	}
-	
-	// init task record 
-    task = new Tine.Tasks.Task(task);
-    Tine.Tasks.fixTask(task);
+Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
+    /**
+     * @cfg {Tine.Addressbook.Model.Contact}
+     */
+    task: null,
+    /**
+     * @cfg {Number}
+     */
+    containerId: -1,
+    /**
+     * @cfg {String}
+     */
+    relatedApp: '',
     
-	var handlers = {        
-        applyChanges: function(_button, _event) {
-			var closeWindow = arguments[2] ? arguments[2] : false;
-			
-			var dlg = Ext.getCmp('TasksEditFormPanel');
-			var form = dlg.getForm();
-			
-			if(form.isValid()) {
-				Ext.MessageBox.wait(translation._('Please wait'), translation._('Saving Task'));
-				
-				// merge changes from form into task record
-				form.updateRecord(task);
-				
-	            Ext.Ajax.request({
-					params: {
-		                method: 'Tasks.saveTask', 
-		                task: Ext.util.JSON.encode(task.data)
-		            },
-		            success: function(_result, _request) {
-		                
-						dlg.action_delete.enable();
-						// override task with returned data
-						task = new Tine.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
-						Tine.Tasks.fixTask(task);
-						
-						// update form with this new data
-						form.loadRecord(task);
-                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
+    /**
+     * @private!
+     */
+    id : 'TasksEditFormPanel',
+    labelAlign: 'side',
 
-						if (closeWindow) {
-                            opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
-                            window.setTimeout("window.close()", 1000);
-                        } else {
-                        	Ext.MessageBox.hide();
-                        }
-		            },
-		            failure: function ( result, request) { 
-		                Ext.MessageBox.alert(translation._('Failed'), translation._('Could not save task.')); 
-		            } 
-				});
-	        } else {
-	            Ext.MessageBox.alert(translation._('Errors'), translation._('Please fix the errors noted.'));
-	        }
-		},
-		saveAndClose:  function(_button, _event) {
-			handlers.applyChanges(_button, _event, true);
-		},
-		pre_delete: function(_button, _event) {
-			Ext.MessageBox.confirm(translation._('Confirm'), translation._('Do you really want to delete this task?'), function(_button) {
-                if(_button == 'yes') {
-			        Ext.MessageBox.wait(translation._('Please wait a moment...'), translation._('Saving Task'));
-	    			Ext.Ajax.request({
-	                    params: {
-	    					method: 'Tasks.deleteTask',
-	    					identifier: task.data.id
-	    				},
-	                    success: function(_result, _request) {
-                            opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
-                            opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
-	    					window.setTimeout("window.close()", 1000);
-	                    },
-	                    failure: function ( result, request) { 
-	                        Ext.MessageBox.alert(translation._('Failed'), translation._('Could not delete task(s).'));
-	    					Ext.MessageBox.hide();
-	                    }
-	    			});
-				}
+    initComponent: function() {
+        this.task = this.task ? this.task : new Tine.Tasks.Task({}, 0);
+        
+        Ext.Ajax.request({
+            scope: this,
+            success: this.onRecordLoad,
+            params: {
+                method: 'Tasks.getTask',
+                uid: this.task.id,
+                containerId: this.containerId,
+                relatedApp: this.relatedApp
+            }
+        });
+        
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Tasks');
+        
+        this.items = this.getTaskFormPanel();
+        Tine.Tasks.EditDialog.superclass.initComponent.call(this);
+    },
+    
+    onRender: function(ct, position) {
+        Tine.Tasks.EditDialog.superclass.onRender.call(this, ct, position);
+        Ext.MessageBox.wait(this.translation._('Loading Task...'), _('Please Wait'));
+    },
+    
+    onRecordLoad: function(response) {
+        this.getForm().findField('summary').focus(false, 250);
+        var recordData = Ext.util.JSON.decode(response.responseText);
+        this.updateRecord(recordData);
+        
+        this.getForm().loadRecord(this.task);
+        Ext.MessageBox.hide();
+    },
+    
+    updateRecord: function(recordData) {
+        this.task = new Tine.Tasks.Task(recordData);
+        Tine.Tasks.fixTask(this.task);
+    },
+    
+    handlerApplyChanges: function(_button, _event) {
+		var closeWindow = arguments[2] ? arguments[2] : false;
+
+        var form = this.getForm();
+		if(form.isValid()) {
+			Ext.MessageBox.wait(this.translation._('Please wait'), this.translation._('Saving Task'));
+			
+			// merge changes from form into task record
+			form.updateRecord(task);
+			
+            Ext.Ajax.request({
+				params: {
+	                method: 'Tasks.saveTask', 
+	                task: Ext.util.JSON.encode(task.data)
+	            },
+	            success: function(_result, _request) {
+	                
+					this.action_delete.enable();
+					// override task with returned data
+					this.updateRecord(Ext.util.JSON.decode(_result.responseText));
+					
+					// update form with this new data
+					form.loadRecord(this.task);
+                    opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
+
+					if (closeWindow) {
+                        opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
+                        window.setTimeout("window.close()", 1000);
+                    } else {
+                    	Ext.MessageBox.hide();
+                    }
+	            },
+	            failure: function ( result, request) { 
+	                Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
+	            } 
 			});
-		}
-	};
+        } else {
+            Ext.MessageBox.alert(this.translation._('Errors'), this.translation._('Please fix the errors noted.'));
+        }
+	},
+    
+	handlerDelete: function(_button, _event) {
+		Ext.MessageBox.confirm(this.translation._('Confirm'), this.translation._('Do you really want to delete this task?'), function(_button) {
+            if(_button == 'yes') {
+		        Ext.MessageBox.wait(this.translation._('Please wait a moment...'), this.translation._('Saving Task'));
+    			Ext.Ajax.request({
+                    params: {
+    					method: 'Tasks.deleteTask',
+    					identifier: task.data.id
+    				},
+                    success: function(_result, _request) {
+                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
+                        opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
+    					window.setTimeout("window.close()", 1000);
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not delete task(s).'));
+    					Ext.MessageBox.hide();
+                    }
+    			});
+			}
+		});
+	},
 	
-	var taskFormPanel = {
+	getTaskFormPanel: function() { return {
 		layout:'column',
 		autoHeight: true,
 		labelWidth: 90,
@@ -691,16 +731,16 @@ Tine.Tasks.EditDialog = function(task) {
                 xtype: 'textfield'
             },
 			items:[{
-				fieldLabel: translation._('Summary'),
+				fieldLabel: this.translation._('Summary'),
 				hideLabel: true,
 				xtype: 'textfield',
 				name: 'summary',
-				emptyText: translation._('Enter short name...'),
+				emptyText: this.translation._('Enter short name...'),
 				allowBlank: false
 			}, {
-				fieldLabel: translation._('Notes'),
+				fieldLabel: this.translation._('Notes'),
 				hideLabel: true,
-                emptyText: translation._('Enter description...'),
+                emptyText: this.translation._('Enter description...'),
 				name: 'description',
 				xtype: 'textarea',
 				height: 150
@@ -714,56 +754,32 @@ Tine.Tasks.EditDialog = function(task) {
             },
             items:[ 
                 new Ext.ux.PercentCombo({
-                    fieldLabel: translation._('Percentage'),
+                    fieldLabel: this.translation._('Percentage'),
                     editable: false,
                     name: 'percent'
                 }), 
                 new Tine.Tasks.status.ComboBox({
-                    fieldLabel: translation._('Status'),
+                    fieldLabel: this.translation._('Status'),
                     name: 'status_id'
                 }), 
                 new Tine.widgets.Priority.Combo({
-                    fieldLabel: translation._('Priority'),
+                    fieldLabel: this.translation._('Priority'),
                     name: 'priority'
                 }), 
                 new Ext.ux.form.ClearableDateField({
-                    fieldLabel: translation._('Due date'),
+                    fieldLabel: this.translation._('Due date'),
                     name: 'due'
                 }), 
                 new Tine.widgets.container.selectionComboBox({
-                    fieldLabel: translation._('Folder'),
+                    fieldLabel: this.translation._('Folder'),
                     name: 'container_id',
                     itemName: 'Tasks',
                     appName: 'Tasks'
                 })
             ]
         }]
-	};
-	
-	var dlg = new Tine.widgets.dialog.EditRecord({
-        id : 'TasksEditFormPanel',
-        handlerApplyChanges: handlers.applyChanges,
-        handlerSaveAndClose: handlers.saveAndClose,
-        handlerDelete: handlers.pre_delete,
-        labelAlign: 'side',
-        //layout: 'fit',
-        items: taskFormPanel
-    });
-	
-	var viewport = new Ext.Viewport({
-        layout: 'border',
-        items: dlg,
-        listeners: {
-            scope: this,
-            render: function() {
-                dlg.updateToolbars.defer(10, dlg, [task]);
-            }
-        }
-    });
-
-    // load form with initial data
-    dlg.getForm().loadRecord(task);
-};
+	};}
+});
 
 
 // fixes a task
