@@ -81,14 +81,21 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function getContact($_contactId)
     {
-        $contact = $this->_backend->get($_contactId);
-        // only get tags the user has view right for
-        Tinebase_Tags::getInstance()->getTagsOfRecord($contact);
-        
-        $contact->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Addressbook_Model_Contact', $contact->getId());
+        if (!$contactId) { // yes, we mean 0, null, false, ''
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, 'Addressbook', $this->_currentAccount, Tinebase_Container::GRANT_ADD);
 
-        if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access to contact denied');
+            $contact = new Addressbook_Model_Contact(array(), true);
+            $contact->owner = $containers[0]->getId();
+        } else {
+            $contact = $this->_backend->get($_contactId);
+            // only get tags the user has view right for
+            Tinebase_Tags::getInstance()->getTagsOfRecord($contact);
+            
+            $contact->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Addressbook_Model_Contact', $contact->getId());
+        
+            if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+                throw new Exception('read access to contact denied');
+            }
         }
         
         return $contact;            

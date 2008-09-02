@@ -35,7 +35,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $result = array(
             'success'   => true
         );
-
+        
         $contact = Addressbook_Controller::getInstance()->getContact($contactId);
         $result['contact'] = $this->_contactToJson($contact);
         
