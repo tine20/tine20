@@ -64,43 +64,4 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         return $initialData;    
     }
 
-    /**
-     * Supplies HTML for edit tasks dialog
-     * 
-     * @param int    $taskId
-     * @param string $linkingApp
-     * @param int    $linkedId
-     */
-    public function editTask($taskId=-1, $linkingApp='', $linkedId=-1, $containerId=-1)
-    {
-        if($taskId >= 0) {
-            $tjs = new Tasks_Json();
-            $task = Zend_Json::encode($tjs->getTask($taskId));
-        } else {
-        	// prepare initial data (temporary, this should become part of json interface)
-        	$newTask = new Tasks_Model_Task(array(), true);
-        	$newTaskArray= $newTask->toArray();
-        
-        	if ($containerId > 0) {
-        	    $newTaskArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($containerId)->toArray();
-        	} else {
-        	    $newTaskArray['container_id'] = Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray();
-        	}
-            $newTaskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $newTaskArray['container_id']['id'])->toArray();
-        
-        	$task = Zend_Json::encode($newTaskArray);
-        }
-        
-        
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        
-        $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
-        $view->title="edit task";
-        $view->jsExecute = 'Tine.Tasks.EditDialog(' . $task . ');';
-        
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-    }
 }
