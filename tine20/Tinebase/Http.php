@@ -235,6 +235,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         $json = new Tinebase_Json();
         return array(
             'NoteTypes'        => $json->getNoteTypes(),
+            'CountryList'      => $json->getCountryList()
         );
     }
     
