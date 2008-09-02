@@ -71,10 +71,10 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     },
     setValue: function(value) {
         Ext.ux.form.ImageField.superclass.setValue.call(this, value);
-        if (! value && value == this.defaultImage) {
+        if (! value || value == this.defaultImage) {
             this.imageSrc = this.defaultImage;
         } else {
-            Ext.ux.util.ImageURL.prototype.parseURL(value)
+            this.imageSrc = Ext.ux.util.ImageURL.prototype.parseURL(value)
         }
         this.updateImage();
     },
