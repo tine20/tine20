@@ -14,8 +14,9 @@ Ext.namespace('Tine');
 Tine.Build = '$Build: $';
 
 Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
-
 Ext.QuickTips.init();
+Ext.ux.PopupWindow.prototype.url = 'index.php';
+
 
 /**
  * create console pseudo object when firebug is disabled/not installed

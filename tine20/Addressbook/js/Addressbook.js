@@ -84,7 +84,7 @@ Tine.Addressbook.Main = {
 	     * onclick handler for addBtn
 	     */
 	    addContact: function(_button, _event) {
-            var popupWindow = new Tine.Addressbook.EditPopup(0);
+            var popupWindow = new Tine.Addressbook.EditPopup();
         },
 
         /**
@@ -92,9 +92,9 @@ Tine.Addressbook.Main = {
          */
         editContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
-            var contactId = selectedRows[0].data.id;
+            //var contactId = selectedRows[0].data.id;
             
-            var popupWindow = new Tine.Addressbook.EditPopup(contactId /*,containerId*/);            
+            var popupWindow = new Tine.Addressbook.EditPopup(selectedRows[0]);            
         },
 
         /**
@@ -599,7 +599,7 @@ Tine.Addressbook.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             try {
-                var popupWindow = new Tine.Addressbook.EditPopup(record.data.id /*,containerId*/);                        
+                var popupWindow = new Tine.Addressbook.EditPopup(record.data);                        
             } catch(e) {
                 // alert(e);
             }
@@ -761,118 +761,188 @@ Tine.Addressbook.Main = {
 /**
  * Addressbook Edit Popup
  */
-Tine.Addressbook.EditPopup = function (contactId) {
-    contactId = contactId ? contactId : 0;
+Tine.Addressbook.EditPopup = function (contact) {
     var window = new Ext.ux.PopupWindowMgr.fly({
-        url: 'index.php?method=Addressbook.editContact&_contactId=' + contactId,
-        name: 'AddressbookEditWindow' + contactId,
+        //url: 'index.php?method=Addressbook.editContact&_contactId=' + contactId,
+        layout: 'border',
+        name: 'AddressbookEditWindow' + contact.id,
         width: 800,
-        height: 600
+        height: 600,
+        itemsConstructor: 'Tine.Addressbook.ContactEditDialog',
+        itemsConstructorConfig: {
+            contact: contact
+        }
     });
     return window;
 }
 
 /**
  * The edit dialog
- */
-Tine.Addressbook.ContactEditDialog = {
-	handlers: {
-	    applyChanges: function(_button, _event, _closeWindow) {
-            this.translation = new Locale.Gettext();
-            this.translation.textdomain('Addressbook');
-            
-            var form = Ext.getCmp('contactDialog').getForm();
-
-            if(form.isValid()) {
-                Ext.MessageBox.wait(this.translation.gettext('Please wait a moment...'), this.translation.gettext('Saving Contact'));
-                form.updateRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
-                Tine.Addressbook.ContactEditDialog.contactRecord.set('jpegphoto', Ext.getCmp('addressbookeditdialog-jpegimage').getValue());
+ * @constructor
+ * @class Tine.Addressbook.ContactEditDialog
+ */  
+Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
+    /**
+     * @cfg {Tine.Addressbook.Model.Contact}
+     */
+    contact: null,
+    
+    
+    /**
+     * @private!
+     */
+    id: 'contactDialog',
+    layout: 'hfit',
+    
+    initComponent: function() {
+        if (! this.contact) {
+            this.contact = new Tine.Addressbook.Model.Contact({
+                id: 0
+            });
+        }
         
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Addressbook.saveContact', 
-                        contactData: Ext.util.JSON.encode(Tine.Addressbook.ContactEditDialog.contactRecord.data)
-                    },
-                    success: function(_result, _request) {
-                    	if(window.opener.Tine.Addressbook) {
-                            window.opener.Tine.Addressbook.Main.reload();
-                    	}
-                    	
-                    	// update record
-                    	var contactData = Ext.util.JSON.decode(_result.responseText).updatedData; 
-                    	Tine.Addressbook.ContactEditDialog.updateContactRecord(contactData);
-                    	form.loadRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
-                    	
-                        // notify opener and return contact data 
-                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', Tine.Addressbook.ContactEditDialog.contactRecord);                    		
-                    	
-                        if(_closeWindow === true) {
-                          	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
-                            window.close();
-                        } else {
-                            this.updateToolbarButtons(this.contactRecord);
-                            
-                            Ext.MessageBox.hide();
-                        }
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save contact.')); 
-                    },
-                    scope: this 
-                });
-            } else {
-                Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
+        Ext.Ajax.request({
+            scope: this,
+            success: this.onContactLoad,
+            params: {
+                method: 'Addressbook.getContact',
+                contactId: this.contact.id
             }
-	    },
+        });
+        
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Addressbook');
+        
+        // export lead handler for edit contact dialog
+        var exportContactButton = new Ext.Action({
+            id: 'exportButton',
+            text: this.translation.gettext('export as pdf'),
+            handler: this.handlerExport,
+            iconCls: 'action_exportAsPdf',
+            disabled: false
+        });
+        
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
 
-	    saveAndClose: function(_button, _event) {
-            this.handlers.applyChanges(_button, _event, true);
-        },
+        this.tbarItems = [exportContactButton, addNoteButton];
+        this.items = Tine.Addressbook.ContactEditDialog.getEditForm(this.contact);
+        
+        Tine.Addressbook.ContactEditDialog.superclass.initComponent.call(this);
+    },
+    
+	onRender: function(ct, position) {
+        Tine.Addressbook.ContactEditDialog.superclass.onRender.call(this, ct, position);
+        Ext.MessageBox.wait(this.translation._('Loading Contact...'), _('Please Wait'));
+    },
+    
+    onContactLoad: function(response) {
+        this.getForm().findField('n_prefix').focus(false, 250);
+        var contactData = Ext.util.JSON.decode(response.responseText).contact;
+        this.updateContactRecord(contactData);
+        
+        this.getForm().loadRecord(this.contact);
+        Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
+        
+        if(this.contact.data.adr_one_countrydisplayname) {
+            //console.log('set adr_one_countryname to ' + this.contact.data.adr_one_countrydisplayname);
+            //this.getForm().findField('adr_one_countryname').setRawValue(this.contact.data.adr_one_countrydisplayname);
+        }
 
-	    deleteContact: function(_button, _event) {
-	        var contactIds = Ext.util.JSON.encode([Tine.Addressbook.ContactEditDialog.contactRecord.data.id]);
-	            
-	        Ext.Ajax.request({
-	            url: 'index.php',
-	            params: {
-	                method: 'Addressbook.deleteContacts', 
-	                _contactIds: contactIds
-	            },
-	            text: this.translation.gettext('Deleting contact...'),
-	            success: function(_result, _request) {
-                    if(window.opener.Tine.Addressbook) {
+        if(this.contact.data.adr_two_countrydisplayname) {
+            //console.log('set adr_two_countryname to ' + this.contact.data.adr_two_countrydisplayname);
+            //this.getForm().findField('adr_two_countryname').setRawValue(this.contact.data.adr_two_countrydisplayname);
+        }
+        Ext.MessageBox.hide();
+    },
+    
+    handlerApplyChanges: function(_button, _event, _closeWindow) {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Addressbook');
+        
+        var form = this.getForm();
+
+        if(form.isValid()) {
+            Ext.MessageBox.wait(this.translation.gettext('Please wait a moment...'), this.translation.gettext('Saving Contact'));
+            form.updateRecord(this.contact);
+            this.contact.set('jpegphoto', Ext.getCmp('addressbookeditdialog-jpegimage').getValue());
+    
+            Ext.Ajax.request({
+                scope: this,
+                params: {
+                    method: 'Addressbook.saveContact', 
+                    contactData: Ext.util.JSON.encode(this.contact.data)
+                },
+                success: function(_result, _request) {
+                	if(window.opener.Tine.Addressbook) {
                         window.opener.Tine.Addressbook.Main.reload();
+                	}
+                	
+                	// update record
+                	var contactData = Ext.util.JSON.decode(_result.responseText).updatedData; 
+                	this.updateContactRecord(contactData);
+                	form.loadRecord(this.contact);
+                    Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
+                	
+                    // notify opener and return contact data 
+                    opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', this.contact);                    		
+                	
+                    if(_closeWindow === true) {
+                      	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
+                        window.close();
+                    } else {
+                        this.updateToolbarButtons(this.contact);
+                        
+                        Ext.MessageBox.hide();
                     }
-                    window.close();
-	            },
-	            failure: function ( result, request) { 
-	                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the conctact.')); 
-	            } 
-	        });                           
-	    },
-	    
-	    exportContact: function(_button, _event) {
-	    	// we have to create an array (json encoded) as param here because exportContact expects one (for multiple contact export)
-	    	var contactIds = Ext.util.JSON.encode([_button.contactId]);
+                },
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save contact.')); 
+                } 
+            });
+        } else {
+            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
+        }
+    },
 
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
-	    }
-	},
+    handlerDelete: function(_button, _event) {
+        var contactIds = Ext.util.JSON.encode([this.contact.data.id]);
+            
+        Ext.Ajax.request({
+            url: 'index.php',
+            params: {
+                method: 'Addressbook.deleteContacts', 
+                _contactIds: contactIds
+            },
+            text: this.translation.gettext('Deleting contact...'),
+            success: function(_result, _request) {
+                if(window.opener.Tine.Addressbook) {
+                    window.opener.Tine.Addressbook.Main.reload();
+                }
+                window.close();
+            },
+            failure: function ( result, request) { 
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the conctact.')); 
+            } 
+        });                           
+    },
+    
+    handlerExport: function(_button, _event) {
+    	// we have to create an array (json encoded) as param here because exportContact expects one (for multiple contact export)
+    	var contactIds = Ext.util.JSON.encode([_button.contactId]);
 
-    contactRecord: null,
+        Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
+    },
     
     updateContactRecord: function(_contactData) {
         if(_contactData.bday && _contactData.bday !== null) {
             _contactData.bday = Date.parseDate(_contactData.bday, 'c');
         }
 
-        this.contactRecord = new Tine.Addressbook.Model.Contact(_contactData);
+        this.contact = new Tine.Addressbook.Model.Contact(_contactData);
     },
-
     
     updateToolbarButtons: function(contact) {
-        var dialog = Ext.getCmp('contactDialog');
-        dialog.updateToolbars.defer(10, dialog, [contact, 'owner']);
+        this.updateToolbars.defer(10, this, [contact, 'owner']);
         
         // add contact id to export button and enable it if id is set
         var contactId = contact.get('id');
@@ -882,66 +952,8 @@ Tine.Addressbook.ContactEditDialog = {
         } else {
         	Ext.getCmp('exportButton').setDisabled(true);
         }
-    },
-    
-    /**
-     * main function of edit dialog, gets called by jsExecute in view
-     */
-    display: function(_contactData) {
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Addressbook');
-        
-        // export lead handler for edit contact dialog
-        var exportContactButton = new Ext.Action({
-        	id: 'exportButton',
-            text: this.translation.gettext('export as pdf'),
-            handler: this.handlers.exportContact,
-            iconCls: 'action_exportAsPdf',
-            disabled: false
-        });         
-        
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
-
-        // Ext.FormPanel
-        var dialog = new Tine.widgets.dialog.EditRecord({
-            layout: 'hfit',
-            id : 'contactDialog',
-            tbarItems: [exportContactButton, addNoteButton],
-            handlerScope: this,
-            handlerApplyChanges: this.handlers.applyChanges,
-            handlerSaveAndClose: this.handlers.saveAndClose,
-            handlerDelete: this.handlers.deleteContact,
-            handlerExport: this.handlers.exportContact,
-            items: Tine.Addressbook.ContactEditDialog.getEditForm(_contactData)
-        });
-        dialog.on('render', function(dialog){
-            dialog.getForm().findField('n_prefix').focus(false, 250);
-        });
-        
-        var viewport = new Ext.Viewport({
-            layout: 'border',
-            frame: true,
-            items: dialog
-        });
-
-        this.updateContactRecord(_contactData);
-        this.updateToolbarButtons(this.contactRecord);
-        
-        dialog.getForm().loadRecord(this.contactRecord);
-        Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contactRecord.get('jpegphoto'));
-        
-        if(this.contactRecord.data.adr_one_countrydisplayname) {
-            //console.log('set adr_one_countryname to ' + this.contactRecord.data.adr_one_countrydisplayname);
-            dialog.getForm().findField('adr_one_countryname').setRawValue(this.contactRecord.data.adr_one_countrydisplayname);
-        }
-
-        if(this.contactRecord.data.adr_two_countrydisplayname) {
-            //console.log('set adr_two_countryname to ' + this.contactRecord.data.adr_two_countrydisplayname);
-            dialog.getForm().findField('adr_two_countryname').setRawValue(this.contactRecord.data.adr_two_countrydisplayname);
-        }
     }
-    
-};
+});
 
 /**************************** models ***************************************/
 
