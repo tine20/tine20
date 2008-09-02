@@ -592,10 +592,8 @@ Tine.widgets.activities.NotesFormField = Ext.extend(Ext.form.Field, {
  * @todo translate type names / descriptions
  */
 Tine.widgets.activities.getTypesStore = function() {
-    
     var store = Ext.StoreMgr.get('noteTypesStore');
     if (!store) {
-
         store = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.NoteType,
             baseParams: {
@@ -606,11 +604,11 @@ Tine.widgets.activities.getTypesStore = function() {
             id: 'id',
             remoteSort: false
         });
-        
-        if (Tine.Tinebase.NoteTypes) {
+        /*if (Tine.Tinebase.Registry.get('NoteTypes')) {
+            store.loadData(Tine.Tinebase.Registry.get('NoteTypes'));
+        } else*/ if (Tine.Tinebase.NoteTypes) {
             store.loadData(Tine.Tinebase.NoteTypes);
         }
-            
         Ext.StoreMgr.add('noteTypesStore', store);
     }
     
