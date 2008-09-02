@@ -146,16 +146,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     {
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        
-        // default credentials
-        if(isset(Zend_Registry::get('configFile')->login)) {
-            $loginConfig = Zend_Registry::get('configFile')->login;
-            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
-            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
-        } else {
-            $defaultUsername = '';
-            $defaultPassword = '';
-        }
 
         // check if registration is active
         if(isset(Zend_Registry::get('configFile')->login)) {
@@ -164,12 +154,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         } else {
             $view->userRegistration = 0;
         }
-        
-        //$view->title="Tine 2.0";
-        //$view->jsExecute =  "
-        //    Tine.Login.showLoginDialog('$defaultUsername', '$defaultPassword');
-        //";
-        
+
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -196,29 +181,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 $view->initialData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
-        
-        //$view->title="Tine 2.0";
-        //$view->jsExecute =  "
-        //    Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass();
-        //    Tine.Tinebase.MainScreen.render();
-        //";
-        // temporary tweak to fill generalised popup
-        // todo: move js code to ext.ux.popupwindow!
-        /*
-        if (isset($_GET['isPopup']) && $_GET['isPopup']) {
-            $view->isPopup = true;
-            $view->jsExecute = "
-                var viewport = new Ext.Viewport({
-                    layout: opener.Ext.ux.PopupWindowMgr.get(window).layout,
-                    items:  opener.Ext.ux.PopupWindowMgr.get(window).items,
-                    onRender: function(viewport){
-                        //window.setTimeout(function() {opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('render', window);}, 3000);
-                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('render', window);
-                    }
-                });
-            ";
-        }
-        */
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -292,7 +254,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 */
 	public function activateUser( $id ) 
 	{
-				
 		// update registration table and get username / account values
 		$account = Tinebase_User_Registration::getInstance()->activateUser( $id );
 
