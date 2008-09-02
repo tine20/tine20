@@ -1,15 +1,15 @@
 /**
  * Tine 2.0
  * 
- * @package     Dialer
+ * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Dialer.css 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
+ * @version     $Id:Phone.css 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
  */
  
-.DialerIconCls {
+.PhoneIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }
 
