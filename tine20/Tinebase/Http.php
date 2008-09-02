@@ -232,7 +232,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public static function getRegistryData()
     {
         $locale = Zend_Registry::get('locale');
-        
+        $json = new Tinebase_Json();
         // default credentials
         if(isset(Zend_Registry::get('configFile')->login)) {
             $loginConfig = Zend_Registry::get('configFile')->login;
@@ -260,6 +260,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 'accountBackend'   => Tinebase_User::getConfiguredBackend(),
                 'jsonKey'          => Zend_Registry::get('jsonKey'),
                 'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray(),
+                'NoteTypes'        => array_value('results', $json->getNoteTypes()),
                 'version'          => array(
                     'codename'      => 'Summer 2008 Milestone 2',
                     'packageString' => 'summer-MS2-1',
