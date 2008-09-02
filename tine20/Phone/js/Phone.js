@@ -8,32 +8,64 @@
  * @version     $Id:Dialer.js 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
  */
+ 
 Ext.namespace('Tine.Phone');
+
+/**************************** panel ****************************************/
 
 /**
  * entry point, required by tinebase
  * creates and returnes app tree panel
  */
 Tine.Phone.getPanel = function(){
-    var tree = new Ext.tree.TreePanel({
-        id: 'phoneTree',
-        iconCls: 'PhoneIconCls',
-        title: 'Phone',
-        border: false,
-        root: new Ext.tree.TreeNode({
-            text: 'root',
-            draggable:false,
-            allowDrop:false,
-            id:'root'
-        })
-    });
+	
+    var translation = new Locale.Gettext();
+    translation.textdomain('Phone');
 
+    // add phones to tree menu
+    var treeLoader = new Ext.tree.TreeLoader({
+        dataUrl: 'index.php',
+        baseParams: {
+            jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
+            method: 'Phone.getUserPhones',
+            /* method: 'Voipmanager.getMyPhones',
+            sort:'', 
+            dir:'ASC',
+            query: '', */
+            accountId: Tine.Tinebase.Registry.get('currentAccount').accountId             
+        }
+    });
+    treeLoader.on("beforeload", function(_loader, _node){
+        _loader.baseParams.node = _node.id;
+    }, this);
     
-    tree.on('click', function(node){
+    var treePanel = new Ext.tree.TreePanel({
+        title: 'Phone',
+        id: 'phone-tree',
+        iconCls: 'PhoneIconCls',
+        loader: treeLoader,
+        //rootVisible: false,
+        rootVisible: true,
+        border: false,
+        collapsible: true
+    });
+    
+    // set the root node
+    var treeRoot = new Ext.tree.AsyncTreeNode({
+        text: translation._('Phones'),
+        cls: 'treemain',
+        allowDrag: false,
+        allowDrop: true,
+        id: 'phones',
+        icon: false
+    });
+    treePanel.setRootNode(treeRoot);
+    
+    treePanel.on('click', function(node){
         Tine.Phone.Main.show(node);
     }, this);
         
-    tree.on('beforeexpand', function(panel) {
+    treePanel.on('beforeexpand', function(panel) {
         if(panel.getSelectionModel().getSelectedNode() === null) {
             panel.expandPath('/root/all');
             panel.selectPath('/root/all');
@@ -41,10 +73,10 @@ Tine.Phone.getPanel = function(){
         panel.fireEvent('click', panel.getSelectionModel().getSelectedNode());
     }, this);
     
-    return tree;
+    return treePanel;
 };
 
-
+/**************************** main ****************************************/
 
 Tine.Phone.Main = {
 	actions: 

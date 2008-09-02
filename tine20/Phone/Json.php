@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Json.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
  */
 
@@ -36,5 +36,17 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
         Phone_Controller::getInstance()->dialNumber($number);
         
         return $result;
+    }
+    
+    /**
+     * get user phones
+     *
+     */
+    public function getUserPhones($accountId)
+    {
+        $voipController = Voipmanager_Controller::getInstance();
+        $phones = $voipController->getMyPhones('id', 'ASC', '', $accountId);
+        
+        return $phones;
     }
 }
