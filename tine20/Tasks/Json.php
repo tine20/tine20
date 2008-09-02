@@ -69,9 +69,20 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @param string $_uid
      * @return Tasks_Model_Task task
      */
-    public function getTask($uid)
+    public function getTask($uid, $containerId = -1, $relatedApp = '')
     {
-        $task = $this->_controller->getTask($uid);
+        if(strlen($uid) == 40) {
+            $task = $this->_controller->getTask($uid);
+        } else {
+            $task = new Tasks_Model_Task(array(
+                'container_id' => $containerId
+            ), true);
+        
+            if ($containerId <= 0) {
+                $task->container_id = Tasks_Controller::getInstance()->getDefaultContainer($relatedApp)->getId();
+            }
+        }
+        
         return $this->_taskToJson($task);
     }
     
