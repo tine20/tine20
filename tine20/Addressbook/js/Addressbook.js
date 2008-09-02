@@ -599,7 +599,7 @@ Tine.Addressbook.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             try {
-                var popupWindow = new Tine.Addressbook.EditPopup(record.data);                        
+                var popupWindow = new Tine.Addressbook.EditPopup(record);                        
             } catch(e) {
                 // alert(e);
             }
@@ -874,11 +874,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                 	form.loadRecord(this.contact);
                     Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
                 	
-                    // notify opener and return contact data 
-                    opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', this.contact);                    		
+                    // notify opener and return contact data
+                    var wm = Ext.ux.PopupWindowGroup.getMainScreen().Ext.ux.PopupWindowMgr;
+                    wm.get(window).fireEvent('update', this.contact); 
                 	
                     if(_closeWindow === true) {
-                      	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
+                      	wm.get(window).purgeListeners();
                         window.close();
                     } else {
                         this.updateToolbarButtons(this.contact);
