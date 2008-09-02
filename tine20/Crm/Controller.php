@@ -10,7 +10,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add other rights
+ * @todo        add more rights? (removed MANAGE_LEADS for the moment, it is covered with the container grants)
  */
 
 /**
@@ -188,7 +188,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $db = Zend_Registry::get('dbAdapter');
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $this->checkRight('MANAGE_LEADS');
+            //$this->checkRight('MANAGE_LEADS');
             
             if(!$_lead->isValid()) {
                 throw new Exception('lead object is not valid');
@@ -244,7 +244,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $db = Zend_Registry::get('dbAdapter');
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $this->checkRight('MANAGE_LEADS');
+            //$this->checkRight('MANAGE_LEADS');
             
             if(!$_lead->isValid()) {
                 throw new Exception('lead object is not valid');
@@ -313,7 +313,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $db = Zend_Registry::get('dbAdapter');
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $this->checkRight('MANAGE_LEADS');
+            //$this->checkRight('MANAGE_LEADS');
             
             if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
                 foreach($_leadId as $leadId) {
