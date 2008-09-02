@@ -842,16 +842,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         
         this.getForm().loadRecord(this.contact);
         Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
-        
-        if(this.contact.data.adr_one_countrydisplayname) {
-            //console.log('set adr_one_countryname to ' + this.contact.data.adr_one_countrydisplayname);
-            //this.getForm().findField('adr_one_countryname').setRawValue(this.contact.data.adr_one_countrydisplayname);
-        }
 
-        if(this.contact.data.adr_two_countrydisplayname) {
-            //console.log('set adr_two_countryname to ' + this.contact.data.adr_two_countrydisplayname);
-            //this.getForm().findField('adr_two_countryname').setRawValue(this.contact.data.adr_two_countrydisplayname);
-        }
         Ext.MessageBox.hide();
     },
     
