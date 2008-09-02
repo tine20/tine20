@@ -351,8 +351,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		$yPos = 30;
 		
 		$creationDate = $translate->_('Export Date').": ".
-		  Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($locale), $locale )." ".
-		  Zend_Date::now()->toString(Zend_Locale_Format::getTimeFormat($locale), $locale );
+		  Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
+		  Zend_Date::now()->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
 
 		$creationURL = $translate->_('Created by').": ";
 		//@todo add this to config file?
@@ -364,13 +364,13 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		  $creationURL .= 'Tine 2.0';
 		}*/
 		
-		for ( $i=0; $i<sizeof($this->pages); $i++ ) {
-			$this->pages[$i]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->footerFontSize );
-			$this->pages[$i]->setFillColor( new Zend_Pdf_Color_GrayScale(0.5) );
-			$this->pages[$i]->drawText ( $creationDate, $xPos, $yPos);
+		for ($i=0; $i<sizeof($this->pages); $i++) {
+			$this->pages[$i]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->footerFontSize);
+			$this->pages[$i]->setFillColor(new Zend_Pdf_Color_GrayScale(0.5));
+			$this->pages[$i]->drawText($creationDate, $xPos, $yPos, 'UTF-8');
 			//$yPos -= 18;
 			$xPos += 380;
-			$this->pages[$i]->drawText ( $creationURL, $xPos, $yPos);
+			$this->pages[$i]->drawText($creationURL, $xPos, $yPos, 'UTF-8');
 		}
 	}	
 
