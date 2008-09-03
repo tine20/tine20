@@ -875,11 +875,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                     Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
                 	
                     // notify opener and return contact data
-                    var wm = Ext.ux.PopupWindowGroup.getMainScreen().Ext.ux.PopupWindowMgr;
-                    wm.get(window).fireEvent('update', this.contact); 
+                    this.windowManager.get(window).fireEvent('update', this.contact); 
                 	
                     if(_closeWindow === true) {
-                      	wm.get(window).purgeListeners();
+                      	this.windowManager.get(window).purgeListeners();
                         window.close();
                     } else {
                         this.updateToolbarButtons(this.contact);
