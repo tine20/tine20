@@ -109,17 +109,16 @@ Ext.ux.PopupWindowGroup = function(){
          * @return {Boolean} True if the dialog was brought to the front, else false
          * if it was already in front
          */
-        /*
         bringToFront : function(win){
             win = this.get(win);
             if(win != front){
                 win._lastAccess = new Date().getTime();
-                orderWindows();
+                win.popup.focus();
+                //orderWindows();
                 return true;
             }
             return false;
         },
-        */
         
         /**
          * Sends the specified window to the back of other active windows.
@@ -194,23 +193,6 @@ Ext.ux.PopupWindowGroup = function(){
                     }
                 }
             }
-        },
-        
-        /**
-         * Returns requested window and create it on the fly if necessary
-         * If the window already exists, it's just focused
-         * 
-         * //NOTE: this dosn't work when the popup got reloaded
-         */
-        fly: function(config){
-            cleanupClosedWindows();
-            var popupWindow = list[config.name];
-            if (popupWindow) {
-                popupWindow.popup.focus();
-            } else {
-                popupWindow = new Ext.ux.PopupWindow(config);
-            }
-            return popupWindow;
         }
     };
 };
