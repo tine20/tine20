@@ -44,7 +44,7 @@ define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 /*
  * Set up basic tine 2.0 environment
  */
-$_SERVER['DOCUMENT_ROOT'] = '/Users/nelius/htdocs/';
+$_SERVER['DOCUMENT_ROOT'] = '/var/www';
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
@@ -52,7 +52,7 @@ $tinebaseController = TestController::getInstance();
 $tinebaseController->initFramework();
 
 if (!$tinebaseController->login('tine20admin', 'lars', '127.0.0.1')){
-    throw new Exception("could't login, user session required for tests! \n");
+    throw new Exception("couldn't login, user session required for tests! \n");
 }
 
  
