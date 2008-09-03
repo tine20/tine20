@@ -659,7 +659,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     
                     var win = this.windowManager.get(window);
                     // free 0 namespace if record got created
-                    win.rename('TasksEditWindow' + this.task.id);
+                    win.rename(this.windowNamePrefix + this.task.id);
                     win.fireEvent('update', this.task);
 
 					if (closeWindow) {
