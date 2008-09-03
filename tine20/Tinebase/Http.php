@@ -55,6 +55,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/Percentage.js',
             'Tinebase/js/ux/PopupWindow.js',
             'Tinebase/js/ux/PopupWindowManager.js',
+            'Tinebase/js/ux/WindowFactory.js',
             'Tinebase/js/ux/Wizard.js',
             'Tinebase/js/ux/SearchField.js',
             'Tinebase/js/ux/grid/CheckColumn.js',
@@ -107,8 +108,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/Models.js',
             'Tinebase/js/MainScreen.js',
             'Tinebase/js/Login.js',
-            // include Tinebase.js at last!
-            'Tinebase/js/Tinebase.js'
+            'Tinebase/js/Tinebase.js',
+            'Tinebase/js/init.js'
             );
     }
     
