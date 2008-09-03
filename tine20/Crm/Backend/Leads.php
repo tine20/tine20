@@ -124,6 +124,8 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      *
      * @param int|Crm_Model_Lead $_leads lead ids
      * @return void
+     * 
+     * @todo delete linked relations (siblings/tasks)
      */
     public function delete($_leadId)
     {
@@ -135,13 +137,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
             $db->quoteInto('lead_id = ?', $leadId)
         );          
         $db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
-
-        $where = array(
-            $db->quoteInto('link_app1 = ?', 'crm'),
-            $db->quoteInto('link_id1 = ?', $leadId),
-            $db->quoteInto('link_app2 = ?', 'addressbook')
-        );                                  
-        $db->delete(SQL_TABLE_PREFIX . 'links', $where);               
         
         $where = array(
             $db->quoteInto('id = ?', $leadId)
