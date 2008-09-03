@@ -16,6 +16,8 @@
  * 
  * @package     Tinebase
  * @subpackage	Export
+ * 
+ * @todo add full utf-8 support (use .ttf ord .pfb font because the build in fonts don't support utf-8 chars) 
  */
 abstract class Tinebase_Export_Pdf extends Zend_Pdf
 {
@@ -57,8 +59,42 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @var integer
      *
      */
-    protected $contentBlockLineHeight = 10;     
-        
+    protected $contentBlockLineHeight = 10;   
+
+    /**
+     * zend pdf font
+     */
+    protected $_font = NULL;
+    
+    /**
+     * zend pdf bold font
+     */
+    protected $_fontBold = NULL;
+    
+    /**
+     * normal font type 
+     */
+    protected $_fontName = Zend_Pdf_Font::FONT_HELVETICA; 
+    //protected $_fontName = Zend_Pdf_Font::FONT_COURIER;
+    
+    /**
+     * bold font type
+     */
+    protected $_fontNameBold = Zend_Pdf_Font::FONT_HELVETICA_BOLD; 
+    //protected $_fontNameBold = Zend_Pdf_Font::FONT_COURIER_BOLD;
+
+    /**
+     * font path to ttf or postscript font file
+     */
+    //protected $_fontPath = '/var/lib/defoma/gs.d/dirs/fonts/Vera.ttf'; 
+    protected $_fontPath = '';
+    
+    /**
+     * encoding
+     */
+    protected $_encoding = 'UTF-8';
+    //protected $_encoding = 'CP1252';
+    
     /**
      * the constructor
      *
@@ -87,6 +123,17 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         }
         if ( $_contentBlockLineHeight !== NULL ) {
             $this->contentBlockLineHeight = $_contentBlockLineHeight;
+        }
+        
+        // set fonts
+        if (!empty($this->_fontPath) && file_exists($this->_fontPath)) {
+            // try to use ttf / type 1 postscript fonts
+            $this->_font = Zend_Pdf_Font::fontWithPath($this->_fontPath /*, Zend_Pdf_Font::EMBED_DONT_EMBED */);
+            $this->_fontBold = Zend_Pdf_Font::fontWithPath($this->_fontPath /*, Zend_Pdf_Font::EMBED_DONT_EMBED */);
+            
+        } else {
+            $this->_font = Zend_Pdf_Font::fontWithName($this->_fontName);
+            $this->_fontBold = Zend_Pdf_Font::fontWithName($this->_fontNameBold);
         }
 	}
 		
@@ -126,8 +173,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // title
         if ( !empty($_title) ) {
-            $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
-            $this->pages[$this->_pageNumber]->drawText($_title, $xPos, $yPos, 'UTF-8');
+            $this->pages[$this->_pageNumber]->setFont($this->_font, 18); 
+            $this->_writeText($_title, $xPos, $yPos);
         }
 
         // title icon
@@ -140,21 +187,21 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         // subtitle
         if ( !empty($_subtitle) ) {
             $yPos -= 20;
-            $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 15); 
-            $this->pages[$this->_pageNumber]->drawText($_subtitle, $xPos, $yPos, 'UTF-8');
+            $this->pages[$this->_pageNumber]->setFont($this->_font, 15); 
+            $this->_writeText($_subtitle, $xPos, $yPos);        
         }
 
         // tags
         if ( !empty($_tags) ) {
             // @todo sort tags?
             $yPos -= 15;
-            $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 11);
+            $this->pages[$this->_pageNumber]->setFont($this->_font, 11);
             $tagsString = $translate->_('Tags') . ": ";
             foreach ($_tags as $tag) {
                 $tagsString .= $tag['name'] . ' ';
             }            
             
-            $this->pages[$this->_pageNumber]->drawText($tagsString, $xPos, $yPos, 'UTF-8');
+            $this->_writeText($tagsString, $xPos, $yPos);
         }
         
         // write note (3 lines)
@@ -169,8 +216,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     
             foreach ( $noteArray as $chunk ) {
                 $yPos -= 20;
-                $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
-                $this->pages[$this->_pageNumber]->drawText( $chunk, $xPos, $yPos, 'UTF-8');
+                $this->pages[$this->_pageNumber]->setFont($this->_font, 10); 
+                $this->_writeText($chunk, $xPos, $yPos);
             }
         }
         
@@ -255,7 +302,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $yPos = $_posY;
                 
         // content
-        $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->contentFontSize); 
+        $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize); 
         $this->pages[$this->_pageNumber]->setLineColor( new Zend_Pdf_Color_GrayScale(0.7) );
         
         foreach ( $_content as $row ) {
@@ -268,7 +315,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 $this->pages[] = $page;     
                 $yPos = $_posY;
                 $this->_pageNumber++;          
-                $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->contentFontSize);
+                $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize);
                 $this->pages[$this->_pageNumber]->setLineColor( new Zend_Pdf_Color_GrayScale(0.7) );
             }
             
@@ -278,9 +325,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 // leave some more space between sections
                 if ( isset($row[$i+1]) && ( $row[$i+1] === 'separator' || $row[$i+1] === 'headline' ) ) {
                     $yPos -= 10;
-                    $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD), $this->contentFontSize);
+                    $this->pages[$this->_pageNumber]->setFont($this->_fontBold, $this->contentFontSize);
                 } else {
-                    $this->pages[$this->_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->contentFontSize);                    
+                    $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize);                    
                 }
                 
                 if ( $row[$i] === 'separator' ) {
@@ -323,11 +370,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     $blockLineHeight = 0;
                     foreach ( $row[$i] as $text ) {
                         $yPos -= $blockLineHeight;
-                        $this->pages[$this->_pageNumber]->drawText($text, $xPos, $yPos, 'UTF-8');    
+                        $this->_writeText($text, $xPos, $yPos); 
                         $blockLineHeight = $this->contentBlockLineHeight;                        
                     }
                 } else {
-                    $this->pages[$this->_pageNumber]->drawText($row[$i], $xPos, $yPos, 'UTF-8');
+                    $this->_writeText($row[$i], $xPos, $yPos);
                 }
                 
                 $xPos += $cellWidth;
@@ -365,13 +412,36 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		}*/
 		
 		for ($i=0; $i<sizeof($this->pages); $i++) {
-			$this->pages[$i]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->footerFontSize);
+			$this->pages[$i]->setFont($this->_font, $this->footerFontSize);
 			$this->pages[$i]->setFillColor(new Zend_Pdf_Color_GrayScale(0.5));
-			$this->pages[$i]->drawText($creationDate, $xPos, $yPos, 'UTF-8');
+			$this->_writeText($creationDate, $xPos, $yPos, $i);
 			//$yPos -= 18;
 			$xPos += 380;
-			$this->pages[$i]->drawText($creationURL, $xPos, $yPos, 'UTF-8');
+            $this->_writeText($creationURL, $xPos, $yPos, $i);
 		}
 	}	
 
+	/**
+	 * draws a text in the pdf and checks correct encoding
+	 *
+	 * @param string $_string the string to draw
+	 * @param int $_xPos
+	 * @param int $_yPos
+     * @param int $_page page number (optional)
+	 */
+	protected function _writeText($_string, $_xPos, $_yPos, $_page = NULL) {
+	
+	    $page = ($_page !== NULL) ? $_page : $this->_pageNumber;
+	    
+	    if (mb_check_encoding($_string, $this->_encoding)) {	
+
+	        //echo $_string;
+	        
+	        $this->pages[$page]->drawText($_string, $_xPos, $_yPos, $this->_encoding);
+
+	    } else {
+	        throw new Exception('Detected an illegal character in input string: ' . $_string);
+	    }
+	}
+	
 }
