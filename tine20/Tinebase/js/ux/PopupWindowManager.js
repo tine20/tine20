@@ -78,14 +78,15 @@ Ext.ux.PopupWindowGroup = function(){
 */
     return {
 
-        // private
         register : function(win){
+            if (! win.popup) {
+                console.error('pure window instead of Ext.ux.PopupWindow got registered');
+            }
             list[win.name] = win;
             accessList.push(win);
             //win.on('hide', activateLast);
         },
 
-        // private
         unregister : function(win){
             delete list[win.name];
             //win.un('hide', activateLast);
