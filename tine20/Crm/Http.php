@@ -37,41 +37,6 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         );
     }
     
-    /**
-     * create edit lead dialog
-     *
-     * @param int $_leadId
-     * @todo catch permission denied exceptions only
-     * 
-     */
-    public function editLead($_leadId)
-    {
-         if(empty($_leadId)) {
-            $_leadId = NULL;
-        }
-        
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-
-        // get lead data
-        $crmJson = new Crm_Json;                       
-        $leadData = $crmJson->getLead($_leadId);
-        
-        // add lead types/states/sources and products to initialData
-        $view->initialData = array();
-        $view->initialData['Crm'] = $this->getInitialMainScreenData();
-        $tasksHttp = new Tasks_Http();
-        $view->initialData['Tasks'] = $tasksHttp->getInitialMainScreenData();
-        $tinebaseJson = new Tinebase_Json();
-        $view->initialData['Tinebase'] = array('NoteTypes' => $tinebaseJson->getNoteTypes());        
-        
-        $view->title="edit lead";
-        $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-    }
-
    	/**
      * export lead
      * 
