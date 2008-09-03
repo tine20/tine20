@@ -55,20 +55,16 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * get single lead
      * fetches a lead and adds resolves linked objects
      *
-     * @param int $_leadId
+     * @param int $leadId
      * @return array with lead data
      * 
      * @todo set default values in js and remove getEmptyXXX functions ?
      */
-    public function getLead($_leadId)
+    public function getLead($leadId)
     {
         $controller = Crm_Controller::getInstance();
 
-        if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {            
-            $leadData = $this->_leadToJson($lead);
-                        
-        } else {
-
+        if(!$leadId ) {   
             $leadData = $controller->getEmptyLead()->toArray();
             $leadData['products'] = array();                
             $leadData['contacts'] = array();   
@@ -79,7 +75,10 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
                 $leadData['container']     = $folder->toArray();
                 $leadData['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $folder->getId())->toArray();
                 break;
-            }            
+            }
+        } else {
+            $lead = $controller->getLead($leadId);
+            $leadData = $this->_leadToJson($lead);            
         }    
 
         return $leadData;
