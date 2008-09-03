@@ -71,17 +71,22 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * @property {Browser Window}
      */
     popup: null,
+    /**
+     * @prperty {Ext.ux.PopupWindowMgr}
+     */
+    windowManager: null,
 	/**
 	 * @private
 	 */
 	initComponent: function(){
+        this.windowManager = Ext.ux.PopupWindowMgr;
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
 
         // open popup window first to save time
         this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
         
         //. register window ( in fact register complete PopupWindow )
-        Ext.ux.PopupWindowMgr.register(this);
+        this.windowManager.register(this);
         
         // does not work on reload!
         //this.popup.PopupWindow = this;
@@ -125,6 +130,16 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         }
         */
 	},
+    /**
+     * rename window name
+     * 
+     * @param {String} new name
+     */
+    rename: function(newName) {
+        this.windowManager.unregister(this);
+        this.name = this.popup.name = newName;
+        this.windowManager.register(this);
+    },
 	/**
 	 * @private
      * 
