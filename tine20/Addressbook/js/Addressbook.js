@@ -764,7 +764,7 @@ Tine.Addressbook.Main = {
 Tine.Addressbook.EditPopup = function (contact) {
     contact = contact ? contact : new Tine.Addressbook.Model.Contact({}, 0);
     
-    var window = new Ext.ux.PopupWindowMgr.fly({
+    var window = Tine.WindowFactory.getWindow({
         //url: 'index.php?method=Addressbook.editContact&_contactId=' + contactId,
         layout: 'border',
         name: 'AddressbookEditWindow' + contact.id,
