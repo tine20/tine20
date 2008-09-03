@@ -648,7 +648,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     },
     
     updateRecord: function(recordData) {
-        this.task = new Tine.Tasks.Task(recordData);
+        this.task = new Tine.Tasks.Task(recordData, recordData.id);
         Tine.Tasks.fixTask(this.task);
     },
     
@@ -660,27 +660,30 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 			Ext.MessageBox.wait(this.translation._('Please wait'), this.translation._('Saving Task'));
 			
 			// merge changes from form into task record
-			form.updateRecord(task);
+			form.updateRecord(this.task);
 			
             Ext.Ajax.request({
+                scope: this,
 				params: {
 	                method: 'Tasks.saveTask', 
-	                task: Ext.util.JSON.encode(task.data)
+	                task: Ext.util.JSON.encode(this.task.data)
 	            },
 	            success: function(_result, _request) {
-	                
-					this.action_delete.enable();
 					// override task with returned data
 					this.updateRecord(Ext.util.JSON.decode(_result.responseText));
-					
-					// update form with this new data
-					form.loadRecord(this.task);
-                    opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
+                    
+                    var win = this.windowManager.get(window);
+                    // free 0 namespace if record got created
+                    win.rename('TasksEditWindow' + this.task.id);
+                    win.fireEvent('update', this.task);
 
 					if (closeWindow) {
-                        opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
+                        this.windowManager.get(window).purgeListeners();
                         window.setTimeout("window.close()", 1000);
                     } else {
+                        // update form with this new data
+                        form.loadRecord(this.task);
+                        this.action_delete.enable();
                     	Ext.MessageBox.hide();
                     }
 	            },
@@ -700,11 +703,11 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     			Ext.Ajax.request({
                     params: {
     					method: 'Tasks.deleteTask',
-    					identifier: task.data.id
+    					identifier: this.task.id
     				},
                     success: function(_result, _request) {
-                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
-                        opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
+                        this.windowManager.get(window).fireEvent('update', this.task);
+                        this.windowManager.get(window).purgeListeners();
     					window.setTimeout("window.close()", 1000);
                     },
                     failure: function ( result, request) { 
