@@ -33,6 +33,10 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      * @cfg {function} handler for generic save and close action
      */
     handlerCancle: null,
+    /**
+     * @cfg {String} layout of the containing window
+     */
+    windowLayout: 'border',
     
     /**
      * @property {Ext.ux.PopupWindowMgr}
