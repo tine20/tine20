@@ -53,6 +53,8 @@ class Tinebase_Translation
      * 
      * @param  string $_applicationName
      * @return Zend_Translate
+     * 
+     * @todo return 'void' if locale = en
     */
     public static function getTranslation($_applicationName)
     {
@@ -61,6 +63,8 @@ class Tinebase_Translation
         $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         try {
             $translate->setLocale(Zend_Registry::get('locale'));
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)Zend_Registry::get('locale'));
+            
         } catch (Zend_Translate_Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)Zend_Registry::get('locale'));
             // the locale of the user is not available
