@@ -34,6 +34,12 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      */
     handlerCancle: null,
     
+    /**
+     * @property {Ext.ux.PopupWindowMgr}
+     */
+    windowManager: null,
+    
+    // private
     bodyStyle:'padding:5px',
     //layout: 'fit',
     anchor:'100% 100%',
@@ -122,6 +128,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             });
         }
 		
+        this.windowManager = Ext.ux.PopupWindowMgr;
 		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	},
     /**
