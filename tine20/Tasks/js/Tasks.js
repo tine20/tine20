@@ -93,7 +93,11 @@ Tine.Tasks.mainGrid = {
                 var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
             }
             var containerId = (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1;
-			var popupWindow = new Tine.Tasks.EditPopup(task, containerId);
+            
+            var popupWindow = Tine.Tasks.EditDialog.openWindow({
+                task: task,
+                containerId: containerId
+            });
             
             popupWindow.on('update', function(task) {
             	this.store.load({params: this.paging});
@@ -570,26 +574,6 @@ Tine.Tasks.mainGrid = {
 /*********************************** EDIT DIALOG ********************************************/
 
 /**
- * Tasks Edit Popup
- */
-Tine.Tasks.EditPopup = function (task, containerId, relatedApp) {
-    task = task ? task : new Tine.Tasks.Task({}, 0);
-    var window = new Ext.ux.PopupWindowMgr.fly({
-        layout: 'border',
-        name: 'TasksEditWindow' + task.id,
-        width: 700,
-        height: 300,
-        itemsConstructor: 'Tine.Tasks.EditDialog',
-        itemsConstructorConfig: {
-            task: task,
-            containerId: containerId,
-            relatedApp: relatedApp
-        }
-    });
-    return window;
-}
-
-/**
  * Tasks Edit Dialog
  */
 Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
@@ -611,7 +595,8 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      */
     id : 'TasksEditFormPanel',
     labelAlign: 'side',
-
+    windowNamePrefix: 'TasksEditWindow_',
+    
     initComponent: function() {
         this.task = this.task ? this.task : new Tine.Tasks.Task({}, 0);
         
@@ -781,9 +766,23 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 })
             ]
         }]
-	};}
+	};},
 });
 
+/**
+ * Tasks Edit Popup
+ */
+Tine.Tasks.EditDialog.openWindow = function (config) {
+    config.task = config.task ? config.task : new Tine.Tasks.Task({}, 0);
+    var window = new Ext.ux.PopupWindowMgr.fly({
+        width: 700,
+        height: 300,
+        name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + config.task.id,
+        itemsConstructor: 'Tine.Tasks.EditDialog',
+        itemsConstructorConfig: config
+    });
+    return window;
+};
 
 // fixes a task
 Tine.Tasks.fixTask = function(task) {
