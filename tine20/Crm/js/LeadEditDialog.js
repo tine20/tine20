@@ -288,21 +288,6 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
     ];
 };
 
-/*********************** crm popups ************************/
-
-/**
- * Lead Edit Popup
- */
-Tine.Crm.LeadEditDialog.Popup = function (leadId) {
-    var window = Tine.WindowFactory.getWindow({
-        url: 'index.php?method=Crm.editLead&_leadId=' + leadId,
-        name: 'CrmLeadEditWindow' + leadId,
-        width: 800,
-        height: 750
-    });
-    return window;
-}
-
 /*********************** crm widgets ************************/
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.contactType');
