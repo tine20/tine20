@@ -591,12 +591,16 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     relatedApp: '',
     
     /**
-     * @private!
+     * @private
      */
-    id : 'TasksEditFormPanel',
     labelAlign: 'side',
+    /**
+     * @private
+     */
     windowNamePrefix: 'TasksEditWindow_',
-    
+    /**
+     * @private
+     */
     initComponent: function() {
         this.task = this.task ? this.task : new Tine.Tasks.Task({}, 0);
         
@@ -617,12 +621,16 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.items = this.getTaskFormPanel();
         Tine.Tasks.EditDialog.superclass.initComponent.call(this);
     },
-    
+    /**
+     * @private
+     */
     onRender: function(ct, position) {
         Tine.Tasks.EditDialog.superclass.onRender.call(this, ct, position);
         Ext.MessageBox.wait(this.translation._('Loading Task...'), _('Please Wait'));
     },
-    
+    /**
+     * @private
+     */
     onRecordLoad: function(response) {
         this.getForm().findField('summary').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
@@ -636,7 +644,9 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.task = new Tine.Tasks.Task(recordData, recordData.id);
         Tine.Tasks.fixTask(this.task);
     },
-    
+    /**
+     * @private
+     */
     handlerApplyChanges: function(_button, _event) {
 		var closeWindow = arguments[2] ? arguments[2] : false;
 
@@ -680,7 +690,9 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             Ext.MessageBox.alert(this.translation._('Errors'), this.translation._('Please fix the errors noted.'));
         }
 	},
-    
+    /**
+     * @private
+     */
 	handlerDelete: function(_button, _event) {
 		Ext.MessageBox.confirm(this.translation._('Confirm'), this.translation._('Do you really want to delete this task?'), function(_button) {
             if(_button == 'yes') {
@@ -774,10 +786,12 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
  */
 Tine.Tasks.EditDialog.openWindow = function (config) {
     config.task = config.task ? config.task : new Tine.Tasks.Task({}, 0);
-    var window = new Ext.ux.PopupWindowMgr.fly({
+    //var window = new Ext.ux.PopupWindowMgr.fly({
+    var window = Tine.WindowFactory.getWindow({
         width: 700,
         height: 300,
         name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + config.task.id,
+        layout: Tine.Tasks.EditDialog.prototype.windowLayout,
         itemsConstructor: 'Tine.Tasks.EditDialog',
         itemsConstructorConfig: config
     });
