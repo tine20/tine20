@@ -255,7 +255,7 @@ class Setup_Controller
         $setupXML = dirname(__FILE__) . '/../' . ucfirst($_applicationName) . '/Setup/setup.xml';
       
         if (!file_exists($setupXML)) {
-            throw new Exception(ucfirst($_applicationName) . '/Setup/setup.xml not foud');
+            throw new Exception(ucfirst($_applicationName) . '/Setup/setup.xml not found. If application got renamed or deleted, re-run setup.php.');
         }
         
         $xml = simplexml_load_file($setupXML);
