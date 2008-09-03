@@ -1,0 +1,567 @@
+#!/usr/bin/env php
+<?php
+/**
+ * lang helper
+ *
+ * @package     HelperScripts
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+
+if (isset($_SERVER['HTTP_HOST'])) {
+    die('not allowed!');
+}
+
+require_once 'Zend/Loader.php';
+Zend_Loader::registerAutoload();
+
+/**
+ * path to tine 2.0 checkout
+ */
+global $tine20path;
+$tine20path = dirname(__FILE__);
+
+/**
+ * options
+ */
+try {
+    $opts = new Zend_Console_Getopt(
+    array(
+        'verbose|v'       => 'Output messages',
+        'clean|c'         => 'Cleanup all tmp files',
+        'update|u'        => 'Update lang files (shortcut for --pot --potmerge --mo --clean)',
+        'package'         => 'Create a translation package',
+        'pot'             => '(re) generate xgettext po template files',
+        'potmerge'        => 'merge pot contents into po files',
+        'statistics'      => 'generate lang statistics',
+        'contribute=s'    => 'merge contributed translations of <path to archive> (implies --update)',
+        'language=s'      => '   contributed language',
+        'mo'              => 'Build mo files',
+        'newlang=s'       => 'Add new language',
+        'overwrite'       => '  overwrite existing lang files',
+        'svn'             => '  add new lang files to svn',
+        'help|h'          => 'Display this help Message',
+    ));
+    $opts->parse();
+} catch (Zend_Console_Getopt_Exception $e) {
+   echo $e->getUsageMessage();
+   exit;
+}
+
+if (count($opts->toArray()) === 0  || $opts->h) {
+    echo $opts->getUsageMessage();
+    exit;
+}
+
+if ($opts->u || $opts->contribute) {
+    $opts->pot = $opts->potmerge = $opts->mo = $opts->c = true;
+}
+
+if ($opts->pot) {
+    generatePOTFiles($opts->v);
+}
+
+if ($opts->potmerge) {
+    potmerge($opts->v);
+}
+
+if ($opts->newlang) {
+    generateNewTranslationFiles($opts->newlang, $opts->v, $opts->overwrite);
+    potmerge($opts->v);
+    msgfmt($opts->v);
+    if($opts->svn) {
+        svnAdd($opts->newlang);
+    }
+    $opts->c = true;
+}
+
+if($opts->contribute) {
+    $_verbose = $opts->v;
+    if (!isset ($opts->language)) {
+        echo "Error: you need to specify the contributed language (--language) \n";
+        exit;
+    }
+    if (! isset ($opts->contribute)) {
+        echo "You need to specify an archive of the lang updates!  \n";
+        exit;
+    }
+    if (! is_file($opts->contribute)) {
+        echo "Archive file '" . $opts->contribute . "' could not be found! \n";
+        exit;
+    }
+    contributorsMerge($opts->v, $opts->language, $opts->contribute);
+    echo "merging completed, don't forget to run ./release.php -t :-) \n";
+}
+
+if ($opts->mo) {
+    msgfmt($opts->v);
+}
+
+if ($opts->c || $opts->package) {
+    // remove translation backups of msgmerge
+    `cd $tine20path
+    find . -type f -iname "*.po~" -exec rm {} \;`;
+}
+if ($opts->statistics) {
+    statistics($opts->v);
+}
+
+if ($opts->package) {
+    buildpackage($opts->v);
+}
+
+/**
+ * gets array of lang dirs app => dir
+ * 
+ * @return array
+ */
+function getTranslationDirs()
+{
+    global $tine20path;
+    
+    $langDirs = array();
+    $d = dir($tine20path);
+    while (false !== ($appName = $d->read())) {
+        $appPath = "$tine20path/$appName";
+        if (is_dir($appPath) && $appName{0} != '.') {
+            $translationPath = "$appPath/translations";
+            if (is_dir($translationPath)) {
+                $langDirs[$appName] = $translationPath;
+            }
+        }
+    }
+    return $langDirs;
+}
+
+/**
+ * checks wether a translation exists or not
+ * 
+ * @param  string $_locale
+ * @return bool
+ */
+function translationExists($_locale)
+{
+    foreach (getTranslationDirs() as $dir) {
+        if (file_exists("$dir/$_locale.po")) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * (re) generates po template files
+ */
+function generatePOTFiles($_verbose)
+{
+    foreach (getTranslationDirs() as $appName => $translationPath) {
+        if ($_verbose) {
+            echo "Creating $appName template \n";
+        }
+        $appPath = "$translationPath/../";
+        `cd $appPath 
+        touch translations/template.pot 
+        find . -type f -iname "*.php" -or -type f -iname "*.js"  | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
+        
+    }
+}
+
+/**
+ * potmerge
+ */
+function potmerge($_verbose)
+{
+    foreach (getTranslationDirs() as $appName => $translationPath) {
+        if ($_verbose) {
+            echo "Processing $appName po files \n";
+        }
+        foreach (scandir($translationPath) as $poFile) {
+            if (substr($poFile, -3) == '.po') {
+                $output = '2> /dev/null';
+                if ($_verbose) {
+                   echo $poFile . ": ";
+                   $output = '';
+                }
+                `cd $translationPath
+                 msgmerge --no-fuzzy-matching --update $poFile template.pot $output`;
+            }
+        }
+    }
+}
+
+/**
+ * contributorsMerge
+ *
+ * @param bool   $_verbose
+ * @param string $_language
+ * @param string $_archive
+ */
+function contributorsMerge($_verbose, $_language, $_archive)
+{
+    global $tine20path;
+    $tmpdir = '/tmp/tinetranslations/';
+    `rm -Rf $tmpdir`;
+    `mkdir $tmpdir`;
+    //`cp $archive $tmpdir`;
+    switch (substr($_archive, -4)) {
+        case '.zip':
+            `unzip -d $tmpdir '$_archive'`;
+            break;
+        default:
+            echo "Error: Only zip archives are supported \n";
+            exit;
+            break;
+    }
+    
+    $basePath = $tmpdir;
+    while (true) {
+        $contents = scandir($basePath);
+        if (count($contents ) == 3) {
+            $basePath .= $contents[2] . '/';
+            if (! is_dir($basePath)) {
+                echo "Error: Could not find translations! \n";
+                exit;
+            }
+        } else {
+            break;
+        }
+    }
+    
+    foreach ($contents as $appName) {
+        if ($appName{0} == '.') continue;
+        if ($_verbose) {
+            echo "Processing translation updates for $appName \n";
+        }
+        
+        $tinePoFile        = "$tine20path/$appName/translations/$_language.po";
+        $contributedPoFile = "$basePath/$appName/translations/$_language.po";
+        
+        if (! is_file($tinePoFile)) {
+            echo "Error: could not find langfile $_language.po in Tine 2.0's $appName \n";
+            exit;
+        }
+        if (! is_file($contributedPoFile)) {
+            //check leggacy
+            $contributedPoFile = "$basePath/$appName/$_language.po";
+            if (! is_file($contributedPoFile)) {
+                echo "Error: could not find langfile $_language.po in contributor's $appName \n";
+                exit;
+            }
+        }
+        // do the actual merging
+        $output = '2> /dev/null';
+        if ($_verbose) {
+           echo $_language . ".po : ";
+           $output = '';
+        }
+        `msgmerge --no-fuzzy-matching --update '$contributedPoFile'  $tinePoFile $output`;
+        `cp '$contributedPoFile' $tinePoFile`;
+    }
+}
+
+/**
+ * msgfmt
+ */
+function msgfmt ($_verbose)
+{
+    foreach (getTranslationDirs() as $appName => $translationPath) {
+        if ($_verbose) {
+            echo "Entering $appName \n";
+        }
+        foreach (scandir($translationPath) as $poFile) {
+            if (substr($poFile, -3) == '.po') {
+                $langName = substr($poFile, 0, -3);
+                if ($_verbose) {
+                    echo "Processing $appName/$poFile \n";
+                }
+                // create mo file
+                `cd $translationPath
+                msgfmt -o $langName.mo $poFile`;
+            }
+        }
+    }
+}
+
+/**
+ * build a translation package
+ */
+function buildpackage($_verbose)
+{
+    global $tine20path;
+    
+    $zipFile = "$tine20path/translations.zip";
+    if (file_exists($zipFile)) `rm $zipFile`;
+    foreach (getTranslationDirs() as $appName => $translationPath) {
+        `cd $tine20path
+        zip $zipFile  $appName/translations/* `;
+    }
+}
+/**
+ * generate statistics
+ *
+ * @param  bool $_verbose
+ * @return void
+ */
+function statistics($_verbose)
+{
+    global $tine20path;
+    $statsFile = "$tine20path/langstatistics.json";
+    $locale = new Zend_Locale('en');
+    
+    $langStats       = array();
+    $poFilesStats    = array();
+    
+    foreach (getTranslationDirs() as $appName => $translationPath) {
+        if ($_verbose) {
+            echo "Entering $appName \n";
+        }
+        $appStats[$appName] = array();
+        foreach (scandir($translationPath) as $poFile) {
+            if (substr($poFile, -3) == '.po') {
+                $langCode = substr($poFile, 0, -3);
+                if ($_verbose) {
+                    echo "Processing $appName/$poFile \n";
+                }
+                $statsOutput = `msgfmt --statistics $translationPath/$poFile 2>&1`;
+                $statsParts = explode(',', $statsOutput);
+                $statsParts = preg_replace('/^\s*(\d+).*/i', '$1', $statsParts);
+
+                $translated = $fuzzy = $untranslated = $total = 0;
+                switch (count($statsParts)) {
+                    case 1:
+                        $translated     = $statsParts[0];
+                        break;
+                    case 2:
+                        $translated     = $statsParts[0];
+                        $untranslated   = $statsParts[1];
+                        break;
+                    case 3:
+                        $translated     = $statsParts[0];
+                        $fuzzy          = $statsParts[1];
+                        $untranslated   = $statsParts[2];
+                        break;
+                    default:
+                        echo "Unexpected statistic return \n";
+                        exit;
+                }
+                $total = array_sum($statsParts);
+                
+                $poFileStats = array(
+                    'locale'       => $langCode,
+                    'language'     => $locale->getLanguageTranslation($langCode),
+                    'appname'      => $appName,
+                    'translated'   => (int)$translated,
+                    'fuzzy'        => (int)$fuzzy,
+                    'untranslated' => (int)$untranslated,
+                    'total'        => array_sum($statsParts),
+                );
+                $poFilesStats[] = $poFileStats;
+                
+                // sum up lang statistics
+                $langStats[$langCode] = array_key_exists($langCode,$langStats) ? $langStats[$langCode] : array(
+                    'locale'       => '',
+                    'language'     => '',
+                    'translated'   => 0,
+                    'fuzzy'        => 0,
+                    'untranslated' => 0,
+                    'total'        => 0
+                );
+                
+                $langStats[$langCode]['locale']        = $langCode;
+                $langStats[$langCode]['language']      = $locale->getLanguageTranslation($langCode);
+                $langStats[$langCode]['appname']       = 'all';
+                $langStats[$langCode]['translated']   += $poFileStats['translated'];
+                $langStats[$langCode]['fuzzy']        += $poFileStats['fuzzy'];
+                $langStats[$langCode]['untranslated'] += $poFileStats['untranslated'];
+                $langStats[$langCode]['total']        += $poFileStats['total'];
+            }
+        }
+    }
+    
+    $results = array(
+        'langStats'    => array_values($langStats),
+        'poFilesStats' => $poFilesStats
+    );
+    file_put_contents($statsFile, Zend_Json::encode($results));
+}
+/**
+ * generates po files with appropriate header for a given locale
+ * 
+ * @param  string $_locale
+ * @return void
+ */
+function generateNewTranslationFiles($_locale, $_verbose=false, $_overwrite=false)
+{
+    list ($language, $region) = explode('_', $_locale);
+    
+    $locale = new Zend_Locale('en');
+    $languageName = $locale->getLanguageTranslation($language);
+    $regionName = $locale->getCountryTranslation($region);
+    
+    if (!$languageName) {
+        die("Language '$language' is not valid / known \n");
+    }
+    if ($region && ! $regionName) {
+        die("Region '$region' is not valid / known \n");
+    }
+    $regionName = $region ? $regionName : 'Not Specified / Any';
+    
+    if (translationExists($_locale)) {
+        if ($_overwrite) {
+            if ($_verbose) echo "Overwriting existing lang files for $_locale \n";
+        } else {
+            die("Translations for $_locale already exist \n");
+        }
+    }
+    
+    if ($_verbose) {
+        echo "Generation new lang files for \n";
+        echo "  Language: $languageName \n";
+        echo "  Region: $regionName \n";
+    }
+    
+    $pluralForm = getPluralForm($languageName);
+    $d = getTranslationDirs();
+    foreach ($d as $appName => $dir) {
+            $poHeader = 
+'msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ' . $appName . '\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: ' . $languageName . '\n"
+"X-Poedit-Country: ' . strtoupper($regionName) . '\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: ' . $pluralForm . '\n"';
+            
+            if ($_verbose) {
+                echo "  Writing $languageName po header for $appName \n";
+            }
+            file_put_contents($dir . '/' . $_locale . '.po', $poHeader);
+    }
+}
+
+/**
+ * returns plural form of given language
+ * 
+ * @link http://www.gnu.org/software/automake/manual/gettext/Plural-forms.html
+ * @param  string $_languageName
+ * @return string 
+ */
+function getPluralForm($_languageName)
+{
+    switch ($_languageName) {
+        // Asian family
+        case 'Japanese' :
+        case 'Korean' :
+        case 'Vietnamese' :
+        case 'Chinese' :
+        // Turkic/Altaic family
+        case 'Turkish' :
+            return 'nplurals=1; plural=0;';
+            
+        // Germanic family
+        case 'Danish' :
+        case 'Dutch' :
+        case 'English' :
+        case 'Faroese' :
+        case 'German' :
+        case 'Norwegian' :
+        case 'Swedish' :
+        // Finno-Ugric family
+        case 'Estonian' :
+        case 'Finnish' :
+        // Latin/Greek family
+        case 'Greek' :
+        // Semitic family
+        case 'Hebrew' :
+        // Romanic family
+        case 'Italian' :
+        case 'Portuguese' :
+        case 'Spanish' :
+        // Artificial
+        case 'Esperanto' :
+        // Finno-Ugric family
+        case 'Hungarian' :
+        // ?
+        case 'Bulgarian' :
+            $pluralForm = 'nplurals=2; plural=n != 1;';
+            break;
+            
+        // Romanic family
+        case 'French' :
+        case 'Brazilian Portuguese' :
+            $pluralForm = 'nplurals=2; plural=n>1;';
+            break;
+            
+        // Baltic family
+        case 'Latvian' :
+            $pluralForm = 'nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;';
+            break;
+            
+        // Celtic
+        case 'Gaeilge' :
+            $pluralForm = 'nplurals=3; plural=n==1 ? 0 : n==2 ? 1 : 2;';
+            break;
+            
+        // Romanic family
+        case 'Romanian' :
+            $pluralForm = 'nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;';
+            break;
+            
+        // Baltic family
+        case 'Lithuanian' :
+            $pluralForm = 'nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2;';
+            break;
+            
+        // Slavic family
+        case 'Croatian' :
+        case 'Serbian' :
+        case 'Russian' :
+        case 'Ukrainian' :
+            $pluralForm = 'nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;';
+            break;
+            
+        // Slavic family
+        case 'Slovak' :
+        case 'Czech' :
+            $pluralForm = 'nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;';
+            break;
+            
+        // Slavic family
+        case 'Polish' :
+            $pluralForm = 'nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;';
+            break;
+        
+        // Slavic family
+        case 'Slovenian' :
+            $pluralForm = 'nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;';
+            break;
+            
+        default :
+            die ("Error: Plural form of $_languageName is not defined! \n");
+            
+    }
+    return $pluralForm;
+}
+
+function svnAdd($_locale)
+{
+    foreach (getTranslationDirs() as $dir) {
+        if (file_exists("$dir/$_locale.po")) {
+            `cd $dir
+            svn add $dir/$_locale.po`;
+        }
+        if (file_exists("$dir/$_locale.mo")) {
+            `cd $dir
+            svn add $dir/$_locale.mo`;
+        }
+    }
+}
