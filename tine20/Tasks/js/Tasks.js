@@ -786,7 +786,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
  */
 Tine.Tasks.EditDialog.openWindow = function (config) {
     config.task = config.task ? config.task : new Tine.Tasks.Task({}, 0);
-    //var window = new Ext.ux.PopupWindowMgr.fly({
     var window = Tine.WindowFactory.getWindow({
         width: 700,
         height: 300,

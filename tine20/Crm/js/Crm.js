@@ -1889,8 +1889,8 @@ Tine.Crm.LeadEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 750,
-        name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + config.lead.id,
-        layout: Tine.Tasks.EditDialog.prototype.windowLayout,
+        name: Tine.Crm.LeadEditDialog.prototype.windowNamePrefix + config.lead.id,
+        layout: Tine.Crm.LeadEditDialog.prototype.windowLayout,
         itemsConstructor: 'Tine.Crm.LeadEditDialog',
         itemsConstructorConfig: config
     });
