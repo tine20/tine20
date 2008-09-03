@@ -155,9 +155,9 @@ Tine.Crm.Main = {
          * @todo    save the link via json request here?
          */
         handlerAddTask: function(){
-            var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            
-            var popupWindow = new Tine.Tasks.EditPopup(-1, -1, _rowIndex[0], 'Crm');
+            Tine.Tasks.EditDialog.openWindow({
+                relatedApp: 'Crm'
+            });
         }
         
     },        
@@ -736,11 +736,7 @@ Tine.Crm.LeadEditDialog = {
         addContact: function(_button, _event) {
             var contactPopup = new Tine.Addressbook.EditPopup();        	
             
-            // update event handler
             contactPopup.on('update', function(contact) {
-                // set id
-                contact.id = contact.data.id;
-                //contact.data.link_id = null;
                 switch ( _button.contactType ) {
                 	case 'responsible':
                 	   contact.data.relation_type = 'responsible';
@@ -752,11 +748,7 @@ Tine.Crm.LeadEditDialog = {
                        contact.data.relation_type = 'partner';
                        break;
                 }
-                
-                // add contact to store
-                var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
-                storeContacts.add(contact);
-
+                this.onContactUpdate(contact);
             }, this);
         },
             
@@ -768,16 +760,7 @@ Tine.Crm.LeadEditDialog = {
             var selectedContact = selectedRows[0];
             
             var contactPopup = new Tine.Addressbook.EditPopup(selectedContact);          
-            
-            // update event handler
-            contactPopup.on('update', function(contact) {            	
-            	// copy values from edited contact
-            	selectedContact.beginEdit();
-            	for (var p in contact.data) { 
-                    selectedContact.set(p, contact.get(p));
-                }
-                selectedContact.endEdit();
-            }, this);            
+            contactPopup.on('update', this.onContactUpdate, this);            
         },
 
         /**
@@ -801,19 +784,10 @@ Tine.Crm.LeadEditDialog = {
          * 
          */
         addTask: function(_button, _event) {
-            var taskPopup = new Tine.Tasks.EditPopup();
-            
-            // update event handler
-            taskPopup.on('update', function(task) {
-            	
-            	// set id and relation properties
-                task.id = task.data.id;
-                task.data.relation_type = 'task';
-                
-                // add contact to store
-                var storeTasks = Ext.StoreMgr.lookup('TasksStore');
-                storeTasks.add(task);                              
-            }, this);
+            var taskPopup = Tine.Tasks.EditDialog.openWindow({
+                relatedApp: 'Crm'
+            });
+            taskPopup.on('update', this.onTaskUpdate, this);
         },
             
         /**
@@ -824,19 +798,12 @@ Tine.Crm.LeadEditDialog = {
             var selectedRows = Ext.getCmp('crmGridTasks').getSelectionModel().getSelections();
             var selectedTask = selectedRows[0];
             
-            var taskPopup = new Tine.Tasks.EditPopup(selectedTask);
-            
-            // update event handler
-            taskPopup.on('update', function(task) {
-                // copy values from edited task
-                selectedTask.beginEdit();
-                for (var p in task.data) { 
-                    selectedTask.set(p, task.get(p));
-                }
-                selectedTask.endEdit();
-            }, this);
+            var taskPopup = Tine.Tasks.EditDialog.openWindow({
+                task: selectedTask
+            });
+            taskPopup.on('update', this.onTaskUpdate, this);
         },
-
+        
         /**
          * linkTask
          * 
@@ -856,8 +823,47 @@ Tine.Crm.LeadEditDialog = {
         	
             Tine.Tinebase.Common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadId, 768, 1024);
         }
-    },       
-
+    },
+    
+    /**
+     * update event handler for related contacts
+     */
+    onContactUpdate: function(contact) {
+        var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+        contact.id = contact.data.id;
+        var myContact = storeContacts.getById(contact.id);
+        if (myContact) {
+            myContact.beginEdit();
+            for (var p in contact.data) { 
+                myContact.set(p, contact.get(p));
+            }
+            myContact.endEdit();
+        } else {
+            storeContacts.add(contact);
+        }
+    },
+    
+    /**
+     * update event handler for related tasks
+     */
+    onTaskUpdate: function(task) {
+        var storeTasks = Ext.StoreMgr.lookup('TasksStore');
+        var myTask = storeTasks.getById(task.id);
+        
+        if (myTask) { 
+            // copy values from edited task
+            myTask.beginEdit();
+            for (var p in task.data) { 
+                myTask.set(p, task.get(p));
+            }
+            myTask.endEdit();
+            
+        } else {
+            task.data.relation_type = 'task';
+            storeTasks.add(task);        
+        }
+    },
+    
     /**
      * getRelationData
      * get the record relation data (switch relation and related record)
@@ -1628,6 +1634,7 @@ Tine.Crm.LeadEditDialog = {
             tooltip: this.translation._('Add new responsible contact'),
             iconCls: 'contactIconResponsible',
             //disabled: true,
+            scope: this,
             handler: this.handlers.addContact
         });
         
@@ -1638,6 +1645,7 @@ Tine.Crm.LeadEditDialog = {
             tooltip: this.translation._('Add new customer contact'),
             iconCls: 'contactIconCustomer',
             //disabled: true,
+            scope: this,
             handler: this.handlers.addContact
         });
         
@@ -1648,6 +1656,7 @@ Tine.Crm.LeadEditDialog = {
             tooltip: this.translation._('Add new partner contact'),
             iconCls: 'contactIconPartner',
             //disabled: true,
+            scope: this,
             handler: this.handlers.addContact
         });
 
@@ -1658,6 +1667,7 @@ Tine.Crm.LeadEditDialog = {
             text: this.translation._('Add new contact'),
             tooltip: this.translation._('Add new customer contact'),
             iconCls: 'actionAdd',
+            scope: this,
             handler: this.handlers.addContact,
             menu: {
                 items: [
@@ -1674,6 +1684,7 @@ Tine.Crm.LeadEditDialog = {
             tooltip: this.translation._('Edit selected contact'),
             disabled: true,
             iconCls: 'actionEdit',
+            scope: this,
             handler: this.handlers.editContact
         });
 
@@ -1706,6 +1717,7 @@ Tine.Crm.LeadEditDialog = {
             tooltip: this.translation._('Add new task'),
             iconCls: 'actionAdd',
             //disabled: true,
+            scope: this,
             handler: this.handlers.addTask
         });
         
@@ -1715,6 +1727,7 @@ Tine.Crm.LeadEditDialog = {
             tooltip: this.translation._('Edit selected task'),
             disabled: true,
             iconCls: 'actionEdit',
+            scope: this,
             handler: this.handlers.editTask
         });
         

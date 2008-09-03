@@ -294,7 +294,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
  * Lead Edit Popup
  */
 Tine.Crm.LeadEditDialog.Popup = function (leadId) {
-    var window = new Ext.ux.PopupWindowMgr.fly({
+    var window = Tine.WindowFactory.getWindow({
         url: 'index.php?method=Crm.editLead&_leadId=' + leadId,
         name: 'CrmLeadEditWindow' + leadId,
         width: 800,
