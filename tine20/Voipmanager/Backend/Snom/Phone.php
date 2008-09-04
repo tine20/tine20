@@ -42,7 +42,7 @@ class Voipmanager_Backend_Snom_Phone
      * @param Tinebase_Model_Pagination|optional $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
 	 */
-    public function search(Voipmanager_Model_SnomPhoneFilter $_filter, $_pagination, $_accountId = NULL)
+    public function search(Voipmanager_Model_SnomPhoneFilter $_filter, $_pagination)
     {	
         $where = array();
         
@@ -76,7 +76,7 @@ class Voipmanager_Backend_Snom_Phone
         if(!empty($_filter->accountId)) {
             $_validPhoneIds = $this->getValidPhoneIds($_filter->accountId);   
             if(empty($_validPhoneIds)) {
-                return false;    
+                return new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhone', array());    
             }         
             $select->where($this->_db->quoteInto('id IN (?)', $_validPhoneIds));
         }

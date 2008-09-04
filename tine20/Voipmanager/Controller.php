@@ -302,14 +302,15 @@ class Voipmanager_Controller
         }    
         
         $filter = new Voipmanager_Model_SnomPhoneFilter(array(
-            'query' => $_query
+            'query' => $_query,
+            'accountId' => $_accountId
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'sort'  => $_sort,
             'dir'   => $_dir
         ));
 
-        $result = $this->_snomPhoneBackend->search($filter, $pagination, $_accountId);
+        $result = $this->_snomPhoneBackend->search($filter, $pagination);
     
         return $result;
     }
