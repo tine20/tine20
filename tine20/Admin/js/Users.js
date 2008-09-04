@@ -424,6 +424,8 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      */
     accountRecord: null,
     
+    windowNamePrefix: 'userEditWindow_',
+    
     id : 'admin_editAccountForm',
     labelWidth: 120,
     labelAlign: 'side',
