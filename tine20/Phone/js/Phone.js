@@ -22,19 +22,6 @@ Tine.Phone.getPanel = function(){
     var translation = new Locale.Gettext();
     translation.textdomain('Phone');
 
-    // add phones to tree menu
-    var treeLoader = new Ext.tree.TreeLoader({
-        dataUrl: 'index.php',
-        baseParams: {
-            jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
-            method: 'Phone.getUserPhones',
-            accountId: Tine.Tinebase.Registry.get('currentAccount').accountId             
-        }
-    });
-    treeLoader.on("beforeload", function(_loader, _node){
-        _loader.baseParams.node = _node.id;
-    }, this);
-    
     var editPhoneSettingsAction = new Ext.Action({
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
@@ -54,7 +41,6 @@ Tine.Phone.getPanel = function(){
         title: 'Phone',
         id: 'phone-tree',
         iconCls: 'PhoneIconCls',
-        loader: treeLoader,
         rootVisible: true,
         border: false,
         collapsible: true
@@ -66,21 +52,48 @@ Tine.Phone.getPanel = function(){
     }, this);
         
     // set the root node
-    var treeRoot = new Ext.tree.AsyncTreeNode({
+    var treeRoot = new Ext.tree.TreeNode({
         text: translation._('Phones'),
         cls: 'treemain',
         allowDrag: false,
         allowDrop: true,
-        id: 'phones',
+        id: 'root',
         icon: false
     });
     treePanel.setRootNode(treeRoot);
+    
+    // add phones to tree menu
+    Ext.Ajax.request({
+        url: 'index.php',
+        params: {
+            method: 'Phone.getUserPhones', 
+            accountId: Tine.Tinebase.Registry.get('currentAccount').accountId
+        },
+        text: translation._('Loading phones ...'),
+        success: function(_result, _request) {
+        	var data = Ext.util.JSON.decode(_result.responseText);
+            //console.log(data);
+            for(var i=0; i<data.length; i++) {
+                var node = new Ext.tree.TreeNode({
+                    id: data[i]['id'],
+                    text: data[i]['macaddress'],
+                    qtip: data[i]['description'],
+                    leaf: true
+                });
+                treeRoot.appendChild(node);
+            }        	
+        },
+        failure: function ( result, request) { 
+            Ext.MessageBox.alert(translation._('Failed'), translation._('Some error occured while trying to get Phones.')); 
+        } 
+    });             
     
     treePanel.on('click', function(node){
         Tine.Phone.Main.show(node);
     }, this);
         
     treePanel.on('beforeexpand', function(panel) {
+    	// expand root (Phones) node
         if(panel.getSelectionModel().getSelectedNode() === null) {
             panel.expandPath('/root/all');
             panel.selectPath('/root/all');

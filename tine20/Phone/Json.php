@@ -47,18 +47,8 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
     {
         $voipController = Voipmanager_Controller::getInstance();
         $phones = $voipController->getMyPhones('id', 'ASC', '', $accountId);
-        
-        $result = array();
-        foreach ($phones as $phone) {
-            $result[] = array(
-                'id' => $phone->id,
-                'text' => $phone->macaddress,
-                'leaf' => 'true'
-            );
-        }
-        
-        echo Zend_Json::encode($result);
-        
+
+        echo Zend_Json::encode($phones->toArray());        
         die;
     }
 }
