@@ -1,6 +1,14 @@
-
-/*********************************** TINE ADMIN GROUPS  ********************************************/
-/*********************************** TINE ADMIN GROUPS  ********************************************/
+/**
+ * Tine 2.0
+ * 
+ * @package     Admin
+ * @subpackage  User
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philip Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
 
 Ext.namespace('Tine.Admin.Groups');
 
@@ -20,7 +28,7 @@ Tine.Admin.Groups.Main = {
          * onclick handler for addBtn
          */
         addGroup: function(_button, _event) {
-            Tine.Tinebase.Common.openWindow('groupWindow', "index.php?method=Admin.editGroup&groupId=",650, 600);
+            Tine.Admin.Groups.EditDialog.openWindow({});
         },
 
         /**
@@ -28,9 +36,7 @@ Tine.Admin.Groups.Main = {
          */
         editGroup: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
-            var groupId = selectedRows[0].id;
-            
-            Tine.Tinebase.Common.openWindow('groupWindow', 'index.php?method=Admin.editGroup&groupId=' + groupId,650, 600);
+            Tine.Admin.Groups.EditDialog.openWindow({group: selectedRows[0]});
         },
 
         
@@ -68,8 +74,7 @@ Tine.Admin.Groups.Main = {
         }    
     },
     
-    initComponent: function()
-    {
+    initComponent: function() {
         this.actions.addGroup = new Ext.Action({
             text: 'add group',
             disabled: true,
@@ -96,8 +101,7 @@ Tine.Admin.Groups.Main = {
 
     },
     
-    displayGroupsToolbar: function()
-    {
+    displayGroupsToolbar: function() {
         var GroupsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'GroupsAdminQuickSearchField',
             width:240,
@@ -130,8 +134,7 @@ Tine.Admin.Groups.Main = {
         Tine.Tinebase.MainScreen.setActiveToolbar(groupsToolbar);
     },
 
-    displayGroupsGrid: function() 
-    {
+    displayGroupsGrid: function() {
         if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
             this.actions.addGroup.setDisabled(false);
         }
@@ -237,11 +240,7 @@ Tine.Admin.Groups.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
-                try {
-                    Tine.Tinebase.Common.openWindow('groupWindow', 'index.php?method=Admin.editGroup&groupId=' + record.data.id,650, 600);
-                } catch(e) {
-                    // alert(e);
-                }
+                Tine.Admin.Groups.EditDialog.openWindow({group: record});
         	}
         }, this);
 
@@ -252,8 +251,7 @@ Tine.Admin.Groups.Main = {
     /**
      * update datastore with node values and load datastore
      */
-    loadData: function()
-    {
+    loadData: function() {
         var dataStore = Ext.getCmp('AdminGroupsGrid').getStore();
             
         dataStore.load({
@@ -264,8 +262,7 @@ Tine.Admin.Groups.Main = {
         });
     },
 
-    show: function() 
-    {
+    show: function() {
         this.initComponent();
         
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
@@ -277,24 +274,38 @@ Tine.Admin.Groups.Main = {
         this.loadData();
     },
     
-    reload: function() 
-    {
+    reload: function() {
         if(Ext.ComponentMgr.all.containsKey('AdminGroupsGrid')) {
             setTimeout ("Ext.getCmp('AdminGroupsGrid').getStore().reload()", 200);
         }
     }
 };
 
+
+
+
+
 /*********************************** EDIT DIALOG ********************************************/
 
-Tine.Admin.Groups.EditDialog = {
-	
+Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
+    /**
+     * var group
+     */
+    group: null,
+    
+
+    windowNamePrefix: 'groupEditWindow_',
+    
+    id : 'groupDialog',
+    layout: 'fit',
+    labelWidth: 120,
+    labelAlign: 'top',
+    
     /**
      * var handlers
      */
      handlers: {
-        removeAccount: function(_button, _event) 
-        { 
+        removeAccount: function(_button, _event) { 
             var groupGrid = Ext.getCmp('groupMembersGrid');
             var selectedRows = groupGrid.getSelectionModel().getSelections();
             
@@ -305,8 +316,7 @@ Tine.Admin.Groups.EditDialog = {
                 
         },
         
-        addAccount: function(account)
-        {
+        addAccount: function(account) {
         	var groupGrid = Ext.getCmp('groupMembersGrid');
             
             var dataStore = groupGrid.getStore();
@@ -320,119 +330,105 @@ Tine.Admin.Groups.EditDialog = {
                 dataStore.addSorted(record);
             }
             selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));            
-        },
-
-        applyChanges: function(_button, _event, _closeWindow) 
-        {
-            var form = Ext.getCmp('groupDialog').getForm();
-            
-            if(form.isValid()) {
+        }
+     },
+     
+    handlerApplyChanges: function(_button, _event, _closeWindow) {
+        var form = this.getForm();
         
-            	// get group members
-                var groupGrid = Ext.getCmp('groupMembersGrid');
+        if(form.isValid()) {
+            Ext.MessageBox.wait('Please wait', 'Updating Memberships');
+            
+            // get group members
+            var groupGrid = Ext.getCmp('groupMembersGrid');
+            
+            var groupMembers = [];
+            var dataStore = groupGrid.getStore();
+            
+            dataStore.each(function(_record){
+                groupMembers.push(_record.data.accountId);
+            });
+            
+            // update record with form data               
+            form.updateRecord(this.group);
 
-                Ext.MessageBox.wait('Please wait', 'Updating Memberships');
-                
-                var groupMembers = [];
-                var dataStore = groupGrid.getStore();
-                
-                dataStore.each(function(_record){
-                    groupMembers.push(_record.data.accountId);
-                });
-                
-                // update record with form data               
-                form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
-
-                /*********** save group members & form ************/
-                
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Admin.saveGroup', 
-                        groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
-                        groupMembers: Ext.util.JSON.encode(groupMembers)
-                    },
-                    success: function(_result, _request) {
-                     	if(window.opener.Tine.Admin.Groups) {
-                            window.opener.Tine.Admin.Groups.Main.reload();
-                        }
-                        if(_closeWindow === true) {
-                            window.close();
-                        } else {
-                            this.updateGroupRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
-                            form.loadRecord(Tine.Admin.Groups.EditDialog.groupRecord);
-                            
-                        	// @todo   get groupMembers from result
-                        	// var groupMembers = Ext.util.JSON.decode(_result.responseText).groupMembers;
-                            // dataStore.loadData(groupMembers.results, false);
-                        	
-                        	Ext.MessageBox.hide();
-                        }
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', 'Could not save group.'); 
-                    },
-                    scope: this 
-                });
-                    
-                
-            } else {
-                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-            }
-        },
-
-        saveAndClose: function(_button, _event) 
-        {
-            this.handlers.applyChanges(_button, _event, true);
-        },
-
-        deleteGroup: function(_button, _event) 
-        {
-            var groupIds = Ext.util.JSON.encode([Tine.Admin.Groups.EditDialog.groupRecord.data.id]);
-                
+            /*********** save group members & form ************/
+            
             Ext.Ajax.request({
-                url: 'index.php',
                 params: {
-                    method: 'Admin.deleteGroups', 
-                    groupIds: groupIds
+                    method: 'Admin.saveGroup', 
+                    groupData: Ext.util.JSON.encode(this.group.data),
+                    groupMembers: Ext.util.JSON.encode(groupMembers)
                 },
-                text: 'Deleting group...',
                 success: function(_result, _request) {
                     if(window.opener.Tine.Admin.Groups) {
                         window.opener.Tine.Admin.Groups.Main.reload();
                     }
-                    window.close();
+                    if(_closeWindow === true) {
+                        window.close();
+                    } else {
+                        this.updateRecord(Ext.util.JSON.decode(_result.responseText));
+                        form.loadRecord(this.group);
+                        
+                        // @todo   get groupMembers from result
+                        // var groupMembers = Ext.util.JSON.decode(_result.responseText).groupMembers;
+                        // dataStore.loadData(groupMembers.results, false);
+                        
+                        Ext.MessageBox.hide();
+                    }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the group.'); 
-                } 
-            });                           
+                    Ext.MessageBox.alert('Failed', 'Could not save group.'); 
+                },
+                scope: this 
+            });
+                
+            
+        } else {
+            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
         }
-        
-     },
-     
-    /**
-     * var groupRecord
-     */
-    groupRecord: null,
+    },
     
+    handlerDelete: function(_button, _event) {
+        var groupIds = Ext.util.JSON.encode([Tine.Admin.Groups.EditDialog.group.data.id]);
+            
+        Ext.Ajax.request({
+            url: 'index.php',
+            params: {
+                method: 'Admin.deleteGroups', 
+                groupIds: groupIds
+            },
+            text: 'Deleting group...',
+            success: function(_result, _request) {
+                if(window.opener.Tine.Admin.Groups) {
+                    window.opener.Tine.Admin.Groups.Main.reload();
+                }
+                window.close();
+            },
+            failure: function ( result, request) { 
+                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the group.'); 
+            } 
+        });                           
+    },
 
     /**
-     * function updateGroupRecord
+     * function updateRecord
      */
-    updateGroupRecord: function(_groupData)
-    {
+    updateRecord: function(_groupData) {
     	// if groupData is empty (=array), set to empty object because array won't work!
         if (_groupData.length === 0) {
         	_groupData = {};
         }
-        this.groupRecord = new Tine.Tinebase.Model.Group(_groupData);
+        this.group = new Tine.Tinebase.Model.Group(_groupData, _groupData.id);
+        
+        // tweak, as group members are not in standard form cycle yet
+        this.dataStore.loadData(this.group.get('groupMembers'));
     },
 
     /**
      * function updateToolbarButtons
      */
-    updateToolbarButtons: function(_rights)
-    {        
+    updateToolbarButtons: function(_rights) {        
        /* if(_rights.editGrant === true) {
             Ext.getCmp('groupDialog').action_saveAndClose.enable();
             Ext.getCmp('groupDialog').action_applyChanges.enable();
@@ -445,33 +441,10 @@ Tine.Admin.Groups.EditDialog = {
     },
     
     /**
-     * function display
-     * 
-     * @param   _groupData
-     * @param   _groupMembers
+     * function getFormContents
      * 
      */
-    display: function(_groupData, _groupMembers) 
-    {
-
-        /******* actions ********/
-
-    	this.actions = {
-            addAccount: new Ext.Action({
-                text: 'add account',
-                disabled: true,
-                scope: this,
-                handler: this.handlers.addAccount,
-                iconCls: 'action_addContact'
-            }),
-            removeAccount: new Ext.Action({
-                text: 'remove account',
-                disabled: true,
-                scope: this,
-                handler: this.handlers.removeAccount,
-                iconCls: 'action_deleteContact'
-            })
-        };
+    getFormContents: function() {
 
         /******* account picker panel ********/
         
@@ -505,10 +478,11 @@ Tine.Admin.Groups.EditDialog = {
         
         this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
         
-        if (_groupMembers.length === 0) {
+        var groupMembers = this.group.get('groupMembers');
+        if (!groupMembers || groupMembers.length === 0) {
         	this.dataStore.removeAll();
         } else {
-            this.dataStore.loadData( _groupMembers );
+            this.dataStore.loadData(groupMembers);
         }
 
         /******* column model ********/
@@ -597,34 +571,72 @@ Tine.Admin.Groups.EditDialog = {
             ]
         };
         
-        /******* build panel & viewport & form ********/
-               
-        // Ext.FormPanel
-        var dialog = new Tine.widgets.dialog.EditRecord({
-            id : 'groupDialog',
-            title: 'Edit Group ' + _groupData.name,
-            layout: 'fit',
-            labelWidth: 120,
-            labelAlign: 'top',
-            handlerScope: this,
-            handlerApplyChanges: this.handlers.applyChanges,
-            handlerSaveAndClose: this.handlers.saveAndClose,
-            handlerDelete: this.handlers.deleteGroup,
-            handlerExport: this.handlers.exportGroup,
-            items: editGroupDialog
-        });
-
-        var viewport = new Ext.Viewport({
-            layout: 'border',
-            frame: true,
-            items: dialog
-        });
-
-        this.updateGroupRecord(_groupData);
-        this.updateToolbarButtons(_groupData.grants);       
-
-        dialog.getForm().loadRecord(this.groupRecord);
-        
-    } // end display function     
+        return editGroupDialog;
+    },
     
+    initComponent: function() {
+        this.group = this.group ? this.group : new Tine.Tinebase.Model.Group({}, 0);
+        
+        //this.title = title: 'Edit Group ' + ,
+        
+        Ext.Ajax.request({
+            scope: this,
+            success: this.onRecordLoad,
+            params: {
+                method: 'Admin.getGroup',
+                groupId: this.group.id
+            }
+        });
+        
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
+        /******* actions ********/
+        this.actions = {
+            addAccount: new Ext.Action({
+                text: 'add account',
+                disabled: true,
+                scope: this,
+                handler: this.handlers.addAccount,
+                iconCls: 'action_addContact'
+            }),
+            removeAccount: new Ext.Action({
+                text: 'remove account',
+                disabled: true,
+                scope: this,
+                handler: this.handlers.removeAccount,
+                iconCls: 'action_deleteContact'
+            })
+        };
+        
+        this.items = this.getFormContents();
+        Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
+    },
+    
+    onRecordLoad: function(response) {
+        this.getForm().findField('name').focus(false, 250);
+        var recordData = Ext.util.JSON.decode(response.responseText);
+        this.updateRecord(recordData);
+        
+        this.getForm().loadRecord(this.group);
+        this.updateToolbarButtons();
+        Ext.MessageBox.hide();
+    }
+});
+
+
+/**
+ * Groups Edit Popup
+ */
+Tine.Admin.Groups.EditDialog.openWindow = function (config) {
+    config.group = config.group ? config.group : new Tine.Tinebase.Model.Group({}, 0);
+    var window = Tine.WindowFactory.getWindow({
+        width: 650,
+        height: 600,
+        name: Tine.Admin.Groups.EditDialog.prototype.windowNamePrefix + config.group.id,
+        layout: Tine.Admin.Groups.EditDialog.prototype.windowLayout,
+        itemsConstructor: 'Tine.Admin.Groups.EditDialog',
+        itemsConstructorConfig: config
+    });
+    return window;
 };
