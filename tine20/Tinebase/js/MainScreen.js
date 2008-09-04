@@ -207,8 +207,8 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                     this.defaultAppPanel = appPanel;
                 }
             } catch(e) {
-                //console.log(_application + ' failed');
-                //console.log(e);
+                console.error('Initialising of Application "' + app.name + '" failed with the following error:');
+                console.error(e);
             }
         }
         
