@@ -25,44 +25,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     protected $_appname = 'Admin';
     
     /**
-     * display edit account dialog
-     *
-     * @param   integer     account id
-     * 
-     *
-    public function editAccountDialog($accountId)
-    {
-        if (!empty($accountId)) {
-            $account = Tinebase_User::getInstance()->getFullUserById($accountId);
-            $account->setTimezone(Zend_Registry::get('userTimeZone'));
-            $arrayAccount = $account->toArray();
-            
-            // add primary group to account for the group selection combo box
-            $group = $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
-        } else {
-            $arrayAccount = array('accountStatus' => 'enabled');
-            
-            // get default primary group for the group selection combo box
-            $group = Tinebase_Group::getInstance()->getDefaultGroup();
-        }
-
-        // encode the account array
-        $arrayAccount['accountPrimaryGroup'] = $group->toArray();
-        $encodedAccount = Zend_Json::encode($arrayAccount);                   
-        
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        $view->title="edit account";
-        $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $encodedAccount .');';
-        
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-    }
-
-    /**
      * display edit group dialog
      *
      * @param   integer     group id
@@ -216,6 +178,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     public function getJsFilesToInclude() {
         return array(
             'Admin/js/Admin.js',
+            'Admin/js/Users.js',
             'Admin/js/Groups.js',
             'Admin/js/Tags.js',
             'Admin/js/Roles.js'

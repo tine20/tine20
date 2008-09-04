@@ -250,11 +250,11 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             // get default primary group for the group selection combo box
             $group = Tinebase_Group::getInstance()->getDefaultGroup();
         }
-
+        
         // encode the account array
         $userArray['accountPrimaryGroup'] = $group->toArray();
 
-        return $userArray
+        return $userArray;
     }
     
     /**
@@ -295,14 +295,14 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     }
 
     /**
-     * save account
+     * save user
      *
      * @param string $accountData JSON encoded Tinebase_Model_FullUser
      * @param string $password the new password
      * @param string $passwordRepeat the new password repeated
      * @return array with 
      */
-    public function saveAccount($accountData, $password, $passwordRepeat)
+    public function saveUser($accountData, $password, $passwordRepeat)
     {
         $decodedAccountData = Zend_Json::decode($accountData);
         
