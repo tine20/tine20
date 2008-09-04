@@ -45,10 +45,15 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
      */
     public function getUserPhones($accountId)
     {
+        $result = array(
+            'success'   => TRUE,
+            'results'   => array() 
+        );
+        
         $voipController = Voipmanager_Controller::getInstance();
         $phones = $voipController->getMyPhones('id', 'ASC', '', $accountId);
-
-        echo Zend_Json::encode($phones->toArray());        
-        die;
+        $result['results'] = $phones->toArray();
+        
+        return $result;        
     }
 }

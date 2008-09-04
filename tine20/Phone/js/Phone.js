@@ -73,15 +73,24 @@ Tine.Phone.getPanel = function(){
         success: function(_result, _request) {
         	var data = Ext.util.JSON.decode(_result.responseText);
             //console.log(data);
-            for(var i=0; i<data.length; i++) {
+            for(var i=0; i<data.results.length; i++) {
                 var node = new Ext.tree.TreeNode({
-                    id: data[i]['id'],
-                    text: data[i]['macaddress'],
-                    qtip: data[i]['description'],
+                    id: data.results[i]['id'],
+                    text: data.results[i]['macaddress'],
+                    qtip: data.results[i]['description'],
+                    leaf: true
+                });
+                treeRoot.appendChild(node);            	
+            }
+            data.each(function(item){ 
+                var node = new Ext.tree.TreeNode({
+                    id: item.id,
+                    text: item.macaddress,
+                    qtip: item.description,
                     leaf: true
                 });
                 treeRoot.appendChild(node);
-            }        	
+            });        	
         },
         failure: function ( result, request) { 
             Ext.MessageBox.alert(translation._('Failed'), translation._('Some error occured while trying to get Phones.')); 
