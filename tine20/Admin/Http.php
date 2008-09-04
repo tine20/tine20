@@ -29,7 +29,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      *
      * @param   integer     account id
      * 
-     */
+     *
     public function editAccountDialog($accountId)
     {
         if (!empty($accountId)) {

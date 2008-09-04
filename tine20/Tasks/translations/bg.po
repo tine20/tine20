@@ -18,143 +18,151 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr ""
 
-#: js/Tasks.js:107
+#: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
 
-#: js/Tasks.js:138 js/Tasks.js:267 js/Tasks.js:550 js/Tasks.js:645
-#: js/Tasks.js:670
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:553 js/Tasks.js:686
+#: js/Tasks.js:711
 msgid "Failed"
 msgstr "Грешка"
 
-#: js/Tasks.js:138 js/Tasks.js:670
+#: js/Tasks.js:141 js/Tasks.js:711
 msgid "Could not delete task(s)."
 msgstr "Задачата (-ите) не може(могат) да бъде(бъдатат) изтрита(-и)"
 
-#: js/Tasks.js:156
+#: js/Tasks.js:159
 msgid "Edit task"
 msgstr "Обработи задача"
 
-#: js/Tasks.js:166
+#: js/Tasks.js:169
 msgid "Add task"
 msgstr "Добави задача"
 
-#: js/Tasks.js:177
+#: js/Tasks.js:180
 msgid "Delete task"
 msgid_plural "Delete tasks"
 msgstr[0] "Изтрий задача"
 msgstr[1] "Изтрий задачи"
 
-#: js/Tasks.js:267 js/Tasks.js:550 js/Tasks.js:645
+#: js/Tasks.js:270 js/Tasks.js:553 js/Tasks.js:686
 msgid "Could not save task."
 msgstr "Задачата не може да бъде запаметена."
 
-#: js/Tasks.js:300
+#: js/Tasks.js:303
 msgid "Tasks"
 msgstr "Задачи"
 
-#: js/Tasks.js:301
+#: js/Tasks.js:304
 msgid "to do lists"
 msgstr "Списъци със задачи"
 
-#: js/Tasks.js:323
+#: js/Tasks.js:326
 msgid "Enter searchfilter"
 msgstr "Задай филтър на търсене"
 
-#: js/Tasks.js:338
+#: js/Tasks.js:341
 msgid "Show closed"
 msgstr "Покажи приключени задачи"
 
-#: js/Tasks.js:388
+#: js/Tasks.js:391
 msgid "Search:"
 msgstr "Търси:"
 
-#: js/Tasks.js:398
+#: js/Tasks.js:401
 msgid "Displaying tasks {0} - {1} of {2}"
 msgstr "Намерени задачи {0} - {1} от {2}"
 
-#: js/Tasks.js:399
+#: js/Tasks.js:402
 msgid "No tasks to display"
 msgstr "Няма намерени задачи"
 
-#: js/Tasks.js:416 js/Tasks.js:722
+#: js/Tasks.js:419 js/Tasks.js:762
 msgid "Status"
 msgstr "Статус"
 
-#: js/Tasks.js:432
+#: js/Tasks.js:435
 msgid "Percent"
 msgstr "Процент"
 
-#: js/Tasks.js:447 js/Tasks.js:694
+#: js/Tasks.js:450 js/Tasks.js:734
 msgid "Summary"
 msgstr "Заключение"
 
-#: js/Tasks.js:455
+#: js/Tasks.js:458
 msgid "Add a task..."
 msgstr "Добави задача"
 
-#: js/Tasks.js:460 js/Tasks.js:726
+#: js/Tasks.js:463 js/Tasks.js:766
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/Tasks.js:476
+#: js/Tasks.js:479
 msgid "Due Date"
 msgstr "Краен срок"
 
-#: js/Tasks.js:497
+#: js/Tasks.js:500
 msgid "No Tasks to display"
 msgstr "Няма намерени задачи"
 
-#: js/Tasks.js:616
+#: js/Tasks.js:629
+msgid "Loading Task..."
+msgstr ""
+
+#: js/Tasks.js:629
+msgid "Please Wait"
+msgstr ""
+
+#: js/Tasks.js:655
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/Tasks.js:616 js/Tasks.js:658
+#: js/Tasks.js:655 js/Tasks.js:699
 msgid "Saving Task"
 msgstr "Запамети задача"
 
-#: js/Tasks.js:649
+#: js/Tasks.js:690
 msgid "Errors"
 msgstr "Грешки"
 
-#: js/Tasks.js:649
+#: js/Tasks.js:690
 msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките."
 
-#: js/Tasks.js:656
+#: js/Tasks.js:697
 msgid "Confirm"
 msgstr "Потвърди"
 
-#: js/Tasks.js:656
+#: js/Tasks.js:697
 msgid "Do you really want to delete this task?"
 msgstr "Наистина ли желаете да изтриете тази задача?"
 
-#: js/Tasks.js:658
+#: js/Tasks.js:699
 msgid "Please wait a moment..."
 msgstr "Моля изчакай един момент"
 
-#: js/Tasks.js:698
+#: js/Tasks.js:738
 msgid "Enter short name..."
 msgstr "Задай съкратено име"
 
-#: js/Tasks.js:701
+#: js/Tasks.js:741
 msgid "Notes"
 msgstr "Бележки"
 
-#: js/Tasks.js:703
+#: js/Tasks.js:743
 msgid "Enter description..."
 msgstr "Напиши описание"
 
-#: js/Tasks.js:717
+#: js/Tasks.js:757
 msgid "Percentage"
 msgstr "Процент"
 
-#: js/Tasks.js:730
+#: js/Tasks.js:770
 msgid "Due date"
 msgstr "Краен срок"
 
-#: js/Tasks.js:734
+#: js/Tasks.js:774
 msgid "Folder"
 msgstr "Папка"

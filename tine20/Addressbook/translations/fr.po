@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: Controller.php:379
+#: Controller.php:386
 #, python-format
 msgid "%s's personal addressbook"
 msgstr ""
@@ -40,17 +40,17 @@ msgid_plural "Do you really want to delete the selected contacts?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:193 js/Addressbook.js:840
+#: js/Addressbook.js:193 js/Addressbook.js:907
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:199 js/Addressbook.js:818 js/Addressbook.js:848
+#: js/Addressbook.js:199 js/Addressbook.js:890 js/Addressbook.js:915
 msgid "Failed"
 msgstr ""
 
-#: js/Addressbook.js:200 js/Addressbook.js:848
+#: js/Addressbook.js:200 js/Addressbook.js:915
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] ""
@@ -70,7 +70,7 @@ msgid_plural "delete contacts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:261 js/Addressbook.js:896
+#: js/Addressbook.js:261 js/Addressbook.js:819
 msgid "export as pdf"
 msgstr ""
 
@@ -265,23 +265,31 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: js/Addressbook.js:786
+#: js/Addressbook.js:835
+msgid "Loading Contact..."
+msgstr ""
+
+#: js/Addressbook.js:835
+msgid "Please Wait"
+msgstr ""
+
+#: js/Addressbook.js:856
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/Addressbook.js:786
+#: js/Addressbook.js:856
 msgid "Saving Contact"
 msgstr ""
 
-#: js/Addressbook.js:818
+#: js/Addressbook.js:890
 msgid "Could not save contact."
 msgstr ""
 
-#: js/Addressbook.js:823
+#: js/Addressbook.js:894
 msgid "Errors"
 msgstr ""
 
-#: js/Addressbook.js:823
+#: js/Addressbook.js:894
 msgid "Please fix the errors noted."
 msgstr ""
 

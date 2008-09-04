@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-08-25 09:56+0100\n"
+"PO-Revision-Date: 2008-09-03 20:39+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,15 +15,15 @@ msgstr ""
 
 #: js/Asterisk/Context.js:82
 msgid "add context"
-msgstr ""
+msgstr "добави контекст"
 
 #: js/Asterisk/Context.js:89
 msgid "edit context"
-msgstr ""
+msgstr "Обработи контекст"
 
 #: js/Asterisk/Context.js:97
 msgid "delete context"
-msgstr ""
+msgstr "Изтрий контекст"
 
 #: js/Asterisk/Context.js:152
 #: js/Asterisk/Meetme.js:152
@@ -36,15 +36,15 @@ msgstr ""
 #: js/Snom/Software.js:160
 #: js/Snom/Templates.js:152
 msgid "Search: "
-msgstr ""
+msgstr "Търси:"
 
 #: js/Asterisk/Context.js:184
 msgid "Displaying context {0} - {1} of {2}"
-msgstr ""
+msgstr "Покажи контекст {0} - {1} oт {2}"
 
 #: js/Asterisk/Context.js:185
 msgid "No context to display"
-msgstr ""
+msgstr "Няма намерен контекст"
 
 #: js/Asterisk/Context.js:190
 #: js/Asterisk/Meetme.js:190
@@ -53,7 +53,7 @@ msgstr ""
 #: js/Snom/Software.js:199
 #: js/Snom/Templates.js:190
 msgid "id"
-msgstr ""
+msgstr "Идентификационен номер `id`"
 
 #: js/Asterisk/Context.js:191
 #: js/Asterisk/SipPeer.js:211
@@ -66,7 +66,7 @@ msgstr ""
 #: js/Snom/Software.js:435
 #: js/Snom/Templates.js:191
 msgid "name"
-msgstr ""
+msgstr "име"
 
 #: js/Asterisk/Context.js:192
 #: js/Asterisk/Context.js:404
@@ -79,7 +79,7 @@ msgstr ""
 #: js/Snom/Templates.js:192
 #: js/Snom/Templates.js:408
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: js/Asterisk/Context.js:396
 #: js/Asterisk/SipPeer.js:456
@@ -90,75 +90,75 @@ msgstr ""
 #: js/Snom/Phone.js:1148
 #: js/Snom/Templates.js:400
 msgid "Name"
-msgstr ""
+msgstr "Име"
 
 #: js/Asterisk/Meetme.js:82
 msgid "add meetme"
-msgstr ""
+msgstr "Добави meetme"
 
 #: js/Asterisk/Meetme.js:89
 msgid "edit meetme"
-msgstr ""
+msgstr "Обработи meetme"
 
 #: js/Asterisk/Meetme.js:97
 msgid "delete meetme"
-msgstr ""
+msgstr "Изтрий meetme"
 
 #: js/Asterisk/Meetme.js:184
 msgid "Displaying meetme {0} - {1} of {2}"
-msgstr ""
+msgstr "Покажи meetme {0} - {1} oт {2}"
 
 #: js/Asterisk/Meetme.js:185
 msgid "No meetme to display"
-msgstr ""
+msgstr "Няма намерен meetme"
 
 #: js/Asterisk/Meetme.js:191
 #: js/Asterisk/Meetme.js:397
 msgid "confno"
-msgstr ""
+msgstr "№ на конференция"
 
 #: js/Asterisk/Meetme.js:192
 #: js/Asterisk/Meetme.js:405
 msgid "pin"
-msgstr ""
+msgstr "Пин"
 
 #: js/Asterisk/Meetme.js:193
 #: js/Asterisk/Meetme.js:413
 msgid "adminpin"
-msgstr ""
+msgstr "Администратвен пин"
 
 #: js/Asterisk/SipPeer.js:83
 msgid "add sipPeer"
-msgstr ""
+msgstr "Добави sipPeer"
 
 #: js/Asterisk/SipPeer.js:90
 msgid "edit sipPeer"
-msgstr ""
+msgstr "Обработи sipPeer"
 
 #: js/Asterisk/SipPeer.js:98
 msgid "delete sipPeer"
-msgstr ""
+msgstr "Изтрий sipPeer"
 
 #: js/Asterisk/SipPeer.js:159
 #: js/Asterisk/Voicemail.js:155
 msgid "Context: "
-msgstr ""
+msgstr "Контекст:"
 
 #: js/Asterisk/SipPeer.js:204
 msgid "Displaying sipPeers {0} - {1} of {2}"
-msgstr ""
+msgstr "Покажи sipPeer {0} - {1} oт {2}"
 
 #: js/Asterisk/SipPeer.js:205
 #: js/Asterisk/SipPeer.js:295
 msgid "No sipPeers to display"
-msgstr ""
+msgstr "Няма намерени sipPeers"
 
 #: js/Asterisk/SipPeer.js:210
 #: js/MyPhones.js:144
 #: js/Snom/Phone.js:244
 #: js/Snom/Settings.js:201
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: js/Asterisk/SipPeer.js:212
 msgid "account code"
@@ -187,11 +187,11 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:218
 msgid "default ip"
-msgstr ""
+msgstr "Iр по настройки"
 
 #: js/Asterisk/SipPeer.js:219
 msgid "dtmf mode"
-msgstr ""
+msgstr "dtmf режим"
 
 #: js/Asterisk/SipPeer.js:220
 msgid "from user"
@@ -516,55 +516,55 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:1008
 msgid "Call Limit"
-msgstr ""
+msgstr "Допустима граница на позвънявания"
 
 #: js/Asterisk/SipPeer.js:1015
 msgid "Busy Level"
-msgstr ""
+msgstr "Заето ниво"
 
 #: js/Asterisk/Voicemail.js:82
 msgid "add voicemail"
-msgstr ""
+msgstr "Добави гласова поща"
 
 #: js/Asterisk/Voicemail.js:89
 msgid "edit voicemail"
-msgstr ""
+msgstr "Обработи гласова поща"
 
 #: js/Asterisk/Voicemail.js:97
 msgid "delete voicemail"
-msgstr ""
+msgstr "Изтрий гласова поща"
 
 #: js/Asterisk/Voicemail.js:189
 msgid "Displaying voicemail {0} - {1} of {2}"
-msgstr ""
+msgstr "Покажи гласова поща"
 
 #: js/Asterisk/Voicemail.js:190
 msgid "No voicemail to display"
-msgstr ""
+msgstr "Няма намерена гласова поща"
 
 #: js/Asterisk/Voicemail.js:198
 msgid "fullname"
-msgstr ""
+msgstr "Пълно име"
 
 #: js/Asterisk/Voicemail.js:199
 #: js/Asterisk/Voicemail.js:471
 msgid "email"
-msgstr ""
+msgstr "Имейл"
 
 #: js/Asterisk/Voicemail.js:200
 #: js/Asterisk/Voicemail.js:477
 msgid "pager"
-msgstr ""
+msgstr "Пейджер"
 
 #: js/Asterisk/Voicemail.js:201
 #: js/Asterisk/Voicemail.js:519
 msgid "tz"
-msgstr ""
+msgstr "TZ"
 
 #: js/Asterisk/Voicemail.js:202
 #: js/Asterisk/Voicemail.js:602
 msgid "attach"
-msgstr ""
+msgstr "Прикрепи"
 
 #: js/Asterisk/Voicemail.js:203
 #: js/Asterisk/Voicemail.js:633
@@ -579,17 +579,17 @@ msgstr ""
 #: js/Asterisk/Voicemail.js:205
 #: js/Asterisk/Voicemail.js:545
 msgid "callback"
-msgstr ""
+msgstr "Върнато позвънявяне"
 
 #: js/Asterisk/Voicemail.js:206
 #: js/Asterisk/Voicemail.js:659
 msgid "review"
-msgstr ""
+msgstr "Преглед"
 
 #: js/Asterisk/Voicemail.js:207
 #: js/Asterisk/Voicemail.js:685
 msgid "operator"
-msgstr ""
+msgstr "оператор"
 
 #: js/Asterisk/Voicemail.js:208
 #: js/Asterisk/Voicemail.js:716
@@ -599,22 +599,22 @@ msgstr ""
 #: js/Asterisk/Voicemail.js:209
 #: js/Asterisk/Voicemail.js:563
 msgid "sayduration"
-msgstr ""
+msgstr "Продължителност"
 
 #: js/Asterisk/Voicemail.js:210
 #: js/Asterisk/Voicemail.js:589
 msgid "saydurationm"
-msgstr ""
+msgstr "Продължителност м."
 
 #: js/Asterisk/Voicemail.js:211
 #: js/Asterisk/Voicemail.js:742
 msgid "sendvoicemail"
-msgstr ""
+msgstr "изпращане на гласов имейл"
 
 #: js/Asterisk/Voicemail.js:212
 #: js/Asterisk/Voicemail.js:768
 msgid "delete"
-msgstr ""
+msgstr "изтрий"
 
 #: js/Asterisk/Voicemail.js:213
 #: js/Asterisk/Voicemail.js:799
@@ -634,15 +634,15 @@ msgstr ""
 #: js/Asterisk/Voicemail.js:216
 #: js/Asterisk/Voicemail.js:882
 msgid "hidefromdir"
-msgstr ""
+msgstr "Скрит от директория"
 
 #: js/Asterisk/Voicemail.js:463
 msgid "Password"
-msgstr ""
+msgstr "Парола"
 
 #: js/Asterisk/Voicemail.js:496
 msgid "additional"
-msgstr ""
+msgstr "допълнителна информация"
 
 #: js/Asterisk/Voicemail.js:577
 #: js/Asterisk/Voicemail.js:616
@@ -677,7 +677,7 @@ msgstr ""
 #: js/Snom/Settings.js:859
 #: js/Snom/Settings.js:888
 msgid "on"
-msgstr ""
+msgstr "включен"
 
 #: js/Asterisk/Voicemail.js:578
 #: js/Asterisk/Voicemail.js:617
@@ -712,97 +712,97 @@ msgstr ""
 #: js/Snom/Settings.js:860
 #: js/Snom/Settings.js:889
 msgid "off"
-msgstr ""
+msgstr "изключен"
 
 #: js/MyPhones.js:48
 msgid "edit myphone"
-msgstr ""
+msgstr "Обработи намерените номера"
 
 #: js/MyPhones.js:138
 msgid "Displaying myphones {0} - {1} of {2}"
-msgstr ""
+msgstr "Покажи номера {0} - {1} от {2}"
 
 #: js/MyPhones.js:139
 msgid "No myphones to display"
-msgstr ""
+msgstr "Няма намерени номера"
 
 #: js/MyPhones.js:145
 #: js/Snom/Phone.js:245
 msgid "MAC address"
-msgstr ""
+msgstr "MAC Адрес"
 
 #: js/MyPhones.js:146
 #: js/Snom/Phone.js:246
 #: js/Snom/Settings.js:203
 msgid "description"
-msgstr ""
+msgstr "описание"
 
 #: js/MyPhones.js:150
 #: js/Snom/Phone.js:250
 #: js/Snom/Phone.js:803
 msgid "Location"
-msgstr ""
+msgstr "Локация"
 
 #: js/MyPhones.js:160
 #: js/Snom/Phone.js:260
 #: js/Snom/Phone.js:723
 msgid "Template"
-msgstr ""
+msgstr "Темплейт"
 
 #: js/MyPhones.js:168
 #: js/Snom/Phone.js:268
 msgid "Software"
-msgstr ""
+msgstr "Програма (Software)"
 
 #: js/MyPhones.js:169
 #: js/Snom/Phone.js:269
 msgid "current model"
-msgstr ""
+msgstr "Употребяван модел"
 
 #: js/MyPhones.js:170
 #: js/Snom/Phone.js:270
 msgid "redirect event"
-msgstr ""
+msgstr "Отклонение"
 
 #: js/MyPhones.js:171
 #: js/Snom/Phone.js:271
 msgid "redirect number"
-msgstr ""
+msgstr "Отклонение към"
 
 #: js/MyPhones.js:172
 #: js/Snom/Phone.js:272
 msgid "redirect time"
-msgstr ""
+msgstr "Отклонение заради превишаване на време за връэка"
 
 #: js/MyPhones.js:173
 #: js/Snom/Phone.js:273
 msgid "settings loaded at"
-msgstr ""
+msgstr "настройки заредени на "
 
 #: js/MyPhones.js:174
 #: js/Snom/Phone.js:274
 msgid "last modified"
-msgstr ""
+msgstr "последни промени"
 
 #: js/MyPhones.js:403
 #: js/Snom/Phone.js:936
 msgid "redirection"
-msgstr ""
+msgstr "отклонена връэка"
 
 #: js/MyPhones.js:420
 #: js/Snom/Phone.js:953
 msgid "redirect_event"
-msgstr ""
+msgstr "причина за отклоняване"
 
 #: js/MyPhones.js:445
 #: js/Snom/Phone.js:978
 msgid "all"
-msgstr ""
+msgstr "всички"
 
 #: js/MyPhones.js:446
 #: js/Snom/Phone.js:979
 msgid "busy"
-msgstr ""
+msgstr "заето"
 
 #: js/MyPhones.js:447
 #: js/MyPhones.js:751
@@ -810,35 +810,35 @@ msgstr ""
 #: js/Snom/Phone.js:1474
 #: js/Snom/Settings.js:738
 msgid "none"
-msgstr ""
+msgstr "Номера не отговаря"
 
 #: js/MyPhones.js:448
 #: js/Snom/Phone.js:981
 msgid "time"
-msgstr ""
+msgstr "време"
 
 #: js/MyPhones.js:459
 #: js/Snom/Phone.js:992
 msgid "redirect_number"
-msgstr ""
+msgstr "отклонен номер"
 
 #: js/MyPhones.js:471
 #: js/Snom/Phone.js:1004
 msgid "redirect_time"
-msgstr ""
+msgstr "Превишаване на време за връэка (сек)"
 
 #: js/MyPhones.js:495
 #: js/Snom/Phone.js:1218
 #: js/Snom/Templates.js:432
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: js/MyPhones.js:527
 #: js/Snom/Phone.js:1250
 #: js/Snom/Settings.js:204
 #: js/Snom/Settings.js:507
 msgid "web_language"
-msgstr ""
+msgstr "Език на страниците"
 
 #: js/MyPhones.js:542
 #: js/MyPhones.js:579
@@ -877,218 +877,218 @@ msgstr ""
 #: js/Snom/Settings.js:858
 #: js/Snom/Settings.js:887
 msgid "- factory default -"
-msgstr ""
+msgstr "Първоначални настройки"
 
 #: js/MyPhones.js:607
 #: js/Snom/Phone.js:1330
 #: js/Snom/Settings.js:206
 #: js/Snom/Settings.js:589
 msgid "display_method"
-msgstr ""
+msgstr "Стил на изписване"
 
 #: js/MyPhones.js:623
 #: js/Snom/Phone.js:1346
 #: js/Snom/Settings.js:606
 msgid "whole url"
-msgstr ""
+msgstr "Пълен URL"
 
 #: js/MyPhones.js:625
 #: js/Snom/Phone.js:1348
 #: js/Snom/Settings.js:608
 msgid "number"
-msgstr ""
+msgstr "Номер"
 
 #: js/MyPhones.js:626
 #: js/Snom/Phone.js:1349
 #: js/Snom/Settings.js:609
 msgid "name + number"
-msgstr ""
+msgstr "Име + Номер"
 
 #: js/MyPhones.js:627
 #: js/Snom/Phone.js:1350
 #: js/Snom/Settings.js:610
 msgid "number + name"
-msgstr ""
+msgstr "Номер + име"
 
 #: js/MyPhones.js:643
 #: js/Snom/Phone.js:1366
 #: js/Snom/Settings.js:215
 #: js/Snom/Settings.js:626
 msgid "call_waiting"
-msgstr ""
+msgstr "Почукване за чакащ разговор"
 
 #: js/MyPhones.js:660
 #: js/Snom/Phone.js:1383
 #: js/Snom/Settings.js:644
 msgid "visual"
-msgstr ""
+msgstr "Визуализиране"
 
 #: js/MyPhones.js:661
 #: js/Snom/Phone.js:1384
 #: js/Snom/Settings.js:645
 msgid "ringer"
-msgstr ""
+msgstr "Тон (звуков сигнал)"
 
 #: js/MyPhones.js:673
 #: js/Snom/Phone.js:1396
 #: js/Snom/Settings.js:207
 #: js/Snom/Settings.js:657
 msgid "mwi_notification"
-msgstr ""
+msgstr "Указание за  'Има съобщение '"
 
 #: js/MyPhones.js:689
 #: js/Snom/Phone.js:1412
 #: js/Snom/Settings.js:674
 msgid "silent"
-msgstr ""
+msgstr "Беззвучно"
 
 #: js/MyPhones.js:690
 #: js/Snom/Phone.js:1413
 #: js/Snom/Settings.js:675
 msgid "beep"
-msgstr ""
+msgstr "beep-Тон"
 
 #: js/MyPhones.js:691
 #: js/Snom/Phone.js:1414
 #: js/Snom/Settings.js:676
 msgid "reminder"
-msgstr ""
+msgstr "Напомняне"
 
 #: js/MyPhones.js:702
 #: js/Snom/Phone.js:1425
 #: js/Snom/Settings.js:208
 #: js/Snom/Settings.js:687
 msgid "mwi_dialtone"
-msgstr ""
+msgstr "Избиращ тон за  'Има съобщение '"
 
 #: js/MyPhones.js:718
 #: js/Snom/Phone.js:1441
 #: js/Snom/Settings.js:704
 msgid "normal"
-msgstr ""
+msgstr "нормален"
 
 #: js/MyPhones.js:719
 #: js/Snom/Phone.js:1442
 #: js/Snom/Settings.js:705
 msgid "stutter"
-msgstr ""
+msgstr "заекване (прекъсване?)"
 
 #: js/MyPhones.js:735
 #: js/Snom/Phone.js:1458
 #: js/Snom/Settings.js:209
 #: js/Snom/Settings.js:721
 msgid "headset_device"
-msgstr ""
+msgstr "Използване на слушалки"
 
 #: js/MyPhones.js:752
 #: js/Snom/Phone.js:1475
 #: js/Snom/Settings.js:739
 msgid "headset_rj"
-msgstr ""
+msgstr "Вход за слушалки"
 
 #: js/MyPhones.js:763
 #: js/Snom/Phone.js:1486
 #: js/Snom/Settings.js:210
 #: js/Snom/Settings.js:750
 msgid "message_led_other"
-msgstr ""
+msgstr "Съобщаващ LED за изпуснати обаждания"
 
 #: js/MyPhones.js:791
 #: js/Snom/Phone.js:1514
 #: js/Snom/Settings.js:211
 #: js/Snom/Settings.js:779
 msgid "global_missed_counter"
-msgstr ""
+msgstr "Глобален брояч на изпуснати обаждания"
 
 #: js/MyPhones.js:824
 #: js/Snom/Phone.js:1547
 #: js/Snom/Settings.js:212
 #: js/Snom/Settings.js:813
 msgid "scroll_outgoing"
-msgstr ""
+msgstr "Изпиши кодовете на излизащи обаждания"
 
 #: js/MyPhones.js:852
 #: js/Snom/Phone.js:1575
 #: js/Snom/Settings.js:213
 #: js/Snom/Settings.js:842
 msgid "show_local_line"
-msgstr ""
+msgstr "Покажи локалният код на набиране"
 
 #: js/MyPhones.js:880
 #: js/Snom/Phone.js:1603
 #: js/Snom/Settings.js:214
 #: js/Snom/Settings.js:871
 msgid "show_call_status"
-msgstr ""
+msgstr "Покажи статус на позвъняванията"
 
 #: js/Snom/Location.js:82
 msgid "add location"
-msgstr ""
+msgstr "Добави локализация"
 
 #: js/Snom/Location.js:89
 msgid "edit location"
-msgstr ""
+msgstr "Обработи локализация"
 
 #: js/Snom/Location.js:97
 msgid "delete location"
-msgstr ""
+msgstr "Изтрий локализация"
 
 #: js/Snom/Location.js:184
 msgid "Displaying location {0} - {1} of {2}"
-msgstr ""
+msgstr "Покажи локализации {0} - {1} от {2}"
 
 #: js/Snom/Location.js:185
 msgid "No location to display"
-msgstr ""
+msgstr "Няма зададена локализация"
 
 #: js/Snom/Location.js:190
 msgid "FW Interval"
-msgstr ""
+msgstr "FW Интервал"
 
 #: js/Snom/Location.js:191
 msgid "FW Status"
-msgstr ""
+msgstr "FW Статус"
 
 #: js/Snom/Location.js:192
 #: js/Snom/Location.js:482
 msgid "Update Policy"
-msgstr ""
+msgstr "Update основна стойност"
 
 #: js/Snom/Location.js:193
 msgid "Server Setting"
-msgstr ""
+msgstr "Настройки на сървъра"
 
 #: js/Snom/Location.js:194
 msgid "Admin Mode"
-msgstr ""
+msgstr "Администраторски режим"
 
 #: js/Snom/Location.js:195
 #: js/Snom/Location.js:614
 msgid "NTP Server"
-msgstr ""
+msgstr "NTP сървъра"
 
 #: js/Snom/Location.js:196
 #: js/Snom/Location.js:725
 msgid "Webserver Type"
-msgstr ""
+msgstr "Тип на вебсървъра"
 
 #: js/Snom/Location.js:197
 #: js/Snom/Location.js:786
 msgid "HTTPS Port"
-msgstr ""
+msgstr "HTTPS Port"
 
 #: js/Snom/Location.js:198
 #: js/Snom/Location.js:807
 msgid "HTTP User"
-msgstr ""
+msgstr "HTTP Потребител"
 
 #: js/Snom/Location.js:208
 msgid "Filter Registrar"
-msgstr ""
+msgstr "Регистрация на филтъра"
 
 #: js/Snom/Location.js:209
 msgid "CP Dialoginfo"
-msgstr ""
+msgstr "CP диалогова информация"
 
 #: js/Snom/Location.js:210
 msgid "Pickup Indic."
@@ -1096,31 +1096,31 @@ msgstr ""
 
 #: js/Snom/Location.js:450
 msgid "Settings URL"
-msgstr ""
+msgstr "URL на настройките"
 
 #: js/Snom/Location.js:458
 msgid "Firmware URL"
-msgstr ""
+msgstr "Програмен URL"
 
 #: js/Snom/Location.js:466
 msgid "Base Download URL"
-msgstr ""
+msgstr "Основен Download URL"
 
 #: js/Snom/Location.js:503
 msgid "Firmware Interval"
-msgstr ""
+msgstr "Програмен интервал"
 
 #: js/Snom/Location.js:521
 msgid "tone_scheme"
-msgstr ""
+msgstr "тон-схема на позвъняване"
 
 #: js/Snom/Location.js:563
 msgid "date_us_format"
-msgstr ""
+msgstr "U.S. формат на дата (mm/dd)"
 
 #: js/Snom/Location.js:589
 msgid "time_24_format"
-msgstr ""
+msgstr "време - 24 часов формат"
 
 #: js/Snom/Location.js:631
 msgid "NTP Server Address"

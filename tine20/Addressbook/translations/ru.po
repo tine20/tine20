@@ -17,7 +17,7 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
-#: Controller.php:379
+#: Controller.php:386
 #, python-format
 msgid "%s's personal addressbook"
 msgstr ""
@@ -45,18 +45,18 @@ msgstr[0] "Вы уверены что хотите удалить выбранн
 msgstr[1] "Вы уверены что хотите удалить выбранные контакты"
 msgstr[2] "Вы уверены что хотите удалить выбранных контактов"
 
-#: js/Addressbook.js:193 js/Addressbook.js:840
+#: js/Addressbook.js:193 js/Addressbook.js:907
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] "Контакт удаляется"
 msgstr[1] "Контакты удаляются"
 msgstr[2] "Контактов удаляются"
 
-#: js/Addressbook.js:199 js/Addressbook.js:818 js/Addressbook.js:848
+#: js/Addressbook.js:199 js/Addressbook.js:890 js/Addressbook.js:915
 msgid "Failed"
 msgstr "Ошибка"
 
-#: js/Addressbook.js:200 js/Addressbook.js:848
+#: js/Addressbook.js:200 js/Addressbook.js:915
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] "При удаление контакта возникла ошибка."
@@ -78,7 +78,7 @@ msgstr[0] "Удалить контакт"
 msgstr[1] "Удалить контакты"
 msgstr[2] "Удалить контактов"
 
-#: js/Addressbook.js:261 js/Addressbook.js:896
+#: js/Addressbook.js:261 js/Addressbook.js:819
 msgid "export as pdf"
 msgstr "экспортировать как пдф"
 
@@ -273,23 +273,31 @@ msgstr "Тэги"
 msgid "Description"
 msgstr "Oписание"
 
-#: js/Addressbook.js:786
+#: js/Addressbook.js:835
+msgid "Loading Contact..."
+msgstr ""
+
+#: js/Addressbook.js:835
+msgid "Please Wait"
+msgstr ""
+
+#: js/Addressbook.js:856
 msgid "Please wait a moment..."
 msgstr "Пожалуйста подождите момент..."
 
-#: js/Addressbook.js:786
+#: js/Addressbook.js:856
 msgid "Saving Contact"
 msgstr "Сохранить контакт"
 
-#: js/Addressbook.js:818
+#: js/Addressbook.js:890
 msgid "Could not save contact."
 msgstr "Контакт не смог выть сохранен"
 
-#: js/Addressbook.js:823
+#: js/Addressbook.js:894
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/Addressbook.js:823
+#: js/Addressbook.js:894
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте указанные ошибки"
 

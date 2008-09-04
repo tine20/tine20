@@ -231,6 +231,33 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /********************************** Users *********************************/
     
     /**
+     * returns a fullUser
+     *
+     * @param int $userId
+     */
+    public function getUser($userId)
+    {
+        if (!empty($userId)) {
+            $user = Tinebase_User::getInstance()->getFullUserById($userId);
+            $user->setTimezone(Zend_Registry::get('userTimeZone'));
+            $userArray = $user->toArray();
+            
+            // add primary group to account for the group selection combo box
+            $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
+        } else {
+            $userArray = array('accountStatus' => 'enabled');
+            
+            // get default primary group for the group selection combo box
+            $group = Tinebase_Group::getInstance()->getDefaultGroup();
+        }
+
+        // encode the account array
+        $userArray['accountPrimaryGroup'] = $group->toArray();
+
+        return $userArray
+    }
+    
+    /**
      * get list of accounts
      *
      * @param string $_filter
