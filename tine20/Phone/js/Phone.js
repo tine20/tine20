@@ -62,35 +62,14 @@ Tine.Phone.getPanel = function(){
     });
     treePanel.setRootNode(treeRoot);
     
-    // add phones to tree menu
-    Ext.Ajax.request({
-        url: 'index.php',
-        params: {
-            method: 'Phone.getUserPhones', 
-            accountId: Tine.Tinebase.Registry.get('currentAccount').accountId
-        },
-        text: translation._('Loading phones ...'),
-        success: function(_result, _request) {
-        	var data = Ext.util.JSON.decode(_result.responseText);
-            for(var i=0; i<data.results.length; i++) {
-            	var label = (data.results[i]['description'] == '') 
-            	   ? data.results[i]['macaddress'] 
-            	   : Ext.util.Format.ellipsis(data.results[i]['description'], 30);
-                var node = new Ext.tree.TreeNode({
-                    id: data.results[i]['id'],
-                    text: label,
-                    qtip: data.results[i]['description'],
-                    leaf: true
-                });
-                treeRoot.appendChild(node);            	
-            }
-        },
-        failure: function ( result, request) { 
-            Ext.MessageBox.alert(translation._('Failed'), translation._('Some error occured while trying to get Phones.')); 
-        } 
-    });             
-    
+    Tine.Phone.loadPhones(treeRoot);
+        
     treePanel.on('click', function(node){
+    	// reload root node
+    	if (node && node.id == 'root') {
+    		Tine.Phone.loadPhones(node);
+    	}
+    	
         Tine.Phone.Main.show(node);
     }, this);
         
@@ -105,6 +84,49 @@ Tine.Phone.getPanel = function(){
     
     return treePanel;
 };
+
+/**
+ * load phones
+ */
+Tine.Phone.loadPhones = function(treeRoot){
+	
+    var translation = new Locale.Gettext();
+    translation.textdomain('Phone');
+
+	// remove all children first
+    treeRoot.eachChild(function(child){
+    	treeRoot.removeChild(child);
+    });
+	
+    // add phones to tree menu
+    Ext.Ajax.request({
+        url: 'index.php',
+        params: {
+            method: 'Phone.getUserPhones', 
+            accountId: Tine.Tinebase.Registry.get('currentAccount').accountId
+        },
+        text: translation._('Loading phones ...'),
+        success: function(_result, _request) {
+            var data = Ext.util.JSON.decode(_result.responseText);
+            for(var i=0; i<data.results.length; i++) {
+                var label = (data.results[i]['description'] == '') 
+                   ? data.results[i]['macaddress'] 
+                   : Ext.util.Format.ellipsis(data.results[i]['description'], 30);
+                var node = new Ext.tree.TreeNode({
+                    id: data.results[i]['id'],
+                    text: label,
+                    qtip: data.results[i]['description'],
+                    leaf: true
+                });
+                treeRoot.appendChild(node);             
+            }
+            treeRoot.expand();
+        },
+        failure: function ( result, request) { 
+            Ext.MessageBox.alert(translation._('Failed'), translation._('Some error occured while trying to get Phones.')); 
+        } 
+    });             	
+}
 
 /**************************** main ****************************************/
 
