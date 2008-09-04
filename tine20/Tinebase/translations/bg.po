@@ -761,17 +761,17 @@ msgstr ""
 msgid "Please consider updateing!"
 msgstr ""
 
-msgid "Save"
-msgstr "Запамети"
+#~ msgid "Save"
+#~ msgstr "Запамети"
 
-msgid "Close"
-msgstr "Затвори"
+#~ msgid "Close"
+#~ msgstr "Затвори"
 
-msgid "My"
-msgstr "Моите"
+#~ msgid "My"
+#~ msgstr "Моите"
 
-msgid "Language: "
-msgstr "Език:"
+#~ msgid "Language: "
+#~ msgstr "Език:"
 
 #~ msgid "All"
 #~ msgstr "Всички"

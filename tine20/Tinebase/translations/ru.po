@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-25 17:24+0100\n"
+"PO-Revision-Date: 2008-08-26 15:30+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -451,7 +451,7 @@ msgstr "Читать"
 
 #: js/widgets/container/ContainerGrants.js:92
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "Обработать"
 
 #: js/widgets/container/ContainerGrants.js:97
 #: js/widgets/container/ContainerTree.js:323
@@ -661,7 +661,7 @@ msgstr[2] "Отделите тэгоф"
 
 #: js/widgets/tags/TagsPanel.js:160
 msgid "Edit tag"
-msgstr "Редактировать тэг"
+msgstr "Обработать тэг"
 
 #: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
@@ -673,7 +673,7 @@ msgstr "Пожалуйста введите новое имя"
 
 #: js/widgets/tags/TagsPanel.js:179
 msgid "Edit Description"
-msgstr "Редактировать описание"
+msgstr "Обработать описание"
 
 #: js/widgets/tags/TagsPanel.js:184
 msgid "Description for tag"
@@ -773,33 +773,32 @@ msgstr ""
 msgid "Please consider updateing!"
 msgstr ""
 
-#~ msgid "Save"
-#~ msgstr "Сохранить"
+msgid "Save"
+msgstr "Сохранить"
 
-#~ msgid "Close"
-#~ msgstr "Закрыть"
+msgid "Close"
+msgstr "Закрыть"
 
-#~ msgid "My"
-#~ msgstr "Мое"
+msgid "My"
+msgstr "Мое"
 
-#~ msgid "container"
-#~ msgstr "контейнер"
+msgid "container"
+msgstr "контейнер"
 
-#~ msgid "The selected tag will be deleted and disapear for all entries"
-#~ msgid_plural ""
-#~ "The selected tags will be removed and disapear for all entries"
-#~ msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
-#~ msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
-#~ msgstr[2] "Выбранные тэгов будут удалени и стерти из всех Записей"
+msgid "The selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
+msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
+msgstr[2] "Выбранные тэгов будут удалени и стерти из всех Записей"
 
-#~ msgid "Language: "
-#~ msgstr "Язык:"
+msgid "Language: "
+msgstr "Язык:"
 
-#~ msgid "All"
-#~ msgstr "Все"
+msgid "All"
+msgstr "Все"
 
-#~ msgid "Shared"
-#~ msgstr "Разделение"
+msgid "Shared"
+msgstr "Разделение"
 
-#~ msgid "Other Users"
-#~ msgstr "Другие пользователи"
+msgid "Other Users"
+msgstr "Другие пользователи"

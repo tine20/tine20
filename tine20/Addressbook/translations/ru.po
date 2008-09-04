@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-08-05 17:42+0100\n"
-"PO-Revision-Date: 2008-08-25 16:26+0100\n"
+"PO-Revision-Date: 2008-08-26 12:49+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr "Внутренние контакты"
 
 #: js/Addressbook.js:28
 msgid "Addressbook"
-msgstr "Книга адресов"
+msgstr "Записная книжка"
 
 #: js/Addressbook.js:29 js/EditDialog.js:34
 msgid "contacts"
@@ -69,7 +69,7 @@ msgstr "Добавить контакт"
 
 #: js/Addressbook.js:238
 msgid "edit contact"
-msgstr "Редактировать контакт"
+msgstr "Обработать контакт"
 
 #: js/Addressbook.js:251
 msgid "delete contact"
@@ -255,7 +255,7 @@ msgstr "Зона времени"
 
 #: js/Addressbook.js:397
 msgid "Geo"
-msgstr "Место нахождения"
+msgstr "Координаты"
 
 #: js/Addressbook.js:398 js/EditDialog.js:95 Pdf.php:112
 msgid "Birthday"
@@ -303,7 +303,7 @@ msgstr "Пожалуйста, исправьте указанные ошибки
 
 #: js/EditDialog.js:31
 msgid "Saved in"
-msgstr "сохраненный в"
+msgstr "сохранен в"
 
 #: js/EditDialog.js:84
 msgid "Middle Name"
@@ -433,14 +433,14 @@ msgstr ""
 msgid "Other Data"
 msgstr "Другая дата"
 
-#~ msgid "Filter: "
-#~ msgstr "Фильтр:"
+msgid "Filter: "
+msgstr "Фильтр:"
 
-#~ msgid "Search: "
-#~ msgstr "Поиск:"
+msgid "Search: "
+msgstr "Поиск:"
 
-#~ msgid "Name"
-#~ msgstr "Имя"
+msgid "Name"
+msgstr "Имя"
 
-#~ msgid "History"
-#~ msgstr "История"
+msgid "History"
+msgstr "История"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-08-05 17:48+0100\n"
-"PO-Revision-Date: 2008-08-22 18:29+0100\n"
+"PO-Revision-Date: 2008-08-26 16:25+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,43 +15,43 @@ msgstr ""
 
 #: Acl/Rights.php:164
 msgid "manage access log"
-msgstr "Управляйте протокол доступа "
+msgstr "Управлять протоколом доступа "
 
 #: Acl/Rights.php:165
 msgid "delete access log entries"
-msgstr "Редактировать протокол доступа "
+msgstr "Обработать протокол доступа "
 
 #: Acl/Rights.php:168
 msgid "manage accounts"
-msgstr "Управляйте пользовательские счета"
+msgstr "Управлять пользовательскими счетами"
 
 #: Acl/Rights.php:169
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr "Добавить пользователи и группы, пароли по-новому ставят, пользователи к группам присоединить."
+msgstr "Добавить и обработать пользователей и группы, присоединить пользователей к группам, ставить пароли по-новому. "
 
 #: Acl/Rights.php:172
 msgid "manage applications"
-msgstr "Управляйте приложения"
+msgstr "Управлять приложениями"
 
 #: Acl/Rights.php:173
 msgid "enable and disable applications, edit application settings"
-msgstr "Редактировать, активировать и деактивировать приложения."
+msgstr "Обработать, активировать и деактивировать приложения."
 
 #: Acl/Rights.php:176
 msgid "manage roles"
-msgstr "Управляйте роли"
+msgstr "Управлять ролями"
 
 #: Acl/Rights.php:177
 msgid "add and edit roles, add new members to roles, add application rights to roles"
-msgstr "Добавьте и редактируйте роли, добавьте новых участников к ролям, добавьте прикладные права на роли"
+msgstr "Добавить и обработать роли, добавить новых участников к ролям, добавить прикладные права на роли"
 
 #: Acl/Rights.php:180
 msgid "manage shared tags"
-msgstr "Управляйте разделенными тэгами"
+msgstr "Управлять разделенными тэгами"
 
 #: Acl/Rights.php:181
 msgid "add, delete and edit shared tags"
-msgstr "Добавьте, удалите и редактируйте разделенные тэги"
+msgstr "Добавить, удалить и обработать разделенные тэги"
 
 #: Acl/Rights.php:184
 msgid "view access log"

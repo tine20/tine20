@@ -174,5 +174,5 @@ msgstr "Число истечения срока"
 msgid "Folder"
 msgstr "Папка"
 
-#~ msgid "Delete tasks"
-#~ msgstr "Удолить задания"
+msgid "Delete tasks"
+msgstr "Удолить задания"

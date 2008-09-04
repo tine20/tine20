@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-08-05 17:50+0100\n"
-"PO-Revision-Date: 2008-08-22 12:19+0100\n"
+"PO-Revision-Date: 2008-08-26 15:32+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr "Добавьте контекст"
 
 #: js/Asterisk/Context.js:89
 msgid "edit context"
-msgstr "Редактировать контекст"
+msgstr "Обработать контекст"
 
 #: js/Asterisk/Context.js:97
 msgid "delete context"
@@ -528,7 +528,7 @@ msgstr "Добавьте речевую почту"
 
 #: js/Asterisk/Voicemail.js:89
 msgid "edit voicemail"
-msgstr "Редактировать речевую почту"
+msgstr "Обработать речевую почту"
 
 #: js/Asterisk/Voicemail.js:97
 msgid "delete voicemail"
@@ -716,7 +716,7 @@ msgstr "Выключено"
 
 #: js/MyPhones.js:48
 msgid "edit myphone"
-msgstr "Редактировать телефон "
+msgstr "Обработать телефон "
 
 #: js/MyPhones.js:138
 msgid "Displaying myphones {0} - {1} of {2}"
@@ -1027,7 +1027,7 @@ msgstr "Добавить местоположение"
 
 #: js/Snom/Location.js:89
 msgid "edit location"
-msgstr "Редактировать местонахождения"
+msgstr "Обработать местонахождения"
 
 #: js/Snom/Location.js:97
 msgid "delete location"
@@ -1160,7 +1160,7 @@ msgstr "Добавить телефон"
 
 #: js/Snom/Phone.js:133
 msgid "edit phone"
-msgstr "Редактировать телефон"
+msgstr "Обработать телефон"
 
 #: js/Snom/Phone.js:141
 msgid "delete phone"
@@ -1240,7 +1240,7 @@ msgstr "Добавить установку"
 
 #: js/Snom/Settings.js:97
 msgid "edit setting"
-msgstr "Редактировать установку"
+msgstr "Обработать установку"
 
 #: js/Snom/Settings.js:105
 msgid "delete setting"
@@ -1264,7 +1264,7 @@ msgstr "Добавить программное обеспечение"
 
 #: js/Snom/Software.js:97
 msgid "edit software"
-msgstr "Редактировать программное обеспечение"
+msgstr "Обработать программное обеспечение"
 
 #: js/Snom/Software.js:105
 msgid "delete software"
