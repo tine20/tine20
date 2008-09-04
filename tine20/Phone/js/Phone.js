@@ -22,6 +22,7 @@ Tine.Phone.getPanel = function(){
     var translation = new Locale.Gettext();
     translation.textdomain('Phone');
 
+    // @todo generalise this for panel & main
     var editPhoneSettingsAction = new Ext.Action({
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
@@ -37,6 +38,8 @@ Tine.Phone.getPanel = function(){
         ]    
     });
     
+    /*********** tree panel *****************/
+
     var treePanel = new Ext.tree.TreePanel({
         title: 'Phone',
         id: 'phone-tree',
@@ -46,12 +49,8 @@ Tine.Phone.getPanel = function(){
         collapsible: true
     });
     
-    treePanel.on('contextmenu', function(node, event){
-    	this.ctxNode = node;
-        contextMenu.showAt(event.getXY());
-    }, this);
-        
-    // set the root node
+    /*********** root node *****************/
+    
     var treeRoot = new Ext.tree.TreeNode({
         text: translation._('Phones'),
         cls: 'treemain',
@@ -64,13 +63,20 @@ Tine.Phone.getPanel = function(){
     
     Tine.Phone.loadPhones(treeRoot);
         
+    /******** tree panel handlers ***********/
+    
     treePanel.on('click', function(node){
     	// reload root node
     	if (node && node.id == 'root') {
     		Tine.Phone.loadPhones(node);
-    	}
-    	
+    		Tine.Phone.Main.actions.editPhoneSettings.setDisabled(true);
+    	}    	
         Tine.Phone.Main.show(node);
+    }, this);
+        
+    treePanel.on('contextmenu', function(node, event){
+        this.ctxNode = node;
+        contextMenu.showAt(event.getXY());
     }, this);
         
     treePanel.on('beforeexpand', function(panel) {
@@ -80,6 +86,19 @@ Tine.Phone.getPanel = function(){
             panel.selectPath('/root/all');
         }
         panel.fireEvent('click', panel.getSelectionModel().getSelectedNode());
+    }, this);
+
+    treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
+
+    	var node = _selectionModel.getSelectedNode();
+
+        // update toolbar
+        var settingsButton = Ext.getCmp('phone-settings-button');
+        if(node && node.id != 'root') {
+        	settingsButton.setDisabled(false);
+        } else {
+            settingsButton.setDisabled(true);
+        }
     }, this);
     
     return treePanel;
@@ -130,10 +149,13 @@ Tine.Phone.loadPhones = function(treeRoot){
 
 /**************************** main ****************************************/
 
+// @todo add translations
+
 Tine.Phone.Main = {
 	actions: 
 	{
-	   	dialNumber: null
+	   	dialNumber: null,
+	   	editPhoneSettings: null
 	},
 	
 	initComponent: function()
@@ -146,6 +168,21 @@ Tine.Phone.Main = {
             scope: this
         });
     	
+        // @todo generalise this for panel & main
+        this.actions.editPhoneSettings = new Ext.Action({
+            id: 'phone-settings-button',
+            //text: translation._('Edit phone settings'),
+        	text: 'Edit phone settings',
+            iconCls: 'PhoneIconCls',
+            handler: function() {
+            	// get selected node id
+            	var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
+            	
+                Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=' + node.id, 700, 300);
+            },
+            scope: this,
+            disabled: true
+        });
     },
     
     handlers: 
@@ -194,6 +231,7 @@ Tine.Phone.Main = {
             height: 26,
             items: [
                 this.actions.dialNumber, 
+                this.actions.editPhoneSettings,
 /*                '-',
                 this.actions.exportContact,
                 new Ext.Toolbar.MenuButton(this.actions.callContact),*/
