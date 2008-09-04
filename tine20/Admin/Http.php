@@ -25,37 +25,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     protected $_appname = 'Admin';
     
     /**
-     * display edit group dialog
-     *
-     * @param   integer     group id
-     * 
-     */
-    public function editGroup($groupId)
-    {
-        if (empty($groupId)) {
-            $encodedGroup = Zend_Json::encode(array());
-            $encodedGroupMembers = Zend_Json::encode(array());
-        } else {
-            $group = Admin_Controller::getInstance()->getGroup($groupId);        	
-            $encodedGroup = Zend_Json::encode($group->toArray());
-            $json = new Admin_Json();
-            $encodedGroupMembers = Zend_Json::encode($json->getGroupMembers($groupId));
-        }
-
-        $currentAccount = Zend_Registry::get('currentAccount');
-        
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        $view->title="edit group";
-        //@todo move Groups.js to Admin.js later
-        $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ', ' . $encodedGroupMembers . ');';
-        
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-    }
-
-    /**
      * display edit tag dialog
      *
      * @param   integer     tag id
