@@ -19,19 +19,20 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.group');
  * Group select ComboBox widget
  */
 Tine.widgets.group.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
-
-	gotJson: false,
-	//group: null,
-	group: { id: 2, name: 'Users' },
- 
-    mode: 'local',
+    
+    
+	group: null,
+    
+    valueField: 'id',
+    displayField: 'name',
     triggerAction: 'all',
     allowBlank: false,
     editable: false,
 
     // private
     initComponent: function(){
-    	
+    	this.group = new Tine.Tinebase.Model.Group({}, 0);
+        
     	this.store =  new Ext.data.JsonStore({
             baseParams: {
                 method: 'Admin.getGroups',
@@ -44,51 +45,29 @@ Tine.widgets.group.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Ext.data.Record.create([{name: 'id'}, {name: 'name'}])       
+            fields: Tine.Tinebase.Model.Group     
         });
                         
         Tine.widgets.group.selectionComboBox.superclass.initComponent.call(this, arguments);
-        
-        this.onTriggerClick = function(e) {
-        	
-        	//console.log ( this.store );
-
-            // get data via json request
-        	if ( !this.gotJson ) {
-    
-                this.store.load();
-    
-                this.gotJson = true;
-        	}
-            
-        	Tine.widgets.group.selectionComboBox.superclass.onTriggerClick.call(this, arguments);        	
-        	
-        };
     },
 
     // private
-    getValue: function(){
+    getValue: function() {
     	return this.group.id;
     },
 
-    // private
-    setValue: function(_group)
-    {
-    	//console.log ( _group );
-        
-    	if ( !this.gotJson ) {
-    	    this.setRawValue(_group.name);
-
-            this.group = _group;
-  	    } else {
-            //console.log ( this.store.getById(_group) );
-            
-            var groupRecord = this.store.getById(_group).data;    
-            this.setRawValue(groupRecord.name);
-            
-            this.group = groupRecord;
+    /**
+     * 
+     */
+    setValue: function(group) {
+        if (isNaN(group) && ! group.data) {
+            group = new Tine.Tinebase.Model.Group(group, group.id);
+        } else {
+            group = this.store.getById(group);
         }
-    	
+        this.group = group;
+        this.value = group.id;
+        this.setRawValue(group.get('name'));
     }
     
 });
