@@ -37,7 +37,7 @@ Tine.Tinebase.Model.Group = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'}
-    // @todo add accounts array to group model?
+    //{name: 'groupMembers'}
 ]);
 
 /**
