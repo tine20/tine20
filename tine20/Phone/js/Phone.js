@@ -28,10 +28,6 @@ Tine.Phone.getPanel = function(){
         baseParams: {
             jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
             method: 'Phone.getUserPhones',
-            /* method: 'Voipmanager.getMyPhones',
-            sort:'', 
-            dir:'ASC',
-            query: '', */
             accountId: Tine.Tinebase.Registry.get('currentAccount').accountId             
         }
     });
@@ -39,17 +35,36 @@ Tine.Phone.getPanel = function(){
         _loader.baseParams.node = _node.id;
     }, this);
     
+    var editPhoneSettingsAction = new Ext.Action({
+        text: translation._('Edit phone settings'),
+        iconCls: 'PhoneIconCls',
+        handler: function() {
+        	Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=' + this.ctxNode.id, 700, 250);
+        },
+        scope: this
+    });
+    
+    var contextMenu = new Ext.menu.Menu({
+        items: [
+            editPhoneSettingsAction
+        ]    
+    });
+    
     var treePanel = new Ext.tree.TreePanel({
         title: 'Phone',
         id: 'phone-tree',
         iconCls: 'PhoneIconCls',
         loader: treeLoader,
-        //rootVisible: false,
         rootVisible: true,
         border: false,
         collapsible: true
     });
     
+    treePanel.on('contextmenu', function(node, event){
+    	this.ctxNode = node;
+        contextMenu.showAt(event.getXY());
+    }, this);
+        
     // set the root node
     var treeRoot = new Ext.tree.AsyncTreeNode({
         text: translation._('Phones'),
