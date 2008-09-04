@@ -25,7 +25,7 @@ $tine20path = dirname(__FILE__);
 /**
  * path to yui compressor
  */
-$yuiCompressorPath = dirname(__FILE__) . '/../../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
+$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
 
 $jslintPath = dirname(__FILE__) . '/../../jslint4java-1.1/jslint4java-1.1+rhino.jar';
 
@@ -41,6 +41,7 @@ try {
         'js|j'            => 'Build Java Script',
         'lint'            => 'JSLint',
         'css|s'           => 'Build CSS Files',
+        'manifest|m'      => 'Build offline manifest',
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
         'help'            => 'Display this help Message',
@@ -129,6 +130,96 @@ if ($opts->a || $opts->j) {
         $verbose = ' --verbose ';
     }
     system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
+}
+
+/*
+ * code to build the html5 manifest
+ *  
+if ($opts->m) {
+    $defaultFiles = "CACHE MANIFEST                                          
+# Build by $build                                                   
+CACHE:                                                  
+Tinebase/css/tine-all.css                               
+Tinebase/js/tine-all.js                                 
+
+ExtJS/ext-all.js
+ExtJS/adapter/ext/ext-base.js       
+ExtJS/resources/css/ext-all.css
+ExtJS/resources/css/xtheme-gray.css 
+    ";
+    
+    $manifest = fopen($tine20path . '/tine20.manifest', 'w+');
+    fwrite($manifest, $defaultFiles . "\n");
+    
+    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
+    preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
+    $oxygenImages = array_unique($matches[1]);
+    foreach($oxygenImages as $oxygenImage) {
+        fwrite($manifest, $oxygenImage . "\n");
+    }
+    
+    exec("cd $tine20path; find ExtJS/resources/images/ -type f", $extImages);
+    foreach($extImages as $extImage) {
+        fwrite($manifest, $extImage . "\n");
+    }
+    fclose($manifest);
+}*/
+
+if ($opts->a || $opts->m) {
+    $files = array(
+        'Tinebase/css/tine-all.css',                               
+        'Tinebase/js/tine-all.js',                                 
+        'ExtJS/ext-all.js',
+        'ExtJS/adapter/ext/ext-base.js',   
+        'ExtJS/resources/css/ext-all.css',
+        'ExtJS/resources/css/xtheme-gray.css' 
+    );
+    
+    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
+    preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
+    $files = array_merge($files, $matches[1]);
+        
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/labelIcon: [\'|"](.*png)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/labelIcon: [\'|"](.*gif)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/src=[\'|"](.*png)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    exec("cd $tine20path; find ExtJS/resources/images/ -type f", $extImages);
+    $files = array_merge($files, $extImages);
+    
+    $manifest = array(
+        'betaManifestVersion'   => 1,
+        'version'               => $build,
+        'entries'               => array()
+    );
+
+    $files = array_unique($files);
+    foreach($files as $file) {
+        $manifest['entries'][] = array(
+            'url'           => '../../' . $file,
+            'ignoreQuery'   => true
+        );
+    }
+    
+    $jsonManifest = json_encode($manifest);
+    # enable to make manifest file more readable
+    #$jsonManifest = str_replace('\/', '/', $jsonManifest);
+    #$jsonManifest = str_replace('},{', "},\n{", $jsonManifest);
+    
+    $fd = fopen($tine20path . '/Tinebase/js/tine20-manifest.js', 'w+');
+    fwrite($fd, $jsonManifest);
+    fclose($fd);
 }
 
 if ($opts->lint) {
