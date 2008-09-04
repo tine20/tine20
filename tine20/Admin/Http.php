@@ -56,47 +56,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     }
 
     /**
-     * display edit application dialog
-     *
-     * @param   integer $appId    application id
-     * @deprecated isn't used anymore, replaced by role management
-     */
-    public function editApplicationPermissions($appId)
-    {
-        /*
-        $application = Admin_Controller::getInstance()->getApplication($appId);           
-        $encodedApplication = Zend_Json::encode($application->toArray());
-        
-        // add accounts
-        $json = new Admin_Json();
-        $encodedPermissions = Zend_Json::encode($json->getApplicationPermissions($appId));
-        
-        // add all rights for this application
-        $encodedRights = Zend_Json::encode(Tinebase_Application::getInstance()->getAllRights($appId));
-
-        $currentAccount = Zend_Registry::get('currentAccount');
-        
-        $view = new Zend_View();
-         
-        $view->setScriptPath('Tinebase/views');
-        
-        $view->jsExecute = 'Tine.Admin.Applications.EditPermissionsDialog.display(' . 
-            $encodedApplication . ', ' . $encodedPermissions . ', ' . $encodedRights . ');';
-
-        $view->title="edit application permissions";
-
-        $view->isPopup = true;
-        
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
-        $view->jsIncludeFiles  = $includeFiles['js'];
-        $view->cssIncludeFiles = $includeFiles['css'];
-        
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-        */
-    }
-    
-    /**
      * display edit tag dialog
      *
      * @param   integer     tag id
