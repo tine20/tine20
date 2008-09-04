@@ -442,7 +442,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             _accountData.accountPassword = null;
         }
 
-        this.accountRecord = new Tine.Admin.Users.Account(_accountData);
+        this.accountRecord = new Tine.Admin.Users.Account(_accountData, _accountData.id);
     },
     
     handlerDelete: function(_button, _event) {
