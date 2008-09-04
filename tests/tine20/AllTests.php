@@ -35,6 +35,7 @@ class AllTests
         $suite->addTest(Crm_AllTests::suite());
         $suite->addTest(Tasks_AllTests::suite());
         $suite->addTest(Voipmanager_AllTests::suite());
+        $suite->addTest(Phone_AllTests::suite());
         
         //$suite->addTest(Setup_AllTests::suite());
         return $suite;
