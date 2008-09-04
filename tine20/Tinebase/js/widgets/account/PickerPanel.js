@@ -230,7 +230,6 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
             loadMask: true,
             autoExpandColumn: 'name',
             tbar: this.Toolbar,
-            bbar: this.Toolbar2,
             border: false
         });
         

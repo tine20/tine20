@@ -26,6 +26,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
      * @private {Ext.data.JsonStore}
      */
     grantsStore: null,
+    
     /**
      * @private
      */
