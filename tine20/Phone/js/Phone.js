@@ -26,7 +26,7 @@ Tine.Phone.getPanel = function(){
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
         handler: function() {
-        	Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=' + this.ctxNode.id, 700, 250);
+        	Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
         },
         scope: this
     });
@@ -72,25 +72,18 @@ Tine.Phone.getPanel = function(){
         text: translation._('Loading phones ...'),
         success: function(_result, _request) {
         	var data = Ext.util.JSON.decode(_result.responseText);
-            //console.log(data);
             for(var i=0; i<data.results.length; i++) {
+            	var label = (data.results[i]['description'] == '') 
+            	   ? data.results[i]['macaddress'] 
+            	   : Ext.util.Format.ellipsis(data.results[i]['description'], 30);
                 var node = new Ext.tree.TreeNode({
                     id: data.results[i]['id'],
-                    text: data.results[i]['macaddress'],
+                    text: label,
                     qtip: data.results[i]['description'],
                     leaf: true
                 });
                 treeRoot.appendChild(node);            	
             }
-            data.each(function(item){ 
-                var node = new Ext.tree.TreeNode({
-                    id: item.id,
-                    text: item.macaddress,
-                    qtip: item.description,
-                    leaf: true
-                });
-                treeRoot.appendChild(node);
-            });        	
         },
         failure: function ( result, request) { 
             Ext.MessageBox.alert(translation._('Failed'), translation._('Some error occured while trying to get Phones.')); 
