@@ -196,6 +196,14 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         var app, appPanel;
         for(var i=0; i<userApps.length; i++) {
             app = userApps[i];
+            
+            /**
+             * we don't have a Tinebase 'Application'
+             */
+            if (app.name == 'Tinebase') {
+                continue;
+            }
+            
             if(app.status != 'enabled') {
                 continue;
             }
@@ -207,8 +215,8 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                     this.defaultAppPanel = appPanel;
                 }
             } catch(e) {
-                console.error('Initialising of Application "' + app.name + '" failed with the following error:');
-                console.error(e);
+                console.error('Initialising of Application "' + app.name + '" failed with the following message:' + e);
+                console.warn(e);
             }
         }
         
