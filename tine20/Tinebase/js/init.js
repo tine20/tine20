@@ -93,7 +93,7 @@ Ext.onReady(function(){
         } else {
             c.viewport = new Ext.Viewport({
                 title: c.title,
-                layout: c.layout ? c.layout : 'fit',
+                layout: c.layout ? c.layout : 'border',
                 items: items
             });
         }
