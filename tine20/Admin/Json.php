@@ -26,146 +26,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      */
     protected $_appname = 'Admin';
     
-    /**
-     * get list of accounts
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return array with results array & totalcount (int)
-     */
-    public function getUsers($filter, $sort, $dir, $start, $limit)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $accounts = Admin_Controller::getInstance()->getFullUsers($filter, $sort, $dir, $start, $limit);
-
-        /*foreach($accounts as $key => $account) {
-            if ($account['last_login'] !== NULL) {
-                 $accounts[$key]['last_login'] = $account['last_login']->get(Zend_Date::ISO_8601);
-            }
-            if ($account['last_password_change'] !== NULL) {
-                 $accounts[$key]['last_password_change'] = $account['last_password_change']->get(Zend_Date::ISO_8601);
-            }
-            if ($account['expires_at'] !== NULL) {
-                 $accounts[$key]['expires_at'] = $account['expires_at']->get(Zend_Date::ISO_8601);
-            }
-        }*/
-        
-        $result['results'] = $accounts->toArray();
-        $result['totalcount'] = count($accounts);
-        
-        return $result;
-    }
-
-    /**
-     * save account
-     *
-     * @param string $accountData JSON encoded Tinebase_Model_FullUser
-     * @param string $password the new password
-     * @param string $passwordRepeat the new password repeated
-     * @return array with 
-     */
-    public function saveAccount($accountData, $password, $passwordRepeat)
-    {
-        $decodedAccountData = Zend_Json::decode($accountData);
-        
-        $account = new Tinebase_Model_FullUser();
-        
-        try {
-            $account->setFromArray($decodedAccountData);
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $account->getValidationErrors(),
-                            'errorMessage'      => 'invalid data for some fields');
-
-            return $result;
-        }
-        
-        if ($account->getId() == NULL) {
-            $account = Admin_Controller::getInstance()->addUser($account, $password, $passwordRepeat);
-        } else {
-            $account = Admin_Controller::getInstance()->updateUser($account, $password, $passwordRepeat);
-        }
-        
-        $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
-        $result = $account->toArray();
-        
-        
-        return $result;
-        
-    }
-    
-    /**
-     * delete users
-     *
-     * @param   string $accountIds  json encoded array of account ids
-     * @return  array with success flag
-     */
-    public function deleteUsers($accountIds)
-    {
-        $result = array(
-            'success' => TRUE
-        );
-
-        $accountIds = Zend_Json::decode($accountIds);
-
-        Admin_Controller::getInstance()->deleteUsers($accountIds);
-        
-        return $result;
-    }
-
-    /**
-     * set account state
-     *
-     * @param   string $accountIds  json encoded array of account ids
-     * @param   string $state      state to set
-     * @return  array with success flag
-     */
-    public function setAccountState($accountIds, $state)
-    {
-        $accountIds = Zend_Json::decode($accountIds);
-        
-        $controller = Admin_Controller::getInstance();
-        
-        foreach ($accountIds as $accountId) {
-            $controller->setAccountStatus($accountId, $state);
-        }
-        
-        $result = array(
-            'success' => TRUE
-        );
-        
-        return $result;
-    }
-    
-    /**
-     * reset password for given account
-     *
-     * @param string $account JSON encoded Tinebase_Model_FullUser
-     * @param string $password the new password
-     * @return array
-     */
-    public function resetPassword($account, $password)
-    {
-        $account = new Tinebase_Model_FullUser(Zend_Json::decode($account));
-        
-        $controller = Admin_Controller::getInstance();
-
-        $controller->setAccountPassword($account, $password, $password);
-        
-        $result = array(
-            'success' => TRUE
-        );
-        
-        return $result;
-    }
+    /******************************* Access Log *******************************/
     
     /**
      * delete access log entries
@@ -191,6 +52,64 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
+    
+    
+    /**
+     * get list of access log entries
+     *
+     * @param string $from (date format example: 2008-03-31T00:00:00)
+     * @param string $to (date format example: 2008-03-31T00:00:00)
+     * @param string $filter
+     * @param string $sort
+     * @param string $dir
+     * @param int $start
+     * @param int $limit
+     * 
+     * @return array with results array & totalcount (int)
+     */
+    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $start, $limit)
+    {
+        /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
+            throw new Exception('invalid date specified for $from');
+        }
+        if (!Zend_Date::isDate($to, 'YYYY-MM-dd hh:mm:ss')) {
+            throw new Exception('invalid date specified for $to');
+        }*/
+        
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        // debug params
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' function params: '. $from . ', ' . $to . ', ... ');
+        
+        $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
+        $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
+        
+        $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
+        
+        $result['results']    = $accessLogSet->toArray();
+        if ($start == 0 && count($result['results']) < $limit) {
+            $result['totalcount'] = count($result['results']);
+        } else {
+            $result['totalcount'] = Admin_Controller::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
+        }
+        
+        foreach ($result['results'] as $key => $value) {
+            try {
+                $result['results'][$key]['accountObject'] = Admin_Controller::getInstance()->getAccount($value['account_id'])->toArray();
+            } catch (Exception $e) {
+                // account not found
+                // do nothing so far
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' account ' . $value['account_id'] .' not found');
+            }
+        }
+        
+        return $result;
+    }
+    
+    /****************************** Applications ******************************/
     
     /**
      * get application
@@ -308,60 +227,181 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         */
     }    
     
+    
+    /********************************** Users *********************************/
+    
     /**
-     * get list of access log entries
+     * get list of accounts
      *
-     * @param string $from (date format example: 2008-03-31T00:00:00)
-     * @param string $to (date format example: 2008-03-31T00:00:00)
-     * @param string $filter
-     * @param string $sort
-     * @param string $dir
-     * @param int $start
-     * @param int $limit
-     * 
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
      * @return array with results array & totalcount (int)
      */
-    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $start, $limit)
+    public function getUsers($filter, $sort, $dir, $start, $limit)
     {
-        /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
-            throw new Exception('invalid date specified for $from');
-        }
-        if (!Zend_Date::isDate($to, 'YYYY-MM-dd hh:mm:ss')) {
-            throw new Exception('invalid date specified for $to');
-        }*/
-        
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        // debug params
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' function params: '. $from . ', ' . $to . ', ... ');
-        
-        $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
-        $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
-        
-        $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
-        
-        $result['results']    = $accessLogSet->toArray();
-        if ($start == 0 && count($result['results']) < $limit) {
-            $result['totalcount'] = count($result['results']);
-        } else {
-            $result['totalcount'] = Admin_Controller::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
-        }
-        
-        foreach ($result['results'] as $key => $value) {
-            try {
-                $result['results'][$key]['accountObject'] = Admin_Controller::getInstance()->getAccount($value['account_id'])->toArray();
-            } catch (Exception $e) {
-                // account not found
-                // do nothing so far
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' account ' . $value['account_id'] .' not found');
+        $accounts = Admin_Controller::getInstance()->getFullUsers($filter, $sort, $dir, $start, $limit);
+
+        /*foreach($accounts as $key => $account) {
+            if ($account['last_login'] !== NULL) {
+                 $accounts[$key]['last_login'] = $account['last_login']->get(Zend_Date::ISO_8601);
             }
-        }
+            if ($account['last_password_change'] !== NULL) {
+                 $accounts[$key]['last_password_change'] = $account['last_password_change']->get(Zend_Date::ISO_8601);
+            }
+            if ($account['expires_at'] !== NULL) {
+                 $accounts[$key]['expires_at'] = $account['expires_at']->get(Zend_Date::ISO_8601);
+            }
+        }*/
+        
+        $result['results'] = $accounts->toArray();
+        $result['totalcount'] = count($accounts);
         
         return $result;
     }
+
+    /**
+     * save account
+     *
+     * @param string $accountData JSON encoded Tinebase_Model_FullUser
+     * @param string $password the new password
+     * @param string $passwordRepeat the new password repeated
+     * @return array with 
+     */
+    public function saveAccount($accountData, $password, $passwordRepeat)
+    {
+        $decodedAccountData = Zend_Json::decode($accountData);
+        
+        $account = new Tinebase_Model_FullUser();
+        
+        try {
+            $account->setFromArray($decodedAccountData);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $account->getValidationErrors(),
+                            'errorMessage'      => 'invalid data for some fields');
+
+            return $result;
+        }
+        
+        if ($account->getId() == NULL) {
+            $account = Admin_Controller::getInstance()->addUser($account, $password, $passwordRepeat);
+        } else {
+            $account = Admin_Controller::getInstance()->updateUser($account, $password, $passwordRepeat);
+        }
+        
+        $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
+        $result = $account->toArray();
+        
+        
+        return $result;
+        
+    }
+    
+    /**
+     * delete users
+     *
+     * @param   string $accountIds  json encoded array of account ids
+     * @return  array with success flag
+     */
+    public function deleteUsers($accountIds)
+    {
+        $accountIds = Zend_Json::decode($accountIds);
+        Admin_Controller::getInstance()->deleteUsers($accountIds);
+        
+        $result = array(
+            'success' => TRUE
+        );
+        return $result;
+    }
+
+    /**
+     * set account state
+     *
+     * @param   string $accountIds  json encoded array of account ids
+     * @param   string $state      state to set
+     * @return  array with success flag
+     */
+    public function setAccountState($accountIds, $state)
+    {
+        $accountIds = Zend_Json::decode($accountIds);
+        
+        $controller = Admin_Controller::getInstance();
+        foreach ($accountIds as $accountId) {
+            $controller->setAccountStatus($accountId, $state);
+        }
+
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+    }
+    
+    /**
+     * reset password for given account
+     *
+     * @param string $account JSON encoded Tinebase_Model_FullUser
+     * @param string $password the new password
+     * @return array
+     */
+    public function resetPassword($account, $password)
+    {
+        $account = new Tinebase_Model_FullUser(Zend_Json::decode($account));
+        
+        $controller = Admin_Controller::getInstance();
+        $controller->setAccountPassword($account, $password, $password);
+        
+        $result = array(
+            'success' => TRUE
+        );
+        return $result;
+    }
+    
+    
+    /**
+     * adds the name of the account to each item in the name property
+     * 
+     * @param  array  &$_items array of arrays which contain a type and id property
+     * @param  bool   $_hasAccountPrefix
+     * @return array  items with appended name 
+     * 
+     */
+    public static function resolveAccountName(array $_items, $_hasAccountPrefix=false)
+    {
+        $prefix = $_hasAccountPrefix ? 'account_' : '';
+        
+        $return = array();
+        foreach ($_items as $num => $item) {
+            
+            switch ($item[$prefix . 'type']) {
+                case 'user':
+                    $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
+                    break;
+                case 'group':
+                    $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;
+                    break;
+                case 'anyone':
+                    $item[$prefix . 'name'] = 'Anyone';
+                    break;
+                default:
+                    throw new Exception('unsupported accountType');
+                    break;
+            }
+            $return[$num] = $item;
+        }
+        return $return;
+    }
+    
+    /********************************* Groups *********************************/
     
     /**
      * get list of groups
@@ -478,7 +518,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
     }
-
+    
+    /********************************** Tags **********************************/
+    
     /**
      * get list of tags
      *
@@ -558,6 +600,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
     }
+    
+    /********************************* Roles **********************************/
     
     /**
      * get list of roles
@@ -737,40 +781,6 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         return $result;
-    }
-    
-    /**
-     * adds the name of the account to each item in the name property
-     * 
-     * @param  array  &$_items array of arrays which contain a type and id property
-     * @param  bool   $_hasAccountPrefix
-     * @return array  items with appended name 
-     * 
-     */
-    public static function resolveAccountName(array $_items, $_hasAccountPrefix=false)
-    {
-        $prefix = $_hasAccountPrefix ? 'account_' : '';
-        
-        $return = array();
-        foreach ($_items as $num => $item) {
-            
-            switch ($item[$prefix . 'type']) {
-                case 'user':
-                    $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
-                    break;
-                case 'group':
-                    $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;
-                    break;
-                case 'anyone':
-                    $item[$prefix . 'name'] = 'Anyone';
-                    break;
-                default:
-                    throw new Exception('unsupported accountType');
-                    break;
-            }
-            $return[$num] = $item;
-        }
-        return $return;
     }
     
 }
