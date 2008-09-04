@@ -431,6 +431,22 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /********************************* Groups *********************************/
     
     /**
+     * gets a single group
+     *
+     * @param int $groupId
+     */
+    public function getGroup($groupId)
+    {
+        $group = array();
+        
+        if ($groupId) {
+            $group = Admin_Controller::getInstance()->getGroup($groupId)->toArray();
+            $group['groupMembers'] = $this->getGroupMembers($groupId);
+        }
+        return $group;
+    }
+    
+    /**
      * get list of groups
      *
      * @param string $_filter
@@ -498,32 +514,15 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             unset($decodedGroupData['id']);
         }
         
-        $group = new Tinebase_Model_Group();
-        
-        try {
-            $group->setFromArray($decodedGroupData);
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $group->getValidationErrors(),
-                            'errorMessage'      => 'invalid data for some fields');
-
-            return $result;
-        }
+        $group = new Tinebase_Model_Group($decodedGroupData);
         
         if ( empty($group->id) ) {
             $group = Admin_Controller::getInstance()->addGroup($group, $decodedGroupMembers);
         } else {
             $group = Admin_Controller::getInstance()->updateGroup($group, $decodedGroupMembers);
         }
-                 
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $group->toArray(),
-                        'groupMembers'      => $this->getGroupMembers($group->getId())
-        );
-        
-        return $result;
+
+        return $this->getGroup($group->getId());
         
     }    
         
