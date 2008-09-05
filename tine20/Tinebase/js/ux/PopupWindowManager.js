@@ -21,9 +21,14 @@ Ext.ux.PopupWindowGroup = function(){
 
     // private
     var cleanupClosedWindows = function() {
+        var doc;
         for(var id in list){
-            // remove closed windows
-            if (! list[id].popup.document) {
+            try {
+                doc = list[id].popup.document
+            } catch(e)  {
+                // same domain policy problem!
+            }
+            if (! doc) {
                 delete list[list[id].name];
                 accessList.remove(list[id]);
             }
