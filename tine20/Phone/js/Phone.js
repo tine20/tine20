@@ -428,7 +428,10 @@ Tine.Phone.Main = {
 
         if(currentToolbar === false || currentToolbar.id != 'Phone_Toolbar') {
             this.displayToolbar();
-            this.displayGrid();
+            // removed the grid for the moment because we can't get the phone calls yet
+            // @todo add grid again
+            //this.displayGrid();
+            Tine.Tinebase.MainScreen.setActiveContentPanel(new Ext.Panel({}));
             this.updateMainToolbar();
         }
         //this.loadData(_node);		
