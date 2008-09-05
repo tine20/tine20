@@ -1,7 +1,15 @@
-
-/*********************************** TINE ADMIN ROLES  ********************************************/
-/*********************************** TINE ADMIN ROLES  ********************************************/
-
+/**
+ * Tine 2.0
+ * 
+ * @package     Admin
+ * @subpackage  Roles
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philip Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+ 
 Ext.namespace('Tine.Admin.Roles');
 
 /*********************************** MAIN DIALOG ********************************************/
@@ -20,7 +28,7 @@ Tine.Admin.Roles.Main = {
          * onclick handler for addBtn
          */
         addRole: function(_button, _event) {
-            Tine.Tinebase.Common.openWindow('roleWindow', "index.php?method=Admin.editRole&roleId=",650, 600);
+            Tine.Admin.Roles.EditDialog.openWindow({role: null});
         },
 
         /**
@@ -28,9 +36,8 @@ Tine.Admin.Roles.Main = {
          */
         editRole: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminRolesGrid').getSelectionModel().getSelections();
-            var roleId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('roleWindow', 'index.php?method=Admin.editRole&roleId=' + roleId,650, 600);
+            Tine.Admin.Roles.EditDialog.openWindow({role: selectedRows[0]});
         },
 
         
@@ -68,8 +75,7 @@ Tine.Admin.Roles.Main = {
         }    
     },
     
-    initComponent: function()
-    {
+    initComponent: function() {
         this.actions.addRole = new Ext.Action({
             text: 'add role',
             disabled: true,
@@ -96,8 +102,7 @@ Tine.Admin.Roles.Main = {
 
     },
     
-    displayRolesToolbar: function()
-    {
+    displayRolesToolbar: function() {
         var RolesQuickSearchField = new Ext.ux.SearchField({
             id: 'RolesQuickSearchField',
             width:240,
@@ -130,8 +135,7 @@ Tine.Admin.Roles.Main = {
         Tine.Tinebase.MainScreen.setActiveToolbar(rolesToolbar);
     },
 
-    displayRolesGrid: function() 
-    {
+    displayRolesGrid: function() {
         if ( Tine.Tinebase.hasRight('manage', 'roles') ) {
             this.actions.addRole.setDisabled(false);
         }    	
@@ -237,11 +241,7 @@ Tine.Admin.Roles.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.hasRight('manage', 'roles') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
-                try {
-                    Tine.Tinebase.Common.openWindow('roleWindow', 'index.php?method=Admin.editRole&roleId=' + record.data.id,650, 600);
-                } catch(e) {
-                    // alert(e);
-                }
+                Tine.Admin.Roles.EditDialog.openWindow({role: record});
         	}
         }, this);
 
@@ -252,8 +252,7 @@ Tine.Admin.Roles.Main = {
     /**
      * update datastore with node values and load datastore
      */
-    loadData: function()
-    {
+    loadData: function() {
         var dataStore = Ext.getCmp('AdminRolesGrid').getStore();
             
         dataStore.load({
@@ -264,8 +263,7 @@ Tine.Admin.Roles.Main = {
         });
     },
 
-    show: function() 
-    {
+    show: function() {
         this.initComponent();
         
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
@@ -277,8 +275,7 @@ Tine.Admin.Roles.Main = {
         this.loadData();
     },
     
-    reload: function() 
-    {
+    reload: function() {
         if(Ext.ComponentMgr.all.containsKey('AdminRolesGrid')) {
             setTimeout ("Ext.getCmp('AdminRolesGrid').getStore().reload()", 200);
         }
@@ -287,7 +284,29 @@ Tine.Admin.Roles.Main = {
 
 /*********************************** EDIT DIALOG ********************************************/
 
-Tine.Admin.Roles.EditDialog = {
+Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
+
+    /**
+     * @cfg {Tine.Tinebase.Model.Role}
+     */
+    role: null,
+    
+    /**
+     * @property {Object} holds allRights (possible rights)
+     */
+    allRights: null,
+    
+    /**
+     * @property {Ext.tree.treePanel}
+     */
+    rightsTreePanel: null,
+    
+    windowNamePrefix: 'rolesEditWindow_',
+    
+    layout: 'fit',
+    id : 'roleDialog',
+    labelWidth: 120,
+    labelAlign: 'top',
 	
     /**
      * returns index of record in the store
@@ -335,8 +354,7 @@ Tine.Admin.Roles.EditDialog = {
      * var handlers
      */
      handlers: {
-        removeAccount: function(_button, _event) 
-        { 
+        removeAccount: function(_button, _event) { 
             var roleGrid = Ext.getCmp('roleMembersGrid');
             var selectedRows = roleGrid.getSelectionModel().getSelections();
             
@@ -347,8 +365,7 @@ Tine.Admin.Roles.EditDialog = {
                 
         },
         
-        addAccount: function(account)
-        {
+        addAccount: function(account) {
         	var roleGrid = Ext.getCmp('roleMembersGrid');
             
             var dataStore = roleGrid.getStore();
@@ -368,132 +385,117 @@ Tine.Admin.Roles.EditDialog = {
             selectionModel.selectRow(dataStore.indexOfId(account.data.id));            
         },
         
-        applyChanges: function(_button, _event, _closeWindow) 
-        {
-            var form = Ext.getCmp('roleDialog').getForm();
+     },
+     
+     handlerApplyChanges: function(_button, _event, _closeWindow) {
+        var form = this.getForm();
+        
+        if(form.isValid()) {
+            // get role members
+            var roleGrid = Ext.getCmp('roleMembersGrid');
+
+            Ext.MessageBox.wait('Please wait', 'Updating Memberships');
             
-            if(form.isValid()) {
+            var roleMembers = [];
+            var membersStore = Ext.StoreMgr.lookup('RoleMembersStore');
+            membersStore.each(function(_record){
+                roleMembers.push(_record.data);
+            });
 
-            	// get role members
-                var roleGrid = Ext.getCmp('roleMembersGrid');
+            // get role rights                
+            var roleRights = [];
+            var rightsStore = Ext.StoreMgr.get('RoleRightsStore');
+            
+            rightsStore.each(function(_record){
+                roleRights.push(_record.data);
+            });
 
-                Ext.MessageBox.wait('Please wait', 'Updating Memberships');
-                
-                //var dataStore = roleGrid.getStore();
-                
-                var roleMembers = [];
-                var membersStore = Ext.StoreMgr.lookup('RoleMembersStore');
-                membersStore.each(function(_record){
-                	roleMembers.push(_record.data);
-                });
+            // update form               
+            form.updateRecord(this.role);
 
-                // get role rights                
-                var roleRights = [];
-                var rightsStore = Ext.StoreMgr.get('RoleRightsStore');
-                
-                rightsStore.each(function(_record){
-                    roleRights.push(_record.data);
-                });
-
-                // update form               
-                form.updateRecord(Tine.Admin.Roles.EditDialog.roleRecord);
-
-                /*********** save role members & form ************/
-                
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Admin.saveRole', 
-                        roleData: Ext.util.JSON.encode(Tine.Admin.Roles.EditDialog.roleRecord.data),
-                        roleMembers: Ext.util.JSON.encode(roleMembers),
-                        roleRights: Ext.util.JSON.encode(roleRights)
-                    },
-                    success: function(_result, _request) {
-                     	if(window.opener.Tine.Admin.Roles) {
-                            window.opener.Tine.Admin.Roles.Main.reload();
-                        }
-                        if(_closeWindow === true) {
-                            window.close();
-                        } else {
-                        	var response = Ext.util.JSON.decode(_result.responseText);
-                            //console.log(response);
-                            this.updateRoleRecord(response.updatedData);
-                            form.loadRecord(this.roleRecord);
-                            
-                        	Ext.MessageBox.hide();
-                        }
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', 'Could not save role.'); 
-                    },
-                    scope: this 
-                });
-                    
-                
-            } else {
-                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-            }
-        },
-
-        saveAndClose: function(_button, _event) 
-        {
-            this.handlers.applyChanges(_button, _event, true);
-        },
-
-        deleteRole: function(_button, _event) 
-        {
-            var roleIds = Ext.util.JSON.encode([Tine.Admin.Roles.EditDialog.roleRecord.data.id]);
-                
+            /*********** save role members & form ************/
+            
             Ext.Ajax.request({
-                url: 'index.php',
                 params: {
-                    method: 'Admin.deleteRoles', 
-                    roleIds: roleIds
+                    method: 'Admin.saveRole', 
+                    roleData: Ext.util.JSON.encode(this.role.data),
+                    roleMembers: Ext.util.JSON.encode(roleMembers),
+                    roleRights: Ext.util.JSON.encode(roleRights)
                 },
-                text: 'Deleting role...',
                 success: function(_result, _request) {
                     if(window.opener.Tine.Admin.Roles) {
                         window.opener.Tine.Admin.Roles.Main.reload();
                     }
-                    window.close();
+                    if(_closeWindow === true) {
+                        window.close();
+                    } else {
+                        var response = Ext.util.JSON.decode(_result.responseText);
+                        this.updateRecord(response);
+                        form.loadRecord(this.role);
+                        
+                        Ext.MessageBox.hide();
+                    }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the role.'); 
-                } 
-            });                           
+                    Ext.MessageBox.alert('Failed', 'Could not save role.'); 
+                },
+                scope: this 
+            });
+                
+            
+        } else {
+            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
         }
-        
-     },
-     
-    /**
-     * var roleRecord
-     */
-    roleRecord: null,
+    },
+    
+    handlerDelete: function(_button, _event) {
+        var roleIds = Ext.util.JSON.encode([this.role.id]);
+            
+        Ext.Ajax.request({
+            url: 'index.php',
+            params: {
+                method: 'Admin.deleteRoles', 
+                roleIds: roleIds
+            },
+            text: 'Deleting role...',
+            success: function(_result, _request) {
+                if(window.opener.Tine.Admin.Roles) {
+                    window.opener.Tine.Admin.Roles.Main.reload();
+                }
+                window.close();
+            },
+            failure: function ( result, request) { 
+                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the role.'); 
+            } 
+        });                           
+    },
+    
     
     /**
      * var rights storage
      */
     rightsDataStore: null,
 
-    /**
-     * function updateRoleRecord
-     */
-    updateRoleRecord: function(_roleData)
-    {
+    updateRecord: function(_roleData) {
     	// if roleData is empty (=array), set to empty object because array won't work!
         if (_roleData.length === 0) {
         	_roleData = {};
         }
-        this.roleRecord = new Tine.Tinebase.Model.Role(_roleData);
+        this.role = new Tine.Tinebase.Model.Role(_roleData);
+        
+        this.membersDataStore.loadData(this.role.get('roleMembers'));
+        this.rightsDataStore.loadData(this.role.get('roleRights'));
+        this.allRights = this.role.get('allRights');
+        this.createRightsTreeNodes();
     },
 
     /**
      * creates the rights tree
      *
      */
-    getRightsTree: function(_allRights) 
-    {
-    
-        var treePanel = new Ext.tree.TreePanel({
+    initRightsTree: function() {
+        
+        this.rightsTreePanel = new Ext.tree.TreePanel({
             id: 'rightsTree',
             iconCls: 'AdminTreePanel',
             rootVisible: false,
@@ -508,8 +510,13 @@ Tine.Admin.Roles.EditDialog = {
             id:'root'
         });
 
-        treePanel.setRootNode(treeRoot);
-                        
+        this.rightsTreePanel.setRootNode(treeRoot);
+    },
+    
+    createRightsTreeNodes: function () {
+        var _allRights = this.allRights;
+        var treeRoot = this.rightsTreePanel.getRootNode();
+        
         // add nodes to tree        
         for(var i=0; i<_allRights.length; i++) {
 
@@ -564,40 +571,14 @@ Tine.Admin.Roles.EditDialog = {
         	
         }     
         
-        return treePanel;
+        return this.rightsTreePanel;
     },
     
     /**
-     * function display
-     * 
-     * @param   _roleData
-     * @param   _roleMembers
+     * returns form
      * 
      */
-    display: function(_roleData, _roleMembers, _roleRights, _allRights) 
-    {
-    	
-    	//console.log ( _roleMembers );
-        //console.log ( _roleRights );
-
-        /******* load role members data store ********/
-
-        this.membersDataStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            //id: 'id',
-            //fields: Tine.Tinebase.Model.Account
-            fields: [ 'account_name', 'account_id', 'account_type' ]
-        });
-
-        Ext.StoreMgr.add('RoleMembersStore', this.membersDataStore);        
-        // this.membersDataStore.setDefaultSort('account_name', 'asc');        
-        
-        if (_roleMembers.length === 0) {
-            this.membersDataStore.removeAll();
-        } else {
-            this.membersDataStore.loadData( _roleMembers );
-        }
+    getFormContents: function() {
         
         /******* account picker + members grid panel ********/
  
@@ -611,30 +592,9 @@ Tine.Admin.Roles.EditDialog = {
             configColumns: []
         });        
 
-        /******* load role rights data store ********/
-
-        this.rightsDataStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            fields: Tine.Admin.Roles.Right
-        });
-
-        Ext.StoreMgr.add('RoleRightsStore', this.rightsDataStore);
-        
-        //this.rightsDataStore.setDefaultSort('right', 'asc');        
-        
-        if (_roleRights.length === 0) {
-            this.rightsDataStore.removeAll();
-        } else {
-            this.rightsDataStore.loadData( _roleRights );
-        }
-        
-        /******* rights tree ********/
-        
-        var rightsTreePanel = this.getRightsTree(_allRights);
- 
         /******* tab panels ********/
-    	
+    	this.initRightsTree();
+        
         var tabPanelMembers = {
             title:'Members',
             //layout:'column',
@@ -656,7 +616,7 @@ Tine.Admin.Roles.EditDialog = {
             anchor:'100% 100%',
             border:false,
             items:[
-                rightsTreePanel
+                this.rightsTreePanel
             ]
         };
     	
@@ -707,35 +667,76 @@ Tine.Admin.Roles.EditDialog = {
             ]
         };
         
-        /******* build panel & viewport & form ********/
-               
-        // Ext.FormPanel
-        var dialog = new Tine.widgets.dialog.EditRecord({
-            id : 'roleDialog',
-            //title: 'Edit Role ' + _roleData.name,
-            layout: 'fit',
-            labelWidth: 120,
-            labelAlign: 'top',
-            handlerScope: this,
-            handlerApplyChanges: this.handlers.applyChanges,
-            handlerSaveAndClose: this.handlers.saveAndClose,
-            handlerDelete: this.handlers.deleteRole,
-            handlerExport: this.handlers.exportRole,
-            items: editRoleDialog
-        });
-
-        var viewport = new Ext.Viewport({
-            layout: 'border',
-            frame: true,
-            items: dialog
-        });
-
-        this.updateRoleRecord(_roleData);
-
-        dialog.getForm().loadRecord(this.roleRecord);
-        
-    } // end display function     
+        return editRoleDialog;
+    },
     
+    initComponent: function() {
+        this.role = this.role ? this.role : new Tine.Tinebase.Model.Role({}, 0);
+        
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
+        //this.title = title: 'Edit Role ' + ,
+        
+        Ext.MessageBox.wait(this.translation._('Loading Role...'), this.translation._('Please Wait'));
+        Ext.Ajax.request({
+            scope: this,
+            success: this.onRecordLoad,
+            params: {
+                method: 'Admin.getRole',
+                roleId: this.role.id
+            }
+        });
+        
+        // init role members store
+        this.membersDataStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            //id: 'id',
+            //fields: Tine.Tinebase.Model.Account
+            fields: [ 'account_name', 'account_id', 'account_type' ]
+        });
+        Ext.StoreMgr.add('RoleMembersStore', this.membersDataStore);        
+        // this.membersDataStore.setDefaultSort('account_name', 'asc');
+        
+        // init rights store
+        this.rightsDataStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: Tine.Admin.Roles.Right
+        });
+        Ext.StoreMgr.add('RoleRightsStore', this.rightsDataStore);
+        //this.rightsDataStore.setDefaultSort('right', 'asc');
+        
+        this.items = this.getFormContents();
+        Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
+    },
+    
+    onRecordLoad: function(response) {
+        this.getForm().findField('name').focus(false, 250);
+        var recordData = Ext.util.JSON.decode(response.responseText);
+        this.updateRecord(recordData);
+        
+        this.getForm().loadRecord(this.role);
+        Ext.MessageBox.hide();
+    }
+    
+});
+
+/**
+ * Roles Edit Popup
+ */
+Tine.Admin.Roles.EditDialog.openWindow = function (config) {
+    config.role = config.role ? config.role : new Tine.Tinebase.Model.Role({}, 0);
+    var window = Tine.WindowFactory.getWindow({
+        width: 650,
+        height: 600,
+        name: Tine.Admin.Roles.EditDialog.prototype.windowNamePrefix + config.role.id,
+        layout: Tine.Admin.Roles.EditDialog.prototype.windowLayout,
+        itemsConstructor: 'Tine.Admin.Roles.EditDialog',
+        itemsConstructorConfig: config
+    });
+    return window;
 };
 
 /**
