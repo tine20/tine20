@@ -33,6 +33,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      */
     actions: {
         changePassword: null,
+        installGoogleGears: null,
         logout: null
     },
     
@@ -47,6 +48,12 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             //disabled: true
         });
         
+        this.actions.installGoogleGears = new Ext.Action({
+            text: _('Install Google Gears'),
+            handler: this.onInstallGoogleGears,
+            disabled: (window.google && google.gears) ? true : false
+        });
+
         this.actions.logout = new Ext.Action({
             text: _('Logout'),
             tooltip:  _('Logout from Tine 2.0'),
@@ -64,7 +71,10 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 menu: {
                     id: 'Tinebase_System_Menu',     
                     items: [
-                        this.actions.changePassword, '-', this.actions.logout
+                        this.actions.changePassword,
+                        this.actions.installGoogleGears,
+                        '-', 
+                        this.actions.logout
                     ]                
                 }
             }, {
@@ -353,6 +363,20 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             })
         });
         passwordDialog.show();  
+    },
+    
+    /**
+     * the install Google Gears handler function
+     * @private
+     */
+    onInstallGoogleGears: function() {
+    	var message = _('Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer.');
+    	Tine.WindowFactory.getWindow({
+	        width: 800,
+	        height: 400,
+	        name: "google_gears",
+	        url: "http://gears.google.com/?action=install&message=" + message
+	    });
     },
     
     /**
