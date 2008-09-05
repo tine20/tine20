@@ -482,7 +482,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             editable: false,
             name: 'color',
             fieldLabel: 'Color',
-            columnWidth: .1
+            columnWidth: .1,
+            store: new Ext.data.Store({})
         });
         
         colorPicker.colorPalette = new Ext.ColorPalette({
@@ -510,6 +511,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 //}
             }
         };
+        
         colorPicker.setValue = function(color) {
             colorPicker.el.setStyle('background', color);
             colorPicker.color = color;
