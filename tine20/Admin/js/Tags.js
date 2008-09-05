@@ -22,7 +22,7 @@ Tine.Admin.Tags.Main = {
          * onclick handler for addBtn
          */
         addTag: function(_button, _event) {
-            Tine.Tinebase.Common.openWindow('tagWindow', "index.php?method=Admin.editTag&tagId=",650, 400);
+            Tine.Admin.Tags.EditDialog.openWindow({tag: null})
         },
 
         /**
@@ -30,9 +30,7 @@ Tine.Admin.Tags.Main = {
          */
         editTag: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
-            var tagId = selectedRows[0].id;
-            
-            Tine.Tinebase.Common.openWindow('tagWindow', 'index.php?method=Admin.editTag&tagId=' + tagId,650, 400);
+            Tine.Admin.Tags.EditDialog.openWindow({tag: selectedRows[0]});
         },
 
         
@@ -228,11 +226,7 @@ Tine.Admin.Tags.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            try {
-                Tine.Tinebase.Common.openWindow('tagWindow', 'index.php?method=Admin.editTag&tagId=' + record.data.id,650, 400);
-            } catch(e) {
-                // alert(e);
-            }
+            Tine.Admin.Tags.EditDialog.openWindow({tag: record});
         }, this);
 
         // add the grid to the layout
@@ -277,179 +271,110 @@ Tine.Admin.Tags.Main = {
 
 /*********************************** EDIT DIALOG ********************************************/
 
-Tine.Admin.Tags.EditDialog = {
+Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     
     /**
-     * var handlers
+     * var tag
      */
-     handlers: {
-        applyChanges: function(_button, _event, _closeWindow) 
-        {
-            var form = Ext.getCmp('tagDialog').getForm();
+    tag: null,
+    
+
+    windowNamePrefix: 'AdminTagEditDialog_',
+    id : 'tagDialog',
+    layout: 'hfit',
+    labelWidth: 120,
+    labelAlign: 'top',
+    
+    handlerApplyChanges: function(_button, _event, _closeWindow) {
+        var form = this.getForm();
+        
+        if(form.isValid()) {
+            Ext.MessageBox.wait('Please wait', 'Updating Memberships');
             
-            if(form.isValid()) {
-                Ext.MessageBox.wait('Please wait', 'Updating Memberships');
-                
-                var tag = Tine.Admin.Tags.EditDialog.tagRecord;
-                
-                // fetch rights
-                tag.data.rights = [];
-                var rightsStore = Ext.StoreMgr.lookup('adminSharedTagsRights');
-                rightsStore.each(function(item){
-                    tag.data.rights.push(item.data);
-                });
-                
-                // fetch contexts
-                tag.data.contexts = [];
-                var anycontext = true;
-                var confinePanel = Ext.getCmp('adminSharedTagsConfinePanel');
-                confinePanel.getRootNode().eachChild(function(node){
-                    if (node.attributes.checked) {
-                        tag.data.contexts.push(node.id);
-                    } else {
-                        anycontext = false;
-                    }
-                });
-                if (anycontext) {
-                    tag.data.contexts = ['any'];
+            var tag = this.tag;
+            
+            // fetch rights
+            tag.data.rights = [];
+            this.rightsStore.each(function(item){
+                tag.data.rights.push(item.data);
+            });
+            
+            // fetch contexts
+            tag.data.contexts = [];
+            var anycontext = true;
+            var confinePanel = Ext.getCmp('adminSharedTagsConfinePanel');
+            confinePanel.getRootNode().eachChild(function(node){
+                if (node.attributes.checked) {
+                    tag.data.contexts.push(node.id);
+                } else {
+                    anycontext = false;
                 }
-                
-                form.updateRecord(tag);
-                
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Admin.saveTag', 
-                        tagData: Ext.util.JSON.encode(tag.data)
-                    },
-                    success: function(_result, _request) {
-                        if(window.opener.Tine.Admin.Tags) {
-                            window.opener.Tine.Admin.Tags.Main.reload();
-                        }
-                        if(_closeWindow === true) {
-                            window.close();
-                        } else {
-                            this.updateTagRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
-                            form.loadRecord(this.tagRecord);
-                            
-                            Ext.MessageBox.hide();
-                        }
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', 'Could not save tag.'); 
-                    },
-                    scope: this 
-                });
-                    
-                
-            } else {
-                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            });
+            if (anycontext) {
+                tag.data.contexts = ['any'];
             }
-        },
-
-        saveAndClose: function(_button, _event) 
-        {
-            this.handlers.applyChanges(_button, _event, true);
-        },
-
-        deleteTag: function(_button, _event) 
-        {
-            var tagIds = Ext.util.JSON.encode([Tine.Admin.Tags.EditDialog.tagRecord.data.id]);
-                
+            
+            form.updateRecord(tag);
+            
             Ext.Ajax.request({
-                url: 'index.php',
                 params: {
-                    method: 'Admin.deleteTags', 
-                    tagIds: tagIds
+                    method: 'Admin.saveTag', 
+                    tagData: Ext.util.JSON.encode(tag.data)
                 },
-                text: 'Deleting tag...',
                 success: function(_result, _request) {
                     if(window.opener.Tine.Admin.Tags) {
                         window.opener.Tine.Admin.Tags.Main.reload();
                     }
-                    window.close();
-                }/*,
+                    if(_closeWindow === true) {
+                        window.close();
+                    } else {
+                        this.updateRecord(Ext.util.JSON.decode(_result.responseText));
+                        Ext.MessageBox.hide();
+                    }
+                },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the tag.'); 
-                }*/
-            });                           
+                    Ext.MessageBox.alert('Failed', 'Could not save tag.'); 
+                },
+                scope: this 
+            });
+        } else {
+            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
         }
+    },
+
+    handlerDeleteTag: function(_button, _event) {
+        var tagIds = Ext.util.JSON.encode([this.tag.id]);
+            
+        Ext.Ajax.request({
+            url: 'index.php',
+            params: {
+                method: 'Admin.deleteTags', 
+                tagIds: tagIds
+            },
+            text: 'Deleting tag...',
+            success: function(_result, _request) {
+                if(window.opener.Tine.Admin.Tags) {
+                    window.opener.Tine.Admin.Tags.Main.reload();
+                }
+                window.close();
+            }/*,
+            failure: function ( result, request) { 
+                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the tag.'); 
+            }*/
+        });                           
+    },
         
-     },
      
     /**
-     * var tagRecord
+     * function updateRecord
      */
-    tagRecord: null,
-    
-
-    /**
-     * function updateTagRecord
-     */
-    updateTagRecord: function(_tagData)
-    {
+    updateRecord: function(_tagData) {
         // if tagData is empty (=array), set to empty object because array wont work!
         if (_tagData.length === 0) {
             _tagData = {};
         }
-        this.tagRecord = new Tine.Tinebase.Model.Tag(_tagData);
-    },
-
-    /**
-     * function updateToolbarButtons
-     */
-    updateToolbarButtons: function(_rights)
-    {        
-       /* if(_rights.editGrant === true) {
-            Ext.getCmp('tagDialog').action_saveAndClose.enable();
-            Ext.getCmp('tagDialog').action_applyChanges.enable();
-        }
-       */
-
-    },
-    
-    /**
-     * function display
-     * 
-     * @param   _tagData
-     * @param   _tagMembers
-     * 
-     */
-    display: function(_tagData, _appList) 
-    {
-
-        /******* THE contexts box ********/
-        var anyContext = !_tagData.contexts || _tagData.contexts.indexOf('any') > -1;
+        this.tag = new Tine.Tinebase.Model.Tag(_tagData, _tagData.id);
         
-        var rootNode = new Ext.tree.TreeNode({
-            text: 'Allowed Contexts',
-            expanded: true,
-            draggable:false,
-            allowDrop:false
-        });
-        var confinePanel = new Ext.tree.TreePanel({
-            id: 'adminSharedTagsConfinePanel',
-            rootVisible: true,
-            border: false,
-            root: rootNode
-        });
-
-        for(var i=0, j=_appList.length; i<j; i++){
-            var app = _appList[i];
-            if (app.name == 'Tinebase' /*|| app.status == 'disabled'*/) {
-                continue;
-            }
-            //console.log(app);
-            
-            rootNode.appendChild(new Ext.tree.TreeNode({
-                text: app.name,
-                id: app.id,
-                checked: anyContext || _tagData.contexts.indexOf(app.id) > -1,
-                leaf: true,
-                icon: "s.gif"
-            }));
-        }
-        
-        /******* THE rights box ********/
         if (!_tagData.rights) {
             _tagData.rights = [{
                 tag_id: '', //todo!
@@ -460,27 +385,79 @@ Tine.Admin.Tags.EditDialog = {
                 use_right: true
             }];
         }
-        var rightsStore = new Ext.data.JsonStore({
-            storeId: 'adminSharedTagsRights',
-            baseParams: {
-                method: 'Admin.getTagRights',
-                containerId: _tagData.id
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            fields: [ 'account_name', 'account_id', 'account_type', 'view_right', 'use_right' ]
-        });
-        rightsStore.loadData({
+        
+        this.rightsStore.loadData({
             results:    _tagData.rights,
             totalcount: _tagData.rights.length
         });
         
+        this.anyContext = !_tagData.contexts || _tagData.contexts.indexOf('any') > -1;
+        this.createTreeNodes(_tagData.appList);
+        this.getForm().loadRecord(this.tag);
+    },
+
+    /**
+     * function updateToolbarButtons
+     */
+    updateToolbarButtons: function(_rights) {        
+       /* if(_rights.editGrant === true) {
+            Ext.getCmp('tagDialog').action_saveAndClose.enable();
+            Ext.getCmp('tagDialog').action_applyChanges.enable();
+        }
+       */
+
+    },
+    
+    createTreeNodes: function(_appList) {
+        // clear old childs
+        var toRemove = [];
+        this.rootNode.eachChild(function(node){
+            toRemove.push(node);
+        });
         
+        for(var i=0, j=_appList.length; i<j; i++){
+            // don't duplicate tree nodes on 'apply changes'
+            toRemove[i] ? toRemove[i].remove() : null;
+            
+            var app = _appList[i];
+            if (app.name == 'Tinebase' /*|| app.status == 'disabled'*/) {
+                continue;
+            }
+            //console.log(app);
+            
+            this.rootNode.appendChild(new Ext.tree.TreeNode({
+                text: app.name,
+                id: app.id,
+                checked: this.anyContext || this.tag.get('contexts').indexOf(app.id) > -1,
+                leaf: true,
+                icon: "s.gif"
+            }));
+        }
+    },
+    /**
+     * function display
+     */
+    getFormContents: function() {
+
+        /******* THE contexts box ********/
+        this.rootNode = new Ext.tree.TreeNode({
+            text: 'Allowed Contexts',
+            expanded: true,
+            draggable:false,
+            allowDrop:false
+        });
+        var confinePanel = new Ext.tree.TreePanel({
+            id: 'adminSharedTagsConfinePanel',
+            rootVisible: true,
+            border: false,
+            root: this.rootNode
+        });
+
         var rightsPanel = new Tine.widgets.account.ConfigGrid({
             //height: 300,
             accountPickerType: 'both',
             accountListTitle: 'Account Rights',
-            configStore: rightsStore,
+            configStore: this.rightsStore,
             hasAccountPrefix: true,
             configColumns: [
                 new Ext.ux.grid.CheckColumn({
@@ -586,33 +563,64 @@ Tine.Admin.Tags.EditDialog = {
             ]
         };
         
-        /******* build panel & viewport & form ********/
-               
-        // Ext.FormPanel
-        var dialog = new Tine.widgets.dialog.EditRecord({
-            id : 'tagDialog',
-            layout: 'hfit',
-            labelWidth: 120,
-            labelAlign: 'top',
-            handlerScope: this,
-            handlerApplyChanges: this.handlers.applyChanges,
-            handlerSaveAndClose: this.handlers.saveAndClose,
-            handlerDelete: this.handlers.deleteTag,
-            handlerExport: this.handlers.exportTag,
-            items: editTagDialog
-        });
-
-        var viewport = new Ext.Viewport({
-            layout: 'border',
-            frame: true,
-            items: dialog
-        });
-
-        this.updateTagRecord(_tagData);
-        //this.updateToolbarButtons(_tagData.grants);       
-
-        dialog.getForm().loadRecord(this.tagRecord);
-        
-    } // end display function     
+        return editTagDialog;
+    },
     
+    initComponent: function() {
+        this.tag = this.tag ? this.tag : new Tine.Tinebase.Model.Tag({}, 0);
+        
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
+        //this.title = title: 'Edit Tag ' + ,
+        
+        Ext.MessageBox.wait(this.translation._('Loading Tag...'), this.translation._('Please Wait'));
+        Ext.Ajax.request({
+            scope: this,
+            success: this.onRecordLoad,
+            params: {
+                method: 'Admin.getTag',
+                tagId: this.tag.id
+            }
+        });
+        
+        this.rightsStore = new Ext.data.JsonStore({
+            storeId: 'adminSharedTagsRights',
+            baseParams: {
+                method: 'Admin.getTagRights',
+                containerId: this.tag.id
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: [ 'account_name', 'account_id', 'account_type', 'view_right', 'use_right' ]
+        });
+        
+        this.items = this.getFormContents();
+        Tine.Admin.Tags.EditDialog.superclass.initComponent.call(this);
+    },
+    
+    onRecordLoad: function(response) {
+        this.getForm().findField('name').focus(false, 250);
+        var recordData = Ext.util.JSON.decode(response.responseText);
+        this.updateRecord(recordData);
+        
+        Ext.MessageBox.hide();
+    }    
+    
+});
+
+/**
+ * Admin Tag Edit Popup
+ */
+Tine.Admin.Tags.EditDialog.openWindow = function (config) {
+    config.tag = config.tag ? config.tag : new Tine.Tinebase.Model.Tag({}, 0);
+    var window = Tine.WindowFactory.getWindow({
+        width: 650,
+        height: 400,
+        name: Tine.Admin.Tags.EditDialog.prototype.windowNamePrefix + config.tag.id,
+        layout: Tine.Admin.Tags.EditDialog.prototype.windowLayout,
+        itemsConstructor: 'Tine.Admin.Tags.EditDialog',
+        itemsConstructorConfig: config
+    });
+    return window;
 };
