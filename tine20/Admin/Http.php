@@ -25,37 +25,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     protected $_appname = 'Admin';
     
     /**
-     * display edit tag dialog
-     *
-     * @param   integer     tag id
-     * 
-     */
-    public function editTag($tagId)
-    {
-        if (empty($tagId)) {
-            $encodedTag = Zend_Json::encode(array());
-        } else {
-            $tag = Admin_Controller::getInstance()->getTag($tagId);
-
-            $tag->rights = $tag->rights->toArray();
-            
-            $tag->rights = Admin_Json::resolveAccountName($tag->rights, true);
-            $encodedTag = Zend_Json::encode($tag->toArray());
-        }
-
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        $appList = Zend_Json::encode(Tinebase_Application::getInstance()->getApplications('%')->toArray());
-        $view->jsExecute = "Tine.Admin.Tags.EditDialog.display($encodedTag, $appList);";
-
-        $view->title="edit tag";
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-    }
-    
-    /**
      * overwrite getJsFilesToInclude from abstract class to add groups js file
      *
      * @return array with js filenames
