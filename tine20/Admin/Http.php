@@ -56,49 +56,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     }
     
     /**
-     * display edit role dialog
-     *
-     * @param   integer  $roleId   role id
-     * 
-     * @todo    create generic "edit" function with edit tag/group/role?
-     * 
-     */
-    public function editRole($roleId)
-    {
-        $json = new Admin_Json();
-        
-        if (empty($roleId)) {
-            $encodedRole = Zend_Json::encode(array());
-            $encodedRoleMembers = Zend_Json::encode(array());
-            $encodedRoleRights = Zend_Json::encode(array());
-        } else {
-            $role = Admin_Controller::getInstance()->getRole($roleId);         
-            $encodedRole = Zend_Json::encode($role->toArray());           
-            $encodedRoleMembers = Zend_Json::encode($json->getRoleMembers($roleId));            
-            $encodedRoleRights = Zend_Json::encode($json->getRoleRights($roleId));
-        }
-        
-        // get all rights for all (active?) applications
-        $encodedAllRights = Zend_Json::encode($json->getAllRoleRights());
-        
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        //@todo move Roles.js to Admin.js later
-        $view->jsExecute = 'Tine.Admin.Roles.EditDialog.display(' . 
-            $encodedRole . ', ' . 
-            $encodedRoleMembers . ', ' . 
-            $encodedRoleRights . ', ' .
-            $encodedAllRights .  
-        ');';
-
-        $view->title="edit role";
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
-    }
-    
-    /**
      * overwrite getJsFilesToInclude from abstract class to add groups js file
      *
      * @return array with js filenames
