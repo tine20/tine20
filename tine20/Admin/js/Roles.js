@@ -481,7 +481,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (_roleData.length === 0) {
         	_roleData = {};
         }
-        this.role = new Tine.Tinebase.Model.Role(_roleData);
+        this.role = new Tine.Tinebase.Model.Role(_roleData, roleData.id);
         
         this.membersDataStore.loadData(this.role.get('roleMembers'));
         this.rightsDataStore.loadData(this.role.get('roleRights'));
