@@ -481,7 +481,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (_roleData.length === 0) {
         	_roleData = {};
         }
-        this.role = new Tine.Tinebase.Model.Role(_roleData, roleData.id);
+        this.role = new Tine.Tinebase.Model.Role(_roleData, _roleData.id);
         
         this.membersDataStore.loadData(this.role.get('roleMembers'));
         this.rightsDataStore.loadData(this.role.get('roleRights'));
@@ -517,9 +517,15 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var _allRights = this.allRights;
         var treeRoot = this.rightsTreePanel.getRootNode();
         
+        var toRemove = [];
+        treeRoot.eachChild(function(node){
+            toRemove.push(node);
+        });
+        
         // add nodes to tree        
         for(var i=0; i<_allRights.length; i++) {
-
+            // don't duplicate tree nodes on 'apply changes'
+            toRemove[i] ? toRemove[i].remove() : null;
         	var node = new Ext.tree.TreeNode(_allRights[i]);
         	node.attributes.application_id = _allRights[i].application_id;
         	node.expanded = true;
