@@ -61,14 +61,13 @@ Tine.Phone.getPanel = function(){
     });
     treePanel.setRootNode(treeRoot);
     
-    Tine.Phone.loadPhones(treeRoot);
+    Tine.Phone.loadPhoneStore();           
         
     /******** tree panel handlers ***********/
     
     treePanel.on('click', function(node){
     	// reload root node
     	if (node && node.id == 'root') {
-    		Tine.Phone.loadPhones(node);
     		Tine.Phone.Main.actions.editPhoneSettings.setDisabled(true);
     	}    	
         Tine.Phone.Main.show(node);
@@ -79,13 +78,16 @@ Tine.Phone.getPanel = function(){
         contextMenu.showAt(event.getXY());
     }, this);
         
-    treePanel.on('beforeexpand', function(panel) {
+    treePanel.on('beforeexpand', function(panel) {    	
     	// expand root (Phones) node
         if(panel.getSelectionModel().getSelectedNode() === null) {
             panel.expandPath('/root/all');
-            panel.selectPath('/root/all');
+            panel.selectPath('/root/all');            
         }
         panel.fireEvent('click', panel.getSelectionModel().getSelectedNode());
+        
+        // @todo reload phone store ?
+        //Tine.Phone.loadPhoneStore(true);
     }, this);
 
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
@@ -107,10 +109,15 @@ Tine.Phone.getPanel = function(){
 /**
  * load phones
  */
-Tine.Phone.loadPhones = function(treeRoot){
+Tine.Phone.updatePhoneTree = function(store){
+	
+	//console.log('update tree');
 	
     var translation = new Locale.Gettext();
     translation.textdomain('Phone');
+
+    // get tree root
+    var treeRoot = Ext.getCmp('phone-tree').getRootNode();    
 
 	// remove all children first
     treeRoot.eachChild(function(child){
@@ -118,34 +125,141 @@ Tine.Phone.loadPhones = function(treeRoot){
     });
 	
     // add phones to tree menu
-    Ext.Ajax.request({
-        url: 'index.php',
-        params: {
-            method: 'Phone.getUserPhones', 
-            accountId: Tine.Tinebase.Registry.get('currentAccount').accountId
-        },
-        text: translation._('Loading phones ...'),
-        success: function(_result, _request) {
-            var data = Ext.util.JSON.decode(_result.responseText);
-            for(var i=0; i<data.results.length; i++) {
-                var label = (data.results[i]['description'] == '') 
-                   ? data.results[i]['macaddress'] 
-                   : Ext.util.Format.ellipsis(data.results[i]['description'], 30);
-                var node = new Ext.tree.TreeNode({
-                    id: data.results[i]['id'],
-                    text: label,
-                    qtip: data.results[i]['description'],
-                    leaf: true
-                });
-                treeRoot.appendChild(node);             
-            }
-            treeRoot.expand();
-        },
-        failure: function ( result, request) { 
-            Ext.MessageBox.alert(translation._('Failed'), translation._('Some error occured while trying to get Phones.')); 
-        } 
-    });             	
-}
+    store.each(function(record){
+        //console.log(treeRoot);
+        var label = (record.data.description == '') 
+           ? record.data.macaddress 
+           : Ext.util.Format.ellipsis(record.data.description, 30);
+        var node = new Ext.tree.TreeNode({
+            id: record.id,
+            text: label,
+            qtip: record.data.description,
+            leaf: true
+        });
+        treeRoot.appendChild(node);
+    });
+    
+    // expand root
+    if (treeRoot.childNodes.length > 0) {
+        treeRoot.expand();
+    }    
+    
+    // don't call this again later
+    //store.removeListener('load');
+    store.purgeListeners();
+};
+
+/**************************** dialer window *******************************/
+
+/**
+ * opens window for number dialing
+ * 
+ * @todo use window factory?
+ * @todo add lines
+ */
+Tine.Phone.DialerWindow = Ext.extend(Ext.Window, {
+	
+	translation: null,
+
+    id: 'dialerWindow',
+    modal: true,
+    width: 300,
+    height: 150,
+    layout: 'form',
+    plain:true,
+    bodyStyle:'padding:5px;',
+    myForm: null,
+	    
+    // private
+    initComponent: function(){
+
+        Tine.Phone.DialerWindow.superclass.initComponent.call(this);        
+
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Phone');    
+
+        this.title = this.translation._('Dial phone number');
+        
+        this.myForm = new Ext.form.FormPanel({
+            bodyStyle:'padding:5px;',
+            //buttonAlign: 'right',
+            items: [
+                new Ext.form.Field({
+                    fieldLabel: this.translation._('Number'),
+                    id: 'phoneNumber',
+                    anchor: '95%',
+                    allowBlank: false
+                    //  {xtype: 'formfield, ...., listener: {'onrender': function(fe) {fe.focus()}}
+                }),
+                new Ext.form.ComboBox({
+                    fieldLabel: this.translation._('Phone'),
+                    store: Tine.Phone.loadPhoneStore(),
+                    //mode: 'remote',
+                    mode: 'local',
+                    displayField:'macaddress',
+                    valueField: 'id',
+                    id: 'phoneId',
+                    anchor: '95%',
+                    forceSelection: true
+                }),                
+                new Ext.form.ComboBox({
+                    fieldLabel: this.translation._('Line'),
+                    id: 'lineId',
+                    mode: 'remote',
+                    anchor: '95%' 
+                }),                
+            ],
+            // @todo make buttons more beautiful
+            // @todo don't lose the scope!
+            // @todo move handlers to handler attribute
+            bbar: [{
+                text: this.translation._('Cancel'),
+                handler : function(){
+                    Ext.getCmp('dialerWindow').close();
+                }},{
+                text: this.translation._('Dial'),
+                handler : function(){   
+                	var form = Ext.getCmp('dialerWindow').myForm.getForm();
+                	// @todo check valid form
+                	// @todo add phone and line here
+                	if(form.isValid()) {
+                        Ext.Ajax.request({
+                            url: 'index.php',
+                            params: {
+                                method: 'Phone.dialNumber',
+                                number: form.findField('phoneNumber').getValue(),
+                                //phone: form.findField('phoneId').getValue() 
+                            },
+                            success: function(_result, _request){
+                                Ext.getCmp('dialerWindow').close();
+                            },
+                            failure: function(result, request){
+                                //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
+                            }
+                        });                
+                	}
+                }}  
+            ]            
+        });        
+
+        this.add(this.myForm);        
+        
+        this.initFields.defer(300, this);        
+    },
+    
+    /**
+     * init form fields
+     */
+    initFields: function() {
+        this.myForm.getForm().findField('phoneNumber').focus();
+        
+        // @todo select first combo value
+        //this.myForm.getForm().findField('phoneId').select(0);
+        //var phoneCombo = this.myForm.getForm().findField('phoneId');
+        //console.log(phoneCombo);
+        //phoneCombo.store.load({});
+    }
+});
 
 /**************************** main ****************************************/
 
@@ -189,6 +303,11 @@ Tine.Phone.Main = {
     {
     	dialNumber: function(_button, _event) 
     	{
+    		// open dialer box (with phone and lines selection)
+    		var dialer = new Tine.Phone.DialerWindow();
+    		dialer.show();
+    		
+    		/*
             Ext.MessageBox.prompt('Number', 'Please enter number to dial:', function(_button, _number){
                 if (_button == 'ok') {                
 		            Ext.Ajax.request({
@@ -205,7 +324,8 @@ Tine.Phone.Main = {
 		                }
 		            });
                 }
-            });    		
+            });
+            */    		
     	}
     },
  
@@ -436,4 +556,48 @@ Tine.Phone.Main = {
         }
         //this.loadData(_node);		
 	}
+};
+
+/**************************** store ****************************************/
+
+/**
+ * get user phones store
+ *
+ * @return Ext.data.JsonStore with phones
+ */
+Tine.Phone.loadPhoneStore = function(reload) {
+	
+	//console.log('get store');
+	
+    var store = Ext.StoreMgr.get('UserPhonesStore');
+    
+    if (!store) {
+        // create store
+        store = new Ext.data.JsonStore({
+            fields: Tine.Voipmanager.Model.Snom.Phone,
+            baseParams: {
+                method: 'Phone.getUserPhones',
+                accountId: Tine.Tinebase.Registry.get('currentAccount').accountId
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
+        Ext.StoreMgr.add('UserPhonesStore', store);
+        
+        store.on('load', Tine.Phone.updatePhoneTree, this);
+        
+        store.load();
+        
+    } else if (reload == true) {
+    	
+    	store.on('load', Tine.Phone.updatePhoneTree, this);
+    	
+    	store.load();
+    }
+    
+    
+    return store;
 };

@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Controller.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
  */
 
@@ -51,6 +51,13 @@ class Phone_Controller
         return self::$_instance;
     }
     
+    /**
+     * dial number
+     *
+     * @param int $_number
+     * 
+     * @todo add phone and line as params
+     */
     public function dialNumber($_number)
     {
         $vmController = Voipmanager_Controller::getInstance();
