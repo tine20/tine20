@@ -549,6 +549,26 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /********************************** Tags **********************************/
     
     /**
+     * gets a single tag
+     *
+     * @param int $tagId
+     * @return array
+     */
+    public function getTag($tagId)
+    {
+        $tag = array();
+        
+        if ($tagId) {
+            $tag = Admin_Controller::getInstance()->getTag($tagId)->toArray();
+            //$tag->rights = $tag->rights->toArray();
+            $tag['rights'] = Admin_Json::resolveAccountName($tag['rights'] , true);
+        }
+        $tag['appList'] = Tinebase_Application::getInstance()->getApplications('%')->toArray();
+        
+        return $tag;
+    }
+    
+    /**
      * get list of tags
      *
      * @param string $_filter
@@ -599,13 +619,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         } else {
             $tag = Admin_Controller::getInstance()->updateTag($tag);
         }
-                 
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $tag->toArray(),
-        );
         
-        return $result;
+        return $this->getTag($tag->getId());
         
     }    
         
