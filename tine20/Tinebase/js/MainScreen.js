@@ -374,7 +374,6 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
     	Tine.WindowFactory.getWindow({
 	        width: 800,
 	        height: 400,
-	        name: "google_gears",
 	        url: "http://gears.google.com/?action=install&message=" + message
 	    });
     },
