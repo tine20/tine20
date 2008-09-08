@@ -572,8 +572,17 @@ Tine.Addressbook.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: this.translation._('No contacts to display')
-            })                        
+                emptyText: this.translation._('No contacts to display'),
+                onLoad: Ext.emptyFn,
+                listeners: {
+                    beforerefresh: function(v) {
+                        v.scrollTop = v.scroller.dom.scrollTop;
+                    },
+                    refresh: function(v) {
+                        v.scroller.dom.scrollTop = v.scrollTop;
+                    },
+                }
+            })              
         });
         
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
