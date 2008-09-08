@@ -416,7 +416,16 @@ Tine.Crm.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: this.translation._('No leads found.')
+                emptyText: this.translation._('No leads found.'),
+                onLoad: Ext.emptyFn,
+                listeners: {
+                    beforerefresh: function(v) {
+                        v.scrollTop = v.scroller.dom.scrollTop;
+                    },
+                    refresh: function(v) {
+                        v.scroller.dom.scrollTop = v.scrollTop;
+                    },
+                }
             })            
         });
         
@@ -1302,7 +1311,16 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     autoFill: true,
                     forceFit:true,
                     ignoreAdd: true,
-                    emptyText: this.translation._('No Tasks to display')
+                    emptyText: this.translation._('No Tasks to display'),
+                    onLoad: Ext.emptyFn,
+                    listeners: {
+                        beforerefresh: function(v) {
+                            v.scrollTop = v.scroller.dom.scrollTop;
+                        },
+                        refresh: function(v) {
+                            v.scroller.dom.scrollTop = v.scrollTop;
+                        },
+                    }
                 })
             });
             
