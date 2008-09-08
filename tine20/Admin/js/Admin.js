@@ -670,7 +670,8 @@ Tine.Admin.Applications.Main = function() {
         disabled: true,
         handler: _enableDisableButtonHandler,
         iconCls: 'action_enable',
-        id: 'Admin_Accesslog_Action_Enable'
+        id: 'Admin_Accesslog_Action_Enable',
+        scope: this
     });
 
     var _action_disable = new Ext.Action({
@@ -678,7 +679,8 @@ Tine.Admin.Applications.Main = function() {
         disabled: true,
         handler: _enableDisableButtonHandler,
         iconCls: 'action_disable',
-        id: 'Admin_Accesslog_Action_Disable'
+        id: 'Admin_Accesslog_Action_Disable',
+        scope: this
     });
 
 	var _action_settings = new Ext.Action({
@@ -736,10 +738,17 @@ Tine.Admin.Applications.Main = function() {
 
 	var _showApplicationsToolbar = function()
     {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
+        _action_enable.setText(this.translation.gettext('enable application'));
+        _action_disable.setText(this.translation.gettext('disable application'));
+        _action_settings.setText(this.translation.gettext('settings'));
+    
         var ApplicationsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'ApplicationsAdminQuickSearchField',
             width:240,
-            emptyText: 'enter searchfilter'
+            emptyText: this.translation.gettext('enter searchfilter')
         }); 
         ApplicationsAdminQuickSearchField.on('change', function() {
             Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
@@ -756,7 +765,7 @@ Tine.Admin.Applications.Main = function() {
                 _action_settings,
                 //_action_permissions,
                 '->',
-                'Search:', ' ',
+                this.translation.gettext('Search:'), ' ',
 /*                new Ext.ux.SelectBox({
                   listClass:'x-combo-list-small',
                   width:90,
@@ -778,6 +787,9 @@ Tine.Admin.Applications.Main = function() {
     };
     
     var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Admin');
+        
         var gridValue;
         
     	switch(_value) {
@@ -787,7 +799,7 @@ Tine.Admin.Applications.Main = function() {
     		  break;
     		  
     		default:
-    		  gridValue = 'unknown status (' + _value + ')';
+    		  gridValue = sprintf(this.translation.gettext('unknown status (%s)'), value);
     		  break;
     	}
         
@@ -816,15 +828,15 @@ Tine.Admin.Applications.Main = function() {
             pageSize: 50,
             store: ds_applications,
             displayInfo: true,
-            displayMsg: 'Displaying application {0} - {1} of {2}',
-            emptyMsg: "No applications to display"
+            displayMsg: this.translation.gettext('Displaying application {0} - {1} of {2}'),
+            emptyMsg: this.translation.gettext("No applications to display")
         }); 
         
         var cm_applications = new Ext.grid.ColumnModel([
-            {resizable: true, header: 'order', id: 'order', dataIndex: 'order', width: 50},
-            {resizable: true, header: 'name', id: 'name', dataIndex: 'name'},
-            {resizable: true, header: 'status', id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
-            {resizable: true, header: 'version', id: 'version', dataIndex: 'version', width: 70}
+            {resizable: true, header: this.translation.gettext('order'),   id: 'order', dataIndex: 'order', width: 50},
+            {resizable: true, header: this.translation.gettext('name'),    id: 'name', dataIndex: 'name'},
+            {resizable: true, header: this.translation.gettext('status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
+            {resizable: true, header: this.translation.gettext('version'), id: 'version', dataIndex: 'version', width: 70}
         ]);
         
         cm_applications.defaultSortable = true; // by default columns are sortable
