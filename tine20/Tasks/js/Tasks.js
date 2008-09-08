@@ -413,8 +413,62 @@ Tine.Tasks.mainGrid = {
             region:'center',
 			sm: new Ext.grid.RowSelectionModel(),
 			loadMask: true,
-            columns: [
-				{
+            columns: [{
+                    id: 'summary',
+                    header: this.translation._("Summary"),
+                    width: 400,
+                    sortable: true,
+                    dataIndex: 'summary',
+                    //editor: new Ext.form.TextField({
+                    //  allowBlank: false
+                    //}),
+                    quickaddField: new Ext.form.TextField({
+                        emptyText: this.translation._('Add a task...')
+                    })
+                }, {
+                    id: 'due',
+                    header: this.translation._("Due Date"),
+                    width: 55,
+                    sortable: true,
+                    dataIndex: 'due',
+                    renderer: Tine.Tinebase.Common.dateRenderer,
+                    editor: new Ext.ux.form.ClearableDateField({
+                        //format : 'd.m.Y'
+                    }),
+                    quickaddField: new Ext.ux.form.ClearableDateField({
+                        //value: new Date(),
+                        //format : "d.m.Y"
+                    })
+                }, {
+                    id: 'priority',
+                    header: this.translation._("Priority"),
+                    width: 45,
+                    sortable: true,
+                    dataIndex: 'priority',
+                    renderer: Tine.widgets.Priority.renderer,
+                    editor: new Tine.widgets.Priority.Combo({
+                        allowBlank: false,
+                        autoExpand: true,
+                        blurOnSelect: true
+                    }),
+                    quickaddField: new Tine.widgets.Priority.Combo({
+                        autoExpand: true
+                    })
+                }, {
+                    id: 'percent',
+                    header: this.translation._("Percent"),
+                    width: 50,
+                    sortable: true,
+                    dataIndex: 'percent',
+                    renderer: Ext.ux.PercentRenderer,
+                    editor: new Ext.ux.PercentCombo({
+                        autoExpand: true,
+                        blurOnSelect: true
+                    }),
+                    quickaddField: new Ext.ux.PercentCombo({
+                        autoExpand: true
+                    })
+                }, {
 					id: 'status_id',
 					header: this.translation._("Status"),
 					width: 45,
@@ -428,65 +482,6 @@ Tine.Tasks.mainGrid = {
 		            }),
 		            quickaddField: new Tine.Tasks.status.ComboBox({
                         autoExpand: true
-                    })
-				},
-				{
-					id: 'percent',
-					header: this.translation._("Percent"),
-					width: 50,
-					sortable: true,
-					dataIndex: 'percent',
-					renderer: Ext.ux.PercentRenderer,
-                    editor: new Ext.ux.PercentCombo({
-						autoExpand: true,
-                        blurOnSelect: true
-                    }),
-                    quickaddField: new Ext.ux.PercentCombo({
-                        autoExpand: true
-                    })
-				},
-				{
-					id: 'summary',
-					header: this.translation._("Summary"),
-					width: 400,
-					sortable: true,
-					dataIndex: 'summary',
-					//editor: new Ext.form.TextField({
-					//	allowBlank: false
-					//}),
-					quickaddField: new Ext.form.TextField({
-                        emptyText: this.translation._('Add a task...')
-                    })
-				},
-				{
-					id: 'priority',
-					header: this.translation._("Priority"),
-					width: 45,
-					sortable: true,
-					dataIndex: 'priority',
-					renderer: Tine.widgets.Priority.renderer,
-                    editor: new Tine.widgets.Priority.Combo({
-                        allowBlank: false,
-						autoExpand: true,
-						blurOnSelect: true
-                    }),
-                    quickaddField: new Tine.widgets.Priority.Combo({
-                        autoExpand: true
-                    })
-				},
-				{
-					id: 'due',
-					header: this.translation._("Due Date"),
-					width: 55,
-					sortable: true,
-					dataIndex: 'due',
-					renderer: Tine.Tinebase.Common.dateRenderer,
-					editor: new Ext.ux.form.ClearableDateField({
-                        //format : 'd.m.Y'
-                    }),
-                    quickaddField: new Ext.ux.form.ClearableDateField({
-                        //value: new Date(),
-                        //format : "d.m.Y"
                     })
 				}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
