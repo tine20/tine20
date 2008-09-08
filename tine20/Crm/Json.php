@@ -135,12 +135,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
         }
         
-        $result = array(
-            'success'           => true,
-            'welcomeMessage'    => 'Entry updated',
-            'updatedData'       => $this->_leadToJson($savedLead)
-        );
-        
+        $result = $this->getLead($savedLead->getId());
         return $result;  
     }      
 
