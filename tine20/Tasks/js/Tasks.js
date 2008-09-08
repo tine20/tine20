@@ -636,12 +636,18 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
         
+        if (! this.task.id) {
+            window.document.title = this.translation.gettext('Add New Task');
+        } else {
+            window.document.title = sprintf(this.translation._('Edit Task "%s"'), this.task.get('summary'));
+        }
+        
         this.getForm().loadRecord(this.task);
         Ext.MessageBox.hide();
     },
     
     updateRecord: function(recordData) {
-        this.task = new Tine.Tasks.Task(recordData, recordData.id);
+        this.task = new Tine.Tasks.Task(recordData, recordData.id ? recordData.id : 0);
         Tine.Tasks.fixTask(this.task);
     },
     /**
@@ -663,9 +669,10 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	                method: 'Tasks.saveTask', 
 	                task: Ext.util.JSON.encode(this.task.data)
 	            },
-	            success: function(_result, _request) {
+	            success: function(response) {
 					// override task with returned data
-					this.updateRecord(Ext.util.JSON.decode(_result.responseText));
+                    this.onRecordLoad(response);
+					//this.updateRecord(Ext.util.JSON.decode(_result.responseText));
                     
                     var win = this.windowManager.get(window);
                     // free 0 namespace if record got created
