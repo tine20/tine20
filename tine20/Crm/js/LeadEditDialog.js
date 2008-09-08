@@ -358,18 +358,21 @@ Ext.reg('leadcontacttypecombo', Tine.Crm.contactType.ComboBox);
  */
 Tine.Crm.contactType.Renderer = function(type)
 {
+    var translation = new Locale.Gettext();
+    translation.textdomain('Crm');
+    
     switch ( type ) {
         case 'responsible':
             var iconClass = 'contactIconResponsible';
-            var qTip = Tine.Crm.LeadEditDialog.translation._('Responsible');
+            var qTip = translation._('Responsible');
             break;
         case 'customer':
             var iconClass = 'contactIconCustomer';
-            var qTip = Tine.Crm.LeadEditDialog.translation._('Customer');
+            var qTip = translation._('Customer');
             break;
         case 'partner':
             var iconClass = 'contactIconPartner';
-            var qTip = Tine.Crm.LeadEditDialog.translation._('Partner');
+            var qTip = translation._('Partner');
             break;
     }
     
