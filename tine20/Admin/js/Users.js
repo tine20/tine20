@@ -444,7 +444,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             _accountData.accountPassword = null;
         }
 
-        this.accountRecord = new Tine.Admin.Users.Account(_accountData, _accountData.id);
+        this.accountRecord = new Tine.Admin.Users.Account(_accountData, _accountData.accountId ? _accountData.accountId : 0);
     },
     
     handlerDelete: function(_button, _event) {
@@ -488,16 +488,19 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     password: form.findField('accountPassword').getValue(),
                     passwordRepeat: form.findField('accountPassword2').getValue()                        
                 },
-                success: function(_result, _request) {
+                success: function(response) {
                     if(window.opener.Tine.Admin.Users) {
                         window.opener.Tine.Admin.Users.Main.reload();
                     }
                     if(_closeWindow === true) {
                         window.close();
                     } else {
+                        this.onRecordLoad(response);
+                        /*
                         this.updateRecord(Ext.util.JSON.decode(_result.responseText));
                         this.updateToolbarButtons();
                         form.loadRecord(this.accountRecord);
+                        */
                     }
                     Ext.MessageBox.hide();
                 },
@@ -650,6 +653,12 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.getForm().findField('accountFirstName').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
+        
+        if (! this.accountRecord.id) {
+            window.document.title = this.translation.gettext('Add New User Account');
+        } else {
+            window.document.title = sprintf(this.translation._('Edit User Account "%s"'), this.accountRecord.get('accountDisplayName'));
+        }
         
         this.getForm().loadRecord(this.accountRecord);
         this.updateToolbarButtons();
