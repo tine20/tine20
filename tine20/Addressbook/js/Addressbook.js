@@ -814,8 +814,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     
     onContactLoad: function(response) {
         this.getForm().findField('n_prefix').focus(false, 250);
-        var contactData = Ext.util.JSON.decode(response.responseText).contact;
+        var contactData = Ext.util.JSON.decode(response.responseText);
         this.updateContactRecord(contactData);
+        
+        if (! this.contact.id) {
+            window.document.title = this.translation.gettext('Add new contact');
+        } else {
+            window.document.title = sprintf(this.translation._('Edit Contact "%s"'), this.contact.get('n_fn') + 
+                (this.contact.get('org_name') ? ' (' + this.contact.get('org_name') + ')' : '') );
+        }
         
         this.getForm().loadRecord(this.contact);
         Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
@@ -840,17 +847,18 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                     method: 'Addressbook.saveContact', 
                     contactData: Ext.util.JSON.encode(this.contact.data)
                 },
-                success: function(_result, _request) {
+                success: function(response) {
                 	if(window.opener.Tine.Addressbook) {
                         window.opener.Tine.Addressbook.Main.reload();
                 	}
-                	
+                    this.onContactLoad(response);
+                	/*
                 	// update record
                 	var contactData = Ext.util.JSON.decode(_result.responseText).updatedData; 
                 	this.updateContactRecord(contactData);
                 	form.loadRecord(this.contact);
                     Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
-                	
+                	*/
                     // notify opener and return contact data
                     this.windowManager.get(window).fireEvent('update', this.contact); 
                 	
@@ -906,7 +914,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             _contactData.bday = Date.parseDate(_contactData.bday, 'c');
         }
 
-        this.contact = new Tine.Addressbook.Model.Contact(_contactData);
+        this.contact = new Tine.Addressbook.Model.Contact(_contactData, _contactData.id ? _contactData.id : 0);
     },
     
     updateToolbarButtons: function(contact) {

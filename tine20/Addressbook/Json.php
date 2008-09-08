@@ -32,12 +32,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      */
     public function getContact($contactId)
     {
-        $result = array(
-            'success'   => true
-        );
-        
+        $result = array();
+               
         $contact = Addressbook_Controller::getInstance()->getContact($contactId);
-        $result['contact'] = $this->_contactToJson($contact);
+        $result = $this->_contactToJson($contact);
         
         return $result;
     }
@@ -107,11 +105,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             $contact = Addressbook_Controller::getInstance()->updateContact($contact);
         }
 
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $this->_contactToJson($contact)
-        );         
-        
+        $result =  $this->getContact($contact->getId());
         return $result;
          
     }
