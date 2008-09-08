@@ -312,9 +312,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
 
         $newContact = $json->saveContact(Zend_Json::encode($newContactData));
-        $this->assertEquals($newContactData['n_family'], $newContact['updatedData']['n_family'], 'Adding contact failed');
+        $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
         
-        $GLOBALS['Addressbook_JsonTest']['addedContactId'] = $newContact['updatedData']['id'];
+        $GLOBALS['Addressbook_JsonTest']['addedContactId'] = $newContact['id'];
     }
     
     /**
@@ -327,7 +327,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         
         $contact = $json->getContact($contactId);
-        $contact = $contact['contact'];
         
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
     }
@@ -342,11 +341,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Json();
         
         $contact = $json->getContact($contactId);
-        $contact = $contact['contact'];
         
         $contact['n_family'] = 'PHPUNIT UPDATE';
         $updatedContact = $json->saveContact(Zend_Json::encode($contact));
-        $updatedContact = $updatedContact['updatedData'];
         
         $this->assertEquals($contactId, $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
