@@ -843,7 +843,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     method: 'Crm.saveLead', 
                     lead: Ext.util.JSON.encode(lead.data)
                 },
-                success: function(_result, _request) {
+                success: function(response) {
                     if(window.opener.Tine.Crm) {
                         window.opener.Tine.Crm.Main.reload();
                     } 
@@ -851,11 +851,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         window.setTimeout("window.close()", 400);
                     }
                     
-                    // fill form with returned lead
-                    this.updateRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
-                    leadForm.loadRecord(this.lead);
-                    
-                    Ext.getCmp('crmGridTasks').setDisabled(false);
+                    this.onRecordLoad(response);
 
                     // update stores
                     var relations = Tine.Crm.splitRelations(this.lead.data.relations);
@@ -1868,12 +1864,18 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             this.actions.exportLead
         ], 'container');
         
+        if (! this.lead.id) {
+            window.document.title = this.translation.gettext('Add New Lead');
+        } else {
+            window.document.title = sprintf(this.translation._('Edit Lead "%s"'), this.lead.get('lead_name'));
+        }
+        
         this.getForm().loadRecord(this.lead);
         Ext.MessageBox.hide();
     },
     
     updateRecord: function(recordData) {
-        this.lead = new Tine.Crm.Model.Lead(recordData, recordData.id);
+        this.lead = new Tine.Crm.Model.Lead(recordData, recordData.id ? recordData.id : 0);
         Tine.Crm.Model.Lead.FixDates(this.lead);
     }
 }); // end of application CRM LEAD EDIT DIALOG
