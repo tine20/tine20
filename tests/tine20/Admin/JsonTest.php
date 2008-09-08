@@ -155,8 +155,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $json->saveGroup( $encodedData, Zend_Json::encode(array()) );
         
-        $this->assertTrue($result['success']); 
-        $this->assertEquals($this->objects['initialGroup']->description, $result['updatedData']['description']);
+        $this->assertEquals($this->objects['initialGroup']->description, $result['description']);
     }    
 
     /**
@@ -172,7 +171,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $encodedData = Zend_Json::encode( $accountData );
         
-        $account = $json->saveAccount($encodedData, 'test', 'test');
+        $account = $json->saveUser($encodedData, 'test', 'test');
         
         $this->assertTrue ( is_array($account) );
         $this->assertEquals('tine20phpunitup', $account['accountLoginName']);
@@ -260,9 +259,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $json->saveGroup( $encodedData, $encodedGroupMembers );
 
-        $this->assertTrue($result['success']); 
         $this->assertGreaterThan(0,sizeof($result['groupMembers'])); 
-        $this->assertEquals($this->objects['updatedGroup']->description, $result['updatedData']['description']); 
+        $this->assertEquals($this->objects['updatedGroup']->description, $result['description']); 
     }    
 
     /**
@@ -491,10 +489,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $json->saveRole($encodedData, $encodedRoleMembers, $encodedRoleRights);
         
-        $this->assertTrue($result['success']);    
         
         // get role id from result
-        $roleId = $result['updatedData']['id'];
+        $roleId = $result['id'];
         
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
         
@@ -536,8 +533,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $json->saveRole($encodedData, Zend_Json::encode(array()),Zend_Json::encode(array()));
         
-        $this->assertTrue($result['success']);
-        $this->assertEquals( "updated description", $result['updatedData']['description']);        
+        $this->assertEquals( "updated description", $result['description']);        
     }
 
     /**
