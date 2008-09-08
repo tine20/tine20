@@ -261,23 +261,21 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         //print_r ( $result );
         
-        $this->assertTrue($result['success'], 'saving of lead failed'); 
-        $this->assertEquals($this->objects['initialLead']->description, $result['updatedData']['description']);
-        $leadId = $result['updatedData']['id'];
+        $this->assertEquals($this->objects['initialLead']->description, $result['description']);
 
         // check linked contacts / tasks
         //print_r($result['updatedData']['relations']);
-        $this->assertGreaterThan(0, count($result['updatedData']['relations']));
-        $this->assertEquals($this->objects['contact']->getId(), $result['updatedData']['relations'][0]['related_id']);
-        $this->assertEquals($this->objects['task']->getId(), $result['updatedData']['relations'][1]['related_id']);
+        $this->assertGreaterThan(0, count($result['relations']));
+        $this->assertEquals($this->objects['contact']->getId(), $result['relations'][0]['related_id']);
+        $this->assertEquals($this->objects['task']->getId(), $result['relations'][1]['related_id']);
 
         // check linked products
-        $this->assertGreaterThan(0, count($result['updatedData']['products']));
-        $this->assertEquals($this->objects['productLink']['product_desc'], $result['updatedData']['products'][0]['product_desc']);
+        $this->assertGreaterThan(0, count($result['products']));
+        $this->assertEquals($this->objects['productLink']['product_desc'], $result['products'][0]['product_desc']);
         
         // check notes
         $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
-        foreach ($result['updatedData']['notes'] as $leadNote) {
+        foreach ($result['notes'] as $leadNote) {
             if ($leadNote['note_type_id'] !== $createdNoteType->getId()) {
                 $this->assertEquals($note['note'], $leadNote['note']);
             }
@@ -342,8 +340,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         //print_r($result['updatedData']);
         
-        $this->assertTrue($result['success']); 
-        $this->assertEquals($this->objects['updatedLead']->description, $result['updatedData']['description']);
+        $this->assertEquals($this->objects['updatedLead']->description, $result['description']);
 
         // check if tasks/contact are no longer linked
         $lead = Crm_Controller::getInstance()->getLead($initialLead['id']);
