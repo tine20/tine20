@@ -782,7 +782,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     name: 'due'
                 }), 
                 new Tine.widgets.container.selectionComboBox({
-                    fieldLabel: this.translation._('Folder'),
+                    fieldLabel: this.translation._('Saved in'),
                     name: 'container_id',
                     itemName: 'Tasks',
                     appName: 'Tasks'
