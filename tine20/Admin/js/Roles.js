@@ -45,7 +45,7 @@ Tine.Admin.Roles.Main = {
          * onclick handler for deleteBtn
          */
         deleteRole: function(_button, _event) {
-            Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected roles?', function(_button){
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected roles?'), function(_button){
                 if (_button == 'yes') {
                 
                     var roleIds = new Array();
@@ -62,12 +62,12 @@ Tine.Admin.Roles.Main = {
                             method: 'Admin.deleteRoles',
                             roleIds: roleIds
                         },
-                        text: 'Deleting role(s)...',
+                        text: this.translation.gettext('Deleting role(s)...'),
                         success: function(_result, _request){
                             Ext.getCmp('AdminRolesGrid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the role.');
+                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the role.'));
                         }
                     });
                 }
@@ -76,8 +76,11 @@ Tine.Admin.Roles.Main = {
     },
     
     initComponent: function() {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
         this.actions.addRole = new Ext.Action({
-            text: 'add role',
+            text: this.translation.gettext('add role'),
             disabled: true,
             handler: this.handlers.addRole,
             iconCls: 'action_permissions',
@@ -85,7 +88,7 @@ Tine.Admin.Roles.Main = {
         });
         
         this.actions.editRole = new Ext.Action({
-            text: 'edit role',
+            text: this.translation.gettext('edit role'),
             disabled: true,
             handler: this.handlers.editRole,
             iconCls: 'action_edit',
@@ -93,7 +96,7 @@ Tine.Admin.Roles.Main = {
         });
         
         this.actions.deleteRole = new Ext.Action({
-            text: 'delete role',
+            text: this.translation.gettext('delete role'),
             disabled: true,
             handler: this.handlers.deleteRole,
             iconCls: 'action_delete',
@@ -106,7 +109,7 @@ Tine.Admin.Roles.Main = {
         var RolesQuickSearchField = new Ext.ux.SearchField({
             id: 'RolesQuickSearchField',
             width:240,
-            emptyText: 'enter searchfilter'
+            emptyText: this.translation.gettext('enter searchfilter')
         }); 
         RolesQuickSearchField.on('change', function(){
             Ext.getCmp('AdminRolesGrid').getStore().load({
@@ -126,7 +129,7 @@ Tine.Admin.Roles.Main = {
                 this.actions.editRole,
                 this.actions.deleteRole,
                 '->', 
-                'Search:', 
+                this.translation.gettext('Search:'), 
                 ' ',
                 RolesQuickSearchField
             ]
@@ -164,15 +167,15 @@ Tine.Admin.Roles.Main = {
             pageSize: 25,
             store: dataStore,
             displayInfo: true,
-            displayMsg: 'Displaying roles {0} - {1} of {2}',
-            emptyMsg: "No roles to display"
+            displayMsg: this.translation.gettext('Displaying roles {0} - {1} of {2}'),
+            emptyMsg: this.translation.gettext("No roles to display")
         }); 
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'id', header: 'ID', dataIndex: 'id', width: 10 },
-            { resizable: true, id: 'name', header: 'Name', dataIndex: 'name', width: 50 },
-            { resizable: true, id: 'description', header: 'Description', dataIndex: 'description' }
+            { resizable: true, id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 10 },
+            { resizable: true, id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
+            { resizable: true, id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -216,7 +219,7 @@ Tine.Admin.Roles.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: 'No roles to display'
+                emptyText: this.translation.gettext('No roles to display')
             })            
             
         });
@@ -394,7 +397,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             // get role members
             var roleGrid = Ext.getCmp('roleMembersGrid');
 
-            Ext.MessageBox.wait('Please wait', 'Updating Memberships');
+            Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
             
             var roleMembers = [];
             var membersStore = Ext.StoreMgr.lookup('RoleMembersStore');
@@ -434,14 +437,14 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Could not save role.'); 
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save role.')); 
                 },
                 scope: this 
             });
                 
             
         } else {
-            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
         }
     },
     
@@ -454,7 +457,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 method: 'Admin.deleteRoles', 
                 roleIds: roleIds
             },
-            text: 'Deleting role...',
+            text: this.translation.gettext('Deleting role...'),
             success: function(_result, _request) {
                 if(window.opener.Tine.Admin.Roles) {
                     window.opener.Tine.Admin.Roles.Main.reload();
@@ -462,7 +465,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 window.close();
             },
             failure: function ( result, request) { 
-                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the role.'); 
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the role.')); 
             } 
         });                           
     },
@@ -589,7 +592,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             //height: 300,
             accountPickerType: 'both',
             accountPickerTypeDefault: 'group', 
-            accountListTitle: 'Role members',
+            accountListTitle: this.translation.gettext('Role members'),
             configStore: this.membersDataStore,
             hasAccountPrefix: true,
             configColumns: []
@@ -599,7 +602,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     	this.initRightsTree();
         
         var tabPanelMembers = {
-            title:'Members',
+            title:this.translation.gettext('Members'),
             //layout:'column',
             layout:'form',
             layoutOnTabChange:true,            
@@ -611,7 +614,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         };
         
         var tabPanelRights = {
-            title:'Rights',
+            title:this.translation.gettext('Rights'),
             layout:'form',
             layoutOnTabChange:true,            
             deferredRender:false,
@@ -641,14 +644,14 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	                    border: false,
 	                    items:[{
 	                        xtype:'textfield',
-	                        fieldLabel:'Role Name', 
+	                        fieldLabel: this.translation.gettext('Role Name'), 
 	                        name:'name',
 	                        anchor:'100%',
 	                        allowBlank: false
 	                    }, {
 	                        xtype:'textarea',
 	                        name: 'description',
-	                        fieldLabel: 'Description',
+	                        fieldLabel: this.translation.gettext('Description'),
 	                        grow: false,
 	                        preventScrollbars:false,
 	                        anchor:'100%',
