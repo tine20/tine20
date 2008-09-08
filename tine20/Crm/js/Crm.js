@@ -1104,37 +1104,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             case 'Tasks':
             
                 columnModel = [{
-                    id: 'status_id',
-                    header: this.translation._("Status"),
-                    width: 45,
-                    sortable: true,
-                    dataIndex: 'status_id',
-                    renderer: Tine.Tasks.status.getStatusIcon,
-                    editor: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true,
-                        blurOnSelect: true,
-                        listClass: 'x-combo-list-small'
-                    }),
-                    quickaddField: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true
-                    })
-                },
-                {
-                    id: 'percent',
-                    header: this.translation._("Percent"),
-                    width: 50,
-                    sortable: true,
-                    dataIndex: 'percent',
-                    renderer: Ext.ux.PercentRenderer,
-                    editor: new Ext.ux.PercentCombo({
-                        autoExpand: true,
-                        blurOnSelect: true
-                    }),
-                    quickaddField: new Ext.ux.PercentCombo({
-                        autoExpand: true
-                    })
-                },
-                {
                     id: 'summary',
                     header: this.translation._("Summary"),
                     width: 100,
@@ -1146,8 +1115,21 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     quickaddField: new Ext.form.TextField({
                         emptyText: this.translation._('Add a task...')
                     })
-                },
-                {
+                }, {
+                    id: 'due',
+                    header: this.translation._("Due Date"),
+                    width: 55,
+                    sortable: true,
+                    dataIndex: 'due',
+                    renderer: Tine.Tinebase.Common.dateRenderer,
+                    editor: new Ext.ux.form.ClearableDateField({
+                        //format : 'd.m.Y'
+                    }),
+                    quickaddField: new Ext.ux.form.ClearableDateField({
+                        //value: new Date(),
+                        //format : "d.m.Y"
+                    })
+                }, {
                     id: 'priority',
                     header: this.translation._("Priority"),
                     width: 45,
@@ -1162,20 +1144,20 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     quickaddField: new Tine.widgets.Priority.Combo({
                         autoExpand: true
                     })
-                },
-                {
-                    id: 'due',
-                    header: this.translation._("Due Date"),
-                    width: 55,
+                }, {
+                    id: 'status_id',
+                    header: this.translation._("Status"),
+                    width: 45,
                     sortable: true,
-                    dataIndex: 'due',
-                    renderer: Tine.Tinebase.Common.dateRenderer,
-                    editor: new Ext.ux.form.ClearableDateField({
-                        //format : 'd.m.Y'
+                    dataIndex: 'status_id',
+                    renderer: Tine.Tasks.status.getStatusIcon,
+                    editor: new Tine.Tasks.status.ComboBox({
+                        autoExpand: true,
+                        blurOnSelect: true,
+                        listClass: 'x-combo-list-small'
                     }),
-                    quickaddField: new Ext.ux.form.ClearableDateField({
-                        //value: new Date(),
-                        //format : "d.m.Y"
+                    quickaddField: new Tine.Tasks.status.ComboBox({
+                        autoExpand: true
                     })
                 }];
                 
