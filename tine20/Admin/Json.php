@@ -442,8 +442,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         if ($groupId) {
             $group = Admin_Controller::getInstance()->getGroup($groupId)->toArray();
-            $group['groupMembers'] = $this->getGroupMembers($groupId);
         }
+        
+        $group['groupMembers'] = $this->getGroupMembers($groupId);
         return $group;
     }
     
@@ -485,14 +486,16 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $accountIds = Admin_Controller::getInstance()->getGroupMembers($groupId);
-
-        $result['results'] = array ();
-        foreach ( $accountIds as $accountId ) {
-            $result['results'][] = Tinebase_User::getInstance()->getUserById($accountId)->toArray();
+        if ($groupId) {
+            $accountIds = Admin_Controller::getInstance()->getGroupMembers($groupId);
+    
+            $result['results'] = array ();
+            foreach ( $accountIds as $accountId ) {
+                $result['results'][] = Tinebase_User::getInstance()->getUserById($accountId)->toArray();
+            }
+                    
+            $result['totalcount'] = count($result['results']);
         }
-                
-        $result['totalcount'] = count($result['results']);
         
         return $result;
     }

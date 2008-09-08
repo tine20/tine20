@@ -360,20 +360,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     groupData: Ext.util.JSON.encode(this.group.data),
                     groupMembers: Ext.util.JSON.encode(groupMembers)
                 },
-                success: function(_result, _request) {
+                success: function(response) {
                     if(window.opener.Tine.Admin.Groups) {
                         window.opener.Tine.Admin.Groups.Main.reload();
                     }
                     if(_closeWindow === true) {
                         window.close();
                     } else {
-                        this.updateRecord(Ext.util.JSON.decode(_result.responseText));
-                        form.loadRecord(this.group);
-                        
-                        // @todo   get groupMembers from result
-                        // var groupMembers = Ext.util.JSON.decode(_result.responseText).groupMembers;
-                        // dataStore.loadData(groupMembers.results, false);
-                        
+                        this.onRecordLoad(response);
                         Ext.MessageBox.hide();
                     }
                 },
@@ -419,7 +413,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (_groupData.length === 0) {
         	_groupData = {};
         }
-        this.group = new Tine.Tinebase.Model.Group(_groupData, _groupData.id);
+        this.group = new Tine.Tinebase.Model.Group(_groupData, _groupData.id ? _groupData.id : 0);
         
         // tweak, as group members are not in standard form cycle yet
         this.dataStore.loadData(this.group.get('groupMembers'));
@@ -617,7 +611,13 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.getForm().findField('name').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
-        
+
+        if (! this.group.id) {
+            window.document.title = this.translation.gettext('Add new group');
+        } else {
+            window.document.title = sprintf(this.translation.gettext('Edit Group "%s"'), this.group.get('name'));
+        }
+
         this.getForm().loadRecord(this.group);
         this.updateToolbarButtons();
         Ext.MessageBox.hide();
