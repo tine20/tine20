@@ -454,7 +454,6 @@ Tine.Crm.Main = {
             tooltip: this.translation._('Add new lead'),
             iconCls: 'actionAdd',
             handler: function(){
-                //Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 1024, 768);
                 Tine.Crm.LeadEditDialog.openWindow({});                
             }   
         });
@@ -734,9 +733,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
          * onclick handler for addContact
          */
         addContact: function(_button, _event) {
-            var contactPopup = new Tine.Addressbook.EditPopup();        	
+            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({});        	
             
-            contactPopup.on('update', function(contact) {
+            contactWindow.on('update', function(contact) {
                 switch ( _button.contactType ) {
                 	case 'responsible':
                 	   contact.data.relation_type = 'responsible';
@@ -757,10 +756,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
          */
         editContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
-            var selectedContact = selectedRows[0];
             
-            var contactPopup = new Tine.Addressbook.EditPopup(selectedContact);          
-            contactPopup.on('update', this.onContactUpdate, this);            
+            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({contact: selectedRows[0]});         
+            contactWindow.on('update', this.onContactUpdate, this);            
         },
 
         /**
