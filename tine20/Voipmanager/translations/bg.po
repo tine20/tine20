@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-03 20:39+0100\n"
+"PO-Revision-Date: 2008-09-06 00:21+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -162,28 +162,28 @@ msgstr "Id"
 
 #: js/Asterisk/SipPeer.js:212
 msgid "account code"
-msgstr ""
+msgstr "акаунт-код"
 
 #: js/Asterisk/SipPeer.js:213
 msgid "ama flags"
-msgstr ""
+msgstr "ama flags"
 
 #: js/Asterisk/SipPeer.js:214
 msgid "call group"
-msgstr ""
+msgstr "група за обаждане"
 
 #: js/Asterisk/SipPeer.js:215
 msgid "caller id"
-msgstr ""
+msgstr "id на позвъняване"
 
 #: js/Asterisk/SipPeer.js:216
 msgid "can reinvite"
-msgstr ""
+msgstr "Възможна повторна покана"
 
 #: js/Asterisk/SipPeer.js:217
 #: js/Asterisk/Voicemail.js:197
 msgid "context"
-msgstr ""
+msgstr "контекст"
 
 #: js/Asterisk/SipPeer.js:218
 msgid "default ip"
@@ -195,23 +195,23 @@ msgstr "dtmf режим"
 
 #: js/Asterisk/SipPeer.js:220
 msgid "from user"
-msgstr ""
+msgstr "от потребител"
 
 #: js/Asterisk/SipPeer.js:221
 msgid "from domain"
-msgstr ""
+msgstr "от домейн"
 
 #: js/Asterisk/SipPeer.js:222
 msgid "full contact"
-msgstr ""
+msgstr "Пълен контакт"
 
 #: js/Asterisk/SipPeer.js:223
 msgid "host"
-msgstr ""
+msgstr "ност"
 
 #: js/Asterisk/SipPeer.js:224
 msgid "insecure"
-msgstr ""
+msgstr "несигурно"
 
 #: js/Asterisk/SipPeer.js:225
 #: js/MyPhones.js:564
@@ -219,300 +219,300 @@ msgstr ""
 #: js/Snom/Settings.js:205
 #: js/Snom/Settings.js:545
 msgid "language"
-msgstr ""
+msgstr "език"
 
 #: js/Asterisk/SipPeer.js:226
 #: js/Asterisk/Voicemail.js:196
 #: js/Asterisk/Voicemail.js:433
 msgid "mailbox"
-msgstr ""
+msgstr "мейлбокс"
 
 #: js/Asterisk/SipPeer.js:227
 msgid "md5 secret"
-msgstr ""
+msgstr "md5 тайна"
 
 #: js/Asterisk/SipPeer.js:228
 msgid "nat"
-msgstr ""
+msgstr "nat"
 
 #: js/Asterisk/SipPeer.js:229
 msgid "deny"
-msgstr ""
+msgstr "забрана"
 
 #: js/Asterisk/SipPeer.js:230
 msgid "permit"
-msgstr ""
+msgstr "Позволиние"
 
 #: js/Asterisk/SipPeer.js:231
 msgid "mask"
-msgstr ""
+msgstr "маска"
 
 #: js/Asterisk/SipPeer.js:232
 msgid "pickup group"
-msgstr ""
+msgstr "приета група (група за прием)"
 
 #: js/Asterisk/SipPeer.js:233
 msgid "port"
-msgstr ""
+msgstr "порт"
 
 #: js/Asterisk/SipPeer.js:234
 msgid "qualify"
-msgstr ""
+msgstr "упълномощение"
 
 #: js/Asterisk/SipPeer.js:235
 msgid "retrict cid"
-msgstr ""
+msgstr "ограничини cid (изскачащи прозорци)"
 
 #: js/Asterisk/SipPeer.js:236
 msgid "rtp timeout"
-msgstr ""
+msgstr "RTP `изтичане на времето`"
 
 #: js/Asterisk/SipPeer.js:237
 msgid "rtp hold timeout"
-msgstr ""
+msgstr "RTP спиране на `изтичане на времето`"
 
 #: js/Asterisk/SipPeer.js:238
 msgid "secret"
-msgstr ""
+msgstr "тайна"
 
 #: js/Asterisk/SipPeer.js:239
 msgid "type"
-msgstr ""
+msgstr "тип"
 
 #: js/Asterisk/SipPeer.js:240
 msgid "username"
-msgstr ""
+msgstr "име на потребител"
 
 #: js/Asterisk/SipPeer.js:241
 msgid "disallow"
-msgstr ""
+msgstr "непозволено"
 
 #: js/Asterisk/SipPeer.js:242
 msgid "allow"
-msgstr ""
+msgstr "позволено"
 
 #: js/Asterisk/SipPeer.js:243
 msgid "music on hold"
-msgstr ""
+msgstr "мелодията е спиряна"
 
 #: js/Asterisk/SipPeer.js:244
 msgid "reg seconds"
-msgstr ""
+msgstr "reg секунди"
 
 #: js/Asterisk/SipPeer.js:245
 msgid "ip address"
-msgstr ""
+msgstr "ip адрес"
 
 #: js/Asterisk/SipPeer.js:246
 msgid "reg exten"
-msgstr ""
+msgstr "reg exten"
 
 #: js/Asterisk/SipPeer.js:247
 msgid "can call forward"
-msgstr ""
+msgstr "позволено следващо обаждане"
 
 #: js/Asterisk/SipPeer.js:248
 msgid "set var"
-msgstr ""
+msgstr "set var"
 
 #: js/Asterisk/SipPeer.js:249
 msgid "notify ringing"
-msgstr ""
+msgstr "отбележи (нанеси) обаждане"
 
 #: js/Asterisk/SipPeer.js:250
 msgid "use client code"
-msgstr ""
+msgstr "използвай клиентски код (Client Code)"
 
 #: js/Asterisk/SipPeer.js:251
 msgid "auth user"
-msgstr ""
+msgstr "потребител с права"
 
 #: js/Asterisk/SipPeer.js:252
 msgid "call limit"
-msgstr ""
+msgstr "граница на обаждания"
 
 #: js/Asterisk/SipPeer.js:253
 msgid "busy level"
-msgstr ""
+msgstr "заето ниво"
 
 #: js/Asterisk/SipPeer.js:450
 #: js/Asterisk/Voicemail.js:414
 msgid "General"
-msgstr ""
+msgstr "Генерално (главно)"
 
 #: js/Asterisk/SipPeer.js:463
 #: js/Asterisk/SipPeer.js:662
 #: js/Asterisk/Voicemail.js:440
 msgid "Context"
-msgstr ""
+msgstr "Контекст"
 
 #: js/Asterisk/SipPeer.js:479
 #: js/Asterisk/SipPeer.js:870
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: js/Asterisk/SipPeer.js:496
 #: js/Asterisk/SipPeer.js:863
 msgid "Secret"
-msgstr ""
+msgstr "Тайна"
 
 #: js/Asterisk/SipPeer.js:503
 #: js/Asterisk/SipPeer.js:638
 msgid "Callerid"
-msgstr ""
+msgstr "id на позвънили"
 
 #: js/Asterisk/SipPeer.js:510
 #: js/Asterisk/SipPeer.js:752
 msgid "Mailbox"
-msgstr ""
+msgstr "Мейлбокс"
 
 #: js/Asterisk/SipPeer.js:517
 #: js/Asterisk/SipPeer.js:631
 msgid "Callgroup"
-msgstr ""
+msgstr "Група за обаждане"
 
 #: js/Asterisk/SipPeer.js:524
 #: js/Asterisk/SipPeer.js:804
 msgid "Pickup group"
-msgstr ""
+msgstr "Приета група (група за прием)"
 
 #: js/Asterisk/SipPeer.js:531
 #: js/Asterisk/SipPeer.js:617
 msgid "Accountcode"
-msgstr ""
+msgstr "Акаунт-код"
 
 #: js/Asterisk/SipPeer.js:538
 #: js/Asterisk/SipPeer.js:745
 msgid "Language"
-msgstr ""
+msgstr "Език"
 
 #: js/Asterisk/SipPeer.js:545
 #: js/Asterisk/SipPeer.js:766
 msgid "NAT"
-msgstr ""
+msgstr "NAT"
 
 #: js/Asterisk/SipPeer.js:562
 #: js/Asterisk/SipPeer.js:825
 msgid "Qualify"
-msgstr ""
+msgstr "Упълномощение"
 
 #: js/Asterisk/SipPeer.js:624
 msgid "Amaflags"
-msgstr ""
+msgstr "Amaflags (предпочитани маркери?)"
 
 #: js/Asterisk/SipPeer.js:645
 msgid "Can reinvite"
-msgstr ""
+msgstr "Възможна повторна покана"
 
 #: js/Asterisk/SipPeer.js:669
 msgid "Default IP"
-msgstr ""
+msgstr "IP по настройки"
 
 #: js/Asterisk/SipPeer.js:676
 msgid "DTMF mode"
-msgstr ""
+msgstr "DTMF режим"
 
 #: js/Asterisk/SipPeer.js:693
 msgid "From User"
-msgstr ""
+msgstr "От потребител"
 
 #: js/Asterisk/SipPeer.js:700
 msgid "From Domain"
-msgstr ""
+msgstr "От дмейн"
 
 #: js/Asterisk/SipPeer.js:714
 msgid "Full Contact"
-msgstr ""
+msgstr "Пълен контакт"
 
 #: js/Asterisk/SipPeer.js:721
 msgid "Host"
-msgstr ""
+msgstr "Хост"
 
 #: js/Asterisk/SipPeer.js:728
 msgid "Insecure"
-msgstr ""
+msgstr "Несигурност"
 
 #: js/Asterisk/SipPeer.js:759
 msgid "MD5 Secret"
-msgstr ""
+msgstr "MD5 Тайна"
 
 #: js/Asterisk/SipPeer.js:783
 msgid "Deny"
-msgstr ""
+msgstr "Забрана"
 
 #: js/Asterisk/SipPeer.js:790
 msgid "Permit"
-msgstr ""
+msgstr "Позволиние"
 
 #: js/Asterisk/SipPeer.js:797
 msgid "Mask"
-msgstr ""
+msgstr "Маска"
 
 #: js/Asterisk/SipPeer.js:818
 msgid "Port"
-msgstr ""
+msgstr "Вход (порт)"
 
 #: js/Asterisk/SipPeer.js:842
 msgid "Restrict CID"
-msgstr ""
+msgstr "Ограничен CID (блокиране на изскачащи pop-up-прозорци)"
 
 #: js/Asterisk/SipPeer.js:849
 msgid "RTP Timeout"
-msgstr ""
+msgstr "RTP `изтичане на времето`"
 
 #: js/Asterisk/SipPeer.js:856
 msgid "RTP Hold Timeout"
-msgstr ""
+msgstr "RTP спиране на `изтичане на времето`"
 
 #: js/Asterisk/SipPeer.js:887
 msgid "Username"
-msgstr ""
+msgstr "Име на потребител"
 
 #: js/Asterisk/SipPeer.js:894
 msgid "Disallow"
-msgstr ""
+msgstr "Непозволен"
 
 #: js/Asterisk/SipPeer.js:901
 msgid "Allow"
-msgstr ""
+msgstr "Позволен"
 
 #: js/Asterisk/SipPeer.js:908
 msgid "Music on hold"
-msgstr ""
+msgstr "Спиране но мелодията"
 
 #: js/Asterisk/SipPeer.js:922
 msgid "Reg Seconds"
-msgstr ""
+msgstr "Втори Reg"
 
 #: js/Asterisk/SipPeer.js:929
 #: js/MyPhones.js:167
 #: js/Snom/Phone.js:267
 msgid "IP Address"
-msgstr ""
+msgstr "IP адрес"
 
 #: js/Asterisk/SipPeer.js:936
 msgid "Reg Exten"
-msgstr ""
+msgstr "Външен Reg"
 
 #: js/Asterisk/SipPeer.js:943
 msgid "Can forward call"
-msgstr ""
+msgstr "Позволено следващо обаждане"
 
 #: js/Asterisk/SipPeer.js:960
 msgid "Set Var"
-msgstr ""
+msgstr "Set Var"
 
 #: js/Asterisk/SipPeer.js:967
 msgid "Notify Ringing"
-msgstr ""
+msgstr "Отбележи (нанеси) обаждане"
 
 #: js/Asterisk/SipPeer.js:984
 msgid "Use Client Code"
-msgstr ""
+msgstr "Използвай клиентски код (Client Code)"
 
 #: js/Asterisk/SipPeer.js:1001
 msgid "Auth User"
-msgstr ""
+msgstr "Потребител с права"
 
 #: js/Asterisk/SipPeer.js:1008
 msgid "Call Limit"
@@ -569,12 +569,12 @@ msgstr "Прикрепи"
 #: js/Asterisk/Voicemail.js:203
 #: js/Asterisk/Voicemail.js:633
 msgid "saycid"
-msgstr ""
+msgstr "saycid"
 
 #: js/Asterisk/Voicemail.js:204
 #: js/Asterisk/Voicemail.js:532
 msgid "dialout"
-msgstr ""
+msgstr "Извън избиране (dialout)"
 
 #: js/Asterisk/Voicemail.js:205
 #: js/Asterisk/Voicemail.js:545
@@ -594,7 +594,7 @@ msgstr "оператор"
 #: js/Asterisk/Voicemail.js:208
 #: js/Asterisk/Voicemail.js:716
 msgid "envelope"
-msgstr ""
+msgstr "Обвивка (envelope)"
 
 #: js/Asterisk/Voicemail.js:209
 #: js/Asterisk/Voicemail.js:563
@@ -619,17 +619,17 @@ msgstr "изтрий"
 #: js/Asterisk/Voicemail.js:213
 #: js/Asterisk/Voicemail.js:799
 msgid "nextaftercmd"
-msgstr ""
+msgstr "следващ след cmd (nextaftercmd)"
 
 #: js/Asterisk/Voicemail.js:214
 #: js/Asterisk/Voicemail.js:825
 msgid "forcename"
-msgstr ""
+msgstr "важащо име (forcename)"
 
 #: js/Asterisk/Voicemail.js:215
 #: js/Asterisk/Voicemail.js:851
 msgid "forcegreetings"
-msgstr ""
+msgstr "важащи обръщения (forcegreetings)"
 
 #: js/Asterisk/Voicemail.js:216
 #: js/Asterisk/Voicemail.js:882
@@ -1092,7 +1092,7 @@ msgstr "CP диалогова информация"
 
 #: js/Snom/Location.js:210
 msgid "Pickup Indic."
-msgstr ""
+msgstr "Pickup Indic."
 
 #: js/Snom/Location.js:450
 msgid "Settings URL"
@@ -1184,11 +1184,11 @@ msgstr "Активен ред"
 
 #: js/Snom/Phone.js:626
 msgid "sipCombo"
-msgstr ""
+msgstr "SiP combo"
 
 #: js/Snom/Phone.js:635
 msgid "Idle Text"
-msgstr ""
+msgstr "Свободен текст"
 
 #: js/Snom/Phone.js:716
 msgid "MAC Address"

@@ -49,15 +49,15 @@ msgstr "Исполнить"
 msgid "run right description"
 msgstr "Исполнимое право необходимо, чтобы иметь доступ к программе."
 
-#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:199 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Тэги"
 
-#: Export/Pdf.php:353
+#: Export/Pdf.php:400
 msgid "Export Date"
 msgstr "Экспортировать число"
 
-#: Export/Pdf.php:357
+#: Export/Pdf.php:404
 msgid "Created by"
 msgstr "Установлено"
 
@@ -65,7 +65,7 @@ msgstr "Установлено"
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:292 js/widgets/EditRecord.js:98
+#: js/ExceptionDialog.js:34 js/MainScreen.js:310 js/widgets/EditRecord.js:98
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -150,7 +150,7 @@ msgstr "Пожалуйста подождите"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
-#: js/Login.js:130 js/MainScreen.js:357
+#: js/Login.js:130 js/MainScreen.js:388
 msgid "Please wait!"
 msgstr "Пожалуйста подождите!"
 
@@ -162,95 +162,105 @@ msgstr "Регистрация не удалась"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
-#: js/MainScreen.js:45
+#: js/MainScreen.js:46
 msgid "Change password"
 msgstr "Изменить пароль"
 
-#: js/MainScreen.js:51
+#: js/MainScreen.js:52
+msgid "Install Google Gears"
+msgstr ""
+
+#: js/MainScreen.js:58
 msgid "Logout"
 msgstr "Выход"
 
-#: js/MainScreen.js:52
+#: js/MainScreen.js:59
 msgid "Logout from Tine 2.0"
 msgstr "Выход из Tine 2.0"
 
-#: js/MainScreen.js:71 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:81 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/MainScreen.js:79
+#: js/MainScreen.js:89
 msgid "Preferences"
 msgstr "Предпочтение"
 
-#: js/MainScreen.js:95
+#: js/MainScreen.js:105
 #, python-format
 msgid "User: %s"
 msgstr "Пользователь"
 
-#: js/MainScreen.js:96
+#: js/MainScreen.js:106
 #, python-format
 msgid "Timezone: %s"
 msgstr "Часовой пояс: %s"
 
-#: js/MainScreen.js:97 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:107 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Язык"
 
-#: js/MainScreen.js:256
+#: js/MainScreen.js:274
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr "Изменить пароль для \"%s\""
 
-#: js/MainScreen.js:280
+#: js/MainScreen.js:298
 msgid "Old Password"
 msgstr "Старый пароль"
 
-#: js/MainScreen.js:284
+#: js/MainScreen.js:302
 msgid "New Password"
 msgstr "Новый пароль"
 
-#: js/MainScreen.js:288
+#: js/MainScreen.js:306
 msgid "Repeat new Password"
 msgstr "Повторите новый пароль"
 
-#: js/MainScreen.js:298 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
+#: js/MainScreen.js:316 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/EditRecord.js:77
 msgid "Ok"
 msgstr "Ок"
 
-#: js/MainScreen.js:307
+#: js/MainScreen.js:325
 msgid "Please Wait!"
 msgstr "Пожалуйста подождите!"
 
-#: js/MainScreen.js:308
+#: js/MainScreen.js:326
 msgid "changing password..."
 msgstr "Пароль изменяется"
 
-#: js/MainScreen.js:319
+#: js/MainScreen.js:337
 msgid "Success"
 msgstr "Успех"
 
-#: js/MainScreen.js:320
+#: js/MainScreen.js:338
 msgid "Your password has been changed."
 msgstr "Ваш пароль  изменен."
 
-#: js/MainScreen.js:326 js/MainScreen.js:336
+#: js/MainScreen.js:344 js/MainScreen.js:354
 msgid "Failure"
 msgstr "Провал "
 
-#: js/MainScreen.js:337
+#: js/MainScreen.js:355
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новие пароли не соответствуют, пожалуйста исправьте их."
 
-#: js/MainScreen.js:355 js/widgets/container/ContainerTree.js:236
+#: js/MainScreen.js:373
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+
+#: js/MainScreen.js:386 js/widgets/container/ContainerTree.js:236
 msgid "Confirm"
 msgstr "Подтверждение"
 
-#: js/MainScreen.js:355
+#: js/MainScreen.js:386
 msgid "Are you sure you want to logout?"
 msgstr "Вы уверены что хотите покинуть программу?"
 
-#: js/MainScreen.js:357
+#: js/MainScreen.js:388
 msgid "Logging you out..."
 msgstr "выключаю программу..."
 
@@ -606,7 +616,7 @@ msgstr "Показать"
 msgid "remove record"
 msgstr "Убрать отчет"
 
-#: js/widgets/GroupSelect.js:115
+#: js/widgets/GroupSelect.js:94
 msgid "Please Select a Group"
 msgstr "Пожалуйста выберите группу"
 
@@ -773,32 +783,33 @@ msgstr ""
 msgid "Please consider updateing!"
 msgstr ""
 
-msgid "Save"
-msgstr "Сохранить"
+#~ msgid "Save"
+#~ msgstr "Сохранить"
 
-msgid "Close"
-msgstr "Закрыть"
+#~ msgid "Close"
+#~ msgstr "Закрыть"
 
-msgid "My"
-msgstr "Мое"
+#~ msgid "My"
+#~ msgstr "Мое"
 
-msgid "container"
-msgstr "контейнер"
+#~ msgid "container"
+#~ msgstr "контейнер"
 
-msgid "The selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
-msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
-msgstr[2] "Выбранные тэгов будут удалени и стерти из всех Записей"
+#~ msgid "The selected tag will be deleted and disapear for all entries"
+#~ msgid_plural ""
+#~ "The selected tags will be removed and disapear for all entries"
+#~ msgstr[0] "Выбранный тэг будет удален и стерт из всех Записей"
+#~ msgstr[1] "Выбранные тэги будут удалени и стерти из всех Записей"
+#~ msgstr[2] "Выбранные тэгов будут удалени и стерти из всех Записей"
 
-msgid "Language: "
-msgstr "Язык:"
+#~ msgid "Language: "
+#~ msgstr "Язык:"
 
-msgid "All"
-msgstr "Все"
+#~ msgid "All"
+#~ msgstr "Все"
 
-msgid "Shared"
-msgstr "Разделение"
+#~ msgid "Shared"
+#~ msgstr "Разделение"
 
-msgid "Other Users"
-msgstr "Другие пользователи"
+#~ msgid "Other Users"
+#~ msgstr "Другие пользователи"

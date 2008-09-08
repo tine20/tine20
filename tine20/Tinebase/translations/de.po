@@ -47,15 +47,15 @@ msgid "run right description"
 msgstr ""
 "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
-#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:199 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Tags"
 
-#: Export/Pdf.php:353
+#: Export/Pdf.php:400
 msgid "Export Date"
 msgstr "Export Datum"
 
-#: Export/Pdf.php:357
+#: Export/Pdf.php:404
 msgid "Created by"
 msgstr "Angelegt von"
 
@@ -63,7 +63,7 @@ msgstr "Angelegt von"
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:292 js/widgets/EditRecord.js:98
+#: js/ExceptionDialog.js:34 js/MainScreen.js:310 js/widgets/EditRecord.js:98
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -147,7 +147,7 @@ msgstr "Bitte warten"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Anmeldung erfolgreich. Tine 2.0 wird geladen..."
 
-#: js/Login.js:130 js/MainScreen.js:357
+#: js/Login.js:130 js/MainScreen.js:388
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
@@ -159,97 +159,107 @@ msgstr "Anmeldung fehlgeschlagen"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ihre Benutzername und Passwort Kombination ist falsch!"
 
-#: js/MainScreen.js:45
+#: js/MainScreen.js:46
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: js/MainScreen.js:51
+#: js/MainScreen.js:52
+msgid "Install Google Gears"
+msgstr ""
+
+#: js/MainScreen.js:58
 msgid "Logout"
 msgstr "Abmelden"
 
-#: js/MainScreen.js:52
+#: js/MainScreen.js:59
 msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
-#: js/MainScreen.js:71 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:81 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "Admin"
 
-#: js/MainScreen.js:79
+#: js/MainScreen.js:89
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: js/MainScreen.js:95
+#: js/MainScreen.js:105
 #, python-format
 msgid "User: %s"
 msgstr "Benutzer: %s"
 
-#: js/MainScreen.js:96
+#: js/MainScreen.js:106
 #, python-format
 msgid "Timezone: %s"
 msgstr "Zeitzone: %s"
 
-#: js/MainScreen.js:97 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:107 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Sprache"
 
-#: js/MainScreen.js:256
+#: js/MainScreen.js:274
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr "Passwort für \"%s\" ändern"
 
-#: js/MainScreen.js:280
+#: js/MainScreen.js:298
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#: js/MainScreen.js:284
+#: js/MainScreen.js:302
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: js/MainScreen.js:288
+#: js/MainScreen.js:306
 msgid "Repeat new Password"
 msgstr "Wiederholung neues Passwort"
 
-#: js/MainScreen.js:298 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
+#: js/MainScreen.js:316 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/EditRecord.js:77
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:307
+#: js/MainScreen.js:325
 msgid "Please Wait!"
 msgstr "Bitte warten!"
 
-#: js/MainScreen.js:308
+#: js/MainScreen.js:326
 msgid "changing password..."
 msgstr "Passwort wird geändert..."
 
-#: js/MainScreen.js:319
+#: js/MainScreen.js:337
 msgid "Success"
 msgstr "Erfolg"
 
-#: js/MainScreen.js:320
+#: js/MainScreen.js:338
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert"
 
-#: js/MainScreen.js:326 js/MainScreen.js:336
+#: js/MainScreen.js:344 js/MainScreen.js:354
 msgid "Failure"
 msgstr "Fehler"
 
-#: js/MainScreen.js:337
+#: js/MainScreen.js:355
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
 "Eingabe."
 
-#: js/MainScreen.js:355 js/widgets/container/ContainerTree.js:236
+#: js/MainScreen.js:373
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+
+#: js/MainScreen.js:386 js/widgets/container/ContainerTree.js:236
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/MainScreen.js:355
+#: js/MainScreen.js:386
 msgid "Are you sure you want to logout?"
 msgstr "Wollen sie sich wirklich Abmelden?"
 
-#: js/MainScreen.js:357
+#: js/MainScreen.js:388
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
@@ -607,7 +617,7 @@ msgstr "Zeige"
 msgid "remove record"
 msgstr "eintrag löschen"
 
-#: js/widgets/GroupSelect.js:115
+#: js/widgets/GroupSelect.js:94
 msgid "Please Select a Group"
 msgstr "Bitte wählen sie eine Gruppe aus"
 

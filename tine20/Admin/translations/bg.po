@@ -27,7 +27,9 @@ msgstr "Обработка на потребителско конто"
 
 #: Acl/Rights.php:169
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr "Създаване и обработка на групи и потребители, вкарване на потребители в групи, създаване и промяна на пароли"
+msgstr ""
+"Създаване и обработка на групи и потребители, вкарване на потребители в "
+"групи, създаване и промяна на пароли"
 
 #: Acl/Rights.php:172
 msgid "manage applications"
@@ -42,8 +44,11 @@ msgid "manage roles"
 msgstr "Обработка правата на достъп (роли)"
 
 #: Acl/Rights.php:177
-msgid "add and edit roles, add new members to roles, add application rights to roles"
-msgstr "Създаване, подреждане и обработка правата на достъп (роли), вкарване на потребители в определена роля, създаване на апликационни права за роли"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"Създаване, подреждане и обработка правата на достъп (роли), вкарване на "
+"потребители в определена роля, създаване на апликационни права за роли"
 
 #: Acl/Rights.php:180
 msgid "manage shared tags"
@@ -85,3 +90,18 @@ msgstr "Виж правата на достъп (роли)"
 msgid "view roles list and details"
 msgstr "Виж листата с правата на достъп (роли) и детайли"
 
+#: js/Roles.js:687
+msgid "Loading Role..."
+msgstr ""
+
+#: js/Roles.js:687 js/Tags.js:579 js/Users.js:474
+msgid "Please Wait"
+msgstr ""
+
+#: js/Tags.js:579
+msgid "Loading Tag..."
+msgstr ""
+
+#: js/Users.js:474
+msgid "Saving User Account"
+msgstr ""

@@ -46,15 +46,15 @@ msgstr ""
 msgid "run right description"
 msgstr ""
 
-#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:199 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr ""
 
-#: Export/Pdf.php:353
+#: Export/Pdf.php:400
 msgid "Export Date"
 msgstr ""
 
-#: Export/Pdf.php:357
+#: Export/Pdf.php:404
 msgid "Created by"
 msgstr ""
 
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Abnormal End"
 msgstr ""
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:292 js/widgets/EditRecord.js:98
+#: js/ExceptionDialog.js:34 js/MainScreen.js:310 js/widgets/EditRecord.js:98
 msgid "Cancel"
 msgstr ""
 
@@ -143,7 +143,7 @@ msgstr ""
 msgid "Login successful. Loading Tine 2.0..."
 msgstr ""
 
-#: js/Login.js:130 js/MainScreen.js:357
+#: js/Login.js:130 js/MainScreen.js:388
 msgid "Please wait!"
 msgstr ""
 
@@ -155,95 +155,105 @@ msgstr ""
 msgid "Your username and/or your password are wrong!!!"
 msgstr ""
 
-#: js/MainScreen.js:45
+#: js/MainScreen.js:46
 msgid "Change password"
 msgstr ""
 
-#: js/MainScreen.js:51
+#: js/MainScreen.js:52
+msgid "Install Google Gears"
+msgstr ""
+
+#: js/MainScreen.js:58
 msgid "Logout"
 msgstr ""
 
-#: js/MainScreen.js:52
+#: js/MainScreen.js:59
 msgid "Logout from Tine 2.0"
 msgstr ""
 
-#: js/MainScreen.js:71 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:81 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr ""
 
-#: js/MainScreen.js:79
+#: js/MainScreen.js:89
 msgid "Preferences"
 msgstr ""
 
-#: js/MainScreen.js:95
+#: js/MainScreen.js:105
 #, python-format
 msgid "User: %s"
 msgstr ""
 
-#: js/MainScreen.js:96
+#: js/MainScreen.js:106
 #, python-format
 msgid "Timezone: %s"
 msgstr ""
 
-#: js/MainScreen.js:97 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:107 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr ""
 
-#: js/MainScreen.js:256
+#: js/MainScreen.js:274
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr ""
 
-#: js/MainScreen.js:280
+#: js/MainScreen.js:298
 msgid "Old Password"
 msgstr ""
 
-#: js/MainScreen.js:284
+#: js/MainScreen.js:302
 msgid "New Password"
 msgstr ""
 
-#: js/MainScreen.js:288
+#: js/MainScreen.js:306
 msgid "Repeat new Password"
 msgstr ""
 
-#: js/MainScreen.js:298 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
+#: js/MainScreen.js:316 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/EditRecord.js:77
 msgid "Ok"
 msgstr ""
 
-#: js/MainScreen.js:307
+#: js/MainScreen.js:325
 msgid "Please Wait!"
 msgstr ""
 
-#: js/MainScreen.js:308
+#: js/MainScreen.js:326
 msgid "changing password..."
 msgstr ""
 
-#: js/MainScreen.js:319
+#: js/MainScreen.js:337
 msgid "Success"
 msgstr ""
 
-#: js/MainScreen.js:320
+#: js/MainScreen.js:338
 msgid "Your password has been changed."
 msgstr ""
 
-#: js/MainScreen.js:326 js/MainScreen.js:336
+#: js/MainScreen.js:344 js/MainScreen.js:354
 msgid "Failure"
 msgstr ""
 
-#: js/MainScreen.js:337
+#: js/MainScreen.js:355
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 
-#: js/MainScreen.js:355 js/widgets/container/ContainerTree.js:236
+#: js/MainScreen.js:373
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+
+#: js/MainScreen.js:386 js/widgets/container/ContainerTree.js:236
 msgid "Confirm"
 msgstr ""
 
-#: js/MainScreen.js:355
+#: js/MainScreen.js:386
 msgid "Are you sure you want to logout?"
 msgstr ""
 
-#: js/MainScreen.js:357
+#: js/MainScreen.js:388
 msgid "Logging you out..."
 msgstr ""
 
@@ -595,7 +605,7 @@ msgstr ""
 msgid "remove record"
 msgstr ""
 
-#: js/widgets/GroupSelect.js:115
+#: js/widgets/GroupSelect.js:94
 msgid "Please Select a Group"
 msgstr ""
 

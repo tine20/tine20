@@ -42,7 +42,8 @@ msgid "manage roles"
 msgstr "管理角色"
 
 #: Acl/Rights.php:177
-msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
 msgstr "添加并编辑角色，给角色添加新成员，给角色添加应用程序权限"
 
 #: Acl/Rights.php:180
@@ -85,3 +86,18 @@ msgstr "浏览角色"
 msgid "view roles list and details"
 msgstr "浏览角色列表和细节"
 
+#: js/Roles.js:687
+msgid "Loading Role..."
+msgstr ""
+
+#: js/Roles.js:687 js/Tags.js:579 js/Users.js:474
+msgid "Please Wait"
+msgstr ""
+
+#: js/Tags.js:579
+msgid "Loading Tag..."
+msgstr ""
+
+#: js/Users.js:474
+msgid "Saving User Account"
+msgstr ""

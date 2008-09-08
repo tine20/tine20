@@ -11,7 +11,8 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: Acl/Rights.php:164
 msgid "manage access log"
@@ -27,7 +28,9 @@ msgstr "Управлять пользовательскими счетами"
 
 #: Acl/Rights.php:169
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr "Добавить и обработать пользователей и группы, присоединить пользователей к группам, ставить пароли по-новому. "
+msgstr ""
+"Добавить и обработать пользователей и группы, присоединить пользователей к "
+"группам, ставить пароли по-новому. "
 
 #: Acl/Rights.php:172
 msgid "manage applications"
@@ -42,8 +45,11 @@ msgid "manage roles"
 msgstr "Управлять ролями"
 
 #: Acl/Rights.php:177
-msgid "add and edit roles, add new members to roles, add application rights to roles"
-msgstr "Добавить и обработать роли, добавить новых участников к ролям, добавить прикладные права на роли"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"Добавить и обработать роли, добавить новых участников к ролям, добавить "
+"прикладные права на роли"
 
 #: Acl/Rights.php:180
 msgid "manage shared tags"
@@ -85,3 +91,18 @@ msgstr "Показать роли"
 msgid "view roles list and details"
 msgstr "Показать роли"
 
+#: js/Roles.js:687
+msgid "Loading Role..."
+msgstr ""
+
+#: js/Roles.js:687 js/Tags.js:579 js/Users.js:474
+msgid "Please Wait"
+msgstr ""
+
+#: js/Tags.js:579
+msgid "Loading Tag..."
+msgstr ""
+
+#: js/Users.js:474
+msgid "Saving User Account"
+msgstr ""

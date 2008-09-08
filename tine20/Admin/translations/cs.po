@@ -30,7 +30,9 @@ msgstr "spravovat účty"
 
 #: Acl/Rights.php:169
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr "přidat a editovat uživatele a skupiny, přidat členy do skupin, měnit hesla uživatelů"
+msgstr ""
+"přidat a editovat uživatele a skupiny, přidat členy do skupin, měnit hesla "
+"uživatelů"
 
 #: Acl/Rights.php:172
 msgid "manage applications"
@@ -45,8 +47,11 @@ msgid "manage roles"
 msgstr "spravovat role"
 
 #: Acl/Rights.php:177
-msgid "add and edit roles, add new members to roles, add application rights to roles"
-msgstr "přidat a editovat role, přidat nové členy do rolí, přidat rolím aplikační práva"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"přidat a editovat role, přidat nové členy do rolí, přidat rolím aplikační "
+"práva"
 
 #: Acl/Rights.php:180
 msgid "manage shared tags"
@@ -88,3 +93,18 @@ msgstr "zobrazit role"
 msgid "view roles list and details"
 msgstr "zobrazit podrobný seznam rolí"
 
+#: js/Roles.js:687
+msgid "Loading Role..."
+msgstr ""
+
+#: js/Roles.js:687 js/Tags.js:579 js/Users.js:474
+msgid "Please Wait"
+msgstr ""
+
+#: js/Tags.js:579
+msgid "Loading Tag..."
+msgstr ""
+
+#: js/Users.js:474
+msgid "Saving User Account"
+msgstr ""

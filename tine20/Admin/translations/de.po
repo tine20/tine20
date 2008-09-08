@@ -91,6 +91,22 @@ msgstr "Rollen ansehen"
 msgid "view roles list and details"
 msgstr "Rollen ansehen"
 
+#: js/Roles.js:687
+msgid "Loading Role..."
+msgstr ""
+
+#: js/Roles.js:687 js/Tags.js:579 js/Users.js:474
+msgid "Please Wait"
+msgstr ""
+
+#: js/Tags.js:579
+msgid "Loading Tag..."
+msgstr ""
+
+#: js/Users.js:474
+msgid "Saving User Account"
+msgstr ""
+
 #~ msgid "manage roles right description"
 #~ msgstr ""
 #~ "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "

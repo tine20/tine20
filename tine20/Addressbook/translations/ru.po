@@ -433,14 +433,14 @@ msgstr ""
 msgid "Other Data"
 msgstr "Другая дата"
 
-msgid "Filter: "
-msgstr "Фильтр:"
+#~ msgid "Filter: "
+#~ msgstr "Фильтр:"
 
-msgid "Search: "
-msgstr "Поиск:"
+#~ msgid "Search: "
+#~ msgstr "Поиск:"
 
-msgid "Name"
-msgstr "Имя"
+#~ msgid "Name"
+#~ msgstr "Имя"
 
-msgid "History"
-msgstr "История"
+#~ msgid "History"
+#~ msgstr "История"

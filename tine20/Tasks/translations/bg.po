@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-08-24 17:21+0100\n"
+"PO-Revision-Date: 2008-09-08 08:36+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 #: Controller.php:302
 #, python-format
 msgid "%s's personal tasks"
-msgstr ""
+msgstr "%s's лична задача"
 
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
@@ -24,12 +24,16 @@ msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:553 js/Tasks.js:686
+#: js/Tasks.js:141
+#: js/Tasks.js:270
+#: js/Tasks.js:553
+#: js/Tasks.js:686
 #: js/Tasks.js:711
 msgid "Failed"
 msgstr "Грешка"
 
-#: js/Tasks.js:141 js/Tasks.js:711
+#: js/Tasks.js:141
+#: js/Tasks.js:711
 msgid "Could not delete task(s)."
 msgstr "Задачата (-ите) не може(могат) да бъде(бъдатат) изтрита(-и)"
 
@@ -47,7 +51,9 @@ msgid_plural "Delete tasks"
 msgstr[0] "Изтрий задача"
 msgstr[1] "Изтрий задачи"
 
-#: js/Tasks.js:270 js/Tasks.js:553 js/Tasks.js:686
+#: js/Tasks.js:270
+#: js/Tasks.js:553
+#: js/Tasks.js:686
 msgid "Could not save task."
 msgstr "Задачата не може да бъде запаметена."
 
@@ -79,7 +85,8 @@ msgstr "Намерени задачи {0} - {1} от {2}"
 msgid "No tasks to display"
 msgstr "Няма намерени задачи"
 
-#: js/Tasks.js:419 js/Tasks.js:762
+#: js/Tasks.js:419
+#: js/Tasks.js:762
 msgid "Status"
 msgstr "Статус"
 
@@ -87,7 +94,8 @@ msgstr "Статус"
 msgid "Percent"
 msgstr "Процент"
 
-#: js/Tasks.js:450 js/Tasks.js:734
+#: js/Tasks.js:450
+#: js/Tasks.js:734
 msgid "Summary"
 msgstr "Заключение"
 
@@ -95,7 +103,8 @@ msgstr "Заключение"
 msgid "Add a task..."
 msgstr "Добави задача"
 
-#: js/Tasks.js:463 js/Tasks.js:766
+#: js/Tasks.js:463
+#: js/Tasks.js:766
 msgid "Priority"
 msgstr "Приоритет"
 
@@ -109,17 +118,18 @@ msgstr "Няма намерени задачи"
 
 #: js/Tasks.js:629
 msgid "Loading Task..."
-msgstr ""
+msgstr "Зарежда задача..."
 
 #: js/Tasks.js:629
 msgid "Please Wait"
-msgstr ""
+msgstr "Моля изчакайте"
 
 #: js/Tasks.js:655
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/Tasks.js:655 js/Tasks.js:699
+#: js/Tasks.js:655
+#: js/Tasks.js:699
 msgid "Saving Task"
 msgstr "Запамети задача"
 
@@ -141,7 +151,7 @@ msgstr "Наистина ли желаете да изтриете тази за
 
 #: js/Tasks.js:699
 msgid "Please wait a moment..."
-msgstr "Моля изчакай един момент"
+msgstr "Моля изчакайте един момент"
 
 #: js/Tasks.js:738
 msgid "Enter short name..."
@@ -166,3 +176,4 @@ msgstr "Краен срок"
 #: js/Tasks.js:774
 msgid "Folder"
 msgstr "Папка"
+

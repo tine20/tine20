@@ -45,15 +45,15 @@ msgstr "运行"
 msgid "run right description"
 msgstr "运行权限描述"
 
-#: Export/Pdf.php:152 js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:199 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "标签"
 
-#: Export/Pdf.php:353
+#: Export/Pdf.php:400
 msgid "Export Date"
 msgstr "输出日期"
 
-#: Export/Pdf.php:357
+#: Export/Pdf.php:404
 msgid "Created by"
 msgstr "创建者"
 
@@ -61,7 +61,7 @@ msgstr "创建者"
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:292 js/widgets/EditRecord.js:98
+#: js/ExceptionDialog.js:34 js/MainScreen.js:310 js/widgets/EditRecord.js:98
 msgid "Cancel"
 msgstr "取消"
 
@@ -144,7 +144,7 @@ msgstr "请等待"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "登录成功，正加载 Tine 2.0 ..."
 
-#: js/Login.js:130 js/MainScreen.js:357
+#: js/Login.js:130 js/MainScreen.js:388
 msgid "Please wait!"
 msgstr "请等待！"
 
@@ -156,95 +156,105 @@ msgstr "登录失败"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "你的用户名或者密码有误！！！"
 
-#: js/MainScreen.js:45
+#: js/MainScreen.js:46
 msgid "Change password"
 msgstr "修改密码"
 
-#: js/MainScreen.js:51
+#: js/MainScreen.js:52
+msgid "Install Google Gears"
+msgstr ""
+
+#: js/MainScreen.js:58
 msgid "Logout"
 msgstr "登出"
 
-#: js/MainScreen.js:52
+#: js/MainScreen.js:59
 msgid "Logout from Tine 2.0"
 msgstr "从 Tine 2.0 登出"
 
-#: js/MainScreen.js:71 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:81 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "管理"
 
-#: js/MainScreen.js:79
+#: js/MainScreen.js:89
 msgid "Preferences"
 msgstr "参考"
 
-#: js/MainScreen.js:95
+#: js/MainScreen.js:105
 #, python-format
 msgid "User: %s"
 msgstr "用户：%s"
 
-#: js/MainScreen.js:96
+#: js/MainScreen.js:106
 #, python-format
 msgid "Timezone: %s"
 msgstr "时区：%s"
 
-#: js/MainScreen.js:97 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:107 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "语言"
 
-#: js/MainScreen.js:256
+#: js/MainScreen.js:274
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr "为 \"%s\"修改密码"
 
-#: js/MainScreen.js:280
+#: js/MainScreen.js:298
 msgid "Old Password"
 msgstr "旧密码"
 
-#: js/MainScreen.js:284
+#: js/MainScreen.js:302
 msgid "New Password"
 msgstr "新密码"
 
-#: js/MainScreen.js:288
+#: js/MainScreen.js:306
 msgid "Repeat new Password"
 msgstr "重复新密码"
 
-#: js/MainScreen.js:298 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
+#: js/MainScreen.js:316 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/EditRecord.js:77
 msgid "Ok"
 msgstr "好"
 
-#: js/MainScreen.js:307
+#: js/MainScreen.js:325
 msgid "Please Wait!"
 msgstr "请等待"
 
-#: js/MainScreen.js:308
+#: js/MainScreen.js:326
 msgid "changing password..."
 msgstr "修改密码..."
 
-#: js/MainScreen.js:319
+#: js/MainScreen.js:337
 msgid "Success"
 msgstr "成功"
 
-#: js/MainScreen.js:320
+#: js/MainScreen.js:338
 msgid "Your password has been changed."
 msgstr "你的密码已经被修改"
 
-#: js/MainScreen.js:326 js/MainScreen.js:336
+#: js/MainScreen.js:344 js/MainScreen.js:354
 msgid "Failure"
 msgstr "失败"
 
-#: js/MainScreen.js:337
+#: js/MainScreen.js:355
 msgid "The new passwords mismatch, please correct them."
 msgstr "新密码不匹配，请纠正"
 
-#: js/MainScreen.js:355 js/widgets/container/ContainerTree.js:236
+#: js/MainScreen.js:373
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+
+#: js/MainScreen.js:386 js/widgets/container/ContainerTree.js:236
 msgid "Confirm"
 msgstr "确认"
 
-#: js/MainScreen.js:355
+#: js/MainScreen.js:386
 msgid "Are you sure you want to logout?"
 msgstr "确实想登出？"
 
-#: js/MainScreen.js:357
+#: js/MainScreen.js:388
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
@@ -596,7 +606,7 @@ msgstr "显示"
 msgid "remove record"
 msgstr "删除记录"
 
-#: js/widgets/GroupSelect.js:115
+#: js/widgets/GroupSelect.js:94
 msgid "Please Select a Group"
 msgstr "请选择一个组"
 
