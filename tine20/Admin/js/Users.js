@@ -138,7 +138,7 @@ Tine.Admin.Users.Main = function() {
         },
     
         resetPasswordHandler: function(_button, _event) {
-            Ext.MessageBox.prompt('Set new password', 'Please enter the new password:', function(_button, _text) {
+            Ext.MessageBox.prompt(this.translation.gettext('Set new password'), this.translation.gettext('Please enter the new password:'), function(_button, _text) {
                 if(_button == 'ok') {
                     //var accountId = Ext.getCmp('AdminUserGrid').getSelectionModel().getSelected().id;
                     var accountObject = Ext.util.JSON.encode(Ext.getCmp('AdminUserGrid').getSelectionModel().getSelected().data);
@@ -163,7 +163,7 @@ Tine.Admin.Users.Main = function() {
         },
         
         deleteButtonHandler: function(_button, _event) {
-            Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected account(s)?', function(_confirmButton){
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected account(s)?'), function(_confirmButton){
                 if (_confirmButton == 'yes') {
                 
                     var accountIds = new Array();
@@ -178,12 +178,12 @@ Tine.Admin.Users.Main = function() {
                             method: 'Admin.deleteUsers',
                             accountIds: Ext.util.JSON.encode(accountIds)
                         },
-                        text: 'Deleting account(s)...',
+                        text: this.translation.gettext('Deleting account(s)...'),
                         success: function(_result, _request){
                             Ext.getCmp('AdminUserGrid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the account(s).');
+                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the account(s).'));
                         }
                     });
                 }
@@ -201,7 +201,7 @@ Tine.Admin.Users.Main = function() {
             var UserAdminQuickSearchField = new Ext.ux.SearchField({
                 id: 'UserAdminQuickSearchField',
                 width:240,
-                emptyText: 'enter searchfilter'
+                emptyText: this.translation.gettext('enter searchfilter')
             }); 
             UserAdminQuickSearchField.on('change', function() {
                 Ext.getCmp('AdminUserGrid').getStore().load({params:{start:0, limit:50}});
@@ -217,7 +217,7 @@ Tine.Admin.Users.Main = function() {
                     this.actionDeleteAccount,
                     '-',
                     '->',
-                    'Search:', ' ',
+                    this.translation.gettext('Search:'), ' ',
     /*                new Ext.ux.SelectBox({
                       listClass:'x-combo-list-small',
                       width:90,
@@ -262,22 +262,22 @@ Tine.Admin.Users.Main = function() {
                 pageSize: 50,
                 store: dataStore,
                 displayInfo: true,
-                displayMsg: 'Displaying accounts {0} - {1} of {2}',
-                emptyMsg: "No accounts to display"
+                displayMsg: this.translation.gettext('Displaying accounts {0} - {1} of {2}'),
+                emptyMsg: this.translation.gettext("No accounts to display")
             }); 
             
             var columnModel = new Ext.grid.ColumnModel([
-                {resizable: true, header: 'ID', id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
-                {resizable: true, header: 'Status', id: 'accountStatus', dataIndex: 'accountStatus', width: 50, renderer: _renderStatus},
-                {resizable: true, header: 'Displayname', id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
-                {resizable: true, header: 'Loginname', id: 'accountLoginName', dataIndex: 'accountLoginName'},
-                {resizable: true, header: 'Last name', id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
-                {resizable: true, header: 'First name', id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
-                {resizable: true, header: 'Email', id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
-                {resizable: true, header: 'Last login at', id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-                {resizable: true, header: 'Last login from', id: 'accountLastLoginfrom', dataIndex: 'accountLastLoginfrom'},
-                {resizable: true, header: 'Password changed', id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-                {resizable: true, header: 'Expires', id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer}
+                {resizable: true, header: this.translation.gettext('ID'), id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
+                {resizable: true, header: this.translation.gettext('Status'), id: 'accountStatus', dataIndex: 'accountStatus', width: 50, renderer: _renderStatus},
+                {resizable: true, header: this.translation.gettext('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
+                {resizable: true, header: this.translation.gettext('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName'},
+                {resizable: true, header: this.translation.gettext('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
+                {resizable: true, header: this.translation.gettext('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
+                {resizable: true, header: this.translation.gettext('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
+                {resizable: true, header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+                {resizable: true, header: this.translation.gettext('Last login from'), id: 'accountLastLoginfrom', dataIndex: 'accountLastLoginfrom'},
+                {resizable: true, header: this.translation.gettext('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+                {resizable: true, header: this.translation.gettext('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer}
             ]);
             
             columnModel.defaultSortable = true; // by default columns are sortable
@@ -354,8 +354,11 @@ Tine.Admin.Users.Main = function() {
         },
         
         initComponent: function() {
+            this.translation = new Locale.Gettext();
+            this.translation.textdomain('Admin');
+        
             this.actionAddAccount = new Ext.Action({
-                text: 'add account',
+                text: this.translation.gettext('add account'),
                 disabled: true,
                 handler: this.addButtonHandler,
                 iconCls: 'action_addContact',
@@ -363,7 +366,7 @@ Tine.Admin.Users.Main = function() {
             });
             
             this.actionEditAccount = new Ext.Action({
-                text: 'edit account',
+                text: this.translation.gettext('edit account'),
                 disabled: true,
                 handler: this.editButtonHandler,
                 iconCls: 'action_edit',
@@ -371,7 +374,7 @@ Tine.Admin.Users.Main = function() {
             });
 
             this.actionDeleteAccount = new Ext.Action({
-                text: 'delete account',
+                text: this.translation.gettext('delete account'),
                 disabled: true,
                 handler: this.deleteButtonHandler,
                 iconCls: 'action_delete',
@@ -379,7 +382,7 @@ Tine.Admin.Users.Main = function() {
             });            
             
             this.actionEnable = new Ext.Action({
-                text: 'enable account',
+                text: this.translation.gettext('enable account'),
                 disabled: true,
                 handler: this.enableDisableButtonHandler,
                 iconCls: 'action_enable',
@@ -388,7 +391,7 @@ Tine.Admin.Users.Main = function() {
             });
         
             this.actionDisable = new Ext.Action({
-                text: 'disable account',
+                text: this.translation.gettext('disable account'),
                 disabled: true,
                 handler: this.enableDisableButtonHandler,
                 iconCls: 'action_disable',
@@ -397,7 +400,7 @@ Tine.Admin.Users.Main = function() {
             });
         
             this.actionResetPassword = new Ext.Action({
-                text: 'reset password',
+                text: this.translation.gettext('reset password'),
                 disabled: true,
                 handler: this.resetPasswordHandler,
                 /*iconCls: 'action_disable',*/
@@ -456,13 +459,13 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 method: 'Admin.deleteUsers', 
                 accountIds: accountIds
             },
-            text: 'Deleting account...',
+            text: this.translation.gettext('Deleting account...'),
             success: function(_result, _request) {
                 window.opener.Tine.Admin.Users.Main.reload();
                 window.close();
             },
             failure: function ( result, request) { 
-                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the account.'); 
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the account.')); 
             } 
         });         
     },
@@ -505,16 +508,16 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     Ext.MessageBox.hide();
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Could not save user account.'); 
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save user account.')); 
                 },
                 scope: this 
             });
         } else {
-            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
         }
     },
     
-    editAccountDialog: [{
+    GetEditAccountDialog: function() { return [{
         layout:'column',
         //frame: true,
         border:false,
@@ -529,32 +532,32 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             },
             items: [{
                     xtype: 'textfield',
-                    fieldLabel: 'First Name',
+                    fieldLabel: this.translation.gettext('First Name'),
                     name: 'accountFirstName'
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Last Name',
+                    fieldLabel: this.translation.gettext('Last Name'),
                     name: 'accountLastName',
                     allowBlank: false
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Login Name',
+                    fieldLabel: this.translation.gettext('Login Name'),
                     name: 'accountLoginName',
                     allowBlank: false
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Password',
+                    fieldLabel: this.translation.gettext('Password'),
                     name: 'accountPassword',
                     inputType: 'password',
-                    emptyText: 'no password set'
+                    emptyText: this.translation.gettext('no password set')
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Password again',
+                    fieldLabel: this.translation.gettext('Password again'),
                     name: 'accountPassword2',
                     inputType: 'password',
-                    emptyText: 'no password set'
+                    emptyText: this.translation.gettext('no password set')
                 },  new Tine.widgets.group.selectionComboBox({
-                    fieldLabel: 'Primary group',
+                    fieldLabel: this.translation.gettext('Primary group'),
                     name: 'accountPrimaryGroup',
                     displayField:'name',
                     valueField:'id'
@@ -562,7 +565,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 {
                     xtype: 'textfield',
                     vtype: 'email',
-                    fieldLabel: 'Emailaddress',
+                    fieldLabel: this.translation.gettext('Emailaddress'),
                     name: 'accountEmailAddress'
                 }
             ]
@@ -576,7 +579,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             items: [
                 {
                     xtype: 'combo',
-                    fieldLabel: 'Status',
+                    fieldLabel: this.translation.gettext('Status'),
                     name: 'accountStatus',
                     mode: 'local',
                     displayField:'status',
@@ -595,33 +598,33 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     )
                 }, 
                 new Ext.ux.form.ClearableDateField({ 
-                    fieldLabel: 'Expires',
+                    fieldLabel: this.translation.gettext('Expires'),
                     name: 'accountExpires',
-                    emptyText: 'never'
+                    emptyText: this.translation.gettext('never')
                 }), {
                     xtype: 'datetimefield',
-                    fieldLabel: 'Last login at',
+                    fieldLabel: this.translation.gettext('Last login at'),
                     name: 'accountLastLogin',
-                    emptyText: 'never logged in',
+                    emptyText: this.translation.gettext('never logged in'),
                     hideTrigger: true,
                     readOnly: true
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Last login from',
+                    fieldLabel: this.translation.gettext('Last login from'),
                     name: 'accountLastLoginfrom',
-                    emptyText: 'never logged in',
+                    emptyText: this.translation.gettext('never logged in'),
                     readOnly: true
                 }, {
                     xtype: 'datetimefield',
-                    fieldLabel: 'Password set',
+                    fieldLabel: this.translation.gettext('Password set'),
                     name: 'accountLastPasswordChange',
-                    emptyText: 'never',
+                    emptyText: this.translation.gettext('never'),
                     hideTrigger: true,
                     readOnly: true
                 }
             ]
         }]
-    }],
+    }]},
     
     updateToolbarButtons: function() {
         if(this.accountRecord.get('accountId') > 0) {
@@ -644,7 +647,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
-        this.items = this.editAccountDialog;
+        this.items = this.GetEditAccountDialog();
         
         Tine.Admin.Users.EditDialog.superclass.initComponent.call(this);
     },
