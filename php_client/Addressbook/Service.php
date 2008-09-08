@@ -43,7 +43,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             var_dump($responseData);
         }
         
-        $contact = new Addressbook_Model_Contact($responseData['contact']);
+        $contact = new Addressbook_Model_Contact($responseData);
         return $contact;
     }
     
@@ -144,7 +144,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             var_dump($responseData);
         }
         
-        $contact = new Addressbook_Model_Contact($responseData['updatedData']);
+        $contact = new Addressbook_Model_Contact($responseData);
         return $contact;
     }
     
