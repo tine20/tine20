@@ -422,17 +422,14 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     roleMembers: Ext.util.JSON.encode(roleMembers),
                     roleRights: Ext.util.JSON.encode(roleRights)
                 },
-                success: function(_result, _request) {
+                success: function(response) {
                     if(window.opener.Tine.Admin.Roles) {
                         window.opener.Tine.Admin.Roles.Main.reload();
                     }
                     if(_closeWindow === true) {
                         window.close();
                     } else {
-                        var response = Ext.util.JSON.decode(_result.responseText);
-                        this.updateRecord(response);
-                        form.loadRecord(this.role);
-                        
+                        this.onRecordLoad(response);
                         Ext.MessageBox.hide();
                     }
                 },
@@ -481,7 +478,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (_roleData.length === 0) {
         	_roleData = {};
         }
-        this.role = new Tine.Tinebase.Model.Role(_roleData, _roleData.id);
+        this.role = new Tine.Tinebase.Model.Role(_roleData, _roleData.id ? _roleData.id : 0);
         
         this.membersDataStore.loadData(this.role.get('roleMembers'));
         this.rightsDataStore.loadData(this.role.get('roleRights'));
@@ -722,6 +719,12 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.getForm().findField('name').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
+        
+        if (! this.role.id) {
+            window.document.title = this.translation.gettext('Add New Role');
+        } else {
+            window.document.title = sprintf(this.translation.gettext('Edit Role "%s"'), this.role.get('name'));
+        }
         
         this.getForm().loadRecord(this.role);
         Ext.MessageBox.hide();
