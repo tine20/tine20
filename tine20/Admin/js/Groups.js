@@ -44,7 +44,7 @@ Tine.Admin.Groups.Main = {
          * onclick handler for deleteBtn
          */
         deleteGroup: function(_button, _event) {
-            Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected groups?', function(_button){
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected groups?'), function(_button){
                 if (_button == 'yes') {
                 
                     var groupIds = new Array();
@@ -61,12 +61,12 @@ Tine.Admin.Groups.Main = {
                             method: 'Admin.deleteGroups',
                             groupIds: groupIds
                         },
-                        text: 'Deleting group(s)...',
+                        text: this.translation.gettext('Deleting group(s)...'),
                         success: function(_result, _request){
                             Ext.getCmp('AdminGroupsGrid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the group.');
+                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the group.'));
                         }
                     });
                 }
@@ -75,8 +75,11 @@ Tine.Admin.Groups.Main = {
     },
     
     initComponent: function() {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
         this.actions.addGroup = new Ext.Action({
-            text: 'add group',
+            text: this.translation.gettext('add group'),
             disabled: true,
             handler: this.handlers.addGroup,
             iconCls: 'action_addGroup',
@@ -84,7 +87,7 @@ Tine.Admin.Groups.Main = {
         });
         
         this.actions.editGroup = new Ext.Action({
-            text: 'edit group',
+            text: this.translation.gettext('edit group'),
             disabled: true,
             handler: this.handlers.editGroup,
             iconCls: 'action_edit',
@@ -92,7 +95,7 @@ Tine.Admin.Groups.Main = {
         });
         
         this.actions.deleteGroup = new Ext.Action({
-            text: 'delete group',
+            text: this.translation.gettext('delete group'),
             disabled: true,
             handler: this.handlers.deleteGroup,
             iconCls: 'action_delete',
@@ -105,7 +108,7 @@ Tine.Admin.Groups.Main = {
         var GroupsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'GroupsAdminQuickSearchField',
             width:240,
-            emptyText: 'enter searchfilter'
+            emptyText: this.translation.gettext('enter searchfilter')
         }); 
         GroupsAdminQuickSearchField.on('change', function(){
             Ext.getCmp('AdminGroupsGrid').getStore().load({
@@ -125,7 +128,7 @@ Tine.Admin.Groups.Main = {
                 this.actions.editGroup,
                 this.actions.deleteGroup,
                 '->', 
-                'Search:', 
+                this.translation.gettext('Search:'), 
                 ' ',
                 GroupsAdminQuickSearchField
             ]
@@ -163,15 +166,15 @@ Tine.Admin.Groups.Main = {
             pageSize: 25,
             store: dataStore,
             displayInfo: true,
-            displayMsg: 'Displaying groups {0} - {1} of {2}',
-            emptyMsg: "No groups to display"
+            displayMsg: this.translation.gettext('Displaying groups {0} - {1} of {2}'),
+            emptyMsg: this.translation.gettext("No groups to display")
         }); 
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'id', header: 'ID', dataIndex: 'id', width: 10 },
-            { resizable: true, id: 'name', header: 'Name', dataIndex: 'name', width: 50 },
-            { resizable: true, id: 'description', header: 'Description', dataIndex: 'description' }
+            { resizable: true, id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 10 },
+            { resizable: true, id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
+            { resizable: true, id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -215,7 +218,7 @@ Tine.Admin.Groups.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: 'No groups to display'
+                emptyText: this.translation.gettext('No groups to display')
             })            
             
         });
@@ -337,7 +340,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var form = this.getForm();
         
         if(form.isValid()) {
-            Ext.MessageBox.wait('Please wait', 'Updating Memberships');
+            Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
             
             // get group members
             var groupGrid = Ext.getCmp('groupMembersGrid');
@@ -372,14 +375,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Could not save group.'); 
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save group.')); 
                 },
                 scope: this 
             });
                 
             
         } else {
-            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
         }
     },
     
@@ -392,7 +395,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 method: 'Admin.deleteGroups', 
                 groupIds: groupIds
             },
-            text: 'Deleting group...',
+            text: this.translation.gettext('Deleting group...'),
             success: function(_result, _request) {
                 if(window.opener.Tine.Admin.Groups) {
                     window.opener.Tine.Admin.Groups.Main.reload();
@@ -400,7 +403,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 window.close();
             },
             failure: function ( result, request) { 
-                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the group.'); 
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the group.')); 
             } 
         });                           
     },
@@ -482,7 +485,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         /******* column model ********/
 
         var columnModel = new Ext.grid.ColumnModel([{ 
-        	resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 
+        	resizable: true, id: 'accountDisplayName', header: this.translation.gettext('Name'), dataIndex: 'accountDisplayName', width: 30 
         }]);
 
         /******* row selection model ********/
@@ -514,7 +517,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var groupMembersGridPanel = new Ext.grid.EditorGridPanel({
         	id: 'groupMembersGrid',
             region: 'center',
-            title: 'Group Members',
+            title: this.translation.gettext('Group Members'),
             store: this.dataStore,
             cm: columnModel,
             autoSizeColumns: false,
@@ -545,14 +548,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	                    border: false,
 	                    items:[{
 	                        xtype:'textfield',
-	                        fieldLabel:'Group Name', 
+	                        fieldLabel: this.translation.gettext('Group Name'), 
 	                        name:'name',
 	                        anchor:'100%',
 	                        allowBlank: false
 	                    }, {
 	                        xtype:'textarea',
 	                        name: 'description',
-	                        fieldLabel: 'Description',
+	                        fieldLabel: this.translation.gettext('Description'),
 	                        grow: false,
 	                        preventScrollbars:false,
 	                        anchor:'100%',
@@ -588,14 +591,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         /******* actions ********/
         this.actions = {
             addAccount: new Ext.Action({
-                text: 'add account',
+                text: this.translation.gettext('add account'),
                 disabled: true,
                 scope: this,
                 handler: this.handlers.addAccount,
                 iconCls: 'action_addContact'
             }),
             removeAccount: new Ext.Action({
-                text: 'remove account',
+                text: this.translation.gettext('remove account'),
                 disabled: true,
                 scope: this,
                 handler: this.handlers.removeAccount,
