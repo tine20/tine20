@@ -15,8 +15,8 @@ Tine.Admin = function() {
 	/**
 	 * builds the admin applications tree
 	 */
-    var _initialTree = [{
-        text: 'User',
+    var _getInitialTree = function(translation) { return [{
+        text: translation.gettext('User'),
         cls: 'treemain',
         allowDrag: false,
         allowDrop: true,
@@ -28,7 +28,7 @@ Tine.Admin = function() {
         dataPanelType: 'accounts',
         viewRight: 'accounts'
     },{
-        text: 'Groups',
+        text: translation.gettext('Groups'),
         cls: 'treemain',
         allowDrag: false,
         allowDrop: true,
@@ -40,7 +40,7 @@ Tine.Admin = function() {
         dataPanelType: 'groups', 
         viewRight: 'accounts'
     },{
-        text: "Applications",
+        text: translation.gettext('Applications'),
 		cls: "treemain",
 		allowDrag: false,
 		allowDrop: true,
@@ -52,7 +52,7 @@ Tine.Admin = function() {
 		dataPanelType: "applications",
 		viewRight: 'apps'
 	},{
-		text :"Access Log",
+		text : translation.gettext('Access Log'),
 		cls :"treemain",
 		allowDrag :false,
 		allowDrop :true,
@@ -64,7 +64,7 @@ Tine.Admin = function() {
 		dataPanelType :"accesslog",
 		viewRight: 'access_log'
 	},{
-        text :"Shared Tags",
+        text : translation.gettext('Shared Tags'),
         cls :"treemain",
         iconCls: 'action_tag',
         allowDrag :false,
@@ -76,7 +76,7 @@ Tine.Admin = function() {
         expanded :true,
         dataPanelType :"sharedtags"
     },{
-        text :"Roles",
+        text :translation.gettext('Roles'),
         cls :"treemain",
         iconCls: 'action_permissions',
         allowDrag :false,
@@ -87,7 +87,7 @@ Tine.Admin = function() {
         expanded :true,
         dataPanelType :"roles",
         viewRight: 'roles'
-    }];
+    }]};
 
 	/**
      * creates the admin menu tree
@@ -95,6 +95,9 @@ Tine.Admin = function() {
      */
     var _getAdminTree = function() 
     {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Admin');
+        
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:'index.php',
             baseParams: {
@@ -108,7 +111,7 @@ Tine.Admin = function() {
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({
-            title: 'Admin',
+            title: translation.gettext('Admin'),
             id: 'admin-tree',
             iconCls: 'AdminIconCls',
             loader: treeLoader,
@@ -124,13 +127,15 @@ Tine.Admin = function() {
             id:'root'
         });
         treePanel.setRootNode(treeRoot);
-
-        for(var i=0; i<_initialTree.length; i++) {
+        
+        var initialTree = _getInitialTree(translation);
+        
+        for(var i=0; i<initialTree.length; i++) {
         	
-        	var node = new Ext.tree.AsyncTreeNode(_initialTree[i]);
+        	var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
         	
         	// check view right
-        	if ( _initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', _initialTree[i].viewRight) ) {
+        	if ( initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', initialTree[i].viewRight) ) {
                 node.disabled = true;
         	}
         	
@@ -243,7 +248,7 @@ Tine.Admin.AccessLog.Main = function() {
      * onclick handler for edit action
      */
     var _deleteHandler = function(_button, _event) {
-    	Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected access log entries?', function(_button) {
+    	Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected access log entries?'), function(_button) {
     		if(_button == 'yes') {
     			var logIds = new Array();
                 var selectedRows = Ext.getCmp('gridAdminAccessLog').getSelectionModel().getSelections();
@@ -277,7 +282,8 @@ Tine.Admin.AccessLog.Main = function() {
         text: 'delete entry',
         disabled: true,
         handler: _deleteHandler,
-        iconCls: 'action_delete'
+        iconCls: 'action_delete',
+        scope: this
     });
 
     var _action_selectAll = new Ext.Action({
@@ -345,10 +351,16 @@ Tine.Admin.AccessLog.Main = function() {
 
     var _showToolbar = function()
     {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
+        _action_delete.setText(this.translation.gettext('delete entry'));
+        _action_selectAll.setText(this.translation.gettext('select all'));
+        
         var AccessLogQuickSearchField = new Ext.ux.SearchField({
             id:        'AccessLogQuickSearchField',
             width:     200,
-            emptyText: 'enter searchfilter'
+            emptyText: this.translation.gettext('enter searchfilter')
         }); 
         AccessLogQuickSearchField.on('change', function() {
             Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
@@ -378,16 +390,16 @@ Tine.Admin.AccessLog.Main = function() {
             height: 26,
             items: [
                 _action_delete,'->',
-                'Display from: ',
+                this.translation.gettext('Display from:') + ' ',
                 ' ',
                 dateFrom,
                 new Ext.Toolbar.Spacer(),
-                'to: ',
+                this.translation.gettext('to:') + ' ',
                 ' ',
                 dateTo,
                 new Ext.Toolbar.Spacer(),
                 '-',
-                'Search:', ' ',
+                this.translation.gettext('Search:'), ' ',
 /*                new Ext.ux.SelectBox({
                   listClass:'x-combo-list-small',
                   width:90,
@@ -453,27 +465,30 @@ Tine.Admin.AccessLog.Main = function() {
     };
     
     var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Admin');
+        
         var gridValue;
         
         switch (_value) {
             case '-3' :
-                gridValue = 'invalid password';
+                gridValue = translation.gettext('invalid password');
                 break;
 
             case '-2' :
-                gridValue = 'ambiguous username';
+                gridValue = translation.gettext('ambiguous username');
                 break;
 
             case '-1' :
-                gridValue = 'user not found';
+                gridValue = translation.gettext('user not found');
                 break;
 
             case '0' :
-                gridValue = 'failure';
+                gridValue = translation.gettext('failure');
                 break;
 
             case '1' :
-                gridValue = 'success';
+                gridValue = translation.gettext('success');
                 break;
         }
         
@@ -494,19 +509,19 @@ Tine.Admin.AccessLog.Main = function() {
             pageSize: 50,
             store: dataStore,
             displayInfo: true,
-            displayMsg: 'Displaying access log entries {0} - {1} of {2}',
-            emptyMsg: "No access log entries to display"
+            displayMsg: this.translation.gettext('Displaying access log entries {0} - {1} of {2}'),
+            emptyMsg: this.translation.gettext("No access log entries to display")
         }); 
         
         var columnModel = new Ext.grid.ColumnModel([
-            {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
-            {resizable: true, header: 'Login Name', id: 'login_name', dataIndex: 'login_name'},
-            {resizable: true, header: 'Name', id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.Common.usernameRenderer},
-            {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
-            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
-            {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
+            {resizable: true, header: this.translation.gettext('Session ID'), id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
+            {resizable: true, header: this.translation.gettext('Login Name'), id: 'login_name', dataIndex: 'login_name'},
+            {resizable: true, header: this.translation.gettext('Name'), id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.Common.usernameRenderer},
+            {resizable: true, header: this.translation.gettext('IP Address'), id: 'ip', dataIndex: 'ip', width: 150},
+            {resizable: true, header: this.translation.gettext('Login Time'), id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+            {resizable: true, header: this.translation.gettext('Logout Time'), id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+            {resizable: true, header: this.translation.gettext('Account ID'), id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
+            {resizable: true, header: this.translation.gettext('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
