@@ -38,7 +38,7 @@ Tine.Admin.Tags.Main = {
          * onclick handler for deleteBtn
          */
         deleteTag: function(_button, _event) {
-            Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected tags?', function(_button){
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected tags?'), function(_button){
                 if (_button == 'yes') {
                 
                     var tagIds = new Array();
@@ -55,7 +55,7 @@ Tine.Admin.Tags.Main = {
                             method: 'Admin.deleteTags',
                             tagIds: tagIds
                         },
-                        text: 'Deleting tag(s)...',
+                        text: this.translation.gettext('Deleting tag(s)...'),
                         success: function(_result, _request){
                             Ext.getCmp('AdminTagsGrid').getStore().reload();
                         }
@@ -65,17 +65,19 @@ Tine.Admin.Tags.Main = {
         }    
     },
     
-    initComponent: function()
-    {
+    initComponent: function() {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
         this.actions.addTag = new Ext.Action({
-            text: 'add tag',
+            text: this.translation.gettext('add tag'),
             handler: this.handlers.addTag,
             iconCls: 'action_tag',
             scope: this
         });
         
         this.actions.editTag = new Ext.Action({
-            text: 'edit tag',
+            text: this.translation.gettext('edit tag'),
             disabled: true,
             handler: this.handlers.editTag,
             iconCls: 'action_edit',
@@ -83,7 +85,7 @@ Tine.Admin.Tags.Main = {
         });
         
         this.actions.deleteTag = new Ext.Action({
-            text: 'delete tag',
+            text: this.translation.gettext('delete tag'),
             disabled: true,
             handler: this.handlers.deleteTag,
             iconCls: 'action_delete',
@@ -97,7 +99,7 @@ Tine.Admin.Tags.Main = {
         var TagsQuickSearchField = new Ext.ux.SearchField({
             id: 'TagsQuickSearchField',
             width:240,
-            emptyText: 'enter searchfilter'
+            emptyText: this.translation.gettext('enter searchfilter')
         }); 
         TagsQuickSearchField.on('change', function(){
             Ext.getCmp('AdminTagsGrid').getStore().load({
@@ -117,7 +119,7 @@ Tine.Admin.Tags.Main = {
                 this.actions.editTag,
                 this.actions.deleteTag,
                 '->', 
-                'Search:', 
+                this.translation.gettext('Search:'), 
                 ' ',
                 TagsQuickSearchField
             ]
@@ -152,15 +154,15 @@ Tine.Admin.Tags.Main = {
             pageSize: 25,
             store: dataStore,
             displayInfo: true,
-            displayMsg: 'Displaying tags {0} - {1} of {2}',
-            emptyMsg: "No tags to display"
+            displayMsg: this.translation.gettext('Displaying tags {0} - {1} of {2}'),
+            emptyMsg: this.translation.gettext("No tags to display")
         }); 
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'color', header: 'color', dataIndex: 'color', width: 25, renderer: function(color){return '<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>';} },
-            { resizable: true, id: 'name', header: 'Name', dataIndex: 'name', width: 200 },
-            { resizable: true, id: 'description', header: 'Description', dataIndex: 'description', width: 500}
+            { resizable: true, id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function(color){return '<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>';} },
+            { resizable: true, id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
+            { resizable: true, id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500}
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -202,7 +204,7 @@ Tine.Admin.Tags.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: 'No tags to display'
+                emptyText: this.translation.gettext('No tags to display')
             })            
             
         });
@@ -289,7 +291,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var form = this.getForm();
         
         if(form.isValid()) {
-            Ext.MessageBox.wait('Please wait', 'Updating Memberships');
+            Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
             
             var tag = this.tag;
             
@@ -333,12 +335,12 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Could not save tag.'); 
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save tag.')); 
                 },
                 scope: this 
             });
         } else {
-            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
         }
     },
 
@@ -351,7 +353,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 method: 'Admin.deleteTags', 
                 tagIds: tagIds
             },
-            text: 'Deleting tag...',
+            text: this.translation.gettext('Deleting tag...'),
             success: function(_result, _request) {
                 if(window.opener.Tine.Admin.Tags) {
                     window.opener.Tine.Admin.Tags.Main.reload();
@@ -441,7 +443,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
         /******* THE contexts box ********/
         this.rootNode = new Ext.tree.TreeNode({
-            text: 'Allowed Contexts',
+            text: this.translation.gettext('Allowed Contexts'),
             expanded: true,
             draggable:false,
             allowDrop:false
@@ -456,17 +458,17 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var rightsPanel = new Tine.widgets.account.ConfigGrid({
             //height: 300,
             accountPickerType: 'both',
-            accountListTitle: 'Account Rights',
+            accountListTitle: this.translation.gettext('Account Rights'),
             configStore: this.rightsStore,
             hasAccountPrefix: true,
             configColumns: [
                 new Ext.ux.grid.CheckColumn({
-                    header: 'View',
+                    header: this.translation.gettext('View'),
                     dataIndex: 'view_right',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header: 'Use',
+                    header: this.translation.gettext('Use'),
                     dataIndex: 'use_right',
                     width: 55
                 })
@@ -481,7 +483,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             readOnly:true,
             editable: false,
             name: 'color',
-            fieldLabel: 'Color',
+            fieldLabel: this.translation.gettext('Color'),
             columnWidth: .1,
             store: new Ext.data.Store({})
         });
@@ -533,13 +535,13 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     items:[
                         [{
                             columnWidth: .3,
-                            fieldLabel:'Tag Name', 
+                            fieldLabel: this.translation.gettext('Tag Name'), 
                             name:'name',
                             allowBlank: false
                         }, {
                             columnWidth: .6,
                             name: 'description',
-                            fieldLabel: 'Description',
+                            fieldLabel: this.translation.gettext('Description'),
                             anchor:'100%'
                         },
                         colorPicker
@@ -555,10 +557,10 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     border: true,
                     plain: true,                    
                     items: [{
-                        title: 'Rights',
+                        title: this.translation.gettext('Rights'),
                         items: [rightsPanel]
                     },{
-                        title: 'Context',
+                        title: this.translation.gettext('Context'),
                         items: [confinePanel]
                     }]
                 }
