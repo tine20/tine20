@@ -321,14 +321,14 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     method: 'Admin.saveTag', 
                     tagData: Ext.util.JSON.encode(tag.data)
                 },
-                success: function(_result, _request) {
+                success: function(response) {
                     if(window.opener.Tine.Admin.Tags) {
                         window.opener.Tine.Admin.Tags.Main.reload();
                     }
                     if(_closeWindow === true) {
                         window.close();
                     } else {
-                        this.updateRecord(Ext.util.JSON.decode(_result.responseText));
+                        this.onRecordLoad(response);
                         Ext.MessageBox.hide();
                     }
                 },
@@ -373,7 +373,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (_tagData.length === 0) {
             _tagData = {};
         }
-        this.tag = new Tine.Tinebase.Model.Tag(_tagData, _tagData.id);
+        this.tag = new Tine.Tinebase.Model.Tag(_tagData, _tagData.id ? _tagData.id : 0);
         
         if (!_tagData.rights) {
             _tagData.rights = [{
@@ -605,6 +605,12 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.getForm().findField('name').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
+        
+        if (! this.tag.id) {
+            window.document.title = this.translation.gettext('Add New Tag');
+        } else {
+            window.document.title = sprintf(this.translation._('Edit Tag "%s"'), this.tag.get('name'));
+        }
         
         Ext.MessageBox.hide();
     }    
