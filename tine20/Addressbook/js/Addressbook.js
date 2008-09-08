@@ -84,7 +84,7 @@ Tine.Addressbook.Main = {
 	     * onclick handler for addBtn
 	     */
 	    addContact: function(_button, _event) {
-            var popupWindow = new Tine.Addressbook.EditPopup();
+            Tine.Addressbook.ContactEditDialog.openWindow({});
         },
 
         /**
@@ -92,9 +92,7 @@ Tine.Addressbook.Main = {
          */
         editContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
-            //var contactId = selectedRows[0].data.id;
-            
-            var popupWindow = new Tine.Addressbook.EditPopup(selectedRows[0]);            
+            Tine.Addressbook.ContactEditDialog.openWindow({contact: selectedRows[0]});
         },
 
         /**
@@ -598,11 +596,7 @@ Tine.Addressbook.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            try {
-                var popupWindow = new Tine.Addressbook.EditPopup(record);                        
-            } catch(e) {
-                // alert(e);
-            }
+            Tine.Addressbook.ContactEditDialog.openWindow({contact: record});
         }, this);
 
         gridPanel.on('keydown', function(e){
@@ -759,26 +753,6 @@ Tine.Addressbook.Main = {
 /**************************** edit dialog **********************************/
 
 /**
- * Addressbook Edit Popup
- */
-Tine.Addressbook.EditPopup = function (contact) {
-    contact = contact ? contact : new Tine.Addressbook.Model.Contact({}, 0);
-    
-    var window = Tine.WindowFactory.getWindow({
-        //url: 'index.php?method=Addressbook.editContact&_contactId=' + contactId,
-        layout: 'border',
-        name: 'AddressbookEditWindow' + contact.id,
-        width: 800,
-        height: 600,
-        itemsConstructor: 'Tine.Addressbook.ContactEditDialog',
-        itemsConstructorConfig: {
-            contact: contact
-        }
-    });
-    return window;
-}
-
-/**
  * The edit dialog
  * @constructor
  * @class Tine.Addressbook.ContactEditDialog
@@ -788,7 +762,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
      * @cfg {Tine.Addressbook.Model.Contact}
      */
     contact: null,
-    
+    /**
+     * @private
+     */
+    windowNamePrefix: 'AddressbookEditWindow_',
     
     /**
      * @private!
@@ -945,6 +922,22 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         }
     }
 });
+
+/**
+ * Addressbook Edit Popup
+ */
+Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
+    config.contact = config.contact ? config.contact : new Tine.Addressbook.Model.Contact({}, 0);
+    var window = Tine.WindowFactory.getWindow({
+        width: 800,
+        height: 600,
+        layout: Tine.Addressbook.ContactEditDialog.prototype.windowLayout,
+        name: Tine.Addressbook.ContactEditDialog.prototype.windowNamePrefix + config.contact.id,
+        itemsConstructor: 'Tine.Addressbook.ContactEditDialog',
+        itemsConstructorConfig: config
+    });
+    return window;
+}
 
 /**************************** models ***************************************/
 
