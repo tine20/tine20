@@ -32,7 +32,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     /**
      * @cfg {function} handler for generic save and close action
      */
-    handlerCancle: null,
+    handlerCancel: null,
     /**
      * @cfg {String} layout of the containing window
      */
@@ -98,7 +98,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             text: _('Cancel'),
             //tooltip: 'Reject changes and close this window',
             minWidth: 70,
-            handler: this.handlerCancle,
+            handler: this.handlerCancel,
             iconCls: 'action_cancel',
             scope: this.handlerScope
         });
@@ -145,7 +145,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             this.handlerApplyChanges(e, button, true);
         };
         
-        this.handlerCancle = this.handlerCancle ? this.handlerCancle : this.closeWindow;
+        this.handlerCancel = this.handlerCancel ? this.handlerCancel : this.closeWindow;
     },
     /**
      * update (action updateer) top and bottom toolbars
