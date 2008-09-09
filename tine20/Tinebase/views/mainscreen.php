@@ -24,7 +24,6 @@
             var localServer = google.gears.factory.create('beta.localserver');
             var store = localServer.createManagedStore('tine20-store');
             store.manifestUrl = 'Tinebase/js/tine20-manifest.js';
-            //store.checkForUpdate();
         }
     </script>
 
