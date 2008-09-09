@@ -59,27 +59,15 @@ Tine.Tinebase.initFramework = function() {
         
 		
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
-            var windowHeight, win;
             // detect resoponse errors (e.g. html from xdebug)
             if (response.responseText.charAt(0) == '<') {
-                windowHeight = 600;
-                if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-                    windowHeight = Ext.getBody().getHeight(true) * 0.7;
-                }
-                win = new Ext.Window({
-                    width: 600,
-                    height: windowHeight,
-                    autoScroll: true,
-                    title: _('There Where Errors'),
-                    html: response.responseText,
-                    buttons: [ new Ext.Action({
-                        text: _('Ok'),
-                        handler: function(){ win.close(); }
-                    })],
-                     buttonAlign: 'center'
+                var htmlText = response.responseText;
+                response.responseText = Ext.util.JSON.encode({
+                    msg: htmlText,
+                    trace: []
                 });
                 
-                win.show();
+                connection.fireEvent('requestexception', connection, response, options);
                 return false;
             }
             var responseData = Ext.util.JSON.decode(response.responseText);
@@ -107,7 +95,6 @@ Tine.Tinebase.initFramework = function() {
             switch(data.code) {
                 // not autorised
                 case 401:
-                console.log(options.params.method);
                 if (! options.params || options.params.method != 'Tinebase.logout') {
                     Ext.MessageBox.show({
                         title: _('Authorisation Required'), 
