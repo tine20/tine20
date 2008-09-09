@@ -86,17 +86,33 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_objects['phone']->rights = $rights;
         
+        $this->_objects['line'] = new Voipmanager_Model_SnomLine(array(
+            'id'                => 1001,
+            'snomphone_id'      => $this->_objects['phone']->getId(),
+            'asteriskline_id'   => 1001,
+            'linenumber'        => 1,
+            'lineactive'        => 1
+        ));
+
+        $this->_objects['sippeer'] = new Voipmanager_Model_AsteriskSipPeer(array(
+            'id'                => 1001,
+        ));
+        
         // create phone, location, template, rights
-        $phoneBackend                = new Voipmanager_Backend_Snom_Phone();
-        $snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
-        $snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();     
-        $snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software(); 
+        $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
+        $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
+        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template();     
+        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software(); 
+        $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
+        $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
         
         $snomSoftwareBackend->create($this->_objects['software']);
         $snomLocationBackend->create($this->_objects['location']);
         $snomTemplateBackend->create($this->_objects['template']);
         $phoneBackend->create($this->_objects['phone']);
         $phoneBackend->setPhoneRights($this->_objects['phone']);
+        $asteriskSipPeerBackend->create($this->_objects['sippeer']);
+        $snomLineBackend->create($this->_objects['line']);
     }
 
     /**
@@ -112,11 +128,15 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
         $snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();     
         $snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software(); 
+        $snomLineBackend             = new Voipmanager_Backend_Snom_Line();
+        $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
         
         $phoneBackend->delete($this->_objects['phone']->getId());
         $snomLocationBackend->delete($this->_objects['location']->getId());
         $snomTemplateBackend->delete($this->_objects['template']->getId());
         $snomSoftwareBackend->delete($this->_objects['software']->getId());
+        $snomLineBackend->delete($this->_objects['line']->getId());
+        $asteriskSipPeerBackend->delete($this->_objects['sippeer']->getId());
     }
     
     /**
@@ -130,7 +150,9 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $phones = $json->getUserPhones(Zend_Registry::get('currentAccount')->getId());
 
         //print_r($phones);
-        $this->assertEquals(1, count($phones['results']), 'only 1 phone expected');        
+        $this->assertGreaterThan(0, count($phones['results']), 'more than 1 phone expected');        
         $this->assertEquals($this->_objects['phone']->macaddress, $phones['results'][0]['macaddress'], 'got wrong phone');
+        $this->assertGreaterThan(0, count($phones['results'][0]['lines']), 'no lines attached');
+        $this->assertEquals($this->_objects['sippeer']->getId(), $phones['results'][0]['lines'][0]['asteriskline_id'], 'got wrong line');
     }    
 }		
