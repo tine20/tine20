@@ -369,8 +369,11 @@ function statistics($_verbose)
                     'total'        => 0
                 );
                 
+                $langLocale = new Zend_Locale($langCode);
+                
                 $langStats[$langCode]['locale']        = $langCode;
-                $langStats[$langCode]['language']      = $locale->getLanguageTranslation($langCode);
+                $langStats[$langCode]['language']      = $locale->getLanguageTranslation($langLocale->getLanguage());
+                $langStats[$langCode]['region']        = $locale->getCountryTranslation($langLocale->getRegion());
                 $langStats[$langCode]['appname']       = 'all';
                 $langStats[$langCode]['translated']   += $poFileStats['translated'];
                 $langStats[$langCode]['fuzzy']        += $poFileStats['fuzzy'];
