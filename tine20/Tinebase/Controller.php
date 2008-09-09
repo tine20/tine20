@@ -203,59 +203,60 @@ class Tinebase_Controller
      */
     public function handleJson()
     {
-        $this->_initFramework();
-        Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
-        
-        $anonymnousMethods = array(
-            'Tinebase.login',
-            'Tinebase.getAvailableTranslations',
-            'Tinebase.setLocale'
-        );
-        // check json key for all methods but some exceptoins
-        if ( !(in_array($_POST['method'], $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
-                && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
-                    
-            Zend_Registry::get('logger')->WARN(__METHOD__ . '::' . __LINE__ . '  Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
-                ' affected account: ' . print_r(Zend_Registry::get('currentAccount')->toArray(), true) .
-                ' request: ' . print_r($_REQUEST, true)
-            );
+        try {
+            $this->_initFramework();
+            Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
             
-            throw new Exception('Possible CSRF attempt detected!');
-        }
-
-        $server = new Zend_Json_Server();
-        
-        // add json apis which require no auth
-        $server->setClass('Tinebase_Json', 'Tinebase');
-        $server->setClass('Tinebase_Json_UserRegistration', 'Tinebase_UserRegistration');
-        
-        // register addidional Json apis only available for authorised users
-        if (Zend_Auth::getInstance()->hasIdentity()) {
-            // addidional Tinebase json apis
-            $server->setClass('Tinebase_Json_Container', 'Tinebase_Container');
-
-            // application apis
-            $userApplications = Zend_Registry::get('currentAccount')->getApplications();
-            foreach ($userApplications as $application) {
-                $applicationName = ucfirst((string) $application);
-                try {
-                    $server->setClass($applicationName.'_Json', $applicationName);
-                } catch (Exception $e) {
-                    // do nothing
+            $anonymnousMethods = array(
+                'Tinebase.login',
+                'Tinebase.getAvailableTranslations',
+                'Tinebase.setLocale'
+            );
+            // check json key for all methods but some exceptoins
+            if ( !(in_array($_POST['method'], $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
+                    && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
+    
+                if (! Zend_Registry::isRegistered('currentAccount')) {
+                    Zend_Registry::get('logger')->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
+                    
+                    throw new Exception('Not Autorised', 401);
+                } else {
+                    Zend_Registry::get('logger')->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
+                        ' affected account: ' . print_r(Zend_Registry::get('currentAccount')->toArray(), true) .
+                        ' request: ' . print_r($_REQUEST, true)
+                    );
+                    
+                    throw new Exception('Possible CSRF attempt detected!');
                 }
             }
+    
+            $server = new Zend_Json_Server();
+            
+            // add json apis which require no auth
+            $server->setClass('Tinebase_Json', 'Tinebase');
+            $server->setClass('Tinebase_Json_UserRegistration', 'Tinebase_UserRegistration');
+            
+            // register addidional Json apis only available for authorised users
+            if (Zend_Auth::getInstance()->hasIdentity()) {
+                // addidional Tinebase json apis
+                $server->setClass('Tinebase_Json_Container', 'Tinebase_Container');
+    
+                // application apis
+                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
+                foreach ($userApplications as $application) {
+                    $applicationName = ucfirst((string) $application);
+                    try {
+                        $server->setClass($applicationName.'_Json', $applicationName);
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
+                }
+            }
+        } catch (Exception $exception) {
+            $server = new Zend_Json_Server();
+            $server->fault($exception, $exception->getCode());
+            exit;
         }
-            /*
-             if (session expired) {
-                unset($_REQUEST);
-                $_REQUEST['method'] = 'Tinebase.login';
-                
-                $server = new Tinebase_Http_Server();        
-                $server->setClass('Tinebase_Http', 'Tinebase');
-                $server->handle($_REQUEST);
-                return;
-             }
-            */ 
          
         $server->handle($_REQUEST);
     }
