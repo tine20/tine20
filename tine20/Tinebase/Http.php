@@ -26,7 +26,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         try {
             Zend_Registry::get('currentAccount');
         } catch (Exception $e) {
-            header("Location: .");
+            $this->sessionTimedOut();
             exit;
         }
     }
@@ -185,6 +185,58 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
+    }
+    
+    /**
+     * show info that session timed out
+     *
+     */
+    public function sessionTimedOut()
+    {
+        ob_start();
+        $html = $this->login();
+        $html = ob_get_clean();
+        
+        $script = "
+            <script type='text/javascript'>
+                exception = {code: 401};
+                Ext.onReady(function() {
+                    Ext.MessageBox.show({
+                        title: _('Authorisation Required'), 
+                        msg: _('Your session timed out. You need to login again.'),
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.WARNING
+                    });
+                });
+            </script>";
+        
+        echo preg_replace('/<\/head.*>/', $script . '</head>', $html);
+    }
+    
+    /**
+     * generic http exception occoured
+     *
+     */
+    public function exception()
+    {
+        ob_start();
+        $html = $this->login();
+        $html = ob_get_clean();
+        
+        $script = "
+        <script type='text/javascript'>
+            exception = {code: 400};
+            Ext.onReady(function() {
+                Ext.MessageBox.show({
+                    title: _('Abnormal End'), 
+                    msg: _('An error occurred, the program ended abnormal.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+            });
+        </script>";
+        
+        echo preg_replace('/<\/head.*>/', $script . '</head>', $html);
     }
     
     /**

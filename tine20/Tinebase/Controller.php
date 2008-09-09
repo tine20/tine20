@@ -162,37 +162,47 @@ class Tinebase_Controller
      */
     public function handleHttp()
     {
-        $this->_initFramework();
-        Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
-        
-        $server = new Tinebase_Http_Server();
-        
-        //NOTE: auth check for Tinebase HTTP api is done via Tinebase_Http::checkAuth  
-        $server->setClass('Tinebase_Http', 'Tinebase');
-
-        // register addidional HTTP apis only available for authorised users
-        if (Zend_Auth::getInstance()->hasIdentity()) {
-            $userApplications = Zend_Registry::get('currentAccount')->getApplications();
+        try {
+            $this->_initFramework();
+            Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
             
-            foreach ($userApplications as $application) {
-                $applicationName = ucfirst((string) $application);
-                try {
-                    $server->setClass($applicationName.'_Http', $applicationName);
-                } catch (Exception $e) {
-                    // do nothing
+            $server = new Tinebase_Http_Server();
+            
+            //NOTE: auth check for Tinebase HTTP api is done via Tinebase_Http::checkAuth  
+            $server->setClass('Tinebase_Http', 'Tinebase');
+    
+            // register addidional HTTP apis only available for authorised users
+            if (Zend_Auth::getInstance()->hasIdentity()) {
+                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
+                
+                foreach ($userApplications as $application) {
+                    $applicationName = ucfirst((string) $application);
+                    try {
+                        $server->setClass($applicationName.'_Http', $applicationName);
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
+                }
+            } 
+            
+            if (empty($_REQUEST['method'])) {
+                if (Zend_Auth::getInstance()->hasIdentity()) {
+                    $_REQUEST['method'] = 'Tinebase.mainScreen';
+                } else {
+                    $_REQUEST['method'] = 'Tinebase.login';
                 }
             }
-        } 
-        
-        if (empty($_REQUEST['method'])) {
-            if (Zend_Auth::getInstance()->hasIdentity()) {
-                $_REQUEST['method'] = 'Tinebase.mainScreen';
+
+            $server->handle($_REQUEST);
+        } catch (Exception $exception) {
+            if (! Zend_Registry::isRegistered('currentAccount')) {
+                Zend_Registry::get('logger')->INFO('Attempt to request a privileged Http-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
+                $server->handle(array('method' => 'Tinebase.sessionTimedOut'));
             } else {
-                $_REQUEST['method'] = 'Tinebase.login';
+                Zend_Registry::get('logger')->DEBUG(__FILE__ . '::' . __METHOD__ . ' (line' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
+                $server->handle(array('method' => 'Tinebase.exception'));
             }
         }
-
-        $server->handle($_REQUEST);
     }
 
     /**
