@@ -97,48 +97,61 @@ Tine.Tinebase.initFramework = function() {
          * @todo In production mode there should be a 'report bug' wizzard here
          */
         Ext.Ajax.on('requestexception', function(connection, response, options){
-			//connection.purgeListeners();
-
             // if communication is lost, we can't create a nice ext window.
             if (response.status === 0) {
                 alert(_('Connection lost, please check your network!'));
             }
             
             var data = Ext.util.JSON.decode(response.responseText);
-            var trace = '';
-            for (var i=0,j=data.trace.length; i<j; i++) {
-                trace += (data.trace[i].file ? data.trace[i].file : '[internal function]') +
-                         (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
-                         (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i].type + '</b>' : '') +
-                         '<b>' + data.trace[i]['function'] + '</b>' +
-                        '(' + (data.trace[i].args[0] ? data.trace[i].args[0] : '') + ')<br/>';
-            }
-            data.traceHTML = trace;
             
-            var windowHeight = 400;
-            if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-                windowHeight = Ext.getBody().getHeight(true) * 0.7;
+            switch(data.code) {
+                // not autorised
+                case 401:
+                console.log(options.params.method);
+                if (! options.params || options.params.method != 'Tinebase.logout') {
+                    Ext.MessageBox.show({
+                        title: _('Authorisation Required'), 
+                        msg: _('Your session timed out. You need to login again.'),
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.WARNING
+                    });
+                }
+                break;
+                
+                // concurrency conflict
+                case 409:
+                Ext.MessageBox.show({
+                    title: _('Concurrent Updates'), 
+                    msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
+                
+                // generic failure -> notify developers
+                default:
+                var trace = '';
+                for (var i=0,j=data.trace.length; i<j; i++) {
+                    trace += (data.trace[i].file ? data.trace[i].file : '[internal function]') +
+                             (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
+                             (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i].type + '</b>' : '') +
+                             '<b>' + data.trace[i]['function'] + '</b>' +
+                            '(' + (data.trace[i].args[0] ? data.trace[i].args[0] : '') + ')<br/>';
+                }
+                data.traceHTML = trace;
+                
+                var windowHeight = 400;
+                if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+                    windowHeight = Ext.getBody().getHeight(true) * 0.7;
+                }
+                
+                var win = new Tine.Tinebase.ExceptionDialog({
+                    height: windowHeight,
+                    exceptionInfo: data
+                });
+                win.show();
+                break;
             }
-            
-            var win = new Tine.Tinebase.ExceptionDialog({
-                height: windowHeight,
-                exceptionInfo: data
-            });
-            /*
-            var win = new Ext.Window({
-                width: 800,
-                height: windowHeight,
-                autoScroll: true,
-                title: data.msg,
-                html: trace,
-                buttons: [ new Ext.Action({
-                    text: 'ok',
-                    handler: function(){ win.close(); }
-                })],
-                 buttonAlign: 'center'
-            });
-            */
-            win.show();
             
         }, this);
     };
