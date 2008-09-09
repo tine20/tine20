@@ -72,9 +72,9 @@ Ext.onReady(function(){
     } else {
         // @todo move PopupWindowMgr to generic WindowMgr
         // init WindowMgr like registry!
-        var c = Ext.ux.PopupWindowMgr.get(window);
+        var c = Ext.ux.PopupWindowMgr.get(window) || {};
         
-        if (!c && exception) {
+        if (!c.itemsConstructor && window.exception) {
             switch (exception.code) {
                 
                 // autorisation required
