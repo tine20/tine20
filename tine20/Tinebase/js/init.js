@@ -72,7 +72,28 @@ Ext.onReady(function(){
     } else {
         // @todo move PopupWindowMgr to generic WindowMgr
         // init WindowMgr like registry!
-        var c = Ext.ux.PopupWindowMgr.get(window) || {};
+        var c = Ext.ux.PopupWindowMgr.get(window);
+        
+        if (!c && exception) {
+            switch (exception.code) {
+                
+                // autorisation required
+                case 401:
+                    Tine.Login.showLoginDialog(Tine.Tinebase.Registry.get('defaultUsername'), Tine.Tinebase.Registry.get('defaultPassword'));
+                    return;
+                    break;
+                
+                // generic exception
+                default:
+                    // we need to wait to grab initialData from mainscreen
+                    //var win = new Tine.Tinebase.ExceptionDialog({});
+                    //win.show();
+                    return;
+                    break;
+            }
+            
+        }
+
         window.document.title = c.title;
 
         var items;
