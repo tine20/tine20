@@ -149,113 +149,117 @@ Tine.Phone.updatePhoneTree = function(store){
     store.purgeListeners();
 };
 
-/**************************** dialer window *******************************/
+/**************************** dialer form *******************************/
 
 /**
- * opens window for number dialing
+ * dialer form
  * 
- * @todo use window factory?
  * @todo add lines
+ * @todo extend form panel
  */
-Tine.Phone.DialerWindow = Ext.extend(Ext.Window, {
+Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
 	
+	id: 'dialerPanel',
 	translation: null,
-
-    id: 'dialerWindow',
-    modal: true,
-    width: 300,
-    height: 150,
-    layout: 'form',
-    plain:true,
-    bodyStyle:'padding:5px;',
-    myForm: null,
+	
+	// config settings
+    defaults: {
+        xtype: 'textfield',
+        anchor: '100%',
+        allowBlank: false
+    },	
+	bodyStyle: 'padding:5px;',	
+	//layout: 'fit',	
+	buttonAlign: 'right',
+	//bbar: [],
 	    
     // private
     initComponent: function(){
-
-        Tine.Phone.DialerWindow.superclass.initComponent.call(this);        
-
+        
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Phone');    
 
-        this.title = this.translation._('Dial phone number');
+        this.items = [
+            {
+                fieldLabel: this.translation._('Number'),
+                name: 'phoneNumber',
+                //  {xtype: 'formfield, ...., listener: {'onrender': function(fe) {fe.focus()}}
+            },{
+                xtype: 'combo',
+                fieldLabel: this.translation._('Phone'),
+                store: Tine.Phone.loadPhoneStore(),
+                //mode: 'remote',
+                mode: 'local',
+                displayField:'macaddress',
+                valueField: 'id',
+                name: 'phoneId',
+                forceSelection: true
+            },{
+            	xtype: 'combo',
+                fieldLabel: this.translation._('Line'),
+                name: 'lineId',
+                mode: 'remote',
+            }
+        ];
         
-        this.myForm = new Ext.form.FormPanel({
-            bodyStyle:'padding:5px;',
-            //buttonAlign: 'right',
-            items: [
-                new Ext.form.Field({
-                    fieldLabel: this.translation._('Number'),
-                    id: 'phoneNumber',
-                    anchor: '95%',
-                    allowBlank: false
-                    //  {xtype: 'formfield, ...., listener: {'onrender': function(fe) {fe.focus()}}
-                }),
-                new Ext.form.ComboBox({
-                    fieldLabel: this.translation._('Phone'),
-                    store: Tine.Phone.loadPhoneStore(),
-                    //mode: 'remote',
-                    mode: 'local',
-                    displayField:'macaddress',
-                    valueField: 'id',
-                    id: 'phoneId',
-                    anchor: '95%',
-                    forceSelection: true
-                }),                
-                new Ext.form.ComboBox({
-                    fieldLabel: this.translation._('Line'),
-                    id: 'lineId',
-                    mode: 'remote',
-                    anchor: '95%' 
-                }),                
-            ],
-            // @todo make buttons more beautiful
-            // @todo don't lose the scope!
-            // @todo move handlers to handler attribute
-            bbar: [{
-                text: this.translation._('Cancel'),
-                handler : function(){
-                    Ext.getCmp('dialerWindow').close();
-                }},{
-                text: this.translation._('Dial'),
-                handler : function(){   
-                	var form = Ext.getCmp('dialerWindow').myForm.getForm();
-                	// @todo check valid form
-                	// @todo add phone and line here
-                	if(form.isValid()) {
-                        Ext.Ajax.request({
-                            url: 'index.php',
-                            params: {
-                                method: 'Phone.dialNumber',
-                                number: form.findField('phoneNumber').getValue(),
-                                //phone: form.findField('phoneId').getValue() 
-                            },
-                            success: function(_result, _request){
-                                Ext.getCmp('dialerWindow').close();
-                            },
-                            failure: function(result, request){
-                                //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
-                            }
-                        });                
-                	}
-                }}  
-            ]            
-        });        
+        // @todo make buttons more beautiful
+        // @todo don't lose the scope!
+        // @todo move handlers to handler attribute
+        this.cancelAction = new Ext.Action({   
+            text: this.translation._('Cancel'),
+            handler : function(){
+                Ext.getCmp('dialerWindow').close();
+            }
+        });
+        	
+		this.dialAction = new Ext.Action({
+            scope: this,
+            text: this.translation._('Dial'),
+            handler : function(){   
+                var form = this.getForm();
 
-        this.add(this.myForm);        
+                // @todo add phone and line here
+                if (form.isValid()) {
+                    Ext.Ajax.request({
+                        url: 'index.php',
+                        params: {
+                            method: 'Phone.dialNumber',
+                            number: form.findField('phoneNumber').getValue()
+                            //phone: form.findField('phoneId').getValue() 
+                            //line:
+                        },
+                        success: function(_result, _request){
+                            Ext.getCmp('dialerWindow').close();
+                        },
+                        failure: function(result, request){
+                            // show error message?
+                        }
+                    });                
+                }
+            }
+        });
+
+        this.buttons = [
+            this.cancelAction,
+            this.dialAction
+        ];
         
-        this.initFields.defer(300, this);        
+        this.initMyFields.defer(500, this);        
+
+        Tine.Phone.DialerPanel.superclass.initComponent.call(this);        
     },
     
     /**
      * init form fields
      */
-    initFields: function() {
-        this.myForm.getForm().findField('phoneNumber').focus();
+    initMyFields: function() {
+        this.getForm().findField('phoneNumber').focus();
         
         // @todo select first combo value
-        //this.myForm.getForm().findField('phoneId').select(0);
-        //var phoneCombo = this.myForm.getForm().findField('phoneId');
+        //this.getForm().findField('phoneId').expand();
+        //this.getForm().findField('phoneId').select(0);
+        
+        //var phoneCombo = this.getForm().findField('phoneId');
         //console.log(phoneCombo);
         //phoneCombo.store.load({});
     }
@@ -304,7 +308,22 @@ Tine.Phone.Main = {
     	dialNumber: function(_button, _event) 
     	{
     		// open dialer box (with phone and lines selection)
-    		var dialer = new Tine.Phone.DialerWindow();
+    		// @todo use window factory later
+    		var dialerPanel = new Tine.Phone.DialerPanel({});     		
+    		var dialer = new Ext.Window({
+    			//title: this.translation._('Dial phone number'),
+    			title: 'Dial phone number',
+                id: 'dialerWindow',
+                modal: true,
+                width: 300,
+                height: 150,
+                layout: 'hfit',
+                plain:true,
+                bodyStyle:'padding:5px;',
+                closeAction: 'close',
+                items: [dialerPanel]
+    		});
+
     		dialer.show();
     		
     		/*
