@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2008-09-09 09:46+0100\n"
+"PO-Revision-Date: 2008-09-09 10:05+0100\n"
 "Last-Translator: Richard <richard@radbasteln.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -227,11 +227,11 @@ msgstr "Ergebnis"
 
 #: js/Admin.js:744
 msgid "enable application"
-msgstr "Anwendung starten"
+msgstr "Anwendung aktivieren"
 
 #: js/Admin.js:745
 msgid "disable application"
-msgstr "Anwendung beenden"
+msgstr "Anwendung deaktivieren"
 
 #: js/Admin.js:746
 msgid "settings"
@@ -239,11 +239,11 @@ msgstr "Einstellungen"
 
 #: js/Admin.js:797
 msgid "disabled"
-msgstr "beendet"
+msgstr "deaktiviert"
 
 #: js/Admin.js:800
 msgid "enabled"
-msgstr "gestartet"
+msgstr "aktiviert"
 
 #: js/Admin.js:804
 #, python-format
@@ -389,7 +389,7 @@ msgstr "Mitgleid entfernen"
 
 #: js/Groups.js:619
 msgid "Add new group"
-msgstr "Neue Gruppw erstellen"
+msgstr "Neue Gruppe erstellen"
 
 #: js/Groups.js:621
 #, python-format
@@ -480,28 +480,28 @@ msgstr "Möchten Sie den/die markierten Bezeichner wirklich löschen?"
 
 #: js/Tags.js:58
 msgid "Deleting tag(s)..."
-msgstr "Bezeichner löschen..."
+msgstr "Tag löschen..."
 
 #: js/Tags.js:73
 msgid "add tag"
-msgstr "Bezeichner hinzufügen"
+msgstr "Tag hinzufügen"
 
 #: js/Tags.js:80
 msgid "edit tag"
-msgstr "Bezeichner bearbeiten"
+msgstr "Tag bearbeiten"
 
 #: js/Tags.js:88
 msgid "delete tag"
-msgstr "Bezeichner löschen"
+msgstr "Tag löschen"
 
 #: js/Tags.js:157
 msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zeige Bezeichner  {0} - {1} von {2}"
+msgstr "Zeige Tag {0} - {1} von {2}"
 
 #: js/Tags.js:158
 #: js/Tags.js:207
 msgid "No tags to display"
-msgstr "Keine Bezeichner anzuzeigen"
+msgstr "Keine Tags anzuzeigen"
 
 #: js/Tags.js:163
 #: js/Tags.js:486
@@ -510,11 +510,11 @@ msgstr "Farbe"
 
 #: js/Tags.js:338
 msgid "Could not save tag."
-msgstr "Konnte Bezeichner nicht speichern"
+msgstr "Konnte Tag nicht speichern"
 
 #: js/Tags.js:356
 msgid "Deleting tag..."
-msgstr "Lösche Bezeichner"
+msgstr "Lösche Tag..."
 
 #: js/Tags.js:446
 msgid "Allowed Contexts"
@@ -542,16 +542,16 @@ msgstr "Context"
 
 #: js/Tags.js:581
 msgid "Loading Tag..."
-msgstr "Lade Bezeichner..."
+msgstr "Lade Tag..."
 
 #: js/Tags.js:612
 msgid "Add New Tag"
-msgstr "Neuen Bezeichner hinzufügen"
+msgstr "Neuen Tag hinzufügen"
 
 #: js/Tags.js:614
 #, python-format
 msgid "Edit Tag \"%s\""
-msgstr "Bezeichner \"%s\" bearbeiten"
+msgstr "Tag \"%s\" bearbeiten"
 
 #: js/Users.js:141
 msgid "Set new password"
@@ -575,7 +575,7 @@ msgstr "Beim Löschen des/r Account(s) traten Fehler auf."
 
 #: js/Users.js:265
 msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Zeige accounts {0} - {1} von {2}"
+msgstr "Zeige Accounts {0} - {1} von {2}"
 
 #: js/Users.js:266
 msgid "No accounts to display"
@@ -588,7 +588,7 @@ msgstr "Status"
 
 #: js/Users.js:272
 msgid "Displayname"
-msgstr "Bildschrimname"
+msgstr "Bildschirmname"
 
 #: js/Users.js:273
 msgid "Loginname"
@@ -596,7 +596,7 @@ msgstr "Loginname"
 
 #: js/Users.js:274
 msgid "Last name"
-msgstr "nachname"
+msgstr "Nachname"
 
 #: js/Users.js:275
 msgid "First name"
@@ -635,11 +635,11 @@ msgstr "Account löschen "
 
 #: js/Users.js:385
 msgid "enable account"
-msgstr "Account freischalten "
+msgstr "Accountaktivieren "
 
 #: js/Users.js:394
 msgid "disable account"
-msgstr "Account abschalten"
+msgstr "Account deaktivieren"
 
 #: js/Users.js:403
 msgid "reset password"
