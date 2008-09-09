@@ -155,32 +155,56 @@ Tine.Phone.updatePhoneTree = function(store){
  * - opens the dialer window if multiple phones/lines are available
  * - directly calls dial json function if number is set and just 1 phone and line are available
  * 
- * @param number
+ * @param string phone number to dial
  * 
  * @todo use window factory later
- * @todo add check if only one phone / one line exists
  */
 Tine.Phone.dialNumber = function(number) {
 	
-    // open dialer box (with phone and lines selection)
-    var dialerPanel = new Tine.Phone.DialerPanel({
-        number: (number) ? number : null
-    });           
-    var dialer = new Ext.Window({
-        //title: this.translation._('Dial phone number'),
-        title: 'Dial phone number',
-        id: 'dialerWindow',
-        modal: true,
-        width: 300,
-        height: 150,
-        layout: 'hfit',
-        plain:true,
-        bodyStyle:'padding:5px;',
-        closeAction: 'close',
-        items: [dialerPanel]        
-    });
+	var phonesStore = Tine.Phone.loadPhoneStore();
+	var lines = phonesStore.getAt(0).data.lines;
 
-    dialer.show();          	
+    // check if only one phone / one line exists and numer is set
+	if (phonesStore.getTotalCount() == 1 && lines.length == 1 && number) {
+		// call Phone.dialNumber
+        Ext.Ajax.request({
+            url: 'index.php',
+            params: {
+                method: 'Phone.dialNumber',
+                number: number,
+                phoneId: phonesStore.getAt(0).id,
+                lineId: lines[0].id 
+            },
+            success: function(_result, _request){
+                // success
+            },
+            failure: function(result, request){
+                // show error message?
+            }
+        });                
+
+    } else {	
+
+    	// open dialer box (with phone and lines selection)
+        var dialerPanel = new Tine.Phone.DialerPanel({
+            number: (number) ? number : null
+        });           
+        var dialer = new Ext.Window({
+            //title: this.translation._('Dial phone number'),
+            title: 'Dial phone number',
+            id: 'dialerWindow',
+            modal: true,
+            width: 300,
+            height: 150,
+            layout: 'hfit',
+            plain:true,
+            bodyStyle:'padding:5px;',
+            closeAction: 'close',
+            items: [dialerPanel]        
+        });
+    
+        dialer.show();          	
+	}
 };
 
 /**
@@ -332,7 +356,11 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         // reload lines combo on change
         phoneCombo.on('select', function(combo, newValue, oldValue){
         	this.setLineStore(newValue.data.id);
-        	this.getForm().findField('lineId').clearValue();
+        	
+        	// @todo remove this hack when the reload/update of the lines combo is working!
+        	if (this.linesStore.getTotalCount > 1) {
+            	this.getForm().findField('lineId').clearValue();
+        	}
         }, this);
         
         // reset phone combo on expand
@@ -341,7 +369,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         	combo.store.load();
         }, this);
 
-        // @todo reset phone combo on expand ?
+        // @todo reset phone combo on expand to show the new lines
         /*
         lineCombo.on('expand', function(combo){
             combo.store.query('linenumber', '*');

@@ -58,7 +58,7 @@ class Phone_Controller
      * @param string $_phoneId
      * @param string $_lineId
      * 
-     * @todo remove deprecated code
+     * @todo check dial right here?
      */
     public function dialNumber($_number, $_phoneId = NULL, $_lineId = NULL)
     {
@@ -69,7 +69,6 @@ class Phone_Controller
         if ($_phoneId === NULL && $_lineId === NULL) {
             
             // use first phone and first line
-            // @todo remove that later
             $filter = new Voipmanager_Model_SnomPhoneFilter(array(
                 'accountId' => $accountId 
             ));
@@ -84,7 +83,9 @@ class Phone_Controller
             } else {
                 throw new Exception('No phones found.');
             }
+            
         } else {
+            // use given phone and line ids
             $phone = $vmController->getMyPhone($_phoneId, $accountId);
             $line = $phone->lines[$phone->lines->getIndexById($_lineId)];
             $asteriskLineId = $line->asteriskline_id; 

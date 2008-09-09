@@ -31,6 +31,8 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
      */
     public function dialNumber($number, $phoneId, $lineId)
     {
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $number, $phoneId, $lineId");
+        
         $result = array(
             'success'   => TRUE
         );
