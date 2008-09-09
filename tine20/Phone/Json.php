@@ -22,20 +22,20 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
     protected $_appname = 'Phone';
     
     /**
-     * delete multiple contacts
+     * dial number
      *
-     * @param array $_contactIDs list of contactId's to delete
+     * @param int $number phone number
+     * @param string $phoneId phone id
+     * @param string $lineId phone line id
      * @return array
-     * 
-     * @todo add phone and line here
      */
-    public function dialNumber($number)
+    public function dialNumber($number, $phoneId, $lineId)
     {
         $result = array(
             'success'   => TRUE
         );
         
-        Phone_Controller::getInstance()->dialNumber($number);
+        Phone_Controller::getInstance()->dialNumber($number, $phoneId, $lineId);
         
         return $result;
     }
@@ -50,9 +50,19 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
         $voipController = Voipmanager_Controller::getInstance();
         $phones = $voipController->getMyPhones('id', 'ASC', '', $accountId);
         
+        // add lines to phones
+        $results = array();
+        foreach ($phones as $phone) {
+            $myPhone = $voipController->getMyPhone($phone->getId(), $accountId);
+
+            $result = $phone->toArray();
+            $result['lines'] = $myPhone->lines->toArray();
+            $results[] = $result;
+        }
+        
         $result = array(
             'success'       => TRUE,
-            'results'       => $phones->toArray(),
+            'results'       => $results,
             'totalcount'    => count($phones) 
         );
         

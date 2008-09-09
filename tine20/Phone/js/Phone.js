@@ -154,8 +154,7 @@ Tine.Phone.updatePhoneTree = function(store){
 /**
  * dialer form
  * 
- * @todo add lines
- * @todo extend form panel
+ * @todo use macaddress or description/name as display value?
  */
 Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
 	
@@ -169,52 +168,76 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         allowBlank: false
     },	
 	bodyStyle: 'padding:5px;',	
-	//layout: 'fit',	
 	buttonAlign: 'right',
-	//bbar: [],
 	    
+	phoneStore: null,
+	linesStore: null,
+	
     // private
     initComponent: function(){
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Phone');    
-
+        
+        // set stores
+        this.phoneStore = Tine.Phone.loadPhoneStore();
+        this.setLineStore(this.phoneStore.getAt(0).id);
+        
+        /***************** form fields *****************/
+        
         this.items = [
             {
                 fieldLabel: this.translation._('Number'),
                 name: 'phoneNumber',
-                //  {xtype: 'formfield, ...., listener: {'onrender': function(fe) {fe.focus()}}
             },{
                 xtype: 'combo',
                 fieldLabel: this.translation._('Phone'),
-                store: Tine.Phone.loadPhoneStore(),
-                //mode: 'remote',
+                store: this.phoneStore,
                 mode: 'local',
                 displayField:'macaddress',
                 valueField: 'id',
                 name: 'phoneId',
-                forceSelection: true
+                tpl: new Ext.XTemplate(
+                '<tpl for=".">' +
+                    '<div class="x-combo-list-item">' +
+                        '{[this.encode(values.macaddress, values.description)]}</tpl>' + 
+                    '</div>' +
+                '</tpl>',{
+                    encode: function(mac, desc) {
+                    	if (desc.length > 0) {
+                            return Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(desc));
+                    	} else {
+                    		return Ext.util.Format.htmlEncode(mac);
+                    	}
+                    }
+                })                
             },{
             	xtype: 'combo',
                 fieldLabel: this.translation._('Line'),
                 name: 'lineId',
-                mode: 'remote',
+                displayField:'linenumber',
+                valueField: 'id',
+                mode: 'local',
+                store: this.linesStore
             }
         ];
         
-        // @todo make buttons more beautiful
-        // @todo don't lose the scope!
-        // @todo move handlers to handler attribute
+        /******************* action buttons ********************/
+        
+        // cancel action
         this.cancelAction = new Ext.Action({   
             text: this.translation._('Cancel'),
+            iconCls: 'action_cancel',
             handler : function(){
                 Ext.getCmp('dialerWindow').close();
             }
         });
         	
+        // dial action
 		this.dialAction = new Ext.Action({
             scope: this,
             text: this.translation._('Dial'),
+            iconCls: 'action_DialNumber',
             handler : function(){   
                 var form = this.getForm();
 
@@ -224,9 +247,9 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                         url: 'index.php',
                         params: {
                             method: 'Phone.dialNumber',
-                            number: form.findField('phoneNumber').getValue()
-                            //phone: form.findField('phoneId').getValue() 
-                            //line:
+                            number: form.findField('phoneNumber').getValue(),
+                            phoneId: form.findField('phoneId').getValue(),
+                            lineId: form.findField('lineId').getValue() 
                         },
                         success: function(_result, _request){
                             Ext.getCmp('dialerWindow').close();
@@ -244,24 +267,72 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
             this.dialAction
         ];
         
-        this.initMyFields.defer(500, this);        
+        /************** other initialisation ****************/
+        
+        this.initMyFields.defer(300, this);        
 
         Tine.Phone.DialerPanel.superclass.initComponent.call(this);        
     },
     
     /**
      * init form fields
+     * 
+     * @todo add prefered phone/line selections
      */
     initMyFields: function() {
+    	// focus number field
         this.getForm().findField('phoneNumber').focus();
+
+        // get combos
+        var phoneCombo = this.getForm().findField('phoneId'); 
+        var lineCombo = this.getForm().findField('lineId'); 
         
-        // @todo select first combo value
-        //this.getForm().findField('phoneId').expand();
-        //this.getForm().findField('phoneId').select(0);
+        // todo select first combo values
+        phoneCombo.setValue(this.phoneStore.getAt(0).id);
+        this.getForm().findField('lineId').setValue(this.linesStore.getAt(0).id);
+
+        // reload lines combo on change
+        phoneCombo.on('select', function(combo, newValue, oldValue){
+        	this.setLineStore(newValue.data.id);
+        	this.getForm().findField('lineId').clearValue();
+        }, this);
         
-        //var phoneCombo = this.getForm().findField('phoneId');
-        //console.log(phoneCombo);
-        //phoneCombo.store.load({});
+        // reset phone combo on expand
+        phoneCombo.on('expand', function(combo){
+        	combo.store.query('macaddress', '*');
+        	combo.store.load();
+        }, this);
+
+        // @todo reset phone combo on expand
+        /*
+        lineCombo.on('expand', function(combo){
+            combo.store.query('linenumber', '*');
+            combo.store.fireEvent('datachanged');
+            //combo.store.load();
+            //combo.store.fireEvent('update');
+        }, this);
+        */
+    },
+    
+    /**
+     * get values from phones store
+     */
+    setLineStore: function(phoneId) {
+    	
+    	//console.log('set lines for ' + phoneId);
+    	
+    	if (this.linesStore == null) {
+    	   this.linesStore = new Ext.data.Store({});
+    	} else {
+    		// empty store
+    		this.linesStore.removeAll();
+    	}
+    	
+    	var phone = this.phoneStore.getById(phoneId);
+    	for(var i=0; i<phone.data.lines.length; i++) {
+    		var lineRecord = new Tine.Voipmanager.Model.Snom.Line(phone.data.lines[i], phone.data.lines[i].id);
+            this.linesStore.add(lineRecord);
+    	}
     }
 });
 
@@ -309,6 +380,8 @@ Tine.Phone.Main = {
     	{
     		// open dialer box (with phone and lines selection)
     		// @todo use window factory later
+    		// @todo add check if only one phone / one line exists
+    		// @todo move to seperate function
     		var dialerPanel = new Tine.Phone.DialerPanel({});     		
     		var dialer = new Ext.Window({
     			//title: this.translation._('Dial phone number'),
