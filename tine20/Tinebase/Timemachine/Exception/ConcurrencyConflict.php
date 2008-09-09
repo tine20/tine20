@@ -17,5 +17,5 @@
  * @subpackage  Timemachine
  */
 class Tinebase_Timemachine_Exception_ConcurrencyConflict extends Exception {
-
+    protected $code = 409;
 }
