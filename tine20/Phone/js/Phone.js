@@ -149,7 +149,39 @@ Tine.Phone.updatePhoneTree = function(store){
     store.purgeListeners();
 };
 
-/**************************** dialer form *******************************/
+/**************************** dialer form / function *******************************/
+/**
+ * dial function
+ * - opens the dialer window if multiple phones/lines are available
+ * - directly calls dial json function if number is set and just 1 phone and line are available
+ * 
+ * @param number
+ * 
+ * @todo use window factory later
+ * @todo add check if only one phone / one line exists
+ */
+Tine.Phone.dialNumber = function(number) {
+	
+    // open dialer box (with phone and lines selection)
+    var dialerPanel = new Tine.Phone.DialerPanel({
+        number: (number) ? number : null
+    });           
+    var dialer = new Ext.Window({
+        //title: this.translation._('Dial phone number'),
+        title: 'Dial phone number',
+        id: 'dialerWindow',
+        modal: true,
+        width: 300,
+        height: 150,
+        layout: 'hfit',
+        plain:true,
+        bodyStyle:'padding:5px;',
+        closeAction: 'close',
+        items: [dialerPanel]        
+    });
+
+    dialer.show();          	
+};
 
 /**
  * dialer form
@@ -160,6 +192,9 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
 	
 	id: 'dialerPanel',
 	translation: null,
+	
+	// initial phone number
+	number: null,
 	
 	// config settings
     defaults: {
@@ -241,7 +276,6 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
             handler : function(){   
                 var form = this.getForm();
 
-                // @todo add phone and line here
                 if (form.isValid()) {
                     Ext.Ajax.request({
                         url: 'index.php',
@@ -280,8 +314,12 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
      * @todo add prefered phone/line selections
      */
     initMyFields: function() {
-    	// focus number field
-        this.getForm().findField('phoneNumber').focus();
+    	// focus number field or set initial value
+    	if (this.number != null) {
+            this.getForm().findField('phoneNumber').setValue(this.number);
+    	} else {
+    		this.getForm().findField('phoneNumber').focus();
+    	}
 
         // get combos
         var phoneCombo = this.getForm().findField('phoneId'); 
@@ -303,7 +341,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         	combo.store.load();
         }, this);
 
-        // @todo reset phone combo on expand
+        // @todo reset phone combo on expand ?
         /*
         lineCombo.on('expand', function(combo){
             combo.store.query('linenumber', '*');
@@ -376,48 +414,8 @@ Tine.Phone.Main = {
     
     handlers: 
     {
-    	dialNumber: function(_button, _event) 
-    	{
-    		// open dialer box (with phone and lines selection)
-    		// @todo use window factory later
-    		// @todo add check if only one phone / one line exists
-    		// @todo move to seperate function
-    		var dialerPanel = new Tine.Phone.DialerPanel({});     		
-    		var dialer = new Ext.Window({
-    			//title: this.translation._('Dial phone number'),
-    			title: 'Dial phone number',
-                id: 'dialerWindow',
-                modal: true,
-                width: 300,
-                height: 150,
-                layout: 'hfit',
-                plain:true,
-                bodyStyle:'padding:5px;',
-                closeAction: 'close',
-                items: [dialerPanel]
-    		});
-
-    		dialer.show();
-    		
-    		/*
-            Ext.MessageBox.prompt('Number', 'Please enter number to dial:', function(_button, _number){
-                if (_button == 'ok') {                
-		            Ext.Ajax.request({
-		                url: 'index.php',
-		                params: {
-		                    method: 'Phone.dialNumber',
-		                    number: _number
-		                },
-		                success: function(_result, _request){
-		                    //Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
-		                },
-		                failure: function(result, request){
-		                    //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
-		                }
-		            });
-                }
-            });
-            */    		
+    	dialNumber: function(_button, _event) {
+    		Tine.Phone.dialNumber();
     	}
     },
  

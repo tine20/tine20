@@ -145,6 +145,8 @@ Tine.Addressbook.Main = {
                     break;
             }
 
+            Tine.Phone.dialNumber(number);
+            /*
             Ext.Ajax.request({
                 url: 'index.php',
                 params: {
@@ -158,6 +160,7 @@ Tine.Addressbook.Main = {
                     //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
                 }
             });
+            */
         },
         
         
