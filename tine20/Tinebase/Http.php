@@ -51,6 +51,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/Locale.js',
             'Tinebase/js/Locale/Gettext.js',
             // Ext user extensions
+            'Tinebase/js/ux/ConnectionStatus.js',
             'Tinebase/js/ux/ButtonLockedToggle.js',
             'Tinebase/js/ux/Percentage.js',
             'Tinebase/js/ux/PopupWindow.js',
@@ -124,6 +125,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	return array(
     	   'Tinebase/css/Tinebase.css',
     	   'Tinebase/css/SmallForms.css',
+    	   'Tinebase/css/ux/ConnectionStatus.css',
     	   'Tinebase/css/ux/Wizard.css',
     	   'Tinebase/css/ux/Percentage.css',
     	   'Tinebase/css/ux/grid/QuickaddGridPanel.css',
