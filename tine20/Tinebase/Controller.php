@@ -408,12 +408,13 @@ class Tinebase_Controller
     /**
      * sets the user locale
      * 
-     * $param  string $_locale
+     * @param  string $_locale
+     * @param  bool   $_saveaspreference
      * @return Zend_Locale
      * 
      * @todo get locale from preferences
      */
-    public function setupUserLocale($_localeString='auto')
+    public function setupUserLocale($_localeString = 'auto', $_saveaspreference = FALSE)
     {
         if ($_localeString == 'auto' && isset($this->_session->userLocale)) {
             $locale = $this->_session->userLocale;
@@ -423,9 +424,22 @@ class Tinebase_Controller
             } catch (Zend_Locale_Exception $e) {
                 $locale = new Zend_Locale('en_US');
             }
-            $this->_session->userLocale = $locale;
+            if ($this->_session !== NULL) {
+                $this->_session->userLocale = $locale;
+            }
         }
         Zend_Registry::set('locale', $locale);
+        
+        // save locale in config
+        if ($_saveaspreference) {
+            $preference = new Tinebase_Model_Config(array(
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+                'name' => 'locale',
+                'value' => $_localeString
+            ));
+            Tinebase_Config::getInstance()->setPreference(Zend_Registry::get('currentAccount')->getId(), $preference);
+        }
+                
         return $locale;
     }
     

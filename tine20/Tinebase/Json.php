@@ -86,12 +86,10 @@ class Tinebase_Json
      * @param  string $localeString
      * @param  bool   $saveaspreference
      * @return array
-     * 
-     * @todo save as preference
      */
     public function setLocale($localeString, $saveaspreference)
     {
-        $locale = Tinebase_Controller::getInstance()->setupUserLocale($localeString);
+        $locale = Tinebase_Controller::getInstance()->setupUserLocale($localeString, $saveaspreference);
         
         return array(
             'locale' => array(

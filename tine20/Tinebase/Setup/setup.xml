@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.13</version>
+    <version>0.14</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1521,6 +1521,84 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+
+        <table>
+            <name>config_user</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>user_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>value</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id-name-user_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>config_user::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>config_user::user_id--accounts::id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
                         <field>id</field>
                     </reference>
                 </index>

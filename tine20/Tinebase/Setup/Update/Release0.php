@@ -1144,4 +1144,104 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.13');
     }
+
+    /**
+     * update to 0.13
+     * - add config user table
+     * 
+     */
+    function update_13()
+    {
+        $tableDefinition = ('
+        <table>
+            <name>config_user</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>user_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>value</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id-name-user_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>config_user::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>config_user::user_id--accounts::id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>');
+    
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+        
+        // add default locale to config
+        $config = new Tinebase_Model_Config(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name' => 'locale',
+            'value' => 'auto'
+        ));
+        Tinebase_Config::getInstance()->setConfig($config);
+
+        $this->setApplicationVersion('Tinebase', '0.14');
+    }
 }

@@ -26,6 +26,13 @@ class Tinebase_Config
     protected $_configTable;
 
     /**
+     * the table object for the SQL_TABLE_PREFIX . user config table
+     *
+     * @var Zend_Db_Table_Abstract
+     */
+    protected $_configUserTable;
+    
+    /**
      * the db adapter
      *
      * @var Zend_Db_Adapter_Abstract
@@ -47,6 +54,7 @@ class Tinebase_Config
     private function __construct() 
     {
         $this->_configTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config'));
+        $this->_configUserTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config_user'));
         $this->_db = $this->_configTable->getAdapter();
     }
 
@@ -96,6 +104,39 @@ class Tinebase_Config
     }
 
     /**
+     * returns one preference value identified by user id, config name and application id
+     * 
+     * @param   int     $_userId 
+     * @param   string  $_name config name/key
+     * @param   int     $_applicationId application id (if NULL -> use Tinebase application)
+     * @param   bool    $_checkDefault
+     * @return  Tinebase_Model_Config  the config record
+     * 
+     * @todo get preference from config table if it doesn't exist in config_user
+     */
+    public function getPreference($_userId, $_name, $_applicationId = NULL, $_checkDefault = TRUE)
+    {
+        $applicationId = ($_applicationId !== NULL ) ? $_applicationId : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        
+        $select = $this->_configUserTable->select();
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId))
+               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name))
+               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('user_id') . ' = ?', $_userId));
+        
+        if (!$row = $this->_configTable->fetchRow($select)) {
+            if ($_checkDefault) {
+                $result = $this->getConfig($applicationId, $_name);
+            } else {
+                throw new Exception("user preference with name $_name not found!");
+            }
+        } else {
+            $result = new Tinebase_Model_Config($row->toArray());    
+        }
+        
+        return $result;
+    }
+    
+    /**
      * returns all config settings for one application
      * 
      * @param   string     $_applicationName application name
@@ -137,7 +178,7 @@ class Tinebase_Config
             $config->value = $_config->value;
 
             // update
-            $this->_configTable->update($_config->toArray(), $this->_db->quoteInto('id = ?', $config->getId()));             
+            $this->_configTable->update($config->toArray(), $this->_db->quoteInto('id = ?', $config->getId()));             
             
         } catch ( Exception $e ) {
             $newId = $_config->generateUID();
@@ -152,6 +193,39 @@ class Tinebase_Config
         return $config;
     }     
 
+    /**
+     * sets one config value identified by config name and application id
+     * 
+     * @param   int     $_userId 
+     * @param   Tinebase_Model_Config $_config record to set
+     * @return  Tinebase_Model_Config
+     */
+    public function setPreference($_userId, Tinebase_Model_Config $_config)
+    {
+        // check if already in
+        try {
+            $config = $this->getPreference($_userId, $_config->name, $_config->application_id, FALSE);
+            $config->value = $_config->value;
+
+            // update
+            $this->_configUserTable->update($config->toArray(), $this->_db->quoteInto('id = ?', $config->getId()));             
+            
+        } catch ( Exception $e ) {
+            $newId = $_config->generateUID();
+            $_config->setId($newId);
+            
+            $configArray = $_config->toArray();
+            $configArray['user_id'] = $_userId;
+            
+            // create new
+            $this->_configUserTable->insert($configArray); 
+        }
+
+        $config =  $this->getPreference($_userId, $_config->name, $_config->application_id);
+        
+        return $config;
+    }     
+    
     /**
      * deletes one config setting
      * 
