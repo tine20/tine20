@@ -1242,6 +1242,14 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ));
         Tinebase_Config::getInstance()->setConfig($config);
 
+        // add default timezone to config
+        $config = new Tinebase_Model_Config(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name' => 'timezone',
+            'value' => 'Europe/Berlin'
+        ));
+        Tinebase_Config::getInstance()->setConfig($config);
+        
         $this->setApplicationVersion('Tinebase', '0.14');
     }
 }
