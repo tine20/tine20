@@ -446,6 +446,7 @@ class Tinebase_Controller
     /**
      * intializes the timezone handling
      *
+     * @todo get timezone from preferences
      */
     protected function setupTimezones()
     {
