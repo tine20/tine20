@@ -652,8 +652,12 @@ class Tinebase_Container
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_User');
         
         foreach($rows as $row) {
-            $account = Tinebase_User::getInstance()->getUserById($row['account_id']);
-            $result->addRecord($account);
+         try {
+                $account = Tinebase_User::getInstance()->getUserById($row['account_id']);
+                $result->addRecord($account);
+            } catch (Exception $e) {
+                // user does not exist any longer (hotfix)
+            }
         }
         
         return $result;
