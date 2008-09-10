@@ -107,10 +107,36 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($list['results']) >= 263);
     }
     
+    /**
+     * test get translations
+     *
+     */
     public function testGetAvailableTranslations()
     {
         $list = $this->_instance->getAvailableTranslations();
         $this->assertTrue(count($list['results']) > 3);
+    }
+    
+    /**
+     * test set locale and save it in db
+     */
+    public function testSetLocaleAndPreference()
+    {
+        $userId = Zend_Registry::get('currentAccount')->getId();
+        $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'locale');
+        
+        $locale = 'de_DE';
+        $result = $this->_instance->setLocale($locale, true);
+        
+        //print_r($result);
+        $this->assertEquals($locale, $result['locale']['locale']);
+        
+        // get config setting from db
+        $preference = Tinebase_Config::getInstance()->getPreference($userId, 'locale');
+        $this->assertEquals($locale, $preference->value, "didn't get right locale preference");
+        
+        // restore old setting
+        Tinebase_Config::getInstance()->setPreference($userId, $oldPreference);
     }
 }
 
