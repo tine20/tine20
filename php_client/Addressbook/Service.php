@@ -119,7 +119,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
         
     
     /**
-     * adds / creates a new contact in remote installation
+     * adds / creates a new contact in a remote installation
      *
      * @param  Addressbook_Model_Contact $_contact
      * @return Addressbook_Model_Contact
