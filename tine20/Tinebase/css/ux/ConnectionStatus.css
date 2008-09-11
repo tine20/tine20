@@ -1,0 +1,11 @@
+.x-ux-connectionstatus-online {
+    background-image: url(../../../images/oxygen/16x16/status/user-online.png) !important;;
+}
+
+.x-ux-connectionstatus-offline {
+    background-image: url(../../../images/oxygen/16x16/status/user-offline.png) !important;;
+}
+
+.x-ux-connectionstatus-unknown {
+    background-image: url(../../../images/oxygen/16x16/categories/system-help.png) !important;;
+}
