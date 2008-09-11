@@ -44,7 +44,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         disabled: true
                     }
                 }*/]
-            },{
+            }/*,{
                 columnWidth: .5,
                 labelWidth: 150,
                 items: {
@@ -54,7 +54,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                     disabled: true,
                     anchor: '100% r'
                 }
-            }
+            }*/
         ]
     };
     
@@ -63,19 +63,9 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         items:[
             [
                 {
-                    columnWidth: .4,
+                    columnWidth: 1,
                     fieldLabel: translation._('Job Role'), 
                     name:'role'
-                },
-                {
-                    columnWidth: .4,
-                    fieldLabel: translation._('Unit'), 
-                    name:'org_unit'
-                },
-                {
-                    columnWidth: .2,
-                    fieldLabel: translation._('Room'), 
-                    name:'room'
                 }
             ],
             [
@@ -91,9 +81,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 },
                 {
                     columnWidth: .2,
-                    xtype: 'datefield',
-                    fieldLabel: translation._('Birthday'),
-                    name: 'bday'
+                    fieldLabel: translation._('Room'), 
+                    name:'room'
                 }
             ]
         ]
@@ -107,59 +96,101 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         autoHeight: true,
         items:[
             {
-                layout: 'column',
-                items:[
-                    {
-                        columnWidth: 1,
+            //    layout: 'column',
+            //    items:[
+            //        {
+            //            columnWidth: 1,
                         xtype: 'columnform',
                         items: [
                             [
                                 {
-                                    columnWidth: .2,
+                                    columnWidth: .20,
                                     fieldLabel: translation._('Title'), 
                                     name:'n_prefix',
                                     id: 'n_prefix'
                                 },
                                 {
-                                    columnWidth: .4,
+                                    columnWidth: .30,
                                     fieldLabel: translation._('First Name'), 
                                     name:'n_given'
                                 },
                                 {
-                                    columnWidth: .4,
+                                    columnWidth: .30,
                                     fieldLabel: translation._('Last Name'), 
                                     name:'n_family',
                                     allowBlank: false
+                                },
+                                {
+                                    columnWidth: .2,
+                                    xtype: 'panel',
+                                    layout: 'fit',
+                                    style: {'z-index': 3},
+                                    items: new Ext.ux.form.ImageField({
+                                        id: 'addressbookeditdialog-jpegimage',
+                                        name: 'jpegimage',
+                                        width: 90,
+                                        height: 80
+                                    })
+                                }
+                                /*
+                                new Ext.ux.form.ImageField({
+                                    id: 'addressbookeditdialog-jpegimage',
+                                    name: 'jpegimage',
+                                    width: 90,
+                                    height: 80
+                                })
+                                */
+                            ],
+                            [
+                                {
+                                    columnWidth: .5,
+                                    xtype: 'combo',
+                                    fieldLabel: translation._('Display Name'),
+                                    name: 'n_fn',
+                                    disabled: true//,
+                                    //anchor: '100% r'
+                                },
+                                {
+                                    columnWidth: .3,
+                                    fieldLabel: translation._('Job Title'),
+                                    name: 'title'
                                 }
                             ],
                             [
                                 {
-                                    columnWidth: .6,
+                                    columnWidth: .5,
                                     xtype: 'mirrortextfield',
                                     fieldLabel: translation._('Company'), 
                                     name:'org_name'
                                 },
                                 {
-                                    columnWidth: .4,
-                                    fieldLabel: translation._('Job Title'),
-                                    name: 'title'
+                                    columnWidth: .3,
+                                    fieldLabel: translation._('Unit'), 
+                                    name:'org_unit'
+                                },
+                                {
+                                    columnWidth: .2,
+                                    xtype: 'datefield',
+                                    fieldLabel: translation._('Birthday'),
+                                    name: 'bday'
                                 }
                             ]
                         ]
                     },
+                    /*
                     {
                         //layout: 'form',
                         hideLabels: true,
                         width: 92,
-                        items: new Ext.ux.form.ImageField({
+                        items: [new Ext.ux.form.ImageField({
                             id: 'addressbookeditdialog-jpegimage',
                             name: 'jpegimage',
                             width: 90,
                             height: 80
-                        })
-                    }
-                ]
-            },
+                        })]
+                    }*/
+                //]
+            //},
             personalInformationExpandArea
         ]
     };
