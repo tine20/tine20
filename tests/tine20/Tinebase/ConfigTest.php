@@ -73,8 +73,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $configSet = Tinebase_Config::getInstance()->setConfig($this->objects['config']);
         
-        $configGet = Tinebase_Config::getInstance()->getConfig(
-            Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(), $configSet->name);
+        $configGet = Tinebase_Config::getInstance()->getConfig($configSet->name);
             
         $this->assertEquals($this->objects['config']->value, $configGet->value);
     }
@@ -99,15 +98,13 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteConfig()
     {
-        $config = Tinebase_Config::getInstance()->getConfig(
-            Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(), $this->objects['config']->name);
+        $config = Tinebase_Config::getInstance()->getConfig($this->objects['config']->name);
         
         Tinebase_Config::getInstance()->deleteConfig($config);
             
         $this->setExpectedException('Exception');
         
-        $config = Tinebase_Config::getInstance()->getConfig(
-            Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(), $this->objects['config']->name);        
+        $config = Tinebase_Config::getInstance()->getConfig($this->objects['config']->name);        
     }
     
 }
