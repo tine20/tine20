@@ -416,11 +416,20 @@ class Tinebase_Controller
      */
     public function setupUserLocale($_localeString = 'auto', $_saveaspreference = FALSE)
     {
-        if ($_localeString == 'auto' && isset($this->_session->userLocale)) {
+        if ($_localeString == 'auto' && isset($this->_session->currentAccount)) {
+            // get locale from config/preferences
+            $localeString = Tinebase_Config::getInstance()
+                ->getPreference(Zend_Registry::get('currentAccount')->getId(), 'Locale')
+                ->value;
+        } else {
+            $localeString = $_localeString;
+        }
+        
+        if ($localeString == 'auto' && isset($this->_session->userLocale)) {
             $locale = $this->_session->userLocale;
         } else {
             try {
-                $locale = new Zend_Locale($_localeString);
+                $locale = new Zend_Locale($localeString);
             } catch (Zend_Locale_Exception $e) {
                 $locale = new Zend_Locale('en_US');
             }
@@ -428,6 +437,8 @@ class Tinebase_Controller
                 $this->_session->userLocale = $locale;
             }
         }
+        
+        // save in registry
         Zend_Registry::set('locale', $locale);
         
         // save locale in config
@@ -435,7 +446,7 @@ class Tinebase_Controller
             $preference = new Tinebase_Model_Config(array(
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
                 'name' => 'Locale',
-                'value' => $_localeString
+                'value' => $localeString
             ));
             Tinebase_Config::getInstance()->setPreference(Zend_Registry::get('currentAccount')->getId(), $preference);
         }

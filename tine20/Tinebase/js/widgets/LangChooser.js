@@ -76,7 +76,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
                 params: {
                     method: 'Tinebase.setLocale',
                     localeString: newLocale,
-                    saveaspreference: false
+                    saveaspreference: true
                 },
                 success: function(result, request){
                     var responseData = Ext.util.JSON.decode(result.responseText);
