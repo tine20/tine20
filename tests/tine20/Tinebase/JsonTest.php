@@ -120,7 +120,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test set locale and save it in db
      */
-    public function testSetLocaleAndPreference()
+    public function testSetLocaleAsPreference()
     {
         $userId = Zend_Registry::get('currentAccount')->getId();
         $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'Locale');
@@ -134,6 +134,29 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         // get config setting from db
         $preference = Tinebase_Config::getInstance()->getPreference($userId, 'Locale');
         $this->assertEquals($locale, $preference->value, "didn't get right locale preference");
+        
+        // restore old setting
+        Tinebase_Config::getInstance()->setPreference($userId, $oldPreference);
+    }
+
+    /**
+     * test set timezone and save it in db
+     */
+    public function testSetTimezoneAsPreference()
+    {
+        $userId = Zend_Registry::get('currentAccount')->getId();
+        $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'Timezone');
+        
+        $timezone = 'America/Vancouver';
+        $result = $this->_instance->setTimezone($timezone, true);        
+        //print_r($result);
+        
+        // check json result
+        $this->assertEquals($timezone, $result);
+        
+        // get config setting from db
+        $preference = Tinebase_Config::getInstance()->getPreference($userId, 'Timezone');
+        $this->assertEquals($timezone, $preference->value, "didn't get right timezone preference");
         
         // restore old setting
         Tinebase_Config::getInstance()->setPreference($userId, $oldPreference);
