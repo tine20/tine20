@@ -1,4 +1,4 @@
-/*
+/**
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
