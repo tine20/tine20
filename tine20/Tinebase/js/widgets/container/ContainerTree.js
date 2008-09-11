@@ -191,6 +191,22 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
         }
 		
 	},
+    
+    /**
+     * returns object of selected container or null
+     */
+    getSelectedContainer: function() {
+        var container = null;
+        
+        var node = this.getSelectionModel().getSelectedNode();
+        var containerType = node.attributes && node.attributes.containerType;
+        if (containerType == 'singleContainer' && node.attributes.container) {
+            container = node.attributes.container;
+        }
+        
+        return container;
+    },
+    
 	// private
 	afterRender: function() {
 		Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
