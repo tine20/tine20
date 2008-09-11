@@ -105,6 +105,38 @@ class Tinebase_Json
     }
 
     /**
+     * returns list of all available timezones in the current locale
+     * 
+     * @return array list of all available timezones
+     *
+     * @todo translate timezones
+     */
+    public function getAvailableTimezones()
+    {
+        //$locale =  Zend_Registry::get('locale');
+        $locale = new Zend_Locale('de');;
+        $englishLocale = new Zend_Locale('en');
+
+        //print_r($locale->)
+        
+        $availableTimezones = array_values($locale->getTranslationList('TimezoneToTerritory'));
+        $availableTimezonesEnglish = array_values($englishLocale->getTranslationList('TimezoneToTerritory'));
+        
+        $result = array();
+        foreach ($availableTimezones as $key => $timezoneTranslation) {
+            $result[] = array(
+                'timezone' => $availableTimezonesEnglish[$key],
+                'timezoneTranslation' => $timezoneTranslation
+            );
+        }
+        
+        return array(
+            'results'    => $result,
+            'totalcount' => count($result)
+        );
+    }
+    
+    /**
      * sets timezone
      *
      * @param  string $timezoneString

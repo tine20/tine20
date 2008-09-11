@@ -105,7 +105,8 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             height: 26,
             items:[
                 sprintf(_('User: %s'), Tine.Tinebase.Registry.get('currentAccount').accountDisplayName), '-',
-                sprintf(_('Timezone: %s'), Tine.Tinebase.Registry.get('timeZone')), '-',
+                //sprintf(_('Timezone: %s'), Tine.Tinebase.Registry.get('timeZone')), '-',
+                _('Timezone') + ': ' , new Tine.widgets.TimezoneChooser({}), '-',
                 _('Language') + ': ' , new Tine.widgets.LangChooser({}),
                 '->',
                 this.onlineStatus

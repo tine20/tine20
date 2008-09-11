@@ -31,6 +31,14 @@ Tine.Tinebase.Model.Language = Ext.data.Record.create([
 ]);
 
 /**
+ * Model of a timezone
+ */
+Tine.Tinebase.Model.Timezone = Ext.data.Record.create([
+    { name: 'timezone' },
+    { name: 'timezoneTranslation' }
+]);
+
+/**
  * Model of a user group account
  */
 Tine.Tinebase.Model.Group = Ext.data.Record.create([
