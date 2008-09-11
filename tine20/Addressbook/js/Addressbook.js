@@ -84,7 +84,10 @@ Tine.Addressbook.Main = {
 	     * onclick handler for addBtn
 	     */
 	    addContact: function(_button, _event) {
-            Tine.Addressbook.ContactEditDialog.openWindow({});
+            var selectedNode = Ext.getCmp('Addressbook_Tree').getSelectedContainer();
+            Tine.Addressbook.ContactEditDialog.openWindow({
+                forceContainer: selectedNode
+            });
         },
 
         /**
@@ -775,6 +778,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
      */
     contact: null,
     /**
+     * @cfg {Object} container
+     */
+    forceContainer: null,    
+    /**
      * @private
      */
     windowNamePrefix: 'AddressbookEditWindow_',
@@ -827,6 +834,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     onContactLoad: function(response) {
         this.getForm().findField('n_prefix').focus(false, 250);
         var contactData = Ext.util.JSON.decode(response.responseText);
+        if (this.forceContainer) {
+            contactData.owner = this.forceContainer;
+            // only force initially!
+            this.forceContainer = null;
+        }
         this.updateContactRecord(contactData);
         
         if (! this.contact.id) {
