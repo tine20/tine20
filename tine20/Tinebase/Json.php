@@ -103,6 +103,33 @@ class Tinebase_Json
                 'ext'     => Tinebase_Translation::getJsTranslationFile($locale, 'ext')
             ));
     }
+
+    /**
+     * sets timezone
+     *
+     * @param  string $timezoneString
+     * @param  bool   $saveaspreference
+     * @return string
+     */
+    public function setTimezone($timezoneString, $saveaspreference)
+    {
+        $timezone = Tinebase_Controller::getInstance()->setupUserTimezone($timezoneString, $saveaspreference);
+        
+        return $timezone;
+        /*
+        return array(
+            'locale' => array(
+                'locale'   => $locale->toString(), 
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion())
+            ),
+            'translationFiles' => array(
+                'generic' => Tinebase_Translation::getJsTranslationFile($locale, 'generic'),
+                'tine'    => Tinebase_Translation::getJsTranslationFile($locale, 'tine'),
+                'ext'     => Tinebase_Translation::getJsTranslationFile($locale, 'ext')
+            ));
+        */
+    }
     
     /**
      * get users
