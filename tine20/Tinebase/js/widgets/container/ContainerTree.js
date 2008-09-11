@@ -371,9 +371,10 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
      * @private
      */
  	createNode: function(attr) {
+        
 		// map attributes from Tinebase_Container to attrs from ExtJS
 		if (attr.name) {
-            if (!attr.account_grants.accountId){
+            if (!attr.account_grants.account_id){
                 // temporary workaround, for a Zend_Json::encode problem
                 attr.account_grants = Ext.util.JSON.decode(attr.account_grants);
             }
@@ -393,7 +394,7 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
                 owner: attr
             };
         }
-        
+                
         attr.qtip = Ext.util.Format.htmlEncode(attr.text);
         attr.text = Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(attr.text, this.displayLength));
         
