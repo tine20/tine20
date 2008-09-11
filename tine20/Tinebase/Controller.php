@@ -434,7 +434,7 @@ class Tinebase_Controller
         if ($_saveaspreference) {
             $preference = new Tinebase_Model_Config(array(
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-                'name' => 'locale',
+                'name' => 'Locale',
                 'value' => $_localeString
             ));
             Tinebase_Config::getInstance()->setPreference(Zend_Registry::get('currentAccount')->getId(), $preference);

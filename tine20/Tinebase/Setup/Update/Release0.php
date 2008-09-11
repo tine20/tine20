@@ -1237,7 +1237,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         // add default locale to config
         $config = new Tinebase_Model_Config(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name' => 'locale',
+            'name' => 'Locale',
             'value' => 'auto'
         ));
         Tinebase_Config::getInstance()->setConfig($config);
@@ -1245,7 +1245,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         // add default timezone to config
         $config = new Tinebase_Model_Config(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name' => 'timezone',
+            'name' => 'Timezone',
             'value' => 'Europe/Berlin'
         ));
         Tinebase_Config::getInstance()->setConfig($config);
