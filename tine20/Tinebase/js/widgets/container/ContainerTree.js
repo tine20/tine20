@@ -221,9 +221,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 
         var handler = {
 			addContainer: function() {
-				Ext.MessageBox.prompt(translation._('New') + ' ' + this.folderName, 'Please enter the name of the new ' + this.folderName + ':', function(_btn, _text) {
+				Ext.MessageBox.prompt(sprintf(translation._('New %s'), this.folderName), sprintf(translation._('Please enter the name of the new %s:'), this.folderName), function(_btn, _text) {
                     if( this.ctxNode && _btn == 'ok') {
-						Ext.MessageBox.wait(translation._('Please wait'), translation._('Creating') + ' ' + this.folderName+ '...');
+						Ext.MessageBox.wait(translation._('Please wait'), sprintf(translation._('Creating %s...' ), this.folderName));
 						var parentNode = this.ctxNode;
 						
 						Ext.Ajax.request({
@@ -249,9 +249,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 			deleteContainer: function() {
 				if (this.ctxNode) {
 					var node = this.ctxNode;
-					Ext.MessageBox.confirm(translation._('Confirm'),translation._('Do you really want to delete the') + ' ' + this.folderName + ': "' + node.text + '"?', function(_btn){
+					Ext.MessageBox.confirm(translation._('Confirm'), sprintf(translation._('Do you really want to delete the %s "%s"?'), this.folderName, node.text), function(_btn){
 						if ( _btn == 'yes') {
-							Ext.MessageBox.wait(translation._('Please wait'), translation._('Deleting') + ' ' + this.folderName + ' "' + node.text + '"');
+							Ext.MessageBox.wait(translation._('Please wait'), sprintf(translation._('Deleting %s "%s"' ), this.folderName , node.text));
 							
 							Ext.Ajax.request({
 								params: {
@@ -278,12 +278,12 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 					var node = this.ctxNode;
 					Ext.MessageBox.show({
 						title: 'Rename ' + this.folderName,
-						msg: translation._('Please enter the new name of the') + ' ' + this.folderName + ':',
+						msg: sprintf(translation._('Please enter the new name of the %s:', this.folderName)),
 						buttons: Ext.MessageBox.OKCANCEL,
 						value: node.text,
 						fn: function(_btn, _text){
 							if (_btn == 'ok') {
-								Ext.MessageBox.wait(translation._('Please wait'), translation._('Updateing') + ' ' + this.folderName + ' "' + node.text + '"');
+								Ext.MessageBox.wait(translation._('Please wait'), sprintf(translation._('Updateing %s "%s"'), this.folderName, node.text));
 								
 								Ext.Ajax.request({
 									params: {
@@ -330,19 +330,19 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 		
 		var actions = {
 			addContainer: new Ext.Action({
-				text: translation._('Add') + ' ' + this.folderName,
+				text: sprintf(translation._('Add %s'), this.folderName),
 				iconCls: 'action_add',
 				handler: handler.addContainer,
 				scope: this
 			}),
 			deleteContainer: new Ext.Action({
-				text: translation._('Delete') + ' ' + this.folderName,
+				text: sprintf(translation._('Delete %s'), this.folderName),
 				iconCls: 'action_delete',
 				handler: handler.deleteContainer,
 				scope: this
 			}),
 			renameContainer: new Ext.Action({
-				text: translation._('Rename') + ' ' + this.folderName,
+				text: sprintf(translation._('Rename %s'), this.folderName),
 				iconCls: 'action_rename',
 				handler: handler.renameContainer,
 				scope: this
