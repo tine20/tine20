@@ -123,7 +123,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     public function testSetLocaleAndPreference()
     {
         $userId = Zend_Registry::get('currentAccount')->getId();
-        $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'locale');
+        $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'Locale');
         
         $locale = 'de_DE';
         $result = $this->_instance->setLocale($locale, true);
@@ -132,7 +132,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($locale, $result['locale']['locale']);
         
         // get config setting from db
-        $preference = Tinebase_Config::getInstance()->getPreference($userId, 'locale');
+        $preference = Tinebase_Config::getInstance()->getPreference($userId, 'Locale');
         $this->assertEquals($locale, $preference->value, "didn't get right locale preference");
         
         // restore old setting
