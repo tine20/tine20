@@ -105,8 +105,8 @@ class Tinebase_Controller
             Zend_Registry::set('currentAccount', $this->_session->currentAccount);
         }
         
-        // Timezones must be setup before logger, as logger has timehandling!
-        $this->setupTimezones();
+        // Server Timezone must be setup before logger, as logger has timehandling!
+        $this->setupServerTimezone();
         
         $this->setupLogger();
         
@@ -114,6 +114,8 @@ class Tinebase_Controller
 
         $this->setupDatabaseConnection();
 
+        $this->setupUserTimezone();
+        
         $this->setupUserLocale();
         
         $this->setupCache();
@@ -411,8 +413,6 @@ class Tinebase_Controller
      * @param  string $_locale
      * @param  bool   $_saveaspreference
      * @return Zend_Locale
-     * 
-     * @todo get locale from preferences
      */
     public function setupUserLocale($_localeString = 'auto', $_saveaspreference = FALSE)
     {
@@ -457,17 +457,53 @@ class Tinebase_Controller
     /**
      * intializes the timezone handling
      *
-     * @todo get timezone from preferences
      */
-    protected function setupTimezones()
+    protected function setupServerTimezone()
     {
         // All server operations are done in UTC
         date_default_timezone_set('UTC');
-        
-        // Timezone for client
-        Zend_Registry::set('userTimeZone', 'Europe/Berlin');
     }
 
+    /**
+     * intializes the timezone handling
+     * 
+     * @param  string $_timezone
+     * @param  bool   $_saveaspreference
+     * @return string
+     */
+    public function setupUserTimezone($_timezone = NULL, $_saveaspreference = FALSE)
+    {
+        if ($_timezone === NULL) {
+            // get timezone from config/preferences
+            if (isset($this->_session->currentAccount)) {
+                $timezone = Tinebase_Config::getInstance()
+                    ->getPreference(Zend_Registry::get('currentAccount')->getId(), 'Timezone')
+                    ->value;
+            } else {
+                $timezone = Tinebase_Config::getInstance()
+                    ->getConfig('Timezone')
+                    ->value;
+            }
+        } else {
+            
+            $timezone = $_timezone;
+
+            // save locale in config
+            if ($_saveaspreference) {
+                $preference = new Tinebase_Model_Config(array(
+                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+                    'name' => 'Timezone',
+                    'value' => $timezone
+                ));
+                Tinebase_Config::getInstance()->setPreference(Zend_Registry::get('currentAccount')->getId(), $preference);
+            }
+        }
+        
+        Zend_Registry::set('userTimeZone', $timezone);
+        
+        return $timezone;
+    }
+    
     /**
      * create new user seesion
      *

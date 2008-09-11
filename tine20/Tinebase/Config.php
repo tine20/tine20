@@ -84,14 +84,16 @@ class Tinebase_Config
     /**
      * returns one config value identified by config name and application id
      * 
-     * @param   int     $_applicationId application id
      * @param   string  $_name config name/key
+     * @param   int     $_applicationId application id
      * @return  Tinebase_Model_Config  the config record
      */
-    public function getConfig($_applicationId, $_name)
+    public function getConfig($_name, $_applicationId = NULL)
     {
+        $applicationId = ($_applicationId !== NULL ) ? $_applicationId : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        
         $select = $this->_configTable->select();
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId))
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId))
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
         
         if (!$row = $this->_configTable->fetchRow($select)) {
@@ -125,7 +127,7 @@ class Tinebase_Config
         
         if (!$row = $this->_configTable->fetchRow($select)) {
             if ($_checkDefault) {
-                $result = $this->getConfig($applicationId, $_name);
+                $result = $this->getConfig($_name, $applicationId);
             } else {
                 throw new Exception("user preference with name $_name not found!");
             }
@@ -174,7 +176,7 @@ class Tinebase_Config
     {
         // check if already in
         try {
-            $config = $this->getConfig($_config->application_id, $_config->name);
+            $config = $this->getConfig($_config->name, $_config->application_id);
             $config->value = $_config->value;
 
             // update
@@ -188,7 +190,7 @@ class Tinebase_Config
             $this->_configTable->insert($_config->toArray()); 
         }
 
-        $config = $this->getConfig($_config->application_id, $_config->name);
+        $config = $this->getConfig($_config->name, $_config->application_id);
         
         return $config;
     }     

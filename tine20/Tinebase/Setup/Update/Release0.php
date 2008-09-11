@@ -1146,9 +1146,9 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 0.13
-     * - add config user table
-     * 
+     * update to 0.14
+     * - add config user table 
+     * - create Locale/Timezone default settings
      */
     function update_13()
     {
