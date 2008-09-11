@@ -79,7 +79,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
             // each row consits n column objects 
             for (var n=0,m=initialRowConfig.length; n<m; n++) {
                 var column = initialRowConfig[n];
-                rowConfig.items.push({
+                var idx = rowConfig.items.push({
                     columnWidth: column.columnWidth ? column.columnWidth : this.formDefaults.columnWidth,
                     layout: 'form',
                     labelAlign: this.labelAlign,
@@ -88,6 +88,11 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                     border: false,
                     items: column
                 });
+                
+                if (column.width) {
+                    rowConfig.items[idx-1].width = column.width;
+                    delete rowConfig.items[idx-1].columnWidth;
+                }
             }
             items.push(rowConfig);
         }
