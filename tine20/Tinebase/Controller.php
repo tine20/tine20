@@ -82,7 +82,7 @@ class Tinebase_Controller
             ));
         }
         Zend_Session::start();
-
+        
         if(file_exists(dirname(__FILE__) . '/../config.inc.php')) {
             $this->_config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
         } else {
@@ -106,6 +106,11 @@ class Tinebase_Controller
         if (isset($this->_session->currentAccount)) {
             Zend_Registry::set('currentAccount', $this->_session->currentAccount);
         }
+        
+        // setup a temporary user locale. This will be overwritten from setupUserLocale, 
+        // but we need to handle exceptions during initialisation process such as seesion timeout
+        // @todo add fallback locale to config.ini
+        Zend_Registry::set('locale', new Zend_Locale('en_US'));
         
         // Server Timezone must be setup before logger, as logger has timehandling!
         $this->setupServerTimezone();
