@@ -154,7 +154,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     /**
      * returns multiple tasks prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_contacts Tasks_Model_Task
+     * @param Tinebase_Record_RecordSet $_tasks Tasks_Model_Task
      * @return array tasks data
      */
     protected function _multipleTasksToJson(Tinebase_Record_RecordSet $_tasks)
