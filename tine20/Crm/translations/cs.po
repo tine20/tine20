@@ -13,67 +13,131 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:107
-msgid "manage leads"
-msgstr "spravovat leady"
+#: Pdf.php:69
+msgid "Lead Data"
+msgstr "Data leadu"
 
-#: Acl/Rights.php:108
-msgid "add, edit and delete leads"
-msgstr "přidat, editovat a smazat leady"
+#: Pdf.php:72 js/LeadEditDialog.js:41 js/Crm.js:234 js/Crm.js:235
+#: js/Crm.js:385
+msgid "Leadstate"
+msgstr "Stav leadu"
 
-#: Controller.php:726
-#, python-format
-msgid "%s's personal leads"
-msgstr ""
+#: Pdf.php:75 js/LeadEditDialog.js:70
+msgid "Leadtype"
+msgstr "Typ leadu"
 
-#: Controller.php:799
-msgid "State"
-msgstr "Status"
+#: Pdf.php:78 js/LeadEditDialog.js:87
+msgid "Leadsource"
+msgstr "Zdroj leadu"
 
-#: Controller.php:800 js/Crm.js:1054 js/Crm.js:1092
-msgid "Type"
-msgstr "Typ"
-
-#: Controller.php:801
-msgid "Source"
-msgstr "Zdroj"
-
-#: Controller.php:802 js/LeadEditDialog.js:112 Pdf.php:87
-msgid "Start"
-msgstr "Začátek"
-
-#: Controller.php:803
-msgid "Scheduled end"
-msgstr "Plánovaný konec"
-
-#: Controller.php:804 js/LeadEditDialog.js:126 Pdf.php:90
-msgid "End"
-msgstr "Konec"
-
-#: Controller.php:805 js/Crm.js:387 Pdf.php:81
+#: Pdf.php:81 js/Crm.js:387 Controller.php:805
 msgid "Turnover"
 msgstr "Obrat"
 
-#: Controller.php:806 js/Crm.js:256 js/Crm.js:257 js/Crm.js:258 js/Crm.js:386
-#: js/LeadEditDialog.js:104 Pdf.php:84
+#: Pdf.php:84 js/LeadEditDialog.js:104 js/Crm.js:256 js/Crm.js:257
+#: js/Crm.js:258 js/Crm.js:386 Controller.php:806
 msgid "Probability"
 msgstr "Pravděpodobnost"
 
-#: Controller.php:807
-msgid "Folder"
-msgstr "Složka"
+#: Pdf.php:87 js/LeadEditDialog.js:112 Controller.php:802
+msgid "Start"
+msgstr "Začátek"
 
-#: Controller.php:808
-msgid "Updated by"
-msgstr "Aktualizoval(a)"
+#: Pdf.php:90 js/LeadEditDialog.js:126 Controller.php:804
+msgid "End"
+msgstr "Konec"
 
-#: Controller.php:814
-msgid "Lead updated"
-msgstr "Lead zaktualizován"
+#: Pdf.php:93
+msgid "End Scheduled"
+msgstr "Plánovaný konec"
 
-#: Controller.php:816
-msgid "Lead added"
-msgstr "Lead přidán"
+#: Pdf.php:171 js/Crm.js:1819
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: Pdf.php:198 js/Crm.js:1034
+msgid "Address"
+msgstr "Adresa"
+
+#: Pdf.php:205
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Pdf.php:206
+msgid "Email"
+msgstr "Email"
+
+#: Pdf.php:219 js/Crm.js:1820
+msgid "Tasks"
+msgstr "Úkoly"
+
+#: Pdf.php:239 js/Crm.js:1129
+msgid "Due Date"
+msgstr "Termín dokončení"
+
+#: Pdf.php:244 js/Crm.js:1143
+msgid "Priority"
+msgstr "Priorita"
+
+#: Pdf.php:258 js/Crm.js:618 js/Crm.js:1821
+msgid "Products"
+msgstr "Produkty"
+
+#: Pdf.php:296
+msgid "low"
+msgstr "nízká"
+
+#: Pdf.php:297
+msgid "normal"
+msgstr "normální"
+
+#: Pdf.php:298
+msgid "high"
+msgstr "vysoká"
+
+#: Pdf.php:299
+msgid "urgent"
+msgstr "urgentní"
+
+#: js/LeadEditDialog.js:32
+msgid "Enter short name"
+msgstr "Zadejte stručný název"
+
+#: js/LeadEditDialog.js:119
+msgid "Estimated end"
+msgstr "Odhadovaný konec"
+
+#: js/LeadEditDialog.js:132
+msgid "folder"
+msgstr "složka"
+
+#: js/LeadEditDialog.js:142
+msgid "Overview"
+msgstr "Přehled"
+
+#: js/LeadEditDialog.js:161 js/Crm.js:1213
+msgid "Description"
+msgstr "Popis"
+
+#: js/LeadEditDialog.js:175
+msgid "Enter description"
+msgstr "Zadejte popis"
+
+#: js/LeadEditDialog.js:227
+msgid "Expected turnover"
+msgstr "Očekávaný obrat"
+
+#: js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
+msgid "Responsible"
+msgstr "Odpovědná osoba"
+
+#: js/LeadEditDialog.js:331 js/LeadEditDialog.js:371 js/Crm.js:384
+msgid "Customer"
+msgstr "Zákazník"
+
+#: js/LeadEditDialog.js:332 js/LeadEditDialog.js:375 js/Crm.js:383
+msgid "Partner"
+msgstr "Partner"
 
 #: js/Crm.js:158
 msgid "Are you sure you want to delete this lead?"
@@ -90,11 +154,6 @@ msgstr "Při pokusu o smazání tohoto leadu došlo k chybě."
 #: js/Crm.js:223
 msgid "Enter searchfilter"
 msgstr "Zadejte hledaný výraz"
-
-#: js/Crm.js:234 js/Crm.js:235 js/Crm.js:385 js/LeadEditDialog.js:41
-#: Pdf.php:72
-msgid "Leadstate"
-msgstr "Stav leadu"
 
 #: js/Crm.js:236
 msgid "leadstate"
@@ -123,14 +182,6 @@ msgstr "ID Leadu"
 #: js/Crm.js:382
 msgid "Lead name"
 msgstr "Jméno leadu"
-
-#: js/Crm.js:383 js/LeadEditDialog.js:332 js/LeadEditDialog.js:375
-msgid "Partner"
-msgstr "Partner"
-
-#: js/Crm.js:384 js/LeadEditDialog.js:331 js/LeadEditDialog.js:371
-msgid "Customer"
-msgstr "Zákazník"
 
 #: js/Crm.js:462
 msgid "Add lead"
@@ -187,10 +238,6 @@ msgstr "Zroje leadů"
 msgid "Lead types"
 msgstr "Typy leadů"
 
-#: js/Crm.js:618 js/Crm.js:1821 Pdf.php:258
-msgid "Products"
-msgstr "Produkty"
-
 #: js/Crm.js:677 js/Crm.js:1046
 msgid "Phone"
 msgstr "Telefon"
@@ -227,13 +274,13 @@ msgstr "Opravte prosím vyznačené chyby."
 msgid "Name"
 msgstr "Jméno"
 
-#: js/Crm.js:1034 Pdf.php:198
-msgid "Address"
-msgstr "Adresa"
-
 #: js/Crm.js:1045
 msgid "Contactdata"
 msgstr "Kontaktní údaje"
+
+#: js/Crm.js:1054 js/Crm.js:1092 Controller.php:800
+msgid "Type"
+msgstr "Typ"
 
 #: js/Crm.js:1089
 msgid "Organisation"
@@ -247,14 +294,6 @@ msgstr "Přehled"
 msgid "Add a task..."
 msgstr "Přidat úkol..."
 
-#: js/Crm.js:1129 Pdf.php:239
-msgid "Due Date"
-msgstr "Termín dokončení"
-
-#: js/Crm.js:1143 Pdf.php:244
-msgid "Priority"
-msgstr "Priorita"
-
 #: js/Crm.js:1158
 msgid "Status"
 msgstr "Status"
@@ -266,10 +305,6 @@ msgstr "Produkt"
 #: js/Crm.js:1204
 msgid "Add a product..."
 msgstr "Přidat produkt..."
-
-#: js/Crm.js:1213 js/LeadEditDialog.js:161
-msgid "Description"
-msgstr "Popis"
 
 #: js/Crm.js:1226
 msgid "Price"
@@ -363,14 +398,6 @@ msgstr "Odstranit produkty"
 msgid "Remove selected products"
 msgstr "Odstranit vybrané produkty"
 
-#: js/Crm.js:1819 Pdf.php:171
-msgid "Contacts"
-msgstr "Kontakty"
-
-#: js/Crm.js:1820 Pdf.php:219
-msgid "Tasks"
-msgstr "Úkoly"
-
 #: js/Crm.js:1844
 msgid "Loading Lead..."
 msgstr ""
@@ -388,73 +415,46 @@ msgstr ""
 msgid "Edit Lead \"%s\""
 msgstr ""
 
-#: js/LeadEditDialog.js:32
-msgid "Enter short name"
-msgstr "Zadejte stručný název"
+#: Acl/Rights.php:107
+msgid "manage leads"
+msgstr "spravovat leady"
 
-#: js/LeadEditDialog.js:70 Pdf.php:75
-msgid "Leadtype"
-msgstr "Typ leadu"
+#: Acl/Rights.php:108
+msgid "add, edit and delete leads"
+msgstr "přidat, editovat a smazat leady"
 
-#: js/LeadEditDialog.js:87 Pdf.php:78
-msgid "Leadsource"
-msgstr "Zdroj leadu"
+#: Controller.php:726
+#, python-format
+msgid "%s's personal leads"
+msgstr ""
 
-#: js/LeadEditDialog.js:119
-msgid "Estimated end"
-msgstr "Odhadovaný konec"
+#: Controller.php:799
+msgid "State"
+msgstr "Status"
 
-#: js/LeadEditDialog.js:132
-msgid "folder"
-msgstr "složka"
+#: Controller.php:801
+msgid "Source"
+msgstr "Zdroj"
 
-#: js/LeadEditDialog.js:142
-msgid "Overview"
-msgstr "Přehled"
-
-#: js/LeadEditDialog.js:175
-msgid "Enter description"
-msgstr "Zadejte popis"
-
-#: js/LeadEditDialog.js:227
-msgid "Expected turnover"
-msgstr "Očekávaný obrat"
-
-#: js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
-msgid "Responsible"
-msgstr "Odpovědná osoba"
-
-#: Pdf.php:69
-msgid "Lead Data"
-msgstr "Data leadu"
-
-#: Pdf.php:93
-msgid "End Scheduled"
+#: Controller.php:803
+msgid "Scheduled end"
 msgstr "Plánovaný konec"
 
-#: Pdf.php:205
-msgid "Telephone"
-msgstr "Telefon"
+#: Controller.php:807
+msgid "Folder"
+msgstr "Složka"
 
-#: Pdf.php:206
-msgid "Email"
-msgstr "Email"
+#: Controller.php:808
+msgid "Updated by"
+msgstr "Aktualizoval(a)"
 
-#: Pdf.php:296
-msgid "low"
-msgstr "nízká"
+#: Controller.php:814
+msgid "Lead updated"
+msgstr "Lead zaktualizován"
 
-#: Pdf.php:297
-msgid "normal"
-msgstr "normální"
-
-#: Pdf.php:298
-msgid "high"
-msgstr "vysoká"
-
-#: Pdf.php:299
-msgid "urgent"
-msgstr "urgentní"
+#: Controller.php:816
+msgid "Lead added"
+msgstr "Lead přidán"
 
 #~ msgid "Percent"
 #~ msgstr "Procent"

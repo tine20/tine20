@@ -14,354 +14,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Bookmarks: 23,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: Controller.php:386
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s's лични адреси"
-
-#: js/Addressbook.js:15 js/Addressbook.js:214
-msgid "Internal Contacts"
-msgstr "Международни контакти"
-
-#: js/Addressbook.js:28
-msgid "Addressbook"
-msgstr "Адреси"
-
-#: js/Addressbook.js:29 js/EditDialog.js:34
-msgid "contacts"
-msgstr "Контакти"
-
-#: js/Addressbook.js:170
-msgid "Are you Sure?"
-msgstr "Сигурни ли сте?"
-
-#: js/Addressbook.js:171
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
-msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
-
-#: js/Addressbook.js:191 js/Addressbook.js:901
-msgid "Deleting contact..."
-msgid_plural "Deleting contacts..."
-msgstr[0] "Изтрива контакт..."
-msgstr[1] "Изтрива контакти..."
-
-#: js/Addressbook.js:197 js/Addressbook.js:884 js/Addressbook.js:909
-msgid "Failed"
-msgstr "Несполучливо"
-
-#: js/Addressbook.js:198 js/Addressbook.js:909
-msgid "Some error occured while trying to delete the conctact."
-msgid_plural "Some error occured while trying to delete the conctacts."
-msgstr[0] "Настъпила е грешка при опит за изтриване но контакта."
-msgstr[1] "Настъпила е грешка при опит за изтриване но контактите."
-
-#: js/Addressbook.js:228
-msgid "add contact"
-msgstr "Прибави контакт"
-
-#: js/Addressbook.js:236
-msgid "edit contact"
-msgstr "Промени контакт"
-
-#: js/Addressbook.js:249
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "Изтрий контакт"
-msgstr[1] "Изтрий контакти"
-
-#: js/Addressbook.js:259 js/Addressbook.js:805
-msgid "export as pdf"
-msgstr "Експортирай като pdf"
-
-#: js/Addressbook.js:269
-msgid "call contact"
-msgstr "Отвори контакт"
-
-#: js/Addressbook.js:330 js/EditDialog.js:360
-msgid "Contact"
-msgstr "Контакт"
-
-#: js/Addressbook.js:331 js/Addressbook.js:363 js/EditDialog.js:125
-msgid "First Name"
-msgstr "Име"
-
-#: js/Addressbook.js:332 js/Addressbook.js:362 js/EditDialog.js:130
-msgid "Last Name"
-msgstr "Фамилия"
-
-#: js/Addressbook.js:333 js/Addressbook.js:366 js/EditDialog.js:139
-msgid "Company"
-msgstr "Фирма"
-
-#: js/Addressbook.js:334 js/Addressbook.js:369 js/Addressbook.js:480
-#: js/EditDialog.js:67
-msgid "Job Role"
-msgstr "Длъжност"
-
-#: js/Addressbook.js:336 js/Addressbook.js:339 js/Addressbook.js:371
-#: js/EditDialog.js:275 js/EditDialog.js:320
-msgid "Street"
-msgstr "Улица"
-
-#: js/Addressbook.js:336 js/Addressbook.js:337 js/Addressbook.js:338
-#: js/EditDialog.js:259
-msgid "Company Address"
-msgstr "Фирмен адрес"
-
-#: js/Addressbook.js:337 js/Addressbook.js:340 js/EditDialog.js:285
-#: js/EditDialog.js:330
-msgid "Postal Code"
-msgstr "Пощенски код"
-
-#: js/Addressbook.js:338 js/Addressbook.js:341 js/Addressbook.js:372
-#: js/EditDialog.js:289 js/EditDialog.js:334
-msgid "City"
-msgstr "Град"
-
-#: js/Addressbook.js:339 js/Addressbook.js:340 js/Addressbook.js:341
-#: js/EditDialog.js:308 js/EditDialog.js:446 Pdf.php:86
-msgid "Private Address"
-msgstr "Личен адрес"
-
-#: js/Addressbook.js:355
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Покажи контакти {0} - {1} от {2}"
-
-#: js/Addressbook.js:356 js/Addressbook.js:575
-msgid "No contacts to display"
-msgstr "Няма намерени контакти"
-
-#: js/Addressbook.js:361
-msgid "Type"
-msgstr "Вид"
-
-#: js/Addressbook.js:364
-msgid "Full Name"
-msgstr "Пълно име"
-
-#: js/Addressbook.js:365 js/EditDialog.js:52
-msgid "Display Name"
-msgstr "Покажи име"
-
-#: js/Addressbook.js:367 js/EditDialog.js:72
-msgid "Unit"
-msgstr "Отдел"
-
-#: js/Addressbook.js:368 js/Addressbook.js:479 js/EditDialog.js:144
-#: Pdf.php:115
-msgid "Job Title"
-msgstr "Длъжност"
-
-#: js/Addressbook.js:370 js/Addressbook.js:481 js/EditDialog.js:77 Pdf.php:74
-msgid "Room"
-msgstr "Стая"
-
-#: js/Addressbook.js:373 js/EditDialog.js:293 js/EditDialog.js:338
-msgid "Region"
-msgstr "Област"
-
-#: js/Addressbook.js:374
-msgid "Postalcode"
-msgstr "Пощенски код"
-
-#: js/Addressbook.js:375 js/EditDialog.js:300 js/EditDialog.js:345
-msgid "Country"
-msgstr "Държава"
-
-#: js/Addressbook.js:376
-msgid "Street (private)"
-msgstr "Улица (приват)"
-
-#: js/Addressbook.js:377
-msgid "City (private)"
-msgstr "Град (приват)"
-
-#: js/Addressbook.js:378
-msgid "Region (private)"
-msgstr "Област (приват)"
-
-#: js/Addressbook.js:379
-msgid "Postalcode (private)"
-msgstr "Пощенски код (приват)"
-
-#: js/Addressbook.js:380
-msgid "Country (private)"
-msgstr "Народност (приват)"
-
-#: js/Addressbook.js:381 Pdf.php:50
-msgid "Email"
-msgstr "Имейл"
-
-#: js/Addressbook.js:382 js/EditDialog.js:179
-msgid "Phone"
-msgstr "Телефон"
-
-#: js/Addressbook.js:383 js/EditDialog.js:184
-msgid "Mobile"
-msgstr "Мобилен телефон"
-
-#: js/Addressbook.js:384 js/EditDialog.js:189
-msgid "Fax"
-msgstr "Факс"
-
-#: js/Addressbook.js:385
-msgid "Car phone"
-msgstr "Телефон (кола) / Мобилен (кола)"
-
-#: js/Addressbook.js:386
-msgid "Pager"
-msgstr "Пейджер"
-
-#: js/Addressbook.js:387 js/EditDialog.js:196
-msgid "Phone (private)"
-msgstr "Телефон (приват)"
-
-#: js/Addressbook.js:388 js/EditDialog.js:206
-msgid "Fax (private)"
-msgstr "Факс  (приват)"
-
-#: js/Addressbook.js:389 js/EditDialog.js:201
-msgid "Mobile (private)"
-msgstr "Мобилен телефон (приват)"
-
-#: js/Addressbook.js:390
-msgid "Email (private)"
-msgstr "Имейл (приват)"
-
-#: js/Addressbook.js:391 js/EditDialog.js:226
-msgid "Web"
-msgstr "Интернет адрес"
-
-#: js/Addressbook.js:392
-msgid "URL (private)"
-msgstr "URL (приват)"
-
-#: js/Addressbook.js:393
-msgid "Note"
-msgstr "Бележки"
-
-#: js/Addressbook.js:394
-msgid "Timezone"
-msgstr "Часова зона"
-
-#: js/Addressbook.js:395
-msgid "Geo"
-msgstr "Географско местонахождение/Координати"
-
-#: js/Addressbook.js:396 js/EditDialog.js:95 Pdf.php:112
-msgid "Birthday"
-msgstr "Дата на раждане"
-
-#: js/Addressbook.js:412 js/Addressbook.js:667
-msgid "Select contact"
-msgstr "Избери контакт"
-
-#: js/Addressbook.js:501
-msgid "Tags"
-msgstr "Тагове"
-
-#: js/Addressbook.js:506 js/EditDialog.js:392
-msgid "Description"
-msgstr "Описание (допълнителна информаця)"
-
-#: js/Addressbook.js:821
-msgid "Loading Contact..."
-msgstr "Зарежда контакт..."
-
-#: js/Addressbook.js:821
-msgid "Please Wait"
-msgstr "Моля изчакайте"
-
-#: js/Addressbook.js:830
-msgid "Add new contact"
-msgstr ""
-
-#: js/Addressbook.js:832
-#, python-format
-msgid "Edit Contact \"%s\""
-msgstr ""
-
-#: js/Addressbook.js:849
-msgid "Please wait a moment..."
-msgstr "Моля изчакайте за момент..."
-
-#: js/Addressbook.js:849
-msgid "Saving Contact"
-msgstr "Съхранява контакт"
-
-#: js/Addressbook.js:884
-msgid "Could not save contact."
-msgstr "Не може да съхрани контакта."
-
-#: js/Addressbook.js:888
-msgid "Errors"
-msgstr "Грешки"
-
-#: js/Addressbook.js:888
-msgid "Please fix the errors noted."
-msgstr "Моля коригирайте грешките."
-
-#: js/EditDialog.js:31
-msgid "Saved in"
-msgstr "Запаметен в"
-
-#: js/EditDialog.js:84
-msgid "Middle Name"
-msgstr "Бащино име"
-
-#: js/EditDialog.js:89
-msgid "Suffix"
-msgstr "Допълнително име"
-
-#: js/EditDialog.js:103
-msgid "Personal Information"
-msgstr "Персонална информаця "
-
-#: js/EditDialog.js:119
-msgid "Title"
-msgstr "Титла"
-
-#: js/EditDialog.js:213
-msgid "E-Mail"
-msgstr "Имейл"
-
-#: js/EditDialog.js:219
-msgid "E-Mail (private)"
-msgstr "Имейл (приват)"
-
-#: js/EditDialog.js:236
-msgid "Contact Information"
-msgstr "Информаця за контакт"
-
-#: js/EditDialog.js:279 js/EditDialog.js:324
-msgid "Street 2"
-msgstr "Улица 2"
-
-#: js/EditDialog.js:352
-msgid "Custom Fields"
-msgstr "Допълнителни данни"
-
-#: js/EditDialog.js:406
-msgid "Enter description"
-msgstr "Вкарай описание"
-
-#: js/EditDialog.js:431 js/EditDialog.js:452
-msgid "Map"
-msgstr "Карта"
-
-#: js/EditDialog.js:440 Pdf.php:42
-msgid "Business Address"
-msgstr "Адрес на фирмата"
-
-#: js/EditDialog.js:476
-#, python-format
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Линк"
-msgstr[1] "Линкове"
-
 #: Pdf.php:35
 msgid "Business Contact Data"
 msgstr "Бизнес контакти"
@@ -369,6 +21,14 @@ msgstr "Бизнес контакти"
 #: Pdf.php:37
 msgid "Organisation / Unit"
 msgstr "Организация/Отдел"
+
+#: Pdf.php:42
+msgid "Business Address"
+msgstr "Адрес на фирмата"
+
+#: Pdf.php:50 js/Addressbook.js:387
+msgid "Email"
+msgstr "Имейл"
 
 #: Pdf.php:53
 msgid "Telephone Work"
@@ -398,6 +58,10 @@ msgstr "URL"
 msgid "Role"
 msgstr "Длъжност"
 
+#: Pdf.php:74 js/Addressbook.js:376 js/Addressbook.js:487 js/EditDialog.js:84
+msgid "Room"
+msgstr "Стая"
+
 #: Pdf.php:77
 msgid "Assistant"
 msgstr "Асистент"
@@ -409,6 +73,11 @@ msgstr "Асистент-телефон"
 #: Pdf.php:84
 msgid "Private Contact Data"
 msgstr "Данни за личен контакт"
+
+#: Pdf.php:86 js/Addressbook.js:345 js/Addressbook.js:346
+#: js/Addressbook.js:347 js/EditDialog.js:339
+msgid "Private Address"
+msgstr "Личен адрес"
 
 #: Pdf.php:94
 msgid "Email Home"
@@ -433,3 +102,333 @@ msgstr "URL  (приват)"
 #: Pdf.php:110
 msgid "Other Data"
 msgstr "Други данни"
+
+#: Pdf.php:112 js/Addressbook.js:402 js/EditDialog.js:174
+msgid "Birthday"
+msgstr "Дата на раждане"
+
+#: Pdf.php:115 js/Addressbook.js:374 js/Addressbook.js:485
+#: js/EditDialog.js:155
+msgid "Job Title"
+msgstr "Длъжност"
+
+#: js/Addressbook.js:15 js/Addressbook.js:220
+msgid "Internal Contacts"
+msgstr "Международни контакти"
+
+#: js/Addressbook.js:28
+msgid "Addressbook"
+msgstr "Адреси"
+
+#: js/Addressbook.js:29 js/EditDialog.js:34
+msgid "contacts"
+msgstr "Контакти"
+
+#: js/Addressbook.js:176
+msgid "Are you Sure?"
+msgstr "Сигурни ли сте?"
+
+#: js/Addressbook.js:177
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
+msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
+
+#: js/Addressbook.js:197 js/Addressbook.js:916
+msgid "Deleting contact..."
+msgid_plural "Deleting contacts..."
+msgstr[0] "Изтрива контакт..."
+msgstr[1] "Изтрива контакти..."
+
+#: js/Addressbook.js:203 js/Addressbook.js:899 js/Addressbook.js:924
+msgid "Failed"
+msgstr "Несполучливо"
+
+#: js/Addressbook.js:204 js/Addressbook.js:924
+msgid "Some error occured while trying to delete the conctact."
+msgid_plural "Some error occured while trying to delete the conctacts."
+msgstr[0] "Настъпила е грешка при опит за изтриване но контакта."
+msgstr[1] "Настъпила е грешка при опит за изтриване но контактите."
+
+#: js/Addressbook.js:234
+msgid "add contact"
+msgstr "Прибави контакт"
+
+#: js/Addressbook.js:242
+msgid "edit contact"
+msgstr "Промени контакт"
+
+#: js/Addressbook.js:255
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "Изтрий контакт"
+msgstr[1] "Изтрий контакти"
+
+#: js/Addressbook.js:265 js/Addressbook.js:815
+msgid "export as pdf"
+msgstr "Експортирай като pdf"
+
+#: js/Addressbook.js:275
+msgid "call contact"
+msgstr "Отвори контакт"
+
+#: js/Addressbook.js:336 js/EditDialog.js:391
+msgid "Contact"
+msgstr "Контакт"
+
+#: js/Addressbook.js:337 js/Addressbook.js:369 js/EditDialog.js:114
+msgid "First Name"
+msgstr "Име"
+
+#: js/Addressbook.js:338 js/Addressbook.js:368 js/EditDialog.js:119
+msgid "Last Name"
+msgstr "Фамилия"
+
+#: js/Addressbook.js:339 js/Addressbook.js:372 js/EditDialog.js:163
+msgid "Company"
+msgstr "Фирма"
+
+#: js/Addressbook.js:340 js/Addressbook.js:375 js/Addressbook.js:486
+#: js/EditDialog.js:67
+msgid "Job Role"
+msgstr "Длъжност"
+
+#: js/Addressbook.js:342 js/Addressbook.js:345 js/Addressbook.js:377
+#: js/EditDialog.js:306 js/EditDialog.js:351
+msgid "Street"
+msgstr "Улица"
+
+#: js/Addressbook.js:342 js/Addressbook.js:343 js/Addressbook.js:344
+#: js/EditDialog.js:290
+msgid "Company Address"
+msgstr "Фирмен адрес"
+
+#: js/Addressbook.js:343 js/Addressbook.js:346 js/EditDialog.js:316
+#: js/EditDialog.js:361
+msgid "Postal Code"
+msgstr "Пощенски код"
+
+#: js/Addressbook.js:344 js/Addressbook.js:347 js/Addressbook.js:378
+#: js/EditDialog.js:320 js/EditDialog.js:365
+msgid "City"
+msgstr "Град"
+
+#: js/Addressbook.js:361
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Покажи контакти {0} - {1} от {2}"
+
+#: js/Addressbook.js:362 js/Addressbook.js:581
+msgid "No contacts to display"
+msgstr "Няма намерени контакти"
+
+#: js/Addressbook.js:367
+msgid "Type"
+msgstr "Вид"
+
+#: js/Addressbook.js:370
+msgid "Full Name"
+msgstr "Пълно име"
+
+#: js/Addressbook.js:371 js/EditDialog.js:52 js/EditDialog.js:148
+msgid "Display Name"
+msgstr "Покажи име"
+
+#: js/Addressbook.js:373 js/EditDialog.js:168
+msgid "Unit"
+msgstr "Отдел"
+
+#: js/Addressbook.js:379 js/EditDialog.js:324 js/EditDialog.js:369
+msgid "Region"
+msgstr "Област"
+
+#: js/Addressbook.js:380
+msgid "Postalcode"
+msgstr "Пощенски код"
+
+#: js/Addressbook.js:381 js/EditDialog.js:331 js/EditDialog.js:376
+msgid "Country"
+msgstr "Държава"
+
+#: js/Addressbook.js:382
+msgid "Street (private)"
+msgstr "Улица (приват)"
+
+#: js/Addressbook.js:383
+msgid "City (private)"
+msgstr "Град (приват)"
+
+#: js/Addressbook.js:384
+msgid "Region (private)"
+msgstr "Област (приват)"
+
+#: js/Addressbook.js:385
+msgid "Postalcode (private)"
+msgstr "Пощенски код (приват)"
+
+#: js/Addressbook.js:386
+msgid "Country (private)"
+msgstr "Народност (приват)"
+
+#: js/Addressbook.js:388 js/EditDialog.js:210
+msgid "Phone"
+msgstr "Телефон"
+
+#: js/Addressbook.js:389 js/EditDialog.js:215
+msgid "Mobile"
+msgstr "Мобилен телефон"
+
+#: js/Addressbook.js:390 js/EditDialog.js:220
+msgid "Fax"
+msgstr "Факс"
+
+#: js/Addressbook.js:391
+msgid "Car phone"
+msgstr "Телефон (кола) / Мобилен (кола)"
+
+#: js/Addressbook.js:392
+msgid "Pager"
+msgstr "Пейджер"
+
+#: js/Addressbook.js:393 js/EditDialog.js:227
+msgid "Phone (private)"
+msgstr "Телефон (приват)"
+
+#: js/Addressbook.js:394 js/EditDialog.js:237
+msgid "Fax (private)"
+msgstr "Факс  (приват)"
+
+#: js/Addressbook.js:395 js/EditDialog.js:232
+msgid "Mobile (private)"
+msgstr "Мобилен телефон (приват)"
+
+#: js/Addressbook.js:396
+msgid "Email (private)"
+msgstr "Имейл (приват)"
+
+#: js/Addressbook.js:397 js/EditDialog.js:257
+msgid "Web"
+msgstr "Интернет адрес"
+
+#: js/Addressbook.js:398
+msgid "URL (private)"
+msgstr "URL (приват)"
+
+#: js/Addressbook.js:399
+msgid "Note"
+msgstr "Бележки"
+
+#: js/Addressbook.js:400
+msgid "Timezone"
+msgstr "Часова зона"
+
+#: js/Addressbook.js:401
+msgid "Geo"
+msgstr "Географско местонахождение/Координати"
+
+#: js/Addressbook.js:418 js/Addressbook.js:673
+msgid "Select contact"
+msgstr "Избери контакт"
+
+#: js/Addressbook.js:507
+msgid "Tags"
+msgstr "Тагове"
+
+#: js/Addressbook.js:512 js/EditDialog.js:423
+msgid "Description"
+msgstr "Описание (допълнителна информаця)"
+
+#: js/Addressbook.js:831
+msgid "Loading Contact..."
+msgstr "Зарежда контакт..."
+
+#: js/Addressbook.js:831
+msgid "Please Wait"
+msgstr "Моля изчакайте"
+
+#: js/Addressbook.js:845
+msgid "Add new contact"
+msgstr ""
+
+#: js/Addressbook.js:847
+#, python-format
+msgid "Edit Contact \"%s\""
+msgstr ""
+
+#: js/Addressbook.js:864
+msgid "Please wait a moment..."
+msgstr "Моля изчакайте за момент..."
+
+#: js/Addressbook.js:864
+msgid "Saving Contact"
+msgstr "Съхранява контакт"
+
+#: js/Addressbook.js:899
+msgid "Could not save contact."
+msgstr "Не може да съхрани контакта."
+
+#: js/Addressbook.js:903
+msgid "Errors"
+msgstr "Грешки"
+
+#: js/Addressbook.js:903
+msgid "Please fix the errors noted."
+msgstr "Моля коригирайте грешките."
+
+#: js/EditDialog.js:31
+msgid "Saved in"
+msgstr "Запаметен в"
+
+#: js/EditDialog.js:74
+msgid "Middle Name"
+msgstr "Бащино име"
+
+#: js/EditDialog.js:79
+msgid "Suffix"
+msgstr "Допълнително име"
+
+#: js/EditDialog.js:92
+msgid "Personal Information"
+msgstr "Персонална информаця "
+
+#: js/EditDialog.js:108
+msgid "Title"
+msgstr "Титла"
+
+#: js/EditDialog.js:244
+msgid "E-Mail"
+msgstr "Имейл"
+
+#: js/EditDialog.js:250
+msgid "E-Mail (private)"
+msgstr "Имейл (приват)"
+
+#: js/EditDialog.js:267
+msgid "Contact Information"
+msgstr "Информаця за контакт"
+
+#: js/EditDialog.js:310 js/EditDialog.js:355
+msgid "Street 2"
+msgstr "Улица 2"
+
+#: js/EditDialog.js:383
+msgid "Custom Fields"
+msgstr "Допълнителни данни"
+
+#: js/EditDialog.js:437
+msgid "Enter description"
+msgstr "Вкарай описание"
+
+#: js/EditDialog.js:473
+#, python-format
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] "Линк"
+msgstr[1] "Линкове"
+
+#: Controller.php:386
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s's лични адреси"
+
+#~ msgid "Map"
+#~ msgstr "Карта"

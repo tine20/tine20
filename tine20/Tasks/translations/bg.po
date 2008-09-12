@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:302
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's лична задача"
-
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -173,5 +168,13 @@ msgid "Due date"
 msgstr "Краен срок"
 
 #: js/Tasks.js:785
-msgid "Folder"
-msgstr "Папка"
+msgid "Saved in"
+msgstr ""
+
+#: Controller.php:302
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's лична задача"
+
+#~ msgid "Folder"
+#~ msgstr "Папка"

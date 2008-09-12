@@ -14,67 +14,131 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:107
-msgid "manage leads"
-msgstr "Leads bearbeiten"
-
-#: Acl/Rights.php:108
-msgid "add, edit and delete leads"
-msgstr "Leads hinzufügen, bearbeiten und löschen"
-
-#: Controller.php:726
-#, python-format
-msgid "%s's personal leads"
+#: Pdf.php:69
+msgid "Lead Data"
 msgstr ""
 
-#: Controller.php:799
-msgid "State"
+#: Pdf.php:72 js/LeadEditDialog.js:41 js/Crm.js:234 js/Crm.js:235
+#: js/Crm.js:385
+msgid "Leadstate"
 msgstr "Status"
 
-#: Controller.php:800 js/Crm.js:1054 js/Crm.js:1092
-msgid "Type"
+#: Pdf.php:75 js/LeadEditDialog.js:70
+msgid "Leadtype"
 msgstr "Typ"
 
-#: Controller.php:801
-msgid "Source"
+#: Pdf.php:78 js/LeadEditDialog.js:87
+msgid "Leadsource"
 msgstr "Quelle"
 
-#: Controller.php:802 js/LeadEditDialog.js:112 Pdf.php:87
-msgid "Start"
-msgstr "Start"
-
-#: Controller.php:803
-msgid "Scheduled end"
-msgstr "geplantes Ende"
-
-#: Controller.php:804 js/LeadEditDialog.js:126 Pdf.php:90
-msgid "End"
-msgstr "Ende"
-
-#: Controller.php:805 js/Crm.js:387 Pdf.php:81
+#: Pdf.php:81 js/Crm.js:387 Controller.php:805
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Controller.php:806 js/Crm.js:256 js/Crm.js:257 js/Crm.js:258 js/Crm.js:386
-#: js/LeadEditDialog.js:104 Pdf.php:84
+#: Pdf.php:84 js/LeadEditDialog.js:104 js/Crm.js:256 js/Crm.js:257
+#: js/Crm.js:258 js/Crm.js:386 Controller.php:806
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
-#: Controller.php:807
-msgid "Folder"
+#: Pdf.php:87 js/LeadEditDialog.js:112 Controller.php:802
+msgid "Start"
+msgstr "Start"
+
+#: Pdf.php:90 js/LeadEditDialog.js:126 Controller.php:804
+msgid "End"
+msgstr "Ende"
+
+#: Pdf.php:93
+msgid "End Scheduled"
+msgstr "geplantes Ende"
+
+#: Pdf.php:171 js/Crm.js:1819
+msgid "Contacts"
+msgstr "Kontakte"
+
+#: Pdf.php:198 js/Crm.js:1034
+msgid "Address"
+msgstr "Anschrift"
+
+#: Pdf.php:205
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Pdf.php:206
+msgid "Email"
+msgstr "Email"
+
+#: Pdf.php:219 js/Crm.js:1820
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#: Pdf.php:239 js/Crm.js:1129
+msgid "Due Date"
+msgstr "Fälligkeitsdatum"
+
+#: Pdf.php:244 js/Crm.js:1143
+msgid "Priority"
+msgstr "Priorität"
+
+#: Pdf.php:258 js/Crm.js:618 js/Crm.js:1821
+msgid "Products"
+msgstr "Produkte"
+
+#: Pdf.php:296
+msgid "low"
+msgstr "Niedrig"
+
+#: Pdf.php:297
+msgid "normal"
+msgstr "Normal"
+
+#: Pdf.php:298
+msgid "high"
+msgstr "Hoch"
+
+#: Pdf.php:299
+msgid "urgent"
+msgstr "Dringend"
+
+#: js/LeadEditDialog.js:32
+msgid "Enter short name"
+msgstr "Kurzname eingeben"
+
+#: js/LeadEditDialog.js:119
+msgid "Estimated end"
+msgstr "Geplantes Ende"
+
+#: js/LeadEditDialog.js:132
+msgid "folder"
 msgstr "Ordner"
 
-#: Controller.php:808
-msgid "Updated by"
-msgstr "Aktualisiert von"
+#: js/LeadEditDialog.js:142
+msgid "Overview"
+msgstr "Übersicht"
 
-#: Controller.php:814
-msgid "Lead updated"
-msgstr "Hinweis aktualisiert"
+#: js/LeadEditDialog.js:161 js/Crm.js:1213
+msgid "Description"
+msgstr "Beschreibung"
 
-#: Controller.php:816
-msgid "Lead added"
-msgstr "Hinweis hinzugefügt"
+#: js/LeadEditDialog.js:175
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
+#: js/LeadEditDialog.js:227
+msgid "Expected turnover"
+msgstr "Erwarteter Umsatz"
+
+#: js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
+msgid "Responsible"
+msgstr "Verantwortlicher"
+
+#: js/LeadEditDialog.js:331 js/LeadEditDialog.js:371 js/Crm.js:384
+msgid "Customer"
+msgstr "Kunden"
+
+#: js/LeadEditDialog.js:332 js/LeadEditDialog.js:375 js/Crm.js:383
+msgid "Partner"
+msgstr "Partner"
 
 #: js/Crm.js:158
 msgid "Are you sure you want to delete this lead?"
@@ -91,11 +155,6 @@ msgstr "Beim löschen eines Leads ist ein Fehler aufgetreten."
 #: js/Crm.js:223
 msgid "Enter searchfilter"
 msgstr "Suchfilter eingeben"
-
-#: js/Crm.js:234 js/Crm.js:235 js/Crm.js:385 js/LeadEditDialog.js:41
-#: Pdf.php:72
-msgid "Leadstate"
-msgstr "Status"
 
 #: js/Crm.js:236
 msgid "leadstate"
@@ -124,14 +183,6 @@ msgstr "Lead Bezeichner"
 #: js/Crm.js:382
 msgid "Lead name"
 msgstr "Lead Name"
-
-#: js/Crm.js:383 js/LeadEditDialog.js:332 js/LeadEditDialog.js:375
-msgid "Partner"
-msgstr "Partner"
-
-#: js/Crm.js:384 js/LeadEditDialog.js:331 js/LeadEditDialog.js:371
-msgid "Customer"
-msgstr "Kunden"
 
 #: js/Crm.js:462
 msgid "Add lead"
@@ -188,10 +239,6 @@ msgstr "Lead Quellen"
 msgid "Lead types"
 msgstr "Lead Typen"
 
-#: js/Crm.js:618 js/Crm.js:1821 Pdf.php:258
-msgid "Products"
-msgstr "Produkte"
-
 #: js/Crm.js:677 js/Crm.js:1046
 msgid "Phone"
 msgstr "Telefon"
@@ -228,13 +275,13 @@ msgstr "Bitte die Fehler korrigieren."
 msgid "Name"
 msgstr "Name"
 
-#: js/Crm.js:1034 Pdf.php:198
-msgid "Address"
-msgstr "Anschrift"
-
 #: js/Crm.js:1045
 msgid "Contactdata"
 msgstr "Kontakte"
+
+#: js/Crm.js:1054 js/Crm.js:1092 Controller.php:800
+msgid "Type"
+msgstr "Typ"
 
 #: js/Crm.js:1089
 msgid "Organisation"
@@ -248,14 +295,6 @@ msgstr "Zusammenfassung"
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/Crm.js:1129 Pdf.php:239
-msgid "Due Date"
-msgstr "Fälligkeitsdatum"
-
-#: js/Crm.js:1143 Pdf.php:244
-msgid "Priority"
-msgstr "Priorität"
-
 #: js/Crm.js:1158
 msgid "Status"
 msgstr "Status"
@@ -267,10 +306,6 @@ msgstr "Produkt"
 #: js/Crm.js:1204
 msgid "Add a product..."
 msgstr "Produkt hinzufügen..."
-
-#: js/Crm.js:1213 js/LeadEditDialog.js:161
-msgid "Description"
-msgstr "Beschreibung"
 
 #: js/Crm.js:1226
 msgid "Price"
@@ -364,14 +399,6 @@ msgstr "Produkt entfernen"
 msgid "Remove selected products"
 msgstr "Ausgewählte Einträge entfernen"
 
-#: js/Crm.js:1819 Pdf.php:171
-msgid "Contacts"
-msgstr "Kontakte"
-
-#: js/Crm.js:1820 Pdf.php:219
-msgid "Tasks"
-msgstr "Aufgaben"
-
 #: js/Crm.js:1844
 msgid "Loading Lead..."
 msgstr ""
@@ -389,73 +416,46 @@ msgstr ""
 msgid "Edit Lead \"%s\""
 msgstr ""
 
-#: js/LeadEditDialog.js:32
-msgid "Enter short name"
-msgstr "Kurzname eingeben"
+#: Acl/Rights.php:107
+msgid "manage leads"
+msgstr "Leads bearbeiten"
 
-#: js/LeadEditDialog.js:70 Pdf.php:75
-msgid "Leadtype"
-msgstr "Typ"
+#: Acl/Rights.php:108
+msgid "add, edit and delete leads"
+msgstr "Leads hinzufügen, bearbeiten und löschen"
 
-#: js/LeadEditDialog.js:87 Pdf.php:78
-msgid "Leadsource"
-msgstr "Quelle"
-
-#: js/LeadEditDialog.js:119
-msgid "Estimated end"
-msgstr "Geplantes Ende"
-
-#: js/LeadEditDialog.js:132
-msgid "folder"
-msgstr "Ordner"
-
-#: js/LeadEditDialog.js:142
-msgid "Overview"
-msgstr "Übersicht"
-
-#: js/LeadEditDialog.js:175
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
-
-#: js/LeadEditDialog.js:227
-msgid "Expected turnover"
-msgstr "Erwarteter Umsatz"
-
-#: js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
-msgid "Responsible"
-msgstr "Verantwortlicher"
-
-#: Pdf.php:69
-msgid "Lead Data"
+#: Controller.php:726
+#, python-format
+msgid "%s's personal leads"
 msgstr ""
 
-#: Pdf.php:93
-msgid "End Scheduled"
+#: Controller.php:799
+msgid "State"
+msgstr "Status"
+
+#: Controller.php:801
+msgid "Source"
+msgstr "Quelle"
+
+#: Controller.php:803
+msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Pdf.php:205
-msgid "Telephone"
-msgstr "Telefon"
+#: Controller.php:807
+msgid "Folder"
+msgstr "Ordner"
 
-#: Pdf.php:206
-msgid "Email"
-msgstr "Email"
+#: Controller.php:808
+msgid "Updated by"
+msgstr "Aktualisiert von"
 
-#: Pdf.php:296
-msgid "low"
-msgstr "Niedrig"
+#: Controller.php:814
+msgid "Lead updated"
+msgstr "Hinweis aktualisiert"
 
-#: Pdf.php:297
-msgid "normal"
-msgstr "Normal"
-
-#: Pdf.php:298
-msgid "high"
-msgstr "Hoch"
-
-#: Pdf.php:299
-msgid "urgent"
-msgstr "Dringend"
+#: Controller.php:816
+msgid "Lead added"
+msgstr "Hinweis hinzugefügt"
 
 #~ msgid "Percent"
 #~ msgstr "Prozent"

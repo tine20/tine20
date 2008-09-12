@@ -1,8 +1,3 @@
-#: Controller.php:302
-#, python-format
-msgid "%s's personal tasks"
-msgstr ""
-
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -158,5 +153,10 @@ msgid "Due date"
 msgstr ""
 
 #: js/Tasks.js:785
-msgid "Folder"
+msgid "Saved in"
+msgstr ""
+
+#: Controller.php:302
+#, python-format
+msgid "%s's personal tasks"
 msgstr ""

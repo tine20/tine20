@@ -17,375 +17,12 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Tinebase\n"
 
-#: Acl/Rights.php:116
-msgid "Report bugs"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Report bugs to tine20.org directly when they occour"
-msgstr ""
-
-#: Acl/Rights.php:120
-msgid "Check version"
-msgstr ""
-
-#: Acl/Rights.php:121
-msgid "Check tine20.org for new versions"
-msgstr ""
-
-#: Application/Rights/Abstract.php:56
-msgid "admin"
-msgstr "Администратор"
-
-#: Application/Rights/Abstract.php:57
-msgid "admin right description"
-msgstr "Права администратора позволяют пользователю делать все..."
-
-#: Application/Rights/Abstract.php:60
-msgid "run"
-msgstr "Исполнить"
-
-#: Application/Rights/Abstract.php:61
-msgid "run right description"
-msgstr "Исполнимое право необходимо, чтобы иметь доступ к программе."
-
-#: Export/Pdf.php:199 js/widgets/tags/TagsPanel.js:53
-msgid "Tags"
-msgstr "Тэги"
-
-#: Export/Pdf.php:400
-msgid "Export Date"
-msgstr "Экспортировать число"
-
-#: Export/Pdf.php:404
-msgid "Created by"
-msgstr "Установлено"
-
-#: js/ExceptionDialog.js:26
-msgid "Abnormal End"
-msgstr "Неправильное завершение"
-
-#: js/ExceptionDialog.js:34 js/MainScreen.js:310 js/widgets/EditRecord.js:98
-msgid "Cancel"
-msgstr "Отмена"
-
-#: js/ExceptionDialog.js:42
-msgid "Send Report"
-msgstr "Послать Сообщение"
-
-#: js/ExceptionDialog.js:51
-msgid "An error occurred, the program ended abnormal."
-msgstr "Произошла Ошибка, программа закончилась неправильно."
-
-#: js/ExceptionDialog.js:52
-msgid "The last action you made was potentially not performed correctly."
-msgstr ""
-"Последнее действие, которое Вы сделали, было потенциально не правильно "
-"выполнено."
-
-#: js/ExceptionDialog.js:53
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occoured."
-msgstr ""
-"Пожалуйста помогите улучшению этого программного обеспечения. И сообщите "
-"издателю коротким описанием, что и где Вы делаете если возникла ошибка. "
-
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
-msgid "Description"
-msgstr "Описание"
-
-#: js/ExceptionDialog.js:69
-msgid "Show Details:"
-msgstr "показ детали:"
-
-#: js/ExceptionDialog.js:92
-msgid "Sending report..."
-msgstr "Сообщение посылается..."
-
-#: js/ExceptionDialog.js:92
-msgid "Please wait a moment"
-msgstr "Пожалуйста подождите момент"
-
-#: js/ExceptionDialog.js:117
-msgid "Transmission Completed"
-msgstr "Передача завершена"
-
-#: js/ExceptionDialog.js:118
-msgid "Your report has been send. Thanks for your contribution"
-msgstr "Ваш отчет был отправлен. Спасибо за Ваше содействие"
-
-#: js/Login.js:29
-msgid "Login"
-msgstr "вход в систему"
-
-#: js/Login.js:36
-msgid "Register"
-msgstr "Регистрироваться"
-
-#: js/Login.js:50
-msgid "Please enter your login data"
-msgstr "Пожалуйста введите свои данные входа в систему"
-
-#: js/Login.js:67
-msgid "Username"
-msgstr "Имя пользователя"
-
-#: js/Login.js:73
-msgid "Password"
-msgstr "Пароль"
-
-#: js/Login.js:119
-msgid "Logging you in..."
-msgstr "Регистрирую Вас в..."
-
-#: js/Login.js:119 js/widgets/container/ContainerGrants.js:34
-#: js/widgets/container/ContainerTree.js:210
-#: js/widgets/container/ContainerTree.js:238
-#: js/widgets/container/ContainerTree.js:270
-msgid "Please wait"
-msgstr "Пожалуйста подождите"
-
-#: js/Login.js:130
-msgid "Login successful. Loading Tine 2.0..."
-msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
-
-#: js/Login.js:130 js/MainScreen.js:388
-msgid "Please wait!"
-msgstr "Пожалуйста подождите!"
-
-#: js/Login.js:134
-msgid "Login failure"
-msgstr "Регистрация не удалась"
-
-#: js/Login.js:135
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
-
-#: js/MainScreen.js:46
-msgid "Change password"
-msgstr "Изменить пароль"
-
-#: js/MainScreen.js:52
-msgid "Install Google Gears"
-msgstr ""
-
-#: js/MainScreen.js:58
-msgid "Logout"
-msgstr "Выход"
-
-#: js/MainScreen.js:59
-msgid "Logout from Tine 2.0"
-msgstr "Выход из Tine 2.0"
-
-#: js/MainScreen.js:81 js/widgets/container/ContainerGrants.js:105
-msgid "Admin"
-msgstr "Администратор"
-
-#: js/MainScreen.js:89
-msgid "Preferences"
-msgstr "Предпочтение"
-
-#: js/MainScreen.js:105
-#, python-format
-msgid "User: %s"
-msgstr "Пользователь"
-
-#: js/MainScreen.js:106
-#, python-format
-msgid "Timezone: %s"
-msgstr "Часовой пояс: %s"
-
-#: js/MainScreen.js:107 js/widgets/LangChooser.js:40
-msgid "Language"
-msgstr "Язык"
-
-#: js/MainScreen.js:274
-#, python-format
-msgid "Change Password For \"%s\""
-msgstr "Изменить пароль для \"%s\""
-
-#: js/MainScreen.js:298
-msgid "Old Password"
-msgstr "Старый пароль"
-
-#: js/MainScreen.js:302
-msgid "New Password"
-msgstr "Новый пароль"
-
-#: js/MainScreen.js:306
-msgid "Repeat new Password"
-msgstr "Повторите новый пароль"
-
-#: js/MainScreen.js:316 js/Tinebase.js:76 js/widgets/AccountpickerPanel.js:108
-#: js/widgets/EditRecord.js:77
-msgid "Ok"
-msgstr "Ок"
-
-#: js/MainScreen.js:325
-msgid "Please Wait!"
-msgstr "Пожалуйста подождите!"
-
-#: js/MainScreen.js:326
-msgid "changing password..."
-msgstr "Пароль изменяется"
-
-#: js/MainScreen.js:337
-msgid "Success"
-msgstr "Успех"
-
-#: js/MainScreen.js:338
-msgid "Your password has been changed."
-msgstr "Ваш пароль  изменен."
-
-#: js/MainScreen.js:344 js/MainScreen.js:354
-msgid "Failure"
-msgstr "Провал "
-
-#: js/MainScreen.js:355
-msgid "The new passwords mismatch, please correct them."
-msgstr "Новие пароли не соответствуют, пожалуйста исправьте их."
-
-#: js/MainScreen.js:373
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-
-#: js/MainScreen.js:386 js/widgets/container/ContainerTree.js:236
-msgid "Confirm"
-msgstr "Подтверждение"
-
-#: js/MainScreen.js:386
-msgid "Are you sure you want to logout?"
-msgstr "Вы уверены что хотите покинуть программу?"
-
-#: js/MainScreen.js:388
-msgid "Logging you out..."
-msgstr "выключаю программу..."
-
-#: js/Tinebase.js:73
-msgid "There Where Errors"
-msgstr "Возникли ошибки"
-
-#: js/Tinebase.js:104
-msgid "Connection lost, please check your network!"
-msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
-
-#: js/UserRegistration.js:33
-msgid "Registration Wizard"
-msgstr "Помощник регистрации"
-
-#: js/UserRegistration.js:86
-msgid "Given name"
-msgstr "Имя"
-
-#: js/UserRegistration.js:97
-msgid "Family name"
-msgstr "Фамилия"
-
-#: js/UserRegistration.js:108
-msgid "Login name"
-msgstr "Имя пользователя"
-
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Электронный адрес"
-
-#: js/UserRegistration.js:167
-msgid "Congratulations!"
-msgstr "Поздравления!"
-
-#: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, "
-"вам будет отправлено подтверждающие электронное письмо."
-
-#: js/ux/form/ImageField.js:48
-msgid "click to edit"
-msgstr "нажмите, чтобы отредактировать"
-
-#: js/ux/form/ImageField.js:90
-msgid "Not An Image"
-msgstr "Никакого файла рисунка"
-
-#: js/ux/form/ImageField.js:90
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Пожалуйста, выберите действительный файл рисунка (gif/png/jpeg)"
-
-#: js/ux/form/ImageField.js:107
-msgid "Loading"
-msgstr "загрузка"
-
-#: js/ux/form/ImageField.js:115
-msgid "Upload Failed"
-msgstr "Загрузка не удалась"
-
-#: js/ux/form/ImageField.js:115
-msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-"Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
-
-#: js/ux/form/ImageField.js:127
-msgid "Change Image"
-msgstr "Поменять картинку"
-
-#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
-msgid "Crop Image"
-msgstr "Обрезать картинку"
-
-#: js/ux/form/ImageField.js:174
-msgid "Delete Image"
-msgstr "Удалить картинку"
-
-#: js/ux/form/ImageField.js:212
-msgid "Image Failed"
-msgstr "Ошибка при обработке картины"
-
-#: js/ux/form/ImageField.js:212
-msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-"Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
-
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
-msgstr "Уберите счет"
-
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
-msgid "Name"
-msgstr "Имя"
-
-#: js/widgets/account/PickerPanel.js:70
-msgid "add account"
-msgstr "Добавить счет"
-
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
-msgid "enter searchfilter"
-msgstr "Ввести поисковый фильтр"
-
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
-msgid "Search"
-msgstr "Поиск"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
-msgid "Browse"
-msgstr "Листать"
-
-#: js/widgets/AccountpickerPanel.js:103
-msgid "please select an account"
-msgstr "Пожалуйста выберите счет"
-
 #: js/widgets/ActivitiesPanel.js:145
 msgid "Add a Note..."
 msgstr "Добавить одно Примечание"
 
 #: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
 #: js/widgets/container/ContainerGrants.js:87
-#: js/widgets/container/ContainerTree.js:317
 msgid "Add"
 msgstr "Добавить"
 
@@ -447,45 +84,76 @@ msgstr "Время"
 msgid "User"
 msgstr "Пользователь"
 
-#: js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
-msgstr "Права обновляются"
+#: js/widgets/LangChooser.js:40 js/MainScreen.js:110
+msgid "Language"
+msgstr "Язык"
 
-#: js/widgets/container/ContainerGrants.js:66
-msgid "Folder"
-msgstr "Папка"
+#: js/widgets/LangChooser.js:72
+msgid "setting new language..."
+msgstr "Урегулирование нового языка..."
 
-#: js/widgets/container/ContainerGrants.js:82
-msgid "Read"
-msgstr "Читать"
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
+#: js/widgets/TimezoneChooser.js:72
+msgid "Please Wait"
+msgstr "Пожалуйста подождите"
 
-#: js/widgets/container/ContainerGrants.js:92
-msgid "Edit"
-msgstr "Обработать"
+#: js/widgets/LangChooser.js:93
+msgid "loading new language..."
+msgstr "Загрузка нового языка..."
 
-#: js/widgets/container/ContainerGrants.js:97
-#: js/widgets/container/ContainerTree.js:323
-msgid "Delete"
-msgstr "Удалить"
-
-#: js/widgets/container/ContainerGrants.js:113
-msgid "Permissions"
-msgstr "Разрешения"
-
-#: js/widgets/container/ContainerSelect.js:50
-#: js/widgets/container/ContainerSelect.js:59
-msgid "shared"
+#: js/widgets/TimezoneChooser.js:32 js/MainScreen.js:109
+msgid "Timezone"
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:50
-#: js/widgets/container/ContainerSelect.js:59 js/widgets/tags/TagsPanel.js:105
-#: js/widgets/tags/TagsPanel.js:406 js/widgets/tags/TagsPanel.js:410
-msgid "personal"
-msgstr "Личное"
+#: js/widgets/TimezoneChooser.js:72
+msgid "setting new timezone..."
+msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:100
-msgid "please select a container"
-msgstr "Пожалуйста выберите контейнер"
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+msgid "New version of Tine 2.0 available"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#, python-format
+msgid "Version \"%s\" of Tine 2.0 is available."
+msgstr ""
+
+#: js/widgets/VersionCheck.js:41
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:50
+msgid "Please consider updateing!"
+msgstr ""
+
+#: js/widgets/GridPicker.js:75
+msgid "remove record"
+msgstr "Убрать отчет"
+
+#: js/widgets/GridPicker.js:386 js/widgets/account/PickerPanel.js:177
+msgid "enter searchfilter"
+msgstr "Ввести поисковый фильтр"
+
+#: js/widgets/GridPicker.js:407 js/widgets/account/PickerPanel.js:221
+msgid "Search"
+msgstr "Поиск"
+
+#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+msgid "Browse"
+msgstr "Листать"
+
+#: js/widgets/account/PickerPanel.js:70
+msgid "add account"
+msgstr "Добавить счет"
+
+#: js/widgets/account/PickerPanel.js:166 js/widgets/account/ConfigGrid.js:79
+msgid "Name"
+msgstr "Имя"
+
+#: js/widgets/account/ConfigGrid.js:55
+msgid "remove account"
+msgstr "Уберите счет"
 
 #: js/widgets/container/ContainerTree.js:110
 #, python-format
@@ -507,46 +175,139 @@ msgstr "Разделение %s"
 msgid "Other Users %s"
 msgstr "Другие пользователи %s"
 
-#: js/widgets/container/ContainerTree.js:208
-msgid "New"
-msgstr "Новое"
+#: js/widgets/container/ContainerTree.js:224
+#, python-format
+msgid "New %s"
+msgstr ""
 
-#: js/widgets/container/ContainerTree.js:210
-msgid "Creating"
-msgstr "устанавливается"
+#: js/widgets/container/ContainerTree.js:224
+#, python-format
+msgid "Please enter the name of the new %s:"
+msgstr ""
 
-#: js/widgets/container/ContainerTree.js:236
-msgid "Do you really want to delete the"
-msgstr "Вы уверены что хотите удалить"
+#: js/widgets/container/ContainerTree.js:226
+#: js/widgets/container/ContainerTree.js:254
+#: js/widgets/container/ContainerTree.js:286
+#: js/widgets/container/ContainerGrants.js:34 js/Login.js:119
+msgid "Please wait"
+msgstr "Пожалуйста подождите"
 
-#: js/widgets/container/ContainerTree.js:238
-msgid "Deleting"
-msgstr "Удаляю"
+#: js/widgets/container/ContainerTree.js:226
+#, python-format
+msgid "Creating %s..."
+msgstr ""
 
-#: js/widgets/container/ContainerTree.js:265
-msgid "Please enter the new name of the"
-msgstr "Пожалуйста введите новое имя"
+#: js/widgets/container/ContainerTree.js:252 js/MainScreen.js:391
+msgid "Confirm"
+msgstr "Подтверждение"
 
-#: js/widgets/container/ContainerTree.js:270
-msgid "Updateing"
-msgstr "Обновление"
+#: js/widgets/container/ContainerTree.js:252
+#, python-format
+msgid "Do you really want to delete the %s \"%s\"?"
+msgstr ""
 
-#: js/widgets/container/ContainerTree.js:304
+#: js/widgets/container/ContainerTree.js:254
+#, python-format
+msgid "Deleting %s \"%s\""
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:281
+#, python-format
+msgid "Please enter the new name of the %s:"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:286
+#, python-format
+msgid "Updateing %s \"%s\""
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:320
 #, python-format
 msgid "Manage Permissions for %s :\"%s\""
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:329
-msgid "Rename"
-msgstr "Переименовать"
+#: js/widgets/container/ContainerTree.js:333
+#, python-format
+msgid "Add %s"
+msgstr ""
 
-#: js/widgets/container/ContainerTree.js:335
+#: js/widgets/container/ContainerTree.js:339
+#, python-format
+msgid "Delete %s"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:345
+#, python-format
+msgid "Rename %s"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:351
 msgid "Manage permissions"
 msgstr "Управлять правами доступа"
+
+#: js/widgets/container/ContainerSelect.js:50
+#: js/widgets/container/ContainerSelect.js:59
+msgid "shared"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:50
+#: js/widgets/container/ContainerSelect.js:59 js/widgets/tags/TagsPanel.js:105
+#: js/widgets/tags/TagsPanel.js:406 js/widgets/tags/TagsPanel.js:410
+msgid "personal"
+msgstr "Личное"
+
+#: js/widgets/container/ContainerSelect.js:100
+msgid "please select a container"
+msgstr "Пожалуйста выберите контейнер"
+
+#: js/widgets/container/ContainerGrants.js:34
+msgid "Updateing Grants"
+msgstr "Права обновляются"
+
+#: js/widgets/container/ContainerGrants.js:66
+msgid "Folder"
+msgstr "Папка"
+
+#: js/widgets/container/ContainerGrants.js:82
+msgid "Read"
+msgstr "Читать"
+
+#: js/widgets/container/ContainerGrants.js:92
+msgid "Edit"
+msgstr "Обработать"
+
+#: js/widgets/container/ContainerGrants.js:97
+msgid "Delete"
+msgstr "Удалить"
+
+#: js/widgets/container/ContainerGrants.js:105 js/MainScreen.js:83
+msgid "Admin"
+msgstr "Администратор"
+
+#: js/widgets/container/ContainerGrants.js:113
+msgid "Permissions"
+msgstr "Разрешения"
+
+#: js/widgets/GroupSelect.js:94
+msgid "Please Select a Group"
+msgstr "Пожалуйста выберите группу"
+
+#: js/widgets/AccountpickerPanel.js:103
+msgid "please select an account"
+msgstr "Пожалуйста выберите счет"
+
+#: js/widgets/AccountpickerPanel.js:108 js/widgets/EditRecord.js:77
+#: js/MainScreen.js:321
+msgid "Ok"
+msgstr "Ок"
 
 #: js/widgets/EditRecord.js:88
 msgid "Apply"
 msgstr "Применить"
+
+#: js/widgets/EditRecord.js:98 js/MainScreen.js:315 js/ExceptionDialog.js:34
+msgid "Cancel"
+msgstr "Отмена"
 
 #: js/widgets/EditRecord.js:108
 msgid "delete"
@@ -612,26 +373,6 @@ msgstr "и"
 msgid "Show"
 msgstr "Показать"
 
-#: js/widgets/GridPicker.js:75
-msgid "remove record"
-msgstr "Убрать отчет"
-
-#: js/widgets/GroupSelect.js:94
-msgid "Please Select a Group"
-msgstr "Пожалуйста выберите группу"
-
-#: js/widgets/LangChooser.js:72
-msgid "setting new language..."
-msgstr "Урегулирование нового языка..."
-
-#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
-msgid "Please Wait"
-msgstr "Пожалуйста подождите"
-
-#: js/widgets/LangChooser.js:93
-msgid "loading new language..."
-msgstr "Загрузка нового языка..."
-
 #: js/widgets/tags/TagCombo.js:37
 msgid "tag name"
 msgstr "Название тэга"
@@ -639,6 +380,10 @@ msgstr "Название тэга"
 #: js/widgets/tags/TagFilter.js:23
 msgid "Tag"
 msgstr "Тэг"
+
+#: js/widgets/tags/TagsPanel.js:53 Export/Pdf.php:199
+msgid "Tags"
+msgstr "Тэги"
 
 #: js/widgets/tags/TagsPanel.js:83
 msgid "Add a new personal tag"
@@ -762,26 +507,360 @@ msgstr "Введите название тэга"
 msgid "Searching..."
 msgstr "Поиск..."
 
+#: js/widgets/tags/TagsPanel.js:556 js/ExceptionDialog.js:59
+msgid "Description"
+msgstr "Описание"
+
 #: js/widgets/tags/TagsPanel.js:560
 msgid "Color"
 msgstr "Цвет"
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
-msgid "New version of Tine 2.0 available"
+#: js/MainScreen.js:48
+msgid "Change password"
+msgstr "Изменить пароль"
+
+#: js/MainScreen.js:54
+msgid "Install Google Gears"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/MainScreen.js:60
+msgid "Logout"
+msgstr "Выход"
+
+#: js/MainScreen.js:61
+msgid "Logout from Tine 2.0"
+msgstr "Выход из Tine 2.0"
+
+#: js/MainScreen.js:91
+msgid "Preferences"
+msgstr "Предпочтение"
+
+#: js/MainScreen.js:107
 #, python-format
-msgid "Version \"%s\" of Tine 2.0 is available."
+msgid "User: %s"
+msgstr "Пользователь"
+
+#: js/MainScreen.js:108
+#, python-format
+msgid "Timezone: %s"
+msgstr "Часовой пояс: %s"
+
+#: js/MainScreen.js:279
+#, python-format
+msgid "Change Password For \"%s\""
+msgstr "Изменить пароль для \"%s\""
+
+#: js/MainScreen.js:303
+msgid "Old Password"
+msgstr "Старый пароль"
+
+#: js/MainScreen.js:307
+msgid "New Password"
+msgstr "Новый пароль"
+
+#: js/MainScreen.js:311
+msgid "Repeat new Password"
+msgstr "Повторите новый пароль"
+
+#: js/MainScreen.js:330
+msgid "Please Wait!"
+msgstr "Пожалуйста подождите!"
+
+#: js/MainScreen.js:331
+msgid "changing password..."
+msgstr "Пароль изменяется"
+
+#: js/MainScreen.js:342
+msgid "Success"
+msgstr "Успех"
+
+#: js/MainScreen.js:343
+msgid "Your password has been changed."
+msgstr "Ваш пароль  изменен."
+
+#: js/MainScreen.js:349 js/MainScreen.js:359
+msgid "Failure"
+msgstr "Провал "
+
+#: js/MainScreen.js:360
+msgid "The new passwords mismatch, please correct them."
+msgstr "Новие пароли не соответствуют, пожалуйста исправьте их."
+
+#: js/MainScreen.js:378
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
 msgstr ""
 
-#: js/widgets/VersionCheck.js:41
-msgid "It's a critical update and must be installed as soon as possible!"
+#: js/MainScreen.js:391
+msgid "Are you sure you want to logout?"
+msgstr "Вы уверены что хотите покинуть программу?"
+
+#: js/MainScreen.js:393
+msgid "Logging you out..."
+msgstr "выключаю программу..."
+
+#: js/MainScreen.js:393 js/Login.js:130
+msgid "Please wait!"
+msgstr "Пожалуйста подождите!"
+
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr "Помощник регистрации"
+
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr "Имя"
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr "Фамилия"
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr "Имя пользователя"
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Электронный адрес"
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr "Поздравления!"
+
+#: js/UserRegistration.js:167
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+"Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, "
+"вам будет отправлено подтверждающие электронное письмо."
+
+#: js/ux/form/ImageField.js:48
+msgid "click to edit"
+msgstr "нажмите, чтобы отредактировать"
+
+#: js/ux/form/ImageField.js:90
+msgid "Not An Image"
+msgstr "Никакого файла рисунка"
+
+#: js/ux/form/ImageField.js:90
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Пожалуйста, выберите действительный файл рисунка (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:107
+msgid "Loading"
+msgstr "загрузка"
+
+#: js/ux/form/ImageField.js:115
+msgid "Upload Failed"
+msgstr "Загрузка не удалась"
+
+#: js/ux/form/ImageField.js:115
+msgid "Could not upload image. Please notify your Administrator"
+msgstr ""
+"Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
+
+#: js/ux/form/ImageField.js:127
+msgid "Change Image"
+msgstr "Поменять картинку"
+
+#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
+msgid "Crop Image"
+msgstr "Обрезать картинку"
+
+#: js/ux/form/ImageField.js:174
+msgid "Delete Image"
+msgstr "Удалить картинку"
+
+#: js/ux/form/ImageField.js:212
+msgid "Image Failed"
+msgstr "Ошибка при обработке картины"
+
+#: js/ux/form/ImageField.js:212
+msgid "Could not load image. Please notify your Administrator"
+msgstr ""
+"Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
+
+#: js/ux/ConnectionStatus.js:52
+msgid "online"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
+#: js/ux/ConnectionStatus.js:53
+msgid "offline"
 msgstr ""
+
+#: js/ux/ConnectionStatus.js:54
+msgid "unknown"
+msgstr ""
+
+#: js/ExceptionDialog.js:26 Http.php:234
+msgid "Abnormal End"
+msgstr "Неправильное завершение"
+
+#: js/ExceptionDialog.js:42
+msgid "Send Report"
+msgstr "Послать Сообщение"
+
+#: js/ExceptionDialog.js:51 Http.php:235
+msgid "An error occurred, the program ended abnormal."
+msgstr "Произошла Ошибка, программа закончилась неправильно."
+
+#: js/ExceptionDialog.js:52
+msgid "The last action you made was potentially not performed correctly."
+msgstr ""
+"Последнее действие, которое Вы сделали, было потенциально не правильно "
+"выполнено."
+
+#: js/ExceptionDialog.js:53
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occoured."
+msgstr ""
+"Пожалуйста помогите улучшению этого программного обеспечения. И сообщите "
+"издателю коротким описанием, что и где Вы делаете если возникла ошибка. "
+
+#: js/ExceptionDialog.js:69
+msgid "Show Details:"
+msgstr "показ детали:"
+
+#: js/ExceptionDialog.js:92
+msgid "Sending report..."
+msgstr "Сообщение посылается..."
+
+#: js/ExceptionDialog.js:92
+msgid "Please wait a moment"
+msgstr "Пожалуйста подождите момент"
+
+#: js/ExceptionDialog.js:117
+msgid "Transmission Completed"
+msgstr "Передача завершена"
+
+#: js/ExceptionDialog.js:118
+msgid "Your report has been send. Thanks for your contribution"
+msgstr "Ваш отчет был отправлен. Спасибо за Ваше содействие"
+
+#: js/Tinebase.js:90
+msgid "Connection lost, please check your network!"
+msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
+
+#: js/Tinebase.js:100 Http.php:208
+msgid "Authorisation Required"
+msgstr ""
+
+#: js/Tinebase.js:101 Http.php:209
+msgid "Your session timed out. You need to login again."
+msgstr ""
+
+#: js/Tinebase.js:111
+msgid "Concurrent Updates"
+msgstr ""
+
+#: js/Tinebase.js:112
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
+msgstr ""
+
+#: js/Login.js:29
+msgid "Login"
+msgstr "вход в систему"
+
+#: js/Login.js:36
+msgid "Register"
+msgstr "Регистрироваться"
+
+#: js/Login.js:50
+msgid "Please enter your login data"
+msgstr "Пожалуйста введите свои данные входа в систему"
+
+#: js/Login.js:67
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: js/Login.js:73
+msgid "Password"
+msgstr "Пароль"
+
+#: js/Login.js:119
+msgid "Logging you in..."
+msgstr "Регистрирую Вас в..."
+
+#: js/Login.js:130
+msgid "Login successful. Loading Tine 2.0..."
+msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
+
+#: js/Login.js:134
+msgid "Login failure"
+msgstr "Регистрация не удалась"
+
+#: js/Login.js:135
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
+
+#: Application/Rights/Abstract.php:56
+msgid "admin"
+msgstr "Администратор"
+
+#: Application/Rights/Abstract.php:57
+msgid "admin right description"
+msgstr "Права администратора позволяют пользователю делать все..."
+
+#: Application/Rights/Abstract.php:60
+msgid "run"
+msgstr "Исполнить"
+
+#: Application/Rights/Abstract.php:61
+msgid "run right description"
+msgstr "Исполнимое право необходимо, чтобы иметь доступ к программе."
+
+#: Export/Pdf.php:400
+msgid "Export Date"
+msgstr "Экспортировать число"
+
+#: Export/Pdf.php:404
+msgid "Created by"
+msgstr "Установлено"
+
+#: Acl/Rights.php:116
+msgid "Report bugs"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr ""
+
+#: Acl/Rights.php:120
+msgid "Check version"
+msgstr ""
+
+#: Acl/Rights.php:121
+msgid "Check tine20.org for new versions"
+msgstr ""
+
+#~ msgid "There Where Errors"
+#~ msgstr "Возникли ошибки"
+
+#~ msgid "New"
+#~ msgstr "Новое"
+
+#~ msgid "Creating"
+#~ msgstr "устанавливается"
+
+#~ msgid "Do you really want to delete the"
+#~ msgstr "Вы уверены что хотите удалить"
+
+#~ msgid "Deleting"
+#~ msgstr "Удаляю"
+
+#~ msgid "Please enter the new name of the"
+#~ msgstr "Пожалуйста введите новое имя"
+
+#~ msgid "Updateing"
+#~ msgstr "Обновление"
+
+#~ msgid "Rename"
+#~ msgstr "Переименовать"
 
 #~ msgid "Save"
 #~ msgstr "Сохранить"

@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:302
-#, python-format
-msgid "%s's personal tasks"
-msgstr ""
-
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -175,5 +170,13 @@ msgid "Due date"
 msgstr "Termín dokončení"
 
 #: js/Tasks.js:785
-msgid "Folder"
-msgstr "Složka"
+msgid "Saved in"
+msgstr ""
+
+#: Controller.php:302
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
+#~ msgid "Folder"
+#~ msgstr "Složka"
