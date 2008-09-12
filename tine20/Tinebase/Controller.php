@@ -199,6 +199,8 @@ class Tinebase_Controller
 
             $server->handle($_REQUEST);
         } catch (Exception $exception) {
+            $server = new Tinebase_Http_Server();
+            $server->setClass('Tinebase_Http', 'Tinebase');
             if (! Zend_Registry::isRegistered('currentAccount')) {
                 Zend_Registry::get('logger')->INFO('Attempt to request a privileged Http-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
                 $server->handle(array('method' => 'Tinebase.sessionTimedOut'));
