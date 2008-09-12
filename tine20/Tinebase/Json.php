@@ -109,23 +109,19 @@ class Tinebase_Json
      * 
      * @return array list of all available timezones
      *
-     * @todo translate timezones
+     * @todo add territory to translation?
      */
     public function getAvailableTimezones()
     {
         //$locale =  Zend_Registry::get('locale');
         $locale = new Zend_Locale('de');;
-        $englishLocale = new Zend_Locale('en');
 
-        //print_r($locale->)
-        
-        $availableTimezones = array_values($locale->getTranslationList('TimezoneToTerritory'));
-        $availableTimezonesEnglish = array_values($englishLocale->getTranslationList('TimezoneToTerritory'));
+        $availableTimezones = $locale->getTranslationList('CityToTimezone');
         
         $result = array();
-        foreach ($availableTimezones as $key => $timezoneTranslation) {
+        foreach ($availableTimezones as $timezone => $timezoneTranslation) {
             $result[] = array(
-                'timezone' => $availableTimezonesEnglish[$key],
+                'timezone' => $timezone,
                 'timezoneTranslation' => $timezoneTranslation
             );
         }

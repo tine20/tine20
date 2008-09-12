@@ -174,8 +174,6 @@ class Tinebase_Translation
      *
      * @param   string $_locale
      * @return  string the file contents
-     * 
-     * @todo    add timezones?
      */
     public static function createJsTranslationLists($_locale)
     {
@@ -191,11 +189,7 @@ class Tinebase_Translation
             'Question', 
             'Language', 
             'Territory',
-            /*
-            'TimezoneToTerritory',            
-            'TimezoneToWindows',
-            'TimezoneToCity'
-            */                    
+            'CityToTimezone',
         );
         
         $zendLocale = new Zend_Locale($_locale);

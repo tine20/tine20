@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo add timezone translation
  */
 
 Ext.namespace('Tine.widgets');
@@ -24,11 +25,27 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
     valueField: 'timezone',
     triggerAction: 'all',
     width: 100,
-    listWidth: 200,
+    listWidth: 250,
     
     initComponent: function() {
         this.value = Tine.Tinebase.Registry.get('timeZone');
         this.fieldLabel = this.fieldLabel ? this.fieldLabel : _('Timezone');
+
+        this.tpl = new Ext.XTemplate(
+            '<tpl for=".">' +
+                '<div class="x-combo-list-item">' +
+                    '{[this.translate(values.timezone, values.timezoneTranslation)]}' + 
+                '</div>' +
+            '</tpl>',{
+                translate: function(timezone, timezoneTranslation) {
+                    // use timezoneTranslation as fallback
+                	translation = (Locale.getTranslationData('CityToTimezone', timezone)) 
+                	   ? Locale.getTranslationData('CityToTimezone', timezone)
+                	   : timezoneTranslation;                	
+                    return '[' + timezone + '] - ' + translation;
+                }
+            }
+        );
         
         this.store = new Ext.data.JsonStore({
             id: 'timezone',
