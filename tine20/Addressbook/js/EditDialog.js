@@ -78,16 +78,16 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 xtype: 'columnform',
                 items: [
                     [{
-                        columnWidth: .30,
+                        columnWidth: .2,
                         fieldLabel: translation._('Title'), 
                         name:'n_prefix',
                         id: 'n_prefix'
                     }, {
-                        columnWidth: .35,
+                        columnWidth: .4,
                         fieldLabel: translation._('First Name'), 
                         name:'n_given'
                     }, {
-                        columnWidth: .35,
+                        columnWidth: .4,
                         fieldLabel: translation._('Last Name'), 
                         name:'n_family',
                         allowBlank: false
