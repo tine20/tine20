@@ -52,6 +52,7 @@ Tine.Tinebase.initFramework = function() {
         Ext.Ajax.on('beforerequest', function(connection, options){
             options.url = options.url ? options.url : 'index.php';
             options.params.jsonKey = Tine.Tinebase.Registry.get('jsonKey');
+            options.params.requestType = 'JSON';
             
             options.headers = options.headers ? options.headers : {};
             options.headers['X-Tine20-Request-Type'] = 'JSON';
