@@ -22,9 +22,24 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     protected $_controller;
     
+    /**
+     * user timezone
+     *
+     * @var string
+     */
     protected $_userTimezone;
+    
+    /**
+     * server timezone
+     *
+     * @var string
+     */
     protected $_serverTimezone;
     
+    /**
+     * the constructor
+     *
+     */
     public function __construct()
     {
         try{
@@ -127,7 +142,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     protected function _taskToJson($_task)
     {
-        $_task->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_task->setTimezone($this->_userTimezone);
         $_task->bypassFilters = true;
         $taskArray = $_task->toArray();
         
@@ -146,13 +161,12 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     {        
         // get acls for tasks
         Tinebase_Container::getInstance()->getGrantsOfRecords($_tasks, Zend_Registry::get('currentAccount'));
-        $_tasks->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_tasks->setTimezone($this->_userTimezone);
         
         $result = $_tasks->toArray();
         
         return $result;
-    }
-    
+    }    
     
     /**
      * Deletes an existing Task
