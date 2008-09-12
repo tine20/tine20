@@ -230,7 +230,8 @@ class Tinebase_Controller
             
             // 2008-09-12 temporary bug hunting for FF or ExtJS bug. 
             if ($_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] !== $_POST['requestType']) {
-                Zend_Registry::get('logger')->debug('HEADER - POST API REQUEST MISMATCH! Header is:"' . $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] . '" whereas POST is "' . $_POST['requestType'] . '"');
+                Zend_Registry::get('logger')->debug('HEADER - POST API REQUEST MISMATCH! Header is:"' . $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] .
+                    '" whereas POST is "' . $_POST['requestType'] . '"' . ' HTTP_USER_AGENT: "' . $_SERVER['HTTP_USER_AGENT'] . '"');
             }
             
             Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
