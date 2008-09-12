@@ -57,7 +57,67 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         layout: 'hfit',
         collapsible: true,
         autoHeight: true,
-        items:[{
+        items:[
+        /*
+        {
+            layout: 'table',
+            defaults: {
+                bodyStyle:'padding:5px',
+                xtype: 'textfield'
+            },
+            layoutConfig: {
+                columns: 4
+            },
+            items: [{
+                labelAlign: 'top',
+                fieldLabel: translation._('Title'), 
+                name:'n_prefix',
+                id: 'n_prefix'
+            }, {
+                fieldLabel: translation._('First Name'), 
+                name:'n_given'
+            }, {
+                fieldLabel: translation._('Last Name'), 
+                name:'n_family',
+                allowBlank: false
+            }, {
+                rowspan: 2,
+                width: 100,
+                xtype: 'panel',
+                layout: 'fit',
+                items: new Ext.ux.form.ImageField({
+                    id: 'addressbookeditdialog-jpegimage',
+                    name: 'jpegimage',
+                    width: 90,
+                    height: 80
+                })
+            }, {
+                colspan: 2,
+                xtype: 'combo',
+                fieldLabel: translation._('Display Name'),
+                name: 'n_fn',
+                disabled: true
+            }, {
+                fieldLabel: translation._('Job Title'),
+                name: 'title'
+            }, {
+                colspan: 2,
+                xtype: 'mirrortextfield',
+                fieldLabel: translation._('Company'), 
+                name:'org_name'
+            }, {
+                columnWidth: .4,
+                fieldLabel: translation._('Unit'), 
+                name:'org_unit'
+            }, {
+                width: 100,
+                xtype: 'datefield',
+                fieldLabel: translation._('Birthday'),
+                name: 'bday'
+            }]
+        },
+        */
+        {
             xtype: 'columnform',
             items: [
                 [{
