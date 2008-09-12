@@ -215,7 +215,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     var companyInformation = {
         xtype: 'tabpanel',
         deferredRender:false,
-        height: 180,
+        height: 168,
         activeTab: 0,
         border: false,
         defaults: {
@@ -415,7 +415,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     
     // resize tab panel when window gets resised, and let space for savePath
     tabPanel.on('bodyresize', function(panel, w, h){
-        panel.setHeight(Ext.getCmp('contactDialog').getSize().height-80);
+        panel.setHeight(Ext.getCmp('contactDialog').getSize().height-75);
     });
     
     return [
