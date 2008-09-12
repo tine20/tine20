@@ -87,7 +87,8 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             success: this.onUploadSuccess,
             failure: this.onUploadFail,
             params: {
-                method: 'Tinebase.uploadTempFile'
+                method: 'Tinebase.uploadTempFile',
+                requestType: 'HTTP'
             }
         });
         
