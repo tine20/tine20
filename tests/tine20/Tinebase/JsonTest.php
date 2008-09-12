@@ -142,14 +142,11 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test get timezones
      *
-     * @todo check translation
      */
     public function testGetAvailableTimezones()
     {
-        $list = $this->_instance->getAvailableTimezones();
-        //print_r($list);
-        
-        $this->assertTrue(count($list['results']) > 240);
+        $list = $this->_instance->getAvailableTimezones();        
+        $this->assertTrue(count($list['results']) > 85);
     }
     
     /**
