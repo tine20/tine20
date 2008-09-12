@@ -52,10 +52,8 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $tasks = $this->_controller->searchTasks($filter, $pagination);
         //$tasks->setTimezone($this->_userTimezone);
         //$tasks->convertDates = true;
-        $results = array();
-        foreach ($tasks as $task) {
-            $results[] = $this->_taskToJson($task);
-        }
+        
+        $results = $this->_multipleTasksToJson($tasks);
         
         return array(
             'results' => $results,
@@ -137,6 +135,24 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $taskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
         return $taskArray;
     }
+    
+    /**
+     * returns multiple tasks prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_contacts Tasks_Model_Task
+     * @return array tasks data
+     */
+    protected function _multipleTasksToJson(Tinebase_Record_RecordSet $_tasks)
+    {        
+        // get acls for tasks
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_tasks, Zend_Registry::get('currentAccount'));
+        $_tasks->setTimezone(Zend_Registry::get('userTimeZone'));
+        
+        $result = $_tasks->toArray();
+        
+        return $result;
+    }
+    
     
     /**
      * Deletes an existing Task
