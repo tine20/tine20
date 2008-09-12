@@ -39,25 +39,35 @@
     <?php echo (isset($this->googleApi)) ? $this->googleApi : '' ?>
 
     <!-- Tine 2.0 static files --><?php
-        $TinebasePath = dirname(dirname(__FILE__));
-        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        /**
+         * this variable gets replaced by the buildscript
+         */
+        $tineBuildPath = "";
         
-        // include css files
-        if (file_exists("$TinebasePath/css/tine-all.css")) {
-            echo "\n    " . '<link rel="stylesheet" type="text/css" href="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/css/tine-all.css') . '" />';
-        } else {
-            foreach ($includeFiles['css'] as $name) {
-                echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'" />';
-            }
-        }
-        
-        // include js files
-        if (file_exists("$TinebasePath/js/tine-all.js")) {
-            echo "\n    " . '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/js/tine-all.js') . '"></script>';
-        } else {
-        	foreach ($includeFiles['js'] as $name) {
-        		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'"></script>';
-        	}
+        switch(TINE20_BUILDTYPE) {
+            case 'DEVELOPMENT':
+                $includeFiles = Tinebase_Http::getAllIncludeFiles();
+
+                foreach ($includeFiles['css'] as $name) {
+                    echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'" />';
+                }
+                foreach ($includeFiles['js'] as $name) {
+                    echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'"></script>';
+                }
+
+                break;
+
+            case 'DEBUG':
+                echo "\n    " . '<link rel="stylesheet" type="text/css" href="Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css" />';
+                echo "\n    " . '<script type="text/javascript" language="javascript" src="Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js"></script>';
+                
+                break;
+                
+            case 'RELEASE':
+                echo "\n    " . '<link rel="stylesheet" type="text/css" href="Tinebase/css/' . $tineBuildPath . 'tine-all.css" />';
+                echo "\n    " . '<script type="text/javascript" language="javascript" src="Tinebase/js/' . $tineBuildPath . 'tine-all.js"></script>';
+                
+                break;
         }
     ?>
     
