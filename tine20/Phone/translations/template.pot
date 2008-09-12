@@ -1,0 +1,47 @@
+#: js/Phone.js:27 js/Phone.js:445 js/Phone.js:446
+msgid "Edit phone settings"
+msgstr ""
+
+#: js/Phone.js:55
+msgid "Phones"
+msgstr ""
+
+#: js/Phone.js:193
+msgid "Dial phone number"
+msgstr ""
+
+#: js/Phone.js:249
+msgid "Number"
+msgstr ""
+
+#: js/Phone.js:253
+msgid "Phone"
+msgstr ""
+
+#: js/Phone.js:275
+msgid "Line"
+msgstr ""
+
+#: js/Phone.js:288
+msgid "Cancel"
+msgstr ""
+
+#: js/Phone.js:298
+msgid "Dial"
+msgstr ""
+
+#: js/Phone.js:435
+msgid "Dial number"
+msgstr ""
+
+#: js/Phone.js:436
+msgid "Initiate a new outgoing call"
+msgstr ""
+
+#: js/Phone.js:471
+msgid "enter searchfilter"
+msgstr ""
+
+#: js/Phone.js:492
+msgid "Search:"
+msgstr ""

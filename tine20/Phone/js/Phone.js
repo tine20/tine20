@@ -403,21 +403,37 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
 });
 
 /**************************** main ****************************************/
-
-// @todo add translations
-
+/**
+ * phone main view
+ * 
+ * @todo show phone calls
+ */
 Tine.Phone.Main = {
+	/**
+	 * translations object
+	 */
+	translations: null,
+	
+	/**
+	 * action buttons
+	 */
 	actions: 
 	{
 	   	dialNumber: null,
 	   	editPhoneSettings: null
 	},
 	
+	/**
+	 * init component function
+	 */
 	initComponent: function()
     {
+    	this.translation = new Locale.Gettext();
+        this.translation.textdomain('Phone');    
+    	
         this.actions.dialNumber = new Ext.Action({
-            text: 'Dial number',
-            tooltip: 'Initiate a new outgoing call',
+            text: this.translation._('Dial number'),
+            tooltip: this.translation._('Initiate a new outgoing call'),
             handler: this.handlers.dialNumber,
             iconCls: 'action_DialNumber',
             scope: this
@@ -427,7 +443,7 @@ Tine.Phone.Main = {
         this.actions.editPhoneSettings = new Ext.Action({
             id: 'phone-settings-button',
             //text: translation._('Edit phone settings'),
-        	text: 'Edit phone settings',
+        	text: this.translation._('Edit phone settings'),
             iconCls: 'PhoneIconCls',
             handler: function() {
             	// get selected node id
@@ -452,7 +468,7 @@ Tine.Phone.Main = {
         var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width:240,
-            emptyText: 'enter searchfilter'
+            emptyText: this.translation._('enter searchfilter')
         }); 
         quickSearchField.on('change', function(){
             Ext.getCmp('Phone_Grid').getStore().load({
@@ -471,10 +487,9 @@ Tine.Phone.Main = {
                 this.actions.dialNumber, 
                 this.actions.editPhoneSettings,
 /*                '-',
-                this.actions.exportContact,
                 new Ext.Toolbar.MenuButton(this.actions.callContact),*/
                 '->', 
-                'Search:', 
+                this.translation._('Search:'), 
                 ' ',
                 quickSearchField
             ]
@@ -504,6 +519,7 @@ Tine.Phone.Main = {
         //Ext.StoreMgr.add('ContactsStore', dataStore);
         
         // the paging toolbar
+        // @todo show calls here and no contacts
         var pagingToolbar = new Ext.PagingToolbar({
             pageSize: 25,
             store: dataStore,
