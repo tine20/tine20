@@ -14,9 +14,25 @@ Ext.namespace('Tine.widgets');
 Ext.namespace('Tine.widgets.dialog');
 Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	/**
-	 * @cfg {array} additional toolbar items
+	 * @cfg {Array} additional toolbar items
 	 */
 	tbarItems: false,
+    /**
+     * @cfg {String} internal app name
+     */
+    appName: null,
+    /**
+     * @cfg {String} translated container item name
+     */
+    containerItemName: 'records',
+    /**
+     * @cfg {String} name of the container property
+     */
+    containerProperty: 'container_id',
+    /**
+     * @cfg {Bool} show container selector in bottom area
+     */
+    showContainerSelector: false,
     /**
      * @cfg {Object} handlerScope scope, the defined handlers will be executed in 
      */
@@ -120,10 +136,14 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         //this.tbarItems = genericButtons.concat(this.tbarItems);
         
         this.buttons = [
+//            new Ext.form.Field({xtype: 'text'}),
+//            new Ext.form.Label({ style: {width: '1000px', display: 'inline'}, text: ''}),
             this.action_applyChanges,
             this.action_cancel,
             this.action_saveAndClose
-           ];
+            
+       ];
+       
         
         if (this.tbarItems) {
             this.tbar = new Ext.Toolbar({
@@ -135,6 +155,34 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         this.windowManager = Ext.ux.PopupWindowMgr;
 		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	},
+    
+    /**
+     * @private
+     */
+    onRender : function(ct, position){
+        Tine.widgets.dialog.EditRecord.superclass.onRender.call(this, ct, position);
+        
+        if (this.showContainerSelector) {
+            this.recordContainerEl = this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
+            var ContainerForm = new Tine.widgets.container.selectionComboBox({
+                fieldLabel: _('Saved in'),
+                width: 150,
+                name: this.containerProperty,
+                itemName: this.containerItemName,
+                appName: this.appName
+            });
+            this.getForm().add(ContainerForm);
+            
+            new Ext.Panel({
+                layout: 'form',
+                border: false,
+                renderTo: this.recordContainerEl,
+                bodyStyle: {'background-color': '#F0F0F0'},
+                items: ContainerForm
+            });
+        }
+    },
+    
     /**
      * @private
      */
