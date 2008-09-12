@@ -791,6 +791,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
      */
     id: 'contactDialog',
     layout: 'hfit',
+    appName: 'Addressbook',
+    containerProperty: 'owner',
+    showContainerSelector: true,
     
     initComponent: function() {
         if (! this.contact) {
@@ -808,6 +811,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Addressbook');
+        
+        this.containerItemName = this.translation._('contacts');
         
         // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
