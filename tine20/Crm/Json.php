@@ -102,10 +102,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $leads->setTimezone($this->_userTimezone);
         $leads->convertDates = true;
         
-        $result = array();
+        /*
+        $result = array();        
         foreach ($leads as $lead) {
             $result[] = $this->_leadToJson($lead);
         }
+        */
+        $result = $this->_multipleLeadsToJson($leads);
         
         //Zend_Registry::get('logger')->debug(print_r($result,true));
         
@@ -169,16 +172,33 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @return array lead data
      * 
      * @todo add toResolve array ?
-     * @todo add timezone ?
      */
     protected function _leadToJson($_lead)
     {
-        $result = $_lead->toArray();                
+        $_lead->setTimezone(Zend_Registry::get('userTimeZone'));
+        $result = $_lead->toArray();
+                        
         $result['container'] = Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray();
         $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_lead->container)->toArray();
         
         return $result;                
     }
+    
+    /**
+     * returns multiple leads prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
+     * @return array leads data
+     */
+    protected function _multipleLeadsToJson(Tinebase_Record_RecordSet $_leads)
+    {        
+        // get acls for leads
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_leads, Zend_Registry::get('currentAccount'), 'container');
+        
+        $result = $_leads->toArray();
+        
+        return $result;
+    }    
     
     /********************** handling of lead types/sources/states and products *************************/
     
