@@ -107,10 +107,11 @@ class Tinebase_Controller
             Zend_Registry::set('currentAccount', $this->_session->currentAccount);
         }
         
-        // setup a temporary user locale. This will be overwritten from setupUserLocale, 
-        // but we need to handle exceptions during initialisation process such as seesion timeout
+        // setup a temporary user locale/timezone. This will be overwritten later but we 
+        // need to handle exceptions during initialisation process such as seesion timeout
         // @todo add fallback locale to config.ini
         Zend_Registry::set('locale', new Zend_Locale('en_US'));
+        Zend_Registry::set('userTimeZone', 'UTC');
         
         // Server Timezone must be setup before logger, as logger has timehandling!
         $this->setupServerTimezone();
