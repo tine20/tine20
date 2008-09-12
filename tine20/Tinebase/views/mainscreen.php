@@ -42,7 +42,7 @@
         /**
          * this variable gets replaced by the buildscript
          */
-        $tineBuildPath = "";
+        $tineBuildPath = '';
         
         switch(TINE20_BUILDTYPE) {
             case 'DEVELOPMENT':
