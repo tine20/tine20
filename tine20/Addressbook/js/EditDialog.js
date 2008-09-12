@@ -94,106 +94,66 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         layout: 'hfit',
         collapsible: true,
         autoHeight: true,
-        items:[
-            {
-            //    layout: 'column',
-            //    items:[
-            //        {
-            //            columnWidth: 1,
-                        xtype: 'columnform',
-                        items: [
-                            [
-                                {
-                                    columnWidth: .20,
-                                    fieldLabel: translation._('Title'), 
-                                    name:'n_prefix',
-                                    id: 'n_prefix'
-                                },
-                                {
-                                    columnWidth: .30,
-                                    fieldLabel: translation._('First Name'), 
-                                    name:'n_given'
-                                },
-                                {
-                                    columnWidth: .30,
-                                    fieldLabel: translation._('Last Name'), 
-                                    name:'n_family',
-                                    allowBlank: false
-                                },
-                                {
-                                    columnWidth: .2,
-                                    xtype: 'panel',
-                                    layout: 'fit',
-                                    style: {'z-index': 3},
-                                    items: new Ext.ux.form.ImageField({
-                                        id: 'addressbookeditdialog-jpegimage',
-                                        name: 'jpegimage',
-                                        width: 90,
-                                        height: 80
-                                    })
-                                }
-                                /*
-                                new Ext.ux.form.ImageField({
-                                    id: 'addressbookeditdialog-jpegimage',
-                                    name: 'jpegimage',
-                                    width: 90,
-                                    height: 80
-                                })
-                                */
-                            ],
-                            [
-                                {
-                                    columnWidth: .5,
-                                    xtype: 'combo',
-                                    fieldLabel: translation._('Display Name'),
-                                    name: 'n_fn',
-                                    disabled: true//,
-                                    //anchor: '100% r'
-                                },
-                                {
-                                    columnWidth: .3,
-                                    fieldLabel: translation._('Job Title'),
-                                    name: 'title'
-                                }
-                            ],
-                            [
-                                {
-                                    columnWidth: .5,
-                                    xtype: 'mirrortextfield',
-                                    fieldLabel: translation._('Company'), 
-                                    name:'org_name'
-                                },
-                                {
-                                    columnWidth: .3,
-                                    fieldLabel: translation._('Unit'), 
-                                    name:'org_unit'
-                                },
-                                {
-                                    columnWidth: .2,
-                                    xtype: 'datefield',
-                                    fieldLabel: translation._('Birthday'),
-                                    name: 'bday'
-                                }
-                            ]
-                        ]
-                    },
-                    /*
-                    {
-                        //layout: 'form',
-                        hideLabels: true,
-                        width: 92,
-                        items: [new Ext.ux.form.ImageField({
-                            id: 'addressbookeditdialog-jpegimage',
-                            name: 'jpegimage',
-                            width: 90,
-                            height: 80
-                        })]
-                    }*/
-                //]
-            //},
-            personalInformationExpandArea
-        ]
-    };
+        items:[{
+            xtype: 'columnform',
+            items: [
+                [{
+                    columnWidth: .30,
+                    fieldLabel: translation._('Title'), 
+                    name:'n_prefix',
+                    id: 'n_prefix'
+                }, {
+                    columnWidth: .35,
+                    fieldLabel: translation._('First Name'), 
+                    name:'n_given'
+                }, {
+                    columnWidth: .35,
+                    fieldLabel: translation._('Last Name'), 
+                    name:'n_family',
+                    allowBlank: false
+                }, {
+                    width: 100,
+                    xtype: 'panel',
+                    layout: 'fit',
+                    items: new Ext.ux.form.ImageField({
+                        id: 'addressbookeditdialog-jpegimage',
+                        name: 'jpegimage',
+                        width: 90,
+                        height: 80
+                    })
+                }], [{
+                    columnWidth: .6,
+                    xtype: 'combo',
+                    fieldLabel: translation._('Display Name'),
+                    name: 'n_fn',
+                    disabled: true//,
+                    //anchor: '100% r'
+                }, {
+                    columnWidth: .4,
+                    fieldLabel: translation._('Job Title'),
+                    name: 'title'
+                }, {
+                    width: 100,
+                    hidden: true
+                }], [{
+                    columnWidth: .6,
+                    xtype: 'mirrortextfield',
+                    fieldLabel: translation._('Company'), 
+                    name:'org_name'
+                }, {
+                    columnWidth: .4,
+                    fieldLabel: translation._('Unit'), 
+                    name:'org_unit'
+                }, {
+                    width: 100,
+                    xtype: 'datefield',
+                    fieldLabel: translation._('Birthday'),
+                    name: 'bday'
+                }]
+            ]
+        },
+        personalInformationExpandArea
+    ]};
  
     var contactInformationBasePanel = {
         xtype: 'columnform',
