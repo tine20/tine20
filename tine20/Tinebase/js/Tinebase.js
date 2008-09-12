@@ -55,7 +55,7 @@ Tine.Tinebase.initFramework = function() {
             options.params.requestType = options.params.requestType || 'JSON';
             
             options.headers = options.headers ? options.headers : {};
-            options.headers['X-Tine20-Request-Type'] = 'JSON';
+            options.headers['X-Tine20-Request-Type'] = options.headers['X-Tine20-Request-Type'] || 'JSON';
         }, this);
         
 		
