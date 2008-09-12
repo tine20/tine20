@@ -8,55 +8,18 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     var translation = new Locale.Gettext();
     translation.textdomain('Addressbook');
 
-    var savePath = {
-        layout: 'column',
-        autoHeight: true,
-        border: false,
-        bodyStyle: 'margin-top: 5px;',
-        defaults: {
-            border: false,
-            layout: 'form'
-            //bodyStyle:'margin:10px',
-        },
-        items: [{
-            columnWidth: .5,
-            layout: 'column',
-            border: false,
-            items:[{
-                layout: 'form',
-                labelWidth: 70,
-                border: false,
-                items:
-                    new Tine.widgets.container.selectionComboBox({
-                        fieldLabel: translation._('Saved in'),
-                        width: 150,
-                        name: 'owner',
-                        itemName: translation._('contacts'),
-                        appName: 'Addressbook'
-                    })
-                }/*,{
-                    hideLabels: true,
-                    bodyStyle: 'margin-left: 3px;',
-                    //border: true,
-                    items: {
-                        xtype: 'checkbox',
-                        boxLabel: 'Private',
-                        disabled: true
-                    }
-                }*/]
-            }/*,{
-                columnWidth: .5,
-                labelWidth: 150,
-                items: {
-                    xtype: 'combo',
-                    fieldLabel: translation._('Display Name'),
-                    name: 'n_fn',
-                    disabled: true,
-                    anchor: '100% r'
-                }
-            }*/
-        ]
-    };
+    
+    /*
+        columnWidth: .5,
+        labelWidth: 150,
+        items: {
+            xtype: 'combo',
+            fieldLabel: translation._('Display Name'),
+            name: 'n_fn',
+            disabled: true,
+            anchor: '100% r'
+        }
+    */
     
     var personalInformationExpandArea = new Ext.ux.form.ColumnFormPanel({
         //xtype: 'columnform',
@@ -418,7 +381,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         defaults: {
             frame: true
         },
-        height: 500,
+        height: 520,
         plain:true,
         activeTab: 0,
         border: false,
@@ -438,11 +401,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     
     // resize tab panel when window gets resised, and let space for savePath
     tabPanel.on('bodyresize', function(panel, w, h){
-        panel.setHeight(Ext.getCmp('contactDialog').getSize().height-100);
+        panel.setHeight(Ext.getCmp('contactDialog').getSize().height-80);
     });
     
     return [
-        tabPanel,
-        savePath
+        tabPanel
     ];
 };
