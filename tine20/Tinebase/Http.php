@@ -19,7 +19,7 @@
 class Tinebase_Http extends Tinebase_Application_Http_Abstract
 {
     /**
-     * checes if a user is loged in. If not we redirect to login
+     * checks if a user is logged in. If not we redirect to login
      */
     protected function checkAuth()
     {
