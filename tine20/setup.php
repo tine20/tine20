@@ -16,15 +16,12 @@ define ( 'IMPORT_EGW_14_ADDRESSBOOK', FALSE );
 define ( 'IMPORT_TINE_REV_949', FALSE );
 
 /**
- * location of config.ini
- */
-$configPath = $_SERVER['DOCUMENT_ROOT'] . '/../config.ini';
-
-/**
  * initialize autoloader
  */
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
+
+$configPath = dirname(__FILE__) . '/config.inc.php';
 
 /**
  * cli api
@@ -33,7 +30,7 @@ if (php_sapi_name() == 'cli') {
     try {
         $opts = new Zend_Console_Getopt(
         array(
-            'config|c=s'      => 'Path to config.ini file',
+            'config|c=s'      => 'Path to config.inc.php file',
             'help|h'          => 'Display this help Message',
         ));
         $opts->parse();
@@ -56,17 +53,18 @@ if (php_sapi_name() == 'cli') {
 /**
  * load central configuration once and put it in the registry
  */
-if (!is_file($configPath)) {
-    echo "Configuration file: '$configPath' not found \n";
-    exit;
-}
 try {
-    Zend_Registry::set('configFile', new Zend_Config_Ini($configPath));
+    if(file_exists($configPath)) {
+        $config = new Zend_Config(require $configPath);
+    } else {
+        // deprecated fallback
+        $config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+    }
+    Zend_Registry::set('configFile', $config);
 } catch (Zend_Config_Exception $e) {
-    echo "Error could not parse config file: '$configPath' \n";
-    exit;
+    die ('central configuration file ' . $configPath . ' not found or invalid');
 }
-
+    
 /**
  * validate environemnt
  * @todo include ini checks in php envirionment checks

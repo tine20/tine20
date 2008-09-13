@@ -208,7 +208,7 @@ if ($opts->a || $opts->m) {
     foreach($files as $file) {
         $manifest['entries'][] = array(
             'url'           => '../../' . $file,
-            'ignoreQuery'   => true
+            #'ignoreQuery'   => true
         );
     }
     
