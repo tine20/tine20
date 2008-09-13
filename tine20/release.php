@@ -216,7 +216,7 @@ if ($opts->a || $opts->m) {
     $jsonManifest = json_encode($manifest);
     $jsonManifest = str_replace('\/', '/', $jsonManifest);
     # enable to make manifest file more readable
-    $jsonManifest = str_replace('},{', "},\n{", $jsonManifest);
+    #$jsonManifest = str_replace('},{', "},\n{", $jsonManifest);
     
     $fd = fopen($tine20path . '/Tinebase/js/tine20-manifest.js', 'w+');
     fwrite($fd, $jsonManifest);
