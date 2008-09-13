@@ -57,8 +57,7 @@ try {
     if(file_exists($configPath)) {
         $config = new Zend_Config(require $configPath);
     } else {
-        // deprecated fallback
-        $config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+        die ('central configuration file ' . $configPath . ' not found.<br>Did you migrate from config.ini to config.inc.php?');
     }
     Zend_Registry::set('configFile', $config);
 } catch (Zend_Config_Exception $e) {
