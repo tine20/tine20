@@ -800,6 +800,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             this.contact = new Tine.Addressbook.Model.Contact({}, 0);
         }
         
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Addressbook');
+        
         Ext.Ajax.request({
             scope: this,
             success: this.onContactLoad,
@@ -808,9 +811,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                 contactId: this.contact.id
             }
         });
-        
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Addressbook');
         
         this.containerItemName = this.translation._('contacts');
         
