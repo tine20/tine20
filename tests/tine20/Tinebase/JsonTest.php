@@ -171,5 +171,13 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         // restore old setting
         Tinebase_Config::getInstance()->setPreference($userId, $oldPreference);
     }
+    
+    /**
+     * get notes types
+     */
+    public function testGetNotesTypes()
+    {
+        $noteTypes = $this->_instance->getNoteTypes();
+        $this->assertTrue($noteTypes['totalcount'] >= 5);
+    }
 }
-
