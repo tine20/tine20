@@ -163,7 +163,7 @@ function generatePOTFiles($_verbose)
         $appPath = "$translationPath/../";
         `cd $appPath 
         touch translations/template.pot 
-        find . -type f -iname "*.php" -or -type f -iname "*.js"  | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
+        find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
         
     }
 }
