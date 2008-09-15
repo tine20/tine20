@@ -512,7 +512,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * returns an array with differences to the given record
      * 
-     * @todo test this! 
      * @param  Tinebase_Record_Interface $_record record for comparism
      * @return array with differences field => different value
      */
