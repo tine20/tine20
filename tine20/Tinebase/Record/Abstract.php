@@ -560,7 +560,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * check if two records are equal
      * 
      * @param  Tinebase_Record_Interface $_record record for comparism
-     * $param  array                     $_toOmit fields to omit
+     * @param  array                     $_toOmit fields to omit
      * @return bool
      */
     public function isEqual($_record, array $_toOmmit = array())
@@ -574,7 +574,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * translate this records' fields
      *
-     * @todo write test
      */
     public function translate()
     {
