@@ -85,13 +85,15 @@ class Tinebase_Config
      * returns one config value identified by config name and application id
      * 
      * @param   string  $_name config name/key
-     * @param   int     $_applicationId application id
+     * @param   int|string     $_applicationId application id
      * @return  Tinebase_Model_Config  the config record
      */
     public function getConfig($_name, $_applicationId = NULL)
     {
-        $applicationId = ($_applicationId !== NULL ) ? $_applicationId : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-        
+        $applicationId = ($_applicationId !== NULL ) 
+            ? Tinebase_Model_Application::convertApplicationIdToInt($_applicationId) 
+            : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+                
         $select = $this->_configTable->select();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId))
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
@@ -110,15 +112,15 @@ class Tinebase_Config
      * 
      * @param   int     $_userId 
      * @param   string  $_name config name/key
-     * @param   int     $_applicationId application id (if NULL -> use Tinebase application)
+     * @param   int|string   $_applicationId application id (if NULL -> use Tinebase application)
      * @param   bool    $_checkDefault
      * @return  Tinebase_Model_Config  the config record
-     * 
-     * @todo get preference from config table if it doesn't exist in config_user
      */
     public function getPreference($_userId, $_name, $_applicationId = NULL, $_checkDefault = TRUE)
     {
-        $applicationId = ($_applicationId !== NULL ) ? $_applicationId : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        $applicationId = ($_applicationId !== NULL ) 
+            ? Tinebase_Model_Application::convertApplicationIdToInt($_applicationId) 
+            : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
         
         $select = $this->_configUserTable->select();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId))
@@ -141,13 +143,13 @@ class Tinebase_Config
     /**
      * returns all config settings for one application
      * 
-     * @param   string     $_applicationName application name
+     * @param   int|string     $_applicationId application id
      * @return  array with config name => value pairs
      */
-    public function getConfigForApplication($_applicationName)
+    public function getConfigForApplication($_applicationId)
     {
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId();
-        
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+
         $select = $this->_db->select();
         $select->from(SQL_TABLE_PREFIX . 'config')
                ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId);
@@ -237,5 +239,4 @@ class Tinebase_Config
     {
         $this->_configTable->delete($this->_db->quoteInto('id = ?', $_config->getId()));
     }
-    
 }
