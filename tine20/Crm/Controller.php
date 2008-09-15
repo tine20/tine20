@@ -562,6 +562,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
         $result = $backend->get($_typeId);
+        $result->translate();
 
         return $result;    
     }
@@ -630,6 +631,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     {
     	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
         $result = $backend->get($_id);
+        $result->translate();
 
         return $result;    
     }
@@ -683,6 +685,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     {
     	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
         $result = $backend->get($_sourceId);
+        $result->translate();
 
         return $result;    
     }

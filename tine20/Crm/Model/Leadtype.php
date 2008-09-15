@@ -54,4 +54,13 @@ class Crm_Model_Leadtype extends Tinebase_Record_Abstract
         'id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'leadtype' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')
     );
+    
+    /**
+     * fields to translate
+     *
+     * @var array
+     */
+    protected $_toTranslate = array(
+        'leadtype'
+    );    
 }
