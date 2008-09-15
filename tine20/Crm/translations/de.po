@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2008-09-15 15:32+0100\n"
+"PO-Revision-Date: 2008-09-15 15:58+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -495,7 +495,7 @@ msgstr ""
 
 #: Setup/setup.xml:478
 msgid "waiting for feedback"
-msgstr ""
+msgstr "Wartet auf Feedback"
 
 #: Setup/setup.xml:496
 msgid "quote sent"
