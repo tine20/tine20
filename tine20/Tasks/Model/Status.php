@@ -31,6 +31,11 @@ class Tasks_Model_Status extends Tinebase_Record_Abstract
      */
     protected $_application = 'Tasks';
     
+    /**
+     * zend validators
+     *
+     * @var array
+     */
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,  'Int' ),
         'created_by'           => array('allowEmpty' => true,  'Int' ),
@@ -45,9 +50,23 @@ class Tasks_Model_Status extends Tinebase_Record_Abstract
         'status_icon'          => array('allowEmpty' => true         ),
     );
     
+    /**
+     * datetime fields
+     *
+     * @var array
+     */
     protected $_datetimeFields = array(
         'creation_time',
         'last_modified_time',
         'deleted_time',
     );
+    
+    /**
+     * fields to translate
+     *
+     * @var array
+     */
+    protected $_toTranslate = array(
+        'status_name'
+    );    
 }

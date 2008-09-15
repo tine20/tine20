@@ -59,9 +59,9 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         
         foreach ($initialData as &$data) {
             $data->setTimezone(Zend_Registry::get('userTimeZone'));
+            $data->translate();
             $data = $data->toArray();
         }
         return $initialData;    
     }
-
 }

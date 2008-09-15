@@ -201,6 +201,8 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
     public function getStati() {
-        return $this->_controller->getStati()->toArray();
+        $result = $this->_controller->getStati();    
+        $result->translate();
+        return $result->toArray();
     }
 }

@@ -267,6 +267,8 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
      * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
     public function getStati() {
+        //$result = $this->_stati->translate(); 
+        //var_dump($result);
         return $this->_stati;
     }
 
@@ -281,6 +283,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
         
         foreach ( $this->_stati as $status ) {
             if ( $status->getId() === $_statusId ) {
+                $status->translate();
                 return $status->toArray();
             }
         }
