@@ -11,34 +11,69 @@
  */
  
 Ext.onReady(function() {
-    var connection = new Tine.mobileClient.Connection({
-        url: '/tine20/index.php'
-    });
-    
-    connection.login('tine20admin', 'lars', function() {
-        new Ext.Viewport({
-            layout: 'fit',
-            items: {
-                xtype: 'panel',
-                layout: 'fit',
-                buttonAlign: 'center',
-                tbar: [
-                    {text: 'Settings', handler: function() {}},
-                    '->',
-                    {text: 'Help', handler: function() {}}
-                ],
-                buttons: [
-                    {text: 'List', handler: function() {}, pressed: true },
-                    {text: 'Day', handler: function() {}},
-                    {text: 'Month', handler: function() {}}
-                ],
-                bbar: [
-                    {text: 'foo', handler: function() {}},
-                    {text: 'bar', handler: function() {}},
-                ],
-                items: new Tine.mobileClient.Tasks.MainGrid({})
-            }
-        });
+    new Ext.Viewport({
+        id: 'mobileViewport',
+        layout: 'card',
+        activeItem: 0,
+        items: [
+            Tine.mobileClient.getSettingsPanel()
+        ]
     });
 });
 
+/**
+ * Settings Panel
+ */
+Tine.mobileClient.getSettingsPanel = function() { 
+    return new Ext.FormPanel({
+        id: 'mobileSettingsPanel',
+        title: 'Settings',
+        tbar: [
+            '->',
+            {text: 'Save', handler: function() {
+                var form = Ext.getCmp('mobileSettingsPanel').getForm();
+                var connection = new Tine.mobileClient.Connection({
+                    url: form.findField('url').getValue()
+                });
+                
+                var username = form.findField('username').getValue();
+                var password = form.findField('passoword').getValue();
+                connection.login(username, password, function() {
+                    var viewport = Ext.getCmp('mobileViewport');
+                    var tasksApp = Ext.getCmp('mobileTaskAppPanel');
+                    if (! tasksApp) {
+                        tasksApp = Tine.mobileClient.Tasks.getAppPanel();
+                        viewport.add(tasksApp);
+                    }
+                    viewport.layout.setActiveItem(tasksApp.id);
+                });
+            }}
+        ],
+        labelAlign: 'top',
+        defaults: {
+            anchor: '100%'
+        },
+        items: [{
+            xtype: 'textfield',
+            name: 'url',
+            fieldLabel: 'Url',
+            value: '/tine20/index.php'
+        }, {
+            xtype: 'textfield',
+            name: 'username',
+            fieldLabel: 'Username',
+            value: 'tine20admin'
+        }, {
+            xtype: 'textfield',
+            name: 'passoword',
+            inputType: 'password',
+            fieldLabel: 'Password',
+            value: 'lars'
+        }, {
+            xtype: 'checkbox',
+            name: 'storeLoginData',
+            fieldLabel: 'Save Login Information',
+            disabled: true
+        }]
+    })
+};
