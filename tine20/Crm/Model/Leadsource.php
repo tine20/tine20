@@ -11,14 +11,14 @@
  */
 
 /**
- * class to hold option data
+ * class to hold option / lead source data
  * 
  * @package     Crm
  */
 class Crm_Model_Leadsource extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which 
+     * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
      * @var string
@@ -55,4 +55,12 @@ class Crm_Model_Leadsource extends Tinebase_Record_Abstract
         'leadsource'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')
     );
     
+    /**
+     * fields to translate
+     *
+     * @var array
+     */
+    protected $_toTranslate = array(
+        'leadsource'
+    );    
 }

@@ -212,6 +212,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
         
         if($rows = Crm_Controller::getInstance()->getLeadSources($sort, $dir)) {
+            $rows->translate();
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
