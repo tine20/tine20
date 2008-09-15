@@ -1,7 +1,7 @@
-
+﻿
 Ext.onReady(function() {
     var connection = new Tine.iPhoneClient.Connection({
-        url: '/tt/tine20/index.php'
+        url: '/tine20/index.php'
     });
     
     connection.login('tine20admin', 'lars', function() {
