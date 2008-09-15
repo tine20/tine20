@@ -123,25 +123,47 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      * delete lead
      *
      * @param int|Crm_Model_Lead $_leads lead ids
+     * @param boolean $_deleteTasks delete linked tasks
      * @return void
-     * 
-     * @todo delete linked relations (siblings/tasks)
      */
-    public function delete($_leadId)
+    public function delete($_leadId, $_deleteTasks = TRUE)
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-
-        $db = Zend_Registry::get('dbAdapter');
         
-        $where = array(
-            $db->quoteInto('lead_id = ?', $leadId)
-        );          
-        $db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
-        
-        $where = array(
-            $db->quoteInto('id = ?', $leadId)
-        );
-        $db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where);
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+                    
+            // delete products
+            $where = array(
+                $this->_db->quoteInto('lead_id = ?', $leadId)
+            );          
+            $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
+            
+            // remove linked tasks / relations
+            if ($_deleteTasks) {
+                $relationsController = Tinebase_Relations::getInstance();                
+                $relations = $relationsController->getRelations('Crm_Model_Lead', 'Sql', $leadId);
+                $relationsController->setRelations('Crm_Model_Lead', 'Sql', $leadId, array());
+                foreach ($relations as $relation) {
+                    if ($relation->related_model === 'Tasks_Model_Task' /* && $relation->own_degree === 'sibling' */) {
+                        Tasks_Controller::getInstance()->deleteTask($relation->related_id);
+                    }
+                }                
+            }
+            
+            // delete lead
+            $where = array(
+                $this->_db->quoteInto('id = ?', $leadId)
+            );
+            $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting lead ' . $e->__toString());
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw($e);
+        }
     }
 
     /**
