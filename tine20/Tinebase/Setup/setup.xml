@@ -1750,12 +1750,12 @@
             <field>
                 <name>name</name>
                 <value>note</value>
-                <!-- _(note) -->
+                <!-- gettext('note') -->
             </field>
             <field>
                 <name>description</name>
                 <value>default note type</value>
-                <!-- _(default note type) -->
+                <!-- gettext('default note type') -->
             </field>
             <field>
                 <name>icon</name>
@@ -1777,12 +1777,12 @@
             <field>
                 <name>name</name>
                 <value>telephone</value>
-                <!-- _(telephone) -->
+                <!-- gettext('telephone') -->
             </field>
             <field>
                 <name>description</name>
                 <value>telephone call</value>
-                <!-- _(telephone call) -->
+                <!-- gettext('telephone call') -->
             </field>
             <field>
                 <name>icon</name>
@@ -1804,12 +1804,12 @@
             <field>
                 <name>name</name>
                 <value>email</value>
-                <!-- _(email) -->
+                <!-- gettext('email') -->
             </field>
             <field>
                 <name>description</name>
                 <value>email contact</value>
-                <!-- _(email contact) -->
+                <!-- gettext('email contact') -->
             </field>
             <field>
                 <name>icon</name>
@@ -1831,12 +1831,12 @@
             <field>
                 <name>name</name>
                 <value>created</value>
-                <!-- _(created) -->
+                <!-- gettext('created') -->
             </field>
             <field>
                 <name>description</name>
                 <value>record created</value>
-                <!-- _(record created) -->
+                <!-- gettext('record created') -->
             </field>
             <field>
                 <name>icon</name>
@@ -1858,12 +1858,12 @@
             <field>
                 <name>name</name>
                 <value>changed</value>
-                <!-- _(changed) -->
+                <!-- gettext('changed') -->
             </field>
             <field>
                 <name>description</name>
                 <value>record changed</value>
-                <!-- _(record changed) -->
+                <!-- gettext('record changed') -->
             </field>
             <field>
                 <name>icon</name>

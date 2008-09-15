@@ -413,6 +413,58 @@ msgstr "添加新线索"
 msgid "Edit Lead \"%s\""
 msgstr "编辑线索 \"%s\""
 
+#: Setup/setup.xml:344
+msgid "telephone"
+msgstr ""
+
+#: Setup/setup.xml:358
+msgid "email"
+msgstr ""
+
+#: Setup/setup.xml:372
+msgid "website"
+msgstr ""
+
+#: Setup/setup.xml:386
+msgid "fair"
+msgstr ""
+
+#: Setup/setup.xml:400
+msgid "customer"
+msgstr ""
+
+#: Setup/setup.xml:414
+msgid "partner"
+msgstr ""
+
+#: Setup/setup.xml:428
+msgid "reseller"
+msgstr ""
+
+#: Setup/setup.xml:442
+msgid "open"
+msgstr ""
+
+#: Setup/setup.xml:460
+msgid "contacted"
+msgstr ""
+
+#: Setup/setup.xml:478
+msgid "waiting for feedback"
+msgstr ""
+
+#: Setup/setup.xml:496
+msgid "quote sent"
+msgstr ""
+
+#: Setup/setup.xml:514
+msgid "accepted"
+msgstr ""
+
+#: Setup/setup.xml:536
+msgid "lost"
+msgstr ""
+
 #: Acl/Rights.php:107
 msgid "manage leads"
 msgstr "管理线索"

@@ -277,21 +277,25 @@ msgstr ""
 msgid "please select an account"
 msgstr ""
 
-#: js/widgets/AccountpickerPanel.js:108 js/widgets/EditRecord.js:77
+#: js/widgets/AccountpickerPanel.js:108 js/widgets/EditRecord.js:93
 #: js/MainScreen.js:321
 msgid "Ok"
 msgstr ""
 
-#: js/widgets/EditRecord.js:88
+#: js/widgets/EditRecord.js:104
 msgid "Apply"
 msgstr ""
 
-#: js/widgets/EditRecord.js:98 js/MainScreen.js:315 js/ExceptionDialog.js:34
+#: js/widgets/EditRecord.js:114 js/MainScreen.js:315 js/ExceptionDialog.js:34
 msgid "Cancel"
 msgstr ""
 
-#: js/widgets/EditRecord.js:108
+#: js/widgets/EditRecord.js:124
 msgid "delete"
+msgstr ""
+
+#: js/widgets/EditRecord.js:168
+msgid "Saved in"
 msgstr ""
 
 #: js/widgets/grid/FilterModel.js:87
@@ -706,23 +710,23 @@ msgstr ""
 msgid "Your report has been send. Thanks for your contribution"
 msgstr ""
 
-#: js/Tinebase.js:90
+#: js/Tinebase.js:91
 msgid "Connection lost, please check your network!"
 msgstr ""
 
-#: js/Tinebase.js:100 Http.php:208
+#: js/Tinebase.js:101 Http.php:208
 msgid "Authorisation Required"
 msgstr ""
 
-#: js/Tinebase.js:101 Http.php:209
+#: js/Tinebase.js:102 Http.php:209
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: js/Tinebase.js:111
+#: js/Tinebase.js:112
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:112
+#: js/Tinebase.js:113
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -762,6 +766,46 @@ msgstr ""
 
 #: js/Login.js:135
 msgid "Your username and/or your password are wrong!!!"
+msgstr ""
+
+#: Setup/setup.xml:1753
+msgid "note"
+msgstr ""
+
+#: Setup/setup.xml:1758
+msgid "default note type"
+msgstr ""
+
+#: Setup/setup.xml:1780
+msgid "telephone"
+msgstr ""
+
+#: Setup/setup.xml:1785
+msgid "telephone call"
+msgstr ""
+
+#: Setup/setup.xml:1807
+msgid "email"
+msgstr ""
+
+#: Setup/setup.xml:1812
+msgid "email contact"
+msgstr ""
+
+#: Setup/setup.xml:1834
+msgid "created"
+msgstr ""
+
+#: Setup/setup.xml:1839
+msgid "record created"
+msgstr ""
+
+#: Setup/setup.xml:1861
+msgid "changed"
+msgstr ""
+
+#: Setup/setup.xml:1866
+msgid "record changed"
 msgstr ""
 
 #: Application/Rights/Abstract.php:56

@@ -384,7 +384,7 @@
             <field>
                 <name>status_name</name>
                 <value>NEEDS-ACTION</value>
-                <!-- _(NEEDS-ACTION) -->
+                <!-- gettext('NEEDS-ACTION') -->
             </field>
             <field>
                 <name>status_is_open</name>
@@ -406,7 +406,7 @@
             <field>
                 <name>status_name</name>
                 <value>COMPLETED</value>
-                <!-- _(COMPLETED) -->
+                <!-- gettext('COMPLETED') -->
             </field>
             <field>
                 <name>status_is_open</name>
@@ -428,7 +428,7 @@
             <field>
                 <name>status_name</name>
                 <value>IN-PROCESS</value>
-                <!-- _(IN-PROCESS) -->
+                <!-- gettext('IN-PROCESS') -->
             </field>
             <field>
                 <name>status_is_open</name>
@@ -450,7 +450,7 @@
             <field>
                 <name>status_name</name>
                 <value>CANCELLED</value>
-                <!-- _(CANCELLED) -->
+                <!-- gettext('CANCELLED') -->
             </field>
             <field>
                 <name>status_is_open</name>

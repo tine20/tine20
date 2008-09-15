@@ -58,7 +58,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Funkce"
 
-#: Pdf.php:74 js/Addressbook.js:376 js/Addressbook.js:487 js/EditDialog.js:84
+#: Pdf.php:74 js/Addressbook.js:376 js/Addressbook.js:487 js/EditDialog.js:47
 msgid "Room"
 msgstr "Místnost"
 
@@ -75,7 +75,7 @@ msgid "Private Contact Data"
 msgstr "Soukromé kontaktní údaje"
 
 #: Pdf.php:86 js/Addressbook.js:345 js/Addressbook.js:346
-#: js/Addressbook.js:347 js/EditDialog.js:339
+#: js/Addressbook.js:347 js/EditDialog.js:276
 msgid "Private Address"
 msgstr "Soukromá adresa"
 
@@ -103,16 +103,16 @@ msgstr "Domácí URL"
 msgid "Other Data"
 msgstr "Ostatní údaje"
 
-#: Pdf.php:112 js/Addressbook.js:402 js/EditDialog.js:174
+#: Pdf.php:112 js/Addressbook.js:402 js/EditDialog.js:126
 msgid "Birthday"
 msgstr "Narozeniny"
 
 #: Pdf.php:115 js/Addressbook.js:374 js/Addressbook.js:485
-#: js/EditDialog.js:155
+#: js/EditDialog.js:109
 msgid "Job Title"
 msgstr "Povolání"
 
-#: js/Addressbook.js:15 js/Addressbook.js:220
+#: js/Addressbook.js:15 js/Addressbook.js:220 Setup/setup.xml:443
 msgid "Internal Contacts"
 msgstr "Interní kontakty"
 
@@ -120,7 +120,7 @@ msgstr "Interní kontakty"
 msgid "Addressbook"
 msgstr "Adresář"
 
-#: js/Addressbook.js:29 js/EditDialog.js:34
+#: js/Addressbook.js:29 js/Addressbook.js:815
 msgid "contacts"
 msgstr "kontakty"
 
@@ -135,18 +135,18 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Addressbook.js:197 js/Addressbook.js:916
+#: js/Addressbook.js:197 js/Addressbook.js:921
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Addressbook.js:203 js/Addressbook.js:899 js/Addressbook.js:924
+#: js/Addressbook.js:203 js/Addressbook.js:904 js/Addressbook.js:929
 msgid "Failed"
 msgstr ""
 
-#: js/Addressbook.js:204 js/Addressbook.js:924
+#: js/Addressbook.js:204 js/Addressbook.js:929
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] ""
@@ -168,7 +168,7 @@ msgstr[0] "smazat kontakt"
 msgstr[1] "smazat kontakty"
 msgstr[2] "smazat kontakty"
 
-#: js/Addressbook.js:265 js/Addressbook.js:815
+#: js/Addressbook.js:265 js/Addressbook.js:820
 msgid "export as pdf"
 msgstr "exportovat do pdf"
 
@@ -176,44 +176,44 @@ msgstr "exportovat do pdf"
 msgid "call contact"
 msgstr "volat kontakt"
 
-#: js/Addressbook.js:336 js/EditDialog.js:391
+#: js/Addressbook.js:336 js/EditDialog.js:328
 msgid "Contact"
 msgstr "Kontakt"
 
-#: js/Addressbook.js:337 js/Addressbook.js:369 js/EditDialog.js:114
+#: js/Addressbook.js:337 js/Addressbook.js:369 js/EditDialog.js:87
 msgid "First Name"
 msgstr "Křestní jméno"
 
-#: js/Addressbook.js:338 js/Addressbook.js:368 js/EditDialog.js:119
+#: js/Addressbook.js:338 js/Addressbook.js:368 js/EditDialog.js:91
 msgid "Last Name"
 msgstr "Příjmení"
 
-#: js/Addressbook.js:339 js/Addressbook.js:372 js/EditDialog.js:163
+#: js/Addressbook.js:339 js/Addressbook.js:372 js/EditDialog.js:117
 msgid "Company"
 msgstr "Firma"
 
 #: js/Addressbook.js:340 js/Addressbook.js:375 js/Addressbook.js:486
-#: js/EditDialog.js:67
+#: js/EditDialog.js:30
 msgid "Job Role"
 msgstr "Pracovní funkce"
 
 #: js/Addressbook.js:342 js/Addressbook.js:345 js/Addressbook.js:377
-#: js/EditDialog.js:306 js/EditDialog.js:351
+#: js/EditDialog.js:243 js/EditDialog.js:288
 msgid "Street"
 msgstr "Ulice"
 
 #: js/Addressbook.js:342 js/Addressbook.js:343 js/Addressbook.js:344
-#: js/EditDialog.js:290
+#: js/EditDialog.js:227
 msgid "Company Address"
 msgstr "Firemní adresa"
 
-#: js/Addressbook.js:343 js/Addressbook.js:346 js/EditDialog.js:316
-#: js/EditDialog.js:361
+#: js/Addressbook.js:343 js/Addressbook.js:346 js/EditDialog.js:253
+#: js/EditDialog.js:298
 msgid "Postal Code"
 msgstr "PSČ"
 
 #: js/Addressbook.js:344 js/Addressbook.js:347 js/Addressbook.js:378
-#: js/EditDialog.js:320 js/EditDialog.js:365
+#: js/EditDialog.js:257 js/EditDialog.js:302
 msgid "City"
 msgstr "Město"
 
@@ -233,15 +233,15 @@ msgstr "Typ"
 msgid "Full Name"
 msgstr "Celé jméno"
 
-#: js/Addressbook.js:371 js/EditDialog.js:52 js/EditDialog.js:148
+#: js/Addressbook.js:371 js/EditDialog.js:17 js/EditDialog.js:103
 msgid "Display Name"
 msgstr "Zobrazované jméno"
 
-#: js/Addressbook.js:373 js/EditDialog.js:168
+#: js/Addressbook.js:373 js/EditDialog.js:121
 msgid "Unit"
 msgstr "Útvar"
 
-#: js/Addressbook.js:379 js/EditDialog.js:324 js/EditDialog.js:369
+#: js/Addressbook.js:379 js/EditDialog.js:261 js/EditDialog.js:306
 msgid "Region"
 msgstr "Region / Kraj"
 
@@ -249,7 +249,7 @@ msgstr "Region / Kraj"
 msgid "Postalcode"
 msgstr "PSČ"
 
-#: js/Addressbook.js:381 js/EditDialog.js:331 js/EditDialog.js:376
+#: js/Addressbook.js:381 js/EditDialog.js:268 js/EditDialog.js:313
 msgid "Country"
 msgstr "Stát"
 
@@ -273,15 +273,15 @@ msgstr "PSČ (privátní adresa)"
 msgid "Country (private)"
 msgstr "Stát (privátní adresa)"
 
-#: js/Addressbook.js:388 js/EditDialog.js:210
+#: js/Addressbook.js:388 js/EditDialog.js:147
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Addressbook.js:389 js/EditDialog.js:215
+#: js/Addressbook.js:389 js/EditDialog.js:152
 msgid "Mobile"
 msgstr "Mobil"
 
-#: js/Addressbook.js:390 js/EditDialog.js:220
+#: js/Addressbook.js:390 js/EditDialog.js:157
 msgid "Fax"
 msgstr "Fax"
 
@@ -293,15 +293,15 @@ msgstr "Telefon do auta"
 msgid "Pager"
 msgstr "Pager"
 
-#: js/Addressbook.js:393 js/EditDialog.js:227
+#: js/Addressbook.js:393 js/EditDialog.js:164
 msgid "Phone (private)"
 msgstr "Telefon (privátní)"
 
-#: js/Addressbook.js:394 js/EditDialog.js:237
+#: js/Addressbook.js:394 js/EditDialog.js:174
 msgid "Fax (private)"
 msgstr "Fax (privátní)"
 
-#: js/Addressbook.js:395 js/EditDialog.js:232
+#: js/Addressbook.js:395 js/EditDialog.js:169
 msgid "Mobile (private)"
 msgstr "Mobil (privátní)"
 
@@ -309,7 +309,7 @@ msgstr "Mobil (privátní)"
 msgid "Email (private)"
 msgstr "Email (privátní)"
 
-#: js/Addressbook.js:397 js/EditDialog.js:257
+#: js/Addressbook.js:397 js/EditDialog.js:194
 msgid "Web"
 msgstr "WWW"
 
@@ -337,92 +337,88 @@ msgstr "Vybrat kontakt"
 msgid "Tags"
 msgstr "Štítky"
 
-#: js/Addressbook.js:512 js/EditDialog.js:423
+#: js/Addressbook.js:512 js/EditDialog.js:360
 msgid "Description"
 msgstr "Popis"
 
-#: js/Addressbook.js:831
+#: js/Addressbook.js:836
 msgid "Loading Contact..."
 msgstr ""
 
-#: js/Addressbook.js:831
+#: js/Addressbook.js:836
 msgid "Please Wait"
 msgstr ""
 
-#: js/Addressbook.js:845
+#: js/Addressbook.js:850
 msgid "Add new contact"
 msgstr ""
 
-#: js/Addressbook.js:847
+#: js/Addressbook.js:852
 #, python-format
 msgid "Edit Contact \"%s\""
 msgstr ""
 
-#: js/Addressbook.js:864
+#: js/Addressbook.js:869
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/Addressbook.js:864
+#: js/Addressbook.js:869
 msgid "Saving Contact"
 msgstr ""
 
-#: js/Addressbook.js:899
+#: js/Addressbook.js:904
 msgid "Could not save contact."
 msgstr ""
 
-#: js/Addressbook.js:903
+#: js/Addressbook.js:908
 msgid "Errors"
 msgstr ""
 
-#: js/Addressbook.js:903
+#: js/Addressbook.js:908
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/EditDialog.js:31
-msgid "Saved in"
-msgstr "Uloženo v"
-
-#: js/EditDialog.js:74
+#: js/EditDialog.js:37
 msgid "Middle Name"
 msgstr "Prostřední jméno"
 
-#: js/EditDialog.js:79
+#: js/EditDialog.js:42
 msgid "Suffix"
 msgstr "Dodatek za jménem"
 
-#: js/EditDialog.js:92
+#: js/EditDialog.js:55
 msgid "Personal Information"
 msgstr "Osobní informace"
 
-#: js/EditDialog.js:108
+#: js/EditDialog.js:82
 msgid "Title"
 msgstr "Titul"
 
-#: js/EditDialog.js:244
+#: js/EditDialog.js:181
 msgid "E-Mail"
 msgstr "E-mail"
 
-#: js/EditDialog.js:250
+#: js/EditDialog.js:187
 msgid "E-Mail (private)"
 msgstr "E-mail (privátní)"
 
-#: js/EditDialog.js:267
+#: js/EditDialog.js:204
 msgid "Contact Information"
 msgstr "Kontaktní informace"
 
-#: js/EditDialog.js:310 js/EditDialog.js:355
+#: js/EditDialog.js:247 js/EditDialog.js:292
 msgid "Street 2"
 msgstr "Ulice 2"
 
-#: js/EditDialog.js:383
+#: js/EditDialog.js:320
 msgid "Custom Fields"
 msgstr "Volitelné položky"
 
-#: js/EditDialog.js:437
+#: js/EditDialog.js:374
 msgid "Enter description"
 msgstr "Vložit popis"
 
-#: js/EditDialog.js:473
+#: js/EditDialog.js:410
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
@@ -434,6 +430,9 @@ msgstr[2] "Odkazů [%d]"
 #, python-format
 msgid "%s's personal addressbook"
 msgstr ""
+
+#~ msgid "Saved in"
+#~ msgstr "Uloženo v"
 
 #~ msgid "Map"
 #~ msgstr "Mapa"

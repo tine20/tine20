@@ -341,7 +341,7 @@
             <field>
                 <name>leadsource</name>
                 <value>telephone</value>
-                <!-- _(telephone) -->
+                <!-- gettext('telephone') -->
             </field>
         </record>
         <record>
@@ -355,7 +355,7 @@
             <field>
                 <name>leadsource</name>
                 <value>email</value>
-                <!-- _(email) -->
+                <!-- gettext('email') -->
             </field>
         </record>
         <record>
@@ -369,7 +369,7 @@
             <field>
                 <name>leadsource</name>
                 <value>website</value>
-                <!-- _(website) -->
+                <!-- gettext('website') -->
             </field>
         </record>
         <record>
@@ -383,7 +383,7 @@
             <field>
                 <name>leadsource</name>
                 <value>fair</value>
-                <!-- _(fair) -->
+                <!-- gettext('fair') -->
             </field>
         </record>        
         <record>
@@ -397,7 +397,7 @@
             <field>
                 <name>leadtype</name>
                 <value>customer</value>
-                <!-- _(customer) -->
+                <!-- gettext('customer') -->
             </field>
         </record>
         <record>
@@ -411,7 +411,7 @@
             <field>
                 <name>leadtype</name>
                 <value>partner</value>
-                <!-- _(partner) -->
+                <!-- gettext('partner') -->
             </field>
         </record>
         <record>
@@ -425,7 +425,7 @@
             <field>
                 <name>leadtype</name>
                 <value>reseller</value>
-                <!-- _(reseller) -->
+                <!-- gettext('reseller') -->
             </field>
         </record>
         <record>
@@ -439,7 +439,7 @@
             <field>
                 <name>leadstate</name>
                 <value>open</value>
-                <!-- _(open) -->
+                <!-- gettext('open') -->
             </field>
             <field>
                 <name>probability</name>
@@ -457,7 +457,7 @@
             <field>
                 <name>leadstate</name>
                 <value>contacted</value>
-                <!-- _(contacted) -->
+                <!-- gettext('contacted') -->
             </field>
             <field>
                 <name>probability</name>
@@ -475,7 +475,7 @@
             <field>
                 <name>leadstate</name>
                 <value>waiting for feedback</value>
-                <!-- _(waiting for feedback) -->
+                <!-- gettext('waiting for feedback') -->
             </field>
             <field>
                 <name>probability</name>
@@ -493,7 +493,7 @@
             <field>
                 <name>leadstate</name>
                 <value>quote sent</value>
-                <!-- _(quote sent) -->
+                <!-- gettext('quote sent') -->
             </field>
             <field>
                 <name>probability</name>
@@ -511,7 +511,7 @@
             <field>
                 <name>leadstate</name>
                 <value>accepted</value>
-                <!-- _(accepted) -->
+                <!-- gettext('accepted') -->
             </field>
             <field>
                 <name>probability</name>
@@ -533,7 +533,7 @@
             <field>
                 <name>leadstate</name>
                 <value>lost</value>
-                <!-- _(lost) -->
+                <!-- gettext('lost') -->
             </field>
             <field>
                 <name>probability</name>
