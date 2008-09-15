@@ -340,5 +340,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $result;
     }
-    
+
+   /**
+     * translate all member records of this set
+     * 
+     */
+    public function translate()
+    {
+        foreach ($this->_listOfRecords as $record) {
+            $record->translate();
+        }
+    }    
 }

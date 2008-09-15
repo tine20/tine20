@@ -104,6 +104,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected $_Zend_Filter = NULL;
    
     /**
+     * fields to translate when translate() function is called
+     *
+     * @var array
+     */
+    protected $_toTranslate = array();
+    
+    /******************************** functions ****************************************/
+    
+    /**
      * Default constructor
      * Constructs an object and sets its record related properties.
      * 
@@ -306,6 +315,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return $this->_isValidated;
     }
     
+    /**
+     * apply filter
+     *
+     * @todo implement
+     */
     public function applyFilter()
     {
         $this->isValid(true);
@@ -557,4 +571,24 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         return count($diff) == 0;
     }
+    
+    /**
+     * translate this records' fields
+     *
+     * @todo write test
+     */
+    public function translate()
+    {
+        // get translation object
+        if (!empty($this->_toTranslate)) {
+            
+            $locale = Zend_Registry::get('locale');
+            $translate = Tinebase_Translation::getTranslation($this->_application);
+            
+            foreach ($this->_toTranslate as $field) {
+                $this->$field = $translate->_($this->$field);
+            }
+        }
+    }
 }
+
