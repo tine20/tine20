@@ -139,7 +139,11 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $this->assertEquals(1, count($diff));
         $this->assertTrue(array_key_exists('date_single', $diff));
     }
-    
+
+    /**
+     * test if equal
+     *
+     */
     public function testIsEqual()
     {
         $record1 = new Tinebase_Record_DummyRecord(array(
@@ -156,6 +160,24 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         
         $this->assertTrue($record1->isEqual($record2, array('string')), 'records are different, but omited');
         
+    }
+    
+    /**
+     * test record translation
+     *
+     */
+    public function testTranslate()
+    {
+        $locale = new Zend_Locale('de');
+
+        $record = new Tinebase_Record_DummyRecord(array(
+            'string' => 'test',
+            'leadstate' => 'waiting for feedback',
+        ), true);
+        
+        $record->translate();
+        
+        $this->assertEquals('Wartet auf Feedback', $record->leadstate);
     }
 }
 		

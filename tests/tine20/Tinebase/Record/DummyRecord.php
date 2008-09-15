@@ -33,6 +33,7 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
 		'test_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
 		'date_single'   => array(),
 		'date_multiple' => array(),
+	    'leadstate'     => array('allowEmpty' => false, 'Alpha' ),
 	);
 
 	protected $_datetimeFields = array(
@@ -40,6 +41,9 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
 		'date_multiple',
 	);
 	
-
-	
+    // fields for translation test
+    protected $_application = 'Crm';
+    protected $_toTranslate = array(
+        'leadstate'
+    ); 	
 }
