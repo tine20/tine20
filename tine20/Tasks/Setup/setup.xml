@@ -384,6 +384,7 @@
             <field>
                 <name>status_name</name>
                 <value>NEEDS-ACTION</value>
+                <!-- _(NEEDS-ACTION) -->
             </field>
             <field>
                 <name>status_is_open</name>
@@ -405,6 +406,7 @@
             <field>
                 <name>status_name</name>
                 <value>COMPLETED</value>
+                <!-- _(COMPLETED) -->
             </field>
             <field>
                 <name>status_is_open</name>
@@ -426,6 +428,7 @@
             <field>
                 <name>status_name</name>
                 <value>IN-PROCESS</value>
+                <!-- _(IN-PROCESS) -->
             </field>
             <field>
                 <name>status_is_open</name>
@@ -447,6 +450,7 @@
             <field>
                 <name>status_name</name>
                 <value>CANCELLED</value>
+                <!-- _(CANCELLED) -->
             </field>
             <field>
                 <name>status_is_open</name>

@@ -440,6 +440,7 @@
             <field>
                 <name>name</name>
                 <value>Internal Contacts</value>
+                <!-- _(Internal Contacts) -->
             </field>
             <field>
                 <name>type</name>

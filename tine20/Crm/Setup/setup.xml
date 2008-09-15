@@ -341,6 +341,7 @@
             <field>
                 <name>leadsource</name>
                 <value>telephone</value>
+                <!-- _(telephone) -->
             </field>
         </record>
         <record>
@@ -354,6 +355,7 @@
             <field>
                 <name>leadsource</name>
                 <value>email</value>
+                <!-- _(email) -->
             </field>
         </record>
         <record>
@@ -367,6 +369,7 @@
             <field>
                 <name>leadsource</name>
                 <value>website</value>
+                <!-- _(website) -->
             </field>
         </record>
         <record>
@@ -380,6 +383,7 @@
             <field>
                 <name>leadsource</name>
                 <value>fair</value>
+                <!-- _(fair) -->
             </field>
         </record>        
         <record>
@@ -393,6 +397,7 @@
             <field>
                 <name>leadtype</name>
                 <value>customer</value>
+                <!-- _(customer) -->
             </field>
         </record>
         <record>
@@ -406,6 +411,7 @@
             <field>
                 <name>leadtype</name>
                 <value>partner</value>
+                <!-- _(partner) -->
             </field>
         </record>
         <record>
@@ -419,6 +425,7 @@
             <field>
                 <name>leadtype</name>
                 <value>reseller</value>
+                <!-- _(reseller) -->
             </field>
         </record>
         <record>
@@ -432,6 +439,7 @@
             <field>
                 <name>leadstate</name>
                 <value>open</value>
+                <!-- _(open) -->
             </field>
             <field>
                 <name>probability</name>
@@ -449,6 +457,7 @@
             <field>
                 <name>leadstate</name>
                 <value>contacted</value>
+                <!-- _(contacted) -->
             </field>
             <field>
                 <name>probability</name>
@@ -466,6 +475,7 @@
             <field>
                 <name>leadstate</name>
                 <value>waiting for feedback</value>
+                <!-- _(waiting for feedback) -->
             </field>
             <field>
                 <name>probability</name>
@@ -483,6 +493,7 @@
             <field>
                 <name>leadstate</name>
                 <value>quote sent</value>
+                <!-- _(quote sent) -->
             </field>
             <field>
                 <name>probability</name>
@@ -500,6 +511,7 @@
             <field>
                 <name>leadstate</name>
                 <value>accepted</value>
+                <!-- _(accepted) -->
             </field>
             <field>
                 <name>probability</name>
@@ -521,6 +533,7 @@
             <field>
                 <name>leadstate</name>
                 <value>lost</value>
+                <!-- _(lost) -->
             </field>
             <field>
                 <name>probability</name>

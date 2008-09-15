@@ -1750,10 +1750,12 @@
             <field>
                 <name>name</name>
                 <value>note</value>
+                <!-- _(note) -->
             </field>
             <field>
                 <name>description</name>
-                <value>the default note type</value>
+                <value>default note type</value>
+                <!-- _(default note type) -->
             </field>
             <field>
                 <name>icon</name>
@@ -1775,10 +1777,12 @@
             <field>
                 <name>name</name>
                 <value>telephone</value>
+                <!-- _(telephone) -->
             </field>
             <field>
                 <name>description</name>
                 <value>telephone call</value>
+                <!-- _(telephone call) -->
             </field>
             <field>
                 <name>icon</name>
@@ -1800,10 +1804,12 @@
             <field>
                 <name>name</name>
                 <value>email</value>
+                <!-- _(email) -->
             </field>
             <field>
                 <name>description</name>
                 <value>email contact</value>
+                <!-- _(email contact) -->
             </field>
             <field>
                 <name>icon</name>
@@ -1825,10 +1831,12 @@
             <field>
                 <name>name</name>
                 <value>created</value>
+                <!-- _(created) -->
             </field>
             <field>
                 <name>description</name>
                 <value>record created</value>
+                <!-- _(record created) -->
             </field>
             <field>
                 <name>icon</name>
@@ -1850,10 +1858,12 @@
             <field>
                 <name>name</name>
                 <value>changed</value>
+                <!-- _(changed) -->
             </field>
             <field>
                 <name>description</name>
                 <value>record changed</value>
+                <!-- _(record changed) -->
             </field>
             <field>
                 <name>icon</name>
