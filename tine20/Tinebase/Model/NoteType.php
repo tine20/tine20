@@ -60,4 +60,15 @@ class Tinebase_Model_NoteType extends Tinebase_Record_Abstract
         'description'            => array('allowEmpty' => true),    
         'is_user_type'           => array('allowEmpty' => true),    
     );    
+    
+    /**
+     * fields to translate
+     *
+     * @var array
+     */
+    protected $_toTranslate = array(
+        'name',
+        'description'
+    );    
+    
 }

@@ -334,10 +334,11 @@ class Tinebase_Json
      */
     public function getNoteTypes()
     {
-        $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes()->toArray();
+        $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes();
+        $noteTypes->translate();
         
         return array(
-            'results'       => $noteTypes,
+            'results'       => $noteTypes->toArray(),
             'totalcount'    => count($noteTypes)
         );        
     }
