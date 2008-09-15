@@ -137,3 +137,29 @@ Tine.mobileClient.Tasks.MainGrid = Ext.extend(Ext.grid.GridPanel, {
     //    return value;
     //}
 });
+
+Tine.mobileClient.Tasks.getAppPanel = function () {
+
+    return new Ext.Panel({
+        id: 'mobileTaskAppPanel',
+        layout: 'fit',
+        buttonAlign: 'center',
+        tbar: [
+            {text: 'Settings', handler: function() {
+                Ext.getCmp('mobileViewport').layout.setActiveItem('mobileSettingsPanel');
+            }},
+            '->',
+            {text: 'Help', handler: function() {}}
+        ],
+        buttons: [
+            {text: 'List', handler: function() {}, pressed: true },
+            {text: 'Day', handler: function() {}},
+            {text: 'Month', handler: function() {}}
+        ],
+        bbar: [
+            {text: 'foo', handler: function() {}},
+            {text: 'bar', handler: function() {}},
+        ],
+        items: new Tine.mobileClient.Tasks.MainGrid({})
+    })
+};
