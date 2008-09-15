@@ -1,7 +1,7 @@
-/**
+/*
  * Tine 2.0
  * 
- * @package     iPhoneClient
+ * @package     mobileClient
  * @subpackage  Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -10,9 +10,9 @@
  *
  */
 
-Ext.namespace('Tine', 'Tine.iPhoneClient');
+Ext.namespace('Tine', 'Tine.mobileClient');
 
-Tine.iPhoneClient.Tasks = {
+Tine.mobileClient.Tasks = {
     
     /**
      * returns a record containing given data
@@ -72,7 +72,7 @@ Tine.iPhoneClient.Tasks = {
     ])
 };
 
-Tine.iPhoneClient.Tasks.MainGrid = Ext.extend(Ext.grid.GridPanel, {
+Tine.mobileClient.Tasks.MainGrid = Ext.extend(Ext.grid.GridPanel, {
      autoExpandColumn: 'summary',
      
     /**
@@ -89,7 +89,7 @@ Tine.iPhoneClient.Tasks.MainGrid = Ext.extend(Ext.grid.GridPanel, {
             root: 'results',
             totalProperty: 'totalcount',
             //successProperty: 'status',
-            fields: Tine.iPhoneClient.Tasks.record,
+            fields: Tine.mobileClient.Tasks.record,
             remoteSort: true,
             baseParams: {
                 method: 'Tasks.searchTasks',
@@ -127,7 +127,7 @@ Tine.iPhoneClient.Tasks.MainGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.title = 'All Tasks',
         
-        Tine.iPhoneClient.Tasks.MainGrid.superclass.initComponent.call(this);
+        Tine.mobileClient.Tasks.MainGrid.superclass.initComponent.call(this);
     },
     
     /**

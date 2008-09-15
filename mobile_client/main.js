@@ -1,6 +1,17 @@
-﻿
+﻿/*
+ * Tine 2.0
+ * 
+ * @package     mobileClient
+ * @subpackage  Tasks
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+ 
 Ext.onReady(function() {
-    var connection = new Tine.iPhoneClient.Connection({
+    var connection = new Tine.mobileClient.Connection({
         url: '/tine20/index.php'
     });
     
@@ -25,7 +36,7 @@ Ext.onReady(function() {
                     {text: 'foo', handler: function() {}},
                     {text: 'bar', handler: function() {}},
                 ],
-                items: new Tine.iPhoneClient.Tasks.MainGrid({})
+                items: new Tine.mobileClient.Tasks.MainGrid({})
             }
         });
     });

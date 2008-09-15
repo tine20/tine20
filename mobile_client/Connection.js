@@ -1,7 +1,19 @@
-Ext.namespace('Tine', 'Tine.iPhoneClient');
+/*
+ * Tine 2.0
+ * 
+ * @package     mobileClient
+ * @subpackage  Tasks
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+ 
+Ext.namespace('Tine', 'Tine.mobileClient');
 
 
-Tine.iPhoneClient.Connection = function(config) {
+Tine.mobileClient.Connection = function(config) {
     Ext.apply(this, config);
     
     this.url = config.url;
@@ -15,7 +27,7 @@ Tine.iPhoneClient.Connection = function(config) {
     }, this);
 };
 
-Tine.iPhoneClient.Connection.prototype = {
+Tine.mobileClient.Connection.prototype = {
     /**
      * @property {Object}
      */
