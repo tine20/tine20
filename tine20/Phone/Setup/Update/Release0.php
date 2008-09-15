@@ -9,7 +9,7 @@
  * @version     $Id:Release0.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  */
 
-class Phone_Setup_Update_Release0 extends Setup_Update_Common
+class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     public function update_1()
     {
