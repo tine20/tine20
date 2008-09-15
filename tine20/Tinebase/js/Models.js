@@ -68,6 +68,18 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
 ]);
 
 /**
+ * Model of a container
+ */
+Tine.Tinebase.Model.Container = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'type'},
+    {name: 'backend'},
+    {name: 'application_id'},
+    {name: 'account_grants'}
+]);
+
+/**
  * Model of a grant
  */
 Tine.Tinebase.Model.Grant = Ext.data.Record.create([
