@@ -375,6 +375,11 @@ Tine.Tinebase.Common = function(){
  */
 Tine.Tinebase.hasRight = function(_right, _resource)
 {
+    if (! (Tine && Tine.Admin && Tine.Admin.rights)) {
+        console.error('Tine.Admin.rights is not available, initialisation Error!');
+        return false;
+    }
+    
     //console.log ( Tine.Admin.rights );
     var result = false;
     
