@@ -9,6 +9,7 @@
  * @version     $Id$
  * 
  * @todo        simplify relations tests: create related_records with relations class
+ * @todo        create new ids for tasks/contacts each time
  */
 
 /**
@@ -322,7 +323,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to update a lead and remove linked contact 
      *
-     * @todo add new task here
      */
     public function testUpdateLead()
     {   
@@ -330,10 +330,14 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));        
         $initialLead = $result['results'][0];
+        //print_r($initialLead);
         
         $updatedLead = $this->objects['updatedLead'];
         $updatedLead->id = $initialLead['id'];
-        $updatedLead->relations = array();
+        // unset contact
+        unset($initialLead['relations'][0]);
+        $updatedLead->relations = new Tinebase_Record_Recordset('Tinebase_Model_Relation', $initialLead['relations']);
+        
         $encodedData = Zend_Json::encode($updatedLead->toArray());
         
         $result = $json->saveLead($encodedData);
@@ -342,9 +346,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($this->objects['updatedLead']->description, $result['description']);
 
-        // check if tasks/contact are no longer linked
+        // check if contact is no longer linked
         $lead = Crm_Controller::getInstance()->getLead($initialLead['id']);
-        $this->assertEquals(0, count($lead->relations));
+        $this->assertEquals(1, count($lead->relations));
         
         // delete contact
         Addressbook_Controller::getInstance()->deleteContact($this->objects['contact']->getId());
@@ -352,7 +356,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to delete a lead
+     * try to delete a lead (and if task is deleted as well)
      *
      */
     public function testDeleteLead()
@@ -365,9 +369,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $backend = new Tinebase_Relation_Backend_Sql();        
         foreach ($result['results'] as $lead) {
             $deleteIds[] = $lead['id'];
-
-            // purge all relations
-            $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $lead['id']);
         }
         
         //print_r($deleteIds);
@@ -379,6 +380,14 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));
         $this->assertEquals(0, $result['totalcount']);   
 
+        // check if linked task got removed as well
+        $this->setExpectedException('Exception');
+        $task = Tasks_Controller::getInstance()->getTask($this->objects['task']->getId());
+        
+        // purge relations
+        foreach ($deleteIds as $id) {
+            $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $id);            
+        }
     }    
     
     /**
