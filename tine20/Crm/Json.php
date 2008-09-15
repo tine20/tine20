@@ -99,15 +99,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
         $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination, TRUE);
-        $leads->setTimezone($this->_userTimezone);
-        $leads->convertDates = true;
         
-        /*
-        $result = array();        
-        foreach ($leads as $lead) {
-            $result[] = $this->_leadToJson($lead);
-        }
-        */
         $result = $this->_multipleLeadsToJson($leads);
         
         //Zend_Registry::get('logger')->debug(print_r($result,true));
@@ -194,6 +186,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {        
         // get acls for leads
         Tinebase_Container::getInstance()->getGrantsOfRecords($_leads, Zend_Registry::get('currentAccount'), 'container');
+        
+        $_leads->setTimezone($this->_userTimezone);
+        $_leads->convertDates = true;
         
         $result = $_leads->toArray();
         

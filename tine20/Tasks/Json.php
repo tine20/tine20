@@ -65,9 +65,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
         $tasks = $this->_controller->searchTasks($filter, $pagination);
-        //$tasks->setTimezone($this->_userTimezone);
-        //$tasks->convertDates = true;
-        
+
         $results = $this->_multipleTasksToJson($tasks);
         
         return array(
@@ -162,6 +160,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         // get acls for tasks
         Tinebase_Container::getInstance()->getGrantsOfRecords($_tasks, Zend_Registry::get('currentAccount'));
         $_tasks->setTimezone($this->_userTimezone);
+        $_tasks->convertDates = true;
         
         $result = $_tasks->toArray();
         
