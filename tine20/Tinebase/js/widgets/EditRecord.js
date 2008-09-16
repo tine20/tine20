@@ -24,7 +24,11 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     /**
      * @cfg {String} translated container item name
      */
-    containerItemName: 'records',
+    containerItemName: 'record',
+    /**
+     * @cfg {String} translated container name
+     */
+    containerName: 'container',
     /**
      * @cfg {String} name of the container property
      */
@@ -170,6 +174,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
                 width: 300,
                 name: this.containerProperty,
                 itemName: this.containerItemName,
+                containerName: this.containerName,
                 appName: this.appName
             });
             this.getForm().add(ContainerForm);
