@@ -11,6 +11,10 @@
 
 class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
 {
+    /**
+     * just a placeholder
+     *
+     */
     public function update_1()
     {
 /*      $declaration = new Setup_Backend_Schema_Field();
@@ -47,4 +51,105 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Phone', '0.3');
     }    
+    
+    /**
+     * add new table for phone history
+     *
+     */
+    public function update_3()
+    {        
+        $tableDefinition = '
+        <table>
+            <name>phone_callhistory</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>line_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>phone_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>call_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>start</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>connected</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>disconnected</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>duration</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>ringing</name>
+                    <type>integer</type>
+                </field>                
+                <field>
+                    <name>direction</name>
+                    <type>enum</type>
+                    <value>in</value>
+                    <value>out</value>
+                    <default>in</default>
+                    <notnull>true</notnull>         
+                </field>
+                <field>
+                    <name>source</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>destination</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>call_id-phone_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>call_id</name>
+                    </field>
+                    <field>
+                        <name>phone_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        ';
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+
+        $this->setApplicationVersion('Phone', '0.4');
+    }        
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Phone</name>
-    <version>0.3</version>
+    <version>0.4</version>
     <order>11</order>
     <status>disabled</status>
     <tables>
@@ -55,6 +55,93 @@
                     </field>
                     <field>
                         <name>context</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>phone_callhistory</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>line_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>phone_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>call_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>start</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>connected</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>disconnected</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>duration</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>ringing</name>
+                    <type>integer</type>
+                </field>                
+                <field>
+                    <name>direction</name>
+                    <type>enum</type>
+                    <value>in</value>
+                    <value>out</value>
+                    <default>in</default>
+                    <notnull>true</notnull>         
+                </field>
+                <field>
+                    <name>source</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>destination</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>call_id-phone_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>call_id</name>
+                    </field>
+                    <field>
+                        <name>phone_id</name>
                     </field>
                 </index>
             </declaration>
