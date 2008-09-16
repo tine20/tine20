@@ -39,7 +39,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {String}
      */
-    itemName: 'record',
+    //itemName: 'record',
     /**
      * @cfg {string} containerName
      * name of container (singular)
@@ -113,7 +113,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     onChoseOther: function() {
         this.collapse();
         var w = new Tine.widgets.container.selectionDialog({
-            itemName: this.itemName,
+            //itemName: this.itemName,
             containerName: this.containerName,
             containersName: this.containersName,
             TriggerField: this
@@ -205,7 +205,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	/**
      * @cfg {String}
      */
-    itemName: 'record',
+    //itemName: 'record',
     /**
      * @cfg {string} containerName
      * name of container (singular)
@@ -284,7 +284,8 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         });
         
         this.tree = new Tine.widgets.container.TreePanel({
-            itemName: this.TriggerField.itemName,
+            containerName: this.TriggerField.containerName,
+            containersName: this.TriggerField.containersName,
             appName: this.TriggerField.appName,
             defaultContainer: this.TriggerField.defaultContainer
         });
