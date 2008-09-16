@@ -302,7 +302,7 @@ Tine.Tasks.mainGrid = {
             iconCls: 'TasksIconCls',
             title: translation._('Tasks'),
             itemName: translation._('to do lists'),
-            folderName: 'to do list',
+            containerName: 'to do list',
             appName: 'Tasks',
             border: false
         });
@@ -602,6 +602,10 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * @private
      */
     windowNamePrefix: 'TasksEditWindow_',
+    
+    appName: 'Tasks',
+    showContainerSelector: true,
+    
     /**
      * @private
      */
@@ -780,13 +784,13 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 new Ext.ux.form.ClearableDateField({
                     fieldLabel: this.translation._('Due date'),
                     name: 'due'
-                }), 
+                })/*, 
                 new Tine.widgets.container.selectionComboBox({
                     fieldLabel: this.translation._('Saved in'),
                     name: 'container_id',
                     itemName: 'Tasks',
                     appName: 'Tasks'
-                })
+                })*/
             ]
         }]
 	};},

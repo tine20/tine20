@@ -167,7 +167,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             var ContainerForm = new Tine.widgets.container.selectionComboBox({
                 id: this.appName + 'EditRecordContainerSelector',
                 fieldLabel: _('Saved in'),
-                width: 150,
+                width: 300,
                 name: this.containerProperty,
                 itemName: this.containerItemName,
                 appName: this.appName

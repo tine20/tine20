@@ -20,7 +20,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
 	 * @cfg {string}
 	 * Name of container folders, e.g. Addressbook
 	 */
-	folderName: null,
+	containerName: null,
 	
     /**
      * @private {Ext.data.JsonStore}
@@ -63,7 +63,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
      * @private
      */
     initComponent: function() {
-        this.folderName = this.folderName ? this.folderName : _('Folder');
+        this.containerName = this.containerName ? this.containerName : _('Folder');
 
         this.grantsStore =  new Ext.data.JsonStore({
             baseParams: {

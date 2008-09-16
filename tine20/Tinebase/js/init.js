@@ -128,6 +128,23 @@ Ext.onReady(function(){
 Ext.namespace('Tine');
 Tine.Build = '$Build: $';
 
+/**
+ * initialise window types
+ */
 Tine.WindowFactory = new Ext.ux.WindowFactory({
     windowType: 'Browser'
 });
+
+/**
+ * initialise state provider
+ */
+Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
+if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+    // fill store from registry / initial data
+    // Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
+} else {
+    // take main windows store
+    Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainScreen().Ext.state.Manager.getProvider().getStateStore());
+}
+
+

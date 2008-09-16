@@ -27,7 +27,7 @@ Tine.Addressbook = {
             iconCls: 'AddressbookIconCls',
             title: translation._('Addressbook'),
             itemName: translation._('contacts'),
-            folderName: 'addressbook',
+            containerName: 'addressbook',
             appName: 'Addressbook',
             border: false,
             extraItems: internalContactsleaf ? internalContactsleaf : [] 

@@ -27,7 +27,7 @@ Tine.Crm = {
             iconCls: 'CrmIconCls',
             title: 'CRM',
             itemName: 'Leads',
-            folderName: 'Leads',
+            containerName: 'Leads',
             appName: 'Crm',
             border: false
         });
