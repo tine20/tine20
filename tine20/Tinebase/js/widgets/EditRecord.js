@@ -24,7 +24,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     /**
      * @cfg {String} translated container item name
      */
-    containerItemName: 'record',
+    //containerItemName: 'record',
     /**
      * @cfg {String} translated container name
      */
@@ -178,7 +178,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
                 fieldLabel: _('Saved in'),
                 width: 300,
                 name: this.containerProperty,
-                itemName: this.containerItemName,
+                //itemName: this.containerItemName,
                 containerName: this.containerName,
                 containersName: this.containersName,
                 appName: this.appName
