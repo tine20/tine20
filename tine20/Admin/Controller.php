@@ -226,19 +226,20 @@ class Admin_Controller
      * get list of access log entries
      *
      * @param string $_filter string to search accounts for
+     * @param Tinebase_Model_Pagination|optional $_pagination
      * @param string $_sort
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
      * @return Tinebase_RecordSet_AccessLog set of matching access log entries
      */
-    public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_from = NULL, $_to = NULL)
+    public function getAccessLogEntries($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
     {
         $this->checkRight('VIEW_ACCESS_LOG');        
         
         $tineAccessLog = Tinebase_AccessLog::getInstance();
 
-        $result = $tineAccessLog->getEntries($_filter, $_sort, $_dir, $_start, $_limit, $_from, $_to);
+        $result = $tineAccessLog->getEntries($_filter, $_pagination, $_from, $_to);
         
         return $result;
     }

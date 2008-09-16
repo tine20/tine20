@@ -329,20 +329,29 @@ Tine.Admin.AccessLog.Main = function() {
         
         ds_accessLog.setDefaultSort('li', 'desc');
 
-        ds_accessLog.on('beforeload', function(_dataSource) {
+        ds_accessLog.on('beforeload', function(_dataSource, options) {
+            if (!options.params) {
+                options.params = {};
+            }
+
         	_dataSource.baseParams.filter = Ext.getCmp('AccessLogQuickSearchField').getValue();
         	
-        	//var dateFormatShort = Locale.getTranslationData('Date', 'medium');
+        	// paging toolbar only works with this properties in the options!
+        	var paging = {
+                'sort'  : _dataSource.getSortState() ? _dataSource.getSortState().field : Tine.Admin.AccessLog.Main.paging.sort,
+                'dir'   : _dataSource.getSortState() ? _dataSource.getSortState().direction : Tine.Admin.AccessLog.Main.paging.dir,
+                'start' : options.params.start ? options.params.start : Tine.Admin.AccessLog.Main.paging.start,
+                'limit' : options.params.limit ? options.params.limit : Tine.Admin.AccessLog.Main.paging.limit
+        	}
+
+            _dataSource.baseParams.paging = Ext.util.JSON.encode(paging);
         	
-            //console.log(Ext.getCmp('adminApplications_dateFrom').getRawValue());
-            //console.log(dateFormatShort);
-        	
-        	var from = Date.parseDate(Ext.getCmp('adminApplications_dateFrom').getRawValue(), Ext.getCmp('adminApplications_dateFrom').format);
-            _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
+			var from = Date.parseDate(Ext.getCmp('adminApplications_dateFrom').getRawValue(), Ext.getCmp('adminApplications_dateFrom').format);
+			_dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
 
             var to = Date.parseDate(Ext.getCmp('adminApplications_dateTo').getRawValue(), Ext.getCmp('adminApplications_dateTo').format);
             _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");
-        });        
+        }, this);        
         
         ds_accessLog.load({params:{start:0, limit:50}});
         
@@ -575,6 +584,16 @@ Tine.Admin.AccessLog.Main = function() {
             this.updateMainToolbar();        
         },
         
+        /**
+        * @cfg {Object} paging defaults
+        */
+	    paging: {
+	        start: 0,
+	        limit: 50,
+	        sort: 'li',
+	        dir: 'DESC'
+	    },
+            
 	    updateMainToolbar : function() 
 	    {
 	        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');

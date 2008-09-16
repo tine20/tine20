@@ -60,22 +60,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * @param string $from (date format example: 2008-03-31T00:00:00)
      * @param string $to (date format example: 2008-03-31T00:00:00)
      * @param string $filter
-     * @param string $sort
-     * @param string $dir
-     * @param int $start
-     * @param int $limit
+     * @param string $paging json encoded pagin data (Tinebase_Model_Pagination)
      * 
      * @return array with results array & totalcount (int)
      */
-    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $start, $limit)
+    public function getAccessLogEntries($from, $to, $filter, $paging)
     {
-        /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
-            throw new Exception('invalid date specified for $from');
-        }
-        if (!Zend_Date::isDate($to, 'YYYY-MM-dd hh:mm:ss')) {
-            throw new Exception('invalid date specified for $to');
-        }*/
-        
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
@@ -86,12 +76,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
         $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
+        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
+        $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $pagination, $fromDateObject, $toDateObject);
         
         $result['results']    = $accessLogSet->toArray();
-        if ($start == 0 && count($result['results']) < $limit) {
-            $result['totalcount'] = count($result['results']);
+        if (count($result['results']) < $pagination->limit) {
+            $result['totalcount'] = $pagination->start + count($result['results']);
         } else {
             $result['totalcount'] = Admin_Controller::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
         }
