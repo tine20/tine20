@@ -875,7 +875,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 }
             });
         } else {
-            Ext.MessageBox.alert('Errors', Tine.Crm.LeadEditDialog.translation._('Please fix the errors noted.'));
+            Ext.MessageBox.alert('Errors', this.translation._('Please fix the errors noted.'));
         }
     },
     
@@ -1019,7 +1019,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     		case 'Contacts':
     		
                 // @todo move that to renderer/addressbook ?
-    		    // @todo remove null and &nbsp; in the grid display 
                 columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
@@ -1043,8 +1042,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         }
                     },
                     {id:'tel_work', header: this.translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
-                            var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? Tine.Crm.LeadEditDialog.translation._('Phone') + ': ' + record.data.tel_work : ' ';
-                            var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? Tine.Crm.LeadEditDialog.translation._('Cellphone') + ': ' + record.data.tel_cell : ' ';          
+                            var translation = new Locale.Gettext();
+                            translation.textdomain('Crm');
+                            var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? translation._('Phone') + ': ' + record.data.tel_work : ' ';
+                            var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? translation._('Cellphone') + ': ' + record.data.tel_cell : ' ';          
                             var formated_return = tel_work + '<br/>' + tel_cell + '<br/>';
                             return formated_return;
                         }                        
@@ -1291,6 +1292,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 bbar: bbarItems,
                 clicksToEdit: 'auto'
             });            
+
+            grid.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
+                var record = _gridPanel.getStore().getAt(_rowIndexPar);
+                Tine.Addressbook.ContactEditDialog.openWindow({contact: record});           
+            });
             
         } else if ( _type === 'Tasks') {        	
             grid = new Ext.ux.grid.QuickaddGridPanel({
@@ -1346,7 +1352,12 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         grid.fireEvent('celldblclick', grid, row, 1, e);
                     });
                 }
-            }, this);            
+            }, this);        
+            
+            grid.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
+                var record = _gridPanel.getStore().getAt(_rowIndexPar);
+                Tine.Tasks.EditDialog.openWindow({task: record});
+            });            
 
         } else if ( _type === 'Products') {        	
             grid = new Ext.ux.grid.QuickaddGridPanel({
@@ -1385,7 +1396,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 selModel: rowSelectionModel,
                 autoExpandColumn: autoExpand,
                 bbar: bbarItems
-            };
+            };            
         }
         	
         return grid;       
