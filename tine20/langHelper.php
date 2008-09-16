@@ -136,6 +136,31 @@ function getTranslationDirs()
 }
 
 /**
+ * returns list of existing langugages
+ * (those, having a correspoinding Tinebase po file)
+ *
+ * @return array 
+ */
+function getExistingLanguages($_verbose)
+{
+    global $tine20path;
+    
+    $langs = array();
+    foreach (scandir("$tine20path/Tinebase/translations") as $poFile) {
+        if (substr($poFile, -3) == '.po') {
+            $langCode = substr($poFile, 0, -3);
+            if ($_verbose) {
+                echo "found language '$langCode'\n";
+            }
+            
+            $langs[] = $langCode;
+        }
+    }
+    
+    return $langs;
+}
+
+/**
  * checks wether a translation exists or not
  * 
  * @param  string $_locale
@@ -173,20 +198,38 @@ function generatePOTFiles($_verbose)
  */
 function potmerge($_verbose)
 {
+    
+    $langs = getExistingLanguages($_verbose);
     foreach (getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Processing $appName po files \n";
         }
-        foreach (scandir($translationPath) as $poFile) {
-            if (substr($poFile, -3) == '.po') {
-                $output = '2> /dev/null';
+
+        foreach ($langs as $langCode) {
+            $poFile = "$translationPath/$langCode.po";
+            
+            if (! is_file($poFile)) {
                 if ($_verbose) {
-                   echo $poFile . ": ";
-                   $output = '';
+                    echo "Adding non exising translation $langCode for $appName\n";
                 }
-                `cd $translationPath
-                 msgmerge --no-fuzzy-matching --update $poFile template.pot $output`;
+                
+                list ($language, $region) = explode('_', $langCode);
+    
+                $locale = new Zend_Locale('en');
+                $languageName = $locale->getLanguageTranslation($language);
+                $regionName = $locale->getCountryTranslation($region);
+                $pluralForm = getPluralForm($languageName);
+                
+                generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $poFile, $_verbose);
             }
+
+            $output = '2> /dev/null';
+            if ($_verbose) {
+               echo $poFile . ": ";
+               $output = '';
+            }
+            `cd $translationPath
+             msgmerge --no-fuzzy-matching --update $poFile template.pot $output`;
         }
     }
 }
@@ -389,8 +432,45 @@ function statistics($_verbose)
     );
     file_put_contents($statsFile, Zend_Json::encode($results));
 }
+
 /**
- * generates po files with appropriate header for a given locale
+ * generates po file with appropriate header
+ *
+ * @param  string $_languageName
+ * @param  string $_regionName
+ * @param  string $_appName
+ * @param  bool   $_verbose
+ * @return void
+ */
+function generateNewTranslationFile($_languageName, $_regionName, $_appName, $_pluralForm, $_file, $_verbose=false)
+{
+    global $tine20path;
+
+    $poHeader = 
+'msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ' . $_appName . '\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: ' . $_languageName . '\n"
+"X-Poedit-Country: ' . strtoupper($_regionName) . '\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: ' . $_pluralForm . '\n"';
+            
+    if ($_verbose) {
+        echo "  Writing $_languageName po header for $_appName \n";
+    }
+    file_put_contents($_file, $poHeader);
+}
+
+
+/**
+ * generates po files with appropriate header for a given locale and all apps
  * 
  * @param  string $_locale
  * @return void
@@ -426,29 +506,13 @@ function generateNewTranslationFiles($_locale, $_verbose=false, $_overwrite=fals
     }
     
     $pluralForm = getPluralForm($languageName);
-    $d = getTranslationDirs();
-    foreach ($d as $appName => $dir) {
-            $poHeader = 
-'msgid ""
-msgstr ""
-"Project-Id-Version: Tine 2.0 - ' . $appName . '\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: ' . $languageName . '\n"
-"X-Poedit-Country: ' . strtoupper($regionName) . '\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: ' . $pluralForm . '\n"';
-            
-            if ($_verbose) {
-                echo "  Writing $languageName po header for $appName \n";
-            }
-            file_put_contents($dir . '/' . $_locale . '.po', $poHeader);
+    
+    foreach (getTranslationDirs() as $appName => $translationPath) {
+        $file = "$translationPath/$_locale.po";
+        generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $file, $_verbose);
     }
+    
+    
 }
 
 /**
