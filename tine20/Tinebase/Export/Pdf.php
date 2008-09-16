@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
  */
 
 
@@ -17,7 +18,8 @@
  * @package     Tinebase
  * @subpackage	Export
  * 
- * @todo add full utf-8 support (use .ttf ord .pfb font because the build in fonts don't support utf-8 chars) 
+ * @todo        make fonts configurable: create font file dir or add path to config.ini/config table
+ * @todo        embed font? make that configurable as well
  */
 abstract class Tinebase_Export_Pdf extends Zend_Pdf
 {
@@ -75,18 +77,18 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * normal font type 
      */
     protected $_fontName = Zend_Pdf_Font::FONT_HELVETICA; 
-    //protected $_fontName = Zend_Pdf_Font::FONT_COURIER;
     
     /**
      * bold font type
      */
     protected $_fontNameBold = Zend_Pdf_Font::FONT_HELVETICA_BOLD; 
-    //protected $_fontNameBold = Zend_Pdf_Font::FONT_COURIER_BOLD;
 
     /**
      * font path to ttf or postscript font file
      */
     //protected $_fontPath = '/var/lib/defoma/gs.d/dirs/fonts/Vera.ttf'; 
+    //protected $_fontPath = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf';
+    //protected $_fontPath = '/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf';
     protected $_fontPath = '';
     
     /**
@@ -127,11 +129,16 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // set fonts
         if (!empty($this->_fontPath) && file_exists($this->_fontPath)) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $this->_fontPath);
+            
             // try to use ttf / type 1 postscript fonts
             $this->_font = Zend_Pdf_Font::fontWithPath($this->_fontPath /*, Zend_Pdf_Font::EMBED_DONT_EMBED */);
             $this->_fontBold = Zend_Pdf_Font::fontWithPath($this->_fontPath /*, Zend_Pdf_Font::EMBED_DONT_EMBED */);
             
+            
         } else {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use zend_pdf font: ' . $this->_fontName);
+            
             $this->_font = Zend_Pdf_Font::fontWithName($this->_fontName);
             $this->_fontBold = Zend_Pdf_Font::fontWithName($this->_fontNameBold);
         }
@@ -193,7 +200,6 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 
         // tags
         if ( !empty($_tags) ) {
-            // @todo sort tags?
             $yPos -= 15;
             $this->pages[$this->_pageNumber]->setFont($this->_font, 11);
             $tagsString = $translate->_('Tags') . ": ";
@@ -402,14 +408,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		  Zend_Date::now()->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
 
 		$creationURL = $translate->_('Created by').": ";
-		//@todo add this to config file?
 		$creationURL .= 'http://www.tine20.org';
-		
-        /*if ( isset($_SERVER['SERVER_NAME']) ) {
-		  $creationURL .= 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
-		} else {
-		  $creationURL .= 'Tine 2.0';
-		}*/
 		
 		for ($i=0; $i<sizeof($this->pages); $i++) {
 			$this->pages[$i]->setFont($this->_font, $this->footerFontSize);
