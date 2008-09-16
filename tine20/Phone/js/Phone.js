@@ -256,6 +256,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 displayField:'macaddress',
                 valueField: 'id',
                 name: 'phoneId',
+                triggerAction: 'all',
                 tpl: new Ext.XTemplate(
                 '<tpl for=".">' +
                     '<div class="x-combo-list-item">' +
@@ -277,7 +278,8 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 displayField:'linenumber',
                 valueField: 'id',
                 mode: 'local',
-                store: this.linesStore
+                store: this.linesStore,
+                triggerAction: 'all'
             }
         ];
         
@@ -356,28 +358,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         // reload lines combo on change
         phoneCombo.on('select', function(combo, newValue, oldValue){
         	this.setLineStore(newValue.data.id);
-        	
-        	// @todo remove this hack when the reload/update of the lines combo is working!
-        	if (this.linesStore.getTotalCount > 1) {
-            	this.getForm().findField('lineId').clearValue();
-        	}
-        }, this);
-        
-        // reset phone combo on expand
-        phoneCombo.on('expand', function(combo){
-        	combo.store.query('macaddress', '*');
-        	combo.store.load();
-        }, this);
-
-        // @todo reset phone combo on expand to show the new lines
-        /*
-        lineCombo.on('expand', function(combo){
-            combo.store.query('linenumber', '*');
-            combo.store.fireEvent('datachanged');
-            //combo.store.load();
-            //combo.store.fireEvent('update');
-        }, this);
-        */
+        }, this);        
     },
     
     /**
