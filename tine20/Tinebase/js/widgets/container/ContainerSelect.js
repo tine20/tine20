@@ -39,7 +39,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {String}
      */
-    itemName: 'records',
+    itemName: 'record',
+    /**
+     * @cfg string
+     */
+    containerName: 'container',
     
     // private
     allowBlank: false,
@@ -61,7 +65,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             fields: Tine.Tinebase.Model.Container
         });
         
-        this.title = sprintf(_('Recently used %s:'), this.itemName);
+        this.title = sprintf(_('Recently used %s:'), this.containerName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         
@@ -80,7 +84,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         var cls = 'x-combo-list';
         this.footer = this.list.createChild({cls:cls+'-ft'});
         this.button = new Ext.Button({
-            text: sprintf(_('choose other %s...'), this.itemName),
+            text: sprintf(_('choose other %s...'), this.containerName),
             scope: this,
             handler: this.onChoseOther,
             renderTo: this.footer
