@@ -1078,7 +1078,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 
                 bbarItems = [                
                     this.actions.linkContact,                    
-                    this.actions.addContact,
                     this.actions.unlinkContact
                 ]; 
                 
@@ -1418,31 +1417,16 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     	
         switch ( _type ) {
             case 'Contacts':
-                var addNewItems = {
-                    text: this.translation._('Add new contact'),
-                    iconCls: 'actionAdd',
-                    contactType: 'partner',
-                    handler: this.handlers.addContact,
-                    menu: {
-                        items: [
-                            this.actions.addResponsible,
-                            this.actions.addCustomer,
-                            this.actions.addPartner
-                        ]
-                    }
-                }; 
                 // items for row context menu
                 rowItems = [
                     this.actions.editContact,
                     this.actions.unlinkContact,
                     '-',
-                    this.actions.linkContact,
-                    addNewItems
+                    this.actions.linkContact
                 ];
                 // items for all grid context menu
                 gridItems = [
-                    this.actions.linkContact,
-                    addNewItems
+                    this.actions.linkContact
                 ];
                 break;
                 
@@ -1632,57 +1616,31 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      */
     initActions: function(lead) {
         // contacts
-        this.actions.addResponsible = new Ext.Action({
-            requiredGrant: 'editGrant',
-        	contactType: 'responsible',
-            text: this.translation._('Add responsible'),
-            tooltip: this.translation._('Add new responsible contact'),
-            iconCls: 'contactIconResponsible',
-            //disabled: true,
-            scope: this,
-            handler: this.handlers.addContact
-        });
-        
-        this.actions.addCustomer = new Ext.Action({
-            requiredGrant: 'editGrant',
-            contactType: 'customer',
-            text: this.translation._('Add customer'),
-            tooltip: this.translation._('Add new customer contact'),
-            iconCls: 'contactIconCustomer',
-            //disabled: true,
-            scope: this,
-            handler: this.handlers.addContact
-        });
-        
-        this.actions.addPartner = new Ext.Action({
-            requiredGrant: 'editGrant',
-            contactType: 'partner',
-            text: this.translation._('Add partner'),
-            tooltip: this.translation._('Add new partner contact'),
-            iconCls: 'contactIconPartner',
-            //disabled: true,
-            scope: this,
-            handler: this.handlers.addContact
-        });
-
-        // split button with all contact types
-        this.actions.addContact = new Ext.SplitButton({
+        this.actions.addContact = new Ext.Action({
             requiredGrant: 'editGrant',
             contactType: 'customer',
             text: this.translation._('Add new contact'),
             tooltip: this.translation._('Add new customer contact'),
             iconCls: 'actionAdd',
             scope: this,
-            handler: this.handlers.addContact,
+            handler: this.handlers.addContact
+        }); 
+
+        this.actions.linkContact = new Ext.SplitButton({
+            requiredGrant: 'editGrant',
+            text: this.translation._('Add contact'),
+            tooltip: this.translation._('Add existing contact to lead'),
+            //disabled: true,
+            iconCls: 'actionAdd',
+            scope: this,
+            handler: this.handlers.linkContact,
             menu: {
                 items: [
-                    this.actions.addResponsible,
-                    this.actions.addCustomer,
-                    this.actions.addPartner
+                    this.actions.addContact
                 ]
             }
-        }); 
-        
+        });
+    	
         this.actions.editContact = new Ext.Action({
             requiredGrant: 'editGrant',
             text: this.translation._('Edit contact'),
@@ -1692,23 +1650,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             scope: this,
             handler: this.handlers.editContact
         });
-
-        this.actions.linkContact = new Ext.Action({
-            requiredGrant: 'editGrant',
-            text: this.translation._('Add existing contact'),
-            tooltip: this.translation._('Add existing contact to lead'),
-            //disabled: true,
-            iconCls: 'contactIconPartner',
-            scope: this,
-            handler: this.handlers.linkContact
-        });
         
         this.actions.unlinkContact = new Ext.Action({
             requiredGrant: 'editGrant',
             text: this.translation._('Unlink contact'),
             tooltip: this.translation._('Unlink selected contacts'),
             disabled: true,
-            iconCls: 'actionDelete',
+            iconCls: 'actionRemove',
             scope: this,
             gridId: 'crmGridContacts',
             storeName: 'ContactsStore',            
@@ -1750,7 +1698,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             text: this.translation._('Remove tasks'),
             tooltip: this.translation._('Remove selected tasks'),
             disabled: true,
-            iconCls: 'actionDelete',
+            iconCls: 'actionRemove',
             scope: this,
             gridId: 'crmGridTasks',
             storeName: 'TasksStore',            
@@ -1763,7 +1711,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             text: this.translation._('Remove products'),
             tooltip: this.translation._('Remove selected products'),
             disabled: true,
-            iconCls: 'actionDelete',
+            iconCls: 'actionRemove',
             scope: this,
             gridId: 'crmGridProducts',
             storeName: 'ProductsStore',            
@@ -1872,9 +1820,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.updateToolbars.defer(10, this, [this.lead, 'container']);
         Tine.widgets.ActionUpdater(this.lead, [
-            this.actions.addResponsible,
-            this.actions.addCustomer,
-            this.actions.addPartner,
+            //this.actions.addResponsible,
+            //this.actions.addCustomer,
+            //this.actions.addPartner,
             this.actions.addContact,
             this.actions.linkContact,
             this.actions.addTask,

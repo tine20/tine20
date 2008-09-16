@@ -30,6 +30,10 @@
     background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
 }
 
+.actionRemove {
+    background-image:url(../../images/oxygen/16x16/actions/list-remove.png) !important;
+}
+
 .actionAddTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
