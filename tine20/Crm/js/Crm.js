@@ -708,9 +708,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	 * define actions
 	 */
 	actions: {
-        addResponsible: null,
-        addCustomer: null,
-        addPartner: null,
         addContact: null,
         editContact: null,
         linkContact: null,
@@ -898,7 +895,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             myContact.endEdit();
         } else {
             storeContacts.add(contact);
-        }
+        }        
     },
     
     /**
@@ -1520,6 +1517,17 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     
             storeContacts.setDefaultSort('type', 'asc');   
             
+            // @todo focus new record -> ask conny
+            storeContacts.on('add', function(store, records, index){
+                //console.log('focus');
+                //console.log(index);
+                var grid = Ext.getCmp('crmGridContacts');
+                //console.log(grid);
+                //grid.getSelectionModel().selectRecords(records);
+                //grid.getSelectionModel().selectRow(0);
+                grid.getView().focusRow(index);                    
+            });
+            
             Ext.StoreMgr.add('ContactsStore', storeContacts);
     	}
     },
@@ -1820,9 +1828,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.updateToolbars.defer(10, this, [this.lead, 'container']);
         Tine.widgets.ActionUpdater(this.lead, [
-            //this.actions.addResponsible,
-            //this.actions.addCustomer,
-            //this.actions.addPartner,
             this.actions.addContact,
             this.actions.linkContact,
             this.actions.addTask,
