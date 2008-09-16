@@ -25,9 +25,16 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
         if(name.match(/^ext\-comp/)) {
             return defaultValue;
         }
-        //console.log('Ext.ux.state.JsonProvider.get');
-        //console.log(name);
-        //console.log(defaultValue);
+        if (name == 'AddressbookEditRecordContainerSelector') {
+            console.log('Ext.ux.state.JsonProvider.get');
+            //console.log(name);
+            //console.log(defaultValue);
+            return [{
+                id: '3434',
+                name: 'mylovelycontaier',
+                type: 'personalContainer'
+            }];
+        }
         
     },
     
@@ -35,14 +42,16 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
      * Sets the value for a key
      */
     set: function(name, value) {
-        //if(! name.match(/^ext\-comp/)) {
-            
-            console.log('Ext.ux.state.JsonProvider.set');
-            console.log(name);
-            console.log(value);
-            //var cmp = Ext.getCmp(name);
-            //console.log(cmp.initialConfig);
-        //}
+        if(! name.match(/^ext\-comp/)) {
+            var cmp = Ext.getCmp(name);
+            if (cmp.stateful) {
+               console.log('Ext.ux.state.JsonProvider.set');
+                console.log(name);
+                console.log(value);
+            } else {
+                 console.info('Ext.ux.state.JsonProvider::set Attempt to set state of the non stateful component: "' + name + '"');
+            }
+        }
     },
     
     /**
