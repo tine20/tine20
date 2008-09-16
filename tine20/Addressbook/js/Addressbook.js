@@ -337,6 +337,7 @@ Tine.Addressbook.Main = {
                 {label: this.translation._('First Name'), field: 'n_given' },
                 {label: this.translation._('Last Name'),  field: 'n_family'},
                 {label: this.translation._('Company'),    field: 'org_name'},
+                {label: this.translation._('Job Title'),    field: 'title'},
                 {label: this.translation._('Job Role'),    field: 'role'},
                 new Tine.widgets.tags.TagFilter({}),
                 {label: this.translation._('Street') + ' (' + this.translation._('Company Address') + ')',      field: 'adr_one_street', defaultOperator: 'equals', valueType: 'int'},
