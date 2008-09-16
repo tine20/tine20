@@ -18,7 +18,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
  * 
  * Container select ComboBox widget
  */
-Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.form.TriggerField*/, {
+Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {array}
      * default container
@@ -36,6 +36,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.fo
      * @cfg {Number} list width
      */    
     listWidth: 400,
+    /**
+     * @cfg {String}
+     */
+    itemName: 'records',
     
     // private
     allowBlank: false,
@@ -190,45 +194,122 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	 * title of dialog
 	 */
     title: null,
-
-    // private
+    /**
+     * @cfg {Number}
+     */
+    windowHeight: 400,
+    /**
+     * @property {Ext.Window}
+     */
+    win: null,
+    /**
+     * @property {Ext.tree.TreePanel}
+     */
+    tree: null,
+    
+    /**
+     * @private
+     */
     initComponent: function(){
         Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
         
         this.title = this.title ? this.title : _('please select a container');
         
-		var windowHeight = 400;
-		if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-			windowHeight = Ext.getBody().getHeight(true) * 0.7;
+        this.cancleAction = new Ext.Action({
+            text: _('Cancel'),
+            iconCls: 'action_cancel',
+            minWidth: 70,
+            handler: this.onCancel,
+            scope: this
+        });
+        
+        this.okAction = new Ext.Action({
+            disabled: true,
+            text: _('Ok'),
+            iconCls: 'action_saveAndClose',
+            minWidth: 70,
+            handler: this.onOk,
+            scope: this
+        });
+        
+        // adjust window height
+		if (Ext.getBody().getHeight(true) * 0.7 < this.windowHeight) {
+			this.windowHeight = Ext.getBody().getHeight(true) * 0.7;
 		}
 
-        var w = new Ext.Window({
+        this.win = new Ext.Window({
             title: this.title,
+            closeAction: 'close',
             modal: true,
             width: 375,
-            height: windowHeight,
+            height: this.windowHeight,
             minWidth: 375,
-            minHeight: windowHeight,
+            minHeight: this.windowHeight,
             layout: 'fit',
             plain: true,
             bodyStyle: 'padding:5px;',
-            buttonAlign: 'center'
+            buttonAlign: 'right',
+            
+            buttons: [
+                this.cancleAction,
+                this.okAction
+            ]
         });
         
-        var tree = new Tine.widgets.container.TreePanel({
+        this.tree = new Tine.widgets.container.TreePanel({
             itemName: this.TriggerField.itemName,
             appName: this.TriggerField.appName,
             defaultContainer: this.TriggerField.defaultContainer
         });
         
-        tree.on('click', function(_node) {
-            if(_node.attributes.containerType == 'singleContainer') {
-                this.TriggerField.setValue(_node.attributes.container);
-                w.hide();
-            }
-        }, this);
-            
-        w.add(tree);
-        w.show();
+        this.tree.on('click', this.onTreeNodeClick, this);
+        this.tree.on('dblclick', this.onTreeNoceDblClick, this);
+        
+        this.win.add(this.tree);
+        this.win.show();
+    },
+    
+    /**
+     * @private
+     */
+    onTreeNodeClick: function(node) {
+        this.okAction.setDisabled(node.attributes.containerType != 'singleContainer');
+        if (! node.leaf ) {//&& ! node.isExpanded() && node.isExpandable()) {
+            node.expand();
+        }
+    },
+    
+    /**
+     * @private
+     */
+    onTreeNoceDblClick: function(node) {
+        if (! this.okAction.isDisabled()) {
+            this.onOk();
+        }
+    },
+    
+    /**
+     * @private
+     */
+    onCancel: function() {
+        this.onClose();
+    },
+    
+    /**
+     * @private
+     */
+    onClose: function() {
+        this.win.close();
+    },
+    
+    /**
+     * @private
+     */
+    onOk: function() {
+        var  node = this.tree.getSelectionModel().getSelectedNode();
+        if (node) {
+            this.TriggerField.setValue(node.attributes.container);
+            this.onClose();
+        }
     }
 });
