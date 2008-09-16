@@ -30,6 +30,11 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      */
     containerName: 'container',
     /**
+     * @cfg {string} containerName
+     * name of container (plural)
+     */
+    containersName: 'containers',
+    /**
      * @cfg {String} name of the container property
      */
     containerProperty: 'container_id',
