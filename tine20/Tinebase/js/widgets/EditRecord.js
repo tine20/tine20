@@ -175,6 +175,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
                 name: this.containerProperty,
                 itemName: this.containerItemName,
                 containerName: this.containerName,
+                containersName: this.containersName,
                 appName: this.appName
             });
             this.getForm().add(ContainerForm);
