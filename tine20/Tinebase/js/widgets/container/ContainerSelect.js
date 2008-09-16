@@ -39,10 +39,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.fo
     
     // private
     allowBlank: false,
+    triggerAction: 'all',
+    lazyInit: false,
     readOnly:true,
     stateful: true,
-    //stateEvents: ['change'],
-    
     mode: 'local',
     valueField: 'id',
     displayField: 'name',
@@ -51,26 +51,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.fo
      * @private
      */
     initComponent: function(){
-        this.store = new Ext.data.JsonStore({
+        this.store = new Ext.data.SimpleStore({
             id: id,
             fields: Tine.Tinebase.Model.Container
         });
         
-        this.tpl = new Ext.XTemplate(
-            '<div class="x-form-item">&nbsp;Recently used:</div>',
-            '<div class ="x-menu-sep">&#160;</div>',
-            
-            '<tpl for=".">',
-                '<div class="x-combo-list-item">',
-                   '<div class="x-form-item">{name}</div>',
-                '</div>',
-            '</tpl>',
-            
-            '<div class ="x-menu-sep">&#160;</div>',
-            '<div class="x-combo-list-item">',
-               '<div class="x-form-item">other...</div>',
-            '</div>'
-        );
+        this.title = sprintf(_('Recently used %s:'), this.itemName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         
@@ -79,12 +65,23 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.fo
             this.value = this.defaultContainer.name;
         }
     },
-    
+
     /**
      * @private
      */
     onRender: function(ct, position) {
         Tine.widgets.container.selectionComboBox.superclass.onRender.call(this, ct, position);
+        
+        var cls = 'x-combo-list';
+        this.footer = this.list.createChild({cls:cls+'-ft'});
+        this.button = new Ext.Button({
+            text: sprintf(_('choose other %s...'), this.itemName),
+            scope: this,
+            handler: this.onChoseOther,
+            renderTo: this.footer
+        });
+        this.assetHeight += this.footer.getHeight();
+        
         this.getEl().on('mouseover', function(e, el) {
             this.qtip = new Ext.QuickTip({
                 target: el,
@@ -97,24 +94,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.fo
     
     /**
      * @private
-     * Check if 'other...' got clicked
      */
-    onViewClick : function(doFocus){
-        var index = this.view.getSelectedIndexes()[0];
-        var r = this.store.getAt(index);
-        
-        if(r){
-            this.onSelect(r, index);
-        } else {
-            this.collapse();
-            var w = new Tine.widgets.container.selectionDialog({
-                TriggerField: this
-            });
-        }
-        
-        if(doFocus !== false){
-            this.el.focus();
-        }
+    onChoseOther: function() {
+        this.collapse();
+        var w = new Tine.widgets.container.selectionDialog({
+            TriggerField: this
+        });
     },
     
     /**
@@ -129,12 +114,19 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.fo
      */
     setValue: function(container){
         
+        // element which is allready in this.store 
+        if (typeof(container) == 'string') {
+            container = this.store.getById(container).data;
+        }
+        
+        /* complicated
         // trim length of current container name
         if (this.container && this.container.name && this.fullContainerName) {
             this.container.name = this.fullContainerName;
         }
         this.fullContainerName = container.name;
         container.name = Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(container.name, this.displayLength));
+        */
         
         // dynamically add current container to store if not exists
         if (! this.store.getById(container.id)) {
@@ -161,9 +153,23 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox /*Ext.fo
      * Recents are a bit more than a simple state...
      */
     getState: function() {
-        return {
-            last1: 'foo',
-            last2: 'bar'
+        var recents = [];
+        this.store.each(function(container) {
+            recents.push(container.data);
+        });
+        return recents;
+    },
+    
+    /**
+     * @private
+     */
+    setState: function(state) {
+        //console.log(this.store);
+        if (typeof state == 'array') {
+            for (var i=0; i<state.length; i++) {
+                console.log('hier');
+                this.store.add(new Tine.Tinebase.Model.Container(state[i], state[i].id));
+            }
         }
     }
     
