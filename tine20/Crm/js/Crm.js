@@ -28,6 +28,7 @@ Tine.Crm = {
             title: 'CRM',
             itemName: 'Leads',
             containerName: 'Leads',
+            containersName: 'Leads',
             appName: 'Crm',
             border: false
         });
@@ -699,6 +700,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      */
     windowNamePrefix: 'LeadEditWindow_',
     labelAlign: 'top',
+    appName: 'Crm',
+    containerProperty: 'container',
+    showContainerSelector: true,
     
 	/**
 	 * define actions
@@ -1797,6 +1801,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Crm');
+        
+        this.containerName = this.translation._('Leads');
+        this.containersName = this.translation._('Leads');
         
         // put lead data into model
         var lead = this.lead; //new Tine.Crm.Model.Lead(_lead);

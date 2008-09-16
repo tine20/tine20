@@ -127,7 +127,8 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
         id: 'end',
         anchor: '95%'
     });
-
+    
+    /*
     var folderTrigger = new Tine.widgets.container.selectionComboBox({
         fieldLabel: translation._('folder'),
         name: 'container',
@@ -135,6 +136,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
         appName: 'crm',
         anchor:'95%'
     });
+    */
  
     /*********** OVERVIEW tab panel ************/
 
@@ -229,8 +231,8 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
                             selectOnFocus: true,
                             anchor: '95%'
                         },  
-                            combo_probability,
-                            folderTrigger 
+                            combo_probability//,
+                            //folderTrigger 
                         ]
                     }]              
                 },{
