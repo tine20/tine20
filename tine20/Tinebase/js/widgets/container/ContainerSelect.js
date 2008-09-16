@@ -47,6 +47,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     lazyInit: false,
     readOnly:true,
     stateful: true,
+    
     mode: 'local',
     valueField: 'id',
     displayField: 'name',
@@ -160,19 +161,18 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         var recents = [];
         this.store.each(function(container) {
             recents.push(container.data);
-        });
+        }, this);
+
         return recents;
     },
     
     /**
      * @private
      */
-    setState: function(state) {
-        //console.log(this.store);
-        if (typeof state == 'array') {
-            for (var i=0; i<state.length; i++) {
-                console.log('hier');
-                this.store.add(new Tine.Tinebase.Model.Container(state[i], state[i].id));
+    applyState : function(state, config){
+        for (var container in state) {
+            if(state.hasOwnProperty(container)) {
+                this.store.add(new Tine.Tinebase.Model.Container(state[container], state[container].id));
             }
         }
     }
