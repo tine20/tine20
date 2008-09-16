@@ -27,6 +27,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Crm_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var bool allow the use of GLOBALS to exchange data between tests
+     */
+    protected $backupGlobals = false;
+    
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -58,6 +63,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        // initialise global for this test suite
+        $GLOBALS['Crm_JsonTest'] = array_key_exists('Crm_JsonTest', $GLOBALS) ? $GLOBALS['Crm_JsonTest'] : array();
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Crm', 
@@ -162,8 +170,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         // create test task
         $this->objects['task'] = new Tasks_Model_Task(array(
-            // tine record fields
-            'id'                   => '90a75021e353685aa9a06e67a7c0b558d0acae32',
             'container_id'         => $tasksContainer->id,
             'created_by'           => Zend_Registry::get('currentAccount')->getId(),
             'creation_time'        => Zend_Date::now(),
@@ -216,11 +222,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         }
 
         // create test task
-        try {
-            $task = Tasks_Controller::getInstance()->getTask($this->objects['task']->getId());
-        } catch ( Exception $e ) {
-            $task = Tasks_Controller::getInstance()->createTask($this->objects['task']);
-        }
+        $task = Tasks_Controller::getInstance()->createTask($this->objects['task']);
+        $GLOBALS['Crm_JsonTest']['taskId'] = $task->getId();
 
         $leadData = $this->objects['initialLead']->toArray();
         $note = array(
@@ -237,7 +240,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
                 'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Tasks_Model_Task',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
-                'related_id'             => $this->objects['task']->getId(),
+                'related_id'             => $GLOBALS['Crm_JsonTest']['taskId'],
                 'type'                   => 'TASK',
                 //'related_record'         => $this->objects['task']->toArray()
             ),
@@ -265,10 +268,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialLead']->description, $result['description']);
 
         // check linked contacts / tasks
-        //print_r($result['updatedData']['relations']);
         $this->assertGreaterThan(0, count($result['relations']));
         $this->assertEquals($this->objects['contact']->getId(), $result['relations'][0]['related_id']);
-        $this->assertEquals($this->objects['task']->getId(), $result['relations'][1]['related_id']);
+        $this->assertEquals($GLOBALS['Crm_JsonTest']['taskId'], $result['relations'][1]['related_id']);
 
         // check linked products
         $this->assertGreaterThan(0, count($result['products']));
@@ -296,8 +298,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $initialLead = $leads[0];
         
         $lead = $json->getLead($initialLead['id']);
-        
-        //print_r($lead);
         
         $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
         $this->assertEquals($lead['relations'][0]['related_record']['assistent'], $this->objects['contact']->assistent);                
@@ -330,7 +330,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));        
         $initialLead = $result['results'][0];
-        //print_r($initialLead);
         
         $updatedLead = $this->objects['updatedLead'];
         $updatedLead->id = $initialLead['id'];
@@ -341,8 +340,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $encodedData = Zend_Json::encode($updatedLead->toArray());
         
         $result = $json->saveLead($encodedData);
-        
-        //print_r($result['updatedData']);
         
         $this->assertEquals($this->objects['updatedLead']->description, $result['description']);
 
@@ -382,7 +379,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         // check if linked task got removed as well
         $this->setExpectedException('Exception');
-        $task = Tasks_Controller::getInstance()->getTask($this->objects['task']->getId());
+        $task = Tasks_Controller::getInstance()->getTask($GLOBALS['Crm_JsonTest']['taskId']);
         
         // purge relations
         foreach ($deleteIds as $id) {
