@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Controller.php:305
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -20,12 +25,12 @@ msgstr[0] "Opravdu chcete smazat vybraný úkol"
 msgstr[1] "Opravdu chcete smazat vybrané úkoly"
 msgstr[2] "Opravdu chcete smazat vybrané úkoly"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:697
-#: js/Tasks.js:722
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
+#: js/Tasks.js:730
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/Tasks.js:141 js/Tasks.js:722
+#: js/Tasks.js:141 js/Tasks.js:730
 msgid "Could not delete task(s)."
 msgstr "Nepodařilo se smazat úkol(y)."
 
@@ -44,7 +49,7 @@ msgstr[0] "Smazat úkol"
 msgstr[1] "Smazat úkoly"
 msgstr[2] "Smazat úkoly"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:697
+#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
 msgid "Could not save task."
 msgstr "Nepodařilo se uložit úkol."
 
@@ -52,9 +57,13 @@ msgstr "Nepodařilo se uložit úkol."
 msgid "Tasks"
 msgstr "Úkoly"
 
-#: js/Tasks.js:304
+#: js/Tasks.js:304 js/Tasks.js:631
 msgid "to do lists"
 msgstr "Seznamy úkolů"
+
+#: js/Tasks.js:305 js/Tasks.js:629 js/Tasks.js:630
+msgid "to do list"
+msgstr ""
 
 #: js/Tasks.js:326
 msgid "Enter searchfilter"
@@ -76,7 +85,7 @@ msgstr "Zobrazuji úkoly {0} - {1} z {2}"
 msgid "No tasks to display"
 msgstr "Žádné úkoly ke zobrazení"
 
-#: js/Tasks.js:418 js/Tasks.js:745
+#: js/Tasks.js:418 js/Tasks.js:753
 msgid "Summary"
 msgstr "Přehled"
 
@@ -88,7 +97,7 @@ msgstr "Přidat úkol..."
 msgid "Due Date"
 msgstr "Termín dokončení"
 
-#: js/Tasks.js:444 js/Tasks.js:777
+#: js/Tasks.js:444 js/Tasks.js:785
 msgid "Priority"
 msgstr "Priorita"
 
@@ -96,7 +105,7 @@ msgstr "Priorita"
 msgid "Percent"
 msgstr "Procent"
 
-#: js/Tasks.js:473 js/Tasks.js:773
+#: js/Tasks.js:473 js/Tasks.js:781
 msgid "Status"
 msgstr "Status"
 
@@ -104,72 +113,72 @@ msgstr "Status"
 msgid "No Tasks to display"
 msgstr "Žádné úkoly ke zobrazení"
 
-#: js/Tasks.js:633
+#: js/Tasks.js:641
 msgid "Loading Task..."
 msgstr ""
 
-#: js/Tasks.js:633
+#: js/Tasks.js:641
 msgid "Please Wait"
 msgstr ""
 
-#: js/Tasks.js:644
+#: js/Tasks.js:652
 msgid "Add New Task"
 msgstr ""
 
-#: js/Tasks.js:646
+#: js/Tasks.js:654
 #, python-format
 msgid "Edit Task \"%s\""
 msgstr ""
 
-#: js/Tasks.js:665
+#: js/Tasks.js:673
 msgid "Please wait"
 msgstr "Prosím čekejte"
 
-#: js/Tasks.js:665 js/Tasks.js:710
+#: js/Tasks.js:673 js/Tasks.js:718
 msgid "Saving Task"
 msgstr "Ukládám úkol"
 
-#: js/Tasks.js:701
+#: js/Tasks.js:709
 msgid "Errors"
 msgstr "Chyby"
 
-#: js/Tasks.js:701
+#: js/Tasks.js:709
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím vyznačené chyby."
 
-#: js/Tasks.js:708
+#: js/Tasks.js:716
 msgid "Confirm"
 msgstr "Povrdit"
 
-#: js/Tasks.js:708
+#: js/Tasks.js:716
 msgid "Do you really want to delete this task?"
 msgstr "Opravdu chcete smazat tento úkol?"
 
-#: js/Tasks.js:710
+#: js/Tasks.js:718
 msgid "Please wait a moment..."
 msgstr "Počkejte prosím okmažik..."
 
-#: js/Tasks.js:749
+#: js/Tasks.js:757
 msgid "Enter short name..."
 msgstr "Zadejte stručný název..."
 
-#: js/Tasks.js:752
+#: js/Tasks.js:760
 msgid "Notes"
 msgstr "Poznámky"
 
-#: js/Tasks.js:754
+#: js/Tasks.js:762
 msgid "Enter description..."
 msgstr "Zadejte popis..."
 
-#: js/Tasks.js:768
+#: js/Tasks.js:776
 msgid "Percentage"
 msgstr "Procenta"
 
-#: js/Tasks.js:781
+#: js/Tasks.js:789
 msgid "Due date"
 msgstr "Termín dokončení"
 
-#: js/Tasks.js:785
+#: js/Tasks.js:793
 msgid "Saved in"
 msgstr ""
 
@@ -187,11 +196,6 @@ msgstr ""
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"
-msgstr ""
-
-#: Controller.php:302
-#, python-format
-msgid "%s's personal tasks"
 msgstr ""
 
 #~ msgid "Folder"

@@ -13,18 +13,23 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:305
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's лична задача"
+
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:697
-#: js/Tasks.js:722
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
+#: js/Tasks.js:730
 msgid "Failed"
 msgstr "Грешка"
 
-#: js/Tasks.js:141 js/Tasks.js:722
+#: js/Tasks.js:141 js/Tasks.js:730
 msgid "Could not delete task(s)."
 msgstr "Задачата (-ите) не може(могат) да бъде(бъдатат) изтрита(-и)"
 
@@ -42,7 +47,7 @@ msgid_plural "Delete tasks"
 msgstr[0] "Изтрий задача"
 msgstr[1] "Изтрий задачи"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:697
+#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
 msgid "Could not save task."
 msgstr "Задачата не може да бъде запаметена."
 
@@ -50,9 +55,13 @@ msgstr "Задачата не може да бъде запаметена."
 msgid "Tasks"
 msgstr "Задачи"
 
-#: js/Tasks.js:304
+#: js/Tasks.js:304 js/Tasks.js:631
 msgid "to do lists"
 msgstr "Списъци със задачи"
+
+#: js/Tasks.js:305 js/Tasks.js:629 js/Tasks.js:630
+msgid "to do list"
+msgstr ""
 
 #: js/Tasks.js:326
 msgid "Enter searchfilter"
@@ -74,7 +83,7 @@ msgstr "Намерени задачи {0} - {1} от {2}"
 msgid "No tasks to display"
 msgstr "Няма намерени задачи"
 
-#: js/Tasks.js:418 js/Tasks.js:745
+#: js/Tasks.js:418 js/Tasks.js:753
 msgid "Summary"
 msgstr "Заключение"
 
@@ -86,7 +95,7 @@ msgstr "Добави задача"
 msgid "Due Date"
 msgstr "Краен срок"
 
-#: js/Tasks.js:444 js/Tasks.js:777
+#: js/Tasks.js:444 js/Tasks.js:785
 msgid "Priority"
 msgstr "Приоритет"
 
@@ -94,7 +103,7 @@ msgstr "Приоритет"
 msgid "Percent"
 msgstr "Процент"
 
-#: js/Tasks.js:473 js/Tasks.js:773
+#: js/Tasks.js:473 js/Tasks.js:781
 msgid "Status"
 msgstr "Статус"
 
@@ -102,72 +111,72 @@ msgstr "Статус"
 msgid "No Tasks to display"
 msgstr "Няма намерени задачи"
 
-#: js/Tasks.js:633
+#: js/Tasks.js:641
 msgid "Loading Task..."
 msgstr "Зарежда задача..."
 
-#: js/Tasks.js:633
+#: js/Tasks.js:641
 msgid "Please Wait"
 msgstr "Моля изчакайте"
 
-#: js/Tasks.js:644
+#: js/Tasks.js:652
 msgid "Add New Task"
 msgstr ""
 
-#: js/Tasks.js:646
+#: js/Tasks.js:654
 #, python-format
 msgid "Edit Task \"%s\""
 msgstr ""
 
-#: js/Tasks.js:665
+#: js/Tasks.js:673
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/Tasks.js:665 js/Tasks.js:710
+#: js/Tasks.js:673 js/Tasks.js:718
 msgid "Saving Task"
 msgstr "Запамети задача"
 
-#: js/Tasks.js:701
+#: js/Tasks.js:709
 msgid "Errors"
 msgstr "Грешки"
 
-#: js/Tasks.js:701
+#: js/Tasks.js:709
 msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките."
 
-#: js/Tasks.js:708
+#: js/Tasks.js:716
 msgid "Confirm"
 msgstr "Потвърди"
 
-#: js/Tasks.js:708
+#: js/Tasks.js:716
 msgid "Do you really want to delete this task?"
 msgstr "Наистина ли желаете да изтриете тази задача?"
 
-#: js/Tasks.js:710
+#: js/Tasks.js:718
 msgid "Please wait a moment..."
 msgstr "Моля изчакайте един момент"
 
-#: js/Tasks.js:749
+#: js/Tasks.js:757
 msgid "Enter short name..."
 msgstr "Задай съкратено име"
 
-#: js/Tasks.js:752
+#: js/Tasks.js:760
 msgid "Notes"
 msgstr "Бележки"
 
-#: js/Tasks.js:754
+#: js/Tasks.js:762
 msgid "Enter description..."
 msgstr "Напиши описание"
 
-#: js/Tasks.js:768
+#: js/Tasks.js:776
 msgid "Percentage"
 msgstr "Процент"
 
-#: js/Tasks.js:781
+#: js/Tasks.js:789
 msgid "Due date"
 msgstr "Краен срок"
 
-#: js/Tasks.js:785
+#: js/Tasks.js:793
 msgid "Saved in"
 msgstr ""
 
@@ -186,11 +195,6 @@ msgstr ""
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr ""
-
-#: Controller.php:302
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's лична задача"
 
 #~ msgid "Folder"
 #~ msgstr "Папка"

@@ -13,22 +13,23 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:305
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/Tasks.js:141
-#: js/Tasks.js:270
-#: js/Tasks.js:557
-#: js/Tasks.js:697
-#: js/Tasks.js:722
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
+#: js/Tasks.js:730
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/Tasks.js:141
-#: js/Tasks.js:722
+#: js/Tasks.js:141 js/Tasks.js:730
 msgid "Could not delete task(s)."
 msgstr "Konnte Aufgabe(n) nicht löschen."
 
@@ -46,9 +47,7 @@ msgid_plural "Delete tasks"
 msgstr[0] "Aufgabe löschen"
 msgstr[1] "Aufgaben löschen"
 
-#: js/Tasks.js:270
-#: js/Tasks.js:557
-#: js/Tasks.js:697
+#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
 msgid "Could not save task."
 msgstr "Konnte Aufgabe nicht speichern."
 
@@ -56,9 +55,13 @@ msgstr "Konnte Aufgabe nicht speichern."
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Tasks.js:304
+#: js/Tasks.js:304 js/Tasks.js:631
 msgid "to do lists"
 msgstr "Aufgabenlisten"
+
+#: js/Tasks.js:305 js/Tasks.js:629 js/Tasks.js:630
+msgid "to do list"
+msgstr ""
 
 #: js/Tasks.js:326
 msgid "Enter searchfilter"
@@ -80,8 +83,7 @@ msgstr "Zeige Aufgabe {0} - {1} von {2}"
 msgid "No tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:418
-#: js/Tasks.js:745
+#: js/Tasks.js:418 js/Tasks.js:753
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -93,8 +95,7 @@ msgstr "Aufgabe hinzufügen..."
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/Tasks.js:444
-#: js/Tasks.js:777
+#: js/Tasks.js:444 js/Tasks.js:785
 msgid "Priority"
 msgstr "Priorität"
 
@@ -102,8 +103,7 @@ msgstr "Priorität"
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/Tasks.js:473
-#: js/Tasks.js:773
+#: js/Tasks.js:473 js/Tasks.js:781
 msgid "Status"
 msgstr "Status"
 
@@ -111,73 +111,72 @@ msgstr "Status"
 msgid "No Tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:633
+#: js/Tasks.js:641
 msgid "Loading Task..."
 msgstr ""
 
-#: js/Tasks.js:633
+#: js/Tasks.js:641
 msgid "Please Wait"
 msgstr ""
 
-#: js/Tasks.js:644
+#: js/Tasks.js:652
 msgid "Add New Task"
 msgstr ""
 
-#: js/Tasks.js:646
+#: js/Tasks.js:654
 #, python-format
 msgid "Edit Task \"%s\""
 msgstr ""
 
-#: js/Tasks.js:665
+#: js/Tasks.js:673
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Tasks.js:665
-#: js/Tasks.js:710
+#: js/Tasks.js:673 js/Tasks.js:718
 msgid "Saving Task"
 msgstr "Aufgabe speichern"
 
-#: js/Tasks.js:701
+#: js/Tasks.js:709
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Tasks.js:701
+#: js/Tasks.js:709
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die angezeigten Fehler."
 
-#: js/Tasks.js:708
+#: js/Tasks.js:716
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/Tasks.js:708
+#: js/Tasks.js:716
 msgid "Do you really want to delete this task?"
 msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 
-#: js/Tasks.js:710
+#: js/Tasks.js:718
 msgid "Please wait a moment..."
 msgstr "Einen Moment noch..."
 
-#: js/Tasks.js:749
+#: js/Tasks.js:757
 msgid "Enter short name..."
 msgstr "Kurzbezeichnung eingeben..."
 
-#: js/Tasks.js:752
+#: js/Tasks.js:760
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/Tasks.js:754
+#: js/Tasks.js:762
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/Tasks.js:768
+#: js/Tasks.js:776
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/Tasks.js:781
+#: js/Tasks.js:789
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/Tasks.js:785
+#: js/Tasks.js:793
 msgid "Saved in"
 msgstr ""
 
@@ -197,13 +196,8 @@ msgstr ""
 msgid "CANCELLED"
 msgstr ""
 
-#: Controller.php:302
-#, python-format
-msgid "%s's personal tasks"
-msgstr ""
-
 #~ msgid "Folder"
 #~ msgstr "Ordner"
+
 #~ msgid "Delete tasks"
 #~ msgstr "Aufgaben löschen"
-
