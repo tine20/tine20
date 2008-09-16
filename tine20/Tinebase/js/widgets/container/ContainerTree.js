@@ -26,9 +26,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
   var taskPanel =  new Tine.containerTreePanel({
         iconCls: 'TasksTreePanel',
         title: 'Tasks',
-        itemName: 'Tasks',
         appName: 'Tasks',
-        containerName: 'Task Folder',
+        containerName: 'to do list',
+        containersName: 'to do lists',
         border: false
     });
   </code></pre>
@@ -43,7 +43,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
      * @cfg {string} itemName
      * name of containers items
      */
-    itemName: 'item',
+    //itemName: 'item',
     /**
      * @cfg {string} containerName
      * name of container (singular)
@@ -112,26 +112,26 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	    });
 	    
 	    var initialTree = [{
-	        text: sprintf(translation._('All %s'), this.itemName),
+	        text: sprintf(translation._('All %s'), this.containersName),
 	        cls: "treemain",
 	        containerType: 'all',
 	        id: 'all',
 	        children: [{
-	            text: sprintf(translation._('My %s'), this.itemName),
+	            text: sprintf(translation._('My %s'), this.containersName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
 	            id: 'user',
 	            leaf: null,
 	            owner: Tine.Tinebase.Registry.get('currentAccount')
 	        }, {
-	            text: sprintf(translation._('Shared %s'), this.itemName),
+	            text: sprintf(translation._('Shared %s'), this.containersName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_SHARED,
 	            children: null,
 	            leaf: null,
 				owner: null
 	        }, {
-	            text: sprintf(translation._('Other Users %s'), this.itemName),
+	            text: sprintf(translation._('Other Users %s'), this.containersName),
 	            cls: 'file',
 	            containerType: 'otherUsers',
 	            children: null,
