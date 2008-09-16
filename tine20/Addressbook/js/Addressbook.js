@@ -814,6 +814,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         });
         
         this.containerItemName = this.translation._('contacts');
+        this.containerName = this.translation._('addressbook');
         
         // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
