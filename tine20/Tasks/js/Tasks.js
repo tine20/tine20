@@ -301,8 +301,8 @@ Tine.Tasks.mainGrid = {
             id: 'TasksTreePanel',
             iconCls: 'TasksIconCls',
             title: translation._('Tasks'),
-            itemName: translation._('to do lists'),
-            containerName: 'to do list',
+            containersName: translation._('to do lists'),
+            containerName: translation._('to do list'),
             appName: 'Tasks',
             border: false
         });
@@ -625,6 +625,10 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
+        
+        //this.containerItemName =  this.translation._('to do list');
+        this.containerName =  this.translation._('to do list');
+        this.containersName =  this.translation._('to do lists');
         
         this.items = this.getTaskFormPanel();
         Tine.Tasks.EditDialog.superclass.initComponent.call(this);
