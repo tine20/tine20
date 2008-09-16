@@ -88,6 +88,14 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         $vmController->updateSnomPhoneRedirect($phone);
     }
     
+    /**
+     * redirect
+     *
+     * @param string $mac
+     * @param string $event
+     * @param string $number
+     * @param string $time
+     */
     public function redirect($mac, $event, $number, $time)
     {
         $this->_authenticate();
