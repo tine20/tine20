@@ -41,9 +41,15 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     itemName: 'record',
     /**
-     * @cfg string
+     * @cfg {string} containerName
+     * name of container (singular)
      */
     containerName: 'container',
+    /**
+     * @cfg {string} containerName
+     * name of container (plural)
+     */
+    containersName: 'containers',
     
     // private
     allowBlank: false,
@@ -65,7 +71,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             fields: Tine.Tinebase.Model.Container
         });
         
-        this.title = sprintf(_('Recently used %s:'), this.containerName);
+        this.title = sprintf(_('Recently used %s:'), this.containersName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         
@@ -107,6 +113,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     onChoseOther: function() {
         this.collapse();
         var w = new Tine.widgets.container.selectionDialog({
+            itemName: this.itemName,
+            containerName: this.containerName,
+            containersName: this.containersName,
             TriggerField: this
         });
     },
@@ -194,6 +203,20 @@ Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionCombo
  */
 Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	/**
+     * @cfg {String}
+     */
+    itemName: 'record',
+    /**
+     * @cfg {string} containerName
+     * name of container (singular)
+     */
+    containerName: 'container',
+    /**
+     * @cfg {string} containerName
+     * name of container (plural)
+     */
+    containersName: 'containers',
+    /**
 	 * @cfg {string}
 	 * title of dialog
 	 */
@@ -217,7 +240,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
     initComponent: function(){
         Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
         
-        this.title = this.title ? this.title : _('please select a container');
+        this.title = this.title ? this.title : sprintf(_('please select a %s'), this.containerName);
         
         this.cancleAction = new Ext.Action({
             text: _('Cancel'),

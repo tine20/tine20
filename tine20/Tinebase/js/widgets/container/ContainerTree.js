@@ -46,9 +46,14 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
     itemName: 'item',
     /**
      * @cfg {string} containerName
-     * name of folders
+     * name of container (singular)
      */
 	containerName: 'container',
+    /**
+     * @cfg {string} containerName
+     * name of container (plural)
+     */
+    containersName: 'containers',
     /**
      * @cfg {array} extraItems
      * additional items to display under all
