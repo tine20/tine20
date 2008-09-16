@@ -88,8 +88,17 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      */
     //protected $_fontPath = '/var/lib/defoma/gs.d/dirs/fonts/Vera.ttf'; 
     //protected $_fontPath = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf';
+    //protected $_fontBoldPath = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf';
     //protected $_fontPath = '/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf';
     protected $_fontPath = '';
+    protected $_fontBoldPath = '';
+    
+    /**
+     * embed font in pdf
+     *
+     * @var boolean
+     */
+    protected $_embedFont = TRUE;
     
     /**
      * encoding
@@ -131,11 +140,18 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         if (!empty($this->_fontPath) && file_exists($this->_fontPath)) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $this->_fontPath);
             
+            if (!isset($this->_fontBoldPath) || empty($this->_fontBoldPath)) {
+                $this->_fontBoldPath = $this->_fontPath;
+            }
+            
             // try to use ttf / type 1 postscript fonts
-            $this->_font = Zend_Pdf_Font::fontWithPath($this->_fontPath /*, Zend_Pdf_Font::EMBED_DONT_EMBED */);
-            $this->_fontBold = Zend_Pdf_Font::fontWithPath($this->_fontPath /*, Zend_Pdf_Font::EMBED_DONT_EMBED */);
-            
-            
+            if ($this->_embedFont) {
+                $this->_font = Zend_Pdf_Font::fontWithPath($this->_fontPath);
+                $this->_fontBold = Zend_Pdf_Font::fontWithPath($this->_fontBoldPath);
+            } else {
+                $this->_font = Zend_Pdf_Font::fontWithPath($this->_fontPath, Zend_Pdf_Font::EMBED_DONT_EMBED );
+                $this->_fontBold = Zend_Pdf_Font::fontWithPath($this->_fontBoldPath, Zend_Pdf_Font::EMBED_DONT_EMBED);
+            }
         } else {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use zend_pdf font: ' . $this->_fontName);
             
