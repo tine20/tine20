@@ -24,7 +24,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var bool allow the use of GLOBALS to excange data between tests
+     * @var bool allow the use of GLOBALS to exchange data between tests
      */
     protected $backupGlobals = false;
     
@@ -321,7 +321,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * test getting contact
      *
      */
-    public function testGetContct()
+    public function testGetContact()
     {
         $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
         $json = new Addressbook_Json();
