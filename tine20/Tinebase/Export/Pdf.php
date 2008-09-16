@@ -18,8 +18,6 @@
  * @package     Tinebase
  * @subpackage	Export
  * 
- * @todo        make fonts configurable: create font file dir or add path to config.ini/config table
- * @todo        embed font? make that configurable as well
  */
 abstract class Tinebase_Export_Pdf extends Zend_Pdf
 {
@@ -84,16 +82,6 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     protected $_fontNameBold = Zend_Pdf_Font::FONT_HELVETICA_BOLD; 
 
     /**
-     * font path to ttf or postscript font file
-     */
-    //protected $_fontPath = '/var/lib/defoma/gs.d/dirs/fonts/Vera.ttf'; 
-    //protected $_fontPath = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf';
-    //protected $_fontBoldPath = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf';
-    //protected $_fontPath = '/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf';
-    protected $_fontPath = '';
-    protected $_fontBoldPath = '';
-    
-    /**
      * embed font in pdf
      *
      * @var boolean
@@ -118,6 +106,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	{
 		parent::__construct();
 		
+		// get config
+		$config = Zend_Registry::get('configFile')->pdfexport;
+		
 		// add first page 
 		$this->pages[] = $this->newPage(Zend_Pdf_Page::SIZE_A4); 	
 		$this->_pageNumber = 0;	
@@ -137,21 +128,15 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         }
         
         // set fonts
-        if (!empty($this->_fontPath) && file_exists($this->_fontPath)) {
+        if (!empty($config->fontpath) && file_exists($config->fontpath)) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $this->_fontPath);
+                         
+            $boldpath = $config->get('fontboldpath', $config->fontpath);
+            $embed = ($config->fontembed) ? Zend_Pdf_Font::EMBED_DONT_EMBED : 0;
             
-            if (!isset($this->_fontBoldPath) || empty($this->_fontBoldPath)) {
-                $this->_fontBoldPath = $this->_fontPath;
-            }
-            
-            // try to use ttf / type 1 postscript fonts
-            if ($this->_embedFont) {
-                $this->_font = Zend_Pdf_Font::fontWithPath($this->_fontPath);
-                $this->_fontBold = Zend_Pdf_Font::fontWithPath($this->_fontBoldPath);
-            } else {
-                $this->_font = Zend_Pdf_Font::fontWithPath($this->_fontPath, Zend_Pdf_Font::EMBED_DONT_EMBED );
-                $this->_fontBold = Zend_Pdf_Font::fontWithPath($this->_fontBoldPath, Zend_Pdf_Font::EMBED_DONT_EMBED);
-            }
+            // try to use ttf / type 1 / opentype / postscript fonts
+            $this->_font = Zend_Pdf_Font::fontWithPath($config->fontpath, $embed);
+            $this->_fontBold = Zend_Pdf_Font::fontWithPath($boldpath, $embed);
         } else {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use zend_pdf font: ' . $this->_fontName);
             
