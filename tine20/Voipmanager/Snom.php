@@ -27,6 +27,8 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
     /**
      * public function to access the directory
      *
+     * @deprecated 
+     * @todo move that to Phone application
      */
     public function directory()
     {
@@ -50,44 +52,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
             }
         }
     }
-    
-    /**
-     * keeps track of the call history
-     *
-     * @param string $mac the mac address of the phone
-     * @param string $event event can be connected, disconnected, incoming, outgoing, missed
-     * @param string $callId the callid
-     * @param string $local the local number
-     * @param string $remote the remote number
-     */
-    public function callHistory($mac, $event, $callId, $local, $remote)
-    {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
         
-        $this->_authenticate();
-        
-        return;
-        
-        $vmController = Voipmanager_Controller::getInstance();
-        
-        $phone = $vmController->getSnomPhoneByMacAddress($mac);
-
-        $phone->redirect_event = $event;
-        if($phone->redirect_event != 'none') {
-            $phone->redirect_number = $number;
-        } else {
-            $phone->redirect_number = NULL;
-        }
-        
-        if($phone->redirect_event == 'time') {
-            $phone->redirect_time = $time;
-        } else {
-            $phone->redirect_time = NULL;
-        }
-        
-        $vmController->updateSnomPhoneRedirect($phone);
-    }
-    
     /**
      * redirect
      *
