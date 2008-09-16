@@ -12,12 +12,56 @@
  
 Ext.namespace('Ext.ux', 'Ext.ux.state');
 
+/**
+ * @class Ext.ux.state.JsonProvider
+ * @constructor
+ */
 Ext.ux.state.JsonProvider = function(config) {
+    Ext.apply(this, config);
+    
+    if (! this.record) {
+        this.record = Ext.data.Record.create([
+            { name: 'name' },
+            { name: 'value' }
+        ]);
+    }
+    
+    if (! this.store) {
+        this.store = new Ext.data.SimpleStore({
+            fields: this.record,
+            id: 'name',
+            data: []
+        });
+    }
+    
     
 }
  
 Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
-
+    
+    /**
+     * @property {Ext.data.Store}
+     */
+    store: null,
+    /**
+     * @property {Ext.data.Record}
+     */
+    record: null,
+    
+    /**
+     * sets the states store
+     */
+    setStateStore: function(store) {
+        this.store = store;
+    },
+    
+    /**
+     * returns the states store
+     */
+    getStateStore: function() {
+        return this.store;
+    },
+    
     /**
      * Returns the current value for a key 
      */
@@ -25,17 +69,10 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
         if(name.match(/^ext\-comp/)) {
             return defaultValue;
         }
-        if (name == 'AddressbookEditRecordContainerSelector') {
-            console.log('Ext.ux.state.JsonProvider.get');
-            //console.log(name);
-            //console.log(defaultValue);
-            return [{
-                id: '3434',
-                name: 'mylovelycontaier',
-                type: 'personalContainer'
-            }];
-        }
         
+        var state = this.store.getById(name);
+        
+        return state ? state.get('value') : defaultValue;
     },
     
     /**
@@ -45,11 +82,17 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
         if(! name.match(/^ext\-comp/)) {
             var cmp = Ext.getCmp(name);
             if (cmp.stateful) {
-               console.log('Ext.ux.state.JsonProvider.set');
-                console.log(name);
-                console.log(value);
+                var state = this.store.getById(name);
+                if (state) {
+                    state.set('value', value);
+                } else {
+                    this.store.add(new this.record({
+                        name: name,
+                        value: value
+                    }, name));
+                }
             } else {
-                 console.info('Ext.ux.state.JsonProvider::set Attempt to set state of the non stateful component: "' + name + '"');
+                 //console.info('Ext.ux.state.JsonProvider::set Attempt to set state of the non stateful component: "' + name + '"');
             }
         }
     },
@@ -58,6 +101,9 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
      * Clears a value from the state
      */
     clear: function(name) {
-        
+        var state = this.store.getById(name);
+        if (state) {
+            this.store.remove(state);
+        }
     }
 });
