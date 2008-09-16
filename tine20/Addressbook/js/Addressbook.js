@@ -26,7 +26,7 @@ Tine.Addressbook = {
             id: 'Addressbook_Tree',
             iconCls: 'AddressbookIconCls',
             title: translation._('Addressbook'),
-            itemName: translation._('contacts'),
+            containersName: translation._('contacts'),
             containerName: 'addressbook',
             appName: 'Addressbook',
             border: false,
@@ -813,8 +813,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             }
         });
         
-        this.containerItemName = this.translation._('contacts');
+        //this.containerItemName = this.translation._('contacts');
         this.containerName = this.translation._('addressbook');
+        this.containersName = this.translation._('contacts');
         
         // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
