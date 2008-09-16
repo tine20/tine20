@@ -13,6 +13,7 @@
 Ext.onReady(function() {
     new Ext.Viewport({
         id: 'mobileViewport',
+        cls: 'ext-ux-mobile',
         layout: 'card',
         activeItem: 0,
         items: [
