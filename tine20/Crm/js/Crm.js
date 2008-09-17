@@ -1517,15 +1517,15 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     
             storeContacts.setDefaultSort('type', 'asc');   
             
-            // @todo focus new record -> ask conny
+            // focus+select new record
+            // @todo sort store again?
             storeContacts.on('add', function(store, records, index){
-                //console.log('focus');
-                //console.log(index);
                 var grid = Ext.getCmp('crmGridContacts');
-                //console.log(grid);
-                //grid.getSelectionModel().selectRecords(records);
-                //grid.getSelectionModel().selectRow(0);
-                grid.getView().focusRow(index);                    
+                
+                (function() {
+                    grid.getView().focusRow(index);
+                    grid.getSelectionModel().selectRow(index); 
+                }).defer(300);                
             });
             
             Ext.StoreMgr.add('ContactsStore', storeContacts);
@@ -1566,6 +1566,19 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             if(_tasks) {
                 storeTasks.loadData(_tasks);                    
             }
+
+            // focus+select new record
+            // @todo sort store again?
+            storeTasks.on('add', function(store, records, index){
+                var grid = Ext.getCmp('crmGridTasks');
+                
+                (function() {
+                    grid.getView().focusRow(index);
+                    grid.getSelectionModel().selectRow(index); 
+                }).defer(300);
+                
+            });
+            
             
             Ext.StoreMgr.add('TasksStore', storeTasks);
     	}
