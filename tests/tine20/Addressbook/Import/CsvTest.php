@@ -24,6 +24,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var bool allow the use of GLOBALS to exchange data between tests
+     */
+    protected $backupGlobals = false;
+    
+    /**
      * @var array test objects
      */
     protected $_objects = array();
@@ -53,6 +58,11 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        // initialise global for this test suite
+        $GLOBALS['Addressbook_Import_CsvTest'] = array_key_exists('Addressbook_Import_CsvTest', $GLOBALS) 
+            ? $GLOBALS['Addressbook_Import_CsvTest'] 
+            : array();
+        
         $this->_instance = Addressbook_Import_Factory::factory('Csv');
         
         $this->_objects['filename'] = dirname(__FILE__) . '/files/test.csv';
@@ -72,8 +82,6 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
             'n_family'              => 'Nachname',
             'n_given'               => 'Vorname',
             'n_prefix'              => array('Anrede', 'Titel'),
-            
-            //'owner'                 => '', //-- create import container
         );        
     }
 
@@ -95,13 +103,40 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     public function testRead()
     {
         $contactRecords = $this->_instance->read($this->_objects['filename'], $this->_objects['mapping']);
+        $GLOBALS['Addressbook_Import_CsvTest']['records'] = $contactRecords;
         
         $this->assertEquals(3, count($contactRecords));
         $this->assertEquals('Krehl, Albert', $contactRecords[0]->n_fileas);
         $this->assertEquals('Herr Dr.', $contactRecords[0]->n_prefix);
+        
         $note = $contactRecords[0]->note;
         $this->assertEquals(1, preg_match("/Mitarbeiter: Meister/", $note));
         $this->assertEquals(1, preg_match("/Anzahl Mitarbeiter: 20/", $note));
+    }
+    
+    /**
+     * test import data
+     *
+     */
+    public function testImport()
+    {
+        $contactRecords = $GLOBALS['Addressbook_Import_CsvTest']['records'];
+        
+        $importedContacts = $this->_instance->import($contactRecords);
+
+        $this->assertEquals(3, count($importedContacts));
+        
+        $firstImportedContact = Addressbook_Controller::getInstance()->getContact($importedContacts[0]->getId());
+        $this->assertEquals('Krehl, Albert', $firstImportedContact->n_fileas);
+        $this->assertEquals('Herr Dr.', $firstImportedContact->n_prefix);
+        $note = $firstImportedContact->note;
+        $this->assertEquals(1, preg_match("/Mitarbeiter: Meister/", $note));
+        $this->assertEquals(1, preg_match("/Anzahl Mitarbeiter: 20/", $note));
+        
+        // delete imported contacts
+        foreach ($importedContacts as $contact) {
+            Addressbook_Controller::getInstance()->deleteContact($contact->getId());
+        }
     }
 }		
 	
