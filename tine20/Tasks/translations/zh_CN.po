@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-08 23:04-0800\n"
-"Last-Translator: jason <qry@yahoo.com>\n"
+"PO-Revision-Date: 2008-09-16 22:36-0800\n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,12 +23,16 @@ msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "确实想删除选中的任务？"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
+#: js/Tasks.js:141
+#: js/Tasks.js:270
+#: js/Tasks.js:557
+#: js/Tasks.js:705
 #: js/Tasks.js:730
 msgid "Failed"
 msgstr "失败"
 
-#: js/Tasks.js:141 js/Tasks.js:730
+#: js/Tasks.js:141
+#: js/Tasks.js:730
 msgid "Could not delete task(s)."
 msgstr "不能删除任务"
 
@@ -45,7 +49,9 @@ msgid "Delete task"
 msgid_plural "Delete tasks"
 msgstr[0] "删除任务"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
+#: js/Tasks.js:270
+#: js/Tasks.js:557
+#: js/Tasks.js:705
 msgid "Could not save task."
 msgstr "不能保存任务"
 
@@ -53,13 +59,16 @@ msgstr "不能保存任务"
 msgid "Tasks"
 msgstr "任务"
 
-#: js/Tasks.js:304 js/Tasks.js:631
+#: js/Tasks.js:304
+#: js/Tasks.js:631
 msgid "to do lists"
 msgstr "to do 列表"
 
-#: js/Tasks.js:305 js/Tasks.js:629 js/Tasks.js:630
+#: js/Tasks.js:305
+#: js/Tasks.js:629
+#: js/Tasks.js:630
 msgid "to do list"
-msgstr ""
+msgstr "to do 列表"
 
 #: js/Tasks.js:326
 msgid "Enter searchfilter"
@@ -81,7 +90,8 @@ msgstr "显示任务 {0} - {1} of {2}"
 msgid "No tasks to display"
 msgstr "没有任务要显示"
 
-#: js/Tasks.js:418 js/Tasks.js:753
+#: js/Tasks.js:418
+#: js/Tasks.js:753
 msgid "Summary"
 msgstr "摘要"
 
@@ -93,7 +103,8 @@ msgstr "添加任务"
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/Tasks.js:444 js/Tasks.js:785
+#: js/Tasks.js:444
+#: js/Tasks.js:785
 msgid "Priority"
 msgstr "优先"
 
@@ -101,7 +112,8 @@ msgstr "优先"
 msgid "Percent"
 msgstr "百分比"
 
-#: js/Tasks.js:473 js/Tasks.js:781
+#: js/Tasks.js:473
+#: js/Tasks.js:781
 msgid "Status"
 msgstr "状态"
 
@@ -130,7 +142,8 @@ msgstr "编辑任务 \"%s\""
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Tasks.js:673 js/Tasks.js:718
+#: js/Tasks.js:673
+#: js/Tasks.js:718
 msgid "Saving Task"
 msgstr "保存任务"
 
@@ -176,23 +189,24 @@ msgstr "过期日期"
 
 #: js/Tasks.js:793
 msgid "Saved in"
-msgstr ""
+msgstr "保存到"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
-msgstr ""
+msgstr "需要执行"
 
 #: Setup/setup.xml:409
 msgid "COMPLETED"
-msgstr ""
+msgstr "完成"
 
 #: Setup/setup.xml:431
 msgid "IN-PROCESS"
-msgstr ""
+msgstr "正在处理"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"
-msgstr ""
+msgstr "取消了"
 
 #~ msgid "Folder"
 #~ msgstr "文件夹"
+

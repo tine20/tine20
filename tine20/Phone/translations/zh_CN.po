@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-09-16 22:31-0800\n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,50 +13,53 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/Phone.js:27 js/Phone.js:426 js/Phone.js:427
+#: js/Phone.js:27
+#: js/Phone.js:426
+#: js/Phone.js:427
 msgid "Edit phone settings"
-msgstr ""
+msgstr "编辑电话设置"
 
 #: js/Phone.js:55
 msgid "Phones"
-msgstr ""
+msgstr "电话"
 
 #: js/Phone.js:193
 msgid "Dial phone number"
-msgstr ""
+msgstr "拨号"
 
 #: js/Phone.js:249
 msgid "Number"
-msgstr ""
+msgstr "号码"
 
 #: js/Phone.js:253
 msgid "Phone"
-msgstr ""
+msgstr "电话"
 
 #: js/Phone.js:276
 msgid "Line"
-msgstr ""
+msgstr "线路"
 
 #: js/Phone.js:290
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: js/Phone.js:300
 msgid "Dial"
-msgstr ""
+msgstr "拨号"
 
 #: js/Phone.js:416
 msgid "Dial number"
-msgstr ""
+msgstr "拨号"
 
 #: js/Phone.js:417
 msgid "Initiate a new outgoing call"
-msgstr ""
+msgstr "初始化一个新的向外呼叫"
 
 #: js/Phone.js:452
 msgid "enter searchfilter"
-msgstr ""
+msgstr "输入搜索过滤器"
 
 #: js/Phone.js:473
 msgid "Search:"
-msgstr ""
+msgstr "搜索："
+

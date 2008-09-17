@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-08 23:03-0800\n"
-"Last-Translator: jason <qry@yahoo.com>\n"
+"PO-Revision-Date: 2008-09-16 22:35-0800\n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +30,9 @@ msgstr "%s 的个人线索"
 msgid "State"
 msgstr "情形"
 
-#: Controller.php:803 js/Crm.js:1059 js/Crm.js:1097
+#: Controller.php:803
+#: js/Crm.js:1059
+#: js/Crm.js:1097
 msgid "Type"
 msgstr "类型"
 
@@ -38,7 +40,9 @@ msgstr "类型"
 msgid "Source"
 msgstr "源"
 
-#: Controller.php:805 js/LeadEditDialog.js:112 Pdf.php:87
+#: Controller.php:805
+#: js/LeadEditDialog.js:112
+#: Pdf.php:87
 msgid "Start"
 msgstr "开始"
 
@@ -46,16 +50,25 @@ msgstr "开始"
 msgid "Scheduled end"
 msgstr "预订结束"
 
-#: Controller.php:807 js/LeadEditDialog.js:126 Pdf.php:90
+#: Controller.php:807
+#: js/LeadEditDialog.js:126
+#: Pdf.php:90
 msgid "End"
 msgstr "结束"
 
-#: Controller.php:808 js/Crm.js:388 Pdf.php:81
+#: Controller.php:808
+#: js/Crm.js:388
+#: Pdf.php:81
 msgid "Turnover"
 msgstr "周转"
 
-#: Controller.php:809 js/Crm.js:257 js/Crm.js:258 js/Crm.js:259 js/Crm.js:387
-#: js/LeadEditDialog.js:104 Pdf.php:84
+#: Controller.php:809
+#: js/Crm.js:257
+#: js/Crm.js:258
+#: js/Crm.js:259
+#: js/Crm.js:387
+#: js/LeadEditDialog.js:104
+#: Pdf.php:84
 msgid "Probability"
 msgstr "可能性"
 
@@ -91,7 +104,10 @@ msgstr "试图删除这个线索时发生了一些错误"
 msgid "Enter searchfilter"
 msgstr "输入搜索过滤器"
 
-#: js/Crm.js:235 js/Crm.js:236 js/Crm.js:386 js/LeadEditDialog.js:41
+#: js/Crm.js:235
+#: js/Crm.js:236
+#: js/Crm.js:386
+#: js/LeadEditDialog.js:41
 #: Pdf.php:72
 msgid "Leadstate"
 msgstr "线索状态"
@@ -112,7 +128,8 @@ msgstr "显示关闭的线索"
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr "显示线索{0} - {1} of {2}"
 
-#: js/Crm.js:360 js/Crm.js:420
+#: js/Crm.js:360
+#: js/Crm.js:420
 msgid "No leads found."
 msgstr "没找到线索"
 
@@ -124,11 +141,15 @@ msgstr "线索标识符"
 msgid "Lead name"
 msgstr "线索名"
 
-#: js/Crm.js:384 js/LeadEditDialog.js:334 js/LeadEditDialog.js:377
+#: js/Crm.js:384
+#: js/LeadEditDialog.js:334
+#: js/LeadEditDialog.js:377
 msgid "Partner"
 msgstr "伙伴"
 
-#: js/Crm.js:385 js/LeadEditDialog.js:333 js/LeadEditDialog.js:373
+#: js/Crm.js:385
+#: js/LeadEditDialog.js:333
+#: js/LeadEditDialog.js:373
 msgid "Customer"
 msgstr "客户"
 
@@ -157,7 +178,9 @@ msgstr[0] "删除线索"
 msgid "Delete selected leads"
 msgstr "删除选中的线索"
 
-#: js/Crm.js:498 js/Crm.js:1776 js/Crm.js:1777
+#: js/Crm.js:498
+#: js/Crm.js:1776
+#: js/Crm.js:1777
 msgid "Export as PDF"
 msgstr "输出PDF文件"
 
@@ -165,7 +188,9 @@ msgstr "输出PDF文件"
 msgid "Export selected lead as PDF"
 msgstr "输出选中的线索到PDF文件"
 
-#: js/Crm.js:508 js/Crm.js:1721 js/Crm.js:1740
+#: js/Crm.js:508
+#: js/Crm.js:1721
+#: js/Crm.js:1740
 msgid "Add task"
 msgstr "添加任务"
 
@@ -185,15 +210,19 @@ msgstr "线索源"
 msgid "Lead types"
 msgstr "线索类型"
 
-#: js/Crm.js:619 js/Crm.js:1839 Pdf.php:258
+#: js/Crm.js:619
+#: js/Crm.js:1839
+#: Pdf.php:258
 msgid "Products"
 msgstr "产品"
 
-#: js/Crm.js:678 js/Crm.js:1051
+#: js/Crm.js:678
+#: js/Crm.js:1051
 msgid "Phone"
 msgstr "电话"
 
-#: js/Crm.js:679 js/Crm.js:1052
+#: js/Crm.js:679
+#: js/Crm.js:1052
 msgid "Cellphone"
 msgstr "手机"
 
@@ -221,11 +250,13 @@ msgstr "不能保存线索"
 msgid "Please fix the errors noted."
 msgstr "请修改标注的错误"
 
-#: js/Crm.js:1028 js/Crm.js:1093
+#: js/Crm.js:1028
+#: js/Crm.js:1093
 msgid "Name"
 msgstr "姓名"
 
-#: js/Crm.js:1037 Pdf.php:198
+#: js/Crm.js:1037
+#: Pdf.php:198
 msgid "Address"
 msgstr "地址"
 
@@ -245,11 +276,13 @@ msgstr "摘要"
 msgid "Add a task..."
 msgstr "添加任务..."
 
-#: js/Crm.js:1134 Pdf.php:239
+#: js/Crm.js:1134
+#: Pdf.php:239
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/Crm.js:1148 Pdf.php:244
+#: js/Crm.js:1148
+#: Pdf.php:244
 msgid "Priority"
 msgstr "优先"
 
@@ -265,7 +298,8 @@ msgstr "产品"
 msgid "Add a product..."
 msgstr "添加产品..."
 
-#: js/Crm.js:1218 js/LeadEditDialog.js:163
+#: js/Crm.js:1218
+#: js/LeadEditDialog.js:163
 msgid "Description"
 msgstr "描述"
 
@@ -277,7 +311,8 @@ msgstr "价格"
 msgid "No Tasks to display"
 msgstr "没有任务要显示"
 
-#: js/Crm.js:1422 js/Crm.js:1672
+#: js/Crm.js:1422
+#: js/Crm.js:1672
 msgid "Add new contact"
 msgstr "添加新联系人"
 
@@ -293,7 +328,8 @@ msgstr "添加新责任联系人"
 msgid "Add customer"
 msgstr "添加客户"
 
-#: js/Crm.js:1650 js/Crm.js:1673
+#: js/Crm.js:1650
+#: js/Crm.js:1673
 msgid "Add new customer contact"
 msgstr "添加新客户联系人"
 
@@ -361,15 +397,18 @@ msgstr "删除产品"
 msgid "Remove selected products"
 msgstr "删除选中的产品"
 
-#: js/Crm.js:1805 js/Crm.js:1806
+#: js/Crm.js:1805
+#: js/Crm.js:1806
 msgid "Leads"
-msgstr ""
+msgstr "线索"
 
-#: js/Crm.js:1837 Pdf.php:171
+#: js/Crm.js:1837
+#: Pdf.php:171
 msgid "Contacts"
 msgstr "联系人"
 
-#: js/Crm.js:1838 Pdf.php:219
+#: js/Crm.js:1838
+#: Pdf.php:219
 msgid "Tasks"
 msgstr "任务"
 
@@ -394,11 +433,13 @@ msgstr "编辑线索 \"%s\""
 msgid "Enter short name"
 msgstr "输入短名"
 
-#: js/LeadEditDialog.js:70 Pdf.php:75
+#: js/LeadEditDialog.js:70
+#: Pdf.php:75
 msgid "Leadtype"
 msgstr "线索类型"
 
-#: js/LeadEditDialog.js:87 Pdf.php:78
+#: js/LeadEditDialog.js:87
+#: Pdf.php:78
 msgid "Leadsource"
 msgstr "线索源"
 
@@ -422,7 +463,8 @@ msgstr "输入描述"
 msgid "Expected turnover"
 msgstr "期望的周转"
 
-#: js/LeadEditDialog.js:332 js/LeadEditDialog.js:369
+#: js/LeadEditDialog.js:332
+#: js/LeadEditDialog.js:369
 msgid "Responsible"
 msgstr "责任"
 
@@ -460,55 +502,56 @@ msgstr "紧急"
 
 #: Setup/setup.xml:344
 msgid "telephone"
-msgstr ""
+msgstr "电话"
 
 #: Setup/setup.xml:358
 msgid "email"
-msgstr ""
+msgstr "电子邮件"
 
 #: Setup/setup.xml:372
 msgid "website"
-msgstr ""
+msgstr "网址"
 
 #: Setup/setup.xml:386
 msgid "fair"
-msgstr ""
+msgstr "展览会"
 
 #: Setup/setup.xml:400
 msgid "customer"
-msgstr ""
+msgstr "客户"
 
 #: Setup/setup.xml:414
 msgid "partner"
-msgstr ""
+msgstr "伙伴"
 
 #: Setup/setup.xml:428
 msgid "reseller"
-msgstr ""
+msgstr "零售商"
 
 #: Setup/setup.xml:442
 msgid "open"
-msgstr ""
+msgstr "打开"
 
 #: Setup/setup.xml:460
 msgid "contacted"
-msgstr ""
+msgstr "联系过的"
 
 #: Setup/setup.xml:478
 msgid "waiting for feedback"
-msgstr ""
+msgstr "等待反馈"
 
 #: Setup/setup.xml:496
 msgid "quote sent"
-msgstr ""
+msgstr "报价已发送"
 
 #: Setup/setup.xml:514
 msgid "accepted"
-msgstr ""
+msgstr "已接受"
 
 #: Setup/setup.xml:536
 msgid "lost"
-msgstr ""
+msgstr "失去"
 
 #~ msgid "Percent"
 #~ msgstr "百分比"
+
