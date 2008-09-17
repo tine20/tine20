@@ -69,11 +69,11 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
             ),
             'tel_work'              => 'TelefonZentrale',
             'tel_cell'              => 'TelefonDurchwahl',
-            //'owner'                 => '', //-- create import container
-            //'title'                 => '',
             'n_family'              => 'Nachname',
             'n_given'               => 'Vorname',
-            //'n_prefix'              => array('Anrede', ' ', 'Titel'),
+            'n_prefix'              => array('Anrede', 'Titel'),
+            
+            //'owner'                 => '', //-- create import container
         );        
     }
 
@@ -96,10 +96,12 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     {
         $contactRecords = $this->_instance->read($this->_objects['filename'], $this->_objects['mapping']);
         
-        //print_r($contactRecords->toArray());
-        
         $this->assertEquals(3, count($contactRecords));
         $this->assertEquals('Krehl, Albert', $contactRecords[0]->n_fileas);
+        $this->assertEquals('Herr Dr.', $contactRecords[0]->n_prefix);
+        $note = $contactRecords[0]->note;
+        $this->assertEquals(1, preg_match("/Mitarbeiter: Meister/", $note));
+        $this->assertEquals(1, preg_match("/Anzahl Mitarbeiter: 20/", $note));
     }
 }		
 	
