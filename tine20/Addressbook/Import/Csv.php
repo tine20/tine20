@@ -107,12 +107,36 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
     /**
      * import the data
      *
-     * @param Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * @param Tinebase_Record_RecordSet $_records Addressbook_Model_Contact records
      * @param integer $_containerId
+     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * 
+     * @todo create new container if it doesn't exit?
      */
-    public function import(Tinebase_Record_RecordSet $_records, $_containerId)
+    public function import(Tinebase_Record_RecordSet $_records, $_containerId = NULL)
     {
+        if ($_containerId === NULL) {
+            // get personal container
+            $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+                Zend_Registry::get('currentAccount'), 
+                'Addressbook', 
+                Zend_Registry::get('currentAccount'), 
+                Tinebase_Container::GRANT_EDIT
+            );
+            $containerId = $personalContainer[0]->getId();
+        } else {
+            $containerId = $_containerId;
+        }
         
+        $addressbookController = Addressbook_Controller::getInstance();
+        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
+        foreach ($_records as $contact) {
+            $contact->owner = $containerId;
+            $newContact = $addressbookController->createContact($contact);
+            $result->addRecord($newContact);
+        }
+        
+        return $result;
     }
     
     /**
