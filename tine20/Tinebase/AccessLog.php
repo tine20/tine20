@@ -17,6 +17,11 @@
 class Tinebase_AccessLog
 {
     /**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_db;
+    
+    /**
      * holdes the instance of the singleton
      *
      * @var Tinebase_AccessLog
@@ -37,6 +42,7 @@ class Tinebase_AccessLog
     private function __construct()
     {
         $this->_accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
+        $this->_db = Zend_Registry::get('dbAdapter');
     }
     
     /**
@@ -118,10 +124,11 @@ class Tinebase_AccessLog
     }
     
     /**
-     * Enter description here...
+     * Search for acceslog entries
      *
      * @param Zend_Date $_from the date from which to fetch the access log entries from
      * @param Zend_Date $_to the date to which to fetch the access log entries to
+     * @param Tinebase_Model_Pagination|optional $_pagination
      * @param string $_sort OPTIONAL the column name to sort by
      * @param string $_dir OPTIONAL the sort direction can be ASC or DESC only
      * @param string $_filter OPTIONAL search parameter
@@ -130,28 +137,36 @@ class Tinebase_AccessLog
      * 
      * @return Tinebase_RecordSet_AccessLog set of matching access log entries
      */
-    public function getEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_from = NULL, $_to = NULL)
+    public function getEntries($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
     {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'access_log');
+            
+        if($_pagination instanceof Tinebase_Model_Pagination) {
+            $_pagination->appendPagination($select);
+        }
+        
         if ($_from instanceof Zend_Date && $_to instanceof Zend_Date) {
-            $where = array(
-                $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' BETWEEN ? ', $_from->getIso()) .
-                $this->_accessLogTable->getAdapter()->quoteInto('AND ?', $_to->getIso())
+            $select->where(
+                $this->_db->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' BETWEEN ? ', $_from->getIso()) .
+                $this->_db->quoteInto('AND ?', $_to->getIso())
             );
         } elseif ($_from instanceof Zend_Date) {
-            $where = array(
-                $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' > ?', $_from->getIso())
+            $select->where(
+                $this->_db->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' > ?', $_from->getIso())
+            );
+        }
+                
+        if(!empty($_filter)) {
+            $select->where(
+                $this->_db->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('login_name') . ' LIKE ?', '%' . $_filter . '%')
             );
         }
         
-        if(!empty($_filter)) {
-            $where[] = $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('login_name') . ' LIKE ?', '%' . $_filter . '%');
-        }
-        //error_log(print_r($where, true));
-        $rowSet = $this->_accessLogTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
-        
-        $arrayRowSet = $rowSet->toArray();
-        
-        foreach ($arrayRowSet as $rowId => $row) {
+        $stmt = $select->query();
+
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        foreach ($rows as $rowId => $row) {
             if ($row['lo'] >= $row['li']) {
                 $row['lo'] = new Zend_Date($row['lo'], Zend_Date::ISO_8601);
             } else {
@@ -180,7 +195,7 @@ class Tinebase_AccessLog
         $where = array(
            $this->_accessLogTable->getAdapter()->quoteIdentifier('li') .  ' BETWEEN ' .$this->_accessLogTable->getAdapter()->quote($_from->getIso()) . ' AND ' . $this->_accessLogTable->getAdapter()->quote($_to->getIso())
         );
-        if( $_filter !== NULL ) {
+        if( !empty($_filter) ) {
             $where[] = $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('login_name') . ' LIKE ?', '%' . $_filter . '%');
         }
 
