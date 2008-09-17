@@ -17,15 +17,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo $this->escape($this->title) ?></title>
-    <script type="text/javascript" src="Tinebase/js/gears_init.js"></script>
-    
-    <script type="text/javascript" language="javascript">
-        if (window.google && google.gears) {
-            var localServer = google.gears.factory.create('beta.localserver');
-            var store = localServer.createManagedStore('tine20-store');
-            store.manifestUrl = 'Tinebase/js/tine20-manifest.js';
-        }
-    </script>
 
     <!-- EXT JS -->
     <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/ext-all.css" />

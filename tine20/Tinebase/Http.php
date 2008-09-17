@@ -43,6 +43,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     {
        //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
         return array(
+            // gears
+            'Tinebase/js/gears_init.js',
             // base framework fixes
             'Tinebase/js/ExtFixes.js',
             // general helpers

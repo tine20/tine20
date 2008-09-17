@@ -25,7 +25,6 @@ if (! ("console" in window) || !("firebug" in console)) {
     }
 }
 
-
 /** -------------------- Extjs Framework Initialisation -------------------- **/
 
 /**
@@ -127,6 +126,20 @@ Ext.onReady(function(){
 
 Ext.namespace('Tine');
 Tine.Build = '$Build: $';
+
+/** ------------------------- Gears Initialisation ------------------------- **/
+
+if (window.google && google.gears) {
+    google.gears.localServer = google.gears.factory.create('beta.localserver');
+    google.gears.localServer.store = google.gears.localServer.createManagedStore('tine20-store');
+    google.gears.localServer.store.manifestUrl = 'Tinebase/js/tine20-manifest.js';
+
+    //google.gears.localServer.store.checkForUpdate();
+    //console.log(google.gears.localServer.store.updateStatus);
+    //console.log(google.gears.localServer.store.lastErrorMessage);
+}
+
+
 
 /**
  * initialise window types
