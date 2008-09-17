@@ -21,6 +21,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 /**
  * Test class for Tinebase_Group
+ * 
+ * take care: the tests only work with the zend_pdf fonts ... don't use custom fonts
  */
 class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
 {
