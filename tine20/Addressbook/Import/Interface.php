@@ -31,7 +31,8 @@ interface Addressbook_Import_Interface
     /**
      * import the data
      *
-     * @param Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * @param Tinebase_Record_RecordSet $_records Addressbook_Model_Contact records
+     * @param integer $_containerId
      */
-    public function import(Tinebase_Record_RecordSet $_records);
+    public function import(Tinebase_Record_RecordSet $_records, $_containerId);
 }

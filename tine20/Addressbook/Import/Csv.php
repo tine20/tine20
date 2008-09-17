@@ -108,9 +108,9 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
      * import the data
      *
      * @param Tinebase_Record_RecordSet of Addressbook_Model_Contact
-     * @todo implement
+     * @param integer $_containerId
      */
-    public function import(Tinebase_Record_RecordSet $_records)
+    public function import(Tinebase_Record_RecordSet $_records, $_containerId)
     {
         
     }
@@ -134,10 +134,25 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
         $result = array();
         foreach($_mapping as $destination => $source) {
             if (is_array($source)) {
-                //-- add
+                
+                $result[$destination] = '';                
+                foreach ($source as $key => $value) {
+                    if (isset($values[$headline[$value]]) && !empty($values[$headline[$value]])) {
+                        if (!is_numeric($key)) {
+                            if (!empty($result[$destination])) {
+                                $result[$destination] .= "\n";
+                            }
+                            $result[$destination] .= $key . ': ' . $values[$headline[$value]];
+                        } else {
+                            if (!empty($result[$destination])) {
+                                $result[$destination] .= " ";
+                            }
+                            $result[$destination] .= $values[$headline[$value]];
+                        }
+                    }                    
+                }
             } elseif (is_string($source) && !empty($source)) {
                 if (isset($values[$headline[$source]])) {
-                    //echo $destination .'-'.$headline[$source]. '-'.$values[$headline[$source]].' ';
                     $result[$destination] = $values[$headline[$source]];
                 }
             }
