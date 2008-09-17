@@ -320,7 +320,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $from->sub('02:00:00',Zend_Date::TIMES);
         $to = new Zend_Date ();
         
-        $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), NULL, 'id', 'ASC', 0, 10);
+        $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), NULL, '{"sort":"li","dir":"DESC","start":0,"limit":50}');
         
         //print_r ( $accessLogs );
       
@@ -341,7 +341,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $from->sub('02:00:00',Zend_Date::TIMES);
         $to = new Zend_Date ();
         
-        $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), 'tine20admin', 'id', 'ASC', 0, 10);
+        $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), 'tine20admin', '{"sort":"li","dir":"DESC","start":0,"limit":50}');
 
         //print_r ( $accessLogs );
         
