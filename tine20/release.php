@@ -91,6 +91,12 @@ if ($opts->clean) {
             }
         }
     }
+    
+    foreach (scandir("$tine20path/Tinebase/js") as $file) {
+        if (substr($file, -7) == '-all.js') {
+            unlink("$tine20path/Tinebase/js/$file");
+        }
+    }
 }
 
 $includeFiles = Tinebase_Http::getAllIncludeFiles(array(
