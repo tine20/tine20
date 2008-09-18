@@ -78,6 +78,53 @@ class Tinebase_Translation
     }
     
     /**
+     * gets a supported locale
+     *
+     * @param string $_localeString
+     * @return Zend_Locale
+     */
+    public static function getLocale($_localeString = 'auto')
+    {
+        Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale given localeString '$_localeString'");
+        try {
+            $locale = new Zend_Locale($_localeString);
+            
+            // check if we suppot the locale
+            $supportedLocales = array();
+            $availableTranslations = self::getAvailableTranslations();
+            foreach ($availableTranslations as $translation) {
+                $supportedLocales[] = $translation['locale'];
+            }
+            
+            if (! in_array((string)$locale, $supportedLocales)) {
+                Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale '$locale' is not supported, checking fallback");
+                
+                // check if we find suiteable fallback
+                $language = $locale->getLanguage();
+                switch ($language) {
+                    case 'zh':
+                        $locale = new Zend_Locale('zh_CN');
+                        break;
+                    default: 
+                        if (in_array($language, $supportedLocales)) {
+                            $locale = new Zend_Locale($language);
+                        } else {
+                            Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale no suiteable lang fallback found within this locales: " . print_r($supportedLocales, true) );
+                            throw new Exception('no suiteable lang fallback found');
+                        }
+                        break;
+                }
+            }
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale $e, falling back to locale en");
+            $locale = new Zend_Locale('en');
+        }
+        
+        Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale selected locale: '$locale'");
+        return $locale;
+    }
+    
+    /**
      * get zend translate for an application
      * 
      * @param  string $_applicationName
