@@ -239,6 +239,7 @@ class Tinebase_Controller
             $anonymnousMethods = array(
                 'Tinebase.login',
                 'Tinebase.getAvailableTranslations',
+                'Tinebase.getTranslations',
                 'Tinebase.setLocale'
             );
             // check json key for all methods but some exceptoins
