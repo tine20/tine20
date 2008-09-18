@@ -20,12 +20,14 @@ Zend_Loader::registerAutoload();
 /**
  * path to tine 2.0 checkout
  */
+global $tine20path;
 $tine20path = dirname(__FILE__);
 
 /**
  * path to yui compressor
  */
-$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
+global $yuiCompressorPath;
+$yuiCompressorPath = dirname(__FILE__) . '/../../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
 
 $jslintPath = dirname(__FILE__) . '/../../jslint4java-1.1/jslint4java-1.1+rhino.jar';
 
@@ -239,6 +241,7 @@ if ($opts->lint) {
     }
 }
 
+// translations
 if ($opts->a || $opts->t) {
     $translations = array();
     
@@ -271,10 +274,13 @@ if ($opts->a || $opts->t) {
             $js = $js . $domain;
         }
         file_put_contents("$tine20path/Tinebase/js/Locale/build/$locale-debug.js", $js);
+        
         if ( $opts->v ) {
             echo "compressing file $locale.js\n";
         }
         system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
+        
+        unifyTranslations(new Zend_Locale($locale));
     }    
 }
 
@@ -305,4 +311,36 @@ function getJs($locale, $appName, $poObject)
     return "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject);";
 }
 
+/**
+ * unifies / concats all translation sources into one file
+ *
+ * @param unknown_type $localeString
+ */
+function unifyTranslations($localeString)
+{
+    global $tine20path;
+    global $yuiCompressorPath;
+    
+    $output = '';
+    
+    // compress ext translation
+    $extTranslationFile = "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'ext');
+    if (file_exists($extTranslationFile)) {
+        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$localeString-ext-min.js $extTranslationFile");
+        
+    }
+    $files = array ( 
+        "$tine20path/" . "Tinebase/js/Locale/build/$localeString-ext-min.js",
+        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'generic'),
+        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'tine')
+    );
+    
+    foreach ($files as $file) {
+        if(file_exists($file)) {
+            $output .= file_get_contents($file);
+        }
+    }
+    
+    file_put_contents("$tine20path/Tinebase/js/Locale/build/$localeString-all.js", $output);
+}
 ?>
