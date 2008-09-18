@@ -345,51 +345,6 @@ function unifyTranslations($localeString)
 }
 
 /**
- * convertes po file to js object
- *
- * @param  string $filePath
- * @return string
- */
-public static function po2jsObject($filePath)
-{
-    $po = file_get_contents($filePath);
-    
-    global $first, $plural;
-    $first = true; 
-    $plural = false;
-    
-    $po = preg_replace('/\r?\n/', "\n", $po);
-    $po = preg_replace('/#.*\n/', '', $po);
-    // 2008-08-25 \s -> \n as there are situations when whitespace like space breaks the thing!
-    $po = preg_replace('/"(\n+)"/', '', $po);
-    $po = preg_replace('/msgid "(.*?)"\nmsgid_plural "(.*?)"/', 'msgid "$1, $2"', $po);
-    $po = preg_replace_callback('/msg(\S+) /', create_function('$matches','
-        global $first, $plural;
-        switch ($matches[1]) {
-            case "id":
-                if ($first) {
-                    $first = false;
-                    return "";
-                }
-                if ($plural) {
-                    $plural = false;
-                    return "]\n, ";
-                }
-                return ", ";
-            case "str":
-                return ": ";
-            case "str[0]":
-                $plural = true;
-                return ": [\n  ";
-            default:
-                return " ,";
-        }
-    '), $po);
-    $po = "({\n" . (string)$po . ($plural ? "]\n})" : "\n})");
-    return $po;
-}
-
-/**
  * creates translation lists js files for locale with js object
  *
  * @param   string $_locale
