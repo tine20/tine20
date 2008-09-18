@@ -1,16 +1,13 @@
 #!/usr/bin/env php
 <?php
 /**
- * tine import script 
+ * tine cli script 
  *
- * @package     HelperScripts
+ * @package     Cli
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo init tine environment
- * @todo set container id / username / password via param?
  */
 
 if (php_sapi_name() != 'cli') {
@@ -31,18 +28,37 @@ $tine20path = dirname(__FILE__);
 try {
     $opts = new Zend_Console_Getopt(
     array(
+    /*
         'verbose|v'             => 'Output messages',
         'format|f'              => 'File format [csv]',
-        'help|h'                => 'Display this help Message',
         'dry|d'                 => "Dry run - don't import data",
-        'filename=w'            => 'Filename of the import file',
+    */
+        'help|h'                => 'Display this help Message',
+        'verbose|v'             => 'Output messages',
+        'dry|d'                 => "Dry run - don't change anything",
+    
+        'method=s'              => 'Method to call',              
+        'username=s'            => 'Username',              
+        'password=s'            => 'Password',              
+        'filename=s'            => '(optional) Filename',
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
+   //echo $e->__toString();
    echo $e->getUsageMessage();
    exit;
 }
 
+if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || empty($opts->username) || empty($opts->password)) {
+    //print_r($opts->toArray());
+    echo $opts->getUsageMessage();
+    exit;
+}
+
+$tineBase = Tinebase_Controller::getInstance();
+$tineBase->handleCli($opts);
+
+/*
 if (count($opts->toArray()) === 0 || $opts->h || empty($opts->filename)) {
     echo $opts->getUsageMessage();
     exit;
@@ -52,12 +68,7 @@ if ($opts->v) {
     echo "filename to import: " . $opts->filename ."\n";
 }
 
-/*
- * Set up basic tine 2.0 environment
- * 
- * @todo make that work for this script!
- */
-/*
+// Set up basic tine 2.0 environment
 $_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__);
 
 $tinebaseController = Tinebase_Controller::getInstance();
@@ -69,7 +80,6 @@ $tinebaseController->setupUserLocale('de');
 if (!$tinebaseController->login('tine20admin', 'lars', '127.0.0.1')){
     throw new Exception("Couldn't login, user session required for import! \n");
 }
-*/
 
 // get csv importer
 $importer = Addressbook_Import_Factory::factory('Csv');
@@ -119,5 +129,5 @@ if (!$opts->d) {
 } else {
     print_r($records->toArray());
 }
-
+*/
 ?>
