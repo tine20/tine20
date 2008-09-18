@@ -48,7 +48,7 @@ class Tinebase_Json
      * returns tine translations of given application / (domain)
      * 
      * @param  string $application
-     * @reutn  string
+     * @return  string
      */
     public function getTranslations($application)
     {
@@ -89,7 +89,8 @@ class Tinebase_Json
      */
     public function setLocale($localeString, $saveaspreference)
     {
-        $locale = Tinebase_Controller::getInstance()->setupUserLocale($localeString, $saveaspreference);
+        Tinebase_Controller::getInstance()->setupUserLocale($localeString, $saveaspreference);
+        $locale = Zend_Registry::get('locale');
         
         return array(
             'locale' => array(
