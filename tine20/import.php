@@ -34,7 +34,8 @@ try {
         'verbose|v'             => 'Output messages',
         'format|f'              => 'File format [csv]',
         'help|h'                => 'Display this help Message',
-        'filename=w'            => 'Filename of the import file'
+        'dry|d'                 => "Dry run - don't import data",
+        'filename=w'            => 'Filename of the import file',
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
@@ -101,19 +102,22 @@ if ($opts->v) {
     echo "done.\n";
 }
 
-// import
-if ($opts->v) {
-    echo "importing ". count($records) ." records ...";
-}
-$importedRecords = $importer->import($records);
-if ($opts->v) {
-    echo "done.\n";
-}
-
-if ($opts->v) {
-    foreach ($importedRecords as $contact) {
-        echo "Imported contact: " . $contact->n_full;
-    }   
+// import (check if dry run)
+if (!$opts->d) {
+    if ($opts->v) {
+        echo "importing ". count($records) ." records ...";
+    }
+    $importedRecords = $importer->import($records);
+    if ($opts->v) {
+        echo "done.\n";
+    }
+    if ($opts->v) {
+        foreach ($importedRecords as $contact) {
+            echo "Imported contact: " . $contact->n_full;
+        }   
+    }
+} else {
+    print_r($records->toArray());
 }
 
 ?>
