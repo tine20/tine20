@@ -110,8 +110,6 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
      * @param Tinebase_Record_RecordSet $_records Addressbook_Model_Contact records
      * @param integer $_containerId
      * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
-     * 
-     * @todo create new container if it doesn't exit?
      */
     public function import(Tinebase_Record_RecordSet $_records, $_containerId = NULL)
     {
@@ -131,7 +129,10 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
         $addressbookController = Addressbook_Controller::getInstance();
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         foreach ($_records as $contact) {
-            $contact->owner = $containerId;
+            // set owner/container id only if it isn't set already
+            if (empty($contact->owner)) {
+                $contact->owner = $containerId;
+            }
             $newContact = $addressbookController->createContact($contact);
             $result->addRecord($newContact);
         }
@@ -152,6 +153,7 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
         $headline = array_flip(explode($this->_delimiter, $_headline));
         $values = explode($this->_delimiter, $_line);
         
+        //print_r($_mapping);
         //print_r($headline);
         //print_r($values);
         
@@ -161,13 +163,21 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
                 
                 $result[$destination] = '';                
                 foreach ($source as $key => $value) {
-                    if (isset($values[$headline[$value]]) && !empty($values[$headline[$value]])) {
-                        if (!is_numeric($key)) {
+                    if (is_array($value) || (isset($headline[$value]) && isset($values[$headline[$value]]) && !empty($values[$headline[$value]]))) {
+                        if (is_array($value) && !empty($value)) {
+                            // match to defined values (i.e. user -> owner/container id)
+                            $keyForValue = $values[$headline[$key]];
+                            if (isset($value[$keyForValue])) {
+                                $result[$destination] = $value[$keyForValue];
+                            }
+                        } elseif (!is_numeric($key)) {
+                            // add multiple values to one destination field with $key added 
                             if (!empty($result[$destination])) {
                                 $result[$destination] .= "\n";
                             }
                             $result[$destination] .= $key . ': ' . $values[$headline[$value]];
                         } else {
+                            // add multiple values to one destination field (separated with spaces)
                             if (!empty($result[$destination])) {
                                 $result[$destination] .= " ";
                             }
@@ -176,7 +186,8 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
                     }                    
                 }
             } elseif (is_string($source) && !empty($source)) {
-                if (isset($values[$headline[$source]])) {
+                // add single value to destination 
+                if (isset($headline[$source]) && isset($values[$headline[$source]])) {
                     $result[$destination] = $values[$headline[$source]];
                 }
             }

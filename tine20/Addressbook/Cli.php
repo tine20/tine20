@@ -86,7 +86,7 @@ class Addressbook_Cli
                 echo "reading file $filename ...";
             }
             try {
-                $records = $importer->read($filename, $config->mapping);
+                $records = $importer->read($filename, $config->mapping->toArray());
                 if ($_opts->v) {
                     echo "done.\n";
                 }
