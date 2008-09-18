@@ -63,11 +63,10 @@ class Tinebase_Cli
     }
     
     /**
-     * handle request
+     * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
      *
      * @param Zend_Console_Getopt $_opts
-     * 
-     * @todo add help option -> every ApplicationName_Cli.php should define a getHelp() function
+     * @return boolean success
      */
     public function handle($_opts)
     {
