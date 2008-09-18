@@ -315,32 +315,18 @@ class Tinebase_Controller
      * handler for command line scripts
      * 
      * @param Zend_Console_Getopt $_opts
-     * @return ???
+     * @return boolean
      */
     public function handleCli($_opts)
     {        
         $this->_initFramework();
 
         Zend_Registry::get('logger')->debug('Is cli request. method: ' . (isset($_opts->method) ? $_opts->method : 'EMPTY'));
-        Zend_Registry::get('logger')->debug('Cli args: ' . print_r($_opts->getRemainingArgs(), true));
+        //Zend_Registry::get('logger')->debug('Cli args: ' . print_r($_opts->getRemainingArgs(), true));
 
         $tinebaseServer = new Tinebase_Cli();
         $tinebaseServer->authenticate($_opts->username, $_opts->password);
-        $tinebaseServer->handle($_opts);
-        
-        /*
-        $server = new Tinebase_Http_Server();
-        $server->setClass('Tinebase_Cli', 'Tinebase');
-        
-        $request = array(
-            'method' => $_opts->method,
-            'username' => $_opts->username,
-            'password' => $_opts->password,
-        );
-        $request = array_merge($request, $_opts->getRemainingArgs());
-                    
-        $server->handle($request);
-        */
+        return $tinebaseServer->handle($_opts);        
     }
     
     /**
