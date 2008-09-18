@@ -341,7 +341,7 @@ function unifyTranslations($localeString)
         }
     }
     
-    file_put_contents("$tine20path/Tinebase/js/Locale/build/$localeString-all.js", $output);
+    file_put_contents("$tine20path/Tinebase/js/$localeString-all.js", $output);
 }
 
 /**
