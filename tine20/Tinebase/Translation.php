@@ -10,6 +10,8 @@
  * @version     $Id$
  */
 
+
+
 /**
  * primary class to handle translations
  *
@@ -18,6 +20,23 @@
  */
 class Tinebase_Translation
 {
+    /**
+     * List of officially supported languages
+     *
+     * @var array
+     */
+    private static $SUPPORTED_LANGS = array(
+        'bg',      // Bulgarian            Dimitrina Mileva <dimitrina@gmx.de>
+        'cs',      // Czech                Michael Sladek <msladek@volny.cz>
+        'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
+        'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
+        //'fr',      // Frensch              Lidia Panio <lidiapanio@hotmail.com>
+        //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
+        //'pl',      // Polish               Chrisopf Gacki <c.gacki@metaways.de>
+        'ru',      // Russian              Ilia Yurkovetskiy <i.yurkovetskiy@metaways.de>
+        'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
+    );
+    
     /**
      * returns list of all available translations
      * NOTE available are those, having a Tinebase translation
@@ -29,22 +48,32 @@ class Tinebase_Translation
     {
         $availableTranslations = array();
         
-        // look for po files in Tinebase an fill in en.po virtually
-        $dirContents = scandir(dirname(__FILE__) . '/translations');
-        array_push($dirContents, 'en.po');
-        sort($dirContents);
-        
-        foreach ($dirContents as $poFile) {
-            list ($localestring, $suffix) = explode('.', $poFile);
-            if ($suffix == 'po') {
-                $locale = new Zend_Locale($localestring);
-                $availableTranslations[] = array(
-                    'locale'   => $localestring,
-                    'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                    'region'   => $locale->getCountryTranslation($locale->getRegion())
-                );
+        if (TINE20_BUILDTYPE == 'RELEASE') {
+            $list = self::$SUPPORTED_LANGS;
+        } else {
+            // look for po files in Tinebase an fill in en.po virtually
+            $dirContents = scandir(dirname(__FILE__) . '/translations');
+            array_push($dirContents, 'en.po');
+            sort($dirContents);
+            $list = array();
+            
+            foreach ($dirContents as $poFile) {
+                list ($localestring, $suffix) = explode('.', $poFile);
+                if ($suffix == 'po') {
+                    $list[] = $localestring;
+                }
             }
         }
+        
+        foreach ($list as $localestring) {
+            $locale = new Zend_Locale($localestring);
+            $availableTranslations[] = array(
+                'locale'   => $localestring,
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion())
+            );
+        }
+            
         return $availableTranslations;
     }
     
