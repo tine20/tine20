@@ -79,7 +79,7 @@ class Tinebase_Cli
             if ($_opts->info) {
                 $result = $object->getHelp();
             } else {
-                $result = call_user_func_array(array($object, $method), $_opts);
+                $result = call_user_func(array($object, $method), $_opts);
             }
         } else {
             echo "Class $class does not exist.\n";
