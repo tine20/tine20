@@ -25,7 +25,7 @@ if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '')
 /**
  * config locales
  */
-Locale.setlocale(Locale.LC_ALL, '');
+//Locale.setlocale(Locale.LC_ALL, '');
 Tine.Tinebase.tranlation = new Locale.Gettext();
 Tine.Tinebase.tranlation.textdomain('Tinebase');
 _ = function(msgid) {
@@ -37,6 +37,14 @@ _ = function(msgid) {
  */
 Tine.Tinebase.initFramework = function() {
 	
+    /*
+    var locale = Tine.Tinebase.Registry.get('locale');
+    var headEl = Ext.get(document.getElementsByTagName("head")[0]);
+    
+    var file = 'Tinebase/js/Locale/build/' + locale.locale + '-all.js';
+    var script = Ext.DomHelper.insertFirst(headEl, {tag: 'script', src: file, type: 'text/javascript'}, true)
+    */
+    
 	/**
      * Ajax reuest proxy
      * 
