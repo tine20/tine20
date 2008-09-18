@@ -166,17 +166,16 @@ class Tinebase_AccessLog
         $stmt = $select->query();
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        foreach ($rows as $rowId => $row) {
+        foreach ($rows as $rowId => &$row) {
             if ($row['lo'] >= $row['li']) {
                 $row['lo'] = new Zend_Date($row['lo'], Zend_Date::ISO_8601);
             } else {
                 $row['lo'] = NULL;
             }
             $row['li'] = new Zend_Date($row['li'], Zend_Date::ISO_8601);
-            $arrayRowSet[$rowId] = $row;
         }
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_AccessLog', $arrayRowSet);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_AccessLog', $rows);
 
         return $result;
     }
