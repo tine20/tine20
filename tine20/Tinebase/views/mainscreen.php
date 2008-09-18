@@ -20,14 +20,12 @@
 
     <!-- EXT JS -->
     <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/xtheme-gray.css" />
-	
+    <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/xtheme-gray.css" /><?php /*
     <!-- <script type="text/javascript" src="ExtJS/adapter/yui/yui-utilities.js"></script> -->
-    <!-- <script type="text/javascript" src="ExtJS/adapter/yui/ext-yui-adapter.js"></script> -->
+    <!-- <script type="text/javascript" src="ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> */?>
+    
     <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="ExtJS/ext-all.js"></script>
-
-    <?php echo (isset($this->googleApi)) ? $this->googleApi : '' ?>
 
     <!-- Tine 2.0 static files --><?php
         /**
@@ -60,15 +58,17 @@
                 
                 break;
         }
-    ?>
-    
-    <!-- Static Localisation --><?php
-    $locale = Zend_Registry::get('locale');
+
+        $locale = Zend_Registry::get('locale');
+        if (TINE20_BUILDTYPE != 'DEVELOPMENT') {
+            echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/" . $tineBuildPath . (string)$locale . "-all.js'></script>";
+        } 
+    /*
     echo "
     <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . "'></script>
     <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . "'></script>
     <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . "'></script>
-    ";?>
+    ";*/?>
     
     
     <!-- Tine 2.0 dynamic initialisation -->
