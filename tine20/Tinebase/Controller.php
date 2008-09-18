@@ -544,7 +544,7 @@ class Tinebase_Controller
             }
             
             Zend_Registry::set('currentAccount', $account);
-
+            
             $this->_session->currentAccount = $account;
             
             $account->setLoginTime($_ipAddress);
@@ -555,7 +555,7 @@ class Tinebase_Controller
                 $_ipAddress,
                 $authResult->getCode(),
                 Zend_Registry::get('currentAccount')
-           );
+            );
             
             return true;
         } else {
