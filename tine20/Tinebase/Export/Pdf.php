@@ -132,7 +132,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $config->fontpath);
                          
             $boldpath = $config->get('fontboldpath', $config->fontpath);
-            $embed = ($config->fontembed) ? Zend_Pdf_Font::EMBED_DONT_EMBED : 0;
+            $embed = ($config->fontembed) ? 0 : Zend_Pdf_Font::EMBED_DONT_EMBED;
             
             // try to use ttf / type 1 / opentype / postscript fonts
             $this->_font = Zend_Pdf_Font::fontWithPath($config->fontpath, $embed);
