@@ -23,6 +23,13 @@ class Addressbook_Cli
      * @var string
      */
     protected $_appname = 'Addressbook';
+    
+    /**
+     * import config filename
+     *
+     * @var string
+     */
+    protected $_configFilename = 'importconfig.inc.php';
 
     /**
      * help array with function names and param descriptions
@@ -33,7 +40,7 @@ class Addressbook_Cli
             'params'        => array(
                 'filenames'   => 'Filename(s) of import file(s) [required]',
                 //'format'     => 'Import file format (default: csv) [optional]',
-                //'config'     => 'Mapping config file (default: mapping.inc.php) [optional]',
+                //'config'     => 'Mapping config file (default: importconfig.inc.php) [optional]',
             )
         )
     );
@@ -57,8 +64,6 @@ class Addressbook_Cli
      * import contacts
      *
      * @param Zend_Console_Getopt $_opts
-     * 
-     * @todo get mapping from config file
      */
     public function import($_opts)
     {
@@ -67,32 +72,21 @@ class Addressbook_Cli
         // get csv importer
         $importer = Addressbook_Import_Factory::factory('Csv');
         
-        // set mapping
-        $mapping = array(
-            'adr_one_locality'      => 'Ort',
-            'adr_one_postalcode'    => 'Plz',
-            'adr_one_street'        => 'Straße',
-            'org_name'              => 'Name1',
-            'org_unit'              => 'Name2',
-            'note'                  => array(
-                'Mitarbeiter'       => 'inLab Spezi',
-                'Anzahl Mitarbeiter' => 'ANZMitarbeiter',
-                'Bemerkung'         => 'Bemerkung',
-            ),
-            'tel_work'              => 'TelefonZentrale',
-            'tel_cell'              => 'TelefonDurchwahl',
-            'n_family'              => 'Nachname',
-            'n_given'               => 'Vorname',
-            'n_prefix'              => array('Anrede', 'Titel'),
-        );
+        // get mapping and container (from config file)
+        if(file_exists($this->_configFilename)) {
+            $config = new Zend_Config(require $this->_configFilename);
+        } else {
+            echo "Import config file not found.\n";
+        }
         
+        // loop files in argv
         foreach ($args as $filename) {
             // read file
             if ($_opts->v) {
                 echo "reading file $filename ...";
             }
             try {
-                $records = $importer->read($filename, $mapping);
+                $records = $importer->read($filename, $config->mapping);
                 if ($_opts->v) {
                     echo "done.\n";
                 }
@@ -102,7 +96,7 @@ class Addressbook_Cli
                 } else {
                     echo $e->getMessage() . "\n";
                 }
-                return FALSE;
+                continue;
             }
             
             // import (check if dry run)
@@ -110,13 +104,13 @@ class Addressbook_Cli
                 if ($_opts->v) {
                     echo "importing ". count($records) ." records...";
                 }
-                $importedRecords = $importer->import($records);
+                $importedRecords = $importer->import($records, $config->containerId);
                 if ($_opts->v) {
                     echo "done.\n";
                 }
                 if ($_opts->v) {
                     foreach ($importedRecords as $contact) {
-                        echo "Imported contact: " . $contact->n_full;
+                        echo "Imported contact: " . $contact->n_fn ."\n";
                     }   
                 }
             } else {
