@@ -66,11 +66,26 @@ class Tinebase_Cli
      * handle request
      *
      * @param Zend_Console_Getopt $_opts
-     * @todo implement
+     * 
+     * @todo add help option -> every ApplicationName_Cli.php should define a getHelp() function
      */
     public function handle($_opts)
     {
-        echo "run method " . $_opts->method ."\n";
+        list($application, $method) = explode('.', $_opts->method);
+        $class = $application . '_' . 'Cli';
         
+        if (@class_exists($class)) {
+            $object = new $class;
+            if ($_opts->info) {
+                $result = $object->getHelp();
+            } else {
+                $result = call_user_func_array(array($object, $method), $_opts);
+            }
+        } else {
+            echo "Class $class does not exist.\n";
+            $result = FALSE;
+        }
+        
+        return $result;
     }
 }

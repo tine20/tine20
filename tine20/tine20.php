@@ -35,12 +35,12 @@ try {
     */
         'help|h'                => 'Display this help Message',
         'verbose|v'             => 'Output messages',
-        'dry|d'                 => "Dry run - don't change anything",
+        'dry|d'                 => "Dry run - don't change anything",    
+        'info|i'                => 'Get usage description of method',
     
-        'method=s'              => 'Method to call',              
-        'username=s'            => 'Username',              
-        'password=s'            => 'Password',              
-        'filename=s'            => '(optional) Filename',
+        'method=s'              => 'Method to call [required]',              
+        'username=s'            => 'Username [required]',              
+        'password=s'            => 'Password [required]',              
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
