@@ -48,4 +48,38 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
         
         return $call;
     }
+    
+    /**
+     * update call, set ringing time
+     *
+     * @param Phone_Model_Call $_call
+     * @return Phone_Model_Call
+     */
+    public function connected(Phone_Model_Call $_call)
+    {
+        $now = Zend_Date::now();
+        $_call->connected = $now->getIso();
+        $_call->ringing = $now->sub($_call->start);
+        
+        $call = $this->update($_call);
+        
+        return $call;
+    }
+
+    /**
+     * update call, set duration
+     *
+     * @param Phone_Model_Call $_call
+     * @return Phone_Model_Call
+     */
+    public function disconnected(Phone_Model_Call $_call)
+    {
+        $now = Zend_Date::now();
+        $_call->disconnected = $now->getIso();
+        $_call->duration = $now->sub($_call->connected);
+        
+        $call = $this->update($_call);
+        
+        return $call;
+    }
 }
