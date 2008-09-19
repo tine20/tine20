@@ -977,7 +977,7 @@ Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
         itemsConstructorConfig: config
     });
     return window;
-}
+};
 
 /**************************** models ***************************************/
 
