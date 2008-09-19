@@ -29,4 +29,23 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
         $this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
     }    
+    
+    /**
+     * start phone call and save in history
+     *
+     * @param Phone_Model_Call $_call
+     * @return Phone_Model_Call
+     */
+    public function startCall(Phone_Model_Call $_call) {
+        if ( empty($_call->id) ) {
+            $newId = $_call->generateUID();
+            $_call->setId($newId);
+        }
+        
+        $_call->start = Zend_Date::now()->getIso();
+        
+        $call = $this->create($_call);
+        
+        return $call;
+    }
 }
