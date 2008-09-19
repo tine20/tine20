@@ -118,6 +118,22 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * tests locale fallback
+     */
+    public function testSetLocaleFallback()
+    {
+        // de_LU -> de
+        $this->_instance->setLocale('de_LU', false);
+        $this->assertEquals('de', (string)Zend_Registry::get('locale'), 'Fallback to generic german did not succseed');
+        
+        $this->_instance->setLocale('zh', false);
+        $this->assertEquals('zh_CN', (string)Zend_Registry::get('locale'), 'Fallback to simplified chinese did not succseed');
+        
+        $this->_instance->setLocale('foo_bar', false);
+        $this->assertEquals('en', (string)Zend_Registry::get('locale'), 'Exception fallback to english did not succseed');
+    }
+    
+    /**
      * test set locale and save it in db
      */
     public function testSetLocaleAsPreference()
