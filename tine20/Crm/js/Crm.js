@@ -1325,7 +1325,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         },
                         refresh: function(v) {
                             v.scroller.dom.scrollTop = v.scrollTop;
-                        },
+                        }
                     }
                 })
             });
@@ -1764,7 +1764,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             success: this.onRecordLoad,
             params: {
                 method: 'Crm.getLead',
-                leadId: this.lead.id,
+                leadId: this.lead.id
             }
         });
         
