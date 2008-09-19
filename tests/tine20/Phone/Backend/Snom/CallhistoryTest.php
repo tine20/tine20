@@ -25,6 +25,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var bool allow the use of GLOBALS to exchange data between tests
+     */
+    protected $backupGlobals = false;
+    
+    /**
      * Fixtures
      * 
      * @var array test objects
@@ -54,7 +59,24 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Phone_Backend_Snom_Callhistory();        
+        // initialise global for this test suite
+        $GLOBALS['Phone_Backend_Snom_CallhistoryTest'] = array_key_exists('Phone_Backend_Snom_CallhistoryTest', $GLOBALS) 
+            ? $GLOBALS['Phone_Backend_Snom_CallhistoryTest'] 
+            : array();
+        
+        $this->_backend = new Phone_Backend_Snom_Callhistory();     
+
+        $this->_objects['call'] = new Phone_Model_Call(array(
+            'line_id'               => 'phpunitlineid',
+            'phone_id'              => 'phpunitphoneid',
+            'call_id'               => 'phpunitcallid',
+            //'start'                 => Zend_Date::now()->getIso(),
+            //'connected'             => '2008-09-19 19:00:02',
+            //'disconnected'          => '2008-09-19 19:05:02',
+            'direction'             => Phone_Model_Call::TYPE_INCOMING,
+            'source'                => '26',
+            'destination'           => '0406437435',    
+        ));
     }
 
     /**
@@ -67,10 +89,31 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test save
+     * test start
      * 
      */
-    public function testSave()
+    public function testStartCall()
+    {
+        $call = $this->_backend->startCall($this->_objects['call']);
+        $GLOBALS['Phone_Backend_Snom_CallhistoryTest']['callId'] = $call->getId();
+        
+        $this->assertEquals($this->_objects['call']->destination, $call->destination);
+        $this->assertGreaterThan(Zend_Date::now()->getIso(), $call->start);
+    }
+
+    /**
+     * test start
+     * 
+     */
+    public function testConnected()
+    {
+    }
+
+    /**
+     * test start
+     * 
+     */
+    public function testDisconnected()
     {
     }
     
@@ -88,5 +131,10 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
+        $callId = $GLOBALS['Phone_Backend_Snom_CallhistoryTest']['callId'];
+        $this->_backend->delete($callId);
+        
+        $this->setExpectedException('Exception');
+        $this->_backend->get($callId);
     }
 }
