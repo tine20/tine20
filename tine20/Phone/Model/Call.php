@@ -71,11 +71,20 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
         'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'connected'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'disconnected'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'duration'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int'),
-        'ringing'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int'),
+        'duration'              => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            'Int', 
+            Zend_Filter_Input::DEFAULT_VALUE => 0
+        ),
+        'ringing'               => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            'Int', 
+            Zend_Filter_Input::DEFAULT_VALUE => 0
+        ),
         'direction'             => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            'InArray' => array(self::TYPE_INCOMING, self::TYPE_OUTGOING)),
+            'InArray' => array(self::TYPE_INCOMING, self::TYPE_OUTGOING)
+        ),
         'source'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'destination'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
     );
