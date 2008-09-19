@@ -125,7 +125,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $userId = Zend_Registry::get('currentAccount')->getId();
         $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'Locale');
         
-        $locale = 'de_DE';
+        $locale = 'de';
         $result = $this->_instance->setLocale($locale, true);
         
         //print_r($result);
