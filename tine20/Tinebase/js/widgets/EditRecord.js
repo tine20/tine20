@@ -185,7 +185,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             });
             this.getForm().add(ContainerForm);
             
-            new Ext.Panel({
+            var containerSelect = new Ext.Panel({
                 layout: 'form',
                 border: false,
                 renderTo: this.recordContainerEl,
