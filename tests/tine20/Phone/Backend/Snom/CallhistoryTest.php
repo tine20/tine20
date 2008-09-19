@@ -70,9 +70,6 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
             'line_id'               => 'phpunitlineid',
             'phone_id'              => 'phpunitphoneid',
             'call_id'               => 'phpunitcallid',
-            //'start'                 => Zend_Date::now()->getIso(),
-            //'connected'             => '2008-09-19 19:00:02',
-            //'disconnected'          => '2008-09-19 19:05:02',
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
             'destination'           => '0406437435',    
@@ -99,30 +96,44 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($this->_objects['call']->destination, $call->destination);
         $this->assertGreaterThan(Zend_Date::now()->getIso(), $call->start);
+        
+        // sleep for 2 secs (ringing...)
+        sleep(2);
     }
 
     /**
-     * test start
+     * test connect
      * 
      */
     public function testConnected()
     {
+        $callId = $GLOBALS['Phone_Backend_Snom_CallhistoryTest']['callId'];
+        $call = $this->_backend->get($callId);
+        $ringing = $call->ringing;
+        
+        $connectedCall = $this->_backend->connected($call);
+        
+        $this->assertGreaterThan($ringing, $connectedCall->ringing);
+        $this->assertLessThan(3, $connectedCall->ringing);
+
+        // sleep for 5 secs (talking...)
+        sleep(5);
     }
 
     /**
-     * test start
+     * test disconnect
      * 
      */
     public function testDisconnected()
     {
-    }
-    
-    /**
-     * test get
-     * 
-     */
-    public function testGet()
-    {        
+        $callId = $GLOBALS['Phone_Backend_Snom_CallhistoryTest']['callId'];
+        $call = $this->_backend->get($callId);
+        $duration = $call->duration;
+
+        $disconnectedCall = $this->_backend->disconnected($call);
+        
+        $this->assertGreaterThan($duration, $disconnectedCall->duration);
+        $this->assertLessThan(6, $disconnectedCall->duration);
     }
     
     /**
