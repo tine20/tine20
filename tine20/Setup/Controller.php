@@ -17,7 +17,18 @@
  */
 class Setup_Controller
 {
+    /**
+     * setup backend
+     *
+     * @var Setup_Backend_Interface
+     */
     private $_backend;
+    
+    /**
+     * Enter description here...
+     *
+     * @var Zend_Config
+     */
     private $_config;
     
     /**
@@ -39,8 +50,6 @@ class Setup_Controller
         $this->setupDatabaseConnection();
     }
               
-    
-
     /**
      * initializes the logger
      *
@@ -154,9 +163,7 @@ class Setup_Controller
             }
         }
     }
-    
-
-    
+     
     /**
      * returns true if we need to load initial data
      *
@@ -167,7 +174,6 @@ class Setup_Controller
         return $this->_doInitialLoad;
     }
     
-
     /**
      * add an application to database
      * register to tine
@@ -263,6 +269,11 @@ class Setup_Controller
         return $xml;
     }
     
+    /**
+     * check update
+     *
+     * @param Tinebase_Model_Application $_application
+     */
     public function checkUpdate(Tinebase_Model_Application $_application)  
     {
         $xmlTables = $this->getSetupXml($_application->name);
@@ -282,19 +293,6 @@ class Setup_Controller
         }
     }
     
-    
-    /**
-     * compare versions
-     *
-     * @param string $_tableName (database)
-     * @param string $_tableVersion (xml-file)
-     * @return 1,0,-1
-     */
-  /*public function tableNeedsUpdate($_tableName, $_tableVersion)
-    {
-        return version_compare($this->tableVersionQuery($_tableName),  $_tableVersion);
-    }*/
-
     /**
      * update installed application
      *
