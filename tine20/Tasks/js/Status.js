@@ -84,7 +84,7 @@ Tine.Tasks.status.getStore = function() {
 Tine.Tasks.status.getIdentifier = function(statusName) {
 	var index = Tine.Tasks.status.getStore().find('status_name', statusName);
 	var status = Tine.Tasks.status.getStore().getAt(index);
-	return status.data.id;
+	return status ? status.data.id : statusName;
 };
 
 Tine.Tasks.status.getStatus = function(id) {
