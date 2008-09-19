@@ -17,6 +17,36 @@
  *
  * @package     Addressbook
  * @subpackage  Import
+ * 
+ * a sample mapping:
+ * --
+ * array(
+    'mapping' => array(
+        'adr_one_locality'      => 'Ort',
+        'adr_one_postalcode'    => 'Plz',
+        'adr_one_street'        => 'Straße',
+        'org_name'              => 'Name1',
+        'org_unit'              => 'Name2',
+        'note'                  => array(
+            'Mitarbeiter'           => 'inLab Spezi',
+            'Anzahl Mitarbeiter'    => 'ANZMitarbeiter',
+            'Bemerkung'             => 'Bemerkung',
+        ),
+        'tel_work'              => 'TelefonZentrale',
+        'tel_cell'              => 'TelefonDurchwahl',
+        'n_family'              => 'Nachname',
+        'n_given'               => 'Vorname',
+        'n_prefix'              => array('Anrede', 'Titel'),
+        'owner'                 => array(
+            'inLab Spezi'           => array(
+            'Name 1'                 => 92,
+            'Name 2'                 => 66,
+            'Name 3'                 => 88
+            ),
+        ),
+    ),
+    //'containerId' => 2,
+ *
  */
 class Addressbook_Import_Csv implements Addressbook_Import_Interface
 {
