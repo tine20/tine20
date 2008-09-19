@@ -57,7 +57,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
             totalProperty: 'totalcount',
             fields: Tine.Tinebase.Model.Language,
             baseParams: {
-                method: 'Tinebase.getAvailableTranslations',
+                method: 'Tinebase.getAvailableTranslations'
             }
         });
         Tine.widgets.LangChooser.superclass.initComponent.call(this);

@@ -24,7 +24,7 @@ Tine.widgets.VersionCheck = function() {
             url: 'http://tine20.org/versionCheck.php'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'version',
+            root: 'version'
         }, ['codename', 'packageString', 'releasedate', 'critical', 'build'])
     });
     ds.on('load', function(store, records) {

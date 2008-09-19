@@ -67,14 +67,14 @@ Tine.Login = {
                     fieldLabel: _('Username'),
                     id: 'username',
                     name: 'username',
-                    value: _defaultUsername,
+                    value: _defaultUsername
                 }, {
                     inputType: 'password',
                     fieldLabel: _('Password'),
                     id: 'password',
                     name: 'password',
                     //allowBlank: false,
-                    value: _defaultPassword,
+                    value: _defaultPassword
                 }]
             }),
             buttons: loginButtons

@@ -53,7 +53,7 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
             totalProperty: 'totalcount',
             fields: Tine.Tinebase.Model.Timezone,
             baseParams: {
-                method: 'Tinebase.getAvailableTimezones',
+                method: 'Tinebase.getAvailableTimezones'
             }
         });
         Tine.widgets.TimezoneChooser.superclass.initComponent.call(this);
