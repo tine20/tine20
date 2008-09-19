@@ -797,7 +797,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 })*/
             ]
         }]
-	};},
+	};}
 });
 
 /**

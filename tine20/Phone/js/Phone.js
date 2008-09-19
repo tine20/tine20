@@ -247,7 +247,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         this.items = [
             {
                 fieldLabel: this.translation._('Number'),
-                name: 'phoneNumber',
+                name: 'phoneNumber'
             },{
                 xtype: 'combo',
                 fieldLabel: this.translation._('Phone'),
