@@ -425,7 +425,7 @@ Tine.Crm.Main = {
                     },
                     refresh: function(v) {
                         v.scroller.dom.scrollTop = v.scrollTop;
-                    },
+                    }
                 }
             })            
         });
