@@ -110,6 +110,8 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
      * @param Tinebase_Record_RecordSet $_records Addressbook_Model_Contact records
      * @param integer $_containerId
      * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * 
+     * @todo create Abstract and move import() there when new import formats are implemented 
      */
     public function import(Tinebase_Record_RecordSet $_records, $_containerId = NULL)
     {
