@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Tables.php 1063 2008-03-14 16:28:12Z lkneschke $
  *
+ * @todo rework ext check classes!
  */
 
 /*
