@@ -114,16 +114,18 @@ class Tinebase_Json
      */
     public function getAvailableTimezones()
     {
-        //$locale =  Zend_Registry::get('locale');
-        $locale = new Zend_Locale('de');;
+        $locale =  Zend_Registry::get('locale');
 
-        $availableTimezones = $locale->getTranslationList('CityToTimezone');
+        $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
+        //asort($availableTimezones);
+        //$availableTimezones = array_flip($availableTimezones);
         
+        $availableTimezones = DateTimeZone::listIdentifiers();
         $result = array();
-        foreach ($availableTimezones as $timezone => $timezoneTranslation) {
+        foreach ($availableTimezones as $timezone) {
             $result[] = array(
                 'timezone' => $timezone,
-                'timezoneTranslation' => $timezoneTranslation
+                'timezoneTranslation' => array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL
             );
         }
         
