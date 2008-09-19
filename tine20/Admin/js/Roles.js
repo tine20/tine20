@@ -386,8 +386,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 dataStore.addSorted(record);
             }
             selectionModel.selectRow(dataStore.indexOfId(account.data.id));            
-        },
-        
+        }
      },
      
      handlerApplyChanges: function(_button, _event, _closeWindow) {
