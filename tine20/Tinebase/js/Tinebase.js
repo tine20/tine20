@@ -17,7 +17,7 @@ Ext.namespace('Tine', 'Tine.Tinebase');
  * Instance of Tine.Tinebase.RegistryClass
  */
 if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
-    Tine.Tinebase.Registry = new Ext.util.MixedCollection;
+    Tine.Tinebase.Registry = new Ext.util.MixedCollection();
 } else {
     Tine.Tinebase.Registry = Ext.ux.PopupWindowGroup.getMainScreen().Tine.Tinebase.Registry;
 }
