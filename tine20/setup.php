@@ -83,6 +83,7 @@ $requiredIniSettings = array(
     'magic_quotes_sybase'  => 0,
     'magic_quotes_gpc'     => 0,
     'magic_quotes_runtime' => 0,
+    'mbstring.func_overload' => 0,
 );
 
 foreach ($requiredIniSettings as $variable => $newValue) {
