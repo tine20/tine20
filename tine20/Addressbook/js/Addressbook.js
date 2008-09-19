@@ -587,7 +587,7 @@ Tine.Addressbook.Main = {
                     },
                     refresh: function(v) {
                         v.scroller.dom.scrollTop = v.scrollTop;
-                    },
+                    }
                 }
             })              
         });
