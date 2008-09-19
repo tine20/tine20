@@ -624,7 +624,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 }
             ]
         }]
-    }]},
+    }];},
     
     updateToolbarButtons: function() {
         if(this.accountRecord.get('accountId') > 0) {

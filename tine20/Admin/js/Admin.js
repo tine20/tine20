@@ -87,7 +87,7 @@ Tine.Admin = function() {
         expanded :true,
         dataPanelType :"roles",
         viewRight: 'roles'
-    }]};
+    }];};
 
 	/**
      * creates the admin menu tree
@@ -342,7 +342,7 @@ Tine.Admin.AccessLog.Main = function() {
                 'dir'   : _dataSource.getSortState() ? _dataSource.getSortState().direction : Tine.Admin.AccessLog.Main.paging.dir,
                 'start' : options.params.start ? options.params.start : Tine.Admin.AccessLog.Main.paging.start,
                 'limit' : options.params.limit ? options.params.limit : Tine.Admin.AccessLog.Main.paging.limit
-        	}
+        	};
 
             _dataSource.baseParams.paging = Ext.util.JSON.encode(paging);
         	

@@ -22,7 +22,7 @@ Tine.Admin.Tags.Main = {
          * onclick handler for addBtn
          */
         addTag: function(_button, _event) {
-            Tine.Admin.Tags.EditDialog.openWindow({tag: null})
+            Tine.Admin.Tags.EditDialog.openWindow({tag: null});
         },
 
         /**
