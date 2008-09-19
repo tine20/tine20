@@ -116,7 +116,7 @@ Ext.onReady(function(){
             }
             var items = new ref(c.itemsConstructorConfig);
         } else {
-            items = c.items ? c.items : {}
+            items = c.items ? c.items : {};
         }
         
         /** temporary Tine.onRady for smooth transition to new window handling **/

@@ -114,7 +114,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             configStore: this.grantsStore,
             hasAccountPrefix: true,
             configColumns: columns
-        })
+        });
         
 		Tine.widgets.container.grantDialog.superclass.initComponent.call(this);
     }

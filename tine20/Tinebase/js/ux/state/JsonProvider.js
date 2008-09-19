@@ -33,9 +33,7 @@ Ext.ux.state.JsonProvider = function(config) {
             data: []
         });
     }
-    
-    
-}
+};
  
 Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
     

@@ -17,7 +17,7 @@ Locale.Gettext = function (locale) {
     this.category = Locale.LC_MESSAGES;
     this.suffix = 'po';
     this.dir = '.';
-}
+};
 
 Locale.Gettext.prototype.bindtextdomain = function (domain, dir) {
   this.dir = dir;

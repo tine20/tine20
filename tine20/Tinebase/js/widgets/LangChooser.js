@@ -102,7 +102,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         var script = {};
         for (var location in translationFiles) {
             file = translationFiles[location];
-            script[location] = Ext.DomHelper.insertFirst(headEl, {tag: 'script', src: file, type: 'text/javascript'}, true)
+            script[location] = Ext.DomHelper.insertFirst(headEl, {tag: 'script', src: file, type: 'text/javascript'}, true);
             script[location].on('load', this.onLangFileLoad, this);
         }
     },

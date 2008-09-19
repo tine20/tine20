@@ -30,7 +30,7 @@ Tine.Tinebase.tranlation = new Locale.Gettext();
 Tine.Tinebase.tranlation.textdomain('Tinebase');
 _ = function(msgid) {
     return Tine.Tinebase.tranlation.dgettext('Tinebase', msgid);
-}
+};
 
 /**
  * Initialise Tine 2.0 ExtJs framework

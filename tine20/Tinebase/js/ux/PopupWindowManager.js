@@ -24,7 +24,7 @@ Ext.ux.PopupWindowGroup = function(){
         var doc;
         for(var id in list){
             try {
-                doc = list[id].popup.document
+                doc = list[id].popup.document;
             } catch(e)  {
                 // same domain policy problem!
             }
@@ -214,7 +214,7 @@ Ext.ux.PopupWindowGroup.getMainScreen = function() {
         w = w.opener;
     }
     return w;
-}
+};
 
 /**
  * @class Ext.ux.PopupWindowMgr

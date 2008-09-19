@@ -57,4 +57,4 @@ Tine.widgets.VersionCheck = function() {
     }, this);
     
     ds.load({params: {version: Ext.util.JSON.encode(Tine.Tinebase.Registry.get('version'))}});
-}
+};
