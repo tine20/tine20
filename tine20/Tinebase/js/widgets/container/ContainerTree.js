@@ -315,7 +315,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 			managePermissions: function() {
 				if (this.ctxNode) {
 					var node = this.ctxNode;
-                    new Ext.ux.PopupWindow({
+                    var window = new Ext.ux.PopupWindow({
                         url: 'index.php',
                         name: 'TinebaseManageContainerGrants' + node.attributes.container.id,
                         layout: 'fit',

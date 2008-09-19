@@ -81,7 +81,7 @@ Tine.Login = {
             
         });
         
-        new Ext.Viewport({
+        var viewport = new Ext.Viewport({
             layout: 'fit',
             html: '',
             listeners: {

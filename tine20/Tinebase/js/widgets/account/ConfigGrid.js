@@ -112,7 +112,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
-            new Ext.menu.Menu({
+            var menu = new Ext.menu.Menu({
                 items: [this.action_removeAccount]
             }).showAt(_eventObject.getXY());
         }, this);
