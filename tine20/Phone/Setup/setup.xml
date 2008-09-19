@@ -60,6 +60,7 @@
             </declaration>
         </table>
         <table>
+        	<!-- @todo add constraints to phone_id/line_id? -->
             <name>phone_callhistory</name>
             <version>1</version>
             <declaration>

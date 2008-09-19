@@ -11,14 +11,22 @@
  */
 
 /**
- * callhistory backend for the Phone application
+ * call history backend for the Phone application
  * 
  * @package     Phone
- * @subpackage  Backend
+ * @subpackage  Snom
  * 
- * @todo implement
- * @todo add it to factory/make singleton?
  */
-class Phone_Backend_Snom_Callhistory
+class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
 {
+    /**
+     * the constructor
+     */
+    public function __construct ()
+    {
+        $this->_tableName = SQL_TABLE_PREFIX . 'phone_callhistory';
+        $this->_modelName = 'Phone_Model_Call';
+        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
+    }    
 }
