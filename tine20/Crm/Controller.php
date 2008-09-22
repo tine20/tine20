@@ -214,11 +214,10 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $lead->notes = $_lead->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($lead);
             }
-            
-            //$this->sendNotifications(false, $lead, $_lead->responsible);
                     
             // add created note to record
             Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'created');
+            $this->sendNotifications($lead, $this->_currentAccount, 'created');
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -285,11 +284,10 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 Tinebase_Notes::getInstance()->setNotesOfRecord($_lead);
             }        
             
-            //$this->sendNotifications(true, $lead, $_lead->responsible);
-            
             // add changed note to record
             if (count($currentMods) > 0) {
                 Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed', $currentMods);
+                $this->sendNotifications($lead, $this->_currentAccount, 'changed', $currentMods);
             }        
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -758,21 +756,18 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     /**
      * creates notification text and sends out notifications
      *
-     * @param bool $_isUpdate set to true(lead got updated) or false(lead got added)
-     * @param Crm_Model_Lead $_lead
+     * @param Crm_Model_Lead            $_lead
+     * @param Tinebase_Model_FullUser   $_updater
+     * @param string                    $_action   {created|changed}
+     * @param Tinebase_Record_RecordSet $_updates
      * @return void
      */
-    protected function sendNotifications($_isUpdate, Crm_Model_Lead $_lead, $_contactIds)
+    protected function sendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_updates=array())
     {
-        if(empty($_contactIds)) {
-            // nothing to do
-            return;
-        }
-        
         $view = new Zend_View();
         $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
         
-        $view->updater = $this->_currentAccount;
+        $view->updater = $_updater;
         $view->lead = $_lead;
         $view->leadState = $this->getLeadState($_lead->leadstate_id);
         $view->leadType = $this->getLeadType($_lead->leadtype_id);
@@ -813,13 +808,54 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $plain = $view->render('newLeadPlain.php');
         $html = $view->render('newLeadHtml.php');
         
-        if($_isUpdate === true) {
-            $subject = $translate->_('Lead updated') . ': ' . $_lead->lead_name;
+        if($_action == 'changed') {
+            $subject = sprintf($translate->_('Lead %s has been changed'), $_lead->lead_name);
         } else {
-            $subject = $translate->_('Lead added') . ': ' . $_lead->lead_name;
+            $subject = sprintf($translate->_('Lead %s has been creaded'), $_lead->lead_name);
         }
         
-        Tinebase_Notification::getInstance()->send($this->_currentAccount, $_contactIds, $subject, $plain, $html);
+        $recipients = $this->_getNotificationRecipients($_lead);
+        // send notificaton to updater in any case!
+        // UGH! how to find out his adb id?
+        //if (! in_array($_updater->accountId, $recipients)) {
+        //    $recipients[] = $_updater->accountId;
+        //}
+        
+        Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html);
+    }
+    
+    /**
+     * returns recipients for a lead notification
+     *
+     * @param  Crm_Model_Lead $_lead
+     * @return array          array of Addressbook_Model_Contact ids
+     */
+    protected function _getNotificationRecipients(Crm_Model_Lead $_lead) {
+        $recipients = array();
+        
+        $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId(), true);
+        
+        foreach ($relations as $relation) {
+            if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == 'RESPONSIBLE') {
+                $recipients[] = $relation->related_record;
+            }
+        }
+        
+        // if no responsibles are defined, send message to all readers of container
+        if (empty($recipients)) {
+            Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
+                $_lead->getId() . 'sending notification to all people having read access to container ' . $_lead->container);
+                
+            $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container);
+            // NOTE: we just send notifications to users, not to groups ore anyones!
+            foreach ($containerGrants as $grant) {
+                if ($grant['account_type'] == 'user' && $grant['readGrant'] == 1) {
+                    $recipients[] = $grant['account_id'];
+                }
+            }
+        }
+        
+        return $recipients;
     }
     
     /**
