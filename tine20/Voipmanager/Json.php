@@ -37,6 +37,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
      * @return array
      */
     public function getSnomPhones($sort, $dir, $query)
@@ -99,12 +100,14 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
     }    
-    
-    
-   /**
-     * get my phones identified by phoneId and 
+        
+    /**
+     * get my phones
      *
-     * @param int $phoneId
+     * @param string $sort
+     * @param string $dir
+     * @param string $query
+     * @param int $accountId
      * @return array
      */
     public function getMyPhones($sort, $dir, $query, $accountId)
@@ -145,13 +148,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;    
     }
     
-    
     /**
      * save one phone
-     *
-     * if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
+     * -  if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
      *
      * @param string $phoneData a JSON encoded array of phone properties
+     * @param string $lineData
+     * @param string $rightsData
      * @return array
      */
     public function saveSnomPhone($phoneData, $lineData, $rightsData)
@@ -377,6 +380,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
      * @return array
      */
     public function getSnomLocations($sort, $dir, $query)
@@ -484,6 +488,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
      * @return array
      */
     public function searchSnomSoftware($sort, $dir, $query)
@@ -591,6 +596,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
      * @return array
      */
     public function getSnomTemplates($sort, $dir, $query)
@@ -697,6 +703,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
+     * @param string $context
      * @return array
      */
     public function getAsteriskSipPeers($sort, $dir, $query, $context)
@@ -804,6 +812,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
      * @return array
      */
     public function getAsteriskContexts($sort = NULL, $dir = NULL, $query = NULL)
@@ -919,6 +928,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
+     * @param string $context
      * @return array
      */
     public function getAsteriskVoicemails($sort, $dir, $query, $context)
@@ -1034,6 +1045,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
      * @return array
      */
     public function getSnomSettings($sort, $dir, $query)
@@ -1149,6 +1161,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sort
      * @param string $dir
+     * @param string $query
      * @return array
      */
     public function getAsteriskMeetmes($sort, $dir, $query)
