@@ -190,7 +190,7 @@ class Tinebase_Controller
                     try {
                         $server->setClass($applicationName.'_Http', $applicationName);
                     } catch (Exception $e) {
-                        // do nothing
+                        Zend_Registry::get('logger')->debug("Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
                 }
             } 
