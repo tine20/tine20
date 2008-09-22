@@ -278,7 +278,7 @@ class Tinebase_Controller
                     try {
                         $server->setClass($applicationName.'_Json', $applicationName);
                     } catch (Exception $e) {
-                        // do nothing
+                        Zend_Registry::get('logger')->debug("Failed to add JSON API for application '$applicationName' Exception: \n". $e);
                     }
                 }
             }
