@@ -219,14 +219,17 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to get all calls
      *
+     * @todo add more than one calls to test filter settings
      */
     public function testGetCalls()    
     {
         // search calls
         $json = new Phone_Json();
         $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter']));
+        
+        //print_r($result);
 
-        $this->assertGreaterThan(0, count($result));
+        $this->assertGreaterThan(0, $result['totalcount']);
         
         /*
         $this->assertEquals($this->_objects['initialLead']->description, $initialLead['description']);        
