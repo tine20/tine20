@@ -43,7 +43,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * Search for contacts matching given arguments
      *
-     * @param array $filter
+     * @param string $filter json encoded
+     * @param string $paging json encoded
      * @return array
      * 
      * @todo add timezone?
