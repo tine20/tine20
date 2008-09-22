@@ -24,11 +24,11 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      */
     const DEGREE_PARENT = 'parent';
     /**
-     * degree parent
+     * degree child
      */
     const DEGREE_CHILD = 'child';
     /**
-     * degree parent
+     * degree sibling
      */
     const DEGREE_SIBLING = 'sibling';
     /**
