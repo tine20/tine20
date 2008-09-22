@@ -28,7 +28,8 @@ Ext.onReady(function() {
 Tine.mobileClient.getSettingsPanel = function() { 
     return new Ext.FormPanel({
         id: 'mobileSettingsPanel',
-        title: 'Settings',
+        tbarTitle: 'Settings',
+        plugins: Ext.ux.tbarTitle,
         tbar: [
             '->',
             {text: 'Save', handler: function() {

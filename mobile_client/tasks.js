@@ -125,8 +125,6 @@ Tine.mobileClient.Tasks.MainGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.sm = new Ext.grid.RowSelectionModel({singleSelect:true});
         
-        this.title = 'All Tasks',
-        
         Tine.mobileClient.Tasks.MainGrid.superclass.initComponent.call(this);
     },
     
@@ -143,7 +141,10 @@ Tine.mobileClient.Tasks.getAppPanel = function () {
     return new Ext.Panel({
         id: 'mobileTaskAppPanel',
         layout: 'fit',
+        border: false,
         buttonAlign: 'center',
+        plugins: Ext.ux.tbarTitle, 
+        tbarTitle: 'All Tasks',
         tbar: [
             {text: 'Settings', handler: function() {
                 Ext.getCmp('mobileViewport').layout.setActiveItem('mobileSettingsPanel');
