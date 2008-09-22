@@ -59,63 +59,6 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
         $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
     }    
 
-    /************************ search functions ****************************/
-    
-    /**
-     * Search for calls matching given filter
-     *
-     * @param Phone_Model_CallFilter $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo move to Tinebase_Abstract_SqlTableBackend
-     */
-    public function search(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
-    {
-        $set = new Tinebase_Record_RecordSet('Phone_Model_Call');
-        
-        if ($_pagination === NULL) {
-            $_pagination = new Tinebase_Model_Pagination();
-        }
-        
-        // build query
-        $select = $this->_getSelect();
-        
-        if (!empty($_pagination->limit)) {
-            $select->limit($_pagination->limit, $_pagination->start);
-        }
-        if (!empty($_pagination->sort)) {
-            $select->order($_pagination->sort . ' ' . $_pagination->dir);
-        }        
-        $this->_addFilter($select, $_filter);
-                
-        // get records
-        $stmt = $this->_db->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        foreach ($rows as $row) {
-            $record = new Phone_Model_Call($row, true, true);
-            $set->addRecord($record);
-        }
-        
-        return $set;
-    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Phone_Model_CallFilter $_filter
-     * @return int
-     * 
-     * @todo move to Tinebase_Abstract_SqlTableBackend
-     */
-    public function searchCount(Phone_Model_CallFilter $_filter)
-    {        
-        $select = $this->_getSelect(TRUE);
-        $this->_addFilter($select, $_filter);
-        $result = $this->_db->fetchOne($select);
-        return $result;        
-    }    
-
     /************************ create / update calls ****************************/
     
     /**
@@ -172,40 +115,7 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
     }
     
     /*********************** helper functions ***********************/
-    
-    /**
-     * get the basic select object to fetch calls from the database 
-     * @param $_getCount only get the count
-     *
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_getCount = FALSE)
-    {        
-        if ($_getCount) {
-            $fields = array('count' => 'COUNT(*)');    
-        } else {
-            $fields = array(
-                'id',
-                'line_id',
-                'phone_id',
-                'call_id',
-                'start',
-                'connected',
-                'disconnected',
-                'duration',
-                'ringing',
-                'direction',
-                'source',
-                'destination'    
-            );
-        }
-
-        $select = $this->_db->select()
-            ->from(array('calls' => SQL_TABLE_PREFIX . 'phone_callhistory'), $fields);
         
-        return $select;
-    }
-    
     /**
      * add the fields to search for to the query
      *
@@ -217,7 +127,7 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
     {
                         
         if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(calls.source LIKE ? OR calls.destination LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('('.$this->_tableName.'.source LIKE ? OR '.$this->_tableName.'.destination LIKE ?)', '%' . $_filter->query . '%'));
         }
         
         /*

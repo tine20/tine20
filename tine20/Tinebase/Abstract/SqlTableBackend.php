@@ -202,4 +202,85 @@ abstract class Tinebase_Abstract_SqlTableBackend
         
         return $result;
     }
+    
+    /**
+     * Search for records matching given filter
+     *
+     * @param Tinebase_Record_Interface $_filter
+     * @param Tinebase_Record_Interface $_pagination
+     * @return Tinebase_Record_RecordSet
+     */
+    public function search(Tinebase_Record_Interface $_filter, Tinebase_Record_Interface $_pagination)
+    {
+        $set = new Tinebase_Record_RecordSet($this->_modelName);
+        
+        if ($_pagination === NULL) {
+            $_pagination = new Tinebase_Model_Pagination();
+        }
+        
+        // build query
+        $select = $this->_getSelect();
+        
+        if (!empty($_pagination->limit)) {
+            $select->limit($_pagination->limit, $_pagination->start);
+        }
+        if (!empty($_pagination->sort)) {
+            $select->order($_pagination->sort . ' ' . $_pagination->dir);
+        }        
+        $this->_addFilter($select, $_filter);
+                
+        // get records
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $record = new $this->_modelName($row, true, true);
+            $set->addRecord($record);
+        }
+        
+        return $set;
+    }
+    
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Record_Interface $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Record_Interface $_filter)
+    {        
+        $select = $this->_getSelect(TRUE);
+        $this->_addFilter($select, $_filter);
+        $result = $this->_db->fetchOne($select);
+        return $result;        
+    }    
+    
+    /**
+     * get the basic select object to fetch records from the database 
+     * @param $_getCount only get the count
+     *
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_getCount = FALSE)
+    {        
+        $select = $this->_db->select();
+        
+        if ($_getCount) {
+            $select->from($this->_tableName, array('count' => 'COUNT(*)'));    
+        } else {
+            $select->from($this->_tableName);
+        }
+        
+        return $select;
+    }
+    
+    /**
+     * add the fields to search for to the query
+     *
+     * @param  Zend_Db_Select           $_select current where filter
+     * @param  Tinebase_Record_Interface   $_filter the string to search for
+     * @return void
+     */
+    protected function _addFilter(Zend_Db_Select $_select, Tinebase_Record_Interface $_filter)
+    {
+    }
 }
