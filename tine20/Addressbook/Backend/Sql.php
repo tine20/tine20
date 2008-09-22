@@ -202,6 +202,26 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $result = new Addressbook_Model_Contact($row);
         return $result;
     }
+    
+    /**
+     * fetch one contact identified by contactid
+     *
+     * @param int $_userId
+     * @return Addressbook_Model_Contact 
+     * 
+     * @todo add test
+     */
+    public function getByUserId($_userId)
+    {
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('account_id = ?', $_userId));
+        $row = $this->_db->fetchRow($select);
+        if (! $row) {
+            throw new UnderflowException('contact with user id ' . $_userId . ' not found');
+        }
+        $result = new Addressbook_Model_Contact($row);
+        return $result;
+    }
+    
     /**
      * Returns a set of contacts identified by their id's
      * 

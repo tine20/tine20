@@ -100,6 +100,21 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         
         return $contact;            
     }
+
+    /**
+     * fetch one contact identified by $_userId
+     *
+     * @param int $_userId
+     * @return Addressbook_Model_Contact
+     */
+    public function getContactByUserId($_userId)
+    {
+        $contact = $this->_backend->getByUserId($_userId);
+        if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access to contact denied');
+        }            
+        return $contact;            
+    }
     
     /**
      * Search for contacts matching given filter

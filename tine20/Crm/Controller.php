@@ -95,10 +95,12 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
     /**
      * returns an empty lead with some defaults set
+     * - add creator as internal contact
      *
      * @return Crm_Model_Lead
-     * @deprecated ?
-     * @todo    move functionality to getLead() or javascript?
+     * 
+     * @todo add creator as internal contact 
+     * @todo update test
      */
     public function getEmptyLead()
     {
@@ -115,6 +117,22 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         );
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
         $emptyLead = new Crm_Model_Lead($defaultData, true);
+        
+        // add creator as RESPONSIBLE
+        /*
+        $userContact = Addressbook_Controller::getInstance()->getContactByUserId($this->_currentAccount->getId());
+        //$emptyLead->relations = new Tinebase_Model_Relation(array(
+        $emptyLead->relations = array(array(
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_backend'        => Addressbook_Backend_Factory::SQL,
+            'related_id'             => $userContact->getId(),
+            'type'                   => 'RESPONSIBLE',
+            'related_record'         => $userContact->toArray()
+        ));
+        */
         
         return $emptyLead;
     }
