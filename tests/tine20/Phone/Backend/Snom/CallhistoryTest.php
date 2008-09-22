@@ -64,7 +64,7 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
             ? $GLOBALS['Phone_Backend_Snom_CallhistoryTest'] 
             : array();
         
-        $this->_backend = new Phone_Backend_Snom_Callhistory();     
+        $this->_backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);    
 
         $this->_objects['call'] = new Phone_Model_Call(array(
             'line_id'               => 'phpunitlineid',

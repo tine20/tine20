@@ -106,13 +106,71 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
         $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
         
-        $snomSoftwareBackend->create($this->_objects['software']);
-        $snomLocationBackend->create($this->_objects['location']);
-        $snomTemplateBackend->create($this->_objects['template']);
-        $phoneBackend->create($this->_objects['phone']);
-        $phoneBackend->setPhoneRights($this->_objects['phone']);
-        $asteriskSipPeerBackend->create($this->_objects['sippeer']);
-        $snomLineBackend->create($this->_objects['line']);
+        try {
+            $snomSoftwareBackend->create($this->_objects['software']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }
+        try {
+            $snomLocationBackend->create($this->_objects['location']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }
+        try {
+            $snomTemplateBackend->create($this->_objects['template']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }
+        try {
+            $phoneBackend->create($this->_objects['phone']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }
+        try {
+            $phoneBackend->setPhoneRights($this->_objects['phone']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }
+        try {
+            $asteriskSipPeerBackend->create($this->_objects['sippeer']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }
+        try {
+            $snomLineBackend->create($this->_objects['line']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }
+        
+        /******************** call history *************************/
+
+        $callHistoryBackend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);    
+        
+        $this->_objects['call'] = new Phone_Model_Call(array(
+            'id'                    => 'phpunitcallhistoryid',
+            'line_id'               => $this->_objects['line']->getId(),
+            'phone_id'              => $this->_objects['phone']->getId(),
+            'call_id'               => 'phpunitcallid',
+            'direction'             => Phone_Model_Call::TYPE_INCOMING,
+            'source'                => '26',
+            'destination'           => '0406437435',    
+        ));
+        
+        $this->_objects['filter'] = array(
+            'start' => 0,
+            'limit' => 50,
+            'sort' => 'start',
+            'dir' => 'ASC',
+            'containerType' => 'all',
+            'query' => ''     
+        );        
+        
+        // create call
+        try {
+            $call = $callHistoryBackend->startCall($this->_objects['call']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // exists
+        }        
     }
 
     /**
@@ -124,12 +182,13 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {	
         // remove phone, location, template
-        $phoneBackend                = new Voipmanager_Backend_Snom_Phone();
-        $snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
-        $snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();     
-        $snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software(); 
-        $snomLineBackend             = new Voipmanager_Backend_Snom_Line();
+        $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
+        $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
+        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template();     
+        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software(); 
+        $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
         $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
+        $callHistoryBackend         = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);    
         
         $phoneBackend->delete($this->_objects['phone']->getId());
         $snomLocationBackend->delete($this->_objects['location']->getId());
@@ -137,6 +196,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $snomSoftwareBackend->delete($this->_objects['software']->getId());
         $snomLineBackend->delete($this->_objects['line']->getId());
         $asteriskSipPeerBackend->delete($this->_objects['sippeer']->getId());
+        $callHistoryBackend->delete($this->_objects['call']->getId());
     }
     
     /**
@@ -154,5 +214,23 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_objects['phone']->macaddress, $phones['results'][0]['macaddress'], 'got wrong phone');
         $this->assertGreaterThan(0, count($phones['results'][0]['lines']), 'no lines attached');
         $this->assertEquals($this->_objects['sippeer']->getId(), $phones['results'][0]['lines'][0]['asteriskline_id'], 'got wrong line');
+    }    
+    
+    /**
+     * try to get all calls
+     *
+     */
+    public function testGetCalls()    
+    {
+        // search calls
+        $json = new Phone_Json();
+        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter']));
+
+        $this->assertGreaterThan(0, count($result));
+        
+        /*
+        $this->assertEquals($this->_objects['initialLead']->description, $initialLead['description']);        
+        $this->assertEquals($this->_objects['contact']->assistent, $initialLead['relations'][0]['related_record']['assistent']);
+        */
     }    
 }		
