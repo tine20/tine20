@@ -80,13 +80,12 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
     public function searchCalls($filter)
     {
         $paginationFilter = Zend_Json::decode($filter);
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($paginationFilter, true));
+        
         $filter = new Phone_Model_CallFilter($paginationFilter);
         $pagination = new Tinebase_Model_Pagination($paginationFilter);
         
         $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
-        
-        //$result = $this->_multipleLeadsToJson($leads);        
-        //Zend_Registry::get('logger')->debug(print_r($result,true));
         
         return array(
             'results'       => $calls->toArray(),

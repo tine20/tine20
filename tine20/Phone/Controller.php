@@ -104,9 +104,7 @@ class Phone_Controller
      * @return Tinebase_Record_RecordSet
      */
     public function searchCalls(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
-    {
-        //$this->_checkContainerACL($_filter);
-        
+    {        
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);        
         $calls = $backend->search($_filter, $_pagination);
         

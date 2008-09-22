@@ -393,8 +393,23 @@ Tine.Phone.Main = {
 	/**
 	 * translations object
 	 */
-	translations: null,
+	translation: null,
 	
+    /**
+     * holds underlaying store
+     */
+    store: null,
+	
+    /**
+     * @cfg {Object} paging defaults
+     */
+    paging: {
+        start: 0,
+        limit: 50,
+        sort: 'start',
+        dir: 'ASC'
+    },
+        
 	/**
 	 * action buttons
 	 */
@@ -435,6 +450,8 @@ Tine.Phone.Main = {
             scope: this,
             disabled: true
         });
+        
+        this.initStore();
     },
     
     handlers: 
@@ -452,7 +469,7 @@ Tine.Phone.Main = {
             emptyText: this.translation._('enter searchfilter')
         }); 
         quickSearchField.on('change', function(){
-            Ext.getCmp('Phone_Grid').getStore().load({
+            this.store.load({
                 params: {
                     start: 0,
                     limit: 50
@@ -479,129 +496,140 @@ Tine.Phone.Main = {
         Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
     },
     
-    displayGrid: function() 
-    {
-        // the datastore
-        var dataStore = new Ext.data.JsonStore({
+    /**
+     * init the calls json grid store
+     * 
+     * @todo add more filters (phone, line, ...)
+     * @todo use new filter toolbar later
+     */
+    initStore: function() {
+
+        this.store = new Ext.data.JsonStore({
+            id: 'id',
+            autoLoad: false,
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Addressbook.Model.Contact,
-            // turn on remote sorting
-            remoteSort: true
+            fields: Tine.Phone.Model.Call,
+            remoteSort: true,
+            baseParams: {
+                method: 'Phone.searchCalls'
+            },
+            sortInfo: {
+                field: this.paging.sort,
+                direction: this.paging.dir
+            }
         });
         
-        dataStore.setDefaultSort('n_family', 'asc');
-
-        dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
-        }, this);   
+        // register store
+        Ext.StoreMgr.add('CallsGridStore', this.store);
         
-        //Ext.StoreMgr.add('ContactsStore', dataStore);
+        // prepare filter
+        this.store.on('beforeload', function(store, options){
+            if (!options.params) {
+                options.params = {};
+            }
+            
+            // paging toolbar only works with this properties in the options!
+            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;
+            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir;
+            options.params.start = options.params.start ? options.params.start : this.paging.start;
+            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;            
+            options.params.paging = Ext.util.JSON.encode(options.params);
+                        
+            // add quicksearch and phone_id filter
+            var quicksearchField = Ext.getCmp('quickSearchField');
+            var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || {};            
+            var filter = { query: quicksearchField.getValue(), phone_id: node.id };
+            
+            // add phone/line to filter
+            /*
+            var filterToolbar = Ext.getCmp('callhistoryFilterToolbar');
+            var filter = filterToolbar ? filterToolbar.getFilter() : [];
+            var nodeAttributes = Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode().attributes || {};
+            filter.push(
+                {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
+                {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
+                {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+            );            
+            */
+            
+            options.params.filter = Ext.util.JSON.encode(filter);
+        }, this);
+    },
+    
+    /**
+     * display the callhistory grid
+     * 
+     * @todo add context menu and row doubleclick
+     * @todo add new filterToolbar
+     */
+    displayGrid: function() 
+    {
+        // the filter toolbar
+    	/*
+        var filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            id : 'callhistoryFilterToolbar',
+            filterModels: [
+                {label: this.translation._('Source or Destination'),    field: 'query',    operators: ['contains']}
+             ],
+             defaultFilter: 'query',
+             filters: []
+        });
+        
+        filterToolbar.on('filtertrigger', function() {
+            this.store.load({});
+        }, this);
+        */
         
         // the paging toolbar
-        // @todo show calls here and no contacts
         var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: 25,
-            store: dataStore,
+            pageSize: 50,
+            store: this.store,
             displayInfo: true,
-            displayMsg: 'Displaying contacts {0} - {1} of {2}',
-            emptyMsg: "No contacts to display"
+            displayMsg: this.translation._('Displaying calls {0} - {1} of {2}'),
+            emptyMsg: this.translation._("No calls to display")
         }); 
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family' },
-            { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80 },
-            { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
-            { resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true }
+            { resizable: true, id: 'call_id', header: this.translation._('Call ID'), dataIndex: 'call_id' },
+            { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start'},
+            { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected' },
+            { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected' },
+            { resizable: true, id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
+            { resizable: true, id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40 },
+            { resizable: true, id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 40 },
+            { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source' },
+            { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination' }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
         
         // the rowselection model
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.deleteContact.setDisabled(true);
-                this.actions.editContact.setDisabled(true);
-                this.actions.exportContact.setDisabled(true);
-                this.actions.callContact.setDisabled(true);
-            } else if(rowCount > 1) {
-                // more than one row selected
-                this.actions.deleteContact.setDisabled(false);
-                this.actions.editContact.setDisabled(true);
-                this.actions.exportContact.setDisabled(true);
-                this.actions.callContact.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.deleteContact.setDisabled(false);
-                this.actions.editContact.setDisabled(false);
-                this.actions.exportContact.setDisabled(false);
-
-                var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
-                callMenu.removeAll();
-                var contact = _selectionModel.getSelected();
-                if(!Ext.isEmpty(contact.data.tel_work)) {
-                    callMenu.add({
-                       id: 'Addressbook_Contacts_CallContact_Work', 
-                       text: 'work ' + contact.data.tel_work + '',
-                       handler: this.handlers.callContact
-                    });
-                    this.actions.callContact.setDisabled(false);
-                }
-                if(!Ext.isEmpty(contact.data.tel_home)) {
-                    callMenu.add({
-                       id: 'Addressbook_Contacts_CallContact_Home', 
-                       text: 'home ' + contact.data.tel_home + '',
-                       handler: this.handlers.callContact
-                    });
-                    this.actions.callContact.setDisabled(false);
-                }
-                if(!Ext.isEmpty(contact.data.tel_cell)) {
-                    callMenu.add({
-                       id: 'Addressbook_Contacts_CallContact_Cell', 
-                       text: 'cell ' + contact.data.tel_cell + '',
-                       handler: this.handlers.callContact
-                    });
-                    this.actions.callContact.setDisabled(false);
-                }
-                if(!Ext.isEmpty(contact.data.tel_cell_private)) {
-                    callMenu.add({
-                       id: 'Addressbook_Contacts_CallContact_CellPrivate', 
-                       text: 'cell private ' + contact.data.tel_cell_private + '',
-                       handler: this.handlers.callContact
-                    });
-                    this.actions.callContact.setDisabled(false);
-                }
-            }
-        }, this);
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Addressbook_Contacts_Grid',
-            store: dataStore,
+            id: 'Phone_Callhistory_Grid',
+            store: this.store,
             cm: columnModel,
             tbar: pagingToolbar,     
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'n_family',
+            autoExpandColumn: 'call_id',
             border: false,
             view: new Ext.grid.GridView({
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: 'No contacts to display'
+                emptyText: this.translation._('No calls to display')
             })            
             
         });
         
+        /*
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
@@ -629,11 +657,17 @@ Tine.Phone.Main = {
                 // alert(e);
             }
         }, this);
+        */
 
         // add the grid to the layout
         Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
     },
 
+    /**
+     * update main toolbar
+     * 
+     * @todo what about the admin button?
+     */
     updateMainToolbar : function() 
     {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
@@ -663,10 +697,8 @@ Tine.Phone.Main = {
 
         if(currentToolbar === false || currentToolbar.id != 'Phone_Toolbar') {
             this.displayToolbar();
-            // removed the grid for the moment because we can't get the phone calls yet
-            // @todo add grid again
-            //this.displayGrid();
-            Tine.Tinebase.MainScreen.setActiveContentPanel(new Ext.Panel({}));
+            this.store.load({});
+            this.displayGrid();
             this.updateMainToolbar();
         }
         //this.loadData(_node);		
@@ -713,6 +745,27 @@ Tine.Phone.loadPhoneStore = function(reload) {
     	store.load();
     }
     
-    
     return store;
 };
+
+/**************************** models ****************************************/
+
+Ext.namespace('Tine.Phone.Model');
+
+/**
+ * Model of a call
+ */
+Tine.Phone.Model.Call = Ext.data.Record.create([
+    { name: 'id' },
+    { name: 'line_id' },
+    { name: 'phone_id' },
+    { name: 'call_id' },
+    { name: 'start' },
+    { name: 'connected' },
+    { name: 'disconnected' },
+    { name: 'duration' },
+    { name: 'ringing' },
+    { name: 'direction' },
+    { name: 'source' },
+    { name: 'destination' }
+]);
