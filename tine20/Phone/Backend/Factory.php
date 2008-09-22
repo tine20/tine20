@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Factory.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  */
 
 /**
@@ -21,6 +21,12 @@ class Phone_Backend_Factory
      *
      */
     const ASTERISK = 'Asterisk';
+
+    /**
+     * constant for the snom phone callhistory backend class
+     *
+     */
+    const CALLHISTORY = 'Callhistory';
     
     /**
      * factory function to return a selected phone backend class
@@ -40,6 +46,10 @@ class Phone_Backend_Factory
                     throw new Exception('no settings found for asterisk backend in config.ini');
                 }
                 $instance = Phone_Backend_Asterisk::getInstance($url, $username, $password);
+                break;
+                
+            case self::CALLHISTORY:
+                $instance = Phone_Backend_Snom_Callhistory::getInstance();
                 break;
                 
             default:

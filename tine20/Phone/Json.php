@@ -70,4 +70,27 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
         
         return $result;        
     }
+    
+    /**
+     * Search for calls matching given arguments
+     *
+     * @param array $filter
+     * @return array
+     */
+    public function searchCalls($filter)
+    {
+        $paginationFilter = Zend_Json::decode($filter);
+        $filter = new Phone_Model_CallFilter($paginationFilter);
+        $pagination = new Tinebase_Model_Pagination($paginationFilter);
+        
+        $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
+        
+        //$result = $this->_multipleLeadsToJson($leads);        
+        //Zend_Registry::get('logger')->debug(print_r($result,true));
+        
+        return array(
+            'results'       => $calls->toArray(),
+            'totalcount'    => Phone_Controller::getInstance()->searchCallsCount($filter)
+        );
+    }
 }

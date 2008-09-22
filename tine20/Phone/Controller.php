@@ -94,4 +94,34 @@ class Phone_Controller
         $asteriskLine = $vmController->getAsteriskSipPeer($asteriskLineId);
         $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskLine->context, $_number, 1, $asteriskLine->callerid);
     }    
+    
+    /**
+     * Search for calls matching given filter
+     *
+     * @param Phone_Model_CallFilter $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * 
+     * @return Tinebase_Record_RecordSet
+     */
+    public function searchCalls(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    {
+        //$this->_checkContainerACL($_filter);
+        
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);        
+        $calls = $backend->search($_filter, $_pagination);
+        
+        return $calls;
+    }
+    
+    /**
+     * Search for calls matching given filter
+     *
+     * @param Phone_Model_CallFilter $_filter
+     * 
+     * @return Tinebase_Record_RecordSet
+     */
+    public function searchCallsCount(Phone_Model_CallFilter $_filter)
+    {
+        return 0;
+    }
 }
