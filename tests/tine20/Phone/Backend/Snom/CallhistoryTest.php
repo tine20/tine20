@@ -114,7 +114,7 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
         $connectedCall = $this->_backend->connected($call);
         
         $this->assertGreaterThan($ringing, $connectedCall->ringing);
-        $this->assertLessThan(3, $connectedCall->ringing);
+        $this->assertLessThan(4, $connectedCall->ringing);
 
         // sleep for 5 secs (talking...)
         sleep(5);
