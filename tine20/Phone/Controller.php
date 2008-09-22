@@ -122,6 +122,8 @@ class Phone_Controller
      */
     public function searchCallsCount(Phone_Model_CallFilter $_filter)
     {
-        return 0;
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
+        $count = $backend->searchCount($_filter);
+        return $count;
     }
 }
