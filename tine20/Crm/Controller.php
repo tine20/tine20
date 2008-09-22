@@ -756,6 +756,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     /**
      * creates notification text and sends out notifications
      *
+     * @todo:
+     *  - add changes to mail body
+     *  - attach pdf of lead
+     *  - find updater in addressbook to notify him
+     *  
      * @param Crm_Model_Lead            $_lead
      * @param Tinebase_Model_FullUser   $_updater
      * @param string                    $_action   {created|changed}
@@ -828,7 +833,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * returns recipients for a lead notification
      *
      * @param  Crm_Model_Lead $_lead
-     * @return array          array of Addressbook_Model_Contact ids
+     * @return array          array of int|Addressbook_Model_Contact
      */
     protected function _getNotificationRecipients(Crm_Model_Lead $_lead) {
         $recipients = array();
