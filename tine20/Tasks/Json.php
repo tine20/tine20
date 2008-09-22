@@ -9,6 +9,7 @@
  * @version     $Id$
  */
 
+
 /**
  * json interface for tasks
  * @package     Tasks
@@ -54,7 +55,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     /**
      * Search for tasks matching given arguments
      *
-     * @param array $filter
+     * @param $filter
      * @return array
      */
     public function searchTasks($filter)
@@ -77,7 +78,9 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     /**
      * Return a single Task
      *
-     * @param string $_uid
+     * @param string $uid
+     * @param int    $containerId
+     * @param string $relatedApp
      * @return Tasks_Model_Task task
      */
     public function getTask($uid, $containerId = -1, $relatedApp = '')
