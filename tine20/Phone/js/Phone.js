@@ -67,9 +67,13 @@ Tine.Phone.getPanel = function(){
     
     treePanel.on('click', function(node){
     	// reload root node
-    	if (node && node.id == 'root') {
-    		Tine.Phone.Main.actions.editPhoneSettings.setDisabled(true);
-    	}    	
+    	if (node) {
+  	        node.getOwnerTree().selectPath(node.getPath());
+ 
+  	        if (node.id == 'root') {
+    		    Tine.Phone.Main.actions.editPhoneSettings.setDisabled(true);
+  	        }
+    	} 
         Tine.Phone.Main.show(node);
     }, this);
         
@@ -407,7 +411,7 @@ Tine.Phone.Main = {
         start: 0,
         limit: 50,
         sort: 'start',
-        dir: 'ASC'
+        dir: 'DESC'
     },
         
 	/**
@@ -457,23 +461,30 @@ Tine.Phone.Main = {
     handlers: 
     {
     	dialNumber: function(_button, _event) {
-    		Tine.Phone.dialNumber();
+    		var number = '';
+    		var grid = Ext.getCmp('Phone_Callhistory_Grid');
+    		if (grid) {
+    		    record = grid.getSelectionModel().getSelected();
+    		    number = (record.data.direction == 'in') ? record.data.source : record.data.destination;
+    		}
+    		
+    		Tine.Phone.dialNumber(number);
     	}
     },
  
     displayToolbar: function()
     {
         var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
+            id: 'callhistoryQuickSearchField',
             width:240,
             emptyText: this.translation._('enter searchfilter')
         }); 
         quickSearchField.on('change', function(){
-            this.store.load({
+            this.store.load({/*
                 params: {
                     start: 0,
                     limit: 50
-                }
+                }*/
             });
         }, this);
         
@@ -506,7 +517,7 @@ Tine.Phone.Main = {
 
         this.store = new Ext.data.JsonStore({
             id: 'id',
-            autoLoad: false,
+            //autoLoad: false,
             root: 'results',
             totalProperty: 'totalcount',
             fields: Tine.Phone.Model.Call,
@@ -537,9 +548,10 @@ Tine.Phone.Main = {
             options.params.paging = Ext.util.JSON.encode(options.params);
                         
             // add quicksearch and phone_id filter
-            var quicksearchField = Ext.getCmp('quickSearchField');
-            var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || {};            
-            var filter = { query: quicksearchField.getValue(), phone_id: node.id };
+            var quicksearchField = Ext.getCmp('callhistoryQuickSearchField');
+            var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || null;            
+            
+            var filter = { query: quicksearchField.getValue(), phone_id: (node !== null && node.id != 'root') ? node.id : '' };
             
             // add phone/line to filter
             /*
@@ -554,6 +566,7 @@ Tine.Phone.Main = {
             */
             
             options.params.filter = Ext.util.JSON.encode(filter);
+            
         }, this);
     },
     
@@ -629,20 +642,15 @@ Tine.Phone.Main = {
             
         });
         
-        /*
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
             var contextMenu = new Ext.menu.Menu({
-                id:'ctxMenuContacts', 
+                id:'ctxMenuCall', 
                 items: [
-                    this.actions.editContact,
-                    this.actions.deleteContact,
-                    this.actions.exportContact,
-                    '-',
-                    this.actions.addContact 
+                    this.actions.dialNumber,
                 ]
             });
             contextMenu.showAt(_eventObject.getXY());
@@ -651,13 +659,18 @@ Tine.Phone.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
+            var number = (record.data.direction == 'in') ? record.data.source : record.data.destination;
+            
+            Tine.Phone.dialNumber(number);
+            
+            /*
             try {
                 Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 800, 600);
             } catch(e) {
                 // alert(e);
             }
+            */
         }, this);
-        */
 
         // add the grid to the layout
         Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
@@ -667,6 +680,7 @@ Tine.Phone.Main = {
      * update main toolbar
      * 
      * @todo what about the admin button?
+     * @todo adopt to new application pattern (see addressbook, tasks, ...)
      */
     updateMainToolbar : function() 
     {
@@ -689,19 +703,19 @@ Tine.Phone.Main = {
         preferencesButton.setDisabled(true);
     },
     
-	show: function(_mode) 
+	show: function(_node) 
 	{	
-        this.initComponent();
-        
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         if(currentToolbar === false || currentToolbar.id != 'Phone_Toolbar') {
+            this.initComponent();
             this.displayToolbar();
             this.store.load({});
             this.displayGrid();
             this.updateMainToolbar();
+        } else {
+        	this.store.load({});
         }
-        //this.loadData(_node);		
 	}
 };
 

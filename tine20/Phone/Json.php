@@ -74,16 +74,17 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
     /**
      * Search for calls matching given arguments
      *
-     * @param array $filter
+     * @param array $filter json encoded
+     * @param string $paging json encoded
      * @return array
      */
-    public function searchCalls($filter)
+    public function searchCalls($filter, $paging)
     {
-        $paginationFilter = Zend_Json::decode($filter);
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($paginationFilter, true));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($filter), true));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($paging), true));
         
-        $filter = new Phone_Model_CallFilter($paginationFilter);
-        $pagination = new Tinebase_Model_Pagination($paginationFilter);
+        $filter = new Phone_Model_CallFilter(Zend_Json::decode($filter));
+        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
         

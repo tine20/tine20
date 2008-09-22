@@ -40,5 +40,6 @@ class Phone_Model_CallFilter extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,  'Int'   ),
         'query'                => array('allowEmpty' => true           ), // source / destination
+        'phone_id'             => array('allowEmpty' => true           ),
     ); 
 }
