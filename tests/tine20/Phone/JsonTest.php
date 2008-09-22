@@ -159,29 +159,33 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->_objects['call2'] = new Phone_Model_Call(array(
             'id'                    => 'phpunitcallhistoryid2',
             'line_id'               => $this->_objects['line']->getId(),
-            'phone_id'              => $this->_objects['phone']->getId(),
+            'phone_id'              => '100000001',
             'call_id'               => 'phpunitcallid2',
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
-            'destination'           => '030364354',    
+            'destination'           => '050364354',    
         ));
         
-        $this->_objects['filter1'] = array(
+        $this->_objects['paging'] = array(
             'start' => 0,
             'limit' => 50,
             'sort' => 'start',
             'dir' => 'ASC',
+        );
+        
+        $this->_objects['filter1'] = array(
             'containerType' => 'all',
             'query' => ''     
         );        
 
         $this->_objects['filter2'] = array(
-            'start' => 0,
-            'limit' => 50,
-            'sort' => 'start',
-            'dir' => 'ASC',
             'containerType' => 'all',
-            'query' => '030'     
+            'query' => '050'     
+        );        
+
+        $this->_objects['filter3'] = array(
+            'containerType' => 'all',
+            'phone_id' => $this->_objects['phone']->getId()     
         );        
         
         // create calls
@@ -244,17 +248,24 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCalls()    
     {
+        $pagingJson = Zend_Json::encode($this->_objects['paging']);
+        
         // search calls
         $json = new Phone_Json();
-        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter1']));
+        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter1']), $pagingJson);
         $this->assertGreaterThan(1, $result['totalcount']);
         
-        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter2']));
-        $this->assertEquals(1, $result['totalcount']);
+        // search query -> '050'
+        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter2']), $pagingJson);
+        $this->assertEquals(1, $result['totalcount'], 'query filter not working');
         
         $call2 = $result['results'][0];
         
         $this->assertEquals($this->_objects['call2']->destination, $call2['destination']);
         $this->assertEquals($this->_objects['call2']->call_id, $call2['call_id']);        
+        
+        // search for phone_id
+        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
+        $this->assertEquals(1, $result['totalcount'], 'phone_id filter not working');
     }    
 }		
