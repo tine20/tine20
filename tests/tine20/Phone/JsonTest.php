@@ -146,17 +146,27 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
 
         $callHistoryBackend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);    
         
-        $this->_objects['call'] = new Phone_Model_Call(array(
-            'id'                    => 'phpunitcallhistoryid',
+        $this->_objects['call1'] = new Phone_Model_Call(array(
+            'id'                    => 'phpunitcallhistoryid1',
             'line_id'               => $this->_objects['line']->getId(),
             'phone_id'              => $this->_objects['phone']->getId(),
-            'call_id'               => 'phpunitcallid',
+            'call_id'               => 'phpunitcallid1',
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
             'destination'           => '0406437435',    
         ));
+
+        $this->_objects['call2'] = new Phone_Model_Call(array(
+            'id'                    => 'phpunitcallhistoryid2',
+            'line_id'               => $this->_objects['line']->getId(),
+            'phone_id'              => $this->_objects['phone']->getId(),
+            'call_id'               => 'phpunitcallid2',
+            'direction'             => Phone_Model_Call::TYPE_INCOMING,
+            'source'                => '26',
+            'destination'           => '030364354',    
+        ));
         
-        $this->_objects['filter'] = array(
+        $this->_objects['filter1'] = array(
             'start' => 0,
             'limit' => 50,
             'sort' => 'start',
@@ -164,10 +174,20 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'containerType' => 'all',
             'query' => ''     
         );        
+
+        $this->_objects['filter2'] = array(
+            'start' => 0,
+            'limit' => 50,
+            'sort' => 'start',
+            'dir' => 'ASC',
+            'containerType' => 'all',
+            'query' => '030'     
+        );        
         
-        // create call
+        // create calls
         try {
-            $call = $callHistoryBackend->startCall($this->_objects['call']);
+            $call = $callHistoryBackend->startCall($this->_objects['call1']);
+            $call = $callHistoryBackend->startCall($this->_objects['call2']);
         } catch (Zend_Db_Statement_Exception $e) {
             // exists
         }        
@@ -196,7 +216,9 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $snomSoftwareBackend->delete($this->_objects['software']->getId());
         $snomLineBackend->delete($this->_objects['line']->getId());
         $asteriskSipPeerBackend->delete($this->_objects['sippeer']->getId());
-        $callHistoryBackend->delete($this->_objects['call']->getId());
+        
+        $callHistoryBackend->delete($this->_objects['call1']->getId());
+        $callHistoryBackend->delete($this->_objects['call2']->getId());
     }
     
     /**
@@ -219,21 +241,20 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to get all calls
      *
-     * @todo add more than one calls to test filter settings
      */
     public function testGetCalls()    
     {
         // search calls
         $json = new Phone_Json();
-        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter']));
+        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter1']));
+        $this->assertGreaterThan(1, $result['totalcount']);
         
-        //print_r($result);
-
-        $this->assertGreaterThan(0, $result['totalcount']);
+        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter2']));
+        $this->assertEquals(1, $result['totalcount']);
         
-        /*
-        $this->assertEquals($this->_objects['initialLead']->description, $initialLead['description']);        
-        $this->assertEquals($this->_objects['contact']->assistent, $initialLead['relations'][0]['related_record']['assistent']);
-        */
+        $call2 = $result['results'][0];
+        
+        $this->assertEquals($this->_objects['call2']->destination, $call2['destination']);
+        $this->assertEquals($this->_objects['call2']->call_id, $call2['call_id']);        
     }    
 }		
