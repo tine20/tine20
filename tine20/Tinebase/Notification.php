@@ -14,11 +14,12 @@
  * primary class to handle notifications
  *
  * @package     Tinebase
- * @subpackage  Server
+ * @subpackage  Notifications
  */
 class Tinebase_Notification
 {
     protected $_smtpBackend;
+    
     /**
      * the constructor
      *
@@ -58,22 +59,23 @@ class Tinebase_Notification
     /**
      * send notifications to a list a receipients
      *
-     * @param Tinebase_Model_FullUser $_updater
+     * @param Tinebase_Model_FullUser   $_updater
      * @param Tinebase_Record_RecordSet $_recipients
-     * @param string $_subject
-     * @param string $_messagePlain
-     * @param string $_messageHtml
+     * @param string                    $_subject
+     * @param string                    $_messagePlain
+     * @param string                    $_messageHtml
+     * @param string|array              $_attachements
      */
-    public function send(Tinebase_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send(Tinebase_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-
+        
         foreach($_recipients as $recipient) {
             try {
                 if(!$recipient instanceof Addressbook_Model_Contact) {
                     $recipient = $contactsBackend->getContact($recipient);
                 }
-                $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml);
+                $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
             } catch (Exception $e) {
                 // do nothing
             }
