@@ -44,13 +44,14 @@ class Tinebase_Notification_Backend_Smtp
     /**
      * send a notification as email
      *
-     * @param Tinebase_Model_FullUser $_updater
+     * @param Tinebase_Model_FullUser   $_updater
      * @param Addressbook_Model_Contact $_recipient
-     * @param string $_subject the subject
-     * @param string $_messagePlain the message as plain text
-     * @param string $_messageHtml the message as html
+     * @param string                    $_subject the subject
+     * @param string                    $_messagePlain the message as plain text
+     * @param string                    $_messageHtml the message as html
+     * @param string|array              $_attachements
      */
-    public function send(Tinebase_Model_FullUser $_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send(Tinebase_Model_FullUser $_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL)
     {
         $mail = new Tinebase_Mail('UTF-8');
         
@@ -70,7 +71,20 @@ class Tinebase_Notification_Backend_Smtp
         } else {
             $mail->setFrom($this->_fromAddress, $this->_fromName);
         }
-
+        
+        // attachements
+        if (is_array($_attachements)) {
+            $attachements = &$_attachements;
+        } elseif (is_string($_attachements)) {
+            $attachements = array(&$_attachements);
+        } else {
+            $attachements = array();
+        }
+        
+        foreach ($attachements as $attachement) {
+            $mail->createAttachment($attachement);
+        }
+        
         if(!empty($_recipient->accountEmailAddress)) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->email);
 
