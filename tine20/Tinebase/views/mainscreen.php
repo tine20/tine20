@@ -62,13 +62,11 @@
         $locale = Zend_Registry::get('locale');
         if (TINE20_BUILDTYPE != 'DEVELOPMENT') {
             echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/" . $tineBuildPath . (string)$locale . "-all.js'></script>";
-        } 
-    /*
-    echo "
-    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . "'></script>
-    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . "'></script>
-    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . "'></script>
-    ";*/?>
+        } else {
+            echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . "'></script>";
+            echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . "'></script>";
+            echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . "'></script>";
+        }?>
     
     
     <!-- Tine 2.0 dynamic initialisation -->
