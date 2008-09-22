@@ -60,7 +60,7 @@ class Tinebase_Notification
      * send notifications to a list a receipients
      *
      * @param Tinebase_Model_FullUser   $_updater
-     * @param Tinebase_Record_RecordSet $_recipients
+     * @param array                     $_recipients array of int|Addressbook_Model_Contact
      * @param string                    $_subject
      * @param string                    $_messagePlain
      * @param string                    $_messageHtml
@@ -73,7 +73,7 @@ class Tinebase_Notification
         foreach($_recipients as $recipient) {
             try {
                 if(!$recipient instanceof Addressbook_Model_Contact) {
-                    $recipient = $contactsBackend->getContact($recipient);
+                    $recipient = $contactsBackend->get($recipient);
                 }
                 $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
             } catch (Exception $e) {
