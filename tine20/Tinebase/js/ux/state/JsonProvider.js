@@ -75,20 +75,25 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
     
     /**
      * Sets the value for a key
+     * @todo!!! only save clones and not the object (references)
      */
     set: function(name, value) {
         if(! name.match(/^ext\-comp/)) {
             var cmp = Ext.getCmp(name);
             if (cmp.stateful) {
+                var valueClone = this.clone(value);
+                
+                // we need to delete old states, cause safari crasches otherwise for some reason
                 var state = this.store.getById(name);
                 if (state) {
-                    state.set('value', value);
-                } else {
-                    this.store.add(new this.record({
-                        name: name,
-                        value: value
-                    }, name));
+                    this.store.remove(state);
                 }
+                
+                this.store.add(new this.record({
+                    name: name,
+                    value: valueClone
+                }, name));
+                
             } else {
                  //console.info('Ext.ux.state.JsonProvider::set Attempt to set state of the non stateful component: "' + name + '"');
             }
@@ -103,5 +108,42 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
         if (state) {
             this.store.remove(state);
         }
+    },
+    
+    /**
+     * clones an object
+     * @todo move to more generic place ;-)
+     */
+    clone: function(original) {
+        var clone;
+        switch (typeof(original)) {
+             case 'object':
+                 if (Ext.isArray(original)) {
+                    clone = [];
+                    for (var i=0; i<original.length; i++) {
+                        clone.push(this.clone(original[i]));
+                    }
+                } else if (original === null) {
+                    clone = null;
+                } else {
+                    clone = {};
+                    for (var property in original) {
+                        if (original.hasOwnProperty(property)) {
+                            clone[property] = this.clone(original[property]);
+                        }
+                    }
+                }
+                break;
+            
+            case 'number':
+            case 'string':
+            case 'boolean':
+            case 'undefined':
+                clone = original;
+                break;
+            default:
+                break;
+        }
+        return clone;
     }
 });
