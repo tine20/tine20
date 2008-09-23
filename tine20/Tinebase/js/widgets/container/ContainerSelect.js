@@ -173,7 +173,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     getState: function() {
         var recents = [];
         this.store.each(function(container) {
-            recents.push(container.data);
+            if (container.get('type') != 'internal') {
+                recents.push(container.data);
+            }
         }, this);
 
         return recents;
