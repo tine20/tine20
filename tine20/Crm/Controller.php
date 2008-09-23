@@ -776,7 +776,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      *
      * @todo:
      *  - add changes to mail body
-     *  - attach pdf of lead
      *  - find updater in addressbook to notify him
      *  
      * @param Crm_Model_Lead            $_lead
@@ -836,7 +835,17 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         } else {
             $subject = sprintf($translate->_('Lead %s has been creaded'), $_lead->lead_name);
         }
-        
+
+        // create pdf
+        try {
+            $pdfGenerator = new Crm_Pdf();
+            $pdfGenerator->generateLeadPdf($_lead);
+            $pdfOutput = $pdfGenerator->render();
+        } catch ( Zend_Pdf_Exception $e ) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+            $pdfOutput = NULL;
+        }
+                
         $recipients = $this->_getNotificationRecipients($_lead);
         // send notificaton to updater in any case!
         // UGH! how to find out his adb id?
@@ -844,7 +853,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         //    $recipients[] = $_updater->accountId;
         //}
         
-        Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html);
+        Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, $pdfOutput);
     }
     
     /**
