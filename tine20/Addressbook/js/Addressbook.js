@@ -857,6 +857,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         }
         
         this.getForm().loadRecord(this.contact);
+        this.updateToolbars(this.contact, 'owner');
         Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
 
         Ext.MessageBox.hide();
