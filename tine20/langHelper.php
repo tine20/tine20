@@ -181,11 +181,17 @@ function translationExists($_locale)
  */
 function generatePOTFiles($_verbose)
 {
+    global $tine20path;
+    if (file_exists("$tine20path/Tinebase/js/tine-all.js")) {
+        die("You need to run ./release.php -c before updateing lang files! \n");
+    }
+    
     foreach (getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Creating $appName template \n";
         }
         $appPath = "$translationPath/../";
+        
         `cd $appPath 
         touch translations/template.pot 
         find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
