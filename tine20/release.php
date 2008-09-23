@@ -331,7 +331,6 @@ function unifyTranslations($localeString)
     $extTranslationFile = "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'ext');
     if (file_exists($extTranslationFile)) {
         system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$localeString-ext-min.js $extTranslationFile");
-        
     }
     $files = array ( 
         "$tine20path/" . "Tinebase/js/Locale/build/$localeString-ext-min.js",
