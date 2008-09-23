@@ -116,9 +116,8 @@ if ($opts->a || $opts->s) {
         }
     }
     fclose($cssDebug);
-    if ($opts->v) {
-        $verbose = ' --verbose ';
-    }
+
+    $verbose = $opts->v ? ' --verbose ' : '';
     system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
 }
 
@@ -134,9 +133,8 @@ if ($opts->a || $opts->j) {
         }
     }
     fclose($jsDebug);
-    if ($opts->v) {
-        $verbose = ' --verbose ';
-    }
+    $verbose = $opts->v ? ' --verbose ' : '';
+    
     system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
 }
 
