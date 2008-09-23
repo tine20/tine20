@@ -1855,6 +1855,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         
         this.getForm().loadRecord(this.lead);
+        this.updateToolbars(this.lead, 'container');
         Ext.MessageBox.hide();
     },
     
