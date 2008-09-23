@@ -53,6 +53,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     	
     	/**
     	 * add a new note
+    	 * 
     	 */
     	addNote: function(_button, _event) { 
             //var note_type_id = Ext.getCmp('note_type_combo').getValue();
@@ -279,12 +280,17 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         
         /**
          * on add note
+         * - add note to activities panel & grid
          */
         onNoteAdd: function(_text, _typeId) {
             if (_text && _typeId) {
                 notesStore = Ext.StoreMgr.lookup('NotesStore');
                 var newNote = new Tine.Tinebase.Model.Note({note_type_id: _typeId, note: _text});
-                notesStore.insert(0, newNote);                
+                notesStore.insert(0, newNote);     
+                
+                // add note to activities grid
+                var gridStore = Ext.getCmp('Activities_Grid').getStore();
+                gridStore.insert(0, newNote);                
             }
         }
     },
@@ -483,6 +489,16 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             );
                         
             options.params.filter = Ext.util.JSON.encode(filter);
+        }, this);
+        
+        // add new notes from notes store
+        this.store.on('load', function(store, operation) {
+        	notesStore = Ext.StoreMgr.lookup('NotesStore');
+        	notesStore.each(function(note){
+        		if (!note.data.creation_time) {
+                    store.insert(0, note);   
+        		}
+            });        	
         }, this);
                         
         //this.store.load({});
