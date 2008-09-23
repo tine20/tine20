@@ -655,6 +655,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         
         this.getForm().loadRecord(this.task);
+        this.updateToolbars(this.task);
         Ext.MessageBox.hide();
     },
     
