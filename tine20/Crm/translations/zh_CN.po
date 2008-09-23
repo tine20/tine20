@@ -21,72 +21,61 @@ msgstr "管理线索"
 msgid "add, edit and delete leads"
 msgstr "添加、编辑和删除线索"
 
-#: Controller.php:729
+#: Controller.php:745
 #, python-format
 msgid "%s's personal leads"
 msgstr "%s 的个人线索"
 
-#: Controller.php:802
+#: Controller.php:820
 msgid "State"
 msgstr "情形"
 
-#: Controller.php:803
-#: js/Crm.js:1059
-#: js/Crm.js:1097
+#: Controller.php:821 js/Crm.js:1056 js/Crm.js:1093
 msgid "Type"
 msgstr "类型"
 
-#: Controller.php:804
+#: Controller.php:822
 msgid "Source"
 msgstr "源"
 
-#: Controller.php:805
-#: js/LeadEditDialog.js:112
-#: Pdf.php:87
+#: Controller.php:823 js/LeadEditDialog.js:112 Pdf.php:87
 msgid "Start"
 msgstr "开始"
 
-#: Controller.php:806
+#: Controller.php:824
 msgid "Scheduled end"
 msgstr "预订结束"
 
-#: Controller.php:807
-#: js/LeadEditDialog.js:126
-#: Pdf.php:90
+#: Controller.php:825 js/LeadEditDialog.js:126 Pdf.php:90
 msgid "End"
 msgstr "结束"
 
-#: Controller.php:808
-#: js/Crm.js:388
-#: Pdf.php:81
+#: Controller.php:826 js/Crm.js:388 Pdf.php:81
 msgid "Turnover"
 msgstr "周转"
 
-#: Controller.php:809
-#: js/Crm.js:257
-#: js/Crm.js:258
-#: js/Crm.js:259
-#: js/Crm.js:387
-#: js/LeadEditDialog.js:104
-#: Pdf.php:84
+#: Controller.php:827 js/Crm.js:257 js/Crm.js:258 js/Crm.js:259 js/Crm.js:387
+#: js/LeadEditDialog.js:104 Pdf.php:84
 msgid "Probability"
 msgstr "可能性"
 
-#: Controller.php:810
+#: Controller.php:828
 msgid "Folder"
 msgstr "文件夹"
 
-#: Controller.php:811
+#: Controller.php:829
 msgid "Updated by"
 msgstr "更新者"
 
-#: Controller.php:817
-msgid "Lead updated"
-msgstr "线索已更新"
+#: Controller.php:835
+#, python-format
+msgid "Lead %s has been changed"
+msgstr ""
 
-#: Controller.php:819
-msgid "Lead added"
-msgstr "线索已添加"
+#: Controller.php:837
+#, python-format
+msgid "Lead %s has been creaded"
+msgstr ""
 
 #: js/Crm.js:159
 msgid "Are you sure you want to delete this lead?"
@@ -104,10 +93,7 @@ msgstr "试图删除这个线索时发生了一些错误"
 msgid "Enter searchfilter"
 msgstr "输入搜索过滤器"
 
-#: js/Crm.js:235
-#: js/Crm.js:236
-#: js/Crm.js:386
-#: js/LeadEditDialog.js:41
+#: js/Crm.js:235 js/Crm.js:236 js/Crm.js:386 js/LeadEditDialog.js:41
 #: Pdf.php:72
 msgid "Leadstate"
 msgstr "线索状态"
@@ -128,8 +114,7 @@ msgstr "显示关闭的线索"
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr "显示线索{0} - {1} of {2}"
 
-#: js/Crm.js:360
-#: js/Crm.js:420
+#: js/Crm.js:360 js/Crm.js:420
 msgid "No leads found."
 msgstr "没找到线索"
 
@@ -141,15 +126,11 @@ msgstr "线索标识符"
 msgid "Lead name"
 msgstr "线索名"
 
-#: js/Crm.js:384
-#: js/LeadEditDialog.js:334
-#: js/LeadEditDialog.js:377
+#: js/Crm.js:384 js/LeadEditDialog.js:334 js/LeadEditDialog.js:377
 msgid "Partner"
 msgstr "伙伴"
 
-#: js/Crm.js:385
-#: js/LeadEditDialog.js:333
-#: js/LeadEditDialog.js:373
+#: js/Crm.js:385 js/LeadEditDialog.js:333 js/LeadEditDialog.js:373
 msgid "Customer"
 msgstr "客户"
 
@@ -178,9 +159,7 @@ msgstr[0] "删除线索"
 msgid "Delete selected leads"
 msgstr "删除选中的线索"
 
-#: js/Crm.js:498
-#: js/Crm.js:1776
-#: js/Crm.js:1777
+#: js/Crm.js:498 js/Crm.js:1745 js/Crm.js:1746
 msgid "Export as PDF"
 msgstr "输出PDF文件"
 
@@ -188,9 +167,7 @@ msgstr "输出PDF文件"
 msgid "Export selected lead as PDF"
 msgstr "输出选中的线索到PDF文件"
 
-#: js/Crm.js:508
-#: js/Crm.js:1721
-#: js/Crm.js:1740
+#: js/Crm.js:508 js/Crm.js:1690 js/Crm.js:1709
 msgid "Add task"
 msgstr "添加任务"
 
@@ -210,221 +187,187 @@ msgstr "线索源"
 msgid "Lead types"
 msgstr "线索类型"
 
-#: js/Crm.js:619
-#: js/Crm.js:1839
-#: Pdf.php:258
+#: js/Crm.js:619 js/Crm.js:1808 Pdf.php:258
 msgid "Products"
 msgstr "产品"
 
-#: js/Crm.js:678
-#: js/Crm.js:1051
+#: js/Crm.js:678 js/Crm.js:1048
 msgid "Phone"
 msgstr "电话"
 
-#: js/Crm.js:679
-#: js/Crm.js:1052
+#: js/Crm.js:679 js/Crm.js:1049
 msgid "Cellphone"
 msgstr "手机"
 
-#: js/Crm.js:785
+#: js/Crm.js:782
 msgid "Search Contacts"
 msgstr "搜索联系人"
 
-#: js/Crm.js:847
+#: js/Crm.js:844
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Crm.js:847
+#: js/Crm.js:844
 msgid "Saving lead"
 msgstr "保存线索"
 
-#: js/Crm.js:878
+#: js/Crm.js:875
 msgid "Failed"
 msgstr "失败"
 
-#: js/Crm.js:878
+#: js/Crm.js:875
 msgid "Could not save lead."
 msgstr "不能保存线索"
 
-#: js/Crm.js:882
+#: js/Crm.js:879
 msgid "Please fix the errors noted."
 msgstr "请修改标注的错误"
 
-#: js/Crm.js:1028
-#: js/Crm.js:1093
+#: js/Crm.js:1025 js/Crm.js:1089
 msgid "Name"
 msgstr "姓名"
 
-#: js/Crm.js:1037
-#: Pdf.php:198
+#: js/Crm.js:1034 Pdf.php:198
 msgid "Address"
 msgstr "地址"
 
-#: js/Crm.js:1048
+#: js/Crm.js:1045
 msgid "Contactdata"
 msgstr "联系人数据"
 
-#: js/Crm.js:1094
+#: js/Crm.js:1090
 msgid "Organisation"
 msgstr "组织"
 
-#: js/Crm.js:1122
+#: js/Crm.js:1118
 msgid "Summary"
 msgstr "摘要"
 
-#: js/Crm.js:1130
+#: js/Crm.js:1126
 msgid "Add a task..."
 msgstr "添加任务..."
 
-#: js/Crm.js:1134
-#: Pdf.php:239
+#: js/Crm.js:1130 Pdf.php:239
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/Crm.js:1148
-#: Pdf.php:244
+#: js/Crm.js:1144 Pdf.php:244
 msgid "Priority"
 msgstr "优先"
 
-#: js/Crm.js:1163
+#: js/Crm.js:1159
 msgid "Status"
 msgstr "状态"
 
-#: js/Crm.js:1200
+#: js/Crm.js:1196
 msgid "Product"
 msgstr "产品"
 
-#: js/Crm.js:1209
+#: js/Crm.js:1205
 msgid "Add a product..."
 msgstr "添加产品..."
 
-#: js/Crm.js:1218
-#: js/LeadEditDialog.js:163
+#: js/Crm.js:1214 js/LeadEditDialog.js:163
 msgid "Description"
 msgstr "描述"
 
-#: js/Crm.js:1231
+#: js/Crm.js:1227
 msgid "Price"
 msgstr "价格"
 
-#: js/Crm.js:1324
+#: js/Crm.js:1320
 msgid "No Tasks to display"
 msgstr "没有任务要显示"
 
-#: js/Crm.js:1422
-#: js/Crm.js:1672
+#: js/Crm.js:1643
 msgid "Add new contact"
 msgstr "添加新联系人"
 
-#: js/Crm.js:1638
-msgid "Add responsible"
-msgstr "添加责任"
-
-#: js/Crm.js:1639
-msgid "Add new responsible contact"
-msgstr "添加新责任联系人"
-
-#: js/Crm.js:1649
-msgid "Add customer"
-msgstr "添加客户"
-
-#: js/Crm.js:1650
-#: js/Crm.js:1673
+#: js/Crm.js:1644
 msgid "Add new customer contact"
 msgstr "添加新客户联系人"
 
-#: js/Crm.js:1660
-msgid "Add partner"
-msgstr "添加伙伴"
+#: js/Crm.js:1652
+msgid "Add contact"
+msgstr ""
 
-#: js/Crm.js:1661
-msgid "Add new partner contact"
-msgstr "添加新伙伴联系人"
-
-#: js/Crm.js:1688
-msgid "Edit contact"
-msgstr "添加联系人"
-
-#: js/Crm.js:1689
-msgid "Edit selected contact"
-msgstr "编辑选中的联系人"
-
-#: js/Crm.js:1698
-msgid "Add existing contact"
-msgstr "编辑存在的联系人"
-
-#: js/Crm.js:1699
+#: js/Crm.js:1653
 msgid "Add existing contact to lead"
 msgstr "给线索添加已存在的联系人"
 
-#: js/Crm.js:1708
+#: js/Crm.js:1667
+msgid "Edit contact"
+msgstr "添加联系人"
+
+#: js/Crm.js:1668
+msgid "Edit selected contact"
+msgstr "编辑选中的联系人"
+
+#: js/Crm.js:1677
 msgid "Unlink contact"
 msgstr "中断联系人链接"
 
-#: js/Crm.js:1709
+#: js/Crm.js:1678
 msgid "Unlink selected contacts"
 msgstr "中断选中的联系人链接"
 
-#: js/Crm.js:1722
+#: js/Crm.js:1691
 msgid "Add new task"
 msgstr "添加新任务"
 
-#: js/Crm.js:1730
+#: js/Crm.js:1699
 msgid "Edit task"
 msgstr "编辑任务"
 
-#: js/Crm.js:1731
+#: js/Crm.js:1700
 msgid "Edit selected task"
 msgstr "编辑选中的任务"
 
-#: js/Crm.js:1741
+#: js/Crm.js:1710
 msgid "Add existing task to lead"
 msgstr "给线索添加已存在的任务"
 
-#: js/Crm.js:1750
+#: js/Crm.js:1719
 msgid "Remove tasks"
 msgstr "删除任务"
 
-#: js/Crm.js:1751
+#: js/Crm.js:1720
 msgid "Remove selected tasks"
 msgstr "删除选中的任务"
 
-#: js/Crm.js:1763
+#: js/Crm.js:1732
 msgid "Remove products"
 msgstr "删除产品"
 
-#: js/Crm.js:1764
+#: js/Crm.js:1733
 msgid "Remove selected products"
 msgstr "删除选中的产品"
 
-#: js/Crm.js:1805
-#: js/Crm.js:1806
+#: js/Crm.js:1774 js/Crm.js:1775
 msgid "Leads"
 msgstr "线索"
 
-#: js/Crm.js:1837
-#: Pdf.php:171
+#: js/Crm.js:1806 Pdf.php:171
 msgid "Contacts"
 msgstr "联系人"
 
-#: js/Crm.js:1838
-#: Pdf.php:219
+#: js/Crm.js:1807 Pdf.php:219
 msgid "Tasks"
 msgstr "任务"
 
-#: js/Crm.js:1862
+#: js/Crm.js:1831
 msgid "Loading Lead..."
 msgstr "加载线索..."
 
-#: js/Crm.js:1862
+#: js/Crm.js:1831
 msgid "Please Wait"
 msgstr "请稍等"
 
-#: js/Crm.js:1886
+#: js/Crm.js:1852
 msgid "Add New Lead"
 msgstr "添加新线索"
 
-#: js/Crm.js:1888
+#: js/Crm.js:1854
 #, python-format
 msgid "Edit Lead \"%s\""
 msgstr "编辑线索 \"%s\""
@@ -433,13 +376,11 @@ msgstr "编辑线索 \"%s\""
 msgid "Enter short name"
 msgstr "输入短名"
 
-#: js/LeadEditDialog.js:70
-#: Pdf.php:75
+#: js/LeadEditDialog.js:70 Pdf.php:75
 msgid "Leadtype"
 msgstr "线索类型"
 
-#: js/LeadEditDialog.js:87
-#: Pdf.php:78
+#: js/LeadEditDialog.js:87 Pdf.php:78
 msgid "Leadsource"
 msgstr "线索源"
 
@@ -463,8 +404,7 @@ msgstr "输入描述"
 msgid "Expected turnover"
 msgstr "期望的周转"
 
-#: js/LeadEditDialog.js:332
-#: js/LeadEditDialog.js:369
+#: js/LeadEditDialog.js:332 js/LeadEditDialog.js:369
 msgid "Responsible"
 msgstr "责任"
 
@@ -552,6 +492,29 @@ msgstr "已接受"
 msgid "lost"
 msgstr "失去"
 
+#~ msgid "Lead updated"
+#~ msgstr "线索已更新"
+
+#~ msgid "Lead added"
+#~ msgstr "线索已添加"
+
+#~ msgid "Add responsible"
+#~ msgstr "添加责任"
+
+#~ msgid "Add new responsible contact"
+#~ msgstr "添加新责任联系人"
+
+#~ msgid "Add customer"
+#~ msgstr "添加客户"
+
+#~ msgid "Add partner"
+#~ msgstr "添加伙伴"
+
+#~ msgid "Add new partner contact"
+#~ msgstr "添加新伙伴联系人"
+
+#~ msgid "Add existing contact"
+#~ msgstr "编辑存在的联系人"
+
 #~ msgid "Percent"
 #~ msgstr "百分比"
-

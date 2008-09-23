@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-08 08:36+0100\n"
+"PO-Revision-Date: 2008-09-19 17:05+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr[1] "Наистина ли желаете да изтриете селек
 #: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
 #: js/Tasks.js:730
 msgid "Failed"
-msgstr "Грешка"
+msgstr "Неуспех"
 
 #: js/Tasks.js:141 js/Tasks.js:730
 msgid "Could not delete task(s)."
@@ -121,12 +121,12 @@ msgstr "Моля изчакайте"
 
 #: js/Tasks.js:652
 msgid "Add New Task"
-msgstr ""
+msgstr "Добави нова задача"
 
 #: js/Tasks.js:654
 #, python-format
 msgid "Edit Task \"%s\""
-msgstr ""
+msgstr "Редакция но задача \"%s\""
 
 #: js/Tasks.js:673
 msgid "Please wait"
@@ -196,5 +196,5 @@ msgstr ""
 msgid "CANCELLED"
 msgstr ""
 
-#~ msgid "Folder"
-#~ msgstr "Папка"
+msgid "Folder"
+msgstr "Папка"

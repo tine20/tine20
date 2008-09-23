@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-08 08:39+0100\n"
+"PO-Revision-Date: 2008-09-19 17:43+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -58,19 +58,19 @@ msgstr "Експортирай датата"
 msgid "Created by"
 msgstr "Обработен/създаден от "
 
-#: Http.php:210 js/Tinebase.js:101
+#: Http.php:212 js/Tinebase.js:109
 msgid "Authorisation Required"
 msgstr ""
 
-#: Http.php:211 js/Tinebase.js:102
+#: Http.php:213 js/Tinebase.js:110
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: Http.php:236 js/ExceptionDialog.js:26
+#: Http.php:238 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Http.php:237 js/ExceptionDialog.js:51
+#: Http.php:239 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен сривл."
 
@@ -173,6 +173,7 @@ msgstr "Смени парола"
 #: js/MainScreen.js:54
 msgid "Install Google Gears"
 msgstr ""
+"Инсталира Гоогел-Гиерс (Google Gears - помощни програми за работа в off line)"
 
 #: js/MainScreen.js:60
 msgid "Logout"
@@ -200,7 +201,7 @@ msgstr "Потребители: %s"
 msgid "Timezone: %s"
 msgstr "Часова зона: %s"
 
-#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:32
+#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr ""
 
@@ -259,6 +260,8 @@ msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr ""
+"Инсталирането на Гиерс (Gears) ще провери актуалното състояние на Tine 2.0 и "
+"ще кочи всички необходими полета  на вашия компютър."
 
 #: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
 msgid "Confirm"
@@ -272,15 +275,15 @@ msgstr "Наистина ли желаете да излезете?"
 msgid "Logging you out..."
 msgstr "Подготвя излизане..."
 
-#: js/Tinebase.js:91
+#: js/Tinebase.js:99
 msgid "Connection lost, please check your network!"
 msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
 
-#: js/Tinebase.js:112
+#: js/Tinebase.js:120
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:113
+#: js/Tinebase.js:121
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -332,7 +335,7 @@ msgstr ""
 
 #: js/ux/form/ImageField.js:48
 msgid "click to edit"
-msgstr "Кликнете за да едитирате"
+msgstr "Кликнете за да редактирате"
 
 #: js/ux/form/ImageField.js:90
 msgid "Not An Image"
@@ -488,7 +491,7 @@ msgstr "Четене"
 
 #: js/widgets/container/ContainerGrants.js:92
 msgid "Edit"
-msgstr "Обработване"
+msgstr "Редакция"
 
 #: js/widgets/container/ContainerGrants.js:97
 msgid "Delete"
@@ -687,7 +690,7 @@ msgid "setting new language..."
 msgstr "задава нов език..."
 
 #: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
-#: js/widgets/TimezoneChooser.js:72
+#: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Моля изчакайте"
 
@@ -824,7 +827,7 @@ msgstr "Търси..."
 msgid "Color"
 msgstr "Цвят"
 
-#: js/widgets/TimezoneChooser.js:72
+#: js/widgets/TimezoneChooser.js:74
 msgid "setting new timezone..."
 msgstr ""
 
@@ -886,50 +889,50 @@ msgstr ""
 msgid "record changed"
 msgstr ""
 
-#~ msgid "please select a container"
-#~ msgstr "Моля иэберете контейнер"
+msgid "please select a container"
+msgstr "Моля изберете контейнер"
 
-#~ msgid "There Where Errors"
-#~ msgstr "Грешки"
+msgid "There Where Errors"
+msgstr "Грешки"
 
-#~ msgid "New"
-#~ msgstr "Нов"
+msgid "New"
+msgstr "Нов"
 
-#~ msgid "Creating"
-#~ msgstr "Създаване"
+msgid "Creating"
+msgstr "Създаване"
 
-#~ msgid "Do you really want to delete the"
-#~ msgstr "Наистина ли желаете да изтриете "
+msgid "Do you really want to delete the"
+msgstr "Наистина ли желаете да изтриете "
 
-#~ msgid "Deleting"
-#~ msgstr "Изтриване"
+msgid "Deleting"
+msgstr "Изтриване"
 
-#~ msgid "Please enter the new name of the"
-#~ msgstr "Моля задайте новото име на"
+msgid "Please enter the new name of the"
+msgstr "Моля задайте новото име на"
 
-#~ msgid "Updateing"
-#~ msgstr "Актуализиране"
+msgid "Updateing"
+msgstr "Актуализиране"
 
-#~ msgid "Rename"
-#~ msgstr "Преименуване"
+msgid "Rename"
+msgstr "Преименуване"
 
-#~ msgid "Save"
-#~ msgstr "Запамети"
+msgid "Save"
+msgstr "Запамети"
 
-#~ msgid "Close"
-#~ msgstr "Затвори"
+msgid "Close"
+msgstr "Затвори"
 
-#~ msgid "My"
-#~ msgstr "Моите"
+msgid "My"
+msgstr "Моите"
 
-#~ msgid "Language: "
-#~ msgstr "Език:"
+msgid "Language: "
+msgstr "Език:"
 
-#~ msgid "All"
-#~ msgstr "Всички"
+msgid "All"
+msgstr "Всички"
 
-#~ msgid "Shared"
-#~ msgstr "Общите"
+msgid "Shared"
+msgstr "Общите"
 
-#~ msgid "Other Users"
-#~ msgstr "Други потребители"
+msgid "Other Users"
+msgstr "Други потребители"

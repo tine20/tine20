@@ -870,7 +870,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $_lead->getId() . 'sending notification to all people having read access to container ' . $_lead->container);
                 
             $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container);
-            // NOTE: we just send notifications to users, not to groups ore anyones!
+            // NOTE: we just send notifications to users, not to groups or anyones!
             foreach ($containerGrants as $grant) {
                 if ($grant['account_type'] == 'user' && $grant['readGrant'] == 1) {
                     $recipients[] = $grant['account_id'];

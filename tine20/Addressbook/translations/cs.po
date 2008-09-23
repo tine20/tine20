@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:386
+#: Controller.php:401
 #, python-format
 msgid "%s's personal addressbook"
 msgstr ""

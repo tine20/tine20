@@ -57,19 +57,19 @@ msgstr "Datum exportu"
 msgid "Created by"
 msgstr "Vytvořil(a)"
 
-#: Http.php:210 js/Tinebase.js:101
+#: Http.php:212 js/Tinebase.js:109
 msgid "Authorisation Required"
 msgstr ""
 
-#: Http.php:211 js/Tinebase.js:102
+#: Http.php:213 js/Tinebase.js:110
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: Http.php:236 js/ExceptionDialog.js:26
+#: Http.php:238 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Http.php:237 js/ExceptionDialog.js:51
+#: Http.php:239 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -200,7 +200,7 @@ msgstr "Uživatel: %s"
 msgid "Timezone: %s"
 msgstr "Časové pásmo: %s"
 
-#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:32
+#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr ""
 
@@ -272,15 +272,15 @@ msgstr "Určitě se chcete odhlásit?"
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
-#: js/Tinebase.js:91
+#: js/Tinebase.js:99
 msgid "Connection lost, please check your network!"
 msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
 
-#: js/Tinebase.js:112
+#: js/Tinebase.js:120
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:113
+#: js/Tinebase.js:121
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -683,7 +683,7 @@ msgid "setting new language..."
 msgstr "nastavuji nový jazyk..."
 
 #: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
-#: js/widgets/TimezoneChooser.js:72
+#: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Prosím čekejte"
 
@@ -823,7 +823,7 @@ msgstr "Vyhledávám..."
 msgid "Color"
 msgstr "Barva"
 
-#: js/widgets/TimezoneChooser.js:72
+#: js/widgets/TimezoneChooser.js:74
 msgid "setting new timezone..."
 msgstr ""
 

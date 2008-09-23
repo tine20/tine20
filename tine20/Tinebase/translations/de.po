@@ -59,19 +59,19 @@ msgstr "Export Datum"
 msgid "Created by"
 msgstr "Angelegt von"
 
-#: Http.php:210 js/Tinebase.js:101
+#: Http.php:212 js/Tinebase.js:109
 msgid "Authorisation Required"
 msgstr ""
 
-#: Http.php:211 js/Tinebase.js:102
+#: Http.php:213 js/Tinebase.js:110
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: Http.php:236 js/ExceptionDialog.js:26
+#: Http.php:238 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: Http.php:237 js/ExceptionDialog.js:51
+#: Http.php:239 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
@@ -202,7 +202,7 @@ msgstr "Benutzer: %s"
 msgid "Timezone: %s"
 msgstr "Zeitzone: %s"
 
-#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:32
+#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr ""
 
@@ -276,15 +276,15 @@ msgstr "Wollen sie sich wirklich Abmelden?"
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
-#: js/Tinebase.js:91
+#: js/Tinebase.js:99
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
 
-#: js/Tinebase.js:112
+#: js/Tinebase.js:120
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:113
+#: js/Tinebase.js:121
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -691,7 +691,7 @@ msgid "setting new language..."
 msgstr "neue Sprache wird eingestellt..."
 
 #: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
-#: js/widgets/TimezoneChooser.js:72
+#: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Bitte Warten"
 
@@ -828,7 +828,7 @@ msgstr "Suche ..."
 msgid "Color"
 msgstr "Farbe"
 
-#: js/widgets/TimezoneChooser.js:72
+#: js/widgets/TimezoneChooser.js:74
 msgid "setting new timezone..."
 msgstr ""
 

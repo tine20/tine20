@@ -130,139 +130,139 @@ msgstr ""
 msgid "Do you really want to delete the selected access log entries?"
 msgstr ""
 
-#: js/Admin.js:357
+#: js/Admin.js:366
 msgid "delete entry"
 msgstr ""
 
-#: js/Admin.js:358
+#: js/Admin.js:367
 msgid "select all"
 msgstr ""
 
-#: js/Admin.js:363 js/Admin.js:751 js/Groups.js:111 js/Roles.js:112
+#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
 #: js/Tags.js:102 js/Users.js:204
 msgid "enter searchfilter"
 msgstr ""
 
-#: js/Admin.js:393
+#: js/Admin.js:402
 msgid "Display from:"
 msgstr ""
 
-#: js/Admin.js:397
+#: js/Admin.js:406
 msgid "to:"
 msgstr ""
 
-#: js/Admin.js:402 js/Admin.js:768 js/Groups.js:131 js/Roles.js:132
+#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
 #: js/Tags.js:122 js/Users.js:220
 msgid "Search:"
 msgstr ""
 
-#: js/Admin.js:475
+#: js/Admin.js:484
 msgid "invalid password"
 msgstr ""
 
-#: js/Admin.js:479
+#: js/Admin.js:488
 msgid "ambiguous username"
 msgstr ""
 
-#: js/Admin.js:483
+#: js/Admin.js:492
 msgid "user not found"
 msgstr ""
 
-#: js/Admin.js:487
+#: js/Admin.js:496
 msgid "failure"
 msgstr ""
 
-#: js/Admin.js:491
+#: js/Admin.js:500
 msgid "success"
 msgstr ""
 
-#: js/Admin.js:512
+#: js/Admin.js:521
 msgid "Displaying access log entries {0} - {1} of {2}"
 msgstr ""
 
-#: js/Admin.js:513
+#: js/Admin.js:522
 msgid "No access log entries to display"
 msgstr ""
 
-#: js/Admin.js:517
+#: js/Admin.js:526
 msgid "Session ID"
 msgstr ""
 
-#: js/Admin.js:518 js/Users.js:544
+#: js/Admin.js:527 js/Users.js:544
 msgid "Login Name"
 msgstr ""
 
-#: js/Admin.js:519 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
 #: js/Tags.js:164
 msgid "Name"
 msgstr ""
 
-#: js/Admin.js:520
+#: js/Admin.js:529
 msgid "IP Address"
 msgstr ""
 
-#: js/Admin.js:521
+#: js/Admin.js:530
 msgid "Login Time"
 msgstr ""
 
-#: js/Admin.js:522
+#: js/Admin.js:531
 msgid "Logout Time"
 msgstr ""
 
-#: js/Admin.js:523
+#: js/Admin.js:532
 msgid "Account ID"
 msgstr ""
 
-#: js/Admin.js:524
+#: js/Admin.js:533
 msgid "Result"
 msgstr ""
 
-#: js/Admin.js:744
+#: js/Admin.js:763
 msgid "enable application"
 msgstr ""
 
-#: js/Admin.js:745
+#: js/Admin.js:764
 msgid "disable application"
 msgstr ""
 
-#: js/Admin.js:746
+#: js/Admin.js:765
 msgid "settings"
 msgstr ""
 
-#: js/Admin.js:797
+#: js/Admin.js:816
 msgid "disabled"
 msgstr ""
 
-#: js/Admin.js:800
+#: js/Admin.js:819
 msgid "enabled"
 msgstr ""
 
-#: js/Admin.js:804
+#: js/Admin.js:823
 #, python-format
 msgid "unknown status (%s)"
 msgstr ""
 
-#: js/Admin.js:833
+#: js/Admin.js:852
 msgid "Displaying application {0} - {1} of {2}"
 msgstr ""
 
-#: js/Admin.js:834
+#: js/Admin.js:853
 msgid "No applications to display"
 msgstr ""
 
-#: js/Admin.js:838
+#: js/Admin.js:857
 msgid "order"
 msgstr ""
 
-#: js/Admin.js:839
+#: js/Admin.js:858
 msgid "name"
 msgstr ""
 
-#: js/Admin.js:840
+#: js/Admin.js:859
 msgid "status"
 msgstr ""
 
-#: js/Admin.js:841
+#: js/Admin.js:860
 msgid "version"
 msgstr ""
 
@@ -275,7 +275,7 @@ msgid "Deleting group(s)..."
 msgstr ""
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:440 js/Roles.js:468 js/Tags.js:338 js/Users.js:186
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:338 js/Users.js:186
 #: js/Users.js:468 js/Users.js:511
 msgid "Failed"
 msgstr ""
@@ -308,16 +308,16 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:654
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
 #: js/Tags.js:165 js/Tags.js:544
 msgid "Description"
 msgstr ""
 
-#: js/Groups.js:343 js/Roles.js:400 js/Tags.js:294
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:294
 msgid "Please wait"
 msgstr ""
 
-#: js/Groups.js:343 js/Roles.js:400 js/Tags.js:294
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:294
 msgid "Updating Memberships"
 msgstr ""
 
@@ -325,11 +325,11 @@ msgstr ""
 msgid "Could not save group."
 msgstr ""
 
-#: js/Groups.js:385 js/Roles.js:447 js/Tags.js:343 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:343 js/Users.js:516
 msgid "Errors"
 msgstr ""
 
-#: js/Groups.js:385 js/Roles.js:447 js/Tags.js:343 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:343 js/Users.js:516
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -370,7 +370,7 @@ msgstr ""
 msgid "Deleting role(s)..."
 msgstr ""
 
-#: js/Roles.js:70 js/Roles.js:468
+#: js/Roles.js:70 js/Roles.js:467
 msgid "Some error occured while trying to delete the role."
 msgstr ""
 
@@ -394,43 +394,43 @@ msgstr ""
 msgid "No roles to display"
 msgstr ""
 
-#: js/Roles.js:440
+#: js/Roles.js:439
 msgid "Could not save role."
 msgstr ""
 
-#: js/Roles.js:460
+#: js/Roles.js:459
 msgid "Deleting role..."
 msgstr ""
 
-#: js/Roles.js:595
+#: js/Roles.js:594
 msgid "Role members"
 msgstr ""
 
-#: js/Roles.js:605
+#: js/Roles.js:604
 msgid "Members"
 msgstr ""
 
-#: js/Roles.js:617 js/Tags.js:560
+#: js/Roles.js:616 js/Tags.js:560
 msgid "Rights"
 msgstr ""
 
-#: js/Roles.js:647
+#: js/Roles.js:646
 msgid "Role Name"
 msgstr ""
 
-#: js/Roles.js:687
+#: js/Roles.js:686
 msgid "Loading Role..."
 msgstr ""
 
-#: js/Roles.js:687 js/Tags.js:581 js/Users.js:477
+#: js/Roles.js:686 js/Tags.js:581 js/Users.js:477
 msgid "Please Wait"
 msgstr ""
 
-#: js/Roles.js:727
+#: js/Roles.js:726
 msgid "Add New Role"
 msgstr ""
 
-#: js/Roles.js:729
+#: js/Roles.js:728
 #, python-format
 msgid "Edit Role \"%s\""
 msgstr ""

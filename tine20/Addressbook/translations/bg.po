@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-05 20:40+0100\n"
+"PO-Revision-Date: 2008-09-09 08:26+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Bookmarks: 23,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: Controller.php:386
+#: Controller.php:401
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%s's лични адреси"
@@ -280,12 +280,12 @@ msgstr "Моля изчакайте"
 
 #: js/Addressbook.js:853
 msgid "Add new contact"
-msgstr ""
+msgstr "Прибави нов контакт"
 
 #: js/Addressbook.js:855
 #, python-format
 msgid "Edit Contact \"%s\""
-msgstr ""
+msgstr "Пбработи контакт  \"%s\""
 
 #: js/Addressbook.js:872
 msgid "Please wait a moment..."
@@ -348,7 +348,7 @@ msgid "Enter description"
 msgstr "Вкарай описание"
 
 #: js/EditDialog.js:410
-#, fuzzy, python-format
+#, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] "Линк"
@@ -430,8 +430,8 @@ msgstr "URL  (приват)"
 msgid "Other Data"
 msgstr "Други данни"
 
-#~ msgid "Saved in"
-#~ msgstr "Запаметен в"
+msgid "Saved in"
+msgstr "Запаметен в"
 
-#~ msgid "Map"
-#~ msgstr "Карта"
+msgid "Map"
+msgstr "Карта"
