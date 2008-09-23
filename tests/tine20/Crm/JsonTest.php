@@ -286,6 +286,21 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to get an empty lead
+     *
+     */
+    public function testGetEmptyLead()    
+    {
+        $json = new Crm_Json();
+        $emptyLead = $json->getLead(NULL);
+        
+        //print_r($emptyLead);
+        
+        $this->assertGreaterThan(Zend_Date::now()->getIso(), $emptyLead['start']);
+        $this->assertEquals(Zend_Registry::get('currentAccount')->accountFullName, $emptyLead['relations'][0]['related_record']['n_fn']);
+    }
+        
+    /**
      * try to get a lead (test searchLeads as well)
      *
      */
@@ -298,6 +313,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $initialLead = $leads[0];
         
         $lead = $json->getLead($initialLead['id']);
+        
+        //print_r($lead);
         
         $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
         $this->assertEquals($lead['relations'][0]['related_record']['assistent'], $this->objects['contact']->assistent);                

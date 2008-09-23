@@ -383,6 +383,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
                 
         $this->assertType('Crm_Model_Lead', $lead);
 
+        // check for linked internal contact
+        $this->assertEquals(Zend_Registry::get('currentAccount')->accountFullName, $lead->relations[0]->related_record['n_fn']);
+        $this->assertEquals('RESPONSIBLE', $lead->relations[0]->type);
+        
         // empty lead can not be valid
         $this->assertFalse($lead->isValid());
     }
