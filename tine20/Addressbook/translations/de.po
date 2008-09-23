@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-08-27 17:38+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-09-23 13:44+0100\n"
+"Last-Translator: Richard <richard@radbasteln.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,17 +40,17 @@ msgid_plural "Do you really want to delete the selected contacts?"
 msgstr[0] "Wollen sie den ausgewählten Kontakt wirklich löschen?"
 msgstr[1] "Wollen sie die ausgewählten Kontakte wirklich löschen?"
 
-#: js/Addressbook.js:197 js/Addressbook.js:924
+#: js/Addressbook.js:197 js/Addressbook.js:925
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] "Kontakt wird gelöscht..."
 msgstr[1] "Kontakte werden gelöscht..."
 
-#: js/Addressbook.js:203 js/Addressbook.js:907 js/Addressbook.js:932
+#: js/Addressbook.js:203 js/Addressbook.js:908 js/Addressbook.js:933
 msgid "Failed"
 msgstr "Fehler"
 
-#: js/Addressbook.js:204 js/Addressbook.js:932
+#: js/Addressbook.js:204 js/Addressbook.js:933
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] "Beim löschen des Kontaktes ist ein Fehler ist aufgetreten."
@@ -267,42 +267,42 @@ msgstr "Beschreibung"
 
 #: js/Addressbook.js:817
 msgid "addressbook"
-msgstr ""
+msgstr "Adressbuch"
 
 #: js/Addressbook.js:839
 msgid "Loading Contact..."
-msgstr ""
+msgstr "Kontakt laden..."
 
 #: js/Addressbook.js:839
 msgid "Please Wait"
-msgstr ""
+msgstr "Bitte warten"
 
 #: js/Addressbook.js:853
 msgid "Add new contact"
-msgstr ""
+msgstr "Kontakt hinzufügen"
 
 #: js/Addressbook.js:855
 #, python-format
 msgid "Edit Contact \"%s\""
-msgstr ""
+msgstr "Kontaktt \"%s\" bearbeiten"
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Please wait a moment..."
 msgstr "Bitte warten sie einen Moment..."
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Saving Contact"
 msgstr "Kontakt wird gespeichert"
 
-#: js/Addressbook.js:907
+#: js/Addressbook.js:908
 msgid "Could not save contact."
 msgstr "Der Kontakt konnte nicht gespeichert werden."
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Please fix the errors noted."
 msgstr "Bitte korrigieren sie die angegebenen Fehler."
 
@@ -429,20 +429,20 @@ msgstr "URL"
 msgid "Other Data"
 msgstr "Andere Daten"
 
-#~ msgid "Saved in"
-#~ msgstr "Abgelegt in"
+msgid "Saved in"
+msgstr "Abgelegt in"
 
-#~ msgid "Map"
-#~ msgstr "Karte"
+msgid "Map"
+msgstr "Karte"
 
-#~ msgid "Filter: "
-#~ msgstr "Filter: "
+msgid "Filter: "
+msgstr "Filter: "
 
-#~ msgid "Search: "
-#~ msgstr "Suche: "
+msgid "Search: "
+msgstr "Suche: "
 
-#~ msgid "History"
-#~ msgstr "Historie"
+msgid "History"
+msgstr "Historie"
 
-#~ msgid "Notes"
-#~ msgstr "Notizen"
+msgid "Notes"
+msgstr "Notizen"

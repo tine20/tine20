@@ -39,16 +39,16 @@ msgid "Do you really want to delete the selected contact?"
 msgid_plural "Do you really want to delete the selected contacts?"
 msgstr[0] "你真的想删除选中的联系人？"
 
-#: js/Addressbook.js:197 js/Addressbook.js:924
+#: js/Addressbook.js:197 js/Addressbook.js:925
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] "正删除联系人..."
 
-#: js/Addressbook.js:203 js/Addressbook.js:907 js/Addressbook.js:932
+#: js/Addressbook.js:203 js/Addressbook.js:908 js/Addressbook.js:933
 msgid "Failed"
 msgstr "失败"
 
-#: js/Addressbook.js:204 js/Addressbook.js:932
+#: js/Addressbook.js:204 js/Addressbook.js:933
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] "当删除联系人的时候有错误发生"
@@ -282,23 +282,23 @@ msgstr "添加新联系人"
 msgid "Edit Contact \"%s\""
 msgstr "编辑联系人 \"%s\""
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Please wait a moment..."
 msgstr "请稍等..."
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Saving Contact"
 msgstr "保存联系人"
 
-#: js/Addressbook.js:907
+#: js/Addressbook.js:908
 msgid "Could not save contact."
 msgstr "不能保存联系人"
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Errors"
 msgstr "错误"
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Please fix the errors noted."
 msgstr "请修复注明的错误"
 

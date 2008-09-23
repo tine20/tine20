@@ -9,12 +9,12 @@ msgid_plural "Do you really want to delete the selected task"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
-#: js/Tasks.js:730
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
+#: js/Tasks.js:745
 msgid "Failed"
 msgstr ""
 
-#: js/Tasks.js:141 js/Tasks.js:730
+#: js/Tasks.js:141 js/Tasks.js:745
 msgid "Could not delete task(s)."
 msgstr ""
 
@@ -32,7 +32,7 @@ msgid_plural "Delete tasks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
+#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
 msgid "Could not save task."
 msgstr ""
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "No tasks to display"
 msgstr ""
 
-#: js/Tasks.js:418 js/Tasks.js:753
+#: js/Tasks.js:418 js/Tasks.js:768
 msgid "Summary"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Due Date"
 msgstr ""
 
-#: js/Tasks.js:444 js/Tasks.js:785
+#: js/Tasks.js:444 js/Tasks.js:800
 msgid "Priority"
 msgstr ""
 
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Percent"
 msgstr ""
 
-#: js/Tasks.js:473 js/Tasks.js:781
+#: js/Tasks.js:473 js/Tasks.js:796
 msgid "Status"
 msgstr ""
 
@@ -113,55 +113,55 @@ msgstr ""
 msgid "Edit Task \"%s\""
 msgstr ""
 
-#: js/Tasks.js:673
+#: js/Tasks.js:688
 msgid "Please wait"
 msgstr ""
 
-#: js/Tasks.js:673 js/Tasks.js:718
+#: js/Tasks.js:688 js/Tasks.js:733
 msgid "Saving Task"
 msgstr ""
 
-#: js/Tasks.js:709
+#: js/Tasks.js:724
 msgid "Errors"
 msgstr ""
 
-#: js/Tasks.js:709
+#: js/Tasks.js:724
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/Tasks.js:716
+#: js/Tasks.js:731
 msgid "Confirm"
 msgstr ""
 
-#: js/Tasks.js:716
+#: js/Tasks.js:731
 msgid "Do you really want to delete this task?"
 msgstr ""
 
-#: js/Tasks.js:718
+#: js/Tasks.js:733
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/Tasks.js:757
+#: js/Tasks.js:772
 msgid "Enter short name..."
 msgstr ""
 
-#: js/Tasks.js:760
+#: js/Tasks.js:775
 msgid "Notes"
 msgstr ""
 
-#: js/Tasks.js:762
+#: js/Tasks.js:777
 msgid "Enter description..."
 msgstr ""
 
-#: js/Tasks.js:776
+#: js/Tasks.js:791
 msgid "Percentage"
 msgstr ""
 
-#: js/Tasks.js:789
+#: js/Tasks.js:804
 msgid "Due date"
 msgstr ""
 
-#: js/Tasks.js:793
+#: js/Tasks.js:808
 msgid "Saved in"
 msgstr ""
 

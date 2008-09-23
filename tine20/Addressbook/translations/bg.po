@@ -41,17 +41,17 @@ msgid_plural "Do you really want to delete the selected contacts?"
 msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
 msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
 
-#: js/Addressbook.js:197 js/Addressbook.js:924
+#: js/Addressbook.js:197 js/Addressbook.js:925
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] "Изтрива контакт..."
 msgstr[1] "Изтрива контакти..."
 
-#: js/Addressbook.js:203 js/Addressbook.js:907 js/Addressbook.js:932
+#: js/Addressbook.js:203 js/Addressbook.js:908 js/Addressbook.js:933
 msgid "Failed"
 msgstr "Несполучливо"
 
-#: js/Addressbook.js:204 js/Addressbook.js:932
+#: js/Addressbook.js:204 js/Addressbook.js:933
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] "Настъпила е грешка при опит за изтриване но контакта."
@@ -287,23 +287,23 @@ msgstr "Прибави нов контакт"
 msgid "Edit Contact \"%s\""
 msgstr "Пбработи контакт  \"%s\""
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Please wait a moment..."
 msgstr "Моля изчакайте за момент..."
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Saving Contact"
 msgstr "Съхранява контакт"
 
-#: js/Addressbook.js:907
+#: js/Addressbook.js:908
 msgid "Could not save contact."
 msgstr "Не може да съхрани контакта."
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Errors"
 msgstr "Грешки"
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките."
 
@@ -430,8 +430,8 @@ msgstr "URL  (приват)"
 msgid "Other Data"
 msgstr "Други данни"
 
-msgid "Saved in"
-msgstr "Запаметен в"
+#~ msgid "Saved in"
+#~ msgstr "Запаметен в"
 
-msgid "Map"
-msgstr "Карта"
+#~ msgid "Map"
+#~ msgstr "Карта"

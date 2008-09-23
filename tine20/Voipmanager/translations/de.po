@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-15 11:02+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
+"Last-Translator: Richard <richard@radbasteln.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:213
 msgid "ama flags"
-msgstr ""
+msgstr "AMA Flags"
 
 #: js/Asterisk/SipPeer.js:214
 msgid "call group"
@@ -156,11 +156,11 @@ msgstr "Kontext"
 
 #: js/Asterisk/SipPeer.js:218
 msgid "default ip"
-msgstr ""
+msgstr "Default IP"
 
 #: js/Asterisk/SipPeer.js:219
 msgid "dtmf mode"
-msgstr ""
+msgstr "DTMF Modus"
 
 #: js/Asterisk/SipPeer.js:220
 msgid "from user"
@@ -176,11 +176,11 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:223
 msgid "host"
-msgstr ""
+msgstr "Host"
 
 #: js/Asterisk/SipPeer.js:224
 msgid "insecure"
-msgstr ""
+msgstr "unsicher"
 
 #: js/Asterisk/SipPeer.js:225 js/MyPhones.js:564 js/Snom/Phone.js:1287
 #: js/Snom/Settings.js:205 js/Snom/Settings.js:545
@@ -202,15 +202,15 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:229
 msgid "deny"
-msgstr ""
+msgstr "ablehnen"
 
 #: js/Asterisk/SipPeer.js:230
 msgid "permit"
-msgstr ""
+msgstr "zulassen"
 
 #: js/Asterisk/SipPeer.js:231
 msgid "mask"
-msgstr ""
+msgstr "ausblenden"
 
 #: js/Asterisk/SipPeer.js:232
 msgid "pickup group"
@@ -218,11 +218,11 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:233
 msgid "port"
-msgstr ""
+msgstr "Port"
 
 #: js/Asterisk/SipPeer.js:234
 msgid "qualify"
-msgstr ""
+msgstr "berechtigen"
 
 #: js/Asterisk/SipPeer.js:235
 msgid "retrict cid"
@@ -230,7 +230,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:236
 msgid "rtp timeout"
-msgstr ""
+msgstr "RTP Timeout"
 
 #: js/Asterisk/SipPeer.js:237
 msgid "rtp hold timeout"
@@ -242,23 +242,23 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:239
 msgid "type"
-msgstr ""
+msgstr "Typ"
 
 #: js/Asterisk/SipPeer.js:240
 msgid "username"
-msgstr ""
+msgstr "Username"
 
 #: js/Asterisk/SipPeer.js:241
 msgid "disallow"
-msgstr ""
+msgstr "ablehnen"
 
 #: js/Asterisk/SipPeer.js:242
 msgid "allow"
-msgstr ""
+msgstr "erlauben"
 
 #: js/Asterisk/SipPeer.js:243
 msgid "music on hold"
-msgstr ""
+msgstr "Warteschleife"
 
 #: js/Asterisk/SipPeer.js:244
 msgid "reg seconds"
@@ -266,7 +266,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:245
 msgid "ip address"
-msgstr ""
+msgstr "Ip Adresse"
 
 #: js/Asterisk/SipPeer.js:246
 msgid "reg exten"
@@ -1115,430 +1115,430 @@ msgstr "Software Version"
 msgid "Keylayout"
 msgstr "Tastaturlayout"
 
-#~ msgid "ASTERISK_LINES_account code"
-#~ msgstr "Account Code"
+msgid "ASTERISK_LINES_account code"
+msgstr "Account Code"
 
-#~ msgid "ASTERISK_LINES_ama flags"
-#~ msgstr "AMA flags"
+msgid "ASTERISK_LINES_ama flags"
+msgstr "AMA flags"
 
-#~ msgid "ASTERISK_LINES_call group"
-#~ msgstr "Anrufergruppe"
+msgid "ASTERISK_LINES_call group"
+msgstr "Anrufergruppe"
 
-#~ msgid "ASTERISK_LINES_caller id"
-#~ msgstr "Anrufer ID"
+msgid "ASTERISK_LINES_caller id"
+msgstr "Anrufer ID"
 
-#~ msgid "ASTERISK_LINES_can reinvite"
-#~ msgstr "Can Re-Invite"
+msgid "ASTERISK_LINES_can reinvite"
+msgstr "Can Re-Invite"
 
-#~ msgid "ASTERISK_LINES_context"
-#~ msgstr "Kontext"
+msgid "ASTERISK_LINES_context"
+msgstr "Kontext"
 
-#~ msgid "ASTERISK_LINES_default ip"
-#~ msgstr "Default IP"
+msgid "ASTERISK_LINES_default ip"
+msgstr "Default IP"
 
-#~ msgid "ASTERISK_LINES_dtmf mode"
-#~ msgstr "DTMF Modus"
+msgid "ASTERISK_LINES_dtmf mode"
+msgstr "DTMF Modus"
 
-#~ msgid "ASTERISK_LINES_from user"
-#~ msgstr "Absender"
+msgid "ASTERISK_LINES_from user"
+msgstr "Absender"
 
-#~ msgid "ASTERISK_LINES_from domain"
-#~ msgstr "Absenderdomain"
+msgid "ASTERISK_LINES_from domain"
+msgstr "Absenderdomain"
 
-#~ msgid "ASTERISK_LINES_full contact"
-#~ msgstr "kompletter Kontakt"
+msgid "ASTERISK_LINES_full contact"
+msgstr "kompletter Kontakt"
 
-#~ msgid "ASTERISK_LINES_host"
-#~ msgstr "Host"
+msgid "ASTERISK_LINES_host"
+msgstr "Host"
 
-#~ msgid "ASTERISK_LINES_insecure"
-#~ msgstr "unsicher"
+msgid "ASTERISK_LINES_insecure"
+msgstr "unsicher"
 
-#~ msgid "ASTERISK_LINES_language"
-#~ msgstr "Sprache"
+msgid "ASTERISK_LINES_language"
+msgstr "Sprache"
 
-#~ msgid "ASTERISK_LINES_mailbox"
-#~ msgstr "Mailbox"
+msgid "ASTERISK_LINES_mailbox"
+msgstr "Mailbox"
 
-#~ msgid "ASTERISK_LINES_md5 secret"
-#~ msgstr "MD5 Secret"
+msgid "ASTERISK_LINES_md5 secret"
+msgstr "MD5 Secret"
 
-#~ msgid "ASTERISK_LINES_nat"
-#~ msgstr "NAT"
+msgid "ASTERISK_LINES_nat"
+msgstr "NAT"
 
-#~ msgid "ASTERISK_LINES_deny"
-#~ msgstr "verbieten"
+msgid "ASTERISK_LINES_deny"
+msgstr "verbieten"
 
-#~ msgid "ASTERISK_LINES_permit"
-#~ msgstr "erlauben"
+msgid "ASTERISK_LINES_permit"
+msgstr "erlauben"
 
-#~ msgid "ASTERISK_LINES_mask"
-#~ msgstr "Maske"
+msgid "ASTERISK_LINES_mask"
+msgstr "Maske"
 
-#~ msgid "ASTERISK_LINES_pickup group"
-#~ msgstr "Pickup Group"
+msgid "ASTERISK_LINES_pickup group"
+msgstr "Pickup Group"
 
-#~ msgid "ASTERISK_LINES_port"
-#~ msgstr "Port"
+msgid "ASTERISK_LINES_port"
+msgstr "Port"
 
-#~ msgid "ASTERISK_LINES_qualify"
-#~ msgstr "Qualify"
+msgid "ASTERISK_LINES_qualify"
+msgstr "Qualify"
 
-#~ msgid "ASTERISK_LINES_retrict cid"
-#~ msgstr "Restrict CID"
+msgid "ASTERISK_LINES_retrict cid"
+msgstr "Restrict CID"
 
-#~ msgid "ASTERISK_LINES_rtp timeout"
-#~ msgstr "RTP Timeout"
+msgid "ASTERISK_LINES_rtp timeout"
+msgstr "RTP Timeout"
 
-#~ msgid "ASTERISK_LINES_rtp hold timeout"
-#~ msgstr "RTP Hold Timeout"
+msgid "ASTERISK_LINES_rtp hold timeout"
+msgstr "RTP Hold Timeout"
 
-#~ msgid "ASTERISK_LINES_secret"
-#~ msgstr "Secret"
+msgid "ASTERISK_LINES_secret"
+msgstr "Secret"
 
-#~ msgid "ASTERISK_LINES_type"
-#~ msgstr "Typ"
+msgid "ASTERISK_LINES_type"
+msgstr "Typ"
 
-#~ msgid "ASTERISK_LINES_username"
-#~ msgstr "Benutzername"
+msgid "ASTERISK_LINES_username"
+msgstr "Benutzername"
 
-#~ msgid "ASTERISK_LINES_disallow"
-#~ msgstr "nicht erlauben"
+msgid "ASTERISK_LINES_disallow"
+msgstr "nicht erlauben"
 
-#~ msgid "ASTERISK_LINES_allow"
-#~ msgstr "erlauben"
+msgid "ASTERISK_LINES_allow"
+msgstr "erlauben"
 
-#~ msgid "ASTERISK_LINES_music on hold"
-#~ msgstr "Music On Hold"
+msgid "ASTERISK_LINES_music on hold"
+msgstr "Music On Hold"
 
-#~ msgid "ASTERISK_LINES_reg seconds"
-#~ msgstr "Reg Seconds"
+msgid "ASTERISK_LINES_reg seconds"
+msgstr "Reg Seconds"
 
-#~ msgid "ASTERISK_LINES_ip address"
-#~ msgstr "IP Addresse"
+msgid "ASTERISK_LINES_ip address"
+msgstr "IP Addresse"
 
-#~ msgid "ASTERISK_LINES_reg exten"
-#~ msgstr "Reg Exten"
+msgid "ASTERISK_LINES_reg exten"
+msgstr "Reg Exten"
 
-#~ msgid "ASTERISK_LINES_can call forward"
-#~ msgstr "Can Call Forward"
+msgid "ASTERISK_LINES_can call forward"
+msgstr "Can Call Forward"
 
-#~ msgid "ASTERISK_LINES_set var"
-#~ msgstr "Set Var"
+msgid "ASTERISK_LINES_set var"
+msgstr "Set Var"
 
-#~ msgid "ASTERISK_LINES_notify ringing"
-#~ msgstr "Notify Ringing"
+msgid "ASTERISK_LINES_notify ringing"
+msgstr "Notify Ringing"
 
-#~ msgid "ASTERISK_LINES_use client code"
-#~ msgstr "Use Client Code"
+msgid "ASTERISK_LINES_use client code"
+msgstr "Use Client Code"
 
-#~ msgid "ASTERISK_LINES_auth user"
-#~ msgstr "Auth Benutzer"
+msgid "ASTERISK_LINES_auth user"
+msgstr "Auth Benutzer"
 
-#~ msgid "ASTERISK_LINES_call limit"
-#~ msgstr "Call Limit"
+msgid "ASTERISK_LINES_call limit"
+msgstr "Call Limit"
 
-#~ msgid "ASTERISK_LINES_busy level"
-#~ msgstr "Busy Level"
+msgid "ASTERISK_LINES_busy level"
+msgstr "Busy Level"
 
-#~ msgid "with_flash"
-#~ msgstr "Benutze Flashplugin"
+msgid "with_flash"
+msgstr "Benutze Flashplugin"
 
-#~ msgid "dnd_on_code"
-#~ msgstr "DND On Code"
+msgid "dnd_on_code"
+msgstr "DND On Code"
 
-#~ msgid "dnd_off_code"
-#~ msgstr "DND Off Code"
+msgid "dnd_off_code"
+msgstr "DND Off Code"
 
-#~ msgid "ringer_headset_device"
-#~ msgstr "Ringer Headset Device"
+msgid "ringer_headset_device"
+msgstr "Ringer Headset Device"
 
-#~ msgid "ring_sound"
-#~ msgstr "Ring Sound"
+msgid "ring_sound"
+msgstr "Ring Sound"
 
-#~ msgid "alert_internal_ring_text"
-#~ msgstr "Alert Internal Ring Text"
+msgid "alert_internal_ring_text"
+msgstr "Alert Internal Ring Text"
 
-#~ msgid "alert_internal_ring_sound"
-#~ msgstr "Alert Internal Ring Sound"
+msgid "alert_internal_ring_sound"
+msgstr "Alert Internal Ring Sound"
 
-#~ msgid "alert_external_ring_text"
-#~ msgstr "Alert External Ring Text"
+msgid "alert_external_ring_text"
+msgstr "Alert External Ring Text"
 
-#~ msgid "alert_external_ring_sound"
-#~ msgstr "Alert External Ring Sound"
+msgid "alert_external_ring_sound"
+msgstr "Alert External Ring Sound"
 
-#~ msgid "alert_group_ring_text"
-#~ msgstr "Alert Group Ring Text"
+msgid "alert_group_ring_text"
+msgstr "Alert Group Ring Text"
 
-#~ msgid "alert_group_ring_sound"
-#~ msgstr "Alert Group Ring Sound"
+msgid "alert_group_ring_sound"
+msgstr "Alert Group Ring Sound"
 
-#~ msgid "friends_ring_sound"
-#~ msgstr "Friends Ring Sound"
+msgid "friends_ring_sound"
+msgstr "Friends Ring Sound"
 
-#~ msgid "family_ring_sound"
-#~ msgstr "Family Ring Sound"
+msgid "family_ring_sound"
+msgstr "Family Ring Sound"
 
-#~ msgid "colleagues_ring_sound"
-#~ msgstr "Colleagues Ring Sound"
+msgid "colleagues_ring_sound"
+msgstr "Colleagues Ring Sound"
 
-#~ msgid "vip_ring_sound"
-#~ msgstr "VIP Ring Sound"
+msgid "vip_ring_sound"
+msgstr "VIP Ring Sound"
 
-#~ msgid "custom_melody_url"
-#~ msgstr "Custom Melody URL"
+msgid "custom_melody_url"
+msgstr "Custom Melody URL"
 
-#~ msgid "auto_connect_indication"
-#~ msgstr "Auto Connect Indication"
+msgid "auto_connect_indication"
+msgstr "Auto Connect Indication"
 
-#~ msgid "auto_connect_type"
-#~ msgstr "Auto Connect Type"
+msgid "auto_connect_type"
+msgstr "Auto Connect Type"
 
-#~ msgid "privacy_out"
-#~ msgstr "Privacy Out"
+msgid "privacy_out"
+msgstr "Privacy Out"
 
-#~ msgid "privacy_in"
-#~ msgstr "Privacy In"
+msgid "privacy_in"
+msgstr "Privacy In"
 
-#~ msgid "presence_timeout"
-#~ msgstr "Presence Timeout"
+msgid "presence_timeout"
+msgstr "Presence Timeout"
 
-#~ msgid "enable_keyboard_lock"
-#~ msgstr "Enable Keyboard Lock"
+msgid "enable_keyboard_lock"
+msgstr "Enable Keyboard Lock"
 
-#~ msgid "keyboard_lock"
-#~ msgstr "Keyboard Lock"
+msgid "keyboard_lock"
+msgstr "Keyboard Lock"
 
-#~ msgid "keyboard_lock_pw"
-#~ msgstr "Keyboard Lock Password"
+msgid "keyboard_lock_pw"
+msgstr "Keyboard Lock Password"
 
-#~ msgid "keyboard_lock_emergency"
-#~ msgstr "Keyboard Lock Emergency"
+msgid "keyboard_lock_emergency"
+msgstr "Keyboard Lock Emergency"
 
-#~ msgid "emergency_proxy"
-#~ msgstr "Emergency Proxy"
+msgid "emergency_proxy"
+msgstr "Emergency Proxy"
 
 #, fuzzy
-#~ msgid "main"
-#~ msgstr "EMail"
+msgid "main"
+msgstr "EMail"
 
-#~ msgid "AUS"
-#~ msgstr "Australien"
+msgid "AUS"
+msgstr "Australien"
 
-#~ msgid "AUT"
-#~ msgstr "Österreich"
+msgid "AUT"
+msgstr "Österreich"
 
-#~ msgid "CHN"
-#~ msgstr "China"
+msgid "CHN"
+msgstr "China"
 
-#~ msgid "DNK"
-#~ msgstr "Dänemark"
+msgid "DNK"
+msgstr "Dänemark"
 
-#~ msgid "FRA"
-#~ msgstr "Frankreich"
+msgid "FRA"
+msgstr "Frankreich"
 
-#~ msgid "GER"
-#~ msgstr "Deutschland"
+msgid "GER"
+msgstr "Deutschland"
 
-#~ msgid "GBR"
-#~ msgstr "Großbritannien"
+msgid "GBR"
+msgstr "Großbritannien"
 
-#~ msgid "IND"
-#~ msgstr "Indien"
+msgid "IND"
+msgstr "Indien"
 
-#~ msgid "ITA"
-#~ msgstr "Italien"
+msgid "ITA"
+msgstr "Italien"
 
-#~ msgid "JPN"
-#~ msgstr "Japan"
+msgid "JPN"
+msgstr "Japan"
 
-#~ msgid "MEX"
-#~ msgstr "Mexiko"
+msgid "MEX"
+msgstr "Mexiko"
 
-#~ msgid "NLD"
-#~ msgstr "Niederlande"
+msgid "NLD"
+msgstr "Niederlande"
 
-#~ msgid "NOR"
-#~ msgstr "Norwegen"
+msgid "NOR"
+msgstr "Norwegen"
 
-#~ msgid "NZL"
-#~ msgstr "Neuseeland"
+msgid "NZL"
+msgstr "Neuseeland"
 
-#~ msgid "ESP"
-#~ msgstr "Spanien"
+msgid "ESP"
+msgstr "Spanien"
 
-#~ msgid "SWE"
-#~ msgstr "Schweden"
+msgid "SWE"
+msgstr "Schweden"
 
-#~ msgid "SWI"
-#~ msgstr "Schweiz"
+msgid "SWI"
+msgstr "Schweiz"
 
-#~ msgid "USA"
-#~ msgstr "USA"
+msgid "USA"
+msgstr "USA"
 
-#~ msgid "English"
-#~ msgstr "Englisch"
+msgid "English"
+msgstr "Englisch"
 
-#~ msgid "Deutsch"
-#~ msgstr "Deutsch"
+msgid "Deutsch"
+msgstr "Deutsch"
 
-#~ msgid "Espanol"
-#~ msgstr "Spanisch"
+msgid "Espanol"
+msgstr "Spanisch"
 
-#~ msgid "Francais"
-#~ msgstr "Französisch"
+msgid "Francais"
+msgstr "Französisch"
 
-#~ msgid "Italiano"
-#~ msgstr "Italienisch"
+msgid "Italiano"
+msgstr "Italienisch"
 
-#~ msgid "Nederlands"
-#~ msgstr "Niederländisch"
+msgid "Nederlands"
+msgstr "Niederländisch"
 
-#~ msgid "Portugues"
-#~ msgstr "Portugiesisch"
+msgid "Portugues"
+msgstr "Portugiesisch"
 
-#~ msgid "Suomi"
-#~ msgstr "Finnisch"
+msgid "Suomi"
+msgstr "Finnisch"
 
-#~ msgid "Svenska"
-#~ msgstr "Schwedisch"
+msgid "Svenska"
+msgstr "Schwedisch"
 
-#~ msgid "Dansk"
-#~ msgstr "Dänisch"
+msgid "Dansk"
+msgstr "Dänisch"
 
-#~ msgid "Norsk"
-#~ msgstr "Norwegisch"
+msgid "Norsk"
+msgstr "Norwegisch"
 
-#~ msgid "English(UK)"
-#~ msgstr "Englisch (UK)"
+msgid "English(UK)"
+msgstr "Englisch (UK)"
 
-#~ msgid "Cestina"
-#~ msgstr "Tschechisch"
+msgid "Cestina"
+msgstr "Tschechisch"
 
-#~ msgid "Polski"
-#~ msgstr "Polnisch"
+msgid "Polski"
+msgstr "Polnisch"
 
-#~ msgid "Slovencina"
-#~ msgstr "Slowakisch"
+msgid "Slovencina"
+msgstr "Slowakisch"
 
-#~ msgid "Japanese"
-#~ msgstr "Japanisch"
+msgid "Japanese"
+msgstr "Japanisch"
 
-#~ msgid "Chinese"
-#~ msgstr "Chinesisch"
+msgid "Chinese"
+msgstr "Chinesisch"
 
-#~ msgid "Redirect"
-#~ msgstr "Umleitung"
+msgid "Redirect"
+msgstr "Umleitung"
 
-#~ msgid "redirect_always_on_code"
-#~ msgstr "redirect always on code"
+msgid "redirect_always_on_code"
+msgstr "redirect always on code"
 
-#~ msgid "redirect_always_off_code"
-#~ msgstr "redirect always off code"
+msgid "redirect_always_off_code"
+msgstr "redirect always off code"
 
-#~ msgid "redirect_busy_number"
-#~ msgstr "redirect busy number"
+msgid "redirect_busy_number"
+msgstr "redirect busy number"
 
-#~ msgid "redirect_busy_on_code"
-#~ msgstr "redirect busy on code"
+msgid "redirect_busy_on_code"
+msgstr "redirect busy on code"
 
-#~ msgid "redirect_busy_off_code"
-#~ msgstr "redirect busy off code"
+msgid "redirect_busy_off_code"
+msgstr "redirect busy off code"
 
-#~ msgid "redirect_time_number"
-#~ msgstr "redirect time number"
+msgid "redirect_time_number"
+msgstr "redirect time number"
 
-#~ msgid "redirect_time_on_code"
-#~ msgstr "redirect time on code"
+msgid "redirect_time_on_code"
+msgstr "redirect time on code"
 
-#~ msgid "redirect_time_off_code"
-#~ msgstr "redirect time off code"
-
-#, fuzzy
-#~ msgid "web_language_writable"
-#~ msgstr "Webseitensprache"
+msgid "redirect_time_off_code"
+msgstr "redirect time off code"
 
 #, fuzzy
-#~ msgid "language_writable"
-#~ msgstr "Sprache"
+msgid "web_language_writable"
+msgstr "Webseitensprache"
 
 #, fuzzy
-#~ msgid "display_method_writable"
-#~ msgstr "Nummernanzeigestil"
+msgid "language_writable"
+msgstr "Sprache"
 
 #, fuzzy
-#~ msgid "tone_scheme_writable"
-#~ msgstr "Ruftonschema"
+msgid "display_method_writable"
+msgstr "Nummernanzeigestil"
 
 #, fuzzy
-#~ msgid "mwi_notification_writable"
-#~ msgstr "Hinweis für 'Nachricht liegt vor'"
+msgid "tone_scheme_writable"
+msgstr "Ruftonschema"
 
 #, fuzzy
-#~ msgid "mwi_dialtone_writable"
-#~ msgstr "Wählton für 'Nachricht liegt vor'"
+msgid "mwi_notification_writable"
+msgstr "Hinweis für 'Nachricht liegt vor'"
 
 #, fuzzy
-#~ msgid "headset_device_writable"
-#~ msgstr "Kopfhörernutzung"
+msgid "mwi_dialtone_writable"
+msgstr "Wählton für 'Nachricht liegt vor'"
 
 #, fuzzy
-#~ msgid "message_led_other_writable"
-#~ msgstr "Message LED für verpasste Anrufe"
+msgid "headset_device_writable"
+msgstr "Kopfhörernutzung"
 
 #, fuzzy
-#~ msgid "global_missed_counter_writable"
-#~ msgstr "Globaler 'Verpasste Anrufe' Zähler"
+msgid "message_led_other_writable"
+msgstr "Message LED für verpasste Anrufe"
 
 #, fuzzy
-#~ msgid "scroll_outgoing_writable"
-#~ msgstr "Scrollen aktiver Identitäten"
+msgid "global_missed_counter_writable"
+msgstr "Globaler 'Verpasste Anrufe' Zähler"
 
 #, fuzzy
-#~ msgid "show_local_line_writable"
-#~ msgstr "Identitäts-Index anzeigen"
+msgid "scroll_outgoing_writable"
+msgstr "Scrollen aktiver Identitäten"
 
 #, fuzzy
-#~ msgid "show_call_status_writable"
-#~ msgstr "Anrufstatusinfo anzeigen"
+msgid "show_local_line_writable"
+msgstr "Identitäts-Index anzeigen"
 
 #, fuzzy
-#~ msgid "redirect_event_writable"
-#~ msgstr "Ereignis"
+msgid "show_call_status_writable"
+msgstr "Anrufstatusinfo anzeigen"
 
 #, fuzzy
-#~ msgid "redirect_number_writable"
-#~ msgstr "Ziel"
+msgid "redirect_event_writable"
+msgstr "Ereignis"
 
 #, fuzzy
-#~ msgid "redirect_time_writable"
-#~ msgstr "redirect time number"
-
-#~ msgid "general information"
-#~ msgstr "Allgemeine Informationen"
-
-#~ msgid "Software Image"
-#~ msgstr "Name"
-
-#~ msgid "phone IP address"
-#~ msgstr "Telefon IP Adresse"
-
-#~ msgid "Filter: "
-#~ msgstr "Filter:"
-
-#~ msgid "phone model"
-#~ msgstr "Telefonmodell"
-
-#~ msgid "phone sw version"
-#~ msgstr "Telefon SW Version"
-
-#~ msgid "class id"
-#~ msgstr "class id"
+msgid "redirect_number_writable"
+msgstr "Ziel"
 
 #, fuzzy
-#~ msgid "delete class"
-#~ msgstr "Config löschen"
+msgid "redirect_time_writable"
+msgstr "redirect time number"
 
-#~ msgid "Phone SW Version"
-#~ msgstr "Telefon SW Version"
+msgid "general information"
+msgstr "Allgemeine Informationen"
+
+msgid "Software Image"
+msgstr "Name"
+
+msgid "phone IP address"
+msgstr "Telefon IP Adresse"
+
+msgid "Filter: "
+msgstr "Filter:"
+
+msgid "phone model"
+msgstr "Telefonmodell"
+
+msgid "phone sw version"
+msgstr "Telefon SW Version"
+
+msgid "class id"
+msgstr "class id"
+
+#, fuzzy
+msgid "delete class"
+msgstr "Config löschen"
+
+msgid "Phone SW Version"
+msgstr "Telefon SW Version"

@@ -67,12 +67,21 @@ msgstr "文件夹"
 msgid "Updated by"
 msgstr "更新者"
 
-#: Controller.php:835
+#: Controller.php:830
+msgid "Updated Fields:"
+msgstr ""
+
+#: Controller.php:831
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr ""
+
+#: Controller.php:837
 #, python-format
 msgid "Lead %s has been changed"
 msgstr ""
 
-#: Controller.php:837
+#: Controller.php:839
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr ""

@@ -67,12 +67,21 @@ msgstr "Папка"
 msgid "Updated by"
 msgstr "Осъвременено от"
 
-#: Controller.php:835
+#: Controller.php:830
+msgid "Updated Fields:"
+msgstr ""
+
+#: Controller.php:831
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr ""
+
+#: Controller.php:837
 #, python-format
 msgid "Lead %s has been changed"
 msgstr ""
 
-#: Controller.php:837
+#: Controller.php:839
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr ""
@@ -493,29 +502,29 @@ msgstr ""
 msgid "lost"
 msgstr ""
 
-msgid "Lead updated"
-msgstr "Предложението е актуализирано"
+#~ msgid "Lead updated"
+#~ msgstr "Предложението е актуализирано"
 
-msgid "Lead added"
-msgstr "Предложението е прибавено"
+#~ msgid "Lead added"
+#~ msgstr "Предложението е прибавено"
 
-msgid "Add responsible"
-msgstr "Добави отговорник"
+#~ msgid "Add responsible"
+#~ msgstr "Добави отговорник"
 
-msgid "Add new responsible contact"
-msgstr "Добави нов отговорник"
+#~ msgid "Add new responsible contact"
+#~ msgstr "Добави нов отговорник"
 
-msgid "Add customer"
-msgstr "Добави клиент"
+#~ msgid "Add customer"
+#~ msgstr "Добави клиент"
 
-msgid "Add partner"
-msgstr "Добави партньор"
+#~ msgid "Add partner"
+#~ msgstr "Добави партньор"
 
-msgid "Add new partner contact"
-msgstr "Добави нов партньорски контакт"
+#~ msgid "Add new partner contact"
+#~ msgstr "Добави нов партньорски контакт"
 
-msgid "Add existing contact"
-msgstr "Добави съществуващ контакт"
+#~ msgid "Add existing contact"
+#~ msgstr "Добави съществуващ контакт"
 
-msgid "Percent"
-msgstr "Процент"
+#~ msgid "Percent"
+#~ msgstr "Процент"

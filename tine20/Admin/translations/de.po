@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2008-09-09 10:05+0100\n"
+"PO-Revision-Date: 2008-09-23 13:43+0100\n"
 "Last-Translator: Richard <richard@radbasteln.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -109,7 +109,7 @@ msgstr "Zugriffslog"
 
 #: js/Admin.js:67
 msgid "Shared Tags"
-msgstr "Gemeinsame Bezeichner"
+msgstr "GemeinsameTag"
 
 #: js/Admin.js:79
 msgid "Roles"
@@ -436,7 +436,7 @@ msgstr "Rolle \"%s\" bearbeiten"
 
 #: js/Tags.js:41
 msgid "Do you really want to delete the selected tags?"
-msgstr "Möchten Sie den/die markierten Bezeichner wirklich löschen?"
+msgstr "Möchten Sie den/die markierten Tag/s wirklich löschen?"
 
 #: js/Tags.js:58
 msgid "Deleting tag(s)..."
@@ -664,21 +664,21 @@ msgstr "Neuen User Account hinzufügen"
 msgid "Edit User Account \"%s\""
 msgstr "Bearbeite User Account \"%s\""
 
-#~ msgid "manage roles right description"
-#~ msgstr ""
-#~ "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
-#~ "Applikations-Rechte zuweisen."
+msgid "manage roles right description"
+msgstr ""
+"Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
+"Applikations-Rechte zuweisen."
 
-#~ msgid "manage applications right description"
-#~ msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
+msgid "manage applications right description"
+msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
 
-#~ msgid "manage accounts right description"
-#~ msgstr ""
-#~ "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
-#~ "zuordnen."
+msgid "manage accounts right description"
+msgstr ""
+"Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
+"zuordnen."
 
-#~ msgid "manage access log right description"
-#~ msgstr "Dieses Recht erlaubt es, im Zugriffsprotokoll Einträge zu löschen."
+msgid "manage access log right description"
+msgstr "Dieses Recht erlaubt es, im Zugriffsprotokoll Einträge zu löschen."
 
-#~ msgid "view access log right description"
-#~ msgstr "Zugriffsprotokoll ansehen"
+msgid "view access log right description"
+msgstr "Zugriffsprotokoll ansehen"

@@ -2,11 +2,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-09-15 16:12+0100\n"
-"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2008-09-23 13:57+0100\n"
+"Last-Translator: Richard <richard@radbasteln.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
@@ -16,7 +16,7 @@ msgstr ""
 #: Controller.php:305
 #, python-format
 msgid "%s's personal tasks"
-msgstr ""
+msgstr "%s's persönliche Aufgaben"
 
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
@@ -24,12 +24,12 @@ msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
-#: js/Tasks.js:730
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
+#: js/Tasks.js:745
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/Tasks.js:141 js/Tasks.js:730
+#: js/Tasks.js:141 js/Tasks.js:745
 msgid "Could not delete task(s)."
 msgstr "Konnte Aufgabe(n) nicht löschen."
 
@@ -47,7 +47,7 @@ msgid_plural "Delete tasks"
 msgstr[0] "Aufgabe löschen"
 msgstr[1] "Aufgaben löschen"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:705
+#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
 msgid "Could not save task."
 msgstr "Konnte Aufgabe nicht speichern."
 
@@ -61,7 +61,7 @@ msgstr "Aufgabenlisten"
 
 #: js/Tasks.js:305 js/Tasks.js:629 js/Tasks.js:630
 msgid "to do list"
-msgstr ""
+msgstr "ToDo Liste"
 
 #: js/Tasks.js:326
 msgid "Enter searchfilter"
@@ -83,7 +83,7 @@ msgstr "Zeige Aufgabe {0} - {1} von {2}"
 msgid "No tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:418 js/Tasks.js:753
+#: js/Tasks.js:418 js/Tasks.js:768
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -95,7 +95,7 @@ msgstr "Aufgabe hinzufügen..."
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/Tasks.js:444 js/Tasks.js:785
+#: js/Tasks.js:444 js/Tasks.js:800
 msgid "Priority"
 msgstr "Priorität"
 
@@ -103,7 +103,7 @@ msgstr "Priorität"
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/Tasks.js:473 js/Tasks.js:781
+#: js/Tasks.js:473 js/Tasks.js:796
 msgid "Status"
 msgstr "Status"
 
@@ -113,76 +113,76 @@ msgstr "Keine Aufgaben vorhanden"
 
 #: js/Tasks.js:641
 msgid "Loading Task..."
-msgstr ""
+msgstr "lade Task..."
 
 #: js/Tasks.js:641
 msgid "Please Wait"
-msgstr ""
+msgstr "Bitte warten"
 
 #: js/Tasks.js:652
 msgid "Add New Task"
-msgstr ""
+msgstr "Neuen Task erstellen"
 
 #: js/Tasks.js:654
 #, python-format
 msgid "Edit Task \"%s\""
-msgstr ""
+msgstr "Task \"%s\" bearbeiten"
 
-#: js/Tasks.js:673
+#: js/Tasks.js:688
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Tasks.js:673 js/Tasks.js:718
+#: js/Tasks.js:688 js/Tasks.js:733
 msgid "Saving Task"
 msgstr "Aufgabe speichern"
 
-#: js/Tasks.js:709
+#: js/Tasks.js:724
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Tasks.js:709
+#: js/Tasks.js:724
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die angezeigten Fehler."
 
-#: js/Tasks.js:716
+#: js/Tasks.js:731
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/Tasks.js:716
+#: js/Tasks.js:731
 msgid "Do you really want to delete this task?"
 msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 
-#: js/Tasks.js:718
+#: js/Tasks.js:733
 msgid "Please wait a moment..."
 msgstr "Einen Moment noch..."
 
-#: js/Tasks.js:757
+#: js/Tasks.js:772
 msgid "Enter short name..."
 msgstr "Kurzbezeichnung eingeben..."
 
-#: js/Tasks.js:760
+#: js/Tasks.js:775
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/Tasks.js:762
+#: js/Tasks.js:777
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/Tasks.js:776
+#: js/Tasks.js:791
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/Tasks.js:789
+#: js/Tasks.js:804
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/Tasks.js:793
+#: js/Tasks.js:808
 msgid "Saved in"
-msgstr ""
+msgstr "Gespeichert in"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
-msgstr ""
+msgstr "NEEDS-ACTION"
 
 #: Setup/setup.xml:409
 msgid "COMPLETED"
@@ -190,14 +190,14 @@ msgstr "ERLEDIGT"
 
 #: Setup/setup.xml:431
 msgid "IN-PROCESS"
-msgstr ""
+msgstr "IN-PROCESS"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"
-msgstr ""
+msgstr "ZURÜCKGESTELLT"
 
-#~ msgid "Folder"
-#~ msgstr "Ordner"
+msgid "Folder"
+msgstr "Ordner"
 
-#~ msgid "Delete tasks"
-#~ msgstr "Aufgaben löschen"
+msgid "Delete tasks"
+msgstr "Aufgaben löschen"

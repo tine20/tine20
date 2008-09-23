@@ -25,17 +25,17 @@ msgid_plural "Do you really want to delete the selected contacts?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:197 js/Addressbook.js:924
+#: js/Addressbook.js:197 js/Addressbook.js:925
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:203 js/Addressbook.js:907 js/Addressbook.js:932
+#: js/Addressbook.js:203 js/Addressbook.js:908 js/Addressbook.js:933
 msgid "Failed"
 msgstr ""
 
-#: js/Addressbook.js:204 js/Addressbook.js:932
+#: js/Addressbook.js:204 js/Addressbook.js:933
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] ""
@@ -271,23 +271,23 @@ msgstr ""
 msgid "Edit Contact \"%s\""
 msgstr ""
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/Addressbook.js:872
+#: js/Addressbook.js:873
 msgid "Saving Contact"
 msgstr ""
 
-#: js/Addressbook.js:907
+#: js/Addressbook.js:908
 msgid "Could not save contact."
 msgstr ""
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Errors"
 msgstr ""
 
-#: js/Addressbook.js:911
+#: js/Addressbook.js:912
 msgid "Please fix the errors noted."
 msgstr ""
 

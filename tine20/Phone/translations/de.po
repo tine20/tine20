@@ -2,109 +2,112 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-09-23 13:54+0100\n"
+"Last-Translator: Richard <richard@radbasteln.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Phone.js:27 js/Phone.js:445 js/Phone.js:446
+#: js/Phone.js:27
+#: js/Phone.js:445
+#: js/Phone.js:446
 msgid "Edit phone settings"
-msgstr ""
+msgstr "Telefoneinstellungen bearbeiten"
 
 #: js/Phone.js:55
 msgid "Phones"
-msgstr ""
+msgstr "Telefone"
 
 #: js/Phone.js:197
 msgid "Dial phone number"
-msgstr ""
+msgstr "Telefonnummer wählen"
 
 #: js/Phone.js:253
 msgid "Number"
-msgstr ""
+msgstr "Nummer"
 
 #: js/Phone.js:257
 msgid "Phone"
-msgstr ""
+msgstr "Telefone"
 
 #: js/Phone.js:280
 msgid "Line"
-msgstr ""
+msgstr "Leitung"
 
 #: js/Phone.js:294
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: js/Phone.js:304
 msgid "Dial"
-msgstr ""
+msgstr "Wählen"
 
 #: js/Phone.js:435
 msgid "Dial number"
-msgstr ""
+msgstr "Nummer wählen"
 
 #: js/Phone.js:436
 msgid "Initiate a new outgoing call"
-msgstr ""
+msgstr "Neuer ausgehender Anruf"
 
 #: js/Phone.js:480
 msgid "enter searchfilter"
-msgstr ""
+msgstr "Suchfilter eingeben"
 
 #: js/Phone.js:501
 msgid "Search:"
-msgstr ""
+msgstr "Suche:"
 
 #: js/Phone.js:586
 msgid "Source or Destination"
-msgstr ""
+msgstr "Quelle oder Ziel"
 
 #: js/Phone.js:602
 msgid "Displaying calls {0} - {1} of {2}"
-msgstr ""
+msgstr "Anrufe  {0} - {1} of {2} anzeigen"
 
-#: js/Phone.js:603 js/Phone.js:640
+#: js/Phone.js:603
+#: js/Phone.js:640
 msgid "No calls to display"
-msgstr ""
+msgstr "Keine Anrufe"
 
 #: js/Phone.js:608
 msgid "Call ID"
-msgstr ""
+msgstr "Anruf ID"
 
 #: js/Phone.js:609
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: js/Phone.js:610
 msgid "Connected"
-msgstr ""
+msgstr "Verbunden"
 
 #: js/Phone.js:611
 msgid "Disconnected"
-msgstr ""
+msgstr "Getrennt"
 
 #: js/Phone.js:612
 msgid "Duration"
-msgstr ""
+msgstr "Dauer"
 
 #: js/Phone.js:613
 msgid "Ringing"
-msgstr ""
+msgstr "Klingeln"
 
 #: js/Phone.js:614
 msgid "Direction"
-msgstr ""
+msgstr "Richtung"
 
 #: js/Phone.js:615
 msgid "Source"
-msgstr ""
+msgstr "Quelle"
 
 #: js/Phone.js:616
 msgid "Destination"
-msgstr ""
+msgstr "Ziel"
+
