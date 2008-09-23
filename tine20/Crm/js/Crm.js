@@ -96,6 +96,8 @@ Tine.Crm.splitRelations = function(_relations, _splitAll) {
             }
         }
     }
+    
+    //console.log(result);
        
     return result;
 };
@@ -1795,7 +1797,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.initActions(lead);
         
-        //console.log(lead.data);
+        //console.log(lead);
         //console.log(lead.data.tasks);
         //console.log(lead.data.responsible);
     	
@@ -1851,6 +1853,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.getForm().findField('lead_name').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
+        
+        //console.log(recordData);
         
         this.updateToolbars.defer(10, this, [this.lead, 'container']);
         Tine.widgets.ActionUpdater(this.lead, [

@@ -65,21 +65,11 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $controller = Crm_Controller::getInstance();
 
         if(!$leadId ) {   
-            $leadData = $controller->getEmptyLead()->toArray();
-            $leadData['products'] = array();                
-            $leadData['contacts'] = array();   
-            $leadData['tasks'] = array();                                   
-            
-            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
-            foreach($personalFolders as $folder) {
-                $leadData['container']     = $folder->toArray();
-                $leadData['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $folder->getId())->toArray();
-                break;
-            }
+            $lead = $controller->getEmptyLead();
         } else {
             $lead = $controller->getLead($leadId);
-            $leadData = $this->_leadToJson($lead);            
-        }    
+        }   
+        $leadData = $this->_leadToJson($lead); 
 
         return $leadData;
     }
@@ -160,18 +150,22 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * returns lead prepared for json transport
      *
      * @param Crm_Model_Lead    $_lead
-     * @param boolean           $_getOnlyContacts   resolve only contact links (not working at the moment)
      * @return array lead data
-     * 
-     * @todo add toResolve array ?
      */
     protected function _leadToJson($_lead)
     {
         $_lead->setTimezone(Zend_Registry::get('userTimeZone'));
         $result = $_lead->toArray();
-                        
-        $result['container'] = Tinebase_Container::getInstance()->getContainerById($_lead->container)->toArray();
-        $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_lead->container)->toArray();
+        
+        // set container
+        if (!$_lead->container) {
+            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
+            $container = $personalFolders[0];
+        } else {
+            $container = $_lead->container;
+        }
+        $result['container'] = Tinebase_Container::getInstance()->getContainerById($container)->toArray();
+        $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container)->toArray();
         
         return $result;                
     }

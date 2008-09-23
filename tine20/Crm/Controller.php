@@ -119,10 +119,10 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $emptyLead = new Crm_Model_Lead($defaultData, true);
         
         // add creator as RESPONSIBLE
-        /*
         $userContact = Addressbook_Controller::getInstance()->getContactByUserId($this->_currentAccount->getId());
-        //$emptyLead->relations = new Tinebase_Model_Relation(array(
-        $emptyLead->relations = array(array(
+        $emptyLead->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+        $emptyLead->relations->addRecord(new Tinebase_Model_Relation(array(
+            'own_id'                 => 0,
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -131,8 +131,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             'related_id'             => $userContact->getId(),
             'type'                   => 'RESPONSIBLE',
             'related_record'         => $userContact->toArray()
-        ));
-        */
+        )));
         
         return $emptyLead;
     }
