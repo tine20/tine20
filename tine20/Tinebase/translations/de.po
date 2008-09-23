@@ -47,8 +47,7 @@ msgid "run right description"
 msgstr ""
 "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
-#: Export/Pdf.php:206 js/tine-all-debug.js:7234 js/tine-all-debug.js:11323
-#: js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Tags"
 
@@ -60,38 +59,36 @@ msgstr "Export Datum"
 msgid "Created by"
 msgstr "Angelegt von"
 
-#: Http.php:212 js/tine-all-debug.js:10336 js/Tinebase.js:109
+#: Http.php:212 js/Tinebase.js:109
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: Http.php:213 js/tine-all-debug.js:10337 js/Tinebase.js:110
+#: Http.php:213 js/Tinebase.js:110
 msgid "Your session timed out. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: Http.php:238 js/ExceptionDialog.js:26 js/tine-all-debug.js:9223
+#: Http.php:238 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: Http.php:239 js/ExceptionDialog.js:51 js/tine-all-debug.js:9248
+#: Http.php:239 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:315 js/tine-all-debug.js:4702
-#: js/tine-all-debug.js:5852 js/tine-all-debug.js:9231
-#: js/tine-all-debug.js:9913 js/tine-all-debug.js:19411
+#: js/ExceptionDialog.js:34 js/MainScreen.js:315
 #: js/widgets/container/ContainerSelect.js:248 js/widgets/EditRecord.js:123
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: js/ExceptionDialog.js:42 js/tine-all-debug.js:9239
+#: js/ExceptionDialog.js:42
 msgid "Send Report"
 msgstr "Bericht Senden"
 
-#: js/ExceptionDialog.js:52 js/tine-all-debug.js:9249
+#: js/ExceptionDialog.js:52
 msgid "The last action you made was potentially not performed correctly."
 msgstr "Ihre letzte Aktion wurde möglicherweise nicht korrekt ausgeführt."
 
-#: js/ExceptionDialog.js:53 js/tine-all-debug.js:9250
+#: js/ExceptionDialog.js:53
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occoured."
@@ -100,194 +97,168 @@ msgstr ""
 "verbessern. Bitte beschreiben sie was genau sie gemacht haben bevor der "
 "Fehler aufgetreten ist. "
 
-#: js/ExceptionDialog.js:59 js/tine-all-debug.js:7737
-#: js/tine-all-debug.js:9256 js/tine-all-debug.js:11328
-#: js/tine-all-debug.js:12234 js/tine-all-debug.js:14157
-#: js/tine-all-debug.js:14538 js/tine-all-debug.js:14791
-#: js/tine-all-debug.js:15170 js/tine-all-debug.js:15442
-#: js/tine-all-debug.js:15917 js/tine-all-debug.js:17241
-#: js/tine-all-debug.js:18130 js/tine-all-debug.js:22011
-#: js/tine-all-debug.js:22251 js/tine-all-debug.js:22498
-#: js/tine-all-debug.js:22714 js/tine-all-debug.js:23686
-#: js/tine-all-debug.js:24723 js/tine-all-debug.js:24958
-#: js/tine-all-debug.js:25876 js/tine-all-debug.js:27626
-#: js/tine-all-debug.js:27838 js/widgets/tags/TagsPanel.js:556
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/ExceptionDialog.js:69 js/tine-all-debug.js:9266
+#: js/ExceptionDialog.js:69
 msgid "Show Details:"
 msgstr "Details anzeigen:"
 
-#: js/ExceptionDialog.js:92 js/tine-all-debug.js:9289
+#: js/ExceptionDialog.js:92
 msgid "Sending report..."
 msgstr "Bericht wird gesendet..."
 
-#: js/ExceptionDialog.js:92 js/tine-all-debug.js:9289
+#: js/ExceptionDialog.js:92
 msgid "Please wait a moment"
 msgstr "Bitte warten sie einen Moment"
 
-#: js/ExceptionDialog.js:117 js/tine-all-debug.js:9314
+#: js/ExceptionDialog.js:117
 msgid "Transmission Completed"
 msgstr "Übermittlung beendet"
 
-#: js/ExceptionDialog.js:118 js/tine-all-debug.js:9315
+#: js/ExceptionDialog.js:118
 msgid "Your report has been send. Thanks for your contribution"
 msgstr "Ihr Bericht wurde gesendet. Vielen Dank für ihre Mithilfe!"
 
-#: js/Login.js:29 js/tine-all-debug.js:10106
+#: js/Login.js:29
 msgid "Login"
 msgstr "Anmelden"
 
-#: js/Login.js:36 js/tine-all-debug.js:10113
+#: js/Login.js:36
 msgid "Register"
 msgstr "Registrieren"
 
-#: js/Login.js:50 js/tine-all-debug.js:10127
+#: js/Login.js:50
 msgid "Please enter your login data"
 msgstr "Bitte geben sie ihre Anmeldedaten ein"
 
-#: js/Login.js:67 js/tine-all-debug.js:10144 js/tine-all-debug.js:27236
+#: js/Login.js:67
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/Login.js:73 js/tine-all-debug.js:10150 js/tine-all-debug.js:13821
-#: js/tine-all-debug.js:28351
+#: js/Login.js:73
 msgid "Password"
 msgstr "Passwort"
 
-#: js/Login.js:119 js/tine-all-debug.js:10196
+#: js/Login.js:119
 msgid "Logging you in..."
 msgstr "Sie werden angemeldet..."
 
-#: js/Login.js:119 js/tine-all-debug.js:5985 js/tine-all-debug.js:6304
-#: js/tine-all-debug.js:6332 js/tine-all-debug.js:6364
-#: js/tine-all-debug.js:10196 js/tine-all-debug.js:14323
-#: js/tine-all-debug.js:14920 js/tine-all-debug.js:15663
-#: js/tine-all-debug.js:16871 js/tine-all-debug.js:20681
-#: js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:119 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:231
 #: js/widgets/container/ContainerTree.js:259
 #: js/widgets/container/ContainerTree.js:291
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Login.js:130 js/tine-all-debug.js:10207
+#: js/Login.js:130
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Anmeldung erfolgreich. Tine 2.0 wird geladen..."
 
-#: js/Login.js:130 js/MainScreen.js:393 js/tine-all-debug.js:9991
-#: js/tine-all-debug.js:10207
+#: js/Login.js:130 js/MainScreen.js:393
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
-#: js/Login.js:134 js/tine-all-debug.js:10211
+#: js/Login.js:134
 msgid "Login failure"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: js/Login.js:135 js/tine-all-debug.js:10212
+#: js/Login.js:135
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ihre Benutzername und Passwort Kombination ist falsch!"
 
-#: js/MainScreen.js:48 js/tine-all-debug.js:9646
+#: js/MainScreen.js:48
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: js/MainScreen.js:54 js/tine-all-debug.js:9652
+#: js/MainScreen.js:54
 msgid "Install Google Gears"
 msgstr "Google Gears installieren"
 
-#: js/MainScreen.js:60 js/tine-all-debug.js:9658
+#: js/MainScreen.js:60
 msgid "Logout"
 msgstr "Abmelden"
 
-#: js/MainScreen.js:61 js/tine-all-debug.js:9659
+#: js/MainScreen.js:61
 msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
-#: js/MainScreen.js:83 js/tine-all-debug.js:6056 js/tine-all-debug.js:9681
-#: js/tine-all-debug.js:12414 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:83 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "Admin"
 
-#: js/MainScreen.js:91 js/tine-all-debug.js:9689
+#: js/MainScreen.js:91
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: js/MainScreen.js:107 js/tine-all-debug.js:9705
+#: js/MainScreen.js:107
 #, python-format
 msgid "User: %s"
 msgstr "Benutzer: %s"
 
-#: js/MainScreen.js:108 js/tine-all-debug.js:9706
+#: js/MainScreen.js:108
 #, python-format
 msgid "Timezone: %s"
 msgstr "Zeitzone: %s"
 
-#: js/MainScreen.js:109 js/tine-all-debug.js:4413 js/tine-all-debug.js:9707
-#: js/tine-all-debug.js:11216 js/tine-all-debug.js:25167
-#: js/widgets/TimezoneChooser.js:34
+#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: js/MainScreen.js:110 js/tine-all-debug.js:4274 js/tine-all-debug.js:9708
-#: js/tine-all-debug.js:26887 js/tine-all-debug.js:27094
-#: js/widgets/LangChooser.js:40
+#: js/MainScreen.js:110 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Sprache"
 
-#: js/MainScreen.js:279 js/tine-all-debug.js:9877
+#: js/MainScreen.js:279
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr "Passwort für \"%s\" ändern"
 
-#: js/MainScreen.js:303 js/tine-all-debug.js:9901
+#: js/MainScreen.js:303
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#: js/MainScreen.js:307 js/tine-all-debug.js:9905
+#: js/MainScreen.js:307
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: js/MainScreen.js:311 js/tine-all-debug.js:9909
+#: js/MainScreen.js:311
 msgid "Repeat new Password"
 msgstr "Wiederholung neues Passwort"
 
-#: js/MainScreen.js:321 js/tine-all-debug.js:4681 js/tine-all-debug.js:5090
-#: js/tine-all-debug.js:5861 js/tine-all-debug.js:9919
-#: js/widgets/AccountpickerPanel.js:108
+#: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/container/ContainerSelect.js:257 js/widgets/EditRecord.js:102
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:330 js/tine-all-debug.js:9928
+#: js/MainScreen.js:330
 msgid "Please Wait!"
 msgstr "Bitte warten!"
 
-#: js/MainScreen.js:331 js/tine-all-debug.js:9929
+#: js/MainScreen.js:331
 msgid "changing password..."
 msgstr "Passwort wird geändert..."
 
-#: js/MainScreen.js:342 js/tine-all-debug.js:9940
+#: js/MainScreen.js:342
 msgid "Success"
 msgstr "Erfolg"
 
-#: js/MainScreen.js:343 js/tine-all-debug.js:9941
+#: js/MainScreen.js:343
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert"
 
-#: js/MainScreen.js:349 js/MainScreen.js:359 js/tine-all-debug.js:9947
-#: js/tine-all-debug.js:9957
+#: js/MainScreen.js:349 js/MainScreen.js:359
 msgid "Failure"
 msgstr "Fehler"
 
-#: js/MainScreen.js:360 js/tine-all-debug.js:9958
+#: js/MainScreen.js:360
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
 "Eingabe."
 
-#: js/MainScreen.js:378 js/tine-all-debug.js:9976
+#: js/MainScreen.js:378
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -295,3234 +266,33 @@ msgstr ""
 "Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
 "indem alle benötigten Dateien local auf dem Computer gespeichert werden."
 
-#: js/MainScreen.js:391 js/tine-all-debug.js:6330 js/tine-all-debug.js:9989
-#: js/tine-all-debug.js:12551 js/tine-all-debug.js:13438
-#: js/tine-all-debug.js:14027 js/tine-all-debug.js:14667
-#: js/tine-all-debug.js:15312 js/tine-all-debug.js:20724
-#: js/widgets/container/ContainerTree.js:257
+#: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/MainScreen.js:391 js/tine-all-debug.js:9989
+#: js/MainScreen.js:391
 msgid "Are you sure you want to logout?"
 msgstr "Wollen sie sich wirklich Abmelden?"
 
-#: js/MainScreen.js:393 js/tine-all-debug.js:9991
+#: js/MainScreen.js:393
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
-#: js/tine-all-debug.js:557 js/ux/ConnectionStatus.js:52
-msgid "online"
-msgstr "online"
-
-#: js/tine-all-debug.js:558 js/ux/ConnectionStatus.js:53
-msgid "offline"
-msgstr "offline"
-
-#: js/tine-all-debug.js:559 js/ux/ConnectionStatus.js:54
-msgid "unknown"
-msgstr "unbekannt"
-
-#: js/tine-all-debug.js:2631 js/ux/form/ImageField.js:48
-msgid "click to edit"
-msgstr "Zum Ändern hier Klicken"
-
-#: js/tine-all-debug.js:2673 js/ux/form/ImageField.js:90
-msgid "Not An Image"
-msgstr "Keine Bild-Datei"
-
-#: js/tine-all-debug.js:2673 js/ux/form/ImageField.js:90
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Bitte wählen sie eine gültige Bild-Datei (gif/png/jpeg)"
-
-#: js/tine-all-debug.js:2690 js/ux/form/ImageField.js:107
-msgid "Loading"
-msgstr "Laden"
-
-#: js/tine-all-debug.js:2698 js/ux/form/ImageField.js:115
-msgid "Upload Failed"
-msgstr "Fehler beim Hochladen"
-
-#: js/tine-all-debug.js:2698 js/ux/form/ImageField.js:115
-msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-"Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren "
-"Administrator"
-
-#: js/tine-all-debug.js:2710 js/ux/form/ImageField.js:127
-msgid "Change Image"
-msgstr "Bild ändern"
-
-#: js/tine-all-debug.js:2731 js/tine-all-debug.js:2749
-#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
-msgid "Crop Image"
-msgstr "Bild zuschneiden"
-
-#: js/tine-all-debug.js:2757 js/ux/form/ImageField.js:174
-msgid "Delete Image"
-msgstr "Bild löschen"
-
-#: js/tine-all-debug.js:2795 js/ux/form/ImageField.js:212
-msgid "Image Failed"
-msgstr "Fehler bei Bildverarbeitung"
-
-#: js/tine-all-debug.js:2795 js/ux/form/ImageField.js:212
-msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-"Das Bild konnte nicht geladen werden. Bitte informieren sie ihren "
-"Administrator"
-
-#: js/tine-all-debug.js:4306 js/widgets/LangChooser.js:72
-msgid "setting new language..."
-msgstr "neue Sprache wird eingestellt..."
-
-#: js/tine-all-debug.js:4306 js/tine-all-debug.js:4327
-#: js/tine-all-debug.js:4453 js/tine-all-debug.js:11654
-#: js/tine-all-debug.js:13749 js/tine-all-debug.js:15207
-#: js/tine-all-debug.js:15950 js/tine-all-debug.js:17858
-#: js/tine-all-debug.js:20648 js/widgets/LangChooser.js:72
-#: js/widgets/LangChooser.js:93 js/widgets/TimezoneChooser.js:74
-msgid "Please Wait"
-msgstr "Bitte Warten"
-
-#: js/tine-all-debug.js:4327 js/widgets/LangChooser.js:93
-msgid "loading new language..."
-msgstr "neue Sprache wird geladen..."
-
-#: js/tine-all-debug.js:4453 js/widgets/TimezoneChooser.js:74
-msgid "setting new timezone..."
-msgstr "Neue Zeitzone setzen..."
-
-#: js/tine-all-debug.js:4692 js/widgets/EditRecord.js:113
-msgid "Apply"
-msgstr "Anwenden"
-
-#: js/tine-all-debug.js:4712 js/tine-all-debug.js:28100
-#: js/tine-all-debug.js:28656 js/widgets/EditRecord.js:133
-msgid "delete"
-msgstr "löschen"
-
-#: js/tine-all-debug.js:4757 js/tine-all-debug.js:20801
-#: js/widgets/EditRecord.js:178
-msgid "Saved in"
-msgstr "Gespeichert in"
-
-#: js/tine-all-debug.js:4959 js/tine-all-debug.js:4968
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
-msgid "New version of Tine 2.0 available"
-msgstr "Eine neue Version von Tine 2.0 ist verfügbar."
-
-#: js/tine-all-debug.js:4960 js/tine-all-debug.js:4969
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
-#, python-format
-msgid "Version \"%s\" of Tine 2.0 is available."
-msgstr "Die Version \"%s\" von Tine 2.0 ist verfügbar."
-
-#: js/tine-all-debug.js:4961 js/widgets/VersionCheck.js:41
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
-
-#: js/tine-all-debug.js:4970 js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
-msgstr "Bitte bestätigen Sie das Update!"
-
-#: js/tine-all-debug.js:5085 js/widgets/AccountpickerPanel.js:103
-msgid "please select an account"
-msgstr "bitte wählen sie einen Zugang"
-
-#: js/tine-all-debug.js:5205 js/tine-all-debug.js:13633
-#: js/tine-all-debug.js:14574 js/tine-all-debug.js:23925
-#: js/widgets/account/PickerPanel.js:70
-msgid "add account"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:5301 js/tine-all-debug.js:5483
-#: js/tine-all-debug.js:12828 js/tine-all-debug.js:14156
-#: js/tine-all-debug.js:14468 js/tine-all-debug.js:14790
-#: js/tine-all-debug.js:15441 js/tine-all-debug.js:17052
-#: js/tine-all-debug.js:17116 js/tine-all-debug.js:22706
-#: js/tine-all-debug.js:23972 js/tine-all-debug.js:24719
-#: js/tine-all-debug.js:24950 js/tine-all-debug.js:26805
-#: js/tine-all-debug.js:26959 js/tine-all-debug.js:27830
-#: js/tine-all-debug.js:28344 js/widgets/account/ConfigGrid.js:79
-#: js/widgets/account/PickerPanel.js:166
-msgid "Name"
-msgstr "Name"
-
-#: js/tine-all-debug.js:5312 js/tine-all-debug.js:8491
-#: js/tine-all-debug.js:12672 js/tine-all-debug.js:13070
-#: js/tine-all-debug.js:13476 js/tine-all-debug.js:14091
-#: js/tine-all-debug.js:14728 js/tine-all-debug.js:15376
-#: js/tine-all-debug.js:19597 js/widgets/account/PickerPanel.js:177
-#: js/widgets/GridPicker.js:386
-msgid "enter searchfilter"
-msgstr "suchfilter eingeben"
-
-#: js/tine-all-debug.js:5356 js/tine-all-debug.js:8512
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
-msgid "Search"
-msgstr "Suchen"
-
-#: js/tine-all-debug.js:5392 js/tine-all-debug.js:5393
-#: js/tine-all-debug.js:8550 js/tine-all-debug.js:8551
-#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
-msgid "Browse"
-msgstr "Blättern"
-
-#: js/tine-all-debug.js:5459 js/tine-all-debug.js:14581
-#: js/tine-all-debug.js:23932 js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
-msgstr "Zugang löschen"
-
-#: js/tine-all-debug.js:5678 js/widgets/container/ContainerSelect.js:74
-#, python-format
-msgid "Recently used %s:"
-msgstr "Kürzlich genutzte %s:"
-
-#: js/tine-all-debug.js:5697 js/widgets/container/ContainerSelect.js:93
-#, python-format
-msgid "choose other %s..."
-msgstr "Andere %s wählen..."
-
-#: js/tine-all-debug.js:5709 js/tine-all-debug.js:7286
-#: js/tine-all-debug.js:7587 js/tine-all-debug.js:7591
-#: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
-#: js/widgets/tags/TagsPanel.js:410
-msgid "personal"
-msgstr "Persönlich"
-
-#: js/tine-all-debug.js:5709 js/widgets/container/ContainerSelect.js:105
-msgid "shared"
-msgstr "geteilt"
-
-#: js/tine-all-debug.js:5849 js/widgets/container/ContainerSelect.js:245
-#, python-format
-msgid "please select a %s"
-msgstr "Bitte %s auswählen"
-
-#: js/tine-all-debug.js:5985 js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
-msgstr "Berechtiungen werden gesichert"
-
-#: js/tine-all-debug.js:6017 js/widgets/container/ContainerGrants.js:66
-msgid "Folder"
-msgstr "Ordner"
-
-#: js/tine-all-debug.js:6033 js/widgets/container/ContainerGrants.js:82
-msgid "Read"
-msgstr "Lesen"
-
-#: js/tine-all-debug.js:6038 js/tine-all-debug.js:8723
-#: js/tine-all-debug.js:8735 js/widgets/ActivitiesPanel.js:161
-#: js/widgets/ActivitiesPanel.js:173
-#: js/widgets/container/ContainerGrants.js:87
-msgid "Add"
-msgstr "Hinzufügen"
-
-#: js/tine-all-debug.js:6043 js/widgets/container/ContainerGrants.js:92
-msgid "Edit"
-msgstr "Editieren"
-
-#: js/tine-all-debug.js:6048 js/widgets/container/ContainerGrants.js:97
-msgid "Delete"
-msgstr "Löschen"
-
-#: js/tine-all-debug.js:6064 js/widgets/container/ContainerGrants.js:113
-msgid "Permissions"
-msgstr "Berechtigungen"
-
-#: js/tine-all-debug.js:6188 js/widgets/container/ContainerTree.js:115
-#, python-format
-msgid "All %s"
-msgstr "Alle %s"
-
-#: js/tine-all-debug.js:6193 js/widgets/container/ContainerTree.js:120
-#, python-format
-msgid "My %s"
-msgstr "Meine %s"
-
-#: js/tine-all-debug.js:6200 js/widgets/container/ContainerTree.js:127
-#, python-format
-msgid "Shared %s"
-msgstr "Gemeinsame %s"
-
-#: js/tine-all-debug.js:6207 js/widgets/container/ContainerTree.js:134
-#, python-format
-msgid "Other Users %s"
-msgstr "%s anderer Benutzer"
-
-#: js/tine-all-debug.js:6302 js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "New %s"
-msgstr "%s neu"
-
-#: js/tine-all-debug.js:6302 js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "Please enter the name of the new %s:"
-msgstr "Bitte den Namen auswählen für %s:"
-
-#: js/tine-all-debug.js:6304 js/widgets/container/ContainerTree.js:231
-#, python-format
-msgid "Creating %s..."
-msgstr "Einrichten %s..."
-
-#: js/tine-all-debug.js:6330 js/widgets/container/ContainerTree.js:257
-#, python-format
-msgid "Do you really want to delete the %s \"%s\"?"
-msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:6332 js/widgets/container/ContainerTree.js:259
-#, python-format
-msgid "Deleting %s \"%s\""
-msgstr "%s \"%s\" löschen"
-
-#: js/tine-all-debug.js:6359 js/widgets/container/ContainerTree.js:286
-#, python-format
-msgid "Please enter the new name of the %s:"
-msgstr "Bitte den Namen für%s: eingeben: "
-
-#: js/tine-all-debug.js:6364 js/widgets/container/ContainerTree.js:291
-#, python-format
-msgid "Updateing %s \"%s\""
-msgstr "%s \"%s\" aktualisieren"
-
-#: js/tine-all-debug.js:6398 js/widgets/container/ContainerTree.js:325
-#, python-format
-msgid "Manage Permissions for %s :\"%s\""
-msgstr "Rechte für %s :\"%s\" verwalten"
-
-#: js/tine-all-debug.js:6411 js/widgets/container/ContainerTree.js:338
-#, python-format
-msgid "Add %s"
-msgstr "%s hinzufügen"
-
-#: js/tine-all-debug.js:6417 js/widgets/container/ContainerTree.js:344
-#, python-format
-msgid "Delete %s"
-msgstr "%s löschen"
-
-#: js/tine-all-debug.js:6423 js/widgets/container/ContainerTree.js:350
-#, python-format
-msgid "Rename %s"
-msgstr "%s umbenennen"
-
-#: js/tine-all-debug.js:6429 js/widgets/container/ContainerTree.js:356
-msgid "Manage permissions"
-msgstr "Zugriffsrechte bearbeiten"
-
-#: js/tine-all-debug.js:6598 js/widgets/grid/FilterModel.js:87
-msgid "contains"
-msgstr "enthält"
-
-#: js/tine-all-debug.js:6599 js/widgets/grid/FilterModel.js:88
-msgid "is equal to"
-msgstr "ist gleich"
-
-#: js/tine-all-debug.js:6600 js/widgets/grid/FilterModel.js:89
-msgid "is greater than"
-msgstr "ist größer als"
-
-#: js/tine-all-debug.js:6601 js/widgets/grid/FilterModel.js:90
-msgid "is less than"
-msgstr "ist kleiner als"
-
-#: js/tine-all-debug.js:6602 js/widgets/grid/FilterModel.js:91
-msgid "is not"
-msgstr "ist nicht"
-
-#: js/tine-all-debug.js:6603 js/widgets/grid/FilterModel.js:92
-msgid "is in"
-msgstr "ist in"
-
-#: js/tine-all-debug.js:6626 js/widgets/grid/FilterModel.js:115
-msgid "select a operator"
-msgstr "Wählen sie einen Operator"
-
-#: js/tine-all-debug.js:6849 js/widgets/grid/FilterToolbar.js:122
-msgid "add new filter"
-msgstr "neuen Filter hinzufügen"
-
-#: js/tine-all-debug.js:6855 js/widgets/grid/FilterToolbar.js:128
-msgid "Delete all filters"
-msgstr "Alle Filter löschen"
-
-#: js/tine-all-debug.js:6861 js/widgets/grid/FilterToolbar.js:134
-msgid "start search"
-msgstr "Suche starten"
-
-#: js/tine-all-debug.js:6870 js/widgets/grid/FilterToolbar.js:143
-msgid "save filter"
-msgstr "Filter speichern"
-
-#: js/tine-all-debug.js:6937 js/widgets/grid/FilterToolbar.js:210
-msgid "select a field"
-msgstr "Wählen sie ein Feld"
-
-#: js/tine-all-debug.js:6961 js/widgets/grid/FilterToolbar.js:234
-msgid "Delete this filter"
-msgstr "Diesen Filter löschen"
-
-#: js/tine-all-debug.js:6984 js/widgets/grid/FilterToolbar.js:257
-msgid "and"
-msgstr "und"
-
-#: js/tine-all-debug.js:7003 js/widgets/grid/FilterToolbar.js:276
-msgid "Show"
-msgstr "Zeige"
-
-#: js/tine-all-debug.js:7264 js/widgets/tags/TagsPanel.js:83
-msgid "Add a new personal tag"
-msgstr "Neuen persönlichen Tag hinzufügen"
-
-#: js/tine-all-debug.js:7267 js/widgets/tags/TagsPanel.js:86
-msgid "Add New Personal Tag"
-msgstr "Neuen persönlichen Tag hinzufügen"
-
-#: js/tine-all-debug.js:7268 js/widgets/tags/TagsPanel.js:87
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Bitte beachten: Einen persönlichen Tag können nur Sie sehen!"
-
-#: js/tine-all-debug.js:7268 js/widgets/tags/TagsPanel.js:87
-msgid "Enter tag name:"
-msgstr "Tag-Namen eingeben:"
-
-#: js/tine-all-debug.js:7308 js/widgets/tags/TagsPanel.js:127
-msgid "No Tags to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:7331 js/widgets/tags/TagsPanel.js:150
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Tag entfernen"
-msgstr[1] "Tags entfernen"
-
-#: js/tine-all-debug.js:7341 js/widgets/tags/TagsPanel.js:160
-msgid "Edit tag"
-msgstr "Tag bearbeiten"
-
-#: js/tine-all-debug.js:7346 js/tine-all-debug.js:7351
-#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
-msgid "Rename Tag"
-msgstr "Tag umbenennen"
-
-#: js/tine-all-debug.js:7351 js/widgets/tags/TagsPanel.js:170
-msgid "Please enter a new name:"
-msgstr "Neuen Namen eingeben"
-
-#: js/tine-all-debug.js:7360 js/widgets/tags/TagsPanel.js:179
-msgid "Edit Description"
-msgstr "Beschreibung editieren"
-
-#: js/tine-all-debug.js:7365 js/widgets/tags/TagsPanel.js:184
-msgid "Description for tag"
-msgstr "Tag-Beschreibung"
-
-#: js/tine-all-debug.js:7365 js/widgets/tags/TagsPanel.js:184
-msgid "Please enter new description:"
-msgstr "Neue Beschreibung eingeben:"
-
-#: js/tine-all-debug.js:7374 js/widgets/tags/TagsPanel.js:193
-msgid "Change Color"
-msgstr "Farbe ändern"
-
-#: js/tine-all-debug.js:7398 js/widgets/tags/TagsPanel.js:217
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Tag löschen"
-msgstr[1] "Tags löschen"
-
-#: js/tine-all-debug.js:7410 js/widgets/tags/TagsPanel.js:229
-msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Ausgewählten Tag wirklich löschen?"
-msgstr[1] "Ausgewählte Tags wirklich löschen?"
-
-#: js/tine-all-debug.js:7411 js/widgets/tags/TagsPanel.js:230
-msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] ""
-"Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
-msgstr[1] ""
-"Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
-
-#: js/tine-all-debug.js:7415 js/tine-all-debug.js:11688
-#: js/tine-all-debug.js:20726 js/widgets/tags/TagsPanel.js:234
-msgid "Please wait a moment..."
-msgstr "Bitte warten Sie einen Moment ..."
-
-#: js/tine-all-debug.js:7415 js/widgets/tags/TagsPanel.js:234
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Lösche Tag"
-msgstr[1] "Lösche Tags"
-
-#: js/tine-all-debug.js:7431 js/tine-all-debug.js:7540
-#: js/tine-all-debug.js:7573 js/tine-all-debug.js:11018
-#: js/tine-all-debug.js:11723 js/tine-all-debug.js:11748
-#: js/tine-all-debug.js:13458 js/tine-all-debug.js:13740
-#: js/tine-all-debug.js:13783 js/tine-all-debug.js:14049
-#: js/tine-all-debug.js:14358 js/tine-all-debug.js:14386
-#: js/tine-all-debug.js:14964 js/tine-all-debug.js:15334
-#: js/tine-all-debug.js:15703 js/tine-all-debug.js:15731
-#: js/tine-all-debug.js:16902 js/tine-all-debug.js:20148
-#: js/tine-all-debug.js:20277 js/tine-all-debug.js:20564
-#: js/tine-all-debug.js:20713 js/tine-all-debug.js:20738
-#: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
-#: js/widgets/tags/TagsPanel.js:392
-msgid "Failed"
-msgstr "Fehlgeschlagen"
-
-#: js/tine-all-debug.js:7431 js/widgets/tags/TagsPanel.js:250
-msgid "Could not delete Tag(s)."
-msgstr "Konnte Tag(s) nicht löschen."
-
-#: js/tine-all-debug.js:7492 js/tine-all-debug.js:7554
-#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
-msgid "Notice"
-msgstr "Beachten Sie"
-
-#: js/tine-all-debug.js:7493 js/tine-all-debug.js:7555
-#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
-msgid "The minimum tag length is three."
-msgstr "Ein Tag muss mindestens aus 3 Zeichen bestehen."
-
-#: js/tine-all-debug.js:7540 js/widgets/tags/TagsPanel.js:359
-msgid "Could not create tag."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:7573 js/widgets/tags/TagsPanel.js:392
-msgid "Could not update tag."
-msgstr "Konnte Tag nicht aktualisieren."
-
-#: js/tine-all-debug.js:7606 js/tine-all-debug.js:7664
-#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
-msgid "Enter tag name"
-msgstr "Tag-Name eingegeben"
-
-#: js/tine-all-debug.js:7607 js/widgets/tags/TagsPanel.js:426
-msgid "Searching..."
-msgstr "Suche ..."
-
-#: js/tine-all-debug.js:7741 js/tine-all-debug.js:14789
-#: js/tine-all-debug.js:15112 js/widgets/tags/TagsPanel.js:560
-msgid "Color"
-msgstr "Farbe"
-
-#: js/tine-all-debug.js:7806 js/widgets/tags/TagCombo.js:37
-msgid "tag name"
-msgstr "Tag Name"
-
-#: js/tine-all-debug.js:7851 js/widgets/tags/TagFilter.js:23
-msgid "Tag"
-msgstr "Tag"
-
-#: js/tine-all-debug.js:7977 js/widgets/GroupSelect.js:94
-msgid "Please Select a Group"
-msgstr "Bitte wählen sie eine Gruppe aus"
-
-#: js/tine-all-debug.js:8180 js/widgets/GridPicker.js:75
-msgid "remove record"
-msgstr "eintrag löschen"
-
-#: js/tine-all-debug.js:8708 js/widgets/ActivitiesPanel.js:146
-msgid "Add a Note..."
-msgstr "Notiz hinzufügen"
-
-#: js/tine-all-debug.js:8723 js/tine-all-debug.js:8958
-#: js/tine-all-debug.js:9076 js/tine-all-debug.js:11215
-#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:401
-#: js/widgets/ActivitiesPanel.js:529
-msgid "Note"
-msgstr "Notiz"
-
-#: js/tine-all-debug.js:8736 js/tine-all-debug.js:8886
-#: js/widgets/ActivitiesPanel.js:174 js/widgets/ActivitiesPanel.js:329
-msgid "Add new note"
-msgstr "Neue Notiz hinzufügen"
-
-#: js/tine-all-debug.js:8767 js/widgets/ActivitiesPanel.js:205
-msgid "Recent Activities"
-msgstr "Letzte Aktivitäten"
-
-#: js/tine-all-debug.js:8831 js/tine-all-debug.js:8885
-#: js/widgets/ActivitiesPanel.js:269 js/widgets/ActivitiesPanel.js:328
-msgid "Add Note"
-msgstr "Notiz hinzufügen"
-
-#: js/tine-all-debug.js:8832 js/widgets/ActivitiesPanel.js:270
-msgid "Enter new note:"
-msgstr "Neue Notiz eingeben:"
-
-#: js/tine-all-debug.js:8873 js/widgets/ActivitiesPanel.js:316
-#, python-format
-msgid "Add a %s Note"
-msgstr "Notiz %s hinzufügen"
-
-#: js/tine-all-debug.js:8956 js/tine-all-debug.js:9081
-#: js/tine-all-debug.js:11183 js/tine-all-debug.js:17083
-#: js/tine-all-debug.js:17120 js/tine-all-debug.js:26828
-#: js/tine-all-debug.js:27219 js/widgets/ActivitiesPanel.js:399
-#: js/widgets/ActivitiesPanel.js:534
-msgid "Type"
-msgstr "Typ"
-
-#: js/tine-all-debug.js:8959 js/widgets/ActivitiesPanel.js:402
-msgid "Created By"
-msgstr "Erstellt von"
-
-#: js/tine-all-debug.js:8960 js/widgets/ActivitiesPanel.js:403
-msgid "Timestamp"
-msgstr "Zeitstempel"
-
-#: js/tine-all-debug.js:8974 js/widgets/ActivitiesPanel.js:417
-msgid "Displaying notes {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:8975 js/widgets/ActivitiesPanel.js:418
-msgid "No notes to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:9064 js/widgets/ActivitiesPanel.js:517
-msgid "Activities"
-msgstr "Aktivitäten"
-
-#: js/tine-all-debug.js:9077 js/widgets/ActivitiesPanel.js:530
-msgid "Time"
-msgstr "Zeit"
-
-#: js/tine-all-debug.js:9079 js/tine-all-debug.js:12319
-#: js/widgets/ActivitiesPanel.js:532
-msgid "User"
-msgstr "Benutzer"
-
-#: js/tine-all-debug.js:10326 js/Tinebase.js:99
+#: js/Tinebase.js:99
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
 
-#: js/tine-all-debug.js:10347 js/Tinebase.js:120
+#: js/Tinebase.js:120
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
-#: js/tine-all-debug.js:10348 js/Tinebase.js:121
+#: js/Tinebase.js:121
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr ""
 "Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. "
 "Sie müssen aktualisieren und die Änderungen erneut durchführen."
-
-#: js/tine-all-debug.js:10830 js/tine-all-debug.js:11035
-#, fuzzy
-msgid "Internal Contacts"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:10843
-msgid "Addressbook"
-msgstr ""
-
-#: js/tine-all-debug.js:10844 js/tine-all-debug.js:11631
-#: js/tine-all-debug.js:11633
-#, fuzzy
-msgid "contacts"
-msgstr "enthält"
-
-#: js/tine-all-debug.js:10991
-msgid "Are you Sure?"
-msgstr ""
-
-#: js/tine-all-debug.js:10992
-#, fuzzy
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Möchten Sie %s \"%s\" wirklich löschen?"
-msgstr[1] "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:11012 js/tine-all-debug.js:11740
-#, fuzzy
-msgid "Deleting contact..."
-msgid_plural "Deleting contacts..."
-msgstr[0] "Lösche Tag"
-msgstr[1] "Lösche Tags"
-
-#: js/tine-all-debug.js:11019 js/tine-all-debug.js:11748
-msgid "Some error occured while trying to delete the conctact."
-msgid_plural "Some error occured while trying to delete the conctacts."
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/tine-all-debug.js:11049
-#, fuzzy
-msgid "add contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:11057
-#, fuzzy
-msgid "edit contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:11070
-#, fuzzy
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "Email Kontakt"
-msgstr[1] "Email Kontakt"
-
-#: js/tine-all-debug.js:11080 js/tine-all-debug.js:11638
-msgid "export as pdf"
-msgstr ""
-
-#: js/tine-all-debug.js:11090
-#, fuzzy
-msgid "call contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:11151 js/tine-all-debug.js:12202
-#, fuzzy
-msgid "Contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:11152 js/tine-all-debug.js:11185
-#: js/tine-all-debug.js:11961 js/tine-all-debug.js:13807
-msgid "First Name"
-msgstr ""
-
-#: js/tine-all-debug.js:11153 js/tine-all-debug.js:11184
-#: js/tine-all-debug.js:11965 js/tine-all-debug.js:13811
-#, fuzzy
-msgid "Last Name"
-msgstr "Name"
-
-#: js/tine-all-debug.js:11154 js/tine-all-debug.js:11188
-#: js/tine-all-debug.js:11991
-msgid "Company"
-msgstr ""
-
-#: js/tine-all-debug.js:11155 js/tine-all-debug.js:11190
-#: js/tine-all-debug.js:11301 js/tine-all-debug.js:11983
-msgid "Job Title"
-msgstr ""
-
-#: js/tine-all-debug.js:11156 js/tine-all-debug.js:11191
-#: js/tine-all-debug.js:11302 js/tine-all-debug.js:11904
-msgid "Job Role"
-msgstr ""
-
-#: js/tine-all-debug.js:11158 js/tine-all-debug.js:11161
-#: js/tine-all-debug.js:11193 js/tine-all-debug.js:12117
-#: js/tine-all-debug.js:12162
-msgid "Street"
-msgstr ""
-
-#: js/tine-all-debug.js:11158 js/tine-all-debug.js:11159
-#: js/tine-all-debug.js:11160 js/tine-all-debug.js:12101
-msgid "Company Address"
-msgstr ""
-
-#: js/tine-all-debug.js:11159 js/tine-all-debug.js:11162
-#: js/tine-all-debug.js:12127 js/tine-all-debug.js:12172
-msgid "Postal Code"
-msgstr ""
-
-#: js/tine-all-debug.js:11160 js/tine-all-debug.js:11163
-#: js/tine-all-debug.js:11194 js/tine-all-debug.js:12131
-#: js/tine-all-debug.js:12176
-msgid "City"
-msgstr ""
-
-#: js/tine-all-debug.js:11161 js/tine-all-debug.js:11162
-#: js/tine-all-debug.js:11163 js/tine-all-debug.js:12150
-msgid "Private Address"
-msgstr ""
-
-#: js/tine-all-debug.js:11177
-#, fuzzy
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:11178 js/tine-all-debug.js:11397
-#, fuzzy
-msgid "No contacts to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:11186
-#, fuzzy
-msgid "Full Name"
-msgstr "Name"
-
-#: js/tine-all-debug.js:11187 js/tine-all-debug.js:11891
-#: js/tine-all-debug.js:11977
-#, fuzzy
-msgid "Display Name"
-msgstr "Nachname"
-
-#: js/tine-all-debug.js:11189 js/tine-all-debug.js:11995
-msgid "Unit"
-msgstr ""
-
-#: js/tine-all-debug.js:11192 js/tine-all-debug.js:11303
-#: js/tine-all-debug.js:11921
-msgid "Room"
-msgstr ""
-
-#: js/tine-all-debug.js:11195 js/tine-all-debug.js:12135
-#: js/tine-all-debug.js:12180
-msgid "Region"
-msgstr ""
-
-#: js/tine-all-debug.js:11196
-msgid "Postalcode"
-msgstr ""
-
-#: js/tine-all-debug.js:11197 js/tine-all-debug.js:12142
-#: js/tine-all-debug.js:12187
-msgid "Country"
-msgstr ""
-
-#: js/tine-all-debug.js:11198
-msgid "Street (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11199
-msgid "City (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11200
-msgid "Region (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11201
-msgid "Postalcode (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11202
-msgid "Country (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11203 js/tine-all-debug.js:13548
-#, fuzzy
-msgid "Email"
-msgstr "Email"
-
-#: js/tine-all-debug.js:11204 js/tine-all-debug.js:12021
-#: js/tine-all-debug.js:16705 js/tine-all-debug.js:17075
-#: js/tine-all-debug.js:19374
-msgid "Phone"
-msgstr ""
-
-#: js/tine-all-debug.js:11205 js/tine-all-debug.js:12026
-msgid "Mobile"
-msgstr ""
-
-#: js/tine-all-debug.js:11206 js/tine-all-debug.js:12031
-msgid "Fax"
-msgstr ""
-
-#: js/tine-all-debug.js:11207
-msgid "Car phone"
-msgstr ""
-
-#: js/tine-all-debug.js:11208
-msgid "Pager"
-msgstr ""
-
-#: js/tine-all-debug.js:11209 js/tine-all-debug.js:12038
-msgid "Phone (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11210 js/tine-all-debug.js:12048
-msgid "Fax (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11211 js/tine-all-debug.js:12043
-msgid "Mobile (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11212
-msgid "Email (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11213 js/tine-all-debug.js:12068
-msgid "Web"
-msgstr ""
-
-#: js/tine-all-debug.js:11214
-msgid "URL (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:11217
-msgid "Geo"
-msgstr ""
-
-#: js/tine-all-debug.js:11218 js/tine-all-debug.js:12000
-msgid "Birthday"
-msgstr ""
-
-#: js/tine-all-debug.js:11234 js/tine-all-debug.js:11489
-#, fuzzy
-msgid "Select contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:11632
-#, fuzzy
-msgid "addressbook"
-msgstr "Email-Adresse"
-
-#: js/tine-all-debug.js:11654
-#, fuzzy
-msgid "Loading Contact..."
-msgstr "Sie werden angemeldet..."
-
-#: js/tine-all-debug.js:11668 js/tine-all-debug.js:17670
-#, fuzzy
-msgid "Add new contact"
-msgstr "Neue Notiz hinzufügen"
-
-#: js/tine-all-debug.js:11670
-#, python-format
-msgid "Edit Contact \"%s\""
-msgstr ""
-
-#: js/tine-all-debug.js:11688
-#, fuzzy
-msgid "Saving Contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:11723
-#, fuzzy
-msgid "Could not save contact."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:11727 js/tine-all-debug.js:13788
-#: js/tine-all-debug.js:14365 js/tine-all-debug.js:14969
-#: js/tine-all-debug.js:15710 js/tine-all-debug.js:20717
-msgid "Errors"
-msgstr ""
-
-#: js/tine-all-debug.js:11727 js/tine-all-debug.js:13788
-#: js/tine-all-debug.js:14365 js/tine-all-debug.js:14969
-#: js/tine-all-debug.js:15710 js/tine-all-debug.js:16906
-#: js/tine-all-debug.js:20717
-#, fuzzy
-msgid "Please fix the errors noted."
-msgstr "Bitte geben Sie einen Namen ein für "
-
-#: js/tine-all-debug.js:11911
-msgid "Middle Name"
-msgstr ""
-
-#: js/tine-all-debug.js:11916
-msgid "Suffix"
-msgstr ""
-
-#: js/tine-all-debug.js:11929
-msgid "Personal Information"
-msgstr ""
-
-#: js/tine-all-debug.js:11956
-#, fuzzy
-msgid "Title"
-msgstr "Zeit"
-
-#: js/tine-all-debug.js:12055
-msgid "E-Mail"
-msgstr ""
-
-#: js/tine-all-debug.js:12061
-msgid "E-Mail (private)"
-msgstr ""
-
-#: js/tine-all-debug.js:12078
-msgid "Contact Information"
-msgstr ""
-
-#: js/tine-all-debug.js:12121 js/tine-all-debug.js:12166
-msgid "Street 2"
-msgstr ""
-
-#: js/tine-all-debug.js:12194
-msgid "Custom Fields"
-msgstr ""
-
-#: js/tine-all-debug.js:12248 js/tine-all-debug.js:18144
-#, fuzzy
-msgid "Enter description"
-msgstr "Beschreibung editieren"
-
-#: js/tine-all-debug.js:12284
-#, fuzzy, python-format
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Anmelden"
-msgstr[1] "Anmelden"
-
-#: js/tine-all-debug.js:12331
-msgid "Groups"
-msgstr ""
-
-#: js/tine-all-debug.js:12343
-msgid "Applications"
-msgstr ""
-
-#: js/tine-all-debug.js:12355
-msgid "Access Log"
-msgstr ""
-
-#: js/tine-all-debug.js:12367
-#, fuzzy
-msgid "Shared Tags"
-msgstr "Gemeinsame %s"
-
-#: js/tine-all-debug.js:12379
-msgid "Roles"
-msgstr ""
-
-#: js/tine-all-debug.js:12551
-#, fuzzy
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:12666
-#, fuzzy
-msgid "delete entry"
-msgstr "löschen"
-
-#: js/tine-all-debug.js:12667
-#, fuzzy
-msgid "select all"
-msgstr "Wählen sie ein Feld"
-
-#: js/tine-all-debug.js:12702
-msgid "Display from:"
-msgstr ""
-
-#: js/tine-all-debug.js:12706
-msgid "to:"
-msgstr ""
-
-#: js/tine-all-debug.js:12711 js/tine-all-debug.js:13087
-#: js/tine-all-debug.js:13492 js/tine-all-debug.js:14111
-#: js/tine-all-debug.js:14748 js/tine-all-debug.js:15396
-#: js/tine-all-debug.js:19618 js/tine-all-debug.js:20398
-#, fuzzy
-msgid "Search:"
-msgstr "Suchen"
-
-#: js/tine-all-debug.js:12784
-#, fuzzy
-msgid "invalid password"
-msgstr "Altes Passwort"
-
-#: js/tine-all-debug.js:12788
-msgid "ambiguous username"
-msgstr ""
-
-#: js/tine-all-debug.js:12792
-msgid "user not found"
-msgstr ""
-
-#: js/tine-all-debug.js:12796
-#, fuzzy
-msgid "failure"
-msgstr "Fehler"
-
-#: js/tine-all-debug.js:12800
-#, fuzzy
-msgid "success"
-msgstr "Erfolg"
-
-#: js/tine-all-debug.js:12821
-#, fuzzy
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:12822
-#, fuzzy
-msgid "No access log entries to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:12826
-msgid "Session ID"
-msgstr ""
-
-#: js/tine-all-debug.js:12827 js/tine-all-debug.js:13816
-#, fuzzy
-msgid "Login Name"
-msgstr "Benutzername"
-
-#: js/tine-all-debug.js:12829 js/tine-all-debug.js:23091
-#: js/tine-all-debug.js:27278 js/tine-all-debug.js:29537
-msgid "IP Address"
-msgstr ""
-
-#: js/tine-all-debug.js:12830
-#, fuzzy
-msgid "Login Time"
-msgstr "Benutzername"
-
-#: js/tine-all-debug.js:12831
-#, fuzzy
-msgid "Logout Time"
-msgstr "Abmelden"
-
-#: js/tine-all-debug.js:12832
-#, fuzzy
-msgid "Account ID"
-msgstr "Benutzername: %s"
-
-#: js/tine-all-debug.js:12833
-msgid "Result"
-msgstr ""
-
-#: js/tine-all-debug.js:13063
-msgid "enable application"
-msgstr ""
-
-#: js/tine-all-debug.js:13064
-msgid "disable application"
-msgstr ""
-
-#: js/tine-all-debug.js:13065
-#, fuzzy
-msgid "settings"
-msgstr "Lege an"
-
-#: js/tine-all-debug.js:13116
-msgid "disabled"
-msgstr ""
-
-#: js/tine-all-debug.js:13119
-#, fuzzy
-msgid "enabled"
-msgstr "Fehlgeschlagen"
-
-#: js/tine-all-debug.js:13123
-#, python-format
-msgid "unknown status (%s)"
-msgstr ""
-
-#: js/tine-all-debug.js:13152
-#, fuzzy
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:13153
-#, fuzzy
-msgid "No applications to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:13157
-#, fuzzy
-msgid "order"
-msgstr "Ordner"
-
-#: js/tine-all-debug.js:13158 js/tine-all-debug.js:22010
-#: js/tine-all-debug.js:22245 js/tine-all-debug.js:22497
-#: js/tine-all-debug.js:24171 js/tine-all-debug.js:25592
-#: js/tine-all-debug.js:25860 js/tine-all-debug.js:25997
-#: js/tine-all-debug.js:26560 js/tine-all-debug.js:27625
-#: js/tine-all-debug.js:29994
-#, fuzzy
-msgid "name"
-msgstr "Umbenennen"
-
-#: js/tine-all-debug.js:13159
-msgid "status"
-msgstr ""
-
-#: js/tine-all-debug.js:13160
-#, fuzzy
-msgid "version"
-msgstr "Version prüfen"
-
-#: js/tine-all-debug.js:13413
-#, fuzzy
-msgid "Set new password"
-msgstr "Wiederholung neues Passwort"
-
-#: js/tine-all-debug.js:13413
-#, fuzzy
-msgid "Please enter the new password:"
-msgstr "Bitte geben Sie einen Namen ein für "
-
-#: js/tine-all-debug.js:13438
-#, fuzzy
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:13453
-msgid "Deleting account(s)..."
-msgstr ""
-
-#: js/tine-all-debug.js:13458
-msgid "Some error occured while trying to delete the account(s)."
-msgstr ""
-
-#: js/tine-all-debug.js:13537
-#, fuzzy
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:13538
-#, fuzzy
-msgid "No accounts to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:13542 js/tine-all-debug.js:14155
-#: js/tine-all-debug.js:15440
-msgid "ID"
-msgstr ""
-
-#: js/tine-all-debug.js:13543 js/tine-all-debug.js:13854
-#: js/tine-all-debug.js:17186 js/tine-all-debug.js:20480
-#: js/tine-all-debug.js:20789
-msgid "Status"
-msgstr ""
-
-#: js/tine-all-debug.js:13544
-#, fuzzy
-msgid "Displayname"
-msgstr "Nachname"
-
-#: js/tine-all-debug.js:13545
-#, fuzzy
-msgid "Loginname"
-msgstr "Benutzername"
-
-#: js/tine-all-debug.js:13546
-#, fuzzy
-msgid "Last name"
-msgstr "Tag Name"
-
-#: js/tine-all-debug.js:13547
-#, fuzzy
-msgid "First name"
-msgstr "Nachname"
-
-#: js/tine-all-debug.js:13549 js/tine-all-debug.js:13878
-#, fuzzy
-msgid "Last login at"
-msgstr "Benutzername"
-
-#: js/tine-all-debug.js:13550 js/tine-all-debug.js:13885
-msgid "Last login from"
-msgstr ""
-
-#: js/tine-all-debug.js:13551
-#, fuzzy
-msgid "Password changed"
-msgstr "Eintrag geändert"
-
-#: js/tine-all-debug.js:13552 js/tine-all-debug.js:13873
-msgid "Expires"
-msgstr ""
-
-#: js/tine-all-debug.js:13641
-#, fuzzy
-msgid "edit account"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:13649
-#, fuzzy
-msgid "delete account"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:13657
-#, fuzzy
-msgid "enable account"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:13666
-#, fuzzy
-msgid "disable account"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:13675
-#, fuzzy
-msgid "reset password"
-msgstr "Neues Passwort"
-
-#: js/tine-all-debug.js:13734
-#, fuzzy
-msgid "Deleting account..."
-msgstr "Lösche Tag"
-
-#: js/tine-all-debug.js:13740
-msgid "Some error occured while trying to delete the account."
-msgstr ""
-
-#: js/tine-all-debug.js:13749
-msgid "Saving User Account"
-msgstr ""
-
-#: js/tine-all-debug.js:13783
-#, fuzzy
-msgid "Could not save user account."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:13824 js/tine-all-debug.js:13830
-#, fuzzy
-msgid "no password set"
-msgstr "Passwort ändern"
-
-#: js/tine-all-debug.js:13827
-#, fuzzy
-msgid "Password again"
-msgstr "Passwort"
-
-#: js/tine-all-debug.js:13832
-msgid "Primary group"
-msgstr ""
-
-#: js/tine-all-debug.js:13840 js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Email-Adresse"
-
-#: js/tine-all-debug.js:13875 js/tine-all-debug.js:13893
-msgid "never"
-msgstr ""
-
-#: js/tine-all-debug.js:13880 js/tine-all-debug.js:13887
-msgid "never logged in"
-msgstr ""
-
-#: js/tine-all-debug.js:13891
-#, fuzzy
-msgid "Password set"
-msgstr "Passwort"
-
-#: js/tine-all-debug.js:13933
-#, fuzzy
-msgid "Add New User Account"
-msgstr "Neuen persönlichen Tag hinzufügen"
-
-#: js/tine-all-debug.js:13935
-#, python-format
-msgid "Edit User Account \"%s\""
-msgstr ""
-
-#: js/tine-all-debug.js:14027
-#, fuzzy
-msgid "Do you really want to delete the selected groups?"
-msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:14044
-#, fuzzy
-msgid "Deleting group(s)..."
-msgstr "Lösche Tag"
-
-#: js/tine-all-debug.js:14049 js/tine-all-debug.js:14386
-msgid "Some error occured while trying to delete the group."
-msgstr ""
-
-#: js/tine-all-debug.js:14062
-#, fuzzy
-msgid "add group"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:14070
-msgid "edit group"
-msgstr ""
-
-#: js/tine-all-debug.js:14078
-#, fuzzy
-msgid "delete group"
-msgstr "löschen"
-
-#: js/tine-all-debug.js:14149
-#, fuzzy
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:14150 js/tine-all-debug.js:14201
-#, fuzzy
-msgid "No groups to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:14323 js/tine-all-debug.js:14920
-#: js/tine-all-debug.js:15663
-#, fuzzy
-msgid "Updating Memberships"
-msgstr "Berechtiungen werden gesichert"
-
-#: js/tine-all-debug.js:14358
-#, fuzzy
-msgid "Could not save group."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:14378
-#, fuzzy
-msgid "Deleting group..."
-msgstr "Lösche Tag"
-
-#: js/tine-all-debug.js:14500
-msgid "Group Members"
-msgstr ""
-
-#: js/tine-all-debug.js:14531
-#, fuzzy
-msgid "Group Name"
-msgstr "Bild zuschneiden"
-
-#: js/tine-all-debug.js:14599
-#, fuzzy
-msgid "Add new group"
-msgstr "Neue Notiz hinzufügen"
-
-#: js/tine-all-debug.js:14601
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr ""
-
-#: js/tine-all-debug.js:14667
-#, fuzzy
-msgid "Do you really want to delete the selected tags?"
-msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:14684
-#, fuzzy
-msgid "Deleting tag(s)..."
-msgstr "Lösche Tag"
-
-#: js/tine-all-debug.js:14699
-#, fuzzy
-msgid "add tag"
-msgstr "Tag bearbeiten"
-
-#: js/tine-all-debug.js:14706
-#, fuzzy
-msgid "edit tag"
-msgstr "Tag bearbeiten"
-
-#: js/tine-all-debug.js:14714
-#, fuzzy
-msgid "delete tag"
-msgstr "Tag löschen"
-
-#: js/tine-all-debug.js:14783
-#, fuzzy
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:14784 js/tine-all-debug.js:14833
-#, fuzzy
-msgid "No tags to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:14964
-#, fuzzy
-msgid "Could not save tag."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:14982
-#, fuzzy
-msgid "Deleting tag..."
-msgstr "Lösche Tag"
-
-#: js/tine-all-debug.js:15072
-msgid "Allowed Contexts"
-msgstr ""
-
-#: js/tine-all-debug.js:15087
-#, fuzzy
-msgid "Account Rights"
-msgstr "Benutzername: %s"
-
-#: js/tine-all-debug.js:15092
-msgid "View"
-msgstr ""
-
-#: js/tine-all-debug.js:15097
-#, fuzzy
-msgid "Use"
-msgstr "Benutzer"
-
-#: js/tine-all-debug.js:15164
-#, fuzzy
-msgid "Tag Name"
-msgstr "Tag Name"
-
-#: js/tine-all-debug.js:15186 js/tine-all-debug.js:15880
-msgid "Rights"
-msgstr ""
-
-#: js/tine-all-debug.js:15189 js/tine-all-debug.js:26812
-#: js/tine-all-debug.js:27011 js/tine-all-debug.js:28328
-msgid "Context"
-msgstr ""
-
-#: js/tine-all-debug.js:15207
-#, fuzzy
-msgid "Loading Tag..."
-msgstr "Laden"
-
-#: js/tine-all-debug.js:15238
-#, fuzzy
-msgid "Add New Tag"
-msgstr "Neuen persönlichen Tag hinzufügen"
-
-#: js/tine-all-debug.js:15240
-#, fuzzy, python-format
-msgid "Edit Tag \"%s\""
-msgstr "Tag bearbeiten"
-
-#: js/tine-all-debug.js:15312
-#, fuzzy
-msgid "Do you really want to delete the selected roles?"
-msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:15329
-#, fuzzy
-msgid "Deleting role(s)..."
-msgstr "Einrichten %s..."
-
-#: js/tine-all-debug.js:15334 js/tine-all-debug.js:15731
-msgid "Some error occured while trying to delete the role."
-msgstr ""
-
-#: js/tine-all-debug.js:15347
-#, fuzzy
-msgid "add role"
-msgstr "Notiz hinzufügen"
-
-#: js/tine-all-debug.js:15355
-msgid "edit role"
-msgstr ""
-
-#: js/tine-all-debug.js:15363
-#, fuzzy
-msgid "delete role"
-msgstr "löschen"
-
-#: js/tine-all-debug.js:15434
-#, fuzzy
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:15435 js/tine-all-debug.js:15486
-#, fuzzy
-msgid "No roles to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:15703
-#, fuzzy
-msgid "Could not save role."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:15723
-#, fuzzy
-msgid "Deleting role..."
-msgstr "Lösche"
-
-#: js/tine-all-debug.js:15858
-msgid "Role members"
-msgstr ""
-
-#: js/tine-all-debug.js:15868
-msgid "Members"
-msgstr ""
-
-#: js/tine-all-debug.js:15910
-#, fuzzy
-msgid "Role Name"
-msgstr "Umbenennen"
-
-#: js/tine-all-debug.js:15950
-#, fuzzy
-msgid "Loading Role..."
-msgstr "Laden"
-
-#: js/tine-all-debug.js:15990
-#, fuzzy
-msgid "Add New Role"
-msgstr "Neue Notiz hinzufügen"
-
-#: js/tine-all-debug.js:15992
-#, python-format
-msgid "Edit Role \"%s\""
-msgstr ""
-
-#: js/tine-all-debug.js:16186
-#, fuzzy
-msgid "Are you sure you want to delete this lead?"
-msgstr "Wollen sie sich wirklich Abmelden?"
-
-#: js/tine-all-debug.js:16202
-#, fuzzy
-msgid "Deleting lead"
-msgstr "Lösche Tag"
-
-#: js/tine-all-debug.js:16207
-msgid "Some error occured while trying to delete the lead."
-msgstr ""
-
-#: js/tine-all-debug.js:16251 js/tine-all-debug.js:20333
-#, fuzzy
-msgid "Enter searchfilter"
-msgstr "suchfilter eingeben"
-
-#: js/tine-all-debug.js:16262 js/tine-all-debug.js:16263
-#: js/tine-all-debug.js:16413 js/tine-all-debug.js:18008
-msgid "Leadstate"
-msgstr ""
-
-#: js/tine-all-debug.js:16264
-#, fuzzy
-msgid "leadstate"
-msgstr "Bitte warten"
-
-#: js/tine-all-debug.js:16284 js/tine-all-debug.js:16285
-#: js/tine-all-debug.js:16286 js/tine-all-debug.js:16414
-#: js/tine-all-debug.js:18071
-msgid "Probability"
-msgstr ""
-
-#: js/tine-all-debug.js:16342
-#, fuzzy
-msgid "Show details"
-msgstr "Details anzeigen:"
-
-#: js/tine-all-debug.js:16351
-msgid "Show closed leads"
-msgstr ""
-
-#: js/tine-all-debug.js:16386
-#, fuzzy
-msgid "Displaying leads {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:16387 js/tine-all-debug.js:16447
-msgid "No leads found."
-msgstr ""
-
-#: js/tine-all-debug.js:16409
-msgid "Lead id"
-msgstr ""
-
-#: js/tine-all-debug.js:16410
-#, fuzzy
-msgid "Lead name"
-msgstr "Tag Name"
-
-#: js/tine-all-debug.js:16411 js/tine-all-debug.js:18301
-#: js/tine-all-debug.js:18344
-msgid "Partner"
-msgstr ""
-
-#: js/tine-all-debug.js:16412 js/tine-all-debug.js:18300
-#: js/tine-all-debug.js:18340
-msgid "Customer"
-msgstr ""
-
-#: js/tine-all-debug.js:16415
-msgid "Turnover"
-msgstr ""
-
-#: js/tine-all-debug.js:16490
-#, fuzzy
-msgid "Add lead"
-msgstr "Notiz hinzufügen"
-
-#: js/tine-all-debug.js:16491
-#, fuzzy
-msgid "Add new lead"
-msgstr "Neue Notiz hinzufügen"
-
-#: js/tine-all-debug.js:16500
-#, fuzzy
-msgid "Edit lead"
-msgstr "Tag bearbeiten"
-
-#: js/tine-all-debug.js:16501
-msgid "Edit selected lead"
-msgstr ""
-
-#: js/tine-all-debug.js:16514
-#, fuzzy
-msgid "Delete lead"
-msgid_plural "Delete leads"
-msgstr[0] "Tag löschen"
-msgstr[1] "Tags löschen"
-
-#: js/tine-all-debug.js:16515
-#, fuzzy
-msgid "Delete selected leads"
-msgstr "Ausgewählten Tag wirklich löschen?"
-
-#: js/tine-all-debug.js:16525 js/tine-all-debug.js:17772
-#: js/tine-all-debug.js:17773
-#, fuzzy
-msgid "Export as PDF"
-msgstr "Export Datum"
-
-#: js/tine-all-debug.js:16526
-msgid "Export selected lead as PDF"
-msgstr ""
-
-#: js/tine-all-debug.js:16535 js/tine-all-debug.js:17717
-#: js/tine-all-debug.js:17736 js/tine-all-debug.js:20176
-#, fuzzy
-msgid "Add task"
-msgstr "%s hinzufügen"
-
-#: js/tine-all-debug.js:16536
-msgid "Add task for selected lead"
-msgstr ""
-
-#: js/tine-all-debug.js:16643
-msgid "Lead states"
-msgstr ""
-
-#: js/tine-all-debug.js:16644
-msgid "Lead sources"
-msgstr ""
-
-#: js/tine-all-debug.js:16645
-msgid "Lead types"
-msgstr ""
-
-#: js/tine-all-debug.js:16646 js/tine-all-debug.js:17835
-msgid "Products"
-msgstr ""
-
-#: js/tine-all-debug.js:16706 js/tine-all-debug.js:17076
-#, fuzzy
-msgid "Cellphone"
-msgstr "Telefon"
-
-#: js/tine-all-debug.js:16809
-#, fuzzy
-msgid "Search Contacts"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:16871
-msgid "Saving lead"
-msgstr ""
-
-#: js/tine-all-debug.js:16902
-#, fuzzy
-msgid "Could not save lead."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:17061
-#, fuzzy
-msgid "Address"
-msgstr "Email-Adresse"
-
-#: js/tine-all-debug.js:17072
-msgid "Contactdata"
-msgstr ""
-
-#: js/tine-all-debug.js:17117
-msgid "Organisation"
-msgstr ""
-
-#: js/tine-all-debug.js:17145 js/tine-all-debug.js:20425
-#: js/tine-all-debug.js:20761
-msgid "Summary"
-msgstr ""
-
-#: js/tine-all-debug.js:17153 js/tine-all-debug.js:20433
-#, fuzzy
-msgid "Add a task..."
-msgstr "Notiz hinzufügen"
-
-#: js/tine-all-debug.js:17157 js/tine-all-debug.js:20437
-msgid "Due Date"
-msgstr ""
-
-#: js/tine-all-debug.js:17171 js/tine-all-debug.js:20451
-#: js/tine-all-debug.js:20793
-msgid "Priority"
-msgstr ""
-
-#: js/tine-all-debug.js:17223
-msgid "Product"
-msgstr ""
-
-#: js/tine-all-debug.js:17232
-#, fuzzy
-msgid "Add a product..."
-msgstr "Notiz hinzufügen"
-
-#: js/tine-all-debug.js:17254
-msgid "Price"
-msgstr ""
-
-#: js/tine-all-debug.js:17347 js/tine-all-debug.js:20502
-#, fuzzy
-msgid "No Tasks to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:17671
-#, fuzzy
-msgid "Add new customer contact"
-msgstr "Neuen persönlichen Tag hinzufügen"
-
-#: js/tine-all-debug.js:17679
-#, fuzzy
-msgid "Add contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:17680
-msgid "Add existing contact to lead"
-msgstr ""
-
-#: js/tine-all-debug.js:17694
-#, fuzzy
-msgid "Edit contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:17695
-msgid "Edit selected contact"
-msgstr ""
-
-#: js/tine-all-debug.js:17704
-#, fuzzy
-msgid "Unlink contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:17705
-msgid "Unlink selected contacts"
-msgstr ""
-
-#: js/tine-all-debug.js:17718
-#, fuzzy
-msgid "Add new task"
-msgstr "Neue Notiz hinzufügen"
-
-#: js/tine-all-debug.js:17726 js/tine-all-debug.js:20166
-#, fuzzy
-msgid "Edit task"
-msgstr "Tag bearbeiten"
-
-#: js/tine-all-debug.js:17727
-msgid "Edit selected task"
-msgstr ""
-
-#: js/tine-all-debug.js:17737
-msgid "Add existing task to lead"
-msgstr ""
-
-#: js/tine-all-debug.js:17746
-msgid "Remove tasks"
-msgstr ""
-
-#: js/tine-all-debug.js:17747
-#, fuzzy
-msgid "Remove selected tasks"
-msgstr "Bitte %s auswählen"
-
-#: js/tine-all-debug.js:17759
-#, fuzzy
-msgid "Remove products"
-msgstr "eintrag löschen"
-
-#: js/tine-all-debug.js:17760
-msgid "Remove selected products"
-msgstr ""
-
-#: js/tine-all-debug.js:17801 js/tine-all-debug.js:17802
-#, fuzzy
-msgid "Leads"
-msgstr "Lesen"
-
-#: js/tine-all-debug.js:17833
-#, fuzzy
-msgid "Contacts"
-msgstr "enthält"
-
-#: js/tine-all-debug.js:17834 js/tine-all-debug.js:20310
-#, fuzzy
-msgid "Tasks"
-msgstr "Tags"
-
-#: js/tine-all-debug.js:17858
-#, fuzzy
-msgid "Loading Lead..."
-msgstr "Laden"
-
-#: js/tine-all-debug.js:17879
-#, fuzzy
-msgid "Add New Lead"
-msgstr "Neue Notiz hinzufügen"
-
-#: js/tine-all-debug.js:17881
-#, python-format
-msgid "Edit Lead \"%s\""
-msgstr ""
-
-#: js/tine-all-debug.js:17999
-#, fuzzy
-msgid "Enter short name"
-msgstr "Tag-Name eingegeben"
-
-#: js/tine-all-debug.js:18037
-msgid "Leadtype"
-msgstr ""
-
-#: js/tine-all-debug.js:18054
-msgid "Leadsource"
-msgstr ""
-
-#: js/tine-all-debug.js:18079 js/tine-all-debug.js:19726
-msgid "Start"
-msgstr ""
-
-#: js/tine-all-debug.js:18086
-msgid "Estimated end"
-msgstr ""
-
-#: js/tine-all-debug.js:18093
-#, fuzzy
-msgid "End"
-msgstr "und"
-
-#: js/tine-all-debug.js:18100
-#, fuzzy
-msgid "folder"
-msgstr "Ordner"
-
-#: js/tine-all-debug.js:18111
-msgid "Overview"
-msgstr ""
-
-#: js/tine-all-debug.js:18196
-msgid "Expected turnover"
-msgstr ""
-
-#: js/tine-all-debug.js:18299 js/tine-all-debug.js:18336
-msgid "Responsible"
-msgstr ""
-
-#: js/tine-all-debug.js:19144 js/tine-all-debug.js:19562
-#: js/tine-all-debug.js:19563
-msgid "Edit phone settings"
-msgstr ""
-
-#: js/tine-all-debug.js:19172
-msgid "Phones"
-msgstr ""
-
-#: js/tine-all-debug.js:19314
-msgid "Dial phone number"
-msgstr ""
-
-#: js/tine-all-debug.js:19370
-#, fuzzy
-msgid "Number"
-msgstr "Name"
-
-#: js/tine-all-debug.js:19397
-#, fuzzy
-msgid "Line"
-msgstr "Anmelden"
-
-#: js/tine-all-debug.js:19421
-msgid "Dial"
-msgstr ""
-
-#: js/tine-all-debug.js:19552
-msgid "Dial number"
-msgstr ""
-
-#: js/tine-all-debug.js:19553
-msgid "Initiate a new outgoing call"
-msgstr ""
-
-#: js/tine-all-debug.js:19703
-msgid "Source or Destination"
-msgstr ""
-
-#: js/tine-all-debug.js:19719
-#, fuzzy
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:19720 js/tine-all-debug.js:19757
-#, fuzzy
-msgid "No calls to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:19725
-msgid "Call ID"
-msgstr ""
-
-#: js/tine-all-debug.js:19727
-msgid "Connected"
-msgstr ""
-
-#: js/tine-all-debug.js:19728
-msgid "Disconnected"
-msgstr ""
-
-#: js/tine-all-debug.js:19729
-#, fuzzy
-msgid "Duration"
-msgstr "Beschreibung"
-
-#: js/tine-all-debug.js:19730
-msgid "Ringing"
-msgstr ""
-
-#: js/tine-all-debug.js:19731
-#, fuzzy
-msgid "Direction"
-msgstr "Beschreibung"
-
-#: js/tine-all-debug.js:19732
-#, fuzzy
-msgid "Source"
-msgstr "Erfolg"
-
-#: js/tine-all-debug.js:19733
-#, fuzzy
-msgid "Destination"
-msgstr "Beschreibung"
-
-#: js/tine-all-debug.js:20117
-#, fuzzy
-msgid "Do you really want to delete the selected task"
-msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Möchten Sie %s \"%s\" wirklich löschen?"
-msgstr[1] "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:20148 js/tine-all-debug.js:20738
-#, fuzzy
-msgid "Could not delete task(s)."
-msgstr "Konnte Tag(s) nicht löschen."
-
-#: js/tine-all-debug.js:20187
-#, fuzzy
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "%s löschen"
-msgstr[1] "%s löschen"
-
-#: js/tine-all-debug.js:20277 js/tine-all-debug.js:20564
-#: js/tine-all-debug.js:20713
-#, fuzzy
-msgid "Could not save task."
-msgstr "Konnte Tag nicht erzeugen."
-
-#: js/tine-all-debug.js:20311 js/tine-all-debug.js:20638
-msgid "to do lists"
-msgstr ""
-
-#: js/tine-all-debug.js:20312 js/tine-all-debug.js:20636
-#: js/tine-all-debug.js:20637
-msgid "to do list"
-msgstr ""
-
-#: js/tine-all-debug.js:20348
-msgid "Show closed"
-msgstr ""
-
-#: js/tine-all-debug.js:20408
-#, fuzzy
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:20409
-#, fuzzy
-msgid "No tasks to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:20466
-msgid "Percent"
-msgstr ""
-
-#: js/tine-all-debug.js:20648
-#, fuzzy
-msgid "Loading Task..."
-msgstr "Laden"
-
-#: js/tine-all-debug.js:20659
-#, fuzzy
-msgid "Add New Task"
-msgstr "Neuen persönlichen Tag hinzufügen"
-
-#: js/tine-all-debug.js:20661
-#, python-format
-msgid "Edit Task \"%s\""
-msgstr ""
-
-#: js/tine-all-debug.js:20681 js/tine-all-debug.js:20726
-msgid "Saving Task"
-msgstr ""
-
-#: js/tine-all-debug.js:20724
-#, fuzzy
-msgid "Do you really want to delete this task?"
-msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
-
-#: js/tine-all-debug.js:20765
-#, fuzzy
-msgid "Enter short name..."
-msgstr "Tag-Name eingegeben"
-
-#: js/tine-all-debug.js:20768
-#, fuzzy
-msgid "Notes"
-msgstr "Notiz"
-
-#: js/tine-all-debug.js:20770
-#, fuzzy
-msgid "Enter description..."
-msgstr "Beschreibung editieren"
-
-#: js/tine-all-debug.js:20784
-msgid "Percentage"
-msgstr ""
-
-#: js/tine-all-debug.js:20797
-msgid "Due date"
-msgstr ""
-
-#: js/tine-all-debug.js:21900
-#, fuzzy
-msgid "add software"
-msgstr "Notiz hinzufügen"
-
-#: js/tine-all-debug.js:21907
-msgid "edit software"
-msgstr ""
-
-#: js/tine-all-debug.js:21915
-#, fuzzy
-msgid "delete software"
-msgstr "Diesen Filter löschen"
-
-#: js/tine-all-debug.js:21970 js/tine-all-debug.js:22458
-#: js/tine-all-debug.js:23030 js/tine-all-debug.js:24668
-#: js/tine-all-debug.js:25553 js/tine-all-debug.js:26509
-#: js/tine-all-debug.js:27586 js/tine-all-debug.js:28044
-#: js/tine-all-debug.js:29007 js/tine-all-debug.js:29476
-#, fuzzy
-msgid "Search: "
-msgstr "Suchen"
-
-#: js/tine-all-debug.js:22003
-#, fuzzy
-msgid "Displaying software {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:22004
-#, fuzzy
-msgid "No software to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:22009 js/tine-all-debug.js:22496
-#: js/tine-all-debug.js:24715 js/tine-all-debug.js:27624
-#: js/tine-all-debug.js:28083 js/tine-all-debug.js:29045
-msgid "id"
-msgstr ""
-
-#: js/tine-all-debug.js:22388
-#, fuzzy
-msgid "add template"
-msgstr "neuen Filter hinzufügen"
-
-#: js/tine-all-debug.js:22395
-#, fuzzy
-msgid "edit template"
-msgstr "Bild ändern"
-
-#: js/tine-all-debug.js:22403
-#, fuzzy
-msgid "delete template"
-msgstr "Bild löschen"
-
-#: js/tine-all-debug.js:22490
-#, fuzzy
-msgid "Displaying template {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:22491
-#, fuzzy
-msgid "No template to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:22499
-msgid "Model"
-msgstr ""
-
-#: js/tine-all-debug.js:22500
-msgid "Keylayout Id"
-msgstr ""
-
-#: js/tine-all-debug.js:22501
-msgid "Settings Id"
-msgstr ""
-
-#: js/tine-all-debug.js:22502
-msgid "Software Id"
-msgstr ""
-
-#: js/tine-all-debug.js:22721
-msgid "Software Version"
-msgstr ""
-
-#: js/tine-all-debug.js:22738 js/tine-all-debug.js:24042
-#: js/tine-all-debug.js:29865
-#, fuzzy
-msgid "Settings"
-msgstr "Lege an"
-
-#: js/tine-all-debug.js:22755
-msgid "Keylayout"
-msgstr ""
-
-#: js/tine-all-debug.js:22950
-#, fuzzy
-msgid "add phone"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:22957
-#, fuzzy
-msgid "edit phone"
-msgstr "Telefon"
-
-#: js/tine-all-debug.js:22965
-#, fuzzy
-msgid "delete phone"
-msgstr "Telefon"
-
-#: js/tine-all-debug.js:22973
-msgid "send HTTP Client Info"
-msgstr ""
-
-#: js/tine-all-debug.js:23062
-#, fuzzy
-msgid "Displaying phones {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:23063
-#, fuzzy
-msgid "No phones to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:23068 js/tine-all-debug.js:25591
-#: js/tine-all-debug.js:26559 js/tine-all-debug.js:29514
-msgid "Id"
-msgstr ""
-
-#: js/tine-all-debug.js:23069 js/tine-all-debug.js:29515
-#, fuzzy
-msgid "MAC address"
-msgstr "Email-Adresse"
-
-#: js/tine-all-debug.js:23070 js/tine-all-debug.js:25593
-#: js/tine-all-debug.js:29516
-#, fuzzy
-msgid "description"
-msgstr "Beschreibung"
-
-#: js/tine-all-debug.js:23074 js/tine-all-debug.js:23627
-#: js/tine-all-debug.js:29520
-#, fuzzy
-msgid "Location"
-msgstr "Laden"
-
-#: js/tine-all-debug.js:23084 js/tine-all-debug.js:23547
-#: js/tine-all-debug.js:29530
-msgid "Template"
-msgstr ""
-
-#: js/tine-all-debug.js:23092 js/tine-all-debug.js:29538
-msgid "Software"
-msgstr ""
-
-#: js/tine-all-debug.js:23093 js/tine-all-debug.js:29539
-#, fuzzy
-msgid "current model"
-msgstr "Passende Updates"
-
-#: js/tine-all-debug.js:23094 js/tine-all-debug.js:29540
-msgid "redirect event"
-msgstr ""
-
-#: js/tine-all-debug.js:23095 js/tine-all-debug.js:29541
-msgid "redirect number"
-msgstr ""
-
-#: js/tine-all-debug.js:23096 js/tine-all-debug.js:29542
-msgid "redirect time"
-msgstr ""
-
-#: js/tine-all-debug.js:23097 js/tine-all-debug.js:29543
-msgid "settings loaded at"
-msgstr ""
-
-#: js/tine-all-debug.js:23098 js/tine-all-debug.js:29544
-msgid "last modified"
-msgstr ""
-
-#: js/tine-all-debug.js:23391
-msgid "lineactive"
-msgstr ""
-
-#: js/tine-all-debug.js:23450
-msgid "sipCombo"
-msgstr ""
-
-#: js/tine-all-debug.js:23459
-msgid "Idle Text"
-msgstr ""
-
-#: js/tine-all-debug.js:23540
-msgid "MAC Address"
-msgstr ""
-
-#: js/tine-all-debug.js:23650
-msgid "Phone Model"
-msgstr ""
-
-#: js/tine-all-debug.js:23701
-msgid "infos"
-msgstr ""
-
-#: js/tine-all-debug.js:23718
-#, fuzzy
-msgid "Current IP Address"
-msgstr "Passende Updates"
-
-#: js/tine-all-debug.js:23725
-msgid "Current Software Version"
-msgstr ""
-
-#: js/tine-all-debug.js:23738
-msgid "Settings Loaded at"
-msgstr ""
-
-#: js/tine-all-debug.js:23746
-msgid "Firmware last checked at"
-msgstr ""
-
-#: js/tine-all-debug.js:23760 js/tine-all-debug.js:29773
-msgid "redirection"
-msgstr ""
-
-#: js/tine-all-debug.js:23777 js/tine-all-debug.js:29790
-msgid "redirect_event"
-msgstr ""
-
-#: js/tine-all-debug.js:23802 js/tine-all-debug.js:29815
-msgid "all"
-msgstr ""
-
-#: js/tine-all-debug.js:23803 js/tine-all-debug.js:29816
-msgid "busy"
-msgstr ""
-
-#: js/tine-all-debug.js:23804 js/tine-all-debug.js:24298
-#: js/tine-all-debug.js:26128 js/tine-all-debug.js:29817
-#: js/tine-all-debug.js:30121
-#, fuzzy
-msgid "none"
-msgstr "Notiz"
-
-#: js/tine-all-debug.js:23805 js/tine-all-debug.js:29818
-#, fuzzy
-msgid "time"
-msgstr "Zeit"
-
-#: js/tine-all-debug.js:23816 js/tine-all-debug.js:29829
-msgid "redirect_number"
-msgstr ""
-
-#: js/tine-all-debug.js:23828 js/tine-all-debug.js:29841
-msgid "redirect_time"
-msgstr ""
-
-#: js/tine-all-debug.js:24002
-msgid "Owner"
-msgstr ""
-
-#: js/tine-all-debug.js:24019
-#, fuzzy
-msgid "Users"
-msgstr "Benutzer"
-
-#: js/tine-all-debug.js:24074 js/tine-all-debug.js:25594
-#: js/tine-all-debug.js:25897 js/tine-all-debug.js:29897
-#, fuzzy
-msgid "web_language"
-msgstr "Sprache"
-
-#: js/tine-all-debug.js:24089 js/tine-all-debug.js:24126
-#: js/tine-all-debug.js:24169 js/tine-all-debug.js:24205
-#: js/tine-all-debug.js:24235 js/tine-all-debug.js:24264
-#: js/tine-all-debug.js:24297 js/tine-all-debug.js:24325
-#: js/tine-all-debug.js:24353 js/tine-all-debug.js:24386
-#: js/tine-all-debug.js:24414 js/tine-all-debug.js:24442
-#: js/tine-all-debug.js:25913 js/tine-all-debug.js:25951
-#: js/tine-all-debug.js:25995 js/tine-all-debug.js:26032
-#: js/tine-all-debug.js:26063 js/tine-all-debug.js:26093
-#: js/tine-all-debug.js:26127 js/tine-all-debug.js:26156
-#: js/tine-all-debug.js:26185 js/tine-all-debug.js:26219
-#: js/tine-all-debug.js:26248 js/tine-all-debug.js:26277
-#: js/tine-all-debug.js:29912 js/tine-all-debug.js:29949
-#: js/tine-all-debug.js:29992 js/tine-all-debug.js:30028
-#: js/tine-all-debug.js:30058 js/tine-all-debug.js:30087
-#: js/tine-all-debug.js:30120 js/tine-all-debug.js:30148
-#: js/tine-all-debug.js:30176 js/tine-all-debug.js:30209
-#: js/tine-all-debug.js:30237 js/tine-all-debug.js:30265
-msgid "- factory default -"
-msgstr ""
-
-#: js/tine-all-debug.js:24111 js/tine-all-debug.js:25595
-#: js/tine-all-debug.js:25935 js/tine-all-debug.js:26574
-#: js/tine-all-debug.js:29934
-#, fuzzy
-msgid "language"
-msgstr "Sprache"
-
-#: js/tine-all-debug.js:24154 js/tine-all-debug.js:25596
-#: js/tine-all-debug.js:25979 js/tine-all-debug.js:29977
-msgid "display_method"
-msgstr ""
-
-#: js/tine-all-debug.js:24170 js/tine-all-debug.js:25996
-#: js/tine-all-debug.js:29993
-msgid "whole url"
-msgstr ""
-
-#: js/tine-all-debug.js:24172 js/tine-all-debug.js:25998
-#: js/tine-all-debug.js:29995
-msgid "number"
-msgstr ""
-
-#: js/tine-all-debug.js:24173 js/tine-all-debug.js:25999
-#: js/tine-all-debug.js:29996
-msgid "name + number"
-msgstr ""
-
-#: js/tine-all-debug.js:24174 js/tine-all-debug.js:26000
-#: js/tine-all-debug.js:29997
-#, fuzzy
-msgid "number + name"
-msgstr "Tag-Name eingegeben"
-
-#: js/tine-all-debug.js:24190 js/tine-all-debug.js:25605
-#: js/tine-all-debug.js:26016 js/tine-all-debug.js:30013
-msgid "call_waiting"
-msgstr ""
-
-#: js/tine-all-debug.js:24206 js/tine-all-debug.js:24326
-#: js/tine-all-debug.js:24354 js/tine-all-debug.js:24387
-#: js/tine-all-debug.js:24415 js/tine-all-debug.js:24443
-#: js/tine-all-debug.js:25093 js/tine-all-debug.js:25119
-#: js/tine-all-debug.js:26033 js/tine-all-debug.js:26157
-#: js/tine-all-debug.js:26186 js/tine-all-debug.js:26220
-#: js/tine-all-debug.js:26249 js/tine-all-debug.js:26278
-#: js/tine-all-debug.js:28465 js/tine-all-debug.js:28504
-#: js/tine-all-debug.js:28535 js/tine-all-debug.js:28561
-#: js/tine-all-debug.js:28587 js/tine-all-debug.js:28618
-#: js/tine-all-debug.js:28644 js/tine-all-debug.js:28670
-#: js/tine-all-debug.js:28701 js/tine-all-debug.js:28727
-#: js/tine-all-debug.js:28753 js/tine-all-debug.js:28784
-#: js/tine-all-debug.js:30029 js/tine-all-debug.js:30149
-#: js/tine-all-debug.js:30177 js/tine-all-debug.js:30210
-#: js/tine-all-debug.js:30238 js/tine-all-debug.js:30266
-msgid "on"
-msgstr ""
-
-#: js/tine-all-debug.js:24207 js/tine-all-debug.js:26034
-#: js/tine-all-debug.js:30030
-msgid "visual"
-msgstr ""
-
-#: js/tine-all-debug.js:24208 js/tine-all-debug.js:26035
-#: js/tine-all-debug.js:30031
-msgid "ringer"
-msgstr ""
-
-#: js/tine-all-debug.js:24209 js/tine-all-debug.js:24327
-#: js/tine-all-debug.js:24355 js/tine-all-debug.js:24388
-#: js/tine-all-debug.js:24416 js/tine-all-debug.js:24444
-#: js/tine-all-debug.js:25094 js/tine-all-debug.js:25120
-#: js/tine-all-debug.js:26036 js/tine-all-debug.js:26158
-#: js/tine-all-debug.js:26187 js/tine-all-debug.js:26221
-#: js/tine-all-debug.js:26250 js/tine-all-debug.js:26279
-#: js/tine-all-debug.js:28466 js/tine-all-debug.js:28505
-#: js/tine-all-debug.js:28536 js/tine-all-debug.js:28562
-#: js/tine-all-debug.js:28588 js/tine-all-debug.js:28619
-#: js/tine-all-debug.js:28645 js/tine-all-debug.js:28671
-#: js/tine-all-debug.js:28702 js/tine-all-debug.js:28728
-#: js/tine-all-debug.js:28754 js/tine-all-debug.js:28785
-#: js/tine-all-debug.js:30032 js/tine-all-debug.js:30150
-#: js/tine-all-debug.js:30178 js/tine-all-debug.js:30211
-#: js/tine-all-debug.js:30239 js/tine-all-debug.js:30267
-#, fuzzy
-msgid "off"
-msgstr "offline"
-
-#: js/tine-all-debug.js:24220 js/tine-all-debug.js:25597
-#: js/tine-all-debug.js:26047 js/tine-all-debug.js:30043
-msgid "mwi_notification"
-msgstr ""
-
-#: js/tine-all-debug.js:24236 js/tine-all-debug.js:26064
-#: js/tine-all-debug.js:30059
-msgid "silent"
-msgstr ""
-
-#: js/tine-all-debug.js:24237 js/tine-all-debug.js:26065
-#: js/tine-all-debug.js:30060
-msgid "beep"
-msgstr ""
-
-#: js/tine-all-debug.js:24238 js/tine-all-debug.js:26066
-#: js/tine-all-debug.js:30061
-msgid "reminder"
-msgstr ""
-
-#: js/tine-all-debug.js:24249 js/tine-all-debug.js:25598
-#: js/tine-all-debug.js:26077 js/tine-all-debug.js:30072
-msgid "mwi_dialtone"
-msgstr ""
-
-#: js/tine-all-debug.js:24265 js/tine-all-debug.js:26094
-#: js/tine-all-debug.js:30088
-#, fuzzy
-msgid "normal"
-msgstr "Programmabbruch"
-
-#: js/tine-all-debug.js:24266 js/tine-all-debug.js:26095
-#: js/tine-all-debug.js:30089
-msgid "stutter"
-msgstr ""
-
-#: js/tine-all-debug.js:24282 js/tine-all-debug.js:25599
-#: js/tine-all-debug.js:26111 js/tine-all-debug.js:30105
-msgid "headset_device"
-msgstr ""
-
-#: js/tine-all-debug.js:24299 js/tine-all-debug.js:26129
-#: js/tine-all-debug.js:30122
-msgid "headset_rj"
-msgstr ""
-
-#: js/tine-all-debug.js:24310 js/tine-all-debug.js:25600
-#: js/tine-all-debug.js:26140 js/tine-all-debug.js:30133
-msgid "message_led_other"
-msgstr ""
-
-#: js/tine-all-debug.js:24338 js/tine-all-debug.js:25601
-#: js/tine-all-debug.js:26169 js/tine-all-debug.js:30161
-msgid "global_missed_counter"
-msgstr ""
-
-#: js/tine-all-debug.js:24371 js/tine-all-debug.js:25602
-#: js/tine-all-debug.js:26203 js/tine-all-debug.js:30194
-msgid "scroll_outgoing"
-msgstr ""
-
-#: js/tine-all-debug.js:24399 js/tine-all-debug.js:25603
-#: js/tine-all-debug.js:26232 js/tine-all-debug.js:30222
-msgid "show_local_line"
-msgstr ""
-
-#: js/tine-all-debug.js:24427 js/tine-all-debug.js:25604
-#: js/tine-all-debug.js:26261 js/tine-all-debug.js:30250
-msgid "show_call_status"
-msgstr ""
-
-#: js/tine-all-debug.js:24598
-#, fuzzy
-msgid "add location"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:24605
-#, fuzzy
-msgid "edit location"
-msgstr "Beschreibung editieren"
-
-#: js/tine-all-debug.js:24613
-msgid "delete location"
-msgstr ""
-
-#: js/tine-all-debug.js:24700
-#, fuzzy
-msgid "Displaying location {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:24701
-#, fuzzy
-msgid "No location to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:24706
-msgid "FW Interval"
-msgstr ""
-
-#: js/tine-all-debug.js:24707
-msgid "FW Status"
-msgstr ""
-
-#: js/tine-all-debug.js:24708 js/tine-all-debug.js:24998
-#, fuzzy
-msgid "Update Policy"
-msgstr "Aktualisiere"
-
-#: js/tine-all-debug.js:24709
-msgid "Server Setting"
-msgstr ""
-
-#: js/tine-all-debug.js:24710
-#, fuzzy
-msgid "Admin Mode"
-msgstr "Admin"
-
-#: js/tine-all-debug.js:24711 js/tine-all-debug.js:25130
-msgid "NTP Server"
-msgstr ""
-
-#: js/tine-all-debug.js:24712 js/tine-all-debug.js:25241
-msgid "Webserver Type"
-msgstr ""
-
-#: js/tine-all-debug.js:24713 js/tine-all-debug.js:25302
-msgid "HTTPS Port"
-msgstr ""
-
-#: js/tine-all-debug.js:24714 js/tine-all-debug.js:25323
-#, fuzzy
-msgid "HTTP User"
-msgstr "Benutzer"
-
-#: js/tine-all-debug.js:24724
-msgid "Filter Registrar"
-msgstr ""
-
-#: js/tine-all-debug.js:24725
-msgid "CP Dialoginfo"
-msgstr ""
-
-#: js/tine-all-debug.js:24726
-msgid "Pickup Indic."
-msgstr ""
-
-#: js/tine-all-debug.js:24966
-msgid "Settings URL"
-msgstr ""
-
-#: js/tine-all-debug.js:24974
-msgid "Firmware URL"
-msgstr ""
-
-#: js/tine-all-debug.js:24982
-msgid "Base Download URL"
-msgstr ""
-
-#: js/tine-all-debug.js:25019
-msgid "Firmware Interval"
-msgstr ""
-
-#: js/tine-all-debug.js:25037
-msgid "tone_scheme"
-msgstr ""
-
-#: js/tine-all-debug.js:25079
-msgid "date_us_format"
-msgstr ""
-
-#: js/tine-all-debug.js:25105
-msgid "time_24_format"
-msgstr ""
-
-#: js/tine-all-debug.js:25147
-msgid "NTP Server Address"
-msgstr ""
-
-#: js/tine-all-debug.js:25160
-msgid "NTP Refresh"
-msgstr ""
-
-#: js/tine-all-debug.js:25192
-msgid "Enable admin mode"
-msgstr ""
-
-#: js/tine-all-debug.js:25204
-#, fuzzy
-msgid "Admin Mode Password"
-msgstr "Altes Passwort"
-
-#: js/tine-all-debug.js:25214
-msgid "Enable webserver"
-msgstr ""
-
-#: js/tine-all-debug.js:25288
-msgid "HTTP Port"
-msgstr ""
-
-#: js/tine-all-debug.js:25335
-#, fuzzy
-msgid "HTTP Password"
-msgstr "Passwort"
-
-#: js/tine-all-debug.js:25480
-msgid "add setting"
-msgstr ""
-
-#: js/tine-all-debug.js:25487
-#, fuzzy
-msgid "edit setting"
-msgstr "Tag bearbeiten"
-
-#: js/tine-all-debug.js:25495
-#, fuzzy
-msgid "delete setting"
-msgstr "Lösche"
-
-#: js/tine-all-debug.js:25585
-#, fuzzy
-msgid "Displaying settings {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:25586
-#, fuzzy
-msgid "No settings to display"
-msgstr "Keine Tags vorhanden"
-
-#: js/tine-all-debug.js:25833
-msgid "SettingsMain"
-msgstr ""
-
-#: js/tine-all-debug.js:26432
-msgid "add sipPeer"
-msgstr ""
-
-#: js/tine-all-debug.js:26439
-msgid "edit sipPeer"
-msgstr ""
-
-#: js/tine-all-debug.js:26447
-#, fuzzy
-msgid "delete sipPeer"
-msgstr "Diesen Filter löschen"
-
-#: js/tine-all-debug.js:26508 js/tine-all-debug.js:28043
-msgid "Context: "
-msgstr ""
-
-#: js/tine-all-debug.js:26553
-#, fuzzy
-msgid "Displaying sipPeers {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:26554 js/tine-all-debug.js:26644
-#, fuzzy
-msgid "No sipPeers to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:26561
-#, fuzzy
-msgid "account code"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:26562
-msgid "ama flags"
-msgstr ""
-
-#: js/tine-all-debug.js:26563
-msgid "call group"
-msgstr ""
-
-#: js/tine-all-debug.js:26564
-msgid "caller id"
-msgstr ""
-
-#: js/tine-all-debug.js:26565
-msgid "can reinvite"
-msgstr ""
-
-#: js/tine-all-debug.js:26566 js/tine-all-debug.js:28085
-msgid "context"
-msgstr ""
-
-#: js/tine-all-debug.js:26567
-#, fuzzy
-msgid "default ip"
-msgstr "default note type"
-
-#: js/tine-all-debug.js:26568
-msgid "dtmf mode"
-msgstr ""
-
-#: js/tine-all-debug.js:26569
-msgid "from user"
-msgstr ""
-
-#: js/tine-all-debug.js:26570
-msgid "from domain"
-msgstr ""
-
-#: js/tine-all-debug.js:26571
-#, fuzzy
-msgid "full contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:26572
-msgid "host"
-msgstr ""
-
-#: js/tine-all-debug.js:26573
-msgid "insecure"
-msgstr ""
-
-#: js/tine-all-debug.js:26575 js/tine-all-debug.js:28084
-#: js/tine-all-debug.js:28321
-#, fuzzy
-msgid "mailbox"
-msgstr "Email"
-
-#: js/tine-all-debug.js:26576
-msgid "md5 secret"
-msgstr ""
-
-#: js/tine-all-debug.js:26577
-msgid "nat"
-msgstr ""
-
-#: js/tine-all-debug.js:26578
-msgid "deny"
-msgstr ""
-
-#: js/tine-all-debug.js:26579
-msgid "permit"
-msgstr ""
-
-#: js/tine-all-debug.js:26580
-msgid "mask"
-msgstr ""
-
-#: js/tine-all-debug.js:26581
-msgid "pickup group"
-msgstr ""
-
-#: js/tine-all-debug.js:26582
-msgid "port"
-msgstr ""
-
-#: js/tine-all-debug.js:26583
-msgid "qualify"
-msgstr ""
-
-#: js/tine-all-debug.js:26584
-msgid "retrict cid"
-msgstr ""
-
-#: js/tine-all-debug.js:26585
-msgid "rtp timeout"
-msgstr ""
-
-#: js/tine-all-debug.js:26586
-msgid "rtp hold timeout"
-msgstr ""
-
-#: js/tine-all-debug.js:26587
-#, fuzzy
-msgid "secret"
-msgstr "erstellt"
-
-#: js/tine-all-debug.js:26588
-#, fuzzy
-msgid "type"
-msgstr "Typ"
-
-#: js/tine-all-debug.js:26589
-#, fuzzy
-msgid "username"
-msgstr "Benutzername"
-
-#: js/tine-all-debug.js:26590
-msgid "disallow"
-msgstr ""
-
-#: js/tine-all-debug.js:26591
-msgid "allow"
-msgstr ""
-
-#: js/tine-all-debug.js:26592
-msgid "music on hold"
-msgstr ""
-
-#: js/tine-all-debug.js:26593
-msgid "reg seconds"
-msgstr ""
-
-#: js/tine-all-debug.js:26594
-#, fuzzy
-msgid "ip address"
-msgstr "Email-Adresse"
-
-#: js/tine-all-debug.js:26595
-msgid "reg exten"
-msgstr ""
-
-#: js/tine-all-debug.js:26596
-msgid "can call forward"
-msgstr ""
-
-#: js/tine-all-debug.js:26597
-msgid "set var"
-msgstr ""
-
-#: js/tine-all-debug.js:26598
-msgid "notify ringing"
-msgstr ""
-
-#: js/tine-all-debug.js:26599
-msgid "use client code"
-msgstr ""
-
-#: js/tine-all-debug.js:26600
-msgid "auth user"
-msgstr ""
-
-#: js/tine-all-debug.js:26601
-msgid "call limit"
-msgstr ""
-
-#: js/tine-all-debug.js:26602
-msgid "busy level"
-msgstr ""
-
-#: js/tine-all-debug.js:26799 js/tine-all-debug.js:28302
-msgid "General"
-msgstr ""
-
-#: js/tine-all-debug.js:26845 js/tine-all-debug.js:27212
-#, fuzzy
-msgid "Secret"
-msgstr "erstellt"
-
-#: js/tine-all-debug.js:26852 js/tine-all-debug.js:26987
-msgid "Callerid"
-msgstr ""
-
-#: js/tine-all-debug.js:26859 js/tine-all-debug.js:27101
-msgid "Mailbox"
-msgstr ""
-
-#: js/tine-all-debug.js:26866 js/tine-all-debug.js:26980
-msgid "Callgroup"
-msgstr ""
-
-#: js/tine-all-debug.js:26873 js/tine-all-debug.js:27153
-msgid "Pickup group"
-msgstr ""
-
-#: js/tine-all-debug.js:26880 js/tine-all-debug.js:26966
-msgid "Accountcode"
-msgstr ""
-
-#: js/tine-all-debug.js:26894 js/tine-all-debug.js:27115
-msgid "NAT"
-msgstr ""
-
-#: js/tine-all-debug.js:26911 js/tine-all-debug.js:27174
-msgid "Qualify"
-msgstr ""
-
-#: js/tine-all-debug.js:26973
-msgid "Amaflags"
-msgstr ""
-
-#: js/tine-all-debug.js:26994
-msgid "Can reinvite"
-msgstr ""
-
-#: js/tine-all-debug.js:27018
-msgid "Default IP"
-msgstr ""
-
-#: js/tine-all-debug.js:27025
-msgid "DTMF mode"
-msgstr ""
-
-#: js/tine-all-debug.js:27042
-#, fuzzy
-msgid "From User"
-msgstr "Benutzer"
-
-#: js/tine-all-debug.js:27049
-msgid "From Domain"
-msgstr ""
-
-#: js/tine-all-debug.js:27063
-#, fuzzy
-msgid "Full Contact"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:27070
-msgid "Host"
-msgstr ""
-
-#: js/tine-all-debug.js:27077
-msgid "Insecure"
-msgstr ""
-
-#: js/tine-all-debug.js:27108
-msgid "MD5 Secret"
-msgstr ""
-
-#: js/tine-all-debug.js:27132
-msgid "Deny"
-msgstr ""
-
-#: js/tine-all-debug.js:27139
-msgid "Permit"
-msgstr ""
-
-#: js/tine-all-debug.js:27146
-msgid "Mask"
-msgstr ""
-
-#: js/tine-all-debug.js:27167
-msgid "Port"
-msgstr ""
-
-#: js/tine-all-debug.js:27191
-msgid "Restrict CID"
-msgstr ""
-
-#: js/tine-all-debug.js:27198
-msgid "RTP Timeout"
-msgstr ""
-
-#: js/tine-all-debug.js:27205
-msgid "RTP Hold Timeout"
-msgstr ""
-
-#: js/tine-all-debug.js:27243
-msgid "Disallow"
-msgstr ""
-
-#: js/tine-all-debug.js:27250
-msgid "Allow"
-msgstr ""
-
-#: js/tine-all-debug.js:27257
-msgid "Music on hold"
-msgstr ""
-
-#: js/tine-all-debug.js:27271
-msgid "Reg Seconds"
-msgstr ""
-
-#: js/tine-all-debug.js:27285
-msgid "Reg Exten"
-msgstr ""
-
-#: js/tine-all-debug.js:27292
-msgid "Can forward call"
-msgstr ""
-
-#: js/tine-all-debug.js:27309
-#, fuzzy
-msgid "Set Var"
-msgstr "Suchen"
-
-#: js/tine-all-debug.js:27316
-msgid "Notify Ringing"
-msgstr ""
-
-#: js/tine-all-debug.js:27333
-msgid "Use Client Code"
-msgstr ""
-
-#: js/tine-all-debug.js:27350
-#, fuzzy
-msgid "Auth User"
-msgstr "Benutzer"
-
-#: js/tine-all-debug.js:27357
-msgid "Call Limit"
-msgstr ""
-
-#: js/tine-all-debug.js:27364
-msgid "Busy Level"
-msgstr ""
-
-#: js/tine-all-debug.js:27516
-#, fuzzy
-msgid "add context"
-msgstr "Zugang Hinzufügen"
-
-#: js/tine-all-debug.js:27523
-#, fuzzy
-msgid "edit context"
-msgstr "Email Kontakt"
-
-#: js/tine-all-debug.js:27531
-#, fuzzy
-msgid "delete context"
-msgstr "löschen"
-
-#: js/tine-all-debug.js:27618
-#, fuzzy
-msgid "Displaying context {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:27619
-#, fuzzy
-msgid "No context to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:27970
-msgid "add voicemail"
-msgstr ""
-
-#: js/tine-all-debug.js:27977
-msgid "edit voicemail"
-msgstr ""
-
-#: js/tine-all-debug.js:27985
-msgid "delete voicemail"
-msgstr ""
-
-#: js/tine-all-debug.js:28077
-#, fuzzy
-msgid "Displaying voicemail {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:28078
-#, fuzzy
-msgid "No voicemail to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:28086
-msgid "fullname"
-msgstr ""
-
-#: js/tine-all-debug.js:28087 js/tine-all-debug.js:28359 Setup/setup.xml:1807
-msgid "email"
-msgstr "Email"
-
-#: js/tine-all-debug.js:28088 js/tine-all-debug.js:28365
-msgid "pager"
-msgstr ""
-
-#: js/tine-all-debug.js:28089 js/tine-all-debug.js:28407
-msgid "tz"
-msgstr ""
-
-#: js/tine-all-debug.js:28090 js/tine-all-debug.js:28490
-msgid "attach"
-msgstr ""
-
-#: js/tine-all-debug.js:28091 js/tine-all-debug.js:28521
-msgid "saycid"
-msgstr ""
-
-#: js/tine-all-debug.js:28092 js/tine-all-debug.js:28420
-msgid "dialout"
-msgstr ""
-
-#: js/tine-all-debug.js:28093 js/tine-all-debug.js:28433
-msgid "callback"
-msgstr ""
-
-#: js/tine-all-debug.js:28094 js/tine-all-debug.js:28547
-msgid "review"
-msgstr ""
-
-#: js/tine-all-debug.js:28095 js/tine-all-debug.js:28573
-#, fuzzy
-msgid "operator"
-msgstr "Wählen sie einen Operator"
-
-#: js/tine-all-debug.js:28096 js/tine-all-debug.js:28604
-msgid "envelope"
-msgstr ""
-
-#: js/tine-all-debug.js:28097 js/tine-all-debug.js:28451
-msgid "sayduration"
-msgstr ""
-
-#: js/tine-all-debug.js:28098 js/tine-all-debug.js:28477
-msgid "saydurationm"
-msgstr ""
-
-#: js/tine-all-debug.js:28099 js/tine-all-debug.js:28630
-msgid "sendvoicemail"
-msgstr ""
-
-#: js/tine-all-debug.js:28101 js/tine-all-debug.js:28687
-msgid "nextaftercmd"
-msgstr ""
-
-#: js/tine-all-debug.js:28102 js/tine-all-debug.js:28713
-#, fuzzy
-msgid "forcename"
-msgstr "Umbenennen"
-
-#: js/tine-all-debug.js:28103 js/tine-all-debug.js:28739
-msgid "forcegreetings"
-msgstr ""
-
-#: js/tine-all-debug.js:28104 js/tine-all-debug.js:28770
-msgid "hidefromdir"
-msgstr ""
-
-#: js/tine-all-debug.js:28384
-msgid "additional"
-msgstr ""
-
-#: js/tine-all-debug.js:28937
-#, fuzzy
-msgid "add meetme"
-msgstr "löschen"
-
-#: js/tine-all-debug.js:28944
-msgid "edit meetme"
-msgstr ""
-
-#: js/tine-all-debug.js:28952
-#, fuzzy
-msgid "delete meetme"
-msgstr "Bild löschen"
-
-#: js/tine-all-debug.js:29039
-#, fuzzy
-msgid "Displaying meetme {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:29040
-#, fuzzy
-msgid "No meetme to display"
-msgstr "Keine Notizen vorhanden"
-
-#: js/tine-all-debug.js:29046 js/tine-all-debug.js:29252
-msgid "confno"
-msgstr ""
-
-#: js/tine-all-debug.js:29047 js/tine-all-debug.js:29260
-msgid "pin"
-msgstr ""
-
-#: js/tine-all-debug.js:29048 js/tine-all-debug.js:29268
-#, fuzzy
-msgid "adminpin"
-msgstr "admin"
-
-#: js/tine-all-debug.js:29418
-msgid "edit myphone"
-msgstr ""
-
-#: js/tine-all-debug.js:29508
-#, fuzzy
-msgid "Displaying myphones {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
-
-#: js/tine-all-debug.js:29509
-#, fuzzy
-msgid "No myphones to display"
-msgstr "Keine Notizen vorhanden"
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
@@ -3540,6 +310,10 @@ msgstr "Nachname"
 msgid "Login name"
 msgstr "Benutzername"
 
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Email-Adresse"
+
 #: js/UserRegistration.js:167
 msgid "Congratulations!"
 msgstr "Herzlichen Glückwunsch!"
@@ -3551,6 +325,533 @@ msgid ""
 msgstr ""
 "Sie haben all benötigten Informationen eingegeben. Wenn sie nun den Fertig "
 "Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
+
+#: js/ux/ConnectionStatus.js:52
+msgid "online"
+msgstr "online"
+
+#: js/ux/ConnectionStatus.js:53
+msgid "offline"
+msgstr "offline"
+
+#: js/ux/ConnectionStatus.js:54
+msgid "unknown"
+msgstr "unbekannt"
+
+#: js/ux/form/ImageField.js:48
+msgid "click to edit"
+msgstr "Zum Ändern hier Klicken"
+
+#: js/ux/form/ImageField.js:90
+msgid "Not An Image"
+msgstr "Keine Bild-Datei"
+
+#: js/ux/form/ImageField.js:90
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Bitte wählen sie eine gültige Bild-Datei (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:107
+msgid "Loading"
+msgstr "Laden"
+
+#: js/ux/form/ImageField.js:115
+msgid "Upload Failed"
+msgstr "Fehler beim Hochladen"
+
+#: js/ux/form/ImageField.js:115
+msgid "Could not upload image. Please notify your Administrator"
+msgstr ""
+"Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren "
+"Administrator"
+
+#: js/ux/form/ImageField.js:127
+msgid "Change Image"
+msgstr "Bild ändern"
+
+#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
+msgid "Crop Image"
+msgstr "Bild zuschneiden"
+
+#: js/ux/form/ImageField.js:174
+msgid "Delete Image"
+msgstr "Bild löschen"
+
+#: js/ux/form/ImageField.js:212
+msgid "Image Failed"
+msgstr "Fehler bei Bildverarbeitung"
+
+#: js/ux/form/ImageField.js:212
+msgid "Could not load image. Please notify your Administrator"
+msgstr ""
+"Das Bild konnte nicht geladen werden. Bitte informieren sie ihren "
+"Administrator"
+
+#: js/widgets/account/ConfigGrid.js:55
+msgid "remove account"
+msgstr "Zugang löschen"
+
+#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
+msgid "Name"
+msgstr "Name"
+
+#: js/widgets/account/PickerPanel.js:70
+msgid "add account"
+msgstr "Zugang Hinzufügen"
+
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
+msgid "enter searchfilter"
+msgstr "suchfilter eingeben"
+
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
+msgid "Search"
+msgstr "Suchen"
+
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+msgid "Browse"
+msgstr "Blättern"
+
+#: js/widgets/AccountpickerPanel.js:103
+msgid "please select an account"
+msgstr "bitte wählen sie einen Zugang"
+
+#: js/widgets/ActivitiesPanel.js:146
+msgid "Add a Note..."
+msgstr "Notiz hinzufügen"
+
+#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:173
+#: js/widgets/container/ContainerGrants.js:87
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:401
+#: js/widgets/ActivitiesPanel.js:529
+msgid "Note"
+msgstr "Notiz"
+
+#: js/widgets/ActivitiesPanel.js:174 js/widgets/ActivitiesPanel.js:329
+msgid "Add new note"
+msgstr "Neue Notiz hinzufügen"
+
+#: js/widgets/ActivitiesPanel.js:205
+msgid "Recent Activities"
+msgstr "Letzte Aktivitäten"
+
+#: js/widgets/ActivitiesPanel.js:269 js/widgets/ActivitiesPanel.js:328
+msgid "Add Note"
+msgstr "Notiz hinzufügen"
+
+#: js/widgets/ActivitiesPanel.js:270
+msgid "Enter new note:"
+msgstr "Neue Notiz eingeben:"
+
+#: js/widgets/ActivitiesPanel.js:316
+#, python-format
+msgid "Add a %s Note"
+msgstr "Notiz %s hinzufügen"
+
+#: js/widgets/ActivitiesPanel.js:399 js/widgets/ActivitiesPanel.js:534
+msgid "Type"
+msgstr "Typ"
+
+#: js/widgets/ActivitiesPanel.js:402
+msgid "Created By"
+msgstr "Erstellt von"
+
+#: js/widgets/ActivitiesPanel.js:403
+msgid "Timestamp"
+msgstr "Zeitstempel"
+
+#: js/widgets/ActivitiesPanel.js:417
+msgid "Displaying notes {0} - {1} of {2}"
+msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#: js/widgets/ActivitiesPanel.js:418
+msgid "No notes to display"
+msgstr "Keine Notizen vorhanden"
+
+#: js/widgets/ActivitiesPanel.js:517
+msgid "Activities"
+msgstr "Aktivitäten"
+
+#: js/widgets/ActivitiesPanel.js:530
+msgid "Time"
+msgstr "Zeit"
+
+#: js/widgets/ActivitiesPanel.js:532
+msgid "User"
+msgstr "Benutzer"
+
+#: js/widgets/container/ContainerGrants.js:34
+msgid "Updateing Grants"
+msgstr "Berechtiungen werden gesichert"
+
+#: js/widgets/container/ContainerGrants.js:66
+msgid "Folder"
+msgstr "Ordner"
+
+#: js/widgets/container/ContainerGrants.js:82
+msgid "Read"
+msgstr "Lesen"
+
+#: js/widgets/container/ContainerGrants.js:92
+msgid "Edit"
+msgstr "Editieren"
+
+#: js/widgets/container/ContainerGrants.js:97
+msgid "Delete"
+msgstr "Löschen"
+
+#: js/widgets/container/ContainerGrants.js:113
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+#: js/widgets/container/ContainerSelect.js:74
+#, python-format
+msgid "Recently used %s:"
+msgstr "Kürzlich genutzte %s:"
+
+#: js/widgets/container/ContainerSelect.js:93
+#, python-format
+msgid "choose other %s..."
+msgstr "Andere %s wählen..."
+
+#: js/widgets/container/ContainerSelect.js:105
+#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:410
+msgid "personal"
+msgstr "Persönlich"
+
+#: js/widgets/container/ContainerSelect.js:105
+msgid "shared"
+msgstr "geteilt"
+
+#: js/widgets/container/ContainerSelect.js:245
+#, python-format
+msgid "please select a %s"
+msgstr "Bitte %s auswählen"
+
+#: js/widgets/container/ContainerTree.js:115
+#, python-format
+msgid "All %s"
+msgstr "Alle %s"
+
+#: js/widgets/container/ContainerTree.js:120
+#, python-format
+msgid "My %s"
+msgstr "Meine %s"
+
+#: js/widgets/container/ContainerTree.js:127
+#, python-format
+msgid "Shared %s"
+msgstr "Gemeinsame %s"
+
+#: js/widgets/container/ContainerTree.js:134
+#, python-format
+msgid "Other Users %s"
+msgstr "%s anderer Benutzer"
+
+#: js/widgets/container/ContainerTree.js:229
+#, python-format
+msgid "New %s"
+msgstr "%s neu"
+
+#: js/widgets/container/ContainerTree.js:229
+#, python-format
+msgid "Please enter the name of the new %s:"
+msgstr "Bitte den Namen auswählen für %s:"
+
+#: js/widgets/container/ContainerTree.js:231
+#, python-format
+msgid "Creating %s..."
+msgstr "Einrichten %s..."
+
+#: js/widgets/container/ContainerTree.js:257
+#, python-format
+msgid "Do you really want to delete the %s \"%s\"?"
+msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#: js/widgets/container/ContainerTree.js:259
+#, python-format
+msgid "Deleting %s \"%s\""
+msgstr "%s \"%s\" löschen"
+
+#: js/widgets/container/ContainerTree.js:286
+#, python-format
+msgid "Please enter the new name of the %s:"
+msgstr "Bitte den Namen für%s: eingeben: "
+
+#: js/widgets/container/ContainerTree.js:291
+#, python-format
+msgid "Updateing %s \"%s\""
+msgstr "%s \"%s\" aktualisieren"
+
+#: js/widgets/container/ContainerTree.js:325
+#, python-format
+msgid "Manage Permissions for %s :\"%s\""
+msgstr "Rechte für %s :\"%s\" verwalten"
+
+#: js/widgets/container/ContainerTree.js:338
+#, python-format
+msgid "Add %s"
+msgstr "%s hinzufügen"
+
+#: js/widgets/container/ContainerTree.js:344
+#, python-format
+msgid "Delete %s"
+msgstr "%s löschen"
+
+#: js/widgets/container/ContainerTree.js:350
+#, python-format
+msgid "Rename %s"
+msgstr "%s umbenennen"
+
+#: js/widgets/container/ContainerTree.js:356
+msgid "Manage permissions"
+msgstr "Zugriffsrechte bearbeiten"
+
+#: js/widgets/EditRecord.js:113
+msgid "Apply"
+msgstr "Anwenden"
+
+#: js/widgets/EditRecord.js:133
+msgid "delete"
+msgstr "löschen"
+
+#: js/widgets/EditRecord.js:178
+msgid "Saved in"
+msgstr "Gespeichert in"
+
+#: js/widgets/grid/FilterModel.js:87
+msgid "contains"
+msgstr "enthält"
+
+#: js/widgets/grid/FilterModel.js:88
+msgid "is equal to"
+msgstr "ist gleich"
+
+#: js/widgets/grid/FilterModel.js:89
+msgid "is greater than"
+msgstr "ist größer als"
+
+#: js/widgets/grid/FilterModel.js:90
+msgid "is less than"
+msgstr "ist kleiner als"
+
+#: js/widgets/grid/FilterModel.js:91
+msgid "is not"
+msgstr "ist nicht"
+
+#: js/widgets/grid/FilterModel.js:92
+msgid "is in"
+msgstr "ist in"
+
+#: js/widgets/grid/FilterModel.js:115
+msgid "select a operator"
+msgstr "Wählen sie einen Operator"
+
+#: js/widgets/grid/FilterToolbar.js:122
+msgid "add new filter"
+msgstr "neuen Filter hinzufügen"
+
+#: js/widgets/grid/FilterToolbar.js:128
+msgid "Delete all filters"
+msgstr "Alle Filter löschen"
+
+#: js/widgets/grid/FilterToolbar.js:134
+msgid "start search"
+msgstr "Suche starten"
+
+#: js/widgets/grid/FilterToolbar.js:143
+msgid "save filter"
+msgstr "Filter speichern"
+
+#: js/widgets/grid/FilterToolbar.js:210
+msgid "select a field"
+msgstr "Wählen sie ein Feld"
+
+#: js/widgets/grid/FilterToolbar.js:234
+msgid "Delete this filter"
+msgstr "Diesen Filter löschen"
+
+#: js/widgets/grid/FilterToolbar.js:257
+msgid "and"
+msgstr "und"
+
+#: js/widgets/grid/FilterToolbar.js:276
+msgid "Show"
+msgstr "Zeige"
+
+#: js/widgets/GridPicker.js:75
+msgid "remove record"
+msgstr "eintrag löschen"
+
+#: js/widgets/GroupSelect.js:94
+msgid "Please Select a Group"
+msgstr "Bitte wählen sie eine Gruppe aus"
+
+#: js/widgets/LangChooser.js:72
+msgid "setting new language..."
+msgstr "neue Sprache wird eingestellt..."
+
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
+#: js/widgets/TimezoneChooser.js:74
+msgid "Please Wait"
+msgstr "Bitte Warten"
+
+#: js/widgets/LangChooser.js:93
+msgid "loading new language..."
+msgstr "neue Sprache wird geladen..."
+
+#: js/widgets/tags/TagCombo.js:37
+msgid "tag name"
+msgstr "Tag Name"
+
+#: js/widgets/tags/TagFilter.js:23
+msgid "Tag"
+msgstr "Tag"
+
+#: js/widgets/tags/TagsPanel.js:83
+msgid "Add a new personal tag"
+msgstr "Neuen persönlichen Tag hinzufügen"
+
+#: js/widgets/tags/TagsPanel.js:86
+msgid "Add New Personal Tag"
+msgstr "Neuen persönlichen Tag hinzufügen"
+
+#: js/widgets/tags/TagsPanel.js:87
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Bitte beachten: Einen persönlichen Tag können nur Sie sehen!"
+
+#: js/widgets/tags/TagsPanel.js:87
+msgid "Enter tag name:"
+msgstr "Tag-Namen eingeben:"
+
+#: js/widgets/tags/TagsPanel.js:127
+msgid "No Tags to display"
+msgstr "Keine Tags vorhanden"
+
+#: js/widgets/tags/TagsPanel.js:150
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "Tag entfernen"
+msgstr[1] "Tags entfernen"
+
+#: js/widgets/tags/TagsPanel.js:160
+msgid "Edit tag"
+msgstr "Tag bearbeiten"
+
+#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
+msgid "Rename Tag"
+msgstr "Tag umbenennen"
+
+#: js/widgets/tags/TagsPanel.js:170
+msgid "Please enter a new name:"
+msgstr "Neuen Namen eingeben"
+
+#: js/widgets/tags/TagsPanel.js:179
+msgid "Edit Description"
+msgstr "Beschreibung editieren"
+
+#: js/widgets/tags/TagsPanel.js:184
+msgid "Description for tag"
+msgstr "Tag-Beschreibung"
+
+#: js/widgets/tags/TagsPanel.js:184
+msgid "Please enter new description:"
+msgstr "Neue Beschreibung eingeben:"
+
+#: js/widgets/tags/TagsPanel.js:193
+msgid "Change Color"
+msgstr "Farbe ändern"
+
+#: js/widgets/tags/TagsPanel.js:217
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Tag löschen"
+msgstr[1] "Tags löschen"
+
+#: js/widgets/tags/TagsPanel.js:229
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "Ausgewählten Tag wirklich löschen?"
+msgstr[1] "Ausgewählte Tags wirklich löschen?"
+
+#: js/widgets/tags/TagsPanel.js:230
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] ""
+"Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
+msgstr[1] ""
+"Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
+
+#: js/widgets/tags/TagsPanel.js:234
+msgid "Please wait a moment..."
+msgstr "Bitte warten Sie einen Moment ..."
+
+#: js/widgets/tags/TagsPanel.js:234
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Lösche Tag"
+msgstr[1] "Lösche Tags"
+
+#: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
+#: js/widgets/tags/TagsPanel.js:392
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#: js/widgets/tags/TagsPanel.js:250
+msgid "Could not delete Tag(s)."
+msgstr "Konnte Tag(s) nicht löschen."
+
+#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
+msgid "Notice"
+msgstr "Beachten Sie"
+
+#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
+msgid "The minimum tag length is three."
+msgstr "Ein Tag muss mindestens aus 3 Zeichen bestehen."
+
+#: js/widgets/tags/TagsPanel.js:359
+msgid "Could not create tag."
+msgstr "Konnte Tag nicht erzeugen."
+
+#: js/widgets/tags/TagsPanel.js:392
+msgid "Could not update tag."
+msgstr "Konnte Tag nicht aktualisieren."
+
+#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
+msgid "Enter tag name"
+msgstr "Tag-Name eingegeben"
+
+#: js/widgets/tags/TagsPanel.js:426
+msgid "Searching..."
+msgstr "Suche ..."
+
+#: js/widgets/tags/TagsPanel.js:560
+msgid "Color"
+msgstr "Farbe"
+
+#: js/widgets/TimezoneChooser.js:74
+msgid "setting new timezone..."
+msgstr "Neue Zeitzone setzen..."
+
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+msgid "New version of Tine 2.0 available"
+msgstr "Eine neue Version von Tine 2.0 ist verfügbar."
+
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#, python-format
+msgid "Version \"%s\" of Tine 2.0 is available."
+msgstr "Die Version \"%s\" von Tine 2.0 ist verfügbar."
+
+#: js/widgets/VersionCheck.js:41
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
+
+#: js/widgets/VersionCheck.js:50
+msgid "Please consider updateing!"
+msgstr "Bitte bestätigen Sie das Update!"
 
 #: Setup/setup.xml:1753
 msgid "note"
@@ -3567,6 +868,10 @@ msgstr "Telefon"
 #: Setup/setup.xml:1785
 msgid "telephone call"
 msgstr "Telefonanruf"
+
+#: Setup/setup.xml:1807
+msgid "email"
+msgstr "Email"
 
 #: Setup/setup.xml:1812
 msgid "email contact"
@@ -3587,6 +892,964 @@ msgstr "geändert"
 #: Setup/setup.xml:1866
 msgid "record changed"
 msgstr "Eintrag geändert"
+
+#, fuzzy
+#~ msgid "Internal Contacts"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "contacts"
+#~ msgstr "enthält"
+
+#, fuzzy
+#~ msgid "Do you really want to delete the selected contact?"
+#~ msgid_plural "Do you really want to delete the selected contacts?"
+#~ msgstr[0] "Möchten Sie %s \"%s\" wirklich löschen?"
+#~ msgstr[1] "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Deleting contact..."
+#~ msgid_plural "Deleting contacts..."
+#~ msgstr[0] "Lösche Tag"
+#~ msgstr[1] "Lösche Tags"
+
+#, fuzzy
+#~ msgid "add contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "edit contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "delete contact"
+#~ msgid_plural "delete contacts"
+#~ msgstr[0] "Email Kontakt"
+#~ msgstr[1] "Email Kontakt"
+
+#, fuzzy
+#~ msgid "call contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Last Name"
+#~ msgstr "Name"
+
+#, fuzzy
+#~ msgid "Displaying contacts {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No contacts to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "Full Name"
+#~ msgstr "Name"
+
+#, fuzzy
+#~ msgid "Display Name"
+#~ msgstr "Nachname"
+
+#, fuzzy
+#~ msgid "Email"
+#~ msgstr "Email"
+
+#, fuzzy
+#~ msgid "Select contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "addressbook"
+#~ msgstr "Email-Adresse"
+
+#, fuzzy
+#~ msgid "Loading Contact..."
+#~ msgstr "Sie werden angemeldet..."
+
+#, fuzzy
+#~ msgid "Add new contact"
+#~ msgstr "Neue Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Saving Contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Could not save contact."
+#~ msgstr "Konnte Tag nicht erzeugen."
+
+#, fuzzy
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Bitte geben Sie einen Namen ein für "
+
+#, fuzzy
+#~ msgid "Title"
+#~ msgstr "Zeit"
+
+#, fuzzy
+#~ msgid "Enter description"
+#~ msgstr "Beschreibung editieren"
+
+#, fuzzy
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "Anmelden"
+#~ msgstr[1] "Anmelden"
+
+#, fuzzy
+#~ msgid "Shared Tags"
+#~ msgstr "Gemeinsame %s"
+
+#, fuzzy
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "delete entry"
+#~ msgstr "löschen"
+
+#, fuzzy
+#~ msgid "select all"
+#~ msgstr "Wählen sie ein Feld"
+
+#, fuzzy
+#~ msgid "Search:"
+#~ msgstr "Suchen"
+
+#, fuzzy
+#~ msgid "invalid password"
+#~ msgstr "Altes Passwort"
+
+#, fuzzy
+#~ msgid "failure"
+#~ msgstr "Fehler"
+
+#, fuzzy
+#~ msgid "success"
+#~ msgstr "Erfolg"
+
+#, fuzzy
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No access log entries to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "Login Name"
+#~ msgstr "Benutzername"
+
+#, fuzzy
+#~ msgid "Login Time"
+#~ msgstr "Benutzername"
+
+#, fuzzy
+#~ msgid "Logout Time"
+#~ msgstr "Abmelden"
+
+#, fuzzy
+#~ msgid "Account ID"
+#~ msgstr "Benutzername: %s"
+
+#, fuzzy
+#~ msgid "settings"
+#~ msgstr "Lege an"
+
+#, fuzzy
+#~ msgid "enabled"
+#~ msgstr "Fehlgeschlagen"
+
+#, fuzzy
+#~ msgid "Displaying application {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No applications to display"
+#~ msgstr "Keine Tags vorhanden"
+
+#, fuzzy
+#~ msgid "order"
+#~ msgstr "Ordner"
+
+#, fuzzy
+#~ msgid "name"
+#~ msgstr "Umbenennen"
+
+#, fuzzy
+#~ msgid "version"
+#~ msgstr "Version prüfen"
+
+#, fuzzy
+#~ msgid "Set new password"
+#~ msgstr "Wiederholung neues Passwort"
+
+#, fuzzy
+#~ msgid "Please enter the new password:"
+#~ msgstr "Bitte geben Sie einen Namen ein für "
+
+#, fuzzy
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No accounts to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "Displayname"
+#~ msgstr "Nachname"
+
+#, fuzzy
+#~ msgid "Loginname"
+#~ msgstr "Benutzername"
+
+#, fuzzy
+#~ msgid "Last name"
+#~ msgstr "Tag Name"
+
+#, fuzzy
+#~ msgid "First name"
+#~ msgstr "Nachname"
+
+#, fuzzy
+#~ msgid "Last login at"
+#~ msgstr "Benutzername"
+
+#, fuzzy
+#~ msgid "Password changed"
+#~ msgstr "Eintrag geändert"
+
+#, fuzzy
+#~ msgid "edit account"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "delete account"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "enable account"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "disable account"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "reset password"
+#~ msgstr "Neues Passwort"
+
+#, fuzzy
+#~ msgid "Deleting account..."
+#~ msgstr "Lösche Tag"
+
+#, fuzzy
+#~ msgid "Could not save user account."
+#~ msgstr "Konnte Tag nicht erzeugen."
+
+#, fuzzy
+#~ msgid "no password set"
+#~ msgstr "Passwort ändern"
+
+#, fuzzy
+#~ msgid "Password again"
+#~ msgstr "Passwort"
+
+#, fuzzy
+#~ msgid "Password set"
+#~ msgstr "Passwort"
+
+#, fuzzy
+#~ msgid "Add New User Account"
+#~ msgstr "Neuen persönlichen Tag hinzufügen"
+
+#, fuzzy
+#~ msgid "Do you really want to delete the selected groups?"
+#~ msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Deleting group(s)..."
+#~ msgstr "Lösche Tag"
+
+#, fuzzy
+#~ msgid "add group"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "delete group"
+#~ msgstr "löschen"
+
+#, fuzzy
+#~ msgid "Displaying groups {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No groups to display"
+#~ msgstr "Keine Tags vorhanden"
+
+#, fuzzy
+#~ msgid "Updating Memberships"
+#~ msgstr "Berechtiungen werden gesichert"
+
+#, fuzzy
+#~ msgid "Could not save group."
+#~ msgstr "Konnte Tag nicht erzeugen."
+
+#, fuzzy
+#~ msgid "Deleting group..."
+#~ msgstr "Lösche Tag"
+
+#, fuzzy
+#~ msgid "Group Name"
+#~ msgstr "Bild zuschneiden"
+
+#, fuzzy
+#~ msgid "Add new group"
+#~ msgstr "Neue Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Do you really want to delete the selected tags?"
+#~ msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Deleting tag(s)..."
+#~ msgstr "Lösche Tag"
+
+#, fuzzy
+#~ msgid "add tag"
+#~ msgstr "Tag bearbeiten"
+
+#, fuzzy
+#~ msgid "edit tag"
+#~ msgstr "Tag bearbeiten"
+
+#, fuzzy
+#~ msgid "delete tag"
+#~ msgstr "Tag löschen"
+
+#, fuzzy
+#~ msgid "Displaying tags {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No tags to display"
+#~ msgstr "Keine Tags vorhanden"
+
+#, fuzzy
+#~ msgid "Could not save tag."
+#~ msgstr "Konnte Tag nicht erzeugen."
+
+#, fuzzy
+#~ msgid "Deleting tag..."
+#~ msgstr "Lösche Tag"
+
+#, fuzzy
+#~ msgid "Account Rights"
+#~ msgstr "Benutzername: %s"
+
+#, fuzzy
+#~ msgid "Use"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~ msgid "Tag Name"
+#~ msgstr "Tag Name"
+
+#, fuzzy
+#~ msgid "Loading Tag..."
+#~ msgstr "Laden"
+
+#, fuzzy
+#~ msgid "Add New Tag"
+#~ msgstr "Neuen persönlichen Tag hinzufügen"
+
+#, fuzzy
+#~ msgid "Edit Tag \"%s\""
+#~ msgstr "Tag bearbeiten"
+
+#, fuzzy
+#~ msgid "Do you really want to delete the selected roles?"
+#~ msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Deleting role(s)..."
+#~ msgstr "Einrichten %s..."
+
+#, fuzzy
+#~ msgid "add role"
+#~ msgstr "Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "delete role"
+#~ msgstr "löschen"
+
+#, fuzzy
+#~ msgid "Displaying roles {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No roles to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "Could not save role."
+#~ msgstr "Konnte Tag nicht erzeugen."
+
+#, fuzzy
+#~ msgid "Deleting role..."
+#~ msgstr "Lösche"
+
+#, fuzzy
+#~ msgid "Role Name"
+#~ msgstr "Umbenennen"
+
+#, fuzzy
+#~ msgid "Loading Role..."
+#~ msgstr "Laden"
+
+#, fuzzy
+#~ msgid "Add New Role"
+#~ msgstr "Neue Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this lead?"
+#~ msgstr "Wollen sie sich wirklich Abmelden?"
+
+#, fuzzy
+#~ msgid "Deleting lead"
+#~ msgstr "Lösche Tag"
+
+#, fuzzy
+#~ msgid "Enter searchfilter"
+#~ msgstr "suchfilter eingeben"
+
+#, fuzzy
+#~ msgid "leadstate"
+#~ msgstr "Bitte warten"
+
+#, fuzzy
+#~ msgid "Show details"
+#~ msgstr "Details anzeigen:"
+
+#, fuzzy
+#~ msgid "Displaying leads {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "Lead name"
+#~ msgstr "Tag Name"
+
+#, fuzzy
+#~ msgid "Add lead"
+#~ msgstr "Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Add new lead"
+#~ msgstr "Neue Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Edit lead"
+#~ msgstr "Tag bearbeiten"
+
+#, fuzzy
+#~ msgid "Delete lead"
+#~ msgid_plural "Delete leads"
+#~ msgstr[0] "Tag löschen"
+#~ msgstr[1] "Tags löschen"
+
+#, fuzzy
+#~ msgid "Delete selected leads"
+#~ msgstr "Ausgewählten Tag wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Export as PDF"
+#~ msgstr "Export Datum"
+
+#, fuzzy
+#~ msgid "Add task"
+#~ msgstr "%s hinzufügen"
+
+#, fuzzy
+#~ msgid "Cellphone"
+#~ msgstr "Telefon"
+
+#, fuzzy
+#~ msgid "Search Contacts"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Could not save lead."
+#~ msgstr "Konnte Tag nicht erzeugen."
+
+#, fuzzy
+#~ msgid "Address"
+#~ msgstr "Email-Adresse"
+
+#, fuzzy
+#~ msgid "Add a task..."
+#~ msgstr "Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Add a product..."
+#~ msgstr "Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "No Tasks to display"
+#~ msgstr "Keine Tags vorhanden"
+
+#, fuzzy
+#~ msgid "Add new customer contact"
+#~ msgstr "Neuen persönlichen Tag hinzufügen"
+
+#, fuzzy
+#~ msgid "Add contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Edit contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Unlink contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Add new task"
+#~ msgstr "Neue Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Edit task"
+#~ msgstr "Tag bearbeiten"
+
+#, fuzzy
+#~ msgid "Remove selected tasks"
+#~ msgstr "Bitte %s auswählen"
+
+#, fuzzy
+#~ msgid "Remove products"
+#~ msgstr "eintrag löschen"
+
+#, fuzzy
+#~ msgid "Leads"
+#~ msgstr "Lesen"
+
+#, fuzzy
+#~ msgid "Contacts"
+#~ msgstr "enthält"
+
+#, fuzzy
+#~ msgid "Tasks"
+#~ msgstr "Tags"
+
+#, fuzzy
+#~ msgid "Loading Lead..."
+#~ msgstr "Laden"
+
+#, fuzzy
+#~ msgid "Add New Lead"
+#~ msgstr "Neue Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "Enter short name"
+#~ msgstr "Tag-Name eingegeben"
+
+#, fuzzy
+#~ msgid "End"
+#~ msgstr "und"
+
+#, fuzzy
+#~ msgid "folder"
+#~ msgstr "Ordner"
+
+#, fuzzy
+#~ msgid "Number"
+#~ msgstr "Name"
+
+#, fuzzy
+#~ msgid "Line"
+#~ msgstr "Anmelden"
+
+#, fuzzy
+#~ msgid "Displaying calls {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No calls to display"
+#~ msgstr "Keine Tags vorhanden"
+
+#, fuzzy
+#~ msgid "Duration"
+#~ msgstr "Beschreibung"
+
+#, fuzzy
+#~ msgid "Direction"
+#~ msgstr "Beschreibung"
+
+#, fuzzy
+#~ msgid "Source"
+#~ msgstr "Erfolg"
+
+#, fuzzy
+#~ msgid "Destination"
+#~ msgstr "Beschreibung"
+
+#, fuzzy
+#~ msgid "Do you really want to delete the selected task"
+#~ msgid_plural "Do you really want to delete the selected task"
+#~ msgstr[0] "Möchten Sie %s \"%s\" wirklich löschen?"
+#~ msgstr[1] "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Konnte Tag(s) nicht löschen."
+
+#, fuzzy
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "%s löschen"
+#~ msgstr[1] "%s löschen"
+
+#, fuzzy
+#~ msgid "Could not save task."
+#~ msgstr "Konnte Tag nicht erzeugen."
+
+#, fuzzy
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No tasks to display"
+#~ msgstr "Keine Tags vorhanden"
+
+#, fuzzy
+#~ msgid "Loading Task..."
+#~ msgstr "Laden"
+
+#, fuzzy
+#~ msgid "Add New Task"
+#~ msgstr "Neuen persönlichen Tag hinzufügen"
+
+#, fuzzy
+#~ msgid "Do you really want to delete this task?"
+#~ msgstr "Möchten Sie %s \"%s\" wirklich löschen?"
+
+#, fuzzy
+#~ msgid "Enter short name..."
+#~ msgstr "Tag-Name eingegeben"
+
+#, fuzzy
+#~ msgid "Notes"
+#~ msgstr "Notiz"
+
+#, fuzzy
+#~ msgid "Enter description..."
+#~ msgstr "Beschreibung editieren"
+
+#, fuzzy
+#~ msgid "add software"
+#~ msgstr "Notiz hinzufügen"
+
+#, fuzzy
+#~ msgid "delete software"
+#~ msgstr "Diesen Filter löschen"
+
+#, fuzzy
+#~ msgid "Search: "
+#~ msgstr "Suchen"
+
+#, fuzzy
+#~ msgid "Displaying software {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No software to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "add template"
+#~ msgstr "neuen Filter hinzufügen"
+
+#, fuzzy
+#~ msgid "edit template"
+#~ msgstr "Bild ändern"
+
+#, fuzzy
+#~ msgid "delete template"
+#~ msgstr "Bild löschen"
+
+#, fuzzy
+#~ msgid "Displaying template {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No template to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "Settings"
+#~ msgstr "Lege an"
+
+#, fuzzy
+#~ msgid "add phone"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "edit phone"
+#~ msgstr "Telefon"
+
+#, fuzzy
+#~ msgid "delete phone"
+#~ msgstr "Telefon"
+
+#, fuzzy
+#~ msgid "Displaying phones {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No phones to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "MAC address"
+#~ msgstr "Email-Adresse"
+
+#, fuzzy
+#~ msgid "description"
+#~ msgstr "Beschreibung"
+
+#, fuzzy
+#~ msgid "Location"
+#~ msgstr "Laden"
+
+#, fuzzy
+#~ msgid "current model"
+#~ msgstr "Passende Updates"
+
+#, fuzzy
+#~ msgid "Current IP Address"
+#~ msgstr "Passende Updates"
+
+#, fuzzy
+#~ msgid "none"
+#~ msgstr "Notiz"
+
+#, fuzzy
+#~ msgid "time"
+#~ msgstr "Zeit"
+
+#, fuzzy
+#~ msgid "Users"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~ msgid "web_language"
+#~ msgstr "Sprache"
+
+#, fuzzy
+#~ msgid "language"
+#~ msgstr "Sprache"
+
+#, fuzzy
+#~ msgid "number + name"
+#~ msgstr "Tag-Name eingegeben"
+
+#, fuzzy
+#~ msgid "off"
+#~ msgstr "offline"
+
+#, fuzzy
+#~ msgid "normal"
+#~ msgstr "Programmabbruch"
+
+#, fuzzy
+#~ msgid "add location"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "edit location"
+#~ msgstr "Beschreibung editieren"
+
+#, fuzzy
+#~ msgid "Displaying location {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No location to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "Update Policy"
+#~ msgstr "Aktualisiere"
+
+#, fuzzy
+#~ msgid "Admin Mode"
+#~ msgstr "Admin"
+
+#, fuzzy
+#~ msgid "HTTP User"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~ msgid "Admin Mode Password"
+#~ msgstr "Altes Passwort"
+
+#, fuzzy
+#~ msgid "HTTP Password"
+#~ msgstr "Passwort"
+
+#, fuzzy
+#~ msgid "edit setting"
+#~ msgstr "Tag bearbeiten"
+
+#, fuzzy
+#~ msgid "delete setting"
+#~ msgstr "Lösche"
+
+#, fuzzy
+#~ msgid "Displaying settings {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No settings to display"
+#~ msgstr "Keine Tags vorhanden"
+
+#, fuzzy
+#~ msgid "delete sipPeer"
+#~ msgstr "Diesen Filter löschen"
+
+#, fuzzy
+#~ msgid "Displaying sipPeers {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No sipPeers to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "account code"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "default ip"
+#~ msgstr "default note type"
+
+#, fuzzy
+#~ msgid "full contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "mailbox"
+#~ msgstr "Email"
+
+#, fuzzy
+#~ msgid "secret"
+#~ msgstr "erstellt"
+
+#, fuzzy
+#~ msgid "type"
+#~ msgstr "Typ"
+
+#, fuzzy
+#~ msgid "username"
+#~ msgstr "Benutzername"
+
+#, fuzzy
+#~ msgid "ip address"
+#~ msgstr "Email-Adresse"
+
+#, fuzzy
+#~ msgid "Secret"
+#~ msgstr "erstellt"
+
+#, fuzzy
+#~ msgid "From User"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~ msgid "Full Contact"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "Set Var"
+#~ msgstr "Suchen"
+
+#, fuzzy
+#~ msgid "Auth User"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~ msgid "add context"
+#~ msgstr "Zugang Hinzufügen"
+
+#, fuzzy
+#~ msgid "edit context"
+#~ msgstr "Email Kontakt"
+
+#, fuzzy
+#~ msgid "delete context"
+#~ msgstr "löschen"
+
+#, fuzzy
+#~ msgid "Displaying context {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No context to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "Displaying voicemail {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No voicemail to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "operator"
+#~ msgstr "Wählen sie einen Operator"
+
+#, fuzzy
+#~ msgid "forcename"
+#~ msgstr "Umbenennen"
+
+#, fuzzy
+#~ msgid "add meetme"
+#~ msgstr "löschen"
+
+#, fuzzy
+#~ msgid "delete meetme"
+#~ msgstr "Bild löschen"
+
+#, fuzzy
+#~ msgid "Displaying meetme {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No meetme to display"
+#~ msgstr "Keine Notizen vorhanden"
+
+#, fuzzy
+#~ msgid "adminpin"
+#~ msgstr "admin"
+
+#, fuzzy
+#~ msgid "Displaying myphones {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
+
+#, fuzzy
+#~ msgid "No myphones to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #~ msgid "please select a container"
 #~ msgstr "Bitte wählen sie einen Kontainer"
