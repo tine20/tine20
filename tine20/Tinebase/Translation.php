@@ -34,7 +34,7 @@ class Tinebase_Translation
         //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
         //'pl',      // Polish               Chrisopf Gacki <c.gacki@metaways.de>
         'ru',      // Russian              Ilia Yurkovetskiy <i.yurkovetskiy@metaways.de>
-        'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
+        'zh_HANS', // Chinese Simplified   Jason Qi <qry@yahoo.com>
     );
     
     /**
