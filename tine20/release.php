@@ -328,10 +328,23 @@ function unifyTranslations($localeString)
     $output = '';
     
     // compress ext translation
-    $extTranslationFile = "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'ext');
+    switch ($localeString) {
+        case 'zh_HANS':
+            $extlocaleName = 'zh_CN';
+            break;
+        case 'zh_HANT':
+            $extlocaleName = 'zh_TW';
+            break;
+        default:
+            $extlocaleName = $localeString;
+            break;
+    }
+    $extTranslationFile = "$tine20path/" . Tinebase_Translation::getJsTranslationFile($extlocaleName, 'ext');
     if (file_exists($extTranslationFile)) {
         system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$localeString-ext-min.js $extTranslationFile");
     }
+    
+    // unify translations
     $files = array ( 
         "$tine20path/" . "Tinebase/js/Locale/build/$localeString-ext-min.js",
         "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'generic'),
