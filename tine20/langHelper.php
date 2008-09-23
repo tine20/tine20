@@ -267,13 +267,20 @@ function contributorsMerge($_verbose, $_language, $_archive)
                 echo "Error: Could not find translations! \n";
                 exit;
             }
+        } elseif ($contents[2] == '__MACOSX') {
+            // max os places a hiddes __MACOSX in the archives
+            $basePath .= $contents[3] . '/';
+            if (! is_dir($basePath)) {
+                echo "Error: Could not find translations! \n";
+                exit;
+            }
         } else {
             break;
         }
     }
     
     foreach ($contents as $appName) {
-        if ($appName{0} == '.') continue;
+        if ($appName{0} == '.' || $appName{0} == '_') continue;
         if ($_verbose) {
             echo "Processing translation updates for $appName \n";
         }
