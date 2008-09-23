@@ -30,6 +30,11 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected $_objects = array();
     
+    /**
+     * test container
+     *
+     * @var Tinebase_Model_Container
+     */
     protected $_testContainer;
     
     /**
@@ -159,7 +164,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         // create test task
         $this->_objects['task'] = new Tasks_Model_Task(array(
             // tine record fields
-            'id'                   => '90a75021e353685aa9a06e67a7c0b558d0acae32',
             'container_id'         => $tasksContainer->id,
             'created_by'           => Zend_Registry::get('currentAccount')->getId(),
             'creation_time'        => Zend_Date::now(),
@@ -437,11 +441,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testLinkedTasks()
     {        
-        try {
-            $task = Tasks_Controller::getInstance()->getTask($this->_objects['task']->id);
-        } catch (Exception $e) {
-            $task = Tasks_Controller::getInstance()->createTask($this->_objects['task']);
-        }
+        $task = Tasks_Controller::getInstance()->createTask($this->_objects['task']);
         
         // link task
         $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
