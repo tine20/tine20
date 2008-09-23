@@ -1069,12 +1069,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();
-                    this.actions.unlinkContact.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    if (Tine.Crm.LeadEditDialog.lead.get('container')) {
+                        this.actions.unlinkContact.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    }
                     this.actions.editContact.setDisabled(rowCount != 1);
                 }, this);
                 
                 bbarItems = [                
-                    this.actions.linkContact,                    
+                    this.actions.linkContactSplit,                    
                     this.actions.unlinkContact
                 ]; 
                 
@@ -1174,7 +1176,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             	rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();
-                    this.actions.unlinkTask.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    if (Tine.Crm.LeadEditDialog.lead.get('container')) {
+                        this.actions.unlinkTask.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    }
                     this.actions.editTask.setDisabled(rowCount != 1);
                 }, this);
 
@@ -1419,11 +1423,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     this.actions.editContact,
                     this.actions.unlinkContact,
                     '-',
-                    this.actions.linkContact
+                    this.actions.linkContactSplit
                 ];
                 // items for all grid context menu
                 gridItems = [
-                    this.actions.linkContact
+                    this.actions.linkContactSplit
                 ];
                 break;
                 
@@ -1647,21 +1651,30 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             handler: this.handlers.addContact
         }); 
 
-        this.actions.linkContact = new Ext.SplitButton({
+        this.actions.linkContact = new Ext.Action({
+            requiredGrant: 'editGrant',
+            text: this.translation._('Add existing contact'),
+            tooltip: this.translation._('Add existing contact to lead'),
+            iconCls: 'actionAdd',
+            scope: this,
+            handler: this.handlers.linkContact
+        }); 
+        
+        this.actions.linkContactSplit = new Ext.SplitButton({
             requiredGrant: 'editGrant',
             text: this.translation._('Add contact'),
             tooltip: this.translation._('Add existing contact to lead'),
-            //disabled: true,
             iconCls: 'actionAdd',
             scope: this,
             handler: this.handlers.linkContact,
             menu: {
                 items: [
+                    this.actions.linkContact,
                     this.actions.addContact
                 ]
             }
         });
-    	
+        
         this.actions.editContact = new Ext.Action({
             requiredGrant: 'editGrant',
             text: this.translation._('Edit contact'),
