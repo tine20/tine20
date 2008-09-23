@@ -42,54 +42,54 @@ msgstr ""
 msgid "enter searchfilter"
 msgstr ""
 
-#: js/Phone.js:501
+#: js/Phone.js:494
 msgid "Search:"
 msgstr ""
 
-#: js/Phone.js:586
+#: js/Phone.js:579
 msgid "Source or Destination"
 msgstr ""
 
-#: js/Phone.js:602
+#: js/Phone.js:595
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr ""
 
-#: js/Phone.js:603 js/Phone.js:640
+#: js/Phone.js:596 js/Phone.js:633
 msgid "No calls to display"
 msgstr ""
 
-#: js/Phone.js:608
+#: js/Phone.js:601
 msgid "Call ID"
 msgstr ""
 
-#: js/Phone.js:609
+#: js/Phone.js:602
 msgid "Start"
 msgstr ""
 
-#: js/Phone.js:610
+#: js/Phone.js:603
 msgid "Connected"
 msgstr ""
 
-#: js/Phone.js:611
+#: js/Phone.js:604
 msgid "Disconnected"
 msgstr ""
 
-#: js/Phone.js:612
+#: js/Phone.js:605
 msgid "Duration"
 msgstr ""
 
-#: js/Phone.js:613
+#: js/Phone.js:606
 msgid "Ringing"
 msgstr ""
 
-#: js/Phone.js:614
+#: js/Phone.js:607
 msgid "Direction"
 msgstr ""
 
-#: js/Phone.js:615
+#: js/Phone.js:608
 msgid "Source"
 msgstr ""
 
-#: js/Phone.js:616
+#: js/Phone.js:609
 msgid "Destination"
 msgstr ""

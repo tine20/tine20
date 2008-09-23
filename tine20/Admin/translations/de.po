@@ -138,7 +138,7 @@ msgid "select all"
 msgstr "Alles auswählen"
 
 #: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
-#: js/Tags.js:102 js/Users.js:204
+#: js/Tags.js:103 js/Users.js:204
 msgid "enter searchfilter"
 msgstr "Suchbegriff eingeben"
 
@@ -151,7 +151,7 @@ msgid "to:"
 msgstr "bis:"
 
 #: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
-#: js/Tags.js:122 js/Users.js:220
+#: js/Tags.js:123 js/Users.js:220
 msgid "Search:"
 msgstr "Suche"
 
@@ -192,7 +192,7 @@ msgid "Login Name"
 msgstr "Benutzername"
 
 #: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
-#: js/Tags.js:164
+#: js/Tags.js:165
 msgid "Name"
 msgstr "Name"
 
@@ -274,7 +274,7 @@ msgid "Deleting group(s)..."
 msgstr "Lösche Gruppe(n)..."
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:338 js/Users.js:186
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
 #: js/Users.js:468 js/Users.js:511
 msgid "Failed"
 msgstr "Fehlgeschlagen"
@@ -308,15 +308,15 @@ msgid "ID"
 msgstr "ID"
 
 #: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
-#: js/Tags.js:165 js/Tags.js:544
+#: js/Tags.js:166 js/Tags.js:547
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:294
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:294
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
 msgid "Updating Memberships"
 msgstr "Mitgliedschaft erneuern"
 
@@ -324,11 +324,11 @@ msgstr "Mitgliedschaft erneuern"
 msgid "Could not save group."
 msgstr "Konnte Gruppe nicht speichern."
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:343 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:343 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die angezeigten Fehler."
 
@@ -409,7 +409,7 @@ msgstr "Rollenmitglieder"
 msgid "Members"
 msgstr "Mitglieder"
 
-#: js/Roles.js:616 js/Tags.js:560
+#: js/Roles.js:616 js/Tags.js:563
 msgid "Rights"
 msgstr "Rechte"
 
@@ -421,7 +421,7 @@ msgstr "Rollennname"
 msgid "Loading Role..."
 msgstr "Lade Rolle..."
 
-#: js/Roles.js:686 js/Tags.js:581 js/Users.js:477
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
 msgid "Please Wait"
 msgstr "Bitte warten"
 
@@ -446,67 +446,67 @@ msgstr "Tag löschen..."
 msgid "add tag"
 msgstr "Tag hinzufügen"
 
-#: js/Tags.js:80
+#: js/Tags.js:81
 msgid "edit tag"
 msgstr "Tag bearbeiten"
 
-#: js/Tags.js:88
+#: js/Tags.js:89
 msgid "delete tag"
 msgstr "Tag löschen"
 
-#: js/Tags.js:157
+#: js/Tags.js:158
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Zeige Tag {0} - {1} von {2}"
 
-#: js/Tags.js:158 js/Tags.js:207
+#: js/Tags.js:159 js/Tags.js:210
 msgid "No tags to display"
 msgstr "Keine Tags anzuzeigen"
 
-#: js/Tags.js:163 js/Tags.js:486
+#: js/Tags.js:164 js/Tags.js:489
 msgid "Color"
 msgstr "Farbe"
 
-#: js/Tags.js:338
+#: js/Tags.js:341
 msgid "Could not save tag."
 msgstr "Konnte Tag nicht speichern"
 
-#: js/Tags.js:356
+#: js/Tags.js:359
 msgid "Deleting tag..."
 msgstr "Lösche Tag..."
 
-#: js/Tags.js:446
+#: js/Tags.js:449
 msgid "Allowed Contexts"
 msgstr "Erlaubte Contexte"
 
-#: js/Tags.js:461
+#: js/Tags.js:464
 msgid "Account Rights"
 msgstr "Benutzerrechte"
 
-#: js/Tags.js:466
+#: js/Tags.js:469
 msgid "View"
 msgstr "Zeigen"
 
-#: js/Tags.js:471
+#: js/Tags.js:474
 msgid "Use"
 msgstr "Verwenden"
 
-#: js/Tags.js:538
+#: js/Tags.js:541
 msgid "Tag Name"
 msgstr "Bezeichnername"
 
-#: js/Tags.js:563
+#: js/Tags.js:566
 msgid "Context"
 msgstr "Context"
 
-#: js/Tags.js:581
+#: js/Tags.js:584
 msgid "Loading Tag..."
 msgstr "Lade Tag..."
 
-#: js/Tags.js:612
+#: js/Tags.js:615
 msgid "Add New Tag"
 msgstr "Neuen Tag hinzufügen"
 
-#: js/Tags.js:614
+#: js/Tags.js:617
 #, python-format
 msgid "Edit Tag \"%s\""
 msgstr "Tag \"%s\" bearbeiten"
@@ -664,21 +664,21 @@ msgstr "Neuen User Account hinzufügen"
 msgid "Edit User Account \"%s\""
 msgstr "Bearbeite User Account \"%s\""
 
-msgid "manage roles right description"
-msgstr ""
-"Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
-"Applikations-Rechte zuweisen."
+#~ msgid "manage roles right description"
+#~ msgstr ""
+#~ "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
+#~ "Applikations-Rechte zuweisen."
 
-msgid "manage applications right description"
-msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
+#~ msgid "manage applications right description"
+#~ msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
 
-msgid "manage accounts right description"
-msgstr ""
-"Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
-"zuordnen."
+#~ msgid "manage accounts right description"
+#~ msgstr ""
+#~ "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
+#~ "zuordnen."
 
-msgid "manage access log right description"
-msgstr "Dieses Recht erlaubt es, im Zugriffsprotokoll Einträge zu löschen."
+#~ msgid "manage access log right description"
+#~ msgstr "Dieses Recht erlaubt es, im Zugriffsprotokoll Einträge zu löschen."
 
-msgid "view access log right description"
-msgstr "Zugriffsprotokoll ansehen"
+#~ msgid "view access log right description"
+#~ msgstr "Zugriffsprotokoll ansehen"

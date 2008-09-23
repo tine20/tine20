@@ -29,12 +29,12 @@ msgstr[0] "Вы уверены что хотите удалить выбранн
 msgstr[1] "Вы уверены что хотите удалить выбранные задания"
 msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
-#: js/Tasks.js:745
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
+#: js/Tasks.js:731
 msgid "Failed"
 msgstr "Неудача"
 
-#: js/Tasks.js:141 js/Tasks.js:745
+#: js/Tasks.js:141 js/Tasks.js:731
 msgid "Could not delete task(s)."
 msgstr "Задание(я) не могло быть удалино."
 
@@ -54,7 +54,7 @@ msgstr[0] "Удолить задание"
 msgstr[1] "Удолить задание"
 msgstr[2] "Удолить задание"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
+#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
 msgid "Could not save task."
 msgstr "Задание не смогла быть сохранино"
 
@@ -90,7 +90,7 @@ msgstr "Показ задач {0} - {1} of {2}"
 msgid "No tasks to display"
 msgstr "Никаких заданий не было найдено"
 
-#: js/Tasks.js:418 js/Tasks.js:768
+#: js/Tasks.js:418 js/Tasks.js:754
 msgid "Summary"
 msgstr "Содержание"
 
@@ -102,7 +102,7 @@ msgstr "Добавить задание..."
 msgid "Due Date"
 msgstr "Число истечения срока"
 
-#: js/Tasks.js:444 js/Tasks.js:800
+#: js/Tasks.js:444 js/Tasks.js:786
 msgid "Priority"
 msgstr "Приоритет"
 
@@ -110,7 +110,7 @@ msgstr "Приоритет"
 msgid "Percent"
 msgstr "Процент"
 
-#: js/Tasks.js:473 js/Tasks.js:796
+#: js/Tasks.js:473 js/Tasks.js:782
 msgid "Status"
 msgstr "Статус"
 
@@ -135,55 +135,55 @@ msgstr ""
 msgid "Edit Task \"%s\""
 msgstr ""
 
-#: js/Tasks.js:688
+#: js/Tasks.js:674
 msgid "Please wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Tasks.js:688 js/Tasks.js:733
+#: js/Tasks.js:674 js/Tasks.js:719
 msgid "Saving Task"
 msgstr "Сохранить задание"
 
-#: js/Tasks.js:724
+#: js/Tasks.js:710
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/Tasks.js:724
+#: js/Tasks.js:710
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, устраните показанные ошибки."
 
-#: js/Tasks.js:731
+#: js/Tasks.js:717
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: js/Tasks.js:731
+#: js/Tasks.js:717
 msgid "Do you really want to delete this task?"
 msgstr "Вы уверены что хотите удалить задание?"
 
-#: js/Tasks.js:733
+#: js/Tasks.js:719
 msgid "Please wait a moment..."
 msgstr "Пожалуйста подождите момент..."
 
-#: js/Tasks.js:772
+#: js/Tasks.js:758
 msgid "Enter short name..."
 msgstr "Введите короткое имя..."
 
-#: js/Tasks.js:775
+#: js/Tasks.js:761
 msgid "Notes"
 msgstr "Примечания"
 
-#: js/Tasks.js:777
+#: js/Tasks.js:763
 msgid "Enter description..."
 msgstr "Введите описание..."
 
-#: js/Tasks.js:791
+#: js/Tasks.js:777
 msgid "Percentage"
 msgstr "Подтвердить"
 
-#: js/Tasks.js:804
+#: js/Tasks.js:790
 msgid "Due date"
 msgstr "Число истечения срока"
 
-#: js/Tasks.js:808
+#: js/Tasks.js:794
 msgid "Saved in"
 msgstr ""
 

@@ -25,12 +25,12 @@ msgstr[0] "Opravdu chcete smazat vybraný úkol"
 msgstr[1] "Opravdu chcete smazat vybrané úkoly"
 msgstr[2] "Opravdu chcete smazat vybrané úkoly"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
-#: js/Tasks.js:745
+#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
+#: js/Tasks.js:731
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/Tasks.js:141 js/Tasks.js:745
+#: js/Tasks.js:141 js/Tasks.js:731
 msgid "Could not delete task(s)."
 msgstr "Nepodařilo se smazat úkol(y)."
 
@@ -49,7 +49,7 @@ msgstr[0] "Smazat úkol"
 msgstr[1] "Smazat úkoly"
 msgstr[2] "Smazat úkoly"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:720
+#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
 msgid "Could not save task."
 msgstr "Nepodařilo se uložit úkol."
 
@@ -85,7 +85,7 @@ msgstr "Zobrazuji úkoly {0} - {1} z {2}"
 msgid "No tasks to display"
 msgstr "Žádné úkoly ke zobrazení"
 
-#: js/Tasks.js:418 js/Tasks.js:768
+#: js/Tasks.js:418 js/Tasks.js:754
 msgid "Summary"
 msgstr "Přehled"
 
@@ -97,7 +97,7 @@ msgstr "Přidat úkol..."
 msgid "Due Date"
 msgstr "Termín dokončení"
 
-#: js/Tasks.js:444 js/Tasks.js:800
+#: js/Tasks.js:444 js/Tasks.js:786
 msgid "Priority"
 msgstr "Priorita"
 
@@ -105,7 +105,7 @@ msgstr "Priorita"
 msgid "Percent"
 msgstr "Procent"
 
-#: js/Tasks.js:473 js/Tasks.js:796
+#: js/Tasks.js:473 js/Tasks.js:782
 msgid "Status"
 msgstr "Status"
 
@@ -130,55 +130,55 @@ msgstr ""
 msgid "Edit Task \"%s\""
 msgstr ""
 
-#: js/Tasks.js:688
+#: js/Tasks.js:674
 msgid "Please wait"
 msgstr "Prosím čekejte"
 
-#: js/Tasks.js:688 js/Tasks.js:733
+#: js/Tasks.js:674 js/Tasks.js:719
 msgid "Saving Task"
 msgstr "Ukládám úkol"
 
-#: js/Tasks.js:724
+#: js/Tasks.js:710
 msgid "Errors"
 msgstr "Chyby"
 
-#: js/Tasks.js:724
+#: js/Tasks.js:710
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím vyznačené chyby."
 
-#: js/Tasks.js:731
+#: js/Tasks.js:717
 msgid "Confirm"
 msgstr "Povrdit"
 
-#: js/Tasks.js:731
+#: js/Tasks.js:717
 msgid "Do you really want to delete this task?"
 msgstr "Opravdu chcete smazat tento úkol?"
 
-#: js/Tasks.js:733
+#: js/Tasks.js:719
 msgid "Please wait a moment..."
 msgstr "Počkejte prosím okmažik..."
 
-#: js/Tasks.js:772
+#: js/Tasks.js:758
 msgid "Enter short name..."
 msgstr "Zadejte stručný název..."
 
-#: js/Tasks.js:775
+#: js/Tasks.js:761
 msgid "Notes"
 msgstr "Poznámky"
 
-#: js/Tasks.js:777
+#: js/Tasks.js:763
 msgid "Enter description..."
 msgstr "Zadejte popis..."
 
-#: js/Tasks.js:791
+#: js/Tasks.js:777
 msgid "Percentage"
 msgstr "Procenta"
 
-#: js/Tasks.js:804
+#: js/Tasks.js:790
 msgid "Due date"
 msgstr "Termín dokončení"
 
-#: js/Tasks.js:808
+#: js/Tasks.js:794
 msgid "Saved in"
 msgstr ""
 

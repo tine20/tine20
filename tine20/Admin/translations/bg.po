@@ -136,7 +136,7 @@ msgid "select all"
 msgstr "селектирай всичко"
 
 #: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
-#: js/Tags.js:102 js/Users.js:204
+#: js/Tags.js:103 js/Users.js:204
 msgid "enter searchfilter"
 msgstr "вкарай филтър за търсене"
 
@@ -149,7 +149,7 @@ msgid "to:"
 msgstr "до:"
 
 #: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
-#: js/Tags.js:122 js/Users.js:220
+#: js/Tags.js:123 js/Users.js:220
 msgid "Search:"
 msgstr "Търси:"
 
@@ -190,7 +190,7 @@ msgid "Login Name"
 msgstr "Потребителско име"
 
 #: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
-#: js/Tags.js:164
+#: js/Tags.js:165
 msgid "Name"
 msgstr "Име"
 
@@ -272,7 +272,7 @@ msgid "Deleting group(s)..."
 msgstr "Изтрива група(и)..."
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:338 js/Users.js:186
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
 #: js/Users.js:468 js/Users.js:511
 msgid "Failed"
 msgstr "Неуспех"
@@ -306,15 +306,15 @@ msgid "ID"
 msgstr "ID (идентификационен номер)"
 
 #: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
-#: js/Tags.js:165 js/Tags.js:544
+#: js/Tags.js:166 js/Tags.js:547
 msgid "Description"
 msgstr "Описание"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:294
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:294
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
 msgid "Updating Memberships"
 msgstr "Актуализира членство "
 
@@ -322,11 +322,11 @@ msgstr "Актуализира членство "
 msgid "Could not save group."
 msgstr "Групата не можа да бъде съхранена"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:343 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
 msgid "Errors"
 msgstr "Грешки"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:343 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
 msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките."
 
@@ -407,7 +407,7 @@ msgstr "Роля на членове"
 msgid "Members"
 msgstr "Членове"
 
-#: js/Roles.js:616 js/Tags.js:560
+#: js/Roles.js:616 js/Tags.js:563
 msgid "Rights"
 msgstr "Права"
 
@@ -419,7 +419,7 @@ msgstr "Име на роля"
 msgid "Loading Role..."
 msgstr "Зарежда роля..."
 
-#: js/Roles.js:686 js/Tags.js:581 js/Users.js:477
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
 msgid "Please Wait"
 msgstr "Моля изчакайте"
 
@@ -444,67 +444,67 @@ msgstr "Изтрива таг(-ове)..."
 msgid "add tag"
 msgstr "Добави таг"
 
-#: js/Tags.js:80
+#: js/Tags.js:81
 msgid "edit tag"
 msgstr "Обработи таг"
 
-#: js/Tags.js:88
+#: js/Tags.js:89
 msgid "delete tag"
 msgstr "Изтрий таг"
 
-#: js/Tags.js:157
+#: js/Tags.js:158
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Показва тагове {0} - {1} от {2}"
 
-#: js/Tags.js:158 js/Tags.js:207
+#: js/Tags.js:159 js/Tags.js:210
 msgid "No tags to display"
 msgstr "Няма намерени тагове"
 
-#: js/Tags.js:163 js/Tags.js:486
+#: js/Tags.js:164 js/Tags.js:489
 msgid "Color"
 msgstr "Цвят"
 
-#: js/Tags.js:338
+#: js/Tags.js:341
 msgid "Could not save tag."
 msgstr "Неуспешно запаметяване на таг."
 
-#: js/Tags.js:356
+#: js/Tags.js:359
 msgid "Deleting tag..."
 msgstr "Изтрива таг..."
 
-#: js/Tags.js:446
+#: js/Tags.js:449
 msgid "Allowed Contexts"
 msgstr "Позволен Контекст"
 
-#: js/Tags.js:461
+#: js/Tags.js:464
 msgid "Account Rights"
 msgstr "Права на конто"
 
-#: js/Tags.js:466
+#: js/Tags.js:469
 msgid "View"
 msgstr "Преглед"
 
-#: js/Tags.js:471
+#: js/Tags.js:474
 msgid "Use"
 msgstr "Употреба"
 
-#: js/Tags.js:538
+#: js/Tags.js:541
 msgid "Tag Name"
 msgstr "Име на таг"
 
-#: js/Tags.js:563
+#: js/Tags.js:566
 msgid "Context"
 msgstr "Контекст"
 
-#: js/Tags.js:581
+#: js/Tags.js:584
 msgid "Loading Tag..."
 msgstr "Зареждо таг..."
 
-#: js/Tags.js:612
+#: js/Tags.js:615
 msgid "Add New Tag"
 msgstr "Добавя нов таг"
 
-#: js/Tags.js:614
+#: js/Tags.js:617
 #, python-format
 msgid "Edit Tag \"%s\""
 msgstr "Задава таг \"%s\""

@@ -429,20 +429,20 @@ msgstr "URL"
 msgid "Other Data"
 msgstr "Andere Daten"
 
-msgid "Saved in"
-msgstr "Abgelegt in"
+#~ msgid "Saved in"
+#~ msgstr "Abgelegt in"
 
-msgid "Map"
-msgstr "Karte"
+#~ msgid "Map"
+#~ msgstr "Karte"
 
-msgid "Filter: "
-msgstr "Filter: "
+#~ msgid "Filter: "
+#~ msgstr "Filter: "
 
-msgid "Search: "
-msgstr "Suche: "
+#~ msgid "Search: "
+#~ msgstr "Suche: "
 
-msgid "History"
-msgstr "Historie"
+#~ msgid "History"
+#~ msgstr "Historie"
 
-msgid "Notes"
-msgstr "Notizen"
+#~ msgid "Notes"
+#~ msgstr "Notizen"

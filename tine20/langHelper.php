@@ -229,7 +229,7 @@ function potmerge($_verbose)
                $output = '';
             }
             `cd $translationPath
-             msgmerge --no-fuzzy-matching --update $poFile template.pot $output`;
+             msgmerge --update $poFile template.pot $output`;
         }
     }
 }

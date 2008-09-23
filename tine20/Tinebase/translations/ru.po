@@ -49,7 +49,8 @@ msgstr "Исполнить"
 msgid "run right description"
 msgstr "Исполнимое право необходимо, чтобы иметь доступ к программе."
 
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:206 js/tine-all-debug.js:7234 js/tine-all-debug.js:11323
+#: js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Тэги"
 
@@ -61,38 +62,40 @@ msgstr "Экспортировать число"
 msgid "Created by"
 msgstr "Установлено"
 
-#: Http.php:212 js/Tinebase.js:109
+#: Http.php:212 js/tine-all-debug.js:10336 js/Tinebase.js:109
 msgid "Authorisation Required"
 msgstr ""
 
-#: Http.php:213 js/Tinebase.js:110
+#: Http.php:213 js/tine-all-debug.js:10337 js/Tinebase.js:110
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: Http.php:238 js/ExceptionDialog.js:26
+#: Http.php:238 js/ExceptionDialog.js:26 js/tine-all-debug.js:9223
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Http.php:239 js/ExceptionDialog.js:51
+#: Http.php:239 js/ExceptionDialog.js:51 js/tine-all-debug.js:9248
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:315
-#: js/widgets/container/ContainerSelect.js:246 js/widgets/EditRecord.js:123
+#: js/ExceptionDialog.js:34 js/MainScreen.js:315 js/tine-all-debug.js:4702
+#: js/tine-all-debug.js:5852 js/tine-all-debug.js:9231
+#: js/tine-all-debug.js:9913 js/tine-all-debug.js:19411
+#: js/widgets/container/ContainerSelect.js:248 js/widgets/EditRecord.js:123
 msgid "Cancel"
 msgstr "Отмена"
 
-#: js/ExceptionDialog.js:42
+#: js/ExceptionDialog.js:42 js/tine-all-debug.js:9239
 msgid "Send Report"
 msgstr "Послать Сообщение"
 
-#: js/ExceptionDialog.js:52
+#: js/ExceptionDialog.js:52 js/tine-all-debug.js:9249
 msgid "The last action you made was potentially not performed correctly."
 msgstr ""
 "Последнее действие, которое Вы сделали, было потенциально не правильно "
 "выполнено."
 
-#: js/ExceptionDialog.js:53
+#: js/ExceptionDialog.js:53 js/tine-all-debug.js:9250
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occoured."
@@ -100,196 +103,3413 @@ msgstr ""
 "Пожалуйста помогите улучшению этого программного обеспечения. И сообщите "
 "издателю коротким описанием, что и где Вы делаете если возникла ошибка. "
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
+#: js/ExceptionDialog.js:59 js/tine-all-debug.js:7737
+#: js/tine-all-debug.js:9256 js/tine-all-debug.js:11328
+#: js/tine-all-debug.js:12234 js/tine-all-debug.js:14157
+#: js/tine-all-debug.js:14538 js/tine-all-debug.js:14791
+#: js/tine-all-debug.js:15170 js/tine-all-debug.js:15442
+#: js/tine-all-debug.js:15917 js/tine-all-debug.js:17241
+#: js/tine-all-debug.js:18130 js/tine-all-debug.js:22011
+#: js/tine-all-debug.js:22251 js/tine-all-debug.js:22498
+#: js/tine-all-debug.js:22714 js/tine-all-debug.js:23686
+#: js/tine-all-debug.js:24723 js/tine-all-debug.js:24958
+#: js/tine-all-debug.js:25876 js/tine-all-debug.js:27626
+#: js/tine-all-debug.js:27838 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
 msgstr "Описание"
 
-#: js/ExceptionDialog.js:69
+#: js/ExceptionDialog.js:69 js/tine-all-debug.js:9266
 msgid "Show Details:"
 msgstr "показ детали:"
 
-#: js/ExceptionDialog.js:92
+#: js/ExceptionDialog.js:92 js/tine-all-debug.js:9289
 msgid "Sending report..."
 msgstr "Сообщение посылается..."
 
-#: js/ExceptionDialog.js:92
+#: js/ExceptionDialog.js:92 js/tine-all-debug.js:9289
 msgid "Please wait a moment"
 msgstr "Пожалуйста подождите момент"
 
-#: js/ExceptionDialog.js:117
+#: js/ExceptionDialog.js:117 js/tine-all-debug.js:9314
 msgid "Transmission Completed"
 msgstr "Передача завершена"
 
-#: js/ExceptionDialog.js:118
+#: js/ExceptionDialog.js:118 js/tine-all-debug.js:9315
 msgid "Your report has been send. Thanks for your contribution"
 msgstr "Ваш отчет был отправлен. Спасибо за Ваше содействие"
 
-#: js/Login.js:29
+#: js/Login.js:29 js/tine-all-debug.js:10106
 msgid "Login"
 msgstr "вход в систему"
 
-#: js/Login.js:36
+#: js/Login.js:36 js/tine-all-debug.js:10113
 msgid "Register"
 msgstr "Регистрироваться"
 
-#: js/Login.js:50
+#: js/Login.js:50 js/tine-all-debug.js:10127
 msgid "Please enter your login data"
 msgstr "Пожалуйста введите свои данные входа в систему"
 
-#: js/Login.js:67
+#: js/Login.js:67 js/tine-all-debug.js:10144 js/tine-all-debug.js:27236
 msgid "Username"
 msgstr "Имя пользователя"
 
-#: js/Login.js:73
+#: js/Login.js:73 js/tine-all-debug.js:10150 js/tine-all-debug.js:13821
+#: js/tine-all-debug.js:28351
 msgid "Password"
 msgstr "Пароль"
 
-#: js/Login.js:119
+#: js/Login.js:119 js/tine-all-debug.js:10196
 msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
-#: js/Login.js:119 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:119 js/tine-all-debug.js:5985 js/tine-all-debug.js:6304
+#: js/tine-all-debug.js:6332 js/tine-all-debug.js:6364
+#: js/tine-all-debug.js:10196 js/tine-all-debug.js:14323
+#: js/tine-all-debug.js:14920 js/tine-all-debug.js:15663
+#: js/tine-all-debug.js:16871 js/tine-all-debug.js:20681
+#: js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:231
 #: js/widgets/container/ContainerTree.js:259
 #: js/widgets/container/ContainerTree.js:291
 msgid "Please wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Login.js:130
+#: js/Login.js:130 js/tine-all-debug.js:10207
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
-#: js/Login.js:130 js/MainScreen.js:393
+#: js/Login.js:130 js/MainScreen.js:393 js/tine-all-debug.js:9991
+#: js/tine-all-debug.js:10207
 msgid "Please wait!"
 msgstr "Пожалуйста подождите!"
 
-#: js/Login.js:134
+#: js/Login.js:134 js/tine-all-debug.js:10211
 msgid "Login failure"
 msgstr "Регистрация не удалась"
 
-#: js/Login.js:135
+#: js/Login.js:135 js/tine-all-debug.js:10212
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
-#: js/MainScreen.js:48
+#: js/MainScreen.js:48 js/tine-all-debug.js:9646
 msgid "Change password"
 msgstr "Изменить пароль"
 
-#: js/MainScreen.js:54
+#: js/MainScreen.js:54 js/tine-all-debug.js:9652
 msgid "Install Google Gears"
 msgstr ""
 
-#: js/MainScreen.js:60
+#: js/MainScreen.js:60 js/tine-all-debug.js:9658
 msgid "Logout"
 msgstr "Выход"
 
-#: js/MainScreen.js:61
+#: js/MainScreen.js:61 js/tine-all-debug.js:9659
 msgid "Logout from Tine 2.0"
 msgstr "Выход из Tine 2.0"
 
-#: js/MainScreen.js:83 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:83 js/tine-all-debug.js:6056 js/tine-all-debug.js:9681
+#: js/tine-all-debug.js:12414 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/MainScreen.js:91
+#: js/MainScreen.js:91 js/tine-all-debug.js:9689
 msgid "Preferences"
 msgstr "Предпочтение"
 
-#: js/MainScreen.js:107
+#: js/MainScreen.js:107 js/tine-all-debug.js:9705
 #, fuzzy, python-format
 msgid "User: %s"
 msgstr "Пользователь"
 
-#: js/MainScreen.js:108
+#: js/MainScreen.js:108 js/tine-all-debug.js:9706
 #, python-format
 msgid "Timezone: %s"
 msgstr "Часовой пояс: %s"
 
-#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
+#: js/MainScreen.js:109 js/tine-all-debug.js:4413 js/tine-all-debug.js:9707
+#: js/tine-all-debug.js:11216 js/tine-all-debug.js:25167
+#: js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr ""
 
-#: js/MainScreen.js:110 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:110 js/tine-all-debug.js:4274 js/tine-all-debug.js:9708
+#: js/tine-all-debug.js:26887 js/tine-all-debug.js:27094
+#: js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Язык"
 
-#: js/MainScreen.js:279
+#: js/MainScreen.js:279 js/tine-all-debug.js:9877
 #, python-format
 msgid "Change Password For \"%s\""
 msgstr "Изменить пароль для \"%s\""
 
-#: js/MainScreen.js:303
+#: js/MainScreen.js:303 js/tine-all-debug.js:9901
 msgid "Old Password"
 msgstr "Старый пароль"
 
-#: js/MainScreen.js:307
+#: js/MainScreen.js:307 js/tine-all-debug.js:9905
 msgid "New Password"
 msgstr "Новый пароль"
 
-#: js/MainScreen.js:311
+#: js/MainScreen.js:311 js/tine-all-debug.js:9909
 msgid "Repeat new Password"
 msgstr "Повторите новый пароль"
 
-#: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
-#: js/widgets/container/ContainerSelect.js:255 js/widgets/EditRecord.js:102
+#: js/MainScreen.js:321 js/tine-all-debug.js:4681 js/tine-all-debug.js:5090
+#: js/tine-all-debug.js:5861 js/tine-all-debug.js:9919
+#: js/widgets/AccountpickerPanel.js:108
+#: js/widgets/container/ContainerSelect.js:257 js/widgets/EditRecord.js:102
 msgid "Ok"
 msgstr "Ок"
 
-#: js/MainScreen.js:330
+#: js/MainScreen.js:330 js/tine-all-debug.js:9928
 msgid "Please Wait!"
 msgstr "Пожалуйста подождите!"
 
-#: js/MainScreen.js:331
+#: js/MainScreen.js:331 js/tine-all-debug.js:9929
 msgid "changing password..."
 msgstr "Пароль изменяется"
 
-#: js/MainScreen.js:342
+#: js/MainScreen.js:342 js/tine-all-debug.js:9940
 msgid "Success"
 msgstr "Успех"
 
-#: js/MainScreen.js:343
+#: js/MainScreen.js:343 js/tine-all-debug.js:9941
 msgid "Your password has been changed."
 msgstr "Ваш пароль  изменен."
 
-#: js/MainScreen.js:349 js/MainScreen.js:359
+#: js/MainScreen.js:349 js/MainScreen.js:359 js/tine-all-debug.js:9947
+#: js/tine-all-debug.js:9957
 msgid "Failure"
 msgstr "Провал "
 
-#: js/MainScreen.js:360
+#: js/MainScreen.js:360 js/tine-all-debug.js:9958
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новие пароли не соответствуют, пожалуйста исправьте их."
 
-#: js/MainScreen.js:378
+#: js/MainScreen.js:378 js/tine-all-debug.js:9976
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr ""
 
-#: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
+#: js/MainScreen.js:391 js/tine-all-debug.js:6330 js/tine-all-debug.js:9989
+#: js/tine-all-debug.js:12551 js/tine-all-debug.js:13438
+#: js/tine-all-debug.js:14027 js/tine-all-debug.js:14667
+#: js/tine-all-debug.js:15312 js/tine-all-debug.js:20724
+#: js/widgets/container/ContainerTree.js:257
 msgid "Confirm"
 msgstr "Подтверждение"
 
-#: js/MainScreen.js:391
+#: js/MainScreen.js:391 js/tine-all-debug.js:9989
 msgid "Are you sure you want to logout?"
 msgstr "Вы уверены что хотите покинуть программу?"
 
-#: js/MainScreen.js:393
+#: js/MainScreen.js:393 js/tine-all-debug.js:9991
 msgid "Logging you out..."
 msgstr "выключаю программу..."
 
-#: js/Tinebase.js:99
+#: js/tine-all-debug.js:557 js/ux/ConnectionStatus.js:52
+msgid "online"
+msgstr ""
+
+#: js/tine-all-debug.js:558 js/ux/ConnectionStatus.js:53
+msgid "offline"
+msgstr ""
+
+#: js/tine-all-debug.js:559 js/ux/ConnectionStatus.js:54
+msgid "unknown"
+msgstr ""
+
+#: js/tine-all-debug.js:2631 js/ux/form/ImageField.js:48
+msgid "click to edit"
+msgstr "нажмите, чтобы отредактировать"
+
+#: js/tine-all-debug.js:2673 js/ux/form/ImageField.js:90
+msgid "Not An Image"
+msgstr "Никакого файла рисунка"
+
+#: js/tine-all-debug.js:2673 js/ux/form/ImageField.js:90
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Пожалуйста, выберите действительный файл рисунка (gif/png/jpeg)"
+
+#: js/tine-all-debug.js:2690 js/ux/form/ImageField.js:107
+msgid "Loading"
+msgstr "загрузка"
+
+#: js/tine-all-debug.js:2698 js/ux/form/ImageField.js:115
+msgid "Upload Failed"
+msgstr "Загрузка не удалась"
+
+#: js/tine-all-debug.js:2698 js/ux/form/ImageField.js:115
+msgid "Could not upload image. Please notify your Administrator"
+msgstr ""
+"Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
+
+#: js/tine-all-debug.js:2710 js/ux/form/ImageField.js:127
+msgid "Change Image"
+msgstr "Поменять картинку"
+
+#: js/tine-all-debug.js:2731 js/tine-all-debug.js:2749
+#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
+msgid "Crop Image"
+msgstr "Обрезать картинку"
+
+#: js/tine-all-debug.js:2757 js/ux/form/ImageField.js:174
+msgid "Delete Image"
+msgstr "Удалить картинку"
+
+#: js/tine-all-debug.js:2795 js/ux/form/ImageField.js:212
+msgid "Image Failed"
+msgstr "Ошибка при обработке картины"
+
+#: js/tine-all-debug.js:2795 js/ux/form/ImageField.js:212
+msgid "Could not load image. Please notify your Administrator"
+msgstr ""
+"Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
+
+#: js/tine-all-debug.js:4306 js/widgets/LangChooser.js:72
+msgid "setting new language..."
+msgstr "Урегулирование нового языка..."
+
+#: js/tine-all-debug.js:4306 js/tine-all-debug.js:4327
+#: js/tine-all-debug.js:4453 js/tine-all-debug.js:11654
+#: js/tine-all-debug.js:13749 js/tine-all-debug.js:15207
+#: js/tine-all-debug.js:15950 js/tine-all-debug.js:17858
+#: js/tine-all-debug.js:20648 js/widgets/LangChooser.js:72
+#: js/widgets/LangChooser.js:93 js/widgets/TimezoneChooser.js:74
+msgid "Please Wait"
+msgstr "Пожалуйста подождите"
+
+#: js/tine-all-debug.js:4327 js/widgets/LangChooser.js:93
+msgid "loading new language..."
+msgstr "Загрузка нового языка..."
+
+#: js/tine-all-debug.js:4453 js/widgets/TimezoneChooser.js:74
+msgid "setting new timezone..."
+msgstr ""
+
+#: js/tine-all-debug.js:4692 js/widgets/EditRecord.js:113
+msgid "Apply"
+msgstr "Применить"
+
+#: js/tine-all-debug.js:4712 js/tine-all-debug.js:28100
+#: js/tine-all-debug.js:28656 js/widgets/EditRecord.js:133
+msgid "delete"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:4757 js/tine-all-debug.js:20801
+#: js/widgets/EditRecord.js:178
+msgid "Saved in"
+msgstr ""
+
+#: js/tine-all-debug.js:4959 js/tine-all-debug.js:4968
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+msgid "New version of Tine 2.0 available"
+msgstr ""
+
+#: js/tine-all-debug.js:4960 js/tine-all-debug.js:4969
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#, python-format
+msgid "Version \"%s\" of Tine 2.0 is available."
+msgstr ""
+
+#: js/tine-all-debug.js:4961 js/widgets/VersionCheck.js:41
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr ""
+
+#: js/tine-all-debug.js:4970 js/widgets/VersionCheck.js:50
+msgid "Please consider updateing!"
+msgstr ""
+
+#: js/tine-all-debug.js:5085 js/widgets/AccountpickerPanel.js:103
+msgid "please select an account"
+msgstr "Пожалуйста выберите счет"
+
+#: js/tine-all-debug.js:5205 js/tine-all-debug.js:13633
+#: js/tine-all-debug.js:14574 js/tine-all-debug.js:23925
+#: js/widgets/account/PickerPanel.js:70
+msgid "add account"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:5301 js/tine-all-debug.js:5483
+#: js/tine-all-debug.js:12828 js/tine-all-debug.js:14156
+#: js/tine-all-debug.js:14468 js/tine-all-debug.js:14790
+#: js/tine-all-debug.js:15441 js/tine-all-debug.js:17052
+#: js/tine-all-debug.js:17116 js/tine-all-debug.js:22706
+#: js/tine-all-debug.js:23972 js/tine-all-debug.js:24719
+#: js/tine-all-debug.js:24950 js/tine-all-debug.js:26805
+#: js/tine-all-debug.js:26959 js/tine-all-debug.js:27830
+#: js/tine-all-debug.js:28344 js/widgets/account/ConfigGrid.js:79
+#: js/widgets/account/PickerPanel.js:166
+msgid "Name"
+msgstr "Имя"
+
+#: js/tine-all-debug.js:5312 js/tine-all-debug.js:8491
+#: js/tine-all-debug.js:12672 js/tine-all-debug.js:13070
+#: js/tine-all-debug.js:13476 js/tine-all-debug.js:14091
+#: js/tine-all-debug.js:14728 js/tine-all-debug.js:15376
+#: js/tine-all-debug.js:19597 js/widgets/account/PickerPanel.js:177
+#: js/widgets/GridPicker.js:386
+msgid "enter searchfilter"
+msgstr "Ввести поисковый фильтр"
+
+#: js/tine-all-debug.js:5356 js/tine-all-debug.js:8512
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
+msgid "Search"
+msgstr "Поиск"
+
+#: js/tine-all-debug.js:5392 js/tine-all-debug.js:5393
+#: js/tine-all-debug.js:8550 js/tine-all-debug.js:8551
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+msgid "Browse"
+msgstr "Листать"
+
+#: js/tine-all-debug.js:5459 js/tine-all-debug.js:14581
+#: js/tine-all-debug.js:23932 js/widgets/account/ConfigGrid.js:55
+msgid "remove account"
+msgstr "Уберите счет"
+
+#: js/tine-all-debug.js:5678 js/widgets/container/ContainerSelect.js:74
+#, python-format
+msgid "Recently used %s:"
+msgstr ""
+
+#: js/tine-all-debug.js:5697 js/widgets/container/ContainerSelect.js:93
+#, python-format
+msgid "choose other %s..."
+msgstr ""
+
+#: js/tine-all-debug.js:5709 js/tine-all-debug.js:7286
+#: js/tine-all-debug.js:7587 js/tine-all-debug.js:7591
+#: js/widgets/container/ContainerSelect.js:105
+#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:410
+msgid "personal"
+msgstr "Личное"
+
+#: js/tine-all-debug.js:5709 js/widgets/container/ContainerSelect.js:105
+msgid "shared"
+msgstr ""
+
+#: js/tine-all-debug.js:5849 js/widgets/container/ContainerSelect.js:245
+#, python-format
+msgid "please select a %s"
+msgstr ""
+
+#: js/tine-all-debug.js:5985 js/widgets/container/ContainerGrants.js:34
+msgid "Updateing Grants"
+msgstr "Права обновляются"
+
+#: js/tine-all-debug.js:6017 js/widgets/container/ContainerGrants.js:66
+msgid "Folder"
+msgstr "Папка"
+
+#: js/tine-all-debug.js:6033 js/widgets/container/ContainerGrants.js:82
+msgid "Read"
+msgstr "Читать"
+
+#: js/tine-all-debug.js:6038 js/tine-all-debug.js:8723
+#: js/tine-all-debug.js:8735 js/widgets/ActivitiesPanel.js:161
+#: js/widgets/ActivitiesPanel.js:173
+#: js/widgets/container/ContainerGrants.js:87
+msgid "Add"
+msgstr "Добавить"
+
+#: js/tine-all-debug.js:6043 js/widgets/container/ContainerGrants.js:92
+msgid "Edit"
+msgstr "Обработать"
+
+#: js/tine-all-debug.js:6048 js/widgets/container/ContainerGrants.js:97
+msgid "Delete"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:6064 js/widgets/container/ContainerGrants.js:113
+msgid "Permissions"
+msgstr "Разрешения"
+
+#: js/tine-all-debug.js:6188 js/widgets/container/ContainerTree.js:115
+#, python-format
+msgid "All %s"
+msgstr "Все %s"
+
+#: js/tine-all-debug.js:6193 js/widgets/container/ContainerTree.js:120
+#, python-format
+msgid "My %s"
+msgstr "Мои %s"
+
+#: js/tine-all-debug.js:6200 js/widgets/container/ContainerTree.js:127
+#, python-format
+msgid "Shared %s"
+msgstr "Разделение %s"
+
+#: js/tine-all-debug.js:6207 js/widgets/container/ContainerTree.js:134
+#, python-format
+msgid "Other Users %s"
+msgstr "Другие пользователи %s"
+
+#: js/tine-all-debug.js:6302 js/widgets/container/ContainerTree.js:229
+#, python-format
+msgid "New %s"
+msgstr ""
+
+#: js/tine-all-debug.js:6302 js/widgets/container/ContainerTree.js:229
+#, python-format
+msgid "Please enter the name of the new %s:"
+msgstr ""
+
+#: js/tine-all-debug.js:6304 js/widgets/container/ContainerTree.js:231
+#, python-format
+msgid "Creating %s..."
+msgstr ""
+
+#: js/tine-all-debug.js:6330 js/widgets/container/ContainerTree.js:257
+#, python-format
+msgid "Do you really want to delete the %s \"%s\"?"
+msgstr ""
+
+#: js/tine-all-debug.js:6332 js/widgets/container/ContainerTree.js:259
+#, python-format
+msgid "Deleting %s \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:6359 js/widgets/container/ContainerTree.js:286
+#, python-format
+msgid "Please enter the new name of the %s:"
+msgstr ""
+
+#: js/tine-all-debug.js:6364 js/widgets/container/ContainerTree.js:291
+#, python-format
+msgid "Updateing %s \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:6398 js/widgets/container/ContainerTree.js:325
+#, python-format
+msgid "Manage Permissions for %s :\"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:6411 js/widgets/container/ContainerTree.js:338
+#, python-format
+msgid "Add %s"
+msgstr ""
+
+#: js/tine-all-debug.js:6417 js/widgets/container/ContainerTree.js:344
+#, python-format
+msgid "Delete %s"
+msgstr ""
+
+#: js/tine-all-debug.js:6423 js/widgets/container/ContainerTree.js:350
+#, python-format
+msgid "Rename %s"
+msgstr ""
+
+#: js/tine-all-debug.js:6429 js/widgets/container/ContainerTree.js:356
+msgid "Manage permissions"
+msgstr "Управлять правами доступа"
+
+#: js/tine-all-debug.js:6598 js/widgets/grid/FilterModel.js:87
+msgid "contains"
+msgstr "Содержит"
+
+#: js/tine-all-debug.js:6599 js/widgets/grid/FilterModel.js:88
+msgid "is equal to"
+msgstr "Равно"
+
+#: js/tine-all-debug.js:6600 js/widgets/grid/FilterModel.js:89
+msgid "is greater than"
+msgstr "Больше чем"
+
+#: js/tine-all-debug.js:6601 js/widgets/grid/FilterModel.js:90
+msgid "is less than"
+msgstr "Меньше чем"
+
+#: js/tine-all-debug.js:6602 js/widgets/grid/FilterModel.js:91
+msgid "is not"
+msgstr "Не"
+
+#: js/tine-all-debug.js:6603 js/widgets/grid/FilterModel.js:92
+msgid "is in"
+msgstr "В"
+
+#: js/tine-all-debug.js:6626 js/widgets/grid/FilterModel.js:115
+msgid "select a operator"
+msgstr "Выберите оператора"
+
+#: js/tine-all-debug.js:6849 js/widgets/grid/FilterToolbar.js:122
+msgid "add new filter"
+msgstr "Добавить новый фильтр"
+
+#: js/tine-all-debug.js:6855 js/widgets/grid/FilterToolbar.js:128
+msgid "Delete all filters"
+msgstr "Удалить все фильтры"
+
+#: js/tine-all-debug.js:6861 js/widgets/grid/FilterToolbar.js:134
+msgid "start search"
+msgstr "Ночять поиск"
+
+#: js/tine-all-debug.js:6870 js/widgets/grid/FilterToolbar.js:143
+msgid "save filter"
+msgstr "Сохранить фильтр"
+
+#: js/tine-all-debug.js:6937 js/widgets/grid/FilterToolbar.js:210
+msgid "select a field"
+msgstr "Выберите поле"
+
+#: js/tine-all-debug.js:6961 js/widgets/grid/FilterToolbar.js:234
+msgid "Delete this filter"
+msgstr "Удалить этот фильтр"
+
+#: js/tine-all-debug.js:6984 js/widgets/grid/FilterToolbar.js:257
+msgid "and"
+msgstr "и"
+
+#: js/tine-all-debug.js:7003 js/widgets/grid/FilterToolbar.js:276
+msgid "Show"
+msgstr "Показать"
+
+#: js/tine-all-debug.js:7264 js/widgets/tags/TagsPanel.js:83
+msgid "Add a new personal tag"
+msgstr "Добавить новый личный тэг"
+
+#: js/tine-all-debug.js:7267 js/widgets/tags/TagsPanel.js:86
+msgid "Add New Personal Tag"
+msgstr "Добавить новый личный тэг"
+
+#: js/tine-all-debug.js:7268 js/widgets/tags/TagsPanel.js:87
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr ""
+"Пожалуйста обратите внимание: Вы устанавливаете личный тэг. Только Вы можете "
+"видеть его!"
+
+#: js/tine-all-debug.js:7268 js/widgets/tags/TagsPanel.js:87
+msgid "Enter tag name:"
+msgstr "Введите название тэга"
+
+#: js/tine-all-debug.js:7308 js/widgets/tags/TagsPanel.js:127
+msgid "No Tags to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:7331 js/widgets/tags/TagsPanel.js:150
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "Отделите тэг"
+msgstr[1] "Отделите тэга"
+msgstr[2] "Отделите тэгоф"
+
+#: js/tine-all-debug.js:7341 js/widgets/tags/TagsPanel.js:160
+msgid "Edit tag"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:7346 js/tine-all-debug.js:7351
+#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
+msgid "Rename Tag"
+msgstr "Переименовать тэг"
+
+#: js/tine-all-debug.js:7351 js/widgets/tags/TagsPanel.js:170
+msgid "Please enter a new name:"
+msgstr "Пожалуйста введите новое имя"
+
+#: js/tine-all-debug.js:7360 js/widgets/tags/TagsPanel.js:179
+msgid "Edit Description"
+msgstr "Обработать описание"
+
+#: js/tine-all-debug.js:7365 js/widgets/tags/TagsPanel.js:184
+msgid "Description for tag"
+msgstr "Описание тэга"
+
+#: js/tine-all-debug.js:7365 js/widgets/tags/TagsPanel.js:184
+msgid "Please enter new description:"
+msgstr "Пожалуйста введите новое описание:"
+
+#: js/tine-all-debug.js:7374 js/widgets/tags/TagsPanel.js:193
+msgid "Change Color"
+msgstr "Изменить цвет"
+
+#: js/tine-all-debug.js:7398 js/widgets/tags/TagsPanel.js:217
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Удалить тэг"
+msgstr[1] "Удалить тэги"
+msgstr[2] "Удалить тэгов"
+
+#: js/tine-all-debug.js:7410 js/widgets/tags/TagsPanel.js:229
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "Вы уверены, что хотите удалить тэг?"
+msgstr[1] "Вы уверени, что хотите удалить выбранные тэги?"
+msgstr[2] "Вы уверени, что хотите удалить выбранных тэгов?"
+
+#: js/tine-all-debug.js:7411 js/widgets/tags/TagsPanel.js:230
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "Выбранный тэг будет удален и исчезнет из всех записях."
+msgstr[1] "Выбранные тэги будут удалены и исчезнут из всех записях."
+msgstr[2] "Выбранные тэгоф будут удалены и исчезнут из всех записях."
+
+#: js/tine-all-debug.js:7415 js/tine-all-debug.js:11688
+#: js/tine-all-debug.js:20726 js/widgets/tags/TagsPanel.js:234
+msgid "Please wait a moment..."
+msgstr "Пожалуйста подождите момент..."
+
+#: js/tine-all-debug.js:7415 js/widgets/tags/TagsPanel.js:234
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Тэг удаляется"
+msgstr[1] "Тэги удаляются"
+msgstr[2] "Тэгоф удаляются"
+
+#: js/tine-all-debug.js:7431 js/tine-all-debug.js:7540
+#: js/tine-all-debug.js:7573 js/tine-all-debug.js:11018
+#: js/tine-all-debug.js:11723 js/tine-all-debug.js:11748
+#: js/tine-all-debug.js:13458 js/tine-all-debug.js:13740
+#: js/tine-all-debug.js:13783 js/tine-all-debug.js:14049
+#: js/tine-all-debug.js:14358 js/tine-all-debug.js:14386
+#: js/tine-all-debug.js:14964 js/tine-all-debug.js:15334
+#: js/tine-all-debug.js:15703 js/tine-all-debug.js:15731
+#: js/tine-all-debug.js:16902 js/tine-all-debug.js:20148
+#: js/tine-all-debug.js:20277 js/tine-all-debug.js:20564
+#: js/tine-all-debug.js:20713 js/tine-all-debug.js:20738
+#: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
+#: js/widgets/tags/TagsPanel.js:392
+msgid "Failed"
+msgstr "Неудалось"
+
+#: js/tine-all-debug.js:7431 js/widgets/tags/TagsPanel.js:250
+msgid "Could not delete Tag(s)."
+msgstr "Не смог удалить тэг(и)."
+
+#: js/tine-all-debug.js:7492 js/tine-all-debug.js:7554
+#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
+msgid "Notice"
+msgstr "Обратите внимание"
+
+#: js/tine-all-debug.js:7493 js/tine-all-debug.js:7555
+#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
+msgid "The minimum tag length is three."
+msgstr "Один тэг должен состоять, по меньшей мере из 3 знаков."
+
+#: js/tine-all-debug.js:7540 js/widgets/tags/TagsPanel.js:359
+msgid "Could not create tag."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:7573 js/widgets/tags/TagsPanel.js:392
+msgid "Could not update tag."
+msgstr "Не мог обновить тэг."
+
+#: js/tine-all-debug.js:7606 js/tine-all-debug.js:7664
+#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
+msgid "Enter tag name"
+msgstr "Введите название тэга"
+
+#: js/tine-all-debug.js:7607 js/widgets/tags/TagsPanel.js:426
+msgid "Searching..."
+msgstr "Поиск..."
+
+#: js/tine-all-debug.js:7741 js/tine-all-debug.js:14789
+#: js/tine-all-debug.js:15112 js/widgets/tags/TagsPanel.js:560
+msgid "Color"
+msgstr "Цвет"
+
+#: js/tine-all-debug.js:7806 js/widgets/tags/TagCombo.js:37
+msgid "tag name"
+msgstr "Название тэга"
+
+#: js/tine-all-debug.js:7851 js/widgets/tags/TagFilter.js:23
+msgid "Tag"
+msgstr "Тэг"
+
+#: js/tine-all-debug.js:7977 js/widgets/GroupSelect.js:94
+msgid "Please Select a Group"
+msgstr "Пожалуйста выберите группу"
+
+#: js/tine-all-debug.js:8180 js/widgets/GridPicker.js:75
+msgid "remove record"
+msgstr "Убрать отчет"
+
+#: js/tine-all-debug.js:8708 js/widgets/ActivitiesPanel.js:146
+msgid "Add a Note..."
+msgstr "Добавить одно Примечание"
+
+#: js/tine-all-debug.js:8723 js/tine-all-debug.js:8958
+#: js/tine-all-debug.js:9076 js/tine-all-debug.js:11215
+#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:401
+#: js/widgets/ActivitiesPanel.js:529
+msgid "Note"
+msgstr "Примечание"
+
+#: js/tine-all-debug.js:8736 js/tine-all-debug.js:8886
+#: js/widgets/ActivitiesPanel.js:174 js/widgets/ActivitiesPanel.js:329
+msgid "Add new note"
+msgstr "Добавить новое Примечание"
+
+#: js/tine-all-debug.js:8767 js/widgets/ActivitiesPanel.js:205
+msgid "Recent Activities"
+msgstr "Последние действия"
+
+#: js/tine-all-debug.js:8831 js/tine-all-debug.js:8885
+#: js/widgets/ActivitiesPanel.js:269 js/widgets/ActivitiesPanel.js:328
+msgid "Add Note"
+msgstr "Добавить Примечание"
+
+#: js/tine-all-debug.js:8832 js/widgets/ActivitiesPanel.js:270
+msgid "Enter new note:"
+msgstr "Введите новое примечание:"
+
+#: js/tine-all-debug.js:8873 js/widgets/ActivitiesPanel.js:316
+#, python-format
+msgid "Add a %s Note"
+msgstr ""
+
+#: js/tine-all-debug.js:8956 js/tine-all-debug.js:9081
+#: js/tine-all-debug.js:11183 js/tine-all-debug.js:17083
+#: js/tine-all-debug.js:17120 js/tine-all-debug.js:26828
+#: js/tine-all-debug.js:27219 js/widgets/ActivitiesPanel.js:399
+#: js/widgets/ActivitiesPanel.js:534
+msgid "Type"
+msgstr "Тип"
+
+#: js/tine-all-debug.js:8959 js/widgets/ActivitiesPanel.js:402
+msgid "Created By"
+msgstr "Установлено"
+
+#: js/tine-all-debug.js:8960 js/widgets/ActivitiesPanel.js:403
+msgid "Timestamp"
+msgstr "Timestamp"
+
+#: js/tine-all-debug.js:8974 js/widgets/ActivitiesPanel.js:417
+msgid "Displaying notes {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:8975 js/widgets/ActivitiesPanel.js:418
+msgid "No notes to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:9064 js/widgets/ActivitiesPanel.js:517
+msgid "Activities"
+msgstr "Действия"
+
+#: js/tine-all-debug.js:9077 js/widgets/ActivitiesPanel.js:530
+msgid "Time"
+msgstr "Время"
+
+#: js/tine-all-debug.js:9079 js/tine-all-debug.js:12319
+#: js/widgets/ActivitiesPanel.js:532
+msgid "User"
+msgstr "Пользователь"
+
+#: js/tine-all-debug.js:10326 js/Tinebase.js:99
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/Tinebase.js:120
+#: js/tine-all-debug.js:10347 js/Tinebase.js:120
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:121
+#: js/tine-all-debug.js:10348 js/Tinebase.js:121
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr ""
+
+#: js/tine-all-debug.js:10830 js/tine-all-debug.js:11035
+msgid "Internal Contacts"
+msgstr ""
+
+#: js/tine-all-debug.js:10843
+msgid "Addressbook"
+msgstr ""
+
+#: js/tine-all-debug.js:10844 js/tine-all-debug.js:11631
+#: js/tine-all-debug.js:11633
+#, fuzzy
+msgid "contacts"
+msgstr "Содержит"
+
+#: js/tine-all-debug.js:10991
+msgid "Are you Sure?"
+msgstr ""
+
+#: js/tine-all-debug.js:10992
+#, fuzzy
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Вы уверены что хотите удалить"
+msgstr[1] "Вы уверены что хотите удалить"
+msgstr[2] "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:11012 js/tine-all-debug.js:11740
+#, fuzzy
+msgid "Deleting contact..."
+msgid_plural "Deleting contacts..."
+msgstr[0] "Тэг удаляется"
+msgstr[1] "Тэги удаляются"
+msgstr[2] "Тэгоф удаляются"
+
+#: js/tine-all-debug.js:11019 js/tine-all-debug.js:11748
+msgid "Some error occured while trying to delete the conctact."
+msgid_plural "Some error occured while trying to delete the conctacts."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/tine-all-debug.js:11049
+#, fuzzy
+msgid "add contact"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:11057
+#, fuzzy
+msgid "edit contact"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:11070
+#, fuzzy
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "Удалить"
+msgstr[1] "Удалить"
+msgstr[2] "Удалить"
+
+#: js/tine-all-debug.js:11080 js/tine-all-debug.js:11638
+msgid "export as pdf"
+msgstr ""
+
+#: js/tine-all-debug.js:11090
+msgid "call contact"
+msgstr ""
+
+#: js/tine-all-debug.js:11151 js/tine-all-debug.js:12202
+msgid "Contact"
+msgstr ""
+
+#: js/tine-all-debug.js:11152 js/tine-all-debug.js:11185
+#: js/tine-all-debug.js:11961 js/tine-all-debug.js:13807
+msgid "First Name"
+msgstr ""
+
+#: js/tine-all-debug.js:11153 js/tine-all-debug.js:11184
+#: js/tine-all-debug.js:11965 js/tine-all-debug.js:13811
+#, fuzzy
+msgid "Last Name"
+msgstr "Имя"
+
+#: js/tine-all-debug.js:11154 js/tine-all-debug.js:11188
+#: js/tine-all-debug.js:11991
+msgid "Company"
+msgstr ""
+
+#: js/tine-all-debug.js:11155 js/tine-all-debug.js:11190
+#: js/tine-all-debug.js:11301 js/tine-all-debug.js:11983
+msgid "Job Title"
+msgstr ""
+
+#: js/tine-all-debug.js:11156 js/tine-all-debug.js:11191
+#: js/tine-all-debug.js:11302 js/tine-all-debug.js:11904
+msgid "Job Role"
+msgstr ""
+
+#: js/tine-all-debug.js:11158 js/tine-all-debug.js:11161
+#: js/tine-all-debug.js:11193 js/tine-all-debug.js:12117
+#: js/tine-all-debug.js:12162
+msgid "Street"
+msgstr ""
+
+#: js/tine-all-debug.js:11158 js/tine-all-debug.js:11159
+#: js/tine-all-debug.js:11160 js/tine-all-debug.js:12101
+msgid "Company Address"
+msgstr ""
+
+#: js/tine-all-debug.js:11159 js/tine-all-debug.js:11162
+#: js/tine-all-debug.js:12127 js/tine-all-debug.js:12172
+msgid "Postal Code"
+msgstr ""
+
+#: js/tine-all-debug.js:11160 js/tine-all-debug.js:11163
+#: js/tine-all-debug.js:11194 js/tine-all-debug.js:12131
+#: js/tine-all-debug.js:12176
+msgid "City"
+msgstr ""
+
+#: js/tine-all-debug.js:11161 js/tine-all-debug.js:11162
+#: js/tine-all-debug.js:11163 js/tine-all-debug.js:12150
+msgid "Private Address"
+msgstr ""
+
+#: js/tine-all-debug.js:11177
+#, fuzzy
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:11178 js/tine-all-debug.js:11397
+#, fuzzy
+msgid "No contacts to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:11186
+#, fuzzy
+msgid "Full Name"
+msgstr "Имя"
+
+#: js/tine-all-debug.js:11187 js/tine-all-debug.js:11891
+#: js/tine-all-debug.js:11977
+#, fuzzy
+msgid "Display Name"
+msgstr "Фамилия"
+
+#: js/tine-all-debug.js:11189 js/tine-all-debug.js:11995
+msgid "Unit"
+msgstr ""
+
+#: js/tine-all-debug.js:11192 js/tine-all-debug.js:11303
+#: js/tine-all-debug.js:11921
+msgid "Room"
+msgstr ""
+
+#: js/tine-all-debug.js:11195 js/tine-all-debug.js:12135
+#: js/tine-all-debug.js:12180
+msgid "Region"
+msgstr ""
+
+#: js/tine-all-debug.js:11196
+msgid "Postalcode"
+msgstr ""
+
+#: js/tine-all-debug.js:11197 js/tine-all-debug.js:12142
+#: js/tine-all-debug.js:12187
+msgid "Country"
+msgstr ""
+
+#: js/tine-all-debug.js:11198
+msgid "Street (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11199
+msgid "City (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11200
+msgid "Region (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11201
+msgid "Postalcode (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11202
+msgid "Country (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11203 js/tine-all-debug.js:13548
+msgid "Email"
+msgstr ""
+
+#: js/tine-all-debug.js:11204 js/tine-all-debug.js:12021
+#: js/tine-all-debug.js:16705 js/tine-all-debug.js:17075
+#: js/tine-all-debug.js:19374
+msgid "Phone"
+msgstr ""
+
+#: js/tine-all-debug.js:11205 js/tine-all-debug.js:12026
+msgid "Mobile"
+msgstr ""
+
+#: js/tine-all-debug.js:11206 js/tine-all-debug.js:12031
+msgid "Fax"
+msgstr ""
+
+#: js/tine-all-debug.js:11207
+msgid "Car phone"
+msgstr ""
+
+#: js/tine-all-debug.js:11208
+msgid "Pager"
+msgstr ""
+
+#: js/tine-all-debug.js:11209 js/tine-all-debug.js:12038
+msgid "Phone (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11210 js/tine-all-debug.js:12048
+msgid "Fax (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11211 js/tine-all-debug.js:12043
+msgid "Mobile (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11212
+msgid "Email (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11213 js/tine-all-debug.js:12068
+msgid "Web"
+msgstr ""
+
+#: js/tine-all-debug.js:11214
+msgid "URL (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:11217
+msgid "Geo"
+msgstr ""
+
+#: js/tine-all-debug.js:11218 js/tine-all-debug.js:12000
+msgid "Birthday"
+msgstr ""
+
+#: js/tine-all-debug.js:11234 js/tine-all-debug.js:11489
+msgid "Select contact"
+msgstr ""
+
+#: js/tine-all-debug.js:11632
+#, fuzzy
+msgid "addressbook"
+msgstr "Электронный адрес"
+
+#: js/tine-all-debug.js:11654
+#, fuzzy
+msgid "Loading Contact..."
+msgstr "Регистрирую Вас в..."
+
+#: js/tine-all-debug.js:11668 js/tine-all-debug.js:17670
+#, fuzzy
+msgid "Add new contact"
+msgstr "Добавить новое Примечание"
+
+#: js/tine-all-debug.js:11670
+#, python-format
+msgid "Edit Contact \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:11688
+msgid "Saving Contact"
+msgstr ""
+
+#: js/tine-all-debug.js:11723
+#, fuzzy
+msgid "Could not save contact."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:11727 js/tine-all-debug.js:13788
+#: js/tine-all-debug.js:14365 js/tine-all-debug.js:14969
+#: js/tine-all-debug.js:15710 js/tine-all-debug.js:20717
+msgid "Errors"
+msgstr ""
+
+#: js/tine-all-debug.js:11727 js/tine-all-debug.js:13788
+#: js/tine-all-debug.js:14365 js/tine-all-debug.js:14969
+#: js/tine-all-debug.js:15710 js/tine-all-debug.js:16906
+#: js/tine-all-debug.js:20717
+#, fuzzy
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста введите новое имя"
+
+#: js/tine-all-debug.js:11911
+msgid "Middle Name"
+msgstr ""
+
+#: js/tine-all-debug.js:11916
+msgid "Suffix"
+msgstr ""
+
+#: js/tine-all-debug.js:11929
+msgid "Personal Information"
+msgstr ""
+
+#: js/tine-all-debug.js:11956
+#, fuzzy
+msgid "Title"
+msgstr "Время"
+
+#: js/tine-all-debug.js:12055
+msgid "E-Mail"
+msgstr ""
+
+#: js/tine-all-debug.js:12061
+msgid "E-Mail (private)"
+msgstr ""
+
+#: js/tine-all-debug.js:12078
+msgid "Contact Information"
+msgstr ""
+
+#: js/tine-all-debug.js:12121 js/tine-all-debug.js:12166
+msgid "Street 2"
+msgstr ""
+
+#: js/tine-all-debug.js:12194
+msgid "Custom Fields"
+msgstr ""
+
+#: js/tine-all-debug.js:12248 js/tine-all-debug.js:18144
+#, fuzzy
+msgid "Enter description"
+msgstr "Обработать описание"
+
+#: js/tine-all-debug.js:12284
+#, fuzzy, python-format
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] "вход в систему"
+msgstr[1] "вход в систему"
+msgstr[2] "вход в систему"
+
+#: js/tine-all-debug.js:12331
+msgid "Groups"
+msgstr ""
+
+#: js/tine-all-debug.js:12343
+msgid "Applications"
+msgstr ""
+
+#: js/tine-all-debug.js:12355
+msgid "Access Log"
+msgstr ""
+
+#: js/tine-all-debug.js:12367
+#, fuzzy
+msgid "Shared Tags"
+msgstr "Разделение %s"
+
+#: js/tine-all-debug.js:12379
+msgid "Roles"
+msgstr ""
+
+#: js/tine-all-debug.js:12551
+#, fuzzy
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:12666
+#, fuzzy
+msgid "delete entry"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:12667
+#, fuzzy
+msgid "select all"
+msgstr "Выберите поле"
+
+#: js/tine-all-debug.js:12702
+msgid "Display from:"
+msgstr ""
+
+#: js/tine-all-debug.js:12706
+msgid "to:"
+msgstr ""
+
+#: js/tine-all-debug.js:12711 js/tine-all-debug.js:13087
+#: js/tine-all-debug.js:13492 js/tine-all-debug.js:14111
+#: js/tine-all-debug.js:14748 js/tine-all-debug.js:15396
+#: js/tine-all-debug.js:19618 js/tine-all-debug.js:20398
+#, fuzzy
+msgid "Search:"
+msgstr "Поиск"
+
+#: js/tine-all-debug.js:12784
+#, fuzzy
+msgid "invalid password"
+msgstr "Старый пароль"
+
+#: js/tine-all-debug.js:12788
+msgid "ambiguous username"
+msgstr ""
+
+#: js/tine-all-debug.js:12792
+msgid "user not found"
+msgstr ""
+
+#: js/tine-all-debug.js:12796
+#, fuzzy
+msgid "failure"
+msgstr "Провал "
+
+#: js/tine-all-debug.js:12800
+#, fuzzy
+msgid "success"
+msgstr "Успех"
+
+#: js/tine-all-debug.js:12821
+#, fuzzy
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:12822
+#, fuzzy
+msgid "No access log entries to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:12826
+msgid "Session ID"
+msgstr ""
+
+#: js/tine-all-debug.js:12827 js/tine-all-debug.js:13816
+#, fuzzy
+msgid "Login Name"
+msgstr "Имя пользователя"
+
+#: js/tine-all-debug.js:12829 js/tine-all-debug.js:23091
+#: js/tine-all-debug.js:27278 js/tine-all-debug.js:29537
+msgid "IP Address"
+msgstr ""
+
+#: js/tine-all-debug.js:12830
+#, fuzzy
+msgid "Login Time"
+msgstr "Имя пользователя"
+
+#: js/tine-all-debug.js:12831
+#, fuzzy
+msgid "Logout Time"
+msgstr "Выход"
+
+#: js/tine-all-debug.js:12832
+msgid "Account ID"
+msgstr ""
+
+#: js/tine-all-debug.js:12833
+msgid "Result"
+msgstr ""
+
+#: js/tine-all-debug.js:13063
+msgid "enable application"
+msgstr ""
+
+#: js/tine-all-debug.js:13064
+msgid "disable application"
+msgstr ""
+
+#: js/tine-all-debug.js:13065
+#, fuzzy
+msgid "settings"
+msgstr "устанавливается"
+
+#: js/tine-all-debug.js:13116
+msgid "disabled"
+msgstr ""
+
+#: js/tine-all-debug.js:13119
+#, fuzzy
+msgid "enabled"
+msgstr "Неудалось"
+
+#: js/tine-all-debug.js:13123
+#, python-format
+msgid "unknown status (%s)"
+msgstr ""
+
+#: js/tine-all-debug.js:13152
+#, fuzzy
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:13153
+#, fuzzy
+msgid "No applications to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:13157
+#, fuzzy
+msgid "order"
+msgstr "Папка"
+
+#: js/tine-all-debug.js:13158 js/tine-all-debug.js:22010
+#: js/tine-all-debug.js:22245 js/tine-all-debug.js:22497
+#: js/tine-all-debug.js:24171 js/tine-all-debug.js:25592
+#: js/tine-all-debug.js:25860 js/tine-all-debug.js:25997
+#: js/tine-all-debug.js:26560 js/tine-all-debug.js:27625
+#: js/tine-all-debug.js:29994
+#, fuzzy
+msgid "name"
+msgstr "Переименовать"
+
+#: js/tine-all-debug.js:13159
+msgid "status"
+msgstr ""
+
+#: js/tine-all-debug.js:13160
+#, fuzzy
+msgid "version"
+msgstr "Разрешения"
+
+#: js/tine-all-debug.js:13413
+#, fuzzy
+msgid "Set new password"
+msgstr "Повторите новый пароль"
+
+#: js/tine-all-debug.js:13413
+#, fuzzy
+msgid "Please enter the new password:"
+msgstr "Пожалуйста введите новое имя"
+
+#: js/tine-all-debug.js:13438
+#, fuzzy
+msgid "Do you really want to delete the selected account(s)?"
+msgstr "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:13453
+msgid "Deleting account(s)..."
+msgstr ""
+
+#: js/tine-all-debug.js:13458
+msgid "Some error occured while trying to delete the account(s)."
+msgstr ""
+
+#: js/tine-all-debug.js:13537
+#, fuzzy
+msgid "Displaying accounts {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:13538
+#, fuzzy
+msgid "No accounts to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:13542 js/tine-all-debug.js:14155
+#: js/tine-all-debug.js:15440
+msgid "ID"
+msgstr ""
+
+#: js/tine-all-debug.js:13543 js/tine-all-debug.js:13854
+#: js/tine-all-debug.js:17186 js/tine-all-debug.js:20480
+#: js/tine-all-debug.js:20789
+msgid "Status"
+msgstr ""
+
+#: js/tine-all-debug.js:13544
+#, fuzzy
+msgid "Displayname"
+msgstr "Фамилия"
+
+#: js/tine-all-debug.js:13545
+#, fuzzy
+msgid "Loginname"
+msgstr "Имя пользователя"
+
+#: js/tine-all-debug.js:13546
+#, fuzzy
+msgid "Last name"
+msgstr "Название тэга"
+
+#: js/tine-all-debug.js:13547
+#, fuzzy
+msgid "First name"
+msgstr "Фамилия"
+
+#: js/tine-all-debug.js:13549 js/tine-all-debug.js:13878
+#, fuzzy
+msgid "Last login at"
+msgstr "Имя пользователя"
+
+#: js/tine-all-debug.js:13550 js/tine-all-debug.js:13885
+msgid "Last login from"
+msgstr ""
+
+#: js/tine-all-debug.js:13551
+#, fuzzy
+msgid "Password changed"
+msgstr "Пароль"
+
+#: js/tine-all-debug.js:13552 js/tine-all-debug.js:13873
+msgid "Expires"
+msgstr ""
+
+#: js/tine-all-debug.js:13641
+#, fuzzy
+msgid "edit account"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:13649
+#, fuzzy
+msgid "delete account"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:13657
+#, fuzzy
+msgid "enable account"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:13666
+#, fuzzy
+msgid "disable account"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:13675
+#, fuzzy
+msgid "reset password"
+msgstr "Новый пароль"
+
+#: js/tine-all-debug.js:13734
+#, fuzzy
+msgid "Deleting account..."
+msgstr "Тэг удаляется"
+
+#: js/tine-all-debug.js:13740
+msgid "Some error occured while trying to delete the account."
+msgstr ""
+
+#: js/tine-all-debug.js:13749
+msgid "Saving User Account"
+msgstr ""
+
+#: js/tine-all-debug.js:13783
+#, fuzzy
+msgid "Could not save user account."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:13824 js/tine-all-debug.js:13830
+#, fuzzy
+msgid "no password set"
+msgstr "Изменить пароль"
+
+#: js/tine-all-debug.js:13827
+#, fuzzy
+msgid "Password again"
+msgstr "Пароль"
+
+#: js/tine-all-debug.js:13832
+msgid "Primary group"
+msgstr ""
+
+#: js/tine-all-debug.js:13840 js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Электронный адрес"
+
+#: js/tine-all-debug.js:13875 js/tine-all-debug.js:13893
+msgid "never"
+msgstr ""
+
+#: js/tine-all-debug.js:13880 js/tine-all-debug.js:13887
+msgid "never logged in"
+msgstr ""
+
+#: js/tine-all-debug.js:13891
+#, fuzzy
+msgid "Password set"
+msgstr "Пароль"
+
+#: js/tine-all-debug.js:13933
+#, fuzzy
+msgid "Add New User Account"
+msgstr "Добавить новый личный тэг"
+
+#: js/tine-all-debug.js:13935
+#, python-format
+msgid "Edit User Account \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:14027
+#, fuzzy
+msgid "Do you really want to delete the selected groups?"
+msgstr "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:14044
+#, fuzzy
+msgid "Deleting group(s)..."
+msgstr "Тэг удаляется"
+
+#: js/tine-all-debug.js:14049 js/tine-all-debug.js:14386
+msgid "Some error occured while trying to delete the group."
+msgstr ""
+
+#: js/tine-all-debug.js:14062
+#, fuzzy
+msgid "add group"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:14070
+msgid "edit group"
+msgstr ""
+
+#: js/tine-all-debug.js:14078
+#, fuzzy
+msgid "delete group"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:14149
+#, fuzzy
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:14150 js/tine-all-debug.js:14201
+#, fuzzy
+msgid "No groups to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:14323 js/tine-all-debug.js:14920
+#: js/tine-all-debug.js:15663
+#, fuzzy
+msgid "Updating Memberships"
+msgstr "Права обновляются"
+
+#: js/tine-all-debug.js:14358
+#, fuzzy
+msgid "Could not save group."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:14378
+#, fuzzy
+msgid "Deleting group..."
+msgstr "Тэг удаляется"
+
+#: js/tine-all-debug.js:14500
+msgid "Group Members"
+msgstr ""
+
+#: js/tine-all-debug.js:14531
+#, fuzzy
+msgid "Group Name"
+msgstr "Обрезать картинку"
+
+#: js/tine-all-debug.js:14599
+#, fuzzy
+msgid "Add new group"
+msgstr "Добавить новое Примечание"
+
+#: js/tine-all-debug.js:14601
+#, python-format
+msgid "Edit Group \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:14667
+#, fuzzy
+msgid "Do you really want to delete the selected tags?"
+msgstr "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:14684
+#, fuzzy
+msgid "Deleting tag(s)..."
+msgstr "Тэг удаляется"
+
+#: js/tine-all-debug.js:14699
+#, fuzzy
+msgid "add tag"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:14706
+#, fuzzy
+msgid "edit tag"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:14714
+#, fuzzy
+msgid "delete tag"
+msgstr "Удалить тэг"
+
+#: js/tine-all-debug.js:14783
+#, fuzzy
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:14784 js/tine-all-debug.js:14833
+#, fuzzy
+msgid "No tags to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:14964
+#, fuzzy
+msgid "Could not save tag."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:14982
+#, fuzzy
+msgid "Deleting tag..."
+msgstr "Тэг удаляется"
+
+#: js/tine-all-debug.js:15072
+msgid "Allowed Contexts"
+msgstr ""
+
+#: js/tine-all-debug.js:15087
+msgid "Account Rights"
+msgstr ""
+
+#: js/tine-all-debug.js:15092
+msgid "View"
+msgstr ""
+
+#: js/tine-all-debug.js:15097
+#, fuzzy
+msgid "Use"
+msgstr "Пользователь"
+
+#: js/tine-all-debug.js:15164
+#, fuzzy
+msgid "Tag Name"
+msgstr "Название тэга"
+
+#: js/tine-all-debug.js:15186 js/tine-all-debug.js:15880
+msgid "Rights"
+msgstr ""
+
+#: js/tine-all-debug.js:15189 js/tine-all-debug.js:26812
+#: js/tine-all-debug.js:27011 js/tine-all-debug.js:28328
+msgid "Context"
+msgstr ""
+
+#: js/tine-all-debug.js:15207
+#, fuzzy
+msgid "Loading Tag..."
+msgstr "загрузка"
+
+#: js/tine-all-debug.js:15238
+#, fuzzy
+msgid "Add New Tag"
+msgstr "Добавить новый личный тэг"
+
+#: js/tine-all-debug.js:15240
+#, fuzzy, python-format
+msgid "Edit Tag \"%s\""
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:15312
+#, fuzzy
+msgid "Do you really want to delete the selected roles?"
+msgstr "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:15329
+msgid "Deleting role(s)..."
+msgstr ""
+
+#: js/tine-all-debug.js:15334 js/tine-all-debug.js:15731
+msgid "Some error occured while trying to delete the role."
+msgstr ""
+
+#: js/tine-all-debug.js:15347
+#, fuzzy
+msgid "add role"
+msgstr "Добавить Примечание"
+
+#: js/tine-all-debug.js:15355
+msgid "edit role"
+msgstr ""
+
+#: js/tine-all-debug.js:15363
+#, fuzzy
+msgid "delete role"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:15434
+#, fuzzy
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:15435 js/tine-all-debug.js:15486
+#, fuzzy
+msgid "No roles to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:15703
+#, fuzzy
+msgid "Could not save role."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:15723
+#, fuzzy
+msgid "Deleting role..."
+msgstr "Удаляю"
+
+#: js/tine-all-debug.js:15858
+msgid "Role members"
+msgstr ""
+
+#: js/tine-all-debug.js:15868
+msgid "Members"
+msgstr ""
+
+#: js/tine-all-debug.js:15910
+#, fuzzy
+msgid "Role Name"
+msgstr "Переименовать"
+
+#: js/tine-all-debug.js:15950
+#, fuzzy
+msgid "Loading Role..."
+msgstr "загрузка"
+
+#: js/tine-all-debug.js:15990
+#, fuzzy
+msgid "Add New Role"
+msgstr "Добавить новое Примечание"
+
+#: js/tine-all-debug.js:15992
+#, python-format
+msgid "Edit Role \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:16186
+#, fuzzy
+msgid "Are you sure you want to delete this lead?"
+msgstr "Вы уверены что хотите покинуть программу?"
+
+#: js/tine-all-debug.js:16202
+#, fuzzy
+msgid "Deleting lead"
+msgstr "Тэг удаляется"
+
+#: js/tine-all-debug.js:16207
+msgid "Some error occured while trying to delete the lead."
+msgstr ""
+
+#: js/tine-all-debug.js:16251 js/tine-all-debug.js:20333
+#, fuzzy
+msgid "Enter searchfilter"
+msgstr "Ввести поисковый фильтр"
+
+#: js/tine-all-debug.js:16262 js/tine-all-debug.js:16263
+#: js/tine-all-debug.js:16413 js/tine-all-debug.js:18008
+msgid "Leadstate"
+msgstr ""
+
+#: js/tine-all-debug.js:16264
+#, fuzzy
+msgid "leadstate"
+msgstr "Пожалуйста подождите"
+
+#: js/tine-all-debug.js:16284 js/tine-all-debug.js:16285
+#: js/tine-all-debug.js:16286 js/tine-all-debug.js:16414
+#: js/tine-all-debug.js:18071
+msgid "Probability"
+msgstr ""
+
+#: js/tine-all-debug.js:16342
+#, fuzzy
+msgid "Show details"
+msgstr "показ детали:"
+
+#: js/tine-all-debug.js:16351
+msgid "Show closed leads"
+msgstr ""
+
+#: js/tine-all-debug.js:16386
+#, fuzzy
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:16387 js/tine-all-debug.js:16447
+msgid "No leads found."
+msgstr ""
+
+#: js/tine-all-debug.js:16409
+msgid "Lead id"
+msgstr ""
+
+#: js/tine-all-debug.js:16410
+#, fuzzy
+msgid "Lead name"
+msgstr "Название тэга"
+
+#: js/tine-all-debug.js:16411 js/tine-all-debug.js:18301
+#: js/tine-all-debug.js:18344
+msgid "Partner"
+msgstr ""
+
+#: js/tine-all-debug.js:16412 js/tine-all-debug.js:18300
+#: js/tine-all-debug.js:18340
+msgid "Customer"
+msgstr ""
+
+#: js/tine-all-debug.js:16415
+msgid "Turnover"
+msgstr ""
+
+#: js/tine-all-debug.js:16490
+#, fuzzy
+msgid "Add lead"
+msgstr "Добавить Примечание"
+
+#: js/tine-all-debug.js:16491
+#, fuzzy
+msgid "Add new lead"
+msgstr "Добавить новое Примечание"
+
+#: js/tine-all-debug.js:16500
+#, fuzzy
+msgid "Edit lead"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:16501
+msgid "Edit selected lead"
+msgstr ""
+
+#: js/tine-all-debug.js:16514
+#, fuzzy
+msgid "Delete lead"
+msgid_plural "Delete leads"
+msgstr[0] "Удалить тэг"
+msgstr[1] "Удалить тэги"
+msgstr[2] "Удалить тэгов"
+
+#: js/tine-all-debug.js:16515
+#, fuzzy
+msgid "Delete selected leads"
+msgstr "Вы уверены, что хотите удалить тэг?"
+
+#: js/tine-all-debug.js:16525 js/tine-all-debug.js:17772
+#: js/tine-all-debug.js:17773
+#, fuzzy
+msgid "Export as PDF"
+msgstr "Экспортировать число"
+
+#: js/tine-all-debug.js:16526
+msgid "Export selected lead as PDF"
+msgstr ""
+
+#: js/tine-all-debug.js:16535 js/tine-all-debug.js:17717
+#: js/tine-all-debug.js:17736 js/tine-all-debug.js:20176
+#, fuzzy
+msgid "Add task"
+msgstr "Добавить Примечание"
+
+#: js/tine-all-debug.js:16536
+msgid "Add task for selected lead"
+msgstr ""
+
+#: js/tine-all-debug.js:16643
+msgid "Lead states"
+msgstr ""
+
+#: js/tine-all-debug.js:16644
+msgid "Lead sources"
+msgstr ""
+
+#: js/tine-all-debug.js:16645
+msgid "Lead types"
+msgstr ""
+
+#: js/tine-all-debug.js:16646 js/tine-all-debug.js:17835
+msgid "Products"
+msgstr ""
+
+#: js/tine-all-debug.js:16706 js/tine-all-debug.js:17076
+msgid "Cellphone"
+msgstr ""
+
+#: js/tine-all-debug.js:16809
+msgid "Search Contacts"
+msgstr ""
+
+#: js/tine-all-debug.js:16871
+msgid "Saving lead"
+msgstr ""
+
+#: js/tine-all-debug.js:16902
+#, fuzzy
+msgid "Could not save lead."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:17061
+#, fuzzy
+msgid "Address"
+msgstr "Электронный адрес"
+
+#: js/tine-all-debug.js:17072
+msgid "Contactdata"
+msgstr ""
+
+#: js/tine-all-debug.js:17117
+msgid "Organisation"
+msgstr ""
+
+#: js/tine-all-debug.js:17145 js/tine-all-debug.js:20425
+#: js/tine-all-debug.js:20761
+msgid "Summary"
+msgstr ""
+
+#: js/tine-all-debug.js:17153 js/tine-all-debug.js:20433
+#, fuzzy
+msgid "Add a task..."
+msgstr "Добавить одно Примечание"
+
+#: js/tine-all-debug.js:17157 js/tine-all-debug.js:20437
+msgid "Due Date"
+msgstr ""
+
+#: js/tine-all-debug.js:17171 js/tine-all-debug.js:20451
+#: js/tine-all-debug.js:20793
+msgid "Priority"
+msgstr ""
+
+#: js/tine-all-debug.js:17223
+msgid "Product"
+msgstr ""
+
+#: js/tine-all-debug.js:17232
+#, fuzzy
+msgid "Add a product..."
+msgstr "Добавить одно Примечание"
+
+#: js/tine-all-debug.js:17254
+msgid "Price"
+msgstr ""
+
+#: js/tine-all-debug.js:17347 js/tine-all-debug.js:20502
+#, fuzzy
+msgid "No Tasks to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:17671
+#, fuzzy
+msgid "Add new customer contact"
+msgstr "Добавить новый личный тэг"
+
+#: js/tine-all-debug.js:17679
+#, fuzzy
+msgid "Add contact"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:17680
+msgid "Add existing contact to lead"
+msgstr ""
+
+#: js/tine-all-debug.js:17694
+#, fuzzy
+msgid "Edit contact"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:17695
+msgid "Edit selected contact"
+msgstr ""
+
+#: js/tine-all-debug.js:17704
+msgid "Unlink contact"
+msgstr ""
+
+#: js/tine-all-debug.js:17705
+msgid "Unlink selected contacts"
+msgstr ""
+
+#: js/tine-all-debug.js:17718
+#, fuzzy
+msgid "Add new task"
+msgstr "Добавить новое Примечание"
+
+#: js/tine-all-debug.js:17726 js/tine-all-debug.js:20166
+#, fuzzy
+msgid "Edit task"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:17727
+msgid "Edit selected task"
+msgstr ""
+
+#: js/tine-all-debug.js:17737
+msgid "Add existing task to lead"
+msgstr ""
+
+#: js/tine-all-debug.js:17746
+msgid "Remove tasks"
+msgstr ""
+
+#: js/tine-all-debug.js:17747
+msgid "Remove selected tasks"
+msgstr ""
+
+#: js/tine-all-debug.js:17759
+#, fuzzy
+msgid "Remove products"
+msgstr "Убрать отчет"
+
+#: js/tine-all-debug.js:17760
+msgid "Remove selected products"
+msgstr ""
+
+#: js/tine-all-debug.js:17801 js/tine-all-debug.js:17802
+#, fuzzy
+msgid "Leads"
+msgstr "Читать"
+
+#: js/tine-all-debug.js:17833
+#, fuzzy
+msgid "Contacts"
+msgstr "Содержит"
+
+#: js/tine-all-debug.js:17834 js/tine-all-debug.js:20310
+#, fuzzy
+msgid "Tasks"
+msgstr "Тэги"
+
+#: js/tine-all-debug.js:17858
+#, fuzzy
+msgid "Loading Lead..."
+msgstr "загрузка"
+
+#: js/tine-all-debug.js:17879
+#, fuzzy
+msgid "Add New Lead"
+msgstr "Добавить новое Примечание"
+
+#: js/tine-all-debug.js:17881
+#, python-format
+msgid "Edit Lead \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:17999
+#, fuzzy
+msgid "Enter short name"
+msgstr "Введите название тэга"
+
+#: js/tine-all-debug.js:18037
+msgid "Leadtype"
+msgstr ""
+
+#: js/tine-all-debug.js:18054
+msgid "Leadsource"
+msgstr ""
+
+#: js/tine-all-debug.js:18079 js/tine-all-debug.js:19726
+msgid "Start"
+msgstr ""
+
+#: js/tine-all-debug.js:18086
+msgid "Estimated end"
+msgstr ""
+
+#: js/tine-all-debug.js:18093
+#, fuzzy
+msgid "End"
+msgstr "и"
+
+#: js/tine-all-debug.js:18100
+#, fuzzy
+msgid "folder"
+msgstr "Папка"
+
+#: js/tine-all-debug.js:18111
+msgid "Overview"
+msgstr ""
+
+#: js/tine-all-debug.js:18196
+msgid "Expected turnover"
+msgstr ""
+
+#: js/tine-all-debug.js:18299 js/tine-all-debug.js:18336
+msgid "Responsible"
+msgstr ""
+
+#: js/tine-all-debug.js:19144 js/tine-all-debug.js:19562
+#: js/tine-all-debug.js:19563
+msgid "Edit phone settings"
+msgstr ""
+
+#: js/tine-all-debug.js:19172
+msgid "Phones"
+msgstr ""
+
+#: js/tine-all-debug.js:19314
+msgid "Dial phone number"
+msgstr ""
+
+#: js/tine-all-debug.js:19370
+#, fuzzy
+msgid "Number"
+msgstr "Имя"
+
+#: js/tine-all-debug.js:19397
+#, fuzzy
+msgid "Line"
+msgstr "вход в систему"
+
+#: js/tine-all-debug.js:19421
+msgid "Dial"
+msgstr ""
+
+#: js/tine-all-debug.js:19552
+msgid "Dial number"
+msgstr ""
+
+#: js/tine-all-debug.js:19553
+msgid "Initiate a new outgoing call"
+msgstr ""
+
+#: js/tine-all-debug.js:19703
+msgid "Source or Destination"
+msgstr ""
+
+#: js/tine-all-debug.js:19719
+#, fuzzy
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:19720 js/tine-all-debug.js:19757
+#, fuzzy
+msgid "No calls to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:19725
+msgid "Call ID"
+msgstr ""
+
+#: js/tine-all-debug.js:19727
+msgid "Connected"
+msgstr ""
+
+#: js/tine-all-debug.js:19728
+msgid "Disconnected"
+msgstr ""
+
+#: js/tine-all-debug.js:19729
+#, fuzzy
+msgid "Duration"
+msgstr "Описание"
+
+#: js/tine-all-debug.js:19730
+msgid "Ringing"
+msgstr ""
+
+#: js/tine-all-debug.js:19731
+#, fuzzy
+msgid "Direction"
+msgstr "Описание"
+
+#: js/tine-all-debug.js:19732
+#, fuzzy
+msgid "Source"
+msgstr "Успех"
+
+#: js/tine-all-debug.js:19733
+#, fuzzy
+msgid "Destination"
+msgstr "Описание"
+
+#: js/tine-all-debug.js:20117
+#, fuzzy
+msgid "Do you really want to delete the selected task"
+msgid_plural "Do you really want to delete the selected task"
+msgstr[0] "Вы уверены что хотите удалить"
+msgstr[1] "Вы уверены что хотите удалить"
+msgstr[2] "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:20148 js/tine-all-debug.js:20738
+#, fuzzy
+msgid "Could not delete task(s)."
+msgstr "Не смог удалить тэг(и)."
+
+#: js/tine-all-debug.js:20187
+#, fuzzy
+msgid "Delete task"
+msgid_plural "Delete tasks"
+msgstr[0] "Удалить тэг"
+msgstr[1] "Удалить тэги"
+msgstr[2] "Удалить тэгов"
+
+#: js/tine-all-debug.js:20277 js/tine-all-debug.js:20564
+#: js/tine-all-debug.js:20713
+#, fuzzy
+msgid "Could not save task."
+msgstr "Не мог установить  тэг."
+
+#: js/tine-all-debug.js:20311 js/tine-all-debug.js:20638
+msgid "to do lists"
+msgstr ""
+
+#: js/tine-all-debug.js:20312 js/tine-all-debug.js:20636
+#: js/tine-all-debug.js:20637
+msgid "to do list"
+msgstr ""
+
+#: js/tine-all-debug.js:20348
+msgid "Show closed"
+msgstr ""
+
+#: js/tine-all-debug.js:20408
+#, fuzzy
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:20409
+#, fuzzy
+msgid "No tasks to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:20466
+msgid "Percent"
+msgstr ""
+
+#: js/tine-all-debug.js:20648
+#, fuzzy
+msgid "Loading Task..."
+msgstr "загрузка"
+
+#: js/tine-all-debug.js:20659
+#, fuzzy
+msgid "Add New Task"
+msgstr "Добавить новый личный тэг"
+
+#: js/tine-all-debug.js:20661
+#, python-format
+msgid "Edit Task \"%s\""
+msgstr ""
+
+#: js/tine-all-debug.js:20681 js/tine-all-debug.js:20726
+msgid "Saving Task"
+msgstr ""
+
+#: js/tine-all-debug.js:20724
+#, fuzzy
+msgid "Do you really want to delete this task?"
+msgstr "Вы уверены что хотите удалить"
+
+#: js/tine-all-debug.js:20765
+#, fuzzy
+msgid "Enter short name..."
+msgstr "Введите название тэга"
+
+#: js/tine-all-debug.js:20768
+#, fuzzy
+msgid "Notes"
+msgstr "Примечание"
+
+#: js/tine-all-debug.js:20770
+#, fuzzy
+msgid "Enter description..."
+msgstr "Обработать описание"
+
+#: js/tine-all-debug.js:20784
+msgid "Percentage"
+msgstr ""
+
+#: js/tine-all-debug.js:20797
+msgid "Due date"
+msgstr ""
+
+#: js/tine-all-debug.js:21900
+#, fuzzy
+msgid "add software"
+msgstr "Добавить Примечание"
+
+#: js/tine-all-debug.js:21907
+msgid "edit software"
+msgstr ""
+
+#: js/tine-all-debug.js:21915
+#, fuzzy
+msgid "delete software"
+msgstr "Удалить этот фильтр"
+
+#: js/tine-all-debug.js:21970 js/tine-all-debug.js:22458
+#: js/tine-all-debug.js:23030 js/tine-all-debug.js:24668
+#: js/tine-all-debug.js:25553 js/tine-all-debug.js:26509
+#: js/tine-all-debug.js:27586 js/tine-all-debug.js:28044
+#: js/tine-all-debug.js:29007 js/tine-all-debug.js:29476
+#, fuzzy
+msgid "Search: "
+msgstr "Поиск"
+
+#: js/tine-all-debug.js:22003
+#, fuzzy
+msgid "Displaying software {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:22004
+#, fuzzy
+msgid "No software to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:22009 js/tine-all-debug.js:22496
+#: js/tine-all-debug.js:24715 js/tine-all-debug.js:27624
+#: js/tine-all-debug.js:28083 js/tine-all-debug.js:29045
+msgid "id"
+msgstr ""
+
+#: js/tine-all-debug.js:22388
+#, fuzzy
+msgid "add template"
+msgstr "Добавить новый фильтр"
+
+#: js/tine-all-debug.js:22395
+msgid "edit template"
+msgstr ""
+
+#: js/tine-all-debug.js:22403
+#, fuzzy
+msgid "delete template"
+msgstr "Удалить картинку"
+
+#: js/tine-all-debug.js:22490
+#, fuzzy
+msgid "Displaying template {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:22491
+#, fuzzy
+msgid "No template to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:22499
+msgid "Model"
+msgstr ""
+
+#: js/tine-all-debug.js:22500
+msgid "Keylayout Id"
+msgstr ""
+
+#: js/tine-all-debug.js:22501
+msgid "Settings Id"
+msgstr ""
+
+#: js/tine-all-debug.js:22502
+msgid "Software Id"
+msgstr ""
+
+#: js/tine-all-debug.js:22721
+msgid "Software Version"
+msgstr ""
+
+#: js/tine-all-debug.js:22738 js/tine-all-debug.js:24042
+#: js/tine-all-debug.js:29865
+#, fuzzy
+msgid "Settings"
+msgstr "устанавливается"
+
+#: js/tine-all-debug.js:22755
+msgid "Keylayout"
+msgstr ""
+
+#: js/tine-all-debug.js:22950
+#, fuzzy
+msgid "add phone"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:22957
+msgid "edit phone"
+msgstr ""
+
+#: js/tine-all-debug.js:22965
+#, fuzzy
+msgid "delete phone"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:22973
+msgid "send HTTP Client Info"
+msgstr ""
+
+#: js/tine-all-debug.js:23062
+#, fuzzy
+msgid "Displaying phones {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:23063
+#, fuzzy
+msgid "No phones to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:23068 js/tine-all-debug.js:25591
+#: js/tine-all-debug.js:26559 js/tine-all-debug.js:29514
+msgid "Id"
+msgstr ""
+
+#: js/tine-all-debug.js:23069 js/tine-all-debug.js:29515
+#, fuzzy
+msgid "MAC address"
+msgstr "Электронный адрес"
+
+#: js/tine-all-debug.js:23070 js/tine-all-debug.js:25593
+#: js/tine-all-debug.js:29516
+#, fuzzy
+msgid "description"
+msgstr "Описание"
+
+#: js/tine-all-debug.js:23074 js/tine-all-debug.js:23627
+#: js/tine-all-debug.js:29520
+#, fuzzy
+msgid "Location"
+msgstr "загрузка"
+
+#: js/tine-all-debug.js:23084 js/tine-all-debug.js:23547
+#: js/tine-all-debug.js:29530
+msgid "Template"
+msgstr ""
+
+#: js/tine-all-debug.js:23092 js/tine-all-debug.js:29538
+msgid "Software"
+msgstr ""
+
+#: js/tine-all-debug.js:23093 js/tine-all-debug.js:29539
+msgid "current model"
+msgstr ""
+
+#: js/tine-all-debug.js:23094 js/tine-all-debug.js:29540
+msgid "redirect event"
+msgstr ""
+
+#: js/tine-all-debug.js:23095 js/tine-all-debug.js:29541
+msgid "redirect number"
+msgstr ""
+
+#: js/tine-all-debug.js:23096 js/tine-all-debug.js:29542
+msgid "redirect time"
+msgstr ""
+
+#: js/tine-all-debug.js:23097 js/tine-all-debug.js:29543
+msgid "settings loaded at"
+msgstr ""
+
+#: js/tine-all-debug.js:23098 js/tine-all-debug.js:29544
+msgid "last modified"
+msgstr ""
+
+#: js/tine-all-debug.js:23391
+msgid "lineactive"
+msgstr ""
+
+#: js/tine-all-debug.js:23450
+msgid "sipCombo"
+msgstr ""
+
+#: js/tine-all-debug.js:23459
+msgid "Idle Text"
+msgstr ""
+
+#: js/tine-all-debug.js:23540
+msgid "MAC Address"
+msgstr ""
+
+#: js/tine-all-debug.js:23650
+msgid "Phone Model"
+msgstr ""
+
+#: js/tine-all-debug.js:23701
+msgid "infos"
+msgstr ""
+
+#: js/tine-all-debug.js:23718
+msgid "Current IP Address"
+msgstr ""
+
+#: js/tine-all-debug.js:23725
+msgid "Current Software Version"
+msgstr ""
+
+#: js/tine-all-debug.js:23738
+msgid "Settings Loaded at"
+msgstr ""
+
+#: js/tine-all-debug.js:23746
+msgid "Firmware last checked at"
+msgstr ""
+
+#: js/tine-all-debug.js:23760 js/tine-all-debug.js:29773
+msgid "redirection"
+msgstr ""
+
+#: js/tine-all-debug.js:23777 js/tine-all-debug.js:29790
+msgid "redirect_event"
+msgstr ""
+
+#: js/tine-all-debug.js:23802 js/tine-all-debug.js:29815
+#, fuzzy
+msgid "all"
+msgstr "Все"
+
+#: js/tine-all-debug.js:23803 js/tine-all-debug.js:29816
+msgid "busy"
+msgstr ""
+
+#: js/tine-all-debug.js:23804 js/tine-all-debug.js:24298
+#: js/tine-all-debug.js:26128 js/tine-all-debug.js:29817
+#: js/tine-all-debug.js:30121
+msgid "none"
+msgstr ""
+
+#: js/tine-all-debug.js:23805 js/tine-all-debug.js:29818
+#, fuzzy
+msgid "time"
+msgstr "Время"
+
+#: js/tine-all-debug.js:23816 js/tine-all-debug.js:29829
+msgid "redirect_number"
+msgstr ""
+
+#: js/tine-all-debug.js:23828 js/tine-all-debug.js:29841
+msgid "redirect_time"
+msgstr ""
+
+#: js/tine-all-debug.js:24002
+msgid "Owner"
+msgstr ""
+
+#: js/tine-all-debug.js:24019
+#, fuzzy
+msgid "Users"
+msgstr "Пользователь"
+
+#: js/tine-all-debug.js:24074 js/tine-all-debug.js:25594
+#: js/tine-all-debug.js:25897 js/tine-all-debug.js:29897
+#, fuzzy
+msgid "web_language"
+msgstr "Язык"
+
+#: js/tine-all-debug.js:24089 js/tine-all-debug.js:24126
+#: js/tine-all-debug.js:24169 js/tine-all-debug.js:24205
+#: js/tine-all-debug.js:24235 js/tine-all-debug.js:24264
+#: js/tine-all-debug.js:24297 js/tine-all-debug.js:24325
+#: js/tine-all-debug.js:24353 js/tine-all-debug.js:24386
+#: js/tine-all-debug.js:24414 js/tine-all-debug.js:24442
+#: js/tine-all-debug.js:25913 js/tine-all-debug.js:25951
+#: js/tine-all-debug.js:25995 js/tine-all-debug.js:26032
+#: js/tine-all-debug.js:26063 js/tine-all-debug.js:26093
+#: js/tine-all-debug.js:26127 js/tine-all-debug.js:26156
+#: js/tine-all-debug.js:26185 js/tine-all-debug.js:26219
+#: js/tine-all-debug.js:26248 js/tine-all-debug.js:26277
+#: js/tine-all-debug.js:29912 js/tine-all-debug.js:29949
+#: js/tine-all-debug.js:29992 js/tine-all-debug.js:30028
+#: js/tine-all-debug.js:30058 js/tine-all-debug.js:30087
+#: js/tine-all-debug.js:30120 js/tine-all-debug.js:30148
+#: js/tine-all-debug.js:30176 js/tine-all-debug.js:30209
+#: js/tine-all-debug.js:30237 js/tine-all-debug.js:30265
+msgid "- factory default -"
+msgstr ""
+
+#: js/tine-all-debug.js:24111 js/tine-all-debug.js:25595
+#: js/tine-all-debug.js:25935 js/tine-all-debug.js:26574
+#: js/tine-all-debug.js:29934
+#, fuzzy
+msgid "language"
+msgstr "Язык"
+
+#: js/tine-all-debug.js:24154 js/tine-all-debug.js:25596
+#: js/tine-all-debug.js:25979 js/tine-all-debug.js:29977
+msgid "display_method"
+msgstr ""
+
+#: js/tine-all-debug.js:24170 js/tine-all-debug.js:25996
+#: js/tine-all-debug.js:29993
+msgid "whole url"
+msgstr ""
+
+#: js/tine-all-debug.js:24172 js/tine-all-debug.js:25998
+#: js/tine-all-debug.js:29995
+msgid "number"
+msgstr ""
+
+#: js/tine-all-debug.js:24173 js/tine-all-debug.js:25999
+#: js/tine-all-debug.js:29996
+msgid "name + number"
+msgstr ""
+
+#: js/tine-all-debug.js:24174 js/tine-all-debug.js:26000
+#: js/tine-all-debug.js:29997
+#, fuzzy
+msgid "number + name"
+msgstr "Введите название тэга"
+
+#: js/tine-all-debug.js:24190 js/tine-all-debug.js:25605
+#: js/tine-all-debug.js:26016 js/tine-all-debug.js:30013
+msgid "call_waiting"
+msgstr ""
+
+#: js/tine-all-debug.js:24206 js/tine-all-debug.js:24326
+#: js/tine-all-debug.js:24354 js/tine-all-debug.js:24387
+#: js/tine-all-debug.js:24415 js/tine-all-debug.js:24443
+#: js/tine-all-debug.js:25093 js/tine-all-debug.js:25119
+#: js/tine-all-debug.js:26033 js/tine-all-debug.js:26157
+#: js/tine-all-debug.js:26186 js/tine-all-debug.js:26220
+#: js/tine-all-debug.js:26249 js/tine-all-debug.js:26278
+#: js/tine-all-debug.js:28465 js/tine-all-debug.js:28504
+#: js/tine-all-debug.js:28535 js/tine-all-debug.js:28561
+#: js/tine-all-debug.js:28587 js/tine-all-debug.js:28618
+#: js/tine-all-debug.js:28644 js/tine-all-debug.js:28670
+#: js/tine-all-debug.js:28701 js/tine-all-debug.js:28727
+#: js/tine-all-debug.js:28753 js/tine-all-debug.js:28784
+#: js/tine-all-debug.js:30029 js/tine-all-debug.js:30149
+#: js/tine-all-debug.js:30177 js/tine-all-debug.js:30210
+#: js/tine-all-debug.js:30238 js/tine-all-debug.js:30266
+msgid "on"
+msgstr ""
+
+#: js/tine-all-debug.js:24207 js/tine-all-debug.js:26034
+#: js/tine-all-debug.js:30030
+msgid "visual"
+msgstr ""
+
+#: js/tine-all-debug.js:24208 js/tine-all-debug.js:26035
+#: js/tine-all-debug.js:30031
+msgid "ringer"
+msgstr ""
+
+#: js/tine-all-debug.js:24209 js/tine-all-debug.js:24327
+#: js/tine-all-debug.js:24355 js/tine-all-debug.js:24388
+#: js/tine-all-debug.js:24416 js/tine-all-debug.js:24444
+#: js/tine-all-debug.js:25094 js/tine-all-debug.js:25120
+#: js/tine-all-debug.js:26036 js/tine-all-debug.js:26158
+#: js/tine-all-debug.js:26187 js/tine-all-debug.js:26221
+#: js/tine-all-debug.js:26250 js/tine-all-debug.js:26279
+#: js/tine-all-debug.js:28466 js/tine-all-debug.js:28505
+#: js/tine-all-debug.js:28536 js/tine-all-debug.js:28562
+#: js/tine-all-debug.js:28588 js/tine-all-debug.js:28619
+#: js/tine-all-debug.js:28645 js/tine-all-debug.js:28671
+#: js/tine-all-debug.js:28702 js/tine-all-debug.js:28728
+#: js/tine-all-debug.js:28754 js/tine-all-debug.js:28785
+#: js/tine-all-debug.js:30032 js/tine-all-debug.js:30150
+#: js/tine-all-debug.js:30178 js/tine-all-debug.js:30211
+#: js/tine-all-debug.js:30239 js/tine-all-debug.js:30267
+msgid "off"
+msgstr ""
+
+#: js/tine-all-debug.js:24220 js/tine-all-debug.js:25597
+#: js/tine-all-debug.js:26047 js/tine-all-debug.js:30043
+msgid "mwi_notification"
+msgstr ""
+
+#: js/tine-all-debug.js:24236 js/tine-all-debug.js:26064
+#: js/tine-all-debug.js:30059
+msgid "silent"
+msgstr ""
+
+#: js/tine-all-debug.js:24237 js/tine-all-debug.js:26065
+#: js/tine-all-debug.js:30060
+msgid "beep"
+msgstr ""
+
+#: js/tine-all-debug.js:24238 js/tine-all-debug.js:26066
+#: js/tine-all-debug.js:30061
+msgid "reminder"
+msgstr ""
+
+#: js/tine-all-debug.js:24249 js/tine-all-debug.js:25598
+#: js/tine-all-debug.js:26077 js/tine-all-debug.js:30072
+msgid "mwi_dialtone"
+msgstr ""
+
+#: js/tine-all-debug.js:24265 js/tine-all-debug.js:26094
+#: js/tine-all-debug.js:30088
+#, fuzzy
+msgid "normal"
+msgstr "Неправильное завершение"
+
+#: js/tine-all-debug.js:24266 js/tine-all-debug.js:26095
+#: js/tine-all-debug.js:30089
+msgid "stutter"
+msgstr ""
+
+#: js/tine-all-debug.js:24282 js/tine-all-debug.js:25599
+#: js/tine-all-debug.js:26111 js/tine-all-debug.js:30105
+msgid "headset_device"
+msgstr ""
+
+#: js/tine-all-debug.js:24299 js/tine-all-debug.js:26129
+#: js/tine-all-debug.js:30122
+msgid "headset_rj"
+msgstr ""
+
+#: js/tine-all-debug.js:24310 js/tine-all-debug.js:25600
+#: js/tine-all-debug.js:26140 js/tine-all-debug.js:30133
+msgid "message_led_other"
+msgstr ""
+
+#: js/tine-all-debug.js:24338 js/tine-all-debug.js:25601
+#: js/tine-all-debug.js:26169 js/tine-all-debug.js:30161
+msgid "global_missed_counter"
+msgstr ""
+
+#: js/tine-all-debug.js:24371 js/tine-all-debug.js:25602
+#: js/tine-all-debug.js:26203 js/tine-all-debug.js:30194
+msgid "scroll_outgoing"
+msgstr ""
+
+#: js/tine-all-debug.js:24399 js/tine-all-debug.js:25603
+#: js/tine-all-debug.js:26232 js/tine-all-debug.js:30222
+msgid "show_local_line"
+msgstr ""
+
+#: js/tine-all-debug.js:24427 js/tine-all-debug.js:25604
+#: js/tine-all-debug.js:26261 js/tine-all-debug.js:30250
+msgid "show_call_status"
+msgstr ""
+
+#: js/tine-all-debug.js:24598
+#, fuzzy
+msgid "add location"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:24605
+#, fuzzy
+msgid "edit location"
+msgstr "Обработать описание"
+
+#: js/tine-all-debug.js:24613
+msgid "delete location"
+msgstr ""
+
+#: js/tine-all-debug.js:24700
+#, fuzzy
+msgid "Displaying location {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:24701
+#, fuzzy
+msgid "No location to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:24706
+msgid "FW Interval"
+msgstr ""
+
+#: js/tine-all-debug.js:24707
+msgid "FW Status"
+msgstr ""
+
+#: js/tine-all-debug.js:24708 js/tine-all-debug.js:24998
+#, fuzzy
+msgid "Update Policy"
+msgstr "Обновление"
+
+#: js/tine-all-debug.js:24709
+msgid "Server Setting"
+msgstr ""
+
+#: js/tine-all-debug.js:24710
+#, fuzzy
+msgid "Admin Mode"
+msgstr "Администратор"
+
+#: js/tine-all-debug.js:24711 js/tine-all-debug.js:25130
+msgid "NTP Server"
+msgstr ""
+
+#: js/tine-all-debug.js:24712 js/tine-all-debug.js:25241
+msgid "Webserver Type"
+msgstr ""
+
+#: js/tine-all-debug.js:24713 js/tine-all-debug.js:25302
+msgid "HTTPS Port"
+msgstr ""
+
+#: js/tine-all-debug.js:24714 js/tine-all-debug.js:25323
+#, fuzzy
+msgid "HTTP User"
+msgstr "Пользователь"
+
+#: js/tine-all-debug.js:24724
+msgid "Filter Registrar"
+msgstr ""
+
+#: js/tine-all-debug.js:24725
+msgid "CP Dialoginfo"
+msgstr ""
+
+#: js/tine-all-debug.js:24726
+msgid "Pickup Indic."
+msgstr ""
+
+#: js/tine-all-debug.js:24966
+msgid "Settings URL"
+msgstr ""
+
+#: js/tine-all-debug.js:24974
+msgid "Firmware URL"
+msgstr ""
+
+#: js/tine-all-debug.js:24982
+msgid "Base Download URL"
+msgstr ""
+
+#: js/tine-all-debug.js:25019
+msgid "Firmware Interval"
+msgstr ""
+
+#: js/tine-all-debug.js:25037
+msgid "tone_scheme"
+msgstr ""
+
+#: js/tine-all-debug.js:25079
+msgid "date_us_format"
+msgstr ""
+
+#: js/tine-all-debug.js:25105
+msgid "time_24_format"
+msgstr ""
+
+#: js/tine-all-debug.js:25147
+msgid "NTP Server Address"
+msgstr ""
+
+#: js/tine-all-debug.js:25160
+msgid "NTP Refresh"
+msgstr ""
+
+#: js/tine-all-debug.js:25192
+msgid "Enable admin mode"
+msgstr ""
+
+#: js/tine-all-debug.js:25204
+#, fuzzy
+msgid "Admin Mode Password"
+msgstr "Старый пароль"
+
+#: js/tine-all-debug.js:25214
+msgid "Enable webserver"
+msgstr ""
+
+#: js/tine-all-debug.js:25288
+msgid "HTTP Port"
+msgstr ""
+
+#: js/tine-all-debug.js:25335
+#, fuzzy
+msgid "HTTP Password"
+msgstr "Пароль"
+
+#: js/tine-all-debug.js:25480
+msgid "add setting"
+msgstr ""
+
+#: js/tine-all-debug.js:25487
+#, fuzzy
+msgid "edit setting"
+msgstr "Обработать тэг"
+
+#: js/tine-all-debug.js:25495
+#, fuzzy
+msgid "delete setting"
+msgstr "Удаляю"
+
+#: js/tine-all-debug.js:25585
+#, fuzzy
+msgid "Displaying settings {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:25586
+#, fuzzy
+msgid "No settings to display"
+msgstr "Никаких тэгов в наличии не имеется"
+
+#: js/tine-all-debug.js:25833
+msgid "SettingsMain"
+msgstr ""
+
+#: js/tine-all-debug.js:26432
+msgid "add sipPeer"
+msgstr ""
+
+#: js/tine-all-debug.js:26439
+msgid "edit sipPeer"
+msgstr ""
+
+#: js/tine-all-debug.js:26447
+#, fuzzy
+msgid "delete sipPeer"
+msgstr "Удалить этот фильтр"
+
+#: js/tine-all-debug.js:26508 js/tine-all-debug.js:28043
+msgid "Context: "
+msgstr ""
+
+#: js/tine-all-debug.js:26553
+#, fuzzy
+msgid "Displaying sipPeers {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:26554 js/tine-all-debug.js:26644
+#, fuzzy
+msgid "No sipPeers to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:26561
+#, fuzzy
+msgid "account code"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:26562
+msgid "ama flags"
+msgstr ""
+
+#: js/tine-all-debug.js:26563
+msgid "call group"
+msgstr ""
+
+#: js/tine-all-debug.js:26564
+msgid "caller id"
+msgstr ""
+
+#: js/tine-all-debug.js:26565
+msgid "can reinvite"
+msgstr ""
+
+#: js/tine-all-debug.js:26566 js/tine-all-debug.js:28085
+#, fuzzy
+msgid "context"
+msgstr "контейнер"
+
+#: js/tine-all-debug.js:26567
+msgid "default ip"
+msgstr ""
+
+#: js/tine-all-debug.js:26568
+msgid "dtmf mode"
+msgstr ""
+
+#: js/tine-all-debug.js:26569
+msgid "from user"
+msgstr ""
+
+#: js/tine-all-debug.js:26570
+msgid "from domain"
+msgstr ""
+
+#: js/tine-all-debug.js:26571
+msgid "full contact"
+msgstr ""
+
+#: js/tine-all-debug.js:26572
+msgid "host"
+msgstr ""
+
+#: js/tine-all-debug.js:26573
+msgid "insecure"
+msgstr ""
+
+#: js/tine-all-debug.js:26575 js/tine-all-debug.js:28084
+#: js/tine-all-debug.js:28321
+msgid "mailbox"
+msgstr ""
+
+#: js/tine-all-debug.js:26576
+msgid "md5 secret"
+msgstr ""
+
+#: js/tine-all-debug.js:26577
+msgid "nat"
+msgstr ""
+
+#: js/tine-all-debug.js:26578
+msgid "deny"
+msgstr ""
+
+#: js/tine-all-debug.js:26579
+msgid "permit"
+msgstr ""
+
+#: js/tine-all-debug.js:26580
+msgid "mask"
+msgstr ""
+
+#: js/tine-all-debug.js:26581
+msgid "pickup group"
+msgstr ""
+
+#: js/tine-all-debug.js:26582
+msgid "port"
+msgstr ""
+
+#: js/tine-all-debug.js:26583
+msgid "qualify"
+msgstr ""
+
+#: js/tine-all-debug.js:26584
+msgid "retrict cid"
+msgstr ""
+
+#: js/tine-all-debug.js:26585
+msgid "rtp timeout"
+msgstr ""
+
+#: js/tine-all-debug.js:26586
+msgid "rtp hold timeout"
+msgstr ""
+
+#: js/tine-all-debug.js:26587
+#, fuzzy
+msgid "secret"
+msgstr "Пользователь"
+
+#: js/tine-all-debug.js:26588
+#, fuzzy
+msgid "type"
+msgstr "Тип"
+
+#: js/tine-all-debug.js:26589
+#, fuzzy
+msgid "username"
+msgstr "Имя пользователя"
+
+#: js/tine-all-debug.js:26590
+msgid "disallow"
+msgstr ""
+
+#: js/tine-all-debug.js:26591
+msgid "allow"
+msgstr ""
+
+#: js/tine-all-debug.js:26592
+msgid "music on hold"
+msgstr ""
+
+#: js/tine-all-debug.js:26593
+msgid "reg seconds"
+msgstr ""
+
+#: js/tine-all-debug.js:26594
+#, fuzzy
+msgid "ip address"
+msgstr "Электронный адрес"
+
+#: js/tine-all-debug.js:26595
+msgid "reg exten"
+msgstr ""
+
+#: js/tine-all-debug.js:26596
+msgid "can call forward"
+msgstr ""
+
+#: js/tine-all-debug.js:26597
+msgid "set var"
+msgstr ""
+
+#: js/tine-all-debug.js:26598
+msgid "notify ringing"
+msgstr ""
+
+#: js/tine-all-debug.js:26599
+msgid "use client code"
+msgstr ""
+
+#: js/tine-all-debug.js:26600
+#, fuzzy
+msgid "auth user"
+msgstr "Другие пользователи"
+
+#: js/tine-all-debug.js:26601
+msgid "call limit"
+msgstr ""
+
+#: js/tine-all-debug.js:26602
+msgid "busy level"
+msgstr ""
+
+#: js/tine-all-debug.js:26799 js/tine-all-debug.js:28302
+msgid "General"
+msgstr ""
+
+#: js/tine-all-debug.js:26845 js/tine-all-debug.js:27212
+msgid "Secret"
+msgstr ""
+
+#: js/tine-all-debug.js:26852 js/tine-all-debug.js:26987
+msgid "Callerid"
+msgstr ""
+
+#: js/tine-all-debug.js:26859 js/tine-all-debug.js:27101
+msgid "Mailbox"
+msgstr ""
+
+#: js/tine-all-debug.js:26866 js/tine-all-debug.js:26980
+msgid "Callgroup"
+msgstr ""
+
+#: js/tine-all-debug.js:26873 js/tine-all-debug.js:27153
+msgid "Pickup group"
+msgstr ""
+
+#: js/tine-all-debug.js:26880 js/tine-all-debug.js:26966
+msgid "Accountcode"
+msgstr ""
+
+#: js/tine-all-debug.js:26894 js/tine-all-debug.js:27115
+msgid "NAT"
+msgstr ""
+
+#: js/tine-all-debug.js:26911 js/tine-all-debug.js:27174
+msgid "Qualify"
+msgstr ""
+
+#: js/tine-all-debug.js:26973
+msgid "Amaflags"
+msgstr ""
+
+#: js/tine-all-debug.js:26994
+msgid "Can reinvite"
+msgstr ""
+
+#: js/tine-all-debug.js:27018
+msgid "Default IP"
+msgstr ""
+
+#: js/tine-all-debug.js:27025
+msgid "DTMF mode"
+msgstr ""
+
+#: js/tine-all-debug.js:27042
+#, fuzzy
+msgid "From User"
+msgstr "Пользователь"
+
+#: js/tine-all-debug.js:27049
+msgid "From Domain"
+msgstr ""
+
+#: js/tine-all-debug.js:27063
+msgid "Full Contact"
+msgstr ""
+
+#: js/tine-all-debug.js:27070
+msgid "Host"
+msgstr ""
+
+#: js/tine-all-debug.js:27077
+msgid "Insecure"
+msgstr ""
+
+#: js/tine-all-debug.js:27108
+msgid "MD5 Secret"
+msgstr ""
+
+#: js/tine-all-debug.js:27132
+msgid "Deny"
+msgstr ""
+
+#: js/tine-all-debug.js:27139
+msgid "Permit"
+msgstr ""
+
+#: js/tine-all-debug.js:27146
+msgid "Mask"
+msgstr ""
+
+#: js/tine-all-debug.js:27167
+msgid "Port"
+msgstr ""
+
+#: js/tine-all-debug.js:27191
+msgid "Restrict CID"
+msgstr ""
+
+#: js/tine-all-debug.js:27198
+msgid "RTP Timeout"
+msgstr ""
+
+#: js/tine-all-debug.js:27205
+msgid "RTP Hold Timeout"
+msgstr ""
+
+#: js/tine-all-debug.js:27243
+msgid "Disallow"
+msgstr ""
+
+#: js/tine-all-debug.js:27250
+#, fuzzy
+msgid "Allow"
+msgstr "Все"
+
+#: js/tine-all-debug.js:27257
+msgid "Music on hold"
+msgstr ""
+
+#: js/tine-all-debug.js:27271
+msgid "Reg Seconds"
+msgstr ""
+
+#: js/tine-all-debug.js:27285
+msgid "Reg Exten"
+msgstr ""
+
+#: js/tine-all-debug.js:27292
+msgid "Can forward call"
+msgstr ""
+
+#: js/tine-all-debug.js:27309
+#, fuzzy
+msgid "Set Var"
+msgstr "Поиск"
+
+#: js/tine-all-debug.js:27316
+msgid "Notify Ringing"
+msgstr ""
+
+#: js/tine-all-debug.js:27333
+msgid "Use Client Code"
+msgstr ""
+
+#: js/tine-all-debug.js:27350
+#, fuzzy
+msgid "Auth User"
+msgstr "Другие пользователи"
+
+#: js/tine-all-debug.js:27357
+msgid "Call Limit"
+msgstr ""
+
+#: js/tine-all-debug.js:27364
+msgid "Busy Level"
+msgstr ""
+
+#: js/tine-all-debug.js:27516
+#, fuzzy
+msgid "add context"
+msgstr "Добавить счет"
+
+#: js/tine-all-debug.js:27523
+msgid "edit context"
+msgstr ""
+
+#: js/tine-all-debug.js:27531
+#, fuzzy
+msgid "delete context"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:27618
+#, fuzzy
+msgid "Displaying context {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:27619
+#, fuzzy
+msgid "No context to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:27970
+msgid "add voicemail"
+msgstr ""
+
+#: js/tine-all-debug.js:27977
+msgid "edit voicemail"
+msgstr ""
+
+#: js/tine-all-debug.js:27985
+msgid "delete voicemail"
+msgstr ""
+
+#: js/tine-all-debug.js:28077
+#, fuzzy
+msgid "Displaying voicemail {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:28078
+#, fuzzy
+msgid "No voicemail to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:28086
+msgid "fullname"
+msgstr ""
+
+#: js/tine-all-debug.js:28087 js/tine-all-debug.js:28359 Setup/setup.xml:1807
+msgid "email"
+msgstr ""
+
+#: js/tine-all-debug.js:28088 js/tine-all-debug.js:28365
+msgid "pager"
+msgstr ""
+
+#: js/tine-all-debug.js:28089 js/tine-all-debug.js:28407
+msgid "tz"
+msgstr ""
+
+#: js/tine-all-debug.js:28090 js/tine-all-debug.js:28490
+msgid "attach"
+msgstr ""
+
+#: js/tine-all-debug.js:28091 js/tine-all-debug.js:28521
+msgid "saycid"
+msgstr ""
+
+#: js/tine-all-debug.js:28092 js/tine-all-debug.js:28420
+msgid "dialout"
+msgstr ""
+
+#: js/tine-all-debug.js:28093 js/tine-all-debug.js:28433
+msgid "callback"
+msgstr ""
+
+#: js/tine-all-debug.js:28094 js/tine-all-debug.js:28547
+msgid "review"
+msgstr ""
+
+#: js/tine-all-debug.js:28095 js/tine-all-debug.js:28573
+#, fuzzy
+msgid "operator"
+msgstr "Выберите оператора"
+
+#: js/tine-all-debug.js:28096 js/tine-all-debug.js:28604
+msgid "envelope"
+msgstr ""
+
+#: js/tine-all-debug.js:28097 js/tine-all-debug.js:28451
+msgid "sayduration"
+msgstr ""
+
+#: js/tine-all-debug.js:28098 js/tine-all-debug.js:28477
+msgid "saydurationm"
+msgstr ""
+
+#: js/tine-all-debug.js:28099 js/tine-all-debug.js:28630
+msgid "sendvoicemail"
+msgstr ""
+
+#: js/tine-all-debug.js:28101 js/tine-all-debug.js:28687
+msgid "nextaftercmd"
+msgstr ""
+
+#: js/tine-all-debug.js:28102 js/tine-all-debug.js:28713
+#, fuzzy
+msgid "forcename"
+msgstr "Переименовать"
+
+#: js/tine-all-debug.js:28103 js/tine-all-debug.js:28739
+msgid "forcegreetings"
+msgstr ""
+
+#: js/tine-all-debug.js:28104 js/tine-all-debug.js:28770
+msgid "hidefromdir"
+msgstr ""
+
+#: js/tine-all-debug.js:28384
+msgid "additional"
+msgstr ""
+
+#: js/tine-all-debug.js:28937
+#, fuzzy
+msgid "add meetme"
+msgstr "Удалить"
+
+#: js/tine-all-debug.js:28944
+msgid "edit meetme"
+msgstr ""
+
+#: js/tine-all-debug.js:28952
+#, fuzzy
+msgid "delete meetme"
+msgstr "Удалить картинку"
+
+#: js/tine-all-debug.js:29039
+#, fuzzy
+msgid "Displaying meetme {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:29040
+#, fuzzy
+msgid "No meetme to display"
+msgstr "Никаких примечаний в наличии"
+
+#: js/tine-all-debug.js:29046 js/tine-all-debug.js:29252
+msgid "confno"
+msgstr ""
+
+#: js/tine-all-debug.js:29047 js/tine-all-debug.js:29260
+msgid "pin"
+msgstr ""
+
+#: js/tine-all-debug.js:29048 js/tine-all-debug.js:29268
+#, fuzzy
+msgid "adminpin"
+msgstr "Администратор"
+
+#: js/tine-all-debug.js:29418
+msgid "edit myphone"
+msgstr ""
+
+#: js/tine-all-debug.js:29508
+#, fuzzy
+msgid "Displaying myphones {0} - {1} of {2}"
+msgstr "Показываю действия {0} - {1} of {2}"
+
+#: js/tine-all-debug.js:29509
+#, fuzzy
+msgid "No myphones to display"
+msgstr "Никаких примечаний в наличии"
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
@@ -307,10 +3527,6 @@ msgstr "Фамилия"
 msgid "Login name"
 msgstr "Имя пользователя"
 
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Электронный адрес"
-
 #: js/UserRegistration.js:167
 msgid "Congratulations!"
 msgstr "Поздравления!"
@@ -322,536 +3538,6 @@ msgid ""
 msgstr ""
 "Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, "
 "вам будет отправлено подтверждающие электронное письмо."
-
-#: js/ux/ConnectionStatus.js:52
-msgid "online"
-msgstr ""
-
-#: js/ux/ConnectionStatus.js:53
-msgid "offline"
-msgstr ""
-
-#: js/ux/ConnectionStatus.js:54
-msgid "unknown"
-msgstr ""
-
-#: js/ux/form/ImageField.js:48
-msgid "click to edit"
-msgstr "нажмите, чтобы отредактировать"
-
-#: js/ux/form/ImageField.js:90
-msgid "Not An Image"
-msgstr "Никакого файла рисунка"
-
-#: js/ux/form/ImageField.js:90
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Пожалуйста, выберите действительный файл рисунка (gif/png/jpeg)"
-
-#: js/ux/form/ImageField.js:107
-msgid "Loading"
-msgstr "загрузка"
-
-#: js/ux/form/ImageField.js:115
-msgid "Upload Failed"
-msgstr "Загрузка не удалась"
-
-#: js/ux/form/ImageField.js:115
-msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-"Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
-
-#: js/ux/form/ImageField.js:127
-msgid "Change Image"
-msgstr "Поменять картинку"
-
-#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
-msgid "Crop Image"
-msgstr "Обрезать картинку"
-
-#: js/ux/form/ImageField.js:174
-msgid "Delete Image"
-msgstr "Удалить картинку"
-
-#: js/ux/form/ImageField.js:212
-msgid "Image Failed"
-msgstr "Ошибка при обработке картины"
-
-#: js/ux/form/ImageField.js:212
-msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-"Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
-
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
-msgstr "Уберите счет"
-
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
-msgid "Name"
-msgstr "Имя"
-
-#: js/widgets/account/PickerPanel.js:70
-msgid "add account"
-msgstr "Добавить счет"
-
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
-msgid "enter searchfilter"
-msgstr "Ввести поисковый фильтр"
-
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
-msgid "Search"
-msgstr "Поиск"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
-msgid "Browse"
-msgstr "Листать"
-
-#: js/widgets/AccountpickerPanel.js:103
-msgid "please select an account"
-msgstr "Пожалуйста выберите счет"
-
-#: js/widgets/ActivitiesPanel.js:145
-msgid "Add a Note..."
-msgstr "Добавить одно Примечание"
-
-#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
-#: js/widgets/container/ContainerGrants.js:87
-msgid "Add"
-msgstr "Добавить"
-
-#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:395
-#: js/widgets/ActivitiesPanel.js:513
-msgid "Note"
-msgstr "Примечание"
-
-#: js/widgets/ActivitiesPanel.js:173 js/widgets/ActivitiesPanel.js:323
-msgid "Add new note"
-msgstr "Добавить новое Примечание"
-
-#: js/widgets/ActivitiesPanel.js:204
-msgid "Recent Activities"
-msgstr "Последние действия"
-
-#: js/widgets/ActivitiesPanel.js:268 js/widgets/ActivitiesPanel.js:322
-msgid "Add Note"
-msgstr "Добавить Примечание"
-
-#: js/widgets/ActivitiesPanel.js:269
-msgid "Enter new note:"
-msgstr "Введите новое примечание:"
-
-#: js/widgets/ActivitiesPanel.js:310
-#, python-format
-msgid "Add a %s Note"
-msgstr ""
-
-#: js/widgets/ActivitiesPanel.js:393 js/widgets/ActivitiesPanel.js:518
-msgid "Type"
-msgstr "Тип"
-
-#: js/widgets/ActivitiesPanel.js:396
-msgid "Created By"
-msgstr "Установлено"
-
-#: js/widgets/ActivitiesPanel.js:397
-msgid "Timestamp"
-msgstr "Timestamp"
-
-#: js/widgets/ActivitiesPanel.js:411
-msgid "Displaying notes {0} - {1} of {2}"
-msgstr "Показываю действия {0} - {1} of {2}"
-
-#: js/widgets/ActivitiesPanel.js:412
-msgid "No notes to display"
-msgstr "Никаких примечаний в наличии"
-
-#: js/widgets/ActivitiesPanel.js:501
-msgid "Activities"
-msgstr "Действия"
-
-#: js/widgets/ActivitiesPanel.js:514
-msgid "Time"
-msgstr "Время"
-
-#: js/widgets/ActivitiesPanel.js:516
-msgid "User"
-msgstr "Пользователь"
-
-#: js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
-msgstr "Права обновляются"
-
-#: js/widgets/container/ContainerGrants.js:66
-msgid "Folder"
-msgstr "Папка"
-
-#: js/widgets/container/ContainerGrants.js:82
-msgid "Read"
-msgstr "Читать"
-
-#: js/widgets/container/ContainerGrants.js:92
-msgid "Edit"
-msgstr "Обработать"
-
-#: js/widgets/container/ContainerGrants.js:97
-msgid "Delete"
-msgstr "Удалить"
-
-#: js/widgets/container/ContainerGrants.js:113
-msgid "Permissions"
-msgstr "Разрешения"
-
-#: js/widgets/container/ContainerSelect.js:74
-#, python-format
-msgid "Recently used %s:"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:93
-#, python-format
-msgid "choose other %s..."
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
-#: js/widgets/tags/TagsPanel.js:410
-msgid "personal"
-msgstr "Личное"
-
-#: js/widgets/container/ContainerSelect.js:105
-msgid "shared"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:243
-#, python-format
-msgid "please select a %s"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:115
-#, python-format
-msgid "All %s"
-msgstr "Все %s"
-
-#: js/widgets/container/ContainerTree.js:120
-#, python-format
-msgid "My %s"
-msgstr "Мои %s"
-
-#: js/widgets/container/ContainerTree.js:127
-#, python-format
-msgid "Shared %s"
-msgstr "Разделение %s"
-
-#: js/widgets/container/ContainerTree.js:134
-#, python-format
-msgid "Other Users %s"
-msgstr "Другие пользователи %s"
-
-#: js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "New %s"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "Please enter the name of the new %s:"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:231
-#, python-format
-msgid "Creating %s..."
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:257
-#, python-format
-msgid "Do you really want to delete the %s \"%s\"?"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:259
-#, python-format
-msgid "Deleting %s \"%s\""
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:286
-#, python-format
-msgid "Please enter the new name of the %s:"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:291
-#, python-format
-msgid "Updateing %s \"%s\""
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:325
-#, python-format
-msgid "Manage Permissions for %s :\"%s\""
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:338
-#, python-format
-msgid "Add %s"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:344
-#, python-format
-msgid "Delete %s"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:350
-#, python-format
-msgid "Rename %s"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:356
-msgid "Manage permissions"
-msgstr "Управлять правами доступа"
-
-#: js/widgets/EditRecord.js:113
-msgid "Apply"
-msgstr "Применить"
-
-#: js/widgets/EditRecord.js:133
-msgid "delete"
-msgstr "Удалить"
-
-#: js/widgets/EditRecord.js:178
-msgid "Saved in"
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:87
-msgid "contains"
-msgstr "Содержит"
-
-#: js/widgets/grid/FilterModel.js:88
-msgid "is equal to"
-msgstr "Равно"
-
-#: js/widgets/grid/FilterModel.js:89
-msgid "is greater than"
-msgstr "Больше чем"
-
-#: js/widgets/grid/FilterModel.js:90
-msgid "is less than"
-msgstr "Меньше чем"
-
-#: js/widgets/grid/FilterModel.js:91
-msgid "is not"
-msgstr "Не"
-
-#: js/widgets/grid/FilterModel.js:92
-msgid "is in"
-msgstr "В"
-
-#: js/widgets/grid/FilterModel.js:115
-msgid "select a operator"
-msgstr "Выберите оператора"
-
-#: js/widgets/grid/FilterToolbar.js:122
-msgid "add new filter"
-msgstr "Добавить новый фильтр"
-
-#: js/widgets/grid/FilterToolbar.js:128
-msgid "Delete all filters"
-msgstr "Удалить все фильтры"
-
-#: js/widgets/grid/FilterToolbar.js:134
-msgid "start search"
-msgstr "Ночять поиск"
-
-#: js/widgets/grid/FilterToolbar.js:143
-msgid "save filter"
-msgstr "Сохранить фильтр"
-
-#: js/widgets/grid/FilterToolbar.js:210
-msgid "select a field"
-msgstr "Выберите поле"
-
-#: js/widgets/grid/FilterToolbar.js:234
-msgid "Delete this filter"
-msgstr "Удалить этот фильтр"
-
-#: js/widgets/grid/FilterToolbar.js:257
-msgid "and"
-msgstr "и"
-
-#: js/widgets/grid/FilterToolbar.js:276
-msgid "Show"
-msgstr "Показать"
-
-#: js/widgets/GridPicker.js:75
-msgid "remove record"
-msgstr "Убрать отчет"
-
-#: js/widgets/GroupSelect.js:94
-msgid "Please Select a Group"
-msgstr "Пожалуйста выберите группу"
-
-#: js/widgets/LangChooser.js:72
-msgid "setting new language..."
-msgstr "Урегулирование нового языка..."
-
-#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
-#: js/widgets/TimezoneChooser.js:74
-msgid "Please Wait"
-msgstr "Пожалуйста подождите"
-
-#: js/widgets/LangChooser.js:93
-msgid "loading new language..."
-msgstr "Загрузка нового языка..."
-
-#: js/widgets/tags/TagCombo.js:37
-msgid "tag name"
-msgstr "Название тэга"
-
-#: js/widgets/tags/TagFilter.js:23
-msgid "Tag"
-msgstr "Тэг"
-
-#: js/widgets/tags/TagsPanel.js:83
-msgid "Add a new personal tag"
-msgstr "Добавить новый личный тэг"
-
-#: js/widgets/tags/TagsPanel.js:86
-msgid "Add New Personal Tag"
-msgstr "Добавить новый личный тэг"
-
-#: js/widgets/tags/TagsPanel.js:87
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr ""
-"Пожалуйста обратите внимание: Вы устанавливаете личный тэг. Только Вы можете "
-"видеть его!"
-
-#: js/widgets/tags/TagsPanel.js:87
-msgid "Enter tag name:"
-msgstr "Введите название тэга"
-
-#: js/widgets/tags/TagsPanel.js:127
-msgid "No Tags to display"
-msgstr "Никаких тэгов в наличии не имеется"
-
-#: js/widgets/tags/TagsPanel.js:150
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Отделите тэг"
-msgstr[1] "Отделите тэга"
-msgstr[2] "Отделите тэгоф"
-
-#: js/widgets/tags/TagsPanel.js:160
-msgid "Edit tag"
-msgstr "Обработать тэг"
-
-#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
-msgid "Rename Tag"
-msgstr "Переименовать тэг"
-
-#: js/widgets/tags/TagsPanel.js:170
-msgid "Please enter a new name:"
-msgstr "Пожалуйста введите новое имя"
-
-#: js/widgets/tags/TagsPanel.js:179
-msgid "Edit Description"
-msgstr "Обработать описание"
-
-#: js/widgets/tags/TagsPanel.js:184
-msgid "Description for tag"
-msgstr "Описание тэга"
-
-#: js/widgets/tags/TagsPanel.js:184
-msgid "Please enter new description:"
-msgstr "Пожалуйста введите новое описание:"
-
-#: js/widgets/tags/TagsPanel.js:193
-msgid "Change Color"
-msgstr "Изменить цвет"
-
-#: js/widgets/tags/TagsPanel.js:217
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Удалить тэг"
-msgstr[1] "Удалить тэги"
-msgstr[2] "Удалить тэгов"
-
-#: js/widgets/tags/TagsPanel.js:229
-msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Вы уверены, что хотите удалить тэг?"
-msgstr[1] "Вы уверени, что хотите удалить выбранные тэги?"
-msgstr[2] "Вы уверени, что хотите удалить выбранных тэгов?"
-
-#: js/widgets/tags/TagsPanel.js:230
-msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Выбранный тэг будет удален и исчезнет из всех записях."
-msgstr[1] "Выбранные тэги будут удалены и исчезнут из всех записях."
-msgstr[2] "Выбранные тэгоф будут удалены и исчезнут из всех записях."
-
-#: js/widgets/tags/TagsPanel.js:234
-msgid "Please wait a moment..."
-msgstr "Пожалуйста подождите момент..."
-
-#: js/widgets/tags/TagsPanel.js:234
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Тэг удаляется"
-msgstr[1] "Тэги удаляются"
-msgstr[2] "Тэгоф удаляются"
-
-#: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
-#: js/widgets/tags/TagsPanel.js:392
-msgid "Failed"
-msgstr "Неудалось"
-
-#: js/widgets/tags/TagsPanel.js:250
-msgid "Could not delete Tag(s)."
-msgstr "Не смог удалить тэг(и)."
-
-#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
-msgid "Notice"
-msgstr "Обратите внимание"
-
-#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
-msgid "The minimum tag length is three."
-msgstr "Один тэг должен состоять, по меньшей мере из 3 знаков."
-
-#: js/widgets/tags/TagsPanel.js:359
-msgid "Could not create tag."
-msgstr "Не мог установить  тэг."
-
-#: js/widgets/tags/TagsPanel.js:392
-msgid "Could not update tag."
-msgstr "Не мог обновить тэг."
-
-#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
-msgid "Enter tag name"
-msgstr "Введите название тэга"
-
-#: js/widgets/tags/TagsPanel.js:426
-msgid "Searching..."
-msgstr "Поиск..."
-
-#: js/widgets/tags/TagsPanel.js:560
-msgid "Color"
-msgstr "Цвет"
-
-#: js/widgets/TimezoneChooser.js:74
-msgid "setting new timezone..."
-msgstr ""
-
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
-msgid "New version of Tine 2.0 available"
-msgstr ""
-
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
-#, python-format
-msgid "Version \"%s\" of Tine 2.0 is available."
-msgstr ""
-
-#: js/widgets/VersionCheck.js:41
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr ""
-
-#: js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
-msgstr ""
 
 #: Setup/setup.xml:1753
 msgid "note"
@@ -867,10 +3553,6 @@ msgstr ""
 
 #: Setup/setup.xml:1785
 msgid "telephone call"
-msgstr ""
-
-#: Setup/setup.xml:1807
-msgid "email"
 msgstr ""
 
 #: Setup/setup.xml:1812
@@ -902,24 +3584,6 @@ msgstr ""
 #~ msgid "New"
 #~ msgstr "Новое"
 
-#~ msgid "Creating"
-#~ msgstr "устанавливается"
-
-#~ msgid "Do you really want to delete the"
-#~ msgstr "Вы уверены что хотите удалить"
-
-#~ msgid "Deleting"
-#~ msgstr "Удаляю"
-
-#~ msgid "Please enter the new name of the"
-#~ msgstr "Пожалуйста введите новое имя"
-
-#~ msgid "Updateing"
-#~ msgstr "Обновление"
-
-#~ msgid "Rename"
-#~ msgstr "Переименовать"
-
 #~ msgid "Save"
 #~ msgstr "Сохранить"
 
@@ -928,9 +3592,6 @@ msgstr ""
 
 #~ msgid "My"
 #~ msgstr "Мое"
-
-#~ msgid "container"
-#~ msgstr "контейнер"
 
 #~ msgid "The selected tag will be deleted and disapear for all entries"
 #~ msgid_plural ""
@@ -942,11 +3603,5 @@ msgstr ""
 #~ msgid "Language: "
 #~ msgstr "Язык:"
 
-#~ msgid "All"
-#~ msgstr "Все"
-
 #~ msgid "Shared"
 #~ msgstr "Разделение"
-
-#~ msgid "Other Users"
-#~ msgstr "Другие пользователи"
