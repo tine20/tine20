@@ -105,7 +105,8 @@ Ext.ux.PopupWindowGroup = function(){
          */
         get : function(name){
             cleanupClosedWindows();
-            return typeof name == "object" ? list[name.name] : list[name];
+            name = typeof name == "object" ? name.name : name;
+            return list[name];
         },
 
         /**
