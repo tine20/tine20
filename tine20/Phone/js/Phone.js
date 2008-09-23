@@ -480,12 +480,7 @@ Tine.Phone.Main = {
             emptyText: this.translation._('enter searchfilter')
         }); 
         quickSearchField.on('change', function(){
-            this.store.load({/*
-                params: {
-                    start: 0,
-                    limit: 50
-                }*/
-            });
+            this.store.load({});
         }, this);
         
         var toolbar = new Ext.Toolbar({
@@ -495,8 +490,6 @@ Tine.Phone.Main = {
             items: [
                 this.actions.dialNumber, 
                 this.actions.editPhoneSettings,
-/*                '-',
-                new Ext.Toolbar.MenuButton(this.actions.callContact),*/
                 '->', 
                 this.translation._('Search:'), 
                 ' ',
@@ -658,18 +651,9 @@ Tine.Phone.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            //console.log('id: ' + record.data.id);
             var number = (record.data.direction == 'in') ? record.data.source : record.data.destination;
             
             Tine.Phone.dialNumber(number);
-            
-            /*
-            try {
-                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 800, 600);
-            } catch(e) {
-                // alert(e);
-            }
-            */
         }, this);
 
         // add the grid to the layout
@@ -686,17 +670,10 @@ Tine.Phone.Main = {
     {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
         menu.removeAll();
-        /*menu.add(
-            {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
-        );*/
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('PhoneTreePanel');
-        //if(Tine.Addressbook.rights.indexOf('admin') > -1) {
-        //    adminButton.setDisabled(false);
-        //} else {
-            adminButton.setDisabled(true);
-        //}
+        adminButton.setDisabled(true);
 
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
         preferencesButton.setIconClass('PhoneTreePanel');
@@ -728,8 +705,6 @@ Tine.Phone.Main = {
  */
 Tine.Phone.loadPhoneStore = function(reload) {
 	
-	//console.log('get store');
-	
     var store = Ext.StoreMgr.get('UserPhonesStore');
     
     if (!store) {
@@ -748,14 +723,12 @@ Tine.Phone.loadPhoneStore = function(reload) {
         
         Ext.StoreMgr.add('UserPhonesStore', store);
         
-        store.on('load', Tine.Phone.updatePhoneTree, this);
-        
+        store.on('load', Tine.Phone.updatePhoneTree, this);        
         store.load();
         
     } else if (reload == true) {
     	
     	store.on('load', Tine.Phone.updatePhoneTree, this);
-    	
     	store.load();
     }
     
