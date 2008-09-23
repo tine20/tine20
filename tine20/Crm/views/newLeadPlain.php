@@ -30,3 +30,10 @@
 <?php echo $this->lang_folder ?>: <?php echo $this->container->name . "\n" ?>
 
 <?php echo $this->lang_updatedBy ?>: <?php echo $this->updater->accountDisplayName . "\n" ?>
+
+<?php if (count($this->updates) > 0): ?>
+<?php echo $this->lang_updatedFields . "\n" ?>
+<?php foreach ($this->updates as $update): ?>
+<?php echo '  ' . sprintf($this->lang_updatedFieldMsg, $update->modified_attribute, $update->old_value, $update->new_value) . "\n" ?>
+<?php endforeach; ?>
+<?php endif;?>

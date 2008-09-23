@@ -58,3 +58,14 @@
     <td><?php echo $this->updater->accountDisplayName ?></td>
   </tr>
 </table>
+
+<?php if (count($this->updates) > 0): ?>
+  <b><?php echo $this->lang_updatedFields ?></b><br />
+  <?php foreach ($this->updates as $update): ?>
+    <?php echo sprintf($this->lang_updatedFieldMsg, $update->modified_attribute, $update->old_value, $update->new_value) ?><br />
+  <?php endforeach; ?>
+<?php endif;?>
+  
+        
+
+

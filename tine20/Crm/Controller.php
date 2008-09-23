@@ -789,12 +789,15 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $view = new Zend_View();
         $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
         
+        $translate = Tinebase_Translation::getTranslation('Crm');
+        
         $view->updater = $_updater;
         $view->lead = $_lead;
         $view->leadState = $this->getLeadState($_lead->leadstate_id);
         $view->leadType = $this->getLeadType($_lead->leadtype_id);
         $view->leadSource = $this->getLeadSource($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container);
+        $view->updates = $_updates;
         
         if($_lead->start instanceof Zend_Date) {
             $view->start = $_lead->start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
@@ -814,8 +817,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $view->ScheduledEnd = '-';
         }
         
-        $translate = Tinebase_Translation::getTranslation('Crm');
-        
         $view->lang_state = $translate->_('State');
         $view->lang_type = $translate->_('Type');
         $view->lang_source = $translate->_('Source');
@@ -826,6 +827,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $view->lang_probability = $translate->_('Probability');
         $view->lang_folder = $translate->_('Folder');
         $view->lang_updatedBy = $translate->_('Updated by');
+        $view->lang_updatedFields = $translate->_('Updated Fields:');
+        $view->lang_updatedFieldMsg = $translate->_('%s changed from %s to %s.');
         
         $plain = $view->render('newLeadPlain.php');
         $html = $view->render('newLeadHtml.php');
@@ -852,7 +855,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         //if (! in_array($_updater->accountId, $recipients)) {
         //    $recipients[] = $_updater->accountId;
         //}
-        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . $plain);
         Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, $pdfOutput);
     }
     
