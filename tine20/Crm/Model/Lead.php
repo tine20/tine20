@@ -190,8 +190,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                 
                 $decodedLead['relations'][$key] = $data;
             } else {
-                // update relation type
-                if ($relation['type'] !== strtoupper($relation['related_record']['relation_type'])) {
+                // update relation type                
+                if (isset($relation['related_record']['relation_type']) && $relation['type'] !== strtoupper($relation['related_record']['relation_type'])) {
                     $decodedLead['relations'][$key]['type'] = strtoupper($relation['related_record']['relation_type']);
                 }
             }
