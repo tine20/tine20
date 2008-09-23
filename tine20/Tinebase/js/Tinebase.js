@@ -378,45 +378,46 @@ Tine.Tinebase.Common = function(){
  * check if user has right to view/manage this application/resource
  * 
  * @param   string      right (view, admin, manage)
+ * @param   string      application
  * @param   string      resource (for example roles, accounts, ...)
  * @returns boolean 
  */
-Tine.Tinebase.hasRight = function(_right, _resource)
+Tine.Tinebase.hasRight = function(_right, _application, _resource)
 {
-    if (! (Tine && Tine.Admin && Tine.Admin.rights)) {
-        console.error('Tine.Admin.rights is not available, initialisation Error!');
+	var userRights = [];
+	
+    if (!(Tine && Tine[_application] && Tine[_application].rights)) {
+        console.error('Tine.' + _application + '.rights is not available, initialisation Error!');
         return false;
+    } else {
+    	userRights = Tine[_application].rights;
     }
     
-    //console.log ( Tine.Admin.rights );
+    //console.log(userRights);
     var result = false;
     
-    for ( var i=0; i < Tine.Admin.rights.length; i++ ) {
-        if ( Tine.Admin.rights[i] == 'admin' ) {
+    for (var i=0; i < userRights.length; i++) {
+        if (userRights[i] == 'admin') {
             result = true;
             break;
         }
         
-        if ( _right == 'view' && (Tine.Admin.rights[i] == 'view_' + _resource || Tine.Admin.rights[i] == 'manage_' + _resource ) ) {
+        if (_right == 'view' && (userRights[i] == 'view_' + _resource || userRights[i] == 'manage_' + _resource) ) {
             result = true;
             break;
         }
         
-        if ( _right == 'manage' && Tine.Admin.rights[i] == 'manage_' + _resource ) {
+        if (_right == 'manage' && userRights[i] == 'manage_' + _resource) {
             result = true;
             break;
+        }
+        
+        if (_right == userRights[i]) {
+        	result = true;
+        	break;
         }
     }
 
-    /*
-    if ( result == true ) {    
-        console.log ("has right: ");
-    } else {
-    	console.log ("has not right: ");
-    }
-    console.log (_right);
-    */
-    
     return result;
 };
 

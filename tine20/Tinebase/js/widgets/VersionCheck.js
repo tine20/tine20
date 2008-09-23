@@ -33,7 +33,7 @@ Tine.widgets.VersionCheck = function() {
         var local = new Date(Tine.Tinebase.Registry.get('version').releasedate);
         var latest = new Date(version.get('releasedate'));
         
-        if (latest > local && Tine.Tinebase.hasRight('run', 'admin')) {
+        if (latest > local && Tine.Tinebase.hasRight('run', 'Tinebase')) {
             if (version.get('critical') == true) {
                 Ext.MessageBox.show({
                     title: _('New version of Tine 2.0 available'), 

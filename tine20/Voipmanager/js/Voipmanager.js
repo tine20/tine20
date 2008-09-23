@@ -253,9 +253,12 @@ Tine.Voipmanager = function() {
             var node = new Ext.tree.AsyncTreeNode(_initialTree[i]);
             
             // check view right
+            // view rights don't exist in voipmanager at the moment
+            /*
             if (_initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', _initialTree[i].viewRight)) {
                 node.disabled = true;
             }
+            */
 
             treeRoot.appendChild(node);
         }

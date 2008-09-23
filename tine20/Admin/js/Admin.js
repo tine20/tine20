@@ -135,7 +135,7 @@ Tine.Admin = function() {
         	var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
         	
         	// check view right
-        	if ( initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', initialTree[i].viewRight) ) {
+        	if ( initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', 'Admin', initialTree[i].viewRight) ) {
                 node.disabled = true;
         	}
         	
@@ -542,7 +542,7 @@ Tine.Admin.AccessLog.Main = function() {
 
             if(rowCount < 1) {
                 _action_delete.setDisabled(true);
-            } else if ( Tine.Tinebase.hasRight('manage', 'access_log') ) {
+            } else if ( Tine.Tinebase.hasRight('manage', 'Admin', 'access_log') ) {
                 _action_delete.setDisabled(false);
             }
         });
@@ -868,7 +868,7 @@ Tine.Admin.Applications.Main = function() {
             var rowCount = _selectionModel.getCount();
             var selected = _selectionModel.getSelected();
 
-            if ( Tine.Tinebase.hasRight('manage', 'apps') ) {
+            if ( Tine.Tinebase.hasRight('manage', 'Admin', 'apps') ) {
                 if (rowCount < 1) {
                     _action_enable.setDisabled(true);
                     _action_disable.setDisabled(true);
@@ -913,7 +913,7 @@ Tine.Admin.Applications.Main = function() {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
 
-                if ( Tine.Tinebase.hasRight('manage', 'apps') ) {
+                if ( Tine.Tinebase.hasRight('manage', 'Admin', 'apps') ) {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);
@@ -924,16 +924,6 @@ Tine.Admin.Applications.Main = function() {
             ctxMenuGrid.showAt(_eventObject.getXY());
         }, this);
           
-        // removed, is replaced by role management
-        /*
-        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-        	if ( Tine.Tinebase.hasRight('manage', 'apps') ) {
-                var record = _gridPar.getStore().getAt(_rowIndexPar);
-                Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 800, 350);
-        	}
-        });
-        */
-        
         return;
     };   
     

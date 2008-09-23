@@ -73,7 +73,8 @@ Tine.Admin.Tags.Main = {
             text: this.translation.gettext('add tag'),
             handler: this.handlers.addTag,
             iconCls: 'action_tag',
-            scope: this
+            scope: this,
+            disabled: !(Tine.Tinebase.hasRight('manage', 'Admin', 'shared_tags'))
         });
         
         this.actions.editTag = new Ext.Action({
@@ -173,18 +174,20 @@ Tine.Admin.Tags.Main = {
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.deleteTag.setDisabled(true);
-                this.actions.editTag.setDisabled(true);
-            } else if(rowCount > 1) {
-                // more than one row selected
-                this.actions.deleteTag.setDisabled(false);
-                this.actions.editTag.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.deleteTag.setDisabled(false);
-                this.actions.editTag.setDisabled(false);
+            if (Tine.Tinebase.hasRight('manage', 'Admin', 'shared_tags') ) {
+                if(rowCount < 1) {
+                    // no row selected
+                    this.actions.deleteTag.setDisabled(true);
+                    this.actions.editTag.setDisabled(true);
+                } else if(rowCount > 1) {
+                    // more than one row selected
+                    this.actions.deleteTag.setDisabled(false);
+                    this.actions.editTag.setDisabled(true);
+                } else {
+                    // only one row selected
+                    this.actions.deleteTag.setDisabled(false);
+                    this.actions.editTag.setDisabled(false);
+                }
             }
         }, this);
         
