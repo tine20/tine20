@@ -153,14 +153,14 @@ Tine.mobileClient.Tasks.getAppPanel = function () {
             {text: 'Help', handler: function() {}}
         ],
         buttons: [
-            {text: 'List', handler: function() {}, pressed: true },
-            {text: 'Day', handler: function() {}},
-            {text: 'Month', handler: function() {}}
+            {text: 'List',  enableToggle: true, toggleGroup: 'view', cls: 'x-btn-group-first', handler: function() {}, pressed: true },
+            {text: 'Day',   enableToggle: true, toggleGroup: 'view', cls: 'x-btn-group',       handler: function() {}},
+            {text: 'Month', enableToggle: true, toggleGroup: 'view', cls: 'x-btn-group-last',  handler: function() {}}
         ],
-        bbar: [
+        /*bbar: [
             {text: 'foo', handler: function() {}},
             {text: 'bar', handler: function() {}},
-        ],
+        ],*/
         items: new Tine.mobileClient.Tasks.MainGrid({})
     })
 };
