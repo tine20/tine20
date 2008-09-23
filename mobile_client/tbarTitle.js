@@ -22,7 +22,7 @@ Ext.ux.tbarTitle = {
     init: function init(panel) {
         panel.on('render', function(panel) {
             var spacer = panel.tbar.child('div[class=ytb-spacer]');
-            spacer.addClass('ux-tbar-title');
+            spacer.addClass('x-tbar-title');
             spacer.dom.innerHTML = this.tbarTitle;
         });
     }

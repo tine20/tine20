@@ -146,7 +146,7 @@ Tine.mobileClient.Tasks.getAppPanel = function () {
         plugins: Ext.ux.tbarTitle, 
         tbarTitle: 'All Tasks',
         tbar: [
-            {text: 'Settings', handler: function() {
+            {text: 'Settings', cls: 'x-btn-back', handler: function() {
                 Ext.getCmp('mobileViewport').layout.setActiveItem('mobileSettingsPanel');
             }},
             '->',
