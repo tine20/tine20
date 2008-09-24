@@ -67,6 +67,12 @@ class Voipmanager_Backend_Snom_Xml
         
     public function getConfig(Voipmanager_Model_SnomPhone $_phone)
     {
+        $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+        $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
+        
+        $baseURL = $protocol . $name . $port . $_SERVER['PHP_SELF'];
+        
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><settings></settings>');
 
         $xmlPhoneSettings = $xml->addChild('phone-settings');
@@ -85,12 +91,23 @@ class Voipmanager_Backend_Snom_Xml
         $child = $xmlPhoneSettings->addChild('user_dp_str1');
         $child->addAttribute('perm', 'RW');
         // add directory button
-        $child = $xmlPhoneSettings->addChild('dkey_directory', 'url http://erp2.mwdev.net/index.php?mac=$mac&amp;method=Voipmanager.directory');
+        $child = $xmlPhoneSettings->addChild('dkey_directory', 'url ' . $baseURL . '?mac=$mac&amp;method=Voipmanager.directory');
         $child->addAttribute('perm', 'RO');
         // add redirect on/off action url
-        $child = $xmlPhoneSettings->addChild('action_redirection_on_url', 'http://erp2.mwdev.net/index.php?mac=$mac&amp;method=Voipmanager.redirect&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
+        $child = $xmlPhoneSettings->addChild('action_redirection_on_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Voipmanager.redirect&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
         $child->addAttribute('perm', 'RO');
-        $child = $xmlPhoneSettings->addChild('action_redirection_off_url', 'http://erp2.mwdev.net/index.php?mac=$mac&amp;method=Voipmanager.redirect&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
+        $child = $xmlPhoneSettings->addChild('action_redirection_off_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Voipmanager.redirect&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
+        $child->addAttribute('perm', 'RO');
+        // callhistory logging
+        $child = $xmlPhoneSettings->addChild('action_incoming_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Phone.callHistory&amp;event=incoming&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
+        $child->addAttribute('perm', 'RO');
+        $child = $xmlPhoneSettings->addChild('action_outgoing_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Phone.callHistory&amp;event=outgoing&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
+        $child->addAttribute('perm', 'RO');
+        $child = $xmlPhoneSettings->addChild('action_connected_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Phone.callHistory&amp;event=connected&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
+        $child->addAttribute('perm', 'RO');
+        $child = $xmlPhoneSettings->addChild('action_disconnected_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Phone.callHistory&amp;event=disconnected&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
+        $child->addAttribute('perm', 'RO');
+        $child = $xmlPhoneSettings->addChild('action_missed_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Phone.callHistory&amp;event=missed&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
         $child->addAttribute('perm', 'RO');
         // disable redundant keys
         $child = $xmlPhoneSettings->addChild('redundant_fkeys', 'off');
