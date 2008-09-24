@@ -64,10 +64,9 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'line_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'phone_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'call_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'connected'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'disconnected'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
