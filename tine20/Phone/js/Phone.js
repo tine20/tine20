@@ -471,6 +471,23 @@ Tine.Phone.Main = {
     		Tine.Phone.dialNumber(number);
     	}
     },
+    
+    renderer: {
+    	direction: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+    		var translation = new Locale.Gettext();
+            translation.textdomain('Phone');
+             
+    		switch(_data) {
+    			case 'in':
+                    return translation._('Incoming');
+                    break;
+                    
+                case 'out':
+                    return translation._('Outgoing');
+                    break;
+    		}
+    	}
+    },
  
     displayToolbar: function()
     {
@@ -598,15 +615,15 @@ Tine.Phone.Main = {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'call_id', header: this.translation._('Call ID'), dataIndex: 'call_id' },
-            { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start'},
-            { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected' },
-            { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected' },
-            { resizable: true, id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
-            { resizable: true, id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40 },
-            { resizable: true, id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 40 },
             { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source' },
-            { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination' }
+            { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination' },
+            { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.Common.dateTimeRenderer },
+            { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.Common.dateTimeRenderer, hidden: true },
+            { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.Common.dateTimeRenderer },
+            { resizable: true, id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
+            { resizable: true, id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40, hidden: true },
+            { resizable: true, id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 40, renderer: this.renderer.direction },
+            { resizable: true, id: 'id', header: this.translation._('Call ID'), dataIndex: 'id', hidden: true}
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -624,7 +641,7 @@ Tine.Phone.Main = {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'call_id',
+            autoExpandColumn: 'destination',
             border: false,
             view: new Ext.grid.GridView({
                 autoFill: true,
@@ -746,10 +763,9 @@ Tine.Phone.Model.Call = Ext.data.Record.create([
     { name: 'id' },
     { name: 'line_id' },
     { name: 'phone_id' },
-    { name: 'call_id' },
-    { name: 'start' },
-    { name: 'connected' },
-    { name: 'disconnected' },
+    { name: 'start', type: 'date', dateFormat: 'c'  },
+    { name: 'connected', type: 'date', dateFormat: 'c'  },
+    { name: 'disconnected', type: 'date', dateFormat: 'c'  },
     { name: 'duration' },
     { name: 'ringing' },
     { name: 'direction' },
