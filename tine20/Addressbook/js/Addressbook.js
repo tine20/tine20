@@ -823,7 +823,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             text: this.translation.gettext('export as pdf'),
             handler: this.handlerExport,
             iconCls: 'action_exportAsPdf',
-            disabled: false
+            disabled: false,
+            scope: this
         });
         
         var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
@@ -937,7 +938,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     
     handlerExport: function(_button, _event) {
     	// we have to create an array (json encoded) as param here because exportContact expects one (for multiple contact export)
-    	var contactIds = Ext.util.JSON.encode([_button.contactId]);
+    	var contactIds = Ext.util.JSON.encode([this.contact.id]);
 
         Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
     },
