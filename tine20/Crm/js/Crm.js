@@ -1065,7 +1065,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();
-                    if (Tine.Crm.LeadEditDialog.lead.get('container')) {
+                    if (Tine.Crm.LeadEditDialog.lead && Tine.Crm.LeadEditDialog.lead.get('container')) {
                         this.actions.unlinkContact.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
                     }
                     this.actions.editContact.setDisabled(rowCount != 1);
