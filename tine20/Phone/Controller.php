@@ -124,4 +124,91 @@ class Phone_Controller
         $count = $backend->searchCount($_filter);
         return $count;
     }
+    
+    /************************ create / update calls ****************************/
+    
+    /**
+     * start phone call and save in history
+     *
+     * @param Phone_Model_Call $_call
+     * @return Phone_Model_Call
+     */
+    public function callStarted(Phone_Model_Call $_call) 
+    {    
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
+        
+        $_call->start = Zend_Date::now();
+        
+        $call = $backend->create($_call);
+        
+        return $call;
+    }
+    
+    /**
+     * update call
+     *
+     * @param Phone_Model_Call $_call
+     * @return Phone_Model_Call
+     */
+    public function callConnected(Phone_Model_Call $_call)
+    {
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
+        
+        $_call->connected = Zend_Date::now();
+        
+        $call = $backend->update($_call);
+        
+        return $call;
+    }
+
+    /**
+     * update call, set duration and ringing time
+     *
+     * @param Phone_Model_Call $_call
+     * @return Phone_Model_Call
+     */
+    public function callDisconnected(Phone_Model_Call $_call)
+    {
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
+        
+        $_call->disconnected = Zend_Date::now();
+        
+        $call = $backend->update($_call);
+
+        // calculate duration and ringing time
+        if($call->connected instanceof Zend_Date) {
+            // how long did we talk
+            $connected = clone $call->connected;
+            $disconnected = clone $call->disconnected;
+            $call->duration = $disconnected->sub($connected);
+            
+            // how long was the telephone ringing
+            $start = clone $call->start;
+            $connected = clone $call->connected;
+            $call->ringing = $connected->sub($start);
+        } else {
+            $start = clone $call->start;
+            $disconnected = clone $call->disconnected;
+            $call->ringing = $disconnected->sub($start);
+        }
+
+        $call = $backend->update($call);
+        
+        return $call;
+    }
+
+    /**
+     * get one call from the backend
+     *
+     * @param string $_callId the callId
+     * @return Phone_Model_Call
+     */
+    public function getCall($_callId)
+    {
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
+        
+        $call = $backend->get($_callId);
+        
+        return $call;
+    }
 }

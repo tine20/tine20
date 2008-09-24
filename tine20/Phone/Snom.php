@@ -64,22 +64,23 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      * @param string $local the local number
      * @param string $remote the remote number
      * 
-     * @todo use authenticate() from voipmanager
+     * @todo add correct line_id
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
         
-        //$this->_authenticate();
+        $this->_authenticate();
         
         $vmController = Voipmanager_Controller::getInstance();
         $phone = $vmController->getSnomPhoneByMacAddress($mac);
-
+        $controller = Phone_Controller::getInstance();
+        
         $pos = strpos($callId, '@');
         if ($pos !== false) {
             $callId = substr($callId, 0 , $pos);
         };
-
+        
         $pos = strpos($local, '@');
         if ($pos !== false) {
             $local = substr($local, 0 , $pos);
@@ -92,59 +93,33 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         
         $call = new Phone_Model_Call(array(
             'id'            => $callId,
-            'call_id'       => $callId,
             'phone_id'      => $phone->getId(),
-            'line_id'       => '2',
-            'source'        => $local,
-            'destination'   => $remote
-        ));
-        
-        $callHistory = Phone_Backend_Snom_Callhistory::getInstance();
-        
-        error_log("$callId => $event");
+            'line_id'       => 'xxx'
+        ));    
         
         switch($event) {
             case 'outgoing':
+                $call->source = $local;
+                $call->destination = $remote;
                 $call->direction = Phone_Model_Call::TYPE_OUTGOING;
-                $callHistory->startCall($call);
+                $controller->callStarted($call);
                 break;
                 
             case 'incoming':
+                $call->source = $local;
+                $call->destination = $remote;
                 $call->direction = Phone_Model_Call::TYPE_INCOMING;
-                $callHistory->startCall($call);
+                $controller->callStarted($call);
                 break;
                 
             case 'connected':
-                $call = $callHistory->get($callId);
-                $callHistory->connected($call);
+                $controller->callConnected($call);
                 break;
                 
             case 'disconnected':
-                $call = $callHistory->get($callId);
-                $callHistory->disconnected($call);
+                $controller->callDisconnected($call);
                 break;
         }
-        
-        return;
-        
-        $vmController = Voipmanager_Controller::getInstance();
-        
-        $phone = $vmController->getSnomPhoneByMacAddress($mac);
-
-        $phone->redirect_event = $event;
-        if($phone->redirect_event != 'none') {
-            $phone->redirect_number = $number;
-        } else {
-            $phone->redirect_number = NULL;
-        }
-        
-        if($phone->redirect_event == 'time') {
-            $phone->redirect_time = $time;
-        } else {
-            $phone->redirect_time = NULL;
-        }
-        
-        $vmController->updateSnomPhoneRedirect($phone);
     }
     
     /**
