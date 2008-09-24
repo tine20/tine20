@@ -151,5 +151,33 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->createTable($table);        
 
         $this->setApplicationVersion('Phone', '0.4');
-    }        
+    }
+            
+    /**
+     * remove no longer needed field
+     *
+     */
+    public function update_4()
+    {        
+        $this->_backend->dropPrimaryKey('phone_callhistory');
+        $this->_backend->dropIndex('phone_callhistory', 'call_id-phone_id');
+        $this->_backend->dropCol('phone_callhistory', 'call_id');
+        
+        $indexDefinition = '
+        <index>
+            <name>id</name>
+            <primary>true</primary>
+            <field>
+                <name>id</name>
+            </field>
+            <field>
+                <name>phone_id</name>
+            </field>
+        </index>';
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('String', $indexDefinition);
+        $this->_backend->addPrimaryKey('phone_callhistory', $index);
+        
+        $this->setApplicationVersion('Phone', '0.5');
+    }
 }
