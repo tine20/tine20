@@ -349,6 +349,8 @@ Tine.Crm.Main = {
     /**
      * creates the grid
      * 
+     * @todo addTask again?
+     * 
      */
     initGridPanel: function() 
     { 
@@ -367,8 +369,8 @@ Tine.Crm.Main = {
 	        items: [
 	            this.actions.editLead,
 	            this.actions.deleteLead,
-	            this.actions.exportLead,
-	            this.actions.addTask
+	            this.actions.exportLead
+	            //this.actions.addTask
 	        ]
 	    });
 
