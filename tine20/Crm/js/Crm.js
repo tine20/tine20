@@ -1067,9 +1067,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();
-                    // @todo fix that!
-                    if (Tine.Crm.LeadEditDialog.lead && Tine.Crm.LeadEditDialog.lead.get('container')) {
-                        this.actions.unlinkContact.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    if (this.lead && this.lead.get('container')) {
+                        this.actions.unlinkContact.setDisabled(!this.lead.get('container').account_grants.editGrant || rowCount != 1);
                     }
                     this.actions.editContact.setDisabled(rowCount != 1);
                 }, this);
@@ -1175,9 +1174,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             	rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 rowSelectionModel.on('selectionchange', function(_selectionModel) {
                     var rowCount = _selectionModel.getCount();
-                    // @todo fix that!
-                    if (Tine.Crm.LeadEditDialog.lead && Tine.Crm.LeadEditDialog.lead.get('container')) {
-                        this.actions.unlinkTask.setDisabled(!Tine.Crm.LeadEditDialog.lead.get('container').account_grants.editGrant || rowCount != 1);
+                    if (this.lead && this.lead.get('container')) {
+                        this.actions.unlinkTask.setDisabled(!this.lead.get('container').account_grants.editGrant || rowCount != 1);
                     }
                     this.actions.editTask.setDisabled(rowCount != 1);
                 }, this);
