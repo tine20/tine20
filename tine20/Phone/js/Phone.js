@@ -660,7 +660,7 @@ Tine.Phone.Main = {
             var contextMenu = new Ext.menu.Menu({
                 id:'ctxMenuCall', 
                 items: [
-                    this.actions.dialNumber,
+                    this.actions.dialNumber
                 ]
             });
             contextMenu.showAt(_eventObject.getXY());
