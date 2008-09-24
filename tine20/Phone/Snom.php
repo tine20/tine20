@@ -54,6 +54,9 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
     
     /**
      * keeps track of the call history
+     * 
+     * the callId can be 3c3b966053be-phxdiv27t9gm or 7027a58643aeb25149e4861076f1b0a9@xxx.xxx.xxx.xxx
+     * we strip everything after the @ character
      *
      * @param string $mac the mac address of the phone
      * @param string $event event can be connected, disconnected, incoming, outgoing, missed
@@ -62,13 +65,65 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      * @param string $remote the remote number
      * 
      * @todo use authenticate() from voipmanager
-     * @todo make it work!
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
         
-        $this->_authenticate();
+        //$this->_authenticate();
+        
+        $vmController = Voipmanager_Controller::getInstance();
+        $phone = $vmController->getSnomPhoneByMacAddress($mac);
+
+        $pos = strpos($callId, '@');
+        if ($pos !== false) {
+            $callId = substr($callId, 0 , $pos);
+        };
+
+        $pos = strpos($local, '@');
+        if ($pos !== false) {
+            $local = substr($local, 0 , $pos);
+        };
+        
+        $pos = strpos($remote, '@');
+        if ($pos !== false) {
+            $remote = substr($remote, 0 , $pos);
+        };
+        
+        $call = new Phone_Model_Call(array(
+            'id'            => $callId,
+            'call_id'       => $callId,
+            'phone_id'      => $phone->getId(),
+            'line_id'       => '2',
+            'source'        => $local,
+            'destination'   => $remote
+        ));
+        
+        $callHistory = Phone_Backend_Snom_Callhistory::getInstance();
+        
+        error_log("$callId => $event");
+        
+        switch($event) {
+            case 'outgoing':
+                $call->direction = Phone_Model_Call::TYPE_OUTGOING;
+                $callHistory->startCall($call);
+                break;
+                
+            case 'incoming':
+                $call->direction = Phone_Model_Call::TYPE_INCOMING;
+                $callHistory->startCall($call);
+                break;
+                
+            case 'connected':
+                $call = $callHistory->get($callId);
+                $callHistory->connected($call);
+                break;
+                
+            case 'disconnected':
+                $call = $callHistory->get($callId);
+                $callHistory->disconnected($call);
+                break;
+        }
         
         return;
         
@@ -92,5 +147,34 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         $vmController->updateSnomPhoneRedirect($phone);
     }
     
-    
+    /**
+     * authenticate the phone against the database
+     *
+     */
+    protected function _authenticate()
+    {
+        if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            header('WWW-Authenticate: Basic realm="Tine 2.0"');
+            header('HTTP/1.0 401 Unauthorized');
+            exit;
+        }
+        
+        $vmController = Voipmanager_Controller::getInstance();
+        
+        $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDBInstance());
+        $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
+            ->setIdentityColumn('http_client_user')
+            ->setCredentialColumn('http_client_pass')
+            ->setIdentity($_SERVER['PHP_AUTH_USER'])
+            ->setCredential($_SERVER['PHP_AUTH_PW']);
+
+        // Perform the authentication query, saving the result
+        $authResult = $authAdapter->authenticate();
+        
+        if (!$authResult->isValid()) {
+            header('WWW-Authenticate: Basic realm="Tine 2.0"');
+            header('HTTP/1.0 401 Unauthorized');
+            exit;
+        }                
+    }
 }
