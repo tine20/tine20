@@ -865,12 +865,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     
                     this.onRecordLoad(response);
 
-                    // update stores
-                    var relations = Tine.Crm.splitRelations(this.lead.data.relations);
-                    this.loadContactsStore(relations.contacts, true);        
-                    this.loadTasksStore(relations.tasks, true);
-                    this.loadProductsStore(lead.data.products, true);
-
                     Ext.MessageBox.hide();
                 },
                 failure: function ( result, request) { 
@@ -1789,24 +1783,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.containerName = this.translation._('Leads');
         this.containersName = this.translation._('Leads');
         
-        // put lead data into model
-        var lead = this.lead; //new Tine.Crm.Model.Lead(_lead);
-        Tine.Crm.LeadEditDialog.lead = lead;
-        
-        Tine.Crm.Model.Lead.FixDates(lead);  
-        
-        this.initActions(lead);
-        
-        //console.log(lead);
-        //console.log(lead.data.tasks);
-        //console.log(lead.data.responsible);
+        // @todo rethink, we have no real lead at this point!
+        this.initActions(this.lead);
     	
         /*********** INIT STORES *******************/
-        
-        var relations = Tine.Crm.splitRelations(lead.data.relations);
-        this.loadContactsStore(relations.contacts);        
-        this.loadTasksStore(relations.tasks);
-        this.loadProductsStore(lead.data.products);
+        this.loadContactsStore(null);        
+        this.loadTasksStore(null);
+        this.loadProductsStore(null); 
                 
         /*********** the EDIT dialog ************/
         
@@ -1816,12 +1799,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             this.actions.exportLead,
             addNoteButton
         ];
-
+        
+        // @todo getEditForm needs depend on data, which are loaded asynchronus. This is a missconception :-(
         this.items = Tine.Crm.LeadEditDialog.getEditForm({
             contactsPanel: this.getLinksGrid('Contacts', this.translation._('Contacts')),
             tasksPanel: this.getLinksGrid('Tasks', this.translation._('Tasks')),
             productsPanel: this.getLinksGrid('Products', this.translation._('Products'))
-        }, lead.data);
+        }, this.lead.data);
         
         // add context menu events
         this.setLinksContextMenu('Contacts');
@@ -1854,7 +1838,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
         
-        //console.log(recordData);
+        // update stores
+        var relations = Tine.Crm.splitRelations(this.lead.data.relations);
+        this.loadContactsStore(relations.contacts, true);        
+        this.loadTasksStore(relations.tasks, true);
+        this.loadProductsStore(this.lead.data.products, true);
         
         this.updateToolbars.defer(10, this, [this.lead, 'container']);
         Tine.widgets.ActionUpdater(this.lead, [
@@ -1872,6 +1860,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         
         this.getForm().loadRecord(this.lead);
+                    
         this.updateToolbars(this.lead, 'container');
         Ext.MessageBox.hide();
     },
