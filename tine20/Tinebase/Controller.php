@@ -307,7 +307,8 @@ class Tinebase_Controller
         
         $server = new Tinebase_Http_Server();
         $server->setClass('Voipmanager_Snom', 'Voipmanager');
-                    
+        $server->setClass('Phone_Snom', 'Phone');
+        
         $server->handle($_REQUEST);
     }
     
