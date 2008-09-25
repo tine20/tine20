@@ -48,8 +48,6 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Voipmanager_Backend_Snom_Phone();
-        
         $this->_objects['location'] = new Voipmanager_Model_SnomLocation(array(
             'id' => 20001,
             'name' => 'phpunit test location'
@@ -144,7 +142,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         /******************** call history *************************/
 
-        $callHistoryBackend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);    
+        $phoneController = Phone_Controller::getInstance();    
         
         $this->_objects['call1'] = new Phone_Model_Call(array(
             'id'                    => 'phpunitcallhistoryid1',
@@ -190,8 +188,8 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         // create calls
         try {
-            $call = $callHistoryBackend->startCall($this->_objects['call1']);
-            $call = $callHistoryBackend->startCall($this->_objects['call2']);
+            $call = $phoneController->callStarted($this->_objects['call1']);
+            $call = $phoneController->callStarted($this->_objects['call2']);
         } catch (Zend_Db_Statement_Exception $e) {
             // exists
         }        
@@ -262,7 +260,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $call2 = $result['results'][0];
         
         $this->assertEquals($this->_objects['call2']->destination, $call2['destination']);
-        $this->assertEquals($this->_objects['call2']->call_id, $call2['call_id']);        
+        $this->assertEquals($this->_objects['call2']->getId(), $call2['id']);        
         
         // search for phone_id
         $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
