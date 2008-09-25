@@ -1,4 +1,4 @@
- l<?php
+<?php
 /**
  * Tine 2.0
  * @package     Phone
