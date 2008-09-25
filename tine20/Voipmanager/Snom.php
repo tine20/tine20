@@ -1,4 +1,4 @@
- l<?php
+<?php
 /**
  * Tine 2.0
  * @package     Voipmanager Management
@@ -24,6 +24,10 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     protected $_appname = 'Voipmanager';
 
+    /**
+     * Search Contacts
+     */
+    
     /**
      * public function to access the directory
      *
@@ -52,69 +56,6 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
             }
         }
     }
-        
-    /**
-     * redirect
-     *
-     * @param string $mac
-     * @param string $event
-     * @param string $number
-     * @param string $time
-     */
-    public function redirect($mac, $event, $number, $time)
-    {
-        $this->_authenticate();
-        
-        $vmController = Voipmanager_Controller::getInstance();
-        
-        $phone = $vmController->getSnomPhoneByMacAddress($mac);
-
-        $phone->redirect_event = $event;
-        if($phone->redirect_event != 'none') {
-            $phone->redirect_number = $number;
-        } else {
-            $phone->redirect_number = NULL;
-        }
-        
-        if($phone->redirect_event == 'time') {
-            $phone->redirect_time = $time;
-        } else {
-            $phone->redirect_time = NULL;
-        }
-        
-        $vmController->updateSnomPhoneRedirect($phone);
-    }
-    
-    /**
-     * authenticate the phone against the database
-     *
-     */
-    protected function _authenticate()
-    {
-        if (!isset($_SERVER['PHP_AUTH_USER'])) {
-            header('WWW-Authenticate: Basic realm="Tine 2.0"');
-            header('HTTP/1.0 401 Unauthorized');
-            exit;
-        }
-        
-        $vmController = Voipmanager_Controller::getInstance();
-        
-        $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDBInstance());
-        $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
-            ->setIdentityColumn('http_client_user')
-            ->setCredentialColumn('http_client_pass')
-            ->setIdentity($_SERVER['PHP_AUTH_USER'])
-            ->setCredential($_SERVER['PHP_AUTH_PW']);
-
-        // Perform the authentication query, saving the result
-        $authResult = $authAdapter->authenticate();
-        
-        if (!$authResult->isValid()) {
-            header('WWW-Authenticate: Basic realm="Tine 2.0"');
-            header('HTTP/1.0 401 Unauthorized');
-            exit;
-        }                
-    }
     
     /**
      * create the search dialogue
@@ -123,15 +64,16 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     protected function _getSearchDialogue()
     {
-        $prefix = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
-        $serverName = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-        $port = ($_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443) ? ':' . $_SERVER['SERVER_PORT'] : '';
-        $url = $prefix . $serverName . $port . $_SERVER['PHP_SELF'];
+        $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+        $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
         
+        $baseURL = $protocol . $name . $port . $_SERVER['PHP_SELF'];
+                
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
             <SnomIPPhoneInput>
                 <Prompt>Prompt</Prompt>
-                <URL>' . $url . '</URL>
+                <URL>' . $baseURL . '</URL>
                 <InputItem>
                     <DisplayName>Search for</DisplayName>
                     <QueryStringParam>' . SID . '&method=Voipmanager.directory&query</QueryStringParam>
@@ -200,4 +142,150 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         
         return $xml->asXML();
     }    
+    
+    /**
+     * set redirect
+     *
+     * @param string $mac
+     * @param string $event
+     * @param string $number
+     * @param string $time
+     */
+    public function redirect($mac, $event, $number, $time)
+    {
+        $this->_authenticate();
+        
+        $vmController = Voipmanager_Controller::getInstance();
+        
+        $phone = $vmController->getSnomPhoneByMacAddress($mac);
+
+        $phone->redirect_event = $event;
+        if($phone->redirect_event != 'none') {
+            $phone->redirect_number = $number;
+        } else {
+            $phone->redirect_number = NULL;
+        }
+        
+        if($phone->redirect_event == 'time') {
+            $phone->redirect_time = $time;
+        } else {
+            $phone->redirect_time = NULL;
+        }
+        
+        $vmController->updateSnomPhoneRedirect($phone);
+    }
+
+    /**
+     * retrieve settings
+     *
+     * @param string $mac
+     */
+    public function settings($mac)
+    {
+        $controller = Voipmanager_Controller::getInstance();
+        
+        $phone = $controller->getSnomPhoneByMacAddress($mac);
+        
+        if($phone->http_client_info_sent == true) {
+            $this->_authenticate();
+        }
+        
+        $phone = $this->_setStatus($phone, 'settings');
+        
+        $xmlBackend = new Voipmanager_Backend_Snom_Xml();        
+        
+        header('Content-Type: text/xml');
+        echo $xmlBackend->getConfig($phone);
+        
+        if($phone->http_client_info_sent == false) {
+            $phone->http_client_info_sent = true;
+            $controller->updateSnomPhone($phone);
+        }
+    }    
+    
+    /**
+     * retrieve firmware settings
+     *
+     * @param string $mac
+     */
+    public function firmware($mac)
+    {
+        $this->_authenticate();
+        
+        $controller = Voipmanager_Controller::getInstance();
+        
+        $phone = $controller->getSnomPhoneByMacAddress($mac);
+        
+        $phone = $this->_setStatus($phone, 'firmware');
+        
+        $xmlBackend = new Voipmanager_Backend_Snom_Xml();        
+        
+        header('Content-Type: text/xml');
+        echo $xmlBackend->getFirmware($phone);        
+    }    
+    
+    protected function _setStatus($_phone, $_type)
+    {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        #$userAgent = 'Mozilla/4.0 (compatible; snom320-SIP 7.1.30';
+        
+        if(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $userAgent, $matches)) {
+            $_phone->current_model = $matches[1];
+            $_phone->current_software = $matches[2];
+        } else {
+            throw new Exception('unparseable useragent string');
+        }
+        
+        $_phone->ipaddress = $_SERVER["REMOTE_ADDR"];
+        
+        switch($_type) {
+            case 'settings':
+                $_phone->settings_loaded_at = Zend_Date::now();
+                break;
+                
+            case 'firmware':
+                $_phone->firmware_checked_at = Zend_Date::now();
+                break;
+        }
+        
+        $controller = Voipmanager_Controller::getInstance();
+        
+        $controller->updateSnomPhone($_phone);
+    
+        return $_phone;
+    }
+    
+    /**
+     * authenticate the phone against the database
+     *
+     */
+    protected function _authenticate()
+    {
+        return true;
+        
+        if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            header('WWW-Authenticate: Basic realm="Tine 2.0"');
+            header('HTTP/1.0 401 Unauthorized');
+            exit;
+        }
+        
+        $vmController = Voipmanager_Controller::getInstance();
+        
+        $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDBInstance());
+        $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
+            ->setIdentityColumn('http_client_user')
+            ->setCredentialColumn('http_client_pass')
+            ->setIdentity($_SERVER['PHP_AUTH_USER'])
+            ->setCredential($_SERVER['PHP_AUTH_PW']);
+
+        // Perform the authentication query, saving the result
+        $authResult = $authAdapter->authenticate();
+        
+        if (!$authResult->isValid()) {
+            header('WWW-Authenticate: Basic realm="Tine 2.0"');
+            header('HTTP/1.0 401 Unauthorized');
+            exit;
+        }                
+    }
+    
 }

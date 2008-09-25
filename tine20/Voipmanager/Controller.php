@@ -408,10 +408,10 @@ class Voipmanager_Controller
      * update one phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone
-     * @param Voipmanager_Model_SnomPhoneSettings $_phoneSettings
+     * @param Voipmanager_Model_SnomPhoneSettings|optional $_phoneSettings
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, $_phoneSettings = NULL)
     {
         unset($_phone->settings_loaded_at);
         unset($_phone->firmware_checked_at);
@@ -421,26 +421,30 @@ class Voipmanager_Controller
         
         $phone = $this->_snomPhoneBackend->update($_phone);
         
-        // force the right phone_id
-        $_phoneSettings->setId($phone->getId());
-
-        // set all settings which are equal to the default settings to NULL
-        $template = $this->getSnomTemplate($phone->template_id);
-        $settingDefaults = $this->getSnomSetting($template->setting_id);
-
-        foreach($_phoneSettings AS $key => $value) {
-            if($key == 'phone_id') {
-                continue;
-            }
-            if($_phoneSettings->$key == $settingDefaults->$key) {
-                $_phoneSettings->$key = NULL;
-            }    
-        }
+        if($_phoneSettings instanceof Voipmanager_Model_SnomPhoneSettings) {
         
-        if($this->_snomPhoneSettingsBackend->get($phone->getId())) {
-            $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
-        } else {
-            $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);            
+            // force the right phone_id
+            $_phoneSettings->setId($phone->getId());
+    
+            // set all settings which are equal to the default settings to NULL
+            $template = $this->getSnomTemplate($phone->template_id);
+            $settingDefaults = $this->getSnomSetting($template->setting_id);
+    
+            foreach($_phoneSettings AS $key => $value) {
+                if($key == 'phone_id') {
+                    continue;
+                }
+                if($_phoneSettings->$key == $settingDefaults->$key) {
+                    $_phoneSettings->$key = NULL;
+                }    
+            }
+            
+            if($this->_snomPhoneSettingsBackend->get($phone->getId())) {
+                $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
+            } else {
+                $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);            
+            }
+        
         }
         
         $this->_snomLineBackend->deletePhoneLines($phone->getId());
