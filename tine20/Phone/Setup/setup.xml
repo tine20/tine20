@@ -3,7 +3,6 @@
     <name>Phone</name>
     <version>0.5</version>
     <order>11</order>
-    <status>disabled</status>
     <tables>
         <table>
             <name>phone_extensions</name>
