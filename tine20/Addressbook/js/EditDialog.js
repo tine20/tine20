@@ -73,7 +73,13 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                     name: 'jpegimage',
                     width: 90,
                     height: 80
-                })
+                }),
+                listeners: {
+                    scope: this,
+                    'resize': function(panel) {
+                        panel.setSize(90, 80);
+                    }
+                }
             }, {
                 xtype: 'columnform',
                 items: [
