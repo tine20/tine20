@@ -298,11 +298,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         sleep(1);
         
-        //print_r($emptyLead);
-        //echo "now " . Zend_Date::now()->getIso();
-        //echo "start " . $startDate->getIso();
-        
-        //$this->assertGreaterThan(Zend_Date::now()->getIso(), $emptyLead['start']);
         $this->assertEquals(1, Zend_Date::now()->compare($startDate));
         $this->assertEquals(Zend_Registry::get('currentAccount')->accountFullName, $emptyLead['relations'][0]['related_record']['n_fn']);
     }

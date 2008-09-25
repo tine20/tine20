@@ -29,7 +29,8 @@ class Phone_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone All Tests');
         $suite->addTestSuite('Phone_JsonTest');
-        $suite->addTest(Phone_Backend_Snom_AllTests::suite());
+        $suite->addTestSuite('Phone_ControllerTest');
+        //$suite->addTest(Phone_Backend_Snom_AllTests::suite());
         return $suite;
     }
 }
