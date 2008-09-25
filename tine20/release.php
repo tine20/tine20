@@ -287,7 +287,8 @@ if ($opts->a || $opts->t) {
         system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
         
         unifyTranslations(new Zend_Locale($locale));
-    }    
+    }
+    unifyTranslations(new Zend_Locale('en'));
 }
 
 // build zend translation lists only on demand
@@ -352,6 +353,11 @@ function unifyTranslations($localeString)
         "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'generic'),
         "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'tine')
     );
+    
+    // don't include tine en as it does not exist!
+    if ($localeString == 'en') {
+        unset($files[2]);
+    }
     
     foreach ($files as $file) {
         if(file_exists($file)) {
