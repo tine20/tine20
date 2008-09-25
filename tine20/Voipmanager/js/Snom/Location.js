@@ -188,9 +188,8 @@ Tine.Voipmanager.Snom.Location.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'firmware_interval', header: this.translation._('FW Interval'), dataIndex: 'firmware_interval', width: 10, hidden: true },
-            { resizable: true, id: 'firmware_status', header: this.translation._('FW Status'), dataIndex: 'firmware_status', width: 100, hidden: true  },
             { resizable: true, id: 'update_policy', header: this.translation._('Update Policy'), dataIndex: 'update_policy', width: 30, hidden: true },
-            { resizable: true, id: 'setting_server', header: this.translation._('Server Setting'), dataIndex: 'setting_server', width: 100, hidden: true  },
+            { resizable: true, id: 'registrar', header: this.translation._('Registrar'), dataIndex: 'registrar', width: 100, hidden: true  },
             { resizable: true, id: 'admin_mode', header: this.translation._('Admin Mode'), dataIndex: 'admin_mode', width: 10, hidden: true },
             { resizable: true, id: 'ntp_server', header: this.translation._('NTP Server'), dataIndex: 'ntp_server', width: 50, hidden: true  },
             { resizable: true, id: 'webserver_type', header: this.translation._('Webserver Type'), dataIndex: 'webserver_type', width: 30, hidden: true },
@@ -446,17 +445,8 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                         height: 30
                     }, {
                         xtype: 'textfield',
-                        vtype: 'url',
-                        fieldLabel: translation._('Settings URL'),
-                        name: 'setting_server',
-                        maxLength: 255,
-                        anchor: '100%',
-                        allowBlank: false
-                    }, {
-                        xtype: 'textfield',
-                        vtype: 'url',
-                        fieldLabel: translation._('Firmware URL'),
-                        name: 'firmware_status',
+                        fieldLabel: translation._('Registrar'),
+                        name: 'registrar',
                         maxLength: 255,
                         anchor: '100%',
                         allowBlank: false

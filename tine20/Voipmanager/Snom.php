@@ -192,7 +192,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         
         $phone = $this->_setStatus($phone, 'settings');
         
-        $xmlBackend = new Voipmanager_Backend_Snom_Xml();        
+        $xmlBackend = new Voipmanager_Backend_Snom_Xml($controller->getDBInstance());        
         
         header('Content-Type: text/xml');
         echo $xmlBackend->getConfig($phone);
@@ -218,8 +218,8 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         
         $phone = $this->_setStatus($phone, 'firmware');
         
-        $xmlBackend = new Voipmanager_Backend_Snom_Xml();        
-        
+        $xmlBackend = new Voipmanager_Backend_Snom_Xml($controller->getDBInstance());        
+                
         header('Content-Type: text/xml');
         echo $xmlBackend->getFirmware($phone);        
     }    

@@ -56,6 +56,11 @@ class Voipmanager_Backend_Snom_Xml
         'TR'    => 'Turkce',
     );
     
+    /**
+     * constructor
+     *
+     * @param Zend_Db_Adapter_Abstract|optional $_db the database adapter to use
+     */
     public function __construct($_db = NULL)
     {
         if($_db instanceof Zend_Db_Adapter_Abstract) {
@@ -64,14 +69,32 @@ class Voipmanager_Backend_Snom_Xml
             $this->_db = Zend_Db_Table_Abstract::getDefaultAdapter();
         }
     }
-        
-    public function getConfig(Voipmanager_Model_SnomPhone $_phone)
+    
+    /**
+     * generate URL with query parameters to access this installation again
+     *
+     * @return string the complete URI http://hostname/path/index.php
+     */
+    protected function _getBaseUrl()
     {
         $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
         $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
         $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
         
         $baseURL = $protocol . $name . $port . $_SERVER['PHP_SELF'];
+        
+        return $baseURL;
+    }
+        
+    /**
+     * get config of one phone
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return string the config as xml string
+     */
+    public function getConfig(Voipmanager_Model_SnomPhone $_phone)
+    {
+        $baseURL = $this->_getBaseUrl();
         
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><settings></settings>');
 
@@ -252,8 +275,9 @@ class Voipmanager_Backend_Snom_Xml
         $locationsSettings['filter_registrar'] = 'off';
         $locationsSettings['challenge_response'] = 'off';
         $locationsSettings['call_completion'] = 'off';
-        
-        $locationsSettings['firmware_status'] .= '?mac=' . $_phone->macaddress;
+
+        $locationsSettings['setting_server'] = $this->_getBaseUrl() . '?method=Voipmanager.settings&mac=' . $_phone->macaddress;
+        $locationsSettings['firmware_status'] = $this->_getBaseUrl() . '?method=Voipmanager.firmware&mac=' . $_phone->macaddress;
         
         return $locationsSettings;
     }
@@ -292,33 +316,35 @@ class Voipmanager_Backend_Snom_Xml
         return $userSettings;        
     }
     
+    /**
+     * return array of phone lines
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return array the lines
+     */
     protected function _getLines(Voipmanager_Model_SnomPhone $_phone)
     {
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
-            ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
-            ->join(SQL_TABLE_PREFIX . 'snom_lines', SQL_TABLE_PREFIX . 'snom_phones.id = ' . SQL_TABLE_PREFIX . 'snom_lines.snomphone_id')
-            ->join(SQL_TABLE_PREFIX . 'asterisk_sip_peers', SQL_TABLE_PREFIX . 'asterisk_sip_peers.id = ' . SQL_TABLE_PREFIX . 'snom_lines.asteriskline_id', array('name', 'secret', 'mailbox', 'callerid'));
-
-        $rows = $this->_db->fetchAssoc($select);
+        $asteriskPeer = new Voipmanager_Backend_Asterisk_SipPeer($this->_db);
+        $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);
         
         $lines = array();
+        $location = $snomLocation->get($_phone->location_id);
         
-        foreach($rows as $row) {
+        foreach($_phone->lines as $snomLine) {
             $line = array();
-            $line['user_active'] = ($row['lineactive'] == 1 ? 'on' : 'off');
-            // remove <xxx> from the end of the line
-            $line['user_realname'] = trim(preg_replace('/<\d+>$/', '', $row['callerid']));
-            $line['user_idle_text'] = $row['idletext'];
-            $line['user_name'] = $row['name'];
-            $line['user_host'] = 'hh.metaways.de';
-            $line['user_mailbox'] = $row['mailbox'];
-            $line['user_pass'] = $row['secret'];
+            $line['user_active'] = ($snomLine->lineactive == 1 ? 'on' : 'off');
+            $line['user_idle_text'] = $snomLine->idletext;
             
-            $lines[$row['linenumber']] = $line;
+            $asteriskLine = $asteriskPeer->get($snomLine->asteriskline_id);
+            // remove <xxx> from the end of the line
+            $line['user_realname'] = trim(preg_replace('/<\d+>$/', '', $asteriskLine->callerid));
+            $line['user_name']     = $asteriskLine->name;
+            $line['user_host']     = $location->registrar;
+            $line['user_mailbox']  = $asteriskLine->mailbox;
+            $line['user_pass']     = $asteriskLine->secret;
+            
+            $lines[$snomLine->linenumber] = $line;
         }
-        #echo "<pre>";
-        #var_dump($lines);
         
         return $lines;
     }
