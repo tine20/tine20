@@ -26,7 +26,7 @@ Ext.ux.PopupWindowGroup = function(){
             try {
                 doc = list[id].popup.document;
             } catch(e)  {
-                // same domain policy problem!
+                doc = false;
             }
             if (! doc) {
                 delete list[list[id].name];
