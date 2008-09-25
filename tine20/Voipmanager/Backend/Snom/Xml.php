@@ -114,7 +114,7 @@ class Voipmanager_Backend_Snom_Xml
         $child = $xmlPhoneSettings->addChild('user_dp_str1');
         $child->addAttribute('perm', 'RW');
         // add directory button
-        $child = $xmlPhoneSettings->addChild('dkey_directory', 'url ' . $baseURL . '?mac=$mac&amp;method=Voipmanager.directory');
+        $child = $xmlPhoneSettings->addChild('dkey_directory', 'url ' . $baseURL . '?mac=$mac&amp;method=Phone.directory');
         $child->addAttribute('perm', 'RO');
         // add redirect on/off action url
         $child = $xmlPhoneSettings->addChild('action_redirection_on_url', 'url ' . $baseURL . '?mac=$mac&amp;method=Voipmanager.redirect&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
