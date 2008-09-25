@@ -15,12 +15,15 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 /**
  * @singleton
  * Instance of Tine.Tinebase.RegistryClass
+ * 
+ * NOTE: As long as the views include initial data, we can not overwrite the registry
+ * in the main window with data from a popup!
  */
-if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+//if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
     Tine.Tinebase.Registry = new Ext.util.MixedCollection();
-} else {
-    Tine.Tinebase.Registry = Ext.ux.PopupWindowGroup.getMainScreen().Tine.Tinebase.Registry;
-}
+//} else {
+//    Tine.Tinebase.Registry = Ext.ux.PopupWindowGroup.getMainScreen().Tine.Tinebase.Registry;
+//}
 
 /**
  * config locales
