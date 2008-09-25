@@ -215,6 +215,11 @@ Tine.Tinebase.Common = function(){
 	 * @param {int} _height
 	 */
 	var _openWindow = function(_windowName, _url, _width, _height){
+        // M$ IE has its internal location bar in the viewport
+        if(Ext.isIE) {
+            _height = _height + 20;
+        }
+        
 		var w,h,x,y,leftPos,topPos,popup;
 		
 		if (document.all) {
