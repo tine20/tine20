@@ -178,4 +178,24 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
        
         $this->setApplicationVersion('Voipmanager', '0.23');
     }
+
+    /**
+     * add registrar field and remove setting_server and firmware_status fields
+     *
+     */
+    public function update_23()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>registrar</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->addCol('snom_location', $declaration);
+        $this->_backend->dropCol('snom_location', 'setting_server');
+        $this->_backend->dropCol('snom_location', 'firmware_status');
+        
+        $this->setApplicationVersion('Voipmanager', '0.24');
+    }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.23</version>
+    <version>0.24</version>
     <order>50</order>
     <tables>
         <table>
@@ -69,12 +69,6 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>firmware_status</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
                     <name>update_policy</name>
                     <type>enum</type>
                     <value>auto_update</value>
@@ -86,7 +80,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>setting_server</name>
+                    <name>registrar</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
