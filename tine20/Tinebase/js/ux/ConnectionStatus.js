@@ -53,7 +53,8 @@ Ext.extend(Ext.ux.ConnectionStatus, Ext.Button, {
         this.offlineText = '(' + _('offline') + ')';
         this.unknownText = '(' + _('unknown') + ')';
         
-        if (! window.navigator || window.navigator.onLine === undefined) {
+        // M$ IE has not online/offline events yet
+        if (Ext.isIE || ! window.navigator || window.navigator.onLine === undefined) {
             this.setStatus('unknown');
             this.isSupported = false;
         } else {
