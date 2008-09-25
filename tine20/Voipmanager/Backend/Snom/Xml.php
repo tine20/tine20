@@ -258,18 +258,24 @@ class Voipmanager_Backend_Snom_Xml
         return $phoneSettings;
     }
     
+    /**
+     * get location settings
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return array
+     */
     protected function _getLocationSettings(Voipmanager_Model_SnomPhone $_phone)
     {
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
-            ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
-            ->join(SQL_TABLE_PREFIX . 'snom_location', SQL_TABLE_PREFIX . 'snom_phones.location_id = ' . SQL_TABLE_PREFIX . 'snom_location.id');
-        
-        $locationsSettings = $this->_db->fetchRow($select);
-        
+        $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);        
+        $location = $snomLocation->get($_phone->location_id);
+        $locationsSettings = $location->toArray();
+                
         unset($locationsSettings['id']);
         unset($locationsSettings['name']);
         unset($locationsSettings['description']);
+        unset($locationsSettings['registrar']);
+        unset($locationsSettings['base_download_url']);
+        
         // see http://wiki.snom.com/Interoperability/Asterisk#Basic_Asterisk_configuration
         $locationsSettings['user_phone'] = 'off';
         $locationsSettings['filter_registrar'] = 'off';
@@ -282,6 +288,12 @@ class Voipmanager_Backend_Snom_Xml
         return $locationsSettings;
     }
     
+    /**
+     * get user editable settings
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return array
+     */
     protected function _getUserSettings(Voipmanager_Model_SnomPhone $_phone)
     {
         $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings();
