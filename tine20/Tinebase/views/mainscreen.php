@@ -47,8 +47,8 @@
                 break;
 
             case 'DEBUG':
-                echo "\n    " . '<link rel="stylesheet" type="text/css" href="Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css" />';
-                echo "\n    " . '<script type="text/javascript" language="javascript" src="Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js"></script>';
+                echo "\n    " . '<link rel="stylesheet" type="text/css" href="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css') . '" />';
+                echo "\n    " . '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js') . '"></script>';
                 
                 break;
                 
