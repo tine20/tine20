@@ -59,7 +59,8 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
         
         $this->_objects['location'] = new Voipmanager_Model_SnomLocation(array(
             'id' => 20001,
-            'name' => 'phpunit test location'
+            'name' => 'phpunit test location',
+            'registrar' => 'registrar'        
         ));
 
         $this->_objects['software'] = new Voipmanager_Model_SnomSoftware(array(
