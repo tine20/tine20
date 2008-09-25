@@ -94,6 +94,10 @@ class Voipmanager_Backend_Snom_Xml
      */
     public function getConfig(Voipmanager_Model_SnomPhone $_phone)
     {
+        if (!$_phone->isValid()) {
+            throw new Exception('invalid phone');
+        }
+        
         $baseURL = $this->_getBaseUrl();
         
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><settings></settings>');
