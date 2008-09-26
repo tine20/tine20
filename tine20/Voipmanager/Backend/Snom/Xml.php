@@ -300,13 +300,13 @@ class Voipmanager_Backend_Snom_Xml
      */
     protected function _getUserSettings(Voipmanager_Model_SnomPhone $_phone)
     {
-        $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings();
+        $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings($this->_db);
         $phoneSettings = $phoneSettinsgBackend->get($_phone->getId());
                 
-        $templateBackend = new Voipmanager_Backend_Snom_Template();
+        $templateBackend = new Voipmanager_Backend_Snom_Template($this->_db);
         $template = $templateBackend->get($_phone->template_id);
         
-        $defaultPhoneSettingsBackend = new Voipmanager_Backend_Snom_Setting();
+        $defaultPhoneSettingsBackend = new Voipmanager_Backend_Snom_Setting($this->_db);
         $defaultPhoneSettings = $defaultPhoneSettingsBackend->get($template->setting_id);
 
         $userSettings = array();
