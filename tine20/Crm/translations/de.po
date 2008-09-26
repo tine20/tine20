@@ -31,7 +31,7 @@ msgstr "%s's persönliche Leads"
 msgid "State"
 msgstr "Status"
 
-#: Controller.php:820 js/Crm.js:1058 js/Crm.js:1097
+#: Controller.php:820 js/Crm.js:1054 js/Crm.js:1093
 msgid "Type"
 msgstr "Typ"
 
@@ -51,11 +51,11 @@ msgstr "geplantes Ende"
 msgid "End"
 msgstr "Ende"
 
-#: Controller.php:825 js/Crm.js:390 Pdf.php:81
+#: Controller.php:825 js/Crm.js:392 Pdf.php:81
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Controller.php:826 js/Crm.js:259 js/Crm.js:260 js/Crm.js:261 js/Crm.js:389
+#: Controller.php:826 js/Crm.js:259 js/Crm.js:260 js/Crm.js:261 js/Crm.js:391
 #: js/LeadEditDialog.js:104 Pdf.php:84
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
@@ -103,7 +103,7 @@ msgstr "Beim löschen eines Leads ist ein Fehler aufgetreten."
 msgid "Enter searchfilter"
 msgstr "Suchfilter eingeben"
 
-#: js/Crm.js:237 js/Crm.js:238 js/Crm.js:388 js/LeadEditDialog.js:41
+#: js/Crm.js:237 js/Crm.js:238 js/Crm.js:390 js/LeadEditDialog.js:41
 #: Pdf.php:72
 msgid "Leadstate"
 msgstr "Status"
@@ -120,270 +120,270 @@ msgstr "Details anzeigen"
 msgid "Show closed leads"
 msgstr "Abgeschlossene Leads anzeigen"
 
-#: js/Crm.js:361
+#: js/Crm.js:363
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr "Zeige Lead {0} - {1} von {2}"
 
-#: js/Crm.js:362 js/Crm.js:422
+#: js/Crm.js:364 js/Crm.js:424
 msgid "No leads found."
 msgstr "Keine Leads gefunden."
 
-#: js/Crm.js:384
+#: js/Crm.js:386
 msgid "Lead id"
 msgstr "Lead Bezeichner"
 
-#: js/Crm.js:385
+#: js/Crm.js:387
 msgid "Lead name"
 msgstr "Lead Name"
 
-#: js/Crm.js:386 js/LeadEditDialog.js:334 js/LeadEditDialog.js:377
+#: js/Crm.js:388 js/LeadEditDialog.js:334 js/LeadEditDialog.js:377
 msgid "Partner"
 msgstr "Partner"
 
-#: js/Crm.js:387 js/LeadEditDialog.js:333 js/LeadEditDialog.js:373
+#: js/Crm.js:389 js/LeadEditDialog.js:333 js/LeadEditDialog.js:373
 msgid "Customer"
 msgstr "Kunde"
 
-#: js/Crm.js:465
+#: js/Crm.js:467
 msgid "Add lead"
 msgstr "Lead hinzufügen"
 
-#: js/Crm.js:466
+#: js/Crm.js:468
 msgid "Add new lead"
 msgstr "Neuen Lead hinzufügen"
 
-#: js/Crm.js:475
+#: js/Crm.js:477
 msgid "Edit lead"
 msgstr "Lead bearbeiten"
 
-#: js/Crm.js:476
+#: js/Crm.js:478
 msgid "Edit selected lead"
 msgstr "Ausgewählten Eintrag bearbeiten"
 
-#: js/Crm.js:489
+#: js/Crm.js:491
 #, fuzzy
 msgid "Delete lead"
 msgid_plural "Delete leads"
 msgstr[0] "Lead löschen"
 msgstr[1] "Lead löschen"
 
-#: js/Crm.js:490
+#: js/Crm.js:492
 msgid "Delete selected leads"
 msgstr "Ausgewählte Leads löschen"
 
-#: js/Crm.js:500 js/Crm.js:1760 js/Crm.js:1761
+#: js/Crm.js:502 js/Crm.js:1756 js/Crm.js:1757
 msgid "Export as PDF"
 msgstr "Als PDF exportieren"
 
-#: js/Crm.js:501
+#: js/Crm.js:503
 msgid "Export selected lead as PDF"
 msgstr "Als PDF exportieren"
 
-#: js/Crm.js:510 js/Crm.js:1705 js/Crm.js:1724
+#: js/Crm.js:512 js/Crm.js:1701 js/Crm.js:1720
 msgid "Add task"
 msgstr "Aufgabe hinzufügen"
 
-#: js/Crm.js:511
+#: js/Crm.js:513
 msgid "Add task for selected lead"
 msgstr "Aufgabe zum Lead hinzufügen"
 
-#: js/Crm.js:618
+#: js/Crm.js:620
 msgid "Lead states"
 msgstr "Lead Stati"
 
-#: js/Crm.js:619
+#: js/Crm.js:621
 msgid "Lead sources"
 msgstr "Lead Quellen"
 
-#: js/Crm.js:620
+#: js/Crm.js:622
 msgid "Lead types"
 msgstr "Lead Typen"
 
-#: js/Crm.js:621 js/Crm.js:1823 Pdf.php:258
+#: js/Crm.js:623 js/Crm.js:1809 Pdf.php:258
 msgid "Products"
 msgstr "Produkte"
 
-#: js/Crm.js:680 js/Crm.js:1050
+#: js/Crm.js:682 js/Crm.js:1046
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Crm.js:681 js/Crm.js:1051
+#: js/Crm.js:683 js/Crm.js:1047
 msgid "Cellphone"
 msgstr "Telefon (Mobil)"
 
-#: js/Crm.js:784
+#: js/Crm.js:786
 msgid "Search Contacts"
 msgstr "Kontakte suchen"
 
-#: js/Crm.js:846
+#: js/Crm.js:848
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Crm.js:846
+#: js/Crm.js:848
 msgid "Saving lead"
 msgstr "Speichere Lead"
 
-#: js/Crm.js:877
+#: js/Crm.js:873
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/Crm.js:877
+#: js/Crm.js:873
 msgid "Could not save lead."
 msgstr "Kann Lead nicht speichern."
 
-#: js/Crm.js:881
+#: js/Crm.js:877
 msgid "Please fix the errors noted."
 msgstr "Bitte die Fehler korrigieren."
 
-#: js/Crm.js:1027 js/Crm.js:1093
+#: js/Crm.js:1023 js/Crm.js:1089
 msgid "Name"
 msgstr "Name"
 
-#: js/Crm.js:1036 Pdf.php:198
+#: js/Crm.js:1032 Pdf.php:198
 msgid "Address"
 msgstr "Anschrift"
 
-#: js/Crm.js:1047
+#: js/Crm.js:1043
 msgid "Contactdata"
 msgstr "Kontakte"
 
-#: js/Crm.js:1094
+#: js/Crm.js:1090
 msgid "Organisation"
 msgstr "Organisation"
 
-#: js/Crm.js:1122
+#: js/Crm.js:1118
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: js/Crm.js:1130
+#: js/Crm.js:1126
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/Crm.js:1134 Pdf.php:239
+#: js/Crm.js:1130 Pdf.php:239
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
-#: js/Crm.js:1148 Pdf.php:244
+#: js/Crm.js:1144 Pdf.php:244
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/Crm.js:1163
+#: js/Crm.js:1159
 msgid "Status"
 msgstr "Status"
 
-#: js/Crm.js:1202
+#: js/Crm.js:1198
 msgid "Product"
 msgstr "Produkt"
 
-#: js/Crm.js:1211
+#: js/Crm.js:1207
 msgid "Add a product..."
 msgstr "Produkt hinzufügen..."
 
-#: js/Crm.js:1220 js/LeadEditDialog.js:163
+#: js/Crm.js:1216 js/LeadEditDialog.js:163
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/Crm.js:1233
+#: js/Crm.js:1229
 msgid "Price"
 msgstr "Preis"
 
-#: js/Crm.js:1326
+#: js/Crm.js:1322
 msgid "No Tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Crm.js:1649
+#: js/Crm.js:1645
 msgid "Add new contact"
 msgstr "Neuen Kontakt hinzufügen"
 
-#: js/Crm.js:1650
+#: js/Crm.js:1646
 msgid "Add new customer contact"
 msgstr "Neuen Kunden hinzufügen"
 
-#: js/Crm.js:1658
+#: js/Crm.js:1654
 msgid "Add existing contact"
 msgstr "Existierenden Kontakt hinzufügen"
 
-#: js/Crm.js:1659 js/Crm.js:1668
+#: js/Crm.js:1655 js/Crm.js:1664
 msgid "Add existing contact to lead"
 msgstr "Existierenden Kontakt hinzufügen"
 
-#: js/Crm.js:1667
+#: js/Crm.js:1663
 msgid "Add contact"
 msgstr "Kontakt hinzufügen"
 
-#: js/Crm.js:1682
+#: js/Crm.js:1678
 msgid "Edit contact"
 msgstr "Kontakt bearbeiten"
 
-#: js/Crm.js:1683
+#: js/Crm.js:1679
 msgid "Edit selected contact"
 msgstr "Ausgewählten Eintrag bearbeiten"
 
-#: js/Crm.js:1692
+#: js/Crm.js:1688
 msgid "Unlink contact"
 msgstr "Kontakt entfernen"
 
-#: js/Crm.js:1693
+#: js/Crm.js:1689
 msgid "Unlink selected contacts"
 msgstr "Ausgewählte Kontakte entfernen"
 
-#: js/Crm.js:1706
+#: js/Crm.js:1702
 msgid "Add new task"
 msgstr "Neue Aufgabe hinzufügen"
 
-#: js/Crm.js:1714
+#: js/Crm.js:1710
 msgid "Edit task"
 msgstr "Aufgabe bearbeiten"
 
-#: js/Crm.js:1715
+#: js/Crm.js:1711
 msgid "Edit selected task"
 msgstr "Ausgewählten Eintrag bearbeiten"
 
-#: js/Crm.js:1725
+#: js/Crm.js:1721
 msgid "Add existing task to lead"
 msgstr "Existierende Aufgabe hinzufügen"
 
-#: js/Crm.js:1734
+#: js/Crm.js:1730
 msgid "Remove tasks"
 msgstr "Aufgabe entfernen"
 
-#: js/Crm.js:1735
+#: js/Crm.js:1731
 msgid "Remove selected tasks"
 msgstr "Ausgewählte Einträge entfernen"
 
-#: js/Crm.js:1747
+#: js/Crm.js:1743
 msgid "Remove products"
 msgstr "Produkt entfernen"
 
-#: js/Crm.js:1748
+#: js/Crm.js:1744
 msgid "Remove selected products"
 msgstr "Ausgewählte Einträge entfernen"
 
-#: js/Crm.js:1789 js/Crm.js:1790
+#: js/Crm.js:1785 js/Crm.js:1786
 msgid "Leads"
 msgstr "Leads"
 
-#: js/Crm.js:1821 Pdf.php:171
+#: js/Crm.js:1807 Pdf.php:171
 msgid "Contacts"
 msgstr "Kontakte"
 
-#: js/Crm.js:1822 Pdf.php:219
+#: js/Crm.js:1808 Pdf.php:219
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Crm.js:1846
+#: js/Crm.js:1832
 msgid "Loading Lead..."
 msgstr "Lade Lead..."
 
-#: js/Crm.js:1846
+#: js/Crm.js:1832
 msgid "Please Wait"
 msgstr "Bitte warten"
 
-#: js/Crm.js:1869
+#: js/Crm.js:1859
 msgid "Add New Lead"
 msgstr "Neuen Lead hinzufügen"
 
-#: js/Crm.js:1871
+#: js/Crm.js:1861
 #, python-format
 msgid "Edit Lead \"%s\""
 msgstr "Lead \"%s\" bearbeiten"

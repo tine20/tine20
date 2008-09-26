@@ -26,7 +26,7 @@ msgid "No context to display"
 msgstr ""
 
 #: js/Asterisk/Context.js:190 js/Asterisk/Meetme.js:190
-#: js/Asterisk/Voicemail.js:195 js/Snom/Location.js:199
+#: js/Asterisk/Voicemail.js:195 js/Snom/Location.js:198
 #: js/Snom/Software.js:199 js/Snom/Templates.js:190
 msgid "id"
 msgstr ""
@@ -39,7 +39,7 @@ msgid "name"
 msgstr ""
 
 #: js/Asterisk/Context.js:192 js/Asterisk/Context.js:404
-#: js/Snom/Location.js:207 js/Snom/Location.js:442 js/Snom/Phone.js:862
+#: js/Snom/Location.js:206 js/Snom/Location.js:441 js/Snom/Phone.js:862
 #: js/Snom/Settings.js:486 js/Snom/Software.js:201 js/Snom/Software.js:441
 #: js/Snom/Templates.js:192 js/Snom/Templates.js:408
 msgid "Description"
@@ -47,7 +47,7 @@ msgstr ""
 
 #: js/Asterisk/Context.js:396 js/Asterisk/SipPeer.js:456
 #: js/Asterisk/SipPeer.js:610 js/Asterisk/Voicemail.js:456
-#: js/Snom/Location.js:203 js/Snom/Location.js:434 js/Snom/Phone.js:1148
+#: js/Snom/Location.js:202 js/Snom/Location.js:433 js/Snom/Phone.js:1148
 #: js/Snom/Templates.js:400
 msgid "Name"
 msgstr ""
@@ -567,8 +567,8 @@ msgstr ""
 #: js/Asterisk/Voicemail.js:813 js/Asterisk/Voicemail.js:839
 #: js/Asterisk/Voicemail.js:865 js/Asterisk/Voicemail.js:896
 #: js/MyPhones.js:659 js/MyPhones.js:779 js/MyPhones.js:807 js/MyPhones.js:840
-#: js/MyPhones.js:868 js/MyPhones.js:896 js/Snom/Location.js:577
-#: js/Snom/Location.js:603 js/Snom/Phone.js:1382 js/Snom/Phone.js:1502
+#: js/MyPhones.js:868 js/MyPhones.js:896 js/Snom/Location.js:567
+#: js/Snom/Location.js:593 js/Snom/Phone.js:1382 js/Snom/Phone.js:1502
 #: js/Snom/Phone.js:1530 js/Snom/Phone.js:1563 js/Snom/Phone.js:1591
 #: js/Snom/Phone.js:1619 js/Snom/Settings.js:643 js/Snom/Settings.js:767
 #: js/Snom/Settings.js:796 js/Snom/Settings.js:830 js/Snom/Settings.js:859
@@ -583,8 +583,8 @@ msgstr ""
 #: js/Asterisk/Voicemail.js:814 js/Asterisk/Voicemail.js:840
 #: js/Asterisk/Voicemail.js:866 js/Asterisk/Voicemail.js:897
 #: js/MyPhones.js:662 js/MyPhones.js:780 js/MyPhones.js:808 js/MyPhones.js:841
-#: js/MyPhones.js:869 js/MyPhones.js:897 js/Snom/Location.js:578
-#: js/Snom/Location.js:604 js/Snom/Phone.js:1385 js/Snom/Phone.js:1503
+#: js/MyPhones.js:869 js/MyPhones.js:897 js/Snom/Location.js:568
+#: js/Snom/Location.js:594 js/Snom/Phone.js:1385 js/Snom/Phone.js:1503
 #: js/Snom/Phone.js:1531 js/Snom/Phone.js:1564 js/Snom/Phone.js:1592
 #: js/Snom/Phone.js:1620 js/Snom/Settings.js:646 js/Snom/Settings.js:768
 #: js/Snom/Settings.js:797 js/Snom/Settings.js:831 js/Snom/Settings.js:860
@@ -826,107 +826,95 @@ msgstr ""
 msgid "FW Interval"
 msgstr ""
 
-#: js/Snom/Location.js:191
-msgid "FW Status"
-msgstr ""
-
-#: js/Snom/Location.js:192 js/Snom/Location.js:482
+#: js/Snom/Location.js:191 js/Snom/Location.js:472
 msgid "Update Policy"
 msgstr ""
 
-#: js/Snom/Location.js:193
-msgid "Server Setting"
+#: js/Snom/Location.js:192 js/Snom/Location.js:448
+msgid "Registrar"
 msgstr ""
 
-#: js/Snom/Location.js:194
+#: js/Snom/Location.js:193
 msgid "Admin Mode"
 msgstr ""
 
-#: js/Snom/Location.js:195 js/Snom/Location.js:614
+#: js/Snom/Location.js:194 js/Snom/Location.js:604
 msgid "NTP Server"
 msgstr ""
 
-#: js/Snom/Location.js:196 js/Snom/Location.js:725
+#: js/Snom/Location.js:195 js/Snom/Location.js:715
 msgid "Webserver Type"
 msgstr ""
 
-#: js/Snom/Location.js:197 js/Snom/Location.js:786
+#: js/Snom/Location.js:196 js/Snom/Location.js:776
 msgid "HTTPS Port"
 msgstr ""
 
-#: js/Snom/Location.js:198 js/Snom/Location.js:807
+#: js/Snom/Location.js:197 js/Snom/Location.js:797
 msgid "HTTP User"
 msgstr ""
 
-#: js/Snom/Location.js:208
+#: js/Snom/Location.js:207
 msgid "Filter Registrar"
 msgstr ""
 
-#: js/Snom/Location.js:209
+#: js/Snom/Location.js:208
 msgid "CP Dialoginfo"
 msgstr ""
 
-#: js/Snom/Location.js:210
+#: js/Snom/Location.js:209
 msgid "Pickup Indic."
 msgstr ""
 
-#: js/Snom/Location.js:450
-msgid "Settings URL"
-msgstr ""
-
-#: js/Snom/Location.js:458
-msgid "Firmware URL"
-msgstr ""
-
-#: js/Snom/Location.js:466
+#: js/Snom/Location.js:456
 msgid "Base Download URL"
 msgstr ""
 
-#: js/Snom/Location.js:503
+#: js/Snom/Location.js:493
 msgid "Firmware Interval"
 msgstr ""
 
-#: js/Snom/Location.js:521
+#: js/Snom/Location.js:511
 msgid "tone_scheme"
 msgstr ""
 
-#: js/Snom/Location.js:563
+#: js/Snom/Location.js:553
 msgid "date_us_format"
 msgstr ""
 
-#: js/Snom/Location.js:589
+#: js/Snom/Location.js:579
 msgid "time_24_format"
 msgstr ""
 
-#: js/Snom/Location.js:631
+#: js/Snom/Location.js:621
 msgid "NTP Server Address"
 msgstr ""
 
-#: js/Snom/Location.js:644
+#: js/Snom/Location.js:634
 msgid "NTP Refresh"
 msgstr ""
 
-#: js/Snom/Location.js:651
+#: js/Snom/Location.js:641
 msgid "Timezone"
 msgstr ""
 
-#: js/Snom/Location.js:676
+#: js/Snom/Location.js:666
 msgid "Enable admin mode"
 msgstr ""
 
-#: js/Snom/Location.js:688
+#: js/Snom/Location.js:678
 msgid "Admin Mode Password"
 msgstr ""
 
-#: js/Snom/Location.js:698
+#: js/Snom/Location.js:688
 msgid "Enable webserver"
 msgstr ""
 
-#: js/Snom/Location.js:772
+#: js/Snom/Location.js:762
 msgid "HTTP Port"
 msgstr ""
 
-#: js/Snom/Location.js:819
+#: js/Snom/Location.js:809
 msgid "HTTP Password"
 msgstr ""
 

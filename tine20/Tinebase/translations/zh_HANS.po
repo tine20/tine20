@@ -57,11 +57,11 @@ msgstr "输出日期"
 msgid "Created by"
 msgstr "创建者"
 
-#: Http.php:212 js/Tinebase.js:109
+#: Http.php:212 js/Tinebase.js:112
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Http.php:213 js/Tinebase.js:110
+#: Http.php:213 js/Tinebase.js:113
 msgid "Your session timed out. You need to login again."
 msgstr "会话超时，需要重新登录"
 
@@ -74,7 +74,7 @@ msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
 #: js/ExceptionDialog.js:34 js/MainScreen.js:315
-#: js/widgets/container/ContainerSelect.js:248 js/widgets/EditRecord.js:123
+#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
 msgid "Cancel"
 msgstr "取消"
 
@@ -225,7 +225,7 @@ msgid "Repeat new Password"
 msgstr "重复新密码"
 
 #: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
-#: js/widgets/container/ContainerSelect.js:257 js/widgets/EditRecord.js:102
+#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditRecord.js:102
 msgid "Ok"
 msgstr "好"
 
@@ -271,15 +271,15 @@ msgstr "确实想登出？"
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
-#: js/Tinebase.js:99
+#: js/Tinebase.js:102
 msgid "Connection lost, please check your network!"
 msgstr "失去连接，请检查网络"
 
-#: js/Tinebase.js:120
+#: js/Tinebase.js:123
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/Tinebase.js:121
+#: js/Tinebase.js:124
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -511,7 +511,7 @@ msgstr "个人的"
 msgid "shared"
 msgstr "共享的"
 
-#: js/widgets/container/ContainerSelect.js:245
+#: js/widgets/container/ContainerSelect.js:248
 #, python-format
 msgid "please select a %s"
 msgstr "请选择一个 %s"

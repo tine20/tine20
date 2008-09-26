@@ -40,17 +40,17 @@ msgid_plural "Do you really want to delete the selected contacts?"
 msgstr[0] "Wollen sie den ausgewählten Kontakt wirklich löschen?"
 msgstr[1] "Wollen sie die ausgewählten Kontakte wirklich löschen?"
 
-#: js/Addressbook.js:197 js/Addressbook.js:925
+#: js/Addressbook.js:197 js/Addressbook.js:926
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] "Kontakt wird gelöscht..."
 msgstr[1] "Kontakte werden gelöscht..."
 
-#: js/Addressbook.js:203 js/Addressbook.js:908 js/Addressbook.js:933
+#: js/Addressbook.js:203 js/Addressbook.js:909 js/Addressbook.js:934
 msgid "Failed"
 msgstr "Fehler"
 
-#: js/Addressbook.js:204 js/Addressbook.js:933
+#: js/Addressbook.js:204 js/Addressbook.js:934
 msgid "Some error occured while trying to delete the conctact."
 msgid_plural "Some error occured while trying to delete the conctacts."
 msgstr[0] "Beim löschen des Kontaktes ist ein Fehler ist aufgetreten."
@@ -78,24 +78,24 @@ msgstr "Als Pdf exportieren"
 msgid "call contact"
 msgstr "Kontakt anrufen"
 
-#: js/Addressbook.js:336 js/EditDialog.js:328
+#: js/Addressbook.js:336 js/EditDialog.js:334
 msgid "Contact"
 msgstr "Kontakt"
 
-#: js/Addressbook.js:337 js/Addressbook.js:370 js/EditDialog.js:87
+#: js/Addressbook.js:337 js/Addressbook.js:370 js/EditDialog.js:93
 msgid "First Name"
 msgstr "Vorname"
 
-#: js/Addressbook.js:338 js/Addressbook.js:369 js/EditDialog.js:91
+#: js/Addressbook.js:338 js/Addressbook.js:369 js/EditDialog.js:97
 msgid "Last Name"
 msgstr "Nachname"
 
-#: js/Addressbook.js:339 js/Addressbook.js:373 js/EditDialog.js:117
+#: js/Addressbook.js:339 js/Addressbook.js:373 js/EditDialog.js:123
 msgid "Company"
 msgstr "Firma"
 
 #: js/Addressbook.js:340 js/Addressbook.js:375 js/Addressbook.js:486
-#: js/EditDialog.js:109 Pdf.php:115
+#: js/EditDialog.js:115 Pdf.php:115
 msgid "Job Title"
 msgstr "Berufs Bezeichnung"
 
@@ -105,27 +105,27 @@ msgid "Job Role"
 msgstr "Rolle"
 
 #: js/Addressbook.js:343 js/Addressbook.js:346 js/Addressbook.js:378
-#: js/EditDialog.js:243 js/EditDialog.js:288
+#: js/EditDialog.js:249 js/EditDialog.js:294
 msgid "Street"
 msgstr "Straße"
 
 #: js/Addressbook.js:343 js/Addressbook.js:344 js/Addressbook.js:345
-#: js/EditDialog.js:227
+#: js/EditDialog.js:233
 msgid "Company Address"
 msgstr "Geschäftliche Anschrift"
 
-#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:253
-#: js/EditDialog.js:298
+#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:259
+#: js/EditDialog.js:304
 msgid "Postal Code"
 msgstr "Postleitzahl"
 
 #: js/Addressbook.js:345 js/Addressbook.js:348 js/Addressbook.js:379
-#: js/EditDialog.js:257 js/EditDialog.js:302
+#: js/EditDialog.js:263 js/EditDialog.js:308
 msgid "City"
 msgstr "Ort"
 
 #: js/Addressbook.js:346 js/Addressbook.js:347 js/Addressbook.js:348
-#: js/EditDialog.js:276 Pdf.php:86
+#: js/EditDialog.js:282 Pdf.php:86
 msgid "Private Address"
 msgstr "Private Anschrift"
 
@@ -145,11 +145,11 @@ msgstr "Typ"
 msgid "Full Name"
 msgstr "Vollständiger Name"
 
-#: js/Addressbook.js:372 js/EditDialog.js:17 js/EditDialog.js:103
+#: js/Addressbook.js:372 js/EditDialog.js:17 js/EditDialog.js:109
 msgid "Display Name"
 msgstr "Angezeigter Name"
 
-#: js/Addressbook.js:374 js/EditDialog.js:121
+#: js/Addressbook.js:374 js/EditDialog.js:127
 msgid "Unit"
 msgstr "Abteilung"
 
@@ -157,7 +157,7 @@ msgstr "Abteilung"
 msgid "Room"
 msgstr "Raum"
 
-#: js/Addressbook.js:380 js/EditDialog.js:261 js/EditDialog.js:306
+#: js/Addressbook.js:380 js/EditDialog.js:267 js/EditDialog.js:312
 msgid "Region"
 msgstr "Region"
 
@@ -165,7 +165,7 @@ msgstr "Region"
 msgid "Postalcode"
 msgstr "Postleitzahl"
 
-#: js/Addressbook.js:382 js/EditDialog.js:268 js/EditDialog.js:313
+#: js/Addressbook.js:382 js/EditDialog.js:274 js/EditDialog.js:319
 msgid "Country"
 msgstr "Land"
 
@@ -193,15 +193,15 @@ msgstr "Land (privat)"
 msgid "Email"
 msgstr "Email"
 
-#: js/Addressbook.js:389 js/EditDialog.js:147
+#: js/Addressbook.js:389 js/EditDialog.js:153
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Addressbook.js:390 js/EditDialog.js:152
+#: js/Addressbook.js:390 js/EditDialog.js:158
 msgid "Mobile"
 msgstr "Handy"
 
-#: js/Addressbook.js:391 js/EditDialog.js:157
+#: js/Addressbook.js:391 js/EditDialog.js:163
 msgid "Fax"
 msgstr "Fax"
 
@@ -213,15 +213,15 @@ msgstr "Auto-Telefon"
 msgid "Pager"
 msgstr "Pager"
 
-#: js/Addressbook.js:394 js/EditDialog.js:164
+#: js/Addressbook.js:394 js/EditDialog.js:170
 msgid "Phone (private)"
 msgstr "Telefon (privat)"
 
-#: js/Addressbook.js:395 js/EditDialog.js:174
+#: js/Addressbook.js:395 js/EditDialog.js:180
 msgid "Fax (private)"
 msgstr "Fax (privat)"
 
-#: js/Addressbook.js:396 js/EditDialog.js:169
+#: js/Addressbook.js:396 js/EditDialog.js:175
 msgid "Mobile (private)"
 msgstr "Handy (privat)"
 
@@ -229,7 +229,7 @@ msgstr "Handy (privat)"
 msgid "Email (private)"
 msgstr "E-Mail (privat)"
 
-#: js/Addressbook.js:398 js/EditDialog.js:194
+#: js/Addressbook.js:398 js/EditDialog.js:200
 msgid "Web"
 msgstr "Internet"
 
@@ -249,7 +249,7 @@ msgstr "Zeitzone"
 msgid "Geo"
 msgstr "Geografischer Ort"
 
-#: js/Addressbook.js:403 js/EditDialog.js:126 Pdf.php:112
+#: js/Addressbook.js:403 js/EditDialog.js:132 Pdf.php:112
 msgid "Birthday"
 msgstr "Geburtstag"
 
@@ -261,7 +261,7 @@ msgstr "Kontakt Auswählen"
 msgid "Tags"
 msgstr "Tags"
 
-#: js/Addressbook.js:513 js/EditDialog.js:360
+#: js/Addressbook.js:513 js/EditDialog.js:366
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -269,40 +269,40 @@ msgstr "Beschreibung"
 msgid "addressbook"
 msgstr "Adressbuch"
 
-#: js/Addressbook.js:839
+#: js/Addressbook.js:840
 msgid "Loading Contact..."
 msgstr "Kontakt laden..."
 
-#: js/Addressbook.js:839
+#: js/Addressbook.js:840
 msgid "Please Wait"
 msgstr "Bitte warten"
 
-#: js/Addressbook.js:853
+#: js/Addressbook.js:854
 msgid "Add new contact"
 msgstr "Kontakt hinzufügen"
 
-#: js/Addressbook.js:855
+#: js/Addressbook.js:856
 #, python-format
 msgid "Edit Contact \"%s\""
 msgstr "Kontaktt \"%s\" bearbeiten"
 
-#: js/Addressbook.js:873
+#: js/Addressbook.js:874
 msgid "Please wait a moment..."
 msgstr "Bitte warten sie einen Moment..."
 
-#: js/Addressbook.js:873
+#: js/Addressbook.js:874
 msgid "Saving Contact"
 msgstr "Kontakt wird gespeichert"
 
-#: js/Addressbook.js:908
+#: js/Addressbook.js:909
 msgid "Could not save contact."
 msgstr "Der Kontakt konnte nicht gespeichert werden."
 
-#: js/Addressbook.js:912
+#: js/Addressbook.js:913
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Addressbook.js:912
+#: js/Addressbook.js:913
 msgid "Please fix the errors noted."
 msgstr "Bitte korrigieren sie die angegebenen Fehler."
 
@@ -318,35 +318,35 @@ msgstr "Namenszusatz"
 msgid "Personal Information"
 msgstr "Persönliche Informationen"
 
-#: js/EditDialog.js:82
+#: js/EditDialog.js:88
 msgid "Title"
 msgstr "Titel"
 
-#: js/EditDialog.js:181
+#: js/EditDialog.js:187
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: js/EditDialog.js:187
+#: js/EditDialog.js:193
 msgid "E-Mail (private)"
 msgstr "E-Mail (privat)"
 
-#: js/EditDialog.js:204
+#: js/EditDialog.js:210
 msgid "Contact Information"
 msgstr "Kontakt Informationen"
 
-#: js/EditDialog.js:247 js/EditDialog.js:292
+#: js/EditDialog.js:253 js/EditDialog.js:298
 msgid "Street 2"
 msgstr "Weitere Straße"
 
-#: js/EditDialog.js:320
+#: js/EditDialog.js:326
 msgid "Custom Fields"
 msgstr "Zusatzfelder"
 
-#: js/EditDialog.js:374
+#: js/EditDialog.js:380
 msgid "Enter description"
 msgstr "Geben sie eine Beschreibung ein"
 
-#: js/EditDialog.js:410
+#: js/EditDialog.js:416
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"

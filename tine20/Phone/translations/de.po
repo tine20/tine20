@@ -52,58 +52,66 @@ msgstr "Nummer wählen"
 msgid "Initiate a new outgoing call"
 msgstr "Neuer ausgehender Anruf"
 
-#: js/Phone.js:480
+#: js/Phone.js:482
+msgid "Incoming"
+msgstr ""
+
+#: js/Phone.js:486
+msgid "Outgoing"
+msgstr ""
+
+#: js/Phone.js:497
 msgid "enter searchfilter"
 msgstr "Suchfilter eingeben"
 
-#: js/Phone.js:494
+#: js/Phone.js:511
 msgid "Search:"
 msgstr "Suche:"
 
-#: js/Phone.js:579
+#: js/Phone.js:596
 msgid "Source or Destination"
 msgstr "Quelle oder Ziel"
 
-#: js/Phone.js:595
+#: js/Phone.js:612
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Anrufe  {0} - {1} of {2} anzeigen"
 
-#: js/Phone.js:596 js/Phone.js:633
+#: js/Phone.js:613 js/Phone.js:650
 msgid "No calls to display"
 msgstr "Keine Anrufe"
 
-#: js/Phone.js:601
-msgid "Call ID"
-msgstr "Anruf ID"
-
-#: js/Phone.js:602
-msgid "Start"
-msgstr "Start"
-
-#: js/Phone.js:603
-msgid "Connected"
-msgstr "Verbunden"
-
-#: js/Phone.js:604
-msgid "Disconnected"
-msgstr "Getrennt"
-
-#: js/Phone.js:605
-msgid "Duration"
-msgstr "Dauer"
-
-#: js/Phone.js:606
-msgid "Ringing"
-msgstr "Klingeln"
-
-#: js/Phone.js:607
-msgid "Direction"
-msgstr "Richtung"
-
-#: js/Phone.js:608
+#: js/Phone.js:618
 msgid "Source"
 msgstr "Quelle"
 
-#: js/Phone.js:609
+#: js/Phone.js:619
 msgid "Destination"
 msgstr "Ziel"
+
+#: js/Phone.js:620
+msgid "Start"
+msgstr "Start"
+
+#: js/Phone.js:621
+msgid "Connected"
+msgstr "Verbunden"
+
+#: js/Phone.js:622
+msgid "Disconnected"
+msgstr "Getrennt"
+
+#: js/Phone.js:623
+msgid "Duration"
+msgstr "Dauer"
+
+#: js/Phone.js:624
+msgid "Ringing"
+msgstr "Klingeln"
+
+#: js/Phone.js:625
+msgid "Direction"
+msgstr "Richtung"
+
+#: js/Phone.js:626
+msgid "Call ID"
+msgstr "Anruf ID"

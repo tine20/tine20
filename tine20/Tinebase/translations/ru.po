@@ -61,11 +61,11 @@ msgstr "Экспортировать число"
 msgid "Created by"
 msgstr "Установлено"
 
-#: Http.php:212 js/Tinebase.js:109
+#: Http.php:212 js/Tinebase.js:112
 msgid "Authorisation Required"
 msgstr ""
 
-#: Http.php:213 js/Tinebase.js:110
+#: Http.php:213 js/Tinebase.js:113
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
@@ -78,7 +78,7 @@ msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
 #: js/ExceptionDialog.js:34 js/MainScreen.js:315
-#: js/widgets/container/ContainerSelect.js:248 js/widgets/EditRecord.js:123
+#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -231,7 +231,7 @@ msgid "Repeat new Password"
 msgstr "Повторите новый пароль"
 
 #: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
-#: js/widgets/container/ContainerSelect.js:257 js/widgets/EditRecord.js:102
+#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditRecord.js:102
 msgid "Ok"
 msgstr "Ок"
 
@@ -277,15 +277,15 @@ msgstr "Вы уверены что хотите покинуть програм�
 msgid "Logging you out..."
 msgstr "выключаю программу..."
 
-#: js/Tinebase.js:99
+#: js/Tinebase.js:102
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/Tinebase.js:120
+#: js/Tinebase.js:123
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:121
+#: js/Tinebase.js:124
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -521,7 +521,7 @@ msgstr "Личное"
 msgid "shared"
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:245
+#: js/widgets/container/ContainerSelect.js:248
 #, python-format
 msgid "please select a %s"
 msgstr ""
