@@ -286,8 +286,8 @@ class Voipmanager_Backend_Snom_Xml
         $locationsSettings['challenge_response'] = 'off';
         $locationsSettings['call_completion'] = 'off';
 
-        $locationsSettings['setting_server'] = $this->_getBaseUrl() . '?method=Voipmanager.settings&mac=' . $_phone->macaddress;
-        $locationsSettings['firmware_status'] = $this->_getBaseUrl() . '?method=Voipmanager.firmware&mac=' . $_phone->macaddress;
+        $locationsSettings['setting_server'] = $this->_getBaseUrl() . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
+        $locationsSettings['firmware_status'] = $this->_getBaseUrl() . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
         
         return $locationsSettings;
     }
