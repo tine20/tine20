@@ -94,7 +94,7 @@ class Tinebase_Controller
         }
         Zend_Registry::set('configFile', $this->_config);
         
-        define('TINE20_BUILDTYPE', $this->_config->get('buildtype', 'DEVELOPMENT'));
+        define('TINE20_BUILDTYPE', strtoupper($this->_config->get('buildtype', 'DEVELOPMENT')));
         
         $this->_session = new Zend_Session_Namespace('tinebase');
         
