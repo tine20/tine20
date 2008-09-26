@@ -376,10 +376,13 @@ function statistics($_verbose)
         $appStats[$appName] = array();
         foreach (scandir($translationPath) as $poFile) {
             if (substr($poFile, -3) == '.po') {
-                $langCode = substr($poFile, 0, -3);
                 if ($_verbose) {
                     echo "Processing $appName/$poFile \n";
                 }
+                
+                $langCode = substr($poFile, 0, -3);
+                $langLocale = new Zend_Locale($langCode);
+                
                 $statsOutput = `msgfmt --statistics $translationPath/$poFile 2>&1`;
                 $statsParts = explode(',', $statsOutput);
                 $statsParts = preg_replace('/^\s*(\d+).*/i', '$1', $statsParts);
@@ -406,7 +409,8 @@ function statistics($_verbose)
                 
                 $poFileStats = array(
                     'locale'       => $langCode,
-                    'language'     => $locale->getLanguageTranslation($langCode),
+                    'language'     => $locale->getLanguageTranslation($langLocale->getLanguage()),
+                    'region'       => $locale->getCountryTranslation($langLocale->getRegion()),
                     'appname'      => $appName,
                     'translated'   => (int)$translated,
                     'fuzzy'        => (int)$fuzzy,
@@ -424,8 +428,6 @@ function statistics($_verbose)
                     'untranslated' => 0,
                     'total'        => 0
                 );
-                
-                $langLocale = new Zend_Locale($langCode);
                 
                 $langStats[$langCode]['locale']        = $langCode;
                 $langStats[$langCode]['language']      = $locale->getLanguageTranslation($langLocale->getLanguage());
