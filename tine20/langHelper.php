@@ -302,8 +302,8 @@ function contributorsMerge($_verbose, $_language, $_archive)
             //check leggacy
             $contributedPoFile = "$basePath/$appName/$_language.po";
             if (! is_file($contributedPoFile)) {
-                echo "Error: could not find langfile $_language.po in contributor's $appName \n";
-                exit;
+                echo "Warning: could not find langfile $_language.po in contributor's $appName \n";
+                continue;
             }
         }
         // do the actual merging
