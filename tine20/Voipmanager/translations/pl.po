@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-09-20 10:26+0100\n"
+"Last-Translator: Christof <c.gacki@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,57 +16,57 @@ msgstr ""
 
 #: js/Asterisk/Context.js:82
 msgid "add context"
-msgstr ""
+msgstr "utwórz kontekst"
 
 #: js/Asterisk/Context.js:89
 msgid "edit context"
-msgstr ""
+msgstr "edycja kontekstu"
 
 #: js/Asterisk/Context.js:97
 msgid "delete context"
-msgstr ""
+msgstr "wymaż kontekst"
 
 #: js/Asterisk/Context.js:152 js/Asterisk/Meetme.js:152
 #: js/Asterisk/SipPeer.js:160 js/Asterisk/Voicemail.js:156 js/MyPhones.js:106
 #: js/Snom/Location.js:152 js/Snom/Phone.js:206 js/Snom/Settings.js:163
 #: js/Snom/Software.js:160 js/Snom/Templates.js:152
 msgid "Search: "
-msgstr ""
+msgstr "Szukanie:"
 
 #: js/Asterisk/Context.js:184
 msgid "Displaying context {0} - {1} of {2}"
-msgstr ""
+msgstr "Pokaż kontekst  {0} - {1} z {2}"
 
 #: js/Asterisk/Context.js:185
 msgid "No context to display"
-msgstr ""
+msgstr "Nie ma kotekstu do pokazania"
 
 #: js/Asterisk/Context.js:190 js/Asterisk/Meetme.js:190
 #: js/Asterisk/Voicemail.js:195 js/Snom/Location.js:198
 #: js/Snom/Software.js:199 js/Snom/Templates.js:190
 msgid "id"
-msgstr ""
+msgstr "id"
 
 #: js/Asterisk/Context.js:191 js/Asterisk/SipPeer.js:211 js/MyPhones.js:624
 #: js/Snom/Phone.js:1347 js/Snom/Settings.js:202 js/Snom/Settings.js:470
 #: js/Snom/Settings.js:607 js/Snom/Software.js:200 js/Snom/Software.js:435
 #: js/Snom/Templates.js:191
 msgid "name"
-msgstr ""
+msgstr "nazwa"
 
 #: js/Asterisk/Context.js:192 js/Asterisk/Context.js:404
 #: js/Snom/Location.js:206 js/Snom/Location.js:441 js/Snom/Phone.js:862
 #: js/Snom/Settings.js:486 js/Snom/Software.js:201 js/Snom/Software.js:441
 #: js/Snom/Templates.js:192 js/Snom/Templates.js:408
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: js/Asterisk/Context.js:396 js/Asterisk/SipPeer.js:456
 #: js/Asterisk/SipPeer.js:610 js/Asterisk/Voicemail.js:456
 #: js/Snom/Location.js:202 js/Snom/Location.js:433 js/Snom/Phone.js:1148
 #: js/Snom/Templates.js:400
 msgid "Name"
-msgstr ""
+msgstr "Nazwa"
 
 #: js/Asterisk/Meetme.js:82
 msgid "add meetme"
@@ -114,7 +114,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:159 js/Asterisk/Voicemail.js:155
 msgid "Context: "
-msgstr ""
+msgstr "Kontets:"
 
 #: js/Asterisk/SipPeer.js:204
 msgid "Displaying sipPeers {0} - {1} of {2}"
@@ -127,7 +127,7 @@ msgstr ""
 #: js/Asterisk/SipPeer.js:210 js/MyPhones.js:144 js/Snom/Phone.js:244
 #: js/Snom/Settings.js:201
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: js/Asterisk/SipPeer.js:212
 msgid "account code"
@@ -151,7 +151,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:217 js/Asterisk/Voicemail.js:197
 msgid "context"
-msgstr ""
+msgstr "kontekst"
 
 #: js/Asterisk/SipPeer.js:218
 msgid "default ip"
@@ -163,15 +163,16 @@ msgstr ""
 
 #: js/Asterisk/SipPeer.js:220
 msgid "from user"
-msgstr ""
+msgstr "od użytkownika"
 
 #: js/Asterisk/SipPeer.js:221
+#, fuzzy
 msgid "from domain"
-msgstr ""
+msgstr "od domeny"
 
 #: js/Asterisk/SipPeer.js:222
 msgid "full contact"
-msgstr ""
+msgstr "pełny kontakt"
 
 #: js/Asterisk/SipPeer.js:223
 msgid "host"
@@ -184,7 +185,7 @@ msgstr ""
 #: js/Asterisk/SipPeer.js:225 js/MyPhones.js:564 js/Snom/Phone.js:1287
 #: js/Snom/Settings.js:205 js/Snom/Settings.js:545
 msgid "language"
-msgstr ""
+msgstr "język"
 
 #: js/Asterisk/SipPeer.js:226 js/Asterisk/Voicemail.js:196
 #: js/Asterisk/Voicemail.js:433

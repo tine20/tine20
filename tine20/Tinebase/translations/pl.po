@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-09-24 21:43+0100\n"
+"Last-Translator: Christof <c.gacki@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,31 +16,31 @@ msgstr ""
 
 #: Acl/Rights.php:116
 msgid "Report bugs"
-msgstr ""
+msgstr "Raport błędów"
 
 #: Acl/Rights.php:117
 msgid "Report bugs to tine20.org directly when they occour"
-msgstr ""
+msgstr "Jeżeli wystąpią błędy proszę zgłoś do tine20.org"
 
 #: Acl/Rights.php:120
 msgid "Check version"
-msgstr ""
+msgstr "Sprawdź wersję"
 
 #: Acl/Rights.php:121
 msgid "Check tine20.org for new versions"
-msgstr ""
+msgstr "Sprawdź tine20.org czy jest nowa wersja"
 
 #: Application/Rights/Abstract.php:56
 msgid "admin"
-msgstr ""
+msgstr "administrator"
 
 #: Application/Rights/Abstract.php:57
 msgid "admin right description"
-msgstr ""
+msgstr "opis praw administratora"
 
 #: Application/Rights/Abstract.php:60
 msgid "run"
-msgstr ""
+msgstr "wykonaj"
 
 #: Application/Rights/Abstract.php:61
 msgid "run right description"
@@ -48,235 +48,242 @@ msgstr ""
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
-msgstr ""
+msgstr "Tagi"
 
 #: Export/Pdf.php:407
 msgid "Export Date"
-msgstr ""
+msgstr "Export danych"
 
 #: Export/Pdf.php:411
 msgid "Created by"
-msgstr ""
+msgstr "Utworzone przez"
 
 #: Http.php:212 js/Tinebase.js:112
 msgid "Authorisation Required"
-msgstr ""
+msgstr "Wymagana autoryzacja"
 
 #: Http.php:213 js/Tinebase.js:113
 msgid "Your session timed out. You need to login again."
-msgstr ""
+msgstr "Upłynął limit czasu twojej sesji. Musisz się zalogować ponownie."
 
 #: Http.php:238 js/ExceptionDialog.js:26
 msgid "Abnormal End"
-msgstr ""
+msgstr "Nietypowe zakończenie"
 
 #: Http.php:239 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
-msgstr ""
+msgstr "Wystąpił błąd, program zostanie zakończony awaryjnie."
 
 #: js/ExceptionDialog.js:34 js/MainScreen.js:315
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: js/ExceptionDialog.js:42
 msgid "Send Report"
-msgstr ""
+msgstr "Wyślij raport"
 
 #: js/ExceptionDialog.js:52
 msgid "The last action you made was potentially not performed correctly."
-msgstr ""
+msgstr "Prawdopodobnie ostatnia akcja nie została wykonana poprawnie."
 
 #: js/ExceptionDialog.js:53
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occoured."
 msgstr ""
+"Proszę pomóc w poprawie tego oprogramowania i powiadomić sprzedawcę. Załącz "
+"krótki opis tego co wykonywałeś w gdy wystąpił błąd."
 
 #: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: js/ExceptionDialog.js:69
 msgid "Show Details:"
-msgstr ""
+msgstr "Pokaż szczegóły:"
 
 #: js/ExceptionDialog.js:92
 msgid "Sending report..."
-msgstr ""
+msgstr "Wysyłam raport …"
 
 #: js/ExceptionDialog.js:92
 msgid "Please wait a moment"
-msgstr ""
+msgstr "Proszę chwileczkę poczekać"
 
 #: js/ExceptionDialog.js:117
 msgid "Transmission Completed"
-msgstr ""
+msgstr "Przekazanie zakończone"
 
 #: js/ExceptionDialog.js:118
 msgid "Your report has been send. Thanks for your contribution"
 msgstr ""
+"Twój raport został zakończony. Dziękujemy za udział w poprawie programu."
 
 #: js/Login.js:29
 msgid "Login"
-msgstr ""
+msgstr "Logowanie"
 
 #: js/Login.js:36
 msgid "Register"
-msgstr ""
+msgstr "Zarejestruj się"
 
 #: js/Login.js:50
 msgid "Please enter your login data"
-msgstr ""
+msgstr "Proszę podać swoje dane logowania"
 
 #: js/Login.js:67
 msgid "Username"
-msgstr ""
+msgstr "Imię użytkownika"
 
 #: js/Login.js:73
 msgid "Password"
-msgstr ""
+msgstr "Hasło"
 
 #: js/Login.js:119
 msgid "Logging you in..."
-msgstr ""
+msgstr "Logowanie w …"
 
 #: js/Login.js:119 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:231
 #: js/widgets/container/ContainerTree.js:259
 #: js/widgets/container/ContainerTree.js:291
 msgid "Please wait"
-msgstr ""
+msgstr "Proszę czekać"
 
 #: js/Login.js:130
 msgid "Login successful. Loading Tine 2.0..."
-msgstr ""
+msgstr "Udane logowanie. Ładowanie Tiny 2.0 …"
 
 #: js/Login.js:130 js/MainScreen.js:393
 msgid "Please wait!"
-msgstr ""
+msgstr "Proszę poczekać!"
 
 #: js/Login.js:134
 msgid "Login failure"
-msgstr ""
+msgstr "Logowanie bez powodzenia"
 
 #: js/Login.js:135
 msgid "Your username and/or your password are wrong!!!"
-msgstr ""
+msgstr "Imię użytkownika i / albo hasło są błędne!"
 
 #: js/MainScreen.js:48
 msgid "Change password"
-msgstr ""
+msgstr "Zmień hasło"
 
 #: js/MainScreen.js:54
 msgid "Install Google Gears"
-msgstr ""
+msgstr "Zanstaluj Gears (dawniej Google Gears)."
 
 #: js/MainScreen.js:60
 msgid "Logout"
-msgstr ""
+msgstr "Wyloguj"
 
 #: js/MainScreen.js:61
 msgid "Logout from Tine 2.0"
-msgstr ""
+msgstr "Wylogowanie z Tiny 2.0"
 
 #: js/MainScreen.js:83 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: js/MainScreen.js:91
 msgid "Preferences"
-msgstr ""
+msgstr "Preferencje"
 
 #: js/MainScreen.js:107
 #, python-format
 msgid "User: %s"
-msgstr ""
+msgstr "Użytkownik: %s"
 
 #: js/MainScreen.js:108
 #, python-format
 msgid "Timezone: %s"
-msgstr ""
+msgstr "Strefa czasowa: %s"
 
 #: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
-msgstr ""
+msgstr "Strefa czasowa"
 
 #: js/MainScreen.js:110 js/widgets/LangChooser.js:40
 msgid "Language"
-msgstr ""
+msgstr "Język"
 
 #: js/MainScreen.js:279
 #, python-format
 msgid "Change Password For \"%s\""
-msgstr ""
+msgstr "Zmień hasło dla \"%s\""
 
 #: js/MainScreen.js:303
 msgid "Old Password"
-msgstr ""
+msgstr "Stare hasło"
 
 #: js/MainScreen.js:307
 msgid "New Password"
-msgstr ""
+msgstr "Nowe hasło"
 
 #: js/MainScreen.js:311
 msgid "Repeat new Password"
-msgstr ""
+msgstr "Powtórz nowe hasło"
 
 #: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
 #: js/widgets/container/ContainerSelect.js:260 js/widgets/EditRecord.js:102
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: js/MainScreen.js:330
 msgid "Please Wait!"
-msgstr ""
+msgstr "Proszę poczekać!"
 
 #: js/MainScreen.js:331
 msgid "changing password..."
-msgstr ""
+msgstr "zmiana hasła …"
 
 #: js/MainScreen.js:342
 msgid "Success"
-msgstr ""
+msgstr "Pomyślnie"
 
 #: js/MainScreen.js:343
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Twoje hasło zostało zmienione."
 
 #: js/MainScreen.js:349 js/MainScreen.js:359
 msgid "Failure"
-msgstr ""
+msgstr "Bez powodzenia"
 
 #: js/MainScreen.js:360
 msgid "The new passwords mismatch, please correct them."
-msgstr ""
+msgstr "Nie ma zgodności obu haseł. Proszę je skorygować."
 
 #: js/MainScreen.js:378
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr ""
+"Instalacja Gears (dawniej Google Gears) przyczyni się do poprawy sprawności "
+"Tiny 2.0 przez lokalne buforowanie wszystkiech potrzebnych plików na tym "
+"komputerze."
 
 #: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
 msgid "Confirm"
-msgstr ""
+msgstr "Potwierdź"
 
 #: js/MainScreen.js:391
 msgid "Are you sure you want to logout?"
-msgstr ""
+msgstr "Jesteś pewien, że chcesz się wylogować?"
 
 #: js/MainScreen.js:393
 msgid "Logging you out..."
-msgstr ""
+msgstr "Wylogowanie trwa …"
 
 #: js/Tinebase.js:102
 msgid "Connection lost, please check your network!"
-msgstr ""
+msgstr "Połączenie zostało utracone, proszę sprawdzić swoją sieć!"
 
 #: js/Tinebase.js:123
+#, fuzzy
 msgid "Concurrent Updates"
-msgstr ""
+msgstr "Jednoczesna aktualizacja"
 
 #: js/Tinebase.js:124
 msgid ""
@@ -286,15 +293,15 @@ msgstr ""
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
-msgstr ""
+msgstr "Kreator rejestracji"
 
 #: js/UserRegistration.js:86
 msgid "Given name"
-msgstr ""
+msgstr "Imię"
 
 #: js/UserRegistration.js:97
 msgid "Family name"
-msgstr ""
+msgstr "Nazwisko"
 
 #: js/UserRegistration.js:108
 msgid "Login name"
