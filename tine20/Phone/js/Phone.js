@@ -465,7 +465,9 @@ Tine.Phone.Main = {
     		var grid = Ext.getCmp('Phone_Callhistory_Grid');
     		if (grid) {
     		    record = grid.getSelectionModel().getSelected();
-    		    number = (record.data.direction == 'in') ? record.data.source : record.data.destination;
+    		    if (record) {
+    		        number = (record.data.direction == 'in') ? record.data.source : record.data.destination;
+    		    }
     		}
     		
     		Tine.Phone.dialNumber(number);
