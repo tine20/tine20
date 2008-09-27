@@ -245,6 +245,23 @@ class Voipmanager_Controller
     }
     
     /**
+     * get snom_phone_line by id
+     *
+     * @param string $_id the id of the line
+     * @return Voipmanager_Model_SnomLine
+     */
+    public function getSnomPhoneLine($_id)
+    {
+        $id = Voipmanager_Model_SnomLine::convertSnomLineIdToInt($_id);
+        if (($result = $this->_cache->load('snomPhoneLine_' . $id)) === false) {
+            $result = $this->_snomLineBackend->get($id);
+            $this->_cache->save($result, 'snomPhoneLine_' . $id, array('SnomPhoneLine'), 5);
+        }
+        
+        return $result;    
+    }
+    
+    /**
      * get snom_phone by macAddress
      *
      * @param string $_macAddress
@@ -914,8 +931,12 @@ class Voipmanager_Controller
      */
     public function getAsteriskSipPeer($_id)
     {
-        $result = $this->_asteriskSipPeerBackend->get($_id);
-
+        $id = Voipmanager_Model_AsteriskSipPeer::convertAsteriskSipPeerIdToInt($_id);
+        if (($result = $this->_cache->load('asteriskSipPeer_' . $id)) === false) {
+            $result = $this->_asteriskSipPeerBackend->get($id);
+            $this->_cache->save($result, 'asteriskSipPeer_' . $id, array('asteriskSipPeer'), 5);
+        }
+        
         return $result;    
     }
 
