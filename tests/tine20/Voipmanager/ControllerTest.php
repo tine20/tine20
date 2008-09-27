@@ -106,6 +106,23 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteAsteriskContexts($returned->getId()); 
     }
     
+    /**
+     * test update of asterisk context
+     *
+     */
+    public function testUpdateAsteriskContext()
+    {
+        $test = $this->_getAsteriskContext();
+        
+        $test = $this->_backend->createAsteriskContext($test);
+        $returned = $this->_backend->updateAsteriskContext($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteAsteriskContexts($returned->getId()); 
+    }
+    
     protected function _getAsteriskContext()
     {
         return new Voipmanager_Model_AsteriskContext(array(
