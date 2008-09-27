@@ -481,11 +481,11 @@ Tine.Phone.Main = {
              
     		switch(_data) {
     			case 'in':
-                    return translation._('Incoming');
+                    return "<img src='images/oxygen/16x16/actions/arrow-right.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Incoming call') + "'/>";
                     break;
                     
                 case 'out':
-                    return translation._('Outgoing');
+                    return "<img src='images/oxygen/16x16/actions/arrow-left.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Outgoing call') + "'/>";
                     break;
     		}
     	}
@@ -617,6 +617,7 @@ Tine.Phone.Main = {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
+            { resizable: true, id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 20, renderer: this.renderer.direction },
             { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source', hidden: true },
             { resizable: true, id: 'callerid', header: this.translation._('Caller Id'), dataIndex: 'callerid' },
             { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination' },
@@ -625,7 +626,6 @@ Tine.Phone.Main = {
             { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.Common.dateTimeRenderer, hidden: true  },
             { resizable: true, id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
             { resizable: true, id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40, hidden: true },
-            { resizable: true, id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 40, renderer: this.renderer.direction },
             { resizable: true, id: 'id', header: this.translation._('Call ID'), dataIndex: 'id', hidden: true}
         ]);
         
