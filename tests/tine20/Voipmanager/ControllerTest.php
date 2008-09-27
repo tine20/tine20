@@ -166,6 +166,22 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteAsteriskMeetmes($returned->getId()); 
     }
     
+    /**
+     * test search of asterisk meetme room
+     *
+     */
+    public function testSearchAsteriskMeetme()
+    {
+        $test = $this->_getAsteriskMeetme();
+        
+        $test = $this->_backend->createAsteriskMeetme($test);
+        
+        $returned = $this->_backend->getAsteriskMeetmes('id', 'ASC', $test->confno);
+        $this->assertEquals(count($returned), 1);
+        
+        $this->_backend->deleteAsteriskMeetmes($returned->getId()); 
+    }
+    
     protected function _getAsteriskMeetme()
     {
         return new Voipmanager_Model_AsteriskMeetme(array(
