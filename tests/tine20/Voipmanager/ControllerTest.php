@@ -327,6 +327,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteAsteriskVoicemails($returned->getId()); 
     }
     
+    /**
+     * return random Voipmanager_Model_AsteriskVoicemail
+     *
+     * @return Voipmanager_Model_AsteriskVoicemail
+     */
     protected function _getAsteriskVoicemail()
     {
         return new Voipmanager_Model_AsteriskVoicemail(array(
