@@ -94,7 +94,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $testContext = $this->_getAsteriskContext();
         $returnedContext = $this->_backend->createAsteriskContext($testContext);
-        $this->_backend->deleteAsteriskContexts($returnedContext); 
+        $this->_backend->deleteAsteriskContexts($returnedContext->getId()); 
     }
     
     protected function _getAsteriskContext()
