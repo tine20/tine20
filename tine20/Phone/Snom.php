@@ -15,7 +15,7 @@
  *
  * @package     Phone
  */
-class Phone_Snom extends Tinebase_Application_Json_Abstract
+class Phone_Snom extends Voipmanager_Frontend_Snom_Abstract
 {
     /**
      * the internal name of the application
@@ -206,54 +206,4 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         }
     }
     
-    /**
-     * authenticate the phone against the database
-     *
-     */
-    protected function _authenticate()
-    {
-        if (!isset($_SERVER['PHP_AUTH_USER'])) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' PHP_AUTH_USER not set');
-            header('WWW-Authenticate: Basic realm="Tine 2.0"');
-            header('HTTP/1.0 401 Unauthorized');
-            exit;
-        }
-        
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' authenticate ' . $_SERVER['PHP_AUTH_USER']);
-        
-        $vmController = Voipmanager_Controller::getInstance();
-        
-        $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDBInstance());
-        $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
-            ->setIdentityColumn('http_client_user')
-            ->setCredentialColumn('http_client_pass')
-            ->setIdentity($_SERVER['PHP_AUTH_USER'])
-            ->setCredential($_SERVER['PHP_AUTH_PW']);
-
-        // Perform the authentication query, saving the result
-        $authResult = $authAdapter->authenticate();
-        
-        if (!$authResult->isValid()) {
-            Zend_Registry::get('logger')->warning(__METHOD__ . '::' . __LINE__ . ' authentication failed for ' . $_SERVER['PHP_AUTH_USER']);
-            header('WWW-Authenticate: Basic realm="Tine 2.0"');
-            header('HTTP/1.0 401 Unauthorized');
-            exit;
-        }                
-    }
-    
-    /**
-     * generate URL with query parameters to access this installation again
-     *
-     * @return string the complete URI http://hostname/path/index.php
-     */
-    protected function _getBaseUrl()
-    {
-        $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
-        $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-        $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
-        
-        $baseURL = $protocol . $name . $port . $_SERVER['PHP_SELF'];
-        
-        return $baseURL;
-    }
 }
