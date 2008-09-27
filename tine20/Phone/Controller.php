@@ -138,7 +138,16 @@ class Phone_Controller
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         
         $_call->start = Zend_Date::now();
-        $_call->callerid = $_call->line_id;
+        
+        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
+            'name'     => $_call->line_id
+        ));
+        $asteriskSipPeers = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($filter);
+        if(count($asteriskSipPeers) > 0) {
+            $_call->callerid = $asteriskSipPeers[0]->callerid;
+        } else {
+            $_call->callerid = $_call->line_id;
+        }
         
         $call = $backend->create($_call);
         
