@@ -188,6 +188,8 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         
         if($phone->http_client_info_sent == true) {
             $this->_authenticate();
+        } else {
+            Zend_Registry::get('logger')->debug('skipped authentication for ' . $mac);
         }
         
         $phone = $this->_setStatus($phone, 'settings');
@@ -198,6 +200,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         echo $xmlBackend->getConfig($phone);
         
         if($phone->http_client_info_sent == false) {
+            Zend_Registry::get('logger')->debug('set http_client_info_sent to true again');
             $phone->http_client_info_sent = true;
             $controller->updateSnomPhone($phone);
         }
