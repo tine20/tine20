@@ -122,6 +122,11 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
                     $directoryEntry->addChild('Name', $contact->n_fileas . ' Home');
                     $directoryEntry->addChild('Telephone', $contact->tel_home);
                 }
+                if(!empty($contact->tel_cell_private)) {
+                    $directoryEntry = $xml->addChild('DirectoryEntry');
+                    $directoryEntry->addChild('Name', $contact->n_fileas . ' CellP');
+                    $directoryEntry->addChild('Telephone', $contact->tel_cell_private);
+                }
             }
             
             $xml = $xml->asXML();
