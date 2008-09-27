@@ -134,7 +134,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backend->createAsteriskContext($test);
         
         $returned = $this->_backend->getAsteriskContexts('id', 'ASC', $test->name);
-        $this->assertEquals(count($returned), 1);
+        $this->assertEquals(1, count($returned));
         
         $this->_backend->deleteAsteriskContexts($returned->getId()); 
     }
@@ -193,7 +193,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backend->createAsteriskMeetme($test);
         
         $returned = $this->_backend->getAsteriskMeetmes('id', 'ASC', $test->confno);
-        $this->assertEquals(count($returned), 1);
+        $this->assertEquals(1, count($returned));
         
         $this->_backend->deleteAsteriskMeetmes($returned->getId()); 
     }
@@ -256,13 +256,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
             'callerid' => $test->callerid
         ));
         $returned = $this->_backend->searchAsteriskSipPeers($filter);
-        $this->assertEquals(count($returned), 1);
+        $this->assertEquals(1, count($returned));
         
         $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
             'query' => $test->callerid
         ));
         $returned = $this->_backend->searchAsteriskSipPeers($filter);
-        $this->assertEquals(count($returned), 1);
+        $this->assertEquals(1, count($returned));
         
         $this->_backend->deleteAsteriskSipPeers($returned->getId()); 
     }
