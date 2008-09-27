@@ -203,7 +203,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         echo $xmlBackend->getConfig($phone);
         
         if($phone->http_client_info_sent == false) {
-            Zend_Registry::get('logger')->debug('set http_client_info_sent to true again');
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set http_client_info_sent to true again');
             $phone->http_client_info_sent = true;
             $controller->updateSnomPhone($phone);
         }
