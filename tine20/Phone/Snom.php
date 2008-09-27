@@ -31,14 +31,6 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      */
     public function directory($mac)
     {
-        $xml = $this->_getSearchDialogue($mac, 'Enter search string:');
-    
-        header('Content-Type: text/xml');
-        echo $xml;
-    }
-    
-    protected function _getSearchDialogue($_mac, $_name)
-    {
         $baseUrl = $this->_getBaseUrl();
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
@@ -46,23 +38,23 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
                 <Prompt>Prompt</Prompt>
                 <URL>' . $baseUrl . '</URL>
                 <InputItem>
-                    <DisplayName>' . $_name . '</DisplayName>
-                    <QueryStringParam>method=Phone.searchContacts&mac=' . $_mac . '&query</QueryStringParam>
+                    <DisplayName>Enter search string:</DisplayName>
+                    <QueryStringParam>method=Phone.searchContacts&mac=' . $mac . '&query</QueryStringParam>
                     <DefaultValue/>
                     <InputFlags>a</InputFlags>
                 </InputItem>
             </SnomIPPhoneInput>
         ';
-        
-        return $xml;
+    
+        header('Content-Type: text/xml');
+        echo $xml;
     }
     
     /**
      * create the search results dialogue
      *
-     * @param Voipmanager_Model_SnomPhone $mac
-     * @param string $query
-     * @return string
+     * @param string $mac the mac address of the phone
+     * @param string $query the string to search the contacts for
      */
     public function searchContacts($mac, $query)
     {
@@ -94,9 +86,14 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($contacts) . ' contacts');
         
         if(count($contacts) == 0) {
-            $xml = $this->_getSearchDialogue($mac, 'Nothing found! Try again:');
-        } else {
-        
+            $baseUrl = $this->_getBaseUrl();
+            $xml = '<SnomIPPhoneText>
+                <Title>Nothing found!</Title>
+                <Text>Nothing found!</Text>
+                <fetch mil="1000">' . $baseUrl . '?method=Phone.directory&mac=' . $mac . '</fetch>
+            </SnomIPPhoneText>
+            ';
+        } else {        
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
               <SnomIPPhoneDirectory>
                 <Title>Directory</Title>
