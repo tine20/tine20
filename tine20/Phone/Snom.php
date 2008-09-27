@@ -67,10 +67,10 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      * @todo add correct line_id
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
-    {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
-        
+    {        
         $this->_authenticate();
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
         
         $vmController = Voipmanager_Controller::getInstance();
         $phone = $vmController->getSnomPhoneByMacAddress($mac);
