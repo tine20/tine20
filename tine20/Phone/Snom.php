@@ -28,18 +28,16 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      * public function to access the directory
      * 
      * @param string $mac
-     * @return string
      */
     public function directory($mac)
     {
-        $xml = $this->_getSearchDialogue('Enter search string:');
+        $xml = $this->_getSearchDialogue($mac, 'Enter search string:');
     
         header('Content-Type: text/xml');
         echo $xml;
-        
     }
     
-    protected function _getSearchDialogue($_name)
+    protected function _getSearchDialogue($_mac, $_name)
     {
         $baseUrl = $this->_getBaseUrl();
 
@@ -49,7 +47,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
                 <URL>' . $baseUrl . '</URL>
                 <InputItem>
                     <DisplayName>' . $_name . '</DisplayName>
-                    <QueryStringParam>method=Phone.searchContacts&mac=' . $mac . '&query</QueryStringParam>
+                    <QueryStringParam>method=Phone.searchContacts&mac=' . $_mac . '&query</QueryStringParam>
                     <DefaultValue/>
                     <InputFlags>a</InputFlags>
                 </InputItem>
@@ -96,7 +94,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($contacts) . ' contacts');
         
         if(count($contacts) == 0) {
-            $xml = $this->_getSearchDialogue('Nothing found! Try again:');
+            $xml = $this->_getSearchDialogue($mac, 'Nothing found! Try again:');
         } else {
         
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
