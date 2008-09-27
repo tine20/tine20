@@ -15,7 +15,7 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Snom_Xml
+class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
 {
     protected $_guiLanguages = array(
         'CZ'    => 'Cestina',
@@ -70,22 +70,6 @@ class Voipmanager_Backend_Snom_Xml
         }
     }
     
-    /**
-     * generate URL with query parameters to access this installation again
-     *
-     * @return string the complete URI http://hostname/path/index.php
-     */
-    protected function _getBaseUrl()
-    {
-        $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
-        $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-        $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
-        
-        $baseURL = $protocol . $name . $port . $_SERVER['PHP_SELF'];
-        
-        return $baseURL;
-    }
-        
     /**
      * get config of one phone
      *

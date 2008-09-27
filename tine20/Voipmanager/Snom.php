@@ -15,7 +15,7 @@
  *
  * @package     Voipmanager Management
  */
-class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
+class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
 {
     /**
      * the internal name of the application
@@ -143,41 +143,5 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         $controller->updateSnomPhone($_phone);
     
         return $_phone;
-    }
-    
-    /**
-     * authenticate the phone against the database
-     *
-     */
-    protected function _authenticate()
-    {
-        if (!isset($_SERVER['PHP_AUTH_USER'])) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' PHP_AUTH_USER not set');
-            header('WWW-Authenticate: Basic realm="Tine 2.0"');
-            header('HTTP/1.0 401 Unauthorized');
-            exit;
-        }
-        
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' authenticate ' . $_SERVER['PHP_AUTH_USER']);
-        
-        $vmController = Voipmanager_Controller::getInstance();
-        
-        $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDBInstance());
-        $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
-            ->setIdentityColumn('http_client_user')
-            ->setCredentialColumn('http_client_pass')
-            ->setIdentity($_SERVER['PHP_AUTH_USER'])
-            ->setCredential($_SERVER['PHP_AUTH_PW']);
-
-        // Perform the authentication query, saving the result
-        $authResult = $authAdapter->authenticate();
-        
-        if (!$authResult->isValid()) {
-            Zend_Registry::get('logger')->warning(__METHOD__ . '::' . __LINE__ . ' authentication failed for ' . $_SERVER['PHP_AUTH_USER']);
-            header('WWW-Authenticate: Basic realm="Tine 2.0"');
-            header('HTTP/1.0 401 Unauthorized');
-            exit;
-        }                
-    }
-    
+    }    
 }
