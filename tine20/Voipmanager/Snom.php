@@ -182,6 +182,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     public function settings($mac)
     {
+        Zend_Registry::get('logger')->debug('get settings for ' . $mac);
         $controller = Voipmanager_Controller::getInstance();
         
         $phone = $controller->getSnomPhoneByMacAddress($mac);
@@ -189,7 +190,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         if($phone->http_client_info_sent == true) {
             $this->_authenticate();
         } else {
-            Zend_Registry::get('logger')->debug('skipped authentication for ' . $mac);
+            Zend_Registry::get('logger')->debug('skipped authentication');
         }
         
         $phone = $this->_setStatus($phone, 'settings');
@@ -213,6 +214,8 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     public function firmware($mac)
     {
+        Zend_Registry::get('logger')->debug('get firmware for ' . $mac);
+        
         $this->_authenticate();
         
         $controller = Voipmanager_Controller::getInstance();
@@ -269,6 +272,8 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
             header('HTTP/1.0 401 Unauthorized');
             exit;
         }
+        
+        Zend_Registry::get('logger')->debug('authenticate ' . $_SERVER['PHP_AUTH_USER']);
         
         $vmController = Voipmanager_Controller::getInstance();
         
