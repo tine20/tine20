@@ -671,7 +671,7 @@ Tine.Phone.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            var number = (record.data.direction == 'in') ? record.data.source : record.data.destination;
+            var number = record.data.destination;
             
             Tine.Phone.dialNumber(number);
         }, this);
