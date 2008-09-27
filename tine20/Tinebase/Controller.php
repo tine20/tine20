@@ -174,7 +174,7 @@ class Tinebase_Controller
     {
         try {
             $this->_initFramework();
-            Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
             
             $server = new Tinebase_Http_Server();
             
@@ -190,7 +190,7 @@ class Tinebase_Controller
                     try {
                         $server->setClass($applicationName.'_Http', $applicationName);
                     } catch (Exception $e) {
-                        Zend_Registry::get('logger')->debug("Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
+                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
                 }
             } 
@@ -208,7 +208,7 @@ class Tinebase_Controller
             $server = new Tinebase_Http_Server();
             $server->setClass('Tinebase_Http', 'Tinebase');
             if (! Zend_Registry::isRegistered('currentAccount')) {
-                Zend_Registry::get('logger')->INFO('Attempt to request a privileged Http-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
+                Zend_Registry::get('logger')->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
                 $server->handle(array('method' => 'Tinebase.sessionTimedOut'));
             } else {
                 Zend_Registry::get('logger')->DEBUG(__FILE__ . '::' . __METHOD__ . ' (line' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
@@ -234,7 +234,7 @@ class Tinebase_Controller
                     '" whereas POST is "' . $_POST['requestType'] . '"' . ' HTTP_USER_AGENT: "' . $_SERVER['HTTP_USER_AGENT'] . '"');
             }
             
-            Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' is json request. method: ' . $_REQUEST['method']);
             
             $anonymnousMethods = array(
                 'Tinebase.login',
@@ -278,7 +278,7 @@ class Tinebase_Controller
                     try {
                         $server->setClass($applicationName.'_Json', $applicationName);
                     } catch (Exception $e) {
-                        Zend_Registry::get('logger')->debug("Failed to add JSON API for application '$applicationName' Exception: \n". $e);
+                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
                     }
                 }
             }
@@ -303,7 +303,7 @@ class Tinebase_Controller
         }
         
         $this->_initFramework();
-        Zend_Registry::get('logger')->debug('is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
         
         $server = new Tinebase_Http_Server();
         $server->setClass('Voipmanager_Snom', 'Voipmanager');
@@ -322,7 +322,7 @@ class Tinebase_Controller
     {        
         $this->_initFramework();
 
-        Zend_Registry::get('logger')->debug('Is cli request. method: ' . (isset($_opts->method) ? $_opts->method : 'EMPTY'));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($_opts->method) ? $_opts->method : 'EMPTY'));
         //Zend_Registry::get('logger')->debug('Cli args: ' . print_r($_opts->getRemainingArgs(), true));
 
         $tinebaseServer = new Tinebase_Cli();
@@ -459,13 +459,13 @@ class Tinebase_Controller
             // NOTE: the preference allways exists, cuase setup gives one!
             if (isset($this->_session->userLocale)) {
                 $localeString = $this->_session->userLocale;
-                Zend_Registry::get('logger')->debug(__FILE__ . "::setupUserLocale session value '$localeString'");
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
             } elseif (isset($this->_session->currentAccount)) {
                 $localeString = Tinebase_Config::getInstance()
                     ->getPreference(Zend_Registry::get('currentAccount')->getId(), 'Locale')
                     ->value;
                     
-                Zend_Registry::get('logger')->debug(__FILE__ . "::setupUserLocale preference '$localeString'");
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
             }
         } 
         $locale = Tinebase_Translation::getLocale($localeString ? $localeString : $_localeString);
@@ -606,7 +606,7 @@ class Tinebase_Controller
     {
         //error_log(print_r(Zend_Registry::get('currentAccount')->toArray(), true));
         $loginName = Zend_Registry::get('currentAccount')->accountLoginName;
-        Zend_Registry::get('logger')->debug("change password for $loginName");
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " change password for $loginName");
         
         if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
             throw new Exception('old password worng');
