@@ -253,13 +253,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backend->createAsteriskSipPeer($test);
         
         $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
-            'callerid' => $test->callerid
+            'name' => $test->name
         ));
         $returned = $this->_backend->searchAsteriskSipPeers($filter);
         $this->assertEquals(1, count($returned));
         
         $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
-            'query' => $test->callerid
+            'query' => $test->name
         ));
         $returned = $this->_backend->searchAsteriskSipPeers($filter);
         $this->assertEquals(1, count($returned));
