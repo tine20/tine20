@@ -452,7 +452,7 @@ class Tinebase_Controller
      */
     public function setupUserLocale($_localeString = 'auto', $_saveaspreference = FALSE)
     {
-        Zend_Registry::get('logger')->debug(__FILE__ . "::setupUserLocale given localeString '$_localeString'");
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         $localeString = NULL;
         if ($_localeString == 'auto') {
             // if the session already has a locale, use this, otherwise take the preference
