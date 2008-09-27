@@ -27,66 +27,45 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
     /**
      * public function to access the directory
      * 
-     */
-    public function directory()
-    {
-        $session = new Zend_Session_Namespace('SnomDirectory');
-        
-        if (!$session->phone instanceof Voipmanager_Model_SnomPhone) {
-            $this->_authenticate();
-            
-            $vmController = Voipmanager_Controller::getInstance();
-            
-            $phone = $vmController->getSnomPhoneByMacAddress($_REQUEST['mac']);
-            
-            $session->phone = $phone;
-        }
-        
-        header('Content-Type: text/xml');
-        if(!isset($_REQUEST['query'])) {
-            echo $this->_getSearchDialogue();
-        } else {
-            if(!empty($_REQUEST['query'])) {
-                echo $this->_searchContacts($session->phone, $_REQUEST['query']);
-            }
-        }
-    }
-    
-    /**
-     * create the search dialogue
-     *
+     * @param string $mac
      * @return string
      */
-    protected function _getSearchDialogue()
+    public function directory($mac)
     {
         $baseUrl = $this->_getBaseUrl();
-                
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
             <SnomIPPhoneInput>
                 <Prompt>Prompt</Prompt>
                 <URL>' . $baseUrl . '</URL>
                 <InputItem>
                     <DisplayName>Search for</DisplayName>
-                    <QueryStringParam>' . SID . '&method=Phone.directory&query</QueryStringParam>
+                    <QueryStringParam>' . SID . '&method=Phone.searchContacts&mac=' . $mac . 'query</QueryStringParam>
                     <DefaultValue/>
                     <InputFlags>a</InputFlags>
                 </InputItem>
             </SnomIPPhoneInput>
         ';
     
-        return $xml;
+        header('Content-Type: text/xml');
+        echo $xml;
+        
     }
     
     /**
      * create the search results dialogue
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
-     * @param string $_query
+     * @param Voipmanager_Model_SnomPhone $mac
+     * @param string $query
      * @return string
      */
-    protected function _searchContacts(Voipmanager_Model_SnomPhone $_phone, $_query)
+    public function searchContacts($mac, $query)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $_phone->getId(). ' search for ' . $_query);
+        $this->_authenticate();
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $mac. ' search for ' . $query);
+            
+        $phone = Voipmanager_Controller::getInstance()->getSnomPhoneByMacAddress($mac);
         
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
@@ -94,7 +73,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         
         $readAbleContainer = array();
         
-        foreach($_phone->rights as $right) {
+        foreach($phone->rights as $right) {
             if($right->account_type == 'user') {
                 $containers = $tbContainer->getContainerByACL($right->account_id, 'Addressbook', Tinebase_Container::GRANT_READ);
                 $readAbleContainer = array_merge($readAbleContainer, $containers->getArrayOfIds());
@@ -134,7 +113,8 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
             }
         }
         
-        return $xml->asXML();
+        header('Content-Type: text/xml');
+        echo $xml->asXML();
     }    
     
     /**
