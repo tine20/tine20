@@ -32,6 +32,15 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      */
     public function directory($mac)
     {
+        $xml = $this->_getSearchDialogue('Enter search string:');
+    
+        header('Content-Type: text/xml');
+        echo $xml;
+        
+    }
+    
+    protected function _getSearchDialogue($_name)
+    {
         $baseUrl = $this->_getBaseUrl();
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
@@ -39,17 +48,15 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
                 <Prompt>Prompt</Prompt>
                 <URL>' . $baseUrl . '</URL>
                 <InputItem>
-                    <DisplayName>Search for</DisplayName>
+                    <DisplayName>' . $_name . '</DisplayName>
                     <QueryStringParam>method=Phone.searchContacts&mac=' . $mac . '&query</QueryStringParam>
                     <DefaultValue/>
                     <InputFlags>a</InputFlags>
                 </InputItem>
             </SnomIPPhoneInput>
         ';
-    
-        header('Content-Type: text/xml');
-        echo $xml;
         
+        return $xml;
     }
     
     /**
@@ -88,33 +95,40 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         $contacts = $contactsBackend->search($filter, new Tinebase_Model_Pagination());
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($contacts) . ' contacts');
         
-        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
-          <SnomIPPhoneDirectory>
-            <Title>Directory</Title>
-            <Prompt>Dial</Prompt>
-          </SnomIPPhoneDirectory>
-        ');
+        if(count($contacts) == 0) {
+            $xml = $this->_getSearchDialogue('Nothing found! Try again:');
+        } else {
         
-        foreach($contacts as $contact) {
-            if(!empty($contact->tel_work)) {
-                $directoryEntry = $xml->addChild('DirectoryEntry');
-                $directoryEntry->addChild('Name', $contact->n_fileas . ' Work');
-                $directoryEntry->addChild('Telephone', $contact->tel_work);
+            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
+              <SnomIPPhoneDirectory>
+                <Title>Directory</Title>
+                <Prompt>Dial</Prompt>
+              </SnomIPPhoneDirectory>
+            ');
+            
+            foreach($contacts as $contact) {
+                if(!empty($contact->tel_work)) {
+                    $directoryEntry = $xml->addChild('DirectoryEntry');
+                    $directoryEntry->addChild('Name', $contact->n_fileas . ' Work');
+                    $directoryEntry->addChild('Telephone', $contact->tel_work);
+                }
+                if(!empty($contact->tel_cell)) {
+                    $directoryEntry = $xml->addChild('DirectoryEntry');
+                    $directoryEntry->addChild('Name', $contact->n_fileas . ' Cell');
+                    $directoryEntry->addChild('Telephone', $contact->tel_cell);
+                }
+                if(!empty($contact->tel_home)) {
+                    $directoryEntry = $xml->addChild('DirectoryEntry');
+                    $directoryEntry->addChild('Name', $contact->n_fileas . ' Home');
+                    $directoryEntry->addChild('Telephone', $contact->tel_home);
+                }
             }
-            if(!empty($contact->tel_cell)) {
-                $directoryEntry = $xml->addChild('DirectoryEntry');
-                $directoryEntry->addChild('Name', $contact->n_fileas . ' Cell');
-                $directoryEntry->addChild('Telephone', $contact->tel_cell);
-            }
-            if(!empty($contact->tel_home)) {
-                $directoryEntry = $xml->addChild('DirectoryEntry');
-                $directoryEntry->addChild('Name', $contact->n_fileas . ' Home');
-                $directoryEntry->addChild('Telephone', $contact->tel_home);
-            }
+            
+            $xml = $xml->asXML();
         }
-        
+
         header('Content-Type: text/xml');
-        echo $xml->asXML();
+        echo $xml;
     }    
     
     /**
