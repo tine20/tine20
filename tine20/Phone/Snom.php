@@ -58,6 +58,11 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      */
     public function searchContacts($mac, $query)
     {
+        // do nothing if no search string got entered
+        if(empty($query)) {
+            return;
+        }
+        
         $this->_authenticate();
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $mac. ' search for ' . $query);
