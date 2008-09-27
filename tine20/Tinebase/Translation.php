@@ -85,7 +85,7 @@ class Tinebase_Translation
      */
     public static function getLocale($_localeString = 'auto')
     {
-        Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale given localeString '$_localeString'");
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         try {
             $locale = new Zend_Locale($_localeString);
             
@@ -97,7 +97,7 @@ class Tinebase_Translation
             }
             
             if (! in_array((string)$locale, $supportedLocales)) {
-                Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale '$locale' is not supported, checking fallback");
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " '$locale' is not supported, checking fallback");
                 
                 // check if we find suiteable fallback
                 $language = $locale->getLanguage();
@@ -109,18 +109,18 @@ class Tinebase_Translation
                         if (in_array($language, $supportedLocales)) {
                             $locale = new Zend_Locale($language);
                         } else {
-                            Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale no suiteable lang fallback found within this locales: " . print_r($supportedLocales, true) );
+                            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " no suiteable lang fallback found within this locales: " . print_r($supportedLocales, true) );
                             throw new Exception('no suiteable lang fallback found');
                         }
                         break;
                 }
             }
         } catch (Exception $e) {
-            Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale $e, falling back to locale en");
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $e, falling back to locale en");
             $locale = new Zend_Locale('en');
         }
         
-        Zend_Registry::get('logger')->debug(__FILE__ . "::getLocale selected locale: '$locale'");
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
         return $locale;
     }
     
