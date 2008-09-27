@@ -93,15 +93,20 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     public function testCreateAsteriskContext()
     {
         $testContext = $this->_getAsteriskContext();
+        
         $returnedContext = $this->_backend->createAsteriskContext($testContext);
+        $this->assertEquals($testContext->name, $returnedContext->name);
+        $this->assertEquals($testContext->description, $returnedContext->description);
+        $this->assertNotNull($returnedContext->id);
+        
         $this->_backend->deleteAsteriskContexts($returnedContext->getId()); 
     }
     
     protected function _getAsteriskContext()
     {
         return new Voipmanager_Model_AsteriskContext(array(
-            'name'  => 'Unit Test Context',
-            'description' => 'Buh!'
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'description' => Tinebase_Record_Abstract::generateUID()
         ));
     }    
 }		
