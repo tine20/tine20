@@ -67,6 +67,7 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'line_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'phone_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'callerid'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'connected'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'disconnected'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),

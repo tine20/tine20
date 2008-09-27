@@ -87,18 +87,7 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination)->toArray();
-        
-        foreach($calls as &$call) {
-            try {
-                $snomline = Voipmanager_Controller::getInstance()->getSnomPhoneLine($call->line_id);
-                $asteriskLine =  Voipmanager_Controller::getInstance()->getAsteriskSipPeer($snomline->asteriskline_id);
                 
-                $call['line_name'] = $asteriskLine->callerid;
-            } catch (Exception $e) {
-                $call['line_name'] = $call['line_id'];
-            }
-        }
-        
         return array(
             'results'       => $calls,
             'totalcount'    => Phone_Controller::getInstance()->searchCallsCount($filter)

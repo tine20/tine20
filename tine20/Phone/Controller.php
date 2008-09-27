@@ -138,6 +138,7 @@ class Phone_Controller
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         
         $_call->start = Zend_Date::now();
+        $_call->callerid = $_call->line_id;
         
         $call = $backend->create($_call);
         

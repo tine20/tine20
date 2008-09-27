@@ -145,7 +145,7 @@ class Phone_Snom extends Voipmanager_Frontend_Snom_Abstract
      * @param string $mac the mac address of the phone
      * @param string $event event can be connected, disconnected, incoming, outgoing, missed
      * @param string $callId the callid
-     * @param string $local the local number
+     * @param string $local the username of the asterisk sip peer
      * @param string $remote the remote number
      * 
      * @todo add correct line_id

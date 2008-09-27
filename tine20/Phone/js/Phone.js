@@ -617,7 +617,8 @@ Tine.Phone.Main = {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source' },
+            { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source', hidden: true },
+            { resizable: true, id: 'callerid', header: this.translation._('Caller Id'), dataIndex: 'callerid' },
             { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination' },
             { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.Common.dateTimeRenderer },
             { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.Common.dateTimeRenderer, hidden: true },
@@ -765,6 +766,7 @@ Tine.Phone.Model.Call = Ext.data.Record.create([
     { name: 'id' },
     { name: 'line_id' },
     { name: 'phone_id' },
+    { name: 'callerid' },
     { name: 'start', type: 'date', dateFormat: 'c'  },
     { name: 'connected', type: 'date', dateFormat: 'c'  },
     { name: 'disconnected', type: 'date', dateFormat: 'c'  },
