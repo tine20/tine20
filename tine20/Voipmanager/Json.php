@@ -715,7 +715,17 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($sort, $dir, $query, $context)) {
+        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
+            'query'     => $query,
+            'context'   => $context
+        ));
+        
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($filter, $pagination)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }

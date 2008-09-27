@@ -37,19 +37,13 @@ class Voipmanager_Backend_Asterisk_SipPeer
     /**
 	 * search for Sip Peers
 	 * 
-     * @param string $_sort
-     * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
+     * @param Voipmanager_Model_AsteriskSipPeerFilter|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
 	 */
-    public function search($_sort = 'id', $_dir = 'ASC', $_filter = NULL, $_context = NULL)
+    #public function search($_sort = 'id', $_dir = 'ASC', $_filter = NULL, $_context = NULL)
+    public function search($_filter = NULL, $_pagination = NULL)
     {	
-        $where = array();
-        
-        if(!empty($_filter)) {
-            $_fields = "callerid,context,fullcontact,ipaddr";            
-            $where = $this->_getSearchFilter($_filter, $_fields);
-        }
-        
         if(!empty($_context)) {
             $where[] = Zend_Registry::get('dbAdapter')->quoteInto('context = ?', $_context);
         }
@@ -57,11 +51,33 @@ class Voipmanager_Backend_Asterisk_SipPeer
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'asterisk_sip_peers');
 
-        $select->order($_sort.' '.$_dir);
+        if($_pagination instanceof Tinebase_Model_Pagination) {
+            $_pagination->appendPagination($select);
+        }
+        
+        if($_filter instanceof Voipmanager_Model_AsteriskSipPeerFilter) {
+            if(!empty($_filter->query)) {
+                $search_values = explode(" ", $_filter->query);
+                
+                $search_fields = array('callerid', 'context', 'fullcontact', 'ipaddr');
+                foreach($search_fields AS $search_field) {
+                    $fields .= " OR " . $search_field . " LIKE ?";    
+                }
+                $fields = substr($fields, 3);
+            
+                foreach($search_values AS $search_value) {
+                    $select->where($this->_db->quoteInto('('.$fields.')', '%' . trim($search_value) . '%'));                            
+                }
+            }
+            
+            if(!empty($_filter->name)) {
+                $select->where($this->_db->quoteInto('name = ?', $_filter->name));
+            }
 
-        foreach($where as $whereStatement) {
-            $select->where($whereStatement);
-        }               
+            if(!empty($_filter->context)) {
+                $select->where($this->_db->quoteInto('context = ?', $_filter->context));
+            }
+        }
        
         $stmt = $this->_db->query($select);
 
@@ -171,32 +187,4 @@ class Voipmanager_Backend_Asterisk_SipPeer
         }
     }      
     
-    
-    /**
-     * create search filter
-     *
-     * @param string $_filter
-     * @param int $_leadstate
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return array
-     */
-    protected function _getSearchFilter($_filter, $_fields)
-    {
-        $where = array();
-        if(!empty($_filter)) {
-            $search_values = explode(" ", $_filter);
-            
-            $search_fields = explode(",", $_fields);
-            foreach($search_fields AS $search_field) {
-                $fields .= " OR " . $search_field . " LIKE ?";    
-            }
-            $fields = substr($fields,3);
-        
-            foreach($search_values AS $search_value) {
-                $where[] = Zend_Registry::get('dbAdapter')->quoteInto('('.$fields.')', '%' . $search_value . '%');                            
-            }
-        }
-        return $where;
-    }    
 }

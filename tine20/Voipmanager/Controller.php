@@ -948,14 +948,27 @@ class Voipmanager_Controller
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
      */
-    public function searchAsteriskSipPeers($_sort = 'id', $_dir = 'ASC', $_query = NULL, $_context = NULL)
+    public function searchAsteriskSipPeerss($_sort = 'id', $_dir = 'ASC', $_query = NULL, $_context = NULL)
     {
         $result = $this->_asteriskSipPeerBackend->search($_sort, $_dir, $_query, $_context);
 
         return $result;    
     }
    
-   
+    /**
+     * get list of asterisk sip peers
+     *
+     * @param Voipmanager_Model_AsteriskSipPeerFilter|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
+     */
+    public function searchAsteriskSipPeers($_filter = NULL, $_pagination = NULL)
+    {
+        $result = $this->_asteriskSipPeerBackend->search($_filter, $_pagination);
+        
+        return $result;    
+    }
+    
     /**
      * add new asterisk sip peer
      *
