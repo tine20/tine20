@@ -59,6 +59,7 @@ class Voipmanager_Backend_Asterisk_SipPeer
                 $search_values = explode(" ", $_filter->query);
                 
                 $search_fields = array('callerid', 'context', 'fullcontact', 'ipaddr');
+                $fields = '';
                 foreach($search_fields AS $search_field) {
                     $fields .= " OR " . $search_field . " LIKE ?";    
                 }
