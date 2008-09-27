@@ -466,7 +466,7 @@ Tine.Phone.Main = {
     		if (grid) {
     		    record = grid.getSelectionModel().getSelected();
     		    if (record) {
-    		        number = (record.data.direction == 'in') ? record.data.source : record.data.destination;
+    		        number = record.data.destination;
     		    }
     		}
     		
