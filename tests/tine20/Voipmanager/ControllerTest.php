@@ -81,7 +81,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
 
     /**
      * test getDBInstance
-     * Zend_Db_Adapter_Abstract
+     * 
      */
     public function testGetDBInstance()
     {
@@ -90,16 +90,20 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertType('Zend_Db_Adapter_Abstract', $db);
     }
     
+    /**
+     * test creation of asterisk context
+     *
+     */
     public function testCreateAsteriskContext()
     {
-        $testContext = $this->_getAsteriskContext();
+        $test = $this->_getAsteriskContext();
         
-        $returnedContext = $this->_backend->createAsteriskContext($testContext);
-        $this->assertEquals($testContext->name, $returnedContext->name);
-        $this->assertEquals($testContext->description, $returnedContext->description);
-        $this->assertNotNull($returnedContext->id);
+        $returned = $this->_backend->createAsteriskContext($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteAsteriskContexts($returnedContext->getId()); 
+        $this->_backend->deleteAsteriskContexts($returned->getId()); 
     }
     
     protected function _getAsteriskContext()
@@ -107,6 +111,33 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         return new Voipmanager_Model_AsteriskContext(array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
             'description' => Tinebase_Record_Abstract::generateUID()
+        ));
+    }
+
+    /** MeetMe tests **/
+    
+    /**
+     * test creation of asterisk meetme room
+     *
+     */
+    public function testCreateAsteriskMeetme()
+    {
+        $test = $this->_getAsteriskMeetme();
+        
+        $returned = $this->_backend->createAsteriskMeetme($test);
+        $this->assertEquals($test->confno, $returned->confno);
+        $this->assertEquals($test->adminpin, $returned->adminpin);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteAsteriskMeetmes($returned->getId()); 
+    }
+    
+    protected function _getAsteriskMeetme()
+    {
+        return new Voipmanager_Model_AsteriskMeetme(array(
+            'confno'  => Tinebase_Record_Abstract::generateUID(),
+            'adminpin' => Tinebase_Record_Abstract::generateUID(),
+            'pin' => Tinebase_Record_Abstract::generateUID()
         ));
     }    
 }		
