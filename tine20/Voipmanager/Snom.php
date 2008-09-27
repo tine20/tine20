@@ -185,6 +185,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
     public function settings($mac)
     {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get settings for ' . $mac);
+        
         $controller = Voipmanager_Controller::getInstance();
         
         $phone = $controller->getSnomPhoneByMacAddress($mac);
@@ -216,9 +217,9 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     public function firmware($mac)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get firmware for ' . $mac);
-        
         $this->_authenticate();
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get firmware for ' . $mac);
         
         $controller = Voipmanager_Controller::getInstance();
         
