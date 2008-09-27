@@ -179,7 +179,8 @@ if ($opts->a || $opts->m) {
         'ExtJS/adapter/ext/ext-base.js',   
         'ExtJS/resources/css/ext-all.css',
         'ExtJS/resources/css/xtheme-gray.css',
-        'images/empty_photo.png'
+        'images/empty_photo.png',
+        'images/oxygen/16x16/actions/knewstuff.png'
     );
     
     $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
