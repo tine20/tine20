@@ -261,8 +261,6 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     protected function _authenticate()
     {
-        return true;
-        
         if (!isset($_SERVER['PHP_AUTH_USER'])) {
             header('WWW-Authenticate: Basic realm="Tine 2.0"');
             header('HTTP/1.0 401 Unauthorized');
