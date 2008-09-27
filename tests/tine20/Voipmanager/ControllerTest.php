@@ -206,4 +206,68 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
             'pin' => Tinebase_Record_Abstract::generateUID()
         ));
     }    
+
+    /** SipPeer tests **/
+    
+    /**
+     * test creation of asterisk sip peer
+     *
+     */
+    public function testCreateAsteriskSipPeer()
+    {
+        $test = $this->_getAsteriskSipPeer();
+        
+        $returned = $this->_backend->createAsteriskSipPeer($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->qualify, $returned->qualify);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteAsteriskSipPeers($returned->getId()); 
+    }
+    
+    /**
+     * test update of asterisk sip peer
+     *
+     */
+    public function testUpdateAsteriskSipPeer()
+    {
+        $test = $this->_getAsteriskSipPeer();
+        
+        $test = $this->_backend->createAsteriskSipPeer($test);
+        $returned = $this->_backend->updateAsteriskSipPeer($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->qualify, $returned->qualify);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteAsteriskSipPeers($returned->getId()); 
+    }
+    
+    /**
+     * test search of asterisk sip peer
+     *
+     */
+    public function testSearchAsteriskSipPeer()
+    {
+        $test = $this->_getAsteriskSipPeer();
+        
+        $test = $this->_backend->createAsteriskSipPeer($test);
+        
+        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
+            'name' => $test->name
+        ));
+        $returned = $this->_backend->searchAsteriskSipPeers($filter);
+        $this->assertEquals(count($returned), 1);
+        
+        $this->_backend->deleteAsteriskSipPeers($returned->getId()); 
+    }
+    
+    protected function _getAsteriskSipPeer()
+    {
+        return new Voipmanager_Model_AsteriskSipPeer(array(
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'callerid' => Tinebase_Record_Abstract::generateUID(),
+            'qualify' => 'yes'
+        ));
+    }    
+    
 }		
