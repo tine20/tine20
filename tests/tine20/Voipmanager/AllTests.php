@@ -29,6 +29,7 @@ class Voipmanager_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager All Tests');
         $suite->addTest(Voipmanager_Backend_Snom_AllTests::suite());
+        $suite->addTestSuite('Voipmanager_ControllerTest');
         //$suite->addTestSuite('Voipmanager_Backend_Snom_PhoneTest');
         return $suite;
     }
