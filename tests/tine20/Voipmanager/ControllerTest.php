@@ -276,4 +276,62 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
     }    
     
+    /** Voicemail tests **/
+    
+    /**
+     * test creation of asterisk sip peer
+     *
+     */
+    public function testCreateAsteriskVoicemail()
+    {
+        $test = $this->_getAsteriskVoicemail();
+        
+        $returned = $this->_backend->createAsteriskVoicemail($test);
+        $this->assertEquals($test->mailbox, $returned->mailbox);
+        $this->assertEquals($test->fullname, $returned->fullname);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteAsteriskVoicemails($returned->getId()); 
+    }
+    
+    /**
+     * test update of asterisk sip peer
+     *
+     */
+    public function testUpdateAsteriskVoicemail()
+    {
+        $test = $this->_getAsteriskVoicemail();
+        
+        $test = $this->_backend->createAsteriskVoicemail($test);
+        $returned = $this->_backend->updateAsteriskVoicemail($test);
+        $this->assertEquals($test->mailbox, $returned->mailbox);
+        $this->assertEquals($test->fullname, $returned->fullname);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteAsteriskVoicemails($returned->getId()); 
+    }
+    
+    /**
+     * test search of asterisk sip peer
+     *
+     */
+    public function testSearchAsteriskVoicemail()
+    {
+        $test = $this->_getAsteriskVoicemail();
+        
+        $test = $this->_backend->createAsteriskVoicemail($test);
+        
+        $returned = $this->_backend->getAsteriskVoicemails('id', 'ASC', $test->mailbox);
+        $this->assertEquals(1, count($returned));
+                
+        $this->_backend->deleteAsteriskVoicemails($returned->getId()); 
+    }
+    
+    protected function _getAsteriskVoicemail()
+    {
+        return new Voipmanager_Model_AsteriskVoicemail(array(
+            'mailbox'  => Tinebase_Record_Abstract::generateUID(),
+            'fullname' => Tinebase_Record_Abstract::generateUID()
+        ));
+    }    
 }		
