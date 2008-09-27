@@ -86,6 +86,8 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
      */
     protected function _searchContacts(Voipmanager_Model_SnomPhone $_phone, $_query)
     {
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $_phone->getId(). ' search for ' . $_query);
+        
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
         $tbContainer = Tinebase_Container::getInstance();
@@ -105,6 +107,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         $filter->query = $_query;
         
         $contacts = $contactsBackend->search($filter, new Tinebase_Model_Pagination());
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($contacts) . ' contacts');
         
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
           <SnomIPPhoneDirectory>
