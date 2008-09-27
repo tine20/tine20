@@ -245,19 +245,20 @@ class Voipmanager_Backend_Snom_Xml
      */
     protected function _getPhoneSettings(Voipmanager_Model_SnomPhone $_phone)
     {
-        if($_phone->http_client_info_sent == false) {
-            $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
-            $phoneSettings['http_client_user']['perms'] = 'RO';
-            $phoneSettings['http_client_pass']['value'] = $_phone->http_client_pass;
-            $phoneSettings['http_client_pass']['perms'] = 'RO';
-        }        
+        $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
+        $phoneSettings['http_client_user']['perms'] = 'RO';
+        $phoneSettings['http_client_pass']['value'] = $_phone->http_client_pass;
+        $phoneSettings['http_client_pass']['perms'] = 'RO';
         
-        $phoneSettings['redirect_event']['value'] = $_phone->redirect_event;
-        $phoneSettings['redirect_event']['perms'] = 'RW';
-        $phoneSettings['redirect_number']['value'] = $_phone->redirect_number;
-        $phoneSettings['redirect_number']['perms'] = 'RW';
-        $phoneSettings['redirect_time']['value'] = $_phone->redirect_time;
-        $phoneSettings['redirect_time']['perms'] = 'RW';
+        /**
+         * disabled until snom releases new software image which fixes a bug
+         */
+        #$phoneSettings['redirect_event']['value'] = $_phone->redirect_event;
+        #$phoneSettings['redirect_event']['perms'] = 'RW';
+        #$phoneSettings['redirect_number']['value'] = $_phone->redirect_number;
+        #$phoneSettings['redirect_number']['perms'] = 'RW';
+        #$phoneSettings['redirect_time']['value'] = $_phone->redirect_time;
+        #$phoneSettings['redirect_time']['perms'] = 'RW';
         
         return $phoneSettings;
     }
