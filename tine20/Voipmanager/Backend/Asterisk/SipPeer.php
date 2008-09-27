@@ -41,7 +41,6 @@ class Voipmanager_Backend_Asterisk_SipPeer
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
 	 */
-    #public function search($_sort = 'id', $_dir = 'ASC', $_filter = NULL, $_context = NULL)
     public function search($_filter = NULL, $_pagination = NULL)
     {	
         if(!empty($_context)) {
