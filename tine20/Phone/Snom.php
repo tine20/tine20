@@ -134,6 +134,8 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
             exit;
         }
         
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' authenticate ' . $_SERVER['PHP_AUTH_USER']);
+        
         $vmController = Voipmanager_Controller::getInstance();
         
         $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDBInstance());
@@ -147,6 +149,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         $authResult = $authAdapter->authenticate();
         
         if (!$authResult->isValid()) {
+            Zend_Registry::get('logger')->warning(__METHOD__ . '::' . __LINE__ . ' authentication failed for ' . $_SERVER['PHP_AUTH_USER']);
             header('WWW-Authenticate: Basic realm="Tine 2.0"');
             header('HTTP/1.0 401 Unauthorized');
             exit;
