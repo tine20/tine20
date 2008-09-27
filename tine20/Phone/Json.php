@@ -86,10 +86,10 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
         $filter = new Phone_Model_CallFilter(Zend_Json::decode($filter));
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination)->toArray();
+        $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
                 
         return array(
-            'results'       => $calls,
+            'results'       => $calls->toArray(),
             'totalcount'    => Phone_Controller::getInstance()->searchCallsCount($filter)
         );
     }
