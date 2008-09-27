@@ -330,7 +330,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     protected function _getAsteriskVoicemail()
     {
         return new Voipmanager_Model_AsteriskVoicemail(array(
-            'mailbox'  => Tinebase_Record_Abstract::generateUID(),
+            'mailbox'  => substr(Tinebase_Record_Abstract::generateUID(), 0, 11),
             'fullname' => Tinebase_Record_Abstract::generateUID()
         ));
     }    
