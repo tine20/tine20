@@ -178,7 +178,7 @@ class Phone_Snom extends Voipmanager_Frontend_Snom_Abstract
         $call = new Phone_Model_Call(array(
             'id'            => $callId,
             'phone_id'      => $phone->getId(),
-            'line_id'       => 'xxx'
+            'line_id'       => $local
         ));    
         
         switch($event) {
