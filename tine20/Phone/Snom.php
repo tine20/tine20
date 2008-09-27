@@ -74,7 +74,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
             </SnomIPPhoneInput>
         ';
     
-        return $xml->asXML();
+        return $xml;
     }
     
     /**
