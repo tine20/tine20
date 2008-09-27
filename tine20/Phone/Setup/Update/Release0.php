@@ -180,4 +180,24 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Phone', '0.5');
     }
+
+    /**
+     * add column callerid
+     *
+     */
+    public function update_5()
+    {        
+        $fieldDefinition = '
+        <field>
+            <name>callerid</name>
+            <type>text</type>
+            <length>80</length>
+            <notnull>false</notnull>
+        </field>';
+        
+        $column = Setup_Backend_Schema_Field_Factory::factory('String', $fieldDefinition);
+        $this->_backend->addCol('phone_callhistory', $column);
+        
+        $this->setApplicationVersion('Phone', '0.6');
+    }
 }

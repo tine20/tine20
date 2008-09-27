@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Phone</name>
-    <version>0.5</version>
+    <version>0.6</version>
     <order>11</order>
     <tables>
         <table>
@@ -80,6 +80,12 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>callerid</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>start</name>
