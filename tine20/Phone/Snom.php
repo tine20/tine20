@@ -83,7 +83,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
         
         $filter = new Addressbook_Model_ContactFilter();
         $filter->container = $readAbleContainer;
-        $filter->query = $_query;
+        $filter->query = $query;
         
         $contacts = $contactsBackend->search($filter, new Tinebase_Model_Pagination());
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($contacts) . ' contacts');
