@@ -40,7 +40,7 @@ class Phone_Snom extends Tinebase_Application_Json_Abstract
                 <URL>' . $baseUrl . '</URL>
                 <InputItem>
                     <DisplayName>Search for</DisplayName>
-                    <QueryStringParam>' . SID . '&method=Phone.searchContacts&mac=' . $mac . 'query</QueryStringParam>
+                    <QueryStringParam>method=Phone.searchContacts&mac=' . $mac . '&query</QueryStringParam>
                     <DefaultValue/>
                     <InputFlags>a</InputFlags>
                 </InputItem>
