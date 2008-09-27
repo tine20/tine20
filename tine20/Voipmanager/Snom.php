@@ -153,6 +153,8 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     public function redirect($mac, $event, $number, $time)
     {
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set redirect for ' . $mac . " to $event, $number, $time");
+        
         $this->_authenticate();
         
         $vmController = Voipmanager_Controller::getInstance();
@@ -182,7 +184,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     public function settings($mac)
     {
-        Zend_Registry::get('logger')->debug('get settings for ' . $mac);
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get settings for ' . $mac);
         $controller = Voipmanager_Controller::getInstance();
         
         $phone = $controller->getSnomPhoneByMacAddress($mac);
@@ -190,7 +192,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
         if($phone->http_client_info_sent == true) {
             $this->_authenticate();
         } else {
-            Zend_Registry::get('logger')->debug('skipped authentication');
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped authentication');
         }
         
         $phone = $this->_setStatus($phone, 'settings');
@@ -214,7 +216,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
      */
     public function firmware($mac)
     {
-        Zend_Registry::get('logger')->debug('get firmware for ' . $mac);
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get firmware for ' . $mac);
         
         $this->_authenticate();
         
@@ -273,7 +275,7 @@ class Voipmanager_Snom extends Tinebase_Application_Json_Abstract
             exit;
         }
         
-        Zend_Registry::get('logger')->debug('authenticate ' . $_SERVER['PHP_AUTH_USER']);
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' authenticate ' . $_SERVER['PHP_AUTH_USER']);
         
         $vmController = Voipmanager_Controller::getInstance();
         
