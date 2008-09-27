@@ -89,4 +89,19 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Zend_Db_Adapter_Abstract', $db);
     }
+    
+    public function testCreateAsteriskContext()
+    {
+        $testContext = $this->_getAsteriskContext();
+        $returnedContext = $this->_backend->createAsteriskContext($context);
+        $this->_backend->deleteAsteriskContexts($returnedContext); 
+    }
+    
+    protected function _getAsteriskContext()
+    {
+        return new Voipmanager_Model_AsteriskContext(array(
+            'name'  => 'Unit Test Context',
+            'description' => 'Buh!'
+        ));
+    }    
 }		
