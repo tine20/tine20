@@ -480,7 +480,6 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
             if (!arguments[0]) {
                 var _templateData = {};                
             }
-            
 
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
