@@ -52,10 +52,7 @@ class Voipmanager_Backend_Snom_Location
         $_pagination->appendPagination($select);
 
         if(!empty($_filter->query)) {
-            
-            
-            
-            $select->where($this->_db->quoteInto('(firmware_interval LIKE ? OR firmware_status LIKE ? OR update_policy LIKE ? OR setting_server LIKE ? OR admin_mode LIKE ? OR ntp_server LIKE ? OR http_user LIKE ? OR description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
+            $select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
         } else {
             // handle the other fields separately
         }
