@@ -502,7 +502,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     public function testCreateSnomTemplate()
     {
         $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
-        $settings = $this->_backend->createSnomPhoneSettings($this->_getSnomSetting());
+        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
         $test = $this->_getSnomTemplate($software, $settings);
         
         $returned = $this->_backend->createSnomTemplate($test);
@@ -511,7 +511,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($returned->id);
         
         $this->_backend->deleteSnomTemplates($returned->getId());
-        $this->_backend->deleteSnomPhoneSettings($settings->getId());
+        $this->_backend->deleteSnomSetting($settings->getId());
         $this->_backend->deleteSnomSoftware($software->getId()); 
     }
     
@@ -522,7 +522,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     public function testUpdateSnomTemplate()
     {
         $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
-        $settings = $this->_backend->createSnomPhoneSettings($this->_getSnomSetting());
+        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
         $test = $this->_getSnomTemplate($software, $settings);
                 
         $test = $this->_backend->createSnomTemplate($test);
@@ -534,7 +534,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($returned->id);
         
         $this->_backend->deleteSnomTemplates($returned->getId());
-        $this->_backend->deleteSnomPhoneSettings($settings->getId());
+        $this->_backend->deleteSnomSetting($settings->getId());
         $this->_backend->deleteSnomSoftware($software->getId()); 
     }
     
@@ -545,7 +545,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     public function testSearchSnomTemplate()
     {
         $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
-        $settings = $this->_backend->createSnomPhoneSettings($this->_getSnomSetting());
+        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
         $test = $this->_getSnomTemplate($software, $settings);
                 
         $test = $this->_backend->createSnomTemplate($test);
@@ -554,7 +554,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($returned));
                 
         $this->_backend->deleteSnomTemplates($returned->getId());
-        $this->_backend->deleteSnomPhoneSettings($settings->getId());
+        $this->_backend->deleteSnomSetting($settings->getId());
         $this->_backend->deleteSnomSoftware($software->getId()); 
     }
     
