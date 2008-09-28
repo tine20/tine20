@@ -615,7 +615,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backend->createSnomTemplate($test);
         $returned = $this->_backend->getSnomTemplate($test);
         
-        $this->assertType('Voipmanager_Model_SnomLocation', $returned);
+        $this->assertType('Voipmanager_Model_SnomTemplate', $returned);
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
