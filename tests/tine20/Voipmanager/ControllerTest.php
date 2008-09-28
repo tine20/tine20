@@ -610,7 +610,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
         $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
-        $test = $this->_getSnomTemplate();
+        $test = $this->_getSnomTemplate($software, $settings);
         
         $test = $this->_backend->createSnomTemplate($test);
         $returned = $this->_backend->getSnomTemplate($test);
