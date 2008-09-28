@@ -374,7 +374,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->softwareimage_snom320, $returned->softwareimage_snom320);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomSoftwares($returned->getId()); 
+        $this->_backend->deleteSnomSoftware($returned->getId()); 
     }
     
     /**
@@ -390,7 +390,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $returned = $this->_backend->searchSnomSoftware('id', 'ASC', $test->name);
         $this->assertEquals(1, count($returned));
                 
-        $this->_backend->deleteSnomSoftwares($returned->getId()); 
+        $this->_backend->deleteSnomSoftware($returned->getId()); 
     }
     
     /**
