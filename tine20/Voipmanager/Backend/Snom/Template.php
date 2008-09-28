@@ -70,7 +70,7 @@ class Voipmanager_Backend_Snom_Template
 	/**
 	 * get Template by id
 	 * 
-     * @param string $_id
+     * @param string|Voipmanager_Model_SnomTemplate $_id
 	 * @return Voipmanager_Model_SnomTemplate
 	 */
     public function get($_id)

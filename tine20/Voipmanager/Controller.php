@@ -736,7 +736,7 @@ class Voipmanager_Controller
     /**
      * get snom_template by id
      *
-     * @param string $_id
+     * @param string|Voipmanager_Model_SnomTemplate $_id
      * @return Voipmanager_Model_SnomTemplate
      */
     public function getSnomTemplate($_id)
