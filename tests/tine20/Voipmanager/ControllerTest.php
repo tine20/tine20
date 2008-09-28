@@ -555,7 +555,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         return new Voipmanager_Model_SnomLocation(array(
             'name'                      => Tinebase_Record_Abstract::generateUID(),
-            'description'               => Tinebase_Record_Abstract::generateUID()
+            'description'               => Tinebase_Record_Abstract::generateUID(),
+            'registrar'                 => Tinebase_Record_Abstract::generateUID()
         ));
     }    
     
