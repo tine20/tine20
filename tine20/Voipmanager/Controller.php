@@ -646,14 +646,14 @@ class Voipmanager_Controller
     /**
      * get snom_location by id
      *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
+     * @param string|Voipmanager_Model_SnomLocation $_id
+     * @return Voipmanager_Model_Location
      */
     public function getSnomLocation($_id)
     {
         $id = Voipmanager_Model_SnomLocation::convertSnomLocationIdToInt($_id);
         if (($result = $this->_cache->load('snomLocation_' . $id)) === false) {
-            $result = $this->_snomLocationBackend->get($_id);
+            $result = $this->_snomLocationBackend->get($id);
             $this->_cache->save($result, 'snomLocation_' . $id, array('SnomLocation'), 5);
         }
         

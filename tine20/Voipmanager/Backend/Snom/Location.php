@@ -69,20 +69,19 @@ class Voipmanager_Backend_Snom_Location
 	/**
 	 * get Location by id
 	 * 
-     * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomLocation
+     * @param string|Voipmanager_Model_SnomLocation $_id
+	 * @return Voipmanager_Model_SnomLocation
 	 */
     public function get($_id)
     {	
         $locationId = Voipmanager_Model_SnomLocation::convertSnomLocationIdToInt($_id);
-
         
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_location')->where($this->_db->quoteInto('id = ?', $locationId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('location not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLocation', $row);
+
         $result = new Voipmanager_Model_SnomLocation($row);
         return $result;
 	}    
