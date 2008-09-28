@@ -476,9 +476,9 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
             'name'                      => Tinebase_Record_Abstract::generateUID(),
             'description'               => Tinebase_Record_Abstract::generateUID(),
             'display_method'            => 'display_name_number',
-            'display_method_writable'   => true,
+            'display_method_writable'   => 1,
             'mwi_notification'          => 'silent',
-            'mwi_notification_writable' => false
+            'mwi_notification_writable' => 0
         ));
     }    
     
