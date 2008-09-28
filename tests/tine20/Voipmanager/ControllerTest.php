@@ -493,4 +493,84 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
     }    
     
+    /** Snom settings tests **/
+    
+    /**
+     * test creation of Snom setting
+     *
+     */
+    public function testCreateSnomTemplate()
+    {
+        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
+        $settings = $this->_backend->createSnomPhoneSettings($this->_getSnomSetting());
+        $test = $this->_getSnomTemplate($software, $settings);
+        
+        $returned = $this->_backend->createSnomTemplate($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomTemplates($returned->getId());
+        $this->_backend->deleteSnomPhoneSettings($settings->getId());
+        $this->_backend->deleteSnomSoftware($software->getId()); 
+    }
+    
+    /**
+     * test update of Snom setting
+     *
+     */
+    public function testUpdateSnomTemplate()
+    {
+        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
+        $settings = $this->_backend->createSnomPhoneSettings($this->_getSnomSetting());
+        $test = $this->_getSnomTemplate($software, $settings);
+                
+        $test = $this->_backend->createSnomTemplate($test);
+        $test->name = Tinebase_Record_Abstract::generateUID();
+        
+        $returned = $this->_backend->updateSnomTemplate($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomTemplates($returned->getId());
+        $this->_backend->deleteSnomPhoneSettings($settings->getId());
+        $this->_backend->deleteSnomSoftware($software->getId()); 
+    }
+    
+    /**
+     * test search of Snom setting
+     *
+     */
+    public function testSearchSnomTemplate()
+    {
+        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
+        $settings = $this->_backend->createSnomPhoneSettings($this->_getSnomSetting());
+        $test = $this->_getSnomTemplate($software, $settings);
+                
+        $test = $this->_backend->createSnomTemplate($test);
+        
+        $returned = $this->_backend->getSnomTemplates('id', 'ASC', $test->name);
+        $this->assertEquals(1, count($returned));
+                
+        $this->_backend->deleteSnomTemplates($returned->getId());
+        $this->_backend->deleteSnomPhoneSettings($settings->getId());
+        $this->_backend->deleteSnomSoftware($software->getId()); 
+    }
+    
+    /**
+     * return random Voipmanager_Model_SnomTemplate
+     *
+     * @return Voipmanager_Model_SnomTemplate
+     */
+    protected function _getSnomTemplate(Voipmanager_Model_SnomSoftware $_software, Voipmanager_Model_SnomSetting $_settings)
+    {
+        return new Voipmanager_Model_SnomTemplate(array(
+            'name'          => Tinebase_Record_Abstract::generateUID(),
+            'description'   => Tinebase_Record_Abstract::generateUID(),
+            'software_id'   => $_software->getId(),
+            'setting_id'    => $_settings->getId()
+        ));
+    }    
+    
 }		
