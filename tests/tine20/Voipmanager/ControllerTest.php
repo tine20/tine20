@@ -378,7 +378,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test search of asterisk sip peer
+     * test search of Snom software
      *
      */
     public function testSearchSnomSoftware()
@@ -406,4 +406,80 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
             'softwareimage_snom320' => Tinebase_Record_Abstract::generateUID()
         ));
     }    
+
+    /** Snom settings tests **/
+    
+    /**
+     * test creation of Snom setting
+     *
+     */
+    public function testCreateSnomSetting()
+    {
+        $test = $this->_getSnomSetting();
+        
+        $returned = $this->_backend->createSnomSetting($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertEquals($test->display_method, $returned->display_method);
+        $this->assertEquals($test->display_method_writable, $returned->display_method_writable);
+        $this->assertEquals($test->mwi_notification, $returned->mwi_notification);
+        $this->assertEquals($test->mwi_notification_writable, $returned->mwi_notification_writable);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomSettings($returned->getId()); 
+    }
+    
+    /**
+     * test update of Snom setting
+     *
+     */
+    public function testUpdateSnomSetting()
+    {
+        $test = $this->_getSnomSetting();
+        
+        $test = $this->_backend->createSnomSetting($test);
+        $returned = $this->_backend->updateSnomSetting($test);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertEquals($test->display_method, $returned->display_method);
+        $this->assertEquals($test->display_method_writable, $returned->display_method_writable);
+        $this->assertEquals($test->mwi_notification, $returned->mwi_notification);
+        $this->assertEquals($test->mwi_notification_writable, $returned->mwi_notification_writable);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomSettings($returned->getId()); 
+    }
+    
+    /**
+     * test search of Snom setting
+     *
+     */
+    public function testSearchSnomSetting()
+    {
+        $test = $this->_getSnomSetting();
+        
+        $test = $this->_backend->createSnomSetting($test);
+        
+        $returned = $this->_backend->getSnomSettings('id', 'ASC', $test->name);
+        $this->assertEquals(1, count($returned));
+                
+        $this->_backend->deleteSnomSettings($returned->getId()); 
+    }
+    
+    /**
+     * return random Voipmanager_Model_SnomSetting
+     *
+     * @return Voipmanager_Model_SnomSetting
+     */
+    protected function _getSnomSetting()
+    {
+        return new Voipmanager_Model_SnomSetting(array(
+            'name'                      => Tinebase_Record_Abstract::generateUID(),
+            'description'               => Tinebase_Record_Abstract::generateUID(),
+            'display_method'            => 'display_name_number',
+            'display_method_writable'   => true,
+            'mwi_notification'          => 'silent',
+            'mwi_notification_writable' => false
+        ));
+    }    
+    
 }		
