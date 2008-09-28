@@ -172,6 +172,7 @@ Tine.Voipmanager = function() {
                 children: [],
                 leaf: null,
                 expanded: true,
+                disabled: true,
                 dataPanelType: "keylayout",
                 viewRight: 'keylayout'
             }, {
