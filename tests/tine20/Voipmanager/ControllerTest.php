@@ -115,6 +115,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskContext();
         
         $test = $this->_backend->createAsteriskContext($test);
+        $test->name = Tinebase_Record_Abstract::generateUID();
+        
         $returned = $this->_backend->updateAsteriskContext($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
@@ -174,6 +176,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskMeetme();
         
         $test = $this->_backend->createAsteriskMeetme($test);
+        $test->adminpin = Tinebase_Record_Abstract::generateUID();
+        
         $returned = $this->_backend->updateAsteriskMeetme($test);
         $this->assertEquals($test->confno, $returned->confno);
         $this->assertEquals($test->adminpin, $returned->adminpin);
@@ -234,6 +238,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskSipPeer();
         
         $test = $this->_backend->createAsteriskSipPeer($test);
+        $test->name = Tinebase_Record_Abstract::generateUID();
+        
         $returned = $this->_backend->updateAsteriskSipPeer($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->qualify, $returned->qualify);
@@ -303,6 +309,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskVoicemail();
         
         $test = $this->_backend->createAsteriskVoicemail($test);
+        $test->fullname = Tinebase_Record_Abstract::generateUID();
+        
         $returned = $this->_backend->updateAsteriskVoicemail($test);
         $this->assertEquals($test->mailbox, $returned->mailbox);
         $this->assertEquals($test->fullname, $returned->fullname);
@@ -438,7 +446,10 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_getSnomSetting();
         
         $test = $this->_backend->createSnomSetting($test);
+        $test->name = Tinebase_Record_Abstract::generateUID();
+        
         $returned = $this->_backend->updateSnomSetting($test);
+        $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->display_method, $returned->display_method);
         $this->assertEquals($test->display_method_writable, $returned->display_method_writable);
