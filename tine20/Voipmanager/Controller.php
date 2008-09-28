@@ -797,12 +797,6 @@ class Voipmanager_Controller
      */
     public function updateSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
     {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-       
         $template = $this->_snomTemplateBackend->update($_template);
         
         return $template;
@@ -937,21 +931,6 @@ class Voipmanager_Controller
             $this->_cache->save($result, 'asteriskSipPeer_' . $id, array('asteriskSipPeer'), 5);
         }
         
-        return $result;    
-    }
-
-
-    /**
-     * get list of asterisk sip peers
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
-     */
-    public function searchAsteriskSipPeerss($_sort = 'id', $_dir = 'ASC', $_query = NULL, $_context = NULL)
-    {
-        $result = $this->_asteriskSipPeerBackend->search($_sort, $_dir, $_query, $_context);
-
         return $result;    
     }
    
@@ -1365,7 +1344,7 @@ class Voipmanager_Controller
     {        
         $meetme = $this->_asteriskMeetmeBackend->create($_meetme);
       
-        return $this->getAsteriskMeetme($meetme);
+        return $meetme;
     }
     
 
