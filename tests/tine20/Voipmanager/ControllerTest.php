@@ -603,6 +603,30 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test get of Snom template
+     *
+     */
+    public function testGetSnomTemplate()
+    {
+        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
+        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
+        $test = $this->_getSnomTemplate();
+        
+        $test = $this->_backend->createSnomTemplate($test);
+        $returned = $this->_backend->getSnomTemplate($test);
+        
+        $this->assertType('Voipmanager_Model_SnomLocation', $returned);
+        $this->assertEquals($test->id, $returned->id);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomTemplates($returned->getId());
+        $this->_backend->deleteSnomSettings($settings->getId());
+        $this->_backend->deleteSnomSoftware($software->getId()); 
+    }
+    
+    /**
      * test update of Snom setting
      *
      */
