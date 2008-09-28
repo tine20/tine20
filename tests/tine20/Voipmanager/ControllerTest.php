@@ -493,6 +493,72 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
     }    
     
+    /** Snom location tests **/
+    
+    /**
+     * test creation of Snom location
+     *
+     */
+    public function testCreateSnomLocation()
+    {
+        $test = $this->_getSnomLocation();
+        
+        $returned = $this->_backend->createSnomLocation($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomLocations($returned->getId()); 
+    }
+    
+    /**
+     * test update of Snom location
+     *
+     */
+    public function testUpdateSnomLocation()
+    {
+        $test = $this->_getSnomLocation();
+        
+        $test = $this->_backend->createSnomLocation($test);
+        $test->name = Tinebase_Record_Abstract::generateUID();
+        
+        $returned = $this->_backend->updateSnomLocation($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomLocations($returned->getId()); 
+    }
+    
+    /**
+     * test search of Snom setting
+     *
+     */
+    public function testSearchSnomLocation()
+    {
+        $test = $this->_getSnomLocation();
+        
+        $test = $this->_backend->createSnomLocation($test);
+        
+        $returned = $this->_backend->getSnomLocations('id', 'ASC', $test->name);
+        $this->assertEquals(1, count($returned));
+                
+        $this->_backend->deleteSnomLocations($returned->getId()); 
+    }
+    
+    /**
+     * return random Voipmanager_Model_SnomLocation
+     *
+     * @return Voipmanager_Model_SnomLocation
+     */
+    protected function _getSnomLocation()
+    {
+        return new Voipmanager_Model_SnomLocation(array(
+            'name'                      => Tinebase_Record_Abstract::generateUID(),
+            'description'               => Tinebase_Record_Abstract::generateUID()
+        ));
+    }    
+    
     /** Snom settings tests **/
     
     /**
