@@ -368,6 +368,26 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test get of Snom software
+     *
+     */
+    public function testGetSnomSoftware()
+    {
+        $test = $this->_getSnomSoftware();
+        
+        $test = $this->_backend->createSnomSoftware($test);
+        $returned = $this->_backend->getSnomSoftware($test);
+        
+        $this->assertType('Voipmanager_Model_SnomSoftware', $returned);
+        $this->assertEquals($test->id, $returned->id);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomSoftware($returned->getId()); 
+    }
+    
+    /**
      * test update of Snom software
      *
      */
