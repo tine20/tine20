@@ -512,6 +512,26 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test get of Snom location
+     *
+     */
+    public function testGetSnomLocation()
+    {
+        $test = $this->_getSnomLocation();
+        
+        $test = $this->_backend->createSnomLocation($test);
+        $returned = $this->_backend->getSnomLocation($test);
+        
+        $this->assertType('Voipmanager_Model_SnomLocation', $returned);
+        $this->assertEquals($test->id, $returned->id);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->description, $returned->description);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomLocations($returned->getId()); 
+    }
+    
+    /**
      * test update of Snom location
      *
      */
