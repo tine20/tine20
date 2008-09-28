@@ -89,7 +89,6 @@ Tine.Voipmanager.Model.Snom.Template = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
-    {name: 'model'},
     {name: 'keylayout_id'},
     {name: 'setting_id'},
     {name: 'software_id'}
