@@ -405,7 +405,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $view->title="edit snom template data";
         $view->jsExecute = '
-            Tine.Tinebase.Registry.add("softwareVersions", ' . $controller->searchSnomSoftware('id', 'ASC', $template->model)->toArray() .' );
+            Tine.Tinebase.Registry.add("softwareVersions", ' . $controller->searchSnomSoftware()->toArray() .' );
             Tine.Voipmanager.Snom.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');
         ';
         
