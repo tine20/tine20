@@ -339,4 +339,71 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
             'fullname' => Tinebase_Record_Abstract::generateUID()
         ));
     }    
+
+    /** Snom software tests **/
+    
+    /**
+     * test creation of Snom software
+     *
+     */
+    public function testCreateSnomSoftware()
+    {
+        $test = $this->_getSnomSoftware();
+        
+        $returned = $this->_backend->createSnomSoftware($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->mailbox, $returned->mailbox);
+        $this->assertEquals($test->softwareimage_snom320, $returned->softwareimage_snom320);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomSoftware($returned->getId()); 
+    }
+    
+    /**
+     * test update of Snom software
+     *
+     */
+    public function testUpdateSnomSoftware()
+    {
+        $test = $this->_getSnomSoftware();
+        
+        $test = $this->_backend->createSnomSoftware($test);
+        $returned = $this->_backend->updateSnomSoftware($test);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->mailbox, $returned->mailbox);
+        $this->assertEquals($test->softwareimage_snom320, $returned->softwareimage_snom320);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteSnomSoftwares($returned->getId()); 
+    }
+    
+    /**
+     * test search of asterisk sip peer
+     *
+     */
+    public function testSearchSnomSoftware()
+    {
+        $test = $this->_getSnomSoftware();
+        
+        $test = $this->_backend->createSnomSoftware($test);
+        
+        $returned = $this->_backend->searchSnomSoftware('id', 'ASC', $test->name);
+        $this->assertEquals(1, count($returned));
+                
+        $this->_backend->deleteSnomSoftwares($returned->getId()); 
+    }
+    
+    /**
+     * return random Voipmanager_Model_SnomSoftware
+     *
+     * @return Voipmanager_Model_SnomSoftware
+     */
+    protected function _getSnomSoftware()
+    {
+        return new Voipmanager_Model_SnomSoftware(array(
+            'name'                  => Tinebase_Record_Abstract::generateUID(),
+            'description'           => Tinebase_Record_Abstract::generateUID(),
+            'softwareimage_snom320' => Tinebase_Record_Abstract::generateUID()
+        ));
+    }    
 }		
