@@ -395,7 +395,11 @@ Tine.Voipmanager.Snom.Phones.Main = {
     }
 };
 
+/********************************** Tine.Voipmanager.Snom.Phones.EditDialog ***************************************/
 
+/**
+ * phone edit dialog
+ */
 Tine.Voipmanager.Snom.Phones.EditDialog =  {
 
         phoneRecord: null,
@@ -711,7 +715,19 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items: [{
+                            items: [
+                            {
+                                xtype: 'textfield',
+                                name: 'description',
+                                fieldLabel: translation._('Name'),
+                                anchor: '98%',
+                                allowBlank: false
+                                /*
+                                grow: false,
+                                preventScrollbars: false,
+                                height: 70
+                                */
+                            },{
                                 xtype: 'textfield',
                                 fieldLabel: translation._('MAC Address'),
                                 name: 'macaddress',
@@ -798,23 +814,6 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     id: 'id',
                                     fields: ['id', 'name', 'setting_id']
                                 })
-                            }, {
-                                xtype: 'combo',
-                                fieldLabel: translation._('Location'),
-                                name: 'location_id',
-                                id: 'location_id',
-                                mode: 'local',
-                                displayField: 'name',
-                                valueField: 'id',
-                                anchor: '98%',
-                                triggerAction: 'all',
-                                editable: false,
-                                forceSelection: true,
-                                store: new Ext.data.JsonStore({
-                                    storeId: 'Voipmanger_EditPhone_Locations',
-                                    id: 'id',
-                                    fields: ['id', 'name']
-                                })
                             }]
                         }, {
                             columnWidth: 0.5,
@@ -856,7 +855,26 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                     }
                                 },
                                 store: Tine.Voipmanager.Data.loadPhoneModelData()
-                            }), {
+                            }),
+                            {
+                                xtype: 'combo',
+                                fieldLabel: translation._('Location'),
+                                name: 'location_id',
+                                id: 'location_id',
+                                mode: 'local',
+                                displayField: 'name',
+                                valueField: 'id',
+                                anchor: '98%',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: new Ext.data.JsonStore({
+                                    storeId: 'Voipmanger_EditPhone_Locations',
+                                    id: 'id',
+                                    fields: ['id', 'name']
+                                })
+                            }                            
+                            /*, {
                                 xtype: 'textarea',
                                 name: 'description',
                                 fieldLabel: translation._('Description'),
@@ -864,7 +882,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                                 preventScrollbars: false,
                                 anchor: '100%',
                                 height: 70
-                            }]
+                            } */]
                         }]
                     }, {
                         layout: 'form',
