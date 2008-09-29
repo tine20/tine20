@@ -65,18 +65,6 @@ Tine.Phone.getPanel = function(){
         
     /******** tree panel handlers ***********/
     
-    treePanel.on('click', function(node){
-    	// reload root node
-    	if (node) {
-  	        node.getOwnerTree().selectPath(node.getPath());
- 
-  	        if (node.id == 'root') {
-    		    Tine.Phone.Main.actions.editPhoneSettings.setDisabled(true);
-  	        }
-    	} 
-        Tine.Phone.Main.show(node);
-    }, this);
-        
     treePanel.on('contextmenu', function(node, event){
         this.ctxNode = node;
         if (node.id != 'root') {
@@ -87,13 +75,10 @@ Tine.Phone.getPanel = function(){
     treePanel.on('beforeexpand', function(panel) {    	
     	// expand root (Phones) node
         if(panel.getSelectionModel().getSelectedNode() === null) {
-            panel.expandPath('/root/all');
-            panel.selectPath('/root/all');            
+            panel.expandPath('/root');
+            panel.selectPath('/root');            
         }
-        panel.fireEvent('click', panel.getSelectionModel().getSelectedNode());
-        
-        // @todo reload phone store ?
-        //Tine.Phone.loadPhoneStore(true);
+        //panel.fireEvent('click', panel.getSelectionModel().getSelectedNode());
     }, this);
 
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
@@ -102,11 +87,17 @@ Tine.Phone.getPanel = function(){
 
         // update toolbar
         var settingsButton = Ext.getCmp('phone-settings-button');
-        if(node && node.id != 'root') {
-        	settingsButton.setDisabled(false);
-        } else {
-            settingsButton.setDisabled(true);
+        if (settingsButton) {
+            if(node && node.id != 'root') {
+            	settingsButton.setDisabled(false);                     
+            } else {
+                settingsButton.setDisabled(true);
+            	
+            }
         }
+
+        node.getOwnerTree().selectPath(node.getPath());
+        Tine.Phone.Main.show(node);
     }, this);
     
     return treePanel;
@@ -554,6 +545,9 @@ Tine.Phone.Main = {
             var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || null;            
             
             var filter = { query: quicksearchField.getValue(), phone_id: (node !== null && node.id != 'root') ? node.id : '' };
+            
+            console.log(node);
+            console.log(filter);
             
             // add phone/line to filter
             /*
