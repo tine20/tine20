@@ -26,6 +26,14 @@ Ext.ux.WindowFactory = function(config) {
             this.windowClass = Ext.ux.PopupWindow;
             this.windowManager = Ext.ux.PopupWindowMgr;
             break;
+        case 'Ext' :
+            this.windowClass = Ext.Window;
+            this.windowManager = Ext.WindowMgr;
+            break;
+        case 'Air' :
+            this.windowClass = Ext.air.NativeWindow;
+            this.windowManager = Ext.air.NativeWindowManager;
+            break;
         default :
             console.error('No such windowType: ' + this.windowType);
             break;
@@ -48,18 +56,63 @@ Ext.ux.WindowFactory.prototype = {
     windowManager: null,
     
     /**
+     * @rivate
+     */
+    getBrowserWindow: function(config) {
+        var win = this.windowManager.get(config.name);
+        
+        if (! win) {
+            win = new this.windowClass(config);
+        }
+        
+        this.windowManager.bringToFront(win);
+        return win;
+    },
+    
+    /**
+     * @private
+     */
+    getExtWindow: function(c) {
+        // add titleBar
+        c.height = c.height + 20;
+        
+        if (c.itemsConstructor) {
+            var parts = c.itemsConstructor.split('.');
+            var ref = window;
+            for (var i=0; i<parts.length; i++) {
+                ref = ref[parts[i]];
+            }
+            console.log(c.itemsConstructor);
+            c.items = new ref(c.itemsConstructorConfig);
+        } else {
+            c.items = c.items ? c.items : {};
+        }
+        
+        var win = new Ext.Window(c);
+        win.show();
+        return win;
+    },
+    
+    /**
      * getWindow
      * 
      * creates new window if not already exists.
      * brings window to front
      */
     getWindow: function(config) {
-        var window = this.windowManager.get(config.name);
-        if (! window) {
-            window = new this.windowClass(config);
+        switch (this.windowType) {
+            case 'Browser' :
+                return this.getBrowserWindow(config);
+                break;
+            case 'Ext' :
+                return this.getExtWindow(config);
+                break;
+            case 'Air' :
+                return this.getAirWindow(config);
+                break;
+            default :
+                console.error('No such windowType: ' + this.windowType);
+                break;
         }
-        
-        this.windowManager.bringToFront(window);
-        return window;
     }
 };
