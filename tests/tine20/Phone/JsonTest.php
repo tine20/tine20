@@ -160,7 +160,6 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'id'                    => 'phpunitcallhistoryid1',
             'line_id'               => $this->_objects['line']->getId(),
             'phone_id'              => $this->_objects['phone']->getId(),
-            'call_id'               => 'phpunitcallid1',
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
             'destination'           => '0406437435',    
@@ -169,8 +168,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->_objects['call2'] = new Phone_Model_Call(array(
             'id'                    => 'phpunitcallhistoryid2',
             'line_id'               => $this->_objects['line']->getId(),
-            'phone_id'              => '100000001',
-            'call_id'               => 'phpunitcallid2',
+            'phone_id'              => $this->_objects['phone']->getId(),
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
             'destination'           => '050364354',    
@@ -184,17 +182,14 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         );
         
         $this->_objects['filter1'] = array(
-            'containerType' => 'all',
             'query' => ''     
         );        
 
         $this->_objects['filter2'] = array(
-            'containerType' => 'all',
             'query' => '050'     
         );        
 
         $this->_objects['filter3'] = array(
-            'containerType' => 'all',
             'phone_id' => $this->_objects['phone']->getId()     
         );        
         
@@ -204,6 +199,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             $call = $phoneController->callStarted($this->_objects['call2']);
         } catch (Zend_Db_Statement_Exception $e) {
             // exists
+            echo $e->getMessage();
         }        
     }
 
@@ -248,10 +244,10 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $phones = $json->getUserPhones(Zend_Registry::get('currentAccount')->getId());
 
         //print_r($phones);
-        $this->assertGreaterThan(0, count($phones['results']), 'more than 1 phone expected');        
-        $this->assertEquals($this->_objects['phone']->macaddress, $phones['results'][0]['macaddress'], 'got wrong phone');
-        $this->assertGreaterThan(0, count($phones['results'][0]['lines']), 'no lines attached');
-        $this->assertEquals($this->_objects['sippeer']->getId(), $phones['results'][0]['lines'][0]['asteriskline_id'], 'got wrong line');
+        $this->assertGreaterThan(0, count($phones), 'more than 1 phone expected');        
+        $this->assertEquals($this->_objects['phone']->macaddress, $phones[0]['macaddress'], 'got wrong phone');
+        $this->assertGreaterThan(0, count($phones[0]['lines']), 'no lines attached');
+        $this->assertEquals($this->_objects['sippeer']->getId(), $phones[0]['lines'][0]['asteriskline_id'], 'got wrong line');
     }    
     
     /**
@@ -278,6 +274,6 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         // search for phone_id
         $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
-        $this->assertEquals(1, $result['totalcount'], 'phone_id filter not working');
+        $this->assertGreaterThan(1, $result['totalcount'], 'phone_id filter not working');
     }    
 }		
