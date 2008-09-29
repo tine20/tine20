@@ -40,6 +40,27 @@ class Phone_Model_CallFilter extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,  'Int'   ),
         'query'                => array('allowEmpty' => true           ), // source / destination
-        'phone_id'             => array('allowEmpty' => true           ),
+        'phone_id'             => array('allowEmpty' => true),
     ); 
+    
+    /**
+     * check user phones (add user phone ids to filter
+     *
+     * @param unknown_type $_userId
+     */
+    public function checkUserPhones($_userId) {
+        // set user phone ids as filter
+        $userPhoneIds = Voipmanager_Controller::getInstance()->getMyPhones('description', 'ASC', '', $_userId)->getArrayOfIds();
+        if (empty($this->phone_id)) {
+            $this->phone_id = $userPhoneIds;
+        } else {
+            if (is_array($this->phone_id)) {
+                $this->phone_id = array_intersect($this->phone_id, $userPhoneIds);
+            } else {
+                if (!in_array($this->phone_id, $userPhoneIds)) {
+                    $this->phone_id = '';
+                }
+            }                
+        }
+    }
 }

@@ -105,7 +105,8 @@ class Phone_Controller
      */
     public function searchCalls(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {        
-        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);        
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);   
+        $_filter->checkUserPhones(Zend_Registry::get('currentAccount')->getId());        
         $calls = $backend->search($_filter, $_pagination);
         
         return $calls;
@@ -121,6 +122,7 @@ class Phone_Controller
     public function searchCallsCount(Phone_Model_CallFilter $_filter)
     {
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
+        $_filter->checkUserPhones(Zend_Registry::get('currentAccount')->getId());        
         $count = $backend->searchCount($_filter);
         return $count;
     }

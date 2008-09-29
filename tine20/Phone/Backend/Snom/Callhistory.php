@@ -75,8 +75,11 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
         }
 
         if (!empty($_filter->phone_id)) {
-            $_select->where($this->_db->quoteInto($this->_tableName.'.phone_id = ?', $_filter->phone_id));
+            if (is_array($_filter->phone_id)) {
+                $_select->where($this->_db->quoteInto($this->_tableName.'.phone_id IN (?)', $_filter->phone_id));
+            } else {
+                $_select->where($this->_db->quoteInto($this->_tableName.'.phone_id = ?', $_filter->phone_id));
+            }
         }        
     }        
-    
 }
