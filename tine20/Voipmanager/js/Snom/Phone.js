@@ -105,7 +105,26 @@ Tine.Voipmanager.Snom.Phones.Main = {
                     });
                 }
             });
-        }            
+        },
+        
+        /**
+         * onclick handler for openPhonesWebGui
+         */
+        openPhonesWebGui: function(_button, _event) {
+            var phoneIp;
+                    
+            var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
+            for (var i = 0; i < selectedRows.length; ++i) {
+                phoneIp = selectedRows[i].get('ipaddress');
+                if (phoneIp && phoneIp.length >= 7) {
+                    Tine.WindowFactory.getWindow({
+                        url: 'http://' + phoneIp,
+                        width: 1024,
+                        height: 768
+                    });
+                }
+            }
+        }
     },
     
     renderer: {
@@ -146,9 +165,16 @@ Tine.Voipmanager.Snom.Phones.Main = {
         });
         
         this.actions.resetHttpClientInfo = new Ext.Action({
-           text: this.translation._('send HTTP Client Info'), 
+           text: this.translation._('reset phones HTTP authentication'), 
            handler: this.handlers.resetHttpClientInfo,
            iconCls: 'action_resetHttpClientInfo',
+           scope: this
+        });
+        
+        this.actions.openPhonesWebGui = new Ext.Action({
+           text: this.translation._('Open phones web gui'), 
+           handler: this.handlers.openPhonesWebGui,
+           iconCls: 'action_openPhonesWebGui',
            scope: this
         });
     },
@@ -281,7 +307,18 @@ Tine.Voipmanager.Snom.Phones.Main = {
 
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
-
+            var selectedRows = _selectionModel.getSelections();
+            
+            var phoneIp, webGui=true;
+            for (var i = 0; i < selectedRows.length; ++i) {
+                 
+                phoneIp = selectedRows[i].get('ipaddress');
+                if (! phoneIp || phoneIp.length < 7) {
+                    webGui = false;
+                }
+            }
+            this.actions.openPhonesWebGui.setDisabled(! webGui);
+            
             if(rowCount < 1) {
                 // no row selected
                 this.actions.deletePhone.setDisabled(true);
@@ -331,7 +368,8 @@ Tine.Voipmanager.Snom.Phones.Main = {
                     '-',
                     this.actions.addPhone,
                     '-',
-                    this.actions.resetHttpClientInfo 
+                    this.actions.resetHttpClientInfo,
+                    this.actions.openPhonesWebGui
                 ]
             });
             contextMenu.showAt(_eventObject.getXY());
