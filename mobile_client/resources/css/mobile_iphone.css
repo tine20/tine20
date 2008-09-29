@@ -1,6 +1,6 @@
 /* top */
 
-.ext-ux-mobile .x-toolbar { background: #fff url(../images/i_phone/botton/bot_bar.gif) repeat-x left top; height: 45px; border-style: none; }
+.ext-ux-mobile .x-toolbar { background: #fff url(../images/i_phone/botton/bot_bar.gif) repeat-x left top; height: 42px; border-style: none; }
 
 .ext-ux-mobile .x-btn { color: #fff; background-color: transparent; height: 31px; margin-top: 5px; }
 
@@ -46,13 +46,13 @@
 .ext-ux-mobile .x-panel-mc .x-panel-body { margin-left: 0px; border-style: none; border-width: 0;}
 
 .ext-ux-mobile .x-grid3-header { background-image: none; }
-.ext-ux-mobile .x-grid3-body { border-bottom: 1px solid #727272; }
+.ext-ux-mobile .x-grid3-body {  }
 .ext-ux-mobile .x-grid3-row {
 	 border-style: none; border-width: 0; }
 .ext-ux-mobile .x-panel-noborder .x-panel-tbar-noborder .x-toolbar {
 	 border-style: none; border-width: 0; }
 	 
-.ext-ux-mobile .x-grid3-cell-inner, .x-grid3-hd-inner { color: #2e2e2e; font-size: 14px; font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; font-weight: bold; padding: 10px 10px 10px 5px; }
+.ext-ux-mobile .x-grid3-cell-inner, .x-grid3-hd-inner { color: #2e2e2e; font-size: 14px; font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; font-weight: bold; padding: 10px 10px 10px 5px; border-bottom: 1px solid #727272; }
 /* bottom*/
 
 .ext-ux-mobile .x-panel-btns { margin-top: 2px;}
