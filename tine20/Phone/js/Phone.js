@@ -115,8 +115,6 @@ Tine.Phone.getPanel = function(){
  */
 Tine.Phone.updatePhoneTree = function(store){
 	
-	//console.log('update tree');
-	
     var translation = new Locale.Gettext();
     translation.textdomain('Phone');
 
@@ -130,7 +128,6 @@ Tine.Phone.updatePhoneTree = function(store){
 	
     // add phones to tree menu
     store.each(function(record){
-        //console.log(treeRoot);
         var label = (record.data.description == '') 
            ? record.data.macaddress 
            : Ext.util.Format.ellipsis(record.data.description, 30);
@@ -141,16 +138,7 @@ Tine.Phone.updatePhoneTree = function(store){
             leaf: true
         });
         treeRoot.appendChild(node);
-    });
-    
-    // expand root
-    if (treeRoot.childNodes.length > 0) {
-        treeRoot.expand();
-    }    
-    
-    // don't call this again later
-    //store.removeListener('load');
-    store.purgeListeners();
+    });    
 };
 
 /**************************** dialer form / function *******************************/
@@ -728,29 +716,27 @@ Tine.Phone.loadPhoneStore = function(reload) {
     var store = Ext.StoreMgr.get('UserPhonesStore');
     
     if (!store) {
-        // create store
+        // create store (get from initial data)
         store = new Ext.data.JsonStore({
             fields: Tine.Voipmanager.Model.Snom.Phone,
-            baseParams: {
-                method: 'Phone.getUserPhones',
-                accountId: Tine.Tinebase.Registry.get('currentAccount').accountId
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            remoteSort: false
+
+            // initial data from http request
+            data: Tine.Phone.Phones,
+            autoLoad: true,
+            id: 'id'
         });
         
         Ext.StoreMgr.add('UserPhonesStore', store);
         
-        store.on('load', Tine.Phone.updatePhoneTree, this);        
-        store.load();
+        Tine.Phone.updatePhoneTree(store);
         
-    } else if (reload == true) {
+    } 
+    
+    /*else if (reload == true) {
     	
     	store.on('load', Tine.Phone.updatePhoneTree, this);
-    	store.load();
-    }
+    	//store.load();
+    }*/
     
     return store;
 };
