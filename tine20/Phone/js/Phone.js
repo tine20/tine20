@@ -78,7 +78,7 @@ Tine.Phone.getPanel = function(){
             panel.expandPath('/root');
             panel.selectPath('/root');            
         }
-        //panel.fireEvent('click', panel.getSelectionModel().getSelectedNode());
+        Tine.Phone.Main.show();
     }, this);
 
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
@@ -545,9 +545,6 @@ Tine.Phone.Main = {
             var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || null;            
             
             var filter = { query: quicksearchField.getValue(), phone_id: (node !== null && node.id != 'root') ? node.id : '' };
-            
-            console.log(node);
-            console.log(filter);
             
             // add phone/line to filter
             /*
