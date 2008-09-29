@@ -79,7 +79,9 @@ Tine.Phone.getPanel = function(){
         
     treePanel.on('contextmenu', function(node, event){
         this.ctxNode = node;
-        contextMenu.showAt(event.getXY());
+        if (node.id != 'root') {
+            contextMenu.showAt(event.getXY());
+        }
     }, this);
         
     treePanel.on('beforeexpand', function(panel) {    	
