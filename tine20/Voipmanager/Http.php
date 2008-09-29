@@ -377,10 +377,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
         if (!empty($templateId)) {
             $template = $controller->getSnomTemplate($templateId);
+            $encodedTemplate = Zend_Json::encode($template->toArray()); 
         } else {
-            $template = new Voipmanager_Model_SnomTemplate(array(
-                'model' => 'snom320'
-            ), true);
+            $encodedTemplate = '{}';
         }
 
         // encode the template array
