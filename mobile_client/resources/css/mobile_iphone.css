@@ -39,12 +39,25 @@
 
 .ext-ux-mobile .x-tbar-title { color: #fff; font-size: 16px; font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; font-weight: bold; text-decoration: none; text-align: center; letter-spacing: 0.1em; margin-right: auto; margin-left: 25%; }
 
+/******************************Form************************************/
+/*main*/
+.ext-gecko .x-form-item {padding-left: 5px;}
+.ext-ux-mobile .x-panel-body-noheader, 
+.ext-ux-mobile .x-panel-mc .x-panel-body { margin-left: 0px; border-style: none; border-width: 0;}
 
+.ext-ux-mobile .x-grid3-header { background-image: none; }
+.ext-ux-mobile .x-grid3-body { border-bottom: 1px solid #2e2e2e; }
+.ext-ux-mobile .x-grid3-row {
+	 border-style: none; border-width: 0; }
+.ext-ux-mobile .x-panel-noborder .x-panel-tbar-noborder .x-toolbar {
+	 border-style: none; border-width: 0; }
+	 
+.ext-ux-mobile .x-grid3-cell-inner, .x-grid3-hd-inner { color: #2e2e2e; font-size: 14px; font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; font-weight: bold; padding: 10px 10px 10px 5px; }
 /* bottom*/
 
-.ext-ux-mobile .x-panel-btns { margin-top: 2px;;}
+.ext-ux-mobile .x-panel-btns { margin-top: 2px;}
 
-.ext-ux-mobile .x-panel-btns-ct { background: url(../images/i_phone/botton/bot_bar.gif) ; background-repeat: repeat-x; background-attachment: scroll; background-position: left top; height: 45px; }
+.ext-ux-mobile .x-panel-btns-ct { background: url(../images/i_phone/botton/bot_bar.gif) repeat-x left top ; height: 45px; margin-top: 10px; }
 
 .ext-ux-mobile .x-panel-btns-ct table td.x-panel-btn-td { margin: 0; padding: 0;;}
 
@@ -69,7 +82,7 @@
 
 
 
-.ext-ux-mobile .x-panel-btns-ct .x-btn-group-first.x-btn-over .x-btn-left{ background: url('../images/i_phone/botton/bottom_botton/2- botbtn_first_high.gif')url(../images/i_phone/botton/bottom_botton/2-botbtn_first_high.gif) no-repeat left top; width: 2px; padding: 0; }
+.ext-ux-mobile .x-panel-btns-ct .x-btn-group-first.x-btn-over .x-btn-left{ background: url('../images/i_phone/botton/bottom_botton/2- botbtn_first_high.gif') no-repeat; width: 2px; padding: 0; }
 
 .ext-ux-mobile .x-panel-btns-ct .x-btn-group-first.x-btn-over .x-btn-right { background: url(../images/i_phone/botton/bottom_botton/6-botbtn_mid_high.gif) repeat-x  ; width: 1px; }
 
@@ -89,7 +102,7 @@
 
 
 
-.ext-ux-mobile .x-panel-btns-ct .x-btn-group-first.x-btn-focus .x-btn-left{ background: url('../images/i_phone/botton/bottom_botton/2- botbtn_first_high.gif')url(../images/i_phone/botton/bottom_botton/2-botbtn_first_high.gif) no-repeat left top; width: 2px; padding: 0; }
+.ext-ux-mobile .x-panel-btns-ct .x-btn-group-first.x-btn-focus .x-btn-left{ background: url('../images/i_phone/botton/bottom_botton/2- botbtn_first_high.gif') no-repeat; width: 2px; padding: 0; }
 
 .ext-ux-mobile .x-panel-btns-ct .x-btn-group-first.x-btn-focus .x-btn-right { background: url(../images/i_phone/botton/bottom_botton/6-botbtn_mid_high.gif) repeat-x  ; width: 1px; }
 
@@ -106,3 +119,6 @@
 .ext-ux-mobile .x-panel-btns-ct .x-btn-group-last.x-btn-focus .x-btn-right { background: url(../images/i_phone/botton/bottom_botton/10-botbtn_last_high.gif) no-repeat  }
 
 .ext-ux-mobile .x-panel-btns-ct .x-btn-group-last.x-btn-focus .x-btn-center { background: url(../images/i_phone/botton/bottom_botton/6-botbtn_mid_high.gif) ; background-repeat: repeat-x; background-attachment: scroll; background-position: left top; }
+
+
+
