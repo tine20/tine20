@@ -1,0 +1,12 @@
+<?php
+return array(
+	'database' => array(
+      		'host'		=> 'ENTER DATABASE HOSTNAME',
+		'dbname'	=> 'ENTER DATABASE NAME',
+       		'username'	=> 'ENTER DATABASE USERNAME',
+       		'password'	=> 'ENTER DATABASE PASSWORD',
+		'adapter'	=> 'pdo_mysql',
+		'tableprefix'	=> 'tine20_'
+	)
+);
+
