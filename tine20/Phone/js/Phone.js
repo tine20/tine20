@@ -75,10 +75,10 @@ Tine.Phone.getPanel = function(){
     treePanel.on('beforeexpand', function(panel) {    	
     	// expand root (Phones) node
         if(panel.getSelectionModel().getSelectedNode() === null) {
-            panel.expandPath('/root');
-            panel.selectPath('/root');            
+        	var node = panel.getRootNode();
+        	node.select();
+        	node.expand();
         }
-        Tine.Phone.Main.show();
     }, this);
 
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
@@ -92,7 +92,6 @@ Tine.Phone.getPanel = function(){
             	settingsButton.setDisabled(false);                     
             } else {
                 settingsButton.setDisabled(true);
-            	
             }
         }
 
