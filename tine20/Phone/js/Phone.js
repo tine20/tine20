@@ -461,11 +461,11 @@ Tine.Phone.Main = {
              
     		switch(_data) {
     			case 'in':
-                    return "<img src='images/oxygen/16x16/actions/arrow-right.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Incoming call') + "'/>";
+                    return "<img src='images/call-incoming.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Incoming call') + "'/>";
                     break;
                     
                 case 'out':
-                    return "<img src='images/oxygen/16x16/actions/arrow-left.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Outgoing call') + "'/>";
+                    return "<img src='images/call-outgoing.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Outgoing call') + "'/>";
                     break;
     		}
     	}
