@@ -230,6 +230,26 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test get of Aterisk sip peer
+     *
+     */
+    public function testGetAsteriskSipPeer()
+    {
+        $test = $this->_getAsteriskSipPeer();
+        
+        $test = $this->_backend->createAsteriskSipPeer($test);
+        $returned = $this->_backend->getAsteriskSipPeer($test);
+
+        $this->assertType('Voipmanager_Model_AsteriskSipPeer', $returned);
+        $this->assertEquals($test->id, $returned->id);
+        $this->assertEquals($test->name, $returned->name);
+        $this->assertEquals($test->callerid, $returned->callerid);
+        $this->assertNotNull($returned->id);
+        
+        $this->_backend->deleteAsteriskSipPeers($returned->getId()); 
+    }
+    
+    /**
      * test update of asterisk sip peer
      *
      */
