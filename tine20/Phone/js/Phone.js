@@ -64,7 +64,11 @@ Tine.Phone.getPanel = function(){
     Tine.Phone.loadPhoneStore();           
         
     /******** tree panel handlers ***********/
-    
+
+    treePanel.on('click', function(node, event){
+        Tine.Phone.Main.show(node);
+    }, this);
+
     treePanel.on('contextmenu', function(node, event){
         this.ctxNode = node;
         if (node.id != 'root') {
@@ -78,11 +82,12 @@ Tine.Phone.getPanel = function(){
         	var node = panel.getRootNode();
         	node.select();
         	node.expand();
+        } else {
+        	panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
         }
     }, this);
 
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
-
     	var node = _selectionModel.getSelectedNode();
 
         // update toolbar
@@ -95,7 +100,7 @@ Tine.Phone.getPanel = function(){
             }
         }
 
-        node.getOwnerTree().selectPath(node.getPath());
+        //node.getOwnerTree().selectPath(node.getPath());
         Tine.Phone.Main.show(node);
     }, this);
     
