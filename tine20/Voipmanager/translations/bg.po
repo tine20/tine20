@@ -27,7 +27,7 @@ msgstr "Изтрий контекст"
 
 #: js/Asterisk/Context.js:152 js/Asterisk/Meetme.js:152
 #: js/Asterisk/SipPeer.js:160 js/Asterisk/Voicemail.js:156 js/MyPhones.js:106
-#: js/Snom/Location.js:152 js/Snom/Phone.js:206 js/Snom/Settings.js:163
+#: js/Snom/Location.js:152 js/Snom/Phone.js:232 js/Snom/Settings.js:163
 #: js/Snom/Software.js:160 js/Snom/Templates.js:152
 msgid "Search: "
 msgstr "Търси:"
@@ -47,23 +47,23 @@ msgid "id"
 msgstr "Идентификационен номер `id`"
 
 #: js/Asterisk/Context.js:191 js/Asterisk/SipPeer.js:211 js/MyPhones.js:624
-#: js/Snom/Phone.js:1347 js/Snom/Settings.js:202 js/Snom/Settings.js:470
+#: js/Snom/Phone.js:1403 js/Snom/Settings.js:202 js/Snom/Settings.js:470
 #: js/Snom/Settings.js:607 js/Snom/Software.js:200 js/Snom/Software.js:435
 #: js/Snom/Templates.js:191
 msgid "name"
 msgstr "име"
 
 #: js/Asterisk/Context.js:192 js/Asterisk/Context.js:404
-#: js/Snom/Location.js:206 js/Snom/Location.js:441 js/Snom/Phone.js:862
+#: js/Snom/Location.js:206 js/Snom/Location.js:441 js/Snom/Phone.js:918
 #: js/Snom/Settings.js:486 js/Snom/Software.js:201 js/Snom/Software.js:441
-#: js/Snom/Templates.js:192 js/Snom/Templates.js:408
+#: js/Snom/Templates.js:192 js/Snom/Templates.js:407
 msgid "Description"
 msgstr "Описание"
 
 #: js/Asterisk/Context.js:396 js/Asterisk/SipPeer.js:456
 #: js/Asterisk/SipPeer.js:610 js/Asterisk/Voicemail.js:456
-#: js/Snom/Location.js:202 js/Snom/Location.js:433 js/Snom/Phone.js:1148
-#: js/Snom/Templates.js:400
+#: js/Snom/Location.js:202 js/Snom/Location.js:433 js/Snom/Phone.js:760
+#: js/Snom/Phone.js:1204 js/Snom/Templates.js:399
 msgid "Name"
 msgstr "Име"
 
@@ -123,7 +123,7 @@ msgstr "Покажи sipPeer {0} - {1} oт {2}"
 msgid "No sipPeers to display"
 msgstr "Няма намерени sipPeers"
 
-#: js/Asterisk/SipPeer.js:210 js/MyPhones.js:144 js/Snom/Phone.js:244
+#: js/Asterisk/SipPeer.js:210 js/MyPhones.js:144 js/Snom/Phone.js:270
 #: js/Snom/Settings.js:201
 msgid "Id"
 msgstr "Id"
@@ -180,7 +180,7 @@ msgstr "ност"
 msgid "insecure"
 msgstr "несигурно"
 
-#: js/Asterisk/SipPeer.js:225 js/MyPhones.js:564 js/Snom/Phone.js:1287
+#: js/Asterisk/SipPeer.js:225 js/MyPhones.js:564 js/Snom/Phone.js:1343
 #: js/Snom/Settings.js:205 js/Snom/Settings.js:545
 msgid "language"
 msgstr "език"
@@ -435,7 +435,7 @@ msgstr "Спиране но мелодията"
 msgid "Reg Seconds"
 msgstr "Втори Reg"
 
-#: js/Asterisk/SipPeer.js:929 js/MyPhones.js:167 js/Snom/Phone.js:267
+#: js/Asterisk/SipPeer.js:929 js/MyPhones.js:167 js/Snom/Phone.js:293
 msgid "IP Address"
 msgstr "IP адрес"
 
@@ -583,9 +583,9 @@ msgstr "допълнителна информация"
 #: js/Asterisk/Voicemail.js:865 js/Asterisk/Voicemail.js:896
 #: js/MyPhones.js:659 js/MyPhones.js:779 js/MyPhones.js:807 js/MyPhones.js:840
 #: js/MyPhones.js:868 js/MyPhones.js:896 js/Snom/Location.js:567
-#: js/Snom/Location.js:593 js/Snom/Phone.js:1382 js/Snom/Phone.js:1502
-#: js/Snom/Phone.js:1530 js/Snom/Phone.js:1563 js/Snom/Phone.js:1591
-#: js/Snom/Phone.js:1619 js/Snom/Settings.js:643 js/Snom/Settings.js:767
+#: js/Snom/Location.js:593 js/Snom/Phone.js:1438 js/Snom/Phone.js:1558
+#: js/Snom/Phone.js:1586 js/Snom/Phone.js:1619 js/Snom/Phone.js:1647
+#: js/Snom/Phone.js:1675 js/Snom/Settings.js:643 js/Snom/Settings.js:767
 #: js/Snom/Settings.js:796 js/Snom/Settings.js:830 js/Snom/Settings.js:859
 #: js/Snom/Settings.js:888
 msgid "on"
@@ -599,9 +599,9 @@ msgstr "включен"
 #: js/Asterisk/Voicemail.js:866 js/Asterisk/Voicemail.js:897
 #: js/MyPhones.js:662 js/MyPhones.js:780 js/MyPhones.js:808 js/MyPhones.js:841
 #: js/MyPhones.js:869 js/MyPhones.js:897 js/Snom/Location.js:568
-#: js/Snom/Location.js:594 js/Snom/Phone.js:1385 js/Snom/Phone.js:1503
-#: js/Snom/Phone.js:1531 js/Snom/Phone.js:1564 js/Snom/Phone.js:1592
-#: js/Snom/Phone.js:1620 js/Snom/Settings.js:646 js/Snom/Settings.js:768
+#: js/Snom/Location.js:594 js/Snom/Phone.js:1441 js/Snom/Phone.js:1559
+#: js/Snom/Phone.js:1587 js/Snom/Phone.js:1620 js/Snom/Phone.js:1648
+#: js/Snom/Phone.js:1676 js/Snom/Settings.js:646 js/Snom/Settings.js:768
 #: js/Snom/Settings.js:797 js/Snom/Settings.js:831 js/Snom/Settings.js:860
 #: js/Snom/Settings.js:889
 msgid "off"
@@ -619,88 +619,88 @@ msgstr "Покажи номера {0} - {1} от {2}"
 msgid "No myphones to display"
 msgstr "Няма намерени номера"
 
-#: js/MyPhones.js:145 js/Snom/Phone.js:245
+#: js/MyPhones.js:145 js/Snom/Phone.js:271
 msgid "MAC address"
 msgstr "MAC Адрес"
 
-#: js/MyPhones.js:146 js/Snom/Phone.js:246 js/Snom/Settings.js:203
+#: js/MyPhones.js:146 js/Snom/Phone.js:272 js/Snom/Settings.js:203
 msgid "description"
 msgstr "описание"
 
-#: js/MyPhones.js:150 js/Snom/Phone.js:250 js/Snom/Phone.js:803
+#: js/MyPhones.js:150 js/Snom/Phone.js:276 js/Snom/Phone.js:899
 msgid "Location"
 msgstr "Локация"
 
-#: js/MyPhones.js:160 js/Snom/Phone.js:260 js/Snom/Phone.js:723
+#: js/MyPhones.js:160 js/Snom/Phone.js:286 js/Snom/Phone.js:777
 msgid "Template"
 msgstr "Темплейт"
 
-#: js/MyPhones.js:168 js/Snom/Phone.js:268
+#: js/MyPhones.js:168 js/Snom/Phone.js:294
 msgid "Software"
 msgstr "Програма (Software)"
 
-#: js/MyPhones.js:169 js/Snom/Phone.js:269
+#: js/MyPhones.js:169 js/Snom/Phone.js:295
 msgid "current model"
 msgstr "Употребяван модел"
 
-#: js/MyPhones.js:170 js/Snom/Phone.js:270
+#: js/MyPhones.js:170 js/Snom/Phone.js:296
 msgid "redirect event"
 msgstr "Отклонение"
 
-#: js/MyPhones.js:171 js/Snom/Phone.js:271
+#: js/MyPhones.js:171 js/Snom/Phone.js:297
 msgid "redirect number"
 msgstr "Отклонение към"
 
-#: js/MyPhones.js:172 js/Snom/Phone.js:272
+#: js/MyPhones.js:172 js/Snom/Phone.js:298
 msgid "redirect time"
 msgstr "Отклонение заради превишаване на време за връэка"
 
-#: js/MyPhones.js:173 js/Snom/Phone.js:273
+#: js/MyPhones.js:173 js/Snom/Phone.js:299
 msgid "settings loaded at"
 msgstr "настройки заредени на "
 
-#: js/MyPhones.js:174 js/Snom/Phone.js:274
+#: js/MyPhones.js:174 js/Snom/Phone.js:300
 msgid "last modified"
 msgstr "последни промени"
 
-#: js/MyPhones.js:403 js/Snom/Phone.js:936
+#: js/MyPhones.js:403 js/Snom/Phone.js:992
 msgid "redirection"
 msgstr "отклонена връэка"
 
-#: js/MyPhones.js:420 js/Snom/Phone.js:953
+#: js/MyPhones.js:420 js/Snom/Phone.js:1009
 msgid "redirect_event"
 msgstr "причина за отклоняване"
 
-#: js/MyPhones.js:445 js/Snom/Phone.js:978
+#: js/MyPhones.js:445 js/Snom/Phone.js:1034
 msgid "all"
 msgstr "всички"
 
-#: js/MyPhones.js:446 js/Snom/Phone.js:979
+#: js/MyPhones.js:446 js/Snom/Phone.js:1035
 msgid "busy"
 msgstr "заето"
 
-#: js/MyPhones.js:447 js/MyPhones.js:751 js/Snom/Phone.js:980
-#: js/Snom/Phone.js:1474 js/Snom/Settings.js:738
+#: js/MyPhones.js:447 js/MyPhones.js:751 js/Snom/Phone.js:1036
+#: js/Snom/Phone.js:1530 js/Snom/Settings.js:738
 msgid "none"
 msgstr "Номера не отговаря"
 
-#: js/MyPhones.js:448 js/Snom/Phone.js:981
+#: js/MyPhones.js:448 js/Snom/Phone.js:1037
 msgid "time"
 msgstr "време"
 
-#: js/MyPhones.js:459 js/Snom/Phone.js:992
+#: js/MyPhones.js:459 js/Snom/Phone.js:1048
 msgid "redirect_number"
 msgstr "отклонен номер"
 
-#: js/MyPhones.js:471 js/Snom/Phone.js:1004
+#: js/MyPhones.js:471 js/Snom/Phone.js:1060
 msgid "redirect_time"
 msgstr "Превишаване на време за връэка (сек)"
 
-#: js/MyPhones.js:495 js/Snom/Phone.js:1218 js/Snom/Templates.js:432
+#: js/MyPhones.js:495 js/Snom/Phone.js:1274 js/Snom/Templates.js:431
 msgid "Settings"
 msgstr "Настройки"
 
-#: js/MyPhones.js:527 js/Snom/Phone.js:1250 js/Snom/Settings.js:204
+#: js/MyPhones.js:527 js/Snom/Phone.js:1306 js/Snom/Settings.js:204
 #: js/Snom/Settings.js:507
 msgid "web_language"
 msgstr "Език на страниците"
@@ -708,10 +708,10 @@ msgstr "Език на страниците"
 #: js/MyPhones.js:542 js/MyPhones.js:579 js/MyPhones.js:622 js/MyPhones.js:658
 #: js/MyPhones.js:688 js/MyPhones.js:717 js/MyPhones.js:750 js/MyPhones.js:778
 #: js/MyPhones.js:806 js/MyPhones.js:839 js/MyPhones.js:867 js/MyPhones.js:895
-#: js/Snom/Phone.js:1265 js/Snom/Phone.js:1302 js/Snom/Phone.js:1345
-#: js/Snom/Phone.js:1381 js/Snom/Phone.js:1411 js/Snom/Phone.js:1440
-#: js/Snom/Phone.js:1473 js/Snom/Phone.js:1501 js/Snom/Phone.js:1529
-#: js/Snom/Phone.js:1562 js/Snom/Phone.js:1590 js/Snom/Phone.js:1618
+#: js/Snom/Phone.js:1321 js/Snom/Phone.js:1358 js/Snom/Phone.js:1401
+#: js/Snom/Phone.js:1437 js/Snom/Phone.js:1467 js/Snom/Phone.js:1496
+#: js/Snom/Phone.js:1529 js/Snom/Phone.js:1557 js/Snom/Phone.js:1585
+#: js/Snom/Phone.js:1618 js/Snom/Phone.js:1646 js/Snom/Phone.js:1674
 #: js/Snom/Settings.js:523 js/Snom/Settings.js:561 js/Snom/Settings.js:605
 #: js/Snom/Settings.js:642 js/Snom/Settings.js:673 js/Snom/Settings.js:703
 #: js/Snom/Settings.js:737 js/Snom/Settings.js:766 js/Snom/Settings.js:795
@@ -719,100 +719,100 @@ msgstr "Език на страниците"
 msgid "- factory default -"
 msgstr "Първоначални настройки"
 
-#: js/MyPhones.js:607 js/Snom/Phone.js:1330 js/Snom/Settings.js:206
+#: js/MyPhones.js:607 js/Snom/Phone.js:1386 js/Snom/Settings.js:206
 #: js/Snom/Settings.js:589
 msgid "display_method"
 msgstr "Стил на изписване"
 
-#: js/MyPhones.js:623 js/Snom/Phone.js:1346 js/Snom/Settings.js:606
+#: js/MyPhones.js:623 js/Snom/Phone.js:1402 js/Snom/Settings.js:606
 msgid "whole url"
 msgstr "Пълен URL"
 
-#: js/MyPhones.js:625 js/Snom/Phone.js:1348 js/Snom/Settings.js:608
+#: js/MyPhones.js:625 js/Snom/Phone.js:1404 js/Snom/Settings.js:608
 msgid "number"
 msgstr "Номер"
 
-#: js/MyPhones.js:626 js/Snom/Phone.js:1349 js/Snom/Settings.js:609
+#: js/MyPhones.js:626 js/Snom/Phone.js:1405 js/Snom/Settings.js:609
 msgid "name + number"
 msgstr "Име + Номер"
 
-#: js/MyPhones.js:627 js/Snom/Phone.js:1350 js/Snom/Settings.js:610
+#: js/MyPhones.js:627 js/Snom/Phone.js:1406 js/Snom/Settings.js:610
 msgid "number + name"
 msgstr "Номер + име"
 
-#: js/MyPhones.js:643 js/Snom/Phone.js:1366 js/Snom/Settings.js:215
+#: js/MyPhones.js:643 js/Snom/Phone.js:1422 js/Snom/Settings.js:215
 #: js/Snom/Settings.js:626
 msgid "call_waiting"
 msgstr "Почукване за чакащ разговор"
 
-#: js/MyPhones.js:660 js/Snom/Phone.js:1383 js/Snom/Settings.js:644
+#: js/MyPhones.js:660 js/Snom/Phone.js:1439 js/Snom/Settings.js:644
 msgid "visual"
 msgstr "Визуализиране"
 
-#: js/MyPhones.js:661 js/Snom/Phone.js:1384 js/Snom/Settings.js:645
+#: js/MyPhones.js:661 js/Snom/Phone.js:1440 js/Snom/Settings.js:645
 msgid "ringer"
 msgstr "Тон (звуков сигнал)"
 
-#: js/MyPhones.js:673 js/Snom/Phone.js:1396 js/Snom/Settings.js:207
+#: js/MyPhones.js:673 js/Snom/Phone.js:1452 js/Snom/Settings.js:207
 #: js/Snom/Settings.js:657
 msgid "mwi_notification"
 msgstr "Указание за  'Има съобщение '"
 
-#: js/MyPhones.js:689 js/Snom/Phone.js:1412 js/Snom/Settings.js:674
+#: js/MyPhones.js:689 js/Snom/Phone.js:1468 js/Snom/Settings.js:674
 msgid "silent"
 msgstr "Беззвучно"
 
-#: js/MyPhones.js:690 js/Snom/Phone.js:1413 js/Snom/Settings.js:675
+#: js/MyPhones.js:690 js/Snom/Phone.js:1469 js/Snom/Settings.js:675
 msgid "beep"
 msgstr "beep-Тон"
 
-#: js/MyPhones.js:691 js/Snom/Phone.js:1414 js/Snom/Settings.js:676
+#: js/MyPhones.js:691 js/Snom/Phone.js:1470 js/Snom/Settings.js:676
 msgid "reminder"
 msgstr "Напомняне"
 
-#: js/MyPhones.js:702 js/Snom/Phone.js:1425 js/Snom/Settings.js:208
+#: js/MyPhones.js:702 js/Snom/Phone.js:1481 js/Snom/Settings.js:208
 #: js/Snom/Settings.js:687
 msgid "mwi_dialtone"
 msgstr "Избиращ тон за  'Има съобщение '"
 
-#: js/MyPhones.js:718 js/Snom/Phone.js:1441 js/Snom/Settings.js:704
+#: js/MyPhones.js:718 js/Snom/Phone.js:1497 js/Snom/Settings.js:704
 msgid "normal"
 msgstr "нормален"
 
-#: js/MyPhones.js:719 js/Snom/Phone.js:1442 js/Snom/Settings.js:705
+#: js/MyPhones.js:719 js/Snom/Phone.js:1498 js/Snom/Settings.js:705
 msgid "stutter"
 msgstr "заекване (прекъсване?)"
 
-#: js/MyPhones.js:735 js/Snom/Phone.js:1458 js/Snom/Settings.js:209
+#: js/MyPhones.js:735 js/Snom/Phone.js:1514 js/Snom/Settings.js:209
 #: js/Snom/Settings.js:721
 msgid "headset_device"
 msgstr "Използване на слушалки"
 
-#: js/MyPhones.js:752 js/Snom/Phone.js:1475 js/Snom/Settings.js:739
+#: js/MyPhones.js:752 js/Snom/Phone.js:1531 js/Snom/Settings.js:739
 msgid "headset_rj"
 msgstr "Вход за слушалки"
 
-#: js/MyPhones.js:763 js/Snom/Phone.js:1486 js/Snom/Settings.js:210
+#: js/MyPhones.js:763 js/Snom/Phone.js:1542 js/Snom/Settings.js:210
 #: js/Snom/Settings.js:750
 msgid "message_led_other"
 msgstr "Съобщаващ LED за изпуснати обаждания"
 
-#: js/MyPhones.js:791 js/Snom/Phone.js:1514 js/Snom/Settings.js:211
+#: js/MyPhones.js:791 js/Snom/Phone.js:1570 js/Snom/Settings.js:211
 #: js/Snom/Settings.js:779
 msgid "global_missed_counter"
 msgstr "Глобален брояч на изпуснати обаждания"
 
-#: js/MyPhones.js:824 js/Snom/Phone.js:1547 js/Snom/Settings.js:212
+#: js/MyPhones.js:824 js/Snom/Phone.js:1603 js/Snom/Settings.js:212
 #: js/Snom/Settings.js:813
 msgid "scroll_outgoing"
 msgstr "Изпиши кодовете на излизащи обаждания"
 
-#: js/MyPhones.js:852 js/Snom/Phone.js:1575 js/Snom/Settings.js:213
+#: js/MyPhones.js:852 js/Snom/Phone.js:1631 js/Snom/Settings.js:213
 #: js/Snom/Settings.js:842
 msgid "show_local_line"
 msgstr "Покажи локалният код на набиране"
 
-#: js/MyPhones.js:880 js/Snom/Phone.js:1603 js/Snom/Settings.js:214
+#: js/MyPhones.js:880 js/Snom/Phone.js:1659 js/Snom/Settings.js:214
 #: js/Snom/Settings.js:871
 msgid "show_call_status"
 msgstr "Покажи статус на позвъняванията"
@@ -934,83 +934,87 @@ msgstr "HTTP-Port"
 msgid "HTTP Password"
 msgstr "HTTP-рарола"
 
-#: js/Snom/Phone.js:126
+#: js/Snom/Phone.js:145
 msgid "add phone"
 msgstr "добави телефон"
 
-#: js/Snom/Phone.js:133
+#: js/Snom/Phone.js:152
 msgid "edit phone"
 msgstr "обработии телефон"
 
-#: js/Snom/Phone.js:141
+#: js/Snom/Phone.js:160
 msgid "delete phone"
 msgstr "изтрий телефон"
 
-#: js/Snom/Phone.js:149
-msgid "send HTTP Client Info"
-msgstr "Изпрати HTTP Client Info"
+#: js/Snom/Phone.js:168
+msgid "reset phones HTTP authentication"
+msgstr ""
 
-#: js/Snom/Phone.js:238
+#: js/Snom/Phone.js:175
+msgid "Open phones web gui"
+msgstr ""
+
+#: js/Snom/Phone.js:264
 msgid "Displaying phones {0} - {1} of {2}"
 msgstr "Покажи телефонни номера"
 
-#: js/Snom/Phone.js:239
+#: js/Snom/Phone.js:265
 msgid "No phones to display"
 msgstr "Няма намерени телефонни номера"
 
-#: js/Snom/Phone.js:567
+#: js/Snom/Phone.js:609
 msgid "lineactive"
 msgstr "Активен ред"
 
-#: js/Snom/Phone.js:626
+#: js/Snom/Phone.js:668
 msgid "sipCombo"
 msgstr "SiP combo"
 
-#: js/Snom/Phone.js:635
+#: js/Snom/Phone.js:677
 msgid "Idle Text"
 msgstr "Свободен текст"
 
-#: js/Snom/Phone.js:716
+#: js/Snom/Phone.js:770
 msgid "MAC Address"
 msgstr "MAC-адрес"
 
-#: js/Snom/Phone.js:826
+#: js/Snom/Phone.js:863
 msgid "Phone Model"
 msgstr "Модел на телефона"
 
-#: js/Snom/Phone.js:877
+#: js/Snom/Phone.js:933
 msgid "infos"
 msgstr "Информация"
 
-#: js/Snom/Phone.js:894
+#: js/Snom/Phone.js:950
 msgid "Current IP Address"
 msgstr "Актуален IP-адрес"
 
-#: js/Snom/Phone.js:901
+#: js/Snom/Phone.js:957
 msgid "Current Software Version"
 msgstr "Актуална рограмна версия:"
 
-#: js/Snom/Phone.js:914
+#: js/Snom/Phone.js:970
 msgid "Settings Loaded at"
 msgstr "Настройките са заредени на:"
 
-#: js/Snom/Phone.js:922
+#: js/Snom/Phone.js:978
 msgid "Firmware last checked at"
 msgstr "Програмата (firmware) послодно тествана на:"
 
-#: js/Snom/Phone.js:1101
+#: js/Snom/Phone.js:1157
 msgid "add account"
 msgstr "Добави собственик/конто"
 
-#: js/Snom/Phone.js:1108
+#: js/Snom/Phone.js:1164
 msgid "remove account"
 msgstr "Изтрий собственик/конто"
 
-#: js/Snom/Phone.js:1178
+#: js/Snom/Phone.js:1234
 msgid "Owner"
 msgstr "Собственик"
 
-#: js/Snom/Phone.js:1195
+#: js/Snom/Phone.js:1251
 msgid "Users"
 msgstr "Потребители"
 
@@ -1079,28 +1083,30 @@ msgid "No template to display"
 msgstr "Няма намерени темрлейтс"
 
 #: js/Snom/Templates.js:193
-msgid "Model"
-msgstr "Модел"
-
-#: js/Snom/Templates.js:194
 msgid "Keylayout Id"
 msgstr "Идентификационен номер (Id) на клавиатурният изглед (?)"
 
-#: js/Snom/Templates.js:195
+#: js/Snom/Templates.js:194
 msgid "Settings Id"
 msgstr "Идентификационен номер (Id) на настройките"
 
-#: js/Snom/Templates.js:196
+#: js/Snom/Templates.js:195
 msgid "Software Id"
 msgstr "Програмен идентификационен номер (Id)"
 
-#: js/Snom/Templates.js:415
+#: js/Snom/Templates.js:414
 msgid "Software Version"
 msgstr "Програмна версия"
 
-#: js/Snom/Templates.js:449
+#: js/Snom/Templates.js:448
 msgid "Keylayout"
 msgstr "Клавиатурен изглед (?)"
+
+#~ msgid "send HTTP Client Info"
+#~ msgstr "Изпрати HTTP Client Info"
+
+#~ msgid "Model"
+#~ msgstr "Модел"
 
 #~ msgid "FW Status"
 #~ msgstr "FW Статус"
