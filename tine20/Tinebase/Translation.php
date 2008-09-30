@@ -23,6 +23,7 @@ class Tinebase_Translation
     /**
      * array with translations for applications 
      * - is used in getTranslations to save already initialized translations
+     * - 2 dim array -> language / application
      * 
      * @var array
      */
@@ -142,12 +143,15 @@ class Tinebase_Translation
     */
     public static function getTranslation($_applicationName)
     {
+        $locale = Zend_Registry::get('locale');
         
         // check if translation exists
-        if (isset(self::$_translations[$_applicationName])) {
+        if (isset(self::$_translations[(string)$locale][$_applicationName])) {
 
             // use saved translation
-            $translate = self::$_translations[$_applicationName];
+            $translate = self::$_translations[(string)$locale][$_applicationName];
+
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' use saved translation for: ' . $_applicationName);
             
         } else {
             
@@ -156,15 +160,16 @@ class Tinebase_Translation
             $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
 
             try {
-                $translate->setLocale(Zend_Registry::get('locale'));
-                //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)Zend_Registry::get('locale'));
+                $translate->setLocale($locale);
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)$locale);
                 
             } catch (Zend_Translate_Exception $e) {
                 // the locale of the user is not available
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)Zend_Registry::get('locale'));
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)$locale);
             }
             
-            self::$_translations[$_applicationName] = $translate;
+            self::$_translations[(string)$locale][$_applicationName] = $translate;
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' created new translation for: ' . $_applicationName);
         }
         
         return $translate;
