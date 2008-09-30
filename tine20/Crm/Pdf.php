@@ -63,7 +63,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      * @return  array  the record
      *  
      */
-    protected function getRecord ( Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate )
+    protected function getRecord(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {        
         $leadFields = array (
             array(  'label' => /* $_translate->_('Lead Data') */ "", 
@@ -98,8 +98,8 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         
         // add data to array
         $record = array ();
-        foreach ( $leadFields as $fieldArray ) {
-            if ( !isset($fieldArray['type']) || $fieldArray['type'] !== 'separator' ) {
+        foreach ($leadFields as $fieldArray) {
+            if (!isset($fieldArray['type']) || $fieldArray['type'] !== 'separator') {
                 $values = array();
                 foreach ( $fieldArray['value'] as $valueFields ) {
                     $content = array();
@@ -145,6 +145,8 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                 $record[] = $fieldArray;
             }
         }     
+        
+        $record = $this->_addActivities($record, $_lead->notes);
         
         return $record;
     }
