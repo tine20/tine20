@@ -92,7 +92,7 @@ class Phone_Controller
         }
 
         $asteriskLine = $vmController->getAsteriskSipPeer($asteriskLineId);
-        $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskLine->context, $_number, 1, $asteriskLine->callerid);
+        $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskLine->context, $_number, 1, $_number);
     }    
     
     /**
