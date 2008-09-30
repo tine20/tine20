@@ -50,7 +50,73 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function setUp()
-    {        
+    {   
+        $this->objects['contact'] = NULL;
+    }
+
+    /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown()
+    {
+        // delete contact afterwards
+        Addressbook_Controller::getInstance()->deleteContact($this->objects['contact']);
+    }
+    
+    /**
+     * try to create a pdf
+     *
+     */
+    public function testContactPdf()
+    {
+        $contact = $this->_createContact();
+        
+		$pdf = new Addressbook_Pdf();
+		$pdf->generateContactPdf($contact);
+		$pdfOutput = $pdf->render();
+		
+		//$pdf->save("test.pdf");
+		
+		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document'); 
+		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
+		
+        // check name and company name
+        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');   
+
+        // check notes
+        $this->assertEquals(1, preg_match("/created by Tine 2.0 Admin/", $pdfOutput), 'note not found');   
+    }
+
+    /**
+     * test pdf locale settings (translation & date formatting)
+     *
+     */
+    public function testContactPdfLocale()
+    {
+    	// set de_DE locale
+    	Zend_Registry::set('locale', new Zend_Locale('de'));
+    	
+    	$contact = $this->_createContact();
+    	
+        $pdf = new Addressbook_Pdf();
+        $pdf->generateContactPdf($contact);
+        $pdfOutput = $pdf->render();
+        
+        //$pdf->save("test.pdf");
+        
+        $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found'); 
+        $this->assertEquals(1, preg_match("/Private Kontaktdaten/", $pdfOutput), 'translation not found');
+    }
+    
+    /**
+     * create contact with note
+     *
+     */
+    protected function _createContact()
+    {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -63,8 +129,8 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         } else {
             $container = $personalContainer[0];
         }
-    	
-        $this->objects['contact'] = new Addressbook_Model_Contact(array(
+        
+        $contact = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
             'adr_one_locality'      => 'Hamburg',
             'adr_one_postalcode'    => '24xxx',
@@ -81,7 +147,6 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
             'bday'                  => new Zend_Date ('1975-01-02 03:04:05', Zend_Date::ISO_8601),
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
             'owner'                 => $container->id,
             'role'                  => 'Role',
@@ -107,61 +172,10 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
             'tel_work'              => '+49TELWORK',
         )); 
         
-            	
-        return;
+        $this->objects['contact'] = Addressbook_Controller::getInstance()->createContact($contact);
         
+        return $this->objects['contact'];
     }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-	
-    }
-    
-    /**
-     * try to create a pdf
-     *
-     */
-    public function testContactPdf()
-    {
-		$pdf = new Addressbook_Pdf();
-		$pdf->generateContactPdf($this->objects['contact']);
-		$pdfOutput = $pdf->render();
-		
-		$pdf->save("test.pdf");
-		
-		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document'); 
-		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
-		
-        // check name and company name
-        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');        
-    }
-
-    /**
-     * test pdf locale settings (translation & date formatting)
-     *
-     */
-    public function testContactPdfLocale()
-    {
-    	// set de_DE locale
-    	Zend_Registry::set('locale', new Zend_Locale('de'));
-    	
-        $pdf = new Addressbook_Pdf();
-        $pdf->generateContactPdf($this->objects['contact']);
-        $pdfOutput = $pdf->render();
-        
-        //$pdf->save("test.pdf");
-        
-        $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found'); 
-        $this->assertEquals(1, preg_match("/Private Kontaktdaten/", $pdfOutput), 'translation not found');
-                
-    }
-    
 }		
 	
 
