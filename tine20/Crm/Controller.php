@@ -878,7 +878,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         // if no responsibles are defined, send message to all readers of container
         if (empty($recipients)) {
             Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
-                $_lead->getId() . 'sending notification to all people having read access to container ' . $_lead->container);
+                $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container);
                 
             $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container);
             // NOTE: we just send notifications to users, not to groups or anyones!
