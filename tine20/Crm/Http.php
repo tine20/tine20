@@ -34,6 +34,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             'Crm/js/LeadSource.js',
             'Crm/js/LeadType.js',
             'Crm/js/Product.js',
+            'Crm/js/Contact.js',
         );
     }
     

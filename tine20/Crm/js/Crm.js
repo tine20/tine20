@@ -782,13 +782,15 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
          * @todo    add bigger & better search dialog later
          */
         linkContact: function(_button, _event) {
+        	/*
         	// create new contact search grid
         	var contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
         	
         	// add grid to tabpanel & activate
         	var linkTabPanel = Ext.getCmp('linkPanelTop');
         	linkTabPanel.add(contactSearchGrid);
-            linkTabPanel.activate(contactSearchGrid);            	
+            linkTabPanel.activate(contactSearchGrid);
+            */            	
         },
 
         /**
@@ -1017,7 +1019,25 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
     		case 'Contacts':
     		
-                // @todo move that to renderer/addressbook ?
+                /*
+                {
+                    header: this.translation._("Name"),
+                    id: 'id',
+                    dataIndex: 'id',
+                    sortable: true,
+                    width: 150,
+                    editor: new Tine.Crm.Contact.ComboBox({
+                        store: Tine.Crm.Contact.getStore() 
+                    }),
+                    quickaddField: new Tine.Crm.Contact.ComboBox({
+                        emptyText: this.translation._('Add a contact...'),
+                        store: Tine.Crm.Contact.getStore(),
+                        setPrice: true,
+                        id: 'new-contact_combo'
+                    })
+                    //,renderer: Tine.Crm.Contact.renderer
+                }
+                */
                 columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
@@ -1082,6 +1102,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             
             /******************* contacts search tabpanel ********************/                
                 
+            // @todo remove that later
             case 'ContactsSearch':
             
                 columnModel = new Ext.grid.ColumnModel([
@@ -1284,16 +1305,61 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             });
             
         } else if ( _type === 'Contacts' ) {
+        	/*
+            grid = new Ext.ux.grid.QuickaddGridPanel({
+                title: _title,
+                id: 'crmGrid' + _type,
+                border: false,
+                store: gridStore,
+                clicksToEdit: 'auto',
+                bbar: bbarItems,
+                enableColumnHide:false,
+                enableColumnMove:false,
+                sm: rowSelectionModel,
+                loadMask: true,
+                quickaddMandatory: 'id',
+                //quickaddMandatory: 'n_fn',
+                //autoExpandColumn: 'n_fn',
+                columns: columnModel,
+                view: new Ext.grid.GridView({
+                    autoFill: true,
+                    forceFit:true,
+                    ignoreAdd: true,
+                    emptyText: this.translation._('No Contacts to display'),
+                    onLoad: Ext.emptyFn,
+                    listeners: {
+                        beforerefresh: function(v) {
+                            v.scrollTop = v.scroller.dom.scrollTop;
+                        },
+                        refresh: function(v) {
+                            v.scroller.dom.scrollTop = v.scrollTop;
+                        }
+                    }
+                })
+            });
+            */
+
             grid = new Ext.grid.EditorGridPanel({
                 id: 'crmGrid' + _type,
-                title: _title,
+                //title: _title,
                 cm: columnModel,
                 store: gridStore,
                 selModel: rowSelectionModel,
                 autoExpandColumn: autoExpand,
                 bbar: bbarItems,
-                clicksToEdit: 'auto'
-            });            
+                tbar: new Ext.Panel({
+                	layout: 'fit',
+                	width: '100%',
+                	items: [
+                        new Tine.Crm.Contact.ComboBox({
+                            //width: '100%'
+                      	    emptyText: this.translation._('Search for Contacts...')
+                        })
+                    ]
+                }),
+                clicksToEdit: 'auto',
+                height: 210
+            });
 
             grid.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
                 var record = _gridPanel.getStore().getAt(_rowIndexPar);
@@ -1527,7 +1593,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 (function() {
                     grid.getView().focusRow(index);
                     grid.getSelectionModel().selectRow(index); 
-                }).defer(300);                
+                }).defer(300);
             });
             
             Ext.StoreMgr.add('ContactsStore', storeContacts);

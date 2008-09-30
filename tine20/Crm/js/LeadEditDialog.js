@@ -195,6 +195,25 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
             id: 'editCenterPanel',
             items: [
                 txtfld_leadName,
+                /*
+                new Ext.Panel({
+                    layout: 'fit',
+                    width: '100%',
+                    items: [
+                        new Tine.Crm.Contact.ComboBox({
+                            width: '100%',
+                            emptyText: 'Search for Contacts...'
+                        })
+                    ]
+                }),
+                */
+                {
+                    xtype: 'panel',
+                    id: 'linkPanelTop',
+                    height: 210,
+                    items: [ _linkTabpanels.contactsPanel ]
+                }
+                /*
                 {
                     xtype: 'tabpanel',
                     //style: 'margin-top: 10px;',
@@ -202,7 +221,8 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
                     activeTab: 0,
                     height: 200,
                     items: [ _linkTabpanels.contactsPanel ]
-                },
+                }
+                */,
                 {
                 layout:'column',
                 height: 140,
