@@ -24,7 +24,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
      *
      * @return	string	the contact pdf
      */
-    public function generateContactPdf ( Addressbook_Model_Contact $_contact )
+    public function generateContactPdf(Addressbook_Model_Contact $_contact)
     {
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_contact->toArray(), true));
         
@@ -187,12 +187,16 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             } elseif ( isset($fieldArray['type']) && $fieldArray['type'] === 'separator' ) {
                 $record[] = $fieldArray;
             }
-        }     
+        }    
+
+        // add notes
+        $record = $this->_addActivities($record, $_contact->notes);
+        //print_r($record);
         
         // tags
         $tags = (isset($_contact['tags'])) ? $_contact['tags'] : array();
                 
         // generate pdf
         $this->generatePdf($record, $title, $subtitle, $tags, $_contact->note, $titleIcon, $contactPhoto, array(), FALSE);
-    }
+    }    
 }

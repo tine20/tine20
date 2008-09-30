@@ -344,14 +344,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     }
                     
                     if ( isset($row[$i+1]) ) {
-                        $iconFilename = dirname(dirname(dirname(__FILE__))).$row[$i+1];
-                        // add icon
-                        if ( is_file($iconFilename)) {
-                            $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
-                            $this->pages[$this->_pageNumber]->drawImage( $icon, $xPos-170, $yPos-6, $xPos-154, $yPos + 10 );                            
-                        } else {
-                            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
-                        }
+                        $this->_drawIcon($row[$i+1], $xPos, $yPos);
                     }
                                         
                     //continue;
@@ -376,9 +369,13 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 if ( is_array($row[$i]) ) {
                     $blockLineHeight = 0;
                     foreach ( $row[$i] as $text ) {
-                        $yPos -= $blockLineHeight;
-                        $this->_writeText($text, $xPos, $yPos); 
-                        $blockLineHeight = $this->contentBlockLineHeight;                        
+                        if (is_array($text)) {
+                            $this->_drawIcon($text['icon'], $xPos, $yPos);
+                        } else {
+                            $yPos -= $blockLineHeight;
+                            $this->_writeText($text, $xPos, $yPos); 
+                            $blockLineHeight = $this->contentBlockLineHeight;                                                    
+                        }
                     }
                 } else {
                     $this->_writeText($row[$i], $xPos, $yPos);
@@ -437,11 +434,73 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 
 	        //echo $_string;
 	        
-	        $this->pages[$page]->drawText($_string, $_xPos, $_yPos, $this->_encoding);
+	        @$this->pages[$page]->drawText($_string, $_xPos, $_yPos, $this->_encoding);
 
 	    } else {
 	        throw new Exception('Detected an illegal character in input string: ' . $_string);
 	    }
 	}
 	
+    /**
+     * add notes and activities to pdf
+     *
+     * @param array $record
+     * @param Tinebase_Record_RecordSet $_notes
+     */
+    protected function _addActivities($record, $_notes)
+    {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        $locale = Zend_Registry::get('locale');
+        
+        
+        if (!empty($_notes)) {
+            
+            $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes();
+
+            $record[] = array(
+                'label' => $translate->_('Activities'),
+                'type'  => 'separator',
+            );
+            
+            foreach ($_notes as $note) {
+                $noteArray = $note->toArray();
+                $noteType = $noteTypes[$noteTypes->getIndexById($note->note_type_id)];
+
+                $time = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
+                    $note->creation_time->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+                  
+                $createdBy = '(' . $translate->_('by') . ' ' . $noteArray['created_by'] . ')';
+                $record[] = array(
+                    'label' => $time,
+                    'type'  => 'multiRow',
+                    'value' => array(
+                        array('icon' => '/' . $noteType->icon),
+                        $note->note,
+                        $createdBy,
+                    )                
+                );
+            }
+        }
+        
+        return $record;
+    }
+    
+    /**
+     * add icon
+     *
+     * @param string $_icon
+     * @param integer $xPos
+     * @param integer $yPos
+     */
+    protected function _drawIcon($_icon, $_xPos, $_yPos)
+    {
+        $iconFilename = dirname(dirname(dirname(__FILE__))).$_icon;
+        // add icon
+        if (is_file($iconFilename)) {
+            $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
+            $this->pages[$this->_pageNumber]->drawImage($icon, $_xPos-170, $_yPos-6, $_xPos-154, $_yPos + 10);                            
+        } else {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
+        }
+    }
 }
