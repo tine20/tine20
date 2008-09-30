@@ -133,7 +133,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
 		$pdf->generateContactPdf($this->objects['contact']);
 		$pdfOutput = $pdf->render();
 		
-		//$pdf->save("test.pdf");
+		$pdf->save("test.pdf");
 		
 		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document'); 
 		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
@@ -149,7 +149,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     public function testContactPdfLocale()
     {
     	// set de_DE locale
-    	Zend_Registry::set('locale', new Zend_Locale('de_DE'));
+    	Zend_Registry::set('locale', new Zend_Locale('de'));
     	
         $pdf = new Addressbook_Pdf();
         $pdf->generateContactPdf($this->objects['contact']);
