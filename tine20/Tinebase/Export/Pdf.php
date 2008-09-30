@@ -463,22 +463,24 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             );
             
             foreach ($_notes as $note) {
-                $noteArray = $note->toArray();
-                $noteType = $noteTypes[$noteTypes->getIndexById($note->note_type_id)];
-
-                $time = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
-                    $note->creation_time->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
-                  
-                $createdBy = '(' . $translate->_('by') . ' ' . $noteArray['created_by'] . ')';
-                $record[] = array(
-                    'label' => $time,
-                    'type'  => 'multiRow',
-                    'value' => array(
-                        array('icon' => '/' . $noteType->icon),
-                        $note->note,
-                        $createdBy,
-                    )                
-                );
+                if ($note instanceOf Tinebase_Model_Note) {
+                    $noteArray = $note->toArray();
+                    $noteType = $noteTypes[$noteTypes->getIndexById($note->note_type_id)];
+    
+                    $time = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
+                        $note->creation_time->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+                      
+                    $createdBy = '(' . $translate->_('by') . ' ' . $noteArray['created_by'] . ')';
+                    $record[] = array(
+                        'label' => $time,
+                        'type'  => 'multiRow',
+                        'value' => array(
+                            array('icon' => '/' . $noteType->icon),
+                            $note->note,
+                            $createdBy,
+                        )                
+                    );
+                }
             }
         }
         
