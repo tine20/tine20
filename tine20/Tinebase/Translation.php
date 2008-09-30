@@ -21,6 +21,14 @@
 class Tinebase_Translation
 {
     /**
+     * array with translations for applications 
+     * - is used in getTranslations to save already initialized translations
+     * 
+     * @var array
+     */
+    protected static $_translations = array();
+    
+    /**
      * List of officially supported languages
      *
      * @var array
@@ -134,17 +142,31 @@ class Tinebase_Translation
     */
     public static function getTranslation($_applicationName)
     {
-        $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
         
-        $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-        try {
-            $translate->setLocale(Zend_Registry::get('locale'));
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)Zend_Registry::get('locale'));
+        // check if translation exists
+        if (isset(self::$_translations[$_applicationName])) {
+
+            // use saved translation
+            $translate = self::$_translations[$_applicationName];
             
-        } catch (Zend_Translate_Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)Zend_Registry::get('locale'));
-            // the locale of the user is not available
+        } else {
+            
+            // create new translation
+            $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
+            $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+
+            try {
+                $translate->setLocale(Zend_Registry::get('locale'));
+                //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)Zend_Registry::get('locale'));
+                
+            } catch (Zend_Translate_Exception $e) {
+                // the locale of the user is not available
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)Zend_Registry::get('locale'));
+            }
+            
+            self::$_translations[$_applicationName] = $translate;
         }
+        
         return $translate;
     }
     
