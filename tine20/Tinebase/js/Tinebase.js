@@ -220,63 +220,63 @@ Tine.Tinebase.Common = function(){
             _height = _height + 20;
         }
         
-		var w,h,x,y,leftPos,topPos,popup;
-		
-		if (document.all) {
-			w = document.body.clientWidth;
-			h = document.body.clientHeight;
-			x = window.screenTop;
-			y = window.screenLeft;
-		}
-		else 
-			if (window.innerWidth) {
-				w = window.innerWidth;
-				h = window.innerHeight;
-				x = window.screenX;
-				y = window.screenY;
-			}
-		leftPos = ((w - _width) / 2) + y;
-		topPos = ((h - _height) / 2) + x;
-		
-		popup = window.open(_url, _windowName, 'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
-		',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
-		
-		return popup;
-	};
-	
-	/**
+        var w,h,x,y,leftPos,topPos,popup;
+
+        if (document.all) {
+            w = document.body.clientWidth;
+            h = document.body.clientHeight;
+            x = window.screenTop;
+            y = window.screenLeft;
+        } else { 
+            if (window.innerWidth) {
+                w = window.innerWidth;
+                h = window.innerHeight;
+                x = window.screenX;
+                y = window.screenY;
+            }
+        }
+        leftPos = ((w - _width) / 2) + y;
+        topPos = ((h - _height) / 2) + x;
+        
+        popup = window.open(_url, _windowName, 'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
+        ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+        
+        return popup;
+    };
+    
+    /**
      * Returns localised date and time string
      * 
      * @param {mixed} date
      * @see Ext.util.Format.date
      * @return {string} localised date and time
      */
-	_dateTimeRenderer = function($_iso8601){
-		return Ext.util.Format.date($_iso8601, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
-	};
-	
-	/**
+    _dateTimeRenderer = function($_iso8601){
+        return Ext.util.Format.date($_iso8601, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
+    };
+
+    /**
      * Returns localised date string
      * 
      * @param {mixed} date
      * @see Ext.util.Format.date
      * @return {string} localised date
      */
-	_dateRenderer = function(date){
-		return Ext.util.Format.date(date, Locale.getTranslationData('Date', 'medium'));
-	};
-	
-	/**
-	 * Returns localised time string
-	 * 
-	 * @param {mixed} date
-	 * @see Ext.util.Format.date
-	 * @return {string} localised time
-	 */
-	_timeRenderer = function(date){
-		return Ext.util.Format.date(date, Locale.getTranslationData('Time', 'medium'));
-	};
-
+    _dateRenderer = function(date){
+        return Ext.util.Format.date(date, Locale.getTranslationData('Date', 'medium'));
+    };
+    
+    /**
+     * Returns localised time string
+     * 
+     * @param {mixed} date
+     * @see Ext.util.Format.date
+     * @return {string} localised time
+     */
+    _timeRenderer = function(date){
+        return Ext.util.Format.date(date, Locale.getTranslationData('Time', 'medium'));
+    };
+    
     /**
      * Returns the formated username
      * 
