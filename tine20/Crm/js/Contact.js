@@ -111,15 +111,25 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
             '<tpl for="."><div class="search-item">',
                 '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                     '<tr>',
-                        '<td width="30%"><div class="x-grid3-cell-inner"><b>{n_fileas}</b><br/>{org_name}</div></td>',
-                        '<td width="25%">{adr_one_street}<br/>{adr_one_postalcode} {adr_one_locality}</td>',
-                        '<td width="25%">{tel_work}<br/>{tel_cell}</td>',
+                        '<td width="30%"><b>{[this.encode(values.n_fileas)]}</b><br/>{[this.encode(values.org_name)]}</td>',
+                        '<td width="25%">{[this.encode(values.adr_one_street)]}<br/>',
+                        	'{[this.encode(values.adr_one_postalcode)]} {[this.encode(values.adr_one_locality)]}</td>',
+                        '<td width="25%">{[this.encode(values.tel_work)]}<br/>{[this.encode(values.tel_cell)]}</td>',
                         '<td width="20%">',
                             '<img width="45px" height="39px" src="{jpegphoto}" />',
                         '</td>',
                     '</tr>',
                 '</table>',
-            '</div></tpl>'
+            '</div></tpl>', // {[this.encode(values.note, "longtext")]}
+            {
+                encode: function(value) {
+                     if (value) {
+                        return Ext.util.Format.htmlEncode(value);
+                    } else {
+                        return '';
+                    }
+                }
+            }
         );
         
         this.tpl = resultTpl;
@@ -162,6 +172,7 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
         store.add([record]);
 
         this.collapse();
+        this.clearValue();
     },
     
     /**
