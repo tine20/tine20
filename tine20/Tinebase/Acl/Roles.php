@@ -367,7 +367,10 @@ class Tinebase_Acl_Roles
     public function getRoleMemberships($_accountId)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);        
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        if(empty($groupMemberships)) {
+            throw new UnderflowException('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');        
+        }
         
         $memberships = array();
         
