@@ -69,7 +69,6 @@ class Phone_Http extends Tinebase_Application_Http_Abstract
      * @param int $phoneId
      * 
      * @todo catch permission denied exceptions only
-     * @todo violates DRY rule / is copy of Voipmanager.editMyPhone -> only use one of them
      * @todo should be obsolete when new window handling is introduced in Phone & Voipmanager
      */
     public function editMyPhone($phoneId = NULL)

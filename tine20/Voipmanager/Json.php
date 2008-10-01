@@ -213,6 +213,9 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $phoneData a JSON encoded array of phone properties
      * @return array
+     * 
+     * @deprecated moved to Phone app 
+     * @todo remove that later (check if it is still needed here first) 
      */
     public function saveMyPhone($phoneData)
     {
@@ -247,7 +250,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         return $result;         
     }    
     
-   
     /**
      * delete multiple phones
      *

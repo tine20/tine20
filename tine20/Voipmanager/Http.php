@@ -127,8 +127,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
      * create edit MyPhone dialog
      *
      * @param int $phoneId
-     * @todo catch permission denied exceptions only
      * 
+     * @deprecated moved to Phone app 
+     * @todo remove that later (check if it is still needed here first) 
      */
     public function editMyPhone($phoneId=NULL)
     {

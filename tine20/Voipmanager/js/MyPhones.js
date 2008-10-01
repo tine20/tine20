@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: MyPhones.js 3306 2008-07-10 14:18:42Z t.wadewitz@metaways.de $
  *
+ * @todo check if this js is needed / move to phone app ?
+ * @deprecated ?
  */
 
 Ext.namespace('Tine.Voipmanager.MyPhones');
@@ -288,7 +290,10 @@ Tine.Voipmanager.MyPhones.Main = {
     }
 };
 
-
+/**
+ * user phone edit dialog
+ * @todo move that to phone app
+ */
 Tine.Voipmanager.MyPhones.EditDialog =  {
 
         myphoneRecord: null,
@@ -314,7 +319,7 @@ Tine.Voipmanager.MyPhones.EditDialog =  {
 
         },
         
-        
+        // @todo remove?
         deleteMyPhone: function(_button, _event)
         {
             var myphoneIds = Ext.util.JSON.encode([this.myphoneRecord.get('id')]);
@@ -345,7 +350,8 @@ Tine.Voipmanager.MyPhones.EditDialog =  {
                 
                 Ext.Ajax.request({
                     params: {
-                        method: 'Voipmanager.saveMyPhone', 
+                        //method: 'Voipmanager.saveMyPhone', 
+                    	method: 'Phone.saveMyPhone',
                         phoneData: Ext.util.JSON.encode(this.myphoneRecord.data)
                     },
                     success: function(_result, _request) {

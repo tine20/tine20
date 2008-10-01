@@ -96,4 +96,45 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
             'totalcount'    => Phone_Controller::getInstance()->searchCallsCount($filter)
         );
     }
+    
+    /**
+     * save one myPhone
+     *
+     * if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
+     *
+     * @param string $phoneData a JSON encoded array of phone properties
+     * @return array
+     */
+    public function saveMyPhone($phoneData)
+    {
+        $phoneData = Zend_Json::decode($phoneData);
+        $voipController = Voipmanager_Controller::getInstance();
+        
+        // unset if empty
+        if (empty($phoneData['id'])) {
+            unset($phoneData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
+        $phone = new Voipmanager_Model_MyPhone();
+        $phone->setFromArray($phoneData);
+        
+        $phoneSettings = new Voipmanager_Model_SnomPhoneSettings();
+        $phoneSettings->setFromArray($phoneData);
+
+        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
+        
+        if (!empty($phone->id)) {
+            $phone = $voipController->updateMyPhone($phone, $phoneSettings, $currentAccount['accountId']);
+        } 
+        
+        $phone = $voipController->getSnomPhone($phone->getId())->toArray();
+
+        $result = array('success'           => true,
+            'welcomeMessage'    => 'Entry updated',
+            'updatedData'       => $phone
+        );
+        
+        return $result;         
+    }        
 }
