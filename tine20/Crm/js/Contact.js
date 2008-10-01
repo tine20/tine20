@@ -46,6 +46,7 @@ Tine.Crm.Contact.getStore = function() {
 
         // prepare filter
         // @todo get paging / value from combo
+        /*
         store.on('beforeload', function(store, options){
             if (!options.params) {
                 options.params = {};
@@ -75,6 +76,7 @@ Tine.Crm.Contact.getStore = function() {
             options.params.filter = Ext.util.JSON.encode(filter);
             
         }, this);
+        */
 
         Ext.StoreMgr.add('CrmContactStore', store);
     }
@@ -124,6 +126,29 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
         this.store = Tine.Crm.Contact.getStore();
         
+        // use beforequery to set query filter
+        this.on('beforequery', function(qevent) {
+            //console.log(qevent);
+            //console.log(qevent.combo.pageTb.cursor);
+            //console.log(qevent.combo.pagesize);
+            
+            var filter = [
+                {field: 'containerType', operator: 'equals', value: 'all' },
+                {field: 'query', operator: 'contains', value: qevent.query }
+            ];
+            
+            // @todo update paging values when paging toolbar is clicked
+            var paging = {
+                start: 0,
+                limit: 10,
+                sort: 'n_family',
+                dir: 'ASC'
+            };            
+            
+            this.store.baseParams.filter = Ext.util.JSON.encode(filter);
+            this.store.baseParams.paging = Ext.util.JSON.encode(paging);
+        });
+
         Tine.Crm.Contact.ComboBox.superclass.initComponent.call(this);        
     },
     
@@ -148,25 +173,8 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
             var record = this.store.getById(id);
             this.onSelect(record);
         }
-    }
+    },
     
-        
-    /*
-        store: ds,
-        displayField:'title',
-        typeAhead: false,
-        loadingText: 'Searching...',
-        width: 570,
-        pageSize:10,
-        hideTrigger:true,
-        tpl: resultTpl,
-        applyTo: 'search',
-        itemSelector: 'div.search-item',
-        onSelect: function(record){ // override default onSelect to do redirect
-            window.location =
-                String.format('http://extjs.com/forum/showthread.php?t={0}&p={1}', record.data.topicId, record.id);
-        }
-    */
 });
 
 /**
