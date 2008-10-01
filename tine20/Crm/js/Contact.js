@@ -46,6 +46,7 @@ Tine.Crm.Contact.getStore = function() {
 
         // prepare filter
         // @todo get paging / value from combo
+        // perhaps we could use this for paging?
         /*
         store.on('beforeload', function(store, options){
             if (!options.params) {
@@ -106,23 +107,16 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
         // Custom rendering Template
     	// @todo move style def to css
     	// @todo encode values and check for 'null'
-    	// @todo add image
         var resultTpl = new Ext.XTemplate(
-        /*
             '<tpl for="."><div class="search-item">',
-                '<h3>{n_fn}</h3><br/>',
-                '{org_name}',
-            '</div></tpl>'
-                // <span>{adr_one_street} {adr_one_postalcode} {adr_one_locality}</span>
-            
-                 */
-            '<tpl for="."><div class="search-item">',
-                '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;">',
+                '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                     '<tr>',
                         '<td width="30%"><div class="x-grid3-cell-inner"><b>{n_fileas}</b><br/>{org_name}</div></td>',
                         '<td width="25%">{adr_one_street}<br/>{adr_one_postalcode} {adr_one_locality}</td>',
                         '<td width="25%">{tel_work}<br/>{tel_cell}</td>',
-                        '<td width="20%"></td>',
+                        '<td width="20%">',
+                            '<img width="45px" height="39px" src="{jpegphoto}" />',
+                        '</td>',
                     '</tr>',
                 '</table>',
             '</div></tpl>'
