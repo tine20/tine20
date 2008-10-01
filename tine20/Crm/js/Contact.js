@@ -99,17 +99,12 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
     store: null,
 
     /*
-    applyTo: 'search',
     hiddenName: 'id',
     lazyRender: true,
-    displayField:'n_family',
     allowBlank: false, 
     forceSelection: true, 
     selectOnFocus: true,
     listClass: 'x-combo-list-small',
-    triggerAction: 'all', 
-    editable: true,
-    mode: 'local', 
     */
     
     //private
@@ -135,16 +130,26 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * override default onSelect
      * 
-     * @todo make it work with 'ENTER' key
      */
-    onSelect: function(record){ // 
-    	
+    onSelect: function(record){  
         record.data.relation_type = 'customer';            
         var store = Ext.StoreMgr.lookup('ContactsStore');
         store.add([record]);
 
         this.collapse();
+    },
+    
+    /**
+     * on keypressed("enter") event to add record
+     */ 
+    onSpecialkey: function(combo, event){
+        if(event.getKey() == event.ENTER){
+         	var id = combo.getValue();
+            var record = this.store.getById(id);
+            this.onSelect(record);
+        }
     }
+    
         
     /*
         store: ds,
