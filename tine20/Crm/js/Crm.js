@@ -780,9 +780,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
          * 
          * link an existing contact -> create and activate contact picker/search dialog
          * @todo    add bigger & better search dialog later
+         * @deprecated
          */
         linkContact: function(_button, _event) {
-        	/*
         	// create new contact search grid
         	var contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
         	
@@ -790,7 +790,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         	var linkTabPanel = Ext.getCmp('linkPanelTop');
         	linkTabPanel.add(contactSearchGrid);
             linkTabPanel.activate(contactSearchGrid);
-            */            	
         },
 
         /**
@@ -1058,7 +1057,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }, this);
         
         var bbarItems = [                
-            this.actions.linkContactSplit,                    
+            //this.actions.linkContactSplit,
+            this.actions.addContact,
             this.actions.unlinkContact
         ]; 
                 
@@ -1066,7 +1066,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var gridStore = Ext.StoreMgr.lookup('ContactsStore');  
         var grid = new Ext.grid.EditorGridPanel({
             id: 'crmGridContacts',
-            //title: _title,
+            //title: '',
             cm: columnModel,
             store: gridStore,
             selModel: rowSelectionModel,
@@ -1364,11 +1364,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     this.actions.editContact,
                     this.actions.unlinkContact,
                     '-',
-                    this.actions.linkContactSplit
+                    //this.actions.linkContactSplit
+                    this.actions.addContact
                 ];
                 // items for all grid context menu
                 gridItems = [
-                    this.actions.linkContactSplit
+                    //this.actions.linkContactSplit
+                    this.actions.addContact
                 ];
                 break;
                 
@@ -1592,6 +1594,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             handler: this.handlers.addContact
         }); 
 
+        // @deprecated
         this.actions.linkContact = new Ext.Action({
             requiredGrant: 'editGrant',
             text: this.translation._('Add existing contact'),
@@ -1601,6 +1604,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             handler: this.handlers.linkContact
         }); 
         
+        // @deprecated
         this.actions.linkContactSplit = new Ext.SplitButton({
             requiredGrant: 'editGrant',
             text: this.translation._('Add contact'),
@@ -1792,7 +1796,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.updateToolbars.defer(10, this, [this.lead, 'container']);
         Tine.widgets.ActionUpdater(this.lead, [
             this.actions.addContact,
-            this.actions.linkContact,
+            //this.actions.linkContact,
             this.actions.addTask,
             this.actions.linkTask,
             this.actions.exportLead
