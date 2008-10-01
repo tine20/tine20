@@ -298,9 +298,9 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 'jsonKey'          => Zend_Registry::get('jsonKey'),
                 'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray(),
                 'version'          => array(
-                    'codename'      => 'Summer 2008 Milestone 2',
-                    'packageString' => 'summer-MS2-1',
-                    'releasedate'   => '2008/08/14'
+                    'codename'      => TINE20_CODENAME,
+                    'packageString' => TINE20_PACKAGESTRING,
+                    'releasetime'   => TINE20_RELEASETIME
                 )
             );
         }
