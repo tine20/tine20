@@ -44,40 +44,15 @@ Tine.Crm.Contact.getStore = function() {
             }            
         });
 
-        // prepare filter
-        // @todo get paging / value from combo
-        // perhaps we could use this for paging?
-        /*
+        // prepare filter / get paging from combo
         store.on('beforeload', function(store, options){
-            if (!options.params) {
-                options.params = {};
-            }
-
             options.params.paging = Ext.util.JSON.encode({
-                start: 0,
-                limit: 10,
+                start: options.params.start,
+                limit: options.params.limit,
                 sort: 'n_family',
                 dir: 'ASC'
             });
-        	
-            var contactsCombo = Ext.getCmp('contactSearchCombo');
-            
-            //console.log(options);            
-            //console.log(contactsCombo);
-            //console.log(options.params);
-            //console.log(options.params.query);
-            //console.log(Ext.getCmp('contactSearchCombo').getValue());
-            
-            var filter = [
-                {field: 'containerType', operator: 'equals', value: 'all' },
-                //{field: 'query', operator: 'contains', value: Ext.getCmp('contactSearchCombo').getValue() }
-                {field: 'query', operator: 'contains', value: options.params.query }
-            ];
-            
-            options.params.filter = Ext.util.JSON.encode(filter);
-            
         }, this);
-        */
 
         Ext.StoreMgr.add('CrmContactStore', store);
     }
@@ -97,7 +72,7 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
     typeAhead: false,
     loadingText: 'Searching...',
     hideTrigger: true,
-    pageSize: 50,
+    pageSize: 10,
     itemSelector: 'div.search-item',
     store: null,
     minChars: 3,
@@ -138,25 +113,11 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
         
         // use beforequery to set query filter
         this.on('beforequery', function(qevent) {
-            //console.log(qevent);
-            //console.log(qevent.combo.pageTb.cursor);
-            //console.log(qevent.combo.pagesize);
-            
             var filter = [
                 {field: 'containerType', operator: 'equals', value: 'all' },
                 {field: 'query', operator: 'contains', value: qevent.query }
             ];
-            
-            // @todo update paging values when paging toolbar is clicked
-            var paging = {
-                start: 0,
-                limit: 50,
-                sort: 'n_family',
-                dir: 'ASC'
-            };            
-            
-            this.store.baseParams.filter = Ext.util.JSON.encode(filter);
-            this.store.baseParams.paging = Ext.util.JSON.encode(paging);
+            this.store.baseParams.filter = Ext.util.JSON.encode(filter);            
         });
 
         Tine.Crm.Contact.ComboBox.superclass.initComponent.call(this);        
