@@ -106,20 +106,34 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     public function setFromJson($_data)
     {
         $data = Zend_Json::decode($_data);
+        if (isset($data['container_id']) && is_array($data['container_id'])) {
+            $data['container_id'] = $data['container_id']['id'];
+        }
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-        
+
+        /** TIMEZONE HANDLING **/
+        // change timezone of current php process to usertimezone to let new dates be in the users timezone
+        // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
+        //       lead to incorrect results on DST transistions 
         $userTimezone = Zend_Registry::get('userTimeZone');
         $serverTimezone = date_default_timezone_get();
         date_default_timezone_set($userTimezone);
         
-        // sanitize container id
-        if (isset($data['container_id']) && is_array($data['container_id'])) {
-            $data['container_id'] = $data['container_id']['id'];
+        // cut the timezone-offset from the iso representation in order to force Zend_Date to create dates in the user timezone.
+        // otherwise they will be created with Etc/GMT+<offset> as timezone which would lead in incorrect results!
+        foreach ($this->_datetimeFields as $fieldName) {
+            if (array_key_exists($fieldName, $data)) {
+                $data[$fieldName] = preg_replace('/\+\d{2}:\d{2}/', '', $data[$fieldName]);
+            }
         }
-        
-        $this->setFromArray($data);
-        $this->setTimezone($serverTimezone);
 
+        // NOTE: setFromArray creates new Zend_Dates of $this->datetimeFields
+        $this->setFromArray($data);
+        
+        // convert $this->_datetimeFields into the configured server's timezone (UTC)
+        $this->setTimezone($serverTimezone);
+        
+        // finally reset timzone of current php process to the configured server timezone (UTC)
         date_default_timezone_set($serverTimezone);
     }
 }
