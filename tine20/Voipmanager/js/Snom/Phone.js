@@ -120,7 +120,9 @@ Tine.Voipmanager.Snom.Phones.Main = {
                     Tine.WindowFactory.getWindow({
                         url: 'http://' + phoneIp,
                         width: 1024,
-                        height: 768
+                        height: 768,
+                        scrollbars: 1,
+                        resizable: 1
                     });
                 }
             }
