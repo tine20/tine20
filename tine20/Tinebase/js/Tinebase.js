@@ -326,7 +326,7 @@ Tine.Tinebase.Common = function(){
 		var dataLen = data.getCount();
 		var jsonData = [];
         var curRecData;
-		for(i=0; i < dataLen; i++) {
+		for(var i=0; i < dataLen; i++) {
 			curRecData = data.itemAt(i).data;
 			jsonData.push(curRecData);
 		}	
