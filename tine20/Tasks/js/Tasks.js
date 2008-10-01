@@ -265,9 +265,6 @@ Tine.Tasks.mainGrid = {
     						// maybe we should reload if the sort critera changed, 
     						// but even this might be confusing
     						//store.load({params: this.paging});
-    	                },
-    	                failure: function ( result, request) { 
-    	                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
     	                }
     				});
 				break;
