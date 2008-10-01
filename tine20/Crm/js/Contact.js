@@ -100,13 +100,13 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
     pageSize: 50,
     itemSelector: 'div.search-item',
     store: null,
+    minChars: 3,
 
     //private
     initComponent: function(){
     	
         // Custom rendering Template
-    	// @todo move style def to css
-    	// @todo encode values and check for 'null'
+    	// @todo move style def to css ?
         var resultTpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
                 '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
@@ -120,7 +120,7 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
                         '</td>',
                     '</tr>',
                 '</table>',
-            '</div></tpl>', // {[this.encode(values.note, "longtext")]}
+            '</div></tpl>',
             {
                 encode: function(value) {
                      if (value) {
@@ -187,22 +187,3 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     
 });
-
-/**
- * contact renderer
- * 
- * @todo use that or tpl?
- */
-Tine.Crm.Contact.renderer = function(data) {
-                                                
-    record = Tine.Crm.Contact.getStore().getById(data);
-    
-    if (record) {
-        //return record.data.value;
-        return Ext.util.Format.htmlEncode(record.data.productsource);
-    }
-    else {
-        Ext.getCmp('leadDialog').doLayout();
-        return Ext.util.Format.htmlEncode(data);
-    }
-};
