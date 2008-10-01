@@ -27,7 +27,7 @@ Tine.Phone.getPanel = function(){
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
         handler: function() {
-        	Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
+        	Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
         },
         scope: this
     });
@@ -434,7 +434,7 @@ Tine.Phone.Main = {
             	// get selected node id
             	var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
             	
-                Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Voipmanager.editMyPhone&phoneId=' + node.id, 700, 300);
+                Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + node.id, 700, 300);
             },
             scope: this,
             disabled: true
