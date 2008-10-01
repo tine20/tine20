@@ -30,8 +30,8 @@ Tine.widgets.VersionCheck = function() {
     ds.on('load', function(store, records) {
         var version = records[0];
         
-        var local = new Date(Tine.Tinebase.Registry.get('version').releasedate);
-        var latest = new Date(version.get('releasedate'));
+        var local = Date.parseDate(Tine.Tinebase.Registry.get('version').releasetime, 'c');
+        var latest = Date.parseDate(version.get('releasetime'), 'c');
         
         if (latest > local && Tine.Tinebase.hasRight('run', 'Tinebase')) {
             if (version.get('critical') == true) {
