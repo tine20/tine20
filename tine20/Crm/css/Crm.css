@@ -27,7 +27,8 @@
 }
 
 .actionAdd {
-    background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
+    /* background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important; */
+    background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
 }
 
 .actionRemove {

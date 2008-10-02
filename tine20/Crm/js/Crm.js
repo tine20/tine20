@@ -1056,7 +1056,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 width: '100%',
                 items: [
                     new Tine.Crm.Contact.ComboBox({
-                        emptyText: this.translation._('Search for Contacts...')
+                        emptyText: this.translation._('Search for Contacts to add ...')
                     })
                 ]
             }),
