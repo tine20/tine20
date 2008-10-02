@@ -223,6 +223,13 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         deferredRender:false,
         height: 168,
         activeTab: 0,
+        // use special item template without tabindex (=-1)
+        itemTpl: new Ext.Template(
+                 '<li class="{cls}" id="{id}"><a class="x-tab-strip-close" onclick="return false;"></a>',
+                 '<a class="x-tab-right" href="#" onclick="return false;" tabindex="-1"><em class="x-tab-left">',
+                 '<span class="x-tab-strip-inner"><span class="x-tab-strip-text {iconCls}">{text}</span></span>',
+                 '</em></a></li>'
+            ),
         border: false,
         defaults: {
             frame: true
