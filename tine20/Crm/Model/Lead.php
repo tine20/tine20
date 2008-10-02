@@ -132,12 +132,12 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     }
     
     /**
-     * create new record from json data
+     * fills record from json data
      *
-     * @param string $_data json encoded data
-     * @return Crm_Model_Lead task record
+     * @param  string $_data json encoded data
+     * @return void
      */
-    public static function setFromJson($_data)
+    public function setFromJson($_data)
     {
         $decodedLead = Zend_Json::decode($_data);
         
@@ -213,8 +213,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
 
         //Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
         
-        $lead = new Crm_Model_Lead($decodedLead);
-        
-        return $lead;         
+        $this->setFromArrayInUsersTimezone($decodedLead);
     }            
 }

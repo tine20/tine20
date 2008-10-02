@@ -112,12 +112,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      */ 
     public function saveLead($lead)
     {
-        $leadData = Crm_Model_Lead::setFromJson($lead);
+        $inLead = new Crm_Model_Lead();
+        $inLead->setFromJson($lead);
                   
-        if(empty($leadData->id)) {
-            $savedLead = Crm_Controller::getInstance()->createLead($leadData);
+        if(empty($inLead->id)) {
+            $savedLead = Crm_Controller::getInstance()->createLead($inLead);
         } else {
-            $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
+            $savedLead = Crm_Controller::getInstance()->updateLead($inLead);
         }
         
         $result = $this->getLead($savedLead->getId());
@@ -154,7 +155,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      */
     protected function _leadToJson($_lead)
     {
-        $_lead->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_lead->setTimezone($this->_userTimezone);
         $result = $_lead->toArray();
         
         // set container
