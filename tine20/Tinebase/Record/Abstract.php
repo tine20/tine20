@@ -217,6 +217,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * wrapper for setFromJason which expects datetimes in array to be in
      * users timezone and converts them to UTC
      *
+     * @todo move this to a generic __call interceptor setFrom<API>InUsersTimezone
+     * 
      * @param  string $_data json encoded data
      * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
      */
