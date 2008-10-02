@@ -186,13 +186,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * 
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
-     * @param array $_data the new data to set
+     * @param array $_data            the new data to set
      * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {
         if($this->convertDates === true) {
-            $this->_convertISO8601ToZendDate($_data);
+            $this->_convertISO8601ToZendDate($_data, $_convertTimezone);
         }
         
         // set internal state to "not validated"
@@ -211,6 +211,30 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if ($this->bypassFilters !== true) {
             $this->isValid(true);
         }
+    }
+    
+    /**
+     * wrapper for setFromArray which expects datetimes in array to be in
+     * users timezone and converts them to UTC
+     *
+     * @param  array $_data            the new data to set
+     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
+     */
+    public function setFromArrayInUsersTimezone(array $_data)
+    {
+        // change timezone of current php process to usertimezone to let new dates be in the users timezone
+        // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
+        //       lead to incorrect results on DST transistions 
+        date_default_timezone_set(Zend_Registry::get('userTimeZone'));
+
+        // NOTE: setFromArray creates new Zend_Dates of $this->datetimeFields
+        $this->setFromArray($_data);
+        
+        // convert $this->_datetimeFields into the configured server's timezone (UTC)
+        $this->setTimezone($serverTimezone);
+        
+        // finally reset timzone of current php process to the configured server timezone (UTC)
+        date_default_timezone_set('UTC');
     }
     
     /**
@@ -432,6 +456,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * Converts dates into Zend_Date representation
      *
      * @param array &$_data
+     * 
      * @return void
      */
     protected function _convertISO8601ToZendDate(array &$_data)
@@ -442,12 +467,31 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             if(is_array($_data[$field])) {
                 foreach($_data[$field] as $dataKey => $dataValue) {
                 	if ($dataValue instanceof Zend_Date) continue;
+                	$dataValue = $this->_convertISO8601ToISO8601LONG($dataValue);
                     $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, ISO8601LONG);
                 }
             } else {
+                $_data[$field] = $this->_convertISO8601ToISO8601LONG($_data[$field]);
                 $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], ISO8601LONG);
             }
         }
+    }
+    
+    /**
+     * cut the timezone-offset from the iso representation in order to force 
+     * Zend_Date to create dates in the user timezone. otherwise they will be 
+     * created with Etc/GMT+<offset> as timezone which would lead to incorrect 
+     * results in datetime computations!
+     * 
+     * @param  string Zend_Date::ISO8601 representation of a datetime filed
+     * @return string ISO8601LONG representation ('YYYY-MM-dd HH:mm:ss')
+     */
+    protected function _convertISO8601ToISO8601LONG($_ISO)
+    {
+        $cutedISO = preg_replace('/[+\-]{1}\d{2}:\d{2}/', '', $_ISO);
+        $cutedISO = str_replace('T', ' ', $cutedISO);
+        
+        return $cutedISO;
     }
     
     /**
