@@ -155,7 +155,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'type'                   => $relation['type'],
                     'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
-                    'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : array(),
+                    'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
                 );
                 
                 switch ($relation['type']) {
@@ -213,6 +213,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
 
         //Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
         
-        $this->setFromArrayInUsersTimezone($decodedLead);
+        $this->setFromArray($decodedLead);
     }            
 }

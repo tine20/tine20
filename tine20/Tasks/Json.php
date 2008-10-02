@@ -125,7 +125,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function saveTask($task)
     {
         $inTask = new Tasks_Model_Task();
-        $inTask->setFromJson($task);
+        $inTask->setFromJsonInUsersTimezone($task);
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 

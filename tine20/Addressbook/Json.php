@@ -98,7 +98,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     public function saveContact($contactData)
     {
         $contact = new Addressbook_Model_Contact();
-        $contact->setFromJson($contactData);
+        $contact->setFromJsonInUsersTimezone($contactData);
         
         if (empty($contact->id)) {
             $contact = Addressbook_Controller::getInstance()->createContact($contact);

@@ -236,7 +236,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         }        
 
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
-        $this->setFromArrayInUsersTimezone($contactData);
+        $this->setFromArray($contactData);
         return;
     }
     

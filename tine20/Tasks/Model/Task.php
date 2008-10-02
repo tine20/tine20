@@ -110,6 +110,6 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             $data['container_id'] = $data['container_id']['id'];
         }
         
-        $this->setFromArrayInUsersTimezone($data);
+        $this->setFromArray($data);
     }
 }
