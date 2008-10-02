@@ -214,13 +214,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
-     * wrapper for setFromArray which expects datetimes in array to be in
+     * wrapper for setFromJason which expects datetimes in array to be in
      * users timezone and converts them to UTC
      *
-     * @param  array $_data            the new data to set
+     * @param  string $_data json encoded data
      * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
      */
-    public function setFromArrayInUsersTimezone(array $_data)
+    public function setFromJsonInUsersTimezone($_data)
     {
         // change timezone of current php process to usertimezone to let new dates be in the users timezone
         // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
@@ -228,10 +228,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         date_default_timezone_set(Zend_Registry::get('userTimeZone'));
 
         // NOTE: setFromArray creates new Zend_Dates of $this->datetimeFields
-        $this->setFromArray($_data);
+        $this->setFromJson($_data);
         
         // convert $this->_datetimeFields into the configured server's timezone (UTC)
-        $this->setTimezone($serverTimezone);
+        $this->setTimezone('UTC');
         
         // finally reset timzone of current php process to the configured server timezone (UTC)
         date_default_timezone_set('UTC');
@@ -241,19 +241,20 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * Sets timezone of $this->_datetimeFields
      * 
      * @see Zend_Date::setTimezone()
-     * @param string $_timezone
+     * @param  string $_timezone
+     * @param  bool   $_recursive
+     * @return  void
      * @throws Tinebase_Record_Exception_Validation
-     * @return void
      */
-    public function setTimezone($_timezone)
+    public function setTimezone($_timezone, $_recursive = TRUE)
     {
         foreach ($this->_datetimeFields as $field) {
             if (!isset($this->_properties[$field])) continue;
             
             if(!is_array($this->_properties[$field])) {
-                $toConvert = array(&$this->_properties[$field]);
+                $toConvert = array($this->_properties[$field]);
             } else {
-                $toConvert = &$this->_properties[$field];
+                $toConvert = $this->_properties[$field];
             }
 
             foreach ($toConvert as $field => &$value) {
@@ -263,6 +264,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $value->setTimezone($_timezone);
             } 
         }
+        
+        if ($_recursive) {
+            foreach ($this->_properties as $property => $value) {
+                if (is_object($value) && 
+                        (in_array('Tinebase_Record_Interface', class_implements($value)) || 
+                        $value instanceof Tinebase_Record_Recordset) ) {
+                    $value->setTimezone($_timezone, TRUE);
+                }
+            }
+        }
+        
     }
     
     /**
