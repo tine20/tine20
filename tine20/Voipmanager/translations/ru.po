@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-08-05 17:50+0100\n"
-"PO-Revision-Date: 2008-08-26 15:32+0100\n"
+"PO-Revision-Date: 2008-10-02 15:41+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -905,11 +905,11 @@ msgstr ""
 
 #: js/Snom/Location.js:621
 msgid "NTP Server Address"
-msgstr ""
+msgstr "НТР (NTP) сервер адрес"
 
 #: js/Snom/Location.js:634
 msgid "NTP Refresh"
-msgstr ""
+msgstr "НТР (NTP) Refresh"
 
 #: js/Snom/Location.js:641
 msgid "Timezone"
@@ -917,11 +917,11 @@ msgstr "Часовой пояс"
 
 #: js/Snom/Location.js:666
 msgid "Enable admin mode"
-msgstr ""
+msgstr "Активировать метод администратора"
 
 #: js/Snom/Location.js:678
 msgid "Admin Mode Password"
-msgstr ""
+msgstr "Admin Mode пароль"
 
 #: js/Snom/Location.js:688
 msgid "Enable webserver"
@@ -929,11 +929,11 @@ msgstr "Актевировать веб-сервер "
 
 #: js/Snom/Location.js:762
 msgid "HTTP Port"
-msgstr ""
+msgstr "HTTP порт"
 
 #: js/Snom/Location.js:809
 msgid "HTTP Password"
-msgstr ""
+msgstr "Пароль HTTP"
 
 #: js/Snom/Phone.js:147
 msgid "add phone"
@@ -965,19 +965,19 @@ msgstr "Никаких телефонов в наличии"
 
 #: js/Snom/Phone.js:611
 msgid "lineactive"
-msgstr ""
+msgstr "lineactive"
 
 #: js/Snom/Phone.js:670
 msgid "sipCombo"
-msgstr ""
+msgstr "sipCombo"
 
 #: js/Snom/Phone.js:679
 msgid "Idle Text"
-msgstr ""
+msgstr "Текст Idle "
 
 #: js/Snom/Phone.js:772
 msgid "MAC Address"
-msgstr ""
+msgstr "Адрес MAC "
 
 #: js/Snom/Phone.js:865
 msgid "Phone Model"
@@ -989,11 +989,11 @@ msgstr "Информация"
 
 #: js/Snom/Phone.js:952
 msgid "Current IP Address"
-msgstr ""
+msgstr "Актуальный IP адрес"
 
 #: js/Snom/Phone.js:959
 msgid "Current Software Version"
-msgstr ""
+msgstr "Актуальная версия программного обеспечения"
 
 #: js/Snom/Phone.js:972
 msgid "Settings Loaded at"
@@ -1001,7 +1001,7 @@ msgstr "Установки выли загружены"
 
 #: js/Snom/Phone.js:980
 msgid "Firmware last checked at"
-msgstr ""
+msgstr "Фирмвер (Firmware) было последний раз проверено"
 
 #: js/Snom/Phone.js:1159
 msgid "add account"
@@ -1065,23 +1065,23 @@ msgstr "Никакого программного обеспечения в на
 
 #: js/Snom/Templates.js:82
 msgid "add template"
-msgstr ""
+msgstr "Добавить темплейт (template)"
 
 #: js/Snom/Templates.js:89
 msgid "edit template"
-msgstr ""
+msgstr "Обработать темплейт (template)"
 
 #: js/Snom/Templates.js:97
 msgid "delete template"
-msgstr ""
+msgstr "Удалить темплейт (template)"
 
 #: js/Snom/Templates.js:184
 msgid "Displaying template {0} - {1} of {2}"
-msgstr ""
+msgstr "Показ темплейт (template) {0} - {1} of {2} "
 
 #: js/Snom/Templates.js:185
 msgid "No template to display"
-msgstr ""
+msgstr "Никакого темрлейта (template) для показа нет"
 
 #: js/Snom/Templates.js:193
 msgid "Keylayout Id"
@@ -1108,3 +1108,6 @@ msgstr "Размещение клавиатуры "
 
 #~ msgid "Server Setting"
 #~ msgstr "Установки сервера"
+
+#~ msgid "send HTTP Client Info"
+#~ msgstr "Послать 'HTTP Client Info'"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-26 15:30+0100\n"
+"PO-Revision-Date: 2008-10-02 10:31+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -19,19 +19,19 @@ msgstr ""
 
 #: Acl/Rights.php:116
 msgid "Report bugs"
-msgstr ""
+msgstr "Сообщать о ошибок"
 
 #: Acl/Rights.php:117
 msgid "Report bugs to tine20.org directly when they occour"
-msgstr ""
+msgstr "сообщайте о ошибках прямо tine20.org."
 
 #: Acl/Rights.php:120
 msgid "Check version"
-msgstr ""
+msgstr "Проверить версию"
 
 #: Acl/Rights.php:121
 msgid "Check tine20.org for new versions"
-msgstr ""
+msgstr "Проверить tine2.0.org на новые версии "
 
 #: Application/Rights/Abstract.php:56
 msgid "admin"
@@ -69,19 +69,19 @@ msgstr "Действия"
 msgid "by"
 msgstr ""
 
-#: Http.php:212 js/Tinebase.js:112
+#: Http.php:213 js/Tinebase.js:228
 msgid "Authorisation Required"
-msgstr ""
+msgstr "Регистрация необходима"
 
-#: Http.php:213 js/Tinebase.js:113
+#: Http.php:214 js/Tinebase.js:229
 msgid "Your session timed out. You need to login again."
-msgstr ""
+msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: Http.php:238 js/ExceptionDialog.js:26
+#: Http.php:239 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Http.php:239 js/ExceptionDialog.js:51
+#: Http.php:240 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
@@ -185,7 +185,7 @@ msgstr "Изменить пароль"
 
 #: js/MainScreen.js:54
 msgid "Install Google Gears"
-msgstr ""
+msgstr "Установить Google Gears"
 
 #: js/MainScreen.js:60
 msgid "Logout"
@@ -215,7 +215,7 @@ msgstr "Часовой пояс: %s"
 
 #: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
-msgstr ""
+msgstr "Часовой пояс"
 
 #: js/MainScreen.js:110 js/widgets/LangChooser.js:40
 msgid "Language"
@@ -272,6 +272,8 @@ msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr ""
+"Инсталляция Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
+"local на компьютере."
 
 #: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
 msgid "Confirm"
@@ -285,19 +287,21 @@ msgstr "Вы уверены что хотите покинуть програм�
 msgid "Logging you out..."
 msgstr "выключаю программу..."
 
-#: js/Tinebase.js:102
+#: js/Tinebase.js:218
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/Tinebase.js:123
+#: js/Tinebase.js:239
 msgid "Concurrent Updates"
-msgstr ""
+msgstr "Параллельные Обновления"
 
-#: js/Tinebase.js:124
+#: js/Tinebase.js:240
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr ""
+"Вовремя того как вы Обрабатывали эту запись, она выла изменена кем то "
+"другим. Вам нужно обновить и сделать обработку снова."
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
@@ -333,15 +337,15 @@ msgstr ""
 
 #: js/ux/ConnectionStatus.js:52
 msgid "online"
-msgstr ""
+msgstr "Онлайн"
 
 #: js/ux/ConnectionStatus.js:53
 msgid "offline"
-msgstr ""
+msgstr "Офлайн"
 
 #: js/ux/ConnectionStatus.js:54
 msgid "unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 #: js/ux/form/ImageField.js:48
 msgid "click to edit"
@@ -401,16 +405,16 @@ msgstr "Имя"
 msgid "add account"
 msgstr "Добавить счет"
 
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "Ввести поисковый фильтр"
 
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "Поиск"
 
 #: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "Листать"
 
@@ -451,7 +455,7 @@ msgstr "Введите новое примечание:"
 #: js/widgets/ActivitiesPanel.js:316
 #, python-format
 msgid "Add a %s Note"
-msgstr ""
+msgstr "Добавить %s заметку"
 
 #: js/widgets/ActivitiesPanel.js:399 js/widgets/ActivitiesPanel.js:534
 msgid "Type"
@@ -508,12 +512,12 @@ msgstr "Разрешения"
 #: js/widgets/container/ContainerSelect.js:74
 #, python-format
 msgid "Recently used %s:"
-msgstr ""
+msgstr "Недавно используемый %s:"
 
 #: js/widgets/container/ContainerSelect.js:93
 #, python-format
 msgid "choose other %s..."
-msgstr ""
+msgstr "Выберите другое %s..."
 
 #: js/widgets/container/ContainerSelect.js:105
 #: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
@@ -523,12 +527,12 @@ msgstr "Личное"
 
 #: js/widgets/container/ContainerSelect.js:105
 msgid "shared"
-msgstr ""
+msgstr "Раздельно"
 
 #: js/widgets/container/ContainerSelect.js:248
 #, python-format
 msgid "please select a %s"
-msgstr ""
+msgstr "Пожалуйста выберите %s"
 
 #: js/widgets/container/ContainerTree.js:115
 #, python-format
@@ -553,57 +557,57 @@ msgstr "Другие пользователи %s"
 #: js/widgets/container/ContainerTree.js:229
 #, python-format
 msgid "New %s"
-msgstr ""
+msgstr "Новое %s"
 
 #: js/widgets/container/ContainerTree.js:229
 #, python-format
 msgid "Please enter the name of the new %s:"
-msgstr ""
+msgstr "Пожалуйста введите новое имя %s:"
 
 #: js/widgets/container/ContainerTree.js:231
 #, python-format
 msgid "Creating %s..."
-msgstr ""
+msgstr "Производ %s..."
 
 #: js/widgets/container/ContainerTree.js:257
 #, python-format
 msgid "Do you really want to delete the %s \"%s\"?"
-msgstr ""
+msgstr "Вы уверены что хотите удалить %s \"%s\"?"
 
 #: js/widgets/container/ContainerTree.js:259
 #, python-format
 msgid "Deleting %s \"%s\""
-msgstr ""
+msgstr "Удаление %s \"%s\""
 
 #: js/widgets/container/ContainerTree.js:286
 #, python-format
 msgid "Please enter the new name of the %s:"
-msgstr ""
+msgstr "Пожалуйста введите новое имя %s:"
 
 #: js/widgets/container/ContainerTree.js:291
 #, python-format
 msgid "Updateing %s \"%s\""
-msgstr ""
+msgstr "Обновление %s \"%s\""
 
 #: js/widgets/container/ContainerTree.js:325
 #, python-format
 msgid "Manage Permissions for %s :\"%s\""
-msgstr ""
+msgstr "Управлять правами %s :\"%s\""
 
 #: js/widgets/container/ContainerTree.js:338
 #, python-format
 msgid "Add %s"
-msgstr ""
+msgstr "Добавить %s"
 
 #: js/widgets/container/ContainerTree.js:344
 #, python-format
 msgid "Delete %s"
-msgstr ""
+msgstr "Удалить %s"
 
 #: js/widgets/container/ContainerTree.js:350
 #, python-format
 msgid "Rename %s"
-msgstr ""
+msgstr "Переименовать %s"
 
 #: js/widgets/container/ContainerTree.js:356
 msgid "Manage permissions"
@@ -619,7 +623,7 @@ msgstr "Удалить"
 
 #: js/widgets/EditRecord.js:178
 msgid "Saved in"
-msgstr ""
+msgstr "Сохранено в"
 
 #: js/widgets/grid/FilterModel.js:87
 msgid "contains"
@@ -681,7 +685,7 @@ msgstr "и"
 msgid "Show"
 msgstr "Показать"
 
-#: js/widgets/GridPicker.js:75
+#: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "Убрать отчет"
 
@@ -838,64 +842,64 @@ msgstr "Цвет"
 
 #: js/widgets/TimezoneChooser.js:74
 msgid "setting new timezone..."
-msgstr ""
+msgstr "Урегулирование новой часового пояса"
 
 #: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
 msgid "New version of Tine 2.0 available"
-msgstr ""
+msgstr "Новая версия Tine 2.0 доступна"
 
 #: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
 #, python-format
 msgid "Version \"%s\" of Tine 2.0 is available."
-msgstr ""
+msgstr "Версия \"%s\" Tine 2.0 доступна."
 
 #: js/widgets/VersionCheck.js:41
 msgid "It's a critical update and must be installed as soon as possible!"
-msgstr ""
+msgstr "Эта важная обновление должна быть как можно быстрее установлено!"
 
 #: js/widgets/VersionCheck.js:50
 msgid "Please consider updateing!"
-msgstr ""
+msgstr "Пожалуйста рассмотрите обновление!"
 
 #: Setup/setup.xml:1753
 msgid "note"
-msgstr ""
+msgstr "Заметка"
 
 #: Setup/setup.xml:1758
 msgid "default note type"
-msgstr ""
+msgstr "Не удалось написать заметку"
 
 #: Setup/setup.xml:1780
 msgid "telephone"
-msgstr ""
+msgstr "Телефон"
 
 #: Setup/setup.xml:1785
 msgid "telephone call"
-msgstr ""
+msgstr "Телефонный звонок"
 
 #: Setup/setup.xml:1807
 msgid "email"
-msgstr ""
+msgstr "Электронная почта"
 
 #: Setup/setup.xml:1812
 msgid "email contact"
-msgstr ""
+msgstr "Контакт электронной почты"
 
 #: Setup/setup.xml:1834
 msgid "created"
-msgstr ""
+msgstr "Произведено"
 
 #: Setup/setup.xml:1839
 msgid "record created"
-msgstr ""
+msgstr "Запись произведена"
 
 #: Setup/setup.xml:1861
 msgid "changed"
-msgstr ""
+msgstr "Изменено"
 
 #: Setup/setup.xml:1866
 msgid "record changed"
-msgstr ""
+msgstr "Запись изменена"
 
 #, fuzzy
 #~ msgid "contacts"

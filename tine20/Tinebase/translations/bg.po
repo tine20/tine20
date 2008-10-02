@@ -66,20 +66,20 @@ msgstr "Операции"
 msgid "by"
 msgstr ""
 
-#: Http.php:212 js/Tinebase.js:112
+#: Http.php:213 js/Tinebase.js:228
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
-#: Http.php:213 js/Tinebase.js:113
+#: Http.php:214 js/Tinebase.js:229
 msgid "Your session timed out. You need to login again."
 msgstr ""
 "Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
 
-#: Http.php:238 js/ExceptionDialog.js:26
+#: Http.php:239 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Http.php:239 js/ExceptionDialog.js:51
+#: Http.php:240 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен сривл."
 
@@ -284,15 +284,15 @@ msgstr "Наистина ли желаете да излезете?"
 msgid "Logging you out..."
 msgstr "Подготвя излизане..."
 
-#: js/Tinebase.js:102
+#: js/Tinebase.js:218
 msgid "Connection lost, please check your network!"
 msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
 
-#: js/Tinebase.js:123
+#: js/Tinebase.js:239
 msgid "Concurrent Updates"
 msgstr "Конкурентно актуализиране"
 
-#: js/Tinebase.js:124
+#: js/Tinebase.js:240
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -404,16 +404,16 @@ msgstr "Име"
 msgid "add account"
 msgstr "Вкарай достъп"
 
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "задай филтър на търсене"
 
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "Търси"
 
 #: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "Разлисти"
 
@@ -684,7 +684,7 @@ msgstr "и"
 msgid "Show"
 msgstr "Покажи"
 
-#: js/widgets/GridPicker.js:75
+#: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "изтрий запис"
 

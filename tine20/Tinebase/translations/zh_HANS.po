@@ -65,19 +65,19 @@ msgstr "活动"
 msgid "by"
 msgstr ""
 
-#: Http.php:212 js/Tinebase.js:112
+#: Http.php:213 js/Tinebase.js:228
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Http.php:213 js/Tinebase.js:113
+#: Http.php:214 js/Tinebase.js:229
 msgid "Your session timed out. You need to login again."
 msgstr "会话超时，需要重新登录"
 
-#: Http.php:238 js/ExceptionDialog.js:26
+#: Http.php:239 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Http.php:239 js/ExceptionDialog.js:51
+#: Http.php:240 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -279,15 +279,15 @@ msgstr "确实想登出？"
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
-#: js/Tinebase.js:102
+#: js/Tinebase.js:218
 msgid "Connection lost, please check your network!"
 msgstr "失去连接，请检查网络"
 
-#: js/Tinebase.js:123
+#: js/Tinebase.js:239
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/Tinebase.js:124
+#: js/Tinebase.js:240
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -391,16 +391,16 @@ msgstr "名子"
 msgid "add account"
 msgstr "添加帐户"
 
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
 
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "搜索"
 
 #: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "浏览"
 
@@ -671,7 +671,7 @@ msgstr "和"
 msgid "Show"
 msgstr "显示"
 
-#: js/widgets/GridPicker.js:75
+#: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "删除记录"
 

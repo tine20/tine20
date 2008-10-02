@@ -50,19 +50,19 @@ msgstr ""
 msgid "by"
 msgstr ""
 
-#: Http.php:212 js/Tinebase.js:112
+#: Http.php:213 js/Tinebase.js:228
 msgid "Authorisation Required"
 msgstr ""
 
-#: Http.php:213 js/Tinebase.js:113
+#: Http.php:214 js/Tinebase.js:229
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: Http.php:238 js/ExceptionDialog.js:26
+#: Http.php:239 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr ""
 
-#: Http.php:239 js/ExceptionDialog.js:51
+#: Http.php:240 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
@@ -262,15 +262,15 @@ msgstr ""
 msgid "Logging you out..."
 msgstr ""
 
-#: js/Tinebase.js:102
+#: js/Tinebase.js:218
 msgid "Connection lost, please check your network!"
 msgstr ""
 
-#: js/Tinebase.js:123
+#: js/Tinebase.js:239
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:124
+#: js/Tinebase.js:240
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -374,16 +374,16 @@ msgstr ""
 msgid "add account"
 msgstr ""
 
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:386
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr ""
 
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:407
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr ""
 
 #: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:445 js/widgets/GridPicker.js:446
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr ""
 
@@ -654,7 +654,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: js/widgets/GridPicker.js:75
+#: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr ""
 

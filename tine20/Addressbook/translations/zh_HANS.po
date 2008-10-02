@@ -74,7 +74,7 @@ msgstr "输入 pdf 文件"
 msgid "call contact"
 msgstr "呼叫联系人"
 
-#: js/Addressbook.js:336 js/EditDialog.js:334
+#: js/Addressbook.js:336 js/EditDialog.js:341
 msgid "Contact"
 msgstr "联系人"
 
@@ -101,27 +101,27 @@ msgid "Job Role"
 msgstr "工作职责"
 
 #: js/Addressbook.js:343 js/Addressbook.js:346 js/Addressbook.js:378
-#: js/EditDialog.js:249 js/EditDialog.js:294
+#: js/EditDialog.js:256 js/EditDialog.js:301
 msgid "Street"
 msgstr "街道"
 
 #: js/Addressbook.js:343 js/Addressbook.js:344 js/Addressbook.js:345
-#: js/EditDialog.js:233
+#: js/EditDialog.js:240
 msgid "Company Address"
 msgstr "公司地址"
 
-#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:259
-#: js/EditDialog.js:304
+#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:266
+#: js/EditDialog.js:311
 msgid "Postal Code"
 msgstr "邮政编码"
 
 #: js/Addressbook.js:345 js/Addressbook.js:348 js/Addressbook.js:379
-#: js/EditDialog.js:263 js/EditDialog.js:308
+#: js/EditDialog.js:270 js/EditDialog.js:315
 msgid "City"
 msgstr "城市"
 
 #: js/Addressbook.js:346 js/Addressbook.js:347 js/Addressbook.js:348
-#: js/EditDialog.js:282 Pdf.php:86
+#: js/EditDialog.js:289 Pdf.php:86
 msgid "Private Address"
 msgstr "个人地址"
 
@@ -153,7 +153,7 @@ msgstr "单位"
 msgid "Room"
 msgstr "房间"
 
-#: js/Addressbook.js:380 js/EditDialog.js:267 js/EditDialog.js:312
+#: js/Addressbook.js:380 js/EditDialog.js:274 js/EditDialog.js:319
 msgid "Region"
 msgstr "省/自治区/直辖市"
 
@@ -161,7 +161,7 @@ msgstr "省/自治区/直辖市"
 msgid "Postalcode"
 msgstr "邮政编码"
 
-#: js/Addressbook.js:382 js/EditDialog.js:274 js/EditDialog.js:319
+#: js/Addressbook.js:382 js/EditDialog.js:281 js/EditDialog.js:326
 msgid "Country"
 msgstr "国家"
 
@@ -257,7 +257,7 @@ msgstr "选择联系人"
 msgid "Tags"
 msgstr "标签"
 
-#: js/Addressbook.js:513 js/EditDialog.js:366
+#: js/Addressbook.js:513 js/EditDialog.js:373
 msgid "Description"
 msgstr "描述"
 
@@ -330,19 +330,19 @@ msgstr "电子邮件（个人）"
 msgid "Contact Information"
 msgstr "联系人信息"
 
-#: js/EditDialog.js:253 js/EditDialog.js:298
+#: js/EditDialog.js:260 js/EditDialog.js:305
 msgid "Street 2"
 msgstr "街道 2"
 
-#: js/EditDialog.js:326
+#: js/EditDialog.js:333
 msgid "Custom Fields"
 msgstr "定制字段"
 
-#: js/EditDialog.js:380
+#: js/EditDialog.js:387
 msgid "Enter description"
 msgstr "输入描述"
 
-#: js/EditDialog.js:416
+#: js/EditDialog.js:423
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"

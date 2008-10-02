@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-08-21 14:53+0100\n"
+"PO-Revision-Date: 2008-10-01 16:53+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: Controller.php:305
 #, python-format
 msgid "%s's personal tasks"
-msgstr ""
+msgstr "%s's личные задания"
 
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
@@ -63,7 +63,7 @@ msgstr "Делать списки"
 
 #: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
 msgid "to do list"
-msgstr ""
+msgstr "Сделать список"
 
 #: js/Tasks.js:323
 msgid "Enter searchfilter"
@@ -119,20 +119,20 @@ msgstr "Задание не смогла быть сохранино"
 
 #: js/Tasks.js:638
 msgid "Loading Task..."
-msgstr ""
+msgstr "Задание загружается"
 
 #: js/Tasks.js:638
 msgid "Please Wait"
-msgstr ""
+msgstr "Пожалуйста подождите"
 
 #: js/Tasks.js:649
 msgid "Add New Task"
-msgstr ""
+msgstr "Добавить новое задание"
 
 #: js/Tasks.js:651
 #, python-format
 msgid "Edit Task \"%s\""
-msgstr ""
+msgstr "Обработать задание \"%s\""
 
 #: js/Tasks.js:671
 msgid "Please wait"
@@ -184,23 +184,23 @@ msgstr "Число истечения срока"
 
 #: js/Tasks.js:791
 msgid "Saved in"
-msgstr ""
+msgstr "Сохранено в"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
-msgstr ""
+msgstr "ДЕЙСТВИЕ-ПОТРЕБНОСТЕЙ"
 
 #: Setup/setup.xml:409
 msgid "COMPLETED"
-msgstr ""
+msgstr "ЗАКОНЧЕНО"
 
 #: Setup/setup.xml:431
 msgid "IN-PROCESS"
-msgstr ""
+msgstr "НЕЗАВЕРШЕННЫЙ"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"
-msgstr ""
+msgstr "ОТСТАВЛЕНО"
 
 #~ msgid "Folder"
 #~ msgstr "Папка"
