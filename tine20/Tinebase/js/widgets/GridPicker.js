@@ -10,6 +10,9 @@
  * 
  * @todo generalise for more different object types
  * @todo add translations
+ * 
+ * @deprecated -> replaced by contact search combobox
+ * @todo remove it!
  */
  
 Ext.namespace('Tine.widgets');
