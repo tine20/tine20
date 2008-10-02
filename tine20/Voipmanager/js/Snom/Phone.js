@@ -466,13 +466,13 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         updatePhoneRecord: function(_phoneData)
         {                     
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
-                _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
+                _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, Date.patterns.ISO8601Long);
             }
             if(_phoneData.settings_loaded_at && _phoneData.settings_loaded_at !== null) {
-                _phoneData.settings_loaded_at = Date.parseDate(_phoneData.settings_loaded_at, 'c');
+                _phoneData.settings_loaded_at = Date.parseDate(_phoneData.settings_loaded_at, Date.patterns.ISO8601Long);
             }
             if(_phoneData.firmware_checked_at && _phoneData.firmware_checked_at !== null) {
-                _phoneData.firmware_checked_at = Date.parseDate(_phoneData.firmware_checked_at, 'c');
+                _phoneData.firmware_checked_at = Date.parseDate(_phoneData.firmware_checked_at, Date.patterns.ISO8601Long);
             }
             if(_phoneData.redirect_event != 'time') {
                 Ext.getCmp('redirect_time').disable();

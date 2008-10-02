@@ -303,13 +303,13 @@ Tine.Voipmanager.MyPhones.EditDialog =  {
         updateMyPhoneRecord: function(_myphoneData)
         {                     
             if(_myphoneData.last_modified_time && _myphoneData.last_modified_time !== null) {
-                _myphoneData.last_modified_time = Date.parseDate(_myphoneData.last_modified_time, 'c');
+                _myphoneData.last_modified_time = Date.parseDate(_myphoneData.last_modified_time, Date.patterns.ISO8601Long);
             }
             if(_myphoneData.settings_loaded_at && _myphoneData.settings_loaded_at !== null) {
-                _myphoneData.settings_loaded_at = Date.parseDate(_myphoneData.settings_loaded_at, 'c');
+                _myphoneData.settings_loaded_at = Date.parseDate(_myphoneData.settings_loaded_at, Date.patterns.ISO8601Long);
             }
             if(_myphoneData.firmware_checked_at && _myphoneData.firmware_checked_at !== null) {
-                _myphoneData.firmware_checked_at = Date.parseDate(_myphoneData.firmware_checked_at, 'c');
+                _myphoneData.firmware_checked_at = Date.parseDate(_myphoneData.firmware_checked_at, Date.patterns.ISO8601Long);
             }
             if(_myphoneData.redirect_event != 'time') {
                 Ext.getCmp('redirect_time').disable();

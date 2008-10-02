@@ -130,8 +130,8 @@ Tine.Calendar.MainScreen = function() {
 			id: 'cal_id',
 			fields: [
 			    { name: 'cal_id' }, 
-			    { name: 'cal_start', type: 'date', dateFormat: 'c' },
-				{ name: 'cal_end', type: 'date', dateFormat: 'c' },
+			    { name: 'cal_start', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+				{ name: 'cal_end', type: 'date', dateFormat: Date.patterns.ISO8601Long },
 				{ name: 'cal_title'	},
 				{ name: 'cal_description' }
 			],
@@ -149,8 +149,8 @@ Tine.Calendar.MainScreen = function() {
 		with (Tine.Calendar.Request) {
 			store.load({
 				params: {
-					start: start.format('c'),
-					end: end.format('c'),
+					start: start.format(Date.patterns.ISO8601Long),
+					end: end.format(Date.patterns.ISO8601Long),
 					users: calendars,
 					filters: filters
 				}

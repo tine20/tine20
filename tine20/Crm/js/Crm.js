@@ -1849,12 +1849,12 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'leadtype_id',   type: 'int'},
     {name: 'leadsource_id', type: 'int'},
     {name: 'container'                 },
-    {name: 'start',         type: 'date', dateFormat: 'c'},
+    {name: 'start',         type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'description',   type: 'string'},
-    {name: 'end',           type: 'date', dateFormat: 'c'},
+    {name: 'end',           type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'turnover',      type: 'int'},
     {name: 'probability',   type: 'int'},
-    {name: 'end_scheduled', type: 'date', dateFormat: 'c'},
+    {name: 'end_scheduled', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'lastread'},
     {name: 'lastreader'},
     {name: 'responsible'},
@@ -1865,12 +1865,12 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'products'},
     {name: 'tags'},
     {name: 'notes'},
-    {name: 'creation_time',      type: 'date', dateFormat: 'c'},
+    {name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'created_by',         type: 'int'                  },
-    {name: 'last_modified_time', type: 'date', dateFormat: 'c'},
+    {name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'last_modified_by',   type: 'int'                  },
     {name: 'is_deleted',         type: 'boolean'              },
-    {name: 'deleted_time',       type: 'date', dateFormat: 'c'},
+    {name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'deleted_by',         type: 'int'                  }
 ]);
 
@@ -1886,8 +1886,8 @@ Tine.Crm.Model.ProductLink = Ext.data.Record.create([
 // work arround nasty ext date bug
 // @todo is that still needed?
 Tine.Crm.Model.Lead.FixDates = function(lead) {
-    lead.data.start         = lead.data.start         ? Date.parseDate(lead.data.start, 'c')         : lead.data.start;
-    lead.data.end           = lead.data.end           ? Date.parseDate(lead.data.end, 'c')           : lead.data.end;
-    lead.data.end_scheduled = lead.data.end_scheduled ? Date.parseDate(lead.data.end_scheduled, 'c') : lead.data.end_scheduled;
+    lead.data.start         = lead.data.start         ? Date.parseDate(lead.data.start, Date.patterns.ISO8601Long)         : lead.data.start;
+    lead.data.end           = lead.data.end           ? Date.parseDate(lead.data.end, Date.patterns.ISO8601Long)           : lead.data.end;
+    lead.data.end_scheduled = lead.data.end_scheduled ? Date.parseDate(lead.data.end_scheduled, Date.patterns.ISO8601Long) : lead.data.end_scheduled;
 };
         

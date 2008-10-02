@@ -435,13 +435,13 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     
     updateRecord: function(_accountData) {
         if(_accountData.accountExpires && _accountData.accountExpires !== null) {
-            _accountData.accountExpires = Date.parseDate(_accountData.accountExpires, 'c');
+            _accountData.accountExpires = Date.parseDate(_accountData.accountExpires, Date.patterns.ISO8601Long);
         }
         if(_accountData.accountLastLogin && _accountData.accountLastLogin !== null) {
-            _accountData.accountLastLogin = Date.parseDate(_accountData.accountLastLogin, 'c');
+            _accountData.accountLastLogin = Date.parseDate(_accountData.accountLastLogin, Date.patterns.ISO8601Long);
         }
         if(_accountData.accountLastPasswordChange && _accountData.accountLastPasswordChange !== null) {
-            _accountData.accountLastPasswordChange = Date.parseDate(_accountData.accountLastPasswordChange, 'c');
+            _accountData.accountLastPasswordChange = Date.parseDate(_accountData.accountLastPasswordChange, Date.patterns.ISO8601Long);
         }
         if(!_accountData.accountPassword) {
             _accountData.accountPassword = null;
@@ -699,9 +699,9 @@ Tine.Admin.Users.Account = Ext.data.Record.create([
     { name: 'accountFullName' },
     { name: 'accountStatus' },
     { name: 'accountPrimaryGroup' },
-    { name: 'accountExpires', type: 'date', dateFormat: 'c' },
-    { name: 'accountLastLogin', type: 'date', dateFormat: 'c' },
-    { name: 'accountLastPasswordChange', type: 'date', dateFormat: 'c' },
+    { name: 'accountExpires', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'accountLastLogin', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'accountLastPasswordChange', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'accountLastLoginfrom' },
     { name: 'accountEmailAddress' }
 ]);

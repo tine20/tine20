@@ -317,8 +317,8 @@ Tine.Admin.AccessLog.Main = function() {
                 {name: 'login_name'},
                 {name: 'accountObject'},
                 {name: 'ip'},
-                {name: 'li', type: 'date', dateFormat: 'c'},
-                {name: 'lo', type: 'date', dateFormat: 'c'},
+                {name: 'li', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+                {name: 'lo', type: 'date', dateFormat: Date.patterns.ISO8601Long},
                 {name: 'id'},
                 {name: 'account_id'},
                 {name: 'result'}

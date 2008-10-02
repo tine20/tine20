@@ -817,7 +817,7 @@ Tine.Tasks.EditDialog.openWindow = function (config) {
 // fixes a task
 Tine.Tasks.fixTask = function(task) {
     if (task.data.due) {
-        task.data.due = Date.parseDate(task.data.due, 'c');
+        task.data.due = Date.parseDate(task.data.due, Date.patterns.ISO8601Long);
     }
 };
 
@@ -825,18 +825,18 @@ Tine.Tasks.fixTask = function(task) {
 Tine.Tasks.TaskArray = [
     // tine record fields
     { name: 'container_id'                                     },
-    { name: 'creation_time',      type: 'date', dateFormat: 'c'},
+    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
     { name: 'created_by',         type: 'int'                  },
-    { name: 'last_modified_time', type: 'date', dateFormat: 'c'},
+    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     { name: 'last_modified_by',   type: 'int'                  },
     { name: 'is_deleted',         type: 'boolean'              },
-    { name: 'deleted_time',       type: 'date', dateFormat: 'c'},
+    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
     { name: 'deleted_by',         type: 'int'                  },
     // task only fields
     { name: 'id' },
     { name: 'percent' },
-    { name: 'completed', type: 'date', dateFormat: 'c' },
-    { name: 'due', type: 'date', dateFormat: 'c' },
+    { name: 'completed', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'due', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     // ical common fields
     { name: 'class_id' },
     { name: 'description' },
@@ -857,8 +857,8 @@ Tine.Tasks.TaskArray = [
     { name: 'resources' },
     { name: 'rstatus' },
     // scheduleable interface fields
-    { name: 'dtstart', type: 'date', dateFormat: 'c' },
-    { name: 'duration', type: 'date', dateFormat: 'c' },
+    { name: 'dtstart', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'duration', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'recurid' },
     // scheduleable interface fields with multiple appearance
     { name: 'exdate' },

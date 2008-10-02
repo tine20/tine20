@@ -48,13 +48,13 @@ Ext.form.DateField.prototype.getValue = function(){
 };
 
 /**
- * fix interpretation of ISO-8601  formatcode ('c') 
+ * fix interpretation of ISO-8601  formatcode (Date.patterns.ISO8601Long) 
  * 
  * Browsers do not support timezones and also javascripts Date object has no 
  * support for it.  All Date Objects are in _one_ timezone which may ore may 
  * not be the operating systems timezone the browser runs on.
  * 
- * parsing dates in ISO format having the timeshift appended ('c') lead to 
+ * parsing dates in ISO format having the timeshift appended (Date.patterns.ISO8601Long) lead to 
  * correctly converted Date Objects in the browsers timezone. This timezone 
  * conversion changes the the Date Parts and as such, javascipt widget 
  * representing date time information print values of the browsers timezone 

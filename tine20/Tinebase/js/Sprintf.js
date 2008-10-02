@@ -40,7 +40,7 @@ sprintf = function() {
                    if (pPrecision && pType == 'f') precision = parseInt(pPrecision.substring(1));
             var subst = param;
                    if (pType == 'b') subst = parseInt(param).toString(2);
-              else if (pType == 'c') subst = String.fromCharCode(parseInt(param));
+              else if (pType == Date.patterns.ISO8601Long) subst = String.fromCharCode(parseInt(param));
               else if (pType == 'd') subst = parseInt(param) ? parseInt(param) : 0;
               else if (pType == 'u') subst = Math.abs(param);
               else if (pType == 'f') subst = (precision > -1) ? Math.round(parseFloat(param) * Math.pow(10, precision)) / Math.pow(10, precision): parseFloat(param);

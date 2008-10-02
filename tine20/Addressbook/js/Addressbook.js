@@ -945,7 +945,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     
     updateContactRecord: function(_contactData) {
         if(_contactData.bday && _contactData.bday !== null) {
-            _contactData.bday = Date.parseDate(_contactData.bday, 'c');
+            _contactData.bday = Date.parseDate(_contactData.bday, Date.patterns.ISO8601Long);
         }
 
         this.contact = new Tine.Addressbook.Model.Contact(_contactData, _contactData.id ? _contactData.id : 0);
@@ -998,7 +998,7 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'n_suffix'},
     {name: 'n_fn'},
     {name: 'n_fileas'},
-    {name: 'bday', type: 'date', dateFormat: 'c' },
+    {name: 'bday', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     {name: 'org_name'},
     {name: 'org_unit'},
     {name: 'title'},
@@ -1039,12 +1039,12 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'tz'},
     {name: 'geo'},
     {name: 'pubkey'},
-    {name: 'creation_time',      type: 'date', dateFormat: 'c'},
+    {name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'created_by',         type: 'int'                  },
-    {name: 'last_modified_time', type: 'date', dateFormat: 'c'},
+    {name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'last_modified_by',   type: 'int'                  },
     {name: 'is_deleted',         type: 'boolean'              },
-    {name: 'deleted_time',       type: 'date', dateFormat: 'c'},
+    {name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'deleted_by',         type: 'int'                  },
     {name: 'jpegphoto'},
     {name: 'account_id'},

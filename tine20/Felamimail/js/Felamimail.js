@@ -310,7 +310,7 @@ Tine.Felamimail.Email = function() {
     };
     
     var _renderDateTime = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-    	var date = Date.parseDate(_data, 'c');
+    	var date = Date.parseDate(_data, Date.patterns.ISO8601Long);
     	
     	return date.format('d.m.Y h:i:s');
     };
