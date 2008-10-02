@@ -288,7 +288,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         if($_expiryDate instanceof Zend_Date) {
-            $accountData['expires_at'] = $_expiryDate->get(ISO8601LONG);
+            $accountData['expires_at'] = $_expiryDate->get(Tinebase_Record_Abstract::ISO8601LONG);
         } else {
             $accountData['expires_at'] = NULL;
         }
@@ -315,7 +315,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         if($_blockedUntilDate instanceof Zend_Date) {
-            $accountData['blocked_until'] = $_blockedUntilDate->get(ISO8601LONG);
+            $accountData['blocked_until'] = $_blockedUntilDate->get(Tinebase_Record_Abstract::ISO8601LONG);
         } else {
             $accountData['blocked_until'] = NULL;
         }
@@ -344,7 +344,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['last_login_from'] = $_ipAddress;
-        $accountData['last_login']      = Zend_Date::now()->get(ISO8601LONG);
+        $accountData['last_login']      = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
@@ -435,7 +435,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array(
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
-            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->get(ISO8601LONG) : NULL),
+            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_account->accountPrimaryGroup,
         );
         

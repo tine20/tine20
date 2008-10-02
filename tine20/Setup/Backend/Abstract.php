@@ -91,7 +91,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
             if (isset($field->value['special'])) {
                 switch(strtolower($field->value['special'])) {
                     case 'now':
-                        $value = Zend_Date::now()->get(ISO8601LONG);
+                        $value = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
                         break;
                     
                     case 'account_id':

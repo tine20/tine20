@@ -20,6 +20,11 @@
  */
 abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 {
+    /**
+     * ISO8601LONG datetime representation
+     */
+    const ISO8601LONG = 'YYYY-MM-dd HH:mm:ss';
+    
 	/**
      * should datas be validated on the fly(false) or only on demand(true)
      *
@@ -459,7 +464,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         foreach ($_toConvert as $field => &$value) {
             if ($value instanceof Zend_Date) {
-                $_toConvert[$field] = $value->get(ISO8601LONG);
+                $_toConvert[$field] = $value->get(Tinebase_Record_Abstract::ISO8601LONG);
             } elseif (is_array($value)) {
                 $this->_convertZendDateToISO8601($value);
             }
@@ -482,11 +487,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 foreach($_data[$field] as $dataKey => $dataValue) {
                 	if ($dataValue instanceof Zend_Date) continue;
                 	$dataValue = $this->_convertISO8601ToISO8601LONG($dataValue);
-                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, ISO8601LONG);
+                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, Tinebase_Record_Abstract::ISO8601LONG);
                 }
             } else {
                 $_data[$field] = $this->_convertISO8601ToISO8601LONG($_data[$field]);
-                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], ISO8601LONG);
+                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], Tinebase_Record_Abstract::ISO8601LONG);
             }
         }
     }

@@ -251,7 +251,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['last_login_from'] = $_ipAddress;
-        $accountData['last_login']      = Zend_Date::now()->get(ISO8601LONG);
+        $accountData['last_login']      = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
             $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)

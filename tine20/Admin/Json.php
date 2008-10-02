@@ -74,8 +74,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         // debug params
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' function params: '. $from . ', ' . $to . ', ... ');
         
-        $fromDateObject = new Zend_Date($from, ISO8601LONG);
-        $toDateObject = new Zend_Date($to, ISO8601LONG);
+        $fromDateObject = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $pagination, $fromDateObject, $toDateObject);
@@ -269,13 +269,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         /*foreach($accounts as $key => $account) {
             if ($account['last_login'] !== NULL) {
-                 $accounts[$key]['last_login'] = $account['last_login']->get(ISO8601LONG);
+                 $accounts[$key]['last_login'] = $account['last_login']->get(Tinebase_Record_Abstract::ISO8601LONG);
             }
             if ($account['last_password_change'] !== NULL) {
-                 $accounts[$key]['last_password_change'] = $account['last_password_change']->get(ISO8601LONG);
+                 $accounts[$key]['last_password_change'] = $account['last_password_change']->get(Tinebase_Record_Abstract::ISO8601LONG);
             }
             if ($account['expires_at'] !== NULL) {
-                 $accounts[$key]['expires_at'] = $account['expires_at']->get(ISO8601LONG);
+                 $accounts[$key]['expires_at'] = $account['expires_at']->get(Tinebase_Record_Abstract::ISO8601LONG);
             }
         }*/
         

@@ -351,7 +351,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         $tasksTable = $this->getTableInstance('tasks');
         $data = array(
             'is_deleted'   => true, 
-            'deleted_time' => Zend_Date::now()->get(ISO8601LONG),
+            'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'deleted_by'   => $this->_currentAccount->getId()
         );
         

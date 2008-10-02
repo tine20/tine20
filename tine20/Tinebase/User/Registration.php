@@ -431,7 +431,7 @@ class Tinebase_User_Registration
             "login_name" => $_registration->login_name ,
             "login_hash" => $_registration->login_hash ,
             "email"      => $_registration->email ,
-            "date"       => Zend_Date::now()->get(ISO8601LONG),
+            "date"       => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             "status"     => "justregistered"
         );
         // add new user
@@ -456,7 +456,7 @@ class Tinebase_User_Registration
             "login_hash" => $_registration->login_hash ,
             "email"      => $_registration->email ,
             "date"       => ($_registration->date instanceof Zend_Date ? 
-                                $_registration->date->get(ISO8601LONG) : NULL) ,
+                                $_registration->date->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL) ,
             "status"     => $_registration->status ,
             "email_sent" => $_registration->email_sent);
         //--   

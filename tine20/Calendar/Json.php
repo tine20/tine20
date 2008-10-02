@@ -33,8 +33,8 @@ class Calendar_Json extends Tinebase_Application_Json_Abstract
         //$etime = $now->add(60, Zend_Date::DAY);
         
         $events = $this->_backend->getEvents( 
-            new Zend_Date($start,ISO8601LONG), 
-            new Zend_Date($end,ISO8601LONG), 
+            new Zend_Date($start,Tinebase_Record_Abstract::ISO8601LONG), 
+            new Zend_Date($end,Tinebase_Record_Abstract::ISO8601LONG), 
             5, 
             array() 
         );
@@ -105,7 +105,7 @@ class Calendar_Json extends Tinebase_Application_Json_Abstract
     {
         foreach ($_toConvert as $field => $value) {
             if ($value instanceof Zend_Date) {
-                $_toConvert[$field] = $value->get(ISO8601LONG);
+                $_toConvert[$field] = $value->get(Tinebase_Record_Abstract::ISO8601LONG);
             } elseif (is_array($value)) {
                 $_toConvert[$field] = self::date2Iso($value);
             }

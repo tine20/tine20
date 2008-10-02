@@ -288,7 +288,7 @@ class Tinebase_Acl_Roles
         if(Zend_Registry::isRegistered('currentAccount')) {
             $data['created_by'] = Zend_Registry::get('currentAccount')->getId();
         }
-        $data['creation_time'] = Zend_Date::now()->get(ISO8601LONG);
+        $data['creation_time'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
                 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                         
@@ -312,7 +312,7 @@ class Tinebase_Acl_Roles
     {
         $data = $_role->toArray();
         $data['last_modified_by'] = Zend_Registry::get('currentAccount')->getId();
-        $data['last_modified_time'] = Zend_Date::now()->get(ISO8601LONG);
+        $data['last_modified_time'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
 

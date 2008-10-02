@@ -59,7 +59,7 @@ if (count($opts->toArray()) === 0 || $opts->h) {
     exit;
 }
 
-$build = trim(`whoami`) . ' '. Zend_Date::now()->get(ISO8601LONG);
+$build = trim(`whoami`) . ' '. Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
 
 /**
  * --clean 

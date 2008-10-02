@@ -74,7 +74,7 @@ class Tinebase_AccessLog
             'sessionid'     => $_sessionId,
             'login_name'    => $_loginId,
             'ip'            => $_ipAddress,
-            'li'            => Zend_Date::now()->get(ISO8601LONG),
+            'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'result'        => $_result
         );
         if ($_accountId !== NULL) {
@@ -94,7 +94,7 @@ class Tinebase_AccessLog
     public function addLogoutEntry($_sessionId, $_ipAddress)
     {
         $data = array(
-            'lo' => Zend_Date::now()->get(ISO8601LONG)
+            'lo' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
         );
         
         $where = array(
@@ -148,12 +148,12 @@ class Tinebase_AccessLog
         
         if ($_from instanceof Zend_Date && $_to instanceof Zend_Date) {
             $select->where(
-                $this->_db->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' BETWEEN ? ', $_from->get(ISO8601LONG)) .
-                $this->_db->quoteInto('AND ?', $_to->get(ISO8601LONG))
+                $this->_db->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' BETWEEN ? ', $_from->get(Tinebase_Record_Abstract::ISO8601LONG)) .
+                $this->_db->quoteInto('AND ?', $_to->get(Tinebase_Record_Abstract::ISO8601LONG))
             );
         } elseif ($_from instanceof Zend_Date) {
             $select->where(
-                $this->_db->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' > ?', $_from->get(ISO8601LONG))
+                $this->_db->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('li') . ' > ?', $_from->get(Tinebase_Record_Abstract::ISO8601LONG))
             );
         }
                 
@@ -168,11 +168,11 @@ class Tinebase_AccessLog
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         foreach ($rows as $rowId => &$row) {
             if ($row['lo'] >= $row['li']) {
-                $row['lo'] = new Zend_Date($row['lo'], ISO8601LONG);
+                $row['lo'] = new Zend_Date($row['lo'], Tinebase_Record_Abstract::ISO8601LONG);
             } else {
                 $row['lo'] = NULL;
             }
-            $row['li'] = new Zend_Date($row['li'], ISO8601LONG);
+            $row['li'] = new Zend_Date($row['li'], Tinebase_Record_Abstract::ISO8601LONG);
         }
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_AccessLog', $rows);
@@ -192,7 +192,7 @@ class Tinebase_AccessLog
     public function getTotalCount(Zend_Date $_from, Zend_Date $_to, $_filter = NULL)
     {
         $where = array(
-           $this->_accessLogTable->getAdapter()->quoteIdentifier('li') .  ' BETWEEN ' .$this->_accessLogTable->getAdapter()->quote($_from->get(ISO8601LONG)) . ' AND ' . $this->_accessLogTable->getAdapter()->quote($_to->get(ISO8601LONG))
+           $this->_accessLogTable->getAdapter()->quoteIdentifier('li') .  ' BETWEEN ' .$this->_accessLogTable->getAdapter()->quote($_from->get(Tinebase_Record_Abstract::ISO8601LONG)) . ' AND ' . $this->_accessLogTable->getAdapter()->quote($_to->get(Tinebase_Record_Abstract::ISO8601LONG))
         );
         if( !empty($_filter) ) {
             $where[] = $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('login_name') . ' LIKE ?', '%' . $_filter . '%');
