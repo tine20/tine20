@@ -192,7 +192,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function setFromArray(array $_data)
     {
         if($this->convertDates === true) {
-            $this->_convertISO8601ToZendDate($_data, $_convertTimezone);
+            $this->_convertISO8601ToZendDate($_data);
         }
         
         // set internal state to "not validated"
