@@ -122,7 +122,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @todo get tags (?) / account grants for all records at once 
      */
     protected function _contactToJson($_contact)
-    {        
+    {   
+        
+        $_contact->setTimezone(Zend_Registry::get('userTimeZone'));
         $result = $_contact->toArray();
         
         $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
@@ -147,6 +149,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         // get acls for contacts
         Tinebase_Container::getInstance()->getGrantsOfRecords($_contacts, Zend_Registry::get('currentAccount'), 'owner');
         
+        $_contacts->setTimezone(Zend_Registry::get('userTimeZone'));
         $result = $_contacts->toArray();
         
         foreach ($result as &$contact) {
