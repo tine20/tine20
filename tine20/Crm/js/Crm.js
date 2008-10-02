@@ -1046,7 +1046,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var gridStore = Ext.StoreMgr.lookup('ContactsStore');  
         var grid = new Ext.grid.EditorGridPanel({
             id: 'crmGridContacts',
-            //title: '',
+            title: this.translation._('Contacts'),
             cm: columnModel,
             store: gridStore,
             selModel: rowSelectionModel,
