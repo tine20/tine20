@@ -163,7 +163,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->object->date_single = clone ($now);
         $this->object->setTimezone('America/Los_Angeles');
         foreach ($this->object as $record) {
-        	$this->assertNotEquals($record->date_single->getIso(), $now->getIso());
+        	$this->assertNotEquals($record->date_single->get(ISO8601LONG), $now->get(ISO8601LONG));
         }
         
     }

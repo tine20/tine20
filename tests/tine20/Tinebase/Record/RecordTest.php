@@ -80,8 +80,8 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     	$dummy = array(
 					'id'=>2, 
 					'test_2'=>'',
-					'date_single' => $date->getIso(), 
-					'date_multiple'=> array($date->getIso()));
+					'date_single' => $date->get(ISO8601LONG), 
+					'date_multiple'=> array($date->get(ISO8601LONG)));
   	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
   	  	
   	  	
@@ -121,7 +121,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
             'string' => 'test',
             'test_1' => 25,
             'test_2' => 99,
-            'date_single' => Zend_Date::now()->getIso()
+            'date_single' => Zend_Date::now()->get(ISO8601LONG)
         ), true);
         
         $record2 = clone $record1;
@@ -150,7 +150,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
             'string' => 'test',
             'test_1' => 25,
             'test_2' => 99,
-            'date_single' => Zend_Date::now()->getIso()
+            'date_single' => Zend_Date::now()->get(ISO8601LONG)
         ), true);
         $record2 = clone $record1;
         $this->assertTrue($record1->isEqual($record2), 'records are equal');
