@@ -1,4 +1,4 @@
-#: js/Phone.js:27 js/Phone.js:425 js/Phone.js:426
+#: js/Phone.js:27 js/Phone.js:430 js/Phone.js:431
 msgid "Edit phone settings"
 msgstr ""
 
@@ -6,102 +6,102 @@ msgstr ""
 msgid "Phones"
 msgstr ""
 
-#: js/Phone.js:177
+#: js/Phone.js:182
 msgid "Dial phone number"
 msgstr ""
 
-#: js/Phone.js:234
+#: js/Phone.js:239
 msgid "Phone"
 msgstr ""
 
-#: js/Phone.js:250
+#: js/Phone.js:255
 msgid "Line"
 msgstr ""
 
-#: js/Phone.js:259
+#: js/Phone.js:264
 msgid "Number"
 msgstr ""
 
-#: js/Phone.js:268
+#: js/Phone.js:273
 msgid "Cancel"
 msgstr ""
 
-#: js/Phone.js:278
+#: js/Phone.js:283
 msgid "Dial"
 msgstr ""
 
-#: js/Phone.js:415
+#: js/Phone.js:420
 msgid "Dial number"
 msgstr ""
 
-#: js/Phone.js:416
+#: js/Phone.js:421
 msgid "Initiate a new outgoing call"
 msgstr ""
 
-#: js/Phone.js:464
+#: js/Phone.js:469
 msgid "Incoming call"
 msgstr ""
 
-#: js/Phone.js:468
+#: js/Phone.js:473
 msgid "Outgoing call"
 msgstr ""
 
-#: js/Phone.js:479
+#: js/Phone.js:484
 msgid "enter searchfilter"
 msgstr ""
 
-#: js/Phone.js:493
+#: js/Phone.js:498
 msgid "Search:"
 msgstr ""
 
-#: js/Phone.js:578
+#: js/Phone.js:583
 msgid "Source or Destination"
 msgstr ""
 
-#: js/Phone.js:594
+#: js/Phone.js:599
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr ""
 
-#: js/Phone.js:595 js/Phone.js:633
+#: js/Phone.js:600 js/Phone.js:638
 msgid "No calls to display"
 msgstr ""
 
-#: js/Phone.js:600
+#: js/Phone.js:605
 msgid "Direction"
 msgstr ""
 
-#: js/Phone.js:601
+#: js/Phone.js:606
 msgid "Source"
 msgstr ""
 
-#: js/Phone.js:602
+#: js/Phone.js:607
 msgid "Caller Id"
 msgstr ""
 
-#: js/Phone.js:603
+#: js/Phone.js:608
 msgid "Destination"
 msgstr ""
 
-#: js/Phone.js:604
+#: js/Phone.js:609
 msgid "Start"
 msgstr ""
 
-#: js/Phone.js:605
+#: js/Phone.js:610
 msgid "Connected"
 msgstr ""
 
-#: js/Phone.js:606
+#: js/Phone.js:611
 msgid "Disconnected"
 msgstr ""
 
-#: js/Phone.js:607
+#: js/Phone.js:612
 msgid "Duration"
 msgstr ""
 
-#: js/Phone.js:608
+#: js/Phone.js:613
 msgid "Ringing"
 msgstr ""
 
-#: js/Phone.js:609
+#: js/Phone.js:614
 msgid "Call ID"
 msgstr ""

@@ -24,12 +24,11 @@ msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
-#: js/Tasks.js:731
+#: js/Tasks.js:141 js/Tasks.js:554 js/Tasks.js:703 js/Tasks.js:728
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/Tasks.js:141 js/Tasks.js:731
+#: js/Tasks.js:141 js/Tasks.js:728
 msgid "Could not delete task(s)."
 msgstr "Konnte Aufgabe(n) nicht löschen."
 
@@ -47,136 +46,136 @@ msgid_plural "Delete tasks"
 msgstr[0] "Aufgabe löschen"
 msgstr[1] "Aufgaben löschen"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
-msgid "Could not save task."
-msgstr "Konnte Aufgabe nicht speichern."
-
-#: js/Tasks.js:303
+#: js/Tasks.js:300
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Tasks.js:304 js/Tasks.js:631
+#: js/Tasks.js:301 js/Tasks.js:628
 msgid "to do lists"
 msgstr "Aufgabenlisten"
 
-#: js/Tasks.js:305 js/Tasks.js:629 js/Tasks.js:630
+#: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
 msgid "to do list"
 msgstr "ToDo Liste"
 
-#: js/Tasks.js:326
+#: js/Tasks.js:323
 msgid "Enter searchfilter"
 msgstr "Suchfilter eingeben"
 
-#: js/Tasks.js:341
+#: js/Tasks.js:338
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Tasks.js:391
+#: js/Tasks.js:388
 msgid "Search:"
 msgstr "Suchen nach:"
 
-#: js/Tasks.js:401
+#: js/Tasks.js:398
 msgid "Displaying tasks {0} - {1} of {2}"
 msgstr "Zeige Aufgabe {0} - {1} von {2}"
 
-#: js/Tasks.js:402
+#: js/Tasks.js:399
 msgid "No tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:418 js/Tasks.js:754
+#: js/Tasks.js:415 js/Tasks.js:751
 msgid "Summary"
 msgstr "Beschreibung"
 
-#: js/Tasks.js:426
+#: js/Tasks.js:423
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/Tasks.js:430
+#: js/Tasks.js:427
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/Tasks.js:444 js/Tasks.js:786
+#: js/Tasks.js:441 js/Tasks.js:783
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/Tasks.js:459
+#: js/Tasks.js:456
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/Tasks.js:473 js/Tasks.js:782
+#: js/Tasks.js:470 js/Tasks.js:779
 msgid "Status"
 msgstr "Status"
 
-#: js/Tasks.js:495
+#: js/Tasks.js:492
 msgid "No Tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:641
+#: js/Tasks.js:554 js/Tasks.js:703
+msgid "Could not save task."
+msgstr "Konnte Aufgabe nicht speichern."
+
+#: js/Tasks.js:638
 msgid "Loading Task..."
 msgstr "lade Task..."
 
-#: js/Tasks.js:641
+#: js/Tasks.js:638
 msgid "Please Wait"
 msgstr "Bitte warten"
 
-#: js/Tasks.js:652
+#: js/Tasks.js:649
 msgid "Add New Task"
 msgstr "Neuen Task erstellen"
 
-#: js/Tasks.js:654
+#: js/Tasks.js:651
 #, python-format
 msgid "Edit Task \"%s\""
 msgstr "Task \"%s\" bearbeiten"
 
-#: js/Tasks.js:674
+#: js/Tasks.js:671
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Tasks.js:674 js/Tasks.js:719
+#: js/Tasks.js:671 js/Tasks.js:716
 msgid "Saving Task"
 msgstr "Aufgabe speichern"
 
-#: js/Tasks.js:710
+#: js/Tasks.js:707
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Tasks.js:710
+#: js/Tasks.js:707
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die angezeigten Fehler."
 
-#: js/Tasks.js:717
+#: js/Tasks.js:714
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/Tasks.js:717
+#: js/Tasks.js:714
 msgid "Do you really want to delete this task?"
 msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 
-#: js/Tasks.js:719
+#: js/Tasks.js:716
 msgid "Please wait a moment..."
 msgstr "Einen Moment noch..."
 
-#: js/Tasks.js:758
+#: js/Tasks.js:755
 msgid "Enter short name..."
 msgstr "Kurzbezeichnung eingeben..."
 
-#: js/Tasks.js:761
+#: js/Tasks.js:758
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/Tasks.js:763
+#: js/Tasks.js:760
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/Tasks.js:777
+#: js/Tasks.js:774
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/Tasks.js:790
+#: js/Tasks.js:787
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/Tasks.js:794
+#: js/Tasks.js:791
 msgid "Saved in"
 msgstr "Gespeichert in"
 

@@ -53,13 +53,21 @@ msgstr "Исполнимое право необходимо, чтобы име�
 msgid "Tags"
 msgstr "Тэги"
 
-#: Export/Pdf.php:407
+#: Export/Pdf.php:404
 msgid "Export Date"
 msgstr "Экспортировать число"
 
-#: Export/Pdf.php:411
+#: Export/Pdf.php:408
 msgid "Created by"
 msgstr "Установлено"
+
+#: Export/Pdf.php:461 js/widgets/ActivitiesPanel.js:517
+msgid "Activities"
+msgstr "Действия"
+
+#: Export/Pdf.php:473
+msgid "by"
+msgstr ""
 
 #: Http.php:212 js/Tinebase.js:112
 msgid "Authorisation Required"
@@ -464,10 +472,6 @@ msgstr "Показываю действия {0} - {1} of {2}"
 #: js/widgets/ActivitiesPanel.js:418
 msgid "No notes to display"
 msgstr "Никаких примечаний в наличии"
-
-#: js/widgets/ActivitiesPanel.js:517
-msgid "Activities"
-msgstr "Действия"
 
 #: js/widgets/ActivitiesPanel.js:530
 msgid "Time"

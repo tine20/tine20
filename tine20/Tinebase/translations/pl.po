@@ -50,13 +50,21 @@ msgstr ""
 msgid "Tags"
 msgstr "Tagi"
 
-#: Export/Pdf.php:407
+#: Export/Pdf.php:404
 msgid "Export Date"
 msgstr "Export danych"
 
-#: Export/Pdf.php:411
+#: Export/Pdf.php:408
 msgid "Created by"
 msgstr "Utworzone przez"
+
+#: Export/Pdf.php:461 js/widgets/ActivitiesPanel.js:517
+msgid "Activities"
+msgstr ""
+
+#: Export/Pdf.php:473
+msgid "by"
+msgstr ""
 
 #: Http.php:212 js/Tinebase.js:112
 msgid "Authorisation Required"
@@ -459,10 +467,6 @@ msgstr ""
 
 #: js/widgets/ActivitiesPanel.js:418
 msgid "No notes to display"
-msgstr ""
-
-#: js/widgets/ActivitiesPanel.js:517
-msgid "Activities"
 msgstr ""
 
 #: js/widgets/ActivitiesPanel.js:530

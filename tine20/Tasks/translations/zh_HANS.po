@@ -23,12 +23,11 @@ msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "确实想删除选中的任务？"
 
-#: js/Tasks.js:141 js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
-#: js/Tasks.js:731
+#: js/Tasks.js:141 js/Tasks.js:554 js/Tasks.js:703 js/Tasks.js:728
 msgid "Failed"
 msgstr "失败"
 
-#: js/Tasks.js:141 js/Tasks.js:731
+#: js/Tasks.js:141 js/Tasks.js:728
 msgid "Could not delete task(s)."
 msgstr "不能删除任务"
 
@@ -45,136 +44,136 @@ msgid "Delete task"
 msgid_plural "Delete tasks"
 msgstr[0] "删除任务"
 
-#: js/Tasks.js:270 js/Tasks.js:557 js/Tasks.js:706
-msgid "Could not save task."
-msgstr "不能保存任务"
-
-#: js/Tasks.js:303
+#: js/Tasks.js:300
 msgid "Tasks"
 msgstr "任务"
 
-#: js/Tasks.js:304 js/Tasks.js:631
+#: js/Tasks.js:301 js/Tasks.js:628
 msgid "to do lists"
 msgstr "to do 列表"
 
-#: js/Tasks.js:305 js/Tasks.js:629 js/Tasks.js:630
+#: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
 msgid "to do list"
 msgstr "to do 列表"
 
-#: js/Tasks.js:326
+#: js/Tasks.js:323
 msgid "Enter searchfilter"
 msgstr "输入搜索过滤器"
 
-#: js/Tasks.js:341
+#: js/Tasks.js:338
 msgid "Show closed"
 msgstr "显示关闭的"
 
-#: js/Tasks.js:391
+#: js/Tasks.js:388
 msgid "Search:"
 msgstr "搜索："
 
-#: js/Tasks.js:401
+#: js/Tasks.js:398
 msgid "Displaying tasks {0} - {1} of {2}"
 msgstr "显示任务 {0} - {1} of {2}"
 
-#: js/Tasks.js:402
+#: js/Tasks.js:399
 msgid "No tasks to display"
 msgstr "没有任务要显示"
 
-#: js/Tasks.js:418 js/Tasks.js:754
+#: js/Tasks.js:415 js/Tasks.js:751
 msgid "Summary"
 msgstr "摘要"
 
-#: js/Tasks.js:426
+#: js/Tasks.js:423
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/Tasks.js:430
+#: js/Tasks.js:427
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/Tasks.js:444 js/Tasks.js:786
+#: js/Tasks.js:441 js/Tasks.js:783
 msgid "Priority"
 msgstr "优先"
 
-#: js/Tasks.js:459
+#: js/Tasks.js:456
 msgid "Percent"
 msgstr "百分比"
 
-#: js/Tasks.js:473 js/Tasks.js:782
+#: js/Tasks.js:470 js/Tasks.js:779
 msgid "Status"
 msgstr "状态"
 
-#: js/Tasks.js:495
+#: js/Tasks.js:492
 msgid "No Tasks to display"
 msgstr "没有任务要显示"
 
-#: js/Tasks.js:641
+#: js/Tasks.js:554 js/Tasks.js:703
+msgid "Could not save task."
+msgstr "不能保存任务"
+
+#: js/Tasks.js:638
 msgid "Loading Task..."
 msgstr "加载任务..."
 
-#: js/Tasks.js:641
+#: js/Tasks.js:638
 msgid "Please Wait"
 msgstr "请稍等"
 
-#: js/Tasks.js:652
+#: js/Tasks.js:649
 msgid "Add New Task"
 msgstr "添加新任务"
 
-#: js/Tasks.js:654
+#: js/Tasks.js:651
 #, python-format
 msgid "Edit Task \"%s\""
 msgstr "编辑任务 \"%s\""
 
-#: js/Tasks.js:674
+#: js/Tasks.js:671
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Tasks.js:674 js/Tasks.js:719
+#: js/Tasks.js:671 js/Tasks.js:716
 msgid "Saving Task"
 msgstr "保存任务"
 
-#: js/Tasks.js:710
+#: js/Tasks.js:707
 msgid "Errors"
 msgstr "错误"
 
-#: js/Tasks.js:710
+#: js/Tasks.js:707
 msgid "Please fix the errors noted."
 msgstr "请修改标注的错误"
 
-#: js/Tasks.js:717
+#: js/Tasks.js:714
 msgid "Confirm"
 msgstr "确认"
 
-#: js/Tasks.js:717
+#: js/Tasks.js:714
 msgid "Do you really want to delete this task?"
 msgstr "确实要删除这个任务？"
 
-#: js/Tasks.js:719
+#: js/Tasks.js:716
 msgid "Please wait a moment..."
 msgstr "请稍等一会儿..."
 
-#: js/Tasks.js:758
+#: js/Tasks.js:755
 msgid "Enter short name..."
 msgstr "输入短名..."
 
-#: js/Tasks.js:761
+#: js/Tasks.js:758
 msgid "Notes"
 msgstr "注释"
 
-#: js/Tasks.js:763
+#: js/Tasks.js:760
 msgid "Enter description..."
 msgstr "输入描述"
 
-#: js/Tasks.js:777
+#: js/Tasks.js:774
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/Tasks.js:790
+#: js/Tasks.js:787
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/Tasks.js:794
+#: js/Tasks.js:791
 msgid "Saved in"
 msgstr "保存到"
 
