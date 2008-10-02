@@ -115,9 +115,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         // change timezone of current php process to usertimezone to let new dates be in the users timezone
         // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
         //       lead to incorrect results on DST transistions 
-        $userTimezone = Zend_Registry::get('userTimeZone');
-        $serverTimezone = date_default_timezone_get();
-        date_default_timezone_set($userTimezone);
+        date_default_timezone_set(Zend_Registry::get('userTimeZone'));
         
         // cut the timezone-offset from the iso representation in order to force Zend_Date to create dates in the user timezone.
         // otherwise they will be created with Etc/GMT+<offset> as timezone which would lead in incorrect results!
@@ -135,6 +133,6 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         $this->setTimezone($serverTimezone);
         
         // finally reset timzone of current php process to the configured server timezone (UTC)
-        date_default_timezone_set($serverTimezone);
+        date_default_timezone_set('UTC');
     }
 }
