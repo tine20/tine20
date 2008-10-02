@@ -720,7 +720,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         linkTask: null,
         unlinkTask: null,
         unlinkProduct: null,
-        exportLead: null
+        exportLead: null,
+        changeContactType: null
 	},
 	
     /**
@@ -749,6 +750,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({});        	
             
             contactWindow.on('update', function(contact) {
+            	// @deprecated
                 switch ( _button.contactType ) {
                 	case 'responsible':
                 	   contact.data.relation_type = 'responsible';
@@ -774,6 +776,20 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             contactWindow.on('update', this.onContactUpdate, this);            
         },
 
+        /**
+         * onclick handler for changeContactType
+         */
+        changeContactType: function(_button, _event) {        	
+        	var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
+        	var store = Ext.StoreMgr.lookup('ContactsStore');
+        	
+            for (var i = 0; i < selectedRows.length; ++i) {
+                selectedRows[i].data.relation_type = _button.contactType;                
+            }                   	
+            
+            store.fireEvent('dataChanged', store);
+        },
+        
         /**
          * onclick handler for add task
          * 
@@ -1363,6 +1379,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 rowItems = [
                     this.actions.editContact,
                     this.actions.unlinkContact,
+                    {
+                    	text: this.translation._('Change contact type'),
+                    	menu: [
+                    	   this.actions.changeContactTypeResponsible,
+                           this.actions.changeContactTypeCustomer,
+                           this.actions.changeContactTypePartner
+                    	]
+                    },
                     '-',
                     this.actions.addContact
                 ];
@@ -1591,7 +1615,37 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             scope: this,
             handler: this.handlers.addContact
         }); 
+
+        this.actions.changeContactTypeCustomer = new Ext.Action({
+            requiredGrant: 'editGrant',
+            contactType: 'customer',
+            text: this.translation._('Customer'),
+            tooltip: this.translation._('Change type to Customer'),
+            iconCls: 'contactIconCustomer',
+            scope: this,
+            handler: this.handlers.changeContactType
+        }); 
         
+        this.actions.changeContactTypeResponsible = new Ext.Action({
+            requiredGrant: 'editGrant',
+            contactType: 'responsible',
+            text: this.translation._('Responsible'),
+            tooltip: this.translation._('Change type to Responsible'),
+            iconCls: 'contactIconResponsible',
+            scope: this,
+            handler: this.handlers.changeContactType
+        }); 
+
+        this.actions.changeContactTypePartner = new Ext.Action({
+            requiredGrant: 'editGrant',
+            contactType: 'partner',
+            text: this.translation._('Partner'),
+            tooltip: this.translation._('Change type to Partner'),
+            iconCls: 'contactIconPartner',
+            scope: this,
+            handler: this.handlers.changeContactType
+        }); 
+
         this.actions.editContact = new Ext.Action({
             requiredGrant: 'editGrant',
             text: this.translation._('Edit contact'),
