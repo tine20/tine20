@@ -7,9 +7,12 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
 
+/**
+ * NOTE: init.js is included before the tine2.0 code!
+ */
+ 
 /** --------------------- Ultra Geneirc Javacipt Stuff --------------------- **/
 
 /**
@@ -43,11 +46,11 @@ if (window.google && google.gears) {
  * don't fill the ext stats
  */
 Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
+
 /**
  * init ext quick tips
  */
 Ext.QuickTips.init();
-
 
 /**
  * additional date patterns
