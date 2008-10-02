@@ -123,7 +123,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         // otherwise they will be created with Etc/GMT+<offset> as timezone which would lead in incorrect results!
         foreach ($this->_datetimeFields as $fieldName) {
             if (array_key_exists($fieldName, $data)) {
-                $data[$fieldName] = preg_replace('/\+\d{2}:\d{2}/', '', $data[$fieldName]);
+                $data[$fieldName] = preg_replace('/[+\-]{1}\d{2}:\d{2}/', '', $data[$fieldName]);
+                $data[$fieldName] = str_replace('T', ' ', $data[$fieldName]);
             }
         }
 
