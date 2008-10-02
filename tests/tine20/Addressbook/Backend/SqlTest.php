@@ -161,7 +161,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     	$dummy = array(
 					'test_id'=>2, 
 					'test_2'=>'',
-					'date_single' => $date->get(ISO8601LONG), 
+					'date_single' => $date->get(Tinebase_Record_Abstract::ISO8601LONG), 
 					'date_multiple'=>'');
   	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
   	  	

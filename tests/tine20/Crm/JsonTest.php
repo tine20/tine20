@@ -294,7 +294,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Crm_Json();
         $emptyLead = $json->getLead(NULL);
         
-        $startDate = new Zend_Date($emptyLead['start'], ISO8601LONG);
+        $startDate = new Zend_Date($emptyLead['start'], Tinebase_Record_Abstract::ISO8601LONG);
         
         sleep(1);
         

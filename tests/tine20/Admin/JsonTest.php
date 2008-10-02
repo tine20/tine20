@@ -320,7 +320,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $from->sub('02:00:00',Zend_Date::TIMES);
         $to = new Zend_Date ();
         
-        $accessLogs = $json->getAccessLogEntries($from->get(ISO8601LONG), $to->get(ISO8601LONG), NULL, '{"sort":"li","dir":"DESC","start":0,"limit":50}');
+        $accessLogs = $json->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), NULL, '{"sort":"li","dir":"DESC","start":0,"limit":50}');
         
         //print_r ( $accessLogs );
       
@@ -341,7 +341,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $from->sub('02:00:00',Zend_Date::TIMES);
         $to = new Zend_Date ();
         
-        $accessLogs = $json->getAccessLogEntries($from->get(ISO8601LONG), $to->get(ISO8601LONG), 'tine20admin', '{"sort":"li","dir":"DESC","start":0,"limit":50}');
+        $accessLogs = $json->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), 'tine20admin', '{"sort":"li","dir":"DESC","start":0,"limit":50}');
 
         //print_r ( $accessLogs );
         
@@ -354,7 +354,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $json->deleteAccessLogEntries( Zend_Json::encode($deleteLogIds) );
         
         // check total count
-        $accessLogs = $json->getAccessLogEntries($from->get(ISO8601LONG), $to->get(ISO8601LONG), 'tine20admin', 'id', 'ASC', 0, 10);
+        $accessLogs = $json->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), 'tine20admin', 'id', 'ASC', 0, 10);
         $this->assertEquals(0, sizeof($accessLogs['results']), 'results not matched');
         $this->assertEquals(0, $accessLogs['totalcount'], 'totalcount not matched');
     }        
