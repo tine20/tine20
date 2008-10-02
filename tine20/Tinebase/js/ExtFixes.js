@@ -47,6 +47,26 @@ Ext.form.DateField.prototype.getValue = function(){
     return value || "";
 };
 
+/**
+ * fix interpretation of ISO-8601  formatcode ('c') 
+ * 
+ * Browsers do not support timezones and also javascripts Date object has no 
+ * support for it.  All Date Objects are in _one_ timezone which may ore may 
+ * not be the operating systems timezone the browser runs on.
+ * 
+ * parsing dates in ISO format having the timeshift appended ('c') lead to 
+ * correctly converted Date Objects in the browsers timezone. This timezone 
+ * conversion changes the the Date Parts and as such, javascipt widget 
+ * representing date time information print values of the browsers timezone 
+ * and _not_ the values send by the server!
+ * 
+ * So in a multi timezone envireonment, datetime information in the browser 
+ * _must not_ be parsed including the offset. Just the values of the server 
+ * side converted datetime information are allowed to be parsed.
+ */
+Date.parseIso = function(isoString) {
+    return Date.parseDate(isoString.replace(/\+\d{2}\d{2}/, ''), 'Y-m-d\\Th:i:s');
+};
 
 
 /**

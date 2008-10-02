@@ -197,7 +197,7 @@ class Tasks_Setup_MigrateFromTine14
             if (!$class) {
                 $identifier = $classTable->insert(array(
                     'created_by'    => Zend_Registry::get('currentAccount')->getId(),
-                    'creation_time' => Zend_Date::now()->getIso(),
+                    'creation_time' => Zend_Date::now()->get(ISO8601LONG),
                     'class'         => $oldclass
                 ));
                 $classes[$oldclass] = $identifier;
@@ -227,7 +227,7 @@ class Tasks_Setup_MigrateFromTine14
             if (!$status) {
                 $identifier = $statusTable->insert(array(
                     'created_by'    => Zend_Registry::get('currentAccount')->getId(),
-                    'creation_time' => Zend_Date::now()->getIso(),
+                    'creation_time' => Zend_Date::now()->get(ISO8601LONG),
                     'status'         => $oldstatus
                 ));
                 $stati[$oldstatus] = $identifier;

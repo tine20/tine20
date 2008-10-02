@@ -237,7 +237,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                         
                         // get due date
                         if ( !empty($task->due) ) {
-                            $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
+                            $dueDate = new Zend_Date ( $task->due, ISO8601LONG );                 
                             $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
                         }    
                         

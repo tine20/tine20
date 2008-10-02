@@ -421,7 +421,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         foreach ($_toConvert as $field => &$value) {
             if ($value instanceof Zend_Date) {
-                $_toConvert[$field] = $value->get(Zend_Date::ISO_8601);
+                $_toConvert[$field] = $value->get(ISO8601LONG);
             } elseif (is_array($value)) {
                 $this->_convertZendDateToISO8601($value);
             }
@@ -442,10 +442,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             if(is_array($_data[$field])) {
                 foreach($_data[$field] as $dataKey => $dataValue) {
                 	if ($dataValue instanceof Zend_Date) continue;
-                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, Zend_Date::ISO_8601);
+                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, ISO8601LONG);
                 }
             } else {
-                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], Zend_Date::ISO_8601);
+                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], ISO8601LONG);
             }
         }
     }

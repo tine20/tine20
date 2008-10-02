@@ -144,7 +144,7 @@ class Tinebase_Tags
         $_tag->setId($newId);
         $_tag->occurrence = 0;
         $_tag->created_by = Zend_Registry::get('currentAccount')->getId();
-        $_tag->creation_time = Zend_Date::now()->getIso();
+        $_tag->creation_time = Zend_Date::now()->get(ISO8601LONG);
         
         switch ($_tag->type) {
             case Tinebase_Model_Tag::TYPE_PERSONAL:
@@ -212,7 +212,7 @@ class Tinebase_Tags
                 'description'        => $_tag->description,
                 'color'              => $_tag->color,
                 'last_modified_by'   => $currentAccountId,
-                'last_modified_time' => Zend_Date::now()->getIso()
+                'last_modified_time' => Zend_Date::now()->get(ISO8601LONG)
             ), $this->_db->quoteInto('id = ?', $tagId));
             
             $tags = $this->getTagsById($tagId);
@@ -249,7 +249,7 @@ class Tinebase_Tags
         $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
             'is_deleted'   => true,
             'deleted_by'   => $currentAccountId,
-            'deleted_time' => Zend_Date::now()->getIso()
+            'deleted_time' => Zend_Date::now()->get(ISO8601LONG)
         ), $this->_db->quoteInto('id IN (?)', $tags->getArrayOfIds()));
     }
     

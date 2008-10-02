@@ -147,7 +147,7 @@ class Tinebase_Record_PersistentObserver
         	$this->_db->update(array(
         	    'is_deleted'   => true,
         	    'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
-        	    'deleted_time' => Zend_Date::now()->getIso()
+        	    'deleted_time' => Zend_Date::now()->get(ISO8601LONG)
         	), $where);
         }
     } // end of member function removeObserver
@@ -168,7 +168,7 @@ class Tinebase_Record_PersistentObserver
             $this->_db->update(array(
                 'is_deleted'   => true,
                 'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
-                'deleted_time' => Zend_Date::now()->getIso()
+                'deleted_time' => Zend_Date::now()->get(ISO8601LONG)
             ), $where);
     	} else {
     		throw new Tinebase_Record_Exception_DefinitionFailure();

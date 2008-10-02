@@ -117,7 +117,7 @@ class Tinebase_Relation_Backend_Sql
     	$this->_db->update(array(
     	    'is_deleted'   => true,
     	    'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
-    	    'deleted_time' => Zend_Date::now()->getIso()
+    	    'deleted_time' => Zend_Date::now()->get(ISO8601LONG)
     	), $where);
     } // end of member function breakRelation
     
@@ -142,7 +142,7 @@ class Tinebase_Relation_Backend_Sql
             $this->_db->update(array(
                 'is_deleted'   => true,
                 'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
-                'deleted_time' => Zend_Date::now()->getIso()
+                'deleted_time' => Zend_Date::now()->get(ISO8601LONG)
             ), $where);
         }
     } // end of member function breakAllRelations

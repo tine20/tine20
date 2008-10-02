@@ -94,10 +94,13 @@ class Tinebase_Controller
         }
         Zend_Registry::set('configFile', $this->_config);
         
+        define('ISO8601LONG',          'YYYY-MM-dd HH:mm:ss');
+        
         define('TINE20_BUILDTYPE',     strtoupper($this->_config->get('buildtype', 'DEVELOPMENT')));
         define('TINE20_CODENAME',      'trunk');
         define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   Zend_Date::now()->getIso());
+        define('TINE20_RELEASETIME',   Zend_Date::now()->get(ISO8601LONG));
+        
         
         
         $this->_session = new Zend_Session_Namespace('tinebase');

@@ -24,8 +24,8 @@ class Felamimail_Json extends Tinebase_Application_Json_Abstract
         );
         
         foreach($result['results'] as $key => $message) {
-            $result['results'][$key]['sent']     = $message['sent']->get(Zend_Date::ISO_8601);
-            $result['results'][$key]['received'] = $message['received']->get(Zend_Date::ISO_8601);
+            $result['results'][$key]['sent']     = $message['sent']->get(ISO8601LONG);
+            $result['results'][$key]['received'] = $message['received']->get(ISO8601LONG);
         }
         
         return $result;

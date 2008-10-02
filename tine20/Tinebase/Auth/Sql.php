@@ -75,7 +75,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['password'] = ( $_encrypt ) ? md5($_password) : $_password;
-        $accountData['last_password_change'] = Zend_Date::now()->getIso();
+        $accountData['last_password_change'] = Zend_Date::now()->get(ISO8601LONG);
         
         $where = array(
             $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('login_name') . ' = ?', $_loginName)

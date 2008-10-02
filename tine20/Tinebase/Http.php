@@ -371,7 +371,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	    $tempFile = new Tinebase_Model_TempFile(array(
 	       'id'          => $id,
            'session_id'  => session_id(),
-           'time'        => Zend_Date::now()->getIso(),
+           'time'        => Zend_Date::now()->get(ISO8601LONG),
            'path'        => $path,
            'name'        => $uploadedFile['name'],
            'type'        => $uploadedFile['type'],
