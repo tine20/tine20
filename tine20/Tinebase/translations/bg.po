@@ -897,895 +897,895 @@ msgid "record changed"
 msgstr "променена документация"
 
 #, fuzzy
-msgid "contacts"
-msgstr "съдържа"
+#~ msgid "contacts"
+#~ msgstr "съдържа"
 
 #, fuzzy
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Наистина ли желаете да изтриете "
-msgstr[1] "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete the selected contact?"
+#~ msgid_plural "Do you really want to delete the selected contacts?"
+#~ msgstr[0] "Наистина ли желаете да изтриете "
+#~ msgstr[1] "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "Deleting contact..."
-msgid_plural "Deleting contacts..."
-msgstr[0] "Изтрива таг"
-msgstr[1] "Изтрива тагове"
+#~ msgid "Deleting contact..."
+#~ msgid_plural "Deleting contacts..."
+#~ msgstr[0] "Изтрива таг"
+#~ msgstr[1] "Изтрива тагове"
 
 #, fuzzy
-msgid "add contact"
-msgstr "Вкарай достъп"
+#~ msgid "add contact"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "edit contact"
-msgstr "Задай таг"
+#~ msgid "edit contact"
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "изтрий"
-msgstr[1] "изтрий"
+#~ msgid "delete contact"
+#~ msgid_plural "delete contacts"
+#~ msgstr[0] "изтрий"
+#~ msgstr[1] "изтрий"
 
 #, fuzzy
-msgid "Last Name"
-msgstr "Име"
+#~ msgid "Last Name"
+#~ msgstr "Име"
 
 #, fuzzy
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying contacts {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No contacts to display"
-msgstr "Няма намерени записи"
+#~ msgid "No contacts to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "Full Name"
-msgstr "Име"
+#~ msgid "Full Name"
+#~ msgstr "Име"
 
 #, fuzzy
-msgid "Display Name"
-msgstr "Фамилия"
+#~ msgid "Display Name"
+#~ msgstr "Фамилия"
 
 #, fuzzy
-msgid "addressbook"
-msgstr "Имейл"
+#~ msgid "addressbook"
+#~ msgstr "Имейл"
 
 #, fuzzy
-msgid "Loading Contact..."
-msgstr "Вашите входни данни се обработват..."
+#~ msgid "Loading Contact..."
+#~ msgstr "Вашите входни данни се обработват..."
 
 #, fuzzy
-msgid "Add new contact"
-msgstr "Добави нова записка"
+#~ msgid "Add new contact"
+#~ msgstr "Добави нова записка"
 
 #, fuzzy
-msgid "Could not save contact."
-msgstr "Тага не беше създаден."
+#~ msgid "Could not save contact."
+#~ msgstr "Тага не беше създаден."
 
 #, fuzzy
-msgid "Please fix the errors noted."
-msgstr "Моля задайте новото име на"
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Моля задайте новото име на"
 
 #, fuzzy
-msgid "Title"
-msgstr "Време"
+#~ msgid "Title"
+#~ msgstr "Време"
 
 #, fuzzy
-msgid "Enter description"
-msgstr "Задай описание"
+#~ msgid "Enter description"
+#~ msgstr "Задай описание"
 
 #, fuzzy
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Вход"
-msgstr[1] "Вход"
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "Вход"
+#~ msgstr[1] "Вход"
 
 #, fuzzy
-msgid "Shared Tags"
-msgstr "Общи  %s"
+#~ msgid "Shared Tags"
+#~ msgstr "Общи  %s"
 
 #, fuzzy
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "delete entry"
-msgstr "изтрий"
+#~ msgid "delete entry"
+#~ msgstr "изтрий"
 
 #, fuzzy
-msgid "select all"
-msgstr "селектирай поле"
+#~ msgid "select all"
+#~ msgstr "селектирай поле"
 
 #, fuzzy
-msgid "Search:"
-msgstr "Търси"
+#~ msgid "Search:"
+#~ msgstr "Търси"
 
 #, fuzzy
-msgid "invalid password"
-msgstr "Стара парола"
+#~ msgid "invalid password"
+#~ msgstr "Стара парола"
 
 #, fuzzy
-msgid "failure"
-msgstr "Грешка"
+#~ msgid "failure"
+#~ msgstr "Грешка"
 
 #, fuzzy
-msgid "success"
-msgstr "Успех"
+#~ msgid "success"
+#~ msgstr "Успех"
 
 #, fuzzy
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No access log entries to display"
-msgstr "Няма намерени записи"
+#~ msgid "No access log entries to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "Login Name"
-msgstr "Потребителско име"
+#~ msgid "Login Name"
+#~ msgstr "Потребителско име"
 
 #, fuzzy
-msgid "Login Time"
-msgstr "Потребителско име"
+#~ msgid "Login Time"
+#~ msgstr "Потребителско име"
 
 #, fuzzy
-msgid "Logout Time"
-msgstr "Изход"
+#~ msgid "Logout Time"
+#~ msgstr "Изход"
 
 #, fuzzy
-msgid "settings"
-msgstr "Създаване"
+#~ msgid "settings"
+#~ msgstr "Създаване"
 
 #, fuzzy
-msgid "enabled"
-msgstr "Грешка"
+#~ msgid "enabled"
+#~ msgstr "Грешка"
 
 #, fuzzy
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying application {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No applications to display"
-msgstr "Няма намерени тагове"
+#~ msgid "No applications to display"
+#~ msgstr "Няма намерени тагове"
 
 #, fuzzy
-msgid "order"
-msgstr "Папка"
+#~ msgid "order"
+#~ msgstr "Папка"
 
 #, fuzzy
-msgid "name"
-msgstr "Преименуване"
+#~ msgid "name"
+#~ msgstr "Преименуване"
 
 #, fuzzy
-msgid "version"
-msgstr "Провери версия"
+#~ msgid "version"
+#~ msgstr "Провери версия"
 
 #, fuzzy
-msgid "Set new password"
-msgstr "Повтори новата парола"
+#~ msgid "Set new password"
+#~ msgstr "Повтори новата парола"
 
 #, fuzzy
-msgid "Please enter the new password:"
-msgstr "Моля задайте новото име на"
+#~ msgid "Please enter the new password:"
+#~ msgstr "Моля задайте новото име на"
 
 #, fuzzy
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No accounts to display"
-msgstr "Няма намерени записи"
+#~ msgid "No accounts to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "Displayname"
-msgstr "Фамилия"
+#~ msgid "Displayname"
+#~ msgstr "Фамилия"
 
 #, fuzzy
-msgid "Loginname"
-msgstr "Потребителско име"
+#~ msgid "Loginname"
+#~ msgstr "Потребителско име"
 
 #, fuzzy
-msgid "Last name"
-msgstr "име на таг"
+#~ msgid "Last name"
+#~ msgstr "име на таг"
 
 #, fuzzy
-msgid "First name"
-msgstr "Фамилия"
+#~ msgid "First name"
+#~ msgstr "Фамилия"
 
 #, fuzzy
-msgid "Last login at"
-msgstr "Потребителско име"
+#~ msgid "Last login at"
+#~ msgstr "Потребителско име"
 
 #, fuzzy
-msgid "Password changed"
-msgstr "Парола"
+#~ msgid "Password changed"
+#~ msgstr "Парола"
 
 #, fuzzy
-msgid "edit account"
-msgstr "Вкарай достъп"
+#~ msgid "edit account"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "delete account"
-msgstr "Вкарай достъп"
+#~ msgid "delete account"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "enable account"
-msgstr "Вкарай достъп"
+#~ msgid "enable account"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "disable account"
-msgstr "Вкарай достъп"
+#~ msgid "disable account"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "reset password"
-msgstr "Нова парола"
+#~ msgid "reset password"
+#~ msgstr "Нова парола"
 
 #, fuzzy
-msgid "Deleting account..."
-msgstr "Изтрива таг"
+#~ msgid "Deleting account..."
+#~ msgstr "Изтрива таг"
 
 #, fuzzy
-msgid "Could not save user account."
-msgstr "Тага не беше създаден."
+#~ msgid "Could not save user account."
+#~ msgstr "Тага не беше създаден."
 
 #, fuzzy
-msgid "no password set"
-msgstr "Смени парола"
+#~ msgid "no password set"
+#~ msgstr "Смени парола"
 
 #, fuzzy
-msgid "Password again"
-msgstr "Парола"
+#~ msgid "Password again"
+#~ msgstr "Парола"
 
 #, fuzzy
-msgid "Password set"
-msgstr "Парола"
+#~ msgid "Password set"
+#~ msgstr "Парола"
 
 #, fuzzy
-msgid "Add New User Account"
-msgstr "Добави нов собствен таг"
+#~ msgid "Add New User Account"
+#~ msgstr "Добави нов собствен таг"
 
 #, fuzzy
-msgid "Do you really want to delete the selected groups?"
-msgstr "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete the selected groups?"
+#~ msgstr "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "Deleting group(s)..."
-msgstr "Изтрива таг"
+#~ msgid "Deleting group(s)..."
+#~ msgstr "Изтрива таг"
 
 #, fuzzy
-msgid "add group"
-msgstr "Вкарай достъп"
+#~ msgid "add group"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "delete group"
-msgstr "изтрий"
+#~ msgid "delete group"
+#~ msgstr "изтрий"
 
 #, fuzzy
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying groups {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No groups to display"
-msgstr "Няма намерени тагове"
+#~ msgid "No groups to display"
+#~ msgstr "Няма намерени тагове"
 
 #, fuzzy
-msgid "Updating Memberships"
-msgstr "Запаметяване на правата"
+#~ msgid "Updating Memberships"
+#~ msgstr "Запаметяване на правата"
 
 #, fuzzy
-msgid "Could not save group."
-msgstr "Тага не беше създаден."
+#~ msgid "Could not save group."
+#~ msgstr "Тага не беше създаден."
 
 #, fuzzy
-msgid "Deleting group..."
-msgstr "Изтрива таг"
+#~ msgid "Deleting group..."
+#~ msgstr "Изтрива таг"
 
 #, fuzzy
-msgid "Group Name"
-msgstr "Обрежи имидж"
+#~ msgid "Group Name"
+#~ msgstr "Обрежи имидж"
 
 #, fuzzy
-msgid "Add new group"
-msgstr "Добави нова записка"
+#~ msgid "Add new group"
+#~ msgstr "Добави нова записка"
 
 #, fuzzy
-msgid "Do you really want to delete the selected tags?"
-msgstr "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete the selected tags?"
+#~ msgstr "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "Deleting tag(s)..."
-msgstr "Изтрива таг"
+#~ msgid "Deleting tag(s)..."
+#~ msgstr "Изтрива таг"
 
 #, fuzzy
-msgid "add tag"
-msgstr "Задай таг"
+#~ msgid "add tag"
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "edit tag"
-msgstr "Задай таг"
+#~ msgid "edit tag"
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "delete tag"
-msgstr "Изтрий таг"
+#~ msgid "delete tag"
+#~ msgstr "Изтрий таг"
 
 #, fuzzy
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying tags {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No tags to display"
-msgstr "Няма намерени тагове"
+#~ msgid "No tags to display"
+#~ msgstr "Няма намерени тагове"
 
 #, fuzzy
-msgid "Could not save tag."
-msgstr "Тага не беше създаден."
+#~ msgid "Could not save tag."
+#~ msgstr "Тага не беше създаден."
 
 #, fuzzy
-msgid "Deleting tag..."
-msgstr "Изтрива таг"
+#~ msgid "Deleting tag..."
+#~ msgstr "Изтрива таг"
 
 #, fuzzy
-msgid "Use"
-msgstr "Потребител"
+#~ msgid "Use"
+#~ msgstr "Потребител"
 
 #, fuzzy
-msgid "Tag Name"
-msgstr "име на таг"
+#~ msgid "Tag Name"
+#~ msgstr "име на таг"
 
 #, fuzzy
-msgid "Loading Tag..."
-msgstr "Зарежда"
+#~ msgid "Loading Tag..."
+#~ msgstr "Зарежда"
 
 #, fuzzy
-msgid "Add New Tag"
-msgstr "Добави нов собствен таг"
+#~ msgid "Add New Tag"
+#~ msgstr "Добави нов собствен таг"
 
 #, fuzzy
-msgid "Edit Tag \"%s\""
-msgstr "Задай таг"
+#~ msgid "Edit Tag \"%s\""
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "Do you really want to delete the selected roles?"
-msgstr "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete the selected roles?"
+#~ msgstr "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "add role"
-msgstr "Добави записка"
+#~ msgid "add role"
+#~ msgstr "Добави записка"
 
 #, fuzzy
-msgid "delete role"
-msgstr "изтрий"
+#~ msgid "delete role"
+#~ msgstr "изтрий"
 
 #, fuzzy
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying roles {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No roles to display"
-msgstr "Няма намерени записи"
+#~ msgid "No roles to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "Could not save role."
-msgstr "Тага не беше създаден."
+#~ msgid "Could not save role."
+#~ msgstr "Тага не беше създаден."
 
 #, fuzzy
-msgid "Deleting role..."
-msgstr "Изтриване"
+#~ msgid "Deleting role..."
+#~ msgstr "Изтриване"
 
 #, fuzzy
-msgid "Role Name"
-msgstr "Преименуване"
+#~ msgid "Role Name"
+#~ msgstr "Преименуване"
 
 #, fuzzy
-msgid "Loading Role..."
-msgstr "Зарежда"
+#~ msgid "Loading Role..."
+#~ msgstr "Зарежда"
 
 #, fuzzy
-msgid "Add New Role"
-msgstr "Добави нова записка"
+#~ msgid "Add New Role"
+#~ msgstr "Добави нова записка"
 
 #, fuzzy
-msgid "Are you sure you want to delete this lead?"
-msgstr "Наистина ли желаете да излезете?"
+#~ msgid "Are you sure you want to delete this lead?"
+#~ msgstr "Наистина ли желаете да излезете?"
 
 #, fuzzy
-msgid "Deleting lead"
-msgstr "Изтрива таг"
+#~ msgid "Deleting lead"
+#~ msgstr "Изтрива таг"
 
 #, fuzzy
-msgid "Enter searchfilter"
-msgstr "задай филтър на търсене"
+#~ msgid "Enter searchfilter"
+#~ msgstr "задай филтър на търсене"
 
 #, fuzzy
-msgid "leadstate"
-msgstr "Моля изчакайте"
+#~ msgid "leadstate"
+#~ msgstr "Моля изчакайте"
 
 #, fuzzy
-msgid "Show details"
-msgstr "Покажи детайли:"
+#~ msgid "Show details"
+#~ msgstr "Покажи детайли:"
 
 #, fuzzy
-msgid "Displaying leads {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying leads {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "Lead name"
-msgstr "име на таг"
+#~ msgid "Lead name"
+#~ msgstr "име на таг"
 
 #, fuzzy
-msgid "Add lead"
-msgstr "Добави записка"
+#~ msgid "Add lead"
+#~ msgstr "Добави записка"
 
 #, fuzzy
-msgid "Add new lead"
-msgstr "Добави нова записка"
+#~ msgid "Add new lead"
+#~ msgstr "Добави нова записка"
 
 #, fuzzy
-msgid "Edit lead"
-msgstr "Задай таг"
+#~ msgid "Edit lead"
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "Delete lead"
-msgid_plural "Delete leads"
-msgstr[0] "Изтрий таг"
-msgstr[1] "Изтрий тагове"
+#~ msgid "Delete lead"
+#~ msgid_plural "Delete leads"
+#~ msgstr[0] "Изтрий таг"
+#~ msgstr[1] "Изтрий тагове"
 
 #, fuzzy
-msgid "Delete selected leads"
-msgstr "Наистина ли желаете да изтриете селектираният таг?"
+#~ msgid "Delete selected leads"
+#~ msgstr "Наистина ли желаете да изтриете селектираният таг?"
 
 #, fuzzy
-msgid "Export as PDF"
-msgstr "Експортирай датата"
+#~ msgid "Export as PDF"
+#~ msgstr "Експортирай датата"
 
 #, fuzzy
-msgid "Add task"
-msgstr "Добави записка"
+#~ msgid "Add task"
+#~ msgstr "Добави записка"
 
 #, fuzzy
-msgid "Could not save lead."
-msgstr "Тага не беше създаден."
+#~ msgid "Could not save lead."
+#~ msgstr "Тага не беше създаден."
 
 #, fuzzy
-msgid "Address"
-msgstr "Имейл"
+#~ msgid "Address"
+#~ msgstr "Имейл"
 
 #, fuzzy
-msgid "Add a task..."
-msgstr "Добави записка"
+#~ msgid "Add a task..."
+#~ msgstr "Добави записка"
 
 #, fuzzy
-msgid "Add a product..."
-msgstr "Добави записка"
+#~ msgid "Add a product..."
+#~ msgstr "Добави записка"
 
 #, fuzzy
-msgid "No Tasks to display"
-msgstr "Няма намерени тагове"
+#~ msgid "No Tasks to display"
+#~ msgstr "Няма намерени тагове"
 
 #, fuzzy
-msgid "Add new customer contact"
-msgstr "Добави нов собствен таг"
+#~ msgid "Add new customer contact"
+#~ msgstr "Добави нов собствен таг"
 
 #, fuzzy
-msgid "Add contact"
-msgstr "Вкарай достъп"
+#~ msgid "Add contact"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "Edit contact"
-msgstr "Задай таг"
+#~ msgid "Edit contact"
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "Add new task"
-msgstr "Добави нова записка"
+#~ msgid "Add new task"
+#~ msgstr "Добави нова записка"
 
 #, fuzzy
-msgid "Edit task"
-msgstr "Задай таг"
+#~ msgid "Edit task"
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "Remove products"
-msgstr "изтрий запис"
+#~ msgid "Remove products"
+#~ msgstr "изтрий запис"
 
 #, fuzzy
-msgid "Leads"
-msgstr "Четене"
+#~ msgid "Leads"
+#~ msgstr "Четене"
 
 #, fuzzy
-msgid "Contacts"
-msgstr "съдържа"
+#~ msgid "Contacts"
+#~ msgstr "съдържа"
 
 #, fuzzy
-msgid "Tasks"
-msgstr "Тагове"
+#~ msgid "Tasks"
+#~ msgstr "Тагове"
 
 #, fuzzy
-msgid "Loading Lead..."
-msgstr "Зарежда"
+#~ msgid "Loading Lead..."
+#~ msgstr "Зарежда"
 
 #, fuzzy
-msgid "Add New Lead"
-msgstr "Добави нова записка"
+#~ msgid "Add New Lead"
+#~ msgstr "Добави нова записка"
 
 #, fuzzy
-msgid "Enter short name"
-msgstr "Задай име на таг"
+#~ msgid "Enter short name"
+#~ msgstr "Задай име на таг"
 
 #, fuzzy
-msgid "End"
-msgstr "и"
+#~ msgid "End"
+#~ msgstr "и"
 
 #, fuzzy
-msgid "folder"
-msgstr "Папка"
+#~ msgid "folder"
+#~ msgstr "Папка"
 
 #, fuzzy
-msgid "Number"
-msgstr "Име"
+#~ msgid "Number"
+#~ msgstr "Име"
 
 #, fuzzy
-msgid "Line"
-msgstr "Вход"
+#~ msgid "Line"
+#~ msgstr "Вход"
 
 #, fuzzy
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying calls {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No calls to display"
-msgstr "Няма намерени тагове"
+#~ msgid "No calls to display"
+#~ msgstr "Няма намерени тагове"
 
 #, fuzzy
-msgid "Duration"
-msgstr "Описание"
+#~ msgid "Duration"
+#~ msgstr "Описание"
 
 #, fuzzy
-msgid "Direction"
-msgstr "Описание"
+#~ msgid "Direction"
+#~ msgstr "Описание"
 
 #, fuzzy
-msgid "Source"
-msgstr "Успех"
+#~ msgid "Source"
+#~ msgstr "Успех"
 
 #, fuzzy
-msgid "Destination"
-msgstr "Описание"
+#~ msgid "Destination"
+#~ msgstr "Описание"
 
 #, fuzzy
-msgid "Do you really want to delete the selected task"
-msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Наистина ли желаете да изтриете "
-msgstr[1] "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete the selected task"
+#~ msgid_plural "Do you really want to delete the selected task"
+#~ msgstr[0] "Наистина ли желаете да изтриете "
+#~ msgstr[1] "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "Could not delete task(s)."
-msgstr "Неуспешно изтриване на тага(-овете)"
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Неуспешно изтриване на тага(-овете)"
 
 #, fuzzy
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Изтрий таг"
-msgstr[1] "Изтрий тагове"
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "Изтрий таг"
+#~ msgstr[1] "Изтрий тагове"
 
 #, fuzzy
-msgid "Could not save task."
-msgstr "Тага не беше създаден."
+#~ msgid "Could not save task."
+#~ msgstr "Тага не беше създаден."
 
 #, fuzzy
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No tasks to display"
-msgstr "Няма намерени тагове"
+#~ msgid "No tasks to display"
+#~ msgstr "Няма намерени тагове"
 
 #, fuzzy
-msgid "Loading Task..."
-msgstr "Зарежда"
+#~ msgid "Loading Task..."
+#~ msgstr "Зарежда"
 
 #, fuzzy
-msgid "Add New Task"
-msgstr "Добави нов собствен таг"
+#~ msgid "Add New Task"
+#~ msgstr "Добави нов собствен таг"
 
 #, fuzzy
-msgid "Do you really want to delete this task?"
-msgstr "Наистина ли желаете да изтриете "
+#~ msgid "Do you really want to delete this task?"
+#~ msgstr "Наистина ли желаете да изтриете "
 
 #, fuzzy
-msgid "Enter short name..."
-msgstr "Задай име на таг"
+#~ msgid "Enter short name..."
+#~ msgstr "Задай име на таг"
 
 #, fuzzy
-msgid "Notes"
-msgstr "Записка"
+#~ msgid "Notes"
+#~ msgstr "Записка"
 
 #, fuzzy
-msgid "Enter description..."
-msgstr "Задай описание"
+#~ msgid "Enter description..."
+#~ msgstr "Задай описание"
 
 #, fuzzy
-msgid "add software"
-msgstr "Добави записка"
+#~ msgid "add software"
+#~ msgstr "Добави записка"
 
 #, fuzzy
-msgid "delete software"
-msgstr "Изтрий филтър"
+#~ msgid "delete software"
+#~ msgstr "Изтрий филтър"
 
 #, fuzzy
-msgid "Search: "
-msgstr "Търси"
+#~ msgid "Search: "
+#~ msgstr "Търси"
 
 #, fuzzy
-msgid "Displaying software {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying software {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No software to display"
-msgstr "Няма намерени записи"
+#~ msgid "No software to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "add template"
-msgstr "Добови филтър"
+#~ msgid "add template"
+#~ msgstr "Добови филтър"
 
 #, fuzzy
-msgid "delete template"
-msgstr "Изтрий имидж"
+#~ msgid "delete template"
+#~ msgstr "Изтрий имидж"
 
 #, fuzzy
-msgid "Displaying template {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying template {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No template to display"
-msgstr "Няма намерени записи"
+#~ msgid "No template to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "Settings"
-msgstr "Създаване"
+#~ msgid "Settings"
+#~ msgstr "Създаване"
 
 #, fuzzy
-msgid "add phone"
-msgstr "Вкарай достъп"
+#~ msgid "add phone"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "delete phone"
-msgstr "изтрий"
+#~ msgid "delete phone"
+#~ msgstr "изтрий"
 
 #, fuzzy
-msgid "Displaying phones {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying phones {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No phones to display"
-msgstr "Няма намерени записи"
+#~ msgid "No phones to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "MAC address"
-msgstr "Имейл"
+#~ msgid "MAC address"
+#~ msgstr "Имейл"
 
 #, fuzzy
-msgid "description"
-msgstr "Описание"
+#~ msgid "description"
+#~ msgstr "Описание"
 
 #, fuzzy
-msgid "Location"
-msgstr "Зарежда"
+#~ msgid "Location"
+#~ msgstr "Зарежда"
 
 #, fuzzy
-msgid "all"
-msgstr "Всички"
+#~ msgid "all"
+#~ msgstr "Всички"
 
 #, fuzzy
-msgid "time"
-msgstr "Време"
+#~ msgid "time"
+#~ msgstr "Време"
 
 #, fuzzy
-msgid "Users"
-msgstr "Потребител"
+#~ msgid "Users"
+#~ msgstr "Потребител"
 
 #, fuzzy
-msgid "web_language"
-msgstr "Език"
+#~ msgid "web_language"
+#~ msgstr "Език"
 
 #, fuzzy
-msgid "language"
-msgstr "Език"
+#~ msgid "language"
+#~ msgstr "Език"
 
 #, fuzzy
-msgid "number + name"
-msgstr "Задай име на таг"
+#~ msgid "number + name"
+#~ msgstr "Задай име на таг"
 
 #, fuzzy
-msgid "normal"
-msgstr "Програмен срив"
+#~ msgid "normal"
+#~ msgstr "Програмен срив"
 
 #, fuzzy
-msgid "add location"
-msgstr "Вкарай достъп"
+#~ msgid "add location"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "edit location"
-msgstr "Задай описание"
+#~ msgid "edit location"
+#~ msgstr "Задай описание"
 
 #, fuzzy
-msgid "Displaying location {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying location {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No location to display"
-msgstr "Няма намерени записи"
+#~ msgid "No location to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "Update Policy"
-msgstr "Актуализиране"
+#~ msgid "Update Policy"
+#~ msgstr "Актуализиране"
 
 #, fuzzy
-msgid "Admin Mode"
-msgstr "Администратор"
+#~ msgid "Admin Mode"
+#~ msgstr "Администратор"
 
 #, fuzzy
-msgid "HTTP User"
-msgstr "Потребител"
+#~ msgid "HTTP User"
+#~ msgstr "Потребител"
 
 #, fuzzy
-msgid "Admin Mode Password"
-msgstr "Стара парола"
+#~ msgid "Admin Mode Password"
+#~ msgstr "Стара парола"
 
 #, fuzzy
-msgid "HTTP Password"
-msgstr "Парола"
+#~ msgid "HTTP Password"
+#~ msgstr "Парола"
 
 #, fuzzy
-msgid "edit setting"
-msgstr "Задай таг"
+#~ msgid "edit setting"
+#~ msgstr "Задай таг"
 
 #, fuzzy
-msgid "delete setting"
-msgstr "Изтриване"
+#~ msgid "delete setting"
+#~ msgstr "Изтриване"
 
 #, fuzzy
-msgid "Displaying settings {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying settings {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No settings to display"
-msgstr "Няма намерени тагове"
+#~ msgid "No settings to display"
+#~ msgstr "Няма намерени тагове"
 
 #, fuzzy
-msgid "delete sipPeer"
-msgstr "Изтрий филтър"
+#~ msgid "delete sipPeer"
+#~ msgstr "Изтрий филтър"
 
 #, fuzzy
-msgid "Displaying sipPeers {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying sipPeers {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No sipPeers to display"
-msgstr "Няма намерени записи"
+#~ msgid "No sipPeers to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "account code"
-msgstr "Вкарай достъп"
+#~ msgid "account code"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "secret"
-msgstr "Потребител"
+#~ msgid "secret"
+#~ msgstr "Потребител"
 
 #, fuzzy
-msgid "type"
-msgstr "Тип"
+#~ msgid "type"
+#~ msgstr "Тип"
 
 #, fuzzy
-msgid "username"
-msgstr "Потребителско име"
+#~ msgid "username"
+#~ msgstr "Потребителско име"
 
 #, fuzzy
-msgid "ip address"
-msgstr "Имейл"
+#~ msgid "ip address"
+#~ msgstr "Имейл"
 
 #, fuzzy
-msgid "auth user"
-msgstr "Други потребители"
+#~ msgid "auth user"
+#~ msgstr "Други потребители"
 
 #, fuzzy
-msgid "From User"
-msgstr "Потребител"
+#~ msgid "From User"
+#~ msgstr "Потребител"
 
 #, fuzzy
-msgid "Allow"
-msgstr "Всички"
+#~ msgid "Allow"
+#~ msgstr "Всички"
 
 #, fuzzy
-msgid "Set Var"
-msgstr "Търси"
+#~ msgid "Set Var"
+#~ msgstr "Търси"
 
 #, fuzzy
-msgid "Auth User"
-msgstr "Други потребители"
+#~ msgid "Auth User"
+#~ msgstr "Други потребители"
 
 #, fuzzy
-msgid "add context"
-msgstr "Вкарай достъп"
+#~ msgid "add context"
+#~ msgstr "Вкарай достъп"
 
 #, fuzzy
-msgid "delete context"
-msgstr "изтрий"
+#~ msgid "delete context"
+#~ msgstr "изтрий"
 
 #, fuzzy
-msgid "Displaying context {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying context {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No context to display"
-msgstr "Няма намерени записи"
+#~ msgid "No context to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "Displaying voicemail {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying voicemail {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No voicemail to display"
-msgstr "Няма намерени записи"
+#~ msgid "No voicemail to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "operator"
-msgstr "Селектирай оператор"
+#~ msgid "operator"
+#~ msgstr "Селектирай оператор"
 
 #, fuzzy
-msgid "forcename"
-msgstr "Преименуване"
+#~ msgid "forcename"
+#~ msgstr "Преименуване"
 
 #, fuzzy
-msgid "add meetme"
-msgstr "изтрий"
+#~ msgid "add meetme"
+#~ msgstr "изтрий"
 
 #, fuzzy
-msgid "delete meetme"
-msgstr "Изтрий имидж"
+#~ msgid "delete meetme"
+#~ msgstr "Изтрий имидж"
 
 #, fuzzy
-msgid "Displaying meetme {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying meetme {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No meetme to display"
-msgstr "Няма намерени записи"
+#~ msgid "No meetme to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
-msgid "adminpin"
-msgstr "Администратор"
+#~ msgid "adminpin"
+#~ msgstr "Администратор"
 
 #, fuzzy
-msgid "Displaying myphones {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+#~ msgid "Displaying myphones {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
 
 #, fuzzy
-msgid "No myphones to display"
-msgstr "Няма намерени записи"
+#~ msgid "No myphones to display"
+#~ msgstr "Няма намерени записи"
 
-msgid "please select a container"
-msgstr "Моля изберете контейнер"
+#~ msgid "please select a container"
+#~ msgstr "Моля изберете контейнер"
 
-msgid "There Where Errors"
-msgstr "Грешки"
+#~ msgid "There Where Errors"
+#~ msgstr "Грешки"
 
-msgid "New"
-msgstr "Нов"
+#~ msgid "New"
+#~ msgstr "Нов"
 
-msgid "Save"
-msgstr "Запамети"
+#~ msgid "Save"
+#~ msgstr "Запамети"
 
-msgid "Close"
-msgstr "Затвори"
+#~ msgid "Close"
+#~ msgstr "Затвори"
 
-msgid "My"
-msgstr "Моите"
+#~ msgid "My"
+#~ msgstr "Моите"
 
-msgid "Language: "
-msgstr "Език:"
+#~ msgid "Language: "
+#~ msgstr "Език:"
 
-msgid "Shared"
-msgstr "Общите"
+#~ msgid "Shared"
+#~ msgstr "Общите"

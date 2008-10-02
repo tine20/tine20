@@ -1102,20 +1102,20 @@ msgstr "Програмна версия"
 msgid "Keylayout"
 msgstr "Клавиатурен изглед (легенда)"
 
-msgid "send HTTP Client Info"
-msgstr "Изпрати HTTP Client Info"
+#~ msgid "send HTTP Client Info"
+#~ msgstr "Изпрати HTTP Client Info"
 
-msgid "Model"
-msgstr "Модел"
+#~ msgid "Model"
+#~ msgstr "Модел"
 
-msgid "FW Status"
-msgstr "FW Статус"
+#~ msgid "FW Status"
+#~ msgstr "FW Статус"
 
-msgid "Server Setting"
-msgstr "Настройки на сървъра"
+#~ msgid "Server Setting"
+#~ msgstr "Настройки на сървъра"
 
-msgid "Settings URL"
-msgstr "URL на настройките"
+#~ msgid "Settings URL"
+#~ msgstr "URL на настройките"
 
-msgid "Firmware URL"
-msgstr "Програмен URL"
+#~ msgid "Firmware URL"
+#~ msgstr "Програмен URL"

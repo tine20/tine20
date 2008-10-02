@@ -507,29 +507,29 @@ msgstr "приет"
 msgid "lost"
 msgstr "изгубен"
 
-msgid "Organisation"
-msgstr "Организация"
+#~ msgid "Organisation"
+#~ msgstr "Организация"
 
-msgid "Lead updated"
-msgstr "Предложението е актуализирано"
+#~ msgid "Lead updated"
+#~ msgstr "Предложението е актуализирано"
 
-msgid "Lead added"
-msgstr "Предложението е прибавено"
+#~ msgid "Lead added"
+#~ msgstr "Предложението е прибавено"
 
-msgid "Add responsible"
-msgstr "Добави отговорник"
+#~ msgid "Add responsible"
+#~ msgstr "Добави отговорник"
 
-msgid "Add new responsible contact"
-msgstr "Добави нов отговорник"
+#~ msgid "Add new responsible contact"
+#~ msgstr "Добави нов отговорник"
 
-msgid "Add customer"
-msgstr "Добави клиент"
+#~ msgid "Add customer"
+#~ msgstr "Добави клиент"
 
-msgid "Add partner"
-msgstr "Добави партньор"
+#~ msgid "Add partner"
+#~ msgstr "Добави партньор"
 
-msgid "Add new partner contact"
-msgstr "Добави нов партньорски контакт"
+#~ msgid "Add new partner contact"
+#~ msgstr "Добави нов партньорски контакт"
 
-msgid "Percent"
-msgstr "Процент"
+#~ msgid "Percent"
+#~ msgstr "Процент"

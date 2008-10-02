@@ -430,8 +430,8 @@ msgstr "URL  (приват)"
 msgid "Other Data"
 msgstr "Други данни"
 
-msgid "Saved in"
-msgstr "Запаметен в"
+#~ msgid "Saved in"
+#~ msgstr "Запаметен в"
 
-msgid "Map"
-msgstr "Карта"
+#~ msgid "Map"
+#~ msgstr "Карта"

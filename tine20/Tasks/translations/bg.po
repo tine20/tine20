@@ -195,5 +195,5 @@ msgstr "В ПРОЦЕС"
 msgid "CANCELLED"
 msgstr "ПРЕКЪСНАТИ"
 
-msgid "Folder"
-msgstr "Папка"
+#~ msgid "Folder"
+#~ msgstr "Папка"
