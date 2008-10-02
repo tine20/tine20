@@ -1122,6 +1122,20 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 autoExpand: true
             })
         }, {
+            id: 'percent',
+            header: this.translation._("Percent"),
+            width: 50,
+            sortable: true,
+            dataIndex: 'percent',
+            renderer: Ext.ux.PercentRenderer,
+            editor: new Ext.ux.PercentCombo({
+                autoExpand: true,
+                blurOnSelect: true
+            }),
+            quickaddField: new Ext.ux.PercentCombo({
+                autoExpand: true
+            })
+        }, {
             id: 'status_id',
             header: this.translation._("Status"),
             width: 45,
