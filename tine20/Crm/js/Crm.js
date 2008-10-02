@@ -714,7 +714,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	actions: {
         addContact: null,
         editContact: null,
-        linkContact: null,
         unlinkContact: null,
         addTask: null,		
         editTask: null,
@@ -773,23 +772,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             
             var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({contact: selectedRows[0]});         
             contactWindow.on('update', this.onContactUpdate, this);            
-        },
-
-        /**
-         * linkContact
-         * 
-         * link an existing contact -> create and activate contact picker/search dialog
-         * @todo    add bigger & better search dialog later
-         * @deprecated
-         */
-        linkContact: function(_button, _event) {
-        	// create new contact search grid
-        	var contactSearchGrid = this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'));
-        	
-        	// add grid to tabpanel & activate
-        	var linkTabPanel = Ext.getCmp('linkPanelTop');
-        	linkTabPanel.add(contactSearchGrid);
-            linkTabPanel.activate(contactSearchGrid);
         },
 
         /**
@@ -956,8 +938,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * 
      * @param   Tine.Crm.Model.Lead lead
      * @return  Tine.Crm.Model.Lead lead
-     * 
-     * @todo move relation handling .each() to extra function
      */
     getAdditionalData: function(lead) {
         // collect data of relations
@@ -1057,7 +1037,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }, this);
         
         var bbarItems = [                
-            //this.actions.linkContactSplit,
             this.actions.addContact,
             this.actions.unlinkContact
         ]; 
@@ -1364,12 +1343,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     this.actions.editContact,
                     this.actions.unlinkContact,
                     '-',
-                    //this.actions.linkContactSplit
                     this.actions.addContact
                 ];
                 // items for all grid context menu
                 gridItems = [
-                    //this.actions.linkContactSplit
                     this.actions.addContact
                 ];
                 break;
@@ -1593,32 +1570,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             scope: this,
             handler: this.handlers.addContact
         }); 
-
-        // @deprecated
-        this.actions.linkContact = new Ext.Action({
-            requiredGrant: 'editGrant',
-            text: this.translation._('Add existing contact'),
-            tooltip: this.translation._('Add existing contact to lead'),
-            iconCls: 'actionAdd',
-            scope: this,
-            handler: this.handlers.linkContact
-        }); 
-        
-        // @deprecated
-        this.actions.linkContactSplit = new Ext.SplitButton({
-            requiredGrant: 'editGrant',
-            text: this.translation._('Add contact'),
-            tooltip: this.translation._('Add existing contact to lead'),
-            iconCls: 'actionAdd',
-            scope: this,
-            handler: this.handlers.linkContact,
-            menu: {
-                items: [
-                    this.actions.linkContact,
-                    this.actions.addContact
-                ]
-            }
-        });
         
         this.actions.editContact = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -1796,7 +1747,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.updateToolbars.defer(10, this, [this.lead, 'container']);
         Tine.widgets.ActionUpdater(this.lead, [
             this.actions.addContact,
-            //this.actions.linkContact,
             this.actions.addTask,
             this.actions.linkTask,
             this.actions.exportLead
