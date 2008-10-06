@@ -188,10 +188,10 @@ class Tinebase_Controller
     
             // register addidional HTTP apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
-                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
+                $applicationParts = explode('.', $_REQUEST['method']);
+                $applicationName = ucfirst($applicationParts[0]);
                 
-                foreach ($userApplications as $application) {
-                    $applicationName = ucfirst((string) $application);
+                if(Zend_Registry::get('currentAccount')->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
                     try {
                         $server->setClass($applicationName.'_Http', $applicationName);
                     } catch (Exception $e) {
@@ -273,18 +273,24 @@ class Tinebase_Controller
             
             // register addidional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
-                // addidional Tinebase json apis
-                $server->setClass('Tinebase_Json_Container', 'Tinebase_Container');
-    
-                // application apis
-                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
-                foreach ($userApplications as $application) {
-                    $applicationName = ucfirst((string) $application);
-                    try {
-                        $server->setClass($applicationName.'_Json', $applicationName);
-                    } catch (Exception $e) {
-                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
-                    }
+                $applicationParts = explode('.', $_REQUEST['method']);
+                $applicationName = ucfirst($applicationParts[0]);
+                
+                switch($applicationName) {
+                    case 'Tinebase_Container':
+                        // addidional Tinebase json apis
+                        $server->setClass('Tinebase_Json_Container', 'Tinebase_Container');                
+                        break;
+                        
+                    default;
+                        if(Zend_Registry::get('currentAccount')->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
+                            try {
+                                $server->setClass($applicationName.'_Json', $applicationName);
+                            } catch (Exception $e) {
+                                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
+                            }
+                        }
+                        break;
                 }
             }
         } catch (Exception $exception) {
