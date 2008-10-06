@@ -232,7 +232,7 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
             { resizable: true, id: 'pickupgroup', header: this.translation._('pickup group'), dataIndex: 'pickupgroup', width: 40 },
             { resizable: true, id: 'port', header: this.translation._('port'), dataIndex: 'port', width: 30, hidden: true },
             { resizable: true, id: 'qualify', header: this.translation._('qualify'), dataIndex: 'qualify', width: 30, hidden: true },
-            { resizable: true, id: 'restrictcid', header: this.translation._('retrict cid'), dataIndex: 'restrictcid', width: 30, hidden: true },
+            { resizable: true, id: 'restrictcid', header: this.translation._('restrict cid'), dataIndex: 'restrictcid', width: 30, hidden: true },
             { resizable: true, id: 'rtptimeout', header: this.translation._('rtp timeout'), dataIndex: 'rtptimeout', width: 30, hidden: true },
             { resizable: true, id: 'rtpholdtimeout', header: this.translation._('rtp hold timeout'), dataIndex: 'rtpholdtimeout', width: 30, hidden: true },
             { resizable: true, id: 'secret', header: this.translation._('secret'), dataIndex: 'secret', width: 30, hidden: true },
