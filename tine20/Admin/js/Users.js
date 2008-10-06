@@ -183,7 +183,7 @@ Tine.Admin.Users.Main = function() {
                             Ext.getCmp('AdminUserGrid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the account(s).'));
+                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the account(s).'));
                         }
                     });
                 }
@@ -465,7 +465,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 window.close();
             },
             failure: function ( result, request) { 
-                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the account.')); 
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the account.')); 
             } 
         });         
     },
