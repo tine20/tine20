@@ -93,17 +93,79 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
     }
                 
     /**
-     * add salutation field
+     * add salutation_id field and table
+     * 
      */    
     public function update_4()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
-                <name>salutation</name>
+                <name>salutation_id</name>
                 <type>text</type>
-                <length>32</length>
+                <length>64</length>
+                <notnull>false</notnull>
             </field>');
         $this->_backend->addCol('addressbook', $declaration);
+
+        $tableDefinition = ('
+        <table>
+            <name>addressbook_salutations</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>gender</name>
+                    <type>enum</type>
+                    <value>male</value>
+                    <value>female</value>
+                    <value>other</value>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>        
+        ');
+    
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);    
+        
+        // add initial values
+        $maleSalutation = new Addressbook_Model_Salutation(array(
+            'id'        => 1,
+            'name'      => 'Mr',
+            'gender'    => Addressbook_Model_Salutation::GENDER_MALE
+        ));
+        Addressbook_Backend_Salutation::getInstance()->create($maleSalutation);
+        $femaleSalutation = new Addressbook_Model_Salutation(array(
+            'id'        => 2,
+            'name'      => 'Ms',
+            'gender'    => Addressbook_Model_Salutation::GENDER_FEMALE
+        ));
+        Addressbook_Backend_Salutation::getInstance()->create($femaleSalutation);
+        $companySalutation = new Addressbook_Model_Salutation(array(
+            'id'        => 3,
+            'name'      => 'Company',
+            'gender'    => Addressbook_Model_Salutation::GENDER_OTHER
+        ));
+        Addressbook_Backend_Salutation::getInstance()->create($companySalutation);
         
         $this->setApplicationVersion('Addressbook', '0.5');
     }

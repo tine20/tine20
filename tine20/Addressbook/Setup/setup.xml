@@ -183,9 +183,9 @@
                     <default>n</default>
                 </field>
                 <field>
-                    <name>salutation</name>
+                    <name>salutation_id</name>
                     <type>text</type>
-                    <length>32</length>
+                    <length>64</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -437,6 +437,40 @@
                 </index>   
             </declaration>
         </table>
+        <table>
+            <name>addressbook_salutations</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>gender</name>
+                    <type>enum</type>
+                    <value>male</value>
+                    <value>female</value>
+                    <value>other</value>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>        
     </tables>    
     <defaultRecords>
         <record>
@@ -459,6 +493,60 @@
             <field>
                 <name>application_id</name>
                 <value special="application_id">Addressbook</value>
+            </field>
+        </record>
+        <record>
+            <table>
+                <name>addressbook_salutations</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>1</value>
+            </field>
+            <field>
+                <name>name</name>
+                <value>Mr</value>
+                <!-- gettext('Mr') -->
+            </field>
+            <field>
+                <name>gender</name>
+                <value>male</value>
+            </field>
+        </record>
+        <record>
+            <table>
+                <name>addressbook_salutations</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>2</value>
+            </field>
+            <field>
+                <name>name</name>
+                <value>Ms</value>
+                <!-- gettext('Ms') -->
+            </field>
+            <field>
+                <name>gender</name>
+                <value>female</value>
+            </field>
+        </record>
+        <record>
+            <table>
+                <name>addressbook_salutations</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>3</value>
+            </field>            
+            <field>
+                <name>name</name>
+                <value>Company</value>
+                <!-- gettext('Company') -->
+            </field>
+            <field>
+                <name>gender</name>
+                <value>other</value>
             </field>
         </record>
     </defaultRecords>

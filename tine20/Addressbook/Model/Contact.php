@@ -103,7 +103,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'owner'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'salutation'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'salutation_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),

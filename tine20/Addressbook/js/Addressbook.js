@@ -1001,6 +1001,7 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'bday', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     {name: 'org_name'},
     {name: 'org_unit'},
+    {name: 'salutation_id'},
     {name: 'title'},
     {name: 'role'},
     {name: 'assistent'},
