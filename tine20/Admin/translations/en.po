@@ -1,0 +1,659 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Admin\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Acl/Rights.php:164
+msgid "manage access log"
+msgstr ""
+
+#: Acl/Rights.php:165
+msgid "delete access log entries"
+msgstr ""
+
+#: Acl/Rights.php:168
+msgid "manage accounts"
+msgstr ""
+
+#: Acl/Rights.php:169
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr ""
+
+#: Acl/Rights.php:172
+msgid "manage applications"
+msgstr ""
+
+#: Acl/Rights.php:173
+msgid "enable and disable applications, edit application settings"
+msgstr ""
+
+#: Acl/Rights.php:176
+msgid "manage roles"
+msgstr ""
+
+#: Acl/Rights.php:177
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+
+#: Acl/Rights.php:180
+msgid "manage shared tags"
+msgstr ""
+
+#: Acl/Rights.php:181
+msgid "add, delete and edit shared tags"
+msgstr ""
+
+#: Acl/Rights.php:184
+msgid "view access log"
+msgstr ""
+
+#: Acl/Rights.php:185
+msgid "view access log list"
+msgstr ""
+
+#: Acl/Rights.php:188
+msgid "view accounts"
+msgstr ""
+
+#: Acl/Rights.php:189
+msgid "view accounts list and details"
+msgstr ""
+
+#: Acl/Rights.php:192
+msgid "view applications"
+msgstr ""
+
+#: Acl/Rights.php:193
+msgid "view applications list and details"
+msgstr ""
+
+#: Acl/Rights.php:196
+msgid "view roles"
+msgstr ""
+
+#: Acl/Rights.php:197
+msgid "view roles list and details"
+msgstr ""
+
+#: js/Admin.js:19
+msgid "User"
+msgstr ""
+
+#: js/Admin.js:31
+msgid "Groups"
+msgstr ""
+
+#: js/Admin.js:43
+msgid "Applications"
+msgstr ""
+
+#: js/Admin.js:55
+msgid "Access Log"
+msgstr ""
+
+#: js/Admin.js:67
+msgid "Shared Tags"
+msgstr ""
+
+#: js/Admin.js:79
+msgid "Roles"
+msgstr ""
+
+#: js/Admin.js:114
+msgid "Admin"
+msgstr ""
+
+#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Users.js:166
+msgid "Confirm"
+msgstr ""
+
+#: js/Admin.js:251
+msgid "Do you really want to delete the selected access log entries?"
+msgstr ""
+
+#: js/Admin.js:366
+msgid "delete entry"
+msgstr ""
+
+#: js/Admin.js:367
+msgid "select all"
+msgstr ""
+
+#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:204
+msgid "enter searchfilter"
+msgstr ""
+
+#: js/Admin.js:402
+msgid "Display from:"
+msgstr ""
+
+#: js/Admin.js:406
+msgid "to:"
+msgstr ""
+
+#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:220
+msgid "Search:"
+msgstr ""
+
+#: js/Admin.js:484
+msgid "invalid password"
+msgstr ""
+
+#: js/Admin.js:488
+msgid "ambiguous username"
+msgstr ""
+
+#: js/Admin.js:492
+msgid "user not found"
+msgstr ""
+
+#: js/Admin.js:496
+msgid "failure"
+msgstr ""
+
+#: js/Admin.js:500
+msgid "success"
+msgstr ""
+
+#: js/Admin.js:521
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr ""
+
+#: js/Admin.js:522
+msgid "No access log entries to display"
+msgstr ""
+
+#: js/Admin.js:526
+msgid "Session ID"
+msgstr ""
+
+#: js/Admin.js:527 js/Users.js:544
+msgid "Login Name"
+msgstr ""
+
+#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/Tags.js:165
+msgid "Name"
+msgstr ""
+
+#: js/Admin.js:529
+msgid "IP Address"
+msgstr ""
+
+#: js/Admin.js:530
+msgid "Login Time"
+msgstr ""
+
+#: js/Admin.js:531
+msgid "Logout Time"
+msgstr ""
+
+#: js/Admin.js:532
+msgid "Account ID"
+msgstr ""
+
+#: js/Admin.js:533
+msgid "Result"
+msgstr ""
+
+#: js/Admin.js:763
+msgid "enable application"
+msgstr ""
+
+#: js/Admin.js:764
+msgid "disable application"
+msgstr ""
+
+#: js/Admin.js:765
+msgid "settings"
+msgstr ""
+
+#: js/Admin.js:816
+msgid "disabled"
+msgstr ""
+
+#: js/Admin.js:819
+msgid "enabled"
+msgstr ""
+
+#: js/Admin.js:823
+#, python-format
+msgid "unknown status (%s)"
+msgstr ""
+
+#: js/Admin.js:852
+msgid "Displaying application {0} - {1} of {2}"
+msgstr ""
+
+#: js/Admin.js:853
+msgid "No applications to display"
+msgstr ""
+
+#: js/Admin.js:857
+msgid "order"
+msgstr ""
+
+#: js/Admin.js:858
+msgid "name"
+msgstr ""
+
+#: js/Admin.js:859
+msgid "status"
+msgstr ""
+
+#: js/Admin.js:860
+msgid "version"
+msgstr ""
+
+#: js/Groups.js:47
+msgid "Do you really want to delete the selected groups?"
+msgstr ""
+
+#: js/Groups.js:64
+msgid "Deleting group(s)..."
+msgstr ""
+
+#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
+#: js/Users.js:468 js/Users.js:511
+msgid "Failed"
+msgstr ""
+
+#: js/Groups.js:69 js/Groups.js:406
+msgid "Some error occured while trying to delete the group."
+msgstr ""
+
+#: js/Groups.js:82
+msgid "add group"
+msgstr ""
+
+#: js/Groups.js:90
+msgid "edit group"
+msgstr ""
+
+#: js/Groups.js:98
+msgid "delete group"
+msgstr ""
+
+#: js/Groups.js:169
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr ""
+
+#: js/Groups.js:170 js/Groups.js:221
+msgid "No groups to display"
+msgstr ""
+
+#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+msgid "ID"
+msgstr ""
+
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
+#: js/Tags.js:166 js/Tags.js:547
+msgid "Description"
+msgstr ""
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Please wait"
+msgstr ""
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Updating Memberships"
+msgstr ""
+
+#: js/Groups.js:378
+msgid "Could not save group."
+msgstr ""
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Errors"
+msgstr ""
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/Groups.js:398
+msgid "Deleting group..."
+msgstr ""
+
+#: js/Groups.js:520
+msgid "Group Members"
+msgstr ""
+
+#: js/Groups.js:551
+msgid "Group Name"
+msgstr ""
+
+#: js/Groups.js:594 js/Users.js:361
+msgid "add account"
+msgstr ""
+
+#: js/Groups.js:601
+msgid "remove account"
+msgstr ""
+
+#: js/Groups.js:619
+msgid "Add new group"
+msgstr ""
+
+#: js/Groups.js:621
+#, python-format
+msgid "Edit Group \"%s\""
+msgstr ""
+
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr ""
+
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr ""
+
+#: js/Roles.js:70 js/Roles.js:467
+msgid "Some error occured while trying to delete the role."
+msgstr ""
+
+#: js/Roles.js:83
+msgid "add role"
+msgstr ""
+
+#: js/Roles.js:91
+msgid "edit role"
+msgstr ""
+
+#: js/Roles.js:99
+msgid "delete role"
+msgstr ""
+
+#: js/Roles.js:170
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr ""
+
+#: js/Roles.js:171 js/Roles.js:222
+msgid "No roles to display"
+msgstr ""
+
+#: js/Roles.js:439
+msgid "Could not save role."
+msgstr ""
+
+#: js/Roles.js:459
+msgid "Deleting role..."
+msgstr ""
+
+#: js/Roles.js:594
+msgid "Role members"
+msgstr ""
+
+#: js/Roles.js:604
+msgid "Members"
+msgstr ""
+
+#: js/Roles.js:616 js/Tags.js:563
+msgid "Rights"
+msgstr ""
+
+#: js/Roles.js:646
+msgid "Role Name"
+msgstr ""
+
+#: js/Roles.js:686
+msgid "Loading Role..."
+msgstr ""
+
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
+msgid "Please Wait"
+msgstr ""
+
+#: js/Roles.js:726
+msgid "Add New Role"
+msgstr ""
+
+#: js/Roles.js:728
+#, python-format
+msgid "Edit Role \"%s\""
+msgstr ""
+
+#: js/Tags.js:41
+msgid "Do you really want to delete the selected tags?"
+msgstr ""
+
+#: js/Tags.js:58
+msgid "Deleting tag(s)..."
+msgstr ""
+
+#: js/Tags.js:73
+msgid "add tag"
+msgstr ""
+
+#: js/Tags.js:81
+msgid "edit tag"
+msgstr ""
+
+#: js/Tags.js:89
+msgid "delete tag"
+msgstr ""
+
+#: js/Tags.js:158
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr ""
+
+#: js/Tags.js:159 js/Tags.js:210
+msgid "No tags to display"
+msgstr ""
+
+#: js/Tags.js:164 js/Tags.js:489
+msgid "Color"
+msgstr ""
+
+#: js/Tags.js:341
+msgid "Could not save tag."
+msgstr ""
+
+#: js/Tags.js:359
+msgid "Deleting tag..."
+msgstr ""
+
+#: js/Tags.js:449
+msgid "Allowed Contexts"
+msgstr ""
+
+#: js/Tags.js:464
+msgid "Account Rights"
+msgstr ""
+
+#: js/Tags.js:469
+msgid "View"
+msgstr ""
+
+#: js/Tags.js:474
+msgid "Use"
+msgstr ""
+
+#: js/Tags.js:541
+msgid "Tag Name"
+msgstr ""
+
+#: js/Tags.js:566
+msgid "Context"
+msgstr ""
+
+#: js/Tags.js:584
+msgid "Loading Tag..."
+msgstr ""
+
+#: js/Tags.js:615
+msgid "Add New Tag"
+msgstr ""
+
+#: js/Tags.js:617
+#, python-format
+msgid "Edit Tag \"%s\""
+msgstr ""
+
+#: js/Users.js:141
+msgid "Set new password"
+msgstr ""
+
+#: js/Users.js:141
+msgid "Please enter the new password:"
+msgstr ""
+
+#: js/Users.js:166
+msgid "Do you really want to delete the selected account(s)?"
+msgstr ""
+
+#: js/Users.js:181
+msgid "Deleting account(s)..."
+msgstr ""
+
+#: js/Users.js:186
+msgid "Some error occured while trying to delete the account(s)."
+msgstr ""
+
+#: js/Users.js:265
+msgid "Displaying accounts {0} - {1} of {2}"
+msgstr ""
+
+#: js/Users.js:266
+msgid "No accounts to display"
+msgstr ""
+
+#: js/Users.js:271 js/Users.js:582
+msgid "Status"
+msgstr ""
+
+#: js/Users.js:272
+msgid "Displayname"
+msgstr ""
+
+#: js/Users.js:273
+msgid "Loginname"
+msgstr ""
+
+#: js/Users.js:274
+msgid "Last name"
+msgstr ""
+
+#: js/Users.js:275
+msgid "First name"
+msgstr ""
+
+#: js/Users.js:276
+msgid "Email"
+msgstr ""
+
+#: js/Users.js:277 js/Users.js:606
+msgid "Last login at"
+msgstr ""
+
+#: js/Users.js:278 js/Users.js:613
+msgid "Last login from"
+msgstr ""
+
+#: js/Users.js:279
+msgid "Password changed"
+msgstr ""
+
+#: js/Users.js:280 js/Users.js:601
+msgid "Expires"
+msgstr ""
+
+#: js/Users.js:369
+msgid "edit account"
+msgstr ""
+
+#: js/Users.js:377
+msgid "delete account"
+msgstr ""
+
+#: js/Users.js:385
+msgid "enable account"
+msgstr ""
+
+#: js/Users.js:394
+msgid "disable account"
+msgstr ""
+
+#: js/Users.js:403
+msgid "reset password"
+msgstr ""
+
+#: js/Users.js:462
+msgid "Deleting account..."
+msgstr ""
+
+#: js/Users.js:468
+msgid "Some error occured while trying to delete the account."
+msgstr ""
+
+#: js/Users.js:477
+msgid "Saving User Account"
+msgstr ""
+
+#: js/Users.js:511
+msgid "Could not save user account."
+msgstr ""
+
+#: js/Users.js:535
+msgid "First Name"
+msgstr ""
+
+#: js/Users.js:539
+msgid "Last Name"
+msgstr ""
+
+#: js/Users.js:549
+msgid "Password"
+msgstr ""
+
+#: js/Users.js:552 js/Users.js:558
+msgid "no password set"
+msgstr ""
+
+#: js/Users.js:555
+msgid "Password again"
+msgstr ""
+
+#: js/Users.js:560
+msgid "Primary group"
+msgstr ""
+
+#: js/Users.js:568
+msgid "Emailaddress"
+msgstr ""
+
+#: js/Users.js:603 js/Users.js:621
+msgid "never"
+msgstr ""
+
+#: js/Users.js:608 js/Users.js:615
+msgid "never logged in"
+msgstr ""
+
+#: js/Users.js:619
+msgid "Password set"
+msgstr ""
+
+#: js/Users.js:661
+msgid "Add New User Account"
+msgstr ""
+
+#: js/Users.js:663
+#, python-format
+msgid "Edit User Account \"%s\""
+msgstr ""
