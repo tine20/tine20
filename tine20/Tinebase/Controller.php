@@ -216,7 +216,7 @@ class Tinebase_Controller
                 Zend_Registry::get('logger')->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
                 $server->handle(array('method' => 'Tinebase.sessionTimedOut'));
             } else {
-                Zend_Registry::get('logger')->DEBUG(__FILE__ . '::' . __METHOD__ . ' (line' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
+                Zend_Registry::get('logger')->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
                 $server->handle(array('method' => 'Tinebase.exception'));
             }
         }
