@@ -116,8 +116,6 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * get salutations
      *
-     * @param string $sort
-     * @param string $dir
      * @return array
      */
    public function getSalutations()
