@@ -91,13 +91,20 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '0.4');
     }
-    
                 
-                 
-                
-                
-                
-                            
-                
-    
+    /**
+     * add salutation field
+     */    
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>salutation</name>
+                <type>text</type>
+                <length>32</length>
+            </field>');
+        $this->_backend->addCol('addressbook', $declaration);
+        
+        $this->setApplicationVersion('Addressbook', '0.5');
+    }
 }
