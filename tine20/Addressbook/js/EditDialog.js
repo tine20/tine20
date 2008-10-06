@@ -83,6 +83,83 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
             }, {
                 xtype: 'columnform',
                 items: [
+                    [
+                    	{
+                    		// @todo add salutation combo here
+                            columnWidth: .35,
+                            fieldLabel: translation._('Salutation'),
+                            xtype: 'combo',
+                            store: Tine.Addressbook.getSalutationStore(),
+                            id: 'salutation_id',
+                            name: 'salutation_id',
+                            mode: 'local',
+                            displayField: 'name',
+                            valueField: 'id'
+                        }, {
+                            columnWidth: .65,
+                            fieldLabel: translation._('Title'), 
+                            name:'n_prefix',
+                            id: 'n_prefix'
+                        }, {
+                            width: 100,
+                            hidden: true
+                        }
+                    ], [
+                    	{
+                            columnWidth: .35,
+                            fieldLabel: translation._('First Name'), 
+                            name:'n_given'
+                        }, {
+                            columnWidth: .30,
+                            fieldLabel: translation._('Middle Name'), 
+                            name:'n_middle',
+                            allowBlank: false
+                        }, {
+                            columnWidth: .35,
+                            fieldLabel: translation._('Last Name'), 
+                            name:'n_family',
+                            allowBlank: false
+                        }, {
+                            width: 100,
+                            hidden: true
+                            //type: 'panel',
+                            //layout: 'fit',
+                            //items: 
+                        }
+                    ], [
+                    	{
+                            columnWidth: .65,
+                            xtype: 'mirrortextfield',
+                            fieldLabel: translation._('Company'), 
+                            name:'org_name'
+                        }, {
+                            columnWidth: .35,
+                            fieldLabel: translation._('Unit'), 
+                            name:'org_unit'
+                        }, {
+                            width: 100,
+                            hidden: true
+                        }
+                    ], [
+                    	{
+                            columnWidth: .65,
+                            xtype: 'combo',
+                            fieldLabel: translation._('Display Name'),
+                            name: 'n_fn',
+                            disabled: true//,
+                            //anchor: '100% r'
+                        }, {
+                            columnWidth: .35,
+                            fieldLabel: translation._('Job Title'),
+                            name: 'title'
+                        }, {
+                            width: 100,
+                            xtype: 'datefield',
+                            fieldLabel: translation._('Birthday'),
+                            name: 'bday'
+                        }
+                    ]
+                    /*                
                     [{
                         columnWidth: .2,
                         fieldLabel: translation._('Title'), 
@@ -131,7 +208,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         xtype: 'datefield',
                         fieldLabel: translation._('Birthday'),
                         name: 'bday'
-                    }]
+                    }]*/
                 ]
             }
         ]},
@@ -221,7 +298,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     var companyInformation = {
         xtype: 'tabpanel',
         deferredRender:false,
-        height: 168,
+        height: 126,
         activeTab: 0,
         // use special item template without tabindex (=-1)
         itemTpl: new Ext.Template(
@@ -259,6 +336,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         {
                             fieldLabel: translation._('Street 2'), 
                             name:'adr_one_street2'
+                        },
+                        {
+                            fieldLabel: translation._('Region'),
+                            name:'adr_one_region'
                         }
                     ],
                     [
@@ -270,12 +351,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                             fieldLabel: translation._('City'),
                             name:'adr_one_locality'
                         },
-                        {
-                            fieldLabel: translation._('Region'),
-                            name:'adr_one_region'
-                        }
-                    ],
-                    [
                         {
                             xtype: 'widget-countrycombo',
                             fieldLabel: translation._('Country'),
@@ -304,6 +379,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         {
                             fieldLabel: translation._('Street 2'), 
                             name:'adr_two_street2'
+                        },
+                        {
+                            fieldLabel: translation._('Region'),
+                            name:'adr_two_region'
                         }
                     ],
                     [
@@ -315,12 +394,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                             fieldLabel: translation._('City'),
                             name:'adr_two_locality'
                         },
-                        {
-                            fieldLabel: translation._('Region'),
-                            name:'adr_two_region'
-                        }
-                    ],
-                    [
                         {
                             xtype: 'widget-countrycombo',
                             fieldLabel: translation._('Country'),

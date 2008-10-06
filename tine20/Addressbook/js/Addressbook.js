@@ -981,6 +981,44 @@ Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
     return window;
 };
 
+/**
+ * get salutation store
+ * if available, load data from initial data
+ * 
+ * @return Ext.data.JsonStore with salutations
+ */
+Tine.Addressbook.getSalutationStore = function() {
+    
+    var store = Ext.StoreMgr.get('AddressbookSalutationStore');
+    if (!store) {
+
+        store = new Ext.data.JsonStore({
+            fields: Tine.Addressbook.Model.Salutation,
+            baseParams: {
+                method: 'Addressbook.getSalutations'
+                /*
+                sort: 'name',
+                dir: 'ASC'
+                */
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
+        if (Tine.Addressbook.Salutations) {
+            store.loadData(Tine.Addressbook.Salutations);
+        }
+        
+            
+        Ext.StoreMgr.add('AddressbookSalutationStore', store);
+    }
+    console.log(store);
+    
+    return store;
+};
+
 /**************************** models ***************************************/
 
 Ext.namespace('Tine.Addressbook.Model');
@@ -1056,4 +1094,13 @@ Tine.Addressbook.Model.ContactArray = [
 Tine.Addressbook.Model.Contact = Ext.data.Record.create(
     Tine.Addressbook.Model.ContactArray
 );
+
+/**
+ * salutation model
+ */
+Tine.Addressbook.Model.Salutation = Ext.data.Record.create([
+   {name: 'id'},
+   {name: 'name'},
+   {name: 'gender'}
+]);
 
