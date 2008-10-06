@@ -206,11 +206,19 @@ function potmerge($_verbose)
 {
     
     $langs = getExistingLanguages($_verbose);
+    $msgDebug = $_verbose ? '' : '2> /dev/null';
+    
     foreach (getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Processing $appName po files \n";
         }
-
+        
+        if ($_verbose) {
+           echo "creating en.po from template.po\n";
+        }
+        `cd $translationPath
+         msgen -o en.po template.pot $msgDebug`;
+         
         foreach ($langs as $langCode) {
             $poFile = "$translationPath/$langCode.po";
             
@@ -229,13 +237,11 @@ function potmerge($_verbose)
                 generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $poFile, $_verbose);
             }
 
-            $output = '2> /dev/null';
             if ($_verbose) {
                echo $poFile . ": ";
-               $output = '';
             }
             `cd $translationPath
-             msgmerge --update $poFile template.pot $output`;
+             msgmerge --update $poFile template.pot $msgDebug`;
         }
     }
 }
