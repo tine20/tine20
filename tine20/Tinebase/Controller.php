@@ -72,7 +72,7 @@ class Tinebase_Controller
     {
         Zend_Session::setOptions(array(
             'name'              => 'TINE20SESSID',
-            //'cookie_httponly'   => true, // not supported by ZF as of 2008-08-13
+            'cookie_httponly'   => true,
             'hash_function'     => 1,
         
         ));
@@ -570,6 +570,9 @@ class Tinebase_Controller
                 
                 throw new Exception('account ' . $authResult->getIdentity() . ' not found in account storage');
             }
+            
+            Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
+            Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
             
             Zend_Registry::set('currentAccount', $account);
             
