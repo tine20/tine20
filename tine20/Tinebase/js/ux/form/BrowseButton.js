@@ -199,15 +199,16 @@ Ext.ux.form.BrowseButton = Ext.extend(Ext.BoxComponent, {
 			}
 		});
 		
-		
-		if (this.debug) {
-			this.clipEl.applyStyles({
-				'background-color': 'green'
-			});
-			this.floatEl.applyStyles({
-				'background-color': 'red'
-			});
-		} else {
+        // set the styles, is IE has problems to follow the mouse
+        // when no styles are set
+		this.clipEl.applyStyles({
+			'background-color': 'green'
+		});
+		this.floatEl.applyStyles({
+			'background-color': 'red'
+		});
+            
+        if (! this.debug) {
 			this.clipEl.setOpacity(0.0);
 		}
 		
