@@ -120,12 +120,12 @@ msgstr ""
 msgid "Lead name"
 msgstr ""
 
-#: js/Crm.js:388 js/Crm.js:1642 js/LeadEditDialog.js:332
+#: js/Crm.js:388 js/Crm.js:1638 js/LeadEditDialog.js:332
 #: js/LeadEditDialog.js:375
 msgid "Partner"
 msgstr ""
 
-#: js/Crm.js:389 js/Crm.js:1622 js/LeadEditDialog.js:331
+#: js/Crm.js:389 js/Crm.js:1618 js/LeadEditDialog.js:331
 #: js/LeadEditDialog.js:371
 msgid "Customer"
 msgstr ""
@@ -156,7 +156,7 @@ msgstr[1] ""
 msgid "Delete selected leads"
 msgstr ""
 
-#: js/Crm.js:502 js/Crm.js:1729 js/Crm.js:1730
+#: js/Crm.js:502 js/Crm.js:1725 js/Crm.js:1726
 msgid "Export as PDF"
 msgstr ""
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "Export selected lead as PDF"
 msgstr ""
 
-#: js/Crm.js:512 js/Crm.js:1674 js/Crm.js:1693
+#: js/Crm.js:512 js/Crm.js:1670 js/Crm.js:1689
 msgid "Add task"
 msgstr ""
 
@@ -184,7 +184,7 @@ msgstr ""
 msgid "Lead types"
 msgstr ""
 
-#: js/Crm.js:623 js/Crm.js:1339 Pdf.php:260
+#: js/Crm.js:623 js/Crm.js:1335 Pdf.php:260
 msgid "Products"
 msgstr ""
 
@@ -228,155 +228,155 @@ msgstr ""
 msgid "Contactdata"
 msgstr ""
 
-#: js/Crm.js:1065 Pdf.php:173
+#: js/Crm.js:1064 Pdf.php:173
 msgid "Contacts"
 msgstr ""
 
-#: js/Crm.js:1082
+#: js/Crm.js:1078
 msgid "Search for Contacts to add ..."
 msgstr ""
 
-#: js/Crm.js:1108
+#: js/Crm.js:1104
 msgid "Summary"
 msgstr ""
 
-#: js/Crm.js:1116
+#: js/Crm.js:1112
 msgid "Add a task..."
 msgstr ""
 
-#: js/Crm.js:1120 Pdf.php:241
+#: js/Crm.js:1116 Pdf.php:241
 msgid "Due Date"
 msgstr ""
 
-#: js/Crm.js:1134 Pdf.php:246
+#: js/Crm.js:1130 Pdf.php:246
 msgid "Priority"
 msgstr ""
 
-#: js/Crm.js:1149
+#: js/Crm.js:1145
 msgid "Percent"
 msgstr ""
 
-#: js/Crm.js:1163
+#: js/Crm.js:1159
 msgid "Status"
 msgstr ""
 
-#: js/Crm.js:1196 Pdf.php:221
+#: js/Crm.js:1192 Pdf.php:221
 msgid "Tasks"
 msgstr ""
 
-#: js/Crm.js:1213
+#: js/Crm.js:1209
 msgid "No Tasks to display"
 msgstr ""
 
-#: js/Crm.js:1268
+#: js/Crm.js:1264
 msgid "Product"
 msgstr ""
 
-#: js/Crm.js:1277
+#: js/Crm.js:1273
 msgid "Add a product..."
 msgstr ""
 
-#: js/Crm.js:1286 js/LeadEditDialog.js:163
+#: js/Crm.js:1282 js/LeadEditDialog.js:163
 msgid "Description"
 msgstr ""
 
-#: js/Crm.js:1299
+#: js/Crm.js:1295
 msgid "Price"
 msgstr ""
 
-#: js/Crm.js:1383
+#: js/Crm.js:1379
 msgid "Change contact type"
 msgstr ""
 
-#: js/Crm.js:1612
+#: js/Crm.js:1608
 msgid "Add new contact"
 msgstr ""
 
-#: js/Crm.js:1613
+#: js/Crm.js:1609
 msgid "Add new customer contact"
 msgstr ""
 
-#: js/Crm.js:1623
+#: js/Crm.js:1619
 msgid "Change type to Customer"
 msgstr ""
 
-#: js/Crm.js:1632 js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
+#: js/Crm.js:1628 js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
 msgid "Responsible"
 msgstr ""
 
-#: js/Crm.js:1633
+#: js/Crm.js:1629
 msgid "Change type to Responsible"
 msgstr ""
 
-#: js/Crm.js:1643
+#: js/Crm.js:1639
 msgid "Change type to Partner"
 msgstr ""
 
-#: js/Crm.js:1651
+#: js/Crm.js:1647
 msgid "Edit contact"
 msgstr ""
 
-#: js/Crm.js:1652
+#: js/Crm.js:1648
 msgid "Edit selected contact"
 msgstr ""
 
-#: js/Crm.js:1661
+#: js/Crm.js:1657
 msgid "Unlink contact"
 msgstr ""
 
-#: js/Crm.js:1662
+#: js/Crm.js:1658
 msgid "Unlink selected contacts"
 msgstr ""
 
-#: js/Crm.js:1675
+#: js/Crm.js:1671
 msgid "Add new task"
 msgstr ""
 
-#: js/Crm.js:1683
+#: js/Crm.js:1679
 msgid "Edit task"
 msgstr ""
 
-#: js/Crm.js:1684
+#: js/Crm.js:1680
 msgid "Edit selected task"
 msgstr ""
 
-#: js/Crm.js:1694
+#: js/Crm.js:1690
 msgid "Add existing task to lead"
 msgstr ""
 
-#: js/Crm.js:1703
+#: js/Crm.js:1699
 msgid "Remove tasks"
 msgstr ""
 
-#: js/Crm.js:1704
+#: js/Crm.js:1700
 msgid "Remove selected tasks"
 msgstr ""
 
-#: js/Crm.js:1716
+#: js/Crm.js:1712
 msgid "Remove products"
 msgstr ""
 
-#: js/Crm.js:1717
+#: js/Crm.js:1713
 msgid "Remove selected products"
 msgstr ""
 
-#: js/Crm.js:1758 js/Crm.js:1759
+#: js/Crm.js:1754 js/Crm.js:1755
 msgid "Leads"
 msgstr ""
 
-#: js/Crm.js:1805
+#: js/Crm.js:1801
 msgid "Loading Lead..."
 msgstr ""
 
-#: js/Crm.js:1805
+#: js/Crm.js:1801
 msgid "Please Wait"
 msgstr ""
 
-#: js/Crm.js:1831
+#: js/Crm.js:1827
 msgid "Add New Lead"
 msgstr ""
 
-#: js/Crm.js:1833
+#: js/Crm.js:1829
 #, python-format
 msgid "Edit Lead \"%s\""
 msgstr ""

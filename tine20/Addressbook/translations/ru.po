@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s's personal addressbook"
 msgstr "%s's Личная книга адресов"
 
-#: js/Addressbook.js:15 js/Addressbook.js:220 Setup/setup.xml:443
+#: js/Addressbook.js:15 js/Addressbook.js:220 Setup/setup.xml:449
 msgid "Internal Contacts"
 msgstr "Внутренние контакты"
 
