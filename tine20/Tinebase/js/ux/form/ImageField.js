@@ -45,14 +45,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.buttonCt.on('contextmenu', this.onContextMenu, this);
         
         // the click to edit text container
-        /*
         var clickToEditText = _('click to edit');
         this.textCt = Ext.DomHelper.insertFirst(this.buttonCt, '<div class="x-ux-from-imagefield-text">' + clickToEditText + '</div>', true);
         this.textCt.setSize(this.width, this.height);
         var tm = Ext.util.TextMetrics.createInstance(this.textCt);
         tm.setFixedWidth(this.width);
         this.textCt.setStyle({top: ((this.height - tm.getHeight(clickToEditText)) / 2) + 'px'});
-        */
         
         // the image container
         // NOTE: this will atm. always be the default image for the first few miliseconds
@@ -206,7 +204,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             img.on('load', function(){
                 this.imageCt.remove();
                 this.imageCt = img;
-                //this.textCt.setVisible(this.imageSrc == this.defaultImage);
+                this.textCt.setVisible(this.imageSrc == this.defaultImage);
                 this.imageCt.setOpacity(this.imageSrc == this.defaultImage ? 0.2 : 1);
                 this.buttonCt.unmask();
             }, this);
