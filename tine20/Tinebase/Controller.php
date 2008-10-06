@@ -198,7 +198,6 @@ class Tinebase_Controller
                 if(Zend_Registry::get('currentAccount')->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
                     try {
                         $server->setClass($applicationName.'_Http', $applicationName);
-                        error_log("$applicationName.'_Http', $applicationName");
                     } catch (Exception $e) {
                         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
