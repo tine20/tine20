@@ -31,7 +31,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
      * @private
      */
 	handlerApplyChanges: function(button, event, closeWindow) {
-		Ext.MessageBox.wait(_('Please wait'), _('Updateing Grants'));
+		Ext.MessageBox.wait(_('Please wait'), _('Updating Grants'));
 		
 		var grants = [];
 		this.grantsStore.each(function(_record){
