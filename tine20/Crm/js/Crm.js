@@ -1058,24 +1058,20 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         ]; 
                 
         // get store and create grid
-        // @todo add border to grid
         var gridStore = Ext.StoreMgr.lookup('ContactsStore');  
         var grid = new Ext.grid.EditorGridPanel({
             id: 'crmGridContacts',
-            title: this.translation._('Contacts'),
+            //title: this.translation._('Contacts'),
             cm: columnModel,
             store: gridStore,
             selModel: rowSelectionModel,
             autoExpandColumn: 'n_fileas',
             bbar: bbarItems,
-            /*
-            border: true,
-            bodyBorder: true,
-            anchor:'98%',
-            */                
+            baseCls: 'contact-grid',
             tbar: new Ext.Panel({
                 layout: 'fit',
                 width: '100%',
+                //baseCls: 'x-tab-strip x-tab-strip-top',
                 items: [
                     // @todo perhaps we could add an icon/button (i.e. edit-find.png) here
                     new Tine.Crm.Contact.ComboBox({

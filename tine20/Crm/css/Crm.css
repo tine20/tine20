@@ -172,3 +172,7 @@
 .x-view-over {
                 background-color: #efefef
             }
+
+.contact-grid {
+	border: 1px solid #cccccc;
+}
