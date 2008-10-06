@@ -288,7 +288,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 						value: node.text,
 						fn: function(_btn, _text){
 							if (_btn == 'ok') {
-								Ext.MessageBox.wait(translation._('Please wait'), sprintf(translation._('Updateing %s "%s"'), this.containerName, node.text));
+								Ext.MessageBox.wait(translation._('Please wait'), sprintf(translation._('Updating %s "%s"'), this.containerName, node.text));
 								
 								Ext.Ajax.request({
 									params: {
