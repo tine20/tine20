@@ -60,9 +60,8 @@ class Tinebase_Translation
         if (TINE20_BUILDTYPE == 'RELEASE') {
             $list = self::$SUPPORTED_LANGS;
         } else {
-            // look for po files in Tinebase an fill in en.po virtually
+            // look for po files in Tinebase
             $dirContents = scandir(dirname(__FILE__) . '/translations');
-            array_push($dirContents, 'en.po');
             sort($dirContents);
             $list = array();
             
