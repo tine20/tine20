@@ -47,7 +47,7 @@ Tine.widgets.VersionCheck = function() {
                 Ext.MessageBox.show({
                     title: _('New version of Tine 2.0 available'),
                     msg: sprintf(_('Version "%s" of Tine 2.0 is available.'), version.get('codename')) + "\n" +
-                                 _('Please consider updateing!'),
+                                 _('Please consider updating!'),
                     width: 400,
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.INFO
