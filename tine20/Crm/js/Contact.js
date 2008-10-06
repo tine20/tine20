@@ -145,6 +145,6 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
             var record = this.store.getById(id);
             this.onSelect(record);
         }
-    },
+    }
     
 });
