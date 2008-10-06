@@ -378,4 +378,16 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
     }
     
+    /**
+     * get all salutations
+     *
+     */
+    public function testGetSalutations()
+    {
+        $json = new Addressbook_Json();
+        
+        $salutations = $json->getSalutations();
+        
+        $this->assertGreaterThan(2, $salutations['totalcount']);
+    }
 }		
