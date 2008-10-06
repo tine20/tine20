@@ -66,7 +66,7 @@ Tine.Admin.Groups.Main = {
                             Ext.getCmp('AdminGroupsGrid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the group.'));
+                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the group.'));
                         }
                     });
                 }
@@ -403,7 +403,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 window.close();
             },
             failure: function ( result, request) { 
-                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the group.')); 
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the group.')); 
             } 
         });                           
     },
