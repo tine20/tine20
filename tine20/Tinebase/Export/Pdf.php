@@ -470,7 +470,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     $time = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
                         $note->creation_time->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
                       
-                    $createdBy = '(' . $translate->_('by') . ' ' . $noteArray['created_by'] . ')';
+                    $createdBy = '(' . $noteArray['created_by'] . ')';
                     $record[] = array(
                         'label' => $time,
                         'type'  => 'multiRow',
