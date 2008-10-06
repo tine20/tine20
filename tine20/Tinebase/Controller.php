@@ -188,24 +188,25 @@ class Tinebase_Controller
     
             // register addidional HTTP apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
+                if (empty($_REQUEST['method'])) {
+                    $_REQUEST['method'] = 'Tinebase.mainScreen';
+                }
+                
                 $applicationParts = explode('.', $_REQUEST['method']);
                 $applicationName = ucfirst($applicationParts[0]);
                 
                 if(Zend_Registry::get('currentAccount')->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
                     try {
                         $server->setClass($applicationName.'_Http', $applicationName);
+                        error_log("$applicationName.'_Http', $applicationName");
                     } catch (Exception $e) {
                         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
                 }
-            } 
+            }
             
             if (empty($_REQUEST['method'])) {
-                if (Zend_Auth::getInstance()->hasIdentity()) {
-                    $_REQUEST['method'] = 'Tinebase.mainScreen';
-                } else {
-                    $_REQUEST['method'] = 'Tinebase.login';
-                }
+                $_REQUEST['method'] = 'Tinebase.login';
             }
 
             $server->handle($_REQUEST);
@@ -293,6 +294,7 @@ class Tinebase_Controller
                         break;
                 }
             }
+            
         } catch (Exception $exception) {
             $server = new Zend_Json_Server();
             $server->fault($exception, $exception->getCode());
