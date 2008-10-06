@@ -35,11 +35,11 @@ msgstr[1] "Deleting contacts..."
 msgid "Failed"
 msgstr "Failed"
 
-#: js/Addressbook.js:204 js/Addressbook.js:934
-msgid "Some error occured while trying to delete the conctact."
-msgid_plural "Some error occured while trying to delete the conctacts."
-msgstr[0] "Some error occured while trying to delete the conctact."
-msgstr[1] "Some error occured while trying to delete the conctacts."
+#: js/Addressbook.js:204
+msgid "Some error occured while trying to delete the contact."
+msgid_plural "Some error occured while trying to delete the contacts."
+msgstr[0] "Some error occured while trying to delete the contact."
+msgstr[1] "Some error occured while trying to delete the contacts."
 
 #: js/Addressbook.js:234
 msgid "add contact"
@@ -290,6 +290,10 @@ msgstr "Errors"
 #: js/Addressbook.js:913
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
+
+#: js/Addressbook.js:934
+msgid "Some error occured while trying to delete the conctact."
+msgstr "Some error occured while trying to delete the conctact."
 
 #: js/EditDialog.js:37
 msgid "Middle Name"

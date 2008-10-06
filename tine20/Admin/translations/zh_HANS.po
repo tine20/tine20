@@ -274,7 +274,8 @@ msgid "Failed"
 msgstr "失败"
 
 #: js/Groups.js:69 js/Groups.js:406
-msgid "Some error occured while trying to delete the group."
+#, fuzzy
+msgid "Some error occurred while trying to delete the group."
 msgstr "删除组时发生错误"
 
 #: js/Groups.js:82
@@ -364,7 +365,8 @@ msgid "Deleting role(s)..."
 msgstr "删除角色 ..."
 
 #: js/Roles.js:70 js/Roles.js:467
-msgid "Some error occured while trying to delete the role."
+#, fuzzy
+msgid "Some error occurred while trying to delete the role."
 msgstr "删除角色是发生错误"
 
 #: js/Roles.js:83
@@ -522,7 +524,8 @@ msgid "Deleting account(s)..."
 msgstr "删除账户"
 
 #: js/Users.js:186
-msgid "Some error occured while trying to delete the account(s)."
+#, fuzzy
+msgid "Some error occurred while trying to delete the account(s)."
 msgstr "删除账户时有错误发生"
 
 #: js/Users.js:265
@@ -598,7 +601,8 @@ msgid "Deleting account..."
 msgstr "删除账户 ..."
 
 #: js/Users.js:468
-msgid "Some error occured while trying to delete the account."
+#, fuzzy
+msgid "Some error occurred while trying to delete the account."
 msgstr "删除账户时有错误发生"
 
 #: js/Users.js:477

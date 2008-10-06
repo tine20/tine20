@@ -223,7 +223,8 @@ msgid "qualify"
 msgstr "упълномощение"
 
 #: js/Asterisk/SipPeer.js:235
-msgid "retrict cid"
+#, fuzzy
+msgid "restrict cid"
 msgstr "ограничини cid (изскачащи прозорци)"
 
 #: js/Asterisk/SipPeer.js:236

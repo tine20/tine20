@@ -48,9 +48,10 @@ msgstr[0] "正删除联系人..."
 msgid "Failed"
 msgstr "失败"
 
-#: js/Addressbook.js:204 js/Addressbook.js:934
-msgid "Some error occured while trying to delete the conctact."
-msgid_plural "Some error occured while trying to delete the conctacts."
+#: js/Addressbook.js:204
+#, fuzzy
+msgid "Some error occured while trying to delete the contact."
+msgid_plural "Some error occured while trying to delete the contacts."
 msgstr[0] "当删除联系人的时候有错误发生"
 
 #: js/Addressbook.js:234
@@ -301,6 +302,10 @@ msgstr "错误"
 #: js/Addressbook.js:913
 msgid "Please fix the errors noted."
 msgstr "请修复注明的错误"
+
+#: js/Addressbook.js:934
+msgid "Some error occured while trying to delete the conctact."
+msgstr "当删除联系人的时候有错误发生"
 
 #: js/EditDialog.js:37
 msgid "Middle Name"

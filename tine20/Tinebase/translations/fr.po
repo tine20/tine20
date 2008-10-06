@@ -470,7 +470,7 @@ msgid "User"
 msgstr ""
 
 #: js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
+msgid "Updating Grants"
 msgstr ""
 
 #: js/widgets/container/ContainerGrants.js:66
@@ -570,7 +570,7 @@ msgstr ""
 
 #: js/widgets/container/ContainerTree.js:291
 #, python-format
-msgid "Updateing %s \"%s\""
+msgid "Updating %s \"%s\""
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:325
@@ -835,7 +835,7 @@ msgid "It's a critical update and must be installed as soon as possible!"
 msgstr ""
 
 #: js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
+msgid "Please consider updating!"
 msgstr ""
 
 #: Setup/setup.xml:1753

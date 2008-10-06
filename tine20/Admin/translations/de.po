@@ -280,7 +280,8 @@ msgid "Failed"
 msgstr "Fehlgeschlagen"
 
 #: js/Groups.js:69 js/Groups.js:406
-msgid "Some error occured while trying to delete the group."
+#, fuzzy
+msgid "Some error occurred while trying to delete the group."
 msgstr "Beim Löschen der Gruppe trat ein Fehler auf."
 
 #: js/Groups.js:82
@@ -370,7 +371,8 @@ msgid "Deleting role(s)..."
 msgstr "Lösche Rolle(n)..."
 
 #: js/Roles.js:70 js/Roles.js:467
-msgid "Some error occured while trying to delete the role."
+#, fuzzy
+msgid "Some error occurred while trying to delete the role."
 msgstr "Beim Löschen der Rolle trat ein Fehler auf."
 
 #: js/Roles.js:83
@@ -528,7 +530,8 @@ msgid "Deleting account(s)..."
 msgstr "Lösche Account(s)..."
 
 #: js/Users.js:186
-msgid "Some error occured while trying to delete the account(s)."
+#, fuzzy
+msgid "Some error occurred while trying to delete the account(s)."
 msgstr "Beim Löschen des/r Account(s) traten Fehler auf."
 
 #: js/Users.js:265
@@ -604,7 +607,8 @@ msgid "Deleting account..."
 msgstr "Lösche Account..."
 
 #: js/Users.js:468
-msgid "Some error occured while trying to delete the account."
+#, fuzzy
+msgid "Some error occurred while trying to delete the account."
 msgstr "Beim Löschen des Accounts trat ein Fehler auf."
 
 #: js/Users.js:477

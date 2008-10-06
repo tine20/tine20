@@ -223,7 +223,8 @@ msgid "qualify"
 msgstr "kontrola dostupnosti SIP klienta (qualify)"
 
 #: js/Asterisk/SipPeer.js:235
-msgid "retrict cid"
+#, fuzzy
+msgid "restrict cid"
 msgstr "zakázat identifikaci volajícího"
 
 #: js/Asterisk/SipPeer.js:236

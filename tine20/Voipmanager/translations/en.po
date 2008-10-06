@@ -208,8 +208,8 @@ msgid "qualify"
 msgstr "qualify"
 
 #: js/Asterisk/SipPeer.js:235
-msgid "retrict cid"
-msgstr "retrict cid"
+msgid "restrict cid"
+msgstr "restrict cid"
 
 #: js/Asterisk/SipPeer.js:236
 msgid "rtp timeout"

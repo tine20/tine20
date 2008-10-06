@@ -487,7 +487,8 @@ msgid "User"
 msgstr "Benutzer"
 
 #: js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
+#, fuzzy
+msgid "Updating Grants"
 msgstr "Berechtiungen werden gesichert"
 
 #: js/widgets/container/ContainerGrants.js:66
@@ -586,8 +587,8 @@ msgid "Please enter the new name of the %s:"
 msgstr "Bitte den Namen für%s: eingeben: "
 
 #: js/widgets/container/ContainerTree.js:291
-#, python-format
-msgid "Updateing %s \"%s\""
+#, fuzzy, python-format
+msgid "Updating %s \"%s\""
 msgstr "%s \"%s\" aktualisieren"
 
 #: js/widgets/container/ContainerTree.js:325
@@ -854,7 +855,8 @@ msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
 
 #: js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
+#, fuzzy
+msgid "Please consider updating!"
 msgstr "Bitte bestätigen Sie das Update!"
 
 #: Setup/setup.xml:1753

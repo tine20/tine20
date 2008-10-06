@@ -278,7 +278,8 @@ msgid "Failed"
 msgstr "Неуспех"
 
 #: js/Groups.js:69 js/Groups.js:406
-msgid "Some error occured while trying to delete the group."
+#, fuzzy
+msgid "Some error occurred while trying to delete the group."
 msgstr "При опит за изтриване на група е настъпила грешка."
 
 #: js/Groups.js:82
@@ -368,7 +369,8 @@ msgid "Deleting role(s)..."
 msgstr "Изтрива роля(-и)."
 
 #: js/Roles.js:70 js/Roles.js:467
-msgid "Some error occured while trying to delete the role."
+#, fuzzy
+msgid "Some error occurred while trying to delete the role."
 msgstr "Настъпила е грешка при опит за изтриване на роля."
 
 #: js/Roles.js:83
@@ -526,7 +528,8 @@ msgid "Deleting account(s)..."
 msgstr "Изтрива конто(-та)..."
 
 #: js/Users.js:186
-msgid "Some error occured while trying to delete the account(s)."
+#, fuzzy
+msgid "Some error occurred while trying to delete the account(s)."
 msgstr "Настъпила е грешка при опит за изтриване на конто(-та)."
 
 #: js/Users.js:265
@@ -602,7 +605,8 @@ msgid "Deleting account..."
 msgstr "Изтрива конто..."
 
 #: js/Users.js:468
-msgid "Some error occured while trying to delete the account."
+#, fuzzy
+msgid "Some error occurred while trying to delete the account."
 msgstr "При опит за изтриване на контото е настъпила грешка."
 
 #: js/Users.js:477

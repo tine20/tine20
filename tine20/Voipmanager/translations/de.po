@@ -225,8 +225,9 @@ msgid "qualify"
 msgstr "berechtigen"
 
 #: js/Asterisk/SipPeer.js:235
-msgid "retrict cid"
-msgstr ""
+#, fuzzy
+msgid "restrict cid"
+msgstr "Restrict CID"
 
 #: js/Asterisk/SipPeer.js:236
 msgid "rtp timeout"

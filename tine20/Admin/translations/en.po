@@ -261,8 +261,8 @@ msgid "Failed"
 msgstr "Failed"
 
 #: js/Groups.js:69 js/Groups.js:406
-msgid "Some error occured while trying to delete the group."
-msgstr "Some error occured while trying to delete the group."
+msgid "Some error occurred while trying to delete the group."
+msgstr "Some error occurred while trying to delete the group."
 
 #: js/Groups.js:82
 msgid "add group"
@@ -351,8 +351,8 @@ msgid "Deleting role(s)..."
 msgstr "Deleting role(s)..."
 
 #: js/Roles.js:70 js/Roles.js:467
-msgid "Some error occured while trying to delete the role."
-msgstr "Some error occured while trying to delete the role."
+msgid "Some error occurred while trying to delete the role."
+msgstr "Some error occurred while trying to delete the role."
 
 #: js/Roles.js:83
 msgid "add role"
@@ -509,8 +509,8 @@ msgid "Deleting account(s)..."
 msgstr "Deleting account(s)..."
 
 #: js/Users.js:186
-msgid "Some error occured while trying to delete the account(s)."
-msgstr "Some error occured while trying to delete the account(s)."
+msgid "Some error occurred while trying to delete the account(s)."
+msgstr "Some error occurred while trying to delete the account(s)."
 
 #: js/Users.js:265
 msgid "Displaying accounts {0} - {1} of {2}"
@@ -585,8 +585,8 @@ msgid "Deleting account..."
 msgstr "Deleting account..."
 
 #: js/Users.js:468
-msgid "Some error occured while trying to delete the account."
-msgstr "Some error occured while trying to delete the account."
+msgid "Some error occurred while trying to delete the account."
+msgstr "Some error occurred while trying to delete the account."
 
 #: js/Users.js:477
 msgid "Saving User Account"

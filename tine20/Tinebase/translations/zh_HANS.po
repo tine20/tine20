@@ -472,7 +472,8 @@ msgid "User"
 msgstr "用户"
 
 #: js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
+#, fuzzy
+msgid "Updating Grants"
 msgstr "更新权限"
 
 #: js/widgets/container/ContainerGrants.js:66
@@ -571,8 +572,8 @@ msgid "Please enter the new name of the %s:"
 msgstr "请输入 %s 的新名字："
 
 #: js/widgets/container/ContainerTree.js:291
-#, python-format
-msgid "Updateing %s \"%s\""
+#, fuzzy, python-format
+msgid "Updating %s \"%s\""
 msgstr "正更新 %s \"%s\""
 
 #: js/widgets/container/ContainerTree.js:325
@@ -832,7 +833,8 @@ msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "这是重要的更新，必需尽快安装！"
 
 #: js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
+#, fuzzy
+msgid "Please consider updating!"
 msgstr "请考虑更新！"
 
 #: Setup/setup.xml:1753

@@ -463,8 +463,8 @@ msgid "User"
 msgstr "User"
 
 #: js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
-msgstr "Updateing Grants"
+msgid "Updating Grants"
+msgstr "Updating Grants"
 
 #: js/widgets/container/ContainerGrants.js:66
 msgid "Folder"
@@ -563,8 +563,8 @@ msgstr "Please enter the new name of the %s:"
 
 #: js/widgets/container/ContainerTree.js:291
 #, python-format
-msgid "Updateing %s \"%s\""
-msgstr "Updateing %s \"%s\""
+msgid "Updating %s \"%s\""
+msgstr "Updating %s \"%s\""
 
 #: js/widgets/container/ContainerTree.js:325
 #, python-format
@@ -828,8 +828,8 @@ msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "It's a critical update and must be installed as soon as possible!"
 
 #: js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
-msgstr "Please consider updateing!"
+msgid "Please consider updating!"
+msgstr "Please consider updating!"
 
 #: Setup/setup.xml:1753
 msgid "note"

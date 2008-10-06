@@ -485,7 +485,8 @@ msgid "User"
 msgstr "Потребител"
 
 #: js/widgets/container/ContainerGrants.js:34
-msgid "Updateing Grants"
+#, fuzzy
+msgid "Updating Grants"
 msgstr "Запаметяване на правата"
 
 #: js/widgets/container/ContainerGrants.js:66
@@ -584,8 +585,8 @@ msgid "Please enter the new name of the %s:"
 msgstr "Моля задай новото име на  %s:"
 
 #: js/widgets/container/ContainerTree.js:291
-#, python-format
-msgid "Updateing %s \"%s\""
+#, fuzzy, python-format
+msgid "Updating %s \"%s\""
 msgstr "Актуализиране %s \"%s\""
 
 #: js/widgets/container/ContainerTree.js:325
@@ -853,7 +854,8 @@ msgstr ""
 "Това е един нестабилен ъпдейт и трябва да бъде инсталиран възможно най-бързо!"
 
 #: js/widgets/VersionCheck.js:50
-msgid "Please consider updateing!"
+#, fuzzy
+msgid "Please consider updating!"
 msgstr "Моля имайте пред вид актуализацията!"
 
 #: Setup/setup.xml:1753

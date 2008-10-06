@@ -53,9 +53,10 @@ msgstr[2] "Wymazywanie kontaktów …"
 msgid "Failed"
 msgstr "Bez powodzenia"
 
-#: js/Addressbook.js:204 js/Addressbook.js:934
-msgid "Some error occured while trying to delete the conctact."
-msgid_plural "Some error occured while trying to delete the conctacts."
+#: js/Addressbook.js:204
+#, fuzzy
+msgid "Some error occured while trying to delete the contact."
+msgid_plural "Some error occured while trying to delete the contacts."
 msgstr[0] "Wystąpiły pewne błędy z powodu próby wmazania kontaktu."
 msgstr[1] "Wystąpiły pewne błędy z powodu próby wmazania kontaktów."
 msgstr[2] "Wystąpiły pewne błędy z powodu próby wmazania kontaktów."
@@ -313,6 +314,11 @@ msgstr "Błędy"
 #: js/Addressbook.js:913
 msgid "Please fix the errors noted."
 msgstr "Proszę zlikwidowć podane błędy. "
+
+#: js/Addressbook.js:934
+#, fuzzy
+msgid "Some error occured while trying to delete the conctact."
+msgstr "Wystąpiły pewne błędy z powodu próby wmazania kontaktu."
 
 #: js/EditDialog.js:37
 msgid "Middle Name"

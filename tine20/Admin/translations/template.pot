@@ -259,7 +259,7 @@ msgid "Failed"
 msgstr ""
 
 #: js/Groups.js:69 js/Groups.js:406
-msgid "Some error occured while trying to delete the group."
+msgid "Some error occurred while trying to delete the group."
 msgstr ""
 
 #: js/Groups.js:82
@@ -349,7 +349,7 @@ msgid "Deleting role(s)..."
 msgstr ""
 
 #: js/Roles.js:70 js/Roles.js:467
-msgid "Some error occured while trying to delete the role."
+msgid "Some error occurred while trying to delete the role."
 msgstr ""
 
 #: js/Roles.js:83
@@ -507,7 +507,7 @@ msgid "Deleting account(s)..."
 msgstr ""
 
 #: js/Users.js:186
-msgid "Some error occured while trying to delete the account(s)."
+msgid "Some error occurred while trying to delete the account(s)."
 msgstr ""
 
 #: js/Users.js:265
@@ -583,7 +583,7 @@ msgid "Deleting account..."
 msgstr ""
 
 #: js/Users.js:468
-msgid "Some error occured while trying to delete the account."
+msgid "Some error occurred while trying to delete the account."
 msgstr ""
 
 #: js/Users.js:477
