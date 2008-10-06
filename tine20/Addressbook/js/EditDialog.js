@@ -85,7 +85,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 items: [
                     [
                     	{
-                    		// @todo add salutation combo here
                             columnWidth: .35,
                             fieldLabel: translation._('Salutation'),
                             xtype: 'combo',
@@ -94,7 +93,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                             name: 'salutation_id',
                             mode: 'local',
                             displayField: 'name',
-                            valueField: 'id'
+                            valueField: 'id',
+                            triggerAction: 'all'
                         }, {
                             columnWidth: .65,
                             fieldLabel: translation._('Title'), 
