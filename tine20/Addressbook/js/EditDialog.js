@@ -112,8 +112,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         }, {
                             columnWidth: .30,
                             fieldLabel: translation._('Middle Name'), 
-                            name:'n_middle',
-                            allowBlank: false
+                            name:'n_middle'
                         }, {
                             columnWidth: .35,
                             fieldLabel: translation._('Last Name'), 
