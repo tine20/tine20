@@ -67,7 +67,7 @@ Tine.Admin.Roles.Main = {
                             Ext.getCmp('AdminRolesGrid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the role.'));
+                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the role.'));
                         }
                     });
                 }
@@ -464,7 +464,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 window.close();
             },
             failure: function ( result, request) { 
-                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the role.')); 
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the role.')); 
             } 
         });                           
     },
