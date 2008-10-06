@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Sebastian Lenk <s.lenk@metaways.de>
  * @version     $Id$
+ * 
+ * @todo remove Zend_Db_Table usage 
  */
 
 /**
@@ -58,6 +60,8 @@ abstract class Tinebase_Abstract_SqlTableBackend
      * @param Tinebase_Record_Interface $_record
      * @throws InvalidArgumentException|Exception
      * @return object Record
+     * 
+     * @todo add support for unique ids (hashs)
      */
     public function create(Tinebase_Record_Interface $_record) {
     	if (!$_record instanceof $this->_modelName) {
