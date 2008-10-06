@@ -201,8 +201,8 @@ Tine.Addressbook.Main = {
 	                    failure: function(result, request){
 	                        Ext.MessageBox.alert(
                                 this.translation._('Failed'),
-                                this.translation.ngettext('Some error occured while trying to delete the conctact.',
-                                                          'Some error occured while trying to delete the conctacts.',
+                                this.translation.ngettext('Some error occured while trying to delete the contact.',
+                                                          'Some error occured while trying to delete the contacts.',
                                                           selectedRows.length
                               ));
 	                    }
