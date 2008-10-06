@@ -110,6 +110,31 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         return $result;
          
     }
+
+    /****************************************** get salutations ****************************/
+    
+    /**
+     * get salutations
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+   public function getSalutations()
+    {
+         $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Addressbook_Controller::getInstance()->getSalutations()) {
+            $rows->translate();
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }  
     
     /****************************************** helper functions ***********************************/
 

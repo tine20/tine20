@@ -73,4 +73,20 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
     {
         return array('Addressbook/js/Addressbook.js' , 'Addressbook/js/EditDialog.js');
     }
+    
+    /**
+     * Returns initial data which is send to the app at creation time.
+     *
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getInitialMainScreenData()
+    {   
+        $json = new Addressbook_Json();
+        
+        $initialData = array(
+            'Salutations' => $json->getSalutations(),
+        );        
+        return $initialData;    
+    }
 }

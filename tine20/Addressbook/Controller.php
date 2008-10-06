@@ -422,4 +422,18 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     {
     }
     
+    /**
+     * get salutations
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Addressbook_Model_Salutation
+     */
+    public function getSalutations($_sort = 'id', $_dir = 'ASC')
+    {
+        $backend = Addressbook_Backend_Salutation::getInstance();        
+        $result = $backend->getAll($_sort, $_dir);
+
+        return $result;    
+    }
 }
