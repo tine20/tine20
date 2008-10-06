@@ -26,21 +26,14 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
         items:[
             [
                 {
-                    columnWidth: 1,
-                    fieldLabel: translation._('Job Role'), 
-                    name:'role'
-                }
-            ],
-            [
-                {
-                    columnWidth: .4,
-                    fieldLabel: translation._('Middle Name'), 
-                    name:'n_middle'
-                },
-                {
                     columnWidth: .4,
                     fieldLabel: translation._('Suffix'), 
                     name:'n_suffix'
+                },
+                {
+                    columnWidth: .4,
+                    fieldLabel: translation._('Job Role'), 
+                    name:'role'
                 },
                 {
                     columnWidth: .2,
