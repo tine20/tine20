@@ -107,7 +107,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_family'		        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        //'n_family'		        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'n_family'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_fileas'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'n_fn'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -156,12 +157,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     public function setFromArray(array $_data)
     {
         // always update fileas and fn
-        $_data['n_fileas'] = $_data['n_family'];
+        $_data['n_fileas'] = (!empty($_data['n_family'])) ? $_data['n_family'] : $_data['org_name'];
         if (!empty($_data['n_given'])) {
             $_data['n_fileas'] .= ', ' . $_data['n_given'];
         }
             
-        $_data['n_fn'] = $_data['n_family'];
+        $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family'] : $_data['org_name'];
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
