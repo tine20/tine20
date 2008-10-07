@@ -356,37 +356,48 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 */
 	public function uploadTempFile()
 	{
-	    $this->checkAuth();
-	    
-	    $uploadedFile = $_FILES['file'];
-	    
-	    $path = tempnam(session_save_path(), 'tine_tempfile_');
-	    if (!$path) {
-	        throw new Exception('Can not upload file, tempnam could not return a valid filename!');
+	    try {
+    	    $this->checkAuth();
+    	    
+    	    $uploadedFile = $_FILES['file'];
+    	    
+    	    $path = tempnam(session_save_path(), 'tine_tempfile_');
+    	    if (!$path) {
+    	        throw new Exception('Can not upload file, tempnam could not return a valid filename!');
+    	    }
+    	    if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
+    	        throw new Exception('No valid upload file found!');
+    	    }
+    	    
+    	    $id = Tinebase_Model_TempFile::generateUID();
+    	    $tempFile = new Tinebase_Model_TempFile(array(
+    	       'id'          => $id,
+               'session_id'  => session_id(),
+               'time'        => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+               'path'        => $path,
+               'name'        => $uploadedFile['name'],
+               'type'        => $uploadedFile['type'],
+               'error'       => $uploadedFile['error'],
+               'size'        => $uploadedFile['size'],
+    	    ));
+    	    
+    	    $db = Zend_Registry::get('dbAdapter');
+    	    $db->insert(SQL_TABLE_PREFIX . 'temp_files', $tempFile->toArray());
+    	    
+    	    die(Zend_Json::encode(array(
+    	       'status'   => 'success',
+    	       'tempFile' => $tempFile->toArray(),
+    	    )));
+	    } catch (Exception $exception) {
+	        Zend_Registry::get('logger')->WARN("File upload could not done, due to the following exception: \n" . $exception);
+	        
+	        if (! headers_sent()) {
+	           header("HTTP/1.0 500 Internal Server Error");
+	        }
+	        die(Zend_Json::encode(array(
+               'status'   => 'failed',
+            )));
 	    }
-	    if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
-	        throw new Exception('No valid upload file found!');
-	    }
-	    
-	    $id = Tinebase_Model_TempFile::generateUID();
-	    $tempFile = new Tinebase_Model_TempFile(array(
-	       'id'          => $id,
-           'session_id'  => session_id(),
-           'time'        => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-           'path'        => $path,
-           'name'        => $uploadedFile['name'],
-           'type'        => $uploadedFile['type'],
-           'error'       => $uploadedFile['error'],
-           'size'        => $uploadedFile['size'],
-	    ));
-	    
-	    $db = Zend_Registry::get('dbAdapter');
-	    $db->insert(SQL_TABLE_PREFIX . 'temp_files', $tempFile->toArray());
-	    
-	    die(Zend_Json::encode(array(
-	       'status'   => 'success',
-	       'tempFile' => $tempFile->toArray(),
-	    )));
 	}
 	
 	/**
