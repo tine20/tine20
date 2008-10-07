@@ -395,10 +395,10 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 * @todo move db stuff into seperate class
 	 * @param unknown_type $application
 	 * @param string $id
-	 * @param unknown_type $location
-	 * @param unknown_type $width
-	 * @param unknown_type $height
-	 * @param unknown_type $ratiomode
+	 * @param string $location
+	 * @param int $width
+	 * @param int $height
+	 * @param int $ratiomode
 	 */
 	public function getImage($application, $id, $location, $width, $height, $ratiomode)
 	{
