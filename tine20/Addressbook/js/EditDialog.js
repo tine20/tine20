@@ -293,7 +293,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     var companyInformation = {
         xtype: 'tabpanel',
         deferredRender:false,
-        height: 126,
+        height: 124,
         activeTab: 0,
         // use special item template without tabindex (=-1)
         itemTpl: new Ext.Template(
