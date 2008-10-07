@@ -65,12 +65,14 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                     id: 'addressbookeditdialog-jpegimage',
                     name: 'jpegimage',
                     width: 90,
-                    height: 80
+                    //height: 80
+                    height: 120
                 }),
                 listeners: {
                     scope: this,
                     'resize': function(panel) {
-                        panel.setSize(90, 80);
+                        //panel.setSize(90, 80);
+                    	panel.setSize(90, 120);
                     }
                 }
             }, {
