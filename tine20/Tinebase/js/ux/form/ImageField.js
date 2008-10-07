@@ -26,6 +26,10 @@ Ext.namespace('Ext.ux.form');
  */
 Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     /**
+     * @cfg {bool}
+     */
+    border: true,
+    /**
      * @cfg {String}
      */
     defaultImage: 'images/empty_photo.png',
@@ -35,12 +39,19 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     initComponent: function() {
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
         this.imageSrc = this.defaultImage;
+        if(this.border === true) {
+            this.width = this.width;
+            this.height = this.height;
+        }
     },
     onRender: function(ct, position) {
         Ext.ux.form.ImageField.superclass.onRender.call(this, ct, position);
         
         // the container for the browe button
         this.buttonCt = Ext.DomHelper.insertFirst(ct, '<div>&nbsp;</div>', true);
+        this.buttonCt.applyStyles({
+            border: this.border === true ? '1px solid #B5B8C8' : '0'
+        });
         this.buttonCt.setSize(this.width, this.height);
         this.buttonCt.on('contextmenu', this.onContextMenu, this);
         
@@ -187,9 +198,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         if (!this.imgTpl) {
             this.imgTpl = new Ext.XTemplate('<img ',
                 'src="{imageSrc}" ',
-                'width="{width}" ',
-                'height="{height -2}" ',
-                'style="border: 1px solid #B5B8C8;" ',
+                //'width="{width}" ',
+                //'height="{height -2}" ',
+                //'style="border: 1px solid #B5B8C8;" ',
                 ' >'
             ).compile();
         }
