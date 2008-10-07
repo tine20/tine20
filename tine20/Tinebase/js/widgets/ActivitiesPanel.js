@@ -312,8 +312,6 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         typesStore.each(function(record){
             if (record.data.is_user_type == 1) {
             	
-            	console.log(record.data);
-            	
                 var action = new Ext.Action({
                     requiredGrant: 'editGrant',
                     text: sprintf(this.translation._('Add a %s Note'), record.data.name),
@@ -640,6 +638,8 @@ Tine.widgets.activities.getTypesStore = function() {
  * 
  * @param   id of the note type record
  * @returns img tag with icon source
+ * 
+ * @todo use icon_class here
  */
 Tine.widgets.activities.getTypeIcon = function(id) {	
     var typesStore = Tine.widgets.activities.getTypesStore();
