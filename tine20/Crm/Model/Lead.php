@@ -145,7 +145,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         
         /************* add new relations *******************/
         
-        foreach ($decodedLead['relations'] as $key => $relation) {
+        foreach ((array)$decodedLead['relations'] as $key => $relation) {
             
             if (!isset($relation['id'])) {
                 $data = array(
