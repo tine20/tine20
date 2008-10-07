@@ -11,7 +11,7 @@
  */
 
 /**
- * class to hold contact data
+ * class to hold salutation data
  * 
  * @package     Addressbook
  */
