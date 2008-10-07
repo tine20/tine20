@@ -13,7 +13,6 @@
 /**
  * Class all Connections / Request to remote Tine 2.0 installation are handled via
  * 
- * @todo    $this->_user: array -> model
  * @package Tinebase
  */
 class Tinebase_Connection
@@ -38,9 +37,9 @@ class Tinebase_Connection
     /**
      * Account data for the current users session
      *
-     * @var array
+     * @var Tinebase_Model_User
      */
-    protected $_user = array();
+    protected $_user = NULL;
     
     /**
      * @var Zend_Http_Client
@@ -95,7 +94,7 @@ class Tinebase_Connection
     /**
      * returns the authenticated user
      * 
-     * @return array()
+     * @return Tinebase_Model_User
      */
     public function getUser()
     {
@@ -169,7 +168,7 @@ class Tinebase_Connection
         }
         
         $this->_jsonKey = $responseData['jsonKey'];
-        $this->_user = $responseData['account'];
+        $this->_user = new Tinebase_Model_User($responseData['account']);
     }
     
     /**
@@ -194,6 +193,6 @@ class Tinebase_Connection
         }
         
         $this->_jsonKey = NULL;
-        $this->_user = array();
+        $this->_user = NULL;
     }
 }
