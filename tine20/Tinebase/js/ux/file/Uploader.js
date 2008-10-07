@@ -85,7 +85,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             form: form,
             scope: this,
             success: this.onUploadSuccess,
-            failure: this.onUploadFail,
+            //failure: this.onUploadFail,
             params: {
                 method: 'Tinebase.uploadTempFile',
                 requestType: 'HTTP'
@@ -106,11 +106,15 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * executed if a file got uploaded successfully
      */
     onUploadSuccess: function(response, request) {
-        var tempFile = Ext.util.JSON.decode(response.responseText).tempFile;
-        this.record.set('status', 'complete');
-        this.record.set('tempFile', tempFile);
-        
-        this.fireEvent('uploadcomplete', this, this.record);
+        response = Ext.util.JSON.decode(response.responseText);
+        if (response.status && response.status !== 'success') {
+            this.onUploadFail();
+        } else {
+            this.record.set('status', 'complete');
+            this.record.set('tempFile', response.tempFile);
+            
+            this.fireEvent('uploadcomplete', this, this.record);
+        }
     },
     /**
      * executed if a file upload failed
