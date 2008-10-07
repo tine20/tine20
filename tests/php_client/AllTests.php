@@ -32,6 +32,7 @@ class AllTests
         $suite->addTestSuite('Tinebase_ConnectionTest');
         $suite->addTestSuite('Tinebase_LoginTest');
         $suite->addTestSuite('Tinebase_Service_AbstractTest');
+        $suite->addTestSuite('Tinebase_ContainerTest');
         $suite->addTestSuite('Addressbook_ServiceTest');
         $suite->addTestSuite('Tinebase_LogoutTest');
         return $suite;
