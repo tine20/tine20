@@ -65,9 +65,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
         // the image container
         // NOTE: this will atm. always be the default image for the first few miliseconds
-        this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, this.getImgTpl().apply(this), true);
+        this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, '<img src="' + this.imageSrc + '"/>' , true);
         this.imageCt.setOpacity(0.2);
-
+        this.imageCt.setStyle({
+            position: 'absolute',
+            top: '18px'
+        });
+        
         this.bb = new Ext.ux.form.BrowseButton({
             //debug: true,
             buttonCt: this.buttonCt,
@@ -86,6 +90,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             this.imageSrc = this.defaultImage;
         } else {
             this.imageSrc = Ext.ux.util.ImageURL.prototype.parseURL(value);
+            this.imageSrc.width = this.width;
+            this.imageSrc.height = this.height;
+            this.imageSrc.ratiomode = 0;
         }
         this.updateImage();
     },
@@ -106,7 +113,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             this.imageSrc = new Ext.ux.util.ImageURL({
                 id: record.get('tempFile').id,
                 width: this.width,
-                height: this.height -2,
+                height: this.height,
                 ratiomode: 0
             });
             this.setValue(this.imageSrc);
@@ -194,23 +201,11 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         });
         this.ctxMenu.showAt(e.getXY());
     },
-    getImgTpl: function() {
-        if (!this.imgTpl) {
-            this.imgTpl = new Ext.XTemplate('<img ',
-                'src="{imageSrc}" ',
-                //'width="{width}" ',
-                //'height="{height -2}" ',
-                //'style="border: 1px solid #B5B8C8;" ',
-                ' >'
-            ).compile();
-        }
-        return this.imgTpl;
-    },
     updateImage: function() {
         // only update when new image differs from current
         if(this.imageCt.dom.src.substr(-1 * this.imageSrc.length) != this.imageSrc) {
             var ct = this.imageCt.up('div');
-            var img = Ext.DomHelper.insertAfter(this.imageCt, this.getImgTpl().apply(this), true);
+            var img = Ext.DomHelper.insertAfter(this.imageCt, '<img src="' + this.imageSrc + '"/>' , true);
             // replace image after load
             img.on('load', function(){
                 this.imageCt.remove();
@@ -237,7 +232,10 @@ Ext.ux.util.ImageURL = function(config) {
         url: 'index.php',
         method: 'Tinebase.getImage',
         application: 'Tinebase',
-        location: 'tempFile'
+        location: 'tempFile',
+        width: 90,
+        height: 120,
+        ratiomode: 0
     }); 
 };
 /**
