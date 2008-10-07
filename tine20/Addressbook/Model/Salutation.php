@@ -70,4 +70,13 @@ class Addressbook_Model_Salutation extends Tinebase_Record_Abstract
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'gender'                => array('InArray' => array(self::GENDER_MALE, self::GENDER_FEMALE, self::GENDER_OTHER)),
     );    
+
+    /**
+     * fields to translate
+     *
+     * @var array
+     */
+    protected $_toTranslate = array(
+        'name'
+    );        
 }
