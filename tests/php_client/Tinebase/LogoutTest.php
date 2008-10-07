@@ -47,7 +47,7 @@ class Tinebase_LogoutTest extends PHPUnit_Framework_TestCase
     {
         $this->_connection->logout();
         $user = $this->_connection->getUser();
-        $this->assertEquals(0, count(array_keys($user)));
+        $this->assertNull($user);
     }
 }
 

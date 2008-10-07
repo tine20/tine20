@@ -47,7 +47,9 @@ class Tinebase_LoginTest extends PHPUnit_Framework_TestCase
     {
         $this->_connection->login();
         $user = $this->_connection->getUser();
-        $this->assertTrue(count(array_keys($user)) > 1);
+        $this->assertTrue($user instanceof Tinebase_Model_User, 'userobject is not the expected model');
+        $this->assertNotNull($user->getId());
+        
     }
 }
 
