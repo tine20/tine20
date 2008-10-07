@@ -13,404 +13,6 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:116
-msgid "Report bugs"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Report bugs to tine20.org directly when they occour"
-msgstr ""
-
-#: Acl/Rights.php:120
-msgid "Check version"
-msgstr ""
-
-#: Acl/Rights.php:121
-msgid "Check tine20.org for new versions"
-msgstr ""
-
-#: Application/Rights/Abstract.php:56
-msgid "admin"
-msgstr "administrovat"
-
-#: Application/Rights/Abstract.php:57
-msgid "admin right description"
-msgstr "popis práva na administraci"
-
-#: Application/Rights/Abstract.php:60
-msgid "run"
-msgstr "spustit"
-
-#: Application/Rights/Abstract.php:61
-msgid "run right description"
-msgstr "popis práva na spuštění"
-
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
-msgid "Tags"
-msgstr "Štítky"
-
-#: Export/Pdf.php:404
-msgid "Export Date"
-msgstr "Datum exportu"
-
-#: Export/Pdf.php:408
-msgid "Created by"
-msgstr "Vytvořil(a)"
-
-#: Export/Pdf.php:461 js/widgets/ActivitiesPanel.js:517
-msgid "Activities"
-msgstr "Činnosti"
-
-#: Export/Pdf.php:473
-msgid "by"
-msgstr ""
-
-#: Http.php:213 js/Tinebase.js:228
-msgid "Authorisation Required"
-msgstr ""
-
-#: Http.php:214 js/Tinebase.js:229
-msgid "Your session timed out. You need to login again."
-msgstr ""
-
-#: Http.php:239 js/ExceptionDialog.js:26
-msgid "Abnormal End"
-msgstr "Abnormální ukončení"
-
-#: Http.php:240 js/ExceptionDialog.js:51
-msgid "An error occurred, the program ended abnormal."
-msgstr "Došlo k chybě, program se neukončil korektně."
-
-#: js/ExceptionDialog.js:34 js/MainScreen.js:315
-#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
-msgid "Cancel"
-msgstr "Storno"
-
-#: js/ExceptionDialog.js:42
-msgid "Send Report"
-msgstr "Odeslat hlášení"
-
-#: js/ExceptionDialog.js:52
-msgid "The last action you made was potentially not performed correctly."
-msgstr ""
-"Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
-
-#: js/ExceptionDialog.js:53
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occoured."
-msgstr ""
-"Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
-"uveďte stručný popis to co jste dělal(a), když došlo k chybě."
-
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
-msgid "Description"
-msgstr "Popis"
-
-#: js/ExceptionDialog.js:69
-msgid "Show Details:"
-msgstr "Zobrazit detaily:"
-
-#: js/ExceptionDialog.js:92
-msgid "Sending report..."
-msgstr "Odesílám hlášení..."
-
-#: js/ExceptionDialog.js:92
-msgid "Please wait a moment"
-msgstr "Počkejte prosím okamžik"
-
-#: js/ExceptionDialog.js:117
-msgid "Transmission Completed"
-msgstr "Přenos dokončen"
-
-#: js/ExceptionDialog.js:118
-msgid "Your report has been send. Thanks for your contribution"
-msgstr "Vaše hlášení bylo odesláno. Děkujeme za Vaši spolupráci."
-
-#: js/Login.js:29
-msgid "Login"
-msgstr "Přihlásit"
-
-#: js/Login.js:36
-msgid "Register"
-msgstr "Registrovat"
-
-#: js/Login.js:50
-msgid "Please enter your login data"
-msgstr "Zadejte prosím Vaše přihlašovací údaje"
-
-#: js/Login.js:67
-msgid "Username"
-msgstr "Uživatelské jméno"
-
-#: js/Login.js:73
-msgid "Password"
-msgstr "Heslo"
-
-#: js/Login.js:119
-msgid "Logging you in..."
-msgstr "Přihlašuji Vás..."
-
-#: js/Login.js:119 js/widgets/container/ContainerGrants.js:34
-#: js/widgets/container/ContainerTree.js:231
-#: js/widgets/container/ContainerTree.js:259
-#: js/widgets/container/ContainerTree.js:291
-msgid "Please wait"
-msgstr "Prosím čekejte"
-
-#: js/Login.js:130
-msgid "Login successful. Loading Tine 2.0..."
-msgstr "Přihlášení bylo úspěšné. Načítám Tine 2.0..."
-
-#: js/Login.js:130 js/MainScreen.js:393
-msgid "Please wait!"
-msgstr "Prosím čekejte!"
-
-#: js/Login.js:134
-msgid "Login failure"
-msgstr "Chybné přihlášení"
-
-#: js/Login.js:135
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
-
-#: js/MainScreen.js:48
-msgid "Change password"
-msgstr "Změnit heslo"
-
-#: js/MainScreen.js:54
-msgid "Install Google Gears"
-msgstr ""
-
-#: js/MainScreen.js:60
-msgid "Logout"
-msgstr "Odhlásit"
-
-#: js/MainScreen.js:61
-msgid "Logout from Tine 2.0"
-msgstr "Odhlásit z Tine 2.0"
-
-#: js/MainScreen.js:83 js/widgets/container/ContainerGrants.js:105
-msgid "Admin"
-msgstr "Administrace"
-
-#: js/MainScreen.js:91
-msgid "Preferences"
-msgstr "Předvolby"
-
-#: js/MainScreen.js:107
-#, python-format
-msgid "User: %s"
-msgstr "Uživatel: %s"
-
-#: js/MainScreen.js:108
-#, python-format
-msgid "Timezone: %s"
-msgstr "Časové pásmo: %s"
-
-#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
-msgid "Timezone"
-msgstr ""
-
-#: js/MainScreen.js:110 js/widgets/LangChooser.js:40
-msgid "Language"
-msgstr "Jazyk"
-
-#: js/MainScreen.js:279
-#, python-format
-msgid "Change Password For \"%s\""
-msgstr "Změnit heslo pro \"%s\""
-
-#: js/MainScreen.js:303
-msgid "Old Password"
-msgstr "Staré heslo"
-
-#: js/MainScreen.js:307
-msgid "New Password"
-msgstr "Nové heslo"
-
-#: js/MainScreen.js:311
-msgid "Repeat new Password"
-msgstr "Zopakujte nové heslo"
-
-#: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
-#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditRecord.js:102
-msgid "Ok"
-msgstr "OK"
-
-#: js/MainScreen.js:330
-msgid "Please Wait!"
-msgstr "Čekejte prosím!"
-
-#: js/MainScreen.js:331
-msgid "changing password..."
-msgstr "měním heslo..."
-
-#: js/MainScreen.js:342
-msgid "Success"
-msgstr "Podařilo se"
-
-#: js/MainScreen.js:343
-msgid "Your password has been changed."
-msgstr "Vaše heslo bylo změněno."
-
-#: js/MainScreen.js:349 js/MainScreen.js:359
-msgid "Failure"
-msgstr "Došlo k chybě"
-
-#: js/MainScreen.js:360
-msgid "The new passwords mismatch, please correct them."
-msgstr "Nová hesla se neshodují, opravte je prosím."
-
-#: js/MainScreen.js:378
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-
-#: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
-msgid "Confirm"
-msgstr "Potvrdit"
-
-#: js/MainScreen.js:391
-msgid "Are you sure you want to logout?"
-msgstr "Určitě se chcete odhlásit?"
-
-#: js/MainScreen.js:393
-msgid "Logging you out..."
-msgstr "Odhlašuji Vás..."
-
-#: js/Tinebase.js:218
-msgid "Connection lost, please check your network!"
-msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
-
-#: js/Tinebase.js:239
-msgid "Concurrent Updates"
-msgstr ""
-
-#: js/Tinebase.js:240
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-
-#: js/UserRegistration.js:33
-msgid "Registration Wizard"
-msgstr "Průvodce registrací"
-
-#: js/UserRegistration.js:86
-msgid "Given name"
-msgstr "Křestní jméno"
-
-#: js/UserRegistration.js:97
-msgid "Family name"
-msgstr "Příjmení"
-
-#: js/UserRegistration.js:108
-msgid "Login name"
-msgstr "Přihlašovací jméno"
-
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Emailová adresa"
-
-#: js/UserRegistration.js:167
-msgid "Congratulations!"
-msgstr "Gratulujeme!"
-
-#: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Zadal(a) jste všechny potřebné informace. Až kliknete na tlačítko Dokončit, "
-"pošleme Vám registrační e-mail."
-
-#: js/ux/ConnectionStatus.js:52
-msgid "online"
-msgstr ""
-
-#: js/ux/ConnectionStatus.js:53
-msgid "offline"
-msgstr ""
-
-#: js/ux/ConnectionStatus.js:54
-msgid "unknown"
-msgstr ""
-
-#: js/ux/form/ImageField.js:48
-msgid "click to edit"
-msgstr ""
-
-#: js/ux/form/ImageField.js:90
-msgid "Not An Image"
-msgstr ""
-
-#: js/ux/form/ImageField.js:90
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr ""
-
-#: js/ux/form/ImageField.js:107
-msgid "Loading"
-msgstr ""
-
-#: js/ux/form/ImageField.js:115
-msgid "Upload Failed"
-msgstr ""
-
-#: js/ux/form/ImageField.js:115
-msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-
-#: js/ux/form/ImageField.js:127
-msgid "Change Image"
-msgstr ""
-
-#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
-msgid "Crop Image"
-msgstr ""
-
-#: js/ux/form/ImageField.js:174
-msgid "Delete Image"
-msgstr ""
-
-#: js/ux/form/ImageField.js:212
-msgid "Image Failed"
-msgstr ""
-
-#: js/ux/form/ImageField.js:212
-msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
-msgstr "odstranit účet"
-
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
-msgid "Name"
-msgstr "Jméno"
-
-#: js/widgets/account/PickerPanel.js:70
-msgid "add account"
-msgstr "přidat účet"
-
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "zadejte hledaný výraz"
-
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "Hledat"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "Procházet"
-
-#: js/widgets/AccountpickerPanel.js:103
-msgid "please select an account"
-msgstr "vyberte prosím účet"
-
 #: js/widgets/ActivitiesPanel.js:146
 msgid "Add a Note..."
 msgstr "Přidat poznámku..."
@@ -466,6 +68,10 @@ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 msgid "No notes to display"
 msgstr "Žádné poznámky ke zobrazení"
 
+#: js/widgets/ActivitiesPanel.js:517 Export/Pdf.php:461
+msgid "Activities"
+msgstr "Činnosti"
+
 #: js/widgets/ActivitiesPanel.js:530
 msgid "Time"
 msgstr "Čas"
@@ -474,55 +80,76 @@ msgstr "Čas"
 msgid "User"
 msgstr "Uživatel"
 
-#: js/widgets/container/ContainerGrants.js:34
-#, fuzzy
-msgid "Updating Grants"
-msgstr "Aktualizuji oprávnění"
+#: js/widgets/LangChooser.js:40 js/MainScreen.js:110
+msgid "Language"
+msgstr "Jazyk"
 
-#: js/widgets/container/ContainerGrants.js:66
-msgid "Folder"
-msgstr "Složka"
+#: js/widgets/LangChooser.js:72
+msgid "setting new language..."
+msgstr "nastavuji nový jazyk..."
 
-#: js/widgets/container/ContainerGrants.js:82
-msgid "Read"
-msgstr "Číst"
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
+#: js/widgets/TimezoneChooser.js:74
+msgid "Please Wait"
+msgstr "Prosím čekejte"
 
-#: js/widgets/container/ContainerGrants.js:92
-msgid "Edit"
-msgstr "Editovat"
+#: js/widgets/LangChooser.js:93
+msgid "loading new language..."
+msgstr "nahrávám nový jazyk..."
 
-#: js/widgets/container/ContainerGrants.js:97
-msgid "Delete"
-msgstr "Smazat"
+#: js/widgets/TimezoneChooser.js:34 js/MainScreen.js:109
+msgid "Timezone"
+msgstr ""
 
-#: js/widgets/container/ContainerGrants.js:113
-msgid "Permissions"
-msgstr "Oprávnění"
+#: js/widgets/TimezoneChooser.js:74
+msgid "setting new timezone..."
+msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:74
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+msgid "New version of Tine 2.0 available"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
 #, python-format
-msgid "Recently used %s:"
+msgid "Version \"%s\" of Tine 2.0 is available."
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:93
-#, python-format
-msgid "choose other %s..."
+#: js/widgets/VersionCheck.js:41
+msgid "It's a critical update and must be installed as soon as possible!"
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
-#: js/widgets/tags/TagsPanel.js:410
-msgid "personal"
-msgstr "osobní"
-
-#: js/widgets/container/ContainerSelect.js:105
-msgid "shared"
+#: js/widgets/VersionCheck.js:50
+msgid "Please consider updating!"
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:248
-#, python-format
-msgid "please select a %s"
-msgstr ""
+#: js/widgets/GridPicker.js:78
+msgid "remove record"
+msgstr "odstranit záznam"
+
+#: js/widgets/GridPicker.js:389 js/widgets/account/PickerPanel.js:177
+msgid "enter searchfilter"
+msgstr "zadejte hledaný výraz"
+
+#: js/widgets/GridPicker.js:410 js/widgets/account/PickerPanel.js:221
+msgid "Search"
+msgstr "Hledat"
+
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+msgid "Browse"
+msgstr "Procházet"
+
+#: js/widgets/account/PickerPanel.js:70
+msgid "add account"
+msgstr "přidat účet"
+
+#: js/widgets/account/PickerPanel.js:166 js/widgets/account/ConfigGrid.js:79
+msgid "Name"
+msgstr "Jméno"
+
+#: js/widgets/account/ConfigGrid.js:55
+msgid "remove account"
+msgstr "odstranit účet"
 
 #: js/widgets/container/ContainerTree.js:115
 #, python-format
@@ -555,9 +182,20 @@ msgid "Please enter the name of the new %s:"
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:231
+#: js/widgets/container/ContainerTree.js:259
+#: js/widgets/container/ContainerTree.js:291
+#: js/widgets/container/ContainerGrants.js:34 js/Login.js:119
+msgid "Please wait"
+msgstr "Prosím čekejte"
+
+#: js/widgets/container/ContainerTree.js:231
 #, python-format
 msgid "Creating %s..."
 msgstr ""
+
+#: js/widgets/container/ContainerTree.js:257 js/MainScreen.js:391
+msgid "Confirm"
+msgstr "Potvrdit"
 
 #: js/widgets/container/ContainerTree.js:257
 #, python-format
@@ -602,6 +240,79 @@ msgstr ""
 #: js/widgets/container/ContainerTree.js:356
 msgid "Manage permissions"
 msgstr "Spravovat oprávnění"
+
+#: js/widgets/container/ContainerSelect.js:74
+#, python-format
+msgid "Recently used %s:"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:93
+#, python-format
+msgid "choose other %s..."
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:105
+#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:410
+msgid "personal"
+msgstr "osobní"
+
+#: js/widgets/container/ContainerSelect.js:105
+msgid "shared"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:248
+#, python-format
+msgid "please select a %s"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
+#: js/MainScreen.js:315 js/ExceptionDialog.js:34
+msgid "Cancel"
+msgstr "Storno"
+
+#: js/widgets/container/ContainerSelect.js:260
+#: js/widgets/AccountpickerPanel.js:108 js/widgets/EditRecord.js:102
+#: js/MainScreen.js:321
+msgid "Ok"
+msgstr "OK"
+
+#: js/widgets/container/ContainerGrants.js:34
+#, fuzzy
+msgid "Updating Grants"
+msgstr "Aktualizuji oprávnění"
+
+#: js/widgets/container/ContainerGrants.js:66
+msgid "Folder"
+msgstr "Složka"
+
+#: js/widgets/container/ContainerGrants.js:82
+msgid "Read"
+msgstr "Číst"
+
+#: js/widgets/container/ContainerGrants.js:92
+msgid "Edit"
+msgstr "Editovat"
+
+#: js/widgets/container/ContainerGrants.js:97
+msgid "Delete"
+msgstr "Smazat"
+
+#: js/widgets/container/ContainerGrants.js:105 js/MainScreen.js:83
+msgid "Admin"
+msgstr "Administrace"
+
+#: js/widgets/container/ContainerGrants.js:113
+msgid "Permissions"
+msgstr "Oprávnění"
+
+#: js/widgets/GroupSelect.js:94
+msgid "Please Select a Group"
+msgstr "Vyberte prosím skupinu"
+
+#: js/widgets/AccountpickerPanel.js:103
+msgid "please select an account"
+msgstr "vyberte prosím účet"
 
 #: js/widgets/EditRecord.js:113
 msgid "Apply"
@@ -675,27 +386,6 @@ msgstr "a"
 msgid "Show"
 msgstr "Zobrazit"
 
-#: js/widgets/GridPicker.js:78
-msgid "remove record"
-msgstr "odstranit záznam"
-
-#: js/widgets/GroupSelect.js:94
-msgid "Please Select a Group"
-msgstr "Vyberte prosím skupinu"
-
-#: js/widgets/LangChooser.js:72
-msgid "setting new language..."
-msgstr "nastavuji nový jazyk..."
-
-#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
-#: js/widgets/TimezoneChooser.js:74
-msgid "Please Wait"
-msgstr "Prosím čekejte"
-
-#: js/widgets/LangChooser.js:93
-msgid "loading new language..."
-msgstr "nahrávám nový jazyk..."
-
 #: js/widgets/tags/TagCombo.js:37
 msgid "tag name"
 msgstr "název štítku"
@@ -703,6 +393,10 @@ msgstr "název štítku"
 #: js/widgets/tags/TagFilter.js:23
 msgid "Tag"
 msgstr "Štítek"
+
+#: js/widgets/tags/TagsPanel.js:53 Export/Pdf.php:206
+msgid "Tags"
+msgstr "Štítky"
 
 #: js/widgets/tags/TagsPanel.js:83
 msgid "Add a new personal tag"
@@ -824,30 +518,293 @@ msgstr "Zadejte název štítku"
 msgid "Searching..."
 msgstr "Vyhledávám..."
 
+#: js/widgets/tags/TagsPanel.js:556 js/ExceptionDialog.js:59
+msgid "Description"
+msgstr "Popis"
+
 #: js/widgets/tags/TagsPanel.js:560
 msgid "Color"
 msgstr "Barva"
 
-#: js/widgets/TimezoneChooser.js:74
-msgid "setting new timezone..."
+#: js/MainScreen.js:48
+msgid "Change password"
+msgstr "Změnit heslo"
+
+#: js/MainScreen.js:54
+msgid "Install Google Gears"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
-msgid "New version of Tine 2.0 available"
-msgstr ""
+#: js/MainScreen.js:60
+msgid "Logout"
+msgstr "Odhlásit"
 
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/MainScreen.js:61
+msgid "Logout from Tine 2.0"
+msgstr "Odhlásit z Tine 2.0"
+
+#: js/MainScreen.js:91
+msgid "Preferences"
+msgstr "Předvolby"
+
+#: js/MainScreen.js:107
 #, python-format
-msgid "Version \"%s\" of Tine 2.0 is available."
+msgid "User: %s"
+msgstr "Uživatel: %s"
+
+#: js/MainScreen.js:108
+#, python-format
+msgid "Timezone: %s"
+msgstr "Časové pásmo: %s"
+
+#: js/MainScreen.js:279
+#, python-format
+msgid "Change Password For \"%s\""
+msgstr "Změnit heslo pro \"%s\""
+
+#: js/MainScreen.js:303
+msgid "Old Password"
+msgstr "Staré heslo"
+
+#: js/MainScreen.js:307
+msgid "New Password"
+msgstr "Nové heslo"
+
+#: js/MainScreen.js:311
+msgid "Repeat new Password"
+msgstr "Zopakujte nové heslo"
+
+#: js/MainScreen.js:330
+msgid "Please Wait!"
+msgstr "Čekejte prosím!"
+
+#: js/MainScreen.js:331
+msgid "changing password..."
+msgstr "měním heslo..."
+
+#: js/MainScreen.js:342
+msgid "Success"
+msgstr "Podařilo se"
+
+#: js/MainScreen.js:343
+msgid "Your password has been changed."
+msgstr "Vaše heslo bylo změněno."
+
+#: js/MainScreen.js:349 js/MainScreen.js:359
+msgid "Failure"
+msgstr "Došlo k chybě"
+
+#: js/MainScreen.js:360
+msgid "The new passwords mismatch, please correct them."
+msgstr "Nová hesla se neshodují, opravte je prosím."
+
+#: js/MainScreen.js:378
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
 msgstr ""
 
-#: js/widgets/VersionCheck.js:41
-msgid "It's a critical update and must be installed as soon as possible!"
+#: js/MainScreen.js:391
+msgid "Are you sure you want to logout?"
+msgstr "Určitě se chcete odhlásit?"
+
+#: js/MainScreen.js:393
+msgid "Logging you out..."
+msgstr "Odhlašuji Vás..."
+
+#: js/MainScreen.js:393 js/Login.js:130
+msgid "Please wait!"
+msgstr "Prosím čekejte!"
+
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr "Průvodce registrací"
+
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr "Křestní jméno"
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr "Příjmení"
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr "Přihlašovací jméno"
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Emailová adresa"
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr "Gratulujeme!"
+
+#: js/UserRegistration.js:167
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+"Zadal(a) jste všechny potřebné informace. Až kliknete na tlačítko Dokončit, "
+"pošleme Vám registrační e-mail."
+
+#: js/ux/form/ImageField.js:48
+msgid "click to edit"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:50
-msgid "Please consider updating!"
+#: js/ux/form/ImageField.js:90
+msgid "Not An Image"
 msgstr ""
+
+#: js/ux/form/ImageField.js:90
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr ""
+
+#: js/ux/form/ImageField.js:107
+msgid "Loading"
+msgstr ""
+
+#: js/ux/form/ImageField.js:115
+msgid "Upload Failed"
+msgstr ""
+
+#: js/ux/form/ImageField.js:115
+msgid "Could not upload image. Please notify your Administrator"
+msgstr ""
+
+#: js/ux/form/ImageField.js:127
+msgid "Change Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
+msgid "Crop Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:174
+msgid "Delete Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:212
+msgid "Image Failed"
+msgstr ""
+
+#: js/ux/form/ImageField.js:212
+msgid "Could not load image. Please notify your Administrator"
+msgstr ""
+
+#: js/ux/ConnectionStatus.js:52
+msgid "online"
+msgstr ""
+
+#: js/ux/ConnectionStatus.js:53
+msgid "offline"
+msgstr ""
+
+#: js/ux/ConnectionStatus.js:54
+msgid "unknown"
+msgstr ""
+
+#: js/ExceptionDialog.js:26 Http.php:239
+msgid "Abnormal End"
+msgstr "Abnormální ukončení"
+
+#: js/ExceptionDialog.js:42
+msgid "Send Report"
+msgstr "Odeslat hlášení"
+
+#: js/ExceptionDialog.js:51 Http.php:240
+msgid "An error occurred, the program ended abnormal."
+msgstr "Došlo k chybě, program se neukončil korektně."
+
+#: js/ExceptionDialog.js:52
+msgid "The last action you made was potentially not performed correctly."
+msgstr ""
+"Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
+
+#: js/ExceptionDialog.js:53
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occoured."
+msgstr ""
+"Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
+"uveďte stručný popis to co jste dělal(a), když došlo k chybě."
+
+#: js/ExceptionDialog.js:69
+msgid "Show Details:"
+msgstr "Zobrazit detaily:"
+
+#: js/ExceptionDialog.js:92
+msgid "Sending report..."
+msgstr "Odesílám hlášení..."
+
+#: js/ExceptionDialog.js:92
+msgid "Please wait a moment"
+msgstr "Počkejte prosím okamžik"
+
+#: js/ExceptionDialog.js:117
+msgid "Transmission Completed"
+msgstr "Přenos dokončen"
+
+#: js/ExceptionDialog.js:118
+msgid "Your report has been send. Thanks for your contribution"
+msgstr "Vaše hlášení bylo odesláno. Děkujeme za Vaši spolupráci."
+
+#: js/Tinebase.js:218
+msgid "Connection lost, please check your network!"
+msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
+
+#: js/Tinebase.js:228 Http.php:213
+msgid "Authorisation Required"
+msgstr ""
+
+#: js/Tinebase.js:229 Http.php:214
+msgid "Your session timed out. You need to login again."
+msgstr ""
+
+#: js/Tinebase.js:239
+msgid "Concurrent Updates"
+msgstr ""
+
+#: js/Tinebase.js:240
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
+msgstr ""
+
+#: js/Login.js:29
+msgid "Login"
+msgstr "Přihlásit"
+
+#: js/Login.js:36
+msgid "Register"
+msgstr "Registrovat"
+
+#: js/Login.js:50
+msgid "Please enter your login data"
+msgstr "Zadejte prosím Vaše přihlašovací údaje"
+
+#: js/Login.js:67
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+#: js/Login.js:73
+msgid "Password"
+msgstr "Heslo"
+
+#: js/Login.js:119
+msgid "Logging you in..."
+msgstr "Přihlašuji Vás..."
+
+#: js/Login.js:130
+msgid "Login successful. Loading Tine 2.0..."
+msgstr "Přihlášení bylo úspěšné. Načítám Tine 2.0..."
+
+#: js/Login.js:134
+msgid "Login failure"
+msgstr "Chybné přihlášení"
+
+#: js/Login.js:135
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
 
 #: Setup/setup.xml:1753
 msgid "note"
@@ -887,6 +844,46 @@ msgstr ""
 
 #: Setup/setup.xml:1866
 msgid "record changed"
+msgstr ""
+
+#: Application/Rights/Abstract.php:56
+msgid "admin"
+msgstr "administrovat"
+
+#: Application/Rights/Abstract.php:57
+msgid "admin right description"
+msgstr "popis práva na administraci"
+
+#: Application/Rights/Abstract.php:60
+msgid "run"
+msgstr "spustit"
+
+#: Application/Rights/Abstract.php:61
+msgid "run right description"
+msgstr "popis práva na spuštění"
+
+#: Export/Pdf.php:404
+msgid "Export Date"
+msgstr "Datum exportu"
+
+#: Export/Pdf.php:408
+msgid "Created by"
+msgstr "Vytvořil(a)"
+
+#: Acl/Rights.php:116
+msgid "Report bugs"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr ""
+
+#: Acl/Rights.php:120
+msgid "Check version"
+msgstr ""
+
+#: Acl/Rights.php:121
+msgid "Check tine20.org for new versions"
 msgstr ""
 
 #, fuzzy

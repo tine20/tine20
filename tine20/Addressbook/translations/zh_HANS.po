@@ -13,12 +13,105 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Controller.php:401
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s 的个人地址本"
+#: Pdf.php:35
+msgid "Business Contact Data"
+msgstr "商业联系人数据"
 
-#: js/Addressbook.js:15 js/Addressbook.js:220 Setup/setup.xml:449
+#: Pdf.php:37
+msgid "Organisation / Unit"
+msgstr "组织/单位"
+
+#: Pdf.php:42
+msgid "Business Address"
+msgstr "商业地址"
+
+#: Pdf.php:50 js/Addressbook.js:388
+msgid "Email"
+msgstr "电子邮件"
+
+#: Pdf.php:53
+msgid "Telephone Work"
+msgstr "工作电话"
+
+#: Pdf.php:56
+msgid "Telephone Cellphone"
+msgstr "手机号码"
+
+#: Pdf.php:59
+msgid "Telephone Car"
+msgstr "车载号码"
+
+#: Pdf.php:62
+msgid "Telephone Fax"
+msgstr "传真号码"
+
+#: Pdf.php:65
+msgid "Telephone Page"
+msgstr "传呼号码"
+
+#: Pdf.php:68
+msgid "URL"
+msgstr "URL"
+
+#: Pdf.php:71
+msgid "Role"
+msgstr "角色"
+
+#: Pdf.php:74 js/Addressbook.js:377 js/Addressbook.js:488 js/EditDialog.js:40
+msgid "Room"
+msgstr "房间"
+
+#: Pdf.php:77
+msgid "Assistant"
+msgstr "助理"
+
+#: Pdf.php:80
+msgid "Assistant Telephone"
+msgstr "助理电话"
+
+#: Pdf.php:84
+msgid "Private Contact Data"
+msgstr "个人联系人数据"
+
+#: Pdf.php:86 js/Addressbook.js:346 js/Addressbook.js:347
+#: js/Addressbook.js:348 js/EditDialog.js:358
+msgid "Private Address"
+msgstr "个人地址"
+
+#: Pdf.php:94
+msgid "Email Home"
+msgstr "家里电子邮件"
+
+#: Pdf.php:97
+msgid "Telephone Home"
+msgstr "家里电话"
+
+#: Pdf.php:100
+msgid "Telephone Cellphone Private"
+msgstr "个人手机号码"
+
+#: Pdf.php:103
+msgid "Telephone Fax Home"
+msgstr "家里传真号码"
+
+#: Pdf.php:106
+msgid "URL Home"
+msgstr "家里 URL"
+
+#: Pdf.php:110
+msgid "Other Data"
+msgstr "其它数据"
+
+#: Pdf.php:112 js/Addressbook.js:403 js/EditDialog.js:152 js/EditDialog.js:203
+msgid "Birthday"
+msgstr "生日"
+
+#: Pdf.php:115 js/Addressbook.js:340 js/Addressbook.js:375
+#: js/Addressbook.js:486 js/EditDialog.js:147 js/EditDialog.js:186
+msgid "Job Title"
+msgstr "工作头衔"
+
+#: js/Addressbook.js:15 js/Addressbook.js:220 Setup/setup.xml:483
 msgid "Internal Contacts"
 msgstr "内部联系人"
 
@@ -48,7 +141,7 @@ msgstr[0] "正删除联系人..."
 msgid "Failed"
 msgstr "失败"
 
-#: js/Addressbook.js:204
+#: js/Addressbook.js:204 js/Addressbook.js:934
 #, fuzzy
 msgid "Some error occured while trying to delete the contact."
 msgid_plural "Some error occured while trying to delete the contacts."
@@ -75,56 +168,49 @@ msgstr "输入 pdf 文件"
 msgid "call contact"
 msgstr "呼叫联系人"
 
-#: js/Addressbook.js:336 js/EditDialog.js:341
+#: js/Addressbook.js:336 js/EditDialog.js:408
 msgid "Contact"
 msgstr "联系人"
 
-#: js/Addressbook.js:337 js/Addressbook.js:370 js/EditDialog.js:93
+#: js/Addressbook.js:337 js/Addressbook.js:370 js/EditDialog.js:105
+#: js/EditDialog.js:164
 msgid "First Name"
 msgstr "名"
 
-#: js/Addressbook.js:338 js/Addressbook.js:369 js/EditDialog.js:97
+#: js/Addressbook.js:338 js/Addressbook.js:369 js/EditDialog.js:113
+#: js/EditDialog.js:168
 msgid "Last Name"
 msgstr "姓"
 
-#: js/Addressbook.js:339 js/Addressbook.js:373 js/EditDialog.js:123
+#: js/Addressbook.js:339 js/Addressbook.js:373 js/EditDialog.js:127
+#: js/EditDialog.js:194 Setup/setup.xml:545
 msgid "Company"
 msgstr "公司"
 
-#: js/Addressbook.js:340 js/Addressbook.js:375 js/Addressbook.js:486
-#: js/EditDialog.js:115 Pdf.php:115
-msgid "Job Title"
-msgstr "工作头衔"
-
 #: js/Addressbook.js:341 js/Addressbook.js:376 js/Addressbook.js:487
-#: js/EditDialog.js:30
+#: js/EditDialog.js:35
 msgid "Job Role"
 msgstr "工作职责"
 
 #: js/Addressbook.js:343 js/Addressbook.js:346 js/Addressbook.js:378
-#: js/EditDialog.js:256 js/EditDialog.js:301
+#: js/EditDialog.js:327 js/EditDialog.js:370
 msgid "Street"
 msgstr "街道"
 
 #: js/Addressbook.js:343 js/Addressbook.js:344 js/Addressbook.js:345
-#: js/EditDialog.js:240
+#: js/EditDialog.js:311
 msgid "Company Address"
 msgstr "公司地址"
 
-#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:266
-#: js/EditDialog.js:311
+#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:341
+#: js/EditDialog.js:384
 msgid "Postal Code"
 msgstr "邮政编码"
 
 #: js/Addressbook.js:345 js/Addressbook.js:348 js/Addressbook.js:379
-#: js/EditDialog.js:270 js/EditDialog.js:315
+#: js/EditDialog.js:345 js/EditDialog.js:388
 msgid "City"
 msgstr "城市"
-
-#: js/Addressbook.js:346 js/Addressbook.js:347 js/Addressbook.js:348
-#: js/EditDialog.js:289 Pdf.php:86
-msgid "Private Address"
-msgstr "个人地址"
 
 #: js/Addressbook.js:362
 msgid "Displaying contacts {0} - {1} of {2}"
@@ -142,19 +228,16 @@ msgstr "类型"
 msgid "Full Name"
 msgstr "全名"
 
-#: js/Addressbook.js:372 js/EditDialog.js:17 js/EditDialog.js:109
+#: js/Addressbook.js:372 js/EditDialog.js:17 js/EditDialog.js:141
+#: js/EditDialog.js:180
 msgid "Display Name"
 msgstr "显示名字"
 
-#: js/Addressbook.js:374 js/EditDialog.js:127
+#: js/Addressbook.js:374 js/EditDialog.js:131 js/EditDialog.js:198
 msgid "Unit"
 msgstr "单位"
 
-#: js/Addressbook.js:377 js/Addressbook.js:488 js/EditDialog.js:47 Pdf.php:74
-msgid "Room"
-msgstr "房间"
-
-#: js/Addressbook.js:380 js/EditDialog.js:274 js/EditDialog.js:319
+#: js/Addressbook.js:380 js/EditDialog.js:335 js/EditDialog.js:378
 msgid "Region"
 msgstr "省/自治区/直辖市"
 
@@ -162,7 +245,7 @@ msgstr "省/自治区/直辖市"
 msgid "Postalcode"
 msgstr "邮政编码"
 
-#: js/Addressbook.js:382 js/EditDialog.js:281 js/EditDialog.js:326
+#: js/Addressbook.js:382 js/EditDialog.js:350 js/EditDialog.js:393
 msgid "Country"
 msgstr "国家"
 
@@ -186,19 +269,15 @@ msgstr "邮政编码（个人）"
 msgid "Country (private)"
 msgstr "国家（个人）"
 
-#: js/Addressbook.js:388 Pdf.php:50
-msgid "Email"
-msgstr "电子邮件"
-
-#: js/Addressbook.js:389 js/EditDialog.js:153
+#: js/Addressbook.js:389 js/EditDialog.js:224
 msgid "Phone"
 msgstr "电话"
 
-#: js/Addressbook.js:390 js/EditDialog.js:158
+#: js/Addressbook.js:390 js/EditDialog.js:229
 msgid "Mobile"
 msgstr "手机"
 
-#: js/Addressbook.js:391 js/EditDialog.js:163
+#: js/Addressbook.js:391 js/EditDialog.js:234
 msgid "Fax"
 msgstr "传真"
 
@@ -210,15 +289,15 @@ msgstr "车载电话"
 msgid "Pager"
 msgstr "传呼机"
 
-#: js/Addressbook.js:394 js/EditDialog.js:170
+#: js/Addressbook.js:394 js/EditDialog.js:241
 msgid "Phone (private)"
 msgstr "电话（个人）"
 
-#: js/Addressbook.js:395 js/EditDialog.js:180
+#: js/Addressbook.js:395 js/EditDialog.js:251
 msgid "Fax (private)"
 msgstr "传真（个人）"
 
-#: js/Addressbook.js:396 js/EditDialog.js:175
+#: js/Addressbook.js:396 js/EditDialog.js:246
 msgid "Mobile (private)"
 msgstr "手机（个人）"
 
@@ -226,7 +305,7 @@ msgstr "手机（个人）"
 msgid "Email (private)"
 msgstr "电子邮件（个人）"
 
-#: js/Addressbook.js:398 js/EditDialog.js:200
+#: js/Addressbook.js:398 js/EditDialog.js:271
 msgid "Web"
 msgstr "网址"
 
@@ -246,10 +325,6 @@ msgstr "时区"
 msgid "Geo"
 msgstr "地理"
 
-#: js/Addressbook.js:403 js/EditDialog.js:132 Pdf.php:112
-msgid "Birthday"
-msgstr "生日"
-
 #: js/Addressbook.js:419 js/Addressbook.js:674
 msgid "Select contact"
 msgstr "选择联系人"
@@ -258,7 +333,7 @@ msgstr "选择联系人"
 msgid "Tags"
 msgstr "标签"
 
-#: js/Addressbook.js:513 js/EditDialog.js:373
+#: js/Addressbook.js:513 js/EditDialog.js:440
 msgid "Description"
 msgstr "描述"
 
@@ -303,131 +378,71 @@ msgstr "错误"
 msgid "Please fix the errors noted."
 msgstr "请修复注明的错误"
 
-#: js/Addressbook.js:934
-msgid "Some error occured while trying to delete the conctact."
-msgstr "当删除联系人的时候有错误发生"
-
-#: js/EditDialog.js:37
-msgid "Middle Name"
-msgstr "中间名"
-
-#: js/EditDialog.js:42
+#: js/EditDialog.js:30
 msgid "Suffix"
 msgstr "后缀"
 
-#: js/EditDialog.js:55
+#: js/EditDialog.js:48
 msgid "Personal Information"
 msgstr "个人信息"
 
-#: js/EditDialog.js:88
+#: js/EditDialog.js:84
+msgid "Salutation"
+msgstr ""
+
+#: js/EditDialog.js:95 js/EditDialog.js:159
 msgid "Title"
 msgstr "头衔"
 
-#: js/EditDialog.js:187
+#: js/EditDialog.js:109
+msgid "Middle Name"
+msgstr "中间名"
+
+#: js/EditDialog.js:258
 msgid "E-Mail"
 msgstr "电子邮件"
 
-#: js/EditDialog.js:193
+#: js/EditDialog.js:264
 msgid "E-Mail (private)"
 msgstr "电子邮件（个人）"
 
-#: js/EditDialog.js:210
+#: js/EditDialog.js:281
 msgid "Contact Information"
 msgstr "联系人信息"
 
-#: js/EditDialog.js:260 js/EditDialog.js:305
+#: js/EditDialog.js:331 js/EditDialog.js:374
 msgid "Street 2"
 msgstr "街道 2"
 
-#: js/EditDialog.js:333
+#: js/EditDialog.js:400
 msgid "Custom Fields"
 msgstr "定制字段"
 
-#: js/EditDialog.js:387
+#: js/EditDialog.js:454
 msgid "Enter description"
 msgstr "输入描述"
 
-#: js/EditDialog.js:423
+#: js/EditDialog.js:490
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] "链接 [%d]"
 
-#: Pdf.php:35
-msgid "Business Contact Data"
-msgstr "商业联系人数据"
+#: Setup/setup.xml:509
+msgid "Mr"
+msgstr ""
 
-#: Pdf.php:37
-msgid "Organisation / Unit"
-msgstr "组织/单位"
+#: Setup/setup.xml:527
+msgid "Ms"
+msgstr ""
 
-#: Pdf.php:42
-msgid "Business Address"
-msgstr "商业地址"
+#: Controller.php:401
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s 的个人地址本"
 
-#: Pdf.php:53
-msgid "Telephone Work"
-msgstr "工作电话"
-
-#: Pdf.php:56
-msgid "Telephone Cellphone"
-msgstr "手机号码"
-
-#: Pdf.php:59
-msgid "Telephone Car"
-msgstr "车载号码"
-
-#: Pdf.php:62
-msgid "Telephone Fax"
-msgstr "传真号码"
-
-#: Pdf.php:65
-msgid "Telephone Page"
-msgstr "传呼号码"
-
-#: Pdf.php:68
-msgid "URL"
-msgstr "URL"
-
-#: Pdf.php:71
-msgid "Role"
-msgstr "角色"
-
-#: Pdf.php:77
-msgid "Assistant"
-msgstr "助理"
-
-#: Pdf.php:80
-msgid "Assistant Telephone"
-msgstr "助理电话"
-
-#: Pdf.php:84
-msgid "Private Contact Data"
-msgstr "个人联系人数据"
-
-#: Pdf.php:94
-msgid "Email Home"
-msgstr "家里电子邮件"
-
-#: Pdf.php:97
-msgid "Telephone Home"
-msgstr "家里电话"
-
-#: Pdf.php:100
-msgid "Telephone Cellphone Private"
-msgstr "个人手机号码"
-
-#: Pdf.php:103
-msgid "Telephone Fax Home"
-msgstr "家里传真号码"
-
-#: Pdf.php:106
-msgid "URL Home"
-msgstr "家里 URL"
-
-#: Pdf.php:110
-msgid "Other Data"
-msgstr "其它数据"
+#~ msgid "Some error occured while trying to delete the conctact."
+#~ msgstr "当删除联系人的时候有错误发生"
 
 #~ msgid "Saved in"
 #~ msgstr "保存到"

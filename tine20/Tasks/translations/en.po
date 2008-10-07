@@ -1,8 +1,3 @@
-#: Controller.php:305
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's personal tasks"
-
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -179,3 +174,8 @@ msgstr "IN-PROCESS"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "CANCELLED"
+
+#: Controller.php:305
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's personal tasks"

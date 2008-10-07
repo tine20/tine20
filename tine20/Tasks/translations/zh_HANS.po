@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Controller.php:305
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s 的个人任务"
-
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -192,6 +187,11 @@ msgstr "正在处理"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "取消了"
+
+#: Controller.php:305
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s 的个人任务"
 
 #~ msgid "Folder"
 #~ msgstr "文件夹"

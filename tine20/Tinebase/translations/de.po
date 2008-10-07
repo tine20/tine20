@@ -14,415 +14,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:116
-msgid "Report bugs"
-msgstr "Fehler melden"
-
-#: Acl/Rights.php:117
-msgid "Report bugs to tine20.org directly when they occour"
-msgstr "Melden Sie Fehler an  tine20.org direkt."
-
-#: Acl/Rights.php:120
-msgid "Check version"
-msgstr "Version prüfen"
-
-#: Acl/Rights.php:121
-msgid "Check tine20.org for new versions"
-msgstr "tine2.0.org auf neue Versionen rüfen"
-
-#: Application/Rights/Abstract.php:56
-msgid "admin"
-msgstr "admin"
-
-#: Application/Rights/Abstract.php:57
-msgid "admin right description"
-msgstr "das Admin-Recht erlaubt dem User, alles zu tun ..."
-
-#: Application/Rights/Abstract.php:60
-msgid "run"
-msgstr "Ausführen"
-
-#: Application/Rights/Abstract.php:61
-msgid "run right description"
-msgstr ""
-"Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
-
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
-msgid "Tags"
-msgstr "Tags"
-
-#: Export/Pdf.php:404
-msgid "Export Date"
-msgstr "Export Datum"
-
-#: Export/Pdf.php:408
-msgid "Created by"
-msgstr "Angelegt von"
-
-#: Export/Pdf.php:461 js/widgets/ActivitiesPanel.js:517
-msgid "Activities"
-msgstr "Aktivitäten"
-
-#: Export/Pdf.php:473
-msgid "by"
-msgstr ""
-
-#: Http.php:213 js/Tinebase.js:228
-msgid "Authorisation Required"
-msgstr "Anmeldung erforderlich"
-
-#: Http.php:214 js/Tinebase.js:229
-msgid "Your session timed out. You need to login again."
-msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
-
-#: Http.php:239 js/ExceptionDialog.js:26
-msgid "Abnormal End"
-msgstr "Programmabbruch"
-
-#: Http.php:240 js/ExceptionDialog.js:51
-msgid "An error occurred, the program ended abnormal."
-msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
-
-#: js/ExceptionDialog.js:34 js/MainScreen.js:315
-#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: js/ExceptionDialog.js:42
-msgid "Send Report"
-msgstr "Bericht Senden"
-
-#: js/ExceptionDialog.js:52
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Ihre letzte Aktion wurde möglicherweise nicht korrekt ausgeführt."
-
-#: js/ExceptionDialog.js:53
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occoured."
-msgstr ""
-"Mit dem Senden eines Fehlerberichtes helfen sie mit die Software zu "
-"verbessern. Bitte beschreiben sie was genau sie gemacht haben bevor der "
-"Fehler aufgetreten ist. "
-
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/ExceptionDialog.js:69
-msgid "Show Details:"
-msgstr "Details anzeigen:"
-
-#: js/ExceptionDialog.js:92
-msgid "Sending report..."
-msgstr "Bericht wird gesendet..."
-
-#: js/ExceptionDialog.js:92
-msgid "Please wait a moment"
-msgstr "Bitte warten sie einen Moment"
-
-#: js/ExceptionDialog.js:117
-msgid "Transmission Completed"
-msgstr "Übermittlung beendet"
-
-#: js/ExceptionDialog.js:118
-msgid "Your report has been send. Thanks for your contribution"
-msgstr "Ihr Bericht wurde gesendet. Vielen Dank für ihre Mithilfe!"
-
-#: js/Login.js:29
-msgid "Login"
-msgstr "Anmelden"
-
-#: js/Login.js:36
-msgid "Register"
-msgstr "Registrieren"
-
-#: js/Login.js:50
-msgid "Please enter your login data"
-msgstr "Bitte geben sie ihre Anmeldedaten ein"
-
-#: js/Login.js:67
-msgid "Username"
-msgstr "Benutzername"
-
-#: js/Login.js:73
-msgid "Password"
-msgstr "Passwort"
-
-#: js/Login.js:119
-msgid "Logging you in..."
-msgstr "Sie werden angemeldet..."
-
-#: js/Login.js:119 js/widgets/container/ContainerGrants.js:34
-#: js/widgets/container/ContainerTree.js:231
-#: js/widgets/container/ContainerTree.js:259
-#: js/widgets/container/ContainerTree.js:291
-msgid "Please wait"
-msgstr "Bitte warten"
-
-#: js/Login.js:130
-msgid "Login successful. Loading Tine 2.0..."
-msgstr "Anmeldung erfolgreich. Tine 2.0 wird geladen..."
-
-#: js/Login.js:130 js/MainScreen.js:393
-msgid "Please wait!"
-msgstr "Bitte warten!"
-
-#: js/Login.js:134
-msgid "Login failure"
-msgstr "Anmeldung fehlgeschlagen"
-
-#: js/Login.js:135
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Ihre Benutzername und Passwort Kombination ist falsch!"
-
-#: js/MainScreen.js:48
-msgid "Change password"
-msgstr "Passwort ändern"
-
-#: js/MainScreen.js:54
-msgid "Install Google Gears"
-msgstr "Google Gears installieren"
-
-#: js/MainScreen.js:60
-msgid "Logout"
-msgstr "Abmelden"
-
-#: js/MainScreen.js:61
-msgid "Logout from Tine 2.0"
-msgstr "Tine 2.0 Sitzung Beenden"
-
-#: js/MainScreen.js:83 js/widgets/container/ContainerGrants.js:105
-msgid "Admin"
-msgstr "Admin"
-
-#: js/MainScreen.js:91
-msgid "Preferences"
-msgstr "Einstellungen"
-
-#: js/MainScreen.js:107
-#, python-format
-msgid "User: %s"
-msgstr "Benutzer: %s"
-
-#: js/MainScreen.js:108
-#, python-format
-msgid "Timezone: %s"
-msgstr "Zeitzone: %s"
-
-#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
-msgid "Timezone"
-msgstr "Zeitzone"
-
-#: js/MainScreen.js:110 js/widgets/LangChooser.js:40
-msgid "Language"
-msgstr "Sprache"
-
-#: js/MainScreen.js:279
-#, python-format
-msgid "Change Password For \"%s\""
-msgstr "Passwort für \"%s\" ändern"
-
-#: js/MainScreen.js:303
-msgid "Old Password"
-msgstr "Altes Passwort"
-
-#: js/MainScreen.js:307
-msgid "New Password"
-msgstr "Neues Passwort"
-
-#: js/MainScreen.js:311
-msgid "Repeat new Password"
-msgstr "Wiederholung neues Passwort"
-
-#: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
-#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditRecord.js:102
-msgid "Ok"
-msgstr "Ok"
-
-#: js/MainScreen.js:330
-msgid "Please Wait!"
-msgstr "Bitte warten!"
-
-#: js/MainScreen.js:331
-msgid "changing password..."
-msgstr "Passwort wird geändert..."
-
-#: js/MainScreen.js:342
-msgid "Success"
-msgstr "Erfolg"
-
-#: js/MainScreen.js:343
-msgid "Your password has been changed."
-msgstr "Ihr Passwort wurde geändert"
-
-#: js/MainScreen.js:349 js/MainScreen.js:359
-msgid "Failure"
-msgstr "Fehler"
-
-#: js/MainScreen.js:360
-msgid "The new passwords mismatch, please correct them."
-msgstr ""
-"Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
-"Eingabe."
-
-#: js/MainScreen.js:378
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
-"indem alle benötigten Dateien local auf dem Computer gespeichert werden."
-
-#: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
-msgid "Confirm"
-msgstr "Bestätigen"
-
-#: js/MainScreen.js:391
-msgid "Are you sure you want to logout?"
-msgstr "Wollen sie sich wirklich Abmelden?"
-
-#: js/MainScreen.js:393
-msgid "Logging you out..."
-msgstr "Sie werden abgemeldet..."
-
-#: js/Tinebase.js:218
-msgid "Connection lost, please check your network!"
-msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
-
-#: js/Tinebase.js:239
-msgid "Concurrent Updates"
-msgstr "Passende Updates"
-
-#: js/Tinebase.js:240
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. "
-"Sie müssen aktualisieren und die Änderungen erneut durchführen."
-
-#: js/UserRegistration.js:33
-msgid "Registration Wizard"
-msgstr "Registrierungs Wizzard"
-
-#: js/UserRegistration.js:86
-msgid "Given name"
-msgstr "Vorname"
-
-#: js/UserRegistration.js:97
-msgid "Family name"
-msgstr "Nachname"
-
-#: js/UserRegistration.js:108
-msgid "Login name"
-msgstr "Benutzername"
-
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Email-Adresse"
-
-#: js/UserRegistration.js:167
-msgid "Congratulations!"
-msgstr "Herzlichen Glückwunsch!"
-
-#: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Sie haben all benötigten Informationen eingegeben. Wenn sie nun den Fertig "
-"Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
-
-#: js/ux/ConnectionStatus.js:52
-msgid "online"
-msgstr "online"
-
-#: js/ux/ConnectionStatus.js:53
-msgid "offline"
-msgstr "offline"
-
-#: js/ux/ConnectionStatus.js:54
-msgid "unknown"
-msgstr "unbekannt"
-
-#: js/ux/form/ImageField.js:48
-msgid "click to edit"
-msgstr "Zum Ändern hier Klicken"
-
-#: js/ux/form/ImageField.js:90
-msgid "Not An Image"
-msgstr "Keine Bild-Datei"
-
-#: js/ux/form/ImageField.js:90
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Bitte wählen sie eine gültige Bild-Datei (gif/png/jpeg)"
-
-#: js/ux/form/ImageField.js:107
-msgid "Loading"
-msgstr "Laden"
-
-#: js/ux/form/ImageField.js:115
-msgid "Upload Failed"
-msgstr "Fehler beim Hochladen"
-
-#: js/ux/form/ImageField.js:115
-msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-"Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren "
-"Administrator"
-
-#: js/ux/form/ImageField.js:127
-msgid "Change Image"
-msgstr "Bild ändern"
-
-#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
-msgid "Crop Image"
-msgstr "Bild zuschneiden"
-
-#: js/ux/form/ImageField.js:174
-msgid "Delete Image"
-msgstr "Bild löschen"
-
-#: js/ux/form/ImageField.js:212
-msgid "Image Failed"
-msgstr "Fehler bei Bildverarbeitung"
-
-#: js/ux/form/ImageField.js:212
-msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-"Das Bild konnte nicht geladen werden. Bitte informieren sie ihren "
-"Administrator"
-
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
-msgstr "Zugang löschen"
-
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
-msgid "Name"
-msgstr "Name"
-
-#: js/widgets/account/PickerPanel.js:70
-msgid "add account"
-msgstr "Zugang Hinzufügen"
-
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "suchfilter eingeben"
-
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "Suchen"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "Blättern"
-
-#: js/widgets/AccountpickerPanel.js:103
-msgid "please select an account"
-msgstr "bitte wählen sie einen Zugang"
-
 #: js/widgets/ActivitiesPanel.js:146
 msgid "Add a Note..."
 msgstr "Notiz hinzufügen"
@@ -478,6 +69,10 @@ msgstr "Zeige Akivität {0} - {1} von {2}"
 msgid "No notes to display"
 msgstr "Keine Notizen vorhanden"
 
+#: js/widgets/ActivitiesPanel.js:517 Export/Pdf.php:461
+msgid "Activities"
+msgstr "Aktivitäten"
+
 #: js/widgets/ActivitiesPanel.js:530
 msgid "Time"
 msgstr "Zeit"
@@ -486,55 +81,77 @@ msgstr "Zeit"
 msgid "User"
 msgstr "Benutzer"
 
-#: js/widgets/container/ContainerGrants.js:34
+#: js/widgets/LangChooser.js:40 js/MainScreen.js:110
+msgid "Language"
+msgstr "Sprache"
+
+#: js/widgets/LangChooser.js:72
+msgid "setting new language..."
+msgstr "neue Sprache wird eingestellt..."
+
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
+#: js/widgets/TimezoneChooser.js:74
+msgid "Please Wait"
+msgstr "Bitte Warten"
+
+#: js/widgets/LangChooser.js:93
+msgid "loading new language..."
+msgstr "neue Sprache wird geladen..."
+
+#: js/widgets/TimezoneChooser.js:34 js/MainScreen.js:109
+msgid "Timezone"
+msgstr "Zeitzone"
+
+#: js/widgets/TimezoneChooser.js:74
+msgid "setting new timezone..."
+msgstr "Neue Zeitzone setzen..."
+
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+msgid "New version of Tine 2.0 available"
+msgstr "Eine neue Version von Tine 2.0 ist verfügbar."
+
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#, python-format
+msgid "Version \"%s\" of Tine 2.0 is available."
+msgstr "Die Version \"%s\" von Tine 2.0 ist verfügbar."
+
+#: js/widgets/VersionCheck.js:41
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
+
+#: js/widgets/VersionCheck.js:50
 #, fuzzy
-msgid "Updating Grants"
-msgstr "Berechtiungen werden gesichert"
+msgid "Please consider updating!"
+msgstr "Bitte bestätigen Sie das Update!"
 
-#: js/widgets/container/ContainerGrants.js:66
-msgid "Folder"
-msgstr "Ordner"
+#: js/widgets/GridPicker.js:78
+msgid "remove record"
+msgstr "eintrag löschen"
 
-#: js/widgets/container/ContainerGrants.js:82
-msgid "Read"
-msgstr "Lesen"
+#: js/widgets/GridPicker.js:389 js/widgets/account/PickerPanel.js:177
+msgid "enter searchfilter"
+msgstr "suchfilter eingeben"
 
-#: js/widgets/container/ContainerGrants.js:92
-msgid "Edit"
-msgstr "Editieren"
+#: js/widgets/GridPicker.js:410 js/widgets/account/PickerPanel.js:221
+msgid "Search"
+msgstr "Suchen"
 
-#: js/widgets/container/ContainerGrants.js:97
-msgid "Delete"
-msgstr "Löschen"
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+msgid "Browse"
+msgstr "Blättern"
 
-#: js/widgets/container/ContainerGrants.js:113
-msgid "Permissions"
-msgstr "Berechtigungen"
+#: js/widgets/account/PickerPanel.js:70
+msgid "add account"
+msgstr "Zugang Hinzufügen"
 
-#: js/widgets/container/ContainerSelect.js:74
-#, python-format
-msgid "Recently used %s:"
-msgstr "Kürzlich genutzte %s:"
+#: js/widgets/account/PickerPanel.js:166 js/widgets/account/ConfigGrid.js:79
+msgid "Name"
+msgstr "Name"
 
-#: js/widgets/container/ContainerSelect.js:93
-#, python-format
-msgid "choose other %s..."
-msgstr "Andere %s wählen..."
-
-#: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
-#: js/widgets/tags/TagsPanel.js:410
-msgid "personal"
-msgstr "Persönlich"
-
-#: js/widgets/container/ContainerSelect.js:105
-msgid "shared"
-msgstr "geteilt"
-
-#: js/widgets/container/ContainerSelect.js:248
-#, python-format
-msgid "please select a %s"
-msgstr "Bitte %s auswählen"
+#: js/widgets/account/ConfigGrid.js:55
+msgid "remove account"
+msgstr "Zugang löschen"
 
 #: js/widgets/container/ContainerTree.js:115
 #, python-format
@@ -567,9 +184,20 @@ msgid "Please enter the name of the new %s:"
 msgstr "Bitte den Namen auswählen für %s:"
 
 #: js/widgets/container/ContainerTree.js:231
+#: js/widgets/container/ContainerTree.js:259
+#: js/widgets/container/ContainerTree.js:291
+#: js/widgets/container/ContainerGrants.js:34 js/Login.js:119
+msgid "Please wait"
+msgstr "Bitte warten"
+
+#: js/widgets/container/ContainerTree.js:231
 #, python-format
 msgid "Creating %s..."
 msgstr "Einrichten %s..."
+
+#: js/widgets/container/ContainerTree.js:257 js/MainScreen.js:391
+msgid "Confirm"
+msgstr "Bestätigen"
 
 #: js/widgets/container/ContainerTree.js:257
 #, python-format
@@ -614,6 +242,79 @@ msgstr "%s umbenennen"
 #: js/widgets/container/ContainerTree.js:356
 msgid "Manage permissions"
 msgstr "Zugriffsrechte bearbeiten"
+
+#: js/widgets/container/ContainerSelect.js:74
+#, python-format
+msgid "Recently used %s:"
+msgstr "Kürzlich genutzte %s:"
+
+#: js/widgets/container/ContainerSelect.js:93
+#, python-format
+msgid "choose other %s..."
+msgstr "Andere %s wählen..."
+
+#: js/widgets/container/ContainerSelect.js:105
+#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:410
+msgid "personal"
+msgstr "Persönlich"
+
+#: js/widgets/container/ContainerSelect.js:105
+msgid "shared"
+msgstr "geteilt"
+
+#: js/widgets/container/ContainerSelect.js:248
+#, python-format
+msgid "please select a %s"
+msgstr "Bitte %s auswählen"
+
+#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
+#: js/MainScreen.js:315 js/ExceptionDialog.js:34
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: js/widgets/container/ContainerSelect.js:260
+#: js/widgets/AccountpickerPanel.js:108 js/widgets/EditRecord.js:102
+#: js/MainScreen.js:321
+msgid "Ok"
+msgstr "Ok"
+
+#: js/widgets/container/ContainerGrants.js:34
+#, fuzzy
+msgid "Updating Grants"
+msgstr "Berechtiungen werden gesichert"
+
+#: js/widgets/container/ContainerGrants.js:66
+msgid "Folder"
+msgstr "Ordner"
+
+#: js/widgets/container/ContainerGrants.js:82
+msgid "Read"
+msgstr "Lesen"
+
+#: js/widgets/container/ContainerGrants.js:92
+msgid "Edit"
+msgstr "Editieren"
+
+#: js/widgets/container/ContainerGrants.js:97
+msgid "Delete"
+msgstr "Löschen"
+
+#: js/widgets/container/ContainerGrants.js:105 js/MainScreen.js:83
+msgid "Admin"
+msgstr "Admin"
+
+#: js/widgets/container/ContainerGrants.js:113
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+#: js/widgets/GroupSelect.js:94
+msgid "Please Select a Group"
+msgstr "Bitte wählen sie eine Gruppe aus"
+
+#: js/widgets/AccountpickerPanel.js:103
+msgid "please select an account"
+msgstr "bitte wählen sie einen Zugang"
 
 #: js/widgets/EditRecord.js:113
 msgid "Apply"
@@ -687,27 +388,6 @@ msgstr "und"
 msgid "Show"
 msgstr "Zeige"
 
-#: js/widgets/GridPicker.js:78
-msgid "remove record"
-msgstr "eintrag löschen"
-
-#: js/widgets/GroupSelect.js:94
-msgid "Please Select a Group"
-msgstr "Bitte wählen sie eine Gruppe aus"
-
-#: js/widgets/LangChooser.js:72
-msgid "setting new language..."
-msgstr "neue Sprache wird eingestellt..."
-
-#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
-#: js/widgets/TimezoneChooser.js:74
-msgid "Please Wait"
-msgstr "Bitte Warten"
-
-#: js/widgets/LangChooser.js:93
-msgid "loading new language..."
-msgstr "neue Sprache wird geladen..."
-
 #: js/widgets/tags/TagCombo.js:37
 msgid "tag name"
 msgstr "Tag Name"
@@ -715,6 +395,10 @@ msgstr "Tag Name"
 #: js/widgets/tags/TagFilter.js:23
 msgid "Tag"
 msgstr "Tag"
+
+#: js/widgets/tags/TagsPanel.js:53 Export/Pdf.php:206
+msgid "Tags"
+msgstr "Tags"
 
 #: js/widgets/tags/TagsPanel.js:83
 msgid "Add a new personal tag"
@@ -833,31 +517,303 @@ msgstr "Tag-Name eingegeben"
 msgid "Searching..."
 msgstr "Suche ..."
 
+#: js/widgets/tags/TagsPanel.js:556 js/ExceptionDialog.js:59
+msgid "Description"
+msgstr "Beschreibung"
+
 #: js/widgets/tags/TagsPanel.js:560
 msgid "Color"
 msgstr "Farbe"
 
-#: js/widgets/TimezoneChooser.js:74
-msgid "setting new timezone..."
-msgstr "Neue Zeitzone setzen..."
+#: js/MainScreen.js:48
+msgid "Change password"
+msgstr "Passwort ändern"
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
-msgid "New version of Tine 2.0 available"
-msgstr "Eine neue Version von Tine 2.0 ist verfügbar."
+#: js/MainScreen.js:54
+msgid "Install Google Gears"
+msgstr "Google Gears installieren"
 
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/MainScreen.js:60
+msgid "Logout"
+msgstr "Abmelden"
+
+#: js/MainScreen.js:61
+msgid "Logout from Tine 2.0"
+msgstr "Tine 2.0 Sitzung Beenden"
+
+#: js/MainScreen.js:91
+msgid "Preferences"
+msgstr "Einstellungen"
+
+#: js/MainScreen.js:107
 #, python-format
-msgid "Version \"%s\" of Tine 2.0 is available."
-msgstr "Die Version \"%s\" von Tine 2.0 ist verfügbar."
+msgid "User: %s"
+msgstr "Benutzer: %s"
 
-#: js/widgets/VersionCheck.js:41
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
+#: js/MainScreen.js:108
+#, python-format
+msgid "Timezone: %s"
+msgstr "Zeitzone: %s"
 
-#: js/widgets/VersionCheck.js:50
-#, fuzzy
-msgid "Please consider updating!"
-msgstr "Bitte bestätigen Sie das Update!"
+#: js/MainScreen.js:279
+#, python-format
+msgid "Change Password For \"%s\""
+msgstr "Passwort für \"%s\" ändern"
+
+#: js/MainScreen.js:303
+msgid "Old Password"
+msgstr "Altes Passwort"
+
+#: js/MainScreen.js:307
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: js/MainScreen.js:311
+msgid "Repeat new Password"
+msgstr "Wiederholung neues Passwort"
+
+#: js/MainScreen.js:330
+msgid "Please Wait!"
+msgstr "Bitte warten!"
+
+#: js/MainScreen.js:331
+msgid "changing password..."
+msgstr "Passwort wird geändert..."
+
+#: js/MainScreen.js:342
+msgid "Success"
+msgstr "Erfolg"
+
+#: js/MainScreen.js:343
+msgid "Your password has been changed."
+msgstr "Ihr Passwort wurde geändert"
+
+#: js/MainScreen.js:349 js/MainScreen.js:359
+msgid "Failure"
+msgstr "Fehler"
+
+#: js/MainScreen.js:360
+msgid "The new passwords mismatch, please correct them."
+msgstr ""
+"Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
+"Eingabe."
+
+#: js/MainScreen.js:378
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
+"indem alle benötigten Dateien local auf dem Computer gespeichert werden."
+
+#: js/MainScreen.js:391
+msgid "Are you sure you want to logout?"
+msgstr "Wollen sie sich wirklich Abmelden?"
+
+#: js/MainScreen.js:393
+msgid "Logging you out..."
+msgstr "Sie werden abgemeldet..."
+
+#: js/MainScreen.js:393 js/Login.js:130
+msgid "Please wait!"
+msgstr "Bitte warten!"
+
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr "Registrierungs Wizzard"
+
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr "Vorname"
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr "Nachname"
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr "Benutzername"
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Email-Adresse"
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr "Herzlichen Glückwunsch!"
+
+#: js/UserRegistration.js:167
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+"Sie haben all benötigten Informationen eingegeben. Wenn sie nun den Fertig "
+"Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
+
+#: js/ux/form/ImageField.js:48
+msgid "click to edit"
+msgstr "Zum Ändern hier Klicken"
+
+#: js/ux/form/ImageField.js:90
+msgid "Not An Image"
+msgstr "Keine Bild-Datei"
+
+#: js/ux/form/ImageField.js:90
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Bitte wählen sie eine gültige Bild-Datei (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:107
+msgid "Loading"
+msgstr "Laden"
+
+#: js/ux/form/ImageField.js:115
+msgid "Upload Failed"
+msgstr "Fehler beim Hochladen"
+
+#: js/ux/form/ImageField.js:115
+msgid "Could not upload image. Please notify your Administrator"
+msgstr ""
+"Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren "
+"Administrator"
+
+#: js/ux/form/ImageField.js:127
+msgid "Change Image"
+msgstr "Bild ändern"
+
+#: js/ux/form/ImageField.js:148 js/ux/form/ImageField.js:166
+msgid "Crop Image"
+msgstr "Bild zuschneiden"
+
+#: js/ux/form/ImageField.js:174
+msgid "Delete Image"
+msgstr "Bild löschen"
+
+#: js/ux/form/ImageField.js:212
+msgid "Image Failed"
+msgstr "Fehler bei Bildverarbeitung"
+
+#: js/ux/form/ImageField.js:212
+msgid "Could not load image. Please notify your Administrator"
+msgstr ""
+"Das Bild konnte nicht geladen werden. Bitte informieren sie ihren "
+"Administrator"
+
+#: js/ux/ConnectionStatus.js:52
+msgid "online"
+msgstr "online"
+
+#: js/ux/ConnectionStatus.js:53
+msgid "offline"
+msgstr "offline"
+
+#: js/ux/ConnectionStatus.js:54
+msgid "unknown"
+msgstr "unbekannt"
+
+#: js/ExceptionDialog.js:26 Http.php:239
+msgid "Abnormal End"
+msgstr "Programmabbruch"
+
+#: js/ExceptionDialog.js:42
+msgid "Send Report"
+msgstr "Bericht Senden"
+
+#: js/ExceptionDialog.js:51 Http.php:240
+msgid "An error occurred, the program ended abnormal."
+msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
+
+#: js/ExceptionDialog.js:52
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Ihre letzte Aktion wurde möglicherweise nicht korrekt ausgeführt."
+
+#: js/ExceptionDialog.js:53
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occoured."
+msgstr ""
+"Mit dem Senden eines Fehlerberichtes helfen sie mit die Software zu "
+"verbessern. Bitte beschreiben sie was genau sie gemacht haben bevor der "
+"Fehler aufgetreten ist. "
+
+#: js/ExceptionDialog.js:69
+msgid "Show Details:"
+msgstr "Details anzeigen:"
+
+#: js/ExceptionDialog.js:92
+msgid "Sending report..."
+msgstr "Bericht wird gesendet..."
+
+#: js/ExceptionDialog.js:92
+msgid "Please wait a moment"
+msgstr "Bitte warten sie einen Moment"
+
+#: js/ExceptionDialog.js:117
+msgid "Transmission Completed"
+msgstr "Übermittlung beendet"
+
+#: js/ExceptionDialog.js:118
+msgid "Your report has been send. Thanks for your contribution"
+msgstr "Ihr Bericht wurde gesendet. Vielen Dank für ihre Mithilfe!"
+
+#: js/Tinebase.js:218
+msgid "Connection lost, please check your network!"
+msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
+
+#: js/Tinebase.js:228 Http.php:213
+msgid "Authorisation Required"
+msgstr "Anmeldung erforderlich"
+
+#: js/Tinebase.js:229 Http.php:214
+msgid "Your session timed out. You need to login again."
+msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
+
+#: js/Tinebase.js:239
+msgid "Concurrent Updates"
+msgstr "Passende Updates"
+
+#: js/Tinebase.js:240
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
+msgstr ""
+"Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. "
+"Sie müssen aktualisieren und die Änderungen erneut durchführen."
+
+#: js/Login.js:29
+msgid "Login"
+msgstr "Anmelden"
+
+#: js/Login.js:36
+msgid "Register"
+msgstr "Registrieren"
+
+#: js/Login.js:50
+msgid "Please enter your login data"
+msgstr "Bitte geben sie ihre Anmeldedaten ein"
+
+#: js/Login.js:67
+msgid "Username"
+msgstr "Benutzername"
+
+#: js/Login.js:73
+msgid "Password"
+msgstr "Passwort"
+
+#: js/Login.js:119
+msgid "Logging you in..."
+msgstr "Sie werden angemeldet..."
+
+#: js/Login.js:130
+msgid "Login successful. Loading Tine 2.0..."
+msgstr "Anmeldung erfolgreich. Tine 2.0 wird geladen..."
+
+#: js/Login.js:134
+msgid "Login failure"
+msgstr "Anmeldung fehlgeschlagen"
+
+#: js/Login.js:135
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Ihre Benutzername und Passwort Kombination ist falsch!"
 
 #: Setup/setup.xml:1753
 msgid "note"
@@ -898,6 +854,47 @@ msgstr "geändert"
 #: Setup/setup.xml:1866
 msgid "record changed"
 msgstr "Eintrag geändert"
+
+#: Application/Rights/Abstract.php:56
+msgid "admin"
+msgstr "admin"
+
+#: Application/Rights/Abstract.php:57
+msgid "admin right description"
+msgstr "das Admin-Recht erlaubt dem User, alles zu tun ..."
+
+#: Application/Rights/Abstract.php:60
+msgid "run"
+msgstr "Ausführen"
+
+#: Application/Rights/Abstract.php:61
+msgid "run right description"
+msgstr ""
+"Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
+
+#: Export/Pdf.php:404
+msgid "Export Date"
+msgstr "Export Datum"
+
+#: Export/Pdf.php:408
+msgid "Created by"
+msgstr "Angelegt von"
+
+#: Acl/Rights.php:116
+msgid "Report bugs"
+msgstr "Fehler melden"
+
+#: Acl/Rights.php:117
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr "Melden Sie Fehler an  tine20.org direkt."
+
+#: Acl/Rights.php:120
+msgid "Check version"
+msgstr "Version prüfen"
+
+#: Acl/Rights.php:121
+msgid "Check tine20.org for new versions"
+msgstr "tine2.0.org auf neue Versionen rüfen"
 
 #, fuzzy
 #~ msgid "Internal Contacts"

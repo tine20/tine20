@@ -17,12 +17,105 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
-#: Controller.php:401
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s's Личная книга адресов"
+#: Pdf.php:35
+msgid "Business Contact Data"
+msgstr "Деловые данные контактов"
 
-#: js/Addressbook.js:15 js/Addressbook.js:220 Setup/setup.xml:449
+#: Pdf.php:37
+msgid "Organisation / Unit"
+msgstr "Организация / Отделение"
+
+#: Pdf.php:42
+msgid "Business Address"
+msgstr "Фирменный адрес"
+
+#: Pdf.php:50 js/Addressbook.js:388
+msgid "Email"
+msgstr "Электронная почта"
+
+#: Pdf.php:53
+msgid "Telephone Work"
+msgstr "Телефон (офис)"
+
+#: Pdf.php:56
+msgid "Telephone Cellphone"
+msgstr "Телефонный толефон"
+
+#: Pdf.php:59
+msgid "Telephone Car"
+msgstr "Телефон (автомобил)"
+
+#: Pdf.php:62
+msgid "Telephone Fax"
+msgstr "Телефон (факс)"
+
+#: Pdf.php:65
+msgid "Telephone Page"
+msgstr "Пейджер"
+
+#: Pdf.php:68
+msgid "URL"
+msgstr "URL (Единый указатель ресурсов)"
+
+#: Pdf.php:71
+msgid "Role"
+msgstr "Роль"
+
+#: Pdf.php:74 js/Addressbook.js:377 js/Addressbook.js:488 js/EditDialog.js:40
+msgid "Room"
+msgstr "Помещение"
+
+#: Pdf.php:77
+msgid "Assistant"
+msgstr "Помощник"
+
+#: Pdf.php:80
+msgid "Assistant Telephone"
+msgstr "Телефон помощника"
+
+#: Pdf.php:84
+msgid "Private Contact Data"
+msgstr "Личные данные контактов"
+
+#: Pdf.php:86 js/Addressbook.js:346 js/Addressbook.js:347
+#: js/Addressbook.js:348 js/EditDialog.js:358
+msgid "Private Address"
+msgstr "Личный адрес"
+
+#: Pdf.php:94
+msgid "Email Home"
+msgstr "Электронная почта"
+
+#: Pdf.php:97
+msgid "Telephone Home"
+msgstr "Телефон"
+
+#: Pdf.php:100
+msgid "Telephone Cellphone Private"
+msgstr "Личный сотовый телефон"
+
+#: Pdf.php:103
+msgid "Telephone Fax Home"
+msgstr "Факс"
+
+#: Pdf.php:106
+msgid "URL Home"
+msgstr "Домашний URL (Единый указатель ресурсов)"
+
+#: Pdf.php:110
+msgid "Other Data"
+msgstr "Другая дата"
+
+#: Pdf.php:112 js/Addressbook.js:403 js/EditDialog.js:152 js/EditDialog.js:203
+msgid "Birthday"
+msgstr "Дата рождения"
+
+#: Pdf.php:115 js/Addressbook.js:340 js/Addressbook.js:375
+#: js/Addressbook.js:486 js/EditDialog.js:147 js/EditDialog.js:186
+msgid "Job Title"
+msgstr "Професия"
+
+#: js/Addressbook.js:15 js/Addressbook.js:220 Setup/setup.xml:483
 msgid "Internal Contacts"
 msgstr "Внутренние контакты"
 
@@ -56,7 +149,7 @@ msgstr[2] "Контактов удаляются"
 msgid "Failed"
 msgstr "Ошибка"
 
-#: js/Addressbook.js:204
+#: js/Addressbook.js:204 js/Addressbook.js:934
 #, fuzzy
 msgid "Some error occured while trying to delete the contact."
 msgid_plural "Some error occured while trying to delete the contacts."
@@ -87,56 +180,49 @@ msgstr "экспортировать как пдф"
 msgid "call contact"
 msgstr "Позвонит контакту"
 
-#: js/Addressbook.js:336 js/EditDialog.js:341
+#: js/Addressbook.js:336 js/EditDialog.js:408
 msgid "Contact"
 msgstr "Контакт"
 
-#: js/Addressbook.js:337 js/Addressbook.js:370 js/EditDialog.js:93
+#: js/Addressbook.js:337 js/Addressbook.js:370 js/EditDialog.js:105
+#: js/EditDialog.js:164
 msgid "First Name"
 msgstr "Имя"
 
-#: js/Addressbook.js:338 js/Addressbook.js:369 js/EditDialog.js:97
+#: js/Addressbook.js:338 js/Addressbook.js:369 js/EditDialog.js:113
+#: js/EditDialog.js:168
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/Addressbook.js:339 js/Addressbook.js:373 js/EditDialog.js:123
+#: js/Addressbook.js:339 js/Addressbook.js:373 js/EditDialog.js:127
+#: js/EditDialog.js:194 Setup/setup.xml:545
 msgid "Company"
 msgstr "Фирма"
 
-#: js/Addressbook.js:340 js/Addressbook.js:375 js/Addressbook.js:486
-#: js/EditDialog.js:115 Pdf.php:115
-msgid "Job Title"
-msgstr "Професия"
-
 #: js/Addressbook.js:341 js/Addressbook.js:376 js/Addressbook.js:487
-#: js/EditDialog.js:30
+#: js/EditDialog.js:35
 msgid "Job Role"
 msgstr "Рабочая роль"
 
 #: js/Addressbook.js:343 js/Addressbook.js:346 js/Addressbook.js:378
-#: js/EditDialog.js:256 js/EditDialog.js:301
+#: js/EditDialog.js:327 js/EditDialog.js:370
 msgid "Street"
 msgstr "Улица"
 
 #: js/Addressbook.js:343 js/Addressbook.js:344 js/Addressbook.js:345
-#: js/EditDialog.js:240
+#: js/EditDialog.js:311
 msgid "Company Address"
 msgstr "Адрес Фирмы"
 
-#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:266
-#: js/EditDialog.js:311
+#: js/Addressbook.js:344 js/Addressbook.js:347 js/EditDialog.js:341
+#: js/EditDialog.js:384
 msgid "Postal Code"
 msgstr "Почтовый индекс"
 
 #: js/Addressbook.js:345 js/Addressbook.js:348 js/Addressbook.js:379
-#: js/EditDialog.js:270 js/EditDialog.js:315
+#: js/EditDialog.js:345 js/EditDialog.js:388
 msgid "City"
 msgstr "Город"
-
-#: js/Addressbook.js:346 js/Addressbook.js:347 js/Addressbook.js:348
-#: js/EditDialog.js:289 Pdf.php:86
-msgid "Private Address"
-msgstr "Личный адрес"
 
 #: js/Addressbook.js:362
 msgid "Displaying contacts {0} - {1} of {2}"
@@ -154,19 +240,16 @@ msgstr "Тип"
 msgid "Full Name"
 msgstr "Полное Имя"
 
-#: js/Addressbook.js:372 js/EditDialog.js:17 js/EditDialog.js:109
+#: js/Addressbook.js:372 js/EditDialog.js:17 js/EditDialog.js:141
+#: js/EditDialog.js:180
 msgid "Display Name"
 msgstr "Показаное имя"
 
-#: js/Addressbook.js:374 js/EditDialog.js:127
+#: js/Addressbook.js:374 js/EditDialog.js:131 js/EditDialog.js:198
 msgid "Unit"
 msgstr "Отделение"
 
-#: js/Addressbook.js:377 js/Addressbook.js:488 js/EditDialog.js:47 Pdf.php:74
-msgid "Room"
-msgstr "Помещение"
-
-#: js/Addressbook.js:380 js/EditDialog.js:274 js/EditDialog.js:319
+#: js/Addressbook.js:380 js/EditDialog.js:335 js/EditDialog.js:378
 msgid "Region"
 msgstr "Область"
 
@@ -174,7 +257,7 @@ msgstr "Область"
 msgid "Postalcode"
 msgstr "Почтовый индекс"
 
-#: js/Addressbook.js:382 js/EditDialog.js:281 js/EditDialog.js:326
+#: js/Addressbook.js:382 js/EditDialog.js:350 js/EditDialog.js:393
 msgid "Country"
 msgstr "Страна"
 
@@ -198,19 +281,15 @@ msgstr "Почтовый индекс (личный)"
 msgid "Country (private)"
 msgstr "Страна (личная)"
 
-#: js/Addressbook.js:388 Pdf.php:50
-msgid "Email"
-msgstr "Электронная почта"
-
-#: js/Addressbook.js:389 js/EditDialog.js:153
+#: js/Addressbook.js:389 js/EditDialog.js:224
 msgid "Phone"
 msgstr "Телефон"
 
-#: js/Addressbook.js:390 js/EditDialog.js:158
+#: js/Addressbook.js:390 js/EditDialog.js:229
 msgid "Mobile"
 msgstr "Мобильный телефон"
 
-#: js/Addressbook.js:391 js/EditDialog.js:163
+#: js/Addressbook.js:391 js/EditDialog.js:234
 msgid "Fax"
 msgstr "Факс"
 
@@ -222,15 +301,15 @@ msgstr "Автомобильный телефон"
 msgid "Pager"
 msgstr "Пейджер"
 
-#: js/Addressbook.js:394 js/EditDialog.js:170
+#: js/Addressbook.js:394 js/EditDialog.js:241
 msgid "Phone (private)"
 msgstr "(Личный) телефон"
 
-#: js/Addressbook.js:395 js/EditDialog.js:180
+#: js/Addressbook.js:395 js/EditDialog.js:251
 msgid "Fax (private)"
 msgstr "(Личный) Факс"
 
-#: js/Addressbook.js:396 js/EditDialog.js:175
+#: js/Addressbook.js:396 js/EditDialog.js:246
 msgid "Mobile (private)"
 msgstr "(личный) мобильный телефон"
 
@@ -238,7 +317,7 @@ msgstr "(личный) мобильный телефон"
 msgid "Email (private)"
 msgstr "(Личная) Электронная почта"
 
-#: js/Addressbook.js:398 js/EditDialog.js:200
+#: js/Addressbook.js:398 js/EditDialog.js:271
 msgid "Web"
 msgstr "Интернет"
 
@@ -258,10 +337,6 @@ msgstr "Зона времени"
 msgid "Geo"
 msgstr "Координаты"
 
-#: js/Addressbook.js:403 js/EditDialog.js:132 Pdf.php:112
-msgid "Birthday"
-msgstr "Дата рождения"
-
 #: js/Addressbook.js:419 js/Addressbook.js:674
 msgid "Select contact"
 msgstr "Выберите контакт"
@@ -270,7 +345,7 @@ msgstr "Выберите контакт"
 msgid "Tags"
 msgstr "Тэги"
 
-#: js/Addressbook.js:513 js/EditDialog.js:373
+#: js/Addressbook.js:513 js/EditDialog.js:440
 msgid "Description"
 msgstr "Oписание"
 
@@ -315,52 +390,51 @@ msgstr "Ошибки"
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте указанные ошибки"
 
-#: js/Addressbook.js:934
-#, fuzzy
-msgid "Some error occured while trying to delete the conctact."
-msgstr "При удаление контакта возникла ошибка."
-
-#: js/EditDialog.js:37
-msgid "Middle Name"
-msgstr "Второе имя"
-
-#: js/EditDialog.js:42
+#: js/EditDialog.js:30
 msgid "Suffix"
 msgstr "Дополнение имени"
 
-#: js/EditDialog.js:55
+#: js/EditDialog.js:48
 msgid "Personal Information"
 msgstr "Личная  информация"
 
-#: js/EditDialog.js:88
+#: js/EditDialog.js:84
+msgid "Salutation"
+msgstr ""
+
+#: js/EditDialog.js:95 js/EditDialog.js:159
 msgid "Title"
 msgstr "Название"
 
-#: js/EditDialog.js:187
+#: js/EditDialog.js:109
+msgid "Middle Name"
+msgstr "Второе имя"
+
+#: js/EditDialog.js:258
 msgid "E-Mail"
 msgstr "Электронная почта"
 
-#: js/EditDialog.js:193
+#: js/EditDialog.js:264
 msgid "E-Mail (private)"
 msgstr "(личная) Электронная почта"
 
-#: js/EditDialog.js:210
+#: js/EditDialog.js:281
 msgid "Contact Information"
 msgstr "Информация контакта"
 
-#: js/EditDialog.js:260 js/EditDialog.js:305
+#: js/EditDialog.js:331 js/EditDialog.js:374
 msgid "Street 2"
 msgstr "Следующая улица"
 
-#: js/EditDialog.js:333
+#: js/EditDialog.js:400
 msgid "Custom Fields"
 msgstr "Дополнительные поля"
 
-#: js/EditDialog.js:387
+#: js/EditDialog.js:454
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/EditDialog.js:423
+#: js/EditDialog.js:490
 #, fuzzy, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
@@ -368,81 +442,22 @@ msgstr[0] "Линк"
 msgstr[1] "Линка"
 msgstr[2] "Линков"
 
-#: Pdf.php:35
-msgid "Business Contact Data"
-msgstr "Деловые данные контактов"
+#: Setup/setup.xml:509
+msgid "Mr"
+msgstr ""
 
-#: Pdf.php:37
-msgid "Organisation / Unit"
-msgstr "Организация / Отделение"
+#: Setup/setup.xml:527
+msgid "Ms"
+msgstr ""
 
-#: Pdf.php:42
-msgid "Business Address"
-msgstr "Фирменный адрес"
+#: Controller.php:401
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s's Личная книга адресов"
 
-#: Pdf.php:53
-msgid "Telephone Work"
-msgstr "Телефон (офис)"
-
-#: Pdf.php:56
-msgid "Telephone Cellphone"
-msgstr "Телефонный толефон"
-
-#: Pdf.php:59
-msgid "Telephone Car"
-msgstr "Телефон (автомобил)"
-
-#: Pdf.php:62
-msgid "Telephone Fax"
-msgstr "Телефон (факс)"
-
-#: Pdf.php:65
-msgid "Telephone Page"
-msgstr "Пейджер"
-
-#: Pdf.php:68
-msgid "URL"
-msgstr "URL (Единый указатель ресурсов)"
-
-#: Pdf.php:71
-msgid "Role"
-msgstr "Роль"
-
-#: Pdf.php:77
-msgid "Assistant"
-msgstr "Помощник"
-
-#: Pdf.php:80
-msgid "Assistant Telephone"
-msgstr "Телефон помощника"
-
-#: Pdf.php:84
-msgid "Private Contact Data"
-msgstr "Личные данные контактов"
-
-#: Pdf.php:94
-msgid "Email Home"
-msgstr "Электронная почта"
-
-#: Pdf.php:97
-msgid "Telephone Home"
-msgstr "Телефон"
-
-#: Pdf.php:100
-msgid "Telephone Cellphone Private"
-msgstr "Личный сотовый телефон"
-
-#: Pdf.php:103
-msgid "Telephone Fax Home"
-msgstr "Факс"
-
-#: Pdf.php:106
-msgid "URL Home"
-msgstr "Домашний URL (Единый указатель ресурсов)"
-
-#: Pdf.php:110
-msgid "Other Data"
-msgstr "Другая дата"
+#, fuzzy
+#~ msgid "Some error occured while trying to delete the conctact."
+#~ msgstr "При удаление контакта возникла ошибка."
 
 #~ msgid "Saved in"
 #~ msgstr "сохранен в"
