@@ -39,6 +39,11 @@ class Crm_ServiceTest extends PHPUnit_Framework_TestCase
     protected $_leadData = NULL;
     
     /**
+     * @var array
+     */
+    protected $_contactData = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -71,25 +76,24 @@ class Crm_ServiceTest extends PHPUnit_Framework_TestCase
             'probability'   => 50,
             'end_scheduled' => NULL,
         );
-        /*
-        array(
-        'n_family'              => 'Weiss',
-        'n_fileas'              => 'Weiss Cornelius',
-        'n_given'               => 'Cornelius',
-        'org_name'              => 'Metaways Infosystems GmbH',
-        'org_unit'              => 'Tine 2.0',
-        'adr_one_countryname'   => 'DE',
-        'adr_one_locality'      => 'Hamburg',
-        'adr_one_postalcode'    => '24xxx',
-        'adr_one_region'        => 'Hamburg',
-        'adr_one_street'        => 'Pickhuben 4',
-        'assistent'             => '',
-        'bday'                  => '1979-06-05 03:04:05',
-        'email'                 => 'c.weiss@metawyas.de',
-        'role'                  => 'Core Developer',
-        'title'                 => 'Dipl. Phys.',
-    );
-*/
+        
+        $this->_contactData = array(
+            'n_family'              => 'Potential',
+            'n_fileas'              => 'Potential Customer',
+            'n_given'               => 'Customer',
+            'org_name'              => 'We have lots of money ltd.',
+            'org_unit'              => 'Strategic Sellings',
+            'adr_one_countryname'   => 'US',
+            'adr_one_locality'      => 'New York',
+            'adr_one_postalcode'    => '2234',
+            'adr_one_region'        => 'New York',
+            'adr_one_street'        => 'Main Road 1',
+            'assistent'             => '',
+            'bday'                  => '',
+            'email'                 => 'c.potential@wehavemoney.us',
+            'role'                  => 'CEO',
+            'title'                 => '',
+        );
     }
 
     /**
@@ -98,9 +102,25 @@ class Crm_ServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testAddLead()
     {
-        $newLead = $this->_service->addLead(new Crm_Model_Lead($this->_leadData, true));
+        $lead = new Crm_Model_Lead($this->_leadData, true);
+        $lead->relations = array(
+            array(
+                'own_model'              => 'Crm_Model_Lead',
+                'own_backend'            => NULL,
+                'own_id'                 => NULL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+                'related_model'          => 'Addressbook_Model_Contact',
+                'related_backend'        => NULL,
+                'related_id'             => NULL,
+                'type'                   => 'CUSTOMER',
+                'related_record'         => $this->_contactData
+            )
+        );
+        $newLead = $this->_service->addLead($lead);
+        
         $this->assertEquals($this->_leadData['lead_name'], $newLead->lead_name);
         $GLOBALS['Crm_ServiceTest']['newLeadId'] = $newLead->getId();
+        $GLOBALS['Crm_ServiceTest']['newContactId'] = $newLead->relations[0]['related_id'];
     }
     
     /**
@@ -123,6 +143,18 @@ class Crm_ServiceTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         $remoteLead = $this->_service->getLead($GLOBALS['Crm_ServiceTest']['newLeadId']);
     }
+    
+    /**
+     * test to delete related contact
+     *
+     */
+    public function testDeleteContact()
+    {
+        // cleanup
+        $adbService = new Addressbook_Service($this->_connection);
+        $adbService->deleteContact($GLOBALS['Crm_ServiceTest']['newContactId']);
+    }
+
 }
 
 if (PHPUnit_MAIN_METHOD == 'Crm_ServiceTest::main') {
