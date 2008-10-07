@@ -87,7 +87,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');   
 
         // check notes
-        $this->assertEquals(1, preg_match("/created by Tine 2.0 Admin/", $pdfOutput), 'note not found');   
+        $this->assertEquals(1, preg_match("/created by/", $pdfOutput), 'note not found');   
     }
 
     /**
