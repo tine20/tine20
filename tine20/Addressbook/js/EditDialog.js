@@ -59,6 +59,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 style: {
                     position: 'absolute',
                     right: '10px',
+                    top: Ext.isGecko ? '6px' : '0px',
                     'z-index': 100
                 },
                 items: new Ext.ux.form.ImageField({
