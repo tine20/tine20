@@ -70,7 +70,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Crm', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Container::GRANT_EDIT
+            Tinebase_Model_Container::GRANT_EDIT
         );
         
         if($personalContainer->count() === 0) {
@@ -111,7 +111,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Container::GRANT_EDIT
+            Tinebase_Model_Container::GRANT_EDIT
         );
         
         $addressbookContainer = $addressbookPersonalContainer[0];
@@ -163,7 +163,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Tasks', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Container::GRANT_EDIT
+            Tinebase_Model_Container::GRANT_EDIT
         );
         
         $tasksContainer = $tasksPersonalContainer[0];

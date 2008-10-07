@@ -50,7 +50,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         try {
-            $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+            $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
             Tinebase_Container::getInstance()->deleteContainer($container);
         } catch (Exception $e) {
             // do nothing
@@ -76,7 +76,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $json = new Tinebase_Json_Container();
 
-        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
         $this->assertTrue($container['account_grants']['adminGrant']);
@@ -92,7 +92,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $json = new Tinebase_Json_Container();
 
-        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
 
@@ -112,7 +112,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $json = new Tinebase_Json_Container();
 
-        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
 
@@ -137,7 +137,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $json = new Tinebase_Json_Container();
 
-        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
 
@@ -163,7 +163,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $json = new Tinebase_Json_Container();
 
-        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
         

@@ -52,7 +52,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
        $this->objects['initialContainer'] = new Tinebase_Model_Container(array(
             'id'                => 123,
             'name'              => 'tine20phpunit',
-            'type'              => Tinebase_Container::TYPE_PERSONAL,
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             //'account_grants'    => 'Tine 2.0',
@@ -172,7 +172,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Container::GRANT_READ));
+        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']);
         $this->assertType('Tinebase_Record_RecordSet', $grants);
@@ -201,7 +201,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Container::GRANT_READ));
+        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
         $this->assertType('Tinebase_Model_Grants', $grants);
@@ -270,7 +270,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $container = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
         
         $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals(Tinebase_Container::TYPE_INTERNAL, $container->type);
+        $this->assertEquals(Tinebase_Model_Container::TYPE_INTERNAL, $container->type);
     }
     
     /**
@@ -279,7 +279,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetOtherUsers()
     {
-        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Container::GRANT_READ);
+        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
         
         $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
     }
@@ -294,9 +294,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Container::GRANT_READ));
+        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
 
-        $readableContainer = Tinebase_Container::getInstance()->getContainerByAcl(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Container::GRANT_READ);
+        $readableContainer = Tinebase_Container::getInstance()->getContainerByAcl(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
         $this->assertType('Tinebase_Record_RecordSet', $readableContainer);
         $this->assertTrue(count($readableContainer) >= 2);
 
