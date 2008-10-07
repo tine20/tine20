@@ -111,8 +111,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         }, {
                             columnWidth: .35,
                             fieldLabel: translation._('Last Name'), 
-                            name:'n_family',
-                            allowBlank: false
+                            name:'n_family'
+                            //allowBlank: false
                         }, {
                             width: 100,
                             hidden: true

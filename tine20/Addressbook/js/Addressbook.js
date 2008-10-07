@@ -870,7 +870,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         
         var form = this.getForm();
 
-        if(form.isValid()) {
+        // you need to fill in one of: n_given n_family org_name
+        // @todo required fields should depend on salutation ('company' -> org_name, etc.) 
+        //       and not required fields should be disabled (n_given, n_family, etc.) 
+        if(form.isValid() 
+            && (form.findField('n_given').getValue() !== '' 
+                || form.findField('n_family').getValue() !== ''
+                || form.findField('org_name').getValue() !== '') ) {
             Ext.MessageBox.wait(this.translation.gettext('Please wait a moment...'), this.translation.gettext('Saving Contact'));
             form.updateRecord(this.contact);
             this.contact.set('jpegphoto', Ext.getCmp('addressbookeditdialog-jpegimage').getValue());
@@ -910,7 +916,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                 } 
             });
         } else {
-            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
+        	form.findField('n_given').markInvalid();
+            form.findField('n_family').markInvalid();
+            form.findField('org_name').markInvalid();
+            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));        	
         }
     },
 
