@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.15</version>
+    <version>0.16</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1596,7 +1596,7 @@
 
         <table>
             <name>note_types</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1620,6 +1620,12 @@
                     <name>icon</name>
                     <type>text</type>
                     <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>icon_class</name>
+                    <type>text</type>
+                    <length>128</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1751,6 +1757,10 @@
                 <value>images/oxygen/16x16/actions/note.png</value>
             </field>
             <field>
+                <name>icon_class</name>
+                <value>notes_noteIcon</value>
+            </field>
+            <field>
                 <name>is_user_type</name>
                 <value>1</value>
             </field>            
@@ -1776,6 +1786,10 @@
             <field>
                 <name>icon</name>
                 <value>images/oxygen/16x16/apps/kcall.png</value>
+            </field>
+            <field>
+                <name>icon_class</name>
+                <value>notes_telephoneIcon</value>
             </field>
             <field>
                 <name>is_user_type</name>
@@ -1805,6 +1819,10 @@
                 <value>images/oxygen/16x16/actions/kontact-mail.png</value>
             </field>
             <field>
+                <name>icon_class</name>
+                <value>notes_emailIcon</value>
+            </field>
+            <field>
                 <name>is_user_type</name>
                 <value>1</value>
             </field>            
@@ -1832,6 +1850,10 @@
                 <value>images/oxygen/16x16/actions/knewstuff.png</value>
             </field>
             <field>
+                <name>icon_class</name>
+                <value>notes_createdIcon</value>
+            </field>
+            <field>
                 <name>is_user_type</name>
                 <value>false</value>
             </field>            
@@ -1857,6 +1879,10 @@
             <field>
                 <name>icon</name>
                 <value>images/oxygen/16x16/actions/document-properties.png</value>
+            </field>
+            <field>
+                <name>icon_class</name>
+                <value>notes_changedIcon</value>
             </field>
             <field>
                 <name>is_user_type</name>

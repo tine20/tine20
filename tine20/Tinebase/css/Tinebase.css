@@ -95,6 +95,14 @@ html, body {
    background-image:url(../../images/oxygen/16x16/actions/kontact-mail.png) !important;
 }
 
+.notes_createdIcon {
+   background-image:url(../../images/oxygen/16x16/actions/knewstuff.png) !important;
+}
+
+.notes_changedIcon {
+   background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
+}
+
 .descriptionIcon {
    background-image:url(../../images/oxygen/16x16/apps/kwrite.png) !important;
 }

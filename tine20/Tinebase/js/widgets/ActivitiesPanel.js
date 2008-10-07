@@ -311,12 +311,16 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         
         typesStore.each(function(record){
             if (record.data.is_user_type == 1) {
+            	
+            	console.log(record.data);
+            	
                 var action = new Ext.Action({
                     requiredGrant: 'editGrant',
-                    text: sprintf(this.translation._('Add a %s Note'), this.translation._(record.data.name)),
+                    text: sprintf(this.translation._('Add a %s Note'), record.data.name),
                     tooltip: this.translation._(record.data.description),
                     handler: this.handlers.addNote,
-                    iconCls: 'notes_' + record.data.name + 'Icon',
+                    //iconCls: 'notes_' + record.data.name + 'Icon',
+                    iconCls: record.data.icon_class,
                     typeId: record.data.id,
                     scope: this
                 });            

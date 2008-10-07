@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
+ * 
+ * @todo remove icon field (first check if it is used somewhere) -> we should use the icon_class instead
  */
 
 /**
@@ -55,8 +57,9 @@ class Tinebase_Model_NoteType extends Tinebase_Record_Abstract
         'id'                     => array('Alnum', 'allowEmpty' => true),
     
         'name'                   => array('presence' => 'required', 'allowEmpty' => false),    
-        'icon'                   => array('presence' => 'required', 'allowEmpty' => false),
-
+        'icon'                   => array('allowEmpty' => true),
+        'icon_class'             => array('allowEmpty' => true),
+    
         'description'            => array('allowEmpty' => true),    
         'is_user_type'           => array('allowEmpty' => true),    
     );    

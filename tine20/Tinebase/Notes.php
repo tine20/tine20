@@ -395,6 +395,22 @@ class Tinebase_Notes
     }
 
     /**
+     * update note type
+     *
+     * @param Tinebase_Model_NoteType $_noteType
+     */
+    public function updateNoteType(Tinebase_Model_NoteType $_noteType)
+    {
+        $data = $_noteType->toArray();
+
+        $where  = array(
+            $this->_noteTypesTable->getAdapter()->quoteInto('id = ?', $_noteType->getId()),
+        );
+        
+        $this->_noteTypesTable->update($data, $where);
+    }
+    
+    /**
      * delete note type
      *
      * @param integer $_noteTypeId

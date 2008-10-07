@@ -1070,50 +1070,50 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);        
         
-        $nodeType = new Tinebase_Model_NoteType(array(
+        $noteType = new Tinebase_Model_NoteType(array(
             'id'            => '1',
             'name'          => 'note',
             'description'   => 'the default note type',
             'icon'          => 'images/oxygen/16x16/actions/note.png',
             'is_user_type'  => true
         ));
-        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+        Tinebase_Notes::getInstance()->addNoteType($noteType);
 
-        $nodeType = new Tinebase_Model_NoteType(array(
+        $noteType = new Tinebase_Model_NoteType(array(
             'id'            => '2',
             'name'          => 'telephone',
             'description'   => 'telephone call',
             'icon'          => 'images/oxygen/16x16/apps/kcall.png',
             'is_user_type'  => true
         ));
-        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+        Tinebase_Notes::getInstance()->addNoteType($noteType);
         
-        $nodeType = new Tinebase_Model_NoteType(array(
+        $noteType = new Tinebase_Model_NoteType(array(
             'id'            => '3',
             'name'          => 'email',
             'description'   => 'email contact',
             'icon'          => 'images/oxygen/16x16/actions/kontact-mail.png',
             'is_user_type'  => true
         ));
-        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+        Tinebase_Notes::getInstance()->addNoteType($noteType);
 
-        $nodeType = new Tinebase_Model_NoteType(array(
+        $noteType = new Tinebase_Model_NoteType(array(
             'id'            => '4',
             'name'          => 'created',
             'description'   => 'record created',
             'icon'          => 'images/oxygen/16x16/actions/knewstuff.png',
             'is_user_type'  => false
         ));
-        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+        Tinebase_Notes::getInstance()->addNoteType($noteType);
 
-        $nodeType = new Tinebase_Model_NoteType(array(
+        $noteType = new Tinebase_Model_NoteType(array(
             'id'            => '5',
             'name'          => 'changed',
             'description'   => 'record changed',
             'icon'          => 'images/oxygen/16x16/actions/document-properties.png',
             'is_user_type'  => false
         ));
-        Tinebase_Notes::getInstance()->addNoteType($nodeType);
+        Tinebase_Notes::getInstance()->addNoteType($noteType);
         
         $this->setApplicationVersion('Tinebase', '0.11');
     }
@@ -1262,5 +1262,39 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->dropForeignKey('config_user', 'config_user::user_id--accounts::id');
         
         $this->setApplicationVersion('Tinebase', '0.15');
+    }
+
+    /**
+     * update to 0.16
+     * - add icon class to note types
+     */
+    function update_15()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>icon_class</name>
+                <type>text</type>
+                <length>128</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        
+        $this->_backend->addCol('note_types', $declaration);
+
+        // delete all note types and add new ones with icon class
+        $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes();
+        $toUpdate = array(
+            1 => 'notes_noteIcon',
+            2 => 'notes_telephoneIcon',
+            3 => 'notes_emailIcon',
+            4 => 'notes_createdIcon',
+            5 => 'notes_changedIcon',
+        );
+        foreach ($noteTypes as $type) {
+            $type->icon_class = $toUpdate[$type->getId()];
+            Tinebase_Notes::getInstance()->updateNoteType($type);
+        }
+        
+        $this->setApplicationVersion('Tinebase', '0.16');
     }
 }
