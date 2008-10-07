@@ -169,11 +169,11 @@ class Tasks_Setup_MigrateFromTine14
             $containers[$_owner] = Tinebase_Container::getInstance()->addContainer(
                 'Tasks',
                 'My Tasks (from egw 1.4 migration)',
-                Tinebase_Container::TYPE_PERSONAL,
+                Tinebase_Model_Container::TYPE_PERSONAL,
                 Tasks_Backend_Factory::SQL
             );
             Tinebase_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
-                Tinebase_Container::GRANT_ANY
+                Tinebase_Model_Container::GRANT_ANY
             ));
         }
         return $containers[$_owner];  

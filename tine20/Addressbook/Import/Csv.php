@@ -151,7 +151,7 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
                 Zend_Registry::get('currentAccount'), 
                 'Addressbook', 
                 Zend_Registry::get('currentAccount'), 
-                Tinebase_Container::GRANT_EDIT
+                Tinebase_Model_Container::GRANT_EDIT
             );
             $containerId = $personalContainer[0]->getId();
         } else {

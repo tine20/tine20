@@ -79,7 +79,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $backend->get($_leadId);
         
-        if (!$this->_currentAccount->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
+        if (!$this->_currentAccount->hasGrant($lead->container, Tinebase_Model_Container::GRANT_READ)) {
             throw new Exception('read permission to lead denied');
         }
 
@@ -185,7 +185,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     protected function _checkContainerACL($_filter)
     {
-        $readableContainer = $this->_currentAccount->getContainerByACL('Crm', Tinebase_Container::GRANT_READ);
+        $readableContainer = $this->_currentAccount->getContainerByACL('Crm', Tinebase_Model_Container::GRANT_READ);
         $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
     }    
         
@@ -211,7 +211,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 throw new Exception('lead object is not valid');
             }
             
-            if(!$this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
+            if(!$this->_currentAccount->hasGrant($_lead->container, Tinebase_Model_Container::GRANT_ADD)) {
                 throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
             }
             
@@ -270,14 +270,14 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             
             // ACL checks
             if ($currentLead->container != $_lead->container) {
-                if (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
+                if (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Model_Container::GRANT_ADD)) {
                     throw new Exception('add access in container ' . $_lead->container . ' denied');
                 }
                 // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-                if (! $this->_currentAccount->hasGrant($currentLead->container, Tinebase_Container::GRANT_DELETE)) {
+                if (! $this->_currentAccount->hasGrant($currentLead->container, Tinebase_Model_Container::GRANT_DELETE)) {
                     throw new Exception('delete access in container ' . $currentLead->container . ' denied');
                 }
-            } elseif (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
+            } elseif (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Model_Container::GRANT_EDIT)) {
                 throw new Exception('edit access in container ' . $_lead->container . ' denied');
             }
     
@@ -338,7 +338,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);            
                 $lead = $backend->get($_leadId);
                 
-                if($this->_currentAccount->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
+                if($this->_currentAccount->hasGrant($lead->container, Tinebase_Model_Container::GRANT_DELETE)) {
                     $backend->delete($_leadId);
     
                     // delete notes
@@ -742,13 +742,13 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $account = Tinebase_User::getInstance()->getUserById($accountId);
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal leads"), $account->accountFullName),
-            'type'              => Tinebase_Container::TYPE_PERSONAL,
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId() 
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
-        $personalContainer->account_grants = Tinebase_Container::GRANT_ANY;
+        $personalContainer->account_grants = Tinebase_Model_Container::GRANT_ANY;
         
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         

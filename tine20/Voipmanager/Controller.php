@@ -670,7 +670,7 @@ class Voipmanager_Controller
     public function createSnomLocation(Voipmanager_Model_SnomLocation $_location)
     {        
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_ADD)) {
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Model_Container::GRANT_ADD)) {
             throw new Exception('add access to location in container ' . $_location->owner . ' denied');
         }
         */
@@ -689,7 +689,7 @@ class Voipmanager_Controller
     public function updateSnomLocation(Voipmanager_Model_SnomLocation $_location)
     {
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_EDIT)) {
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Model_Container::GRANT_EDIT)) {
             throw new Exception('edit access to location in container ' . $_location->owner . ' denied');
         }
         */
@@ -715,7 +715,7 @@ class Voipmanager_Controller
     {
       /*  foreach ($_identifiers as $identifier) {
             $Config = $this->getLocationById($identifier);
-            if (!$this->_currentAccount->hasGrant($Location->container_id, Tinebase_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($Location->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
         }
@@ -779,7 +779,7 @@ class Voipmanager_Controller
     public function createSnomTemplate(Voipmanager_Model_SnomTemplate $_template)
     {        
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Model_Container::GRANT_ADD)) {
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
         */
@@ -1083,7 +1083,7 @@ class Voipmanager_Controller
     public function updateAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
     {
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Model_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
         */
@@ -1176,7 +1176,7 @@ class Voipmanager_Controller
     public function updateAsteriskVoicemail(Voipmanager_Model_AsteriskVoicemail $_voicemail)
     {
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Model_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
         */
@@ -1357,7 +1357,7 @@ class Voipmanager_Controller
     public function updateAsteriskMeetme(Voipmanager_Model_AsteriskMeetme $_meetme)
     {
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Model_Container::GRANT_EDIT)) {
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
         */

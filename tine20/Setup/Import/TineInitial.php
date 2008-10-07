@@ -197,14 +197,14 @@ class Setup_Import_TineInitial
         
         // give Users group read rights to the internal addressbook
         // give Adminstrators group read/edit/admin rights to the internal addressbook
-        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL);
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
-            Tinebase_Container::GRANT_READ
+            Tinebase_Model_Container::GRANT_READ
         ), TRUE);
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
-            Tinebase_Container::GRANT_READ,
-            Tinebase_Container::GRANT_EDIT,
-            Tinebase_Container::GRANT_ADMIN
+            Tinebase_Model_Container::GRANT_READ,
+            Tinebase_Model_Container::GRANT_EDIT,
+            Tinebase_Model_Container::GRANT_ADMIN
         ), TRUE);
         
         echo "TINE 2.0 now ready to use - try <a href=\"./index.php\">TINE 2.0 Login</a>";

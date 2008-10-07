@@ -95,16 +95,16 @@ class Crm_Model_LeadFilter extends Tinebase_Record_Abstract
         $cc = Tinebase_Container::getInstance();
         switch($this->containerType) {
             case 'all':
-                $containers = $cc->getContainerByACL(Zend_Registry::get('currentAccount'), $this->_application, Tinebase_Container::GRANT_READ);
+                $containers = $cc->getContainerByACL(Zend_Registry::get('currentAccount'), $this->_application, Tinebase_Model_Container::GRANT_READ);
                 break;
             case 'personal':
-                $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->owner, Tinebase_Container::GRANT_READ);
+                $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->owner, Tinebase_Model_Container::GRANT_READ);
                 break;
             case 'shared':
-                $containers = Zend_Registry::get('currentAccount')->getSharedContainer($this->_application, Tinebase_Container::GRANT_READ);
+                $containers = Zend_Registry::get('currentAccount')->getSharedContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
                 break;
             case 'otherUsers':
-                $containers = Zend_Registry::get('currentAccount')->getOtherUsersContainer($this->_application, Tinebase_Container::GRANT_READ);
+                $containers = Zend_Registry::get('currentAccount')->getOtherUsersContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
                 break;
             case 'singleContainer':
                 $this->_properties['container'] = array($this->_properties['container']);

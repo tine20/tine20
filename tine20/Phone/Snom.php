@@ -77,7 +77,7 @@ class Phone_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         foreach($phone->rights as $right) {
             if($right->account_type == 'user') {
-                $containers = $tbContainer->getContainerByACL($right->account_id, 'Addressbook', Tinebase_Container::GRANT_READ);
+                $containers = $tbContainer->getContainerByACL($right->account_id, 'Addressbook', Tinebase_Model_Container::GRANT_READ);
                 $readAbleContainer = array_merge($readAbleContainer, $containers->getArrayOfIds());
             }
         }

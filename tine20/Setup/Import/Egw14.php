@@ -190,11 +190,11 @@ class Setup_Import_Egw14
             if ( $contact->contact_owner > 0 ) {
                 // personal container for owner
                 try {
-                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Container::TYPE_PERSONAL);
+                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Model_Container::TYPE_PERSONAL);
                 } catch ( UnderflowException $e ) {
                     $container = new Tinebase_Model_Container(array(
                         'name' => 'Personal Contacts',
-                        'type' => Tinebase_Container::TYPE_PERSONAL,      
+                        'type' => Tinebase_Model_Container::TYPE_PERSONAL,      
                         'backend' => 'Sql',
                         'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
                     ));             
@@ -202,27 +202,27 @@ class Setup_Import_Egw14
                 }
 
                 Tinebase_Container::getInstance()->addGrants($container, 'user', $contact->contact_owner, array(
-                    Tinebase_Container::GRANT_ANY,
+                    Tinebase_Model_Container::GRANT_ANY,
                 ), TRUE);
                                 
             } else if ( $contact->contact_owner == $sharedContactsGroupId ) {
                 // default users group -> shared container
                 $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
                 try {
-                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', $sharedContactsContainerName, Tinebase_Container::TYPE_SHARED);
+                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', $sharedContactsContainerName, Tinebase_Model_Container::TYPE_SHARED);
                 } catch ( UnderflowException $e ) {
                     $container = new Tinebase_Model_Container(array(
                         'name' => $sharedContactsContainerName,
-                        'type' => Tinebase_Container::TYPE_SHARED,      
+                        'type' => Tinebase_Model_Container::TYPE_SHARED,      
                         'backend' => 'Sql',
                         'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
                     ));
                     $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
                     Tinebase_Container::getInstance()->addGrants($container, 'group', $userGroup, array(
-                        Tinebase_Container::GRANT_READ,
-                        Tinebase_Container::GRANT_ADD,
-                        Tinebase_Container::GRANT_EDIT,
-                        Tinebase_Container::GRANT_DELETE,
+                        Tinebase_Model_Container::GRANT_READ,
+                        Tinebase_Model_Container::GRANT_ADD,
+                        Tinebase_Model_Container::GRANT_EDIT,
+                        Tinebase_Model_Container::GRANT_DELETE,
                     ), TRUE);
                 }                
             } else {

@@ -474,7 +474,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             $contactData['account_id'] = $accountId;
             $contactData['tid'] = 'n';
-            $contactData['owner'] = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL)->getId();
+            $contactData['owner'] = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
             //var_dump($contactData);
             $contactsTable->insert($contactData);
             

@@ -32,8 +32,8 @@ class Tinebase_Json_Container
     public function getContainer($application, $containerType, $owner)
     {       
         switch($containerType) {
-            case Tinebase_Container::TYPE_PERSONAL:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $application, $owner, Tinebase_Container::GRANT_READ);
+            case Tinebase_Model_Container::TYPE_PERSONAL:
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $application, $owner, Tinebase_Model_Container::GRANT_READ);
                 foreach ($containers as $container) {
                     $container->bypassFilters = true;
                     $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray());
@@ -42,8 +42,8 @@ class Tinebase_Json_Container
                 
                 break;
                 
-            case Tinebase_Container::TYPE_SHARED:
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
+            case Tinebase_Model_Container::TYPE_SHARED:
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $application, Tinebase_Model_Container::GRANT_READ);
                 foreach ($containers as $container) {
                     $container->bypassFilters = true;
                     $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray());
@@ -53,7 +53,7 @@ class Tinebase_Json_Container
                 break;
                 
             case 'otherUsers':
-                $accounts = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
+                $accounts = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Model_Container::GRANT_READ);
                 echo Zend_Json::encode($accounts->toArray());
                 
                 break;
@@ -82,7 +82,7 @@ class Tinebase_Json_Container
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId() 
         ));
         
-        if($newContainer->type !== Tinebase_Container::TYPE_PERSONAL and $newContainer->type !== Tinebase_Container::TYPE_SHARED) {
+        if($newContainer->type !== Tinebase_Model_Container::TYPE_PERSONAL and $newContainer->type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Exception('can add personal or shared containers only');
         }
                 

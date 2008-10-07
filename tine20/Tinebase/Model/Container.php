@@ -18,6 +18,68 @@
  */
 class Tinebase_Model_Container extends Tinebase_Record_Abstract
 {
+    /**
+     * constant for no grants
+     *
+     */
+    const GRANT_NONE = 0;
+
+    /**
+     * constant for read grant
+     *
+     */
+    const GRANT_READ = 1;
+
+    /**
+     * constant for add grant
+     *
+     */
+    const GRANT_ADD = 2;
+
+    /**
+     * constant for edit grant
+     *
+     */
+    const GRANT_EDIT = 4;
+
+    /**
+     * constant for delete grant
+     *
+     */
+    const GRANT_DELETE = 8;
+
+    /**
+     * constant for admin grant
+     *
+     */
+    const GRANT_ADMIN = 16;
+
+    /**
+     * constant for all grants
+     *
+     */
+    const GRANT_ANY = 31;
+    
+    /**
+     * type for internal contaier
+     * 
+     * for example the internal addressbook
+     *
+     */
+    const TYPE_INTERNAL = 'internal';
+    
+    /**
+     * type for personal containers
+     *
+     */
+    const TYPE_PERSONAL = 'personal';
+    
+    /**
+     * type for shared container
+     *
+     */
+    const TYPE_SHARED = 'shared';
+    
 	/**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -54,7 +116,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                => array('Digits', 'allowEmpty' => true),
         'name'              => array('presence' => 'required'),
-        'type'              => array('InArray' => array(Tinebase_Container::TYPE_INTERNAL, Tinebase_Container::TYPE_PERSONAL, Tinebase_Container::TYPE_SHARED)),
+        'type'              => array('InArray' => array(self::TYPE_INTERNAL, self::TYPE_PERSONAL, self::TYPE_SHARED)),
         'backend'           => array('presence' => 'required'),
         'application_id'    => array('Digits', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true, /*'presence' => 'required'*/)

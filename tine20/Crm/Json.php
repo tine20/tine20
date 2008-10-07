@@ -161,7 +161,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         // set container
         if (!$_lead->container) {
-            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
+            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Model_Container::GRANT_READ);
             $container = $personalFolders[0];
         } else {
             $container = $_lead->container;
