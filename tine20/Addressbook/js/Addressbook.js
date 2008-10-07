@@ -874,8 +874,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         // @todo required fields should depend on salutation ('company' -> org_name, etc.) 
         //       and not required fields should be disabled (n_given, n_family, etc.) 
         if(form.isValid() 
-            && (form.findField('n_given').getValue() !== '' 
-                || form.findField('n_family').getValue() !== ''
+            && (form.findField('n_family').getValue() !== ''
                 || form.findField('org_name').getValue() !== '') ) {
             Ext.MessageBox.wait(this.translation.gettext('Please wait a moment...'), this.translation.gettext('Saving Contact'));
             form.updateRecord(this.contact);
@@ -916,7 +915,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                 } 
             });
         } else {
-        	form.findField('n_given').markInvalid();
             form.findField('n_family').markInvalid();
             form.findField('org_name').markInvalid();
             Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));        	
@@ -1005,10 +1003,6 @@ Tine.Addressbook.getSalutationStore = function() {
             fields: Tine.Addressbook.Model.Salutation,
             baseParams: {
                 method: 'Addressbook.getSalutations'
-                /*
-                sort: 'name',
-                dir: 'ASC'
-                */
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -1023,7 +1017,6 @@ Tine.Addressbook.getSalutationStore = function() {
             
         Ext.StoreMgr.add('AddressbookSalutationStore', store);
     }
-    console.log(store);
     
     return store;
 };
