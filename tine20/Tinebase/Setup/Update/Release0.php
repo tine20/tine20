@@ -1252,4 +1252,15 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.14');
     }
+
+    /**
+     * update to 0.15
+     * - remove constraint from config user table
+     */
+    function update_14()
+    {
+        $this->_backend->dropForeignKey('config_user', 'config_user::user_id--accounts::id');
+        
+        $this->setApplicationVersion('Tinebase', '0.15');
+    }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.14</version>
+    <version>0.15</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1529,7 +1529,7 @@
 
         <table>
             <name>config_user</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1588,17 +1588,6 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>applications</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-                <index>
-                    <name>config_user::user_id--accounts::id</name>
-                    <field>
-                        <name>user_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
                         <field>id</field>
                     </reference>
                 </index>
