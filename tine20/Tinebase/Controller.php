@@ -94,12 +94,12 @@ class Tinebase_Controller
         }
         Zend_Registry::set('configFile', $this->_config);
         
+        $this->setupLogger();
+        
         define('TINE20_BUILDTYPE',     strtoupper($this->_config->get('buildtype', 'DEVELOPMENT')));
         define('TINE20_CODENAME',      'trunk');
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
-        
-        
         
         $this->_session = new Zend_Session_Namespace('tinebase');
         
@@ -120,8 +120,6 @@ class Tinebase_Controller
         
         // Server Timezone must be setup before logger, as logger has timehandling!
         $this->setupServerTimezone();
-        
-        $this->setupLogger();
         
         $this->setupMailer();
 
