@@ -292,9 +292,9 @@ if ($opts->a || $opts->t) {
         }
         system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
         
-        unifyTranslations(new Zend_Locale($locale));
+        unifyTranslations($locale);
     }
-    unifyTranslations(new Zend_Locale('en'));
+    unifyTranslations('en');
 }
 
 // build zend translation lists only on demand
@@ -327,7 +327,7 @@ function getJs($locale, $appName, $poObject)
 /**
  * unifies / concats all translation sources into one file
  *
- * @param unknown_type $localeString
+ * @param string $localeString
  */
 function unifyTranslations($localeString)
 {
@@ -356,7 +356,7 @@ function unifyTranslations($localeString)
     // unify translations
     $files = array ( 
         "$tine20path/" . "Tinebase/js/Locale/build/$localeString-ext-min.js",
-        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'generic'),
+        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($extlocaleName, 'generic'),
         "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'tine')
     );
     
@@ -409,7 +409,7 @@ function createJsTranslationLists($_locale)
             foreach ( $list as $key => $value ) {    
                 // convert ISO -> PHP for date formats
                 if ( in_array($type, array('Date', 'Time', 'DateTime')) ) {
-                    $value = self::convertIsoToPhpFormat($value);
+                    $value = convertIsoToPhpFormat($value);
                 }
                 $value = preg_replace("/\"/", '\"', $value);        
                 $jsContent .= "\n\t\t'$key': \"$value\",";
