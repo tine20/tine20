@@ -46,6 +46,7 @@ try {
         'manifest|m'      => 'Build offline manifest',
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
+        'yui-s'           => 'Path to yuicompressor.jar',
         'help'            => 'Display this help Message',
     ));
     $opts->parse();
@@ -60,6 +61,10 @@ if (count($opts->toArray()) === 0 || $opts->h) {
 }
 
 $build = trim(`whoami`) . ' '. Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+
+if ($opts->yui) {
+    $yuiCompressorPath = $opts->yui;
+}
 
 /**
  * --clean 
@@ -285,7 +290,7 @@ if ($opts->a || $opts->t) {
         if ( $opts->v ) {
             echo "compressing file $locale.js\n";
         }
-        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
+        system("java -jar $ CompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
         
         unifyTranslations(new Zend_Locale($locale));
     }
