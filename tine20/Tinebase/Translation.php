@@ -43,7 +43,7 @@ class Tinebase_Translation
         //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
         //'pl',      // Polish               Chrisopf Gacki <c.gacki@metaways.de>
         'ru',      // Russian              Ilia Yurkovetskiy <i.yurkovetskiy@metaways.de>
-        'zh_HANS', // Chinese Simplified   Jason Qi <qry@yahoo.com>
+        'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
     );
     
     /**
@@ -104,7 +104,7 @@ class Tinebase_Translation
                 $supportedLocales[] = $translation['locale'];
             }
             
-            if (! in_array((string)$locale, $supportedLocales)) {
+            if (! in_array($_localeString, $supportedLocales)) {
                 Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " '$locale' is not supported, checking fallback");
                 
                 // check if we find suiteable fallback
@@ -129,6 +129,7 @@ class Tinebase_Translation
         }
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . var_export($locale, true));
         return $locale;
     }
     
