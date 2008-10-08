@@ -183,6 +183,11 @@ class Tinebase_Translation
      */
     public static function getJsTranslationFile($_locale, $_location='tine')
     {
+        $localeString = (string)$_locale;
+        if (! $_locale instanceof Zend_Locale) {
+            $_locale = new Zend_Locale($_locale);
+        }
+        
         switch ($_location) {
         	case 'generic':
         	   $dir = 'Tinebase/js/Locale/static/';
@@ -204,14 +209,10 @@ class Tinebase_Translation
         	   break;
         }
         
-        $locale = (string)$_locale;
+        
         $language = $_locale->getLanguage();
         
-        if (! $_locale instanceof Zend_Locale) {
-            $_locale = new Zend_Locale($_locale);
-        }
-        
-        $file = $dir . $prefix . $locale . $suffix;
+        $file = $dir . $prefix . $localeString . $suffix;
         if (file_exists(dirname(__FILE__) . "/../$file")) {
             return $file;
         }
