@@ -335,20 +335,8 @@ function unifyTranslations($localeString)
     global $yuiCompressorPath;
     
     $output = '';
-    
-    // compress ext translation
-    switch ($localeString) {
-        case 'zh_HANS':
-            $extlocaleName = 'zh_CN';
-            break;
-        case 'zh_HANT':
-            $extlocaleName = 'zh_TW';
-            break;
-        default:
-            $extlocaleName = $localeString;
-            break;
-    }
-    $extTranslationFile = "$tine20path/" . Tinebase_Translation::getJsTranslationFile($extlocaleName, 'ext');
+
+    $extTranslationFile = "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'ext');
     if (file_exists($extTranslationFile)) {
         system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$localeString-ext-min.js $extTranslationFile");
     }
@@ -356,7 +344,7 @@ function unifyTranslations($localeString)
     // unify translations
     $files = array ( 
         "$tine20path/" . "Tinebase/js/Locale/build/$localeString-ext-min.js",
-        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($extlocaleName, 'generic'),
+        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'generic'),
         "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'tine')
     );
     
