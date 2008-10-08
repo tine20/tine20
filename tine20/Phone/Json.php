@@ -90,6 +90,9 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
+        
+        // set timezone
+        $calls->setTimezone(Zend_Registry::get('userTimeZone'));
                 
         return array(
             'results'       => $calls->toArray(),
