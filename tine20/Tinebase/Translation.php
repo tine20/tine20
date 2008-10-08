@@ -129,7 +129,6 @@ class Tinebase_Translation
         }
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . var_export($locale, true));
         return $locale;
     }
     
