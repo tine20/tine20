@@ -70,19 +70,6 @@ class Tinebase_Controller
      */
     protected function _initFramework()
     {
-        Zend_Session::setOptions(array(
-            'name'              => 'TINE20SESSID',
-            'cookie_httponly'   => true,
-            'hash_function'     => 1,
-        
-        ));
-        if(isset($_SERVER['HTTPS'])) {
-            Zend_Session::setOptions(array(
-                'cookie_secure'     => true,
-            ));
-        }
-        Zend_Session::start();
-        
         if(file_exists(dirname(__FILE__) . '/../config.inc.php')) {
             $this->_config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
         } else {
@@ -95,6 +82,19 @@ class Tinebase_Controller
         Zend_Registry::set('configFile', $this->_config);
         
         $this->setupLogger();
+        
+        Zend_Session::setOptions(array(
+            'name'              => 'TINE20SESSID',
+            'cookie_httponly'   => true,
+            'hash_function'     => 1,
+        
+        ));
+        if(isset($_SERVER['HTTPS'])) {
+            Zend_Session::setOptions(array(
+                'cookie_secure'     => true,
+            ));
+        }
+        Zend_Session::start();
         
         define('TINE20_BUILDTYPE',     strtoupper($this->_config->get('buildtype', 'DEVELOPMENT')));
         define('TINE20_CODENAME',      'trunk');
