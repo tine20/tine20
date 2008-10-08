@@ -290,7 +290,7 @@ if ($opts->a || $opts->t) {
         if ( $opts->v ) {
             echo "compressing file $locale.js\n";
         }
-        system("java -jar $ CompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
+        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
         
         unifyTranslations(new Zend_Locale($locale));
     }
