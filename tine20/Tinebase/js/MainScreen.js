@@ -46,8 +46,8 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         // init actions
         this.actions.changePassword = new Ext.Action({
             text: _('Change password'),
-            handler: this.onChangePassword
-            //disabled: true
+            handler: this.onChangePassword,
+            disabled: !Tine.Tinebase.Registry.get('changepw')
         });
         
         this.actions.installGoogleGears = new Ext.Action({

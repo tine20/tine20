@@ -302,7 +302,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                     'codename'      => TINE20_CODENAME,
                     'packageString' => TINE20_PACKAGESTRING,
                     'releasetime'   => TINE20_RELEASETIME
-                )
+                ),
+                'changepw'         => (isset(Zend_Registry::get('configFile')->accounts) 
+                                        && isset(Zend_Registry::get('configFile')->accounts->changepw))
+                                            ? Zend_Registry::get('configFile')->accounts->changepw
+                                            : false
             );
         }
         return $registryData;
