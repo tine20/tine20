@@ -618,11 +618,19 @@ class Tinebase_Controller
     public function changePassword($_oldPassword, $_newPassword1, $_newPassword2)
     {
         //error_log(print_r(Zend_Registry::get('currentAccount')->toArray(), true));
+        
+        // check config setting
+        if (!isset(Zend_Registry::get('configFile')->accounts) 
+            || !isset(Zend_Registry::get('configFile')->accounts->changepw)
+            || !Zend_Registry::get('configFile')->accounts->changepw) {
+            throw new Exception('Password change not allowed.');                
+        }
+        
         $loginName = Zend_Registry::get('currentAccount')->accountLoginName;
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " change password for $loginName");
         
         if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
-            throw new Exception('old password worng');
+            throw new Exception('Old password is wrong.');
         }
         
         Tinebase_Auth::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);

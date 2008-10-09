@@ -234,7 +234,7 @@ class Tinebase_Json
         } catch (Exception $e) {
             $response = array(
                 'success'      => FALSE,
-                'errorMessage' => "new password could not be set!"
+                'errorMessage' => "New password could not be set! Error: " . $e->getMessage()
             );   
         }
         
