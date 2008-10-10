@@ -262,8 +262,10 @@ class user_kontakt2tine extends tslib_pibase {
 
 					$contact = new Addressbook_Model_Contact($contactData);
 					
-				    // tmp crm lead hack
-                    if (false) {
+					$contactOnly = true;
+					if ($contactOnly) {
+					    $addressbook->addContact($contactData);
+					} else {
                         
                         // bare lead
                         $lead = new Crm_Model_Lead(array(
