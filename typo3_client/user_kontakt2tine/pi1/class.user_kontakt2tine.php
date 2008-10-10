@@ -242,8 +242,8 @@ class user_kontakt2tine extends tslib_pibase {
 				
 					// write addressbook entry
 					$contactData = array(
-										'owner'					=> $containerId[1][0],
-										'company' 				=> $fFieldValues['FIRMA'], 
+										'owner'					=> 34,
+										'org_name' 				=> $fFieldValues['FIRMA'], 
 										'n_family' 				=> $fFieldValues['NACHNAME'],
 										'n_given' 				=> $fFieldValues['VORNAME'],
 										'adr_one_locality'		=> $fFieldValues['ORT'],
@@ -261,20 +261,80 @@ class user_kontakt2tine extends tslib_pibase {
 										);
 
 					$contact = new Addressbook_Model_Contact($contactData);
+					
+				    // tmp crm lead hack
+                    if (false) {
+                        
+                        // bare lead
+                        $lead = new Crm_Model_Lead(array(
+                            'lead_name'     => ($fFieldValues['FIRMA'] ? $fFieldValues['FIRMA'] . ': ' : '') . $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_' . $fFieldValues['AUSWAHL']),
+                            'leadstate_id'  => 1,
+                            'leadtype_id'   => 42,
+                            'leadsource_id' => 46,
+                            'container'     => 272,
+                            'start'         => Zend_Date::now(),
+                            'description'   => $fFieldValues['NACHRICHT'],
+                            'end'           => NULL,
+                            'turnover'      => '',
+                            'probability'   => 50,
+                            'end_scheduled' => NULL,
+                        ), true);
+                        
+                        // bare task
+                        $task = array(
+                            'container_id'         => 280,
+                            'created_by'           => 8,
+                            'creation_time'        => Zend_Date::now(),
+                            'percent'              => 0,
+                            'due'                  => Zend_Date::now()->addDay(3),
+                            'summary'              => 'Kontaktaufnahme ' . $contactData['n_fn'] . ($fFieldValues['FIRMA'] ? ' (' . $fFieldValues['FIRMA'] . ')' : ''),
+                        );
+                        
+                        // contact as customer
+                        $lead->relations = array(
+                            array(
+                                'own_model'              => 'Crm_Model_Lead',
+                                'own_backend'            => NULL,
+                                'own_id'                 => NULL,
+                                'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+                                'related_model'          => 'Addressbook_Model_Contact',
+                                'related_backend'        => NULL,
+                                'related_id'             => NULL,
+                                'type'                   => 'CUSTOMER',
+                                'related_record'         => $contact->toArray()
+                            ),
+                            array(
+                                'own_model'              => 'Crm_Model_Lead',
+                                'own_backend'            => NULL,
+                                'own_id'                 => NULL,
+                                'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+                                'related_model'          => 'Tasks_Model_Task',
+                                'related_backend'        => NULL,
+                                'related_id'             => NULL,
+                                'type'                   => 'TASK',
+                                'related_record'         => $task
+                            ),
+                            array(
+                                'own_model'              => 'Crm_Model_Lead',
+                                'own_backend'            => NULL,
+                                'own_id'                 => NULL,
+                                'own_degree'             => Tinebase_Model_Relation::DEGREE_CHILD,
+                                'related_model'          => 'Addressbook_Model_Contact',
+                                'related_backend'        => NULL,
+                                'related_id'             => 8,
+                                'type'                   => 'RESPONSIBLE',
+                                //'related_record'         => NULL
+                            ),
+                        );
+                        
+                        $crmService = new Crm_Service($connection);
+                        $crmService->addLead($lead);
+                    }
+                    
 				}
 				catch (Exception $e) 
 				{
-					//echo "kein model";
-					//exit;
-				}
-
-				try{
-					$updatedContact = $addressbook->addContact($contact);
-	
-				}
-				catch (Exception $e) 
-				{
-					//echo "kein add";
+					//echo "shit";
 					//exit;
 				}
 				
@@ -421,10 +481,6 @@ class user_kontakt2tine extends tslib_pibase {
 		
 		return true;
 	}
-	
-	
-	
-	
 	
 }
 
