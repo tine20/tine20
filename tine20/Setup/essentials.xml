@@ -10,5 +10,6 @@
 		<extension name="date" />
 		<extension name="PDO" />
 		<extension name="pdo_mysql" />
+        <extension name="SPL" />
 	</extensions>	
 </essential>	
