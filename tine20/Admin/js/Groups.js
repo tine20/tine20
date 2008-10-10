@@ -138,7 +138,7 @@ Tine.Admin.Groups.Main = {
     },
 
     displayGroupsGrid: function() {
-        if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
+        if ( Tine.Tinebase.hasRight('manage', 'Admin', 'accounts') ) {
             this.actions.addGroup.setDisabled(false);
         }
 
