@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-09-23 13:57+0100\n"
-"Last-Translator: Richard <richard@radbasteln.de>\n"
+"PO-Revision-Date: 2008-10-10 16:57+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +19,15 @@ msgid_plural "Do you really want to delete the selected task"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/Tasks.js:141 js/Tasks.js:554 js/Tasks.js:703 js/Tasks.js:728
+#: js/Tasks.js:141
+#: js/Tasks.js:554
+#: js/Tasks.js:703
+#: js/Tasks.js:728
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/Tasks.js:141 js/Tasks.js:728
+#: js/Tasks.js:141
+#: js/Tasks.js:728
 msgid "Could not delete task(s)."
 msgstr "Konnte Aufgabe(n) nicht löschen."
 
@@ -45,11 +49,14 @@ msgstr[1] "Aufgaben löschen"
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Tasks.js:301 js/Tasks.js:628
+#: js/Tasks.js:301
+#: js/Tasks.js:628
 msgid "to do lists"
 msgstr "Aufgabenlisten"
 
-#: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
+#: js/Tasks.js:302
+#: js/Tasks.js:626
+#: js/Tasks.js:627
 msgid "to do list"
 msgstr "ToDo Liste"
 
@@ -73,7 +80,8 @@ msgstr "Zeige Aufgabe {0} - {1} von {2}"
 msgid "No tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:415 js/Tasks.js:751
+#: js/Tasks.js:415
+#: js/Tasks.js:751
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -85,7 +93,8 @@ msgstr "Aufgabe hinzufügen..."
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/Tasks.js:441 js/Tasks.js:783
+#: js/Tasks.js:441
+#: js/Tasks.js:783
 msgid "Priority"
 msgstr "Priorität"
 
@@ -93,7 +102,8 @@ msgstr "Priorität"
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/Tasks.js:470 js/Tasks.js:779
+#: js/Tasks.js:470
+#: js/Tasks.js:779
 msgid "Status"
 msgstr "Status"
 
@@ -101,7 +111,8 @@ msgstr "Status"
 msgid "No Tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Tasks.js:554 js/Tasks.js:703
+#: js/Tasks.js:554
+#: js/Tasks.js:703
 msgid "Could not save task."
 msgstr "Konnte Aufgabe nicht speichern."
 
@@ -126,7 +137,8 @@ msgstr "Task \"%s\" bearbeiten"
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Tasks.js:671 js/Tasks.js:716
+#: js/Tasks.js:671
+#: js/Tasks.js:716
 msgid "Saving Task"
 msgstr "Aufgabe speichern"
 
@@ -176,7 +188,7 @@ msgstr "Gespeichert in"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
-msgstr "NEEDS-ACTION"
+msgstr "ZU BEARBEITEN"
 
 #: Setup/setup.xml:409
 msgid "COMPLETED"
@@ -184,7 +196,7 @@ msgstr "ERLEDIGT"
 
 #: Setup/setup.xml:431
 msgid "IN-PROCESS"
-msgstr "IN-PROCESS"
+msgstr "IN BEARBEITUNG"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"
@@ -197,6 +209,6 @@ msgstr "%s's persönliche Aufgaben"
 
 #~ msgid "Folder"
 #~ msgstr "Ordner"
-
 #~ msgid "Delete tasks"
 #~ msgstr "Aufgaben löschen"
+
