@@ -12,8 +12,11 @@
 
 /*
  * Set error reporting 
+ * 
+ * @todo it's not working at the moment because of date/timezone problems
+ * @todo put that in config.inc as well?
  */
-error_reporting( E_ALL | E_STRICT );
+//error_reporting( E_ALL | E_STRICT );
 
 
 /*
@@ -38,21 +41,32 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 
 /*
  * Set parameters  for logging (call via browser)
+ * 
+ * @todo put that in config.inc as well?
  */
 define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 
 /*
  * Set up basic tine 2.0 environment
  */
-$_SERVER['DOCUMENT_ROOT'] = '/var/www/';
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
+// get config
+if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
+    $config = new Zend_Config(require dirname(__FILE__) . '/config.inc.php');
+} else {
+    throw new Exception("Couldn't find config.inc.php! \n");
+}
+
+$_SERVER['DOCUMENT_ROOT'] = $config->docroot;    
+
 $tinebaseController = TestController::getInstance();
 $tinebaseController->initFramework();
+Zend_Registry::set('locale', new Zend_Locale($config->locale));
 
-if (!$tinebaseController->login('tine20admin', 'lars', '127.0.0.1')){
-    throw new Exception("couldn't login, user session required for tests! \n");
+if (!$tinebaseController->login($config->username, $config->password, $config->ip)){
+    throw new Exception("Couldn't login, user session required for tests! \n");
 }
 
  
