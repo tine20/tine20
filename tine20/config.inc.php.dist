@@ -1,4 +1,6 @@
 <?php
+// rename to config.inc.php
+// minimal configuration
 return array(
 	'database' => array(
       		'host'		=> 'ENTER DATABASE HOSTNAME',
