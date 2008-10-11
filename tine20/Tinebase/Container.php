@@ -892,8 +892,6 @@ class Tinebase_Container
      * @param Tinebase_Record_RecordSet $_records records to get the grants for
      * @param int|Tinebase_Model_User $_accountId the account to get the grants for
      * @param string $_containerProperty container property
-     * 
-     * @todo write test
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id')
     {
