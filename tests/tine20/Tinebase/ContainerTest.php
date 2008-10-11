@@ -302,6 +302,24 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         Tinebase_Container::getInstance()->deleteContainer($container);
     }
+    
+    /**
+     * test getGrantsOfRecords
+     *
+     */
+    public function testGetGrantsOfRecords()
+    {
+        $userId = Zend_Registry::get('currentAccount')->getId();
+        $contact = Addressbook_Controller::getInstance()->getContactByUserId($userId);
+        $records = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
+        $records->addRecord($contact);
+        
+        $grants = Tinebase_Container::getInstance()->getGrantsOfRecords($records, $userId, 'owner');
+        
+        $this->assertTrue(is_array($records[0]['owner']));
+        $this->assertGreaterThan(0, count($records[0]['owner']['account_grants']));
+        $this->assertEquals('internal', $records[0]['owner']['type']);
+    }
 }		
 	
 
