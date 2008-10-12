@@ -13,6 +13,79 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: Acl/Rights.php:164
+msgid "manage access log"
+msgstr "管理访问日志"
+
+#: Acl/Rights.php:165
+msgid "delete access log entries"
+msgstr "删除访问日志记录"
+
+#: Acl/Rights.php:168
+msgid "manage accounts"
+msgstr "管理帐户"
+
+#: Acl/Rights.php:169
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr "添加并编辑用户和组，添加组成员，修改用户密码"
+
+#: Acl/Rights.php:172
+msgid "manage applications"
+msgstr "管理应用程序"
+
+#: Acl/Rights.php:173
+msgid "enable and disable applications, edit application settings"
+msgstr "开启和关闭应用程序，编辑应用程序设置"
+
+#: Acl/Rights.php:176
+msgid "manage roles"
+msgstr "管理角色"
+
+#: Acl/Rights.php:177
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr "添加并编辑角色，给角色添加新成员，给角色添加应用程序权限"
+
+#: Acl/Rights.php:180
+msgid "manage shared tags"
+msgstr "管理共享的标签"
+
+#: Acl/Rights.php:181
+msgid "add, delete and edit shared tags"
+msgstr "添加、删除和编辑共享的标签"
+
+#: Acl/Rights.php:184
+msgid "view access log"
+msgstr "浏览访问日志"
+
+#: Acl/Rights.php:185
+msgid "view access log list"
+msgstr "浏览访问日志列表"
+
+#: Acl/Rights.php:188
+msgid "view accounts"
+msgstr "浏览帐户"
+
+#: Acl/Rights.php:189
+msgid "view accounts list and details"
+msgstr "浏览帐户列表和细节"
+
+#: Acl/Rights.php:192
+msgid "view applications"
+msgstr "浏览应用程序"
+
+#: Acl/Rights.php:193
+msgid "view applications list and details"
+msgstr "浏览应用程序列表和细节"
+
+#: Acl/Rights.php:196
+msgid "view roles"
+msgstr "浏览角色"
+
+#: Acl/Rights.php:197
+msgid "view roles list and details"
+msgstr "浏览角色列表和细节"
+
 #: js/Admin.js:19
 msgid "User"
 msgstr "用户"
@@ -41,8 +114,8 @@ msgstr "角色"
 msgid "Admin"
 msgstr "管理"
 
-#: js/Admin.js:251 js/Roles.js:48 js/Users.js:166 js/Groups.js:47
-#: js/Tags.js:41
+#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Users.js:166
 msgid "Confirm"
 msgstr "确认"
 
@@ -58,8 +131,8 @@ msgstr "删除条目"
 msgid "select all"
 msgstr "全选"
 
-#: js/Admin.js:372 js/Admin.js:770 js/Roles.js:112 js/Users.js:204
-#: js/Groups.js:111 js/Tags.js:103
+#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:204
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
 
@@ -71,8 +144,8 @@ msgstr "显示从："
 msgid "to:"
 msgstr "到："
 
-#: js/Admin.js:411 js/Admin.js:787 js/Roles.js:132 js/Users.js:220
-#: js/Groups.js:131 js/Tags.js:123
+#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:220
 msgid "Search:"
 msgstr "搜索："
 
@@ -112,7 +185,7 @@ msgstr "会话 ID"
 msgid "Login Name"
 msgstr "登录名"
 
-#: js/Admin.js:528 js/Roles.js:177 js/Groups.js:176 js/Groups.js:488
+#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
 #: js/Tags.js:165
 msgid "Name"
 msgstr "名字"
@@ -186,6 +259,103 @@ msgstr "状态"
 msgid "version"
 msgstr "版本"
 
+#: js/Groups.js:47
+msgid "Do you really want to delete the selected groups?"
+msgstr "真的要删除选中的组？"
+
+#: js/Groups.js:64
+msgid "Deleting group(s)..."
+msgstr "删除组..."
+
+#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
+#: js/Users.js:468 js/Users.js:511
+msgid "Failed"
+msgstr "失败"
+
+#: js/Groups.js:69 js/Groups.js:406
+#, fuzzy
+msgid "Some error occurred while trying to delete the group."
+msgstr "删除组时发生错误"
+
+#: js/Groups.js:82
+msgid "add group"
+msgstr "添加组"
+
+#: js/Groups.js:90
+msgid "edit group"
+msgstr "编辑组"
+
+#: js/Groups.js:98
+msgid "delete group"
+msgstr "删除组"
+
+#: js/Groups.js:169
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "显示组 {0} - {1} of {2}"
+
+#: js/Groups.js:170 js/Groups.js:221
+msgid "No groups to display"
+msgstr "没有组要显示"
+
+#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+msgid "ID"
+msgstr "ID"
+
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
+#: js/Tags.js:166 js/Tags.js:547
+msgid "Description"
+msgstr "描述"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Please wait"
+msgstr "请稍等"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Updating Memberships"
+msgstr "更新会员身份"
+
+#: js/Groups.js:378
+msgid "Could not save group."
+msgstr "不能保存组"
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Errors"
+msgstr "错误"
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Please fix the errors noted."
+msgstr "请修复标明的错误"
+
+#: js/Groups.js:398
+msgid "Deleting group..."
+msgstr "删除组 ..."
+
+#: js/Groups.js:520
+msgid "Group Members"
+msgstr "组成员"
+
+#: js/Groups.js:551
+msgid "Group Name"
+msgstr "组名"
+
+#: js/Groups.js:594 js/Users.js:361
+msgid "add account"
+msgstr "添加账户"
+
+#: js/Groups.js:601
+msgid "remove account"
+msgstr "删除账户"
+
+#: js/Groups.js:619
+msgid "Add new group"
+msgstr "添加新组"
+
+#: js/Groups.js:621
+#, python-format
+msgid "Edit Group \"%s\""
+msgstr "编辑组 \"%s\""
+
 #: js/Roles.js:48
 msgid "Do you really want to delete the selected roles?"
 msgstr "真的想删除选中的角色？"
@@ -193,12 +363,6 @@ msgstr "真的想删除选中的角色？"
 #: js/Roles.js:65
 msgid "Deleting role(s)..."
 msgstr "删除角色 ..."
-
-#: js/Roles.js:70 js/Roles.js:439 js/Roles.js:467 js/Users.js:186
-#: js/Users.js:468 js/Users.js:511 js/Groups.js:69 js/Groups.js:378
-#: js/Groups.js:406 js/Tags.js:341
-msgid "Failed"
-msgstr "失败"
 
 #: js/Roles.js:70 js/Roles.js:467
 #, fuzzy
@@ -225,34 +389,9 @@ msgstr "显示角色{0} - {1} of {2}"
 msgid "No roles to display"
 msgstr "没有角色要显示"
 
-#: js/Roles.js:176 js/Users.js:270 js/Groups.js:175
-msgid "ID"
-msgstr "ID"
-
-#: js/Roles.js:178 js/Roles.js:653 js/Groups.js:177 js/Groups.js:558
-#: js/Tags.js:166 js/Tags.js:547
-msgid "Description"
-msgstr "描述"
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Please wait"
-msgstr "请稍等"
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Updating Memberships"
-msgstr "更新会员身份"
-
 #: js/Roles.js:439
 msgid "Could not save role."
 msgstr "不能保存角色"
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Errors"
-msgstr "错误"
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Please fix the errors noted."
-msgstr "请修复标明的错误"
 
 #: js/Roles.js:459
 msgid "Deleting role..."
@@ -278,7 +417,7 @@ msgstr "角色名"
 msgid "Loading Role..."
 msgstr "加载角色"
 
-#: js/Roles.js:686 js/Users.js:477 js/Tags.js:584
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
 msgid "Please Wait"
 msgstr "请稍等"
 
@@ -290,6 +429,83 @@ msgstr "添加新角色"
 #, python-format
 msgid "Edit Role \"%s\""
 msgstr "编辑角色\"%s\""
+
+#: js/Tags.js:41
+msgid "Do you really want to delete the selected tags?"
+msgstr "真的想删除选中的标签？"
+
+#: js/Tags.js:58
+msgid "Deleting tag(s)..."
+msgstr "删除标签"
+
+#: js/Tags.js:73
+msgid "add tag"
+msgstr "添加标签"
+
+#: js/Tags.js:81
+msgid "edit tag"
+msgstr "编辑标签"
+
+#: js/Tags.js:89
+msgid "delete tag"
+msgstr "删除标签"
+
+#: js/Tags.js:158
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "显示标签{0} - {1} of {2}"
+
+#: js/Tags.js:159 js/Tags.js:210
+msgid "No tags to display"
+msgstr "没有标签要显示"
+
+#: js/Tags.js:164 js/Tags.js:489
+msgid "Color"
+msgstr "颜色"
+
+#: js/Tags.js:341
+msgid "Could not save tag."
+msgstr "不能保存标签"
+
+#: js/Tags.js:359
+msgid "Deleting tag..."
+msgstr "删除标签..."
+
+#: js/Tags.js:449
+msgid "Allowed Contexts"
+msgstr "允许的上下文"
+
+#: js/Tags.js:464
+msgid "Account Rights"
+msgstr "账户权限"
+
+#: js/Tags.js:469
+msgid "View"
+msgstr "视图"
+
+#: js/Tags.js:474
+msgid "Use"
+msgstr "使用"
+
+#: js/Tags.js:541
+msgid "Tag Name"
+msgstr "标签名"
+
+#: js/Tags.js:566
+msgid "Context"
+msgstr "上下文"
+
+#: js/Tags.js:584
+msgid "Loading Tag..."
+msgstr "加载标签..."
+
+#: js/Tags.js:615
+msgid "Add New Tag"
+msgstr "添加新标签"
+
+#: js/Tags.js:617
+#, python-format
+msgid "Edit Tag \"%s\""
+msgstr "编辑标签 \"%s\""
 
 #: js/Users.js:141
 msgid "Set new password"
@@ -359,10 +575,6 @@ msgstr "密码已修改"
 #: js/Users.js:280 js/Users.js:601
 msgid "Expires"
 msgstr "过期"
-
-#: js/Users.js:361 js/Groups.js:594
-msgid "add account"
-msgstr "添加账户"
 
 #: js/Users.js:369
 msgid "edit account"
@@ -449,215 +661,3 @@ msgstr "添加新用户账户"
 #, python-format
 msgid "Edit User Account \"%s\""
 msgstr "编辑用户账户\"%s\""
-
-#: js/Groups.js:47
-msgid "Do you really want to delete the selected groups?"
-msgstr "真的要删除选中的组？"
-
-#: js/Groups.js:64
-msgid "Deleting group(s)..."
-msgstr "删除组..."
-
-#: js/Groups.js:69 js/Groups.js:406
-#, fuzzy
-msgid "Some error occurred while trying to delete the group."
-msgstr "删除组时发生错误"
-
-#: js/Groups.js:82
-msgid "add group"
-msgstr "添加组"
-
-#: js/Groups.js:90
-msgid "edit group"
-msgstr "编辑组"
-
-#: js/Groups.js:98
-msgid "delete group"
-msgstr "删除组"
-
-#: js/Groups.js:169
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "显示组 {0} - {1} of {2}"
-
-#: js/Groups.js:170 js/Groups.js:221
-msgid "No groups to display"
-msgstr "没有组要显示"
-
-#: js/Groups.js:378
-msgid "Could not save group."
-msgstr "不能保存组"
-
-#: js/Groups.js:398
-msgid "Deleting group..."
-msgstr "删除组 ..."
-
-#: js/Groups.js:520
-msgid "Group Members"
-msgstr "组成员"
-
-#: js/Groups.js:551
-msgid "Group Name"
-msgstr "组名"
-
-#: js/Groups.js:601
-msgid "remove account"
-msgstr "删除账户"
-
-#: js/Groups.js:619
-msgid "Add new group"
-msgstr "添加新组"
-
-#: js/Groups.js:621
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr "编辑组 \"%s\""
-
-#: js/Tags.js:41
-msgid "Do you really want to delete the selected tags?"
-msgstr "真的想删除选中的标签？"
-
-#: js/Tags.js:58
-msgid "Deleting tag(s)..."
-msgstr "删除标签"
-
-#: js/Tags.js:73
-msgid "add tag"
-msgstr "添加标签"
-
-#: js/Tags.js:81
-msgid "edit tag"
-msgstr "编辑标签"
-
-#: js/Tags.js:89
-msgid "delete tag"
-msgstr "删除标签"
-
-#: js/Tags.js:158
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "显示标签{0} - {1} of {2}"
-
-#: js/Tags.js:159 js/Tags.js:210
-msgid "No tags to display"
-msgstr "没有标签要显示"
-
-#: js/Tags.js:164 js/Tags.js:489
-msgid "Color"
-msgstr "颜色"
-
-#: js/Tags.js:341
-msgid "Could not save tag."
-msgstr "不能保存标签"
-
-#: js/Tags.js:359
-msgid "Deleting tag..."
-msgstr "删除标签..."
-
-#: js/Tags.js:449
-msgid "Allowed Contexts"
-msgstr "允许的上下文"
-
-#: js/Tags.js:464
-msgid "Account Rights"
-msgstr "账户权限"
-
-#: js/Tags.js:469
-msgid "View"
-msgstr "视图"
-
-#: js/Tags.js:474
-msgid "Use"
-msgstr "使用"
-
-#: js/Tags.js:541
-msgid "Tag Name"
-msgstr "标签名"
-
-#: js/Tags.js:566
-msgid "Context"
-msgstr "上下文"
-
-#: js/Tags.js:584
-msgid "Loading Tag..."
-msgstr "加载标签..."
-
-#: js/Tags.js:615
-msgid "Add New Tag"
-msgstr "添加新标签"
-
-#: js/Tags.js:617
-#, python-format
-msgid "Edit Tag \"%s\""
-msgstr "编辑标签 \"%s\""
-
-#: Acl/Rights.php:164
-msgid "manage access log"
-msgstr "管理访问日志"
-
-#: Acl/Rights.php:165
-msgid "delete access log entries"
-msgstr "删除访问日志记录"
-
-#: Acl/Rights.php:168
-msgid "manage accounts"
-msgstr "管理帐户"
-
-#: Acl/Rights.php:169
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr "添加并编辑用户和组，添加组成员，修改用户密码"
-
-#: Acl/Rights.php:172
-msgid "manage applications"
-msgstr "管理应用程序"
-
-#: Acl/Rights.php:173
-msgid "enable and disable applications, edit application settings"
-msgstr "开启和关闭应用程序，编辑应用程序设置"
-
-#: Acl/Rights.php:176
-msgid "manage roles"
-msgstr "管理角色"
-
-#: Acl/Rights.php:177
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr "添加并编辑角色，给角色添加新成员，给角色添加应用程序权限"
-
-#: Acl/Rights.php:180
-msgid "manage shared tags"
-msgstr "管理共享的标签"
-
-#: Acl/Rights.php:181
-msgid "add, delete and edit shared tags"
-msgstr "添加、删除和编辑共享的标签"
-
-#: Acl/Rights.php:184
-msgid "view access log"
-msgstr "浏览访问日志"
-
-#: Acl/Rights.php:185
-msgid "view access log list"
-msgstr "浏览访问日志列表"
-
-#: Acl/Rights.php:188
-msgid "view accounts"
-msgstr "浏览帐户"
-
-#: Acl/Rights.php:189
-msgid "view accounts list and details"
-msgstr "浏览帐户列表和细节"
-
-#: Acl/Rights.php:192
-msgid "view applications"
-msgstr "浏览应用程序"
-
-#: Acl/Rights.php:193
-msgid "view applications list and details"
-msgstr "浏览应用程序列表和细节"
-
-#: Acl/Rights.php:196
-msgid "view roles"
-msgstr "浏览角色"
-
-#: Acl/Rights.php:197
-msgid "view roles list and details"
-msgstr "浏览角色列表和细节"

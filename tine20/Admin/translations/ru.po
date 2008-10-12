@@ -14,6 +14,83 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: Acl/Rights.php:164
+msgid "manage access log"
+msgstr "Управлять протоколом доступа "
+
+#: Acl/Rights.php:165
+msgid "delete access log entries"
+msgstr "Стереть протокол доступа "
+
+#: Acl/Rights.php:168
+msgid "manage accounts"
+msgstr "Управлять пользовательскими счетами"
+
+#: Acl/Rights.php:169
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr ""
+"Добавить и обработать пользователей и группы, присоединить пользователей к "
+"группам, ставить пароли по-новому. "
+
+#: Acl/Rights.php:172
+msgid "manage applications"
+msgstr "Управлять приложениями"
+
+#: Acl/Rights.php:173
+msgid "enable and disable applications, edit application settings"
+msgstr "Обработать, активировать и деактивировать приложения."
+
+#: Acl/Rights.php:176
+msgid "manage roles"
+msgstr "Управлять ролями"
+
+#: Acl/Rights.php:177
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"Добавить и обработать роли, добавить новых участников к ролям, добавить "
+"прикладные права на роли"
+
+#: Acl/Rights.php:180
+msgid "manage shared tags"
+msgstr "Управлять разделенными тэгами"
+
+#: Acl/Rights.php:181
+msgid "add, delete and edit shared tags"
+msgstr "Добавить, удалить и обработать разделенные тэги"
+
+#: Acl/Rights.php:184
+msgid "view access log"
+msgstr "Показать протокол доступа "
+
+#: Acl/Rights.php:185
+msgid "view access log list"
+msgstr "Показать протокол доступа "
+
+#: Acl/Rights.php:188
+msgid "view accounts"
+msgstr "Показать пользовательские счета "
+
+#: Acl/Rights.php:189
+msgid "view accounts list and details"
+msgstr "Показать пользовательские счета "
+
+#: Acl/Rights.php:192
+msgid "view applications"
+msgstr "Показать приложения "
+
+#: Acl/Rights.php:193
+msgid "view applications list and details"
+msgstr "Показать приложения "
+
+#: Acl/Rights.php:196
+msgid "view roles"
+msgstr "Показать роли"
+
+#: Acl/Rights.php:197
+msgid "view roles list and details"
+msgstr "Показать роли"
+
 #: js/Admin.js:19
 msgid "User"
 msgstr "Пользователь"
@@ -42,8 +119,8 @@ msgstr "Роли"
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/Admin.js:251 js/Roles.js:48 js/Users.js:166 js/Groups.js:47
-#: js/Tags.js:41
+#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Users.js:166
 msgid "Confirm"
 msgstr "Подтверждать"
 
@@ -60,8 +137,8 @@ msgstr "Удалить элемент"
 msgid "select all"
 msgstr "Выбрать все"
 
-#: js/Admin.js:372 js/Admin.js:770 js/Roles.js:112 js/Users.js:204
-#: js/Groups.js:111 js/Tags.js:103
+#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:204
 msgid "enter searchfilter"
 msgstr "Введите поисковый фильтр"
 
@@ -73,8 +150,8 @@ msgstr "Показ от:"
 msgid "to:"
 msgstr "До:"
 
-#: js/Admin.js:411 js/Admin.js:787 js/Roles.js:132 js/Users.js:220
-#: js/Groups.js:131 js/Tags.js:123
+#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:220
 msgid "Search:"
 msgstr "Поиск:"
 
@@ -114,7 +191,7 @@ msgstr "Cессия ID"
 msgid "Login Name"
 msgstr "Имя для регистрации"
 
-#: js/Admin.js:528 js/Roles.js:177 js/Groups.js:176 js/Groups.js:488
+#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
 #: js/Tags.js:165
 msgid "Name"
 msgstr "Имя"
@@ -188,6 +265,103 @@ msgstr "Статус"
 msgid "version"
 msgstr "Версия"
 
+#: js/Groups.js:47
+msgid "Do you really want to delete the selected groups?"
+msgstr "Вы уверены что хотите удалить выбранные группы?"
+
+#: js/Groups.js:64
+msgid "Deleting group(s)..."
+msgstr "Удаление групп(ы)..."
+
+#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
+#: js/Users.js:468 js/Users.js:511
+msgid "Failed"
+msgstr "Неудача"
+
+#: js/Groups.js:69 js/Groups.js:406
+#, fuzzy
+msgid "Some error occurred while trying to delete the group."
+msgstr "При удаление группы возникла ошибка."
+
+#: js/Groups.js:82
+msgid "add group"
+msgstr "Добавить группу"
+
+#: js/Groups.js:90
+msgid "edit group"
+msgstr "Обработать группу"
+
+#: js/Groups.js:98
+msgid "delete group"
+msgstr "Удалить группу"
+
+#: js/Groups.js:169
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Показ групп {0} - {1} of {2}"
+
+#: js/Groups.js:170 js/Groups.js:221
+msgid "No groups to display"
+msgstr "Некаких групп для показа нет"
+
+#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+msgid "ID"
+msgstr "ID"
+
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
+#: js/Tags.js:166 js/Tags.js:547
+msgid "Description"
+msgstr "Описание"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Please wait"
+msgstr "Пожалуйста подождите"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Updating Memberships"
+msgstr "Обновить членство"
+
+#: js/Groups.js:378
+msgid "Could not save group."
+msgstr "Группа не могла быть сохранена."
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Errors"
+msgstr "Ошибки"
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, устраните показанные ошибки."
+
+#: js/Groups.js:398
+msgid "Deleting group..."
+msgstr "Удаление групп..."
+
+#: js/Groups.js:520
+msgid "Group Members"
+msgstr "Члены группы"
+
+#: js/Groups.js:551
+msgid "Group Name"
+msgstr "Название группы"
+
+#: js/Groups.js:594 js/Users.js:361
+msgid "add account"
+msgstr "Добавить счет"
+
+#: js/Groups.js:601
+msgid "remove account"
+msgstr "Убрать счет"
+
+#: js/Groups.js:619
+msgid "Add new group"
+msgstr "Добавить новую группу"
+
+#: js/Groups.js:621
+#, python-format
+msgid "Edit Group \"%s\""
+msgstr "Обработать группу \"%s\""
+
 #: js/Roles.js:48
 msgid "Do you really want to delete the selected roles?"
 msgstr "Вы уверены что хотите удалить выбранную роль?"
@@ -195,12 +369,6 @@ msgstr "Вы уверены что хотите удалить выбранну�
 #: js/Roles.js:65
 msgid "Deleting role(s)..."
 msgstr "Удаление роли(ей)..."
-
-#: js/Roles.js:70 js/Roles.js:439 js/Roles.js:467 js/Users.js:186
-#: js/Users.js:468 js/Users.js:511 js/Groups.js:69 js/Groups.js:378
-#: js/Groups.js:406 js/Tags.js:341
-msgid "Failed"
-msgstr "Неудача"
 
 #: js/Roles.js:70 js/Roles.js:467
 #, fuzzy
@@ -227,34 +395,9 @@ msgstr "Показ ролей {0} - {1} of {2}"
 msgid "No roles to display"
 msgstr "Некаких ролей для показа нет"
 
-#: js/Roles.js:176 js/Users.js:270 js/Groups.js:175
-msgid "ID"
-msgstr "ID"
-
-#: js/Roles.js:178 js/Roles.js:653 js/Groups.js:177 js/Groups.js:558
-#: js/Tags.js:166 js/Tags.js:547
-msgid "Description"
-msgstr "Описание"
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Please wait"
-msgstr "Пожалуйста подождите"
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Updating Memberships"
-msgstr "Обновить членство"
-
 #: js/Roles.js:439
 msgid "Could not save role."
 msgstr "Роль не могла бить сохранена."
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Errors"
-msgstr "Ошибки"
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Please fix the errors noted."
-msgstr "Пожалуйста, устраните показанные ошибки."
 
 #: js/Roles.js:459
 msgid "Deleting role..."
@@ -280,7 +423,7 @@ msgstr "Название роли"
 msgid "Loading Role..."
 msgstr "З"
 
-#: js/Roles.js:686 js/Users.js:477 js/Tags.js:584
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
 msgid "Please Wait"
 msgstr "Пожалуйста подождите"
 
@@ -292,6 +435,83 @@ msgstr "Добавьте новую роль"
 #, python-format
 msgid "Edit Role \"%s\""
 msgstr "Обработать роль \"%s\""
+
+#: js/Tags.js:41
+msgid "Do you really want to delete the selected tags?"
+msgstr "Вы уверены что хотите удалить выбранный тэг?"
+
+#: js/Tags.js:58
+msgid "Deleting tag(s)..."
+msgstr "Удаление тэга(ов)..."
+
+#: js/Tags.js:73
+msgid "add tag"
+msgstr "Добавить тэг"
+
+#: js/Tags.js:81
+msgid "edit tag"
+msgstr "Обработать тэг"
+
+#: js/Tags.js:89
+msgid "delete tag"
+msgstr "Удалить тэг"
+
+#: js/Tags.js:158
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Показ тэгов {0} - {1} of {2}"
+
+#: js/Tags.js:159 js/Tags.js:210
+msgid "No tags to display"
+msgstr "Некаких тэгов для показа нет"
+
+#: js/Tags.js:164 js/Tags.js:489
+msgid "Color"
+msgstr "Цвет"
+
+#: js/Tags.js:341
+msgid "Could not save tag."
+msgstr "Тэг не мог быть сохранен."
+
+#: js/Tags.js:359
+msgid "Deleting tag..."
+msgstr "Удаление тэга..."
+
+#: js/Tags.js:449
+msgid "Allowed Contexts"
+msgstr "Позволенный Контекст"
+
+#: js/Tags.js:464
+msgid "Account Rights"
+msgstr "Права счета"
+
+#: js/Tags.js:469
+msgid "View"
+msgstr "Представление"
+
+#: js/Tags.js:474
+msgid "Use"
+msgstr "Использовать"
+
+#: js/Tags.js:541
+msgid "Tag Name"
+msgstr "Название тэга"
+
+#: js/Tags.js:566
+msgid "Context"
+msgstr "Контекст"
+
+#: js/Tags.js:584
+msgid "Loading Tag..."
+msgstr "Загрузка тэга..."
+
+#: js/Tags.js:615
+msgid "Add New Tag"
+msgstr "Добавить новый тэг"
+
+#: js/Tags.js:617
+#, python-format
+msgid "Edit Tag \"%s\""
+msgstr "Обработать тэг \"%s\""
 
 #: js/Users.js:141
 msgid "Set new password"
@@ -361,10 +581,6 @@ msgstr "Пароль бил изменен"
 #: js/Users.js:280 js/Users.js:601
 msgid "Expires"
 msgstr "Истекает"
-
-#: js/Users.js:361 js/Groups.js:594
-msgid "add account"
-msgstr "Добавить счет"
 
 #: js/Users.js:369
 msgid "edit account"
@@ -451,219 +667,3 @@ msgstr "Добавить новый счет пользователя"
 #, python-format
 msgid "Edit User Account \"%s\""
 msgstr "Обработать счёт пользователя \"%s\""
-
-#: js/Groups.js:47
-msgid "Do you really want to delete the selected groups?"
-msgstr "Вы уверены что хотите удалить выбранные группы?"
-
-#: js/Groups.js:64
-msgid "Deleting group(s)..."
-msgstr "Удаление групп(ы)..."
-
-#: js/Groups.js:69 js/Groups.js:406
-#, fuzzy
-msgid "Some error occurred while trying to delete the group."
-msgstr "При удаление группы возникла ошибка."
-
-#: js/Groups.js:82
-msgid "add group"
-msgstr "Добавить группу"
-
-#: js/Groups.js:90
-msgid "edit group"
-msgstr "Обработать группу"
-
-#: js/Groups.js:98
-msgid "delete group"
-msgstr "Удалить группу"
-
-#: js/Groups.js:169
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Показ групп {0} - {1} of {2}"
-
-#: js/Groups.js:170 js/Groups.js:221
-msgid "No groups to display"
-msgstr "Некаких групп для показа нет"
-
-#: js/Groups.js:378
-msgid "Could not save group."
-msgstr "Группа не могла быть сохранена."
-
-#: js/Groups.js:398
-msgid "Deleting group..."
-msgstr "Удаление групп..."
-
-#: js/Groups.js:520
-msgid "Group Members"
-msgstr "Члены группы"
-
-#: js/Groups.js:551
-msgid "Group Name"
-msgstr "Название группы"
-
-#: js/Groups.js:601
-msgid "remove account"
-msgstr "Убрать счет"
-
-#: js/Groups.js:619
-msgid "Add new group"
-msgstr "Добавить новую группу"
-
-#: js/Groups.js:621
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr "Обработать группу \"%s\""
-
-#: js/Tags.js:41
-msgid "Do you really want to delete the selected tags?"
-msgstr "Вы уверены что хотите удалить выбранный тэг?"
-
-#: js/Tags.js:58
-msgid "Deleting tag(s)..."
-msgstr "Удаление тэга(ов)..."
-
-#: js/Tags.js:73
-msgid "add tag"
-msgstr "Добавить тэг"
-
-#: js/Tags.js:81
-msgid "edit tag"
-msgstr "Обработать тэг"
-
-#: js/Tags.js:89
-msgid "delete tag"
-msgstr "Удалить тэг"
-
-#: js/Tags.js:158
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Показ тэгов {0} - {1} of {2}"
-
-#: js/Tags.js:159 js/Tags.js:210
-msgid "No tags to display"
-msgstr "Некаких тэгов для показа нет"
-
-#: js/Tags.js:164 js/Tags.js:489
-msgid "Color"
-msgstr "Цвет"
-
-#: js/Tags.js:341
-msgid "Could not save tag."
-msgstr "Тэг не мог быть сохранен."
-
-#: js/Tags.js:359
-msgid "Deleting tag..."
-msgstr "Удаление тэга..."
-
-#: js/Tags.js:449
-msgid "Allowed Contexts"
-msgstr "Позволенный Контекст"
-
-#: js/Tags.js:464
-msgid "Account Rights"
-msgstr "Права счета"
-
-#: js/Tags.js:469
-msgid "View"
-msgstr "Представление"
-
-#: js/Tags.js:474
-msgid "Use"
-msgstr "Использовать"
-
-#: js/Tags.js:541
-msgid "Tag Name"
-msgstr "Название тэга"
-
-#: js/Tags.js:566
-msgid "Context"
-msgstr "Контекст"
-
-#: js/Tags.js:584
-msgid "Loading Tag..."
-msgstr "Загрузка тэга..."
-
-#: js/Tags.js:615
-msgid "Add New Tag"
-msgstr "Добавить новый тэг"
-
-#: js/Tags.js:617
-#, python-format
-msgid "Edit Tag \"%s\""
-msgstr "Обработать тэг \"%s\""
-
-#: Acl/Rights.php:164
-msgid "manage access log"
-msgstr "Управлять протоколом доступа "
-
-#: Acl/Rights.php:165
-msgid "delete access log entries"
-msgstr "Стереть протокол доступа "
-
-#: Acl/Rights.php:168
-msgid "manage accounts"
-msgstr "Управлять пользовательскими счетами"
-
-#: Acl/Rights.php:169
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"Добавить и обработать пользователей и группы, присоединить пользователей к "
-"группам, ставить пароли по-новому. "
-
-#: Acl/Rights.php:172
-msgid "manage applications"
-msgstr "Управлять приложениями"
-
-#: Acl/Rights.php:173
-msgid "enable and disable applications, edit application settings"
-msgstr "Обработать, активировать и деактивировать приложения."
-
-#: Acl/Rights.php:176
-msgid "manage roles"
-msgstr "Управлять ролями"
-
-#: Acl/Rights.php:177
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"Добавить и обработать роли, добавить новых участников к ролям, добавить "
-"прикладные права на роли"
-
-#: Acl/Rights.php:180
-msgid "manage shared tags"
-msgstr "Управлять разделенными тэгами"
-
-#: Acl/Rights.php:181
-msgid "add, delete and edit shared tags"
-msgstr "Добавить, удалить и обработать разделенные тэги"
-
-#: Acl/Rights.php:184
-msgid "view access log"
-msgstr "Показать протокол доступа "
-
-#: Acl/Rights.php:185
-msgid "view access log list"
-msgstr "Показать протокол доступа "
-
-#: Acl/Rights.php:188
-msgid "view accounts"
-msgstr "Показать пользовательские счета "
-
-#: Acl/Rights.php:189
-msgid "view accounts list and details"
-msgstr "Показать пользовательские счета "
-
-#: Acl/Rights.php:192
-msgid "view applications"
-msgstr "Показать приложения "
-
-#: Acl/Rights.php:193
-msgid "view applications list and details"
-msgstr "Показать приложения "
-
-#: Acl/Rights.php:196
-msgid "view roles"
-msgstr "Показать роли"
-
-#: Acl/Rights.php:197
-msgid "view roles list and details"
-msgstr "Показать роли"

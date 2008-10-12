@@ -6,7 +6,7 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Language: Czech\n"
@@ -15,578 +15,6 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Admin\n"
-
-#: js/Admin.js:19
-msgid "User"
-msgstr ""
-
-#: js/Admin.js:31
-msgid "Groups"
-msgstr ""
-
-#: js/Admin.js:43
-msgid "Applications"
-msgstr ""
-
-#: js/Admin.js:55
-msgid "Access Log"
-msgstr ""
-
-#: js/Admin.js:67
-msgid "Shared Tags"
-msgstr ""
-
-#: js/Admin.js:79
-msgid "Roles"
-msgstr ""
-
-#: js/Admin.js:114
-msgid "Admin"
-msgstr ""
-
-#: js/Admin.js:251 js/Roles.js:48 js/Users.js:166 js/Groups.js:47
-#: js/Tags.js:41
-msgid "Confirm"
-msgstr ""
-
-#: js/Admin.js:251
-msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
-
-#: js/Admin.js:366
-msgid "delete entry"
-msgstr ""
-
-#: js/Admin.js:367
-msgid "select all"
-msgstr ""
-
-#: js/Admin.js:372 js/Admin.js:770 js/Roles.js:112 js/Users.js:204
-#: js/Groups.js:111 js/Tags.js:103
-msgid "enter searchfilter"
-msgstr ""
-
-#: js/Admin.js:402
-msgid "Display from:"
-msgstr ""
-
-#: js/Admin.js:406
-msgid "to:"
-msgstr ""
-
-#: js/Admin.js:411 js/Admin.js:787 js/Roles.js:132 js/Users.js:220
-#: js/Groups.js:131 js/Tags.js:123
-msgid "Search:"
-msgstr ""
-
-#: js/Admin.js:484
-msgid "invalid password"
-msgstr ""
-
-#: js/Admin.js:488
-msgid "ambiguous username"
-msgstr ""
-
-#: js/Admin.js:492
-msgid "user not found"
-msgstr ""
-
-#: js/Admin.js:496
-msgid "failure"
-msgstr ""
-
-#: js/Admin.js:500
-msgid "success"
-msgstr ""
-
-#: js/Admin.js:521
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr ""
-
-#: js/Admin.js:522
-msgid "No access log entries to display"
-msgstr ""
-
-#: js/Admin.js:526
-msgid "Session ID"
-msgstr ""
-
-#: js/Admin.js:527 js/Users.js:544
-msgid "Login Name"
-msgstr ""
-
-#: js/Admin.js:528 js/Roles.js:177 js/Groups.js:176 js/Groups.js:488
-#: js/Tags.js:165
-msgid "Name"
-msgstr ""
-
-#: js/Admin.js:529
-msgid "IP Address"
-msgstr ""
-
-#: js/Admin.js:530
-msgid "Login Time"
-msgstr ""
-
-#: js/Admin.js:531
-msgid "Logout Time"
-msgstr ""
-
-#: js/Admin.js:532
-msgid "Account ID"
-msgstr ""
-
-#: js/Admin.js:533
-msgid "Result"
-msgstr ""
-
-#: js/Admin.js:763
-msgid "enable application"
-msgstr ""
-
-#: js/Admin.js:764
-msgid "disable application"
-msgstr ""
-
-#: js/Admin.js:765
-msgid "settings"
-msgstr ""
-
-#: js/Admin.js:816
-msgid "disabled"
-msgstr ""
-
-#: js/Admin.js:819
-msgid "enabled"
-msgstr ""
-
-#: js/Admin.js:823
-#, python-format
-msgid "unknown status (%s)"
-msgstr ""
-
-#: js/Admin.js:852
-msgid "Displaying application {0} - {1} of {2}"
-msgstr ""
-
-#: js/Admin.js:853
-msgid "No applications to display"
-msgstr ""
-
-#: js/Admin.js:857
-msgid "order"
-msgstr ""
-
-#: js/Admin.js:858
-msgid "name"
-msgstr ""
-
-#: js/Admin.js:859
-msgid "status"
-msgstr ""
-
-#: js/Admin.js:860
-msgid "version"
-msgstr ""
-
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr ""
-
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr ""
-
-#: js/Roles.js:70 js/Roles.js:439 js/Roles.js:467 js/Users.js:186
-#: js/Users.js:468 js/Users.js:511 js/Groups.js:69 js/Groups.js:378
-#: js/Groups.js:406 js/Tags.js:341
-msgid "Failed"
-msgstr ""
-
-#: js/Roles.js:70 js/Roles.js:467
-msgid "Some error occurred while trying to delete the role."
-msgstr ""
-
-#: js/Roles.js:83
-msgid "add role"
-msgstr ""
-
-#: js/Roles.js:91
-msgid "edit role"
-msgstr ""
-
-#: js/Roles.js:99
-msgid "delete role"
-msgstr ""
-
-#: js/Roles.js:170
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr ""
-
-#: js/Roles.js:171 js/Roles.js:222
-msgid "No roles to display"
-msgstr ""
-
-#: js/Roles.js:176 js/Users.js:270 js/Groups.js:175
-msgid "ID"
-msgstr ""
-
-#: js/Roles.js:178 js/Roles.js:653 js/Groups.js:177 js/Groups.js:558
-#: js/Tags.js:166 js/Tags.js:547
-msgid "Description"
-msgstr ""
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Please wait"
-msgstr ""
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Updating Memberships"
-msgstr ""
-
-#: js/Roles.js:439
-msgid "Could not save role."
-msgstr ""
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Errors"
-msgstr ""
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Please fix the errors noted."
-msgstr ""
-
-#: js/Roles.js:459
-msgid "Deleting role..."
-msgstr ""
-
-#: js/Roles.js:594
-msgid "Role members"
-msgstr ""
-
-#: js/Roles.js:604
-msgid "Members"
-msgstr ""
-
-#: js/Roles.js:616 js/Tags.js:563
-msgid "Rights"
-msgstr ""
-
-#: js/Roles.js:646
-msgid "Role Name"
-msgstr ""
-
-#: js/Roles.js:686
-msgid "Loading Role..."
-msgstr ""
-
-#: js/Roles.js:686 js/Users.js:477 js/Tags.js:584
-msgid "Please Wait"
-msgstr ""
-
-#: js/Roles.js:726
-msgid "Add New Role"
-msgstr ""
-
-#: js/Roles.js:728
-#, python-format
-msgid "Edit Role \"%s\""
-msgstr ""
-
-#: js/Users.js:141
-msgid "Set new password"
-msgstr ""
-
-#: js/Users.js:141
-msgid "Please enter the new password:"
-msgstr ""
-
-#: js/Users.js:166
-msgid "Do you really want to delete the selected account(s)?"
-msgstr ""
-
-#: js/Users.js:181
-msgid "Deleting account(s)..."
-msgstr ""
-
-#: js/Users.js:186
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr ""
-
-#: js/Users.js:265
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr ""
-
-#: js/Users.js:266
-msgid "No accounts to display"
-msgstr ""
-
-#: js/Users.js:271 js/Users.js:582
-msgid "Status"
-msgstr ""
-
-#: js/Users.js:272
-msgid "Displayname"
-msgstr ""
-
-#: js/Users.js:273
-msgid "Loginname"
-msgstr ""
-
-#: js/Users.js:274
-msgid "Last name"
-msgstr ""
-
-#: js/Users.js:275
-msgid "First name"
-msgstr ""
-
-#: js/Users.js:276
-msgid "Email"
-msgstr ""
-
-#: js/Users.js:277 js/Users.js:606
-msgid "Last login at"
-msgstr ""
-
-#: js/Users.js:278 js/Users.js:613
-msgid "Last login from"
-msgstr ""
-
-#: js/Users.js:279
-msgid "Password changed"
-msgstr ""
-
-#: js/Users.js:280 js/Users.js:601
-msgid "Expires"
-msgstr ""
-
-#: js/Users.js:361 js/Groups.js:594
-msgid "add account"
-msgstr ""
-
-#: js/Users.js:369
-msgid "edit account"
-msgstr ""
-
-#: js/Users.js:377
-msgid "delete account"
-msgstr ""
-
-#: js/Users.js:385
-msgid "enable account"
-msgstr ""
-
-#: js/Users.js:394
-msgid "disable account"
-msgstr ""
-
-#: js/Users.js:403
-msgid "reset password"
-msgstr ""
-
-#: js/Users.js:462
-msgid "Deleting account..."
-msgstr ""
-
-#: js/Users.js:468
-msgid "Some error occurred while trying to delete the account."
-msgstr ""
-
-#: js/Users.js:477
-msgid "Saving User Account"
-msgstr ""
-
-#: js/Users.js:511
-msgid "Could not save user account."
-msgstr ""
-
-#: js/Users.js:535
-msgid "First Name"
-msgstr ""
-
-#: js/Users.js:539
-msgid "Last Name"
-msgstr ""
-
-#: js/Users.js:549
-msgid "Password"
-msgstr ""
-
-#: js/Users.js:552 js/Users.js:558
-msgid "no password set"
-msgstr ""
-
-#: js/Users.js:555
-msgid "Password again"
-msgstr ""
-
-#: js/Users.js:560
-msgid "Primary group"
-msgstr ""
-
-#: js/Users.js:568
-msgid "Emailaddress"
-msgstr ""
-
-#: js/Users.js:603 js/Users.js:621
-msgid "never"
-msgstr ""
-
-#: js/Users.js:608 js/Users.js:615
-msgid "never logged in"
-msgstr ""
-
-#: js/Users.js:619
-msgid "Password set"
-msgstr ""
-
-#: js/Users.js:661
-msgid "Add New User Account"
-msgstr ""
-
-#: js/Users.js:663
-#, python-format
-msgid "Edit User Account \"%s\""
-msgstr ""
-
-#: js/Groups.js:47
-msgid "Do you really want to delete the selected groups?"
-msgstr ""
-
-#: js/Groups.js:64
-msgid "Deleting group(s)..."
-msgstr ""
-
-#: js/Groups.js:69 js/Groups.js:406
-msgid "Some error occurred while trying to delete the group."
-msgstr ""
-
-#: js/Groups.js:82
-msgid "add group"
-msgstr ""
-
-#: js/Groups.js:90
-msgid "edit group"
-msgstr ""
-
-#: js/Groups.js:98
-msgid "delete group"
-msgstr ""
-
-#: js/Groups.js:169
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr ""
-
-#: js/Groups.js:170 js/Groups.js:221
-msgid "No groups to display"
-msgstr ""
-
-#: js/Groups.js:378
-msgid "Could not save group."
-msgstr ""
-
-#: js/Groups.js:398
-msgid "Deleting group..."
-msgstr ""
-
-#: js/Groups.js:520
-msgid "Group Members"
-msgstr ""
-
-#: js/Groups.js:551
-msgid "Group Name"
-msgstr ""
-
-#: js/Groups.js:601
-msgid "remove account"
-msgstr ""
-
-#: js/Groups.js:619
-msgid "Add new group"
-msgstr ""
-
-#: js/Groups.js:621
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr ""
-
-#: js/Tags.js:41
-msgid "Do you really want to delete the selected tags?"
-msgstr ""
-
-#: js/Tags.js:58
-msgid "Deleting tag(s)..."
-msgstr ""
-
-#: js/Tags.js:73
-msgid "add tag"
-msgstr ""
-
-#: js/Tags.js:81
-msgid "edit tag"
-msgstr ""
-
-#: js/Tags.js:89
-msgid "delete tag"
-msgstr ""
-
-#: js/Tags.js:158
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr ""
-
-#: js/Tags.js:159 js/Tags.js:210
-msgid "No tags to display"
-msgstr ""
-
-#: js/Tags.js:164 js/Tags.js:489
-msgid "Color"
-msgstr ""
-
-#: js/Tags.js:341
-msgid "Could not save tag."
-msgstr ""
-
-#: js/Tags.js:359
-msgid "Deleting tag..."
-msgstr ""
-
-#: js/Tags.js:449
-msgid "Allowed Contexts"
-msgstr ""
-
-#: js/Tags.js:464
-msgid "Account Rights"
-msgstr ""
-
-#: js/Tags.js:469
-msgid "View"
-msgstr ""
-
-#: js/Tags.js:474
-msgid "Use"
-msgstr ""
-
-#: js/Tags.js:541
-msgid "Tag Name"
-msgstr ""
-
-#: js/Tags.js:566
-msgid "Context"
-msgstr ""
-
-#: js/Tags.js:584
-msgid "Loading Tag..."
-msgstr ""
-
-#: js/Tags.js:615
-msgid "Add New Tag"
-msgstr ""
-
-#: js/Tags.js:617
-#, python-format
-msgid "Edit Tag \"%s\""
-msgstr ""
 
 #: Acl/Rights.php:164
 msgid "manage access log"
@@ -664,3 +92,575 @@ msgstr "zobrazit role"
 #: Acl/Rights.php:197
 msgid "view roles list and details"
 msgstr "zobrazit podrobný seznam rolí"
+
+#: js/Admin.js:19
+msgid "User"
+msgstr "Uživatel"
+
+#: js/Admin.js:31
+msgid "Groups"
+msgstr "Skupiny"
+
+#: js/Admin.js:43
+msgid "Applications"
+msgstr "Aplikace"
+
+#: js/Admin.js:55
+msgid "Access Log"
+msgstr "Přístupový log"
+
+#: js/Admin.js:67
+msgid "Shared Tags"
+msgstr "Sdílené štítky"
+
+#: js/Admin.js:79
+msgid "Roles"
+msgstr "Role"
+
+#: js/Admin.js:114
+msgid "Admin"
+msgstr "Administrátor"
+
+#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Users.js:166
+msgid "Confirm"
+msgstr "Potvrdit"
+
+#: js/Admin.js:251
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "Opravdu chcete smazat vybrané záznamy přístupového logu?"
+
+#: js/Admin.js:366
+msgid "delete entry"
+msgstr "smazat záznam"
+
+#: js/Admin.js:367
+msgid "select all"
+msgstr "vybrat vše"
+
+#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:204
+msgid "enter searchfilter"
+msgstr "zadejte hledaný výraz"
+
+#: js/Admin.js:402
+msgid "Display from:"
+msgstr "Zobrazit od:"
+
+#: js/Admin.js:406
+msgid "to:"
+msgstr "do:"
+
+#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:220
+msgid "Search:"
+msgstr "Hledat:"
+
+#: js/Admin.js:484
+msgid "invalid password"
+msgstr "neplatné heslo"
+
+#: js/Admin.js:488
+msgid "ambiguous username"
+msgstr "nejednoznačné uživatelské jméno"
+
+#: js/Admin.js:492
+msgid "user not found"
+msgstr "uživatel nebyl nalezen"
+
+#: js/Admin.js:496
+msgid "failure"
+msgstr "chyba"
+
+#: js/Admin.js:500
+msgid "success"
+msgstr "úspěch"
+
+#: js/Admin.js:521
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "Zobrazuji záznamy přístupového logu {0} - {1} z {2}"
+
+#: js/Admin.js:522
+msgid "No access log entries to display"
+msgstr "Žádné záznamy přístupového logu ke zobrazení"
+
+#: js/Admin.js:526
+msgid "Session ID"
+msgstr "ID relace"
+
+#: js/Admin.js:527 js/Users.js:544
+msgid "Login Name"
+msgstr "Přihlašovací jméno"
+
+#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/Tags.js:165
+msgid "Name"
+msgstr "Jméno"
+
+#: js/Admin.js:529
+msgid "IP Address"
+msgstr "IP adresa"
+
+#: js/Admin.js:530
+msgid "Login Time"
+msgstr "Čas přihlášení"
+
+#: js/Admin.js:531
+msgid "Logout Time"
+msgstr "Čas odhlášení"
+
+#: js/Admin.js:532
+msgid "Account ID"
+msgstr "ID účtu"
+
+#: js/Admin.js:533
+msgid "Result"
+msgstr "Výsledek"
+
+#: js/Admin.js:763
+msgid "enable application"
+msgstr "povolit aplikaci"
+
+#: js/Admin.js:764
+msgid "disable application"
+msgstr "zakázat aplikaci"
+
+#: js/Admin.js:765
+msgid "settings"
+msgstr "nastavení"
+
+#: js/Admin.js:816
+msgid "disabled"
+msgstr "zakázáno"
+
+#: js/Admin.js:819
+msgid "enabled"
+msgstr "povoleno"
+
+#: js/Admin.js:823
+#, python-format
+msgid "unknown status (%s)"
+msgstr "neznámý stav (%s)"
+
+#: js/Admin.js:852
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Zobrazuji aplikace {0} - {1} z {2}"
+
+#: js/Admin.js:853
+msgid "No applications to display"
+msgstr "Žádné aplikace ke zobrazení"
+
+#: js/Admin.js:857
+msgid "order"
+msgstr "pořadí"
+
+#: js/Admin.js:858
+msgid "name"
+msgstr "název"
+
+#: js/Admin.js:859
+msgid "status"
+msgstr "stav"
+
+#: js/Admin.js:860
+msgid "version"
+msgstr "verze"
+
+#: js/Groups.js:47
+msgid "Do you really want to delete the selected groups?"
+msgstr "Opravdu chcete smazat vybrané skupiny?"
+
+#: js/Groups.js:64
+msgid "Deleting group(s)..."
+msgstr "Mažu skupinu(y)..."
+
+#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
+#: js/Users.js:468 js/Users.js:511
+msgid "Failed"
+msgstr "Nepodařilo se"
+
+#: js/Groups.js:69 js/Groups.js:406
+msgid "Some error occurred while trying to delete the group."
+msgstr "Během mazání skupiny došlo k chybě."
+
+#: js/Groups.js:82
+msgid "add group"
+msgstr "přidat skupinu"
+
+#: js/Groups.js:90
+msgid "edit group"
+msgstr "editovat skupinu"
+
+#: js/Groups.js:98
+msgid "delete group"
+msgstr "smazat skupinu"
+
+#: js/Groups.js:169
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Zobrazuji skupiny {0} - {1} z {2}"
+
+#: js/Groups.js:170 js/Groups.js:221
+msgid "No groups to display"
+msgstr "Žádné skupiny ke zobrazení"
+
+#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+msgid "ID"
+msgstr "ID"
+
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
+#: js/Tags.js:166 js/Tags.js:547
+msgid "Description"
+msgstr "Popis"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Please wait"
+msgstr "Čekejte prosím"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Updating Memberships"
+msgstr "Aktualizuji členství"
+
+#: js/Groups.js:378
+msgid "Could not save group."
+msgstr "Nepodařilo se uložit skupinu."
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Errors"
+msgstr "Chyby"
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím vyznačené chyby."
+
+#: js/Groups.js:398
+msgid "Deleting group..."
+msgstr "Mažu skupinu..."
+
+#: js/Groups.js:520
+msgid "Group Members"
+msgstr "Členové skupiny"
+
+#: js/Groups.js:551
+msgid "Group Name"
+msgstr "Název skupiny"
+
+#: js/Groups.js:594 js/Users.js:361
+msgid "add account"
+msgstr "přidat účet"
+
+#: js/Groups.js:601
+msgid "remove account"
+msgstr "odstranit účet"
+
+#: js/Groups.js:619
+msgid "Add new group"
+msgstr "Přídat novou skupinu"
+
+#: js/Groups.js:621
+#, python-format
+msgid "Edit Group \"%s\""
+msgstr "Editovat skupinu \"%s\""
+
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr "Určitě chcete smazat vybrané role?"
+
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr "Mažu roli(e)..."
+
+#: js/Roles.js:70 js/Roles.js:467
+msgid "Some error occurred while trying to delete the role."
+msgstr "Během mazání role došlo k chybě."
+
+#: js/Roles.js:83
+msgid "add role"
+msgstr "přidat roli"
+
+#: js/Roles.js:91
+msgid "edit role"
+msgstr "editovat roli"
+
+#: js/Roles.js:99
+msgid "delete role"
+msgstr "smazat roli"
+
+#: js/Roles.js:170
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Zobrazuji role  {0} - {1} z {2}"
+
+#: js/Roles.js:171 js/Roles.js:222
+msgid "No roles to display"
+msgstr "Žádné role ke zobrazení"
+
+#: js/Roles.js:439
+msgid "Could not save role."
+msgstr "Nepodařilo se uložit roli."
+
+#: js/Roles.js:459
+msgid "Deleting role..."
+msgstr "Mažu roli..."
+
+#: js/Roles.js:594
+msgid "Role members"
+msgstr "Členové role"
+
+#: js/Roles.js:604
+msgid "Members"
+msgstr "Členové"
+
+#: js/Roles.js:616 js/Tags.js:563
+msgid "Rights"
+msgstr "Práva"
+
+#: js/Roles.js:646
+msgid "Role Name"
+msgstr "Název role"
+
+#: js/Roles.js:686
+msgid "Loading Role..."
+msgstr "Načítám roli..."
+
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
+msgid "Please Wait"
+msgstr "Čekejte prosím"
+
+#: js/Roles.js:726
+msgid "Add New Role"
+msgstr "Přidat novou roli"
+
+#: js/Roles.js:728
+#, python-format
+msgid "Edit Role \"%s\""
+msgstr "Editovat roli \"%s\""
+
+#: js/Tags.js:41
+msgid "Do you really want to delete the selected tags?"
+msgstr "Opravdu chcete smazat vybrané štítky?"
+
+#: js/Tags.js:58
+msgid "Deleting tag(s)..."
+msgstr "Mažu štítek(ky)..."
+
+#: js/Tags.js:73
+msgid "add tag"
+msgstr "přidat štítek"
+
+#: js/Tags.js:81
+msgid "edit tag"
+msgstr "editovat štítek"
+
+#: js/Tags.js:89
+msgid "delete tag"
+msgstr "smazat štítek"
+
+#: js/Tags.js:158
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Zobrazuji štítky {0} - {1} of {2}"
+
+#: js/Tags.js:159 js/Tags.js:210
+msgid "No tags to display"
+msgstr "Žádné štítky ke zobrazení"
+
+#: js/Tags.js:164 js/Tags.js:489
+msgid "Color"
+msgstr "Barva"
+
+#: js/Tags.js:341
+msgid "Could not save tag."
+msgstr "Nepodařilo se uložit štítek."
+
+#: js/Tags.js:359
+msgid "Deleting tag..."
+msgstr "Mažu štítek..."
+
+#: js/Tags.js:449
+msgid "Allowed Contexts"
+msgstr "Povolené kontexty"
+
+#: js/Tags.js:464
+msgid "Account Rights"
+msgstr "Práva účtu"
+
+#: js/Tags.js:469
+msgid "View"
+msgstr "Prohlížet"
+
+#: js/Tags.js:474
+msgid "Use"
+msgstr "Používat"
+
+#: js/Tags.js:541
+msgid "Tag Name"
+msgstr "Název štítku"
+
+#: js/Tags.js:566
+msgid "Context"
+msgstr "Kontext"
+
+#: js/Tags.js:584
+msgid "Loading Tag..."
+msgstr "Načítám štítek..."
+
+#: js/Tags.js:615
+msgid "Add New Tag"
+msgstr "Přidat nový štítek"
+
+#: js/Tags.js:617
+#, python-format
+msgid "Edit Tag \"%s\""
+msgstr "Editovat štítek \"%s\""
+
+#: js/Users.js:141
+msgid "Set new password"
+msgstr "Nastavit nové heslo"
+
+#: js/Users.js:141
+msgid "Please enter the new password:"
+msgstr "Zadejte prosím nové heslo:"
+
+#: js/Users.js:166
+msgid "Do you really want to delete the selected account(s)?"
+msgstr "Opravdu chcete smazat vybraný(é) účet(ty)?"
+
+#: js/Users.js:181
+msgid "Deleting account(s)..."
+msgstr "Mažu účet(ty)..."
+
+#: js/Users.js:186
+msgid "Some error occurred while trying to delete the account(s)."
+msgstr "Během mazání účtu(ů) došlo k chybě."
+
+#: js/Users.js:265
+msgid "Displaying accounts {0} - {1} of {2}"
+msgstr "Zobrazuji účty {0} - {1} z {2}"
+
+#: js/Users.js:266
+msgid "No accounts to display"
+msgstr "Žádné účty ke zobrazení"
+
+#: js/Users.js:271 js/Users.js:582
+msgid "Status"
+msgstr "Stav"
+
+#: js/Users.js:272
+msgid "Displayname"
+msgstr "Zobrazované jméno"
+
+#: js/Users.js:273
+msgid "Loginname"
+msgstr "Přihlašovací jméno"
+
+#: js/Users.js:274
+msgid "Last name"
+msgstr "Příjmení"
+
+#: js/Users.js:275
+msgid "First name"
+msgstr "Křestní jméno"
+
+#: js/Users.js:276
+msgid "Email"
+msgstr "Email"
+
+#: js/Users.js:277 js/Users.js:606
+msgid "Last login at"
+msgstr "Poslední přihlášení v"
+
+#: js/Users.js:278 js/Users.js:613
+msgid "Last login from"
+msgstr "Poslední přihlášení z"
+
+#: js/Users.js:279
+msgid "Password changed"
+msgstr "Heslo změněno"
+
+#: js/Users.js:280 js/Users.js:601
+msgid "Expires"
+msgstr "Vyprší"
+
+#: js/Users.js:369
+msgid "edit account"
+msgstr "editovat účet"
+
+#: js/Users.js:377
+msgid "delete account"
+msgstr "smazat účet"
+
+#: js/Users.js:385
+msgid "enable account"
+msgstr "povolit účet"
+
+#: js/Users.js:394
+msgid "disable account"
+msgstr "zakázat účet"
+
+#: js/Users.js:403
+msgid "reset password"
+msgstr "resetovat heslo"
+
+#: js/Users.js:462
+msgid "Deleting account..."
+msgstr "Mažu účet..."
+
+#: js/Users.js:468
+msgid "Some error occurred while trying to delete the account."
+msgstr "Během mazání účtu došlo k chybě."
+
+#: js/Users.js:477
+msgid "Saving User Account"
+msgstr "Ukládám uživatelský účet"
+
+#: js/Users.js:511
+msgid "Could not save user account."
+msgstr "Nepodařilo se uložit uživatelský účet."
+
+#: js/Users.js:535
+msgid "First Name"
+msgstr "Křestní jméno"
+
+#: js/Users.js:539
+msgid "Last Name"
+msgstr "Příjmení"
+
+#: js/Users.js:549
+msgid "Password"
+msgstr "Heslo"
+
+#: js/Users.js:552 js/Users.js:558
+msgid "no password set"
+msgstr "heslo nebylo nastaveno"
+
+#: js/Users.js:555
+msgid "Password again"
+msgstr "Zopakovat heslo"
+
+#: js/Users.js:560
+msgid "Primary group"
+msgstr "Primární skupina"
+
+#: js/Users.js:568
+msgid "Emailaddress"
+msgstr "Emailová adresa"
+
+#: js/Users.js:603 js/Users.js:621
+msgid "never"
+msgstr "nikdy"
+
+#: js/Users.js:608 js/Users.js:615
+msgid "never logged in"
+msgstr "nikdy nepřihlášen"
+
+#: js/Users.js:619
+msgid "Password set"
+msgstr "Heslo nastaveno"
+
+#: js/Users.js:661
+msgid "Add New User Account"
+msgstr "Přidat nový uživatelský účet"
+
+#: js/Users.js:663
+#, python-format
+msgid "Edit User Account \"%s\""
+msgstr "Editovat uživatelský účet \"%s\""

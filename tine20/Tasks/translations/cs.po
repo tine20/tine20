@@ -12,6 +12,13 @@ msgstr ""
 "X-Poedit-Language: Czech\n"
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+
+#: Controller.php:305
+#, python-format
+msgid "%s's personal tasks"
+msgstr "osobní úkoly uživatele %s"
 
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
@@ -53,7 +60,7 @@ msgstr "Seznamy úkolů"
 
 #: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
 msgid "to do list"
-msgstr ""
+msgstr "seznam úkolů"
 
 #: js/Tasks.js:323
 msgid "Enter searchfilter"
@@ -109,24 +116,24 @@ msgstr "Nepodařilo se uložit úkol."
 
 #: js/Tasks.js:638
 msgid "Loading Task..."
-msgstr ""
+msgstr "Načítám úkol..."
 
 #: js/Tasks.js:638
 msgid "Please Wait"
-msgstr ""
+msgstr "Čekejte prosím"
 
 #: js/Tasks.js:649
 msgid "Add New Task"
-msgstr ""
+msgstr "Přidat nový úkol"
 
 #: js/Tasks.js:651
 #, python-format
 msgid "Edit Task \"%s\""
-msgstr ""
+msgstr "Editovat úkol \"%s\""
 
 #: js/Tasks.js:671
 msgid "Please wait"
-msgstr "Prosím čekejte"
+msgstr "Čekejte prosím"
 
 #: js/Tasks.js:671 js/Tasks.js:716
 msgid "Saving Task"
@@ -174,28 +181,23 @@ msgstr "Termín dokončení"
 
 #: js/Tasks.js:791
 msgid "Saved in"
-msgstr ""
+msgstr "Uloženo v"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
-msgstr ""
+msgstr "VYŽADUJE ZÁSAH"
 
 #: Setup/setup.xml:409
 msgid "COMPLETED"
-msgstr ""
+msgstr "DOKONČENÝ"
 
 #: Setup/setup.xml:431
 msgid "IN-PROCESS"
-msgstr ""
+msgstr "ROZPRACOVANÝ"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"
-msgstr ""
+msgstr "ZRUŠENÝ"
 
-#: Controller.php:305
-#, python-format
-msgid "%s's personal tasks"
-msgstr ""
-
-#~ msgid "Folder"
-#~ msgstr "Složka"
+msgid "Folder"
+msgstr "Složka"

@@ -17,6 +17,11 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
+#: Controller.php:305
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's личные задания"
+
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -196,11 +201,6 @@ msgstr "НЕЗАВЕРШЕННЫЙ"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "ОТСТАВЛЕНО"
-
-#: Controller.php:305
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's личные задания"
 
 #~ msgid "Folder"
 #~ msgstr "Папка"

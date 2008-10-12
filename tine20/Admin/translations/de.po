@@ -14,6 +14,83 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Acl/Rights.php:164
+msgid "manage access log"
+msgstr "Zugriffsprotokoll bearbeiten"
+
+#: Acl/Rights.php:165
+msgid "delete access log entries"
+msgstr "Zugriffsprotokoll bearbeiten"
+
+#: Acl/Rights.php:168
+msgid "manage accounts"
+msgstr "Benutzerkonten bearbeiten"
+
+#: Acl/Rights.php:169
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr ""
+"Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
+"zuordnen."
+
+#: Acl/Rights.php:172
+msgid "manage applications"
+msgstr "Applikationen bearbeiten"
+
+#: Acl/Rights.php:173
+msgid "enable and disable applications, edit application settings"
+msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
+
+#: Acl/Rights.php:176
+msgid "manage roles"
+msgstr "Rollen bearbeiten"
+
+#: Acl/Rights.php:177
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
+"Applikations-Rechte zuweisen."
+
+#: Acl/Rights.php:180
+msgid "manage shared tags"
+msgstr "Gemeinsame Tags bearbeiten"
+
+#: Acl/Rights.php:181
+msgid "add, delete and edit shared tags"
+msgstr "Gemeinsame Tags anlegen, bearbeiten und löschen"
+
+#: Acl/Rights.php:184
+msgid "view access log"
+msgstr "Zugriffsprotokoll ansehen"
+
+#: Acl/Rights.php:185
+msgid "view access log list"
+msgstr "Zugriffsprotokoll ansehen"
+
+#: Acl/Rights.php:188
+msgid "view accounts"
+msgstr "Benutzerkonten ansehen"
+
+#: Acl/Rights.php:189
+msgid "view accounts list and details"
+msgstr "Benutzerkonten ansehen"
+
+#: Acl/Rights.php:192
+msgid "view applications"
+msgstr "Applikationen ansehen"
+
+#: Acl/Rights.php:193
+msgid "view applications list and details"
+msgstr "Applikationen ansehen"
+
+#: Acl/Rights.php:196
+msgid "view roles"
+msgstr "Rollen ansehen"
+
+#: Acl/Rights.php:197
+msgid "view roles list and details"
+msgstr "Rollen ansehen"
+
 #: js/Admin.js:19
 msgid "User"
 msgstr "Benutzer"
@@ -42,8 +119,8 @@ msgstr "Rollen"
 msgid "Admin"
 msgstr "Admin"
 
-#: js/Admin.js:251 js/Roles.js:48 js/Users.js:166 js/Groups.js:47
-#: js/Tags.js:41
+#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Users.js:166
 msgid "Confirm"
 msgstr "Bestatätigen"
 
@@ -60,8 +137,8 @@ msgstr "Eintrag löschen"
 msgid "select all"
 msgstr "Alles auswählen"
 
-#: js/Admin.js:372 js/Admin.js:770 js/Roles.js:112 js/Users.js:204
-#: js/Groups.js:111 js/Tags.js:103
+#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:204
 msgid "enter searchfilter"
 msgstr "Suchbegriff eingeben"
 
@@ -73,8 +150,8 @@ msgstr "Anzeigen von:"
 msgid "to:"
 msgstr "bis:"
 
-#: js/Admin.js:411 js/Admin.js:787 js/Roles.js:132 js/Users.js:220
-#: js/Groups.js:131 js/Tags.js:123
+#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:220
 msgid "Search:"
 msgstr "Suche"
 
@@ -114,7 +191,7 @@ msgstr "Session ID"
 msgid "Login Name"
 msgstr "Benutzername"
 
-#: js/Admin.js:528 js/Roles.js:177 js/Groups.js:176 js/Groups.js:488
+#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
 #: js/Tags.js:165
 msgid "Name"
 msgstr "Name"
@@ -188,6 +265,103 @@ msgstr "Status"
 msgid "version"
 msgstr "Version"
 
+#: js/Groups.js:47
+msgid "Do you really want to delete the selected groups?"
+msgstr "Die ausgewählten Gurppen wirklich löschen?"
+
+#: js/Groups.js:64
+msgid "Deleting group(s)..."
+msgstr "Lösche Gruppe(n)..."
+
+#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
+#: js/Users.js:468 js/Users.js:511
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#: js/Groups.js:69 js/Groups.js:406
+#, fuzzy
+msgid "Some error occurred while trying to delete the group."
+msgstr "Beim Löschen der Gruppe trat ein Fehler auf."
+
+#: js/Groups.js:82
+msgid "add group"
+msgstr "Gruppe hinzufügen"
+
+#: js/Groups.js:90
+msgid "edit group"
+msgstr "Gruppe bearbeiten"
+
+#: js/Groups.js:98
+msgid "delete group"
+msgstr "Gruppe löschen"
+
+#: js/Groups.js:169
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Zeige Gruppen {0} - {1} von {2}"
+
+#: js/Groups.js:170 js/Groups.js:221
+msgid "No groups to display"
+msgstr "Keine Gruppen anzuzeigen"
+
+#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+msgid "ID"
+msgstr "ID"
+
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
+#: js/Tags.js:166 js/Tags.js:547
+msgid "Description"
+msgstr "Beschreibung"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Please wait"
+msgstr "Bitte warten"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Updating Memberships"
+msgstr "Mitgliedschaft erneuern"
+
+#: js/Groups.js:378
+msgid "Could not save group."
+msgstr "Konnte Gruppe nicht speichern."
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Errors"
+msgstr "Fehler"
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+msgid "Please fix the errors noted."
+msgstr "Bitte beheben Sie die angezeigten Fehler."
+
+#: js/Groups.js:398
+msgid "Deleting group..."
+msgstr "Gruppen löschen."
+
+#: js/Groups.js:520
+msgid "Group Members"
+msgstr "Gruppenmitglieder"
+
+#: js/Groups.js:551
+msgid "Group Name"
+msgstr "Gruppenname"
+
+#: js/Groups.js:594 js/Users.js:361
+msgid "add account"
+msgstr "Mitglied hinzufügen"
+
+#: js/Groups.js:601
+msgid "remove account"
+msgstr "Mitgleid entfernen"
+
+#: js/Groups.js:619
+msgid "Add new group"
+msgstr "Neue Gruppe erstellen"
+
+#: js/Groups.js:621
+#, python-format
+msgid "Edit Group \"%s\""
+msgstr "Gruppe \"%s\" bearbeiten"
+
 #: js/Roles.js:48
 msgid "Do you really want to delete the selected roles?"
 msgstr "Möchten Sie die ausgewählten Rollen wirklich löschen?"
@@ -195,12 +369,6 @@ msgstr "Möchten Sie die ausgewählten Rollen wirklich löschen?"
 #: js/Roles.js:65
 msgid "Deleting role(s)..."
 msgstr "Lösche Rolle(n)..."
-
-#: js/Roles.js:70 js/Roles.js:439 js/Roles.js:467 js/Users.js:186
-#: js/Users.js:468 js/Users.js:511 js/Groups.js:69 js/Groups.js:378
-#: js/Groups.js:406 js/Tags.js:341
-msgid "Failed"
-msgstr "Fehlgeschlagen"
 
 #: js/Roles.js:70 js/Roles.js:467
 #, fuzzy
@@ -227,34 +395,9 @@ msgstr "Zeige Rollen {0} - {1} von {2}"
 msgid "No roles to display"
 msgstr "Keine Rollen zum Anziegen"
 
-#: js/Roles.js:176 js/Users.js:270 js/Groups.js:175
-msgid "ID"
-msgstr "ID"
-
-#: js/Roles.js:178 js/Roles.js:653 js/Groups.js:177 js/Groups.js:558
-#: js/Tags.js:166 js/Tags.js:547
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Please wait"
-msgstr "Bitte warten"
-
-#: js/Roles.js:399 js/Groups.js:343 js/Tags.js:297
-msgid "Updating Memberships"
-msgstr "Mitgliedschaft erneuern"
-
 #: js/Roles.js:439
 msgid "Could not save role."
 msgstr "Konnte die Rolle nicht speichern"
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Errors"
-msgstr "Fehler"
-
-#: js/Roles.js:446 js/Users.js:516 js/Groups.js:385 js/Tags.js:346
-msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie die angezeigten Fehler."
 
 #: js/Roles.js:459
 msgid "Deleting role..."
@@ -280,7 +423,7 @@ msgstr "Rollennname"
 msgid "Loading Role..."
 msgstr "Lade Rolle..."
 
-#: js/Roles.js:686 js/Users.js:477 js/Tags.js:584
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
 msgid "Please Wait"
 msgstr "Bitte warten"
 
@@ -292,6 +435,83 @@ msgstr "Neue Rolle hinzufügen"
 #, python-format
 msgid "Edit Role \"%s\""
 msgstr "Rolle \"%s\" bearbeiten"
+
+#: js/Tags.js:41
+msgid "Do you really want to delete the selected tags?"
+msgstr "Möchten Sie den/die markierten Tag/s wirklich löschen?"
+
+#: js/Tags.js:58
+msgid "Deleting tag(s)..."
+msgstr "Tag löschen..."
+
+#: js/Tags.js:73
+msgid "add tag"
+msgstr "Tag hinzufügen"
+
+#: js/Tags.js:81
+msgid "edit tag"
+msgstr "Tag bearbeiten"
+
+#: js/Tags.js:89
+msgid "delete tag"
+msgstr "Tag löschen"
+
+#: js/Tags.js:158
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Zeige Tag {0} - {1} von {2}"
+
+#: js/Tags.js:159 js/Tags.js:210
+msgid "No tags to display"
+msgstr "Keine Tags anzuzeigen"
+
+#: js/Tags.js:164 js/Tags.js:489
+msgid "Color"
+msgstr "Farbe"
+
+#: js/Tags.js:341
+msgid "Could not save tag."
+msgstr "Konnte Tag nicht speichern"
+
+#: js/Tags.js:359
+msgid "Deleting tag..."
+msgstr "Lösche Tag..."
+
+#: js/Tags.js:449
+msgid "Allowed Contexts"
+msgstr "Erlaubte Contexte"
+
+#: js/Tags.js:464
+msgid "Account Rights"
+msgstr "Benutzerrechte"
+
+#: js/Tags.js:469
+msgid "View"
+msgstr "Zeigen"
+
+#: js/Tags.js:474
+msgid "Use"
+msgstr "Verwenden"
+
+#: js/Tags.js:541
+msgid "Tag Name"
+msgstr "Bezeichnername"
+
+#: js/Tags.js:566
+msgid "Context"
+msgstr "Context"
+
+#: js/Tags.js:584
+msgid "Loading Tag..."
+msgstr "Lade Tag..."
+
+#: js/Tags.js:615
+msgid "Add New Tag"
+msgstr "Neuen Tag hinzufügen"
+
+#: js/Tags.js:617
+#, python-format
+msgid "Edit Tag \"%s\""
+msgstr "Tag \"%s\" bearbeiten"
 
 #: js/Users.js:141
 msgid "Set new password"
@@ -361,10 +581,6 @@ msgstr "Passwort geändert"
 #: js/Users.js:280 js/Users.js:601
 msgid "Expires"
 msgstr "Verfällt"
-
-#: js/Users.js:361 js/Groups.js:594
-msgid "add account"
-msgstr "Mitglied hinzufügen"
 
 #: js/Users.js:369
 msgid "edit account"
@@ -451,222 +667,6 @@ msgstr "Neuen User Account hinzufügen"
 #, python-format
 msgid "Edit User Account \"%s\""
 msgstr "Bearbeite User Account \"%s\""
-
-#: js/Groups.js:47
-msgid "Do you really want to delete the selected groups?"
-msgstr "Die ausgewählten Gurppen wirklich löschen?"
-
-#: js/Groups.js:64
-msgid "Deleting group(s)..."
-msgstr "Lösche Gruppe(n)..."
-
-#: js/Groups.js:69 js/Groups.js:406
-#, fuzzy
-msgid "Some error occurred while trying to delete the group."
-msgstr "Beim Löschen der Gruppe trat ein Fehler auf."
-
-#: js/Groups.js:82
-msgid "add group"
-msgstr "Gruppe hinzufügen"
-
-#: js/Groups.js:90
-msgid "edit group"
-msgstr "Gruppe bearbeiten"
-
-#: js/Groups.js:98
-msgid "delete group"
-msgstr "Gruppe löschen"
-
-#: js/Groups.js:169
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Zeige Gruppen {0} - {1} von {2}"
-
-#: js/Groups.js:170 js/Groups.js:221
-msgid "No groups to display"
-msgstr "Keine Gruppen anzuzeigen"
-
-#: js/Groups.js:378
-msgid "Could not save group."
-msgstr "Konnte Gruppe nicht speichern."
-
-#: js/Groups.js:398
-msgid "Deleting group..."
-msgstr "Gruppen löschen."
-
-#: js/Groups.js:520
-msgid "Group Members"
-msgstr "Gruppenmitglieder"
-
-#: js/Groups.js:551
-msgid "Group Name"
-msgstr "Gruppenname"
-
-#: js/Groups.js:601
-msgid "remove account"
-msgstr "Mitgleid entfernen"
-
-#: js/Groups.js:619
-msgid "Add new group"
-msgstr "Neue Gruppe erstellen"
-
-#: js/Groups.js:621
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr "Gruppe \"%s\" bearbeiten"
-
-#: js/Tags.js:41
-msgid "Do you really want to delete the selected tags?"
-msgstr "Möchten Sie den/die markierten Tag/s wirklich löschen?"
-
-#: js/Tags.js:58
-msgid "Deleting tag(s)..."
-msgstr "Tag löschen..."
-
-#: js/Tags.js:73
-msgid "add tag"
-msgstr "Tag hinzufügen"
-
-#: js/Tags.js:81
-msgid "edit tag"
-msgstr "Tag bearbeiten"
-
-#: js/Tags.js:89
-msgid "delete tag"
-msgstr "Tag löschen"
-
-#: js/Tags.js:158
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zeige Tag {0} - {1} von {2}"
-
-#: js/Tags.js:159 js/Tags.js:210
-msgid "No tags to display"
-msgstr "Keine Tags anzuzeigen"
-
-#: js/Tags.js:164 js/Tags.js:489
-msgid "Color"
-msgstr "Farbe"
-
-#: js/Tags.js:341
-msgid "Could not save tag."
-msgstr "Konnte Tag nicht speichern"
-
-#: js/Tags.js:359
-msgid "Deleting tag..."
-msgstr "Lösche Tag..."
-
-#: js/Tags.js:449
-msgid "Allowed Contexts"
-msgstr "Erlaubte Contexte"
-
-#: js/Tags.js:464
-msgid "Account Rights"
-msgstr "Benutzerrechte"
-
-#: js/Tags.js:469
-msgid "View"
-msgstr "Zeigen"
-
-#: js/Tags.js:474
-msgid "Use"
-msgstr "Verwenden"
-
-#: js/Tags.js:541
-msgid "Tag Name"
-msgstr "Bezeichnername"
-
-#: js/Tags.js:566
-msgid "Context"
-msgstr "Context"
-
-#: js/Tags.js:584
-msgid "Loading Tag..."
-msgstr "Lade Tag..."
-
-#: js/Tags.js:615
-msgid "Add New Tag"
-msgstr "Neuen Tag hinzufügen"
-
-#: js/Tags.js:617
-#, python-format
-msgid "Edit Tag \"%s\""
-msgstr "Tag \"%s\" bearbeiten"
-
-#: Acl/Rights.php:164
-msgid "manage access log"
-msgstr "Zugriffsprotokoll bearbeiten"
-
-#: Acl/Rights.php:165
-msgid "delete access log entries"
-msgstr "Zugriffsprotokoll bearbeiten"
-
-#: Acl/Rights.php:168
-msgid "manage accounts"
-msgstr "Benutzerkonten bearbeiten"
-
-#: Acl/Rights.php:169
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
-"zuordnen."
-
-#: Acl/Rights.php:172
-msgid "manage applications"
-msgstr "Applikationen bearbeiten"
-
-#: Acl/Rights.php:173
-msgid "enable and disable applications, edit application settings"
-msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
-
-#: Acl/Rights.php:176
-msgid "manage roles"
-msgstr "Rollen bearbeiten"
-
-#: Acl/Rights.php:177
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
-"Applikations-Rechte zuweisen."
-
-#: Acl/Rights.php:180
-msgid "manage shared tags"
-msgstr "Gemeinsame Tags bearbeiten"
-
-#: Acl/Rights.php:181
-msgid "add, delete and edit shared tags"
-msgstr "Gemeinsame Tags anlegen, bearbeiten und löschen"
-
-#: Acl/Rights.php:184
-msgid "view access log"
-msgstr "Zugriffsprotokoll ansehen"
-
-#: Acl/Rights.php:185
-msgid "view access log list"
-msgstr "Zugriffsprotokoll ansehen"
-
-#: Acl/Rights.php:188
-msgid "view accounts"
-msgstr "Benutzerkonten ansehen"
-
-#: Acl/Rights.php:189
-msgid "view accounts list and details"
-msgstr "Benutzerkonten ansehen"
-
-#: Acl/Rights.php:192
-msgid "view applications"
-msgstr "Applikationen ansehen"
-
-#: Acl/Rights.php:193
-msgid "view applications list and details"
-msgstr "Applikationen ansehen"
-
-#: Acl/Rights.php:196
-msgid "view roles"
-msgstr "Rollen ansehen"
-
-#: Acl/Rights.php:197
-msgid "view roles list and details"
-msgstr "Rollen ansehen"
 
 #~ msgid "manage roles right description"
 #~ msgstr ""
