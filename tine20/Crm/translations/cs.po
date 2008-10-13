@@ -515,35 +515,35 @@ msgstr "přijatý"
 msgid "lost"
 msgstr "ztracený"
 
-msgid "Search Contacts"
-msgstr "Hledat kontakty"
+#~ msgid "Search Contacts"
+#~ msgstr "Hledat kontakty"
 
-msgid "Add existing contact"
-msgstr "Přidat existující kontakt"
+#~ msgid "Add existing contact"
+#~ msgstr "Přidat existující kontakt"
 
-msgid "Add existing contact to lead"
-msgstr "Přidat k leadu existující kontakt"
+#~ msgid "Add existing contact to lead"
+#~ msgstr "Přidat k leadu existující kontakt"
 
-msgid "Organisation"
-msgstr "Organizace"
+#~ msgid "Organisation"
+#~ msgstr "Organizace"
 
-msgid "Lead updated"
-msgstr "Lead zaktualizován"
+#~ msgid "Lead updated"
+#~ msgstr "Lead zaktualizován"
 
-msgid "Lead added"
-msgstr "Lead přidán"
+#~ msgid "Lead added"
+#~ msgstr "Lead přidán"
 
-msgid "Add responsible"
-msgstr "Přidat zodpovědnou osobu"
+#~ msgid "Add responsible"
+#~ msgstr "Přidat zodpovědnou osobu"
 
-msgid "Add new responsible contact"
-msgstr "Přidat nový kontakt na zodpovědnou osobu"
+#~ msgid "Add new responsible contact"
+#~ msgstr "Přidat nový kontakt na zodpovědnou osobu"
 
-msgid "Add customer"
-msgstr "Přidat zákazníka"
+#~ msgid "Add customer"
+#~ msgstr "Přidat zákazníka"
 
-msgid "Add partner"
-msgstr "Přidat partnera"
+#~ msgid "Add partner"
+#~ msgstr "Přidat partnera"
 
-msgid "Add new partner contact"
-msgstr "Přidat nový kontakt na partnera"
+#~ msgid "Add new partner contact"
+#~ msgstr "Přidat nový kontakt na partnera"

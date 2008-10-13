@@ -199,5 +199,5 @@ msgstr "ROZPRACOVANÝ"
 msgid "CANCELLED"
 msgstr "ZRUŠENÝ"
 
-msgid "Folder"
-msgstr "Složka"
+#~ msgid "Folder"
+#~ msgstr "Složka"

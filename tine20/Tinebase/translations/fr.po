@@ -61,19 +61,19 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Http.php:213 js/Tinebase.js:228
+#: Http.php:224 js/Tinebase.js:228
 msgid "Authorisation Required"
 msgstr ""
 
-#: Http.php:214 js/Tinebase.js:229
-msgid "Your session timed out. You need to login again."
+#: Http.php:225
+msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Http.php:239 js/ExceptionDialog.js:26
+#: Http.php:251 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr ""
 
-#: Http.php:240 js/ExceptionDialog.js:51
+#: Http.php:252 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
@@ -277,11 +277,15 @@ msgstr ""
 msgid "Connection lost, please check your network!"
 msgstr ""
 
-#: js/Tinebase.js:239
+#: js/Tinebase.js:229
+msgid "Your session timed out. You need to login again."
+msgstr ""
+
+#: js/Tinebase.js:242
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/Tinebase.js:240
+#: js/Tinebase.js:243
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."

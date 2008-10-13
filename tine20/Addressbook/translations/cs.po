@@ -454,20 +454,20 @@ msgstr "Pan"
 msgid "Ms"
 msgstr "Paní"
 
-msgid "Saved in"
-msgstr "Uloženo v"
+#~ msgid "Saved in"
+#~ msgstr "Uloženo v"
 
-msgid "Map"
-msgstr "Mapa"
+#~ msgid "Map"
+#~ msgstr "Mapa"
 
-msgid "Filter: "
-msgstr "Filtr:"
+#~ msgid "Filter: "
+#~ msgstr "Filtr:"
 
-msgid "Search: "
-msgstr "Hledat:"
+#~ msgid "Search: "
+#~ msgstr "Hledat:"
 
-msgid "History"
-msgstr "Historie"
+#~ msgid "History"
+#~ msgstr "Historie"
 
-msgid "Notes"
-msgstr "Poznámky"
+#~ msgid "Notes"
+#~ msgstr "Poznámky"

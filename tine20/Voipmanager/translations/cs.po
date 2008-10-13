@@ -1104,20 +1104,20 @@ msgstr "Verze softwaru"
 msgid "Keylayout"
 msgstr "Rozložení kláves"
 
-msgid "send HTTP Client Info"
-msgstr "poslat HTTP Client Info"
+#~ msgid "send HTTP Client Info"
+#~ msgstr "poslat HTTP Client Info"
 
-msgid "Model"
-msgstr "Model"
+#~ msgid "Model"
+#~ msgstr "Model"
 
-msgid "FW Status"
-msgstr "URL konfiguračního souboru pro firmware"
+#~ msgid "FW Status"
+#~ msgstr "URL konfiguračního souboru pro firmware"
 
-msgid "Server Setting"
-msgstr "Nastavení serveru"
+#~ msgid "Server Setting"
+#~ msgstr "Nastavení serveru"
 
-msgid "Settings URL"
-msgstr "URL pro konfigurační souobry"
+#~ msgid "Settings URL"
+#~ msgstr "URL pro konfigurační souobry"
 
-msgid "Firmware URL"
-msgstr "URL pro firmware"
+#~ msgid "Firmware URL"
+#~ msgstr "URL pro firmware"

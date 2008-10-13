@@ -61,63 +61,67 @@ msgstr ""
 msgid "Outgoing call"
 msgstr ""
 
-#: js/Phone.js:484
+#: js/Phone.js:481
+msgid "unknown number"
+msgstr ""
+
+#: js/Phone.js:492
 msgid "enter searchfilter"
 msgstr "Ввести поисковый фильтр"
 
-#: js/Phone.js:498
+#: js/Phone.js:506
 msgid "Search:"
 msgstr "Поиск:"
 
-#: js/Phone.js:583
+#: js/Phone.js:591
 msgid "Source or Destination"
 msgstr "Источник или Предназначение"
 
-#: js/Phone.js:599
+#: js/Phone.js:607
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Показ звонков {0} - {1} of {2}"
 
-#: js/Phone.js:600 js/Phone.js:638
+#: js/Phone.js:608 js/Phone.js:646
 msgid "No calls to display"
 msgstr "Не каких звонков для показа нет"
 
-#: js/Phone.js:605
+#: js/Phone.js:613
 msgid "Direction"
 msgstr "Описание"
 
-#: js/Phone.js:606
+#: js/Phone.js:614
 msgid "Source"
 msgstr "Источник"
 
-#: js/Phone.js:607
+#: js/Phone.js:615
 msgid "Caller Id"
 msgstr ""
 
-#: js/Phone.js:608
+#: js/Phone.js:616
 msgid "Destination"
 msgstr "Предназначение"
 
-#: js/Phone.js:609
+#: js/Phone.js:617
 msgid "Start"
 msgstr "Старт"
 
-#: js/Phone.js:610
+#: js/Phone.js:618
 msgid "Connected"
 msgstr "Соединение"
 
-#: js/Phone.js:611
+#: js/Phone.js:619
 msgid "Disconnected"
 msgstr "Разъединение"
 
-#: js/Phone.js:612
+#: js/Phone.js:620
 msgid "Duration"
 msgstr "Продолжительность"
 
-#: js/Phone.js:613
+#: js/Phone.js:621
 msgid "Ringing"
 msgstr "Звон"
 
-#: js/Phone.js:614
+#: js/Phone.js:622
 msgid "Call ID"
 msgstr "ID звонка"
 
