@@ -228,7 +228,10 @@ Tine.Tinebase.initFramework = function() {
                         title: _('Authorisation Required'), 
                         msg: _('Your session timed out. You need to login again.'),
                         buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.WARNING
+                        icon: Ext.MessageBox.WARNING,
+                        fn: function() {
+                            window.location.href = window.location.href;
+                        }
                     });
                 }
                 break;
