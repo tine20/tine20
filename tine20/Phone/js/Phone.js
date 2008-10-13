@@ -41,7 +41,7 @@ Tine.Phone.getPanel = function(){
     /*********** tree panel *****************/
 
     var treePanel = new Ext.tree.TreePanel({
-        title: 'Phone',
+        title: translation.gettext('Phone'),
         id: 'phone-tree',
         iconCls: 'PhoneIconCls',
         rootVisible: true,
