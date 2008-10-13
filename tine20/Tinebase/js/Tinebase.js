@@ -59,7 +59,7 @@ Ext.onReady(function(){
             
         }
 
-        window.document.title = c.title;
+        window.document.title = c.title ? c.title : window.document.title;
 
         var items;
         if (c.itemsConstructor) {
