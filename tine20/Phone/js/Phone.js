@@ -640,11 +640,23 @@ Tine.Phone.Main = {
             
         });
         
+        rowSelectionModel.on('selectionchange', function(sm) {
+            this.actions.dialNumber.setDisabled(sm.getCount() > 1);
+            
+            if (sm.getCount() == 1) {
+                var record = sm.getSelected();
+                var number = record ? record.get('destination') : false;
+                this.actions.dialNumber.setDisabled(! Tine.Phone.utils.isCallable(number));
+            }
+        }, this);
+        
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
+            
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
+            
             var contextMenu = new Ext.menu.Menu({
                 id:'ctxMenuCall', 
                 items: [
@@ -759,3 +771,17 @@ Tine.Phone.Model.Call = Ext.data.Record.create([
     { name: 'source' },
     { name: 'destination' }
 ]);
+
+
+/***************************** utils ****************************************/
+
+Ext.namespace('Tine.Phone.utils');
+
+/**
+ * checks if given argument is syntactically a callable/valid number
+ * 
+ * @todo: synchrosize this with the asterisk rules
+ */
+Tine.Phone.utils.isCallable = function(number) {
+    return ! number.toString().replace(/^\+|[ \-\/]/g, '').match(/[^0-9]/);
+};
