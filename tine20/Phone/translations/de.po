@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-13 16:53+0100\n"
+"PO-Revision-Date: 2008-10-13 16:58+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr "Telefonnummer wählen"
 
 #: js/Phone.js:239
 msgid "Phone"
-msgstr "Telefone"
+msgstr "Telefon"
 
 #: js/Phone.js:255
 msgid "Line"
