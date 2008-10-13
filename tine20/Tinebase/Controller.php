@@ -208,11 +208,13 @@ class Tinebase_Controller
 
             $server->handle($_REQUEST);
         } catch (Exception $exception) {
+            Zend_Registry::get('logger')->INFO($exception);
+            
             $server = new Tinebase_Http_Server();
             $server->setClass('Tinebase_Http', 'Tinebase');
-            if (! Zend_Registry::isRegistered('currentAccount')) {
-                Zend_Registry::get('logger')->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
-                $server->handle(array('method' => 'Tinebase.sessionTimedOut'));
+            if ($exception instanceof Zend_Session_Exception) {
+                Zend_Registry::get('logger')->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
+                $server->handle(array('method' => 'Tinebase.sessionException'));
             } else {
                 Zend_Registry::get('logger')->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
                 $server->handle(array('method' => 'Tinebase.exception'));
@@ -259,7 +261,8 @@ class Tinebase_Controller
                         ' request: ' . print_r($_REQUEST, true)
                     );
                     
-                    throw new Exception('Possible CSRF attempt detected!');
+                    throw new Exception('Not Autorised', 401);
+                    //throw new Exception('Possible CSRF attempt detected!');
                 }
             }
     
