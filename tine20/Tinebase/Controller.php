@@ -296,6 +296,12 @@ class Tinebase_Controller
             }
             
         } catch (Exception $exception) {
+            
+            // hanlde all kind of session exceptions as 'Not Autorised'
+            if ($exception instanceof Zend_Session_Exception) {
+                $exception = new Exception('Not Autorised', 401);
+            }
+            
             $server = new Zend_Json_Server();
             $server->fault($exception, $exception->getCode());
             exit;
