@@ -196,11 +196,22 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     }
     
     /**
-     * show info that session timed out
+     * hanlde session exception for http requests
+     * 
+     * we force the client to delete session cookie, but we don't destroy
+     * the session on server side. This way we prevent session DOS from thrid party
+     *
      *
      */
-    public function sessionTimedOut()
+    public function sessionException()
     {
+        Zend_Session::expireSessionCookie();
+        echo "
+            <script type='text/javascript'>
+                window.location.href = window.location.href;
+            </script>
+        ";
+        /*
         ob_start();
         $html = $this->login();
         $html = ob_get_clean();
@@ -211,7 +222,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 Ext.onReady(function() {
                     Ext.MessageBox.show({
                         title: _('Authorisation Required'), 
-                        msg: _('Your session timed out. You need to login again.'),
+                        msg: _('Your session is not valid. You need to login again.'),
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.WARNING
                     });
@@ -219,6 +230,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             </script>";
         
         echo preg_replace('/<\/head.*>/', $script . '</head>', $html);
+        */
     }
     
     /**
