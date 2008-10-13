@@ -473,7 +473,15 @@ Tine.Phone.Main = {
                     return "<img src='images/call-outgoing.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Outgoing call') + "'/>";
                     break;
     		}
-    	}
+    	},
+        destination: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+            if (_data.toString().toLowerCase() == 'unknown') {
+                var translation = new Locale.Gettext();
+                translation.textdomain('Phone');
+                _data = translation.gettext('unknown number');
+            }
+            return _data;
+        }
     },
  
     displayToolbar: function()
@@ -605,7 +613,7 @@ Tine.Phone.Main = {
             { resizable: true, id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 20, renderer: this.renderer.direction },
             { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source', hidden: true },
             { resizable: true, id: 'callerid', header: this.translation._('Caller Id'), dataIndex: 'callerid' },
-            { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination' },
+            { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination', renderer: this.renderer.destination },
             { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.Common.dateTimeRenderer },
             { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.Common.dateTimeRenderer, hidden: true },
             { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.Common.dateTimeRenderer, hidden: true  },
