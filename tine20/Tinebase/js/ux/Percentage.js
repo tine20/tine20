@@ -79,7 +79,6 @@ Ext.reg('extuxpercentcombo', Ext.ux.PercentCombo);
  * @constructor
  */
 Ext.ux.PercentRenderer = function(percent) {
-    
     if (! Ext.ux.PercentRenderer.template) {
         Ext.ux.PercentRenderer.template = new Ext.XTemplate(
             '<div class="x-progress-wrap PercentRenderer">',
@@ -95,7 +94,6 @@ Ext.ux.PercentRenderer = function(percent) {
             '</div>',
         '</div>'
         ).compile();
-        
     }
     
     return Ext.ux.PercentRenderer.template.apply({percent: percent});
