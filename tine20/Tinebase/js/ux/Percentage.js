@@ -79,16 +79,24 @@ Ext.reg('extuxpercentcombo', Ext.ux.PercentCombo);
  * @constructor
  */
 Ext.ux.PercentRenderer = function(percent) {
-    return '<div class="x-progress-wrap PercentRenderer">' +
-            '<div class="x-progress-inner PercentRenderer">' +
-                '<div class="x-progress-bar PercentRenderer" style="width:' + percent + '%">' +
-                    '<div class="PercentRendererText PercentRenderer">' +
-                        '<div>'+ percent +'%</div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="x-progress-text x-progress-text-back PercentRenderer">' +
-                    '<div>&#160;</div>' +
-                '</div>' +
-            '</div>' +
-        '</div>';
+    
+    if (! Ext.ux.PercentRenderer.template) {
+        Ext.ux.PercentRenderer.template = new Ext.XTemplate(
+            '<div class="x-progress-wrap PercentRenderer">',
+            '<div class="x-progress-inner PercentRenderer">',
+                '<div class="x-progress-bar PercentRenderer" style="width:{percent}%">',
+                    '<div class="PercentRendererText PercentRenderer">',
+                        '<div>{percent}%</div>',
+                    '</div>',
+                '</div>',
+                '<div class="x-progress-text x-progress-text-back PercentRenderer">',
+                    '<div>&#160;</div>',
+                '</div>',
+            '</div>',
+        '</div>'
+        ).compile();
+        
+    }
+    
+    return Ext.ux.PercentRenderer.template.apply({percent: percent});
 };
