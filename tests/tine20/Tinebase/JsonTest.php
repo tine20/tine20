@@ -104,7 +104,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetCountryList()
     {
         $list = $this->_instance->getCountryList();
-        $this->assertTrue(count($list['results']) >= 247);
+        $this->assertTrue(count($list['results']) > 200);
     }
     
     /**
