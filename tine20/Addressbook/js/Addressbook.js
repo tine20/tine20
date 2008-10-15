@@ -429,7 +429,7 @@ Tine.Addressbook.Main = {
 	                if(!Ext.isEmpty(contact.data.tel_work)) {
 		                callMenu.add({
 	                       id: 'Addressbook_Contacts_CallContact_Work', 
-		                   text: 'work ' + contact.data.tel_work + '',
+		                   text: this.translation._('Work') + ' ' + contact.data.tel_work + '',
 		                   handler: this.handlers.callContact
 		                });
 	                    this.actions.callContact.setDisabled(false);
@@ -437,7 +437,7 @@ Tine.Addressbook.Main = {
 	                if(!Ext.isEmpty(contact.data.tel_home)) {
 	                    callMenu.add({
 	                       id: 'Addressbook_Contacts_CallContact_Home', 
-	                       text: 'home ' + contact.data.tel_home + '',
+	                       text: this.translation._('Home') + ' ' + contact.data.tel_home + '',
 	                       handler: this.handlers.callContact
 	                    });
 	                    this.actions.callContact.setDisabled(false);
@@ -445,7 +445,7 @@ Tine.Addressbook.Main = {
 	                if(!Ext.isEmpty(contact.data.tel_cell)) {
 	                    callMenu.add({
 	                       id: 'Addressbook_Contacts_CallContact_Cell', 
-	                       text: 'cell ' + contact.data.tel_cell + '',
+	                       text: this.translation._('Cell') + ' ' + contact.data.tel_cell + '',
 	                       handler: this.handlers.callContact
 	                    });
 	                    this.actions.callContact.setDisabled(false);
@@ -453,7 +453,7 @@ Tine.Addressbook.Main = {
 	                if(!Ext.isEmpty(contact.data.tel_cell_private)) {
 	                    callMenu.add({
 	                       id: 'Addressbook_Contacts_CallContact_CellPrivate', 
-	                       text: 'cell private ' + contact.data.tel_cell_private + '',
+	                       text: this.translation._('Cell private') + ' ' + contact.data.tel_cell_private + '',
 	                       handler: this.handlers.callContact
 	                    });
 	                    this.actions.callContact.setDisabled(false);
