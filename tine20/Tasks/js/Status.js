@@ -31,12 +31,18 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
     selectOnFocus: true,
     editable: false,
     lazyInit: false,
+    
+    translation: null,
 	
 	//private
     initComponent: function(){
+    	
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Tasks');
+    	
 		this.store = Tine.Tasks.status.getStore();
 		if (!this.value) {
-			this.value = Tine.Tasks.status.getIdentifier('IN-PROCESS');
+			this.value = Tine.Tasks.status.getIdentifier(this.translation._('IN-PROCESS'));
 		}
 		if (this.autoExpand) {
 			this.on('focus', function(){
