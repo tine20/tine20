@@ -376,7 +376,7 @@ class Admin_Controller
      * 
      * @return Tinebase_Model_Group
      */
-    public function AddGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
+    public function addGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -397,7 +397,7 @@ class Admin_Controller
      * 
      * @return Tinebase_Model_Group
      */
-    public function UpdateGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
+    public function updateGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -483,7 +483,7 @@ class Admin_Controller
      * @param  Tinebase_Model_FullTag $_tag
      * @return Tinebase_Model_FullTag
      */
-    public function AddTag(Tinebase_Model_FullTag $_tag)
+    public function addTag(Tinebase_Model_FullTag $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
@@ -503,7 +503,7 @@ class Admin_Controller
      * @param  Tinebase_Model_FullTag $_tag
      * @return Tinebase_Model_FullTag
      */
-    public function UpdateTag(Tinebase_Model_FullTag $_tag)
+    public function updateTag(Tinebase_Model_FullTag $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
@@ -584,7 +584,7 @@ class Admin_Controller
      * @param   array role rights
      * @return  Tinebase_Model_Role
      */
-    public function AddRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
+    public function addRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         $this->checkRight('MANAGE_ROLES');
         
@@ -603,7 +603,7 @@ class Admin_Controller
      * @param   array role rights
      * @return Tinebase_Model_Role
      */
-    public function UpdateRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
+    public function updateRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         $this->checkRight('MANAGE_ROLES');
         
