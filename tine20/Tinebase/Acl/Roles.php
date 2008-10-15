@@ -330,9 +330,26 @@ class Tinebase_Acl_Roles
      * @return void
      */
     public function deleteRoles($_ids)
-    {
+    {        
         $ids = ( is_array($_ids) ) ? implode(",", $_ids) : $_ids;
-        $this->_rolesTable->delete( "id in ( $ids )");
+
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+            
+            // delete role acls/members first
+            $this->_roleMembersTable->delete( "role_id in ( $ids )");
+            $this->_roleRightsTable->delete( "role_id in ( $ids )");
+            
+            // delete role
+            $this->_rolesTable->delete( "id in ( $ids )");
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting role ' . $e->__toString());
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw($e);
+        }
     }
     
     /**
