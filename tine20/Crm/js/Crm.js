@@ -369,8 +369,10 @@ Tine.Crm.Main = {
 	        items: [
 	            this.actions.editLead,
 	            this.actions.deleteLead,
-	            this.actions.exportLead
-	            //this.actions.addTask
+	            this.actions.exportLead,
+                '-',
+	            this.actions.addLead
+                //this.actions.addTask
 	        ]
 	    });
 
