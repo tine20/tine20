@@ -465,6 +465,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             foreach ($_notes as $note) {
                 if ($note instanceOf Tinebase_Model_Note) {
                     $noteArray = $note->toArray();
+                    $noteText = (strlen($note->note) > 100) ? substr($note->note, 0, 99) . '...' : $note->note;
                     $noteType = $noteTypes[$noteTypes->getIndexById($note->note_type_id)];
     
                     $time = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
@@ -476,7 +477,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                         'type'  => 'multiRow',
                         'value' => array(
                             array('icon' => '/' . $noteType->icon),
-                            $note->note,
+                            $noteText,
                             $createdBy,
                         )                
                     );
