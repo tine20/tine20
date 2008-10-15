@@ -39,7 +39,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         $title = $_lead->lead_name; 
         $subtitle = "";
         $description = $_lead->description;
-        $titleIcon = "/images/oxygen/32x32/actions/paperbag.png";
+        $titleIcon = "/images/oxygen/32x32/actions/datashowchart.png";
 
         /*********************** add linked objects *************************/
 
