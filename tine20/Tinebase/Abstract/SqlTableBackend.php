@@ -214,9 +214,14 @@ abstract class Tinebase_Abstract_SqlTableBackend
      * @param Tinebase_Record_Interface $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Record_Interface $_filter, Tinebase_Record_Interface $_pagination)
+    public function search(Tinebase_Record_Interface $_filter, Tinebase_Record_Interface $_pagination = NULL)
     {
         $set = new Tinebase_Record_RecordSet($this->_modelName);
+        
+        // empty means, that e.g. no shared containers exist
+        if (isset($_filter->container) && count($_filter->container) === 0) {
+            return $set;
+        }
         
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
@@ -252,6 +257,10 @@ abstract class Tinebase_Abstract_SqlTableBackend
      */
     public function searchCount(Tinebase_Record_Interface $_filter)
     {        
+        if (isset($_filter->container) && count($_filter->container) === 0) {
+            return 0;
+        }        
+        
         $select = $this->_getSelect(TRUE);
         $this->_addFilter($select, $_filter);
         $result = $this->_db->fetchOne($select);

@@ -140,12 +140,12 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * Search for leads matching given filter
      *
      * @param Crm_Model_LeadFilter $_filter
-     * @param Crm_Model_LeadPagination $_pagination
+     * @param Tinebase_Model_Pagination $_pagination
      * @param bool $_getRelations
      * 
      * @return Tinebase_Record_RecordSet
      */
-    public function searchLeads(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination, $_getRelations = FALSE)
+    public function searchLeads(Crm_Model_LeadFilter $_filter, Tinebase_Model_Pagination $_pagination, $_getRelations = FALSE)
     {
         $this->_checkContainerACL($_filter);
         
@@ -154,7 +154,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         if ( $_getRelations ) {
             foreach ($leads as $lead) {
-                //$this->getLinkedProperties($lead);
                 $this->getLeadLinks($lead);
             }
         }

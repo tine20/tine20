@@ -171,7 +171,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
         $filter = new Crm_Model_LeadFilter();
         $filter->container = array($this->_testContainer->id);
         $filter->query = 'PHPUnit';
-        $pagination = new Crm_Model_LeadPagination();
+        $pagination = new Tinebase_Model_Pagination();
         $leads = $this->_backend->search($filter, $pagination);
         
         $this->assertEquals(1, count($leads));

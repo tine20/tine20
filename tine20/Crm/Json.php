@@ -85,7 +85,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {
         $paginationFilter = Zend_Json::decode($filter);
         $filter = new Crm_Model_LeadFilter($paginationFilter);
-        $pagination = new Crm_Model_LeadPagination($paginationFilter);
+        $pagination = new Tinebase_Model_Pagination($paginationFilter);
         
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         

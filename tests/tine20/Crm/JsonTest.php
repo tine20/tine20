@@ -293,12 +293,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Crm_Json();
         $emptyLead = $json->getLead(NULL);
-        
-        $startDate = new Zend_Date($emptyLead['start'], Tinebase_Record_Abstract::ISO8601LONG);
-        
-        sleep(1);
-        
-        $this->assertEquals(1, Zend_Date::now()->compare($startDate));
+
+        $this->assertEquals(0, $emptyLead['probability']);
         $this->assertEquals(Zend_Registry::get('currentAccount')->accountFullName, $emptyLead['relations'][0]['related_record']['n_fn']);
     }
         

@@ -413,7 +413,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $filter->container = array($this->_testContainer->id);
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
-        $pagination = new Crm_Model_LeadPagination();
+        $pagination = new Tinebase_Model_Pagination();
         $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
         $count = Crm_Controller::getInstance()->searchLeadsCount($filter);
                 
@@ -432,7 +432,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $filter->containerType = 'shared';
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
-        $pagination = new Crm_Model_LeadPagination();
+        $pagination = new Tinebase_Model_Pagination();
         $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
         
         $this->assertEquals(0, count($leads));

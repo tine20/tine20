@@ -58,65 +58,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
         return $lead;
     }
     
-    /**
-     * Search for leads matching given filter
-     *
-     * @param Crm_Model_LeadFilter $_filter
-     * @param Crm_Model_LeadPagination $_pagination
-     * @return Tinebase_Record_RecordSet of Crm_Model_Lead records
-     */
-    public function search(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination = NULL)
-    {
-        $set = new Tinebase_Record_RecordSet('Crm_Model_Lead');
-        
-        // empty means, that e.g. no shared containers exist
-        if (empty($_filter->container)) {
-            return $set;
-        }
-        
-        if ($_pagination === NULL) {
-            $_pagination = new Crm_Model_LeadPagination();
-        }
-        
-        // build query
-        $select = $this->_getSelect();
-        
-        if (!empty($_pagination->limit)) {
-            $select->limit($_pagination->limit, $_pagination->start);
-        }
-        if (!empty($_pagination->sort)) {
-            $select->order($_pagination->sort . ' ' . $_pagination->dir);
-        }        
-        $this->_addFilter($select, $_filter);
-                
-        // get records
-        $stmt = $this->_db->query($select);
-        $leads = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        foreach ($leads as $leadArray) {
-            $lead = new Crm_Model_Lead($leadArray, true, true);
-            $set->addRecord($lead);
-        }
-        
-        return $set;
-    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Crm_Model_LeadFilter $_filter
-     * @return int
-     */
-    public function searchCount(Crm_Model_LeadFilter $_filter)
-    {        
-        if (count($_filter->container) === 0) {
-            return 0;
-        }
-        $select = $this->_getSelect(TRUE);
-        $this->_addFilter($select, $_filter);
-        $result = $this->_db->fetchOne($select);
-        return $result;        
-    }    
-
     /****************** update / delete *************/
     
     /**
@@ -197,6 +138,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
         return $this->get($leadId);
     }
     
+    
     /************************ helper functions ************************/
 
     /**
@@ -238,6 +180,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
         
         return $select;
     }
+    
     
     /**
      * add the fields to search for to the query
