@@ -13,10 +13,9 @@
 /*
  * Set error reporting 
  * 
- * @todo it's not working at the moment because of date/timezone problems
  * @todo put that in config.inc as well?
  */
-//error_reporting( E_ALL | E_STRICT );
+error_reporting( E_ALL | E_STRICT );
 
 
 /*
@@ -42,7 +41,7 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 /*
  * Set parameters  for logging (call via browser)
  * 
- * @todo put that in config.inc as well?
+ * @todo put that in config.inc as well or remove that?
  */
 define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 
