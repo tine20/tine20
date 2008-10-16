@@ -7,18 +7,17 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo use functions from Tinebase_Abstract_SqlTableBackend
  */
+
 /**
  * sql backend class for the addressbook
  *
  * @package     Addressbook
  */
-class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
+class Addressbook_Backend_Sql extends Tinebase_Abstract_SqlTableBackend
 {
-    /**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
     /**
      * the constructor
      *
@@ -27,21 +26,26 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     private function __construct ()
     {
         $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_tableName = SQL_TABLE_PREFIX . 'addressbook';
+        $this->_modelName = 'Addressbook_Model_Contact';
+        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));        
     }
+
     /**
      * don't clone. Use the singleton.
      *
      */
     private function __clone ()
     {
-        
     }
+
     /**
      * holdes the instance of the singleton
      *
      * @var Addressbook_Backend_Sql
      */
     private static $_instance = NULL;
+    
     /**
      * the singleton pattern
      *
@@ -53,78 +57,16 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             self::$_instance = new Addressbook_Backend_Sql();
         }
         return self::$_instance;
-    }
-    
-    /**
-     * get list of contacts from given addressbooks
-     *
-     * @param  Tinebase_Record_RecordSet $_container  container id's to read the contacts from
-     * @param  Addressbook_Model_ContactFilter  $_filter     string to search for in contacts
-     * @param  Tinebase_Model_Pagination $_pagination 
-     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
-     */
-    public function search(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination)
-    {
-        if (count($_filter->container) === 0) {
-            throw new Exception('$_container can not be empty');
-        }
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'addressbook')
-            ->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
-        
-        //$this->_addFilter($select, $_filter);
-        $_filter->appendFilterSql($select);
-        $_pagination->appendPagination($select);
-        
-        $rows = $this->_db->fetchAssoc($select);
-        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows, true);
+    }    
 
-        return $result;
-    }
-    
-    /**
-     * get total count of contacts from given addressbooks
-     *
-     * @param  Tinebase_Record_RecordSet $_container container id's to read the contacts from
-     * @param  Addressbook_Model_ContactFilter  $_filter the search filter
-     * @return int                       count of all other users contacts
-     */
-    public function searchCount(Addressbook_Model_ContactFilter $_filter)
-    {
-        if (count($_filter->container) === 0) {
-            return 0;
-        }
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'addressbook', array('count' => 'COUNT(*)'))
-            ->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
         
-        //$this->_addFilter($select, $_filter);
-        $_filter->appendFilterSql($select);
-        
-        $result = $this->_db->fetchOne($select);
-        return $result;
-    }
-    
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select           $_select current where filter
-     * @param  Addressbook_Model_ContactFilter $_filter the string to search for
-     * @return void
-     */
-    protected function _addFilter (Zend_Db_Select $_select, Addressbook_Model_ContactFilter $_filter)
-    {
-        $_select->where($this->_db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter->query) . '%'));
-        if (! empty($_filter->tag)) {
-            Tinebase_Tags::appendSqlFilter($_select, $_filter->tag);
-        }
-    }
-    
     /**
      * add a contact
      *
      * @param Addressbook_Model_Contact $_contactData the contactdata
      * @return Addressbook_Model_Contact
+     * @deprecated
+     * @todo replace by create function from SqlTableBackend 
      */
     public function create(Addressbook_Model_Contact $_contactData)
     {
@@ -151,11 +93,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         return $this->get($_contactData->id);
     }
+    
     /**
      * update an existing contact
      *
      * @param Addressbook_Model_Contact $_contactData the contactdata
      * @return Addressbook_Model_Contact
+     * @deprecated
+     * @todo replace by update function from SqlTableBackend 
      */
     public function update(Addressbook_Model_Contact $_contactData)
     {
@@ -172,11 +117,39 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $this->_db->update(SQL_TABLE_PREFIX . 'addressbook', $contactData, $where);
         return $this->get($contactId);
     }
+
+    /**
+     * Returns a set of contacts identified by their id's
+     * 
+     * @param  array $_ids array of int
+     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * @deprecated
+     * @todo replace by getMultiple function from SqlTableBackend 
+     */
+    public function getMultiple(array $_contactIds)
+    {
+        $contacts = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
+        
+        if (!empty($_contactIds)) {
+            $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('id IN (?)', $_contactIds));
+            $stmt = $this->_db->query($select);
+            $contactsArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            
+            foreach ($contactsArray as $contact) {
+                $contacts->addRecord(new Addressbook_Model_Contact($contact));
+            }
+        }
+        return $contacts;
+    }
+    
     /**
      * delete contact identified by contact id
      *
      * @param int $_contactId contact ids
      * @return int the number of rows deleted
+     * 
+     * @deprecated
+     * @todo replace by delete function from SqlTableBackend 
      */
     public function delete ($_contactId)
     {
@@ -185,22 +158,19 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'addressbook', $where);
         return $result;
     }
+    
     /**
-     * fetch one contact identified by contactid
+     * add the fields to search for to the query
      *
-     * @param int $_contactId
-     * @return Addressbook_Model_Contact 
+     * @param  Zend_Db_Select           $_select current where filter
+     * @param  Addressbook_Model_ContactFilter $_filter the string to search for
+     * @return void
      */
-    public function get ($_contactId)
-    {
-        $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactId);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('id = ?', $contactId));
-        $row = $this->_db->fetchRow($select);
-        if (! $row) {
-            throw new UnderflowException('contact with id ' . $contactId . ' not found');
-        }
-        $result = new Addressbook_Model_Contact($row);
-        return $result;
+    protected function _addFilter (Zend_Db_Select $_select, Addressbook_Model_ContactFilter $_filter)
+    {        
+        $_select->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
+        
+        $_filter->appendFilterSql($_select);
     }
     
     /**
@@ -222,25 +192,4 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
-    /**
-     * Returns a set of contacts identified by their id's
-     * 
-     * @param  array $_ids array of int
-     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
-     */
-    public function getMultiple(array $_contactIds)
-    {
-        $contacts = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        
-        if (!empty($_contactIds)) {
-            $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('id IN (?)', $_contactIds));
-            $stmt = $this->_db->query($select);
-            $contactsArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            
-            foreach ($contactsArray as $contact) {
-                $contacts->addRecord(new Addressbook_Model_Contact($contact));
-            }
-        }
-        return $contacts;
-    }
 }

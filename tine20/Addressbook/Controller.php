@@ -128,10 +128,6 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     {
         $this->_checkContainerACL($_filter);
         
-        if (count($_filter->container) === 0) {
-            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        }        
-        
         $contacts = $this->_backend->search($_filter, $_pagination);
         
         return $contacts;
@@ -146,10 +142,6 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     public function searchContactsCount(Addressbook_Model_ContactFilter $_filter) 
     {
         $this->_checkContainerACL($_filter);
-        
-        if (count($_filter->container) === 0) {
-            return 0;
-        }        
         
         $count = $this->_backend->searchCount($_filter);
         

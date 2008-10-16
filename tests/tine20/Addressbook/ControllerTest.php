@@ -227,18 +227,26 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountByAddressbookId()
     {
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'), 
+            'Addressbook', 
+            Zend_Registry::get('currentAccount'), 
+            Tinebase_Model_Container::GRANT_EDIT
+        );        
+        $container = $personalContainer[0];
+        
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
+        $filter->container = array($container->getId());
         $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
-        $this->assertGreaterThan(0, $count);
+        $this->assertGreaterThan(1, $count);
     }
     
     /**
      * try to get count of contacts
      *
-     * @todo use new searchContacts()
      */
     public function testGetCountOfAllContacts()
     {
@@ -263,6 +271,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
     }
 
+    /**
+     * test remove image
+     *
+     */
     public function testRemoveContactImage()
     {
         $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
