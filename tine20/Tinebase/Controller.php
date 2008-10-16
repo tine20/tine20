@@ -81,6 +81,9 @@ class Tinebase_Controller
         }
         Zend_Registry::set('configFile', $this->_config);
         
+        // Server Timezone must be setup before logger, as logger has timehandling!
+        $this->setupServerTimezone();
+        
         $this->setupLogger();
         
         Zend_Session::setOptions(array(
@@ -117,9 +120,6 @@ class Tinebase_Controller
         // @todo add fallback locale to config.ini
         Zend_Registry::set('locale', new Zend_Locale('en_US'));
         Zend_Registry::set('userTimeZone', 'UTC');
-        
-        // Server Timezone must be setup before logger, as logger has timehandling!
-        $this->setupServerTimezone();
         
         $this->setupMailer();
 
