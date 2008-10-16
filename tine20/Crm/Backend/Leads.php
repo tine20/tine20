@@ -9,6 +9,7 @@
  * @version     $Id$
  *
  * @todo        rename container to container_id in leads table
+ * @todo use functions from Tinebase_Abstract_SqlTableBackend
  */
 
 
@@ -37,6 +38,9 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      *
      * @param int|Crm_Model_Lead $_id
      * @return Crm_Model_Lead
+     * 
+     * @deprecated
+     * @todo replace by getMultiple function from SqlTableBackend 
      */
     public function get($_id)
     {
@@ -112,6 +116,9 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      *
      * @param Crm_Lead $_leadData the leaddata
      * @return Crm_Model_Lead
+     * 
+     * @deprecated
+     * @todo replace by getMultiple function from SqlTableBackend 
      */
     public function update(Tinebase_Record_Interface $_lead)
     {
