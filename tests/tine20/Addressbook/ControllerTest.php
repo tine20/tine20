@@ -241,7 +241,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $filter->container = array($container->getId());
         $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         
-        $this->assertGreaterThan(1, $count);
+        $this->assertGreaterThan(0, $count);
     }
     
     /**
