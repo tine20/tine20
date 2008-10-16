@@ -41,7 +41,6 @@ abstract class Tinebase_Abstract_SqlTableBackend
      */
     protected $_identifier = 'id';
     
-    
     /**
      * @var Zend_Db_Adapter_Abstract
      */
@@ -123,18 +122,23 @@ abstract class Tinebase_Abstract_SqlTableBackend
      * Gets one entry (by id)
      *
      * @throws InvalidArgumentException|UnderflowException
-     * @param integer $_id
+     * @param integer|Tinebase_Record_Interface $_id
      */
     public function get($_id) {
-        $id = (int) $_id;
         
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
+        if ($_id instanceof $this->_modelName) {
+            $id = $_id->getId();
+        } else {
+            $id = (int) $_id;
+            
+            if($id != $_id) {
+                throw new InvalidArgumentException('$_id must be integer');
+            }
         }
         
         $select = $this->_db->select();
         $select->from($this->_tableName)
-            ->where($this->_identifier . ' = ?', $_id);
+            ->where($this->_identifier . ' = ?', $id);
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -208,7 +212,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
     }
     
     /**
-     * Search for records matching given filter
+    * Search for records matching given filter
      *
      * @param Tinebase_Record_Interface $_filter
      * @param Tinebase_Record_Interface $_pagination
@@ -237,7 +241,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
             $select->order($_pagination->sort . ' ' . $_pagination->dir);
         }        
         $this->_addFilter($select, $_filter);
-                
+        
         // get records
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -263,6 +267,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
         
         $select = $this->_getSelect(TRUE);
         $this->_addFilter($select, $_filter);
+        
         $result = $this->_db->fetchOne($select);
         return $result;        
     }    
@@ -285,6 +290,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
         
         return $select;
     }
+    
     
     /**
      * add the fields to search for to the query
