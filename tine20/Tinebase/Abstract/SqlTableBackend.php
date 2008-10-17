@@ -53,71 +53,8 @@ abstract class Tinebase_Abstract_SqlTableBackend
     */
     protected $_table;
     
-    /**
-     * Creates new entry
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @throws InvalidArgumentException|Exception
-     * @return object Record
-     * 
-     * @todo add support for unique ids (hashs)
-     */
-    public function create(Tinebase_Record_Interface $_record) {
-    	if (!$_record instanceof $this->_modelName) {
-    		throw new InvalidArgumentException('$_record is of invalid model type');
-    	}
-        
-        $recordArray = $_record->toArray();
-        $tableDefinition = $this->_table->info();
-        $recordArray = array_intersect_key($recordArray, array_flip($tableDefinition['cols']));
-        
-        $this->_db->insert($this->_tableName, $recordArray);
-        $id = $this->_db->lastInsertId();
+    /*************************** get/search funcs ************************************/
 
-        // if we insert a record without an id, we need to get back one
-        if (empty($_record->id) && $id == 0) {
-            throw new Exception("returned lead id is 0");
-        }
-        
-        // if the record had no id set, set the id now
-        if ($_record->id == NULL || $_record->id == 'NULL') {
-        	$_record->id = $id;
-        }
-        
-        return $this->get($_record->id);
-    }
-    
-    /**
-     * Updates existing entry
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @throws Exception|InvalidArgumentException
-     * @return object Record
-     */
-    public function update(Tinebase_Record_Interface $_record) {
-        if (!$_record instanceof $this->_modelName) {
-            throw new InvalidArgumentException('$_record is of invalid model type');
-        }
-        
-    	if(!$_record->isValid()) {
-            throw new Exception('record object is not valid');
-        }
-        
-        $id = $_record->getId();
-
-        $recordArray = $_record->toArray();
-        $tableDefinition = $this->_table->info();
-        $recordArray = array_intersect_key($recordArray, array_flip($tableDefinition['cols']));
-        
-        $where  = array(
-            $this->_table->getAdapter()->quoteInto($this->_identifier . ' = ?', $id),
-        );
-        
-        $this->_db->update($this->_tableName, $recordArray, $where);
-                
-        return $this->get($id);
-    }
-    
     /**
      * Gets one entry (by id)
      *
@@ -158,32 +95,13 @@ abstract class Tinebase_Abstract_SqlTableBackend
      * @return Tinebase_Record_RecordSet
      */
     public function getMultiple($_id) {
-    	$resultRecordSet = new Tinebase_Record_RecordSet($this->_modelName);
-    	
-    	foreach ((array) $_id as $id) {
-    		$resultRecordSet->addRecord($this->get($id));
-    	}
-    	
-    	return $resultRecordSet;
-    }
-    
-    /**
-      * Deletes entries
-      * 
-      * @param string|array $_id Ids
-      * @return void
-      * @throws Exception
-      * 
-      * @todo Change to delete only ONE record. "Delete all" style should be removed from backend to controller.
-      */
-    public function delete($_id) {
-    	foreach ((array) $_id as $id) {
-	        $where = array(
-	            $this->_db->quoteInto($this->_identifier . ' = ?', $id)
-	        );
-	        
-	        $this->_db->delete($this->_tableName, $where);
-    	}
+        $resultRecordSet = new Tinebase_Record_RecordSet($this->_modelName);
+        
+        foreach ((array) $_id as $id) {
+            $resultRecordSet->addRecord($this->get($id));
+        }
+        
+        return $resultRecordSet;
     }
     
     /**
@@ -271,6 +189,94 @@ abstract class Tinebase_Abstract_SqlTableBackend
         $result = $this->_db->fetchOne($select);
         return $result;        
     }    
+        
+    /*************************** create / update / delete ****************************/
+    
+    /**
+     * Creates new entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws InvalidArgumentException|Exception
+     * @return object Record
+     * 
+     * @todo add support for unique ids (hashs)
+     */
+    public function create(Tinebase_Record_Interface $_record) {
+    	if (!$_record instanceof $this->_modelName) {
+    		throw new InvalidArgumentException('$_record is of invalid model type');
+    	}
+        
+        $recordArray = $_record->toArray();
+        $tableDefinition = $this->_table->info();
+        $recordArray = array_intersect_key($recordArray, array_flip($tableDefinition['cols']));
+        
+        $this->_db->insert($this->_tableName, $recordArray);
+        $id = $this->_db->lastInsertId();
+
+        // if we insert a record without an id, we need to get back one
+        if (empty($_record->id) && $id == 0) {
+            throw new Exception("returned lead id is 0");
+        }
+        
+        // if the record had no id set, set the id now
+        if ($_record->id == NULL || $_record->id == 'NULL') {
+        	$_record->id = $id;
+        }
+        
+        return $this->get($_record->id);
+    }
+    
+    /**
+     * Updates existing entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Exception|InvalidArgumentException
+     * @return object Record
+     */
+    public function update(Tinebase_Record_Interface $_record) {
+        if (!$_record instanceof $this->_modelName) {
+            throw new InvalidArgumentException('$_record is of invalid model type');
+        }
+        
+    	if(!$_record->isValid()) {
+            throw new Exception('record object is not valid');
+        }
+        
+        $id = $_record->getId();
+
+        $recordArray = $_record->toArray();
+        $tableDefinition = $this->_table->info();
+        $recordArray = array_intersect_key($recordArray, array_flip($tableDefinition['cols']));
+        
+        $where  = array(
+            $this->_table->getAdapter()->quoteInto($this->_identifier . ' = ?', $id),
+        );
+        
+        $this->_db->update($this->_tableName, $recordArray, $where);
+                
+        return $this->get($id);
+    }
+    
+    /**
+      * Deletes entries
+      * 
+      * @param string|array $_id Ids
+      * @return void
+      * @throws Exception
+      * 
+      * @todo Change to delete only ONE record. "Delete all" style should be removed from backend to controller.
+      */
+    public function delete($_id) {
+    	foreach ((array) $_id as $id) {
+	        $where = array(
+	            $this->_db->quoteInto($this->_identifier . ' = ?', $id)
+	        );
+	        
+	        $this->_db->delete($this->_tableName, $where);
+    	}
+    }
+    
+    /*************************** protected helper funcs ************************************/
     
     /**
      * get the basic select object to fetch records from the database 
