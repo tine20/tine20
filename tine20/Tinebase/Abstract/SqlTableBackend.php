@@ -63,15 +63,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
      */
     public function get($_id) {
         
-        if ($_id instanceof $this->_modelName) {
-            $id = $_id->getId();
-        } else {
-            $id = (int) $_id;
-            
-            if($id != $_id) {
-                throw new InvalidArgumentException('$_id must be integer');
-            }
-        }
+        $id = $this->_convertIdToInt($_id);
         
         $select = $this->_db->select();
         $select->from($this->_tableName)
@@ -308,4 +300,29 @@ abstract class Tinebase_Abstract_SqlTableBackend
     protected function _addFilter(Zend_Db_Select $_select, Tinebase_Record_Interface $_filter)
     {
     }
+    
+    /**
+     * converts a int, string or Tinebase_Record_Interface to a id
+     *
+     * @param int|string|Tinebase_Record_Interface $_id the id to convert
+     * @return int
+     */
+    protected function _convertIdToInt($_id)
+    {
+        if($_id instanceof $this->_modelName) {
+            if(empty($_id->id)) {
+                throw new Exception('No id set!');
+            }
+            $id = (int) $_id->id;
+        } else {
+            $id = (int) $_id;
+        }
+        
+        if($id === 0) {
+            throw new Exception($this->_modelName . '.id can not be 0!');
+        }
+        
+        return $id;
+    }
+    
 }
