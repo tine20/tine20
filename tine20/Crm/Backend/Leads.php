@@ -30,38 +30,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
     	$this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
     }
-    
-    /********** get / search ***********/
-
-    /**
-     * get lead
-     *
-     * @param int|Crm_Model_Lead $_id
-     * @return Crm_Model_Lead
-     * 
-     * @deprecated
-     * @todo replace by getMultiple function from SqlTableBackend 
-     */
-    public function get($_id)
-    {
-        $id = Crm_Model_Lead::convertLeadIdToInt($_id);
-
-        $select = $this->_getSelect()
-            ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
-
-        $stmt = $select->query();
-
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-        if(empty($row)) {
-            throw new UnderflowException('lead not found');
-        }
-        
-        $lead = new Crm_Model_Lead($row);
-
-        return $lead;
-    }
-    
     /****************** update / delete *************/
     
     /**
@@ -110,41 +79,6 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
             throw($e);
         }
     }
-
-    /**
-     * updates a lead
-     *
-     * @param Crm_Lead $_leadData the leaddata
-     * @return Crm_Model_Lead
-     * 
-     * @deprecated
-     * @todo replace by getMultiple function from SqlTableBackend 
-     */
-    public function update(Tinebase_Record_Interface $_lead)
-    {
-        if(!$_lead->isValid()) {
-            throw new Exception('lead object is not valid');
-        }
-        
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_lead);        
-
-        $leadData = $_lead->toArray();
-        
-       // unset fields that should not be written into the db
-        $unsetFields = array('id', 'tasks', 'products', 'tags', 'relations', 'notes');
-        foreach ( $unsetFields as $field ) {
-            unset($leadData[$field]);
-        }
-                
-        $where  = array(
-            $this->_table->getAdapter()->quoteInto('id = ?', $leadId),
-        );
-        
-        $updatedRows = $this->_table->update($leadData, $where);
-                
-        return $this->get($leadId);
-    }
-    
     
     /************************ helper functions ************************/
 
