@@ -62,13 +62,6 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
             $results[] = $result;
         }
         
-        /*
-        $result = array(
-            'success'       => TRUE,
-            'results'       => $results,
-            'totalcount'    => count($phones) 
-        );
-        */
         $result = $results;
         
         return $result;        

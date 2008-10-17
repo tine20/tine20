@@ -102,53 +102,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     }    
         
     /**
-     * get my phones
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @param int $accountId
-     * @return array
-     */
-    public function getMyPhones($sort, $dir, $query, $accountId)
-    {     
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-
-        
-        if($rows = Voipmanager_Controller::getInstance()->getMyPhones($sort, $dir, $query, $accountId)) {
-        
-            $_rows = $rows->toArray();
-
-            $i = 0; 
-                  
-            foreach($_rows AS $_row)
-            {
-                if($location_row = Voipmanager_Controller::getInstance()->getSnomLocation($_row['location_id']))
-                {
-                    $_location = $location_row->toArray();
-                    $_rows[$i]['location'] = $_location['name'];
-                }
-                
-                if($template_row = Voipmanager_Controller::getInstance()->getSnomTemplate($_row['template_id']))
-                {
-                    $_template = $template_row->toArray();                                        
-                    $_rows[$i]['template'] = $_template['name'];
-                }                
-                
-                $i = $i + 1;
-            }         
-        
-            $result['results']      = $_rows;
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;    
-    }
-    
-    /**
      * save one phone
      * -  if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
      *
@@ -204,51 +157,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
 
         return $result;         
     }     
-    
-    
-    /**
-     * save one myPhone
-     *
-     * if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
-     *
-     * @param string $phoneData a JSON encoded array of phone properties
-     * @return array
-     * 
-     * @deprecated moved to Phone app 
-     * @todo remove that later (check if it is still needed here first) 
-     */
-    public function saveMyPhone($phoneData)
-    {
-
-        $phoneData = Zend_Json::decode($phoneData);
-        
-        // unset if empty
-        if (empty($phoneData['id'])) {
-            unset($phoneData['id']);
-        }
-
-        //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
-        $phone = new Voipmanager_Model_MyPhone();
-        $phone->setFromArray($phoneData);
-        
-        $phoneSettings = new Voipmanager_Model_SnomPhoneSettings();
-        $phoneSettings->setFromArray($phoneData);
-
-        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
-        
-        if (!empty($phone->id)) {
-            $phone = Voipmanager_Controller::getInstance()->updateMyPhone($phone, $phoneSettings, $currentAccount['accountId']);
-        } 
-        
-        $phone = $this->getSnomPhone($phone->getId());
-
-        $result = array('success'           => true,
-            'welcomeMessage'    => 'Entry updated',
-            'updatedData'       => $phone
-        );
-        
-        return $result;         
-    }    
     
     /**
      * delete multiple phones

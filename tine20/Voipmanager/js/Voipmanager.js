@@ -15,200 +15,177 @@ Tine.Voipmanager = function() {
      * builds the voipmanager applications tree
      */
         
-    /*if (Tine.Tinebase.Registry.get('adminAccount') === false) {
-    
-         var _initialTree = [{
-            text: 'My Phones',
+    var _initialTree = [{
+        text: 'Asterisk',
+        cls: 'treemain',
+        allowDrag: false,
+        allowDrop: true,
+        id: 'asterisk',
+        icon: false,
+        children: [{
+            text: "SipPeers",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "sipPeers",
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: "sipPeers",
+            viewRight: 'sipPeers'
+        }, {
+            text: "Dialplan",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "dialplan",
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: "dialplan",
+            viewRight: 'dialplan'
+        }, {
+            text: "Context",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "context",
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: "context",
+            viewRight: 'context'
+        }, {
+            text: "Voicemail",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "voicemail",
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: "voicemail",
+            viewRight: 'voicemail'
+        }, {
+            text: "Meetme",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "meetme",
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: "meetme",
+            viewRight: 'meetme'
+        }, {
+            text: "Queues",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "queues",
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: "queues",
+            viewRight: 'queues'
+        }],
+        leaf: null,
+        expanded: true,
+        dataPanelType: 'asterisk',
+        viewRight: 'asterisk'
+    }, {
+        text: 'Snom',
+        cls: 'treemain',
+        allowDrag: false,
+        allowDrop: true,
+        id: 'snom',
+        icon: false,
+        children: [{
+            text: 'Phones',
             cls: 'treemain',
             allowDrag: false,
             allowDrop: true,
-            id: 'myPhones',
+            id: 'phones',
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: 'phones',
+            viewRight: 'phones'
+        }, {
+            text: "Location",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "location",
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: "location",
+            viewRight: 'location'
+        }, {
+            text: "Templates",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "templates",
             icon: false,
             children: [],
             leaf: null,
             expanded: true,
-            dataPanelType: 'myPhones',
-            viewRight: 'myPhones',            
-            owner: Tine.Tinebase.Registry.get('currentAccount')
-        }];
-    }*/
-    
-    //if (Tine.Tinebase.Registry.get('adminAccount') === true) {
-        
-        var _initialTree = [{
-            text: 'Asterisk',
-            cls: 'treemain',
-            allowDrag: false,
-            allowDrop: true,
-            id: 'asterisk',
-            icon: false,
-            children: [{
-                text: "SipPeers",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "sipPeers",
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: "sipPeers",
-                viewRight: 'sipPeers'
-            }, {
-                text: "Dialplan",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "dialplan",
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: "dialplan",
-                viewRight: 'dialplan'
-            }, {
-                text: "Context",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "context",
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: "context",
-                viewRight: 'context'
-            }, {
-                text: "Voicemail",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "voicemail",
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: "voicemail",
-                viewRight: 'voicemail'
-            }, {
-                text: "Meetme",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "meetme",
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: "meetme",
-                viewRight: 'meetme'
-            }, {
-                text: "Queues",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "queues",
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: "queues",
-                viewRight: 'queues'
-            }],
-            leaf: null,
-            expanded: true,
-            dataPanelType: 'asterisk',
-            viewRight: 'asterisk'
+            dataPanelType: "templates",
+            viewRight: 'templates'
         }, {
-            text: 'Snom',
-            cls: 'treemain',
+            text: "Keylayout",
+            cls: "treemain",
             allowDrag: false,
             allowDrop: true,
-            id: 'snom',
+            id: "keylayout",
             icon: false,
-            children: [{
-                text: 'Phones',
-                cls: 'treemain',
-                allowDrag: false,
-                allowDrop: true,
-                id: 'phones',
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: 'phones',
-                viewRight: 'phones'
-            }, {
-                text: "Location",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "location",
-                icon: false,
-                children: [],
-                leaf: true,
-                expanded: true,
-                dataPanelType: "location",
-                viewRight: 'location'
-            }, {
-                text: "Templates",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "templates",
-                icon: false,
-                children: [],
-                leaf: null,
-                expanded: true,
-                dataPanelType: "templates",
-                viewRight: 'templates'
-            }, {
-                text: "Keylayout",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "keylayout",
-                icon: false,
-                children: [],
-                leaf: null,
-                expanded: true,
-                disabled: true,
-                dataPanelType: "keylayout",
-                viewRight: 'keylayout'
-            }, {
-                text: "Settings",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "settings",
-                icon: false,
-                children: [],
-                leaf: null,
-                expanded: true,
-                dataPanelType: "settings",
-                viewRight: 'settings'
-            }, {
-                text: "Software",
-                cls: "treemain",
-                allowDrag: false,
-                allowDrop: true,
-                id: "software",
-                icon: false,
-                children: [],
-                leaf: null,
-                expanded: true,
-                dataPanelType: "software",
-                viewRight: 'software'
-            }],
+            children: [],
             leaf: null,
             expanded: true,
-            dataPanelType: 'snom',
-            viewRight: 'snom'
-        }];
+            disabled: true,
+            dataPanelType: "keylayout",
+            viewRight: 'keylayout'
+        }, {
+            text: "Settings",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "settings",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "settings",
+            viewRight: 'settings'
+        }, {
+            text: "Software",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "software",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "software",
+            viewRight: 'software'
+        }],
+        leaf: null,
+        expanded: true,
+        dataPanelType: 'snom',
+        viewRight: 'snom'
+    }];
         
-    //}
-
-
     /**
      * creates the voipmanager menu tree
      *
@@ -344,15 +321,6 @@ Tine.Voipmanager = function() {
                         Ext.getCmp('gridVoipmanagerMeetme').getStore().load({params:{start:0, limit:50}});
                     } else {
                         Tine.Voipmanager.Asterisk.Meetme.Main.show(_node);
-                    }
-                    break; 					                                                                                
-                    
-                    
-                case 'myPhones':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerMyPhones') {
-                        Ext.getCmp('gridVoipmanagerMyPhones').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Tine.Voipmanager.MyPhones.Main.show(_node);
                     }
                     break; 					                                                                                                    
             }
