@@ -21,7 +21,7 @@ Tine.Crm.Product.Model = Ext.data.Record.create([
 
 /**
  * get product store
- * if available, load data from Tine.Crm.Products
+ * if available, load data from Tine.Crm.registry.get('Products')
  *
  * @return Ext.data.JsonStore with products
  */
@@ -43,8 +43,8 @@ Tine.Crm.Product.getStore = function() {
         });
         
         // check if initital data available
-        if ( Tine.Crm.Products ) {
-            store.loadData(Tine.Crm.Products);
+        if ( Tine.Crm.registry.get('Products') ) {
+            store.loadData(Tine.Crm.registry.get('Products'));
         }
         
         Ext.StoreMgr.add('CrmProductStore', store);

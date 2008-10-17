@@ -75,20 +75,13 @@
     <script type="text/javascript" language="javascript"><?php
         // registry data
         foreach ((array)$this->initialData as $appname => $data) {
-            if ($appname == 'Tinebase') {
-                echo "\n";
-                foreach ($data as $index => $value) {
-                    echo "\n        Tine.Tinebase.registry.add('$index'," . Zend_Json::encode($value) . ");";
-                }
-                continue;
+            if ($appname != 'Tinebase') {
+                echo "\n        Tine.$appname.registry = new Ext.util.MixedCollection();";
             }
-            echo "\n\n        Tine.$appname.registry = new Ext.util.MixedCollection();";
+            
             if (!empty($data) ) {
                 foreach ($data as $var => $content) {
-                    if ($var == 'rights') {
-                        echo "\n        Tine.$appname.registry.add('$var'," . Zend_Json::encode($content). ");";
-                    }
-                    echo "\n        Tine.$appname.$var = ". Zend_Json::encode($content). ';';
+                    echo "\n        Tine.$appname.registry.add('$var'," . Zend_Json::encode($content). ");";
                 }
             }
         }

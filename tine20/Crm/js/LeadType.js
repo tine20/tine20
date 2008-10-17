@@ -45,8 +45,8 @@ Tine.Crm.LeadType.getStore = function() {
             remoteSort: false
         });
         
-        if ( Tine.Crm.LeadTypes ) {
-        	store.loadData(Tine.Crm.LeadTypes);
+        if ( Tine.Crm.registry.get('LeadTypes') ) {
+        	store.loadData(Tine.Crm.registry.get('LeadTypes'));
         }
         	
         Ext.StoreMgr.add('CrmLeadTypeStore', store);

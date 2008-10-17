@@ -79,7 +79,7 @@ Tine.Tasks.status.getStore = function() {
                 { name: 'status_icon'                                       }
            ],
 		   // initial data from http request
-           data: Tine.Tasks.AllStati,
+           data: Tine.Tasks.registry.get('AllStati'),
            autoLoad: true,
            id: 'id'
        });

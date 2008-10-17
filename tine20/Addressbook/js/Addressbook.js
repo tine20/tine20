@@ -1010,8 +1010,8 @@ Tine.Addressbook.getSalutationStore = function() {
             remoteSort: false
         });
         
-        if (Tine.Addressbook.Salutations) {
-            store.loadData(Tine.Addressbook.Salutations);
+        if (Tine.Addressbook.registry.get('Salutations')) {
+            store.loadData(Tine.Addressbook.registration.get('Salutations'));
         }
         
             

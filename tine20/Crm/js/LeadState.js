@@ -25,7 +25,7 @@ Tine.Crm.LeadState.Model = Ext.data.Record.create([
 
 /**
  * get lead state store
- * if available, load data from Tine.Crm.LeadStates
+ * if available, load data from Tine.Crm.registry.get('LeadStates')
  *
  * @return Ext.data.JsonStore with lead states
  */
@@ -47,8 +47,8 @@ Tine.Crm.LeadState.getStore = function() {
         });
         
         // check if initital data available
-        if ( Tine.Crm.LeadStates ) {
-            store.loadData(Tine.Crm.LeadStates);
+        if ( Tine.Crm.registry.get('LeadStates') ) {
+            store.loadData(Tine.Crm.registry.get('LeadStates'));
         }
         
         Ext.StoreMgr.add('CrmLeadstateStore', store);

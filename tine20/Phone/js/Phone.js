@@ -738,7 +738,7 @@ Tine.Phone.loadPhoneStore = function(reload) {
             fields: Tine.Voipmanager.Model.Snom.Phone,
 
             // initial data from http request
-            data: Tine.Phone.Phones,
+            data: Tine.Phone.registry.get('Phones'),
             autoLoad: true,
             id: 'id'
         });
