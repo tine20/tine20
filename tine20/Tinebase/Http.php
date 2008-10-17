@@ -186,7 +186,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             if(class_exists($httpAppName)) {
                 $application_http = new $httpAppName;
                 
-                $view->initialData[ucfirst((string) $application)] = $application_http->getInitialMainScreenData();
+                $view->initialData[ucfirst((string) $application)] = $application_http->getRegistryData();
                 $view->initialData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
@@ -264,7 +264,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
      * 
      * @return array
      */
-    public static function getRegistryData()
+    public function getRegistryData()
     {
         $locale = Zend_Registry::get('locale');
         $json = new Tinebase_Json();

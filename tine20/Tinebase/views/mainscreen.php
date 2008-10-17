@@ -74,17 +74,16 @@
     <!-- Tine 2.0 dynamic initialisation -->
     <script type="text/javascript" language="javascript"><?php
         // registry data
-        foreach (Tinebase_Http::getRegistryData() as $index => $value) {
-            echo "
-        Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");";
-        }
-        
-        // initial data
         foreach ((array)$this->initialData as $appname => $data) {
+            if ($appname == 'Tinebase') {
+                foreach ($data as $index => $value) {
+                    echo "\n        Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");";
+                }
+                continue;
+            }
             if (!empty($data) ) {
                 foreach ($data as $var => $content) {
-                    echo "
-        Tine.$appname.$var = ". Zend_Json::encode($content). ';';
+                    echo "\n        Tine.$appname.$var = ". Zend_Json::encode($content). ';';
                 }
             }
         }

@@ -96,7 +96,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
      * @return mixed array 'variable name' => 'data'
      * @todo    is the setTimezone needed?
      */
-    public function getInitialMainScreenData()
+    public function getRegistryData()
     {   
         $json = new Crm_Json();
         

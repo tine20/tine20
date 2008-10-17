@@ -49,7 +49,7 @@ class Phone_Http extends Tinebase_Application_Http_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
      */
-    public function getInitialMainScreenData()
+    public function getRegistryData()
     {   
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__);
     

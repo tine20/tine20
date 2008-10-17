@@ -52,6 +52,6 @@ Interface Tinebase_Application_Http_Interface extends Tinebase_Application_Inter
      * 
      * @return mixed array 'variable name' => 'data'
      */
-    public function getInitialMainScreenData();
+    public function getRegistryData();
     
 }

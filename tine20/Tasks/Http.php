@@ -49,7 +49,7 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
      */
-    public function getInitialMainScreenData()
+    public function getRegistryData()
     {
         $controller = Tasks_Controller::getInstance();
         $initialData = array(

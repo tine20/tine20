@@ -65,7 +65,7 @@ abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_A
      * 
      * @return mixed array 'variable name' => 'data'
      */
-    public function getInitialMainScreenData()
+    public function getRegistryData()
     {
         return array();
     }
