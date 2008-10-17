@@ -95,7 +95,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $this->container->id,
+            'container_id'                 => $this->container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -138,7 +138,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $this->container->id,
+            'container_id'                 => $this->container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -203,7 +203,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }    
 
     /**
-     * try to get contacts by owner
+     * try to get contacts by owner / container_id
      *
      */
     public function testGetContactsByOwner()
@@ -213,7 +213,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
-            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+            array('field' => 'container_id',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         );
         $contacts = $json->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
         
@@ -305,7 +305,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $newContactData = array(
             'n_family'  => 'PHPUNIT',
-            'owner'     => $this->container->id,
+            'container_id'     => $this->container->id,
             'notes'     => Zend_Json::encode(array($note))
         );        
 

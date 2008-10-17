@@ -117,7 +117,6 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             ),
 
             //'id' => 'Contact ID',    
-            //'owner' => 'Owner',
             //'n_prefix' => 'Name Prefix',
             //'n_suffix' => 'Name Suffix',
              

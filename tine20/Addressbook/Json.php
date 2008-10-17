@@ -150,8 +150,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $_contact->setTimezone(Zend_Registry::get('userTimeZone'));
         $result = $_contact->toArray();
         
-        $result['owner'] = Tinebase_Container::getInstance()->getContainerById($_contact->owner)->toArray();
-        $result['owner']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->owner)->toArray();
+        $result['container_id'] = Tinebase_Container::getInstance()->getContainerById($_contact->container_id)->toArray();
+        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->container_id)->toArray();
         
         // get tags?
         //$result['tags'] = Tinebase_Tags::getInstance()->getTagsOfRecord($_contact)->toArray();        
@@ -170,7 +170,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     protected function _multipleContactsToJson(Tinebase_Record_RecordSet $_contacts)
     {        
         // get acls for contacts
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_contacts, Zend_Registry::get('currentAccount'), 'owner');
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_contacts, Zend_Registry::get('currentAccount'));
         
         $_contacts->setTimezone(Zend_Registry::get('userTimeZone'));
         $result = $_contacts->toArray();

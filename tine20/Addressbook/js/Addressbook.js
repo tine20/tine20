@@ -214,8 +214,8 @@ Tine.Addressbook.Main = {
 	
 	renderer: {
         contactTid: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-            //console.log(_record.get('owner').type);
-            switch(_record.get('owner').type) {
+            //console.log(_record.get('container_id').type);
+            switch(_record.get('container_id').type) {
                 case 'internal':
                     return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + Tine.Addressbook.Main.translation._("Internal Contacts") + "'/>";
                 default:
@@ -410,7 +410,7 @@ Tine.Addressbook.Main = {
 
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             // update toolbars
-            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'owner');
+            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'container_id');
             
             var rowCount = _selectionModel.getCount();
             if(rowCount < 1) {
@@ -733,7 +733,7 @@ Tine.Addressbook.Main = {
             filter.push(
                 {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
                 {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+                {field: 'container_id',  operator: 'equals', value: nodeAttributes.container_id ? nodeAttributes.container_id.accountId : null        }
             );
             
             options.params.filter = Ext.util.JSON.encode(filter);
@@ -793,7 +793,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     id: 'contactDialog',
     layout: 'hfit',
     appName: 'Addressbook',
-    containerProperty: 'owner',
+    containerProperty: 'container_id',
     showContainerSelector: true,
     
     initComponent: function() {
@@ -844,7 +844,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         this.getForm().findField('n_prefix').focus(false, 250);
         var contactData = Ext.util.JSON.decode(response.responseText);
         if (this.forceContainer) {
-            contactData.owner = this.forceContainer;
+            contactData.container_id = this.forceContainer;
             // only force initially!
             this.forceContainer = null;
         }
@@ -858,7 +858,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         }
         
         this.getForm().loadRecord(this.contact);
-        this.updateToolbars(this.contact, 'owner');
+        this.updateToolbars(this.contact, 'container_id');
         Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
 
         Ext.MessageBox.hide();
@@ -959,7 +959,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     },
     
     updateToolbarButtons: function(contact) {
-        this.updateToolbars.defer(10, this, [contact, 'owner']);
+        this.updateToolbars.defer(10, this, [contact, 'container_id']);
         
         // add contact id to export button and enable it if id is set
         var contactId = contact.get('id');
@@ -1028,7 +1028,7 @@ Ext.namespace('Tine.Addressbook.Model');
 Tine.Addressbook.Model.ContactArray = [
     {name: 'id'},
     {name: 'tid'},
-    {name: 'owner'},
+    {name: 'container_id'},
     {name: 'private'},
     {name: 'cat_id'},
     {name: 'n_family'},

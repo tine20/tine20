@@ -169,4 +169,52 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '0.5');
     }
+    
+    /**
+     * rename column owner to container_id in addressbook table
+     * 
+     */    
+    public function update_5()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>container_id</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration, 'owner');
+        
+        $this->_backend->dropIndex('addressbook', 'owner');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>container_id</name>
+                <field>
+                    <name>container_id</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('addressbook', $declaration);
+        
+        try {
+            $this->_backend->dropForeignKey('addressbook', 'addressbook_container_id');
+        } catch (Exception $e) {
+            echo "  Foreign key 'addressbook_container_id' didn't exist.\n";
+        }
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>addressbook::container_id--container::id</name>
+                <field>
+                    <name>container_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>container</table>
+                    <field>id</field>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('addressbook', $declaration);
+        
+        $this->setApplicationVersion('Addressbook', '0.6');
+    }
 }

@@ -91,7 +91,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
                     'value'    => NULL
                 ),
                 array(
-                    'field'    => 'owner',
+                    'field'    => 'container_id',
                     'operator' => 'equals',
                     'value'    => NULL
                 ),

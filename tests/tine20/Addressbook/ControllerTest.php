@@ -80,7 +80,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'id'                    => 20,
             'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../Tinebase/ImageHelper/phpunit-logo.gif'),
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $container->id,
+            'container_id'                 => $container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -124,7 +124,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'id'                    => 20,
             'jpegphoto'             => '',
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $container->id,
+            'container_id'                 => $container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -214,7 +214,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'query',         'operator' => 'contains', 'value' => $this->objects['initialContact']->n_family),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
-            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+            array('field' => 'container_id',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
         $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
         

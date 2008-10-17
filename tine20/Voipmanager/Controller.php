@@ -1083,8 +1083,8 @@ class Voipmanager_Controller
     public function updateAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
     {
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Model_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->container_id . ' denied');
         }
         */
         $context = $this->_asteriskContextBackend->update($_context);
@@ -1176,8 +1176,8 @@ class Voipmanager_Controller
     public function updateAsteriskVoicemail(Voipmanager_Model_AsteriskVoicemail $_voicemail)
     {
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Model_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->container_id . ' denied');
         }
         */
         $voicemail = $this->_asteriskVoicemailBackend->update($_voicemail);
@@ -1357,8 +1357,8 @@ class Voipmanager_Controller
     public function updateAsteriskMeetme(Voipmanager_Model_AsteriskMeetme $_meetme)
     {
         /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Model_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->container_id . ' denied');
         }
         */
         $meetme = $this->_asteriskMeetmeBackend->update($_meetme);

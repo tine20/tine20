@@ -80,7 +80,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
                 'n_family'              => 'Weiss',
                 'n_given'               => 'Cornelius',
                 'bday'                  => '1979-06-05T00:00:00+02:00',
-                'owner'                 => '',
+                'container_id'                 => '',
             ),
             'type'                   => 'PARTNER',
         ),

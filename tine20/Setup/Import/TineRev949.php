@@ -284,7 +284,7 @@ class Setup_Import_TineRev949
                 
                 'id'                    => $contact->contact_id,
                 'account_id'            => $contact->account_id,
-                'owner'                 => $contact->contact_owner,
+                'container_id'                 => $contact->contact_owner,
 
                 'n_family'              => $contact->n_family,
                 'n_fileas'              => $contact->n_fileas,

@@ -314,11 +314,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $records = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         $records->addRecord($contact);
         
-        $grants = Tinebase_Container::getInstance()->getGrantsOfRecords($records, $userId, 'owner');
+        $grants = Tinebase_Container::getInstance()->getGrantsOfRecords($records, $userId, 'container_id');
         
-        $this->assertTrue(is_array($records[0]['owner']));
-        $this->assertGreaterThan(0, count($records[0]['owner']['account_grants']));
-        $this->assertEquals('internal', $records[0]['owner']['type']);
+        $this->assertTrue(is_array($records[0]['container_id']));
+        $this->assertGreaterThan(0, count($records[0]['container_id']['account_grants']));
+        $this->assertEquals('internal', $records[0]['container_id']['type']);
     }
 }		
 	

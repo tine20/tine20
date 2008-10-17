@@ -101,7 +101,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'owner'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'container_id'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'salutation_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -201,7 +201,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @param string $_data json encoded data
      * @return void
      * 
-     * @todo check in calling functions where these tags/notes/owner arrays are coming from and get down to the root of the trouble    
+     * @todo check in calling functions where these tags/notes/container arrays are coming from and get down to the root of the trouble    
      */
     public function setFromJson($_data)
     {
@@ -232,9 +232,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             unset($contactData['id']);
         }
         
-        // sanitize container id / owner
-        if (isset($contactData['owner']) && is_array($contactData['owner'])) {
-            $contactData['owner'] = $contactData['owner']['id'];
+        // sanitize container id / container_id
+        if (isset($contactData['container_id']) && is_array($contactData['container_id'])) {
+            $contactData['container_id'] = $contactData['container_id']['id'];
         }        
 
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));

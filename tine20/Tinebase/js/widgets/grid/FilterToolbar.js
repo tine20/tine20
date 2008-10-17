@@ -17,13 +17,13 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
      tb = new Tine.widgets.grid.FilterToolbar({
          filterModels: [
             {name: 'Full Name', field: 'n_fn', defaultOperator: 'contains'},
-            {name: 'Container', field: 'owner', operatorRenderer: function() {...}, valueRenderer: function() {...}},
+            {name: 'Container', field: 'container_id', operatorRenderer: function() {...}, valueRenderer: function() {...}},
             {name: 'Contact', field: 'quicksearch'}
          ],
          defaultFilter: 'quicksearch',
          filters: [
             {field: 'n_fn', operator: 'contains', value: 'Smith'},
-            {field: 'owner', operator: 'equals', value: 4}
+            {field: 'container_id', operator: 'equals', value: 4}
         ]
      });
     </code></pre>

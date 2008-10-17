@@ -168,7 +168,7 @@ class Addressbook_Backend_Sql extends Tinebase_Abstract_SqlTableBackend
      */
     protected function _addFilter (Zend_Db_Select $_select, Addressbook_Model_ContactFilter $_filter)
     {        
-        $_select->where($this->_db->quoteInto('owner IN (?)', $_filter->container));
+        $_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
         
         $_filter->appendFilterSql($_select);
     }

@@ -128,7 +128,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 120,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $addressbookContainer->id,
+            'container_id'                 => $addressbookContainer->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>0.5</version>
+    <version>0.6</version>
     <order>10</order>
     <tables>
         <table>
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -151,7 +151,7 @@
                     <type>clob</type>
                 </field>
                 <field>
-                    <name>owner</name>
+                    <name>container_id</name>
                     <type>integer</type>
                     <notnull>false</notnull>
                 </field>
@@ -383,9 +383,9 @@
                     </field>
                 </index>
                 <index>
-                    <name>owner</name>
+                    <name>container_id</name>
                     <field>
-                        <name>owner</name>
+                        <name>container_id</name>
                     </field>
                 </index>
                 <index>
@@ -425,9 +425,9 @@
                     </field>
                 </index>
                 <index>
-                    <name>addressbook_container_id</name>
+                    <name>addressbook::container_id--container::id</name>
                     <field>
-                        <name>owner</name>
+                        <name>container_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>

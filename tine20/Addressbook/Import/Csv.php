@@ -37,7 +37,7 @@
         'n_family'              => 'Nachname',
         'n_given'               => 'Vorname',
         'n_prefix'              => array('Anrede', 'Titel'),
-        'owner'                 => array(
+        'container_id'                 => array(
             'inLab Spezi'           => array(
             'Name 1'                 => 92,
             'Name 2'                 => 66,
@@ -161,9 +161,9 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
         $addressbookController = Addressbook_Controller::getInstance();
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         foreach ($_records as $contact) {
-            // set owner/container id only if it isn't set already
-            if (empty($contact->owner)) {
-                $contact->owner = $containerId;
+            // set container_id/container id only if it isn't set already
+            if (empty($contact->container_id)) {
+                $contact->container_id = $containerId;
             }
             $newContact = $addressbookController->createContact($contact);
             $result->addRecord($newContact);
@@ -197,7 +197,7 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
                 foreach ($source as $key => $value) {
                     if (is_array($value) || (isset($headline[$value]) && isset($values[$headline[$value]]) && !empty($values[$headline[$value]]))) {
                         if (is_array($value) && !empty($value)) {
-                            // match to defined values (i.e. user -> owner/container id)
+                            // match to defined values (i.e. user -> container_id/container id)
                             $keyForValue = $values[$headline[$key]];
                             if (isset($value[$keyForValue])) {
                                 $result[$destination] = $value[$keyForValue];

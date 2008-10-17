@@ -421,7 +421,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * this function adds an user 
      *
      * @param Tinebase_Model_FullUser $_account
-     * @todo fix $contactData['owner'] = 1;
+     * @todo fix $contactData['container_id'] = 1;
      * @return Tinebase_Model_FullUser
      */
     public function addUser(Tinebase_Model_FullUser $_account)
@@ -474,7 +474,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             $contactData['account_id'] = $accountId;
             $contactData['tid'] = 'n';
-            $contactData['owner'] = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
+            $contactData['container_id'] = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
             //var_dump($contactData);
             $contactsTable->insert($contactData);
             

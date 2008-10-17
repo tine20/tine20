@@ -113,7 +113,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $this->testContainer->id,
+            'container_id'                 => $this->testContainer->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
