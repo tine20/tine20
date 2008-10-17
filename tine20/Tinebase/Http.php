@@ -260,20 +260,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     }
     
     /**
-     * get initial mainscreen data
-     *
-     * @todo figure out registry vs. initialData
-     * @return array
-     */
-    public function getInitialMainScreenData()
-    {
-        $json = new Tinebase_Json();
-        return array(
-            'CountryList'      => $json->getCountryList()
-        );
-    }
-    
-    /**
      * returns registry data
      * 
      * @return array
@@ -311,6 +297,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 'jsonKey'          => Zend_Registry::get('jsonKey'),
                 'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray(),
                 'NoteTypes'        => $json->getNoteTypes(),
+                'CountryList'      => $json->getCountryList(),
                 'version'          => array(
                     'codename'      => TINE20_CODENAME,
                     'packageString' => TINE20_PACKAGESTRING,
