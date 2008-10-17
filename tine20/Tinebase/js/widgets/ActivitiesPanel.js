@@ -624,8 +624,8 @@ Tine.widgets.activities.getTypesStore = function() {
         });
         /*if (Tine.Tinebase.Registry.get('NoteTypes')) {
             store.loadData(Tine.Tinebase.Registry.get('NoteTypes'));
-        } else*/ if (Tine.Tinebase.NoteTypes) {
-            store.loadData(Tine.Tinebase.NoteTypes);
+        } else*/ if (Tine.Tinebase.Registry.get('NoteTypes')) {
+            store.loadData(Tine.Tinebase.Registry.get('NoteTypes'));
         }
         Ext.StoreMgr.add('noteTypesStore', store);
     }
