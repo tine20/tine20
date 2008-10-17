@@ -42,6 +42,13 @@ class Addressbook_Cli
                 //'format'     => 'Import file format (default: csv) [optional]',
                 //'config'     => 'Mapping config file (default: importconfig.inc.php) [optional]',
             )
+        ),
+        'export' => array(
+            'description'   => 'Exports contacts as csv data to stdout',
+            'params'        => array(
+                'addressbookId' => 'only export contcts of the given addressbook',
+                'tagId'         => 'only export contacts having the given tag'
+            )
         )
     );
     
@@ -117,5 +124,77 @@ class Addressbook_Cli
                 print_r($records->toArray());
             }        
         }
+    }
+    
+    /**
+     * quick hack to export csv's
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function export($_opts)
+    {
+        $containerId = 1;
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
+            array('field' => 'container',     'operator' => 'equals',   'value' => $containerId     ),
+        ));
+        
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => 0,
+            'limit' => 0,
+            'sort' => 'n_fileas',
+            'dir' => 'ASC',
+        ));
+        
+        $contacts = Addressbook_Controller::getInstance()->searchContacts($filter, $pagination);
+        if (count($contacts) < 1) {
+            die("No contacts found \n");
+        }
+        
+        // to ensure the order of fields we need to sort it ourself!
+        $fields = array();
+        $skipFields = array(
+            'jpegphoto'
+        );
+        foreach ($contacts[0] as $fieldName => $value) {
+            if (! in_array($fieldName, $skipFields)) {
+                $fields[] = $fieldName;
+            }
+        }
+        
+        $this->fputcsv(STDOUT, $fields);
+        
+        foreach ($contacts as $contact) {
+            $contactArray = array();
+            foreach ($fields as $fieldName) {
+                $contactArray[] = $contact->$fieldName;
+            }
+            $this->fputcsv(STDOUT, $contactArray);
+        }
+    }
+    
+    /**
+     * The php build in fputcsv function is buggy, so we need an own one :-(
+     * 
+     * @todo to be moved to csv export class ;-)
+     *
+     * @param resource $filePointer
+     * @param array $dataArray
+     * @param char $delimiter
+     * @param char $enclosure
+     */
+    protected function fputcsv($filePointer, $dataArray, $delimiter=',', $enclosure=''){
+        $string = "";
+        $writeDelimiter = false;
+        foreach($dataArray as $dataElement) {
+            if($writeDelimiter) $string .= $delimiter;
+            $string .= $enclosure . $dataElement . $enclosure;
+            $writeDelimiter = true;
+        } 
+        $string .= "\n";
+        
+        fwrite($filePointer, $string);
+            
     }
 }
