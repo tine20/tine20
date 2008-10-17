@@ -36,7 +36,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     },
     
     initComponent: function() {
-        this.value = Tine.Tinebase.Registry.get('locale').language;
+        this.value = Tine.Tinebase.registry.get('locale').language;
         this.fieldLabel = this.fieldLabel ? this.fieldLabel : _('Language');
         
         this.tpl = new Ext.XTemplate(
@@ -65,7 +65,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         this.on('select', this.onLangSelect, this);
     },
     onLangSelect: function(combo, localeRecord, idx) {
-        var currentLocale = Tine.Tinebase.Registry.get('locale').locale;
+        var currentLocale = Tine.Tinebase.registry.get('locale').locale;
         var newLocale = localeRecord.get('locale');
         
         if (newLocale != currentLocale) {
@@ -92,7 +92,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     loadNewLang: function(locale, translationFiles) {
         Ext.MessageBox.wait(_('loading new language...'), _('Please Wait'));
         
-        Tine.Tinebase.Registry.add('locale', locale);
+        Tine.Tinebase.registry.add('locale', locale);
         for (var location in this.locationLoaded) {
             this.locationLoaded[location] = false;
         }
@@ -117,7 +117,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         }
         
         // en has no tine translations!
-        if (Tine.Tinebase.Registry.get('locale').locale == 'en') {
+        if (Tine.Tinebase.registry.get('locale').locale == 'en') {
             this.locationLoaded.tine = true;
         }
         

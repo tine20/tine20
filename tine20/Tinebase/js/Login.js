@@ -10,7 +10,7 @@
  *
  */
 
-Ext.namespace('Tine.Tinebase.Registry');
+Ext.namespace('Tine.Tinebase.registry');
 
 /**
  * @todo make registration working again!

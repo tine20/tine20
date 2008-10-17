@@ -122,7 +122,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
 	            id: 'user',
 	            leaf: null,
-	            owner: Tine.Tinebase.Registry.get('currentAccount')
+	            owner: Tine.Tinebase.registry.get('currentAccount')
 	        }, {
 	            text: sprintf(translation._('Shared %s'), this.containersName),
 	            cls: 'file',
@@ -150,7 +150,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	        dataUrl:'index.php',
             displayLength: this.displayLength,
 	        baseParams: {
-	            jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
+	            jsonKey: Tine.Tinebase.registry.get('jsonKey'),
 				method: 'Tinebase_Container.getContainer',
 				application: this.appName,
 				containerType: Tine.Tinebase.container.TYPE_PERSONAL
@@ -176,7 +176,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 					}
 					break;
 				case Tine.Tinebase.container.TYPE_PERSONAL:
-				    if (owner.accountId == Tine.Tinebase.Registry.get('currentAccount').accountId) {
+				    if (owner.accountId == Tine.Tinebase.registry.get('currentAccount').accountId) {
 						//console.log('owner clicked his own folder');
 						this.contextMenuUserFolder.showAt(event.getXY());
 					}

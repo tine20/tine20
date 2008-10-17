@@ -77,7 +77,7 @@
         foreach ((array)$this->initialData as $appname => $data) {
             if ($appname == 'Tinebase') {
                 foreach ($data as $index => $value) {
-                    echo "\n        Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");";
+                    echo "\n        Tine.Tinebase.registry.add('$index'," . Zend_Json::encode($value) . ");";
                 }
                 continue;
             }

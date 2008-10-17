@@ -18,8 +18,8 @@ Ext.onReady(function(){
     // Tine Framework initialisation for each window
     Tine.Tinebase.initFramework();
     /** temporary login **/
-    if (!Tine.Tinebase.Registry.get('currentAccount')) {
-        Tine.Login.showLoginDialog(Tine.Tinebase.Registry.get('defaultUsername'), Tine.Tinebase.Registry.get('defaultPassword'));
+    if (!Tine.Tinebase.registry.get('currentAccount')) {
+        Tine.Login.showLoginDialog(Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
         return;
     }
     
@@ -44,7 +44,7 @@ Ext.onReady(function(){
                 
                 // autorisation required
                 case 401:
-                    Tine.Login.showLoginDialog(Tine.Tinebase.Registry.get('defaultUsername'), Tine.Tinebase.Registry.get('defaultPassword'));
+                    Tine.Login.showLoginDialog(Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
                     return;
                     break;
                 
@@ -130,15 +130,15 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 
 /**
  * @singleton
- * Instance of Tine.Tinebase.RegistryClass
+ * Instance of Tine.Tinebase.registryClass
  * 
  * NOTE: As long as the views include initial data, we can not overwrite the registry
  * in the main window with data from a popup!
  */
 //if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
-    Tine.Tinebase.Registry = new Ext.util.MixedCollection();
+    Tine.Tinebase.registry = new Ext.util.MixedCollection();
 //} else {
-//    Tine.Tinebase.Registry = Ext.ux.PopupWindowGroup.getMainScreen().Tine.Tinebase.Registry;
+//    Tine.Tinebase.registry = Ext.ux.PopupWindowGroup.getMainScreen().Tine.Tinebase.registry;
 //}
 
 /**
@@ -157,7 +157,7 @@ _ = function(msgid) {
 Tine.Tinebase.initFramework = function() {
 	
     /*
-    var locale = Tine.Tinebase.Registry.get('locale');
+    var locale = Tine.Tinebase.registry.get('locale');
     var headEl = Ext.get(document.getElementsByTagName("head")[0]);
     
     var file = 'Tinebase/js/Locale/build/' + locale.locale + '-all.js';
@@ -178,7 +178,7 @@ Tine.Tinebase.initFramework = function() {
     var initAjax = function(){
         Ext.Ajax.on('beforerequest', function(connection, options){
             options.url = options.url ? options.url : 'index.php';
-            options.params.jsonKey = Tine.Tinebase.Registry.get('jsonKey');
+            options.params.jsonKey = Tine.Tinebase.registry.get('jsonKey');
             options.params.requestType = options.params.requestType || 'JSON';
             
             options.headers = options.headers ? options.headers : {};

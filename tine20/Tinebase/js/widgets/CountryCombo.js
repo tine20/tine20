@@ -65,8 +65,8 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
             });
             Ext.StoreMgr.add('Countries', store);
         }
-        if (Tine.Tinebase.Registry.get('CountryList')) {
-            store.loadData(Tine.Tinebase.Registry.get('CountryList'));
+        if (Tine.Tinebase.registry.get('CountryList')) {
+            store.loadData(Tine.Tinebase.registry.get('CountryList'));
         }
         
         return store;

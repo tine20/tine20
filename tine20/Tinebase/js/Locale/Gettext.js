@@ -29,7 +29,7 @@ Locale.Gettext.prototype.textdomain = function (domain) {
 };
 
 Locale.Gettext.prototype.getmsg = function (domain, category, reload) {
-  var locale = Tine.Tinebase.Registry.get('locale').locale;
+  var locale = Tine.Tinebase.registry.get('locale').locale;
   if (! locale) {
     console.error('attempt to gain translation at include time. Requested domain: "' + domain + '"');
   }
@@ -57,7 +57,7 @@ Locale.Gettext.prototype._url = function (category, domain) {
     req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     req.setRequestHeader('X-Tine20-Request-Type', 'JSON');
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.send('method=Tinebase.getTranslations&requestType=JSON&application=' + domain + '&jsonKey=' + Tine.Tinebase.Registry.get('jsonKey'));
+    req.send('method=Tinebase.getTranslations&requestType=JSON&application=' + domain + '&jsonKey=' + Tine.Tinebase.registry.get('jsonKey'));
     if (req.status == 200 || req.status == 304 || req.status == 0 || req.status == null) {
       return Ext.util.JSON.decode(req.responseText);
     }

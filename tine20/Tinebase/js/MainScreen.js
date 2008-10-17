@@ -47,7 +47,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         this.actions.changePassword = new Ext.Action({
             text: _('Change password'),
             handler: this.onChangePassword,
-            disabled: !Tine.Tinebase.Registry.get('changepw')
+            disabled: !Tine.Tinebase.registry.get('changepw')
         });
         
         this.actions.installGoogleGears = new Ext.Action({
@@ -104,8 +104,8 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             id: 'tineFooter',
             height: 26,
             items:[
-                sprintf(_('User: %s'), Tine.Tinebase.Registry.get('currentAccount').accountDisplayName), '-',
-                //sprintf(_('Timezone: %s'), Tine.Tinebase.Registry.get('timeZone')), '-',
+                sprintf(_('User: %s'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), '-',
+                //sprintf(_('Timezone: %s'), Tine.Tinebase.registry.get('timeZone')), '-',
                 _('Timezone') + ': ' , new Tine.widgets.TimezoneChooser({}), '-',
                 _('Language') + ': ' , new Tine.widgets.LangChooser({}),
                 '->',
@@ -205,7 +205,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      * @return {Array}
      */
     getPanels:  function() {
-        var userApps = Tine.Tinebase.Registry.get('userApplications');
+        var userApps = Tine.Tinebase.registry.get('userApplications');
         
         var panels = [];
         var app, appPanel;
@@ -276,7 +276,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
     onChangePassword: function() {
         
         var passwordDialog = new Ext.Window({
-            title: sprintf(_('Change Password For "%s"'), Tine.Tinebase.Registry.get('currentAccount').accountDisplayName),
+            title: sprintf(_('Change Password For "%s"'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
             id: 'changePassword_window',
             closeAction: 'close',
             modal: true,

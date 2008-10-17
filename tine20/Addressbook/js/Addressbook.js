@@ -9,7 +9,7 @@ Tine.Addressbook = {
         var translation = new Locale.Gettext();
         translation.textdomain('Addressbook');
     	
-        var accountBackend = Tine.Tinebase.Registry.get('accountBackend');
+        var accountBackend = Tine.Tinebase.registry.get('accountBackend');
         if (accountBackend == 'Sql') {
             var internalContactsleaf = {
                 text: translation._("Internal Contacts"),

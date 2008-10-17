@@ -185,7 +185,7 @@ Tine.Tasks.mainGrid = {
             })
         };
         
-        this.filter.owner = Tine.Tinebase.Registry.get('currentAccount').accountId;
+        this.filter.owner = Tine.Tinebase.registry.get('currentAccount').accountId;
         this.initStore();
         this.initToolbar();
         this.initGrid();

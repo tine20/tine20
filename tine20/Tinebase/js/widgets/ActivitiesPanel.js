@@ -97,7 +97,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                             return Tine.widgets.activities.getTypeIcon(value);
                         case 'user':
                             if (!value) {
-                                value = Tine.Tinebase.Registry.map.currentAccount.accountDisplayName;
+                                value = Tine.Tinebase.registry.map.currentAccount.accountDisplayName;
                             }
                             var username = value;
                             return '<i>' + username + '</i>';
@@ -622,10 +622,10 @@ Tine.widgets.activities.getTypesStore = function() {
             id: 'id',
             remoteSort: false
         });
-        /*if (Tine.Tinebase.Registry.get('NoteTypes')) {
-            store.loadData(Tine.Tinebase.Registry.get('NoteTypes'));
-        } else*/ if (Tine.Tinebase.Registry.get('NoteTypes')) {
-            store.loadData(Tine.Tinebase.Registry.get('NoteTypes'));
+        /*if (Tine.Tinebase.registry.get('NoteTypes')) {
+            store.loadData(Tine.Tinebase.registry.get('NoteTypes'));
+        } else*/ if (Tine.Tinebase.registry.get('NoteTypes')) {
+            store.loadData(Tine.Tinebase.registry.get('NoteTypes'));
         }
         Ext.StoreMgr.add('noteTypesStore', store);
     }

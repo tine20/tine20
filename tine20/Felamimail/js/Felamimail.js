@@ -7,7 +7,7 @@ Tine.Felamimail = function() {
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:'index.php',
             baseParams: {
-                jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
+                jsonKey: Tine.Tinebase.registry.get('jsonKey'),
                 method: 'Felamimail.getSubTree',
                 location: 'mainTree'
             }
@@ -226,7 +226,7 @@ Tine.Felamimail.Email = function() {
             url: 'index.php',
             baseParams: {
                 method:     'Felamimail.getEmailOverview',
-                jsonKey: Tine.Tinebase.Registry.get('jsonKey')
+                jsonKey: Tine.Tinebase.registry.get('jsonKey')
             },
             root: 'results',
             totalProperty: 'totalcount',

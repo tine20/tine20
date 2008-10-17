@@ -30,7 +30,7 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
     //typeAhead: true,
     
     initComponent: function() {
-        this.value = Tine.Tinebase.Registry.get('timeZone');
+        this.value = Tine.Tinebase.registry.get('timeZone');
         this.fieldLabel = this.fieldLabel ? this.fieldLabel : _('Timezone');
 
         this.tpl = new Ext.XTemplate(
@@ -67,7 +67,7 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
      * timezone selection ajax call
      */
     onTimezoneSelect: function(combo, record, idx) {
-        var currentTimezone = Tine.Tinebase.Registry.get('timeZone');
+        var currentTimezone = Tine.Tinebase.registry.get('timeZone');
         var newTimezone = record.get('timezone');
         
         if (newTimezone != currentTimezone) {

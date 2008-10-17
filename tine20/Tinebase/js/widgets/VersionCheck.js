@@ -30,7 +30,7 @@ Tine.widgets.VersionCheck = function() {
     ds.on('load', function(store, records) {
         var version = records[0];
         
-        var local = Date.parseDate(Tine.Tinebase.Registry.get('version').releasetime, Date.patterns.ISO8601Long);
+        var local = Date.parseDate(Tine.Tinebase.registry.get('version').releasetime, Date.patterns.ISO8601Long);
         var latest = Date.parseDate(version.get('releasetime'), Date.patterns.ISO8601Long);
         
         if (latest > local && Tine.Tinebase.hasRight('run', 'Tinebase')) {
@@ -56,5 +56,5 @@ Tine.widgets.VersionCheck = function() {
         }
     }, this);
     
-    ds.load({params: {version: Ext.util.JSON.encode(Tine.Tinebase.Registry.get('version'))}});
+    ds.load({params: {version: Ext.util.JSON.encode(Tine.Tinebase.registry.get('version'))}});
 };

@@ -198,7 +198,7 @@ Tine.Voipmanager = function() {
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl: 'index.php',
             baseParams: {
-                jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
+                jsonKey: Tine.Tinebase.registry.get('jsonKey'),
                 method: 'Voipmanager.getSubTree',
                 location: 'mainTree'
             }
