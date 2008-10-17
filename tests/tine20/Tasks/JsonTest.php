@@ -66,10 +66,10 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to get all leads
+     * try to search for tasks
      *
      */
-    public function testGetTasks()    
+    public function testSearchTasks()    
     {
         // create task
         $task = $this->_getTask();
