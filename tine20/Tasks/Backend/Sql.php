@@ -11,13 +11,6 @@
  */
 
 /**
- * the class needs to access the backend interface
- *
- * @see Tasks_Backend_Interface
- */
-require_once('Interface.php');
-
-/**
  * SQL Backend for Tasks 2.0
  * 
  * The Tasks 2.0 Sql backend consists of various tables. Properties with single
@@ -28,10 +21,11 @@ require_once('Interface.php');
  * @subpackage  Backend
  * 
  * @todo    Use of special Exceptions
- * @todo    remove current account from sql backend?
+ * @todo    remove current account from sql backend
  * @todo    add function for complete removal of tasks?
+ * @todo    use more functions from Tinebase_Abstract_SqlTableBackend
  */
-class Tasks_Backend_Sql implements Tasks_Backend_Interface
+class Tasks_Backend_Sql extends Tinebase_Abstract_SqlTableBackend
 {
     /**
      * For some said reason, Zend_Db doesn't support table prefixes. Thus each 
@@ -55,19 +49,12 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     protected $_tables = array();
     
     /**
-     * Holds Zend_Db_Adapter_Pdo_Mysql
-     *
-     * @var Zend_Db_Adapter_Pdo_Mysql
-     */
-    protected $_db;
-    
-    /**
      * Holds instance of current account
      *
      * @var Tinebase_Model_User
      */
     protected $_currentAccount;
-    
+
     /**
      * Constructor
      *
@@ -79,7 +66,11 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $this->_tableNames[$basename] = SQL_TABLE_PREFIX . $name;
         }
         
+        $this->_tableName = $this->_tableNames['tasks'];
+        $this->_modelName = 'Tasks_Model_Task';
         $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
+       
         try {
             $this->_currentAccount = Zend_Registry::get('currentAccount');
         } catch ( Zend_Exception $e ) {
@@ -87,69 +78,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         }
     }
     
-    /**
-     * Search for tasks matching given filter
-     *
-     * @param Tasks_Model_Filter $_filter
-     * @param Tasks_Model_Pagination $_pagination
-     * @return Tinebase_Record_RecordSet
-     */
-    public function search(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination)
-    {
-        //Zend_Registry::get('logger')->debug(print_r($_filter->toArray(),true));
-        $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
+    /************************** check the following functions **********************/
         
-        // empty means, that e.g. no shared containers exist
-        if (empty($_filter->container)) {
-            return $TaskSet;
-        }
-        
-        // build query
-        $select = $this->_getSelect();
-
-        if (!empty($_pagination->limit)) {
-            $select->limit($_pagination->limit, $_pagination->start);
-        }
-        if (!empty($_pagination->sort)){
-            if ($_pagination->sort == 'due') {
-                $select->order('is_due ' . ($_pagination->dir == 'DESC' ? 'ASC' : 'DESC'));
-            } 
-            $select->order($_pagination->sort . ' ' . $_pagination->dir);
-        }
-        
-        $this->_addFilter($select, $_filter);
-                          
-
-        $stmt = $this->_db->query($select);
-        $Tasks = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        foreach ($Tasks as $TaskArray) {
-            $Task = new Tasks_Model_Task($TaskArray, true, true);
-            $TaskSet->addRecord($Task);
-            //error_log(print_r($Task->toArray(),true));
-        }
-        return $TaskSet;
-    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Tasks_Model_Filter $_filter
-     * @return int
-     */
-    public function searchCount(Tasks_Model_Filter $_filter)
-    {
-        if (count($_filter->container) === 0) {
-            return 0;
-        }
-        $select = $this->_getSelect(TRUE);
-        $this->_addFilter($select, $_filter);
-        $result = $this->_db->fetchOne($select);
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' count: ' . $select->__toString());
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' count: ' . $result);
-        
-        return $result;
-    }
+    // @todo check which functions are still needed
+    // @todo check which functions can be replaced by functions from Tinebase_Abstract_SqlTableBackend
     
     /**
      * Return a single Task
@@ -197,65 +129,6 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         }
         return $taskSet;
     }
-    
-    /**
-     * Returns a common select Object
-     * 
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_getCount = FALSE)
-    {
-        $select = $this->_db->select()
-            ->where('tasks.is_deleted = FALSE');
-        
-        $tablename = array('tasks' => $this->_tableNames['tasks']);
-        
-        if ($_getCount) {
-            $fields = array('count' => 'COUNT(tasks.id)');
-            $select->from($tablename, $fields) 
-                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array());
-        } else {
-            $fields = array(
-                'tasks.*', 
-                'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_id)',
-                'is_due'  => 'LENGTH(tasks.due)',
-                //'is_open' => 'status.status_is_open',
-            );
-            $select->from($tablename, $fields)
-                ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
-                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
-                ->group('tasks.id');
-        }
-
-        return $select;
-    }
-
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select           $_select current where filter
-     * @param  Crm_Model_LeadFilter $_filter the string to search for
-     * @return void
-     */
-    protected function _addFilter(Zend_Db_Select $_select, Tasks_Model_Filter $_filter)
-    {
-        $_select->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
-                                
-        if(!empty($_filter->query)){
-            $_select->where($this->_db->quoteInto('(tasks.summary LIKE ? OR tasks.description LIKE ?)', '%' . $_filter->query . '%'));
-        }
-        if(!empty($_filter->status)){
-            $_select->where($this->_db->quoteInto('tasks.status_id = ?',$_filter->status));
-        }
-        if(!empty($_filter->organizer)){
-            $_select->where($this->_db->quoteInto('tasks.organizer = ?', (int)$_filter->organizer));
-        }
-        if(isset($_filter->showClosed) && $_filter->showClosed){
-            // nothing to filter
-        } else {
-            $_select->where('status.status_is_open = TRUE OR tasks.status_id IS NULL');
-        }
-    }        
     
     /**
      * Create a new Task
@@ -473,5 +346,66 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         }
         return $this->_tables[$_tablename];
     }
+    
+    /********************************** protected funcs **********************************/
+    
+    /**
+     * Returns a common select Object
+     * 
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_getCount = FALSE)
+    {
+        $select = $this->_db->select()
+            ->where('tasks.is_deleted = FALSE');
+        
+        $tablename = array('tasks' => $this->_tableNames['tasks']);
+        
+        if ($_getCount) {
+            $fields = array('count' => 'COUNT(tasks.id)');
+            $select->from($tablename, $fields) 
+                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array());
+        } else {
+            $fields = array(
+                'tasks.*', 
+                'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_id)',
+                'is_due'  => 'LENGTH(tasks.due)',
+                //'is_open' => 'status.status_is_open',
+            );
+            $select->from($tablename, $fields)
+                ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
+                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
+                ->group('tasks.id');
+        }
+
+        return $select;
+    }
+
+    /**
+     * add the fields to search for to the query
+     *
+     * @param  Zend_Db_Select           $_select current where filter
+     * @param  Crm_Model_LeadFilter $_filter the string to search for
+     * @return void
+     */
+    protected function _addFilter(Zend_Db_Select $_select, Tasks_Model_Filter $_filter)
+    {
+        $_select->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
+                                
+        if(!empty($_filter->query)){
+            $_select->where($this->_db->quoteInto('(tasks.summary LIKE ? OR tasks.description LIKE ?)', '%' . $_filter->query . '%'));
+        }
+        if(!empty($_filter->status)){
+            $_select->where($this->_db->quoteInto('tasks.status_id = ?',$_filter->status));
+        }
+        if(!empty($_filter->organizer)){
+            $_select->where($this->_db->quoteInto('tasks.organizer = ?', (int)$_filter->organizer));
+        }
+        if(isset($_filter->showClosed) && $_filter->showClosed){
+            // nothing to filter
+        } else {
+            $_select->where('status.status_is_open = TRUE OR tasks.status_id IS NULL');
+        }
+    }        
     
 }
