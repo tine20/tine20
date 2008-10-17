@@ -513,12 +513,11 @@ Tine.Tinebase.hasRight = function(_right, _application, _resource)
 {
 	var userRights = [];
 	
-    if (!(Tine && Tine[_application] && Tine[_application].rights)) {
+    if (!(Tine && Tine[_application] && Tine[_application].registry && Tine[_application].registry.get('rights'))) {
         console.error('Tine.' + _application + '.rights is not available, initialisation Error!');
         return false;
-    } else {
-    	userRights = Tine[_application].rights;
     }
+	userRights = Tine[_application].registry.get('rights');
     
     //console.log(userRights);
     var result = false;
