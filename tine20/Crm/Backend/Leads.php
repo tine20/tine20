@@ -9,7 +9,6 @@
  * @version     $Id$
  *
  * @todo        rename container to container_id in leads table
- * @todo use functions from Tinebase_Abstract_SqlTableBackend
  */
 
 
