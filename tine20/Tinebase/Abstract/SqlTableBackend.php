@@ -63,7 +63,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
      */
     public function get($_id) {
         
-        $id = $this->_convertIdToInt($_id);
+        $id = $this->_convertId($_id);
         
         $select = $this->_db->select();
         $select->from($this->_tableName)
@@ -307,15 +307,15 @@ abstract class Tinebase_Abstract_SqlTableBackend
      * @param int|string|Tinebase_Record_Interface $_id the id to convert
      * @return int
      */
-    protected function _convertIdToInt($_id)
+    protected function _convertId($_id)
     {
         if($_id instanceof $this->_modelName) {
             if(empty($_id->id)) {
                 throw new Exception('No id set!');
             }
-            $id = (int) $_id->id;
+            $id = $_id->id;
         } else {
-            $id = (int) $_id;
+            $id = $_id;
         }
         
         if($id === 0) {
