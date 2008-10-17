@@ -81,6 +81,7 @@
                 }
                 continue;
             }
+            echo "\n\n        Tine.$appname.registry = new Ext.util.MixedCollection();";
             if (!empty($data) ) {
                 foreach ($data as $var => $content) {
                     echo "\n        Tine.$appname.$var = ". Zend_Json::encode($content). ';';
