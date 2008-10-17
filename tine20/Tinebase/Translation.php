@@ -36,7 +36,7 @@ class Tinebase_Translation
      */
     private static $SUPPORTED_LANGS = array(
         'bg',      // Bulgarian            Dimitrina Mileva <dimitrina@gmx.de>
-        'cs',      // Czech                Michael Sladek <msladek@volny.cz>
+        'cs',      // Czech                Michael Sladek <msladek@brotel.cz>
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
         //'fr',      // Frensch              Wilfried Maurin <aiouto2@gmail.com>
