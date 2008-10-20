@@ -400,7 +400,7 @@ Tine.Crm.Main = {
         
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             // update toolbars
-            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'container');
+            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'container_id');
         }, this);
         
         var gridPanel = new Ext.grid.GridPanel({
@@ -707,7 +707,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     windowNamePrefix: 'LeadEditWindow_',
     labelAlign: 'top',
     appName: 'Crm',
-    containerProperty: 'container',
+    containerProperty: 'container_id',
     showContainerSelector: true,
     
 	/**
@@ -851,6 +851,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             
             // get linked stuff
             lead = this.getAdditionalData(lead);
+            console.log(lead);
 
             Ext.Ajax.request({
                 scope: this,
@@ -1048,8 +1049,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
-            if (this.lead && this.lead.get('container')) {
-                this.actions.unlinkContact.setDisabled(!this.lead.get('container').account_grants.editGrant || rowCount != 1);
+            if (this.lead && this.lead.get('container_id')) {
+                this.actions.unlinkContact.setDisabled(!this.lead.get('container_id').account_grants.editGrant || rowCount != 1);
             }
             this.actions.editContact.setDisabled(rowCount != 1);
         }, this);
@@ -1176,8 +1177,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
-            if (this.lead && this.lead.get('container')) {
-                this.actions.unlinkTask.setDisabled(!this.lead.get('container').account_grants.editGrant || rowCount != 1);
+            if (this.lead && this.lead.get('container_id')) {
+                this.actions.unlinkTask.setDisabled(!this.lead.get('container_id').account_grants.editGrant || rowCount != 1);
             }
             this.actions.editTask.setDisabled(rowCount != 1);
         }, this);
@@ -1817,13 +1818,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.loadTasksStore(relations.tasks, true);
         this.loadProductsStore(this.lead.data.products, true);
         
-        this.updateToolbars.defer(10, this, [this.lead, 'container']);
+        this.updateToolbars.defer(10, this, [this.lead, 'container_id']);
         Tine.widgets.ActionUpdater(this.lead, [
             this.actions.addContact,
             this.actions.addTask,
             this.actions.linkTask,
             this.actions.exportLead
-        ], 'container');
+        ], 'container_id');
         
         if (! this.lead.id) {
             window.document.title = this.translation.gettext('Add New Lead');
@@ -1833,7 +1834,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.getForm().loadRecord(this.lead);
                     
-        this.updateToolbars(this.lead, 'container');
+        this.updateToolbars(this.lead, 'container_id');
         Ext.MessageBox.hide();
     },
     
@@ -1871,7 +1872,7 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'leadstate_id',  type: 'int'},
     {name: 'leadtype_id',   type: 'int'},
     {name: 'leadsource_id', type: 'int'},
-    {name: 'container'                 },
+    {name: 'container_id'              },
     {name: 'start',         type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'description',   type: 'string'},
     {name: 'end',           type: 'date', dateFormat: Date.patterns.ISO8601Long},

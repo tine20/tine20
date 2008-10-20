@@ -166,8 +166,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         } else {
             $container_id = $_lead->container_id;
         }
-        $result['container'] = Tinebase_Container::getInstance()->getContainerById($container_id)->toArray();
-        $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container_id)->toArray();
+        $result['container_id'] = Tinebase_Container::getInstance()->getContainerById($container_id)->toArray();
+        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container_id)->toArray();
         
         return $result;                
     }

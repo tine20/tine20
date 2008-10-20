@@ -140,7 +140,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     public function setFromJson($_data)
     {
         $decodedLead = Zend_Json::decode($_data);
-        
+
         //Zend_Registry::get('logger')->debug("setFromJson:" . print_r($decodedLead,true));
         
         /************* add new relations *******************/
@@ -179,15 +179,12 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         throw new Exception('relation type not supported');
                 }
 
-                // @todo remove that? or replace owner with container_id?
-                /*
-                if (isset($relation['related_record']['owner']) && is_array($relation['related_record']['owner'])) {
-                    // hack for container
-                    $data['related_record']['owner'] = $relation['related_record']['owner']['id'];
+                // sanitize container id
+                if (is_array($relation['related_record']['container'])) {
+                    $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
+                }
                     
-                    $data['related_record']['tags'] = '';
-                } 
-                */               
+                //    $data['related_record']['tags'] = '';
                 
                 $decodedLead['relations'][$key] = $data;
             } else {
