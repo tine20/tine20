@@ -1011,7 +1011,7 @@ Tine.Addressbook.getSalutationStore = function() {
         });
         
         if (Tine.Addressbook.registry.get('Salutations')) {
-            store.loadData(Tine.Addressbook.registration.get('Salutations'));
+            store.loadData(Tine.Addressbook.registry.get('Salutations'));
         }
         
             
