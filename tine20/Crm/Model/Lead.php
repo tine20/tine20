@@ -180,7 +180,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                 }
 
                 // sanitize container id
-                if (is_array($relation['related_record']['container'])) {
+                if (isset($relation['related_record']) && is_array($relation['related_record']['container_id'])) {
                     $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
                 }
                     
