@@ -74,7 +74,7 @@ Tine.Admin.Tags.Main = {
             handler: this.handlers.addTag,
             iconCls: 'action_tag',
             scope: this,
-            disabled: !(Tine.Tinebase.hasRight('manage', 'Admin', 'shared_tags'))
+            disabled: !(Tine.Tinebase.common.hasRight('manage', 'Admin', 'shared_tags'))
         });
         
         this.actions.editTag = new Ext.Action({
@@ -174,7 +174,7 @@ Tine.Admin.Tags.Main = {
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
-            if (Tine.Tinebase.hasRight('manage', 'Admin', 'shared_tags') ) {
+            if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'shared_tags') ) {
                 if(rowCount < 1) {
                     // no row selected
                     this.actions.deleteTag.setDisabled(true);

@@ -627,7 +627,7 @@ Tine.Crm.Main = {
 
     	var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('crmThumbnailApplication');
-        if(Tine.Tinebase.hasRight('admin', 'Crm')) {
+        if(Tine.Tinebase.common.hasRight('admin', 'Crm')) {
             adminButton.setDisabled(false);
         } else {
         	adminButton.setDisabled(true);

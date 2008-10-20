@@ -138,7 +138,7 @@ Tine.Admin.Groups.Main = {
     },
 
     displayGroupsGrid: function() {
-        if ( Tine.Tinebase.hasRight('manage', 'Admin', 'accounts') ) {
+        if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
             this.actions.addGroup.setDisabled(false);
         }
 
@@ -185,7 +185,7 @@ Tine.Admin.Groups.Main = {
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
-            if ( Tine.Tinebase.hasRight('manage', 'Admin', 'accounts') ) {
+            if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
                 if(rowCount < 1) {
                     // no row selected
                     this.actions.deleteGroup.setDisabled(true);
@@ -241,7 +241,7 @@ Tine.Admin.Groups.Main = {
         }, this);
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-        	if ( Tine.Tinebase.hasRight('manage', 'Admin', 'accounts') ) {
+        	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
                 Tine.Admin.Groups.EditDialog.openWindow({group: record});
         	}

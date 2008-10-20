@@ -139,7 +139,7 @@ Tine.Admin.Roles.Main = {
     },
 
     displayRolesGrid: function() {
-        if ( Tine.Tinebase.hasRight('manage', 'Admin', 'roles') ) {
+        if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
             this.actions.addRole.setDisabled(false);
         }    	
     	
@@ -186,7 +186,7 @@ Tine.Admin.Roles.Main = {
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
-            if ( Tine.Tinebase.hasRight('manage', 'Admin', 'roles') ) {
+            if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
                 if(rowCount < 1) {
                     // no row selected
                     this.actions.deleteRole.setDisabled(true);
@@ -242,7 +242,7 @@ Tine.Admin.Roles.Main = {
         }, this);
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-        	if ( Tine.Tinebase.hasRight('manage', 'Admin', 'roles') ) {
+        	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
                 Tine.Admin.Roles.EditDialog.openWindow({role: record});
         	}

@@ -239,7 +239,7 @@ Tine.Admin.Users.Main = function() {
         },
         
         showMainGrid: function() {
-            if ( Tine.Tinebase.hasRight('manage', 'Admin', 'accounts') ) {
+            if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
                 this.actionAddAccount.setDisabled(false);
             }
             
@@ -287,7 +287,7 @@ Tine.Admin.Users.Main = function() {
             rowSelectionModel.on('selectionchange', function(_selectionModel) {
                 var rowCount = _selectionModel.getCount();
     
-                if ( Tine.Tinebase.hasRight('manage', 'Admin', 'accounts') ) {
+                if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
                     if(rowCount < 1) {
                         this.actionEditAccount.setDisabled(true);
                         this.actionDeleteAccount.setDisabled(true);

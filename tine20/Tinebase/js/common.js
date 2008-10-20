@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id: Common.js 4995 2008-10-20 10:20:01Z c.weiss@metaways.de $
  */
  
 Ext.namespace('Tine', 'Tine.Tinebase');
@@ -176,5 +176,50 @@ Tine.Tinebase.common = {
         }   
 
         return Ext.util.JSON.encode(jsonData);
+    },
+    
+    /**
+     * check if user has right to view/manage this application/resource
+     * 
+     * @param   string      right (view, admin, manage)
+     * @param   string      application
+     * @param   string      resource (for example roles, accounts, ...)
+     * @returns boolean 
+     */
+    hasRight: function(_right, _application, _resource) {
+        var userRights = [];
+        
+        if (!(Tine && Tine[_application] && Tine[_application].registry && Tine[_application].registry.get('rights'))) {
+            console.error('Tine.' + _application + '.rights is not available, initialisation Error!');
+            return false;
+        }
+        userRights = Tine[_application].registry.get('rights');
+        
+        //console.log(userRights);
+        var result = false;
+        
+        for (var i=0; i < userRights.length; i++) {
+            if (userRights[i] == 'admin') {
+                result = true;
+                break;
+            }
+            
+            if (_right == 'view' && (userRights[i] == 'view_' + _resource || userRights[i] == 'manage_' + _resource) ) {
+                result = true;
+                break;
+            }
+            
+            if (_right == 'manage' && userRights[i] == 'manage_' + _resource) {
+                result = true;
+                break;
+            }
+            
+            if (_right == userRights[i]) {
+                result = true;
+                break;
+            }
+        }
+    
+        return result;
     }
 };

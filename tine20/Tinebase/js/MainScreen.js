@@ -255,7 +255,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             }
         });
         // check for new version 
-        if (Tine.Tinebase.hasRight('check_version', 'Tinebase')) {
+        if (Tine.Tinebase.common.hasRight('check_version', 'Tinebase')) {
             Tine.widgets.VersionCheck();
         }
     },

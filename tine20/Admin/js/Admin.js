@@ -135,7 +135,7 @@ Tine.Admin = function() {
         	var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
         	
         	// check view right
-        	if ( initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', 'Admin', initialTree[i].viewRight) ) {
+        	if ( initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view', 'Admin', initialTree[i].viewRight) ) {
                 node.disabled = true;
         	}
         	
@@ -542,7 +542,7 @@ Tine.Admin.AccessLog.Main = function() {
 
             if(rowCount < 1) {
                 _action_delete.setDisabled(true);
-            } else if ( Tine.Tinebase.hasRight('manage', 'Admin', 'access_log') ) {
+            } else if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'access_log') ) {
                 _action_delete.setDisabled(false);
             }
         });
@@ -868,7 +868,7 @@ Tine.Admin.Applications.Main = function() {
             var rowCount = _selectionModel.getCount();
             var selected = _selectionModel.getSelected();
 
-            if ( Tine.Tinebase.hasRight('manage', 'Admin', 'apps') ) {
+            if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'apps') ) {
                 if (rowCount < 1) {
                     _action_enable.setDisabled(true);
                     _action_disable.setDisabled(true);
@@ -913,7 +913,7 @@ Tine.Admin.Applications.Main = function() {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
 
-                if ( Tine.Tinebase.hasRight('manage', 'Admin', 'apps') ) {
+                if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'apps') ) {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);

@@ -233,7 +233,7 @@ Tine.Voipmanager = function() {
             // check view right
             // view rights don't exist in voipmanager at the moment
             /*
-            if (_initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', _initialTree[i].viewRight)) {
+            if (_initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view', _initialTree[i].viewRight)) {
                 node.disabled = true;
             }
             */
