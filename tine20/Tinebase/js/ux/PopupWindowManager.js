@@ -203,15 +203,15 @@ Ext.ux.PopupWindowGroup = function(){
     };
 };
 
-Ext.ux.PopupWindowGroup.MainScreenName = 'MainScreen';
+Ext.ux.PopupWindowGroup.MainWindowName = 'MainWindow';
 /**
- * returns main screen window
+ * returns the main window
  * 
  * @todo move to WindowManager
  */
-Ext.ux.PopupWindowGroup.getMainScreen = function() {
+Ext.ux.PopupWindowGroup.getMainWindow = function() {
     var w = window;
-    while ( w.name != Ext.ux.PopupWindowGroup.MainScreenName) {
+    while ( w.name != Ext.ux.PopupWindowGroup.MainWindowName) {
         w = w.opener;
     }
     return w;
@@ -224,8 +224,11 @@ Ext.ux.PopupWindowGroup.getMainScreen = function() {
  * popup windows, create additional instances of {@link Ext.ux.PopupWindowGroup} as needed.
  * @singleton
  */
-if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+if (window.name == Ext.ux.PopupWindowGroup.MainWindowName || window.name === '') {
     Ext.ux.PopupWindowMgr = new Ext.ux.PopupWindowGroup();
+    window.name = Ext.ux.PopupWindowGroup.MainWindowName;
+    window.isMainWindow = true;
 } else {
-    Ext.ux.PopupWindowMgr = Ext.ux.PopupWindowGroup.getMainScreen().Ext.ux.PopupWindowMgr;
+    Ext.ux.PopupWindowMgr = Ext.ux.PopupWindowGroup.getMainWindow().Ext.ux.PopupWindowMgr;
+    window.isMainWindow = false;
 }

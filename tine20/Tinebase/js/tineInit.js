@@ -25,9 +25,8 @@ Ext.onReady(function(){
     }
     
     
-    if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+    if (window.isMainWindow) {
         // mainscreen request
-        window.name = Ext.ux.PopupWindowGroup.MainScreenName;
         Ext.ux.PopupWindowMgr.register({
             name: window.name,
             popup: window
@@ -115,12 +114,12 @@ Tine.WindowFactory = new Ext.ux.WindowFactory({
  * initialise state provider
  */
 Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
-if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+if (window.isMainWindow) {
     // fill store from registry / initial data
     // Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
 } else {
     // take main windows store
-    Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainScreen().Ext.state.Manager.getProvider().getStateStore());
+    Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainWindow().Ext.state.Manager.getProvider().getStateStore());
 }
 
 /**
@@ -129,10 +128,10 @@ if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '')
  * NOTE: As long as the views include initial data, we can not overwrite the registry
  * in the main window with data from a popup!
  */
-//if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '') {
+//if (window.isMainWindow) {
     Tine.Tinebase.registry = new Ext.util.MixedCollection();
 //} else {
-//    Tine.Tinebase.registry = Ext.ux.PopupWindowGroup.getMainScreen().Tine.Tinebase.registry;
+//    Tine.Tinebase.registry = Ext.ux.PopupWindowGroup.getMainWindow().Tine.Tinebase.registry;
 //}
 
 /**
