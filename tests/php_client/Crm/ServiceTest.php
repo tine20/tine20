@@ -68,7 +68,7 @@ class Crm_ServiceTest extends PHPUnit_Framework_TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container'     => $containers[0]->getId(),
+            'container_id'     => $containers[0]->getId(),
             'start'         => Zend_Date::now(),
             'description'   => 'I want to hire all your tine developers!',
             'end'           => NULL,
