@@ -453,4 +453,33 @@ class Tinebase_Json extends Tinebase_Application_Json_Abstract
         }
         return $registryData;
     }
+    
+    /**
+     * Returns registry data of all applications current user has access to
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getAllRegistryData()
+    {
+        $registryData = array();
+        
+        if (Zend_Registry::isRegistered('currentAccount')) { 
+            $userApplications = Zend_Registry::get('currentAccount')->getApplications();
+            
+            foreach($userApplications as $application) {
+                $jsonAppName = ucfirst((string) $application) . '_Json';
+                if(class_exists($jsonAppName)) {
+                    $applicationJson = new $jsonAppName;
+                    
+                    $view->registryData[ucfirst((string) $application)] = $applicationJson->getRegistryData();
+                    $view->registryData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
+                }
+            }
+        } else {
+            $registryData['Tinebase'] = $this->getRegistryData();
+        }
+        
+        return $registryData;
+    }
 }
