@@ -24,7 +24,7 @@ Tine.Voipmanager.Snom.Phones.Main = {
          */
         addPhone: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=', 700, 450);
+            Tine.Tinebase.common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=', 700, 450);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Snom.Phones.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
             var phoneId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=' + phoneId, 700, 450);
+            Tine.Tinebase.common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=' + phoneId, 700, 450);
         },
         
         /**
@@ -381,7 +381,7 @@ Tine.Voipmanager.Snom.Phones.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=' + record.data.id, 700, 450);
+                Tine.Tinebase.common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editSnomPhone&phoneId=' + record.data.id, 700, 450);
             } catch(e) {
                 // alert(e);
             }

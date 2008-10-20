@@ -14,7 +14,7 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 /**
  * static common helpers
  */
-Tine.Tinebase.Common = {
+Tine.Tinebase.common = {
     
     /**
      * Open browsers native popup

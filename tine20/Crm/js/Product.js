@@ -122,7 +122,7 @@ Tine.Crm.Product.EditDialog = function() {
   
     var handlerProductsourceSaveClose = function(){
         var productsourceStore = Tine.Crm.Product.getStore();        
-        var productsourceJson = Tine.Tinebase.Common.getJSONdata(productsourceStore); 
+        var productsourceJson = Tine.Tinebase.common.getJSONdata(productsourceStore); 
 
          Ext.Ajax.request({
                     params: {

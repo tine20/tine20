@@ -24,7 +24,7 @@ Tine.Voipmanager.Snom.Templates.Main = {
          */
         addTemplate: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=', 450, 350);
+            Tine.Tinebase.common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=', 450, 350);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Snom.Templates.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Template_Grid').getSelectionModel().getSelections();
             var templateId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=' + templateId, 450, 350);
+            Tine.Tinebase.common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=' + templateId, 450, 350);
         },
         
         /**
@@ -260,7 +260,7 @@ Tine.Voipmanager.Snom.Templates.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=' + record.data.id, 450, 350);
+                Tine.Tinebase.common.openWindow('templateWindow', 'index.php?method=Voipmanager.editSnomTemplate&templateId=' + record.data.id, 450, 350);
             } catch(e) {
                 // alert(e);
             }

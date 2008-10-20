@@ -109,7 +109,7 @@ Tine.Crm.LeadSource.EditDialog = function() {
   
     var handlerLeadsourceSaveClose = function(){
         var leadsourceStore = Tine.Crm.LeadSource.getStore();        
-        var leadsourceJson = Tine.Tinebase.Common.getJSONdata(leadsourceStore); 
+        var leadsourceJson = Tine.Tinebase.common.getJSONdata(leadsourceStore); 
 
         Ext.Ajax.request({
             params: {

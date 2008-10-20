@@ -24,7 +24,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
          */
         addVoicemail: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=', 450, 400);
+            Tine.Tinebase.common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=', 450, 400);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Voicemail_Grid').getSelectionModel().getSelections();
             var voicemailId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + voicemailId, 450, 400);
+            Tine.Tinebase.common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + voicemailId, 450, 400);
         },
         
         /**
@@ -281,7 +281,7 @@ Tine.Voipmanager.Asterisk.Voicemail.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + record.data.id, 450, 400);
+                Tine.Tinebase.common.openWindow('voicemailWindow', 'index.php?method=Voipmanager.editAsteriskVoicemail&voicemailId=' + record.data.id, 450, 400);
             } catch(e) {
                 // alert(e);
             }

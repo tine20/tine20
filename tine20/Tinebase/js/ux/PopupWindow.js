@@ -83,7 +83,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
 
         // open popup window first to save time
-        this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
+        this.popup = Tine.Tinebase.common.openWindow(this.name, this.url, this.width, this.height);
         
         //. register window ( in fact register complete PopupWindow )
         this.windowManager.register(this);

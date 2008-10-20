@@ -78,7 +78,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
                 id: this.recordPrefix + 'name', 
                 header: _('Name'), 
                 dataIndex: this.recordPrefix + 'name', 
-                renderer: Tine.Tinebase.Common.accountRenderer,
+                renderer: Tine.Tinebase.common.accountRenderer,
                 width: 70
             }].concat(this.configColumns)
         );

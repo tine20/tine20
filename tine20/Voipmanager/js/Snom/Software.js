@@ -24,7 +24,7 @@ Tine.Voipmanager.Snom.Software.Main = {
          */
         addSoftware: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=', 450, 350);
+            Tine.Tinebase.common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=', 450, 350);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Snom.Software.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Software_Grid').getSelectionModel().getSelections();
             var softwareId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + softwareId, 450, 350);
+            Tine.Tinebase.common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + softwareId, 450, 350);
         },
         
         /**
@@ -266,7 +266,7 @@ Tine.Voipmanager.Snom.Software.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + record.data.id, 450, 350);
+                Tine.Tinebase.common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSnomSoftware&softwareId=' + record.data.id, 450, 350);
             } catch(e) {
                 // alert(e);
             }

@@ -274,10 +274,10 @@ Tine.Admin.Users.Main = function() {
                 {resizable: true, header: this.translation.gettext('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
                 {resizable: true, header: this.translation.gettext('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
                 {resizable: true, header: this.translation.gettext('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
-                {resizable: true, header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+                {resizable: true, header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
                 {resizable: true, header: this.translation.gettext('Last login from'), id: 'accountLastLoginfrom', dataIndex: 'accountLastLoginfrom'},
-                {resizable: true, header: this.translation.gettext('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-                {resizable: true, header: this.translation.gettext('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer}
+                {resizable: true, header: this.translation.gettext('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                {resizable: true, header: this.translation.gettext('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer}
             ]);
             
             columnModel.defaultSortable = true; // by default columns are sortable

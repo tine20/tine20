@@ -27,7 +27,7 @@ Tine.Phone.getPanel = function(){
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
         handler: function() {
-        	Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
+        	Tine.Tinebase.common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
         },
         scope: this
     });
@@ -434,7 +434,7 @@ Tine.Phone.Main = {
             	// get selected node id
             	var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
             	
-                Tine.Tinebase.Common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + node.id, 700, 300);
+                Tine.Tinebase.common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + node.id, 700, 300);
             },
             scope: this,
             disabled: true
@@ -614,9 +614,9 @@ Tine.Phone.Main = {
             { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source', hidden: true },
             { resizable: true, id: 'callerid', header: this.translation._('Caller Id'), dataIndex: 'callerid' },
             { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination', renderer: this.renderer.destination },
-            { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.Common.dateTimeRenderer },
-            { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.Common.dateTimeRenderer, hidden: true },
-            { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.Common.dateTimeRenderer, hidden: true  },
+            { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.common.dateTimeRenderer },
+            { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true },
+            { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true  },
             { resizable: true, id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
             { resizable: true, id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40, hidden: true },
             { resizable: true, id: 'id', header: this.translation._('Call ID'), dataIndex: 'id', hidden: true}

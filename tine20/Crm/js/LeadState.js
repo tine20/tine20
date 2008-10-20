@@ -143,7 +143,7 @@ Tine.Crm.LeadState.EditDialog = function() {
   
    var handlerLeadstateSaveClose = function(){
         var leadstateStore = Tine.Crm.LeadState.getStore();
-        var leadstateJson = Tine.Tinebase.Common.getJSONdata(leadstateStore); 
+        var leadstateJson = Tine.Tinebase.common.getJSONdata(leadstateStore); 
 
          Ext.Ajax.request({
             params: {

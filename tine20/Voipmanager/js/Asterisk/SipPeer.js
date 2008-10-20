@@ -25,7 +25,7 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
          */
         addSipPeer: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=', 750, 300);
+            Tine.Tinebase.common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=', 750, 300);
         },
 
         /**
@@ -36,7 +36,7 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_SipPeers_Grid').getSelectionModel().getSelections();
             var sipPeerId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=' + sipPeerId, 750, 300);
+            Tine.Tinebase.common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=' + sipPeerId, 750, 300);
         },
         
         /**
@@ -318,7 +318,7 @@ Tine.Voipmanager.Asterisk.SipPeers.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=' + record.data.id, 750, 300);
+                Tine.Tinebase.common.openWindow('sipPeersWindow', 'index.php?method=Voipmanager.editAsteriskSipPeer&sipPeerId=' + record.data.id, 750, 300);
             } catch(e) {
                 // alert(e);
             }

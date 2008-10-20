@@ -111,7 +111,7 @@ Tine.Addressbook.Main = {
             
             var contactIds = Ext.util.JSON.encode(toExportIds);
 
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 768, 1024);
+            Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 768, 1024);
         },
 
         /**
@@ -947,7 +947,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     	// we have to create an array (json encoded) as param here because exportContact expects one (for multiple contact export)
     	var contactIds = Ext.util.JSON.encode([this.contact.id]);
 
-        Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
+        Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
     },
     
     updateContactRecord: function(_contactData) {

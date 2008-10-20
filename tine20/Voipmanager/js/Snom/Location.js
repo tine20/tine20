@@ -24,7 +24,7 @@ Tine.Voipmanager.Snom.Location.Main = {
          */
         addLocation: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&LocationId=', 600, 660);
+            Tine.Tinebase.common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&LocationId=', 600, 660);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Snom.Location.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Location_Grid').getSelectionModel().getSelections();
             var locationId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&locationId=' + locationId, 600, 660);
+            Tine.Tinebase.common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&locationId=' + locationId, 600, 660);
         },
         
         /**
@@ -274,7 +274,7 @@ Tine.Voipmanager.Snom.Location.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&locationId=' + record.data.id, 600, 660);
+                Tine.Tinebase.common.openWindow('locationWindow', 'index.php?method=Voipmanager.editSnomLocation&locationId=' + record.data.id, 600, 660);
             } catch(e) {
                 // alert(e);
             }

@@ -525,10 +525,10 @@ Tine.Admin.AccessLog.Main = function() {
         var columnModel = new Ext.grid.ColumnModel([
             {resizable: true, header: this.translation.gettext('Session ID'), id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
             {resizable: true, header: this.translation.gettext('Login Name'), id: 'login_name', dataIndex: 'login_name'},
-            {resizable: true, header: this.translation.gettext('Name'), id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.Common.usernameRenderer},
+            {resizable: true, header: this.translation.gettext('Name'), id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.common.usernameRenderer},
             {resizable: true, header: this.translation.gettext('IP Address'), id: 'ip', dataIndex: 'ip', width: 150},
-            {resizable: true, header: this.translation.gettext('Login Time'), id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-            {resizable: true, header: this.translation.gettext('Logout Time'), id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+            {resizable: true, header: this.translation.gettext('Login Time'), id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+            {resizable: true, header: this.translation.gettext('Logout Time'), id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
             {resizable: true, header: this.translation.gettext('Account ID'), id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
             {resizable: true, header: this.translation.gettext('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
         ]);
@@ -634,7 +634,7 @@ Tine.Admin.Applications.Main = function() {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
-        Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 600, 400);
+        Tine.Tinebase.common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 600, 400);
     };
     
     /**
@@ -646,7 +646,7 @@ Tine.Admin.Applications.Main = function() {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
-        Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + applicationId, 800, 350);
+        Tine.Tinebase.common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + applicationId, 800, 350);
     };
     */
 

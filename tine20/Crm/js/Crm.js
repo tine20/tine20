@@ -199,7 +199,7 @@ Tine.Crm.Main = {
             
             var leadIds = Ext.util.JSON.encode(toExportIds);
 
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadIds, 768, 1024);
+            Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadIds, 768, 1024);
         },
         
         /**
@@ -834,7 +834,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         	
         	var leadId = Ext.util.JSON.encode([_button.leadId]);
         	
-            Tine.Tinebase.Common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadId, 768, 1024);
+            Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadId, 768, 1024);
         }
     },
     
@@ -1120,7 +1120,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             width: 55,
             sortable: true,
             dataIndex: 'due',
-            renderer: Tine.Tinebase.Common.dateRenderer,
+            renderer: Tine.Tinebase.common.dateRenderer,
             editor: new Ext.ux.form.ClearableDateField({
                 //format : 'd.m.Y'
             }),

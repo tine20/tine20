@@ -109,7 +109,7 @@ Tine.Crm.LeadType.EditDialog = function() {
                   
     var handlerLeadtypeSaveClose = function(){
         var leadtypeStore =Tine.Crm.LeadType.getStore();        
-        var leadtypeJson = Tine.Tinebase.Common.getJSONdata(leadtypeStore); 
+        var leadtypeJson = Tine.Tinebase.common.getJSONdata(leadtypeStore); 
     
         Ext.Ajax.request({
             params: {

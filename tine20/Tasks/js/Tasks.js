@@ -428,7 +428,7 @@ Tine.Tasks.mainGrid = {
                     width: 55,
                     sortable: true,
                     dataIndex: 'due',
-                    renderer: Tine.Tinebase.Common.dateRenderer,
+                    renderer: Tine.Tinebase.common.dateRenderer,
                     editor: new Ext.ux.form.ClearableDateField({
                         //format : 'd.m.Y'
                     }),

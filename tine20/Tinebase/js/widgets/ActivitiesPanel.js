@@ -403,7 +403,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             { resizable: true, id: 'note', header: this.translation._('Note'), dataIndex: 'note'},
             { resizable: true, id: 'created_by', header: this.translation._('Created By'), dataIndex: 'created_by', width: 70},
             { resizable: true, id: 'creation_time', header: this.translation._('Timestamp'), dataIndex: 'creation_time', width: 50, 
-                renderer: Tine.Tinebase.Common.dateTimeRenderer }
+                renderer: Tine.Tinebase.common.dateTimeRenderer }
         ]);
 
         columnModel.defaultSortable = true; // by default columns are sortable

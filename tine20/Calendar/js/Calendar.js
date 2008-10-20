@@ -189,7 +189,7 @@ Tine.Calendar.MainScreen = function() {
 			
 			for (var i = 1; i <= nDays; i++) {
 				columns.push({
-					//header: includeHeader ? Tine.Tinebase.Common.dateRenderer(request.start.add(Date.DAY, i-1)) : '',
+					//header: includeHeader ? Tine.Tinebase.common.dateRenderer(request.start.add(Date.DAY, i-1)) : '',
 					header: includeHeader ? request.start.add(Date.DAY, i-1).format('l, \\t\\he jS \\o\\f F') : '',
 					sortable: false,
 					fixed: true,
