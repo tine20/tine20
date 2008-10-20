@@ -53,6 +53,11 @@ Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
 Ext.QuickTips.init();
 
 /**
+ * html encode all grid columns per defaut
+ */
+Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
+
+/**
  * additional date patterns
  * @see{Date}
  */

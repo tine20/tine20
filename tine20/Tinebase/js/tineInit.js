@@ -14,6 +14,9 @@ Ext.onReady(function() {
    
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initRegistry();
+    Tine.Tinebase.tineInit.initWindowMgr();
+    Tine.Tinebase.tineInit.initState();
+    Tine.Tinebase.tineInit.initLocale();
     
     var waitForInits = function() {
         if (Tine.Tinebase.tineInit.initList.initRegistry) {
@@ -24,6 +27,11 @@ Ext.onReady(function() {
     };
     waitForInits();
 });
+
+/** ------------------------ Tine 2.0 Initialisation ----------------------- **/
+
+Ext.namespace('Tine');
+Tine.Build = '$Build: $';
 
 /**
  * static tine init functions
@@ -254,57 +262,52 @@ Tine.Tinebase.tineInit = {
     },
     
     /**
+     * initialise window and windowMgr (only popup atm.)
+     */
+    initWindowMgr: function() {
+        /**
+         * init the window handling
+         */
+        Ext.ux.PopupWindow.prototype.url = 'index.php';
+        
+        /**
+         * initialise window types
+         */
+        Tine.WindowFactory = new Ext.ux.WindowFactory({
+            windowType: 'Browser'
+        });
+    },
+    
+    /**
+    * initialise state provider
+    */
+    initState: function() {
+        Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
+        if (window.isMainWindow) {
+            // fill store from registry / initial data
+            // Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
+        } else {
+            // take main windows store
+            Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainWindow().Ext.state.Manager.getProvider().getStateStore());
+        }
+    },
+
+    /**
+     * config locales
+     */
+    initLocale: function() {
+        //Locale.setlocale(Locale.LC_ALL, '');
+        Tine.Tinebase.tranlation = new Locale.Gettext();
+        Tine.Tinebase.tranlation.textdomain('Tinebase');
+        window._ = function(msgid) {
+            return Tine.Tinebase.tranlation.dgettext('Tinebase', msgid);
+        };
+    },
+    
+    /**
      * Last stage of initialisation, to be done after Tine.onReady!
      */
     onLangFilesLoad: function() {
         Ext.ux.form.DateField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     }
 }
-
-
-/** ------------------------ Tine 2.0 Initialisation ----------------------- **/
-
-Ext.namespace('Tine');
-Tine.Build = '$Build: $';
-
-/**
- * html encode all grid columns per defaut
- */
-Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
-
-/**
- * init the window handling
- */
-Ext.ux.PopupWindow.prototype.url = 'index.php';
-
-/**
- * initialise window types
- */
-Tine.WindowFactory = new Ext.ux.WindowFactory({
-    windowType: 'Browser'
-});
-
-/**
- * initialise state provider
- */
-Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
-if (window.isMainWindow) {
-    // fill store from registry / initial data
-    // Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
-} else {
-    // take main windows store
-    Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainWindow().Ext.state.Manager.getProvider().getStateStore());
-}
-
-/**
- * config locales
- */
-//Locale.setlocale(Locale.LC_ALL, '');
-Tine.Tinebase.tranlation = new Locale.Gettext();
-Tine.Tinebase.tranlation.textdomain('Tinebase');
-_ = function(msgid) {
-    return Tine.Tinebase.tranlation.dgettext('Tinebase', msgid);
-};
-
-
-
