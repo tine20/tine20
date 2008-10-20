@@ -472,14 +472,14 @@ class Tinebase_Json extends Tinebase_Application_Json_Abstract
                 if(class_exists($jsonAppName)) {
                     $applicationJson = new $jsonAppName;
                     
-                    $view->registryData[ucfirst((string) $application)] = $applicationJson->getRegistryData();
-                    $view->registryData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
+                    $registryData[ucfirst((string) $application)] = $applicationJson->getRegistryData();
+                    $registryData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
                 }
             }
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
         
-        return $registryData;
+        die(Zend_Json::encode($registryData));
     }
 }

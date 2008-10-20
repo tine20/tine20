@@ -242,6 +242,8 @@ class Tinebase_Controller
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' is json request. method: ' . $_REQUEST['method']);
             
             $anonymnousMethods = array(
+                'Tinebase.getRegistryData',
+                'Tinebase.getAllRegistryData',
                 'Tinebase.login',
                 'Tinebase.getAvailableTranslations',
                 'Tinebase.getTranslations',
