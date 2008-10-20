@@ -736,9 +736,6 @@ Tine.Addressbook.Main = {
                 {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
             );
             
-            console.log(nodeAttributes);
-            console.log(filter);
-            
             options.params.filter = Ext.util.JSON.encode(filter);
         }, this);
     },
