@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-$url      = 'http://demo.tine20.org';
+$url      = 'http://playground.tine20.org/tine20/';
 $username = 'utester';
 $password = 'utester1234';
 
