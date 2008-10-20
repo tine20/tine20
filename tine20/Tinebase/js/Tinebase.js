@@ -17,6 +17,7 @@
 Ext.onReady(function(){
     // Tine Framework initialisation for each window
     Tine.Tinebase.initFramework();
+    
     /** temporary login **/
     if (!Tine.Tinebase.registry.get('currentAccount')) {
         Tine.Login.showLoginDialog(Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
@@ -88,8 +89,6 @@ Ext.onReady(function(){
 });
 
 
-
-
 /** ------------------------ Tine 2.0 Initialisation ----------------------- **/
 
 Ext.namespace('Tine');
@@ -124,10 +123,6 @@ if (window.name == Ext.ux.PopupWindowGroup.MainScreenName || window.name === '')
     Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainScreen().Ext.state.Manager.getProvider().getStateStore());
 }
 
-
-
-
-
 /**
  * @singleton
  * Instance of Tine.Tinebase.registryClass
@@ -150,6 +145,9 @@ Tine.Tinebase.tranlation.textdomain('Tinebase');
 _ = function(msgid) {
     return Tine.Tinebase.tranlation.dgettext('Tinebase', msgid);
 };
+
+
+
 
 /**
  * Initialise Tine 2.0 ExtJs framework
@@ -276,6 +274,7 @@ Tine.Tinebase.initFramework = function() {
 
  
     var initFormats = function() {
+        /*
         Ext.util.Format = Ext.apply(Ext.util.Format, {
                 euMoney: function(v){
                     v = (Math.round((v-0)*100))/100;
@@ -313,7 +312,7 @@ Tine.Tinebase.initFramework = function() {
                     return v;
                }
         });
-        
+        */
         Ext.ux.form.DateField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     };
 	
