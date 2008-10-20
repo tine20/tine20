@@ -851,7 +851,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             
             // get linked stuff
             lead = this.getAdditionalData(lead);
-            console.log(lead);
 
             Ext.Ajax.request({
                 scope: this,
