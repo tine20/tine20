@@ -116,7 +116,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/MainScreen.js',
             'Tinebase/js/Login.js',
             'Tinebase/js/common.js',
-            'Tinebase/js/Tinebase.js',
+            'Tinebase/js/tineInit.js',
             );
     }
     
