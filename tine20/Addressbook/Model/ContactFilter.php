@@ -38,7 +38,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
         'id'                   => array('allowEmpty' => true,  'Int'   ),
         
         'containerType'        => array('allowEmpty' => true           ),
-        'container_id'                => array('allowEmpty' => true           ),
+        'owner'                => array('allowEmpty' => true           ),
         'container'            => array('allowEmpty' => true           ),
 
         'query'                => array('allowEmpty' => true           ),
@@ -138,7 +138,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
             switch ($field) {
                 case 'containerType':
                 case 'container':
-                case 'container_id':
+                case 'owner':
                     // skip container here handling for the moment
                     break;
                 case 'query':
@@ -198,8 +198,8 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
         if (!$this->containerType) {
             throw new Exception('You need to set a containerType.');
         }
-        if ($this->containerType == 'Personal' && !$this->container_id) {
-            throw new Exception('You need to set a container_id when containerType is "Personal".');
+        if ($this->containerType == 'Personal' && !$this->owner) {
+            throw new Exception('You need to set an owner when containerType is "Personal".');
         }
         
         $cc = Tinebase_Container::getInstance();
@@ -208,7 +208,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
                 $containers = $cc->getContainerByACL(Zend_Registry::get('currentAccount'), $this->_application, Tinebase_Model_Container::GRANT_READ);
                 break;
             case 'personal':
-                $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->container_id, Tinebase_Model_Container::GRANT_READ);
+                $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->owner, Tinebase_Model_Container::GRANT_READ);
                 break;
             case 'shared':
                 $containers = Zend_Registry::get('currentAccount')->getSharedContainer($this->_application, Tinebase_Model_Container::GRANT_READ);

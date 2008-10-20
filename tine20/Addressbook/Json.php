@@ -141,8 +141,6 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      *
      * @param Addressbook_Model_Contact $_contact
      * @return array contact data
-     * 
-     * @todo get tags (?) / account grants for all records at once 
      */
     protected function _contactToJson($_contact)
     {   
@@ -150,11 +148,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $_contact->setTimezone(Zend_Registry::get('userTimeZone'));
         $result = $_contact->toArray();
         
-        $result['container_id'] = Tinebase_Container::getInstance()->getContainerById($_contact->container_id)->toArray();
-        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->container_id)->toArray();
-        
-        // get tags?
-        //$result['tags'] = Tinebase_Tags::getInstance()->getTagsOfRecord($_contact)->toArray();        
+        $result['container'] = Tinebase_Container::getInstance()->getContainerById($_contact->container_id)->toArray();
+        $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->container_id)->toArray();
         
         $result['jpegphoto'] = $this->_getImageLink($_contact);
         

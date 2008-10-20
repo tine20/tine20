@@ -138,7 +138,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
-            'container_id'                 => $this->container->id,
+            'container_id'          => $this->container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -213,7 +213,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
-            array('field' => 'container_id',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+            array('field' => 'owner',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         );
         $contacts = $json->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
         
