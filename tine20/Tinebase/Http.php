@@ -163,7 +163,9 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         } else {
             $view->userRegistration = 0;
         }
-
+        
+        $view->initialData = array('Tinebase' => $this->getRegistryData());
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -311,6 +313,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         }
         return $registryData;
     }
+    
 	/**
 	 * activate user account
 	 *
