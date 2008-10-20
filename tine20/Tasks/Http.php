@@ -52,16 +52,16 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
     public function getRegistryData()
     {
         $controller = Tasks_Controller::getInstance();
-        $initialData = array(
+        $registryData = array(
             'AllStati' => $controller->getStati(),
             //'DefaultContainer' => $controller->getDefaultContainer()
         );
         
-        foreach ($initialData as &$data) {
+        foreach ($registryData as &$data) {
             $data->setTimezone(Zend_Registry::get('userTimeZone'));
             $data->translate();
             $data = $data->toArray();
         }
-        return $initialData;    
+        return $registryData;    
     }
 }

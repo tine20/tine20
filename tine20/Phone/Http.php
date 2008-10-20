@@ -56,11 +56,11 @@ class Phone_Http extends Tinebase_Application_Http_Abstract
         $accountId = Zend_Registry::get('currentAccount')->getId();
         $json = new Phone_Json();
         
-        $initialData = array(
+        $registryData = array(
             'Phones' => $json->getUserPhones($accountId)
         );
         
-        return $initialData;
+        return $registryData;
     }
     
     /**

@@ -74,7 +74,7 @@
     <!-- Tine 2.0 dynamic initialisation -->
     <script type="text/javascript" language="javascript"><?php
         // registry data
-        foreach ((array)$this->initialData as $appname => $data) {
+        foreach ((array)$this->registryData as $appname => $data) {
             if ($appname != 'Tinebase') {
                 echo "\n        Tine.$appname.registry = new Ext.util.MixedCollection();";
             }

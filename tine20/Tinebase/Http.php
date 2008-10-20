@@ -164,7 +164,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             $view->userRegistration = 0;
         }
         
-        $view->initialData = array('Tinebase' => $this->getRegistryData());
+        $view->registryData = array('Tinebase' => $this->getRegistryData());
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -180,7 +180,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
-        $view->initialData = array();
+        $view->registryData = array();
         
         $userApplications = Zend_Registry::get('currentAccount')->getApplications();
         foreach($userApplications as $application) {
@@ -188,8 +188,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             if(class_exists($httpAppName)) {
                 $application_http = new $httpAppName;
                 
-                $view->initialData[ucfirst((string) $application)] = $application_http->getRegistryData();
-                $view->initialData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
+                $view->registryData[ucfirst((string) $application)] = $application_http->getRegistryData();
+                $view->registryData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
         

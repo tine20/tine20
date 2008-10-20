@@ -100,7 +100,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
     {   
         $json = new Crm_Json();
         
-        $initialData = array(
+        $registryData = array(
             'LeadTypes' => $json->getLeadtypes('leadtype','ASC'),
             'LeadStates' => $json->getLeadStates('leadstate','ASC'),
             'LeadSources' => $json->getLeadSources('leadsource','ASC'),
@@ -108,12 +108,12 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         );
         
         /*
-        foreach ($initialData as &$data) {
+        foreach ($registryData as &$data) {
             $data->setTimezone(Zend_Registry::get('userTimeZone'));
             $data = $data->toArray();
         }
         */
-        return $initialData;    
+        return $registryData;    
     }
 	
 }

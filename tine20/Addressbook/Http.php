@@ -84,9 +84,9 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
     {   
         $json = new Addressbook_Json();
         
-        $initialData = array(
+        $registryData = array(
             'Salutations' => $json->getSalutations(),
         );        
-        return $initialData;    
+        return $registryData;    
     }
 }
