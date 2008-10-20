@@ -189,7 +189,32 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $result = $_leads->toArray();
         
         return $result;
-    }    
+    }
+    
+    /**
+     * Returns registry data of crm.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {   
+        $registryData = array(
+            'LeadTypes'   => $this->getLeadtypes('leadtype','ASC'),
+            'LeadStates'  => $this->getLeadStates('leadstate','ASC'),
+            'LeadSources' => $this->getLeadSources('leadsource','ASC'),
+            'Products'    => $this->getProducts('productsource','ASC'),
+        );
+        
+        /*
+        foreach ($registryData as &$data) {
+            $data->setTimezone(Zend_Registry::get('userTimeZone'));
+            $data = $data->toArray();
+        }
+        */
+        return $registryData;    
+    }
+    
     
     /********************** handling of lead types/sources/states and products *************************/
     

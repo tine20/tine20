@@ -32,36 +32,4 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
             'Tasks/js/Tasks.js',
         );
     }
-
-    
-    /**
-     * Returns initial data which is send to the app at creation time.
-     *
-     * When the mainScreen is created, Tinebase_Http_Controller queries this function
-     * to get the initial datas for this app. This pattern prevents that any app needs
-     * to make an server-request for its initial datas.
-     * 
-     * Initial datas are just javascript varialbes declared in the mainScreen html code.
-     * 
-     * The returned data have to be an array with the variable names as keys and
-     * the datas as values. The datas will be JSON encoded later. Note that the
-     * variable names get prefixed with Tine.<applicationname>
-     * 
-     * @return mixed array 'variable name' => 'data'
-     */
-    public function getRegistryData()
-    {
-        $controller = Tasks_Controller::getInstance();
-        $registryData = array(
-            'AllStati' => $controller->getStati(),
-            //'DefaultContainer' => $controller->getDefaultContainer()
-        );
-        
-        foreach ($registryData as &$data) {
-            $data->setTimezone(Zend_Registry::get('userTimeZone'));
-            $data->translate();
-            $data = $data->toArray();
-        }
-        return $registryData;    
-    }
 }

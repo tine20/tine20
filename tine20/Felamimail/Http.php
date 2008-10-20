@@ -14,9 +14,4 @@
 class Felamimail_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Felamimail';
-    
-    public function getRegistryData()
-    {
-        return array('initialTree' => Felamimail_Json::getInitialTree());
-    }
 }

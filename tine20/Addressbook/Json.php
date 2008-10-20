@@ -199,4 +199,18 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         }
         return $link;
     }
+
+    /**
+     * Returns registry data of addressbook.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {   
+        $registryData = array(
+            'Salutations' => $this->getSalutations(),
+        );        
+        return $registryData;    
+    }
 }

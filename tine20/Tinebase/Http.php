@@ -164,7 +164,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             $view->userRegistration = 0;
         }
         
-        $view->registryData = array('Tinebase' => $this->getRegistryData());
+        $json = new Tinebase_Json();
+        $view->registryData = array('Tinebase' => $json->getRegistryData());
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
@@ -184,11 +185,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         
         $userApplications = Zend_Registry::get('currentAccount')->getApplications();
         foreach($userApplications as $application) {
-            $httpAppName = ucfirst((string) $application) . '_Http';
-            if(class_exists($httpAppName)) {
-                $application_http = new $httpAppName;
+            $jsonAppName = ucfirst((string) $application) . '_Json';
+            if(class_exists($jsonAppName)) {
+                $applicationJson = new $jsonAppName;
                 
-                $view->registryData[ucfirst((string) $application)] = $application_http->getRegistryData();
+                $view->registryData[ucfirst((string) $application)] = $applicationJson->getRegistryData();
                 $view->registryData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
@@ -268,49 +269,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
      */
     public function getRegistryData()
     {
-        $locale = Zend_Registry::get('locale');
-        $json = new Tinebase_Json();
         
-        // default credentials
-        if(isset(Zend_Registry::get('configFile')->login)) {
-            $loginConfig = Zend_Registry::get('configFile')->login;
-            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
-            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
-        } else {
-            $defaultUsername = '';
-            $defaultPassword = '';
-        }
-        
-        $registryData =  array(
-            'timeZone'         => Zend_Registry::get('userTimeZone'),
-            'locale'           => array(
-                'locale'   => $locale->toString(), 
-                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion()),
-            ),
-            'defaultUsername' => $defaultUsername,
-            'defaultPassword' => $defaultPassword
-        );
-
-        if (Zend_Registry::isRegistered('currentAccount')) {
-            $registryData += array(    
-                'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
-                'accountBackend'   => Tinebase_User::getConfiguredBackend(),
-                'jsonKey'          => Zend_Registry::get('jsonKey'),
-                'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray(),
-                'NoteTypes'        => $json->getNoteTypes(),
-                'CountryList'      => $json->getCountryList(),
-                'version'          => array(
-                    'codename'      => TINE20_CODENAME,
-                    'packageString' => TINE20_PACKAGESTRING,
-                    'releasetime'   => TINE20_RELEASETIME
-                ),
-                'changepw'         => (isset(Zend_Registry::get('configFile')->accounts) 
-                                        && isset(Zend_Registry::get('configFile')->accounts->changepw))
-                                            ? Zend_Registry::get('configFile')->accounts->changepw
-                                            : false
-            );
-        }
         return $registryData;
     }
     

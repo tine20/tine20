@@ -49,27 +49,7 @@ abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_A
         }
         return array();
     }
-    
-    /**
-     * Returns initial data which is send to the app at createon time.
-     *
-     * When the mainScreen is created, Tinebase_Http_Controler queries this function
-     * to get the initial datas for this app. This pattern prevents that any app needs
-     * to make an server-request for its initial datas.
-     * 
-     * Initial datas are just javascript varialbes declared in the mainScreen html code.
-     * 
-     * The returned data have to be an array with the variable names as keys and
-     * the datas as values. The datas will be JSON encoded later. Note that the
-     * varialbe names get prefixed with Tine.<applicationname>
-     * 
-     * @return mixed array 'variable name' => 'data'
-     */
-    public function getRegistryData()
-    {
-        return array();
-    }
-    
+        
     /**
      * Helper function to coerce browsers to reload js files when changed.
      *

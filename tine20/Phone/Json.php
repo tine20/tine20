@@ -132,5 +132,24 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
         );
         
         return $result;         
-    }        
+    }
+    
+    /**
+     * Returns registry data of the phone application.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {   
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__);
+    
+        $accountId = Zend_Registry::get('currentAccount')->getId();
+        
+        $registryData = array(
+            'Phones' => $this->getUserPhones($accountId)
+        );
+        
+        return $registryData;
+    }
 }

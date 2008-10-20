@@ -33,37 +33,6 @@ class Phone_Http extends Tinebase_Application_Http_Abstract
     }
     
     /**
-     * Returns initial data which is send to the app at creation time.
-     *
-     * When the mainScreen is created, Tinebase_Http_Controller queries this function
-     * to get the initial datas for this app. This pattern prevents that any app needs
-     * to make an server-request for its initial datas.
-     * 
-     * Initial data objects are just javascript variables declared in the mainScreen html code.
-     * 
-     * The returned data have to be an array with the variable names as keys and
-     * the datas as values. The datas will be JSON encoded later. Note that the
-     * variable names get prefixed with Tine.<applicationname>
-     * 
-     * - this function returns the user phones
-     * 
-     * @return mixed array 'variable name' => 'data'
-     */
-    public function getRegistryData()
-    {   
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__);
-    
-        $accountId = Zend_Registry::get('currentAccount')->getId();
-        $json = new Phone_Json();
-        
-        $registryData = array(
-            'Phones' => $json->getUserPhones($accountId)
-        );
-        
-        return $registryData;
-    }
-    
-    /**
      * create edit MyPhone dialog
      *
      * @param int $phoneId

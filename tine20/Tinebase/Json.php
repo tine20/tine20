@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Json
+class Tinebase_Json extends Tinebase_Application_Json_Abstract
 {
 	
     /**
@@ -399,5 +399,58 @@ class Tinebase_Json
         );
 
         return $result;
+    }
+    
+    /**
+     * Returns registry data of tinebase.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $locale = Zend_Registry::get('locale');
+        
+        // default credentials
+        if(isset(Zend_Registry::get('configFile')->login)) {
+            $loginConfig = Zend_Registry::get('configFile')->login;
+            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
+            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
+        } else {
+            $defaultUsername = '';
+            $defaultPassword = '';
+        }
+        
+        $registryData =  array(
+            'timeZone'         => Zend_Registry::get('userTimeZone'),
+            'locale'           => array(
+                'locale'   => $locale->toString(), 
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion()),
+            ),
+            'defaultUsername' => $defaultUsername,
+            'defaultPassword' => $defaultPassword
+        );
+
+        if (Zend_Registry::isRegistered('currentAccount')) {
+            $registryData += array(    
+                'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
+                'accountBackend'   => Tinebase_User::getConfiguredBackend(),
+                'jsonKey'          => Zend_Registry::get('jsonKey'),
+                'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray(),
+                'NoteTypes'        => $this->getNoteTypes(),
+                'CountryList'      => $this->getCountryList(),
+                'version'          => array(
+                    'codename'      => TINE20_CODENAME,
+                    'packageString' => TINE20_PACKAGESTRING,
+                    'releasetime'   => TINE20_RELEASETIME
+                ),
+                'changepw'         => (isset(Zend_Registry::get('configFile')->accounts) 
+                                        && isset(Zend_Registry::get('configFile')->accounts->changepw))
+                                            ? Zend_Registry::get('configFile')->accounts->changepw
+                                            : false
+            );
+        }
+        return $registryData;
     }
 }

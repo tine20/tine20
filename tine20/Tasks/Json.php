@@ -208,4 +208,25 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $result->translate();
         return $result->toArray();
     }
+    
+    /**
+     * Returns registry data of the tasks application.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $registryData = array(
+            'AllStati' => $this->_controller->getStati(),
+            //'DefaultContainer' => $controller->getDefaultContainer()
+        );
+        
+        foreach ($registryData as &$data) {
+            $data->setTimezone(Zend_Registry::get('userTimeZone'));
+            $data->translate();
+            $data = $data->toArray();
+        }
+        return $registryData;    
+    }
 }

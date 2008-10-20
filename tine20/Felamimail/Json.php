@@ -105,4 +105,15 @@ class Felamimail_Json extends Tinebase_Application_Json_Abstract
 
 		return $treeNodes;
 	}
+	
+	/**
+     * Returns registry data of felamimail.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        return array('initialTree' => self::getInitialTree());
+    }
 }

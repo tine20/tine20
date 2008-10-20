@@ -21,5 +21,19 @@
  */
 abstract class Tinebase_Application_Json_Abstract extends Tinebase_Application_Abstract implements Tinebase_Application_Json_Interface
 {
-
+    /**
+     * Returns registry data of the application.
+     *
+     * Each application has its own registry to supply static data to the client.
+     * Registry data is queried only once per session from the client.
+     *
+     * This registry must not be used for rights or ACL purposes. Use the generic
+     * rights and ACL mechanisms instead!
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        return array();
+    }
 }
