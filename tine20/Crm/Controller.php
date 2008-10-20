@@ -79,7 +79,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $lead = $backend->get($_leadId);
         
-        if (!$this->_currentAccount->hasGrant($lead->container, Tinebase_Model_Container::GRANT_READ)) {
+        if (!$this->_currentAccount->hasGrant($lead->container_id, Tinebase_Model_Container::GRANT_READ)) {
             throw new Exception('read permission to lead denied');
         }
 
@@ -210,8 +210,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 throw new Exception('lead object is not valid');
             }
             
-            if(!$this->_currentAccount->hasGrant($_lead->container, Tinebase_Model_Container::GRANT_ADD)) {
-                throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
+            if(!$this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_ADD)) {
+                throw new Exception('add access to leads in container ' . $_lead->container_id . ' denied');
             }
             
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_lead, 'create');
@@ -268,16 +268,16 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $currentLead = $backend->get($_lead->getId());
             
             // ACL checks
-            if ($currentLead->container != $_lead->container) {
-                if (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Model_Container::GRANT_ADD)) {
-                    throw new Exception('add access in container ' . $_lead->container . ' denied');
+            if ($currentLead->container_id != $_lead->container_id) {
+                if (! $this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_ADD)) {
+                    throw new Exception('add access in container ' . $_lead->container_id . ' denied');
                 }
                 // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-                if (! $this->_currentAccount->hasGrant($currentLead->container, Tinebase_Model_Container::GRANT_DELETE)) {
-                    throw new Exception('delete access in container ' . $currentLead->container . ' denied');
+                if (! $this->_currentAccount->hasGrant($currentLead->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
+                    throw new Exception('delete access in container ' . $currentLead->container_id . ' denied');
                 }
-            } elseif (! $this->_currentAccount->hasGrant($_lead->container, Tinebase_Model_Container::GRANT_EDIT)) {
-                throw new Exception('edit access in container ' . $_lead->container . ' denied');
+            } elseif (! $this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
+                throw new Exception('edit access in container ' . $_lead->container_id . ' denied');
             }
     
             // concurrency management & history log
@@ -337,7 +337,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);            
                 $lead = $backend->get($_leadId);
                 
-                if($this->_currentAccount->hasGrant($lead->container, Tinebase_Model_Container::GRANT_DELETE)) {
+                if($this->_currentAccount->hasGrant($lead->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
                     $backend->delete($_leadId);
     
                     // delete notes
@@ -794,7 +794,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $view->leadState = $this->getLeadState($_lead->leadstate_id);
         $view->leadType = $this->getLeadType($_lead->leadtype_id);
         $view->leadSource = $this->getLeadSource($_lead->leadsource_id);
-        $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container);
+        $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
         $view->updates = $_updates;
         
         if($_lead->start instanceof Zend_Date) {
@@ -877,9 +877,9 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         // if no responsibles are defined, send message to all readers of container
         if (empty($recipients)) {
             Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
-                $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container);
+                $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id);
                 
-            $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container);
+            $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container_id);
             // NOTE: we just send notifications to users, not to groups or anyones!
             foreach ($containerGrants as $grant) {
                 if ($grant['account_type'] == 'user' && $grant['readGrant'] == 1) {

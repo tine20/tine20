@@ -112,4 +112,47 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setTableVersion('metacrm_lead', '2');
         $this->setApplicationVersion('Crm', '0.3');
     }
+    
+    /**
+     * update function 3
+     * rename column container to container_id in leads table
+     */    
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>container_id</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('metacrm_lead', $declaration, 'container');
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>container_id</name>
+                <field>
+                    <name>container_id</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('metacrm_lead', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>metacrm_lead::container_id--container::id</name>
+                <field>
+                    <name>container_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>container</table>
+                    <field>id</field>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('metacrm_lead', $declaration);
+        
+        $this->setTableVersion('metacrm_lead', '3');
+        $this->setApplicationVersion('Crm', '0.4');
+    }
 }

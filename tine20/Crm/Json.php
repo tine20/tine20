@@ -160,14 +160,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $result = $_lead->toArray();
         
         // set container
-        if (!$_lead->container) {
+        if (!$_lead->container_id) {
             $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Model_Container::GRANT_READ);
-            $container = $personalFolders[0];
+            $container_id = $personalFolders[0];
         } else {
-            $container = $_lead->container;
+            $container_id = $_lead->container_id;
         }
-        $result['container'] = Tinebase_Container::getInstance()->getContainerById($container)->toArray();
-        $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container)->toArray();
+        $result['container'] = Tinebase_Container::getInstance()->getContainerById($container_id)->toArray();
+        $result['container']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container_id)->toArray();
         
         return $result;                
     }
@@ -181,7 +181,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     protected function _multipleLeadsToJson(Tinebase_Record_RecordSet $_leads)
     {        
         // get acls for leads
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_leads, Zend_Registry::get('currentAccount'), 'container');
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_leads, Zend_Registry::get('currentAccount'));
         
         $_leads->setTimezone($this->_userTimezone);
         $_leads->convertDates = true;

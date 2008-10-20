@@ -57,7 +57,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'leadstate_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'leadtype_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'leadsource_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'container'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'container_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'end'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -179,14 +179,15 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         throw new Exception('relation type not supported');
                 }
 
+                // @todo remove that? or replace owner with container_id?
+                /*
                 if (isset($relation['related_record']['owner']) && is_array($relation['related_record']['owner'])) {
                     // hack for container
-                    // @todo make that better ?
                     $data['related_record']['owner'] = $relation['related_record']['owner']['id'];
                     
-                    //@todo json encode tags?
                     $data['related_record']['tags'] = '';
-                }                
+                } 
+                */               
                 
                 $decodedLead['relations'][$key] = $data;
             } else {

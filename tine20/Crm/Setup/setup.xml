@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>0.3</version>
+    <version>0.4</version>
     <order>20</order>
     <tables>
         <table>
@@ -105,7 +105,7 @@
         </table>                
         <table>
             <name>metacrm_lead</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -131,8 +131,9 @@
                     <type>integer</type>
                 </field>
                 <field>
-                    <name>container</name>
+                    <name>container_id</name>
                     <type>integer</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>description</name>
@@ -206,6 +207,12 @@
                     </field>
                 </index>
                 <index>
+                    <name>container_id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                </index>
+                <index>
                     <name>metacrm_lead::leadsource_id--metacrm_leadsource::id</name>
                     <field>
                         <name>leadsource_id</name>
@@ -235,6 +242,17 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>metacrm_leadstate</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>metacrm_lead::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
                         <field>id</field>
                     </reference>
                 </index>

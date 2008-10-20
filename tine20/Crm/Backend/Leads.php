@@ -7,8 +7,6 @@
  * @author      Sebastian Lenk <s.lenk@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo        rename container to container_id in leads table
  */
 
 
@@ -98,7 +96,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
                 'leadstate_id',
                 'leadtype_id',
                 'leadsource_id',
-                'container',
+                'container_id',
                 'start',
                 'description',
                 'end',
@@ -131,7 +129,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
      */
     protected function _addFilter(Zend_Db_Select $_select, Crm_Model_LeadFilter $_filter)
     {
-        $_select->where($this->_db->quoteInto('lead.container IN (?)', $_filter->container));
+        $_select->where($this->_db->quoteInto('lead.container_id IN (?)', $_filter->container));
                         
         if (!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(lead.lead_name LIKE ? OR lead.description LIKE ?)', '%' . $_filter->query . '%'));
