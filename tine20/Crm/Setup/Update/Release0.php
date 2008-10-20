@@ -119,6 +119,8 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_3()
     {
+        $this->validateTableVersion('metacrm_lead', '2');
+        
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>container_id</name>
