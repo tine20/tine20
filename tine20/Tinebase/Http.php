@@ -48,7 +48,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             // gears
             'Tinebase/js/gears_init.js',
             // generic init to be included before parsing of the tine code
-            'Tinebase/js/init.js',
+            'Tinebase/js/extInit.js',
             // general helpers
             'Tinebase/js/Sprintf.js',
             // Locale support
@@ -115,7 +115,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/Models.js',
             'Tinebase/js/MainScreen.js',
             'Tinebase/js/Login.js',
-            'Tinebase/js/Common.js',
+            'Tinebase/js/common.js',
             'Tinebase/js/Tinebase.js',
             );
     }
