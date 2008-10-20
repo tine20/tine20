@@ -115,6 +115,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/Models.js',
             'Tinebase/js/MainScreen.js',
             'Tinebase/js/Login.js',
+            'Tinebase/js/Common.js',
             'Tinebase/js/Tinebase.js',
             );
     }
@@ -193,7 +194,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 $view->registryData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
-        
+
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
