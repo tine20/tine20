@@ -1,4 +1,4 @@
-#: Controller.php:401
+#: Controller.php:393
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%s's personal addressbook"
@@ -245,6 +245,22 @@ msgstr "Birthday"
 #: js/Addressbook.js:419 js/Addressbook.js:674
 msgid "Select contact"
 msgstr "Select contact"
+
+#: js/Addressbook.js:432
+msgid "Work"
+msgstr "Work"
+
+#: js/Addressbook.js:440
+msgid "Home"
+msgstr "Home"
+
+#: js/Addressbook.js:448
+msgid "Cell"
+msgstr "Cell"
+
+#: js/Addressbook.js:456
+msgid "Cell private"
+msgstr "Cell private"
 
 #: js/Addressbook.js:508
 msgid "Tags"

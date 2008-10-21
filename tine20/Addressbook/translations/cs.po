@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
-#: Controller.php:401
+#: Controller.php:393
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "Osobní adresář uživatele %s"
@@ -268,6 +268,24 @@ msgstr "Narozeniny"
 #: js/Addressbook.js:419 js/Addressbook.js:674
 msgid "Select contact"
 msgstr "Vybrat kontakt"
+
+#: js/Addressbook.js:432
+msgid "Work"
+msgstr ""
+
+#: js/Addressbook.js:440
+#, fuzzy
+msgid "Home"
+msgstr "Domácí URL"
+
+#: js/Addressbook.js:448
+msgid "Cell"
+msgstr ""
+
+#: js/Addressbook.js:456
+#, fuzzy
+msgid "Cell private"
+msgstr "Město (privátní adresa)"
 
 #: js/Addressbook.js:508
 msgid "Tags"

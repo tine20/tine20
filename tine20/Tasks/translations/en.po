@@ -3,6 +3,10 @@
 msgid "%s's personal tasks"
 msgstr "%s's personal tasks"
 
+#: js/Status.js:45 Setup/setup.xml:431
+msgid "IN-PROCESS"
+msgstr "IN-PROCESS"
+
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -171,10 +175,6 @@ msgstr "NEEDS-ACTION"
 #: Setup/setup.xml:409
 msgid "COMPLETED"
 msgstr "COMPLETED"
-
-#: Setup/setup.xml:431
-msgid "IN-PROCESS"
-msgstr "IN-PROCESS"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"

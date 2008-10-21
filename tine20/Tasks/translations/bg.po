@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-29 18:48+0100\n"
+"PO-Revision-Date: 2008-10-15 16:16+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,11 @@ msgstr ""
 #: Controller.php:305
 #, python-format
 msgid "%s's personal tasks"
-msgstr "%s's лична задача"
+msgstr "%s's лични задачи"
+
+#: js/Status.js:45 Setup/setup.xml:431
+msgid "IN-PROCESS"
+msgstr "В ПРОЦЕС"
 
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
@@ -34,7 +38,7 @@ msgstr "Задачата (-ите) не може(могат) да бъде(бъ�
 
 #: js/Tasks.js:159
 msgid "Edit task"
-msgstr "Обработи задача"
+msgstr "Редактирай задача"
 
 #: js/Tasks.js:169
 msgid "Add task"
@@ -52,11 +56,11 @@ msgstr "Задачи"
 
 #: js/Tasks.js:301 js/Tasks.js:628
 msgid "to do lists"
-msgstr "Списъци със задачи"
+msgstr "списъци със задачи"
 
 #: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
 msgid "to do list"
-msgstr "Списък със задачи"
+msgstr "списък със задачи"
 
 #: js/Tasks.js:323
 msgid "Enter searchfilter"
@@ -186,10 +190,6 @@ msgstr "НЕОБХОДИМА Е НАМЕСА"
 #: Setup/setup.xml:409
 msgid "COMPLETED"
 msgstr "ЗАВЪРШЕНИ"
-
-#: Setup/setup.xml:431
-msgid "IN-PROCESS"
-msgstr "В ПРОЦЕС"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"

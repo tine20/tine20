@@ -22,6 +22,10 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s's личные задания"
 
+#: js/Status.js:45 Setup/setup.xml:431
+msgid "IN-PROCESS"
+msgstr "НЕЗАВЕРШЕННЫЙ"
+
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -193,10 +197,6 @@ msgstr "ДЕЙСТВИЕ-ПОТРЕБНОСТЕЙ"
 #: Setup/setup.xml:409
 msgid "COMPLETED"
 msgstr "ЗАКОНЧЕНО"
-
-#: Setup/setup.xml:431
-msgid "IN-PROCESS"
-msgstr "НЕЗАВЕРШЕННЫЙ"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"

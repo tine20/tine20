@@ -62,20 +62,20 @@ msgstr "Utworzone przez"
 msgid "Activities"
 msgstr ""
 
-#: Http.php:224 js/Tinebase.js:228
+#: Http.php:214 js/tineInit.js:170
 msgid "Authorisation Required"
 msgstr "Wymagana autoryzacja"
 
-#: Http.php:225
+#: Http.php:215
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Upłynął limit czasu twojej sesji. Musisz się zalogować ponownie."
 
-#: Http.php:251 js/ExceptionDialog.js:26
+#: Http.php:241 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Nietypowe zakończenie"
 
-#: Http.php:252 js/ExceptionDialog.js:51
+#: Http.php:242 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd, program zostanie zakończony awaryjnie."
 
@@ -281,20 +281,20 @@ msgstr "Jesteś pewien, że chcesz się wylogować?"
 msgid "Logging you out..."
 msgstr "Wylogowanie trwa …"
 
-#: js/Tinebase.js:218
+#: js/tineInit.js:160
 msgid "Connection lost, please check your network!"
 msgstr "Połączenie zostało utracone, proszę sprawdzić swoją sieć!"
 
-#: js/Tinebase.js:229
+#: js/tineInit.js:171
 msgid "Your session timed out. You need to login again."
 msgstr "Upłynął limit czasu twojej sesji. Musisz się zalogować ponownie."
 
-#: js/Tinebase.js:242
+#: js/tineInit.js:184
 #, fuzzy
 msgid "Concurrent Updates"
 msgstr "Jednoczesna aktualizacja"
 
-#: js/Tinebase.js:243
+#: js/tineInit.js:185
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."

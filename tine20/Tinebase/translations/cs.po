@@ -64,20 +64,20 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Http.php:224 js/Tinebase.js:228
+#: Http.php:214 js/tineInit.js:170
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Http.php:225
+#: Http.php:215
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
 
-#: Http.php:251 js/ExceptionDialog.js:26
+#: Http.php:241 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Http.php:252 js/ExceptionDialog.js:51
+#: Http.php:242 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -282,19 +282,19 @@ msgstr "Určitě se chcete odhlásit?"
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
-#: js/Tinebase.js:218
+#: js/tineInit.js:160
 msgid "Connection lost, please check your network!"
 msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
 
-#: js/Tinebase.js:229
+#: js/tineInit.js:171
 msgid "Your session timed out. You need to login again."
 msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
 
-#: js/Tinebase.js:242
+#: js/tineInit.js:184
 msgid "Concurrent Updates"
 msgstr "Kolidující aktualizace"
 
-#: js/Tinebase.js:243
+#: js/tineInit.js:185
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."

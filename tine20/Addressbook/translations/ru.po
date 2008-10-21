@@ -17,7 +17,7 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
-#: Controller.php:401
+#: Controller.php:393
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%s's Личная книга адресов"
@@ -269,6 +269,24 @@ msgstr "Дата рождения"
 #: js/Addressbook.js:419 js/Addressbook.js:674
 msgid "Select contact"
 msgstr "Выберите контакт"
+
+#: js/Addressbook.js:432
+msgid "Work"
+msgstr ""
+
+#: js/Addressbook.js:440
+#, fuzzy
+msgid "Home"
+msgstr "Домашний URL (Единый указатель ресурсов)"
+
+#: js/Addressbook.js:448
+msgid "Cell"
+msgstr ""
+
+#: js/Addressbook.js:456
+#, fuzzy
+msgid "Cell private"
+msgstr "Город (личный)"
 
 #: js/Addressbook.js:508
 msgid "Tags"

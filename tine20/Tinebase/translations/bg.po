@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-01 23:23+0100\n"
+"PO-Revision-Date: 2008-10-21 17:44+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgstr "Администратор"
 
 #: Application/Rights/Abstract.php:57
 msgid "admin right description"
-msgstr "Описание на администраторските права: неограничени."
+msgstr "oписание на администраторските права"
 
 #: Application/Rights/Abstract.php:60
 msgid "run"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
-msgstr "Тагове"
+msgstr "Категории"
 
 #: Export/Pdf.php:404
 msgid "Export Date"
@@ -62,23 +62,23 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Http.php:224 js/Tinebase.js:228
+#: Http.php:214 js/tineInit.js:170
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
-#: Http.php:225
+#: Http.php:215
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 "Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
 
-#: Http.php:251 js/ExceptionDialog.js:26
+#: Http.php:241 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Http.php:252 js/ExceptionDialog.js:51
+#: Http.php:242 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
-msgstr "Грешка, водеща до рограмен сривл."
+msgstr "Грешка, водеща до рограмен срив."
 
 #: js/ExceptionDialog.js:34 js/MainScreen.js:315
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
@@ -187,7 +187,7 @@ msgstr "Изход"
 
 #: js/MainScreen.js:61
 msgid "Logout from Tine 2.0"
-msgstr "Излиэане от Tine 2.0"
+msgstr "Излизане от Tine 2.0"
 
 #: js/MainScreen.js:83 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
@@ -281,20 +281,20 @@ msgstr "Наистина ли желаете да излезете?"
 msgid "Logging you out..."
 msgstr "Подготвя излизане..."
 
-#: js/Tinebase.js:218
+#: js/tineInit.js:160
 msgid "Connection lost, please check your network!"
 msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
 
-#: js/Tinebase.js:229
+#: js/tineInit.js:171
 msgid "Your session timed out. You need to login again."
 msgstr ""
 "Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
 
-#: js/Tinebase.js:242
+#: js/tineInit.js:184
 msgid "Concurrent Updates"
 msgstr "Конкурентно актуализиране"
 
-#: js/Tinebase.js:243
+#: js/tineInit.js:185
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -331,20 +331,20 @@ msgid ""
 "You have entered all needed information. If you press the Finish button we "
 "will send you the registration email."
 msgstr ""
-"Вие зададохте необходимата информация. След като натиснете бутона \"Край\" "
-"ще Ви бъде изпратеп регистрационен имейл."
+"Вие зададохте необходимата информация. След като натиснете бутона `Край` ще "
+"Ви бъде изпратеп регистрационен имейл."
 
 #: js/ux/ConnectionStatus.js:52
 msgid "online"
-msgstr "в мрежа"
+msgstr "мрежов режим на работа"
 
 #: js/ux/ConnectionStatus.js:53
 msgid "offline"
-msgstr "локално"
+msgstr "локален режим на работа"
 
 #: js/ux/ConnectionStatus.js:54
 msgid "unknown"
-msgstr "непознат"
+msgstr "неоппределен"
 
 #: js/ux/form/ImageField.js:59
 msgid "click to edit"
@@ -352,11 +352,11 @@ msgstr "Кликнете за да редактирате"
 
 #: js/ux/form/ImageField.js:108
 msgid "Not An Image"
-msgstr "Не е имидж (изображение)"
+msgstr "Не е снимка (изображение)"
 
 #: js/ux/form/ImageField.js:108
 msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Моля селектирай имидж (gif/png/jpeg)"
+msgstr "Моля селектирайте снимка (gif/png/jpeg)"
 
 #: js/ux/form/ImageField.js:125
 msgid "Loading"
@@ -364,34 +364,34 @@ msgstr "Зарежда"
 
 #: js/ux/form/ImageField.js:133
 msgid "Upload Failed"
-msgstr "Неуспешено качване (Upload)"
+msgstr "Неуспешено зареждане (Upload)"
 
 #: js/ux/form/ImageField.js:133
 msgid "Could not upload image. Please notify your Administrator"
 msgstr ""
-"Неуспешено качване (Upload) на имидж. Моля обърнете се към Вашият "
+"Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият "
 "администратор."
 
 #: js/ux/form/ImageField.js:145
 msgid "Change Image"
-msgstr "Замени имидж"
+msgstr "Замени снимка"
 
 #: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
 msgid "Crop Image"
-msgstr "Обрежи имидж"
+msgstr "Обрежи снимка"
 
 #: js/ux/form/ImageField.js:192
 msgid "Delete Image"
-msgstr "Изтрий имидж"
+msgstr "Изтрий снимка"
 
 #: js/ux/form/ImageField.js:218
 msgid "Image Failed"
-msgstr "Грешка при обработка на имиджа"
+msgstr "Грешка при обработка на снимка"
 
 #: js/ux/form/ImageField.js:218
 msgid "Could not load image. Please notify your Administrator"
 msgstr ""
-"Неуспешено качване (Upload) на имидж. Моля обърнете се към Вашият "
+"Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият "
 "администратор."
 
 #: js/widgets/account/ConfigGrid.js:55

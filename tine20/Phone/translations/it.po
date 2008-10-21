@@ -17,16 +17,16 @@ msgstr ""
 msgid "Edit phone settings"
 msgstr ""
 
+#: js/Phone.js:44 js/Phone.js:239
+msgid "Phone"
+msgstr ""
+
 #: js/Phone.js:55
 msgid "Phones"
 msgstr ""
 
 #: js/Phone.js:182
 msgid "Dial phone number"
-msgstr ""
-
-#: js/Phone.js:239
-msgid "Phone"
 msgstr ""
 
 #: js/Phone.js:255

@@ -13,11 +13,13 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/Phone.js:27
-#: js/Phone.js:430
-#: js/Phone.js:431
+#: js/Phone.js:27 js/Phone.js:430 js/Phone.js:431
 msgid "Edit phone settings"
 msgstr "编辑电话设置"
+
+#: js/Phone.js:44 js/Phone.js:239
+msgid "Phone"
+msgstr "电话"
 
 #: js/Phone.js:55
 msgid "Phones"
@@ -26,10 +28,6 @@ msgstr "电话"
 #: js/Phone.js:182
 msgid "Dial phone number"
 msgstr "拨号"
-
-#: js/Phone.js:239
-msgid "Phone"
-msgstr "电话"
 
 #: js/Phone.js:255
 msgid "Line"
@@ -83,8 +81,7 @@ msgstr "源或者目的"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "显示呼叫 {0} - {1} of {2}"
 
-#: js/Phone.js:608
-#: js/Phone.js:646
+#: js/Phone.js:608 js/Phone.js:646
 msgid "No calls to display"
 msgstr "没有呼叫要显示"
 
@@ -127,4 +124,3 @@ msgstr "振铃"
 #: js/Phone.js:622
 msgid "Call ID"
 msgstr "来电号码"
-

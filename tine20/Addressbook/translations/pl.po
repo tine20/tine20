@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
-#: Controller.php:401
+#: Controller.php:393
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%s's osobista książka adresowa"
@@ -268,6 +268,24 @@ msgstr "Urodziny"
 #: js/Addressbook.js:419 js/Addressbook.js:674
 msgid "Select contact"
 msgstr "Wybierz kontakt"
+
+#: js/Addressbook.js:432
+msgid "Work"
+msgstr ""
+
+#: js/Addressbook.js:440
+#, fuzzy
+msgid "Home"
+msgstr "URL domowe"
+
+#: js/Addressbook.js:448
+msgid "Cell"
+msgstr ""
+
+#: js/Addressbook.js:456
+#, fuzzy
+msgid "Cell private"
+msgstr "Miasto (prywatny adres)"
 
 #: js/Addressbook.js:508
 msgid "Tags"

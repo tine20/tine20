@@ -20,6 +20,10 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "osobní úkoly uživatele %s"
 
+#: js/Status.js:45 Setup/setup.xml:431
+msgid "IN-PROCESS"
+msgstr "ROZPRACOVANÝ"
+
 #: js/Tasks.js:110
 msgid "Do you really want to delete the selected task"
 msgid_plural "Do you really want to delete the selected task"
@@ -190,10 +194,6 @@ msgstr "VYŽADUJE ZÁSAH"
 #: Setup/setup.xml:409
 msgid "COMPLETED"
 msgstr "DOKONČENÝ"
-
-#: Setup/setup.xml:431
-msgid "IN-PROCESS"
-msgstr "ROZPRACOVANÝ"
 
 #: Setup/setup.xml:453
 msgid "CANCELLED"

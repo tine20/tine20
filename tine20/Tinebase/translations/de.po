@@ -63,20 +63,20 @@ msgstr "Angelegt von"
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Http.php:224 js/Tinebase.js:228
+#: Http.php:214 js/tineInit.js:170
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: Http.php:225
+#: Http.php:215
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: Http.php:251 js/ExceptionDialog.js:26
+#: Http.php:241 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: Http.php:252 js/ExceptionDialog.js:51
+#: Http.php:242 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
@@ -283,19 +283,19 @@ msgstr "Wollen sie sich wirklich Abmelden?"
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
-#: js/Tinebase.js:218
+#: js/tineInit.js:160
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
 
-#: js/Tinebase.js:229
+#: js/tineInit.js:171
 msgid "Your session timed out. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: js/Tinebase.js:242
+#: js/tineInit.js:184
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
-#: js/Tinebase.js:243
+#: js/tineInit.js:185
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."

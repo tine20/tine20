@@ -65,20 +65,20 @@ msgstr "Установлено"
 msgid "Activities"
 msgstr "Действия"
 
-#: Http.php:224 js/Tinebase.js:228
+#: Http.php:214 js/tineInit.js:170
 msgid "Authorisation Required"
 msgstr "Регистрация необходима"
 
-#: Http.php:225
+#: Http.php:215
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: Http.php:251 js/ExceptionDialog.js:26
+#: Http.php:241 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Http.php:252 js/ExceptionDialog.js:51
+#: Http.php:242 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
@@ -284,19 +284,19 @@ msgstr "Вы уверены что хотите покинуть програм�
 msgid "Logging you out..."
 msgstr "выключаю программу..."
 
-#: js/Tinebase.js:218
+#: js/tineInit.js:160
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/Tinebase.js:229
+#: js/tineInit.js:171
 msgid "Your session timed out. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: js/Tinebase.js:242
+#: js/tineInit.js:184
 msgid "Concurrent Updates"
 msgstr "Параллельные Обновления"
 
-#: js/Tinebase.js:243
+#: js/tineInit.js:185
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
