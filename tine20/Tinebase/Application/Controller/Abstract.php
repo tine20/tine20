@@ -16,7 +16,7 @@
  *
  * @package     Admin
  */
-class Tinebase_Application_Controller_Abstract
+abstract class Tinebase_Application_Controller_Abstract
 {
     /**
      * application name (is needed in checkRight())
@@ -49,6 +49,13 @@ class Tinebase_Application_Controller_Abstract
     private function __clone() 
     {        
     }
+    
+    /**
+     * the singleton pattern
+     *
+     * @return mixed
+     */
+    abstract public static function getInstance();
 
     /**
      * generic check admin rights function
