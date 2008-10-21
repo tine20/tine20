@@ -2,14 +2,13 @@
 /**
  * Tine 2.0
  *
- * @package     Admin
- * @subpackage  Controller
+ * @package     Tinebase
+ * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        create factory for the controllers?
  */
 
 /**
@@ -17,9 +16,18 @@
  *
  * @package     Admin
  */
-class Admin_Controller_Abstract
+class Tinebase_Application_Controller_Abstract
 {
     /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = '';
+    
+    /**
+     * the current account
+     * 
      * @var Tinebase_Model_User
      */
     protected $_currentAccount;
@@ -49,21 +57,26 @@ class Admin_Controller_Abstract
      * - MANAGE_* right includes VIEW_* right 
      * 
      * @param   string  $_right to check
-     * @todo    think about moving that to Tinebase_Acl or Tinebase_Application
      */    
     protected function checkRight( $_right ) {
+        
+        if (empty($this->_applicationName)) {
+            throw new Exception('No application name defined!');
+        }
+        
+        $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
         
         // array with the rights that should be checked, ADMIN is in it per default
         $rightsToCheck = array ( Tinebase_Acl_Rights::ADMIN );
         
         if ( preg_match("/MANAGE_/", $_right) ) {
-            $rightsToCheck[] = constant('Admin_Acl_Rights::' . $_right);
+            $rightsToCheck[] = constant($applicationRightsClass. '::' . $_right);
         }
 
         if ( preg_match("/VIEW_([A-Z_]*)/", $_right, $matches) ) {
-            $rightsToCheck[] = constant('Admin_Acl_Rights::' . $_right);
+            $rightsToCheck[] = constant($applicationRightsClass. '::' . $_right);
             // manage right includes view right
-            $rightsToCheck[] = constant('Admin_Acl_Rights::MANAGE_' . $matches[1]);
+            $rightsToCheck[] = constant($applicationRightsClass. '::MANAGE_' . $matches[1]);
         }
         
         $hasRight = FALSE;
@@ -76,9 +89,7 @@ class Admin_Controller_Abstract
         }
         
         if ( !$hasRight ) {
-            throw new Exception("You are not allowed to $_right !");
+            throw new Exception("You are not allowed to $_right in application $this->_applicationName !");
         }        
-                
     }
-    
 }

@@ -17,8 +17,15 @@
  *
  * @package     Admin
  */
-class Admin_Controller_AccessLog extends Admin_Controller_Abstract
+class Admin_Controller_AccessLog extends Tinebase_Application_Controller_Abstract
 {
+    /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Admin';
+    
     /**
      * holdes the instance of the singleton
      *
