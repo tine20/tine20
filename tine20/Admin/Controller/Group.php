@@ -20,6 +20,27 @@
 class Admin_Controller_Group extends Admin_Controller_Abstract
 {
     /**
+     * holdes the instance of the singleton
+     *
+     * @var Admin_Controller_Group
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Admin_Controller_Group
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Admin_Controller_Group;
+        }
+        
+        return self::$_instance;
+    }
+    
+    /**
      * get list of groups
      *
      * @param string $_filter

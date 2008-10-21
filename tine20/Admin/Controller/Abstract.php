@@ -13,7 +13,7 @@
  */
 
 /**
- * abstract controller for Admin application
+ * controller abstract for Admin application
  *
  * @package     Admin
  */
@@ -42,27 +42,6 @@ class Admin_Controller_Abstract
     {        
     }
 
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Admin_Controller_Abstract
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Admin_Controller
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Admin_Controller;
-        }
-        
-        return self::$_instance;
-    }
-    
     /**
      * generic check admin rights function
      * rules: 

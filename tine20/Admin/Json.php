@@ -41,7 +41,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         try {
             $logIds = Zend_Json::decode($logIds);
 
-            Admin_Controller::getInstance()->deleteAccessLogEntries($logIds);
+            Admin_Controller_AccessLog::getInstance()->deleteAccessLogEntries($logIds);
 
             $result = array(
                 'success' => TRUE
@@ -80,18 +80,18 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $pagination, $fromDateObject, $toDateObject);
+        $accessLogSet = Admin_Controller_AccessLog::getInstance()->getAccessLogEntries($filter, $pagination, $fromDateObject, $toDateObject);
         
         $result['results']    = $accessLogSet->toArray();
         if (count($result['results']) < $pagination->limit) {
             $result['totalcount'] = $pagination->start + count($result['results']);
         } else {
-            $result['totalcount'] = Admin_Controller::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
+            $result['totalcount'] = Admin_Controller_AccessLog::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
         }
         
         foreach ($result['results'] as $key => $value) {
             try {
-                $result['results'][$key]['accountObject'] = Admin_Controller::getInstance()->getAccount($value['account_id'])->toArray();
+                $result['results'][$key]['accountObject'] = Admin_Controller_User::getInstance()->getAccount($value['account_id'])->toArray();
             } catch (Exception $e) {
                 // account not found
                 // do nothing so far
@@ -112,7 +112,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      */
     public function getApplication($applicationId)
     {
-        $application = Admin_Controller::getInstance()->getApplication($applicationId);
+        $application = Admin_Controller_Application::getInstance()->getApplication($applicationId);
         
         return $application->toArray();
     }
@@ -138,13 +138,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $applicationSet = Admin_Controller::getInstance()->getApplications($filter, $sort, $dir, $start, $limit);
+        $applicationSet = Admin_Controller_Application::getInstance()->getApplications($filter, $sort, $dir, $start, $limit);
 
         $result['results']    = $applicationSet->toArray();
         if ($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
-            $result['totalcount'] = Admin_Controller::getInstance()->getTotalApplicationCount($filter);
+            $result['totalcount'] = Admin_Controller_Application::getInstance()->getTotalApplicationCount($filter);
         }
         
         return $result;
@@ -161,7 +161,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     {
         $applicationIds = Zend_Json::decode($applicationIds);
 
-        Admin_Controller::getInstance()->setApplicationState($applicationIds, $state);
+        Admin_Controller_Application::getInstance()->setApplicationState($applicationIds, $state);
 
         $result = array(
             'success' => TRUE
@@ -169,57 +169,6 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
-    
-    /**
-     * get list of application accounts with rights
-     *
-     * @param int   $appId
-     * @return array with results array & totalcount (int)
-     * @deprecated isn't used anymore, replaced by role management
-     */
-    public function getApplicationPermissions($appId)
-    {
-        /*
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $permissions = Admin_Controller::getInstance()->getApplicationPermissions($appId);
-
-        $result['results']    = $permissions;
-        $result['totalcount'] = count($permissions);
-        
-        return $result;
-        */
-    }
-    
-    /**
-     * save application data from edit form
-     *
-     * @param   int     $applicationId  app id
-     * @param   string  $rights         json encoded array of application rights
-     * @return  array with success, message, group data and rights
-     * @deprecated isn't used anymore, replaced by role management
-     */
-    public function saveApplicationPermissions($applicationId, $rights)
-    {
-        /*
-        $decodedRights = Zend_Json::decode($rights);
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($decodedRights, true));
-                
-        $countOfRightsSet = Admin_Controller::getInstance()->setApplicationPermissions($applicationId, $decodedRights);
-                 
-        $result = array('success'           => TRUE,
-                        'welcomeMessage'    => $countOfRightsSet . " rights set",                        
-                        'rights'            => Admin_Controller::getInstance()->getApplicationPermissions($applicationId),
-        );
-        
-        return $result;
-        */
-    }    
-    
     
     /********************************** Users *********************************/
     
@@ -267,7 +216,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $accounts = Admin_Controller::getInstance()->getFullUsers($filter, $sort, $dir, $start, $limit);
+        $accounts = Admin_Controller_User::getInstance()->getFullUsers($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
             if ($account['last_login'] !== NULL) {
@@ -313,9 +262,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         if ($account->getId() == NULL) {
-            $account = Admin_Controller::getInstance()->addUser($account, $password, $passwordRepeat);
+            $account = Admin_Controller_User::getInstance()->addUser($account, $password, $passwordRepeat);
         } else {
-            $account = Admin_Controller::getInstance()->updateUser($account, $password, $passwordRepeat);
+            $account = Admin_Controller_User::getInstance()->updateUser($account, $password, $passwordRepeat);
         }
         
         $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
@@ -335,7 +284,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     public function deleteUsers($accountIds)
     {
         $accountIds = Zend_Json::decode($accountIds);
-        Admin_Controller::getInstance()->deleteUsers($accountIds);
+        Admin_Controller_User::getInstance()->deleteUsers($accountIds);
         
         $result = array(
             'success' => TRUE
@@ -354,7 +303,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     {
         $accountIds = Zend_Json::decode($accountIds);
         
-        $controller = Admin_Controller::getInstance();
+        $controller = Admin_Controller_User::getInstance();
         foreach ($accountIds as $accountId) {
             $controller->setAccountStatus($accountId, $state);
         }
@@ -377,7 +326,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     {
         $account = new Tinebase_Model_FullUser(Zend_Json::decode($account));
         
-        $controller = Admin_Controller::getInstance();
+        $controller = Admin_Controller_User::getInstance();
         $controller->setAccountPassword($account, $password, $password);
         
         $result = array(
@@ -434,7 +383,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $group = array();
         
         if ($groupId) {
-            $group = Admin_Controller::getInstance()->getGroup($groupId)->toArray();
+            $group = Admin_Controller_Group::getInstance()->getGroup($groupId)->toArray();
         }
         
         $group['groupMembers'] = $this->getGroupMembers($groupId);
@@ -458,7 +407,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $groups = Admin_Controller::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
+        $groups = Admin_Controller_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
 
         $result['results'] = $groups->toArray();
         $result['totalcount'] = count($groups);
@@ -480,7 +429,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         );
         
         if ($groupId) {
-            $accountIds = Admin_Controller::getInstance()->getGroupMembers($groupId);
+            $accountIds = Admin_Controller_Group::getInstance()->getGroupMembers($groupId);
     
             $result['results'] = array ();
             foreach ( $accountIds as $accountId ) {
@@ -514,9 +463,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $group = new Tinebase_Model_Group($decodedGroupData);
         
         if ( empty($group->id) ) {
-            $group = Admin_Controller::getInstance()->addGroup($group, $decodedGroupMembers);
+            $group = Admin_Controller_Group::getInstance()->addGroup($group, $decodedGroupMembers);
         } else {
-            $group = Admin_Controller::getInstance()->updateGroup($group, $decodedGroupMembers);
+            $group = Admin_Controller_Group::getInstance()->updateGroup($group, $decodedGroupMembers);
         }
 
         return $this->getGroup($group->getId());
@@ -537,7 +486,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $groupIds = Zend_Json::decode($groupIds);
         
-        Admin_Controller::getInstance()->deleteGroups($groupIds);
+        Admin_Controller_Group::getInstance()->deleteGroups($groupIds);
 
         return $result;
     }
@@ -555,7 +504,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $tag = array();
         
         if ($tagId) {
-            $tag = Admin_Controller::getInstance()->getTag($tagId)->toArray();
+            $tag = Admin_Controller_Tags::getInstance()->getTag($tagId)->toArray();
             //$tag->rights = $tag->rights->toArray();
             $tag['rights'] = Admin_Json::resolveAccountName($tag['rights'] , true);
         }
@@ -581,7 +530,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $tags = Admin_Controller::getInstance()->getTags($query, $sort, $dir, $start, $limit);
+        $tags = Admin_Controller_Tags::getInstance()->getTags($query, $sort, $dir, $start, $limit);
 
         $result['results'] = $tags->toArray();
         $result['totalcount'] = count($tags);
@@ -611,9 +560,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(print_r($tag->toArray(),true));
         
         if ( empty($tag->id) ) {
-            $tag = Admin_Controller::getInstance()->addTag($tag);
+            $tag = Admin_Controller_Tags::getInstance()->addTag($tag);
         } else {
-            $tag = Admin_Controller::getInstance()->updateTag($tag);
+            $tag = Admin_Controller_Tags::getInstance()->updateTag($tag);
         }
         
         return $this->getTag($tag->getId());
@@ -634,7 +583,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $tagIds = Zend_Json::decode($tagIds);
         
-        Admin_Controller::getInstance()->deleteTags($tagIds);
+        Admin_Controller_Tags::getInstance()->deleteTags($tagIds);
 
         return $result;
     }
@@ -651,7 +600,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     {
         $role = array();
         if ($roleId) {
-            $role = Admin_Controller::getInstance()->getRole($roleId)->toArray();
+            $role = Admin_Controller_Role::getInstance()->getRole($roleId)->toArray();
         }
 
         $role['roleMembers'] = $this->getRoleMembers($roleId);
@@ -677,7 +626,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $roles = Admin_Controller::getInstance()->getRoles($query, $sort, $dir, $start, $limit);
+        $roles = Admin_Controller_Role::getInstance()->getRoles($query, $sort, $dir, $start, $limit);
 
         //$result['results'] = array ( array("name" => "role1", "description" => "blabla", "id" => 1) );
         //$result['totalcount'] = 1;
@@ -713,9 +662,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $role = new Tinebase_Model_Role($decodedRoleData);
         
         if (empty($role->id) ) {
-            $role = Admin_Controller::getInstance()->addRole($role, $decodedRoleMembers, $decodedRoleRights);
+            $role = Admin_Controller_Role::getInstance()->addRole($role, $decodedRoleMembers, $decodedRoleRights);
         } else {
-            $role = Admin_Controller::getInstance()->updateRole($role, $decodedRoleMembers, $decodedRoleRights);
+            $role = Admin_Controller_Role::getInstance()->updateRole($role, $decodedRoleMembers, $decodedRoleRights);
         }
         
         return $this->getRole($role->getId());
@@ -735,7 +684,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $roleIds = Zend_Json::decode($roleIds);
         
-        Admin_Controller::getInstance()->deleteRoles($roleIds);
+        Admin_Controller_Role::getInstance()->deleteRoles($roleIds);
 
         return $result;
     }
@@ -756,7 +705,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         );
         
         if (!empty($roleId)) {
-            $members = Admin_Controller::getInstance()->getRoleMembers($roleId);
+            $members = Admin_Controller_Role::getInstance()->getRoleMembers($roleId);
     
             $result['results'] = self::resolveAccountName($members, true);
             $result['totalcount'] = count($result['results']);
@@ -778,7 +727,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         );
         
         if (!empty($roleId)) {
-            $rights = Admin_Controller::getInstance()->getRoleRights($roleId);
+            $rights = Admin_Controller_Role::getInstance()->getRoleRights($roleId);
         
             $result['results'] = $rights;
             $result['totalcount'] = count($rights);
@@ -799,7 +748,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $result = array();
         
         // get all applications
-        $applications = Admin_Controller::getInstance()->getApplications(NULL, 'name', 'ASC', NULL, NULL);
+        $applications = Admin_Controller_Application::getInstance()->getApplications(NULL, 'name', 'ASC', NULL, NULL);
         
         foreach ( $applications as $application ) {
             $appId = $application->getId();

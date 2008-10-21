@@ -20,6 +20,56 @@
 class Admin_Controller_Role extends Admin_Controller_Abstract
 {
     /**
+     * holdes the instance of the singleton
+     *
+     * @var Admin_Controller_Role
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Admin_Controller_Role
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Admin_Controller_Role;
+        }
+        
+        return self::$_instance;
+    }
+
+    /**
+     * get list of roles
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Role
+     */
+    public function getRoles($query, $sort, $dir, $start, $limit)
+    {
+        $this->checkRight('VIEW_ROLES');
+       
+        $filter = new Tinebase_Model_RoleFilter(array(
+            'name'        => '%' . $query . '%',
+            'description' => '%' . $query . '%'
+        ));
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        return Tinebase_Acl_Roles::getInstance()->searchRoles($filter, $paging);
+        
+    }
+    
+    /**
      * fetch one role identified by $_roleId
      *
      * @param int $_roleId

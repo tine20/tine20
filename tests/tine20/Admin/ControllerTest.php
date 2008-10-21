@@ -72,7 +72,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroups()
     {        
-        $groups = Admin_Controller::getInstance()->getGroups(NULL, 'id', 'ASC', 0, 10);
+        $groups = Admin_Controller_Group::getInstance()->getGroups(NULL, 'id', 'ASC', 0, 10);
         
         $this->assertGreaterThan(0, sizeof($groups));
     }    
@@ -83,7 +83,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroup()
     {                
-        $group = Admin_Controller::getInstance()->getGroup(Tinebase_Group::getInstance()->getGroupByName('Users')->getId());
+        $group = Admin_Controller_Group::getInstance()->getGroup(Tinebase_Group::getInstance()->getGroupByName('Users')->getId());
         
         $this->assertEquals('Users', $group->name);
     }    

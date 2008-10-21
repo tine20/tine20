@@ -20,6 +20,27 @@
 class Admin_Controller_AccessLog extends Admin_Controller_Abstract
 {
     /**
+     * holdes the instance of the singleton
+     *
+     * @var Admin_Controller_AccessLog
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Admin_Controller_AccessLog
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Admin_Controller_AccessLog;
+        }
+        
+        return self::$_instance;
+    }
+    
+    /**
      * get list of access log entries
      *
      * @param string $_filter string to search accounts for
