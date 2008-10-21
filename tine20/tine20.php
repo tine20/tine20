@@ -8,6 +8,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        use new Tinebase_Server_Cli
  */
 
 if (php_sapi_name() != 'cli') {
