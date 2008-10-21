@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        move that to Admin_Frontend_Http
+ * @deprecated  remove that when Admin_Frontend_* is used
  */
 
 /**
