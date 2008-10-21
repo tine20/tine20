@@ -10,7 +10,9 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add more rights? (removed MANAGE_LEADS for the moment, it is covered with the container grants)
+ * @todo        what todo about the Tinebase_Container_Abstract extension?
+ * @todo        split into Crm_Controller_Lead/Crm_Controller_Product/...
+ * @deprecated 
  */
 
 /**
