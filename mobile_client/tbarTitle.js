@@ -21,9 +21,20 @@ Ext.namespace('Ext.ux');
 Ext.ux.tbarTitle = {
     init: function init(panel) {
         panel.on('render', function(panel) {
-            var spacer = panel.tbar.child('div[class=ytb-spacer]');
-            spacer.addClass('x-tbar-title');
-            spacer.dom.innerHTML = this.tbarTitle;
+            var tbarEl = Ext.get(panel.tbar);
+            this.tbarTitleEl = tbarEl.insertFirst({
+                tag: 'div',
+                html: this.tbarTitle
+            });
+            this.tbarTitleEl.addClass('x-tbar-title');
+        });
+        
+        panel.on('resize', function(panel) {
+            var titleSize = Ext.util.TextMetrics.createInstance(this.tbarTitleEl, true).getSize(this.tbarTitle);
+            var tbarSize  = Ext.get(panel.tbar).getSize();
+            
+            this.tbarTitleEl.setLeft(tbarSize.width/2 - titleSize.width/2);
+            this.tbarTitleEl.setTop(tbarSize.height/2 - titleSize.height/2);
         });
     }
 }

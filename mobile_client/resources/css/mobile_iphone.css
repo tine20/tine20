@@ -37,7 +37,7 @@
 { color: #fff; font-size: 11px; font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; background-image: none; letter-spacing: 0.1em; }
 .ext-ux-mobile .x-btn-back { }
 
-.ext-ux-mobile .x-tbar-title { color: #fff; font-size: 16px; font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; font-weight: bold; text-decoration: none; text-align: center; letter-spacing: 0.1em; margin-right: auto; margin-left: 25%; }
+.ext-ux-mobile .x-tbar-title {z-index: 1; position: absolute; align: center; color: #fff; font-size: 16px; font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; font-weight: bold; text-decoration: none; text-align: center; letter-spacing: 0.1em;}
 
 /******************************Form************************************/
 /*main*/
