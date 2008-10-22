@@ -3,10 +3,13 @@
  * @author      Koji Horaguchi <horaguchi@horaguchi.net>
  * @version     $Id$
  */
+ 
+/* We don't support dynamic inclusion of po files any longer!
 if (typeof ActiveXObject != 'undefined' && typeof XMLHttpRequest == 'undefined') {
   XMLHttpRequest = function () { try { return new ActiveXObject("Msxml2.XMLHTTP");
   } catch (e) { return new ActiveXObject("Microsoft.XMLHTTP"); } };
 }
+*/
 
 /**
  * @constuctor
@@ -38,9 +41,13 @@ Locale.Gettext.prototype.getmsg = function (domain, category, reload) {
   }
   
   var key = this._getkey(category, domain);
+  return Locale.Gettext.prototype._msgs[key];
+  
+  /*
   return reload || typeof Locale.Gettext.prototype._msgs[key] == 'undefined'
     ? Locale.Gettext.prototype._msgs[key] = new Locale.Gettext.PO(this._url(category, domain))
     : Locale.Gettext.prototype._msgs[key];
+  */
 };
 
 Locale.Gettext.prototype._msgs = {};
@@ -49,6 +56,7 @@ Locale.Gettext.prototype._getkey = function(category, domain) {
     return this.dir + '/' + category + '/' + domain; // expect category is str
 };
 
+/*
 Locale.Gettext.prototype._url = function (category, domain) {
  try {
     var req = new XMLHttpRequest;
@@ -65,6 +73,7 @@ Locale.Gettext.prototype._url = function (category, domain) {
     return '';
   }
 };
+*/
 
 Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
   //console.log(msgid);
@@ -122,6 +131,7 @@ if (typeof Locale.Gettext.PO == 'undefined') {
   };
 }
 
+/*
 Locale.Gettext.PO.VERSION = '0.0.4';
 Locale.Gettext.PO.EXPORT_OK = [
   'po2object',
@@ -131,6 +141,7 @@ Locale.Gettext.PO.EXPORT_OK = [
 Locale.Gettext.PO.po2object = function (po) {
   return eval(Locale.Gettext.PO.po2json(po));
 };
+
 
 Locale.Gettext.PO.po2json = function (po) {
   var first = true, plural = false;
@@ -156,6 +167,7 @@ Locale.Gettext.PO.po2json = function (po) {
       }
     }) + (plural ? ']\n})' : '\n})');
 };
+*/
 
 Locale.Gettext.PO.prototype.get = function (msgid, msgid_plural) {
   // for msgid_plural == ""
