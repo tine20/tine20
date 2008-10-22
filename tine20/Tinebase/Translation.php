@@ -48,9 +48,10 @@ class Tinebase_Translation
     
     /**
      * returns list of all available translations
+     * 
      * NOTE available are those, having a Tinebase translation
      * 
-     * @return array list of all available translation 'localecode' => localised lang name
+     * @return array list of all available translation
      *
      */
     public static function getAvailableTranslations()
@@ -250,61 +251,6 @@ class Tinebase_Translation
         }
         
         return $poFiles;
-    }
-    
-    /**
-     * returns the available language java script from a given locale
-     * 
-     * @deprecated 
-     * 
-     * @param  Zend_Locale        $_locale
-     * @param  string             $_location required location on of {generic|tine|ext}
-     * @return string             filepath relative to tine installation
-     */
-    public static function getJsTranslationFile($_locale, $_location='tine')
-    {
-        $localeString = (string)$_locale;
-        if (! $_locale instanceof Zend_Locale) {
-            $_locale = new Zend_Locale($_locale);
-        }
-        
-        switch ($_location) {
-        	case 'generic':
-        	   $dir = 'Tinebase/js/Locale/static/';
-        	   $prefix = 'generic-';
-        	   $suffix = '.js';
-        	   break;
-        	case 'tine':
-        	   $dir = 'Tinebase/js/Locale/build/';
-               $prefix = '';
-               $suffix = '.js';
-               break;
-        	case 'ext':
-        	   $dir = 'ExtJS/build/locale/';
-               $prefix = 'ext-lang-';
-               $suffix = '.js';
-               break;
-        	default:
-        		throw new Exception('no such location');
-        	   break;
-        }
-        
-        
-        $language = $_locale->getLanguage();
-        
-        $file = $dir . $prefix . $localeString . $suffix;
-        if (file_exists(dirname(__FILE__) . "/../$file")) {
-            return $file;
-        }
-        
-        $file = $dir . $prefix . $language . $suffix;
-        
-        if (file_exists(dirname(__FILE__) . "/../$file")) {
-            return $file;
-        }
-        
-        // fallback
-        return $dir . $prefix . 'en' . $suffix;
     }
     
     /**
