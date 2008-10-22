@@ -47,7 +47,7 @@ class Tasks_Controller implements Tinebase_Events_Interface, Tinebase_Container_
      *
      * @var Zend_Db_Table_Rowset
      */
-    protected $_stati;
+    protected $_status;
     
     /**
      * Holds instance of current account
@@ -81,7 +81,7 @@ class Tasks_Controller implements Tinebase_Events_Interface, Tinebase_Container_
         //$classTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
         $statiTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
         //$this->_classes = new Tinebase_Record_RecordSet('Tinebase_Record_Class', $classTable->fetchAll());
-        $this->_stati = new Tinebase_Record_RecordSet('Tasks_Model_Status', $statiTable->fetchAll()->toArray(),  true);
+        $this->_status = new Tinebase_Record_RecordSet('Tasks_Model_Status', $statiTable->fetchAll()->toArray(),  true);
         
         $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
@@ -266,10 +266,10 @@ class Tasks_Controller implements Tinebase_Events_Interface, Tinebase_Container_
      * 
      * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
-    public function getStati() {
-        //$result = $this->_stati->translate(); 
+    public function getAllStatus() {
+        //$result = $this->_status->translate(); 
         //var_dump($result);
-        return $this->_stati;
+        return $this->_status;
     }
 
     /**
@@ -281,7 +281,7 @@ class Tasks_Controller implements Tinebase_Events_Interface, Tinebase_Container_
      */
     public function getTaskStatus($_statusId) {
         
-        foreach ( $this->_stati as $status ) {
+        foreach ( $this->_status as $status ) {
             if ( $status->getId() === $_statusId ) {
                 $status->translate();
                 return $status->toArray();

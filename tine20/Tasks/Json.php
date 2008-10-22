@@ -203,8 +203,8 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * 
      * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
-    public function getStati() {
-        $result = $this->_controller->getStati();    
+    public function getAllStatus() {
+        $result = $this->_controller->getAllStatus();    
         $result->translate();
         return $result->toArray();
     }
@@ -218,7 +218,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function getRegistryData()
     {
         $registryData = array(
-            'AllStati' => $this->_controller->getStati(),
+            'AllStati' => $this->_controller->getAllStatus(),
             //'DefaultContainer' => $controller->getDefaultContainer()
         );
         
