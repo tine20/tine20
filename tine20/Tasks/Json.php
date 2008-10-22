@@ -204,13 +204,11 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
-     * 
-     * @todo replace AllStati with AllStatus
      */
     public function getRegistryData()
     {
         $registryData = array(
-            'AllStati' => Tasks_Controller_Status::getInstance()->getAllStatus(),
+            'AllStatus' => Tasks_Controller_Status::getInstance()->getAllStatus(),
             //'DefaultContainer' => $controller->getDefaultContainer()
         );
         
