@@ -36,7 +36,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         
         switch ($_format) {
             case 'pdf':                             
-                $pdf = new Addressbook_Pdf();
+                $pdf = new Addressbook_Export_Pdf();
                 
                 foreach ($contactIds as $contactId) {
                     $contact = Addressbook_Controller_Contact::getInstance()->getContact($contactId);
