@@ -238,7 +238,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     public function testLeadPdfLinkedTask()
     {
         // create lead + task + link
-        $task = Tasks_Controller::getInstance()->createTask($this->objects['linkedTask']);
+        $task = Tasks_Controller_Task::getInstance()->createTask($this->objects['linkedTask']);
 
         $lead = Crm_Controller_Leads::getInstance()->getLead($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
@@ -263,7 +263,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match("/".$task->summary."/", $pdfOutput), "no summary found");
                 
         // remove
-        Tasks_Controller::getInstance()->deleteTask($task->getId());
+        Tasks_Controller_Task::getInstance()->deleteTask($task->getId());
         
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();        

@@ -19,11 +19,6 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     protected $_appname = 'Tasks';
     
     /**
-     * @var Tasks_Controller
-     */
-    protected $_controller;
-    
-    /**
      * user timezone
      *
      * @var string
@@ -43,11 +38,6 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function __construct()
     {
-        try{
-            $this->_controller = Tasks_Controller::getInstance();
-        } catch (Exception $e) {
-            //error_log($e);
-        }
         $this->_userTimezone = Zend_Registry::get('userTimeZone');
         $this->_serverTimezone = date_default_timezone_get();
     }
@@ -65,13 +55,13 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $pagination = new Tasks_Model_Pagination($paginationFilter);
         //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
-        $tasks = $this->_controller->searchTasks($filter, $pagination);
+        $tasks = Tasks_Controller_Task::getInstance()->searchTasks($filter, $pagination);
 
         $results = $this->_multipleTasksToJson($tasks);
         
         return array(
             'results' => $results,
-            'totalcount' => $this->_controller->searchTasksCount($filter)
+            'totalcount' => Tasks_Controller_Task::getInstance()->searchTasksCount($filter)
         );
     }
     
@@ -86,7 +76,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function getTask($uid, $containerId = -1, $relatedApp = '')
     {
         if(strlen($uid) == 40) {
-            $task = $this->_controller->getTask($uid);
+            $task = Tasks_Controller_Task::getInstance()->getTask($uid);
         } else {
             $task = new Tasks_Model_Task(array(
                 'container_id' => $containerId
@@ -112,7 +102,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $inTask->setFromJson($task);
         
         //error_log(print_r($newTask->toArray(),true));
-        $outTask = $this->_controller->updateTask($inTask);
+        $outTask = Tasks_Controller_Task::getInstance()->updateTask($inTask);
         return $this->_taskToJson($outTask);
     }
     
@@ -129,8 +119,8 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 
-            $this->_controller->updateTask($inTask): 
-            $this->_controller->createTask($inTask);
+            Tasks_Controller_Task::getInstance()->updateTask($inTask): 
+            Tasks_Controller_Task::getInstance()->createTask($inTask);
 
         return $this->_taskToJson($outTask);
     }
@@ -182,7 +172,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         if (strlen($identifier) > 40) {
             $identifier = Zend_Json::decode($identifier);
         }
-        $this->_controller->deleteTask($identifier);
+        Tasks_Controller_Task::getInstance()->deleteTask($identifier);
         return 'success';
     }
     
@@ -193,7 +183,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function getDefaultContainer()
     {
-        $container = $this->_controller->getDefaultContainer();
+        $container = Tasks_Controller::getInstance()->getDefaultContainer();
         $container->setTimezone($this->_userTimezone);
         return $container->toArray();
     }
@@ -204,7 +194,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
     public function getAllStatus() {
-        $result = $this->_controller->getAllStatus();    
+        $result = Tasks_Controller_Status::getInstance()->getAllStatus();    
         $result->translate();
         return $result->toArray();
     }
@@ -214,11 +204,13 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
+     * 
+     * @todo replace AllStati with AllStatus
      */
     public function getRegistryData()
     {
         $registryData = array(
-            'AllStati' => $this->_controller->getAllStatus(),
+            'AllStati' => Tasks_Controller_Status::getInstance()->getAllStatus(),
             //'DefaultContainer' => $controller->getDefaultContainer()
         );
         

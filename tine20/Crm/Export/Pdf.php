@@ -224,13 +224,12 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                 
                 foreach ($taskRelations as $relation) {
                     try {
-                        //$task = Tasks_Controller::getInstance()->getTask($relation->related_id);
                         $task = $relation->related_record;
                         
                         $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
                         // @todo add big icon to db or preg_replace? 
                         if ( !empty($task->status_id) ) {
-                            $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
+                            $status = Tasks_Controller_Status::getInstance()->getTaskStatus($task->status_id);
                             $icon = "/" . $status['status_icon'];
                             $linkedObjects[] = array ($taskTitle, 'separator', $icon);
                         } else {

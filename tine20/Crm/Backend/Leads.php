@@ -57,7 +57,7 @@ class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
                 $relationsController->setRelations('Crm_Model_Lead', 'Sql', $leadId, array());
                 foreach ($relations as $relation) {
                     if ($relation->related_model === 'Tasks_Model_Task' /* && $relation->own_degree === 'sibling' */) {
-                        Tasks_Controller::getInstance()->deleteTask($relation->related_id);
+                        Tasks_Controller_Task::getInstance()->deleteTask($relation->related_id);
                     }
                 }                
             }

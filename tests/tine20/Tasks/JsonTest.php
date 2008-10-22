@@ -73,7 +73,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create task
         $task = $this->_getTask();
-        $task = Tasks_Controller::getInstance()->createTask($task);
+        $task = Tasks_Controller_Task::getInstance()->createTask($task);
         
         // search tasks
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()));
@@ -83,7 +83,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         
         // delete task
         // @todo move that to generic cleanup function
-        Tasks_Controller::getInstance()->deleteTask($task->getId());        
+        Tasks_Controller_Task::getInstance()->deleteTask($task->getId());        
     }
     
     /**
