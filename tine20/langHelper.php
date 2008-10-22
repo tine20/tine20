@@ -113,29 +113,6 @@ if ($opts->package) {
 }
 
 /**
- * gets array of lang dirs app => dir
- * 
- * @return array
- */
-function getTranslationDirs()
-{
-    global $tine20path;
-    
-    $langDirs = array();
-    $d = dir($tine20path);
-    while (false !== ($appName = $d->read())) {
-        $appPath = "$tine20path/$appName";
-        if (is_dir($appPath) && $appName{0} != '.') {
-            $translationPath = "$appPath/translations";
-            if (is_dir($translationPath)) {
-                $langDirs[$appName] = $translationPath;
-            }
-        }
-    }
-    return $langDirs;
-}
-
-/**
  * returns list of existing langugages
  * (those, having a correspoinding Tinebase po file)
  *
@@ -168,7 +145,7 @@ function getExistingLanguages($_verbose)
  */
 function translationExists($_locale)
 {
-    foreach (getTranslationDirs() as $dir) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $dir) {
         if (file_exists("$dir/$_locale.po")) {
             return true;
         }
@@ -186,7 +163,7 @@ function generatePOTFiles($_verbose)
         die("You need to run ./release.php -c before updateing lang files! \n");
     }
     
-    foreach (getTranslationDirs() as $appName => $translationPath) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Creating $appName template \n";
         }
@@ -208,7 +185,7 @@ function potmerge($_verbose)
     $langs = getExistingLanguages($_verbose);
     $msgDebug = $_verbose ? '' : '2> /dev/null';
     
-    foreach (getTranslationDirs() as $appName => $translationPath) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Processing $appName po files \n";
         }
@@ -328,7 +305,7 @@ function contributorsMerge($_verbose, $_language, $_archive)
  */
 function msgfmt ($_verbose)
 {
-    foreach (getTranslationDirs() as $appName => $translationPath) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Entering $appName \n";
         }
@@ -355,7 +332,7 @@ function buildpackage($_verbose)
     
     $zipFile = "$tine20path/translations.zip";
     if (file_exists($zipFile)) `rm $zipFile`;
-    foreach (getTranslationDirs() as $appName => $translationPath) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         `cd $tine20path
         zip $zipFile  $appName/translations/* `;
     }
@@ -375,7 +352,7 @@ function statistics($_verbose)
     $langStats       = array();
     $poFilesStats    = array();
     
-    foreach (getTranslationDirs() as $appName => $translationPath) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Entering $appName \n";
         }
@@ -528,7 +505,7 @@ function generateNewTranslationFiles($_locale, $_verbose=false, $_overwrite=fals
     
     $pluralForm = getPluralForm($languageName);
     
-    foreach (getTranslationDirs() as $appName => $translationPath) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         $file = "$translationPath/$_locale.po";
         generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $file, $_verbose);
     }
@@ -642,7 +619,7 @@ function getPluralForm($_languageName)
 
 function svnAdd($_locale)
 {
-    foreach (getTranslationDirs() as $dir) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $dir) {
         if (file_exists("$dir/$_locale.po")) {
             `cd $dir
             svn add $dir/$_locale.po`;

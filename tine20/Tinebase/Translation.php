@@ -175,7 +175,56 @@ class Tinebase_Translation
     }
     
     /**
+     * Returns collection of all javascript translations data for requested language
+     * 
+     * This is a javascript spechial function!
+     * The data will be preseted to be included as javascript on client side!
+     *
+     * @param  string $_locale
+     * @return string javascript
+     */
+    public static function getJsTranslations($_locale)
+    {
+        $baseDir = dirname(__FILE__) . "/..";
+        $localeString = (string) $_locale;
+        
+        $genericTranslations = file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
+        $extTranslations     = file_get_contents("$baseDir/ExtJS/build/locale/ext-lang-$localeString.js");
+        
+        
+        
+    }
+    
+    /**
+     * gets array of lang dirs from all applications having translations
+     * 
+     * Note: This functions must not query the database! 
+     *       It's only used in the development and release building process
+     * 
+     * @return array app => dir
+     */
+    public static function getTranslationDirs()
+    {
+        $tine20path = dirname(__File__) . "/..";
+        
+        $langDirs = array();
+        $d = dir($tine20path);
+        while (false !== ($appName = $d->read())) {
+            $appPath = "$tine20path/$appName";
+            if (is_dir($appPath) && $appName{0} != '.') {
+                $translationPath = "$appPath/translations";
+                if (is_dir($translationPath)) {
+                    $langDirs[$appName] = $translationPath;
+                }
+            }
+        }
+        return $langDirs;
+    }
+    
+    /**
      * returns the available language java script from a given locale
+     * 
+     * @deprecated 
      * 
      * @param  Zend_Locale        $_locale
      * @param  string             $_location required location on of {generic|tine|ext}
