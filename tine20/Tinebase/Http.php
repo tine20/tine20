@@ -250,6 +250,22 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     }
     
     /**
+     * returns javascript of translations for the currently configured locale
+     * 
+     * Note: This function is only used in development mode. In debug/release mode
+     * we can include the static build files in the view. With this we avoid the 
+     * need to start a php process and stream static js files through it.
+     * 
+     * @return javascript
+     *
+     */
+    public function getJsTranslations()
+    {
+        $locale = Zend_Registry::get('locale');
+        echo Tinebase_Translation::getJsTranslations($locale);
+    }
+    
+    /**
      * returns registry data
      * 
      * @return array
