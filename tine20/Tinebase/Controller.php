@@ -160,17 +160,23 @@ class Tinebase_Controller
     public static function getApplicationInstance($_applicationName, $_modelName = '')
     {
         $controllerName = ucfirst((string) $_applicationName) . '_Controller';
-        
-        if (!class_exists($controllerName)) {
-            
-            // check for model controller
+
+        // check for model controller
+        if (!empty($_modelName)) {
             $controllerNameModel = $controllerName . '_' . $_modelName;
-            
             if (!class_exists($controllerNameModel)) {
-                throw new Exception('classes '. $controllerName . ' and ' . $controllerNameModel . ' not found');
+    
+                // check for generic app controller
+                if (!class_exists($controllerName)) {            
+                    throw new Exception('No Controller found (checked classes '. $controllerName . ' and ' . $controllerNameModel . ')!');
+                } 
             } else {
                 $controllerName = $controllerNameModel;
             }
+        } else {
+            if (!class_exists($controllerName)) {            
+                throw new Exception('No Application Controller found (checked class ' . $controllerName . ')!');
+            }             
         }
         
         $controller = call_user_func(array($controllerName, 'getInstance'));

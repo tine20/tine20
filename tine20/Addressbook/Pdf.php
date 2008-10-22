@@ -123,7 +123,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         );
          
         try {
-            $tineImage = Addressbook_Controller_Contact::getInstance()->getImage($_contact->getId());
+            $tineImage = Addressbook_Controller::getInstance()->getImage($_contact->getId());
             Tinebase_ImageHelper::resize($tineImage, 160, 240, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);            
             $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
             $tmpPath .= $tineImage->getImageExtension();

@@ -200,7 +200,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetImage()
     {
-        $image = Addressbook_Controller_Contact::getInstance()->getImage($this->objects['initialContact']->id);
+        $image = Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
         $this->assertType('Tinebase_Model_Image', $image);
         $this->assertEquals($image->width, 94);
     }
@@ -280,7 +280,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
         $contact->jpegphoto = '';
         $this->setExpectedException('Exception');
-        $image = Addressbook_Controller_Contact::getInstance()->getImage($contact->id);
+        $image = Addressbook_Controller::getInstance()->getImage($contact->id);
     }
     
     /**
@@ -290,7 +290,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testGetImageException()
     {
         $this->setExpectedException('Exception');
-        Addressbook_Controller_Contact::getInstance()->getImage($this->objects['initialContact']->id);
+        Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
     }
     
     /**
@@ -313,9 +313,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testCreatePersonalFolder()
     {
         $account = Zend_Registry::get('currentAccount');
-        $folder = Addressbook_Controller_Contact::getInstance()->createPersonalFolder($account);
+        $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account);
         $this->assertEquals(1, count($folder));
-        $folder = Addressbook_Controller_Contact::getInstance()->createPersonalFolder($account->getId());
+        $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account->getId());
         $this->assertEquals(1, count($folder));
     }
 }
