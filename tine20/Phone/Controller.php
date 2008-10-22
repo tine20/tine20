@@ -15,21 +15,8 @@
  * 
  * @package     Phone
  */
-class Phone_Controller
+class Phone_Controller extends Tinebase_Application_Controller_Abstract
 {
-    /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() {}
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
     /**
      * holdes the instance of the singleton
      *
