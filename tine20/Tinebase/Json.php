@@ -91,18 +91,15 @@ class Tinebase_Json extends Tinebase_Application_Json_Abstract
     {
         Tinebase_Controller::getInstance()->setupUserLocale($localeString, $saveaspreference);
         $locale = Zend_Registry::get('locale');
-        
+        /* No need for return values yet. Client needs to reload!
         return array(
             'locale' => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
                 'region'   => $locale->getCountryTranslation($locale->getRegion())
-            ),
-            'translationFiles' => array(
-                'generic' => Tinebase_Translation::getJsTranslationFile($locale, 'generic'),
-                'tine'    => Tinebase_Translation::getJsTranslationFile($locale, 'tine'),
-                'ext'     => Tinebase_Translation::getJsTranslationFile($locale, 'ext')
-            ));
+            )
+        );
+        */
     }
 
     /**
