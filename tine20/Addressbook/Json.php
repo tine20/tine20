@@ -34,7 +34,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     {
         $result = array();
                
-        $contact = Addressbook_Controller::getInstance()->getContact($contactId);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContact($contactId);
         $result = $this->_contactToJson($contact);
         
         return $result;
@@ -56,13 +56,13 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         //Zend_Registry::get('logger')->debug(print_r($decodedFilter,true));
         
-        $contacts = Addressbook_Controller::getInstance()->searchContacts($filter, $pagination);
+        $contacts = Addressbook_Controller_Contact::getInstance()->searchContacts($filter, $pagination);
         //$contacts->setTimezone($this->_userTimezone);
         //$contacts->convertDates = true;
         
         return array(
             'results'       => $this->_multipleContactsToJson($contacts),
-            'totalcount'    => Addressbook_Controller::getInstance()->searchContactsCount($filter)
+            'totalcount'    => Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter)
         );
     }    
 
@@ -82,7 +82,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         $contactIds = Zend_Json::decode($_contactIds);
         
-        Addressbook_Controller::getInstance()->deleteContact($contactIds);
+        Addressbook_Controller_Contact::getInstance()->deleteContact($contactIds);
 
         return $result;
     }
@@ -101,9 +101,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $contact->setFromJsonInUsersTimezone($contactData);
         
         if (empty($contact->id)) {
-            $contact = Addressbook_Controller::getInstance()->createContact($contact);
+            $contact = Addressbook_Controller_Contact::getInstance()->createContact($contact);
         } else {
-            $contact = Addressbook_Controller::getInstance()->updateContact($contact);
+            $contact = Addressbook_Controller_Contact::getInstance()->updateContact($contact);
         }
 
         $result =  $this->getContact($contact->getId());
@@ -125,7 +125,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Addressbook_Controller::getInstance()->getSalutations()) {
+        if($rows = Addressbook_Controller_Salutation::getInstance()->getSalutations()) {
             $rows->translate();
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);

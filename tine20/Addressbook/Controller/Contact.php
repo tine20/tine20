@@ -3,6 +3,7 @@
  * Tine 2.0
  *
  * @package     Addressbook
+ * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,19 +12,13 @@
  */
 
 /**
- * controller for Addressbook
+ * contact controller for Addressbook
  *
  * @package     Addressbook
+ * @subpackage  Controller
  */
-class Addressbook_Controller implements Tinebase_Events_Interface, Tinebase_Container_Interface
+class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
 {
-    /**
-     * Holds instance of current account
-     *
-     * @var Tinebase_Model_User
-     */
-    protected $_currentAccount;
-    
     /**
      * the contacts backend
      *
@@ -34,7 +29,7 @@ class Addressbook_Controller implements Tinebase_Events_Interface, Tinebase_Cont
     /**
      * holdes the instance of the singleton
      *
-     * @var Adressbook_Controller
+     * @var Addressbook_Controller_Contact
      */
     private static $_instance = NULL;
     
@@ -49,23 +44,14 @@ class Addressbook_Controller implements Tinebase_Events_Interface, Tinebase_Cont
     }
     
     /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone()
-    {
-        
-    }
-
-    /**
      * the singleton pattern
      *
-     * @return Addressbook_Controller
+     * @return Addressbook_Controller_Contact
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Controller;
+            self::$_instance = new Addressbook_Controller_Contact;
         }
         
         return self::$_instance;
@@ -412,20 +398,5 @@ class Addressbook_Controller implements Tinebase_Events_Interface, Tinebase_Cont
      */
     public function deletePersonalFolder($_account)
     {
-    }
-    
-    /**
-     * get salutations
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Addressbook_Model_Salutation
-     */
-    public function getSalutations($_sort = 'id', $_dir = 'ASC')
-    {
-        $backend = Addressbook_Backend_Salutation::getInstance();        
-        $result = $backend->getAll($_sort, $_dir);
-
-        return $result;    
     }
 }

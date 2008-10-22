@@ -185,7 +185,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                 
                 foreach ($contactRelations as $relation) {
                     try {
-                        //$contact = Addressbook_Controller::getInstance()->getContact($relation->related_id);
+                        //$contact = Addressbook_Controller_Contact::getInstance()->getContact($relation->related_id);
                         $contact = $relation->related_record;
                         
                         $contactNameAndCompany = $contact->n_fn;

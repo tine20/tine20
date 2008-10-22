@@ -310,7 +310,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     public function testGetGrantsOfRecords()
     {
         $userId = Zend_Registry::get('currentAccount')->getId();
-        $contact = Addressbook_Controller::getInstance()->getContactByUserId($userId);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($userId);
         $records = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         $records->addRecord($contact);
         

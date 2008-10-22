@@ -176,7 +176,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $contact = $this->objects['initialContact'];
         $contact->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
-        $contact = Addressbook_Controller::getInstance()->createContact($contact);
+        $contact = Addressbook_Controller_Contact::getInstance()->createContact($contact);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
@@ -188,7 +188,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContact()
     {
-        $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
@@ -200,7 +200,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetImage()
     {
-        $image = Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
+        $image = Addressbook_Controller_Contact::getInstance()->getImage($this->objects['initialContact']->id);
         $this->assertType('Tinebase_Model_Image', $image);
         $this->assertEquals($image->width, 94);
     }
@@ -216,7 +216,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
+        $count = Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter);
         
         $this->assertEquals(1, $count);
     }
@@ -239,7 +239,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
         $filter->container = array($container->getId());
-        $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
+        $count = Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter);
         
         $this->assertGreaterThan(0, $count);
     }
@@ -254,7 +254,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'query',         'operator' => 'contains', 'value' => $this->objects['initialContact']->n_family),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
-        $count = Addressbook_Controller::getInstance()->searchContactsCount($filter);
+        $count = Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter);
         
         $this->assertEquals(1, $count);
     }
@@ -265,7 +265,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateContact()
     {
-        $contact = Addressbook_Controller::getInstance()->updateContact($this->objects['updatedContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->updateContact($this->objects['updatedContact']);
 
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
         $this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
@@ -277,10 +277,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testRemoveContactImage()
     {
-        $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
         $contact->jpegphoto = '';
         $this->setExpectedException('Exception');
-        $image = Addressbook_Controller::getInstance()->getImage($contact->id);
+        $image = Addressbook_Controller_Contact::getInstance()->getImage($contact->id);
     }
     
     /**
@@ -290,7 +290,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testGetImageException()
     {
         $this->setExpectedException('Exception');
-        Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
+        Addressbook_Controller_Contact::getInstance()->getImage($this->objects['initialContact']->id);
     }
     
     /**
@@ -299,11 +299,11 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContact()
     {
-        Addressbook_Controller::getInstance()->deleteContact($this->objects['initialContact']);
+        Addressbook_Controller_Contact::getInstance()->deleteContact($this->objects['initialContact']);
 
         $this->setExpectedException('UnderflowException');
         
-        $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
     }
     
     /**
@@ -313,9 +313,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testCreatePersonalFolder()
     {
         $account = Zend_Registry::get('currentAccount');
-        $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account);
+        $folder = Addressbook_Controller_Contact::getInstance()->createPersonalFolder($account);
         $this->assertEquals(1, count($folder));
-        $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account->getId());
+        $folder = Addressbook_Controller_Contact::getInstance()->createPersonalFolder($account->getId());
         $this->assertEquals(1, count($folder));
     }
 }

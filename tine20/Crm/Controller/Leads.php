@@ -98,7 +98,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract impl
         $emptyLead = new Crm_Model_Lead($defaultData, true);
         
         // add creator as RESPONSIBLE
-        $userContact = Addressbook_Controller::getInstance()->getContactByUserId($this->_currentAccount->getId());
+        $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId());
         $emptyLead->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         $emptyLead->relations->addRecord(new Tinebase_Model_Relation(array(
             'own_id'                 => 0,

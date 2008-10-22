@@ -158,7 +158,7 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
             $containerId = $_containerId;
         }
         
-        $addressbookController = Addressbook_Controller::getInstance();
+        $addressbookController = Addressbook_Controller_Contact::getInstance();
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         foreach ($_records as $contact) {
             // set container_id/container id only if it isn't set already

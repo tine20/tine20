@@ -148,7 +148,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             // already there
         }
         try {
-            $contact = Addressbook_Controller::getInstance()->createContact($this->objects['linkedContact']);
+            $contact = Addressbook_Controller_Contact::getInstance()->createContact($this->objects['linkedContact']);
         } catch ( Exception $e ) {
             // already there
         }
@@ -173,7 +173,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         }
         
         try { 
-            Addressbook_Controller::getInstance()->deleteContact($this->objects['linkedContact']);
+            Addressbook_Controller_Contact::getInstance()->deleteContact($this->objects['linkedContact']);
         } catch ( Exception $e ) {
             // access denied ?
         }

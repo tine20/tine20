@@ -147,7 +147,7 @@ class Addressbook_Cli
             'dir' => 'ASC',
         ));
         
-        $contacts = Addressbook_Controller::getInstance()->searchContacts($filter, $pagination);
+        $contacts = Addressbook_Controller_Contact::getInstance()->searchContacts($filter, $pagination);
         if (count($contacts) < 1) {
             die("No contacts found \n");
         }

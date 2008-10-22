@@ -154,14 +154,23 @@ class Tinebase_Controller
      * returns an instance of the controller of an application
      *
      * @param string $_applicationName
+     * @param string $_modelName
      * @return object the controller of the application
      */
-    public static function getApplicationInstance($_applicationName)
+    public static function getApplicationInstance($_applicationName, $_modelName = '')
     {
         $controllerName = ucfirst((string) $_applicationName) . '_Controller';
         
         if (!class_exists($controllerName)) {
-            throw new Exception('class '. $controllerName . ' not found');
+            
+            // check for model controller
+            $controllerNameModel = $controllerName . '_' . $_modelName;
+            
+            if (!class_exists($controllerNameModel)) {
+                throw new Exception('classes '. $controllerName . ' and ' . $controllerNameModel . ' not found');
+            } else {
+                $controllerName = $controllerNameModel;
+            }
         }
         
         $controller = call_user_func(array($controllerName, 'getInstance'));

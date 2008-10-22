@@ -477,9 +477,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     {
         // create test contact
         try {
-            $contact = Addressbook_Controller::getInstance()->getContact($this->_objects['user']->getId());
+            $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->_objects['user']->getId());
         } catch ( Exception $e ) {
-            $contact = Addressbook_Controller::getInstance()->createContact($this->_objects['user']);
+            $contact = Addressbook_Controller_Contact::getInstance()->createContact($this->_objects['user']);
         }
         
         // link contact
@@ -504,7 +504,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($contact->getId(), $updatedLead->relations[0]->related_id);
         
         // delete contact
-        Addressbook_Controller::getInstance()->deleteContact($this->_objects['user']->getId());
+        Addressbook_Controller_Contact::getInstance()->deleteContact($this->_objects['user']->getId());
     }
     
     /**
