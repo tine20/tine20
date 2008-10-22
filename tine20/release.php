@@ -255,46 +255,20 @@ if ($opts->lint) {
 
 // translations
 if ($opts->a || $opts->t) {
-    $translations = array();
+    $availableTranslations = Tinebase_Translation::getAvailableTranslations();
     
-    // collect translations
-    $d = dir($tine20path);
-    while (false !== ($appName = $d->read())) {
-        $appPath = "$tine20path/$appName";
-        if (is_dir($appPath) && $appName{0} != '.') {
-            $translationPath = "$appPath/translations";
-            if (is_dir($translationPath)) {
-                $files = scandir($translationPath);
-                foreach ($files as $file) {
-                    $filePath = "$translationPath/$file";
-                    if (is_file($filePath) && substr($file , -3) == '.po') {
-                        list($locale) = explode('.', $file);
-                        $poObject = Tinebase_Translation::po2jsObject($filePath);
-                        $translations[$locale][] = getJs($locale, $appName, $poObject);
-                    }
-                }
-            }
-        }
-       
-    }
-    $d->close();
-    
-    // dump one langfile for each locale
-    foreach ($translations as $locale => $domains) {
-        $js = '';
-        foreach ($domains as $domain) {
-            $js = $js . $domain;
-        }
-        file_put_contents("$tine20path/Tinebase/js/Locale/build/$locale-debug.js", $js);
+    foreach ($availableTranslations as $translation) {
+        $localeString = $translation['locale'];
+        $locale = new Zend_Locale($localeString);
         
         if ( $opts->v ) {
-            echo "compressing file $locale.js\n";
+            echo "building language '$localeString'\n";
         }
-        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
         
-        unifyTranslations($locale);
+        $jsTranslation = Tinebase_Translation::getJsTranslations($locale);
+        file_put_contents("$tine20path/Tinebase/js/Locale/build/$locale-all-debug.js", $jsTranslation);
+        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale-all.js $tine20path/Tinebase/js/Locale/build/$locale-all-debug.js");
     }
-    unifyTranslations('en');
 }
 
 // build zend translation lists only on demand
@@ -312,55 +286,6 @@ if ( $opts->z ) {
     }
 }
 
-/**
- * returns key of translations object in Locale.Gettext
- *
- * @param string $locale
- * @param string $appName
- * @return string
- */
-function getJs($locale, $appName, $poObject)
-{
-    return "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject);";
-}
-
-/**
- * unifies / concats all translation sources into one file
- *
- * @param string $localeString
- */
-function unifyTranslations($localeString)
-{
-    global $tine20path;
-    global $yuiCompressorPath;
-    
-    $output = '';
-
-    $extTranslationFile = "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'ext');
-    if (file_exists($extTranslationFile)) {
-        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$localeString-ext-min.js $extTranslationFile");
-    }
-    
-    // unify translations
-    $files = array ( 
-        "$tine20path/" . "Tinebase/js/Locale/build/$localeString-ext-min.js",
-        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'generic'),
-        "$tine20path/" . Tinebase_Translation::getJsTranslationFile($localeString, 'tine')
-    );
-    
-    // don't include tine en as it does not exist!
-    if ($localeString == 'en') {
-        unset($files[2]);
-    }
-    
-    foreach ($files as $file) {
-        if(file_exists($file)) {
-            $output .= file_get_contents($file);
-        }
-    }
-    
-    file_put_contents("$tine20path/Tinebase/js/$localeString-all.js", $output);
-}
 
 /**
  * creates translation lists js files for locale with js object
