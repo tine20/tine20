@@ -10,6 +10,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        replace by Voipmanager_Controller_*
  */
 
 /**
@@ -183,12 +184,6 @@ class Voipmanager_Controller
         return $db;
     }
     
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
     /**
      * holdes the instance of the singleton
      *
