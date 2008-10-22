@@ -119,13 +119,13 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
                             } elseif ( $key === 'leadstate_id' ) {
-                                $state = Crm_Controller::getInstance()->getLeadState($_lead->leadstate_id);
+                                $state = Crm_Controller_LeadStates::getInstance()->getLeadState($_lead->leadstate_id);
                                 $content[] = $state->leadstate;
                             } elseif ( $key === 'leadtype_id' ) {
-                                $type = Crm_Controller::getInstance()->getLeadType($_lead->leadtype_id);
+                                $type = Crm_Controller_LeadTypes::getInstance()->getLeadType($_lead->leadtype_id);
                                 $content[] = $type->leadtype;
                             } elseif ( $key === 'leadsource_id' ) {
-                                $source = Crm_Controller::getInstance()->getLeadSource($_lead->leadsource_id);
+                                $source = Crm_Controller_LeadSources::getInstance()->getLeadSource($_lead->leadsource_id);
                                 $content[] = $source->leadsource;
                             } else {
                                 $content[] = $_lead->$key;
@@ -263,7 +263,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             
             foreach ($_lead->products as $product) {
                 try {
-                    $sourceProduct = Crm_Controller::getInstance()->getProduct($product->product_id);
+                    $sourceProduct = Crm_Controller_LeadProducts::getInstance()->getProduct($product->product_id);
                     
                     // @todo set precision for the price ?
                     $price = Zend_Locale_Format::toNumber($product->product_price, array('locale' => $_locale)/*, array('precision' => 2)*/) . " €";

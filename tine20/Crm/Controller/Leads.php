@@ -66,7 +66,6 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract impl
             throw new Exception('read permission to lead denied');
         }
 
-        //$this->getLinkedProperties($lead);
         $this->getLeadLinks($lead);
         
         Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
@@ -349,7 +348,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract impl
             }
         }        
         $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
-        $this->saveLeadProducts($_leadId, $products);                        
+        Crm_Controller_LeadProducts::getInstance()->saveLeadProducts($_leadId, $products);                        
     }
 
     /**
@@ -359,7 +358,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract impl
      */
     private function getLeadLinks(Crm_Model_Lead &$_lead)
     {
-        $_lead->products = $this->getLeadProducts($_lead->getId());
+        $_lead->products = Crm_Controller_LeadProducts::getInstance()->getLeadProducts($_lead->getId());
         $_lead->relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
     }    
     
@@ -444,15 +443,15 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract impl
     protected function sendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_updates=array())
     {
         $view = new Zend_View();
-        $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
+        $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
         
         $translate = Tinebase_Translation::getTranslation('Crm');
         
         $view->updater = $_updater;
         $view->lead = $_lead;
-        $view->leadState = $this->getLeadState($_lead->leadstate_id);
-        $view->leadType = $this->getLeadType($_lead->leadtype_id);
-        $view->leadSource = $this->getLeadSource($_lead->leadsource_id);
+        $view->leadState = Crm_Controller_LeadStates::getInstance()->getLeadState($_lead->leadstate_id);
+        $view->leadType = Crm_Controller_LeadTypes::getInstance()->getLeadType($_lead->leadtype_id);
+        $view->leadSource = Crm_Controller_LeadSources::getInstance()->getLeadSource($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
         $view->updates = $_updates;
         

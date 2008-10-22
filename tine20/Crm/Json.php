@@ -63,7 +63,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      */
     public function getLead($leadId)
     {
-        $controller = Crm_Controller::getInstance();
+        $controller = Crm_Controller_Leads::getInstance();
 
         if(!$leadId ) {   
             $lead = $controller->getEmptyLead();
@@ -90,7 +90,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
-        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination, TRUE);
+        $leads = Crm_Controller_Leads::getInstance()->searchLeads($filter, $pagination, TRUE);
         
         $result = $this->_multipleLeadsToJson($leads);
         
@@ -98,7 +98,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         return array(
             'results'       => $result,
-            'totalcount'    => Crm_Controller::getInstance()->searchLeadsCount($filter)
+            'totalcount'    => Crm_Controller_Leads::getInstance()->searchLeadsCount($filter)
         );
     }
     
@@ -118,9 +118,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $inLead->setFromJsonInUsersTimezone($lead);
                   
         if(empty($inLead->id)) {
-            $savedLead = Crm_Controller::getInstance()->createLead($inLead);
+            $savedLead = Crm_Controller_Leads::getInstance()->createLead($inLead);
         } else {
-            $savedLead = Crm_Controller::getInstance()->updateLead($inLead);
+            $savedLead = Crm_Controller_Leads::getInstance()->updateLead($inLead);
         }
         
         $result = $this->getLead($savedLead->getId());
@@ -137,7 +137,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {
         $leadIds = Zend_Json::decode($_leadIds);
 
-        Crm_Controller::getInstance()->deleteLead($leadIds);
+        Crm_Controller_Leads::getInstance()->deleteLead($leadIds);
         
         $result = array(
             'success'   => TRUE
@@ -233,7 +233,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Crm_Controller::getInstance()->getLeadSources($sort, $dir)) {
+        if($rows = Crm_Controller_LeadSources::getInstance()->getLeadSources($sort, $dir)) {
             $rows->translate();
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
@@ -266,7 +266,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
             
         
-        if(Crm_Controller::getInstance()->saveLeadsources($leadSources) === FALSE) {
+        if(Crm_Controller_LeadSources::getInstance()->saveLeadsources($leadSources) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);
@@ -290,7 +290,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Crm_Controller::getInstance()->getLeadTypes($sort, $dir)) {
+        if($rows = Crm_Controller_LeadTypes::getInstance()->getLeadTypes($sort, $dir)) {
             $rows->translate();
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
@@ -322,7 +322,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
             
-        if(Crm_Controller::getInstance()->saveLeadtypes($leadTypes) === FALSE) {
+        if(Crm_Controller_LeadTypes::getInstance()->saveLeadtypes($leadTypes) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);
@@ -346,7 +346,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Crm_Controller::getInstance()->getLeadStates($sort, $dir)) {
+        if($rows = Crm_Controller_LeadStates::getInstance()->getLeadStates($sort, $dir)) {
             $rows->translate();
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
@@ -379,7 +379,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
             
         
-        if(Crm_Controller::getInstance()->saveLeadstates($leadStates) === FALSE) {
+        if(Crm_Controller_LeadStates::getInstance()->saveLeadstates($leadStates) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);
@@ -403,7 +403,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Crm_Controller::getInstance()->getProducts($sort, $dir)) {
+        if($rows = Crm_Controller_LeadProducts::getInstance()->getProducts($sort, $dir)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -435,7 +435,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
             
         
-        if(Crm_Controller::getInstance()->saveProducts($products) === FALSE) {
+        if(Crm_Controller_LeadProducts::getInstance()->saveProducts($products) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);

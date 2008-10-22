@@ -143,7 +143,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         ));
         
         try {
-            $lead = Crm_Controller::getInstance()->createLead($this->objects['leadWithLink']);
+            $lead = Crm_Controller_Leads::getInstance()->createLead($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // already there
         }
@@ -167,7 +167,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     {
         // delete the db entries
         try { 
-            Crm_Controller::getInstance()->deleteLead($this->objects['leadWithLink']);
+            Crm_Controller_Leads::getInstance()->deleteLead($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // access denied ?
         }
@@ -204,7 +204,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     public function testLeadPdfLinkedContact()
     {
     	// create lead + contact + link    
-        $lead = Crm_Controller::getInstance()->getLead($this->objects['leadWithLink']->getId());
+        $lead = Crm_Controller_Leads::getInstance()->getLead($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
@@ -215,7 +215,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'related_id'             => $this->objects['linkedContact']->id,
             'type'                   => 'RESPONSIBLE'
         ));
-        $lead = Crm_Controller::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Leads::getInstance()->updateLead($lead);
         
     	$pdf = new Crm_Pdf();
         $pdf->generateLeadPdf($lead);
@@ -240,7 +240,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         // create lead + task + link
         $task = Tasks_Controller::getInstance()->createTask($this->objects['linkedTask']);
 
-        $lead = Crm_Controller::getInstance()->getLead($this->objects['leadWithLink']->getId());
+        $lead = Crm_Controller_Leads::getInstance()->getLead($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
@@ -251,7 +251,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'related_id'             => $task->getId(),
             'type'                   => 'TASK'
         ));
-        $lead = Crm_Controller::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Leads::getInstance()->updateLead($lead);
         
         $pdf = new Crm_Pdf();
         $pdf->generateLeadPdf($lead);

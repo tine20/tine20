@@ -343,7 +343,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $lead = $this->_objects['initialLead'];
         $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
-        $lead = Crm_Controller::getInstance()->createLead($lead);
+        $lead = Crm_Controller_Leads::getInstance()->createLead($lead);
         
         $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
@@ -367,7 +367,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLead()
     {
-        $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']);
+        $lead = Crm_Controller_Leads::getInstance()->getLead($this->_objects['initialLead']);
         
         $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
@@ -379,7 +379,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetEmptyLead()
     {
-        $lead = Crm_Controller::getInstance()->getEmptyLead();
+        $lead = Crm_Controller_Leads::getInstance()->getEmptyLead();
                 
         $this->assertType('Crm_Model_Lead', $lead);
 
@@ -397,7 +397,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateLead()
     {
-        $lead = Crm_Controller::getInstance()->updateLead($this->_objects['updatedLead']);
+        $lead = Crm_Controller_Leads::getInstance()->updateLead($this->_objects['updatedLead']);
         
         $this->assertEquals($this->_objects['updatedLead']->id, $lead->id);
         $this->assertEquals($this->_objects['updatedLead']->description, $lead->description);
@@ -414,8 +414,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
         $pagination = new Tinebase_Model_Pagination();
-        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
-        $count = Crm_Controller::getInstance()->searchLeadsCount($filter);
+        $leads = Crm_Controller_Leads::getInstance()->searchLeads($filter, $pagination);
+        $count = Crm_Controller_Leads::getInstance()->searchLeadsCount($filter);
                 
         $this->assertEquals(1, count($leads));
         $this->assertEquals($count, count($leads));
@@ -433,7 +433,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
         $pagination = new Tinebase_Model_Pagination();
-        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
+        $leads = Crm_Controller_Leads::getInstance()->searchLeads($filter, $pagination);
         
         $this->assertEquals(0, count($leads));
         $this->assertType('Tinebase_Record_RecordSet', $leads);
@@ -448,7 +448,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $task = Tasks_Controller::getInstance()->createTask($this->_objects['task']);
         
         // link task
-        $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $lead = Crm_Controller_Leads::getInstance()->getLead($this->_objects['initialLead']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
@@ -459,10 +459,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'related_id'             => $task->getId(),
             'type'                   => 'TASK'
         )); 
-        $lead = Crm_Controller::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Leads::getInstance()->updateLead($lead);
         
         // check linked tasks
-        $updatedLead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $updatedLead = Crm_Controller_Leads::getInstance()->getLead($this->_objects['initialLead']->getId());
         
         $this->assertGreaterThan(0, count($updatedLead->relations));
         $this->assertEquals($task->getId(), $updatedLead->relations[0]->related_id);
@@ -483,7 +483,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // link contact
-        $lead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $lead = Crm_Controller_Leads::getInstance()->getLead($this->_objects['initialLead']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
@@ -495,10 +495,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'type'                   => 'RESPONSIBLE'
         ));
          
-        $lead = Crm_Controller::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Leads::getInstance()->updateLead($lead);
                 
         // check linked contacts
-        $updatedLead = Crm_Controller::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $updatedLead = Crm_Controller_Leads::getInstance()->getLead($this->_objects['initialLead']->getId());
         
         $this->assertGreaterThan(0, count($updatedLead->relations));
         $this->assertEquals($contact->getId(), $updatedLead->relations[0]->related_id);
@@ -513,7 +513,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteLead()
     {
-        Crm_Controller::getInstance()->deleteLead($this->_objects['initialLead']);
+        Crm_Controller_Leads::getInstance()->deleteLead($this->_objects['initialLead']);
 
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();        
@@ -521,7 +521,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('UnderflowException');
         
-        Crm_Controller::getInstance()->getLead($this->_objects['initialLead']);
+        Crm_Controller_Leads::getInstance()->getLead($this->_objects['initialLead']);
     }
     
     /**
@@ -530,7 +530,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadSources()
     {
-        $sources = Crm_Controller::getInstance()->getLeadSources();
+        $sources = Crm_Controller_LeadSources::getInstance()->getLeadSources();
         
         $this->assertEquals(4, count($sources));
     }
@@ -541,7 +541,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadTypes()
     {
-        $types = Crm_Controller::getInstance()->getLeadTypes();
+        $types = Crm_Controller_LeadTypes::getInstance()->getLeadTypes();
         
         $this->assertEquals(3, count($types));
     }
@@ -552,9 +552,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadType()
     {
-        $types = Crm_Controller::getInstance()->getLeadTypes();
+        $types = Crm_Controller_LeadTypes::getInstance()->getLeadTypes();
         
-        $type = Crm_Controller::getInstance()->getLeadType($types[0]->id);
+        $type = Crm_Controller_LeadTypes::getInstance()->getLeadType($types[0]->id);
         
         $this->assertType('Crm_Model_Leadtype', $type);
         $this->assertTrue($type->isValid());
@@ -566,7 +566,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadStates()
     {
-        $states = Crm_Controller::getInstance()->getLeadStates();
+        $states = Crm_Controller_LeadStates::getInstance()->getLeadStates();
         
         $this->assertTrue(count($states) >= 6);
     }
@@ -577,9 +577,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadState()
     {
-        $states = Crm_Controller::getInstance()->getLeadStates();
+        $states = Crm_Controller_LeadStates::getInstance()->getLeadStates();
         
-        $state = Crm_Controller::getInstance()->getLeadState($states[0]->id);
+        $state = Crm_Controller_LeadStates::getInstance()->getLeadState($states[0]->id);
         
         $this->assertType('Crm_Model_Leadstate', $state);
         $this->assertTrue($state->isValid());
@@ -592,14 +592,14 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveProducts() {
     	// save db table content (because of test dependencies)
-    	$savedProducts = Crm_Controller::getInstance()->getProducts();
+    	$savedProducts = Crm_Controller_LeadProducts::getInstance()->getProducts();
     	
     	// go!
     	$someProducts = new Tinebase_Record_RecordSet('Crm_Model_Product',
                 $this->_objects['someProducts']);
         
         // save / create some products
-        $resultProducts = Crm_Controller::getInstance()
+        $resultProducts = Crm_Controller_LeadProducts::getInstance()
                 ->saveProducts($someProducts);
         
         $this->assertEquals($someProducts, $resultProducts);
@@ -615,17 +615,17 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $someProducts = new Tinebase_Record_RecordSet('Crm_Model_Product',
                 $this->_objects['someProductsToUpdate']);
         
-        $resultProducts = Crm_Controller::getInstance()
+        $resultProducts = Crm_Controller_LeadProducts::getInstance()
                 ->saveProducts($someProducts);
         
         foreach ($this->_objects['someProductsToUpdate'] as $product) {
             $this->assertEquals($product['productsource'],
                     //$backend->get($product->id)->productsource);
-                    Crm_Controller::getInstance()->getProduct($product->id)->productsource);
+                    Crm_Controller_LeadProducts::getInstance()->getProduct($product->id)->productsource);
         }
         
         // cleanup
-        Crm_Controller::getInstance()->saveProducts($savedProducts);
+        Crm_Controller_LeadProducts::getInstance()->saveProducts($savedProducts);
     }
     
     /**
@@ -635,7 +635,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveLeadTypes() {
         // save db table content (because of test dependencies)
-        $savedLeadTypes = Crm_Controller::getInstance()->getLeadTypes();
+        $savedLeadTypes = Crm_Controller_LeadTypes::getInstance()->getLeadTypes();
         
         // go!
     	//$someLeadTypes = new Tinebase_Record_RecordSet('Crm_Model_Leadtype', $this->_objects['someLeadTypes']);
@@ -646,7 +646,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     	}
         
         // save / create some lead types
-        $resultLeadTypes = Crm_Controller::getInstance()
+        $resultLeadTypes = Crm_Controller_LeadTypes::getInstance()
                 ->saveLeadtypes($someLeadTypes);
         
         $this->assertEquals($someLeadTypes, $resultLeadTypes);
@@ -664,7 +664,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $someLeadTypes = new Tinebase_Record_RecordSet('Crm_Model_Leadtype',
                 $this->_objects['someLeadTypesToUpdate']);
         
-        $resultLeadTypes = Crm_Controller::getInstance()
+        $resultLeadTypes = Crm_Controller_LeadTypes::getInstance()
                 ->saveLeadtypes($someLeadTypes);
         
         foreach ($this->_objects['someLeadTypesToUpdate'] as $leadType) {
@@ -674,7 +674,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         */
         
         // cleanup
-        Crm_Controller::getInstance()->saveLeadtypes($savedLeadTypes);
+        Crm_Controller_LeadTypes::getInstance()->saveLeadtypes($savedLeadTypes);
     }
     
     /**
@@ -684,7 +684,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveLeadSources() {
         // save db table content (because of test dependencies)
-        $savedLeadSources = Crm_Controller::getInstance()->getLeadSources();
+        $savedLeadSources = Crm_Controller_LeadSources::getInstance()->getLeadSources();
         
         // go!
         //$someLeadSources = new Tinebase_Record_RecordSet('Crm_Model_Leadsource', $this->_objects['someLeadSources']);
@@ -695,7 +695,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
                 
         // save / create some lead types
-        $resultLeadSources = Crm_Controller::getInstance()
+        $resultLeadSources = Crm_Controller_LeadSources::getInstance()
                 ->saveLeadsources($someLeadSources);
         
         $this->assertEquals($someLeadSources, $resultLeadSources);
@@ -713,7 +713,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $someLeadSources = new Tinebase_Record_RecordSet('Crm_Model_Leadsource',
                 $this->_objects['someLeadSourcesToUpdate']);
         
-        $resultLeadSources = Crm_Controller::getInstance()
+        $resultLeadSources = Crm_Controller_LeadSources::getInstance()
                 ->saveLeadsources($someLeadSources);
         
         foreach ($this->_objects['someLeadSourcesToUpdate'] as $leadSource) {
@@ -723,7 +723,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         */
         
         // cleanup
-        Crm_Controller::getInstance()->saveLeadsources($savedLeadSources);
+        Crm_Controller_LeadSources::getInstance()->saveLeadsources($savedLeadSources);
     }
     
     /**
@@ -733,7 +733,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveLeadStates() {
         // save db table content (because of test dependencies)
-        $savedLeadStates = Crm_Controller::getInstance()->getLeadStates();
+        $savedLeadStates = Crm_Controller_LeadStates::getInstance()->getLeadStates();
         
         // go!
         //$someLeadStates = new Tinebase_Record_RecordSet('Crm_Model_Leadstate', $this->_objects['someLeadStates']);
@@ -744,7 +744,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
                 
         // save / create some lead states
-        $resultLeadStates = Crm_Controller::getInstance()
+        $resultLeadStates = Crm_Controller_LeadStates::getInstance()
                 ->saveLeadstates($someLeadStates);
         
         $this->assertEquals($someLeadStates, $resultLeadStates);
@@ -762,7 +762,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $someLeadStates = new Tinebase_Record_RecordSet('Crm_Model_Leadstate',
                 $this->_objects['someLeadStatesToUpdate']);
         
-        $resultLeadStates = Crm_Controller::getInstance()
+        $resultLeadStates = Crm_Controller_LeadStates::getInstance()
                 ->saveLeadstates($someLeadStates);
         
         foreach ($this->_objects['someLeadStatesToUpdate'] as $leadState) {
@@ -772,6 +772,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         */
         
         // cleanup
-        Crm_Controller::getInstance()->saveLeadstates($savedLeadStates);
+        Crm_Controller_LeadStates::getInstance()->saveLeadstates($savedLeadStates);
     }
 }
