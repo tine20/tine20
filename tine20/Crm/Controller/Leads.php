@@ -497,7 +497,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract impl
 
         // create pdf
         try {
-            $pdfGenerator = new Crm_Pdf();
+            $pdfGenerator = new Crm_Export_Pdf();
             $pdfGenerator->generateLeadPdf($_lead);
             $pdfOutput = $pdfGenerator->render();
         } catch ( Zend_Pdf_Exception $e ) {

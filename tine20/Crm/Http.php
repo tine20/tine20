@@ -54,7 +54,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
 	    
         switch ($_format) {
 		    case 'pdf':		        		        
-                $pdf = new Crm_Pdf();
+                $pdf = new Crm_Export_Pdf();
 		        
 		        foreach ($leadIds as $leadId) {
                     $lead = Crm_Controller_Leads::getInstance()->getLead($leadId);

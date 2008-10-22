@@ -187,7 +187,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     public function testLeadPdf()
     {
     	
-		$pdf = new Crm_Pdf();
+		$pdf = new Crm_Export_Pdf();
 		$pdf->generateLeadPdf($this->objects['lead']);
 		$pdfOutput = $pdf->render();
 		
@@ -217,7 +217,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         ));
         $lead = Crm_Controller_Leads::getInstance()->updateLead($lead);
         
-    	$pdf = new Crm_Pdf();
+    	$pdf = new Crm_Export_Pdf();
         $pdf->generateLeadPdf($lead);
         $pdfOutput = $pdf->render();
         
@@ -253,7 +253,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         ));
         $lead = Crm_Controller_Leads::getInstance()->updateLead($lead);
         
-        $pdf = new Crm_Pdf();
+        $pdf = new Crm_Export_Pdf();
         $pdf->generateLeadPdf($lead);
         $pdfOutput = $pdf->render();
                 

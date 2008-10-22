@@ -3,12 +3,11 @@
  * crm pdf generation class
  *
  * @package     Crm
+ * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        move to Frontend/Export?
  */
 
 
@@ -16,8 +15,9 @@
  * crm pdf export class
  * 
  * @package     Crm
+ * @subpackage  Export
   */
-class Crm_Pdf extends Tinebase_Export_Pdf
+class Crm_Export_Pdf extends Tinebase_Export_Pdf
 {
 
     /**
