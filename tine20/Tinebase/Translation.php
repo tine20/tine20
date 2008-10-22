@@ -180,19 +180,28 @@ class Tinebase_Translation
      * This is a javascript spechial function!
      * The data will be preseted to be included as javascript on client side!
      *
-     * @param  string $_locale
-     * @return string javascript
+     * @param  Zend_Locale $_locale
+     * @return string      javascript
      */
     public static function getJsTranslations($_locale)
     {
         $baseDir = dirname(__FILE__) . "/..";
         $localeString = (string) $_locale;
         
-        $genericTranslations = file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
-        $extTranslations     = file_get_contents("$baseDir/ExtJS/build/locale/ext-lang-$localeString.js");
+        $jsTranslations  = "/************************** generic translations **************************/ \n";
+        $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
         
+        $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
+        $jsTranslations  .= file_get_contents("$baseDir/ExtJS/build/locale/ext-lang-$localeString.js");
         
+        $poFiles = self::getPoTranslationFiles($_locale);
+        foreach ($poFiles as $appName => $poPath) {
+            $poObject = self::po2jsObject($poPath);
+            $jsTranslations  .= "/********************** tine translations of $appName**********************/ \n";
+            $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
+        }
         
+        return $jsTranslations;
     }
     
     /**
@@ -201,7 +210,7 @@ class Tinebase_Translation
      * Note: This functions must not query the database! 
      *       It's only used in the development and release building process
      * 
-     * @return array app => dir
+     * @return array appName => translationDir
      */
     public static function getTranslationDirs()
     {
@@ -219,6 +228,28 @@ class Tinebase_Translation
             }
         }
         return $langDirs;
+    }
+    
+    /**
+     * gets all available po files for a given locale
+     *
+     * @param  Zend_Locale $_locale
+     * @return array appName => pofile path
+     */
+    public static function getPoTranslationFiles($_locale)
+    {
+        $localeString = (string)$_locale;
+        $poFiles = array();
+        
+        $translationDirs = self::getTranslationDirs();
+        foreach ($translationDirs as $appName => $translationDir) {
+            $poPath = "$translationDir/$localeString.po";
+            if (file_exists($poPath)) {
+                $poFiles[$appName] = $poPath;
+            }
+        }
+        
+        return $poFiles;
     }
     
     /**
