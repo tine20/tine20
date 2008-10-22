@@ -15,7 +15,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Controller extends Tinebase_Container_Abstract implements Tinebase_Events_Interface
+class Addressbook_Controller implements Tinebase_Events_Interface, Tinebase_Container_Interface
 {
     /**
      * Holds instance of current account

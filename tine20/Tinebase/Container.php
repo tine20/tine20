@@ -320,7 +320,7 @@ class Tinebase_Container
                 // let's check if the controller of the application has a function to create the needed folders
                 $application = Tinebase_Controller::getApplicationInstance($_application);
                 
-                if($application instanceof Tinebase_Container_Abstract) {
+                if($application instanceof Tinebase_Container_Interface) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
                     return $application->createPersonalFolder($_accountId);
                 }
@@ -489,7 +489,7 @@ class Tinebase_Container
             // let's check if the controller of the application has a function to create the needed folders
             $application = Tinebase_Controller::getApplicationInstance($application);
             
-            if($application instanceof Tinebase_Container_Abstract) {
+            if($application instanceof Tinebase_Container_Interface) {
                 return $application->createPersonalFolder($accountId);
             }
         }

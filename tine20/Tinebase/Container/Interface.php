@@ -9,11 +9,11 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @deprecated  use Tinebase_Container_Interface instead
+ * @todo        move that to Tinebase_Application_Container_Interface or something like that?
  */
 
 /**
- * abstract class to handle container in each application controller
+ *  interface to handle container in each application controller
  * 
  * any record in Tine 2.0 is tied to a container. the rights of an account on a record gets 
  * calculated by the grants given to this account on the container holding the record (if you know what i mean ;-))
@@ -21,13 +21,13 @@
  * @package     Tinebase
  * @subpackage  Container
  */
-abstract class Tinebase_Container_Abstract
+interface Tinebase_Container_Interface
 {
     /**
      * creates the initial folder for new accounts
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
+     * @return Tinebase_Record_RecordSet                 of subtype Tinebase_Model_Container
      */
-    abstract public function createPersonalFolder($_accountId);
+    public function createPersonalFolder($_accountId);
 }

@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        what todo about the Tinebase_Container_Abstract extension?
  * @todo        split into Crm_Controller_Lead/Crm_Controller_Product/...
  * @deprecated 
  */
@@ -20,7 +19,7 @@
  * 
  * @package     Crm
  */
-class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Events_Interface
+class Crm_Controller implements Tinebase_Events_Interface, Tinebase_Container_Interface
 {
     /**
      * Holds instance of current account
