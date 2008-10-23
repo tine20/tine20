@@ -604,129 +604,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     
     
     
-/********************************
- * ASTERISK SIP PEER FUNCTIONS
- *
- * 
- */    
- 
-    /**
-     * get asterisk sip peers
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @param string $context
-     * @return array
-     * 
-     * @todo    replace with generic function
-     */
-    public function getAsteriskSipPeers($sort, $dir, $query, $context)
-    {       
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
-            'query'     => $query,
-            'context'   => $context
-        ));
-        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        if($rows = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter, $pagination)) {
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;    
-    }
-    
-    
-   /**
-     * get one asterisk sip peer identified by sipPeerId
-     *
-     * @param int $sipPeerId
-     * @return array
-     * 
-     * @todo    replace with generic function
-     */
-    public function getAsteriskSipPeer($sipPeerId)
-    {
-        $result = array(
-            'success'   => true
-        );
-
-        $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($sipPeerId);
-        
-        $result = $sipPeer->toArray();        
-        return $result;
-    }
-          
-             
-    /**
-     * add/update asterisk sip peer
-     *
-     * if $sipPeerData['id'] is empty the sip peer gets added, otherwise it gets updated
-     *
-     * @param string $sipPeerData a JSON encoded array of sipPeer properties
-     * @return array
-     * 
-     * @todo    replace with generic function
-     */
-    public function saveAsteriskSipPeer($sipPeerData)
-    {
-        $sipPeerData = Zend_Json::decode($sipPeerData);
-        
-        // unset if empty
-        if (empty($sipPeerData['id'])) {
-            unset($sipPeerData['id']);
-        }
-
-        $sipPeer = new Voipmanager_Model_AsteriskSipPeer();
-        $sipPeer->setFromArray($sipPeerData);
-        
-        if ( empty($sipPeer->id) ) {
-            $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->create($sipPeer);
-        } else {
-            $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->update($sipPeer);
-        }
-
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $sipPeer->toArray()
-        );
-        
-        
-        return $result;
-         
-    }     
-    
-
-    /**
-     * delete multiple asterisk sip peers
-     *
-     * @param array $_sipPeerIDs list of sipPeerId's to delete
-     * @return array
-     * 
-     * @todo    replace with generic function
-     */
-    public function deleteAsteriskSipPeers($_sipPeerIds)
-    {
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $sipPeerIds = Zend_Json::decode($_sipPeerIds);
-     
-        Voipmanager_Controller_Asterisk_SipPeer::getInstance()->delete($sipPeerIds);
-
-        return $result;
-    }     
     
     
     
@@ -743,31 +620,16 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @param string $query
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function getAsteriskContexts($sort = NULL, $dir = NULL, $query = NULL)
     {     
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
+        $controller = Voipmanager_Controller_Asterisk_Context::getInstance();
         $filter = new Voipmanager_Model_AsteriskContextFilter(array(
             'query'     => $query
         ));
-        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        if($rows = Voipmanager_Controller_Asterisk_Context::getInstance()->search($filter, $pagination)) {
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-        
-        return $result;    
+                
+        $result = $this->_search($controller, $sort, $dir, $filter);
+        return $result;            
     }
     
     
@@ -776,19 +638,11 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int $contextId
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function getAsteriskContext($contextId)
     {
-        $result = array(
-            'success'   => true
-        );
-
-        $context = Voipmanager_Controller_Asterisk_Context::getInstance()->get($contextId);
-        
-        $result = $context->toArray();      
-          
+        $controller = Voipmanager_Controller_Asterisk_Context::getInstance();       
+        $result = $this->_get($controller, $contextId); 
         return $result;
     }    
     
@@ -800,33 +654,12 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $contextData a JSON encoded array of context properties
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function saveAsteriskContext($contextData)
     {
-        $contextData = Zend_Json::decode($contextData);
-        
-        // unset if empty
-        if (empty($contextData['id'])) {
-            unset($contextData['id']);
-        }
-
-        $context = new Voipmanager_Model_AsteriskContext();
-        $context->setFromArray($contextData);
-        
-        if (empty($context->id)) {
-            $context = Voipmanager_Controller_Asterisk_Context::getInstance()->create($context);
-        } else {
-            $context = Voipmanager_Controller_Asterisk_Context::getInstance()->update($context);
-        }
-        $context = $this->getAsteriskContext($context->getId());
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $context
-        ); 
-        
-        return $result;
+        $controller = Voipmanager_Controller_Asterisk_Context::getInstance();
+        $result = $this->_save($controller, $contextData, 'Voipmanager_Model_AsteriskContext');
+        return $result;        
     }     
     
     
@@ -835,23 +668,152 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param array $_contextIDs list of contextId's to delete
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function deleteAsteriskContexts($_contextIds)
     {
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $contextIds = Zend_Json::decode($_contextIds);
-        
-        Voipmanager_Controller_Asterisk_Context::getInstance()->delete($contextIds);
-
+        $controller = Voipmanager_Controller_Asterisk_Context::getInstance();
+        $result = $this->_delete($controller, $_contextIds);
         return $result;
     }    
        
+/********************************
+ * ASTERISK MEETME FUNCTIONS
+ *
+ * 
+ */        
     
+    /**
+     * get asterisk meetmes
+     *
+     * @param string $sort
+     * @param string $dir
+     * @param string $query
+     * @return array
+     */
+    public function getAsteriskMeetmes($sort, $dir, $query)
+    {     
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
+        $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
+            'query'     => $query
+        ));
+                
+        $result = $this->_search($controller, $sort, $dir, $filter);
+        return $result;    
+    }
+    
+    
+   /**
+     * get one meetme identified by meetmeId
+     *
+     * @param int $meetmeId
+     * @return array
+     */
+    public function getAsteriskMeetme($meetmeId)
+    {
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();       
+        $result = $this->_get($controller, $meetmeId); 
+        return $result;
+    }    
+    
+    
+    /**
+     * save one meetme
+     *
+     * if $meetmeData['id'] is empty the meetme gets added, otherwise it gets updated
+     *
+     * @param string $meetmeData a JSON encoded array of meetme properties
+     * @return array
+     */
+    public function saveAsteriskMeetme($meetmeData)
+    {
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
+        $result = $this->_save($controller, $meetmeData, 'Voipmanager_Model_AsteriskMeetme');
+        return $result;
+    }     
+    
+    /**
+     * delete multiple meetmes
+     *
+     * @param array $_meetmeIDs list of meetmeId's to delete
+     * @return array
+     */
+    public function deleteAsteriskMeetmes($_meetmeIds)
+    {
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
+        $result = $this->_delete($controller, $_meetmeIds);
+        return $result;
+    }     
+    
+/********************************
+ * ASTERISK SIP PEER FUNCTIONS
+ *
+ * 
+ */    
+ 
+    /**
+     * get asterisk sip peers
+     *
+     * @param string $sort
+     * @param string $dir
+     * @param string $query
+     * @param string $context
+     * @return array
+     */
+    public function getAsteriskSipPeers($sort, $dir, $query, $context)
+    {       
+        $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
+        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
+            'query'     => $query,
+            'context'   => $context
+        ));
+                
+        $result = $this->_search($controller, $sort, $dir, $filter);
+        return $result;                    
+    }
+    
+    
+   /**
+     * get one asterisk sip peer identified by sipPeerId
+     *
+     * @param int $sipPeerId
+     * @return array
+     */
+    public function getAsteriskSipPeer($sipPeerId)
+    {
+        $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance();       
+        $result = $this->_get($controller, $sipPeerId); 
+        return $result;        
+    }
+          
+             
+    /**
+     * add/update asterisk sip peer
+     *
+     * if $sipPeerData['id'] is empty the sip peer gets added, otherwise it gets updated
+     *
+     * @param string $sipPeerData a JSON encoded array of sipPeer properties
+     * @return array
+     */
+    public function saveAsteriskSipPeer($sipPeerData)
+    {
+        $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
+        $result = $this->_save($controller, $sipPeerData, 'Voipmanager_Model_AsteriskSipPeer');
+        return $result;        
+    }     
+    
+
+    /**
+     * delete multiple asterisk sip peers
+     *
+     * @param array $_sipPeerIDs list of sipPeerId's to delete
+     * @return array
+     */
+    public function deleteAsteriskSipPeers($_sipPeerIds)
+    {
+        $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
+        $result = $this->_delete($controller, $_sipPeerIds);
+        return $result;
+    }     
     
 /********************************
  * ASTERISK VOICEMAIL FUNCTIONS
@@ -867,34 +829,18 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $query
      * @param string $context
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function getAsteriskVoicemails($sort, $dir, $query, $context)
     {     
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
+        $controller = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
         $filter = new Voipmanager_Model_AsteriskVoicemailFilter(array(
             'query'     => $query,
             'context'   => $context
         ));
-        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        if($rows = Voipmanager_Controller_Asterisk_Voicemail::getInstance()->search($filter, $pagination)) {
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;    
+                
+        $result = $this->_search($controller, $sort, $dir, $filter);
+        return $result;
     }
-    
     
    /**
      * get one voicemail identified by voicemailId
@@ -904,17 +850,10 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     public function getAsteriskVoicemail($voicemailId)
     {
-        $result = array(
-            'success'   => true
-        );
-
-        $voicemail = Voipmanager_Controller::getInstance()->getAsteriskVoicemail($voicemailId);
-        
-        $result = $voicemail->toArray();      
-          
-        return $result;
-    }    
-    
+        $controller = Voipmanager_Controller_Asterisk_Voicemail::getInstance();       
+        $result = $this->_get($controller, $voicemailId); 
+        return $result;        
+    }        
     
     /**
      * save one voicemail
@@ -926,32 +865,9 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveAsteriskVoicemail($voicemailData)
     {
-        $voicemailData = Zend_Json::decode($voicemailData);
-        
-        // unset if empty
-        if (empty($voicemailData['id'])) {
-            unset($voicemailData['id']);
-        }
-
-        //Zend_Registry::get('logger')->debug(print_r($voicemailData,true));
-        $voicemail = new Voipmanager_Model_AsteriskVoicemail();
-        $voicemail->setFromArray($voicemailData);
-
-        
-        if (empty($voicemail->id)) {
-            $voicemail = Voipmanager_Controller::getInstance()->createAsteriskVoicemail($voicemail);
-        } else {
-            $voicemail = Voipmanager_Controller::getInstance()->updateAsteriskVoicemail($voicemail);
-        }
-        $voicemail = $this->getAsteriskVoicemail($voicemail->getId());
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $voicemail
-        ); //$voicemail->toArray());
-        
-        
-        return $result;
-         
+        $controller = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
+        $result = $this->_save($controller, $voicemailData, 'Voipmanager_Model_AsteriskVoicemail');
+        return $result;        
     }     
     
    
@@ -963,18 +879,10 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     public function deleteAsteriskVoicemails($_voicemailIds)
     {
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $voicemailIds = Zend_Json::decode($_voicemailIds);
-        
-        Voipmanager_Controller::getInstance()->deleteAsteriskVoicemails($voicemailIds);
-
+        $controller = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
+        $result = $this->_delete($controller, $_voicemailIds);
         return $result;
     }     
-
-
 
 /********************************
  * SNOM SETTING FUNCTIONS
@@ -1088,77 +996,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         Voipmanager_Controller::getInstance()->deleteSnomSettings($settingIds);
 
         return $result;
-    }      
-   
-   
-   
-/********************************
- * ASTERISK MEETME FUNCTIONS
- *
- * 
- */        
-    
-    /**
-     * get asterisk meetmes
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     */
-    public function getAsteriskMeetmes($sort, $dir, $query)
-    {     
-        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
-        $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
-            'query'     => $query
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;    
-    }
-    
-    
-   /**
-     * get one meetme identified by meetmeId
-     *
-     * @param int $meetmeId
-     * @return array
-     */
-    public function getAsteriskMeetme($meetmeId)
-    {
-        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();       
-        $result = $this->_get($controller, $meetmeId); 
-        return $result;
-    }    
-    
-    
-    /**
-     * save one meetme
-     *
-     * if $meetmeData['id'] is empty the meetme gets added, otherwise it gets updated
-     *
-     * @param string $meetmeData a JSON encoded array of meetme properties
-     * @return array
-     */
-    public function saveAsteriskMeetme($meetmeData)
-    {
-        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
-        $result = $this->_save($controller, $meetmeData, 'Voipmanager_Model_AsteriskMeetme');
-        return $result;
-    }     
-    
-    /**
-     * delete multiple meetmes
-     *
-     * @param array $_meetmeIDs list of meetmeId's to delete
-     * @return array
-     */
-    public function deleteAsteriskMeetmes($_meetmeIds)
-    {
-        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
-        $result = $this->_delete($controller, $_meetmeIds);
-        return $result;
-    }     
+    }         
 
     /********************* generic get/search/save/delete functions ************************************/
     
