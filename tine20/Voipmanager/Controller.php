@@ -10,7 +10,18 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        remove asterisk meetme
+ * @todo        remove asterisk sippeer
+ * @todo        remove asterisk voicemail
+ * @todo        remove snom config
+ * @todo        remove snom location
+ * @todo        remove snom phone
+ * @todo        remove snom setting
+ * @todo        remove snom software
+ * @todo        remove snom template
+ * @todo        remove myphone
  * @todo        replace by Voipmanager_Controller_*
+ * @deprecated 
  */
 
 /**
@@ -1024,12 +1035,14 @@ class Voipmanager_Controller
      * @param string $_id
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskContext
      */
+    /*
     public function getAsteriskContext($_id)
     {
         $context = $this->_asteriskContextBackend->get($_id);
         
         return $context;    
     }
+    */
 
 
     /**
@@ -1039,6 +1052,7 @@ class Voipmanager_Controller
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskContext
      */
+    /*
     public function getAsteriskContexts($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
         $filter = new Voipmanager_Model_AsteriskContextFilter(array(
@@ -1053,7 +1067,7 @@ class Voipmanager_Controller
         
         return $result;    
     }
-
+    */
 
     /**
      * add one context
@@ -1061,6 +1075,7 @@ class Voipmanager_Controller
      * @param Voipmanager_Model_AsteriskContext $_context
      * @return  Voipmanager_Model_AsteriskContext
      */
+    /*
     public function createAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
     {        
         $context = $this->_asteriskContextBackend->create($_context);
@@ -1068,25 +1083,22 @@ class Voipmanager_Controller
         return $this->getAsteriskContext($context);
     }
     
-
+    */
+    
     /**
      * update one context
      *
      * @param Voipmanager_Model_AsteriskContext $_context
      * @return  Voipmanager_Model_AsteriskContext
      */
+    /*
     public function updateAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
     {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->container_id . ' denied');
-        }
-        */
         $context = $this->_asteriskContextBackend->update($_context);
         
         return $this->getAsteriskContext($context);
     }    
-    
+    */  
   
     /**
      * Deletes a set of contexts.
@@ -1097,12 +1109,13 @@ class Voipmanager_Controller
      * @param array array of context identifiers
      * @return void
      */
+    /*
     public function deleteAsteriskContexts($_identifiers)
     {
         $this->_asteriskContextBackend->delete($_identifiers);
     }
     
-    
+    */
     
 /********************************
  * ASTERISK VOICEMAIL FUNCTIONS

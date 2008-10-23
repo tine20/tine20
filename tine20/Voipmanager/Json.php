@@ -6,6 +6,8 @@
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        replace old controller with controllers from Voipmanager_Controller_*
  */
 
 /**
@@ -743,7 +745,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getAsteriskContexts($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller_Asterisk_Context::getInstance()->get($sort, $dir, $query)) {
         
             $_rows = $rows->toArray();
 
@@ -769,7 +771,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'success'   => true
         );
 
-        $context = Voipmanager_Controller::getInstance()->getAsteriskContext($contextId);
+        $context = Voipmanager_Controller_Asterisk_Context::getInstance()->get($contextId);
         
         $result = $context->toArray();      
           
@@ -794,25 +796,21 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             unset($contextData['id']);
         }
 
-        //Zend_Registry::get('logger')->debug(print_r($contextData,true));
         $context = new Voipmanager_Model_AsteriskContext();
         $context->setFromArray($contextData);
-
         
         if (empty($context->id)) {
-            $context = Voipmanager_Controller::getInstance()->createAsteriskContext($context);
+            $context = Voipmanager_Controller_Asterisk_Context::getInstance()->create($context);
         } else {
-            $context = Voipmanager_Controller::getInstance()->updateAsteriskContext($context);
+            $context = Voipmanager_Controller_Asterisk_Context::getInstance()->update($context);
         }
         $context = $this->getAsteriskContext($context->getId());
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $context
-        ); //$context->toArray());
-        
+        ); 
         
         return $result;
-         
     }     
     
     
@@ -830,7 +828,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $contextIds = Zend_Json::decode($_contextIds);
         
-        Voipmanager_Controller::getInstance()->deleteAsteriskContexts($contextIds);
+        Voipmanager_Controller_Asterisk_Context::getInstance()->delete($contextIds);
 
         return $result;
     }    

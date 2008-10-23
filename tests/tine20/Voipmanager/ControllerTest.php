@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        replace single controller by controllers from Voipmanager_Controller_*
  */
 
 /**
@@ -34,8 +36,16 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      * Backend
      *
      * @var Voipmanager_Controller
+     * @deprecated 
      */
     protected $_backend;
+    
+    /**
+     * the voipmanager controllers
+     *
+     * @var array
+     */
+    protected $_backends;
     
     /**
      * Runs the test methods of this class.
@@ -59,6 +69,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->_backend = Voipmanager_Controller::getInstance();    
 
+        $this->_backends['Asterisk_Context'] = Voipmanager_Controller_Asterisk_Context::getInstance();
+        
         #$this->_objects['call'] = new Phone_Model_Call(array(
         #    'id'                    => 'phpunitcallid',
         #    'line_id'               => 'phpunitlineid',
@@ -98,12 +110,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskContext();
         
-        $returned = $this->_backend->createAsteriskContext($test);
+        $returned = $this->_backends['Asterisk_Context']->create($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteAsteriskContexts($returned->getId()); 
+        $this->_backends['Asterisk_Context']->delete($returned->getId()); 
     }
     
     /**
@@ -114,15 +126,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskContext();
         
-        $test = $this->_backend->createAsteriskContext($test);
+        $test = $this->_backends['Asterisk_Context']->create($test);
         $test->name = Tinebase_Record_Abstract::generateUID();
         
-        $returned = $this->_backend->updateAsteriskContext($test);
+        $returned = $this->_backends['Asterisk_Context']->update($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteAsteriskContexts($returned->getId()); 
+        $this->_backends['Asterisk_Context']->delete($returned->getId()); 
     }
     
     /**
@@ -133,12 +145,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskContext();
         
-        $test = $this->_backend->createAsteriskContext($test);
+        $test = $this->_backends['Asterisk_Context']->create($test);
         
-        $returned = $this->_backend->getAsteriskContexts('id', 'ASC', $test->name);
+        $returned = $this->_backends['Asterisk_Context']->search('id', 'ASC', $test->name);
         $this->assertEquals(1, count($returned));
         
-        $this->_backend->deleteAsteriskContexts($returned->getId()); 
+        $this->_backends['Asterisk_Context']->delete($returned->getId()); 
     }
     
     protected function _getAsteriskContext()

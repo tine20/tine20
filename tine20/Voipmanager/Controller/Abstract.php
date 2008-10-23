@@ -10,6 +10,7 @@
  * @version     $Id$
  *
  * @todo        add Voipmanager_Backend_Interface / Factory
+ * @todo        move that (or parts) to Tinebase_Application_Controller_Abstract
  */
 
 /**
@@ -47,15 +48,6 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
     const PDO_OCI = 'Pdo_Oci';
     
     /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton
-     * - create backend class here in implementation 
-     * - define filter class
-     */
-    abstract private function __construct() {}
-    
-    /**
      * get by id
      *
      * @param string $_id
@@ -67,7 +59,6 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
         
         return $context;    
     }
-
 
     /**
      * get asterisk_contexts
