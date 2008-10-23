@@ -26,13 +26,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Fixtures
-     * 
-     * @var array test objects
-     */
-    protected $_objects = array();
-
-    /**
      * Backend
      *
      * @var Voipmanager_Json
@@ -125,6 +118,11 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
     
+    /**
+     * get asterisk meetme data
+     *
+     * @return array
+     */
     protected function _getAsteriskMeetme()
     {
         return array(
