@@ -42,14 +42,16 @@ class Voipmanager_Backend_Asterisk_Meetme
      * @param Tinebase_Model_Pagination $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
 	 */
-    public function search(Voipmanager_Model_AsteriskMeetmeFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    public function search(Voipmanager_Model_AsteriskMeetmeFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
     {	
         $where = array();
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'asterisk_meetme');
-            
-        $_pagination->appendPagination($select);
+
+        if($_pagination instanceof Tinebase_Model_Pagination) {            
+            $_pagination->appendPagination($select);
+        }
 
         if(!empty($_filter->query)) {
             $select->where($this->_db->quoteInto('(confno LIKE ? OR pin LIKE ? OR adminpin LIKE ?)', '%' . $_filter->query . '%'));

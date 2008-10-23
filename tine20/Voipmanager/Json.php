@@ -618,10 +618,11 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $query
      * @param string $context
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function getAsteriskSipPeers($sort, $dir, $query, $context)
-    {     
-  
+    {       
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
@@ -637,7 +638,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'dir'   => $dir
         ));
         
-        if($rows = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($filter, $pagination)) {
+        if($rows = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter, $pagination)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -651,6 +652,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int $sipPeerId
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function getAsteriskSipPeer($sipPeerId)
     {
@@ -658,7 +661,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'success'   => true
         );
 
-        $sipPeer = Voipmanager_Controller::getInstance()->getAsteriskSipPeer($sipPeerId);
+        $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($sipPeerId);
         
         $result = $sipPeer->toArray();        
         return $result;
@@ -672,6 +675,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $sipPeerData a JSON encoded array of sipPeer properties
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function saveAsteriskSipPeer($sipPeerData)
     {
@@ -686,9 +691,9 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $sipPeer->setFromArray($sipPeerData);
         
         if ( empty($sipPeer->id) ) {
-            $sipPeer = Voipmanager_Controller::getInstance()->createAsteriskSipPeer($sipPeer);
+            $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->create($sipPeer);
         } else {
-            $sipPeer = Voipmanager_Controller::getInstance()->updateAsteriskSipPeer($sipPeer);
+            $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->update($sipPeer);
         }
 
         $result = array('success'           => true,
@@ -707,6 +712,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param array $_sipPeerIDs list of sipPeerId's to delete
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function deleteAsteriskSipPeers($_sipPeerIds)
     {
@@ -716,7 +723,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $sipPeerIds = Zend_Json::decode($_sipPeerIds);
      
-        Voipmanager_Controller::getInstance()->deleteAsteriskSipPeers($sipPeerIds);
+        Voipmanager_Controller_Asterisk_SipPeer::getInstance()->delete($sipPeerIds);
 
         return $result;
     }     
@@ -736,25 +743,30 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @param string $query
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function getAsteriskContexts($sort = NULL, $dir = NULL, $query = NULL)
     {     
-  
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller_Asterisk_Context::getInstance()->get($sort, $dir, $query)) {
+        $filter = new Voipmanager_Model_AsteriskContextFilter(array(
+            'query'     => $query
+        ));
         
-            $_rows = $rows->toArray();
-
-            $i = 0; 
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
         
-            $result['results']      = $_rows;
+        if($rows = Voipmanager_Controller_Asterisk_Context::getInstance()->search($filter, $pagination)) {
+            $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
-
+        
         return $result;    
     }
     
@@ -764,6 +776,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int $contextId
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function getAsteriskContext($contextId)
     {
@@ -786,6 +800,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $contextData a JSON encoded array of context properties
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function saveAsteriskContext($contextData)
     {
@@ -819,6 +835,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param array $_contextIDs list of contextId's to delete
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function deleteAsteriskContexts($_contextIds)
     {
@@ -1081,25 +1099,30 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @param string $query
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function getAsteriskMeetmes($sort, $dir, $query)
     {     
-  
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller_Asterisk_Meetme::getInstance()->search($sort, $dir, $query)) {
+        $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
+            'query'     => $query
+        ));
         
-            $_rows = $rows->toArray();
-
-            $i = 0; 
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
         
-            $result['results']      = $_rows;
+        if($rows = Voipmanager_Controller_Asterisk_Meetme::getInstance()->search($filter, $pagination)) {
+            $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
-
+        
         return $result;    
     }
     
@@ -1109,6 +1132,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int $meetmeId
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function getAsteriskMeetme($meetmeId)
     {
@@ -1131,6 +1156,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $meetmeData a JSON encoded array of meetme properties
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function saveAsteriskMeetme($meetmeData)
     {
@@ -1163,6 +1190,8 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param array $_meetmeIDs list of meetmeId's to delete
      * @return array
+     * 
+     * @todo    replace by generic function
      */
     public function deleteAsteriskMeetmes($_meetmeIds)
     {

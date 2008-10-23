@@ -28,19 +28,19 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
      */
     protected $_applicationName = 'Voipmanager';
     
-    /**
-     * filter class
-     *
-     * @var string
-     */
-    protected $_filterClass;
-        
    /**
      * Voipmanager backend class
      *
      * @var Voipmanager_Backend_Interface
      */
     protected $_backend;
+    
+    /**
+     * the central caching object
+     *
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
     
     /**
      * const PDO_MYSQL
@@ -68,28 +68,18 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
     }
 
     /**
-     * get asterisk_contexts
+     * get list of voipmanager records
      *
-     * @param   string $_sort
-     * @param   string $_dir
-     * @param   string $_query
-     * @return  Tinebase_Record_RecordSet
+     * @param Tinebase_Record_Interface|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @return Tinebase_Record_RecordSet
      */
-    public function search($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
     {
-        $filter = new $this->_filterClass(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_backend->search($filter, $pagination);
+        $result = $this->_backend->search($_filter, $_pagination);
         
         return $result;    
     }
-
 
     /**
      * add one record

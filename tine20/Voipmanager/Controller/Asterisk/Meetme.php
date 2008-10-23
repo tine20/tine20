@@ -32,7 +32,6 @@ class Voipmanager_Controller_Asterisk_Meetme extends Voipmanager_Controller_Abst
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_filterClass  = 'Voipmanager_Model_AsteriskMeetmeFilter';
 		$this->_backend		= new Voipmanager_Backend_Asterisk_Meetme($this->_getDatabaseBackend());
     }
         

@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        remove asterisk sippeer
  * @todo        remove asterisk voicemail
  * @todo        remove snom config
  * @todo        remove snom location
@@ -73,13 +72,6 @@ class Voipmanager_Controller
     protected $_snomTemplateBackend;
     
     /**
-     * the asterisk sip peer sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_SipPeer
-     */
-    protected $_asteriskSipPeerBackend;
-
-    /**
      * the asterisk voicemail sql backend
      *
      * @var Voipmanager_Backend_Asterisk_Voicemail
@@ -137,7 +129,6 @@ class Voipmanager_Controller
         $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location($this->_dbBbackend);
         $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template($this->_dbBbackend);      
         $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting($this->_dbBbackend);              
-        $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer($this->_dbBbackend);          
         $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail($this->_dbBbackend);  
 
 		$this->_cache = Zend_Registry::get('cache');
@@ -895,91 +886,7 @@ class Voipmanager_Controller
     public function deleteSnomSoftware($_identifiers)
     {
         $this->_snomSoftwareBackend->delete($_identifiers);
-    }    
-    
-
-    
-/********************************
- * ASTERISK SIP PEER FUNCTIONS
- *
- * 
- */
-
-    
-    /**
-     * get asterisk sip peer by id
-     *
-     * @param string $_id the id of the peer
-     * @return Voipmanager_Model_AsteriskSipPeer
-     */
-    public function getAsteriskSipPeer($_id)
-    {
-        $id = Voipmanager_Model_AsteriskSipPeer::convertAsteriskSipPeerIdToInt($_id);
-        if (($result = $this->_cache->load('asteriskSipPeer_' . $id)) === false) {
-            $result = $this->_asteriskSipPeerBackend->get($id);
-            $this->_cache->save($result, 'asteriskSipPeer_' . $id, array('asteriskSipPeer'), 5);
-        }
-        
-        return $result;    
-    }
-   
-    /**
-     * get list of asterisk sip peers
-     *
-     * @param Voipmanager_Model_AsteriskSipPeerFilter|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
-     */
-    public function searchAsteriskSipPeers($_filter = NULL, $_pagination = NULL)
-    {
-        $result = $this->_asteriskSipPeerBackend->search($_filter, $_pagination);
-        
-        return $result;    
-    }
-    
-    /**
-     * add new asterisk sip peer
-     *
-     * @param Voipmanager_Model_AsteriskSipPeer $_sipPeer
-     * @return  Voipmanager_Model_AsteriskSipPeer
-     */
-    public function createAsteriskSipPeer(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
-    {        
-        $sipPeer = $this->_asteriskSipPeerBackend->create($_sipPeer);
-      
-        return $sipPeer;
-    }
-    
-    
-    /**
-     * update existing asterisk sip peer
-     *
-     * @param Voipmanager_Model_AsteriskSipPeer $_sipPeer
-     * @return  Voipmanager_Model_AsteriskSipPeer
-     */
-    public function updateAsteriskSipPeer(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
-    {
-        $sipPeer = $this->_asteriskSipPeerBackend->update($_sipPeer);
-        
-        return $sipPeer;
-    }       
-    
-    
-    /**
-     * Deletes a set of asterisk sip peers.
-     * 
-     * If one of the asterisk sip peer could not be deleted, no asterisk sip peer is deleted
-     * 
-     * @throws Exception
-     * @param array array of asterisk sip peer identifiers
-     * @return void
-     */
-    public function deleteAsteriskSipPeers($_identifiers)
-    {
-        $this->_asteriskSipPeerBackend->delete($_identifiers);
-    }     
-    
-    
+    }        
     
 /********************************
  * SNOM XML CONFIG FUNCTIONS
