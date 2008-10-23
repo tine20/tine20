@@ -42,14 +42,16 @@ class Voipmanager_Backend_Asterisk_Voicemail
      * @param Tinebase_Model_Pagination $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskVoicemail
 	 */
-    public function search(Voipmanager_Model_AsteriskVoicemailFilter $_filter, Tinebase_Model_Pagination $_pagination, $_context = NULL)
+    public function search(Voipmanager_Model_AsteriskVoicemailFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
     {	
         $where = array();
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'asterisk_voicemail');
             
-        $_pagination->appendPagination($select);
+        if($_pagination instanceof Tinebase_Model_Pagination) {
+            $_pagination->appendPagination($select);
+        }
 
         if(!empty($_filter->query)) {
             $select->where($this->_db->quoteInto('(context LIKE ? OR mailbox LIKE ? OR fullname LIKE ? OR email LIKE ? OR pager LIKE ? )', '%' . $_filter->query . '%'));
@@ -57,8 +59,8 @@ class Voipmanager_Backend_Asterisk_Voicemail
             // handle the other fields separately
         }
         
-        if(!empty($_context)) {
-            $select->where($this->_db->quoteInto('context = ?', $_context));
+        if(!empty($_filter->context)) {
+            $select->where($this->_db->quoteInto('context = ?', $_filter->context));
         }
        
         $stmt = $select->query();

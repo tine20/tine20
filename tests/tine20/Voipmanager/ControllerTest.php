@@ -72,6 +72,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_backends['Asterisk_Context'] = Voipmanager_Controller_Asterisk_Context::getInstance();
         $this->_backends['Asterisk_Meetme'] = Voipmanager_Controller_Asterisk_Meetme::getInstance();
         $this->_backends['Asterisk_SipPeer'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
+        $this->_backends['Asterisk_Voicemail'] = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
         
         #$this->_objects['call'] = new Phone_Model_Call(array(
         #    'id'                    => 'phpunitcallid',
@@ -331,12 +332,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskVoicemail();
         
-        $returned = $this->_backend->createAsteriskVoicemail($test);
+        $returned = $this->_backends['Asterisk_Voicemail']->create($test);
         $this->assertEquals($test->mailbox, $returned->mailbox);
         $this->assertEquals($test->fullname, $returned->fullname);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteAsteriskVoicemails($returned->getId()); 
+        $this->_backends['Asterisk_Voicemail']->delete($returned->getId()); 
     }
     
     /**
@@ -347,15 +348,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskVoicemail();
         
-        $test = $this->_backend->createAsteriskVoicemail($test);
+        $test = $this->_backends['Asterisk_Voicemail']->create($test);
         $test->fullname = Tinebase_Record_Abstract::generateUID();
         
-        $returned = $this->_backend->updateAsteriskVoicemail($test);
+        $returned = $this->_backends['Asterisk_Voicemail']->update($test);
         $this->assertEquals($test->mailbox, $returned->mailbox);
         $this->assertEquals($test->fullname, $returned->fullname);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteAsteriskVoicemails($returned->getId()); 
+        $this->_backends['Asterisk_Voicemail']->delete($returned->getId()); 
     }
     
     /**
@@ -366,12 +367,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskVoicemail();
         
-        $test = $this->_backend->createAsteriskVoicemail($test);
+        $test = $this->_backends['Asterisk_Voicemail']->create($test);
         
-        $returned = $this->_backend->getAsteriskVoicemails('id', 'ASC', $test->mailbox);
+        $filter = new Voipmanager_Model_AsteriskVoicemailFilter(array(
+            'query' => $test->mailbox
+        ));
+        $returned = $this->_backends['Asterisk_Voicemail']->search($filter);
         $this->assertEquals(1, count($returned));
                 
-        $this->_backend->deleteAsteriskVoicemails($returned->getId()); 
+        $this->_backends['Asterisk_Voicemail']->delete($returned->getId()); 
     }
     
     /**

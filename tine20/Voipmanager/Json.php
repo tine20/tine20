@@ -619,7 +619,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $context
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function getAsteriskSipPeers($sort, $dir, $query, $context)
     {       
@@ -653,7 +653,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $sipPeerId
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function getAsteriskSipPeer($sipPeerId)
     {
@@ -676,7 +676,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $sipPeerData a JSON encoded array of sipPeer properties
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function saveAsteriskSipPeer($sipPeerData)
     {
@@ -713,7 +713,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_sipPeerIDs list of sipPeerId's to delete
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function deleteAsteriskSipPeers($_sipPeerIds)
     {
@@ -744,7 +744,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $query
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function getAsteriskContexts($sort = NULL, $dir = NULL, $query = NULL)
     {     
@@ -777,7 +777,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $contextId
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function getAsteriskContext($contextId)
     {
@@ -801,7 +801,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $contextData a JSON encoded array of context properties
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function saveAsteriskContext($contextData)
     {
@@ -836,7 +836,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_contextIDs list of contextId's to delete
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function deleteAsteriskContexts($_contextIds)
     {
@@ -867,22 +867,28 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $query
      * @param string $context
      * @return array
+     * 
+     * @todo    replace with generic function
      */
     public function getAsteriskVoicemails($sort, $dir, $query, $context)
     {     
-  
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getAsteriskVoicemails($sort, $dir, $query, $context)) {
+        $filter = new Voipmanager_Model_AsteriskVoicemailFilter(array(
+            'query'     => $query,
+            'context'   => $context
+        ));
         
-            $_rows = $rows->toArray();
-
-            $i = 0; 
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
         
-            $result['results']      = $_rows;
+        if($rows = Voipmanager_Controller_Asterisk_Voicemail::getInstance()->search($filter, $pagination)) {
+            $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
 
@@ -1100,7 +1106,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $query
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function getAsteriskMeetmes($sort, $dir, $query)
     {     
@@ -1133,7 +1139,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param int $meetmeId
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function getAsteriskMeetme($meetmeId)
     {
@@ -1157,7 +1163,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $meetmeData a JSON encoded array of meetme properties
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function saveAsteriskMeetme($meetmeData)
     {
@@ -1191,7 +1197,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param array $_meetmeIDs list of meetmeId's to delete
      * @return array
      * 
-     * @todo    replace by generic function
+     * @todo    replace with generic function
      */
     public function deleteAsteriskMeetmes($_meetmeIds)
     {

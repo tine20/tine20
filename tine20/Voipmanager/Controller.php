@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        remove asterisk voicemail
  * @todo        remove snom config
  * @todo        remove snom location
  * @todo        remove snom phone
@@ -72,13 +71,6 @@ class Voipmanager_Controller
     protected $_snomTemplateBackend;
     
     /**
-     * the asterisk voicemail sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_Voicemail
-     */
-    protected $_asteriskVoicemailBackend;
-    
-    /**
      * the snom setting sql backend
      *
      * @var Voipmanager_Backend_Snom_Setting
@@ -129,7 +121,6 @@ class Voipmanager_Controller
         $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location($this->_dbBbackend);
         $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template($this->_dbBbackend);      
         $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting($this->_dbBbackend);              
-        $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail($this->_dbBbackend);  
 
 		$this->_cache = Zend_Registry::get('cache');
     }
@@ -910,99 +901,7 @@ class Voipmanager_Controller
         return $xml;
     }
     
-/********************************
- * ASTERISK VOICEMAIL FUNCTIONS
- *
- * 
- */
 
-    
-    /**
-     * get asterisk_voicemail by id
-     *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskVoicemail
-     */
-    public function getAsteriskVoicemail($_id)
-    {
-        $voicemail = $this->_asteriskVoicemailBackend->get($_id);
-        
-        return $voicemail;    
-    }
-
-
-    /**
-     * get asterisk_voicemails
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskVoicemail
-     */
-    public function getAsteriskVoicemails($_sort = 'id', $_dir = 'ASC', $_query = NULL, $_context = NULL)
-    {
-        $filter = new Voipmanager_Model_AsteriskVoicemailFilter(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_asteriskVoicemailBackend->search($filter, $pagination, $_context);
-        
-        return $result;    
-    }
-
-
-    /**
-     * add one voicemail
-     *
-     * @param Voipmanager_Model_AsteriskVoicemail $_voicemail
-     * @return  Voipmanager_Model_AsteriskVoicemail
-     */
-    public function createAsteriskVoicemail(Voipmanager_Model_AsteriskVoicemail $_voicemail)
-    {        
-        $voicemail = $this->_asteriskVoicemailBackend->create($_voicemail);
-      
-        return $this->getAsteriskVoicemail($voicemail);
-    }
-    
-
-    /**
-     * update one voicemail
-     *
-     * @param Voipmanager_Model_AsteriskVoicemail $_voicemail
-     * @return  Voipmanager_Model_AsteriskVoicemail
-     */
-    public function updateAsteriskVoicemail(Voipmanager_Model_AsteriskVoicemail $_voicemail)
-    {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->container_id . ' denied');
-        }
-        */
-        $voicemail = $this->_asteriskVoicemailBackend->update($_voicemail);
-        
-        return $this->getAsteriskVoicemail($voicemail);
-    }    
-    
-  
-    /**
-     * Deletes a set of voicemails.
-     * 
-     * If one of the voicemails could not be deleted, no voicemail is deleted
-     * 
-     * @throws Exception
-     * @param array array of voicemail identifiers
-     * @return void
-     */
-    public function deleteAsteriskVoicemails($_identifiers)
-    {
-        $this->_asteriskVoicemailBackend->delete($_identifiers);
-    }    
-    
-    
-    
     
 /********************************
  * SNOM SETTINGS FUNCTIONS
