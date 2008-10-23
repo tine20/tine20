@@ -1,8 +1,6 @@
 <?php
 /**
- * controller for Voipmanager Management application
- * 
- * the main logic of the Voipmanager Management application
+ * Snom_Phone controller for Voipmanager Management application
  *
  * @package     Voipmanager
  * @subpackage  Controller
@@ -14,114 +12,19 @@
  */
 
 /**
- * controller class for Voipmanager Management application
+ * Snom_Phone controller class for Voipmanager Management application
  * 
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_Abstract
+class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
 {
     /**
      * Voipmanager backend class
      *
-     * @var Voipmanager_Backend_Sql
-     */
-    protected $_backend;
-    
-    /**
-     * the snom phone sql backend
-     *
      * @var Voipmanager_Backend_Snom_Phone
      */
-    protected $_snomPhoneBackend;
-    
-    /**
-     * the snom phone lines sql backend
-     *
-     * @var Voipmanager_Backend_Snom_Line
-     */
-    protected $_snomLineBackend;
-    
-    /**
-     * the snom phone software sql backend
-     *
-     * @var Voipmanager_Backend_Snom_Software
-     */
-    protected $_snomSoftwareBackend;
-    
-    /**
-     * the snom phone location sql backend
-     *
-     * @var Voipmanager_Backend_Snom_Location
-     */
-    protected $_snomLocationBackend;
-    
-    /**
-     * the snom phone template sql backend
-     *
-     * @var Voipmanager_Backend_Snom_Template
-     */
-    protected $_snomTemplateBackend;
-    
-    /**
-     * the asterisk sip peer sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_SipPeer
-     */
-    protected $_asteriskSipPeerBackend;
-
-    /**
-     * the asterisk context sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_Context
-     */
-    protected $_asteriskContextBackend;
-
-    /**
-     * the asterisk voicemail sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_Voicemail
-     */
-    protected $_asteriskVoicemailBackend;
-    
-    /**
-     * the snom setting sql backend
-     *
-     * @var Voipmanager_Backend_Snom_Setting
-     */
-    protected $_snomSettingBackend;    
-    
-    /**
-     * the asterisk meetme sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_Meetme
-     */
-    protected $_asteriskMeetmeBackend;	
-	
-    /**
-     * the snom phone settings sql backend
-     *
-     * @var Voipmanager_Backend_Snom_PhoneSettings
-     */	
-    protected $_snomPhoneSettingsBackend;
-    
-    /**
-     * the central caching object
-     *
-     * @var Zend_Cache_Core
-     */
-    protected $_cache;
-    
-    const PDO_MYSQL = 'Pdo_Mysql';
-    
-    const PDO_OCI = 'Pdo_Oci';
-    
-    /**
-     * the database backend for the backend classes
-     *
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_dbBackend;
+    protected $_backend;
     
     /**
      * the constructor
@@ -129,107 +32,45 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        if(isset(Zend_Registry::get('configFile')->voipmanager) && isset(Zend_Registry::get('configFile')->voipmanager->database)) {
-            $this->_dbBbackend = $this->_getDatabaseBackend(Zend_Registry::get('configFile')->voipmanager->database);
-        } else {
-            $this->_dbBbackend = Zend_Registry::get('dbAdapter');
-        }
-        
-        $this->_snomPhoneBackend            = new Voipmanager_Backend_Snom_Phone($this->_dbBbackend);
-        $this->_snomPhoneSettingsBackend    = new Voipmanager_Backend_Snom_PhoneSettings($this->_dbBbackend);        
-        $this->_snomLineBackend             = new Voipmanager_Backend_Snom_Line($this->_dbBbackend);
-        $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software($this->_dbBbackend);
-        $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location($this->_dbBbackend);
-        $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template($this->_dbBbackend);      
-        $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting($this->_dbBbackend);              
-        $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer($this->_dbBbackend);          
-        $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context($this->_dbBbackend);          
-        $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail($this->_dbBbackend);  
-		$this->_asteriskMeetmeBackend		= new Voipmanager_Backend_Asterisk_Meetme($this->_dbBbackend);
-
-		$this->_cache = Zend_Registry::get('cache');
+        $this->_backend      = new Voipmanager_Backend_Snom_Phone($this->_getDatabaseBackend());
     }
-    
-    /**
-     * return instance of the current database backend
-     *
-     * @return Zend_Db_Adapter_Abstract
-     */
-    public function getDBInstance()
-    {
-        return $this->_dbBbackend;
-    }
-    
-    /**
-     * initialize the optional database backend
-     *
-     * @param unknown_type $_dbConfig
-     * @return Zend_Db_Adapter_Abstract
-     */
-    protected function _getDatabaseBackend($_dbConfig) 
-    {
-        $dbBackend = constant('self::' . strtoupper($_dbConfig->get('backend', self::PDO_MYSQL)));
         
-        switch($dbBackend) {
-            case self::PDO_MYSQL:
-                $db = Zend_Db::factory('Pdo_Mysql', $_dbConfig->toArray());
-                break;
-            case self::PDO_OCI:
-                $db = Zend_Db::factory('Pdo_Oci', $_dbConfig->toArray());
-                break;
-            default:
-                throw new Exception('Invalid database backend type defined. Please set backend to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.ini.');
-                break;
-        }
-        
-        return $db;
-    }
-    
     /**
      * holdes the instance of the singleton
      *
-     * @var Voipmanager_Controller
+     * @var Voipmanager_Controller_Snom_Phone
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Voipmanager_Controller
+     * @return Voipmanager_Controller_Snom_Phone
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller;
+            self::$_instance = new Voipmanager_Controller_Snom_Phone;
         }
         
         return self::$_instance;
     }
-
-
-
-/**********************************************
- * SNOM PHONE / SNOM PHONESETTINGS FUNCTIONS
- *
- * 
- */
-
-
+    
     /**
      * get snom_phone by id
      *
      * @param string $_id
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
      */
-    public function getSnomPhone($_id)
+    public function get($_id)
     {
-        $phone = $this->_snomPhoneBackend->get($_id);
+        $phone = $this->_backend->get($_id);
         
         $filter = new Voipmanager_Model_SnomLineFilter(array(
             'snomphone_id'  => $phone->id
         ));
-        $phone->lines  = $this->_snomLineBackend->search($filter);
-        $phone->rights = $this->_snomPhoneBackend->getPhoneRights($phone->id);
+        $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
+        $phone->rights = $this->_backend->getPhoneRights($phone->id);
         
         // add accountDisplayName
         foreach ($phone->rights as &$right) {
@@ -238,23 +79,6 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
         }
         
         return $phone;    
-    }
-    
-    /**
-     * get snom_phone_line by id
-     *
-     * @param string $_id the id of the line
-     * @return Voipmanager_Model_SnomLine
-     */
-    public function getSnomPhoneLine($_id)
-    {
-        $id = Voipmanager_Model_SnomLine::convertSnomLineIdToInt($_id);
-        if (($result = $this->_cache->load('snomPhoneLine_' . $id)) === false) {
-            $result = $this->_snomLineBackend->get($id);
-            $this->_cache->save($result, 'snomPhoneLine_' . $id, array('SnomPhoneLine'), 5);
-        }
-        
-        return $result;    
     }
     
     /**
@@ -263,15 +87,15 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
      * @param string $_macAddress
      * @return Voipmanager_Model_SnomPhone
      */
-    public function getSnomPhoneByMacAddress($_macAddress)
+    public function getByMacAddress($_macAddress)
     {
-        $phone = $this->_snomPhoneBackend->getByMacAddress($_macAddress);
+        $phone = $this->_backend->getByMacAddress($_macAddress);
         
         $filter = new Voipmanager_Model_SnomLineFilter(array(
             'snomphone_id'  => $phone->id
         ));
-        $phone->lines  = $this->_snomLineBackend->search($filter);
-        $phone->rights = $this->_snomPhoneBackend->getPhoneRights($phone->id);
+        $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
+        $phone->rights = $this->_backend->getPhoneRights($phone->id);
         
         // add accountDisplayName
         foreach ($phone->rights as &$right) {
@@ -281,22 +105,6 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
         
         return $phone;    
     }
-        
-    
-    /**
-     * get snom_phones
-     *
-     * @param Voipmanager_Model_SnomPhoneFilter $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
-     */
-    public function getSnomPhones(Voipmanager_Model_SnomPhoneFilter $_filter, $_pagination = NULL)
-    {
-        $result = $this->_snomPhoneBackend->search($_filter, $_pagination);
-        
-        return $result;    
-    }
-
 
     /**
      * add one phone
@@ -304,7 +112,7 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function createSnomPhone(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    public function create(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
     {
         // auto generate random http client username and password        
         // limit length because of Snom phone limitations
@@ -318,14 +126,14 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
         unset($_phone->ipaddress);
         unset($_phone->current_software);
         
-        $phone = $this->_snomPhoneBackend->create($_phone);
+        $phone = $this->_backend->create($_phone);
         
         // force the right phone_id
         $_phoneSettings->setId($phone->getId());
 
         // set all settings which are equal to the default settings to NULL
-        $template = $this->getSnomTemplate($phone->template_id);
-        $settingDefaults = $this->getSnomSetting($template->setting_id);
+        $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
+        $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
 
         foreach($_phoneSettings AS $key => $value) {
             if($key == 'phone_id') {
@@ -340,15 +148,15 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
         
         foreach($_phone->lines as $line) {
             $line->snomphone_id = $phone->getId();
-            $addedLine = $this->_snomLineBackend->create($line);
+            $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->create($line);
         }
         
         // save phone rights
         if (isset($phone->rights)) {
-            $this->_snomPhoneBackend->setPhoneRights($phone);
+            $this->_backend->setPhoneRights($phone);
         }        
       
-        return $this->getSnomPhone($phone);
+        return $this->get($phone);
     }
     
     /**
@@ -356,9 +164,9 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
      *
      * @param Voipmanager_Model_SnomPhone $_phone
      */
-    public function updateSnomPhoneRedirect(Voipmanager_Model_SnomPhone $_phone)
+    public function updateRedirect(Voipmanager_Model_SnomPhone $_phone)
     {
-        $this->_snomPhoneBackend->updateRedirect($_phone);
+        $this->_backend->updateRedirect($_phone);
     }
     
     /**
@@ -368,7 +176,7 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
      * @param Voipmanager_Model_SnomPhoneSettings|optional $_phoneSettings
      * @return  Voipmanager_Model_SnomPhone
      */
-    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone, $_phoneSettings = NULL)
+    public function update(Voipmanager_Model_SnomPhone $_phone, $_phoneSettings = NULL)
     {
         unset($_phone->settings_loaded_at);
         unset($_phone->firmware_checked_at);
@@ -376,7 +184,7 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
         unset($_phone->ipaddress);
         unset($_phone->current_software);
         
-        $phone = $this->_snomPhoneBackend->update($_phone);
+        $phone = $this->_backend->update($_phone);
         
         if($_phoneSettings instanceof Voipmanager_Model_SnomPhoneSettings) {
         
@@ -384,8 +192,8 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
             $_phoneSettings->setId($phone->getId());
     
             // set all settings which are equal to the default settings to NULL
-            $template = $this->getSnomTemplate($phone->template_id);
-            $settingDefaults = $this->getSnomSetting($template->setting_id);
+            $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
+            $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
     
             foreach($_phoneSettings AS $key => $value) {
                 if($key == 'phone_id') {
@@ -395,47 +203,30 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
                     $_phoneSettings->$key = NULL;
                 }    
             }
-            
+
             if($this->_snomPhoneSettingsBackend->get($phone->getId())) {
-                $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
+                $phoneSettings = Voipmanager_Controller_Snom_Setting::getInstance()->update($_phoneSettings);
             } else {
-                $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);            
+                $phoneSettings = Voipmanager_Controller_Snom_Setting::getInstance()->create($_phoneSettings);            
             }
         
         }
         
-        $this->_snomLineBackend->deletePhoneLines($phone->getId());
+        Voipmanager_Controller_Snom_Line::getInstance()->deletePhoneLines($phone->getId());
         
         foreach($_phone->lines as $line) {
             $line->snomphone_id = $phone->getId();
-            //error_log(print_r($line->toArray(), true));
-            $addedLine = $this->_snomLineBackend->create($line);
+            $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->createe($line);
         }
         
         // save phone rights
         if (isset($_phone->rights)) {
-            $this->_snomPhoneBackend->setPhoneRights($_phone);
+            $this->_backend->setPhoneRights($_phone);
         }
               
-        return $this->getSnomPhone($phone);
+        return $this->get($phone);
     }    
     
-    
-    /**
-     * Deletes a set of phones.
-     * 
-     * If one of the phones could not be deleted, no phone is deleted
-     * 
-     * @throws Exception
-     * @param array array of phone identifiers
-     * @return void
-     */
-    public function deleteSnomPhones($_identifiers)
-    {
-        $this->_snomPhoneBackend->delete($_identifiers);
-    }
-
-
     /**
      * send http client info to a set of phones.
      * 
@@ -453,62 +244,7 @@ class Voipmanager_Controller_SnomPhone extends Tinebase_Application_Controller_A
             $phone->http_client_pass = Tinebase_Record_Abstract::generateUID(20);
             $phone->http_client_info_sent = false;
             
-            $phone = $this->_snomPhoneBackend->update($phone);
+            $phone = $this->_backend->update($phone);
         }
     }
-
-    /**
-     * get snom_phoneSettings by id
-     *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhoneSettings
-     */
-    public function getSnomPhoneSettings($_id)
-    {
-        $phoneSettings = $this->_snomPhoneSettingsBackend->get($_id);
-        return $phoneSettings;    
-    }
-
-
-    /**
-     * add one phoneSetting
-     *
-     * @param Voipmanager_Model_SnomPhoneSettings $_phone
-     * @return  Voipmanager_Model_SnomPhoneSettings
-     */
-    public function createSnomPhoneSettings(Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
-    {       
-        $phoneSettings = $this->_snomPhoneSettingsBackend->create($_phoneSettings);
-        return $this->getSnomPhoneSettings($phoneSettings);
-    }
-    
-
-    /**
-     * update one phoneSettings
-     *
-     * @param Voipmanager_Model_SnomPhoneSettings $_phoneSettings
-     * @return  Voipmanager_Model_SnomPhoneSettings
-     */
-    public function updateSnomPhoneSettings(Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
-    {
-        $phoneSettings = $this->_snomPhoneSettingsBackend->update($_phoneSettings);
-        return $this->getSnomPhoneSettings($phoneSettings);
-    }    
-    
-    
-    /**
-     * Deletes phoneSettings.
-     * 
-     * 
-     * 
-     * @throws Exception
-     * @param array array of phone identifiers
-     * @return void
-     */
-    public function deleteSnomPhoneSettings($_identifiers)
-    {
-        $this->_snomPhoneSettingsBackend->delete($_identifiers);
-    }
-
-
 }

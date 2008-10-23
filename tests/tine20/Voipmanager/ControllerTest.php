@@ -8,7 +8,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        replace single controller by controllers from Voipmanager_Controller_*
+ * @todo        split into seperate controller tests?
  */
 
 /**
@@ -29,17 +29,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      * Fixtures
      * 
      * @var array test objects
+     * @todo    use it?
+     * @deprecated 
      */
     protected $_objects = array();
 
-    /**
-     * Backend
-     *
-     * @var Voipmanager_Controller
-     * @deprecated 
-     */
-    protected $_backend;
-    
     /**
      * the voipmanager controllers
      *
@@ -67,22 +61,17 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Voipmanager_Controller::getInstance();
-
         $this->_backends['Asterisk_Context'] = Voipmanager_Controller_Asterisk_Context::getInstance();
         $this->_backends['Asterisk_Meetme'] = Voipmanager_Controller_Asterisk_Meetme::getInstance();
         $this->_backends['Asterisk_SipPeer'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
         $this->_backends['Asterisk_Voicemail'] = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
+        $this->_backends['Snom_Line'] = Voipmanager_Controller_Snom_Line::getInstance();
         $this->_backends['Snom_Location'] = Voipmanager_Controller_Snom_Location::getInstance();
-        
-        #$this->_objects['call'] = new Phone_Model_Call(array(
-        #    'id'                    => 'phpunitcallid',
-        #    'line_id'               => 'phpunitlineid',
-        #    'phone_id'              => 'phpunitphoneid',
-        #    'direction'             => Phone_Model_Call::TYPE_INCOMING,
-        #    'source'                => '26',
-        #    'destination'           => '0406437435',    
-        #));
+        $this->_backends['Snom_Phone'] = Voipmanager_Controller_Snom_Phone::getInstance();
+        $this->_backends['Snom_Setting'] = Voipmanager_Controller_Snom_Setting::getInstance();
+        $this->_backends['Snom_Software'] = Voipmanager_Controller_Snom_Software::getInstance();
+        $this->_backends['Snom_Template'] = Voipmanager_Controller_Snom_Template::getInstance();
+        $this->_backends['MyPhone'] = Voipmanager_Controller_MyPhone::getInstance();
     }
 
     /**
@@ -95,17 +84,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {	
     }
 
-    /**
-     * test getDBInstance
-     * 
-     */
-    public function testGetDBInstance()
-    {
-        $db = $this->_backend->getDBInstance();
-        
-        $this->assertType('Zend_Db_Adapter_Abstract', $db);
-    }
-    
     /**
      * test creation of asterisk context
      *
@@ -402,13 +380,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomSoftware();
         
-        $returned = $this->_backend->createSnomSoftware($test);
+        $returned = $this->_backends['Snom_Software']->create($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->softwareimage_snom320, $returned->softwareimage_snom320);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomSoftware($returned->getId()); 
+        $this->_backends['Snom_Software']->delete($returned->getId()); 
     }
     
     /**
@@ -419,8 +397,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomSoftware();
         
-        $test = $this->_backend->createSnomSoftware($test);
-        $returned = $this->_backend->getSnomSoftware($test);
+        $test = $this->_backends['Snom_Software']->create($test);
+        $returned = $this->_backends['Snom_Software']->get($test);
         
         $this->assertType('Voipmanager_Model_SnomSoftware', $returned);
         $this->assertEquals($test->id, $returned->id);
@@ -428,7 +406,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomSoftware($returned->getId()); 
+        $this->_backends['Snom_Software']->delete($returned->getId()); 
     }
     
     /**
@@ -439,14 +417,14 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomSoftware();
         
-        $test = $this->_backend->createSnomSoftware($test);
-        $returned = $this->_backend->updateSnomSoftware($test);
+        $test = $this->_backends['Snom_Software']->create($test);
+        $returned = $this->_backends['Snom_Software']->update($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->softwareimage_snom320, $returned->softwareimage_snom320);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomSoftware($returned->getId()); 
+        $this->_backends['Snom_Software']->delete($returned->getId()); 
     }
     
     /**
@@ -457,12 +435,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomSoftware();
         
-        $test = $this->_backend->createSnomSoftware($test);
+        $test = $this->_backends['Snom_Software']->create($test);
         
-        $returned = $this->_backend->searchSnomSoftware('id', 'ASC', $test->name);
+        $filter = new Voipmanager_Model_SnomSoftwareFilter(array(
+            'query' => $test->name
+        ));
+        $returned = $this->_backends['Snom_Software']->search($filter);
         $this->assertEquals(1, count($returned));
                 
-        $this->_backend->deleteSnomSoftware($returned->getId()); 
+        $this->_backends['Snom_Software']->delete($returned->getId()); 
     }
     
     /**
@@ -489,7 +470,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomSetting();
         
-        $returned = $this->_backend->createSnomSetting($test);
+        $returned = $this->_backends['Snom_Setting']->create($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->display_method, $returned->display_method);
@@ -498,7 +479,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->mwi_notification_writable, $returned->mwi_notification_writable);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomSettings($returned->getId()); 
+        $this->_backends['Snom_Setting']->delete($returned->getId()); 
     }
     
     /**
@@ -509,10 +490,10 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomSetting();
         
-        $test = $this->_backend->createSnomSetting($test);
+        $test = $this->_backends['Snom_Setting']->create($test);
         $test->name = Tinebase_Record_Abstract::generateUID();
         
-        $returned = $this->_backend->updateSnomSetting($test);
+        $returned = $this->_backends['Snom_Setting']->update($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->display_method, $returned->display_method);
@@ -521,7 +502,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->mwi_notification_writable, $returned->mwi_notification_writable);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomSettings($returned->getId()); 
+        $this->_backends['Snom_Setting']->delete($returned->getId()); 
     }
     
     /**
@@ -532,12 +513,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomSetting();
         
-        $test = $this->_backend->createSnomSetting($test);
+        $test = $this->_backends['Snom_Setting']->create($test);
         
-        $returned = $this->_backend->getSnomSettings('id', 'ASC', $test->name);
+        $filter = new Voipmanager_Model_SnomSettingFilter(array(
+            'query' => $test->name
+        ));
+        $returned = $this->_backends['Snom_Setting']->search($filter);
         $this->assertEquals(1, count($returned));
                 
-        $this->_backend->deleteSnomSettings($returned->getId()); 
+        $this->_backends['Snom_Setting']->delete($returned->getId()); 
     }
     
     /**
@@ -656,18 +640,18 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateSnomTemplate()
     {
-        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
-        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
+        $software = $this->_backends['Snom_Software']->create($this->_getSnomSoftware());
+        $settings = $this->_backends['Snom_Setting']->create($this->_getSnomSetting());
         $test = $this->_getSnomTemplate($software, $settings);
         
-        $returned = $this->_backend->createSnomTemplate($test);
+        $returned = $this->_backends['Snom_Template']->create($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomTemplates($returned->getId());
-        $this->_backend->deleteSnomSettings($settings->getId());
-        $this->_backend->deleteSnomSoftware($software->getId()); 
+        $this->_backends['Snom_Template']->delete($returned->getId());
+        $this->_backends['Snom_Setting']->delete($settings->getId());
+        $this->_backends['Snom_Software']->delete($software->getId()); 
     }
     
     /**
@@ -676,12 +660,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSnomTemplate()
     {
-        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
-        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
+        $software = $this->_backends['Snom_Software']->create($this->_getSnomSoftware());
+        $settings = $this->_backends['Snom_Setting']->create($this->_getSnomSetting());
         $test = $this->_getSnomTemplate($software, $settings);
         
-        $test = $this->_backend->createSnomTemplate($test);
-        $returned = $this->_backend->getSnomTemplate($test);
+        $test = $this->_backends['Snom_Template']->create($test);
+        $returned = $this->_backends['Snom_Template']->get($test);
         
         $this->assertType('Voipmanager_Model_SnomTemplate', $returned);
         $this->assertEquals($test->id, $returned->id);
@@ -689,9 +673,9 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomTemplates($returned->getId());
-        $this->_backend->deleteSnomSettings($settings->getId());
-        $this->_backend->deleteSnomSoftware($software->getId()); 
+        $this->_backends['Snom_Template']->delete($returned->getId());
+        $this->_backends['Snom_Setting']->delete($settings->getId());
+        $this->_backends['Snom_Software']->delete($software->getId()); 
     }
     
     /**
@@ -700,21 +684,21 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateSnomTemplate()
     {
-        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
-        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
+        $software = $this->_backends['Snom_Software']->create($this->_getSnomSoftware());
+        $settings = $this->_backends['Snom_Setting']->create($this->_getSnomSetting());
         $test = $this->_getSnomTemplate($software, $settings);
                 
-        $test = $this->_backend->createSnomTemplate($test);
+        $test = $this->_backends['Snom_Template']->create($test);
         $test->name = Tinebase_Record_Abstract::generateUID();
         
-        $returned = $this->_backend->updateSnomTemplate($test);
+        $returned = $this->_backends['Snom_Template']->update($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomTemplates($returned->getId());
-        $this->_backend->deleteSnomSettings($settings->getId());
-        $this->_backend->deleteSnomSoftware($software->getId()); 
+        $this->_backends['Snom_Template']->delete($returned->getId());
+        $this->_backends['Snom_Setting']->delete($settings->getId());
+        $this->_backends['Snom_Software']->delete($software->getId()); 
     }
     
     /**
@@ -723,18 +707,21 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchSnomTemplate()
     {
-        $software = $this->_backend->createSnomSoftware($this->_getSnomSoftware());
-        $settings = $this->_backend->createSnomSetting($this->_getSnomSetting());
+        $software = $this->_backends['Snom_Software']->create($this->_getSnomSoftware());
+        $settings = $this->_backends['Snom_Setting']->create($this->_getSnomSetting());
         $test = $this->_getSnomTemplate($software, $settings);
                 
-        $test = $this->_backend->createSnomTemplate($test);
+        $test = $this->_backends['Snom_Template']->create($test);
         
-        $returned = $this->_backend->getSnomTemplates('id', 'ASC', $test->name);
+        $filter = new Voipmanager_Model_SnomTemplateFilter(array(
+            'query' => $test->name
+        ));
+        $returned = $this->_backends['Snom_Template']->search($filter);
         $this->assertEquals(1, count($returned));
                 
-        $this->_backend->deleteSnomTemplates($returned->getId());
-        $this->_backend->deleteSnomSettings($settings->getId());
-        $this->_backend->deleteSnomSoftware($software->getId()); 
+        $this->_backends['Snom_Template']->delete($returned->getId());
+        $this->_backends['Snom_Setting']->delete($settings->getId());
+        $this->_backends['Snom_Software']->delete($software->getId()); 
     }
     
     /**

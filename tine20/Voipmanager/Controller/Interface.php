@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        rework interface (Snom_Phone controllers use differen create/update functions)?
  */
 
 /**
@@ -42,7 +43,7 @@ interface Voipmanager_Controller_Interface
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
      */
-    public function create(Tinebase_Record_Interface $_record);
+    //public function create(Tinebase_Record_Interface $_record);
     
     /**
      * update one record
@@ -50,7 +51,7 @@ interface Voipmanager_Controller_Interface
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
      */
-    public function update(Tinebase_Record_Interface $_record);
+    //public function update(Tinebase_Record_Interface $_record);
     
     /**
      * Deletes a set of records.

@@ -41,16 +41,18 @@ class Voipmanager_Backend_Snom_Software
      * @param Tinebase_Model_Pagination $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomSoftware
 	 */
-    public function search(Voipmanager_Model_SnomSoftwareFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    public function search(Voipmanager_Model_SnomSoftwareFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
     {	
         $where = array();
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'snom_software');
             
-        $_pagination->appendPagination($select);
+        if ($_pagination instanceof Tinebase_Model_Pagination) {
+            $_pagination->appendPagination($select);
+        }
 
-        if(!empty($_filter->query)) {
+        if (!empty($_filter->query)) {
             $select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
         } else {
             // handle the other fields separately

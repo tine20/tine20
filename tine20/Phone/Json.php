@@ -49,8 +49,12 @@ class Phone_Json extends Tinebase_Application_Json_Abstract
      */
     public function getUserPhones($accountId)
     {        
-        $voipController = Voipmanager_Controller::getInstance();
-        $phones = $voipController->getMyPhones('id', 'ASC', '', $accountId);
+        $voipController = Voipmanager_Controller_MyPhone::getInstance();
+        
+        $filter = new Voipmanager_Model_SnomPhoneFilter(array(
+            'accountId' => $accountId
+        ));
+        $phones = $voipController->search($filter);
         
         // add lines to phones
         $results = array();
