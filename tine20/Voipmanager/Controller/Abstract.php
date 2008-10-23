@@ -22,6 +22,13 @@
 abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Controller_Abstract
 {
     /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Voipmanager';
+    
+    /**
      * filter class
      *
      * @var string
