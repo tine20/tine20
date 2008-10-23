@@ -62,10 +62,23 @@ class Voipmanager_Controller_Snom_Xml extends Voipmanager_Controller_Abstract
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return string the xml formated configuration file
      */
-    public function get($_phone)
+    public function getConfig($_phone)
     {
         $xml = $this->_backend->getConfig($_phone);
         
         return $xml;
     }   
+    
+    /**
+     * get phone firmware
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return string the firmware as xml string
+     */
+    public function getFirmware(Voipmanager_Model_SnomPhone $_phone)
+    {
+        $xml = $this->_backend->getFirmware($_phone);
+        
+        return $xml;
+    }
 }

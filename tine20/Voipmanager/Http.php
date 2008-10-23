@@ -56,23 +56,19 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $snomTemplates = Voipmanager_Controller_Snom_Template::getInstance()->search();
         $snomLocations = Voipmanager_Controller_Snom_Location::getInstance()->search();
         
-        $asteriskSipPeers = $controller->searchAsteriskSipPeers('name');
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort' => 'name'
+        ));
+        $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->searchAsteriskSipPeers(NULL, $pagination);
         $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());    
         
         if (!empty($phoneId)) {
-            $snomPhone = $controller->getSnomPhone($phoneId);
-            //$snomLines = $snomPhone->lines;
-            //unset($phone->lines);
-
-            $_phoneData = $snomPhone->toArray();
-
-            //$_phoneOwner = $controller->getPhoneOwner($_phoneData['id']);   
-             
-            $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['id'])->toArray();
+            $snomPhone = Voipmanager_Controller_Snom_Phone::getInstance()->get($phoneId);
+            $_phoneData = $snomPhone->toArray();             
+            $_phoneSettingsData = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($_phoneData['id'])->toArray();
             
-            $_templateData = $controller->getSnomTemplate($_phoneData['template_id'])->toArray();
-            $_settingsData = $controller->getSnomSetting($_templateData['setting_id'])->toArray();
-            
+            $_templateData = Voipmanager_Controller_Snom_Template::getInstance()->get($_phoneData['template_id'])->toArray();
+            $_settingsData = Voipmanager_Controller_Snom_Setting::getInstance()->get($_templateData['setting_id'])->toArray();            
 
             $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 
@@ -130,7 +126,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editAsteriskSipPeer($sipPeerId=NULL)
     {
         if (!empty($sipPeerId)) {
-            $sipPeer = Voipmanager_Controller::getInstance()->getAsteriskSipPeer($sipPeerId);
+            $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($sipPeerId);
         } else {
             $sipPeer = new Voipmanager_Model_AsteriskSipPeer(array(
                 'type'  => 'user'
@@ -140,7 +136,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         // encode the asterisk sip peer array
         $encodedSipPeer = Zend_Json::encode($sipPeer->toArray());                   
         
-        $encodedContexts = Zend_Json::encode(Voipmanager_Controller::getInstance()->getAsteriskContexts()->toArray());
+        $encodedContexts = Zend_Json::encode(Voipmanager_Controller_Asterisk_Context::getInstance()->search()->toArray());
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
@@ -162,7 +158,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editAsteriskContext($contextId=NULL)
     {
         if (!empty($contextId)) {
-            $context = Voipmanager_Controller::getInstance()->getAsteriskContext($contextId);
+            $context = Voipmanager_Controller_Asterisk_Context::getInstance()->get($contextId);
             $encodedContext = Zend_Json::encode($context->toArray());                   
         } else {
             $encodedContext = '{}';
@@ -188,13 +184,13 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editAsteriskVoicemail($voicemailId=NULL)
     {
         if (!empty($voicemailId)) {
-            $voicemail = Voipmanager_Controller::getInstance()->getAsteriskVoicemail($voicemailId);
+            $voicemail = Voipmanager_Controller_Asterisk_Voicemail::getInstance()->get($voicemailId);
             $encodedVoicemail = Zend_Json::encode($voicemail->toArray());                   
         } else {
             $encodedVoicemail = '{}';
         }
 
-        $encodedContexts = Zend_Json::encode(Voipmanager_Controller::getInstance()->getAsteriskContexts()->toArray());
+        $encodedContexts = Zend_Json::encode(Voipmanager_Controller_Asterisk_Context::getInstance()->search()->toArray());
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
@@ -217,7 +213,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editSnomLocation($locationId=NULL)
     {
         if (!empty($locationId)) {
-            $location = Voipmanager_Controller::getInstance()->getSnomLocation($locationId);
+            $location = Voipmanager_Controller_Snom_Location::getInstance()->get($locationId);
         } else {
             $location = new Voipmanager_Model_SnomLocation(array(
                 'webserver_type'    => 'http',
@@ -250,7 +246,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editSnomSoftware($softwareId=NULL)
     {
         if (!empty($softwareId)) {
-            $software = Voipmanager_Controller::getInstance()->getSnomSoftware($softwareId);
+            $software = Voipmanager_Controller_Snom_Software::getInstance()->get($softwareId);
             $encodedSoftware = Zend_Json::encode($software->toArray());
         } else {
             $encodedSoftware = '{}';
@@ -277,7 +273,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editSnomSetting($settingId=NULL)
     {
         if (!empty($settingId)) {
-            $setting = Voipmanager_Controller::getInstance()->getSnomSetting($settingId);
+            $setting = Voipmanager_Controller_Snom_Setting::getInstance()->get($settingId);
             $encodedSetting = Zend_Json::encode($setting->toArray());
         } else {
             $encodedSetting = '{}';
@@ -304,10 +300,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
      */
     public function editSnomTemplate($templateId=NULL)
     {
-        $controller = Voipmanager_Controller::getInstance();
-
         if (!empty($templateId)) {
-            $template = $controller->getSnomTemplate($templateId);
+            $template = Voipmanager_Controller_Snom_Template::getInstance()->get($templateId);
             // encode the template array
             $encodedTemplate = Zend_Json::encode($template->toArray()); 
         } else {
@@ -315,7 +309,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         }
         
         // software data
-        $software = $controller->searchSnomSoftware();
+        $software = Voipmanager_Controller_Snom_Software::getInstance()->search();
         $encodedSoftware = Zend_Json::encode($software->toArray());
         
         // keylayout data
@@ -323,7 +317,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $encodedKeylayout = Zend_Json::encode('[]');
         
         // settings data
-        $settings = $controller->getSnomSettings();
+        $settings = Voipmanager_Controller_Snom_Setting::getInstance()->search();
         $encodedSettings = Zend_Json::encode($settings->toArray());
         
         $view = new Zend_View();
@@ -331,7 +325,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         
         $view->title="edit snom template data";
         $view->jsExecute = '
-            Tine.Tinebase.Registry.add("softwareVersions", ' . $controller->searchSnomSoftware()->toArray() .' );
+            Tine.Tinebase.Registry.add("softwareVersions", ' . Voipmanager_Controller_Snom_Software::getInstance()->search()->toArray() .' );
             Tine.Voipmanager.Snom.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');
         ';
         
@@ -349,7 +343,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editAsteriskMeetme($meetmeId=NULL)
     {
         if (!empty($meetmeId)) {
-            $meetme = Voipmanager_Controller::getInstance()->getAsteriskMeetme($meetmeId);
+            $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->get($meetmeId);
             $encodedMeetme = Zend_Json::encode($meetme->toArray());                   
         } else {
             $encodedMeetme = '{}';

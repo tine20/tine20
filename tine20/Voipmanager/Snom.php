@@ -38,9 +38,9 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         $this->_authenticate();
         
-        $vmController = Voipmanager_Controller::getInstance();
+        $vmController = Voipmanager_Controller_Snom_Phone::getInstance();
         
-        $phone = $vmController->getSnomPhoneByMacAddress($mac);
+        $phone = $vmController->getByMacAddress($mac);
 
         $phone->redirect_event = $event;
         if($phone->redirect_event != 'none') {
@@ -55,7 +55,7 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
             $phone->redirect_time = NULL;
         }
         
-        $vmController->updateSnomPhoneRedirect($phone);
+        $vmController->updateRedirect($phone);
     }
 
     /**
@@ -65,9 +65,9 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function settings($mac)
     {
-        $controller = Voipmanager_Controller::getInstance();
+        $controller = Voipmanager_Controller_Snom_Phone::getInstance();
         
-        $phone = $controller->getSnomPhoneByMacAddress($mac);
+        $phone = $controller->getByMacAddress($mac);
         
         if($phone->http_client_info_sent == true) {
             $this->_authenticate();
@@ -79,9 +79,7 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         $phone = $this->_setStatus($phone, 'settings');
         
-        //$xmlBackend = new Voipmanager_Backend_Snom_Xml($controller->getDBInstance());        
-        //$xmlConfig = $xmlBackend->getConfig($phone);
-        $xmlConfig = Voipmanager_Controller_Snom_Xml::getInstance()->get($phone);
+        $xmlConfig = Voipmanager_Controller_Snom_Xml::getInstance()->getConfig($phone);
         
         header('Content-Type: text/xml');
         echo $xmlConfig;
@@ -89,7 +87,7 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
         if($phone->http_client_info_sent == false) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set http_client_info_sent to true again');
             $phone->http_client_info_sent = true;
-            $controller->updateSnomPhone($phone);
+            $controller->update($phone);
         }
     }    
     
@@ -104,18 +102,25 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get firmware for ' . $mac);
         
-        $controller = Voipmanager_Controller::getInstance();
+        $controller = Voipmanager_Controller_Snom_Phone::getInstance();
         
-        $phone = $controller->getSnomPhoneByMacAddress($mac);
+        $phone = $controller->getByMacAddress($mac);
         
         $phone = $this->_setStatus($phone, 'firmware');
         
-        $xmlBackend = new Voipmanager_Backend_Snom_Xml($controller->getDBInstance());        
-                
+        $xmlFirmware = Voipmanager_Controller_Snom_Xml::getInstance()->getFirmware($phone);
+        
         header('Content-Type: text/xml');
-        echo $xmlBackend->getFirmware($phone);        
+        echo $xmlFirmware;        
     }    
     
+    /**
+     * set status
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param unknown_type $_type
+     * @return Voipmanager_Model_SnomPhone
+     */
     protected function _setStatus($_phone, $_type)
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
@@ -140,9 +145,7 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
                 break;
         }
         
-        $controller = Voipmanager_Controller::getInstance();
-        
-        $controller->updateSnomPhone($_phone);
+        Voipmanager_Controller_Snom_Phone::getInstance()->update($_phone);
     
         return $_phone;
     }    

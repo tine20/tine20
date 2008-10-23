@@ -195,6 +195,12 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
         return $xml->asXML();
     }
     
+    /**
+     * get phone firmware
+     *
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return string the firmware as xml string
+     */
     public function getFirmware(Voipmanager_Model_SnomPhone $_phone)
     {
         if (!$_phone->isValid()) {
