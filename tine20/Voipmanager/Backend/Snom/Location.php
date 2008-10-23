@@ -42,14 +42,16 @@ class Voipmanager_Backend_Snom_Location
      * @param Tinebase_Model_Pagination $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomLocation
 	 */
-    public function search(Voipmanager_Model_SnomLocationFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    public function search(Voipmanager_Model_SnomLocationFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
     {	
         $where = array();
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'snom_location');
             
-        $_pagination->appendPagination($select);
+        if($_pagination instanceof Tinebase_Model_Pagination) {  
+            $_pagination->appendPagination($select);
+        }
 
         if(!empty($_filter->query)) {
             $select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));

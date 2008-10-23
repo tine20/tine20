@@ -10,8 +10,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        remove snom config
- * @todo        remove snom location
  * @todo        remove snom phone
  * @todo        remove snom setting
  * @todo        remove snom software
@@ -55,13 +53,6 @@ class Voipmanager_Controller
      * @var Voipmanager_Backend_Snom_Software
      */
     protected $_snomSoftwareBackend;
-    
-    /**
-     * the snom phone location sql backend
-     *
-     * @var Voipmanager_Backend_Snom_Location
-     */
-    protected $_snomLocationBackend;
     
     /**
      * the snom phone template sql backend
@@ -118,7 +109,6 @@ class Voipmanager_Controller
         $this->_snomPhoneSettingsBackend    = new Voipmanager_Backend_Snom_PhoneSettings($this->_dbBbackend);        
         $this->_snomLineBackend             = new Voipmanager_Backend_Snom_Line($this->_dbBbackend);
         $this->_snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software($this->_dbBbackend);
-        $this->_snomLocationBackend         = new Voipmanager_Backend_Snom_Location($this->_dbBbackend);
         $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template($this->_dbBbackend);      
         $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting($this->_dbBbackend);              
 
@@ -582,119 +572,6 @@ class Voipmanager_Controller
     {
         $this->_snomPhoneSettingsBackend->delete($_identifiers);
     }
-
-
-/********************************
- * SNOM LOCATION FUNCTIONS
- *
- * 
- */
-
-
-   /**
-     * get snom_location
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
-     */
-    public function getSnomLocations($_sort = 'id', $_dir = 'ASC', $_query = NULL)
-    {        
-        $filter = new Voipmanager_Model_SnomLocationFilter(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_snomLocationBackend->search($filter, $pagination);    
-    
-        return $result;    
-    }
-    
-    
-    /**
-     * get snom_location by id
-     *
-     * @param string|Voipmanager_Model_SnomLocation $_id
-     * @return Voipmanager_Model_Location
-     */
-    public function getSnomLocation($_id)
-    {
-        $id = Voipmanager_Model_SnomLocation::convertSnomLocationIdToInt($_id);
-        if (($result = $this->_cache->load('snomLocation_' . $id)) === false) {
-            $result = $this->_snomLocationBackend->get($id);
-            $this->_cache->save($result, 'snomLocation_' . $id, array('SnomLocation'), 5);
-        }
-        
-        return $result;    
-    }    
-    
-    
-    /**
-     * add one location
-     *
-     * @param Voipmanager_Model_Location $_location
-     * @return  Voipmanager_Model_Location
-     */
-    public function createSnomLocation(Voipmanager_Model_SnomLocation $_location)
-    {        
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Model_Container::GRANT_ADD)) {
-            throw new Exception('add access to location in container ' . $_location->owner . ' denied');
-        }
-        */
-        $location = $this->_snomLocationBackend->create($_location);
-      
-        return $location;
-    }    
-    
-    
-    /**
-     * update one location
-     *
-     * @param Voipmanager_Model_Location $_location
-     * @return  Voipmanager_Model_Location
-     */
-    public function updateSnomLocation(Voipmanager_Model_SnomLocation $_location)
-    {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Model_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to location in container ' . $_location->owner . ' denied');
-        }
-        */
-       
-        $location = $this->_snomLocationBackend->update($_location);
-        
-        $this->_cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('SnomLocation'));
-        
-        return $location;
-    }
-      
-      
-    /**
-     * Deletes a set of locations.
-     * 
-     * If one of the locations could not be deleted, no location is deleted
-     * 
-     * @throws Exception
-     * @param array array of location identifiers
-     * @return void
-     */
-    public function deleteSnomLocations($_identifiers)
-    {
-      /*  foreach ($_identifiers as $identifier) {
-            $Config = $this->getLocationById($identifier);
-            if (!$this->_currentAccount->hasGrant($Location->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                throw new Exception('Not allowed!');
-            }
-        }
-       */
-      
-        $this->_snomLocationBackend->delete($_identifiers);
-    }
-
 
 
 /********************************

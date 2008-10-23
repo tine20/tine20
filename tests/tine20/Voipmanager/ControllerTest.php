@@ -73,6 +73,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_backends['Asterisk_Meetme'] = Voipmanager_Controller_Asterisk_Meetme::getInstance();
         $this->_backends['Asterisk_SipPeer'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
         $this->_backends['Asterisk_Voicemail'] = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
+        $this->_backends['Snom_Location'] = Voipmanager_Controller_Snom_Location::getInstance();
         
         #$this->_objects['call'] = new Phone_Model_Call(array(
         #    'id'                    => 'phpunitcallid',
@@ -566,12 +567,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomLocation();
         
-        $returned = $this->_backend->createSnomLocation($test);
+        $returned = $this->_backends['Snom_Location']->create($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomLocations($returned->getId()); 
+        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
@@ -582,8 +583,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomLocation();
         
-        $test = $this->_backend->createSnomLocation($test);
-        $returned = $this->_backend->getSnomLocation($test);
+        $test = $this->_backends['Snom_Location']->create($test);
+        $returned = $this->_backends['Snom_Location']->get($test);
         
         $this->assertType('Voipmanager_Model_SnomLocation', $returned);
         $this->assertEquals($test->id, $returned->id);
@@ -591,7 +592,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomLocations($returned->getId()); 
+        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
@@ -602,15 +603,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomLocation();
         
-        $test = $this->_backend->createSnomLocation($test);
+        $test = $this->_backends['Snom_Location']->create($test);
         $test->name = Tinebase_Record_Abstract::generateUID();
         
-        $returned = $this->_backend->updateSnomLocation($test);
+        $returned = $this->_backends['Snom_Location']->update($test);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteSnomLocations($returned->getId()); 
+        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
@@ -621,12 +622,16 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomLocation();
         
-        $test = $this->_backend->createSnomLocation($test);
+        $test = $this->_backends['Snom_Location']->create($test);
         
-        $returned = $this->_backend->getSnomLocations('id', 'ASC', $test->name);
+        $filter = new Voipmanager_Model_SnomLocationFilter(array(
+            'name' => $test->name
+        ));
+        
+        $returned = $this->_backends['Snom_Location']->search($filter);
         $this->assertEquals(1, count($returned));
                 
-        $this->_backend->deleteSnomLocations($returned->getId()); 
+        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
