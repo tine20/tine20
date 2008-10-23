@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        remove asterisk meetme
  * @todo        remove asterisk sippeer
  * @todo        remove asterisk voicemail
  * @todo        remove snom config
@@ -81,13 +80,6 @@ class Voipmanager_Controller
     protected $_asteriskSipPeerBackend;
 
     /**
-     * the asterisk context sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_Context
-     */
-    protected $_asteriskContextBackend;
-
-    /**
      * the asterisk voicemail sql backend
      *
      * @var Voipmanager_Backend_Asterisk_Voicemail
@@ -101,13 +93,6 @@ class Voipmanager_Controller
      */
     protected $_snomSettingBackend;    
     
-    /**
-     * the asterisk meetme sql backend
-     *
-     * @var Voipmanager_Backend_Asterisk_Meetme
-     */
-    protected $_asteriskMeetmeBackend;	
-	
     /**
      * the snom phone settings sql backend
      *
@@ -153,9 +138,7 @@ class Voipmanager_Controller
         $this->_snomTemplateBackend         = new Voipmanager_Backend_Snom_Template($this->_dbBbackend);      
         $this->_snomSettingBackend          = new Voipmanager_Backend_Snom_Setting($this->_dbBbackend);              
         $this->_asteriskSipPeerBackend      = new Voipmanager_Backend_Asterisk_SipPeer($this->_dbBbackend);          
-        $this->_asteriskContextBackend      = new Voipmanager_Backend_Asterisk_Context($this->_dbBbackend);          
         $this->_asteriskVoicemailBackend    = new Voipmanager_Backend_Asterisk_Voicemail($this->_dbBbackend);  
-		$this->_asteriskMeetmeBackend		= new Voipmanager_Backend_Asterisk_Meetme($this->_dbBbackend);
 
 		$this->_cache = Zend_Registry::get('cache');
     }
@@ -1020,103 +1003,6 @@ class Voipmanager_Controller
         return $xml;
     }
     
-    
-    
-/********************************
- * ASTERISK CONTEXT FUNCTIONS
- *
- * 
- */
-
-    
-    /**
-     * get asterisk_context by id
-     *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskContext
-     */
-    /*
-    public function getAsteriskContext($_id)
-    {
-        $context = $this->_asteriskContextBackend->get($_id);
-        
-        return $context;    
-    }
-    */
-
-
-    /**
-     * get asterisk_contexts
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskContext
-     */
-    /*
-    public function getAsteriskContexts($_sort = 'id', $_dir = 'ASC', $_query = NULL)
-    {
-        $filter = new Voipmanager_Model_AsteriskContextFilter(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_asteriskContextBackend->search($filter, $pagination);
-        
-        return $result;    
-    }
-    */
-
-    /**
-     * add one context
-     *
-     * @param Voipmanager_Model_AsteriskContext $_context
-     * @return  Voipmanager_Model_AsteriskContext
-     */
-    /*
-    public function createAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
-    {        
-        $context = $this->_asteriskContextBackend->create($_context);
-      
-        return $this->getAsteriskContext($context);
-    }
-    
-    */
-    
-    /**
-     * update one context
-     *
-     * @param Voipmanager_Model_AsteriskContext $_context
-     * @return  Voipmanager_Model_AsteriskContext
-     */
-    /*
-    public function updateAsteriskContext(Voipmanager_Model_AsteriskContext $_context)
-    {
-        $context = $this->_asteriskContextBackend->update($_context);
-        
-        return $this->getAsteriskContext($context);
-    }    
-    */  
-  
-    /**
-     * Deletes a set of contexts.
-     * 
-     * If one of the contexts could not be deleted, no context is deleted
-     * 
-     * @throws Exception
-     * @param array array of context identifiers
-     * @return void
-     */
-    /*
-    public function deleteAsteriskContexts($_identifiers)
-    {
-        $this->_asteriskContextBackend->delete($_identifiers);
-    }
-    
-    */
-    
 /********************************
  * ASTERISK VOICEMAIL FUNCTIONS
  *
@@ -1295,102 +1181,4 @@ class Voipmanager_Controller
     {
         $this->_snomSettingBackend->delete($_identifiers);
     }     
-   
-   
-   
-/********************************
- * ASTERISK MEETME FUNCTIONS
- *
- * 
- */
-
-    
-    /**
-     * get asterisk_meetme by id
-     *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
-     */
-    public function getAsteriskMeetme($_id)
-    {
-        $meetme = $this->_asteriskMeetmeBackend->get($_id);
-        
-        return $meetme;    
-    }
-
-
-    /**
-     * get asterisk_meetmes
-     *
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
-     */
-    public function getAsteriskMeetmes($_sort = 'id', $_dir = 'ASC', $_query = NULL)
-    {
-        $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
-            'query' => $_query
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-
-        $result = $this->_asteriskMeetmeBackend->search($filter, $pagination);
-        
-        return $result;    
-    }
-
-
-    /**
-     * add one meetme
-     *
-     * @param Voipmanager_Model_AsteriskMeetme $_meetme
-     * @return  Voipmanager_Model_AsteriskMeetme
-     */
-    public function createAsteriskMeetme(Voipmanager_Model_AsteriskMeetme $_meetme)
-    {        
-        $meetme = $this->_asteriskMeetmeBackend->create($_meetme);
-      
-        return $meetme;
-    }
-    
-
-    /**
-     * update one meetme
-     *
-     * @param Voipmanager_Model_AsteriskMeetme $_meetme
-     * @return  Voipmanager_Model_AsteriskMeetme
-     */
-    public function updateAsteriskMeetme(Voipmanager_Model_AsteriskMeetme $_meetme)
-    {
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
-            throw new Exception('edit access to contacts in container ' . $_contact->container_id . ' denied');
-        }
-        */
-        $meetme = $this->_asteriskMeetmeBackend->update($_meetme);
-        
-        return $this->getAsteriskMeetme($meetme);
-    }    
-    
-  
-    /**
-     * Deletes a set of meetmes.
-     * 
-     * If one of the meetmes could not be deleted, no meetme is deleted
-     * 
-     * @throws Exception
-     * @param array array of meetme identifiers
-     * @return void
-     */
-    public function deleteAsteriskMeetmes($_identifiers)
-    {
-        $this->_asteriskMeetmeBackend->delete($_identifiers);
-    }    
-    
-    
-     
-   
-    
 }

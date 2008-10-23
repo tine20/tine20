@@ -67,9 +67,10 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Voipmanager_Controller::getInstance();    
+        $this->_backend = Voipmanager_Controller::getInstance();
 
         $this->_backends['Asterisk_Context'] = Voipmanager_Controller_Asterisk_Context::getInstance();
+        $this->_backends['Asterisk_Meetme'] = Voipmanager_Controller_Asterisk_Meetme::getInstance();
         
         #$this->_objects['call'] = new Phone_Model_Call(array(
         #    'id'                    => 'phpunitcallid',
@@ -171,12 +172,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskMeetme();
         
-        $returned = $this->_backend->createAsteriskMeetme($test);
+        $returned = $this->_backends['Asterisk_Meetme']->create($test);
         $this->assertEquals($test->confno, $returned->confno);
         $this->assertEquals($test->adminpin, $returned->adminpin);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteAsteriskMeetmes($returned->getId()); 
+        $this->_backends['Asterisk_Meetme']->delete($returned->getId()); 
     }
     
     /**
@@ -187,15 +188,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskMeetme();
         
-        $test = $this->_backend->createAsteriskMeetme($test);
+        $test = $this->_backends['Asterisk_Meetme']->create($test);
         $test->adminpin = Tinebase_Record_Abstract::generateUID();
         
-        $returned = $this->_backend->updateAsteriskMeetme($test);
+        $returned = $this->_backends['Asterisk_Meetme']->update($test);
         $this->assertEquals($test->confno, $returned->confno);
         $this->assertEquals($test->adminpin, $returned->adminpin);
         $this->assertNotNull($returned->id);
         
-        $this->_backend->deleteAsteriskMeetmes($returned->getId()); 
+        $this->_backends['Asterisk_Meetme']->delete($returned->getId()); 
     }
     
     /**
@@ -206,12 +207,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getAsteriskMeetme();
         
-        $test = $this->_backend->createAsteriskMeetme($test);
+        $test = $this->_backends['Asterisk_Meetme']->create($test);
         
-        $returned = $this->_backend->getAsteriskMeetmes('id', 'ASC', $test->confno);
+        $returned = $this->_backends['Asterisk_Meetme']->search('id', 'ASC', $test->confno);
         $this->assertEquals(1, count($returned));
         
-        $this->_backend->deleteAsteriskMeetmes($returned->getId()); 
+        $this->_backends['Asterisk_Meetme']->delete($returned->getId()); 
     }
     
     protected function _getAsteriskMeetme()

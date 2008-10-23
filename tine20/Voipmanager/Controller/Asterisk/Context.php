@@ -31,8 +31,7 @@ class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abs
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        
+    private function __construct() {        
         $this->_filterClass  = 'Voipmanager_Model_AsteriskContextFilter';
         $this->_backend      = new Voipmanager_Backend_Asterisk_Context($this->_getDatabaseBackend());          
     }

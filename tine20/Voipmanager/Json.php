@@ -1090,7 +1090,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getAsteriskMeetmes($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller_Asterisk_Meetme::getInstance()->search($sort, $dir, $query)) {
         
             $_rows = $rows->toArray();
 
@@ -1116,7 +1116,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'success'   => true
         );
 
-        $meetme = Voipmanager_Controller::getInstance()->getAsteriskMeetme($meetmeId);
+        $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->get($meetmeId);
         
         $result = $meetme->toArray();      
           
@@ -1141,28 +1141,23 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             unset($meetmeData['id']);
         }
 
-        //Zend_Registry::get('logger')->debug(print_r($meetmeData,true));
         $meetme = new Voipmanager_Model_AsteriskMeetme();
         $meetme->setFromArray($meetmeData);
 
-        
         if (empty($meetme->id)) {
-            $meetme = Voipmanager_Controller::getInstance()->createAsteriskMeetme($meetme);
+            $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->create($meetme);
         } else {
-            $meetme = Voipmanager_Controller::getInstance()->updateAsteriskMeetme($meetme);
+            $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->update($meetme);
         }
         $meetme = $this->getAsteriskMeetme($meetme->getId());
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $meetme
-        ); //$meetme->toArray());
-        
+        ); 
         
         return $result;
-         
     }     
     
-   
     /**
      * delete multiple meetmes
      *
@@ -1177,7 +1172,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $meetmeIds = Zend_Json::decode($_meetmeIds);
         
-        Voipmanager_Controller::getInstance()->deleteAsteriskMeetmes($meetmeIds);
+        Voipmanager_Controller_Asterisk_Meetme::getInstance()->deleteAsteriskMeetmes($meetmeIds);
 
         return $result;
     }     
