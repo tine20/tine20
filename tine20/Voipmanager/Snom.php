@@ -79,10 +79,12 @@ class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         $phone = $this->_setStatus($phone, 'settings');
         
-        $xmlBackend = new Voipmanager_Backend_Snom_Xml($controller->getDBInstance());        
+        //$xmlBackend = new Voipmanager_Backend_Snom_Xml($controller->getDBInstance());        
+        //$xmlConfig = $xmlBackend->getConfig($phone);
+        $xmlConfig = Voipmanager_Controller_Snom_Xml::getInstance()->get($phone);
         
         header('Content-Type: text/xml');
-        echo $xmlBackend->getConfig($phone);
+        echo $xmlConfig;
         
         if($phone->http_client_info_sent == false) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set http_client_info_sent to true again');

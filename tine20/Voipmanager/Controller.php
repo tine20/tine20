@@ -879,29 +879,6 @@ class Voipmanager_Controller
         $this->_snomSoftwareBackend->delete($_identifiers);
     }        
     
-/********************************
- * SNOM XML CONFIG FUNCTIONS
- *
- * 
- */    
- 
- 
-    /**
-     * get xml configurationfile for snom phones
-     *
-     * @param string $_macAddress the mac address of the phone
-     * @return string the xml formated configuration file
-     */
-    public function getSnomConfig($_macAddress)
-    {
-        $xmlBackend = new Voipmanager_Backend_Snom_Xml();
-        
-        $xml = $xmlBackend->getConfig($_macAddress);
-        
-        return $xml;
-    }
-    
-
     
 /********************************
  * SNOM SETTINGS FUNCTIONS
