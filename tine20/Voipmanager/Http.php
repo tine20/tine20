@@ -53,9 +53,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
      */
     public function editSnomPhone($phoneId=NULL)
     {
-        $controller = Voipmanager_Controller::getInstance();
-        $snomTemplates = $controller->getSnomTemplates();
-        $snomLocations = $controller->getSnomLocations();
+        $snomTemplates = Voipmanager_Controller_Snom_Template::getInstance()->search();
+        $snomLocations = Voipmanager_Controller_Snom_Location::getInstance()->search();
         
         $asteriskSipPeers = $controller->searchAsteriskSipPeers('name');
         $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());    
