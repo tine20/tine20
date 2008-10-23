@@ -131,7 +131,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
         $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
             'name'     => $_call->line_id
         ));
-        $asteriskSipPeers = Voipmanager_Controller::getInstance()->searchAsteriskSipPeers($filter);
+        $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);
         if(count($asteriskSipPeers) > 0) {
             $_call->callerid = $asteriskSipPeers[0]->callerid;
         } else {
