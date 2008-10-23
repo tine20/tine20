@@ -80,16 +80,15 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateAsteriskMeetme()
     {
-        /*
         $test = $this->_getAsteriskMeetme();
         
-        $returned = $this->_backend->save(Zend_Json::encode($test));
-        $this->assertEquals($test['confno'], $returned['confno']);
-        $this->assertEquals($test['adminpin'], $returned['adminpin']);
-        $this->assertNotNull($returned['id']);
+        $returned = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($test));
         
-        $this->_backend->delete($returned['id']);
-        */ 
+        $this->assertEquals($test['confno'], $returned['updatedData']['confno']);
+        $this->assertEquals($test['adminpin'], $returned['updatedData']['adminpin']);
+        $this->assertNotNull($returned['updatedData']['id']);
+        
+        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
     
     /**

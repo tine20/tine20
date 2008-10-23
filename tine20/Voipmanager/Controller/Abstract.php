@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add Voipmanager_Backend_Interface / Factory
+ * @todo        add Factory ?
  * @todo        move that (or parts) to Tinebase_Application_Controller_Abstract
  */
 
@@ -19,7 +19,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Controller_Abstract
+abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Controller_Abstract implements Voipmanager_Controller_Interface
 {
     /**
      * application name (is needed in checkRight())

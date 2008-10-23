@@ -1138,19 +1138,12 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int $meetmeId
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function getAsteriskMeetme($meetmeId)
     {
-        $result = array(
-            'success'   => true
-        );
-
-        $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->get($meetmeId);
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
         
-        $result = $meetme->toArray();      
-          
+        $result = $this->_get($controller, $meetmeId); 
         return $result;
     }    
     
@@ -1162,32 +1155,12 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $meetmeData a JSON encoded array of meetme properties
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function saveAsteriskMeetme($meetmeData)
     {
-        $meetmeData = Zend_Json::decode($meetmeData);
-        
-        // unset if empty
-        if (empty($meetmeData['id'])) {
-            unset($meetmeData['id']);
-        }
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
 
-        $meetme = new Voipmanager_Model_AsteriskMeetme();
-        $meetme->setFromArray($meetmeData);
-
-        if (empty($meetme->id)) {
-            $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->create($meetme);
-        } else {
-            $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->update($meetme);
-        }
-        $meetme = $this->getAsteriskMeetme($meetme->getId());
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $meetme
-        ); 
-        
+        $result = $this->_save($controller, $meetmeData, 'Voipmanager_Model_AsteriskMeetme');
         return $result;
     }     
     
@@ -1207,10 +1180,57 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $meetmeIds = Zend_Json::decode($_meetmeIds);
         
-        Voipmanager_Controller_Asterisk_Meetme::getInstance()->deleteAsteriskMeetmes($meetmeIds);
+        Voipmanager_Controller_Asterisk_Meetme::getInstance()->delete($meetmeIds);
 
         return $result;
     }     
 
+    /********************* generic get/search/create/update/delete functions ************************************/
+    
+    /**
+     * generic get function
+     *
+     * @param Voipmanager_Controller_Interface $_controller
+     * @param integer $_id
+     */
+    protected function _get(Voipmanager_Controller_Interface $_controller, $_id)
+    {
+        $record = $_controller->get($_id);        
+        $result = $record->toArray();      
+          
+        return $result;
+    }
+    
+    /**
+     * generic save function
+     *
+     * @param Voipmanager_Controller_Interface $_controller
+     * @param integer $_id
+     */
+    protected function _save(Voipmanager_Controller_Interface $_controller, $_data, $_model)
+    {
+        $data = Zend_Json::decode($_data);
+        
+        // unset if empty
+        if (empty($data['id'])) {
+            unset($data['id']);
+        }
+
+        $record = new $_model();
+        $record->setFromArray($data);
+
+        if (empty($record->id)) {
+            $record = $_controller->create($record);
+        } else {
+            $record = $_controller->update($record);
+        }
+
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $this->_get($_controller, $record->getId())
+        ); 
+        
+        return $result;
+    }
     
 }
