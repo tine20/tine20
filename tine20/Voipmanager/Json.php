@@ -1105,30 +1105,15 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @param string $query
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function getAsteriskMeetmes($sort, $dir, $query)
     {     
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
         $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
             'query'     => $query
         ));
-        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        if($rows = Voipmanager_Controller_Asterisk_Meetme::getInstance()->search($filter, $pagination)) {
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-        
+                
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;    
     }
     
@@ -1141,8 +1126,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      */
     public function getAsteriskMeetme($meetmeId)
     {
-        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
-        
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();       
         $result = $this->_get($controller, $meetmeId); 
         return $result;
     }    
@@ -1159,7 +1143,6 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     public function saveAsteriskMeetme($meetmeData)
     {
         $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
-
         $result = $this->_save($controller, $meetmeData, 'Voipmanager_Model_AsteriskMeetme');
         return $result;
     }     
@@ -1169,23 +1152,15 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
      *
      * @param array $_meetmeIDs list of meetmeId's to delete
      * @return array
-     * 
-     * @todo    replace with generic function
      */
     public function deleteAsteriskMeetmes($_meetmeIds)
     {
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $meetmeIds = Zend_Json::decode($_meetmeIds);
-        
-        Voipmanager_Controller_Asterisk_Meetme::getInstance()->delete($meetmeIds);
-
+        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
+        $result = $this->_delete($controller, $_meetmeIds);
         return $result;
     }     
 
-    /********************* generic get/search/create/update/delete functions ************************************/
+    /********************* generic get/search/save/delete functions ************************************/
     
     /**
      * generic get function
@@ -1197,8 +1172,36 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     {
         $record = $_controller->get($_id);        
         $result = $record->toArray();      
-          
         return $result;
+    }
+
+    /**
+     * generic search function
+     *
+     * @param Voipmanager_Controller_Interface $_controller
+     * @param string $_sort
+     * @param string $_dir
+     * @param Tinebase_Record_Interface $_filter
+     * @return array
+     */
+    protected function _search(Voipmanager_Controller_Interface $_controller, $_sort, $_dir, $_filter)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
+        
+        if($rows = $_controller->search($_filter, $pagination)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+        
+        return $result;    
     }
     
     /**
@@ -1232,5 +1235,22 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * generic delete function
+     *
+     * @param Voipmanager_Controller_Interface $_controller
+     * @param array $_meetmeIDs list of meetmeId's to delete
+     * @return array
+     */
+    protected function _delete(Voipmanager_Controller_Interface $_controller, $_ids)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $ids = Zend_Json::decode($_ids);
+        $_controller->delete($ids);
+        return $result;
+    }
 }

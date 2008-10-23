@@ -97,19 +97,17 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateAsteriskMeetme()
     {
-        /*
         $test = $this->_getAsteriskMeetme();
         
-        $test = $this->_backends['Asterisk_Meetme']->create($test);
-        $test->adminpin = Tinebase_Record_Abstract::generateUID();
+        $returned = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($test));
+        $returned['updatedData']['adminpin'] = Tinebase_Record_Abstract::generateUID();
         
-        $returned = $this->_backends['Asterisk_Meetme']->update($test);
-        $this->assertEquals($test->confno, $returned->confno);
-        $this->assertEquals($test->adminpin, $returned->adminpin);
-        $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_Meetme']->delete($returned->getId());
-        */ 
+        $updated = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['confno'], $updated['updatedData']['confno']);
+        $this->assertEquals($returned['updatedData']['adminpin'], $updated['updatedData']['adminpin']);
+        $this->assertNotNull($updated['updatedData']['id']);
+                
+        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
     
     /**
@@ -118,18 +116,13 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchAsteriskMeetme()
     {
-        /*
-        $test = $this->_getAsteriskMeetme();
-        $test = $this->_backends['Asterisk_Meetme']->create($test);
+        $test = $this->_getAsteriskMeetme();        
+        $returned = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($test));
+                
+        $searchResult = $this->_backend->getAsteriskMeetmes('confno', 'ASC', $test['confno']);
+        $this->assertEquals(1, $searchResult['totalcount']);
         
-        $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
-            'query' => $test->confno
-        ));        
-        $returned = $this->_backends['Asterisk_Meetme']->search($filter);
-        $this->assertEquals(1, count($returned));
-        
-        $this->_backends['Asterisk_Meetme']->delete($returned->getId());
-        */ 
+        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
     
     protected function _getAsteriskMeetme()
