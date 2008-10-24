@@ -58,7 +58,7 @@ abstract class Tinebase_Application_Frontend_Http_Abstract extends Tinebase_Appl
      */
     public static function _appendFileTime( $_file )
     {
-        $path = dirname(__FILE__). "/../../../$_file";
+        $path = dirname(__FILE__). "/../../../../$_file";
         return "$_file?". @filectime($path);
     }
 }
