@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Interface
+abstract class Tinebase_Application_Abstract implements Tinebase_Application_Interface
 {
     /**
      * Application name

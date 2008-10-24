@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-interface Tinebase_Application_Frontend_Interface
+interface Tinebase_Application_Interface
 {
     /**
      * Returns application name
