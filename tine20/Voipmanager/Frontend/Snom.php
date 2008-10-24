@@ -17,7 +17,7 @@
  *
  * @package     Voipmanager Management
  */
-class Voipmanager_Snom extends Voipmanager_Frontend_Snom_Abstract
+class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
 {
     /**
      * the internal name of the application

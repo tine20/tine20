@@ -344,8 +344,8 @@ class Tinebase_Controller
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
         
         $server = new Tinebase_Http_Server();
-        $server->setClass('Voipmanager_Snom', 'Voipmanager');
-        $server->setClass('Phone_Snom', 'Phone');
+        $server->setClass('Voipmanager_Frontend_Snom', 'Voipmanager');
+        $server->setClass('Phone_Frontend_Snom', 'Phone');
         
         $server->handle($_REQUEST);
     }

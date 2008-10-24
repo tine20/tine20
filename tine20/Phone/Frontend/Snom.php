@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @deprecated
  */
 
 /**
@@ -17,7 +16,7 @@
  *
  * @package     Phone
  */
-class Phone_Snom extends Voipmanager_Frontend_Snom_Abstract
+class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
 {
     /**
      * the internal name of the application
