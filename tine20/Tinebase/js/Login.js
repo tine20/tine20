@@ -16,11 +16,18 @@ Ext.namespace('Tine.Tinebase.registry');
  * @todo make registration working again!
  */
 Tine.Login = {
+    onLogin: function(){},
+    scope: window,
+    defaultUsername: '',
+    defaultPassword: '',
+    
     
     /**
      * show the login dialog
      */
-    showLoginDialog: function(_defaultUsername, _defaultPassword) {
+    showLoginDialog: function(config) {
+        Ext.apply(this, config);
+        
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';  
 
@@ -38,7 +45,7 @@ Tine.Login = {
             });
         }
         
-        var loginWindow = new Ext.Window({
+        this.loginWindow = new Ext.Window({
             xtype: 'panel',
             layout: 'fit',
             modal: true,
@@ -67,20 +74,30 @@ Tine.Login = {
                     fieldLabel: _('Username'),
                     id: 'username',
                     name: 'username',
-                    value: _defaultUsername
+                    value: this.defaultUsername
                 }, {
                     inputType: 'password',
                     fieldLabel: _('Password'),
                     id: 'password',
                     name: 'password',
                     //allowBlank: false,
-                    value: _defaultPassword
+                    value: this.defaultPassword
                 }]
             }),
             buttons: loginButtons
             
         });
         
+        //var viewport = Tine.Tinebase.viewport;
+        //viewport.on('resize', function() {
+        //    this.loginWindow.center();
+        //}, this);
+        
+        this.loginWindow.show();
+        Ext.getCmp('username').focus(false, 250);
+                    
+        //viewport.add(new Ext.Panel())
+        /*
         var viewport = new Ext.Viewport({
             layout: 'fit',
             html: '',
@@ -95,6 +112,7 @@ Tine.Login = {
                 }
             }
         });
+        */
         
         Ext.getCmp('username').on('specialkey', function(_field, _event) {
         	if(_event.getKey() == _event.ENTER){
@@ -119,6 +137,7 @@ Tine.Login = {
             Ext.MessageBox.wait(_('Logging you in...'), _('Please wait'));
             
             Ext.Ajax.request({
+                scope: this,
                 params : {
                     method: 'Tinebase.login',
                     username: values.username,
@@ -128,7 +147,8 @@ Tine.Login = {
                     var responseData = Ext.util.JSON.decode(response.responseText);
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(_('Login successful. Loading Tine 2.0...'), _('Please wait!'));
-                        window.location = window.location;
+                        this.loginWindow.hide();
+                        this.onLogin.call(this.scope);
                     } else {
                         Ext.MessageBox.show({
                             title: _('Login failure'),
