@@ -23,9 +23,9 @@
  * @todo    Use of special Exceptions
  * @todo    remove current account from sql backend
  * @todo    add function for complete removal of tasks?
- * @todo    use more functions from Tinebase_Application_Backend_Sql
+ * @todo    use more functions from Tinebase_Application_Backend_Sql_Abstract
  */
-class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql
+class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
      * For some said reason, Zend_Db doesn't support table prefixes. Thus each 
@@ -81,7 +81,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql
     /************************** check the following functions **********************/
         
     // @todo check which functions are still needed
-    // @todo check which functions can be replaced by functions from Tinebase_Application_Backend_Sql
+    // @todo check which functions can be replaced by functions from Tinebase_Application_Backend_Sql_Abstract
     
     /**
      * Return a single Task
@@ -90,6 +90,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql
      * @return Tasks_Model_Task task
      * @throws Exception if task could not be found
      */
+    /*
     public function get($_id)
     {
         $stmt = $this->_db->query($this->_getSelect()
@@ -105,14 +106,15 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql
         $Task = new Tasks_Model_Task($TaskArray[0], true, true); 
         return $Task;
     }
-    
+    */    
+
     /**
      * returns a set of tasks identified by their id's
      * 
      * @param  array $_ids
      * @return Tinebase_RecordSet of Tasks_Model_Task
      */
-    public function getMultiple(array $_ids)
+    public function getMultiple($_ids)
     {
         $taskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
@@ -136,7 +138,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql
      * @param Tasks_Model_Task $_task
      * @return Tasks_Model_Task
      */
-    public function create(Tasks_Model_Task $_task)
+    public function create(Tinebase_Record_Interface $_task)
     {
         if ( empty($_task->id) ) {
         	$newId = $_task->generateUID();
@@ -168,7 +170,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql
      * @param Tasks_Model_Task $_task
      * @return Tasks_Model_Task
      */ 
-    public function update(Tasks_Model_Task $_task)
+    public function update(Tinebase_Record_Interface $_task)
     {
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);

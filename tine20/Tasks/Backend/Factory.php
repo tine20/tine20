@@ -32,7 +32,7 @@ class Tasks_Backend_Factory
     /**
      * Singelton store for backends
      *
-     * @var array array of Tasks_Backend_Interface
+     * @var array array of Tinebase_Application_Backend_Interface
      */
     private static $_instances = array();
     
@@ -40,7 +40,7 @@ class Tasks_Backend_Factory
      * Factory function to return a requested Tasks backend
      *
      * @param string $_type
-     * @return Tasks_Backend_Interface
+     * @return Tinebase_Application_Backend_Interface
      */
     static public function factory($_type)
     {

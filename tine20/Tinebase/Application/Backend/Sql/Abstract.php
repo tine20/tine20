@@ -3,22 +3,22 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Abstract
+ * @subpackage  Application
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Sebastian Lenk <s.lenk@metaways.de>
  * @version     $Id$
  * 
- * @todo remove Zend_Db_Table usage 
+ * @todo        remove Zend_Db_Table usage 
  */
 
 /**
  * Abstract class for a Tine 2.0 sql backend
  * 
  * @package     Tinebase
- * @subpackage  Abstract
+ * @subpackage  Application
  */
-abstract class Tinebase_Application_Backend_Sql
+abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_Application_Backend_Interface
 {
     /**
      * Table name
@@ -125,10 +125,10 @@ abstract class Tinebase_Application_Backend_Sql
     * Search for records matching given filter
      *
      * @param Tinebase_Record_Interface $_filter
-     * @param Tinebase_Record_Interface $_pagination
+     * @param Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Record_Interface $_filter, Tinebase_Record_Interface $_pagination = NULL)
+    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
     {
         $set = new Tinebase_Record_RecordSet($this->_modelName);
         

@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  * @todo        add save rights function
- * @todo        extend Tinebase_Application_Backend_Sql
+ * @todo        extend Tinebase_Application_Backend_Sql_Abstract
  */
 
 /**

@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        extend Tinebase_Application_Backend_Sql
+ * @todo        extend Tinebase_Application_Backend_Sql_Abstract
  */
 
 /**

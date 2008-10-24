@@ -17,6 +17,6 @@
  * @package     Addressbook
  * @todo		implement ldap backend
  */
-class Addressbook_Backend_Ldap implements Addressbook_Backend_Interface
+class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
 {
 }

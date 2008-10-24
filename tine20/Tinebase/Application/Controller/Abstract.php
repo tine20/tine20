@@ -12,9 +12,10 @@
  */
 
 /**
- * controller abstract for Admin application
+ * controller abstract for applications
  *
- * @package     Admin
+ * @package     Tinebase
+ * @subpackage  Application
  */
 abstract class Tinebase_Application_Controller_Abstract
 {
@@ -65,7 +66,7 @@ abstract class Tinebase_Application_Controller_Abstract
      * 
      * @param   string  $_right to check
      */    
-    protected function checkRight( $_right ) {
+    public function checkRight($_right) {
         
         if (empty($this->_applicationName)) {
             throw new Exception('No application name defined!');
@@ -76,11 +77,11 @@ abstract class Tinebase_Application_Controller_Abstract
         // array with the rights that should be checked, ADMIN is in it per default
         $rightsToCheck = array ( Tinebase_Acl_Rights::ADMIN );
         
-        if ( preg_match("/MANAGE_/", $_right) ) {
+        if (preg_match("/MANAGE_/", $_right)) {
             $rightsToCheck[] = constant($applicationRightsClass. '::' . $_right);
         }
 
-        if ( preg_match("/VIEW_([A-Z_]*)/", $_right, $matches) ) {
+        if (preg_match("/VIEW_([A-Z_]*)/", $_right, $matches)) {
             $rightsToCheck[] = constant($applicationRightsClass. '::' . $_right);
             // manage right includes view right
             $rightsToCheck[] = constant($applicationRightsClass. '::MANAGE_' . $matches[1]);
@@ -88,14 +89,14 @@ abstract class Tinebase_Application_Controller_Abstract
         
         $hasRight = FALSE;
         
-        foreach ( $rightsToCheck as $rightToCheck ) {
-            if ( Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck) ) {
+        foreach ($rightsToCheck as $rightToCheck) {
+            if (Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck)) {
                 $hasRight = TRUE;
                 break;    
             }
         }
         
-        if ( !$hasRight ) {
+        if (!$hasRight) {
             throw new Exception("You are not allowed to $_right in application $this->_applicationName !");
         }        
     }
