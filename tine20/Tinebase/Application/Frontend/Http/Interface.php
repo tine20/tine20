@@ -23,7 +23,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-Interface Tinebase_Application_Http_Interface extends Tinebase_Application_Interface
+Interface Tinebase_Application_Frontend_Http_Interface extends Tinebase_Application_Frontend_Interface
 {
     /**
      * Returns all JS files which must be included for this app

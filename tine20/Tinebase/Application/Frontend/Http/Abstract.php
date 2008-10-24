@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
- * 
- * @deprecated
  */
 
 /**
@@ -21,7 +19,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_Abstract implements Tinebase_Application_Http_Interface
+abstract class Tinebase_Application_Frontend_Http_Abstract extends Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Http_Interface
 {
     /**
      * Returns all JS files which must be included for this app
