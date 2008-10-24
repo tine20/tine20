@@ -55,6 +55,8 @@ Tine.Tinebase.tineInit = {
     
     /**
      * Each window has exactly one viewport containing a card layout in its lifetime
+     * 
+     * Note, this does not work yet! see comment in renderWindow!
      */
     initBootSplash: function() {
         // defautl wait panel (picture only no string!)
@@ -152,6 +154,22 @@ Tine.Tinebase.tineInit = {
             /** temporary Tine.onRady for smooth transition to new window handling **/
             Tine.onReady();
         } else {
+            
+            /* this does not work :-(
+             * - in the mainscreen, a border layout is not rendered in a card layout (no idea why)
+             * - in popups, the appflow needs to get smoothed
+             * 
+             * As a consequence, we can't deal with a bootSplash yet!
+             *
+            var mainCardLayout = Ext.getCmp('tine-viewport-maincardpanel');
+            var panel = new Ext.Panel({
+                layout: c.layout ? c.layout : 'border',
+                items: items
+            });
+            mainCardLayout.add(panel);
+            mainCardLayout.layout.setActiveItem(panel.id);
+            */
+            
             c.viewport = new Ext.Viewport({
                 title: c.title,
                 layout: c.layout ? c.layout : 'border',
@@ -294,7 +312,6 @@ Tine.Tinebase.tineInit = {
                 for(var i=0; i<userApps.length; i++) {
                     app = userApps[i];
                     
-                    console.log(app.name);
                     if (app.name !== 'Tinebase') {
                         Tine[app.name].registry = mainWindow.Tine[app.name].registry;
                     }
