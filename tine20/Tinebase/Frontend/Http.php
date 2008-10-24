@@ -441,7 +441,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	 */
 	public static function getAllIncludeFiles(array $_exclude=array())
 	{
-	    $tine20path = dirname(dirname(__FILE__));
+	    $tine20path = dirname(dirname(dirname(__FILE__)));
 	    
 	    // Tinebase first
 	    $tinebaseHttp = new Tinebase_Frontend_Http();
@@ -455,6 +455,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	    while (false !== ($appName = $d->read())) {
             if (is_dir("$tine20path/$appName") && !in_array($appName, $_exclude)) {
                 if (file_exists("$tine20path/$appName/Frontend/Http.php")) {
+                    
                     $httpClass = $appName . "_Frontend_Http";
                     $instance = new $httpClass();
                     if (method_exists($instance, 'getCssFilesToInclude')) {
