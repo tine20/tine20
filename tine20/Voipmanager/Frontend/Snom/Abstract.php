@@ -16,7 +16,7 @@
  * @package     Voipmanager
  * @subpackage  Snom
  */
- abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Application_Abstract
+ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Application_Frontend_Abstract
  {
     /**
      * authenticate the phone against the database
