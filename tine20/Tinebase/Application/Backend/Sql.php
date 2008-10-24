@@ -13,12 +13,12 @@
  */
 
 /**
- * Abstract class for a Tine 2.0 sql table backend
+ * Abstract class for a Tine 2.0 sql backend
  * 
  * @package     Tinebase
  * @subpackage  Abstract
  */
-abstract class Tinebase_Abstract_SqlTableBackend
+abstract class Tinebase_Application_Backend_Sql
 {
     /**
      * Table name

@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo use functions from Tinebase_Abstract_SqlTableBackend
+ * @todo use functions from Tinebase_Application_Backend_Sql
  */
 
 /**
@@ -16,7 +16,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Backend_Sql extends Tinebase_Abstract_SqlTableBackend
+class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql
 {
     /**
      * the constructor

@@ -16,7 +16,7 @@
  * @package     Addressbook
  * 
  */
-class Addressbook_Backend_Salutation extends Tinebase_Abstract_SqlTableBackend
+class Addressbook_Backend_Salutation extends Tinebase_Application_Backend_Sql
 {
     /**
      * don't clone. Use the singleton.

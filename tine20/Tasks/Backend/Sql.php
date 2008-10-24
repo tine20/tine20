@@ -23,9 +23,9 @@
  * @todo    Use of special Exceptions
  * @todo    remove current account from sql backend
  * @todo    add function for complete removal of tasks?
- * @todo    use more functions from Tinebase_Abstract_SqlTableBackend
+ * @todo    use more functions from Tinebase_Application_Backend_Sql
  */
-class Tasks_Backend_Sql extends Tinebase_Abstract_SqlTableBackend
+class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql
 {
     /**
      * For some said reason, Zend_Db doesn't support table prefixes. Thus each 
@@ -81,7 +81,7 @@ class Tasks_Backend_Sql extends Tinebase_Abstract_SqlTableBackend
     /************************** check the following functions **********************/
         
     // @todo check which functions are still needed
-    // @todo check which functions can be replaced by functions from Tinebase_Abstract_SqlTableBackend
+    // @todo check which functions can be replaced by functions from Tinebase_Application_Backend_Sql
     
     /**
      * Return a single Task

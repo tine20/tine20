@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @deprecated  use Tinebase_Abstract_SqlTableBackend
+ * @deprecated  use Tinebase_Application_Backend_Sql
  * @todo        create Backend_Interface (for Addressbook_Backend_Ldap)
  * 
  */

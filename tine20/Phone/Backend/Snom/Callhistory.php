@@ -17,7 +17,7 @@
  * @subpackage  Snom
  * 
  */
-class Phone_Backend_Snom_Callhistory extends Tinebase_Abstract_SqlTableBackend
+class Phone_Backend_Snom_Callhistory extends Tinebase_Application_Backend_Sql
 {
     /**
      * don't clone. Use the singleton.
