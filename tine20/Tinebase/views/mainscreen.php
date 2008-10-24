@@ -40,12 +40,12 @@
                 
                 // js files
                 foreach ($includeFiles['css'] as $name) {
-                    echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'" />';
+                    echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Frontend_Http_Abstract::_appendFileTime($name) .'" />';
                 }
                 
                 //css files
                 foreach ($includeFiles['js'] as $name) {
-                    echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'"></script>';
+                    echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
                 }
                 
                 // laguage file
@@ -53,9 +53,9 @@
                 break;
 
             case 'DEBUG':
-                echo "\n    <link rel='stylesheet' type='text/css' href='" . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css') . "' />";
-                echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js') . "'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Http_Abstract::_appendFileTime("Tinebase/js/" . $tineBuildPath . 'Locale/build/' . (string)$locale . "-all-debug.js") ."'></script>";
+                echo "\n    <link rel='stylesheet' type='text/css' href='" . Tinebase_Application_Frontend_Http_Abstract::_appendFileTime('Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css') . "' />";
+                echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Frontend_Http_Abstract::_appendFileTime('Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js') . "'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Application_Frontend_Http_Abstract::_appendFileTime("Tinebase/js/" . $tineBuildPath . 'Locale/build/' . (string)$locale . "-all-debug.js") ."'></script>";
                 break;
                 
             case 'RELEASE':
