@@ -24,6 +24,13 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Phone_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Backend
+     *
+     * @var Phone_Frontend_Json
+     */
+    protected $_backend;
+    
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -48,6 +55,8 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_backend = new Phone_Frontend_Json();
+        
         $this->_objects['location'] = new Voipmanager_Model_SnomLocation(array(
             'id' => 20001,
             'name' => 'phpunit test location',
@@ -240,8 +249,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetUserPhones()
     {        
         // get phone json
-        $json = new Phone_Json();
-        $phones = $json->getUserPhones(Zend_Registry::get('currentAccount')->getId());
+        $phones = $this->_backend->getUserPhones(Zend_Registry::get('currentAccount')->getId());
 
         //print_r($phones);
         $this->assertGreaterThan(0, count($phones), 'more than 1 phone expected');        
@@ -259,12 +267,11 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $pagingJson = Zend_Json::encode($this->_objects['paging']);
         
         // search calls
-        $json = new Phone_Json();
-        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter1']), $pagingJson);
+        $result = $this->_backend->searchCalls(Zend_Json::encode($this->_objects['filter1']), $pagingJson);
         $this->assertGreaterThan(1, $result['totalcount']);
         
         // search query -> '050'
-        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter2']), $pagingJson);
+        $result = $this->_backend->searchCalls(Zend_Json::encode($this->_objects['filter2']), $pagingJson);
         $this->assertEquals(1, $result['totalcount'], 'query filter not working');
         
         $call2 = $result['results'][0];
@@ -273,7 +280,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_objects['call2']->getId(), $call2['id']);        
         
         // search for phone_id
-        $result = $json->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
+        $result = $this->_backend->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
         $this->assertGreaterThan(1, $result['totalcount'], 'phone_id filter not working');
     }    
 }		

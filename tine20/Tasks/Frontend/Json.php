@@ -14,7 +14,7 @@
  * json interface for tasks
  * @package     Tasks
  */
-class Tasks_Json extends Tinebase_Application_Json_Abstract
+class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
     protected $_appname = 'Tasks';
     

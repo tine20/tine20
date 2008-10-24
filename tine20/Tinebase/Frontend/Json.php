@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
+ * @version     $Id: Json.php 5047 2008-10-22 10:51:07Z c.weiss@metaways.de $
  */
 
 /**
@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Json extends Tinebase_Application_Json_Abstract
+class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
 	
     /**
@@ -445,7 +445,7 @@ class Tinebase_Json extends Tinebase_Application_Json_Abstract
             $userApplications = Zend_Registry::get('currentAccount')->getApplications();
             
             foreach($userApplications as $application) {
-                $jsonAppName = ucfirst((string) $application) . '_Json';
+                $jsonAppName = ucfirst((string) $application) . '_Frontend_Json';
                 if(class_exists($jsonAppName)) {
                     $applicationJson = new $jsonAppName;
                     

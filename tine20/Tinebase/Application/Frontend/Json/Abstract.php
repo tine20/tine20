@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
- * 
- * @deprecated 
  */
 
 
@@ -21,7 +19,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Json_Abstract extends Tinebase_Application_Abstract implements Tinebase_Application_Json_Interface
+abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Json_Interface
 {
     /**
      * Returns registry data of the application.

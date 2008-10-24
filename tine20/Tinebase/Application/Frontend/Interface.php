@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
- * 
- * @deprecated 
  */
 
 /**
@@ -18,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-interface Tinebase_Application_Interface
+interface Tinebase_Application_Frontend_Interface
 {
     /**
      * Returns application name

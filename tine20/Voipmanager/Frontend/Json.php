@@ -17,7 +17,7 @@
  *
  * @package     Voipmanager Management
  */
-class Voipmanager_Json extends Tinebase_Application_Json_Abstract
+class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
     /**
      * the internal name of the application

@@ -9,7 +9,6 @@
  * @version     $Id$
  * 
  * @todo        put gmaps api key in config
- * @deprecated
  */
 
 /**
@@ -19,7 +18,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Http extends Tinebase_Application_Http_Abstract
+class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
     protected $_appname = 'Addressbook';
 

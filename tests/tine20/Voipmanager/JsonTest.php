@@ -28,7 +28,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * Backend
      *
-     * @var Voipmanager_Json
+     * @var Voipmanager_Frontend_Json
      */
     protected $_backend;
     
@@ -52,7 +52,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Voipmanager_Json();
+        $this->_backend = new Voipmanager_Frontend_Json();
     }
 
     /**

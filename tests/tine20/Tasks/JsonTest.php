@@ -29,7 +29,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * Backend
      *
-     * @var Tasks_Json
+     * @var Tasks_Frontend_Json
      */
     protected $_backend;
     
@@ -51,7 +51,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Tasks_Json();  
+        $this->_backend = new Tasks_Frontend_Json();  
     }
 
     /**

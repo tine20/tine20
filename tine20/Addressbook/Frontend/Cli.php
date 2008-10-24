@@ -6,8 +6,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @deprecated
  */
 
 /**
@@ -17,7 +15,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Cli
+class Addressbook_Frontend_Cli
 {
     /**
      * the internal name of the application

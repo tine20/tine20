@@ -28,7 +28,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
      * unit under test (UIT)
-     * @var Tinebase_Json
+     * @var Tinebase_Frontend_Json
      */
     protected $_instance;
 
@@ -52,7 +52,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->_instance = new Tinebase_Json();
+        $this->_instance = new Tinebase_Frontend_Json();
         
         $this->_objects['record'] = array(
             'id'        => 1,

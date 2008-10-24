@@ -7,7 +7,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Json.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
- *
  */
 
 /**
@@ -17,7 +16,7 @@
  *
  * @package     Phone
  */
-class Phone_Json extends Tinebase_Application_Json_Abstract
+class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
     protected $_appname = 'Phone';
     

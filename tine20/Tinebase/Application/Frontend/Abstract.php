@@ -8,22 +8,30 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
- * 
- * @deprecated 
  */
 
 /**
- * Interface for an Tine 2.0 application
- *
+ * Abstract class for an Tine 2.0 application
+ * 
  * @package     Tinebase
  * @subpackage  Application
  */
-interface Tinebase_Application_Interface
+abstract class Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Interface
 {
+    /**
+     * Application name
+     *
+     * @var string
+     */
+    protected $_appname;
+    
     /**
      * Returns application name
      * 
      * @return string application name
      */
-    public function getApplicationName();
+    public function getApplicationName()
+    {
+        return $this->_appname;
+    }
 }

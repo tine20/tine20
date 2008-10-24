@@ -6,8 +6,6 @@
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        move to Frontend
  */
 
 /**
@@ -17,7 +15,7 @@
  *
  * @package     Crm
  */
-class Crm_Json extends Tinebase_Application_Json_Abstract
+class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
     /**
      * the internal name of the application

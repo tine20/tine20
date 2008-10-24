@@ -13,7 +13,7 @@
  * json interface for calendar
  * @package     Calendar
  */
-class Calendar_Json extends Tinebase_Application_Json_Abstract
+class Calendar_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
     protected $_appname = 'Calendar';
     

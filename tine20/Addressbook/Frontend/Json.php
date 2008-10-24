@@ -3,6 +3,7 @@
  * Tine 2.0
  *
  * @package     Addressbook
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -16,9 +17,10 @@
  * This class handles all Json requests for the addressbook application
  *
  * @package     Addressbook
+ * @subpackage  Frontend
  * @todo        handle timezone management
  */
-class Addressbook_Json extends Tinebase_Application_Json_Abstract
+class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
     protected $_appname = 'Addressbook';
     

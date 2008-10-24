@@ -70,7 +70,7 @@ class Tinebase_Server_Json
             $server = new Zend_Json_Server();
             
             // add json apis which require no auth
-            $server->setClass('Tinebase_Json', 'Tinebase');
+            $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
             $server->setClass('Tinebase_Json_UserRegistration', 'Tinebase_UserRegistration');
             
             // register addidional Json apis only available for authorised users
@@ -87,7 +87,7 @@ class Tinebase_Server_Json
                     default;
                         if(Zend_Registry::get('currentAccount')->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
                             try {
-                                $server->setClass($applicationName.'_Json', $applicationName);
+                                $server->setClass($applicationName.'_Frontend_Json', $applicationName);
                             } catch (Exception $e) {
                                 Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
                             }

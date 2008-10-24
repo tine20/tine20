@@ -9,6 +9,7 @@
  * @version     $Id$
  * 
  * @todo        move to Frontend
+ * @deprecated
  */
 
 /**

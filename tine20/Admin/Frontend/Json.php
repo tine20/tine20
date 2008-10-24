@@ -7,9 +7,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo        move that to Admin_Frontend_Json
- * @deprecated  remove that when Admin_Frontend_* is used
  */
 
 /**
@@ -19,7 +16,7 @@
  *
  * @package     Admin
  */
-class Admin_Json extends Tinebase_Application_Json_Abstract
+class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
     /**
      * the application name

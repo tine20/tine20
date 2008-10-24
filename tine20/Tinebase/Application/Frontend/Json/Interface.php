@@ -8,22 +8,18 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
- * 
- * @deprecated 
  */
 
+
 /**
- * Interface for an Tine 2.0 application
- *
+ * Abstract class for an Tine 2.0 application with Json interface
+ * Each tine application must extend this class to gain an native tine 2.0 user
+ * interface.
+ * 
  * @package     Tinebase
  * @subpackage  Application
  */
-interface Tinebase_Application_Interface
+Interface Tinebase_Application_Frontend_Json_Interface extends Tinebase_Application_Frontend_Interface
 {
-    /**
-     * Returns application name
-     * 
-     * @return string application name
-     */
-    public function getApplicationName();
+
 }
