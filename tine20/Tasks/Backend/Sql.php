@@ -90,7 +90,6 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      * @return Tasks_Model_Task task
      * @throws Exception if task could not be found
      */
-    /*
     public function get($_id)
     {
         $stmt = $this->_db->query($this->_getSelect()
@@ -106,7 +105,6 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $Task = new Tasks_Model_Task($TaskArray[0], true, true); 
         return $Task;
     }
-    */    
 
     /**
      * returns a set of tasks identified by their id's
