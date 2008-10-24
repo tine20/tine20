@@ -15,7 +15,7 @@
  *
  * @package     Tinebase
  */
-class Tinebase_Cli
+class Tinebase_Frontend_Cli
 {
     /**
      * the internal name of the application
@@ -71,7 +71,7 @@ class Tinebase_Cli
     public function handle($_opts)
     {
         list($application, $method) = explode('.', $_opts->method);
-        $class = $application . '_' . 'Cli';
+        $class = $application . '_Frontend_Cli';
         
         if (@class_exists($class)) {
             $object = new $class;

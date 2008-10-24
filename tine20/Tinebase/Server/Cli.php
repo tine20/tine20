@@ -35,7 +35,7 @@ class Tinebase_Server_Cli
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($_opts->method) ? $_opts->method : 'EMPTY'));
         //Zend_Registry::get('logger')->debug('Cli args: ' . print_r($_opts->getRemainingArgs(), true));
 
-        $tinebaseServer = new Tinebase_Cli();
+        $tinebaseServer = new Tinebase_Frontend_Cli();
         $tinebaseServer->authenticate($_opts->username, $_opts->password);
         return $tinebaseServer->handle($_opts);        
     }
