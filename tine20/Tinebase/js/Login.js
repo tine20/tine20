@@ -88,32 +88,9 @@ Tine.Login = {
             
         });
         
-        //var viewport = Tine.Tinebase.viewport;
-        //viewport.on('resize', function() {
-        //    this.loginWindow.center();
-        //}, this);
-        
         this.loginWindow.show();
         Ext.getCmp('username').focus(false, 250);
                     
-        //viewport.add(new Ext.Panel())
-        /*
-        var viewport = new Ext.Viewport({
-            layout: 'fit',
-            html: '',
-            listeners: {
-                scope: this,
-                render: function() {
-                    loginWindow.show();
-                    Ext.getCmp('username').focus(false, 250);
-                },
-                resize: function() {
-                    loginWindow.center();
-                }
-            }
-        });
-        */
-        
         Ext.getCmp('username').on('specialkey', function(_field, _event) {
         	if(_event.getKey() == _event.ENTER){
         		this.doLogin();
