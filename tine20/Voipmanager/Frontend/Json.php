@@ -64,12 +64,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $i = 0; 
               
         foreach($_rows AS $_row) {
-            if($location_row = Voipmanager_Controller::getInstance()->getSnomLocation($_row['location_id'])) {
+            if($location_row = Voipmanager_Controller_Snom_Location::getInstance()->get($_row['location_id'])) {
                 $_location = $location_row->toArray();
                 $_rows[$i]['location'] = $_location['name'];
             }
             
-            if($template_row = Voipmanager_Controller::getInstance()->getSnomTemplate($_row['template_id'])) {
+            if($template_row = Voipmanager_Controller_Snom_Template::getInstance()->get($_row['template_id'])) {
                 $_template = $template_row->toArray();                                        
                 $_rows[$i]['template'] = $_template['name'];
             }                
