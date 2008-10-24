@@ -14,7 +14,7 @@
  * Task Pagination Class
  * @package Tasks
  */
-class Tasks_Model_Pagination extends Tinebase_Record_Abstract
+class Tasks_Model_Pagination extends Tinebase_Model_Pagination
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
