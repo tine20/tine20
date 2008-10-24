@@ -15,33 +15,8 @@
  * @package Tasks
  */
 class Tasks_Model_Pagination extends Tinebase_Model_Pagination
-{
-	/**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Tasks';
-    
-    protected $_validators = array(
-        'id'                   => array('allowEmpty' => true,  'Int'   ),
-        
-        'start'                => array('allowEmpty' => true,  'Int'   ),
-        'limit'                => array('allowEmpty' => true,  'Int'   ),
-        'sort'                 => array('allowEmpty' => true,          ),
-        'dir'                  => array('allowEmpty' => true,  'Alpha' ),
-    );
-    
+{    
     protected $_datetimeFields = array(
         'due',
     );
-    
 }
