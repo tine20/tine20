@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: PhoneSettings.php 4616 2008-09-27 04:43:39Z l.kneschke@metaways.de $
  *
+ * @todo        extend Tinebase_Application_Backend_Sql
  */
  
 

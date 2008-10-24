@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        replace old controller with controllers from Voipmanager_Controller_*
+ * @todo        still too much code duplication (in get/search/save/delete functions), remove that (but how?)
  */
 
 /**
