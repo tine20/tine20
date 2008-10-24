@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  *
+ * @todo        use it in index.php 
  * @todo        add Voipmanager_Server_Snom
  */
 
@@ -63,42 +64,6 @@ class Tinebase_Core
      *
      */
     const PDO_OCI = 'Pdo_Oci';
-    
-    /**
-     * stores the tinebase session namespace
-     *
-     * @var Zend_Session_Namespace
-     */
-    protected $_session;
-        
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Tinebase_Core
-     */
-    private static $instance = NULL;
-
-    /**
-     * the constructor
-     *
-     */
-    private function __construct() 
-    {    
-    }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_Core
-     */
-    public static function getInstance() 
-    {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_Core;
-        }
-        
-        return self::$instance;
-    }
     
     /******************************* DISPATCH *********************************/
     
