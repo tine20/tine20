@@ -9,7 +9,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  * 
- * @deprecated 
+ * @deprecated
  */
 
 /**
@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Abstract implements Tinebase_Application_Interface
+abstract class Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Interface
 {
     /**
      * Application name
