@@ -43,18 +43,6 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
     protected $_cache;
     
     /**
-     * const PDO_MYSQL
-     *
-     */
-    const PDO_MYSQL = 'Pdo_Mysql';
-    
-    /**
-     * const PDO_OCI
-     *
-     */
-    const PDO_OCI = 'Pdo_Oci';
-    
-    /**
      * get by id
      *
      * @param string $_id
@@ -130,17 +118,17 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
         if(isset(Zend_Registry::get('configFile')->voipmanager) && isset(Zend_Registry::get('configFile')->voipmanager->database)) {
             $dbConfig = Zend_Registry::get('configFile')->voipmanager->database;
         
-            $dbBackend = constant('self::' . strtoupper($dbConfig->get('backend', self::PDO_MYSQL)));
+            $dbBackend = constant('Tinebase_Core::' . strtoupper($dbConfig->get('backend', Tinebase_Core::PDO_MYSQL)));
             
             switch($dbBackend) {
-                case self::PDO_MYSQL:
+                case Tinebase_Core::PDO_MYSQL:
                     $db = Zend_Db::factory('Pdo_Mysql', $dbConfig->toArray());
                     break;
-                case self::PDO_OCI:
+                case Tinebase_Core::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
                     break;
                 default:
-                    throw new Exception('Invalid database backend type defined. Please set backend to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.ini.');
+                    throw new Exception('Invalid database backend type defined. Please set backend to ' . Tinebase_Core::PDO_MYSQL . ' or ' . Tinebase_Core::PDO_OCI . ' in config.ini.');
                     break;
             }
         } else {
