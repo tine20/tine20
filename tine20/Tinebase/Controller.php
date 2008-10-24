@@ -199,7 +199,7 @@ class Tinebase_Controller
             $server = new Tinebase_Http_Server();
             
             //NOTE: auth check for Tinebase HTTP api is done via Tinebase_Http::checkAuth  
-            $server->setClass('Tinebase_Http', 'Tinebase');
+            $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
     
             // register addidional HTTP apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
@@ -212,7 +212,7 @@ class Tinebase_Controller
                 
                 if(Zend_Registry::get('currentAccount')->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
                     try {
-                        $server->setClass($applicationName.'_Http', $applicationName);
+                        $server->setClass($applicationName.'_Frontend_Http', $applicationName);
                     } catch (Exception $e) {
                         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
@@ -228,7 +228,7 @@ class Tinebase_Controller
             Zend_Registry::get('logger')->INFO($exception);
             
             $server = new Tinebase_Http_Server();
-            $server->setClass('Tinebase_Http', 'Tinebase');
+            $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
             if ($exception instanceof Zend_Session_Exception) {
                 Zend_Registry::get('logger')->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
                 $server->handle(array('method' => 'Tinebase.sessionException'));

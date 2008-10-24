@@ -11,7 +11,7 @@
  * @version     $Id$
  *
  */
-class Felamimail_Http extends Tinebase_Application_Http_Abstract
+class Felamimail_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
     protected $_appname = 'Felamimail';
 }

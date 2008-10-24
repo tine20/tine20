@@ -19,7 +19,7 @@
  * @package     Calendar
  * @subpackage  Server
  */
-class Calendar_Http extends Tinebase_Application_Http_Abstract
+class Calendar_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
     protected $_appname = 'Calendar';
     

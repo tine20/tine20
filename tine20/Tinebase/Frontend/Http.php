@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
- * 
- * @deprecated 
  */
 
 /**
@@ -18,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Http extends Tinebase_Application_Http_Abstract
+class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
     /**
      * checks if a user is logged in. If not we redirect to login
