@@ -11,7 +11,8 @@
  */
 
 Ext.onReady(function() {
-   
+    Tine.Tinebase.tineInit.initWindow();
+    Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initRegistry();
     Tine.Tinebase.tineInit.initWindowMgr();
@@ -20,7 +21,7 @@ Ext.onReady(function() {
     
     var waitForInits = function() {
         if (Tine.Tinebase.tineInit.initList.initRegistry) {
-            Tine.Tinebase.tineInit.initViewport();
+            Tine.Tinebase.tineInit.render();
         } else {
             waitForInits.defer(100);
         }
@@ -41,79 +42,118 @@ Tine.Tinebase.tineInit = {
      * list of initialised items
      */
     initList: {
+        initWindow:   false,
+        initViewport: false,
         initRegistry: false
     },
     
-    initViewport: function(){
+    initWindow: function() {
+        //init window is done in Ext.ux.PopupWindowMgr. yet
+        this.initList.initWindow = true;
+    },
+    
+    /**
+     * Each window has exactly one viewport containing a card layout in its lifetime
+     */
+    initBootSplash: function() {
+        // defautl wait panel (picture only no string!)
+        this.waitPanel = {
+            id: 'tine-viewport-waitcycle',
+            layout: 'fit',
+            border: false,
+            html: '<h1>Pls Wait...</p>'
+        };
+        
+        new Ext.Viewport({
+            layout: 'fit',
+            border: false,
+            items: {
+                id: 'tine-viewport-maincardpanel',
+                layout: 'card',
+                border: false,
+                activeItem: 0,
+                items: this.waitPanel,
+            },
+            listeners: {
+                scope: this,
+                render: function() {
+                    this.initList.initViewport = true;
+                }
+            }
+        });
+    },
+    
+    render: function(){
         // Tine Framework initialisation for each window
         Tine.Tinebase.tineInit.onLangFilesLoad();
+
         
-        /** temporary login **/
         if (!Tine.Tinebase.registry.get('currentAccount')) {
-            Tine.Login.showLoginDialog(Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
+            Tine.Login.showLoginDialog({
+                defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
+                defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
+                scope: this,
+                onLogin: function(response) {
+                    Tine.Tinebase.tineInit.initList.initRegistry = false;
+                    Tine.Tinebase.tineInit.initRegistry();
+                    var waitForRegistry = function() {
+                        if (Tine.Tinebase.tineInit.initList.initRegistry) {
+                            Ext.MessageBox.hide();
+                            Tine.Tinebase.tineInit.render();
+                        } else {
+                            waitForRegistry.defer(100);
+                        }
+                    };
+                    waitForRegistry();
+                },
+            });
             return;
         }
         
+        var c = Ext.ux.PopupWindowMgr.get(window) || {};
         
-        if (window.isMainWindow) {
-            // mainscreen request
-            Ext.ux.PopupWindowMgr.register({
-                name: window.name,
-                popup: window
-            });
-            Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass();
-            Tine.Tinebase.MainScreen.render();
-            window.focus();
-        } else {
-            // @todo move PopupWindowMgr to generic WindowMgr
-            // init WindowMgr like registry!
-            var c = Ext.ux.PopupWindowMgr.get(window) || {};
-            
-            if (!c.itemsConstructor && window.exception) {
-                switch (exception.code) {
-                    
-                    // autorisation required
-                    case 401:
-                        Tine.Login.showLoginDialog(Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
-                        return;
-                        break;
-                    
-                    // generic exception
-                    default:
-                        // we need to wait to grab initialData from mainscreen
-                        //var win = new Tine.Tinebase.ExceptionDialog({});
-                        //win.show();
-                        return;
-                        break;
-                }
+        if (!c.itemsConstructor && window.exception) {
+            switch (exception.code) {
                 
+                // autorisation required
+                case 401:
+                    Tine.Login.showLoginDialog(onLogin, Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
+                    return;
+                    break;
+                
+                // generic exception
+                default:
+                    // we need to wait to grab initialData from mainscreen
+                    //var win = new Tine.Tinebase.ExceptionDialog({});
+                    //win.show();
+                    return;
+                    break;
             }
-    
-            window.document.title = c.title ? c.title : window.document.title;
-    
-            var items;
-            if (c.itemsConstructor) {
-                var parts = c.itemsConstructor.split('.');
-                var ref = window;
-                for (var i=0; i<parts.length; i++) {
-                    ref = ref[parts[i]];
-                }
-                var items = new ref(c.itemsConstructorConfig);
-            } else {
-                items = c.items ? c.items : {};
+        }
+
+        window.document.title = c.title ? c.title : window.document.title;
+
+        var items;
+        if (c.itemsConstructor) {
+            var parts = c.itemsConstructor.split('.');
+            var ref = window;
+            for (var i=0; i<parts.length; i++) {
+                ref = ref[parts[i]];
             }
-            
-            /** temporary Tine.onRady for smooth transition to new window handling **/
-            if (typeof(Tine.onReady) == 'function') {
-                Tine.onReady();
-            } else {
-                c.viewport = new Ext.Viewport({
-                    title: c.title,
-                    layout: c.layout ? c.layout : 'border',
-                    items: items
-                });
-            }
-            window.focus();
+            var items = new ref(c.itemsConstructorConfig);
+        } else {
+            items = c.items ? c.items : {};
+        }
+        
+        /** temporary Tine.onRady for smooth transition to new window handling **/
+        if (typeof(Tine.onReady) == 'function') {
+            Tine.onReady();
+        } else {
+            c.viewport = new Ext.Viewport({
+                title: c.title,
+                layout: c.layout ? c.layout : 'border',
+                items: items
+            });
         }
     },
 
@@ -276,6 +316,19 @@ Tine.Tinebase.tineInit = {
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: 'Browser'
         });
+        
+        /**
+         * register MainWindow
+         */
+        if (window.isMainWindow) {
+            Ext.ux.PopupWindowMgr.register({
+                name: window.name,
+                popup: window,
+                itemsConstructor: 'Tine.Tinebase.MainScreen',
+                itemsConstructorConfig: {},
+                layout: 'fit'
+            });
+        }
     },
     
     /**
