@@ -156,6 +156,8 @@ class Tinebase_Controller
      * @param string $_applicationName
      * @param string $_modelName
      * @return object the controller of the application
+     * 
+     * @todo    move that to Core?
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '')
     {
@@ -189,6 +191,7 @@ class Tinebase_Controller
      * @todo session expre handling
      * 
      * @return HTTP
+     * @deprecated
      */
     public function handleHttp()
     {
@@ -244,6 +247,7 @@ class Tinebase_Controller
      * @todo session expre handling
      * 
      * @return JSON
+     * @deprecated
      */
     public function handleJson()
     {
@@ -333,6 +337,8 @@ class Tinebase_Controller
      * handler for SNOM api requests
      * 
      * @return xml
+     * 
+     * @deprecated
      */
     public function handleSnom()
     {
@@ -355,6 +361,8 @@ class Tinebase_Controller
      * 
      * @param Zend_Console_Getopt $_opts
      * @return boolean
+     * 
+     * @deprecated
      */
     public function handleCli($_opts)
     {        

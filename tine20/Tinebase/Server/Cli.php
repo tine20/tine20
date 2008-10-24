@@ -9,9 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        replace/remove Tinebase_Cli
- * @todo        finish & use it
- * @todo        add Server Interface?
  */
 
 /**
@@ -20,23 +17,24 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Cli
+class Tinebase_Server_Cli extends Tinebase_Server_Abstract
 {
     /**
      * handler for command line scripts
      * 
-     * @param Zend_Console_Getopt $_opts
      * @return boolean
      */
-    public function handleCli($_opts)
+    public function handle()
     {        
         $this->_initFramework();
+        
+        $opts = Tinebase_Core::get('opts');
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($_opts->method) ? $_opts->method : 'EMPTY'));
-        //Zend_Registry::get('logger')->debug('Cli args: ' . print_r($_opts->getRemainingArgs(), true));
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
+        //Zend_Registry::get('logger')->debug('Cli args: ' . print_r($opts->getRemainingArgs(), true));
 
         $tinebaseServer = new Tinebase_Frontend_Cli();
-        $tinebaseServer->authenticate($_opts->username, $_opts->password);
-        return $tinebaseServer->handle($_opts);        
+        $tinebaseServer->authenticate($opts->username, $opts->password);
+        return $tinebaseServer->handle($opts);        
     }
 }

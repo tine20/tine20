@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        finish & use it
- * @todo        add Server Interface?
  */
 
 /**

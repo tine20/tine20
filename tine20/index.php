@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        call Tinebase_Core::handleRequest() instead of Tinebase_Controller->handleXYZ()
+ * @todo        call Tinebase_Core::dispatchRequest() instead of Tinebase_Controller->handleXYZ()
  */
 
 $time_start = microtime(true);
@@ -31,6 +31,8 @@ if (( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_
     // HTTP api
     $tineBase->handleHttp();   
 }
+
+//Tinebase_Core::getInstance()->dispatchRequest();
 
 // log profiling information
 $time_end = microtime(true);

@@ -10,8 +10,6 @@
  * @version     $Id$
  *
  * @todo        add Voipmanager_Server_Snom
- * @todo        implement get registry/config/session and replace $this->_config and $this->_session
- * @todo        use it in index.php 
  */
 
 /**
@@ -21,34 +19,154 @@
  * - has registry and config
  * 
  * @package     Tinebase
- * @subpackage  Server
  */
 class Tinebase_Core
 {
     /**
+     * constant for config registry index
+     *
+     */
+    const CONFIG = 'configFile';    
+
+    /**
+     * constant for logger registry index
+     *
+     */
+    const LOGGER = 'logger';    
+    
+    /**
+     * constant for cache registry index
+     *
+     */
+    const CACHE = 'cache';    
+
+    /**
+     * constant for session namespace (tinebase) registry index
+     *
+     */
+    const SESSION = 'session';    
+    
+    /**
+     * constant for current account/user
+     *
+     */
+    const USER = 'currentAccount';    
+    
+    /**
+     * const PDO_MYSQL
+     *
+     */
+    const PDO_MYSQL = 'Pdo_Mysql';
+    
+    /**
+     * const PDO_OCI
+     *
+     */
+    const PDO_OCI = 'Pdo_Oci';
+    
+    /**
+     * stores the tinebase session namespace
+     *
+     * @var Zend_Session_Namespace
+     */
+    protected $_session;
+        
+    /**
+     * holdes the instance of the singleton
+     *
+     * @var Tinebase_Core
+     */
+    private static $instance = NULL;
+
+    /**
+     * the constructor
+     *
+     */
+    private function __construct() 
+    {    
+    }
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Tinebase_Core
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Tinebase_Core;
+        }
+        
+        return self::$instance;
+    }
+    
+    /******************************* DISPATCH *********************************/
+    
+    /**
      * dispatch request
      *
      * @todo add ActiveSync
+     * @todo create server for snom requests?
      */
     public static function dispatchRequest()
     {
         $server = NULL;
         
+        /**************************** JSON API *****************************/
+
         if (( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
               (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
             ) && isset($_REQUEST['method'])) {
             $server = new Tinebase_Server_Json();
-                    
-        } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])) {
-            // SNOM api
-            $server = new Voipmanager_Server_Snom();
+
+        /**************************** SNOM API *****************************/
             
+        } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])) {
+            if(isset($_REQUEST['TINE20SESSID'])) {
+                Zend_Session::setId($_REQUEST['TINE20SESSID']);
+            }
+            
+            $this->_initFramework();
+            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+            
+            $server = new Tinebase_Http_Server();
+            $server->setClass('Voipmanager_Frontend_Snom', 'Voipmanager');
+            $server->setClass('Phone_Frontend_Snom', 'Phone');
+            
+            $server->handle($_REQUEST);
+                        
+        /**************************** CLI API *****************************/
+        
+        } elseif (php_sapi_name() == 'cli') {
+            $server = new Tinebase_Server_Cli();
+            
+        /**************************** HTTP API ****************************/
+        
         } else {
-            // HTTP api
             $server = new Tinebase_Server_Http();
         }        
         
         $server->handle();
+    }
+    
+    /******************************* SETUP ************************************/
+    
+    /**
+     * initializes the config
+     *
+     */
+    public static function setupConfig()
+    {
+        if(file_exists(dirname(__FILE__) . '/../config.inc.php')) {
+            $config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
+        } else {
+            try {
+                $config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            } catch (Zend_Config_Exception $e) {
+                die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
+            }
+        }
+        self::set(self::CONFIG, $config);  
     }
     
     /**
@@ -57,11 +175,12 @@ class Tinebase_Core
      */
     public static function setupLogger()
     {
+        $config = self::getConfig();
         $logger = new Zend_Log();
         
-        if (isset($this->_config->logger)) {
+        if (isset($config->logger)) {
             try {
-                $loggerConfig = $this->_config->logger;
+                $loggerConfig = $config->logger;
                 
                 $filename = $loggerConfig->filename;
                 $priority = (int)$loggerConfig->priority;
@@ -81,9 +200,9 @@ class Tinebase_Core
             $logger->addWriter($writer);
         }
 
-        Zend_Registry::set('logger', $logger);
+        self::set(self::LOGGER, $logger);
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
+        $logger->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
     }
     
     /**
@@ -92,27 +211,29 @@ class Tinebase_Core
      */
     public static function setupCache()
     {
+        $config = self::getConfig();        
+        
         // create zend cache
-        if ($this->_config->caching && $this->_config->caching->active) {
+        if ($config->caching && $config->caching->active) {
             $frontendOptions = array(
                 'cache_id_prefix' => SQL_TABLE_PREFIX,
-                'lifetime' => ($this->_config->caching->lifetime) ? $this->_config->caching->lifetime : 7200,
+                'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
                 'automatic_serialization' => true // turn that off for more speed
             );
                         
-            $backendType = ($this->_config->caching->backend) ? ucfirst($this->_config->caching->backend) : 'File';
+            $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
             
             switch ($backendType) {
                 case 'File':
                     $backendOptions = array(
-                        'cache_dir' => ($this->_config->caching->path) ? $this->_config->caching->path : session_save_path()  // Directory where to put the cache files
+                        'cache_dir' => ($config->caching->path) ? $config->caching->path : session_save_path()  // Directory where to put the cache files
                     );
                 break;
                 case 'Memcached':                        
                     $backendOptions = array(
                         'servers' => array(
-                            'host' => ($this->_config->caching->host) ? $this->_config->caching->host : 'localhost',
-                            'port' => ($this->_config->caching->port) ? $this->_config->caching->port : 11211,
+                            'host' => ($config->caching->host) ? $config->caching->host : 'localhost',
+                            'port' => ($config->caching->port) ? $config->caching->port : 11211,
                             'persistent' => TRUE
                     ));
                 break;
@@ -129,7 +250,48 @@ class Tinebase_Core
 
         // getting a Zend_Cache_Core object
         $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
-        Zend_Registry::set('cache', $cache);
+        
+        self::set(self::CACHE, $cache);
+    }
+    
+    /**
+     * initializes the session
+     *
+     */
+    public static function setupSession()
+    {
+        $config = self::getConfig();
+        
+        Zend_Session::setOptions(array(
+            'name'              => 'TINE20SESSID',
+            'cookie_httponly'   => true,
+            'hash_function'     => 1,
+        
+        ));
+        if(isset($_SERVER['HTTPS'])) {
+            Zend_Session::setOptions(array(
+                'cookie_secure'     => true,
+            ));
+        }
+        Zend_Session::start();
+        
+        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20_CODENAME',      'trunk');
+        define('TINE20_PACKAGESTRING', 'none');
+        define('TINE20_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $session = new Zend_Session_Namespace('tinebase');
+        
+        if (!isset($session->jsonKey)) {
+            $session->jsonKey = Tinebase_Record_Abstract::generateUID();
+        }
+        self::set('jsonKey', $session->jsonKey);
+
+        if (isset($session->currentAccount)) {
+            self::set(self::USER, $session->currentAccount);
+        }
+        
+        self::set(self::SESSION, $session);
     }
     
     /**
@@ -138,8 +300,10 @@ class Tinebase_Core
      */
     public static function setupDatabaseConnection()
     {
-        if (isset($this->_config->database)) {
-            $dbConfig = $this->_config->database;
+        $config = self::getConfig();
+        
+        if (isset($config->database)) {
+            $dbConfig = $config->database;
             
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         
@@ -173,38 +337,40 @@ class Tinebase_Core
      */
     public static function setupUserLocale($_localeString = 'auto', $_saveaspreference = FALSE)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
+        $session = self::get(self::SESSION);
+        
+        self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         $localeString = NULL;
         if ($_localeString == 'auto') {
             // if the session already has a locale, use this, otherwise take the preference
             // NOTE: the preference allways exists, cuase setup gives one!
-            if (isset($this->_session->userLocale)) {
-                $localeString = $this->_session->userLocale;
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
-            } elseif (isset($this->_session->currentAccount)) {
+            if (isset($session->userLocale)) {
+                $localeString = $session->userLocale;
+                self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
+            } elseif (isset($session->currentAccount)) {
                 $localeString = Tinebase_Config::getInstance()
-                    ->getPreference(Zend_Registry::get('currentAccount')->getId(), 'Locale')
+                    ->getPreference(self::getUser()->getId(), 'Locale')
                     ->value;
                     
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
+                self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
             }
         } 
         $locale = Tinebase_Translation::getLocale($localeString ? $localeString : $_localeString);
         
         // save in session and registry
-        if ($this->_session !== NULL) {
-            $this->_session->userLocale = (string)$locale;
+        if ($session !== NULL) {
+            $session->userLocale = (string)$locale;
         }
-        Zend_Registry::set('locale', $locale);
+        self::set('locale', $locale);
         
         // save locale in config
-        if ($_saveaspreference && Zend_Registry::isRegistered('currentAccount')) {
+        if ($_saveaspreference && Zend_Registry::isRegistered(self::USER)) {
             $preference = new Tinebase_Model_Config(array(
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
                 'name' => 'Locale',
                 'value' => (string)$locale
             ));
-            Tinebase_Config::getInstance()->setPreference(Zend_Registry::get('currentAccount')->getId(), $preference);
+            Tinebase_Config::getInstance()->setPreference(self::getUser()->getId(), $preference);
         }
     }
     
@@ -219,13 +385,57 @@ class Tinebase_Core
     }
 
     /**
+     * intializes the timezone handling
+     * 
+     * @param  string $_timezone
+     * @param  bool   $_saveaspreference
+     * @return string
+     */
+    public static function setupUserTimezone($_timezone = NULL, $_saveaspreference = FALSE)
+    {
+        $session = self::get(self::SESSION);
+        
+        if ($_timezone === NULL) {
+            // get timezone from config/preferences
+            if (isset($session->currentAccount)) {
+                $timezone = Tinebase_Config::getInstance()
+                    ->getPreference(self::getUser()->getId(), 'Timezone')
+                    ->value;
+            } else {
+                $timezone = Tinebase_Config::getInstance()
+                    ->getConfig('Timezone')
+                    ->value;
+            }
+        } else {
+            
+            $timezone = $_timezone;
+
+            // save locale in config
+            if ($_saveaspreference) {
+                $preference = new Tinebase_Model_Config(array(
+                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+                    'name' => 'Timezone',
+                    'value' => $timezone
+                ));
+                Tinebase_Config::getInstance()->setPreference(self::getUser()->getId(), $preference);
+            }
+        }
+        
+        self::set('userTimeZone', $timezone);
+        
+        return $timezone;
+    }
+    
+    /**
      * function to initialize the smtp connection
      *
      */
     public static function setupMailer()
     {
-        if (isset($this->_config->mail)) {
-            $mailConfig = $this->_config->mail;
+        $config = self::getConfig();
+        
+        if (isset($config->mail)) {
+            $mailConfig = $config->mail;
         } else {
             $mailConfig = new Zend_Config(array(
                 'smtpserver' => 'localhost', 
@@ -235,5 +445,66 @@ class Tinebase_Core
         
         $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
         Zend_Mail::setDefaultTransport($transport);
+    }
+
+    /******************************* REGISTRY ************************************/
+    
+    /**
+     * get a value from the registry
+     *
+     */
+    public static function get($index)
+    {
+        return Zend_Registry::get($index);
+    }
+
+    /**
+     * set a registry value 
+     *
+     * @return mixed value
+     */
+    public static function set($index, $value)
+    {
+        Zend_Registry::set($index, $value);
+    }
+
+    /**
+     * get config from the registry
+     *
+     * @return Zend_Config|Zend_Config_Ini
+     */
+    public static function getConfig()
+    {
+        return self::get(self::CONFIG);
+    }
+
+    /**
+     * get config from the registry
+     *
+     * @return Zend_Log the logger
+     */
+    public static function getLogger()
+    {
+        return self::get(self::LOGGER);
+    }
+
+    /**
+     * get session namespace from the registry
+     *
+     * @return Zend_Session_Namespace tinebase session namespace
+     */
+    public static function getSession()
+    {
+        return self::get(self::SESSION);
+    }
+
+    /**
+     * get current user account
+     *
+     * @return Tinebase_Model_FullUser the user account record
+     */
+    public static function getUser()
+    {
+        return self::get(self::USER);
     }
 }

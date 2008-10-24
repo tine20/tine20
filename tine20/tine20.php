@@ -50,7 +50,7 @@ if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || empty($
     exit;
 }
 
-$tineBase = Tinebase_Controller::getInstance();
-$tineBase->handleCli($opts);
+Tinebase_Core::set('opts', $opts);
+Tinebase_Core::getInstance()->dispatchRequest();
 
 ?>

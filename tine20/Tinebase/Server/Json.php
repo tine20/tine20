@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        finish & use it
- * @todo        add Server Interface?
  */
 
 /**
@@ -27,7 +26,7 @@ class Tinebase_Server_Json
      * 
      * @return JSON
      */
-    public function handleJson()
+    public function handle()
     {
         try {
             $this->_initFramework();
