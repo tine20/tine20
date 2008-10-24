@@ -60,7 +60,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
         $pagination = new Tinebase_Model_Pagination(array(
             'sort' => 'name'
         ));
-        $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->searchAsteriskSipPeers(NULL, $pagination);
+        $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search(NULL, $pagination);
         $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());    
         
         if (!empty($phoneId)) {

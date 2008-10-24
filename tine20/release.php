@@ -104,7 +104,7 @@ if ($opts->clean) {
     }
 }
 
-$includeFiles = Tinebase_Http::getAllIncludeFiles(array(
+$includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles(array(
     'Asterisk',
     'Felamimail',
     'Calendar'

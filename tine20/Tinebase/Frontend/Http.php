@@ -444,7 +444,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	    $tine20path = dirname(dirname(__FILE__));
 	    
 	    // Tinebase first
-	    $tinebaseHttp = new Tinebase_Http();
+	    $tinebaseHttp = new Tinebase_Frontend_Http();
         $cssFiles = $tinebaseHttp->getCssFilesToInclude();
         $jsFiles  = $tinebaseHttp->getJsFilesToInclude();
         

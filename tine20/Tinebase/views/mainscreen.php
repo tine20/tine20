@@ -36,7 +36,7 @@
         $locale = Zend_Registry::get('locale');
         switch(TINE20_BUILDTYPE) {
             case 'DEVELOPMENT':
-                $includeFiles = Tinebase_Http::getAllIncludeFiles();
+                $includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles();
                 
                 // js files
                 foreach ($includeFiles['css'] as $name) {
