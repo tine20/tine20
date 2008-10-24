@@ -20,10 +20,11 @@ Ext.onReady(function() {
     Tine.Tinebase.tineInit.initLocale();
     
     var waitForInits = function() {
-        if (Tine.Tinebase.tineInit.initList.initRegistry) {
-            Tine.Tinebase.tineInit.render();
-        } else {
+        if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
+        } else {
+            Tine.Tinebase.tineInit.onLangFilesLoad();
+            Tine.Tinebase.tineInit.renderWindow();
         }
     };
     waitForInits();
@@ -83,11 +84,8 @@ Tine.Tinebase.tineInit = {
         });
     },
     
-    render: function(){
-        // Tine Framework initialisation for each window
-        Tine.Tinebase.tineInit.onLangFilesLoad();
-
-        
+    renderWindow: function(){
+        // check if user is already loged in        
         if (!Tine.Tinebase.registry.get('currentAccount')) {
             Tine.Login.showLoginDialog({
                 defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
@@ -99,7 +97,7 @@ Tine.Tinebase.tineInit = {
                     var waitForRegistry = function() {
                         if (Tine.Tinebase.tineInit.initList.initRegistry) {
                             Ext.MessageBox.hide();
-                            Tine.Tinebase.tineInit.render();
+                            Tine.Tinebase.tineInit.renderWindow();
                         } else {
                             waitForRegistry.defer(100);
                         }
@@ -110,11 +108,12 @@ Tine.Tinebase.tineInit = {
             return;
         }
         
+        // fetch window config from WindowMgr
         var c = Ext.ux.PopupWindowMgr.get(window) || {};
         
-        if (!c.itemsConstructor && window.exception) {
+        // temporary handling for server side exceptions of http (html) window requests
+        if (!c.itemsConstructor || window.exception) {
             switch (exception.code) {
-                
                 // autorisation required
                 case 401:
                     Tine.Login.showLoginDialog(onLogin, Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
@@ -130,9 +129,12 @@ Tine.Tinebase.tineInit = {
                     break;
             }
         }
-
+        
+        // set window title
         window.document.title = c.title ? c.title : window.document.title;
-
+        
+        
+        // create the window contents
         var items;
         if (c.itemsConstructor) {
             var parts = c.itemsConstructor.split('.');
@@ -145,8 +147,9 @@ Tine.Tinebase.tineInit = {
             items = c.items ? c.items : {};
         }
         
-        /** temporary Tine.onRady for smooth transition to new window handling **/
+        // finaly render the viewport and window contentes        
         if (typeof(Tine.onReady) == 'function') {
+            /** temporary Tine.onRady for smooth transition to new window handling **/
             Tine.onReady();
         } else {
             c.viewport = new Ext.Viewport({
