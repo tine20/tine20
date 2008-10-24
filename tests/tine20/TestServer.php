@@ -16,12 +16,12 @@
  * helper class
  *
  */
-class TestController extends Tinebase_Controller 
+class TestServer extends Tinebase_Server_Abstract
 {
     /**
      * holdes the instance of the singleton
      *
-     * @var TestController
+     * @var TestServer
      */
     private static $instance = NULL;
     
@@ -36,20 +36,32 @@ class TestController extends Tinebase_Controller
     /**
      * the singleton pattern
      *
-     * @return Tinebase_Controller
+     * @return TestServer
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new TestController;
+            self::$instance = new TestServer;
         }
         
-        parent::getInstance();
         return self::$instance;
     }
 
+    /**
+     * init the test framework
+     *
+     */
     public function initFramework()
     {
         $this->_initFramework();
+    }
+    
+    /**
+     * don't use that
+     *
+     */
+    public function handle()
+    {
+        
     }
 }

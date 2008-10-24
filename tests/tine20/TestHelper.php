@@ -60,10 +60,11 @@ if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
 
 $_SERVER['DOCUMENT_ROOT'] = $config->docroot;    
 
-$tinebaseController = TestController::getInstance();
-$tinebaseController->initFramework();
+TestServer::getInstance()->initFramework();
+
 Zend_Registry::set('locale', new Zend_Locale($config->locale));
 
+$tinebaseController = Tinebase_Controller::getInstance();
 if (!$tinebaseController->login($config->username, $config->password, $config->ip)){
     throw new Exception("Couldn't login, user session required for tests! \n");
 }
