@@ -14,7 +14,7 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 /**
  * Tine 2.0 ExtJS client Mainscreen.
  */
-Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
+Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     
     /**
      * @cfg {String} Appname of default app
@@ -26,6 +26,9 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
      * @private
      */
     defaultAppPanel: null,
+    
+    //private
+    layout: 'border',
     
     /**
      * direct actions of MainScreen
@@ -65,7 +68,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         });
         
         // init main menu
-        var tineMenu = new Ext.Toolbar({
+        this.tineMenu = new Ext.Toolbar({
             id: 'tineMenu',
             height: 26,
             items:[{
@@ -141,7 +144,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
                 border: false,
                 id:     'north-panel-1',
                 items: [
-                    tineMenu
+                    this.tineMenu
                 ]
             },{
                 region: 'center',
@@ -195,7 +198,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             items: this.applicationArcordion
         }];
         
-        Tine.Tinebase.MainScreenClass.superclass.initComponent.call(this);
+        Tine.Tinebase.MainScreen.superclass.initComponent.call(this);
     },
 
     /**
@@ -238,22 +241,11 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
         return panels;
     },
     
-    /**
-     * render the viewport
-     * 
-     * NOTE: We can't extend viewport directly, as we need to ensure, that the
-     * viewport gets rendered before the contents of it :-)
-     * @private
-     */
-    render: function() {
-        var viewport = new Ext.Viewport({
-            layout: 'border',
-            items: this.items,
-            listeners: {
-                scope: this,
-                render: this.ativateDefaultApp
-            }
-        });
+    onRender: function(ct, position) {
+        Tine.Tinebase.MainScreen.superclass.onRender.call(this, ct, position);
+        Tine.Tinebase.MainScreen = this;
+        this.ativateDefaultApp();
+        
         // check for new version 
         if (Tine.Tinebase.common.hasRight('check_version', 'Tinebase')) {
             Tine.widgets.VersionCheck();
@@ -270,6 +262,7 @@ Tine.Tinebase.MainScreenClass = Ext.extend(Ext.Component, {
             this.ativateDefaultApp.defer(10, this);
         }
     },
+    
     /**
      * @private
      */
