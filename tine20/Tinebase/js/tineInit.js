@@ -12,7 +12,7 @@
 
 Ext.onReady(function() {
     Tine.Tinebase.tineInit.initWindow();
-    Tine.Tinebase.tineInit.initBootSplash();
+    //Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initRegistry();
     Tine.Tinebase.tineInit.initWindowMgr();
