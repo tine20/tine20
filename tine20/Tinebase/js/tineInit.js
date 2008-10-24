@@ -12,12 +12,12 @@
 
 Ext.onReady(function() {
     Tine.Tinebase.tineInit.initWindow();
-    //Tine.Tinebase.tineInit.initBootSplash();
+    Tine.Tinebase.tineInit.initBootSplash();
+    Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initRegistry();
     Tine.Tinebase.tineInit.initWindowMgr();
     Tine.Tinebase.tineInit.initState();
-    Tine.Tinebase.tineInit.initLocale();
     
     var waitForInits = function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
@@ -67,7 +67,7 @@ Tine.Tinebase.tineInit = {
             html: '<h1>Pls Wait...</p>'
         };
         
-        new Ext.Viewport({
+        Tine.Tinebase.viewport = new Ext.Viewport({
             layout: 'fit',
             border: false,
             items: {
@@ -149,33 +149,23 @@ Tine.Tinebase.tineInit = {
             items = c.items ? c.items : {};
         }
         
-        // finaly render the viewport and window contentes        
+        /** temporary Tine.onRady for smooth transition to new window handling **/
         if (typeof(Tine.onReady) == 'function') {
-            /** temporary Tine.onRady for smooth transition to new window handling **/
+            Tine.Tinebase.viewport.destroy();
             Tine.onReady();
-        } else {
-            
-            /* this does not work :-(
-             * - in the mainscreen, a border layout is not rendered in a card layout (no idea why)
-             * - in popups, the appflow needs to get smoothed
-             * 
-             * As a consequence, we can't deal with a bootSplash yet!
-             *
-            var mainCardLayout = Ext.getCmp('tine-viewport-maincardpanel');
-            var panel = new Ext.Panel({
-                layout: c.layout ? c.layout : 'border',
-                items: items
-            });
-            mainCardLayout.add(panel);
-            mainCardLayout.layout.setActiveItem(panel.id);
-            */
-            
-            c.viewport = new Ext.Viewport({
-                title: c.title,
-                layout: c.layout ? c.layout : 'border',
-                items: items
-            });
+            return;
         }
+        
+        // finaly render the window contentes in a new card  
+        var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
+        var card = new Ext.Panel({
+            layout: c.layout ? c.layout : 'border',
+            border: false,
+            items: items
+        });
+        mainCardPanel.layout.container.add(card);
+        mainCardPanel.layout.setActiveItem(card.id);
+        card.doLayout();
     },
 
     initAjax: function() {
