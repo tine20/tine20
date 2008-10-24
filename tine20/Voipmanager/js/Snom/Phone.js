@@ -508,9 +508,6 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
         {
             var form = Ext.getCmp('voipmanager_editPhoneForm').getForm();
 
-            var _settingId = Ext.getCmp('template_id').store.getById(Ext.getCmp('template_id').getValue());
-            _settingId = _settingId.data.setting_id;
-
             if(form.isValid()) {
                 form.updateRecord(this.phoneRecord);
                 
