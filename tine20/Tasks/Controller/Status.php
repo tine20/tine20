@@ -20,7 +20,7 @@
  * @package Tasks
  * @subpackage  Controller
  */
-class Tasks_Controller_Status implements Tinebase_Events_Interface, Tinebase_Container_Interface
+class Tasks_Controller_Status extends Tinebase_Application_Controller_Abstract
 {
     
     /**
