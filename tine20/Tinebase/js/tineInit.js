@@ -114,7 +114,7 @@ Tine.Tinebase.tineInit = {
         var c = Ext.ux.PopupWindowMgr.get(window) || {};
         
         // temporary handling for server side exceptions of http (html) window requests
-        if (!c.itemsConstructor || window.exception) {
+        if (window.exception) {
             switch (exception.code) {
                 // autorisation required
                 case 401:
