@@ -157,9 +157,16 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
 
+        // check if setup/update required
+        $setupController = new Setup_Controller(FALSE); 
+        if ($setupController->setupRequired()) {
+            //-- redirect to setup.php
+            header("Location: setup.php");
+        }
+        
         // check if registration is active
-        if(isset(Zend_Registry::get('configFile')->login)) {
-            $registrationConfig = Zend_Registry::get('configFile')->registration;
+        if(isset(Tinebase_Core::getConfig()->login)) {
+            $registrationConfig = Tinebase_Core::getConfig()->registration;
             $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
         } else {
             $view->userRegistration = 0;

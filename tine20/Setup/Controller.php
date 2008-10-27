@@ -1,4 +1,4 @@
-    <?php
+<?php
 /**
  * Tine 2.0
  *
@@ -42,12 +42,14 @@ class Setup_Controller
      * the constructor
      *
      */
-    public function __construct()
+    public function __construct($_init = TRUE)
     {
         $this->_config = Zend_Registry::get('configFile');
 
-        $this->_setupLogger();
-        $this->setupDatabaseConnection();
+        if ($_init) {
+            $this->_setupLogger();
+            $this->setupDatabaseConnection();
+        }
     }
               
     /**
@@ -119,8 +121,11 @@ class Setup_Controller
 
     /**
      * updates installed applications. does nothing if no applications are installed
+     * 
+     * @param Tinebase_Record_RecordSet $_applications
+     * @param boolean                   $_dryRun checks only if update is needed if true 
      */
-    public function updateApplications(Tinebase_Record_RecordSet $_applications)
+    public function updateApplications(Tinebase_Record_RecordSet $_applications, $_dryRun = FALSE)
     {
         $smallestMajorVersion = NULL;
         $biggestMajorVersion = NULL;
@@ -138,10 +143,10 @@ class Setup_Controller
         for($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
             foreach($_applications as $application) {
                 if($application->getMajorVersion() <= $majorVersion) {
-                    $this->updateApplication($application, $majorVersion);
+                    $this->updateApplication($application, $majorVersion, $_dryRun);
                 }
             }
-        }
+        }        
     }
     
     /**
@@ -296,15 +301,21 @@ class Setup_Controller
     /**
      * update installed application
      *
-     * @param string $_name application name
-     * @param string $_updateTo version to update to (example: 1.17)
+     * @param string    $_name application name
+     * @param string    $_updateTo version to update to (example: 1.17)
+     * @param boolean   $_dryRun checks only if update is needed if true
+     * @throws Setup_Exception_SetupRequired if update is needed and dry run is activated
      */
-    public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion)
+    public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion, $_dryRun = FALSE)
     {
         $setupXml = $this->getSetupXml($_application->name);
         
         switch(version_compare($_application->version, $setupXml->version)) {
             case -1:
+                if ($_dryRun) {
+                    throw new Setup_Exception_SetupRequired();
+                }
+                
                 echo "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")<br>";
 
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
@@ -332,13 +343,43 @@ class Setup_Controller
                 break; 
                 
             case 0:
-                echo "<i>" . $_application->name . " is up to date (Version: " . $_application->version . ")</i><br>\n\n";
+                if (!$_dryRun) {
+                    echo "<i>" . $_application->name . " is up to date (Version: " . $_application->version . ")</i><br>\n\n";
+                }
                 break;
                 
             case 1:
-                echo "<span style=color:#ff0000>Something went wrong!!! Current application version is higher than version from setup.xml.</span>";
+                if (!$_dryRun) {
+                    echo "<span style=color:#ff0000>Something went wrong!!! Current application version is higher than version from setup.xml.</span>";
+                }
                 throw new Exception('Current application version is higher than version from setup.xml');
                 break;
         }        
+    }
+
+    /**
+     * checks if setup/update is required
+     *
+     * @return boolean
+     * 
+     * @todo check database/tables or add another function for that
+     */
+    public function setupRequired()
+    {
+        $result = FALSE;
+        
+        //-- check if database exists
+        
+        //-- check if application table exists
+        
+        // check if applications are up-to-date
+        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        try {
+            $result = $this->updateApplications($applications, TRUE);
+        } catch (Setup_Exception_SetupRequired $ure) {
+            $result = TRUE;
+        }
+        
+        return $result;
     }
 }
