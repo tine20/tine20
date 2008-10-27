@@ -70,7 +70,6 @@ class Tinebase_Core
      * dispatch request
      *
      * @todo add ActiveSync
-     * @todo create server for snom requests?
      */
     public static function dispatchRequest()
     {
@@ -86,19 +85,8 @@ class Tinebase_Core
         /**************************** SNOM API *****************************/
             
         } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])) {
-            if(isset($_REQUEST['TINE20SESSID'])) {
-                Zend_Session::setId($_REQUEST['TINE20SESSID']);
-            }
+            $server = new Voipmanager_Server_Snom();
             
-            $this->_initFramework();
-            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
-            
-            $server = new Tinebase_Http_Server();
-            $server->setClass('Voipmanager_Frontend_Snom', 'Voipmanager');
-            $server->setClass('Phone_Frontend_Snom', 'Phone');
-            
-            $server->handle($_REQUEST);
-                        
         /**************************** CLI API *****************************/
         
         } elseif (php_sapi_name() == 'cli') {
