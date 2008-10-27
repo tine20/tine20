@@ -177,7 +177,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     }
     
     /**
-     * renders the login dialog
+     * renders the setup/update required dialog
      *
      */
     public function setupRequired()

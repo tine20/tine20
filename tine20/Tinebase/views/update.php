@@ -30,11 +30,10 @@
                         items: {
                                 xtype: 'panel',
                                 layout: 'fit'
-                                //title: 'test'
                         }
                     });
                     Ext.MessageBox.wait('Tine 2.0 needs to be updated.', 'Please wait or contact your administrator');
-                    window.setTimeout('location.href = location.href', 10000);
+                    window.setTimeout('location.href = location.href', 20000);
         }); 
     </script>
 
