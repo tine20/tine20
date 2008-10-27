@@ -154,15 +154,16 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     public function login()
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-
         // check if setup/update required
         $setupController = new Setup_Controller(FALSE); 
         if ($setupController->updateRequired()) {
-            // redirect to setup.php
-            header("Location: setup.php");
+            $this->setupRequired();
         }
+        
+        $view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+
+        header('Content-Type: text/html; charset=utf-8');
         
         // check if registration is active
         if(isset(Tinebase_Core::getConfig()->login)) {
@@ -170,10 +171,25 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
         } else {
             $view->userRegistration = 0;
-        }
+        }        
         
-        header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
+    }
+    
+    /**
+     * renders the login dialog
+     *
+     */
+    public function setupRequired()
+    {
+        $view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+
+        header('Content-Type: text/html; charset=utf-8');
+        
+        Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Update/Setup required!');
+        echo $view->render('update.php');
+        exit();        
     }
     
 	/**

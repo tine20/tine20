@@ -1,0 +1,45 @@
+<?php
+/**
+ * update view
+ * 
+ * @package     Tinebase
+ * @subpackage  Views
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/xtheme-gray.css" /><!-- LIBS -->
+
+    <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="ExtJS/ext-all.js"></script>
+
+    <script type="text/javascript">
+        Ext.onReady(function() {
+                
+                
+                new Ext.Viewport({
+                        layout: 'fit',
+                        items: {
+                                xtype: 'panel',
+                                layout: 'fit'
+                                //title: 'test'
+                        }
+                    });
+                    Ext.MessageBox.wait('Tine 2.0 needs to be updated.', 'Please wait or contact your administrator');
+                    window.setTimeout('location.href = location.href', 10000);
+        }); 
+    </script>
+
+</head>
+<body>
+<div id="button"></div>
+</body>
+</html>

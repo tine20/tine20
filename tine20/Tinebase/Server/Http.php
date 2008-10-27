@@ -71,13 +71,11 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
                 // check if setup is required
                 $setupController = new Setup_Controller(FALSE); 
                 if ($setupController->setupRequired()) {
-                    // redirect to setup.php
-                    header("Location: setup.php");
-                    exit();
-                }                
-                
-                Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
-                $server->handle(array('method' => 'Tinebase.exception'));
+                    $server->handle(array('method' => 'Tinebase.setupRequired'));
+                } else {                
+                    Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
+                    $server->handle(array('method' => 'Tinebase.exception'));
+                }
             }
         }
     }
