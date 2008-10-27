@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        call Tinebase_Core::dispatchRequest() instead of Tinebase_Controller->handleXYZ()
  */
 
 $time_start = microtime(true);
@@ -19,20 +18,7 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
-$tineBase = Tinebase_Controller::getInstance();
-if (( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
-      (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
-    ) && isset($_REQUEST['method'])) {
-    $tineBase->handleJson();        
-} elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])) {
-    // SNOM api
-    $tineBase->handleSnom();
-} else {
-    // HTTP api
-    $tineBase->handleHttp();   
-}
-
-//Tinebase_Core::getInstance()->dispatchRequest();
+Tinebase_Core::dispatchRequest();
 
 // log profiling information
 $time_end = microtime(true);
