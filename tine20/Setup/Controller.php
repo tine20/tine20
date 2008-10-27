@@ -92,20 +92,20 @@ class Setup_Controller
 
             echo "<pre><hr>setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
             
-            $dbBackend = constant('Tinebase_Controller::' . strtoupper($dbConfig->get('backend', Tinebase_Controller::PDO_MYSQL)));
+            $dbBackend = constant('Tinebase_Core::' . strtoupper($dbConfig->get('backend', Tinebase_Core::PDO_MYSQL)));
             
             switch($dbBackend) {
-                case Tinebase_Controller::PDO_MYSQL:
+                case Tinebase_Core::PDO_MYSQL:
                     $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
                     $this->_backend = Setup_Backend_Factory::factory('Mysql');
                     break;
-                case Tinebase_Controller::PDO_OCI:
+                case Tinebase_Core::PDO_OCI:
                     //$db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
                     $db = Zend_Db::factory('Oracle', $dbConfig->toArray());
                     $this->_backend = Setup_Backend_Factory::factory('Oracle');
                     break;
                 default:
-                    throw new Exception('Invalid database backend type defined. Please set backend to ' . Tinebase_Controller::PDO_MYSQL . ' or ' . Tinebase_Controller::PDO_OCI . ' in config.ini.');
+                    throw new Exception('Invalid database backend type defined. Please set backend to ' . Tinebase_Core::PDO_MYSQL . ' or ' . Tinebase_Core::PDO_OCI . ' in config.ini.');
                     break;
             }
                         
