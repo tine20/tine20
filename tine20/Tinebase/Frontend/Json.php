@@ -69,7 +69,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function setLocale($localeString, $saveaspreference)
     {
-        Tinebase_Controller::getInstance()->setupUserLocale($localeString, $saveaspreference);
+        Tinebase_Core::setupUserLocale($localeString, $saveaspreference);
         $locale = Zend_Registry::get('locale');
         /* No need for return values yet. Client needs to reload!
         return array(
@@ -121,7 +121,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function setTimezone($timezoneString, $saveaspreference)
     {
-        $timezone = Tinebase_Controller::getInstance()->setupUserTimezone($timezoneString, $saveaspreference);
+        $timezone = Tinebase_Core::setupUserTimezone($timezoneString, $saveaspreference);
         
         return $timezone;
         /*
