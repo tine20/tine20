@@ -75,6 +75,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * @prperty {Ext.ux.PopupWindowMgr}
      */
     windowManager: null,
+    
 	/**
 	 * @private
 	 */
@@ -114,7 +115,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             "close" : true
         });
         
-        
         // NOTE: Do not register unregister with this events, 
         //       as it would be broken on window reloads!
         /*
@@ -130,6 +130,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         }
         */
 	},
+    
     /**
      * rename window name
      * 
@@ -140,6 +141,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.name = this.popup.name = newName;
         this.windowManager.register(this);
     },
+    
 	/**
 	 * @private
      * 
@@ -152,6 +154,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         	//console.log(window);
         }, this);
     },
+    
     /**
      * @private
      * 
@@ -159,25 +162,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     onClose: function() {
 
-    },
-    /**
-     * injects document with framework html (head)
-     * NOTE: has strange layout problems in FF
-     */
-    injectFramework: function(popup) {
-        var framework = new Ext.XTemplate('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n' ,
-            '<html><head>{head}</head><body></body></html>'
-        );
-        
-        var head = Ext.getDoc().dom.documentElement.firstChild.innerHTML;
-        head = head.replace(/Ext\.onReady[^<]*/m, 'Ext.onReady(function(){formData={"linking":{"link_app1":"","link_id1":"-1"}}; Tine.Tinebase.initFramework();' + this.onReadyFn + 'window.focus();});');
-        
-        var doc = popup.document;
-        doc.open("text/html; charset=utf-8", "replace");
-        doc.write(framework.apply({
-            head:  head
-        }));
-        doc.close();
     }
 });
 
