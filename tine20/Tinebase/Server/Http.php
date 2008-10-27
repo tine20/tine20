@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        finish & use it
  */
 
 /**
@@ -18,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Http
+class Tinebase_Server_Http extends Tinebase_Server_Abstract
 {
     /**
      * handler for HTTP api requests
@@ -30,7 +29,7 @@ class Tinebase_Server_Http
     {
         try {
             $this->_initFramework();
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
             
             $server = new Tinebase_Http_Server();
             
@@ -46,11 +45,11 @@ class Tinebase_Server_Http
                 $applicationParts = explode('.', $_REQUEST['method']);
                 $applicationName = ucfirst($applicationParts[0]);
                 
-                if(Zend_Registry::get('currentAccount')->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
+                if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
                     try {
                         $server->setClass($applicationName.'_Frontend_Http', $applicationName);
                     } catch (Exception $e) {
-                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
                 }
             }
@@ -61,15 +60,15 @@ class Tinebase_Server_Http
 
             $server->handle($_REQUEST);
         } catch (Exception $exception) {
-            Zend_Registry::get('logger')->INFO($exception);
+            Tinebase_Core::getLogger()->INFO($exception);
             
             $server = new Tinebase_Http_Server();
             $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
             if ($exception instanceof Zend_Session_Exception) {
-                Zend_Registry::get('logger')->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
                 $server->handle(array('method' => 'Tinebase.sessionException'));
             } else {
-                Zend_Registry::get('logger')->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
+                Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
                 $server->handle(array('method' => 'Tinebase.exception'));
             }
         }

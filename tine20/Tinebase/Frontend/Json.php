@@ -409,7 +409,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             'defaultPassword' => $defaultPassword
         );
 
-        if (Zend_Registry::isRegistered('currentAccount')) {
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $registryData += array(    
                 'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
                 'accountBackend'   => Tinebase_User::getConfiguredBackend(),
@@ -441,7 +441,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $registryData = array();
         
-        if (Zend_Registry::isRegistered('currentAccount')) { 
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
             $userApplications = Zend_Registry::get('currentAccount')->getApplications();
             
             foreach($userApplications as $application) {

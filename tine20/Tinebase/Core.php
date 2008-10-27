@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  *
- * @todo        use it in index.php 
  * @todo        add Voipmanager_Server_Snom
  */
 
@@ -246,6 +245,7 @@ class Tinebase_Core
         define('TINE20_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
         
         $session = new Zend_Session_Namespace('tinebase');
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session data: " . print_r($session, true));
         
         if (!isset($session->jsonKey)) {
             $session->jsonKey = Tinebase_Record_Abstract::generateUID();
@@ -431,6 +431,16 @@ class Tinebase_Core
     public static function set($index, $value)
     {
         Zend_Registry::set($index, $value);
+    }
+
+    /**
+     * checks a registry value 
+     *
+     * @return boolean
+     */
+    public static function isRegistered($index)
+    {
+        return Zend_Registry::isRegistered($index);
     }
 
     /**

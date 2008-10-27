@@ -30,7 +30,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract
         
         $opts = Tinebase_Core::get('opts');
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
         //Zend_Registry::get('logger')->debug('Cli args: ' . print_r($opts->getRemainingArgs(), true));
 
         $tinebaseServer = new Tinebase_Frontend_Cli();
