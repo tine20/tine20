@@ -59,13 +59,13 @@ Ext.ux.WindowFactory.prototype = {
      * @rivate
      */
     getBrowserWindow: function(config) {
-        var win = this.windowManager.get(config.name);
+        var win = Ext.ux.PopupWindowMgr.get(config.name);
         
         if (! win) {
             win = new this.windowClass(config);
         }
         
-        this.windowManager.bringToFront(win);
+        Ext.ux.PopupWindowMgr.bringToFront(win);
         return win;
     },
     
@@ -76,21 +76,30 @@ Ext.ux.WindowFactory.prototype = {
         // add titleBar
         c.height = c.height + 20;
         
-        if (c.itemsConstructor) {
-            var parts = c.itemsConstructor.split('.');
-            var ref = window;
-            for (var i=0; i<parts.length; i++) {
-                ref = ref[parts[i]];
-            }
-            console.log(c.itemsConstructor);
-            c.items = new ref(c.itemsConstructorConfig);
-        } else {
-            c.items = c.items ? c.items : {};
-        }
+        c.items = this.getWindowItems(c);
         
         var win = new Ext.Window(c);
         win.show();
         return win;
+    },
+    
+    /**
+     * constructs window items from config properties
+     */
+    getWindowItems: function(config) {
+        var items;
+        if (config.itemsConstructor) {
+            var parts = config.itemsConstructor.split('.');
+            var ref = window;
+            for (var i=0; i<parts.length; i++) {
+                ref = ref[parts[i]];
+            }
+            var items = new ref(config.itemsConstructorConfig);
+        } else {
+            items = config.items ? config.items : {};
+        }
+        
+        return items;
     },
     
     /**
