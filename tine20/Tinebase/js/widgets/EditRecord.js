@@ -12,6 +12,10 @@
 Ext.namespace('Tine.widgets');
 
 Ext.namespace('Tine.widgets.dialog');
+
+/**
+ * Generic 'Edit Record' dialog
+ */
 Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	/**
 	 * @cfg {Array} additional toolbar items
@@ -65,6 +69,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     
     /**
      * @property {Ext.ux.PopupWindowMgr}
+     * @depricated use window instead
      */
     windowManager: null,
     
@@ -145,18 +150,13 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         //this.tbarItems = genericButtons.concat(this.tbarItems);
         
         this.buttons = [
-//            new Ext.form.Field({xtype: 'text'}),
-//            new Ext.form.Label({ style: {width: '1000px', display: 'inline'}, text: ''}),
             this.action_applyChanges,
             this.action_cancel,
             this.action_saveAndClose
-            
        ];
        
-        
         if (this.tbarItems) {
             this.tbar = new Ext.Toolbar({
-                id: 'applicationToolbar',
                 items: this.tbarItems
             });
         }
@@ -207,6 +207,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         
         this.handlerCancel = this.handlerCancel ? this.handlerCancel : this.closeWindow;
     },
+    
     /**
      * update (action updateer) top and bottom toolbars
      */
@@ -220,19 +221,23 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         Tine.widgets.ActionUpdater(record, actions, containerField);
         Tine.widgets.ActionUpdater(record, this.tbarItems, containerField);
     },
+    
     /**
      * get top toolbar
      */
 	getToolbar: function() {
 		return this.getTopToolbar();
 	},
+    
     /**
      * @private
      */
     onCancel: function(){
         this.fireEvent('cancel');
+        this.purgeListeners();
         //console.log('cancel');
     },
+    
     /**
      * @private
      */
@@ -240,6 +245,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         this.fireEvent('saveAndClose');
         //console.log('save');
     },
+    
     /**
      * @private
      */
@@ -247,6 +253,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         this.fireEvent('apply');
         //console.log('apply');
     },
+    
     /**
      * helper function to close window
      * @todo implemet ;-)
