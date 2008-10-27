@@ -42,7 +42,7 @@ class Voipmanager_Backend_Snom_Software
      * @param Tinebase_Model_Pagination $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomSoftware
 	 */
-    public function search(Voipmanager_Model_SnomSoftwareFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
+    public function search(Voipmanager_Model_SnomSoftwareFilter $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
     {	
         $where = array();
         
