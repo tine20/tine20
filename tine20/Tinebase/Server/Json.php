@@ -99,9 +99,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             
         } catch (Exception $exception) {
             
-            // hanlde all kind of session exceptions as 'Not Autorised'
+            // handle all kind of session exceptions as 'Not Authorised'
             if ($exception instanceof Zend_Session_Exception) {
-                $exception = new Exception('Not Autorised', 401);
+                $exception = new Exception('Not Authorised', 401);
             }
             
             $server = new Zend_Json_Server();
