@@ -151,6 +151,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     /**
      * renders the login dialog
      *
+     * @todo perhaps we could add a config option to display the update dialog if it is set
      */
     public function login()
     {
