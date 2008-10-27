@@ -4,7 +4,7 @@
  * @package     Tine
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
@@ -119,9 +119,6 @@ Tine.Tinebase.tineInit = {
             return;
         }
         
-        // fetch window config from WindowMgr
-        var c = Ext.ux.PopupWindowMgr.get(window) || {};
-        
         // temporary handling for server side exceptions of http (html) window requests
         if (window.exception) {
             switch (exception.code) {
@@ -141,36 +138,25 @@ Tine.Tinebase.tineInit = {
             }
         }
         
-        // set window title
-        window.document.title = c.title ? c.title : window.document.title;
-        
-        
-        // create the window contents
-        var items;
-        if (c.itemsConstructor) {
-            var parts = c.itemsConstructor.split('.');
-            var ref = window;
-            for (var i=0; i<parts.length; i++) {
-                ref = ref[parts[i]];
-            }
-            var items = new ref(c.itemsConstructorConfig);
-        } else {
-            items = c.items ? c.items : {};
-        }
-        
-        /** temporary Tine.onRady for smooth transition to new window handling **/
+        /** temporary Tine.onReady for smooth transition to new window handling **/
         if (typeof(Tine.onReady) == 'function') {
             Tine.Tinebase.viewport.destroy();
             Tine.onReady();
             return;
         }
         
+        // fetch window config from WindowMgr
+        var c = Ext.ux.PopupWindowMgr.get(window) || {};
+        
+        // set window title
+        window.document.title = c.title ? c.title : window.document.title;
+        
         // finaly render the window contentes in a new card  
         var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
         var card = new Ext.Panel({
             layout: c.layout ? c.layout : 'border',
             border: false,
-            items: items
+            items: Tine.WindowFactory.getWindowItems(c)
         });
         mainCardPanel.layout.container.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
