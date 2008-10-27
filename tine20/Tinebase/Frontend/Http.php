@@ -159,8 +159,8 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 
         // check if setup/update required
         $setupController = new Setup_Controller(FALSE); 
-        if ($setupController->setupRequired()) {
-            //-- redirect to setup.php
+        if ($setupController->updateRequired()) {
+            // redirect to setup.php
             header("Location: setup.php");
         }
         

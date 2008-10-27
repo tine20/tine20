@@ -358,19 +358,13 @@ class Setup_Controller
     }
 
     /**
-     * checks if setup/update is required
+     * checks if update is required
      *
      * @return boolean
-     * 
-     * @todo check database/tables or add another function for that
      */
-    public function setupRequired()
+    public function updateRequired()
     {
         $result = FALSE;
-        
-        //-- check if database exists
-        
-        //-- check if application table exists
         
         // check if applications are up-to-date
         $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
@@ -380,6 +374,25 @@ class Setup_Controller
             $result = TRUE;
         }
         
+        return $result;
+    }
+
+    /**
+     * checks if setup is required
+     *
+     * @return boolean
+     */
+    public function setupRequired()
+    {
+        $result = FALSE;
+        
+        // check if applications table exists
+        try {
+            // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
+            $applicationTable = Tinebase_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
+        } catch (Zend_Db_Statement_Exception $e) {
+            $result = TRUE;
+        }            
         return $result;
     }
 }

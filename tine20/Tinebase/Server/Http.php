@@ -21,7 +21,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
 {
     /**
      * handler for HTTP api requests
-     * @todo session expre handling
+     * @todo session expire handling
      * 
      * @return HTTP
      */
@@ -68,6 +68,14 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
                 $server->handle(array('method' => 'Tinebase.sessionException'));
             } else {
+                // check if setup is required
+                $setupController = new Setup_Controller(FALSE); 
+                if ($setupController->setupRequired()) {
+                    // redirect to setup.php
+                    header("Location: setup.php");
+                    exit();
+                }                
+                
                 Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
                 $server->handle(array('method' => 'Tinebase.exception'));
             }

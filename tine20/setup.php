@@ -154,4 +154,4 @@ if ( IMPORT_EGW_14_ADDRESSBOOK === TRUE ) {
     $import->importAddressbook('egw_addressbook', FALSE);
 }
 
-echo "setup done<br>";
+echo 'setup done<br><br>Please go to the <a href="index.php">login dialog</a>.';

@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  *
- * @todo        add Voipmanager_Server_Snom
  */
 
 /**
@@ -22,6 +21,8 @@
  */
 class Tinebase_Core
 {
+    /**************** registry indexes *************************/
+    
     /**
      * constant for config registry index
      *
@@ -51,6 +52,14 @@ class Tinebase_Core
      *
      */
     const USER = 'currentAccount';    
+
+    /**
+     * constant for database adapter
+     *
+     */
+    const DB = 'dbAdapter';    
+    
+    /**************** other consts *************************/
     
     /**
      * const PDO_MYSQL
@@ -312,7 +321,7 @@ class Tinebase_Core
             
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
-            Zend_Registry::set('dbAdapter', $db);
+            self::set(self::DB, $db);
         } else {
             die ('database section not found in central configuration file');
         }
@@ -505,5 +514,15 @@ class Tinebase_Core
     public static function getUser()
     {
         return self::get(self::USER);
+    }
+
+    /**
+     * get db adapter
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public static function getDb()
+    {
+        return self::get(self::DB);
     }
 }
