@@ -101,6 +101,43 @@ class Tinebase_Core
         $server->handle();
     }
     
+    /******************************* APPLICATION ************************************/
+    
+    /**
+     * returns an instance of the controller of an application
+     *
+     * @param string $_applicationName
+     * @param string $_modelName
+     * @return object the controller of the application
+     * 
+     */
+    public static function getApplicationInstance($_applicationName, $_modelName = '')
+    {
+        $controllerName = ucfirst((string) $_applicationName) . '_Controller';
+
+        // check for model controller
+        if (!empty($_modelName)) {
+            $controllerNameModel = $controllerName . '_' . $_modelName;
+            if (!class_exists($controllerNameModel)) {
+    
+                // check for generic app controller
+                if (!class_exists($controllerName)) {            
+                    throw new Exception('No Controller found (checked classes '. $controllerName . ' and ' . $controllerNameModel . ')!');
+                } 
+            } else {
+                $controllerName = $controllerNameModel;
+            }
+        } else {
+            if (!class_exists($controllerName)) {            
+                throw new Exception('No Application Controller found (checked class ' . $controllerName . ')!');
+            }             
+        }
+        
+        $controller = call_user_func(array($controllerName, 'getInstance'));
+        
+        return $controller;
+    }
+    
     /******************************* SETUP ************************************/
     
     /**

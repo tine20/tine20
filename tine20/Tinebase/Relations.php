@@ -186,7 +186,7 @@ class Tinebase_Relations
     protected function _setAppRecord($_relation)
     {
         list($appName, $i, $itemName) = explode('_', $_relation->related_model);
-        $appController = Tinebase_Controller::getInstance()->getApplicationInstance($appName, $itemName);
+        $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
         
         if (!$_relation->related_record->getId()) {
             $method = 'create' . $itemName;
@@ -234,7 +234,7 @@ class Tinebase_Relations
         foreach ($modelMap as $modelName => $relations) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolving " . count($relations) . " relation(s) of $modelName");
             list($appName, $i, $itemName) = explode('_', $modelName);
-            $appController = Tinebase_Controller::getInstance()->getApplicationInstance($appName, $itemName);
+            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
             $getMultipleMethod = 'getMultiple' . $itemName . 's';
             //Zend_Registry::get('logger')->debug('Tinebase_Relations: ' . print_r($relations->related_id, true));
             $records = $appController->$getMultipleMethod($relations->related_id);

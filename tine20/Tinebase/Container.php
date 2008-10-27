@@ -318,7 +318,7 @@ class Tinebase_Container
                 // no containers found. maybe something went wrong when creating the initial folder
                 // any account should have at least one personal folder
                 // let's check if the controller of the application has a function to create the needed folders
-                $application = Tinebase_Controller::getApplicationInstance($_application);
+                $application = Tinebase_Core::getApplicationInstance($_application);
                 
                 if($application instanceof Tinebase_Container_Interface) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
@@ -487,7 +487,7 @@ class Tinebase_Container
         if(empty($rows) and $accountId === $ownerId) {
             // no containers found. maybe something went wrong when creating the initial folder
             // let's check if the controller of the application has a function to create the needed folders
-            $application = Tinebase_Controller::getApplicationInstance($application);
+            $application = Tinebase_Core::getApplicationInstance($application);
             
             if($application instanceof Tinebase_Container_Interface) {
                 return $application->createPersonalFolder($accountId);

@@ -50,7 +50,7 @@ class Tinebase_AbstractControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_controller = Tinebase_Controller::getInstance()->getApplicationInstance($this->_appName);
+        $this->_controller = Tinebase_Core::getApplicationInstance($this->_appName);
     }
 
     /**

@@ -27,7 +27,7 @@ class Tinebase_Events
     {
         foreach(Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
             try {
-                $controller = Tinebase_Controller::getApplicationInstance($application);
+                $controller = Tinebase_Core::getApplicationInstance($application);
             } catch (Exception $e) {
                 // application has no controller or is not useable at all
                 continue;
