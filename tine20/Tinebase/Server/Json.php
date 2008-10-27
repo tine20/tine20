@@ -74,7 +74,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
                 
                 $applicationParts = explode('.', $_REQUEST['method']);
                 $applicationName = ucfirst($applicationParts[0]);

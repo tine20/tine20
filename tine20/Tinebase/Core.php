@@ -233,7 +233,6 @@ class Tinebase_Core
         define('TINE20_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
         
         $session = new Zend_Session_Namespace('tinebase');
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session data: " . print_r($session, true));
         
         if (!isset($session->jsonKey)) {
             $session->jsonKey = Tinebase_Record_Abstract::generateUID();
