@@ -9,14 +9,15 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  *
+ * @todo        add methods/attributes? application name for example?
  */
 
 /**
- * Backend exception
+ * Addressbook exception
  * 
  * @package     Addressbook
  * @subpackage  Exception
  */
-class Addressbook_Exception_Backend extends Addressbook_Exception
+class Addressbook_Exception extends Exception
 {
 }

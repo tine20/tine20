@@ -17,6 +17,6 @@
  * @package     Addressbook
  * @subpackage  Exception
  */
-class Addressbook_Exception_NotFound extends Exception
+class Addressbook_Exception_NotFound extends Addressbook_Exception
 {
 }

@@ -17,6 +17,6 @@
  * @package     Addressbook
  * @subpackage  Exception
  */
-class Addressbook_Exception_Import extends Exception
+class Addressbook_Exception_Import extends Addressbook_Exception
 {
 }

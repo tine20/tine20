@@ -17,6 +17,6 @@
  * @package     Addressbook
  * @subpackage  Exception
  */
-class Addressbook_Exception_AccessDenied extends Exception
+class Addressbook_Exception_AccessDenied extends Addressbook_Exception
 {
 }
