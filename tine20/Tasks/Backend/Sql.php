@@ -20,9 +20,9 @@
  * @package     Tasks
  * @subpackage  Backend
  * 
- * @todo    Use of special Exceptions
  * @todo    remove current account from sql backend
  * @todo    add function for complete removal of tasks?
+ * @todo    split backend (status/tasks)
  * @todo    use more functions from Tinebase_Application_Backend_Sql_Abstract
  */
 class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
@@ -73,7 +73,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
        
         try {
             $this->_currentAccount = Zend_Registry::get('currentAccount');
-        } catch ( Zend_Exception $e ) {
+        } catch (Zend_Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'no account available: ' . $e->getMessage());
         }
     }
@@ -88,7 +88,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      *
      * @param string $_id
      * @return Tasks_Model_Task task
-     * @throws Exception if task could not be found
+     * @throws Tasks_Exception_NotFound if task could not be found
      */
     public function get($_id)
     {
@@ -99,7 +99,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $TaskArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         if (empty($TaskArray)) {
-            throw new Exception("Task with uid: $_id not found!");
+            throw new Tasks_Exception_NotFound("Task with uid: $_id not found!");
         }
         
         $Task = new Tasks_Model_Task($TaskArray[0], true, true); 
@@ -133,8 +133,9 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     /**
      * Create a new Task
      *
-     * @param Tasks_Model_Task $_task
-     * @return Tasks_Model_Task
+     * @param   Tasks_Model_Task $_task
+     * @return  Tasks_Model_Task
+     * @throws  Tasks_Exception_Backend
      */
     public function create(Tinebase_Record_Interface $_task)
     {
@@ -155,9 +156,8 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             return $this->get($_task->getId());
             
         } catch (Exception $e) {
-        	echo $e;
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw($e);
+            throw new Tasks_Exception_Backend($e->getMessage);
         }
     }
     
@@ -165,8 +165,9 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     /**
      * Upate an existing Task
      *
-     * @param Tasks_Model_Task $_task
-     * @return Tasks_Model_Task
+     * @param   Tasks_Model_Task $_task
+     * @return  Tasks_Model_Task
+     * @throws  Tasks_Exception_Backend
      */ 
     public function update(Tinebase_Record_Interface $_task)
     {
@@ -208,16 +209,16 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw($e);
+            throw new Tasks_Exception_Backend($e->getMessage);            
         }
     }
     
     /**
      * Deletes one or more existing Task
      *
-     * @param string|array $_id
-     * @return void
-     * @throws Exception
+     * @param   string|array $_id
+     * @return  void
+     * @throws  Tasks_Exception_Backend
      */
     public function delete($_id)
     {
@@ -241,7 +242,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Tasks_Exception_Backend($e->getMessage);
         }
     }
     

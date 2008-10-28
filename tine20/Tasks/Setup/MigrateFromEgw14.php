@@ -128,7 +128,7 @@ class Tasks_Setup_MigrateFromTine14
                 $Task20 = new Tasks_Model_Task(NULL, true, true);
                 $Task20->setFromArray($Task);
                 
-            } catch (Exception $e) {
+            } catch (Tinebase_Record_Exception_Validation $e) {
                 $validation_errors = $Task20->getValidationErrors();
                 Zend_Registry::get('logger')->debug( 
                     'Could not migrate Infolog with info_id ' . $infolog->info_id . "\n" . 

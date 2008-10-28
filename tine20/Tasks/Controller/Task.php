@@ -102,14 +102,15 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
     /**
      * Return a single Task
      *
-     * @param string $_uid
-     * @return Tasks_Model_Task task
+     * @param   string $_uid
+     * @return  Tasks_Model_Task task
+     * @throws  Tasks_Exception_AccessDenied
      */
     public function getTask($_uid)
     {
         $Task = $this->_backend->get($_uid);
         if (! $this->_currentAccount->hasGrant($Task->container_id, Tinebase_Model_Container::GRANT_READ)) {
-            throw new Exception('Not allowed!');
+            throw new Tasks_Exception_AccessDenied('Not allowed!');
         }
         
         return $Task;
@@ -136,8 +137,9 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
     /**
      * Create a new Task
      *
-     * @param Tasks_Model_Task $_task
-     * @return Tasks_Model_Task
+     * @param   Tasks_Model_Task $_task
+     * @return  Tasks_Model_Task
+     * @throws  Tasks_Exception_AccessDenied
      */
     public function createTask(Tasks_Model_Task $_task)
     {
@@ -146,7 +148,7 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
     		$_task->container_id = Tasks_Controller::getInstance()->getDefaultContainer()->getId();
     	}
         if (! $this->_currentAccount->hasGrant($_task->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-            throw new Exception('Not allowed!');
+            throw new Tasks_Exception_AccessDenied('Not allowed!');
         }
         if(empty($_task->class_id)) {
             $_task->class_id = NULL;
@@ -160,8 +162,9 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
      * acl rights are managed, which is a bit complicated when a container change
      * happens. Also concurrency management is done in this contoller function
      *
-     * @param Tasks_Model_Task $_task
-     * @return Tasks_Model_Task
+     * @param   Tasks_Model_Task $_task
+     * @return  Tasks_Model_Task
+     * @throws  Tasks_Exception_AccessDenied
      */
     public function updateTask(Tasks_Model_Task $_task)
     {
@@ -172,15 +175,15 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
         if ($oldtask->container_id != $_task->container_id) {
             
             if (!$this->_currentAccount->hasGrant($_task->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                throw new Exception('Not allowed!');
+                throw new Tasks_Exception_AccessDenied('Not allowed!');
             }
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
             if (!$this->_currentAccount->hasGrant($oldtask->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                throw new Exception('Not allowed!');
+                throw new Tasks_Exception_AccessDenied('Not allowed!');
             }
             
         } elseif(!$this->_currentAccount->hasGrant($_task->container_id, Tinebase_Model_Container::GRANT_EDIT))  {
-            throw new Exception('Not allowed!');
+            throw new Tasks_Exception_AccessDenied('Not allowed!');
         }
         
         $Task = $this->_backend->update($_task);
@@ -190,19 +193,21 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
     /**
      * Deletes an re more existing Task
      *
-     * @param string|array $_identifier
-     * @return void
+     * @param   string|array $_identifier
+     * @return  void
+     * @throws  Tasks_Exception_NotFound
+     * @throws  Tasks_Exception_AccessDenied
      */
     public function deleteTask($_identifier)
     {
         $tasks = $this->_backend->getMultiple((array)$_identifier);
         if (count((array)$_identifier) != count($tasks)) {
-            throw new Exception('Error, only ' . count($tasks) . ' of ' . count((array)$_identifier) . ' tasks exist');
+            throw new Tasks_Exception_NotFound('Error, only ' . count($tasks) . ' of ' . count((array)$_identifier) . ' tasks exist');
         }
         
         foreach ($tasks as $task) {
             if (!$this->_currentAccount->hasGrant($task->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                throw new Exception('You are only allowed to delete task "' . $task->getId() . '"');
+                throw new Tasks_Exception_AccessDenied('You are only allowed to delete task "' . $task->getId() . '"');
             }
         }
         

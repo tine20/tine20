@@ -71,7 +71,7 @@ class Tasks_Model_Filter extends Tinebase_Record_Abstract
     /**
      * Resolves containers from selected nodes
      * 
-     * @throws Exception
+     * @throws Tasks_Exception_UnexpectedValue
      * @return void
      */
     protected function _resolveContainer()
@@ -80,10 +80,10 @@ class Tasks_Model_Filter extends Tinebase_Record_Abstract
             return;
         }
         if (!$this->containerType) {
-            throw new Exception('You need to set a containerType.');
+            throw new Tasks_Exception_UnexpectedValue('You need to set a containerType.');
         }
         if ($this->containerType == 'Personal' && !$this->owner) {
-            throw new Exception('You need to set an owner when containerType is "Personal".');
+            throw new Tasks_Exception_UnexpectedValue('You need to set an owner when containerType is "Personal".');
         }
         
         $cc = Tinebase_Container::getInstance();
@@ -104,7 +104,7 @@ class Tasks_Model_Filter extends Tinebase_Record_Abstract
                 $this->_properties['container'] = array($this->_properties['container']);
                 return;
             default:
-                throw new Exception('containerType not supported.');
+                throw new Tasks_Exception_UnexpectedValue('containerType not supported.');
         }
         $container = array();
         foreach ($containers as $singleContainer) {
