@@ -167,7 +167,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      *
      * @param   Tasks_Model_Task $_task
      * @return  Tasks_Model_Task
-     * @throws  Tasks_Exception_Backend
+     * @throws  Exception
      */ 
     public function update(Tinebase_Record_Interface $_task)
     {
@@ -209,7 +209,8 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Tasks_Exception_Backend($e->getMessage);            
+            //throw new Tasks_Exception_Backend($e->getMessage());
+            throw $e;            
         }
     }
     
