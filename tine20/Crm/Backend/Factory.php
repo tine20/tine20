@@ -111,7 +111,7 @@ class Crm_Backend_Factory
                 break;
                 
             default:
-                throw new Exception('unknown type');
+                throw new Crm_Exception_Backend('Unknown type (' . $_type . ').');
         }
 
         return $instance;

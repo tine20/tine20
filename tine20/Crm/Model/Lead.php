@@ -110,14 +110,15 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     /**
      * converts a int, string or Crm_Model_Lead to a lead id
      *
-     * @param int|string|Crm_Model_Lead $_accountId the lead id to convert
-     * @return int
+     * @param   int|string|Crm_Model_Lead $_accountId the lead id to convert
+     * @return  int
+     * @throws  UnexpectedValueException
      */
     static public function convertLeadIdToInt($_leadId)
     {
         if($_leadId instanceof Crm_Model_Lead) {
             if(empty($_leadId->id)) {
-                throw new Exception('no lead id set');
+                throw new UnexpectedValueException('No lead id set.');
             }
             $id = (int) $_leadId->id;
         } else {
@@ -125,7 +126,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         }
         
         if($id === 0) {
-            throw new Exception('lead id can not be 0');
+            throw new UnexpectedValueException('Lead id can not be 0.');
         }
         
         return $id;
@@ -134,8 +135,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     /**
      * fills record from json data
      *
-     * @param  string $_data json encoded data
-     * @return void
+     * @param   string $_data json encoded data
+     * @throws  UnexpectedValueException
      */
     public function setFromJson($_data)
     {
@@ -176,7 +177,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         $data['related_backend'] = Tasks_Backend_Factory::SQL;
                         break;                    
                     default:
-                        throw new Exception('relation type not supported');
+                        throw new UnexpectedValueException('Relation type not supported.');
                 }
 
                 // sanitize container id

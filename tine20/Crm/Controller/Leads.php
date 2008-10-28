@@ -54,8 +54,9 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
     /**
      * get lead identified by leadId
      *
-     * @param int $_leadId
-     * @return Crm_Model_Lead
+     * @param   int $_leadId
+     * @return  Crm_Model_Lead
+     * @throws  Crm_Exception_AccessDenied
      */
     public function getLead($_leadId)
     {
@@ -63,7 +64,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
         $lead = $backend->get($_leadId);
         
         if (!$this->_currentAccount->hasGrant($lead->container_id, Tinebase_Model_Container::GRANT_READ)) {
-            throw new Exception('read permission to lead denied');
+            throw new Crm_Exception_AccessDenied('Read permission to lead denied.');
         }
 
         $this->getLeadLinks($lead);
@@ -172,8 +173,10 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
     /**
      * add Lead
      *
-     * @param Crm_Model_Lead $_lead the lead to add
-     * @return Crm_Model_Lead the newly added lead
+     * @param   Crm_Model_Lead $_lead the lead to add
+     * @return  Crm_Model_Lead the newly added lead
+     * @throws  Crm_Exception_AccessDenied
+     * @throws  Tinebase_Record_Exception_Validation
      */ 
     public function createLead(Crm_Model_Lead $_lead)
     {
@@ -182,11 +185,11 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
                         
             if(!$_lead->isValid()) {
-                throw new Exception('lead object is not valid');
+                throw new Tinebase_Record_Exception_Validation('Lead object is not valid.');
             }
             
             if(!$this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                throw new Exception('add access to leads in container ' . $_lead->container_id . ' denied');
+                throw new Crm_Exception_AccessDenied('Add access to leads in container ' . $_lead->container_id . ' denied.');
             }
             
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_lead, 'create');
@@ -223,8 +226,10 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
    /**
      * update Lead
      *
-     * @param Crm_Model_Lead $_lead the lead to update
-     * @return Crm_Model_Lead the updated lead
+     * @param   Crm_Model_Lead $_lead the lead to update
+     * @return  Crm_Model_Lead the updated lead
+     * @throws  Crm_Exception_AccessDenied
+     * @throws  Tinebase_Record_Exception_Validation
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
@@ -233,7 +238,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if(!$_lead->isValid()) {
-                throw new Exception('lead object is not valid');
+                throw new Tinebase_Record_Exception_Validation('Lead object is not valid');
             }
             $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
             $currentLead = $backend->get($_lead->getId());
@@ -241,14 +246,14 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
             // ACL checks
             if ($currentLead->container_id != $_lead->container_id) {
                 if (! $this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                    throw new Exception('add access in container ' . $_lead->container_id . ' denied');
+                    throw new Crm_Exception_AccessDenied('Add access in container ' . $_lead->container_id . ' denied.');
                 }
                 // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
                 if (! $this->_currentAccount->hasGrant($currentLead->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                    throw new Exception('delete access in container ' . $currentLead->container_id . ' denied');
+                    throw new Crm_Exception_AccessDenied('Delete access in container ' . $currentLead->container_id . ' denied.');
                 }
             } elseif (! $this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
-                throw new Exception('edit access in container ' . $_lead->container_id . ' denied');
+                throw new Crm_Exception_AccessDenied('Edit access in container ' . $_lead->container_id . ' denied.');
             }
     
             // concurrency management & history log
@@ -289,8 +294,8 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
     /**
      * delete a lead
      *
-     * @param int|array|Tinebase_Record_RecordSet|Crm_Model_Lead $_leadId
-     * @return void
+     * @param   int|array|Tinebase_Record_RecordSet|Crm_Model_Lead $_leadId
+     * @throws  Crm_Exception_AccessDenied
      */
     public function deleteLead($_leadId)
     {
@@ -312,7 +317,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
                     // delete notes
                     Tinebase_Notes::getInstance()->deleteNotesOfRecord('Crm_Model_Lead', 'Sql', $lead->getId());                
                 } else {
-                    throw new Exception('delete access to lead denied');
+                    throw new Crm_Exception_AccessDenied('Delete access to lead denied.');
                 }
             }
             

@@ -254,7 +254,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
          
         try {
             $leadSources = new Tinebase_Record_RecordSet('Crm_Model_Leadsource', $leadSources);
-        } catch (Exception $e) {
+        } catch (Tinebase_Record_Exception_Validation $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
                             'errorMessage'      => 'filter NOT ok'
@@ -311,7 +311,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
          
         try {
             $leadTypes = new Tinebase_Record_RecordSet('Crm_Model_Leadtype', $leadTypes);
-        } catch (Exception $e) {
+        } catch (Tinebase_Record_Exception_Validation $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
                             'errorMessage'      => 'filter NOT ok'
@@ -367,7 +367,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
          
         try {
             $leadStates = new Tinebase_Record_RecordSet('Crm_Model_Leadstate', $leadStates);
-        } catch (Exception $e) {
+        } catch (Tinebase_Record_Exception_Validation $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
                             'errorMessage'      => 'filter NOT ok'
@@ -423,7 +423,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
          
         try {
             $products = new Tinebase_Record_RecordSet('Crm_Model_Product', $products);
-        } catch (Exception $e) {
+        } catch (Tinebase_Record_Exception_Validation $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
                             'errorMessage'      => 'filter NOT ok'

@@ -159,9 +159,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      * @param   Crm_Model_Lead $_lead lead data
      * @param   Zend_Locale $_locale the locale
      * @param   Zend_Translate $_translate
-     * 
      * @return  array  the linked objects
-     * 
      */
     protected function getLinkedObjects(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {
