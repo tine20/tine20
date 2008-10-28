@@ -89,7 +89,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         foreach ($result['results'] as $key => $value) {
             try {
                 $result['results'][$key]['accountObject'] = Admin_Controller_User::getInstance()->getAccount($value['account_id'])->toArray();
-            } catch (Exception $e) {
+            } catch (Tinebase_Exception_NotFound $e) {
                 // account not found
                 // do nothing so far
                 Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' account ' . $value['account_id'] .' not found');
@@ -249,7 +249,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         try {
             $account->setFromArray($decodedAccountData);
-        } catch (Exception $e) {
+        } catch (Tinebase_Record_Exception_Validation $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
                             'errors'            => $account->getValidationErrors(),
@@ -339,7 +339,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @param  array  &$_items array of arrays which contain a type and id property
      * @param  bool   $_hasAccountPrefix
      * @return array  items with appended name 
-     * 
+     * @throws UnexpectedValueException 
      */
     public static function resolveAccountName(array $_items, $_hasAccountPrefix=false)
     {
@@ -359,7 +359,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
                     $item[$prefix . 'name'] = 'Anyone';
                     break;
                 default:
-                    throw new Exception('unsupported accountType');
+                    throw new UnexpectedValueException('Unsupported accountType: ' . $item[$prefix . 'type']);
                     break;
             }
             $return[$num] = $item;

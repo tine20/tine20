@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        change exceptions to PermissionDeniedException?
  */
 
 /**
@@ -76,10 +75,6 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
         
         $group = Tinebase_Group::getInstance()->getGroupById($_groupId);
 
-        /*if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Model_Container::GRANT_READ)) {
-            throw new Exception('read access to contact denied');
-        }*/
-        
         return $group;            
     }  
 

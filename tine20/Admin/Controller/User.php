@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        change exceptions to PermissionDeniedException
  */
 
 /**
@@ -132,7 +131,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         $this->checkRight('MANAGE_ACCOUNTS');
         
         if ($_password != $_passwordRepeat) {
-            throw new Exception("passwords don't match");
+            throw new Admin_Exception("Passwords don't match.");
         }
         
         $result = Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
