@@ -139,15 +139,16 @@ class Tinebase_Notes
     /**
      * get a single note
      *
-     * @param string $_noteId
-     * @return Tinebase_Model_Note
+     * @param   string $_noteId
+     * @return  Tinebase_Model_Note
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getNote($_noteId)
     {
         $row = $this->_notesTable->fetchRow($this->_db->quoteInto('id = ?', $_noteId));
         
         if (!$row) {
-            throw new UnderflowException('note not found');
+            throw new Tinebase_Exception_NotFound('Note not found.');
         }
         
         return new Tinebase_Model_Note($row->toArray());
@@ -365,13 +366,14 @@ class Tinebase_Notes
      *
      * @param string $_name
      * @return Tinebase_Model_NoteType
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getNoteTypeByName($_name)
     {        
         $row = $this->_noteTypesTable->fetchRow($this->_db->quoteInto('name = ?', $_name));
         
         if (!$row) {
-            throw new UnderflowException('note type not found');
+            throw new Tinebase_Exception_NotFound('Note type not found.');
         }
         
         return new Tinebase_Model_NoteType($row->toArray());        

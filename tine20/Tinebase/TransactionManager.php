@@ -75,8 +75,9 @@ class Tinebase_TransactionManager
     /**
      * starts a transaction
      *
-     * @param  mixed $_transactionable
-     * @return string transactionId
+     * @param   mixed $_transactionable
+     * @return  string transactionId
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     public function startTransaction($_transactionable)
     {
@@ -88,7 +89,7 @@ class Tinebase_TransactionManager
                 $_transactionable->beginTransaction();
             } else {
                 $this->rollBack();
-                throw new Exception('Unsupported transactionalbe!');
+                throw new Tinebase_Exception_UnexpectedValue('Unsupported transactionable!');
             }
             array_push($this->_openTransactionables, $_transactionable);
         }

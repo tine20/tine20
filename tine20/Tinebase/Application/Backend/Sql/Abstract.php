@@ -58,8 +58,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
      * Gets one entry (by id)
      *
-     * @throws InvalidArgumentException|UnderflowException
      * @param integer|Tinebase_Record_Interface $_id
+     * @throws Tinebase_Exception_NotFound
      */
     public function get($_id) {
         
@@ -73,7 +73,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $queryResult = $stmt->fetch();
         
         if (!$queryResult) {
-            throw new UnderflowException('Entry with id ' . $id . ' not found');
+            throw new Tinebase_Exception_NotFound('Entry with id ' . $id . ' not found');
         }        
         $result = new $this->_modelName($queryResult);
         
@@ -101,12 +101,12 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      *
      * @param string $_orderBy Order result by
      * @param string $_orderDirection Order direction - allowed are ASC and DESC
-     * @throws InvalidArgumentException
+     * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Record_RecordSet
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') {
         if(in_array($_orderDirection, array('ASC', 'DESC')) === FALSE) {
-            throw new InvalidArgumentException('$_orderDirection is invalid');
+            throw new Tinebase_Exception_InvalidArgument('$_orderDirection is invalid');
         }
         
         $select = $this->_db->select();
@@ -189,14 +189,14 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      *
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
-     * @throws  InvalidArgumentException
-     * @throws  UnexpectedValueException
+     * @throws  Tinebase_Exception_InvalidArgument
+     * @throws  Tinebase_Exception_UnexpectedValue
      *  
      * @todo add support for unique ids (hashs)
      */
     public function create(Tinebase_Record_Interface $_record) {
     	if (!$_record instanceof $this->_modelName) {
-    		throw new InvalidArgumentException('$_record is of invalid model type');
+    		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
     	}
         
         $recordArray = $_record->toArray();
@@ -208,7 +208,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
 
         // if we insert a record without an id, we need to get back one
         if (empty($_record->id) && $id == 0) {
-            throw new UnexpectedValueException("Returned record id is 0.");
+            throw new Tinebase_Exception_UnexpectedValue("Returned record id is 0.");
         }
         
         // if the record had no id set, set the id now
@@ -223,16 +223,16 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * Updates existing entry
      *
      * @param Tinebase_Record_Interface $_record
-     * @throws Exception|InvalidArgumentException
-     * @return object Record
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record
      */
     public function update(Tinebase_Record_Interface $_record) {
         if (!$_record instanceof $this->_modelName) {
-            throw new InvalidArgumentException('$_record is of invalid model type');
+            throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
         }
         
     	if(!$_record->isValid()) {
-            throw new Exception('record object is not valid');
+            throw new Tinebase_Exception_Record_Validation('record object is not valid');
         }
         
         $id = $_record->getId();
@@ -255,7 +255,6 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
       * 
       * @param string|array $_id Ids
       * @return void
-      * @throws Exception
       * 
       * @todo Change to delete only ONE record. "Delete all" style should be removed from backend to controller.
       */
@@ -320,7 +319,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
         
         if($id === 0) {
-            throw new Exception($this->_modelName . '.id can not be 0!');
+            throw new Tinebase_Exception_InvalidArgument($this->_modelName . '.id can not be 0!');
         }
         
         return $id;

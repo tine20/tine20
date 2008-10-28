@@ -59,7 +59,7 @@ class Tinebase_Relation_Backend_Sql
     public function addRelation( $_relation )
     {
     	if ($_relation->getId()) {
-    		throw new Tinebase_Record_Exception_NotAllowed('Could not add existing relation');
+    		throw new Tinebase_Exception_Record_NotAllowed('Could not add existing relation');
     	}
     	
     	$id = $_relation->generateUID();
@@ -212,7 +212,7 @@ class Tinebase_Relation_Backend_Sql
     	if($relationRow) {
     		return new Tinebase_Model_Relation($relationRow->toArray(), true);
     	} else {
-    		throw new Tinebase_Record_Exception_NotDefined("No relation found.");
+    		throw new Tinebase_Exception_Record_NotDefined("No relation found.");
     	}
     	
     } // end of member function getRelationById

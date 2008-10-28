@@ -62,10 +62,11 @@ class Tinebase_Controller
     /**
      * create new user seesion
      *
-     * @param string $_username
-     * @param string $_password
-     * @param string $_ipAddress
-     * @return bool
+     * @param   string $_username
+     * @param   string $_password
+     * @param   string $_ipAddress
+     * @return  bool
+     * @throws  Tinebase_Exception_NotFound
      */
     public function login($_username, $_password, $_ipAddress)
     {
@@ -75,10 +76,9 @@ class Tinebase_Controller
             $accountsController = Tinebase_User::getInstance();
             try {
                 $account = $accountsController->getFullUserByLoginName($authResult->getIdentity());
-            } catch (Exception $e) {
+            } catch (Tinebase_Exception_NotFound $e) {
                 Zend_Session::destroy();
-                
-                throw new Exception('account ' . $authResult->getIdentity() . ' not found in account storage');
+                throw new Tinebase_Exception_NotFound('Account ' . $authResult->getIdentity() . ' not found in account storage.');
             }
             
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
@@ -125,6 +125,8 @@ class Tinebase_Controller
      * @param string $_oldPassword
      * @param string $_newPassword1
      * @param string $_newPassword2
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function changePassword($_oldPassword, $_newPassword1, $_newPassword2)
     {
@@ -134,14 +136,14 @@ class Tinebase_Controller
         if (!isset(Zend_Registry::get('configFile')->accounts) 
             || !isset(Zend_Registry::get('configFile')->accounts->changepw)
             || !Zend_Registry::get('configFile')->accounts->changepw) {
-            throw new Exception('Password change not allowed.');                
+            throw new Tinebase_Exception_AccessDenied('Password change not allowed.');                
         }
         
         $loginName = Tinebase_Core::getUser()->accountLoginName;
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " change password for $loginName");
         
         if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
-            throw new Exception('Old password is wrong.');
+            throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
         }
         
         Tinebase_Auth::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);
@@ -170,21 +172,23 @@ class Tinebase_Controller
     /**
      * gets image info and data
      * 
-     * @param  string $_application application which manages the image
-     * @param  string $_identifier identifier of image/record
-     * @param  string $_location optional additional identifier
-     * @return Tinebase_Model_Image
+     * @param   string $_application application which manages the image
+     * @param   string $_identifier identifier of image/record
+     * @param   string $_location optional additional identifier
+     * @return  Tinebase_Model_Image
+     * @throws  Tinebase_Exception_NotFound
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     public function getImage($_application, $_identifier, $_location='')
     {
         $appController = Tinebase_Core::getApplicationInstance($_application);
         if (!method_exists($appController, 'getImage')) {
-            throw new Exception("$_application has no getImage function");
+            throw new Tinebase_Exception_NotFound("$_application has no getImage function.");
         }
         $image = $appController->getImage($_identifier, $_location);
         
         if (!$image instanceof Tinebase_Model_Image) {
-            throw new Exception("$_application returned invalid image");
+            throw new Tinebase_Exception_UnexpectedValue("$_application returned invalid image.");
         }
         return $image;
     }

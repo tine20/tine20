@@ -3,21 +3,21 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Timemachine
+ * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  * 
- * @todo        move to Tinebase_Exception_*
+ * @todo        use this or Tinebase_Exception_NotFound?
  */
 
 /**
- * Concurrency Conflict exception
+ * not defined expection
  * 
  * @package     Tinebase
- * @subpackage  Timemachine
+ * @subpackage  Exception
  */
-class Tinebase_Timemachine_Exception_ConcurrencyConflict extends Exception {
-    protected $code = 409;
+class Tinebase_Exception_Record_NotDefined extends Tinebase_Exception // extends Tinebase_Exception_UnexpectedValue 
+{
 }

@@ -72,16 +72,18 @@ class Tinebase_Container
     /**
      * creates a new container
      *
-     * @param Tinebase_Model_Container $_container the new container
-     * @param Tinebase_Record_RecordSet $_grants the grants for the new folder 
-     * @param bool  $_ignoreAcl
-     * @param integer $_accountId
-     * @return Tinebase_Model_Container the newly created container
+     * @param   Tinebase_Model_Container $_container the new container
+     * @param   Tinebase_Record_RecordSet $_grants the grants for the new folder 
+     * @param   bool  $_ignoreAcl
+     * @param   integer $_accountId
+     * @return  Tinebase_Model_Container the newly created container
+     * @throws  Tinebase_Exception_Record_Validation
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE, $_accountId = NULL)
     {
         if(!$_container->isValid()) {
-            throw new Exception('invalid container object supplied');
+            throw new Tinebase_Exception_Record_Validation('Invalid container object supplied.');
         }
         
         if ( $_accountId !== NULL ) {
@@ -100,12 +102,12 @@ class Tinebase_Container
                 case Tinebase_Model_Container::TYPE_SHARED:
                     $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
                     if(!Zend_Registry::get('currentAccount')->hasRight((string) $application, Tinebase_Acl_Rights::ADMIN)) {
-                        throw new Exception('permission to add shared container denied');
+                        throw new Tinebase_Exception_AccessDenied('permission to add shared container denied');
                     }
                     break;
                     
                 default:
-                    throw new Exception('can add personal or shared folders only when ignoring Acl');
+                    throw new Tinebase_Exception_InvalidArgument('Can add personal or shared folders only when ignoring Acl.');
                     break;
             }
         }
@@ -130,7 +132,7 @@ class Tinebase_Container
         }
         
         if($containerId < 1) {
-            throw new UnexpectedValueException('$containerId can not be 0');
+            throw new Tinebase_Exception_UnexpectedValue('$containerId can not be 0');
         }
         
         $container = $this->getContainerById($containerId);
@@ -185,18 +187,19 @@ class Tinebase_Container
     /**
      * add grants to container
      *
-     * @todo check that grant is not already given to container/type/accout combi
-     * @param int $_containerId
-     * @param int $_accountId
-     * @param array $_grants list of grants to add
-     * @return boolean
+     * @todo    check that grant is not already given to container/type/accout combi
+     * @param   int $_containerId
+     * @param   int $_accountId
+     * @param   array $_grants list of grants to add
+     * @return  boolean
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function addGrants($_containerId, $_accountType, $_accountId, array $_grants, $_ignoreAcl = FALSE)
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         if($_ignoreAcl !== TRUE and !$this->hasGrant(Zend_Registry::get('currentAccount'), $_containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
-                throw new Exception('permission to manage grants on container denied');
+                throw new Tinebase_Exception_AccessDenied('Permission to manage grants on container denied.');
         }
         
         switch($_accountType) {
@@ -210,7 +213,7 @@ class Tinebase_Container
                 $accountId = 0;
                 break;
             default:
-                throw new InvalidArgumentException('invalid $_accountType');
+                throw new Tinebase_Exception_InvalidArgument('invalid $_accountType');
                 break;
         }
         
@@ -240,10 +243,11 @@ class Tinebase_Container
      *
      * used to get a list of all containers accesssible by the current user
      * 
-     * @param int $_accountId
-     * @param string $_application the application name
-     * @param int $_grant the required grant
-     * @return Tinebase_Record_RecordSet
+     * @param   int $_accountId
+     * @param   string $_application the application name
+     * @param   int $_grant the required grant
+     * @return  Tinebase_Record_RecordSet
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getContainerByACL($_accountId, $_application, $_grant)
     {
@@ -256,7 +260,7 @@ class Tinebase_Container
         if (!$result) {
             $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
             if(count($groupMemberships) === 0) {
-                throw new Exception('account must be in at least one group');
+                throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
             }
             
             $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
@@ -340,9 +344,10 @@ class Tinebase_Container
      * return a container by containerId
      * - cache the results because this function is called very often
      *
-     * @todo move acl check to another place
-     * @param int|Tinebase_Model_Container $_containerId the id of the container
-     * @return Tinebase_Model_Container
+     * @todo    move acl check to another place
+     * @param   int|Tinebase_Model_Container $_containerId the id of the container
+     * @return  Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getContainerById($_containerId)
     {
@@ -357,7 +362,7 @@ class Tinebase_Container
             $row = $this->containerTable->find($containerId)->current();
             
             if($row === NULL) {
-                throw new UnderflowException('container not found');
+                throw new Tinebase_Exception_NotFound('Container not found.');
             }
             
             $result = new Tinebase_Model_Container($row->toArray());
@@ -375,14 +380,14 @@ class Tinebase_Container
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
-     * @throws  UnexpectedValueException
+     * @throws  Tinebase_Exception_UnexpectedValue
      * 
      * @todo move acl check to another place
      */
     public function getContainerByName($_application, $_containerName, $_type)
     {
         if($_type !== Tinebase_Model_Container::TYPE_INTERNAL and $_type !== Tinebase_Model_Container::TYPE_PERSONAL and $_type !== Tinebase_Model_Container::TYPE_SHARED) {
-            throw new UnexpectedValueException ('Invalid type $_type supplied.');
+            throw new Tinebase_Exception_UnexpectedValue ('Invalid type $_type supplied.');
         }
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
@@ -410,9 +415,11 @@ class Tinebase_Container
     /**
      * returns the internal conatainer for a given application
      *
-     * @param int|Tinebase_Model_User $_accountId
-     * @param string $_application name of the application
-     * @return Tinebase_Model_Container the internal container
+     * @param   int|Tinebase_Model_User $_accountId
+     * @param   string $_application name of the application
+     * @return  Tinebase_Model_Container the internal container
+     * @throws  Tinebase_Exception_NotFound
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function getInternalContainer($_accountId, $_application)
     {
@@ -425,13 +432,13 @@ class Tinebase_Container
         $row = $this->containerTable->fetchRow($select);
         
         if($row === NULL) {
-            throw new UnderflowException('no internal container found');
+            throw new Tinebase_Exception_NotFound('No internal container found.');
         }
 
         $container = new Tinebase_Model_Container($row->toArray());
         
         if(!$this->hasGrant($_accountId, $container, Tinebase_Model_Container::GRANT_READ)) {
-            throw new Exception('permission to container denied');
+            throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
         }
         
         return $container;        
@@ -440,18 +447,19 @@ class Tinebase_Container
     /**
      * returns the personal container of a given account accessible by a another given account
      *
-     * @param int|Tinebase_Model_User $_accountId
-     * @param string $_application
-     * @param int|Tinebase_Model_User $_owner
-     * @param int $_grant
-     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     * @param   int|Tinebase_Model_User $_accountId
+     * @param   string $_application
+     * @param   int|Tinebase_Model_User $_owner
+     * @param   int $_grant
+     * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant)
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         if(count($groupMemberships) === 0) {
-            throw new Exception('account must be in at least one group');
+            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         $ownerId            = Tinebase_Model_User::convertUserIdToInt($_owner);
         
@@ -505,10 +513,11 @@ class Tinebase_Container
     /**
      * returns the shared container for a given application accessible by the current user
      *
-     * @param int|Tinebase_Model_User $_accountId
-     * @param string $_application the name of the application
-     * @param int $_grant
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     * @param   int|Tinebase_Model_User $_accountId
+     * @param   string $_application the name of the application
+     * @param   int $_grant
+     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getSharedContainer($_accountId, $_application, $_grant)
     {
@@ -516,7 +525,7 @@ class Tinebase_Container
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
-            throw new Exception('account must be in at least one group');
+            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
         $db = Zend_Registry::get('dbAdapter');
@@ -550,9 +559,10 @@ class Tinebase_Container
     /**
      * return users which made personal containers accessible to current account
      *
-     * @param int|Tinebase_Model_User $_accountId
-     * @param string $_application the name of the application
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_User
+     * @param   int|Tinebase_Model_User $_accountId
+     * @param   string $_application the name of the application
+     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_User
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getOtherUsers($_accountId, $_application, $_grant)
     {
@@ -560,7 +570,7 @@ class Tinebase_Container
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
-            throw new Exception('account must be in at least one group');
+            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
         $db = Zend_Registry::get('dbAdapter');
@@ -596,7 +606,7 @@ class Tinebase_Container
          try {
                 $account = Tinebase_User::getInstance()->getUserById($row['account_id']);
                 $result->addRecord($account);
-            } catch (Exception $e) {
+            } catch (Tinebase_Exception_NotFound $e) {
                 // user does not exist any longer (hotfix)
             }
         }
@@ -607,9 +617,10 @@ class Tinebase_Container
     /**
      * return set of all personal container of other users made accessible to the current account 
      *
-     * @param int|Tinebase_Model_User $_accountId
-     * @param string $_application the name of the application
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     * @param   int|Tinebase_Model_User $_accountId
+     * @param   string $_application the name of the application
+     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getOtherUsersContainer($_accountId, $_application, $_grant)
     {
@@ -617,7 +628,7 @@ class Tinebase_Container
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
-            throw new Exception('account must be in at least one group');
+            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
         $db = Zend_Registry::get('dbAdapter');
@@ -657,8 +668,9 @@ class Tinebase_Container
     /**
      * delete container if user has the required right
      *
-     * @param int|Tinebase_Model_Container $_containerId
-     * @return void
+     * @param   int|Tinebase_Model_Container $_containerId
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function deleteContainer($_containerId, $_ignoreAcl = FALSE)
     {
@@ -666,12 +678,12 @@ class Tinebase_Container
         
         if($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
-                throw new Exception('permission to delete container denied');
+                throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
             }
             
             $container = $this->getContainerById($containerId);
             if($container->type !== Tinebase_Model_Container::TYPE_PERSONAL and $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
-                throw new Exception('can delete personal or shared containers only');
+                throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
             }
         }        
         
@@ -691,16 +703,17 @@ class Tinebase_Container
     /**
      * set container name, if the user has the required right
      *
-     * @param int $_containerId
-     * @param string $_containerName the new name
-     * @return Tinebase_Model_Container
+     * @param   int $_containerId
+     * @param   string $_containerName the new name
+     * @return  Tinebase_Model_Container
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function setContainerName($_containerId, $_containerName)
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
 
         if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
-            throw new Exception('permission to rename container denied');
+            throw new Tinebase_Exception_AccessDenied('Permission to rename container denied.');
         }
         
         $where = array(
@@ -721,10 +734,12 @@ class Tinebase_Container
     /**
      * check if the given user user has a certain grant
      *
-     * @param int $_accountId
-     * @param int|Tinebase_Model_Container $_containerId
-     * @param int $_grant
-     * @return boolean
+     * @param   int $_accountId
+     * @param   int|Tinebase_Model_Container $_containerId
+     * @param   int $_grant
+     * @return  boolean
+     * @throws  Tinebase_Exception_InvalidArgument
+     * @throws  Tinebase_Exception_NotFound
      */
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
@@ -734,12 +749,12 @@ class Tinebase_Container
         
         $grant = (int)$_grant;
         if($grant != $_grant) {
-            throw new InvalidArgumentException('$_grant must be integer');
+            throw new Tinebase_Exception_InvalidArgument('$_grant must be integer');
         }
         
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         if(count($groupMemberships) === 0) {
-            throw new Exception('account must be in at least one group');
+            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
         $db = Zend_Registry::get('dbAdapter');
@@ -771,8 +786,9 @@ class Tinebase_Container
     /**
      * get all grants assigned to this container
      *
-     * @param int|Tinebase_Model_Container $_containerId
-     * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     * @param   int|Tinebase_Model_Container $_containerId
+     * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function getGrantsOfContainer($_containerId, $_ignoreAcl = FALSE) 
     {
@@ -780,7 +796,7 @@ class Tinebase_Container
         
         if($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
-                throw new Exception('permission to get grants of container denied');
+                throw new Tinebase_Exception_AccessDenied('Permission to get grants of container denied.');
             }            
         }
         
@@ -859,7 +875,7 @@ class Tinebase_Container
             #}
             
             if(count($groupMemberships) === 0) {
-                throw new Exception('account must be in at least one group');
+                throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
             }
             
             $db = Zend_Registry::get('dbAdapter');
@@ -892,9 +908,10 @@ class Tinebase_Container
     /**
      * get grants assigned to multiple records
      *
-     * @param Tinebase_Record_RecordSet $_records records to get the grants for
-     * @param int|Tinebase_Model_User $_accountId the account to get the grants for
-     * @param string $_containerProperty container property
+     * @param   Tinebase_Record_RecordSet $_records records to get the grants for
+     * @param   int|Tinebase_Model_User $_accountId the account to get the grants for
+     * @param   string $_containerProperty container property
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id')
     {
@@ -906,7 +923,7 @@ class Tinebase_Container
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
-            throw new Exception('account must be in at least one group');
+            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
 
         // get container ids
@@ -959,9 +976,11 @@ class Tinebase_Container
     /**
      * set all grant for given container
      *
-     * @param int|Tinebase_Model_Container $_containerId
-     * @param Tinebase_Record_RecordSet $_grants
-     * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     * @param   int|Tinebase_Model_Container $_containerId
+     * @param   Tinebase_Record_RecordSet $_grants
+     * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_Backend
      */
     public function setGrants($_containerId, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE) 
     {
@@ -969,7 +988,7 @@ class Tinebase_Container
         
         if($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
-                throw new Exception('permission to set grants of container denied');
+                throw new Tinebase_Exception_AccessDenied('Permission to set grants of container denied.');
             }            
         }
         
@@ -1045,9 +1064,8 @@ class Tinebase_Container
             $this->_removeFromCache($containerId);
             
         } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            
-            throw($e);
+            Tinebase_TransactionManager::getInstance()->rollBack();            
+            throw new Tinebase_Exception_Backend($e->getMessage());
         }
         
         return $this->getGrantsOfContainer($containerId, $_ignoreAcl);

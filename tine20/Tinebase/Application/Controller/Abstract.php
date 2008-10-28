@@ -65,11 +65,13 @@ abstract class Tinebase_Application_Controller_Abstract
      * - MANAGE_* right includes VIEW_* right 
      * 
      * @param   string  $_right to check
+     * @throws  Tinebase_Exception_UnexpectedValue
+     * @throws  Tinebase_Exception_AccessDenied
      */    
     public function checkRight($_right) {
         
         if (empty($this->_applicationName)) {
-            throw new Exception('No application name defined!');
+            throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
         }
         
         $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
@@ -97,7 +99,7 @@ abstract class Tinebase_Application_Controller_Abstract
         }
         
         if (!$hasRight) {
-            throw new Exception("You are not allowed to $_right in application $this->_applicationName !");
+            throw new Tinebase_Exception_AccessDenied("You are not allowed to $_right in application $this->_applicationName !");
         }        
     }
 }

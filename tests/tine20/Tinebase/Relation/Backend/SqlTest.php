@@ -185,7 +185,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         $rel = $this->relations[0];
         $this->object->breakRelation($rel->getId());
-        $this->setExpectedException('Tinebase_Record_Exception_NotDefined');
+        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
         $this->object->getRelation($rel->getId(), $rel->own_model, $rel->own_backend, $rel->own_id);
     }
     /**
@@ -195,7 +195,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         $rel = $this->relations[0];
         $this->object->breakRelation($rel->getId());
-        $this->setExpectedException('Tinebase_Record_Exception_NotDefined');
+        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
         $this->object->getRelation($rel->getId(), $rel->related_model, $rel->related_backend, $rel->related_id);
     }
     

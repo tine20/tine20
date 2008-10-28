@@ -68,10 +68,11 @@ class Tinebase_Json_Container
     /**
      * adds a container
      * 
-     * @param string $application
-     * @param string $containerName
-     * $param string $containerType
-     * @return array new container
+     * @param   string $application
+     * @param   string $containerName
+     * @param   string $containerType
+     * @return  array new container
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function addContainer($application, $containerName, $containerType)
     {
@@ -83,7 +84,7 @@ class Tinebase_Json_Container
         ));
         
         if($newContainer->type !== Tinebase_Model_Container::TYPE_PERSONAL and $newContainer->type !== Tinebase_Model_Container::TYPE_SHARED) {
-            throw new Exception('can add personal or shared containers only');
+            throw new Tinebase_Exception_InvalidArgument('Can add personal or shared containers only');
         }
                 
         $container = Tinebase_Container::getInstance()->addContainer($newContainer);
@@ -97,16 +98,16 @@ class Tinebase_Json_Container
     /**
      * deletes a container
      * 
-     * @param int $containerId
-     * @return string success
-     * @throws Exception
+     * @param   int $containerId
+     * @return  string success
+     * @throws  Tinebase_Exception
      */
     public function deleteContainer($containerId)
     {
         try {
             Tinebase_Container::getInstance()->deleteContainer($containerId);
-        } catch (Exception $e) {
-            throw new Exception('container not found or permission to delete container denied!');
+        } catch (Tinebase_Exception $e) {
+            throw new Tinebase_Exception('Container not found or permission to delete container denied!');
         }
         
         return 'success';
@@ -116,15 +117,16 @@ class Tinebase_Json_Container
      * renames a container
      * 
      * @param int $containerId
-     * $param string $newName
+     * @param string $newName
      * @return array updated container
+     * @throws  Tinebase_Exception
      */
     public function renameContainer($containerId, $newName)
     {
         try {
             $container = Tinebase_Container::getInstance()->setContainerName($containerId, $newName);
-        } catch (Exception $e) {
-            throw new Exception('container not found or permission to set containername denied!');
+        } catch (Tinebase_Exception $e) {
+            throw new Tinebase_Exception('Container not found or permission to set containername denied!');
         }
         
         return $container->toArray();
@@ -133,9 +135,9 @@ class Tinebase_Json_Container
     /**
      * returns container grants
      * 
-     * @param int $containerId
-     * @return array
-     * @throws Exception
+     * @param   int $containerId
+     * @return  array
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function getContainerGrants($containerId) 
     {
@@ -159,7 +161,7 @@ class Tinebase_Json_Container
                     $value['account_name'] = array('accountDisplayName' => 'Anyone');
                     break;
                 default:
-                    throw new Exception('unsupported accountType');
+                    throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');
                     break;    
             }            
         }

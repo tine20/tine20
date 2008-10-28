@@ -155,7 +155,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
 		$this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
 		
 		$this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
-		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Record_Exception_Validation', array('test_2' => 'string'), );
+		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Exception_Record_Validation', array('test_2' => 'string'), );
 		$this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
 		
     	$dummy = array(
@@ -179,7 +179,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
 		$this->expectFailure['TestRecord']['test__getException'][] = array( 'UnexpectedValueException', 'test_100',);
 		
   	  	
-  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Record_Exception_NotAllowed', 'test_2',);
+  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Exception_Record_NotAllowed', 'test_2',);
     }
 
     /**
@@ -257,7 +257,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         Addressbook_Backend_Sql::getInstance()->delete($this->objects['initialContact']);
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $contact = Addressbook_Backend_Sql::getInstance()->get($this->objects['initialContact']);
     }

@@ -65,17 +65,21 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
      * 
      * @param string _name of property
      * @param mixed _value of property
-     * @throws Tinebase_Record_Exception_NotDefined
-     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function __set($_name, $_value)
     {
         switch ($_name) {
             case 'application_id':
-                if ($_value instanceof Tinebase_Model_Application ) $_value = $_value->getId();
-                elseif ((int)$_value > 0) $_value = (int)$_value;
-                elseif (is_string($_value)) $_value = Tinebase_Application::getInstance()->getApplicationByName($_value)->getId();
-                else throw new Exception("$_value is not supported");
+                if ($_value instanceof Tinebase_Model_Application ) {
+                    $_value = $_value->getId();
+                } elseif ((int)$_value > 0) {
+                    $_value = (int)$_value;
+                } elseif (is_string($_value)) {
+                    $_value = Tinebase_Application::getInstance()->getApplicationByName($_value)->getId();
+                } else {
+                    throw new Tinebase_Exception_InvalidArgument("$_value is not supported");
+                }
                 break;
         }
         parent::__set($_name, $_value);

@@ -74,14 +74,15 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
     /**
      * converts a int, string or Tinebase_Model_Application to an accountid
      *
-     * @param int|string|Tinebase_Model_Application $_accountId the accountid to convert
-     * @return int
+     * @param   int|string|Tinebase_Model_Application $_accountId the accountid to convert
+     * @return  int
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     static public function convertApplicationIdToInt($_applicationId)
     {
         if($_applicationId instanceof Tinebase_Model_Application) {
             if(empty($_applicationId->id)) {
-                throw new Exception('no application id set');
+                throw new Tinebase_Exception_InvalidArgument('No application id set.');
             }
             $applicationId = (int) $_applicationId->id;
         } elseif (is_string($_applicationId) && ((int) $_applicationId) === 0) {
@@ -91,7 +92,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
         }
         
         if($applicationId === 0) {
-            throw new Exception('application id can not be 0');
+            throw new Tinebase_Exception_InvalidArgument('Application id can not be 0.');
         }
         
         return $applicationId;
@@ -110,12 +111,13 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
     /**
      * return the major version of the appliaction
      *
-     * @return int the major version
+     * @return  int the major version
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function getMajorVersion()
     {
         if(empty($this->version)) {
-            throw new Exception('no version set');
+            throw new Tinebase_Exception_InvalidArgument('No version set.');
         }
         
         list($majorVersion, $minorVersion) = explode('.', $this->version);

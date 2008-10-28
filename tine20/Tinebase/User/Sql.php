@@ -129,7 +129,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param string $_loginName the loginname of the user
      * @return Tinebase_Model_User the user object
      *
-     * @throws Tinebase_Record_Exception_NotDefined when row is empty
+     * @throws Tinebase_Exception_NotFound when row is empty
      */
     public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {
@@ -145,7 +145,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
            // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
            // because of the wrong type that is not catched by the block below)
         if ( $row === false ) {
-             throw new Exception('user not found');
+             throw new Tinebase_Exception_NotFound('User not found.');
         }        
 
         try {
@@ -165,8 +165,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * get user by userId
      *
-     * @param int $_accountId the user id
-     * @return Tinebase_Model_User the user object
+     * @param   int $_accountId the user id
+     * @return  Tinebase_Model_User the user object
+     * @throws  Tinebase_Exception_NotFound
+     * @throws  Tinebase_Exception_Record_Validation
      */
     public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
@@ -185,7 +187,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         try {
             $account = new $_accountClass();
             $account->setFromArray($row);
-        } catch (Exception $e) {
+        } catch (Tinebase_Exception_Record_Validation $e) {
             $validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
                 "Tinebase_Model_User::validation_errors: \n" .
@@ -262,7 +264,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 break;
             
             default:
-                throw new InvalidArgumentException('$_status can be only enabled, disabled or expired');
+                throw new Tinebase_Exception_InvalidArgument('$_status can be only enabled, disabled or expired');
                 break;
         }
         

@@ -491,7 +491,7 @@ class Tinebase_User_Registration
         $stmt = $select->query();
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
-            throw (new Tinebase_Record_Exception_NotDefined('registration entry not found error'));
+            throw (new Tinebase_Exception_Record_NotDefined('registration entry not found error'));
             //Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
         }
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 

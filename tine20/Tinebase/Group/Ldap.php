@@ -96,8 +96,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * get list of groupmembers 
      *
-     * @param int $_groupId
-     * @return array with account ids
+     * @param   int $_groupId
+     * @return  array with account ids
+     * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupMembers($_groupId)
     {
@@ -106,7 +107,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         try {
             $groupMembers = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('member', 'memberuid'));
         } catch (Exception $e) {
-            throw new Tinebase_Record_Exception_NotDefined('group not found');
+            throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
         
         $members = array();
@@ -136,8 +137,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * get group by name
      *
-     * @param string $_name
-     * @return Tinebase_Model_Group
+     * @param   string $_name
+     * @return  Tinebase_Model_Group
+     * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupByName($_name)
     {        
@@ -146,7 +148,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         try {
             $group = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'cn=' . $groupName, array('cn','description','gidnumber'));
         } catch (Exception $e) {
-            throw new Tinebase_Record_Exception_NotDefined('group not found');
+            throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
 
         $result = new Tinebase_Model_Group(array(
@@ -163,6 +165,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      *
      * @param string $_name
      * @return Tinebase_Model_Group
+     * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupById($_groupId)
     {   
@@ -171,7 +174,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         try {
             $group = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('cn','description','gidnumber'));
         } catch (Exception $e) {
-            throw new Tinebase_Record_Exception_NotDefined('group not found');
+            throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
 
         $result = new Tinebase_Model_Group(array(
@@ -230,7 +233,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function setGroupMembers($_groupId, $_groupMembers) 
     {
-        throw new Exception('not yet implemented');
+        throw new Tinebase_Exception_NotImplemented('not yet implemented');
     }
     
     /**
@@ -242,7 +245,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function addGroupMember($_groupId, $_accountId) 
     {
-        throw new Exception('not yet implemented');
+        throw new Tinebase_Exception_NotImplemented('not yet implemented');
     }
 
     /**
@@ -254,7 +257,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function removeGroupMember($_groupId, $_accountId) 
     {
-        throw new Exception('not yet implemented');
+        throw new Tinebase_Exception_NotImplemented('not yet implemented');
     }
     
     /**
@@ -265,7 +268,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function addGroup(Tinebase_Model_Group $_group) 
     {
-        throw new Exception('not yet implemented');
+        throw new Tinebase_Exception_NotImplemented('not yet implemented');
     }
     
     /**
@@ -276,7 +279,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function updateGroup(Tinebase_Model_Group $_group) 
     {
-        throw new Exception('not yet implemented');
+        throw new Tinebase_Exception_NotImplemented('not yet implemented');
     }
 
     /**
@@ -287,6 +290,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function deleteGroups($_groupId) 
     {
-        throw new Exception('not yet implemented');
+        throw new Tinebase_Exception_NotImplemented('not yet implemented');
     }
 }

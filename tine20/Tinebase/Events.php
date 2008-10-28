@@ -28,7 +28,7 @@ class Tinebase_Events
         foreach(Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
             try {
                 $controller = Tinebase_Core::getApplicationInstance($application);
-            } catch (Exception $e) {
+            } catch (Tinebase_Exception_NotFound $e) {
                 // application has no controller or is not useable at all
                 continue;
             }
@@ -37,7 +37,7 @@ class Tinebase_Events
                 try {
                     $controller->handleEvents($_eventObject);
                 } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . (string) $application . ' throwed an exception');
+                    Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . (string) $application . ' threw an exception.');
                 }
             }
         }

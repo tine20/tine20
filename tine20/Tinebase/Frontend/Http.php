@@ -346,6 +346,8 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	 * receives file uploads and stores it in the file_uploads db
 	 * 
 	 * @todo: move db storage into seperate tmp_file class
+	 * @throws Tinebase_Exception_UnexpectedValue
+	 * @throws Tinebase_Exception_NotFound
 	 */
 	public function uploadTempFile()
 	{
@@ -356,10 +358,10 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     	    
     	    $path = tempnam(session_save_path(), 'tine_tempfile_');
     	    if (!$path) {
-    	        throw new Exception('Can not upload file, tempnam could not return a valid filename!');
+    	        throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam could not return a valid filename!');
     	    }
     	    if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
-    	        throw new Exception('No valid upload file found!');
+    	        throw new Tinebase_Exception_NotFound('No valid upload file found!');
     	    }
     	    
     	    $id = Tinebase_Model_TempFile::generateUID();
@@ -381,7 +383,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     	       'status'   => 'success',
     	       'tempFile' => $tempFile->toArray(),
     	    )));
-	    } catch (Exception $exception) {
+	    } catch (Tinebase_Exception $exception) {
 	        Zend_Registry::get('logger')->WARN("File upload could not done, due to the following exception: \n" . $exception);
 	        
 	        if (! headers_sent()) {

@@ -177,7 +177,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
             $this->_objects['record']['id']
         );
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $note = $this->_instance->getNote($this->_objects['note']->getId());
     }

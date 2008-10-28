@@ -171,8 +171,9 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * Returns a single logbook entry identified by an logbook identifier
      * 
-     * @param string _id
-     * @return Tinebase_Model_ModificationLog
+     * @param   string _id
+     * @return  Tinebase_Model_ModificationLog
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getModification( $_id ) {
     	$db = $this->_table->getAdapter();
@@ -183,7 +184,7 @@ class Tinebase_Timemachine_ModificationLog
         $RawLogEntry = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         if (empty($RawLogEntry)) {
-            throw new Exception("Modification Log with id: $_id not found!");
+            throw new Tinebase_Exception_NotFound("Modification Log with id: $_id not found!");
         }
         return new Tinebase_Model_ModificationLog($RawLogEntry[0], true); 
         
@@ -192,8 +193,9 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * Saves a logbook record
      * 
-     * @param Tinebase_Model_ModificationLog _modification 
-     * @return string id;
+     * @param   Tinebase_Model_ModificationLog _modification 
+     * @return  string id;
+     * @throws  Tinebase_Exception_Record_Validation
      */
     public function setModification( Tinebase_Model_ModificationLog $_modification ) {
         if ($_modification->isValid()) {
@@ -204,7 +206,7 @@ class Tinebase_Timemachine_ModificationLog
             
             $this->_table->insert($modificationArray);
         } else {
-            throw new Exception(
+            throw new Tinebase_Exception_Record_Validation(
                 "_modification data is not valid! \n" . 
                 print_r($_modification->getValidationErrors(), true)
             );
@@ -315,10 +317,10 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * sets record modification data and protects it from spoofing
      * 
-     * @param  Tinebase_Record_Abstract $_newRecord record from user data
-     * @param  string                    $_action    one of {create|update|delete}
-     * @param  Tinebase_Record_Abstract $_curRecord record from storage
-     * @return void
+     * @param   Tinebase_Record_Abstract $_newRecord record from user data
+     * @param   string                    $_action    one of {create|update|delete}
+     * @param   Tinebase_Record_Abstract $_curRecord record from storage
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function setRecordMetaData($_newRecord, $_action, $_curRecord=NULL)
     {
@@ -350,7 +352,7 @@ class Tinebase_Timemachine_ModificationLog
                 $_newRecord->is_deleted   = true;
                 break;
             default:
-                throw new Exception('action must be one of {create|update|delete}');
+                throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete}.');
                 break;
         }
     } // end of static function setRecordMetaData

@@ -249,7 +249,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         try {
             $account->setFromArray($decodedAccountData);
-        } catch (Tinebase_Record_Exception_Validation $e) {
+        } catch (Tinebase_Exception_Record_Validation $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
                             'errors'            => $account->getValidationErrors(),

@@ -87,6 +87,7 @@ class Tinebase_Config
      * @param   string  $_name config name/key
      * @param   int|string     $_applicationId application id
      * @return  Tinebase_Model_Config  the config record
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getConfig($_name, $_applicationId = NULL)
     {
@@ -99,7 +100,7 @@ class Tinebase_Config
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
         
         if (!$row = $this->_configTable->fetchRow($select)) {
-            throw new Exception("application config setting with name $_name not found!");
+            throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found!");
         }
         
         $result = new Tinebase_Model_Config($row->toArray());
@@ -115,6 +116,7 @@ class Tinebase_Config
      * @param   int|string   $_applicationId application id (if NULL -> use Tinebase application)
      * @param   bool    $_checkDefault
      * @return  Tinebase_Model_Config  the config record
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getPreference($_userId, $_name, $_applicationId = NULL, $_checkDefault = TRUE)
     {
@@ -131,7 +133,7 @@ class Tinebase_Config
             if ($_checkDefault) {
                 $result = $this->getConfig($_name, $applicationId);
             } else {
-                throw new Exception("user preference with name $_name not found!");
+                throw new Tinebase_Exception_NotFound("User preference with name $_name not found!");
             }
         } else {
             $result = new Tinebase_Model_Config($row->toArray());    
@@ -145,6 +147,7 @@ class Tinebase_Config
      * 
      * @param   int|string     $_applicationId application id
      * @return  array with config name => value pairs
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getConfigForApplication($_applicationId)
     {
@@ -157,7 +160,7 @@ class Tinebase_Config
         //$result = new Tinebase_Record_RecordSet('Tinebase_Model_Config', $rows, true);
 
         if (empty($rows)) {
-            throw new Exception("application $_applicationName config settings not found!");
+            throw new Tinebase_Exception_NotFound("application $_applicationName config settings not found!");
         }
         
         $result = array();
@@ -184,7 +187,7 @@ class Tinebase_Config
             // update
             $this->_configTable->update($config->toArray(), $this->_db->quoteInto('id = ?', $config->getId()));             
             
-        } catch ( Exception $e ) {
+        } catch (Tinebase_Exception_NotFound $e) {
             $newId = $_config->generateUID();
             $_config->setId($newId);
             
@@ -214,7 +217,7 @@ class Tinebase_Config
             // update
             $this->_configUserTable->update($config->toArray(), $this->_db->quoteInto('id = ?', $config->getId()));             
             
-        } catch ( Exception $e ) {
+        } catch (Tinebase_Exception_NotFound $e) {
             $newId = $_config->generateUID();
             $_config->setId($newId);
             

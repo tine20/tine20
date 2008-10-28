@@ -176,7 +176,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
      * @param   Crm_Model_Lead $_lead the lead to add
      * @return  Crm_Model_Lead the newly added lead
      * @throws  Crm_Exception_AccessDenied
-     * @throws  Tinebase_Record_Exception_Validation
+     * @throws  Tinebase_Exception_Record_Validation
      */ 
     public function createLead(Crm_Model_Lead $_lead)
     {
@@ -185,7 +185,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
                         
             if(!$_lead->isValid()) {
-                throw new Tinebase_Record_Exception_Validation('Lead object is not valid.');
+                throw new Tinebase_Exception_Record_Validation('Lead object is not valid.');
             }
             
             if(!$this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_ADD)) {
@@ -229,7 +229,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
      * @param   Crm_Model_Lead $_lead the lead to update
      * @return  Crm_Model_Lead the updated lead
      * @throws  Crm_Exception_AccessDenied
-     * @throws  Tinebase_Record_Exception_Validation
+     * @throws  Tinebase_Exception_Record_Validation
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
@@ -238,7 +238,7 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if(!$_lead->isValid()) {
-                throw new Tinebase_Record_Exception_Validation('Lead object is not valid');
+                throw new Tinebase_Exception_Record_Validation('Lead object is not valid');
             }
             $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
             $currentLead = $backend->get($_lead->getId());

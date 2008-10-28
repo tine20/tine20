@@ -34,8 +34,9 @@ class Tinebase_Auth_Factory
     /**
      * factory function to return a selected authentication backend class
      *
-     * @param string $type
-     * @return Zend_Auth_Adapter_Interface
+     * @param   string $type
+     * @return  Zend_Auth_Adapter_Interface
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     static public function factory($_type)
     {
@@ -58,7 +59,7 @@ class Tinebase_Auth_Factory
                 break;
                 
             default:
-                throw new Exception('unknown authentication backend');
+                throw new Tinebase_Exception_InvalidArgument('Unknown authentication backend');
                 break;
         }
         

@@ -134,7 +134,7 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
     	$id = $this->_objects['initialProduct']->getId();
     	
         $this->_backend->delete($id);
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_backend->get($id);
     }
 }

@@ -98,7 +98,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $json->deleteContainer($container['id']);
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
         
@@ -124,7 +124,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         
         $json->deleteContainer($container['id']);
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);    
     }
@@ -150,7 +150,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $json->deleteContainer($container['id']);
 
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
 
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
     }
@@ -189,7 +189,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $json->deleteContainer($container['id']);
 
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
 
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
     }

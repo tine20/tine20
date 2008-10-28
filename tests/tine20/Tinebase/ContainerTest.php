@@ -157,7 +157,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
     }
@@ -186,7 +186,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 
         Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
     }
@@ -213,7 +213,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 
         Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
     }
@@ -256,7 +256,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 
         Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
     }

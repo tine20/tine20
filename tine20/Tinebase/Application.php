@@ -82,14 +82,14 @@ class Tinebase_Application
      *
      * @param int $_applicationId the id of the application
      * @todo code still needs some testing
-     * @throws Exception if $_applicationId is not integer and not greater 0
+     * @throws Tinebase_Exception_InvalidArgument if $_applicationId is not integer and not greater 0
      * @return Tinebase_Model_Application the information about the application
      */
     public function getApplicationById($_applicationId)
     {
         $applicationId = (int)$_applicationId;
         if($applicationId != $_applicationId) {
-            throw new InvalidArgumentException('$_applicationId must be integer');
+            throw new Tinebase_Exception_InvalidArgument('$_applicationId must be integer');
         }
         
         $row = $this->_applicationTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId));
@@ -104,7 +104,7 @@ class Tinebase_Application
      *
      * @param string $$_applicationName the name of the application
      * @return Tinebase_Model_Application the information about the application
-     * @throws InvalidArgumentException
+     * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * 
      * @todo code still needs some testing
@@ -112,7 +112,7 @@ class Tinebase_Application
     public function getApplicationByName($_applicationName)
     {
         if(empty($_applicationName)) {
-            throw new InvalidArgumentException('$_applicationName can not be empty.');
+            throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty.');
         }
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
         if(!$row = $this->_applicationTable->fetchRow($where)) {
@@ -157,7 +157,7 @@ class Tinebase_Application
     public function getApplicationsByState($_status)
     {
         if($_status !== Tinebase_Application::ENABLED && $_status !== Tinebase_Application::DISABLED) {
-            throw new InvalidArgumentException('$_status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
+            throw new Tinebase_Exception_InvalidArgument('$_status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
         $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', $_status);
         
@@ -189,13 +189,14 @@ class Tinebase_Application
     /**
      * set application state
      *
-     * @param array $_applicationIds application ids to set new state for
-     * @param string $_state the new state
+     * @param   array $_applicationIds application ids to set new state for
+     * @param   string $_state the new state
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function setApplicationState(array $_applicationIds, $_state)
     {
         if($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
-            throw new OutOfRangeException('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
+            throw new Tinebase_Exception_InvalidArgument('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_applicationIds)

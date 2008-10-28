@@ -74,7 +74,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
 		$this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
 		
 		$this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
-		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Record_Exception_Validation', array('test_2' => 'string'), );
+		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Exception_Record_Validation', array('test_2' => 'string'), );
 		$this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
 		
     	$dummy = array(
@@ -94,11 +94,11 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
   	  	$this->expectFailure['TestRecord']['test__isset'][] = array('string');
   	  	
   	  	
-  	  	$this->expectFailure['TestRecord']['test__setException'][] = array( 'UnexpectedValueException', 'test_100',);
-		$this->expectFailure['TestRecord']['test__getException'][] = array( 'UnexpectedValueException', 'test_100',);
+  	  	$this->expectFailure['TestRecord']['test__setException'][] = array( 'Tinebase_Exception_UnexpectedValue', 'test_100',);
+		$this->expectFailure['TestRecord']['test__getException'][] = array( 'Tinebase_Exception_UnexpectedValue', 'test_100',);
 		
   	  	
-  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Record_Exception_NotAllowed', 'test_2',);
+  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Exception_Record_NotAllowed', 'test_2',);
     }
 
     /**

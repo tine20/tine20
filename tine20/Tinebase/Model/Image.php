@@ -48,13 +48,14 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     /**
      * returns image from given path
      * 
-     * @param  string $_path
-     * @return Tinebase_Model_Image
+     * @param   string $_path
+     * @return  Tinebase_Model_Image
+     * @throws  Tinebase_Exception_NotFound
      */
     public static function getImageFromPath($_path)
     {
         if (!file_exists($_path)) {
-            throw new Exception('image file not found');
+            throw new Tinebase_Exception_NotFound('Image file not found.');
         }
         $imgBlob = file_get_contents($_path);
         return new Tinebase_Model_Image(Tinebase_ImageHelper::getImageInfoFromBlob($imgBlob) + array(
@@ -78,8 +79,9 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     /**
      * parses an imageURL
      * 
-     * @param  string imageURL
-     * @return array array of image params
+     * @param   string imageURL
+     * @return  array array of image params
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function parseImageURL($_imageURL)
     {
@@ -88,7 +90,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         if (!empty($params['application']) && !empty($params['id'])) {
             return $params;
         } else {
-            throw new Exception("$_imageURL is not a valid imageURL");
+            throw new Tinebase_Exception_InvalidArgument("$_imageURL is not a valid imageURL");
         }
     }
     

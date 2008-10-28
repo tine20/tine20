@@ -301,7 +301,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     {
         Addressbook_Controller_Contact::getInstance()->deleteContact($this->objects['initialContact']);
 
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
     }

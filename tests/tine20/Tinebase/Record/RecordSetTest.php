@@ -66,7 +66,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorWrongRecord ()
     {
-        $this->setExpectedException('Tinebase_Record_Exception_NotAllowed');
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
         try {
             $recordArray[] = new Tinebase_Record_DummyRecord(array(), true);
             $recordArray[] = new Tinebase_Model_Container(array(), true);
@@ -100,7 +100,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
      */
     public function testAddWrongRecordException ()
     {
-        $this->setExpectedException('Tinebase_Record_Exception_NotAllowed');
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
         try {
             $record = new Tinebase_Model_Container(array(), true);
             $this->object->addRecord($record);
@@ -220,13 +220,13 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     
     public function testNonExistantOffsetSet()
     {
-        $this->setExpectedException('Tinebase_Record_Exception_NotAllowed');
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
         $this->object[99] = new Tinebase_Record_DummyRecord(array('string' => 'error'), true);
     }
     
     public function testNonRecordOffsetSet()
     {
-        $this->setExpectedException('Tinebase_Record_Exception_NotAllowed');
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
         $this->object[] = array();
     }
     

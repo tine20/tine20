@@ -55,14 +55,15 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     /**
      * converts a int, string or Tinebase_Model_Group to a groupid
      *
-     * @param int|string|Tinebase_Model_Group $_groupId the groupid to convert
-     * @return int
+     * @param   int|string|Tinebase_Model_Group $_groupId the groupid to convert
+     * @return  int
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     static public function convertGroupIdToInt($_groupId)
     {
         if($_groupId instanceof Tinebase_Model_Group) {
             if(empty($_groupId->id)) {
-                throw new Exception('no group id set');
+                throw new Tinebase_Exception_InvalidArgument('No group id set.');
             }
             $groupId = (int) $_groupId->id;
         } else {
@@ -70,7 +71,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         }
         
         if($groupId === 0) {
-            throw new Exception('group id can not be 0');
+            throw new Tinebase_Exception_InvalidArgument('Group id can not be 0.');
         }
         
         return $groupId;

@@ -421,10 +421,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	/**
 	 * draws a text in the pdf and checks correct encoding
 	 *
-	 * @param string $_string the string to draw
-	 * @param int $_xPos
-	 * @param int $_yPos
-     * @param int $_page page number (optional)
+	 * @param  string $_string the string to draw
+	 * @param  int $_xPos
+	 * @param  int $_yPos
+     * @param  int $_page page number (optional)
+     * @throws Tinebase_Exception_UnexpectedValue
 	 */
 	protected function _writeText($_string, $_xPos, $_yPos, $_page = NULL) {
 	
@@ -437,7 +438,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	        @$this->pages[$page]->drawText($_string, $_xPos, $_yPos, $this->_encoding);
 
 	    } else {
-	        throw new Exception('Detected an illegal character in input string: ' . $_string);
+	        throw new Tinebase_Exception_UnexpectedValue('Detected an illegal character in input string: ' . $_string);
 	    }
 	}
 	

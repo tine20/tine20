@@ -106,6 +106,7 @@ class Tinebase_Tags
      * @param  string                                  $_right the required right current user must have on the tags
      * @param  bool                                    $_ignoreAcl
      * @return Tinebase_Record_RecordSet               Set of Tinebase_Model_Tag
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getTagsById($_id, $_right=Tinebase_Model_TagRight::VIEW_RIGHT, $_ignoreAcl=false)
     {
@@ -125,7 +126,7 @@ class Tinebase_Tags
             }
         }        
         if (is_string($_id) && empty($tags)) {
-            throw new Exception("Tag with id '$_id'' not found");
+            throw new Tinebase_Exception_NotFound("Tag with id '$_id'' not found.");
         }
         return $tags;
     }
@@ -133,8 +134,10 @@ class Tinebase_Tags
     /**
      * Creates a single tag
      * 
-     * @param  Tinebase_Model_Tag
-     * @return Tinebase_Model_Tag
+     * @param   Tinebase_Model_Tag
+     * @return  Tinebase_Model_Tag
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     public function createTag(Tinebase_Model_Tag $_tag)
     {
@@ -169,13 +172,13 @@ class Tinebase_Tags
                 // @todo move to controller later?
                 if ( !Tinebase_Acl_Roles::getInstance()
                         ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS) ) {
-                    throw new Exception('Your are not allowed to create this tag');
+                    throw new Tinebase_Exception_AccessDenied('Your are not allowed to create this tag');
                 }
                 $_tag->owner = 0;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
                 break;
             default:
-                throw new Exception('No such tag type');
+                throw new Tinebase_Exception_UnexpectedValue('No such tag type.');
                 break;
         }
         
@@ -188,8 +191,9 @@ class Tinebase_Tags
     /**
      * updates a single tag
      * 
-     * @param  Tinebase_Model_Tag
-     * @return Tinebase_Model_Tag
+     * @param   Tinebase_Model_Tag
+     * @return  Tinebase_Model_Tag
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function updateTag(Tinebase_Model_Tag $_tag)
     {
@@ -202,7 +206,7 @@ class Tinebase_Tags
                  
             $tagId = $_tag->getId();
             if (strlen($tagId) != 40) {
-                throw new Exception('Could not update non-existing tag');
+                throw new Tinebase_Exception_AccessDenied('Could not update non-existing tag.');
             }
             
             $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
@@ -218,7 +222,7 @@ class Tinebase_Tags
             $tags = $this->getTagsById($tagId);
             return $tags[0];
         } else {
-            throw new Exception('Your are not allowed to update this tag');
+            throw new Tinebase_Exception_AccessDenied('Your are not allowed to update this tag.');
         }
     }
     
@@ -226,7 +230,7 @@ class Tinebase_Tags
      * Deletes (set stated deleted) tags identified by their identifiers
      * 
      * @param  string|array id(s) to delete
-     * @return void
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function deleteTags($_ids)
     {
@@ -235,7 +239,7 @@ class Tinebase_Tags
             ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         $tags = $this->getTagsById($_ids);
         if (count($tags) != count((array)$_ids)) {
-            throw new Exception('You are not allowed to delete this tags');
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this tags');
         }
         
         foreach ($tags as $tag) {
@@ -243,7 +247,7 @@ class Tinebase_Tags
                  ($tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
                 continue;      
             } else {
-                throw new Exception('You are not allowed to delete this tags');
+                throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this tags');
             }
         }
         $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
@@ -350,6 +354,7 @@ class Tinebase_Tags
      * 
      * @param   array|Tinebase_Record_RecordSet set of string|array|Tinebase_Model_Tag with existing and non-existing tags
      * @return  Tinebase_Record_RecordSet       set of all tags
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     protected function CreateTagsFly($_mixedTags)
     {
@@ -362,7 +367,7 @@ class Tinebase_Tags
                 if (is_array($tag)) {
                     $tag = new Tinebase_Model_Tag($tag);
                 } elseif (!$tag instanceof Tinebase_Model_Tag) {
-                    throw new Exception('Tag could not be identified');
+                    throw new Tinebase_Exception_UnexpectedValue('Tag could not be identified.');
                 }
                 if (!$tag->getId()) {
                     $tag->type = Tinebase_Model_Tag::TYPE_PERSONAL;
@@ -429,14 +434,14 @@ class Tinebase_Tags
      * 
      * @param Tinebase_Record_RecordSet|Tinebase_Model_TagRight
      * @return void
-     * @throws Exception
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function setRights($_rights)
     {
         $rights = $_rights instanceof Tinebase_Model_TagRight ? array($_rights) : $_rights;
         foreach ($rights as $right) {
             if (! ($right instanceof Tinebase_Model_TagRight && $right->isValid())) {
-                throw new Exception ('The given right is not valid!');
+                throw new Tinebase_Exception_Record_Validation('The given right is not valid!');
             }
             $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', array(
                 $this->_db->quoteInto('tag_id = ?', $right->tag_id),
@@ -497,14 +502,14 @@ class Tinebase_Tags
     /**
      * sets all given contexts for a given tag
      * 
-     * @param  array  $_contexts
-     * @param  string $_tagId
-     * @return void
+     * @param   array  $_contexts
+     * @param   string $_tagId
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function setContexts(array $_contexts, $_tagId)
     {
         if (!$_tagId) {
-            throw new Exception('a $_tagId is mandentory');
+            throw new Tinebase_Exception_InvalidArgument('A $_tagId is mandentory.');
         }
         
         if (in_array('any', $_contexts, true) || in_array(0, $_contexts, true)) {

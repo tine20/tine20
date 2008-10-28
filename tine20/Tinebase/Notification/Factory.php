@@ -25,7 +25,8 @@ class Tinebase_Notification_Factory
     /**
      * return a instance of the current accounts backend
      *
-     * @return Tinebase_Notification_Interface
+     * @return  Tinebase_Notification_Interface
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function getBackend($_backendType) 
     {
@@ -35,7 +36,7 @@ class Tinebase_Notification_Factory
                 break;
                 
             default:
-                throw new Exception("accounts backend type $_backendType not implemented");
+                throw new Tinebase_Exception_InvalidArgument("Notification backend type $_backendType not implemented");
         }
         
         return $result;

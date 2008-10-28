@@ -81,7 +81,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function addRecord(Tinebase_Record_Interface $_record)
     {
         if (! $_record instanceof $this->_recordClass) {
-            throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+            throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         $this->_listOfRecords[] = $_record;
         end($this->_listOfRecords);
@@ -256,14 +256,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function offsetSet($_offset, $_value)
     {
         if (! $_value instanceof $this->_recordClass) {
-            throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+            throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         
         if (!is_int($_offset)) {
         	$this->addRecord($_value);
         } else {
             if (!array_key_exists($_offset, $this->_listOfRecords)) {
-                throw new Tinebase_Record_Exception_NotAllowed('adding a record is only allowd via the addRecord method');
+                throw new Tinebase_Exception_Record_NotAllowed('adding a record is only allowd via the addRecord method');
             }
         	$this->_listOfRecords[$_offset] = $_value;
         	$id = $_value->getId();

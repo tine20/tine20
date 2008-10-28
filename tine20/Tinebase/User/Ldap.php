@@ -148,7 +148,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param string $_loginName the loginname of the user
      * @return Tinebase_Model_User the user object
      *
-     * @throws Tinebase_Record_Exception_NotDefined when row is empty
+     * @throws Tinebase_Exception_Record_NotDefined when row is empty
      */
     public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {

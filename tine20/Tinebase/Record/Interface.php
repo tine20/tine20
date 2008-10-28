@@ -89,7 +89,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data the new data to set
-     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data);
     
@@ -98,7 +98,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * 
      * @see Zend_Date::setTimezone()
      * @param string $_timezone
-     * @throws Tinebase_Record_Exception_Validation
+     * @throws Tinebase_Exception_Record_Validation
      * @return void
      */
     public function setTimezone($_timezone);

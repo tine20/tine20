@@ -38,8 +38,7 @@ class Tinebase_Frontend_Cli
             $accountsController = Tinebase_User::getInstance();
             try {
                 $account = $accountsController->getFullUserByLoginName($authResult->getIdentity());
-            } catch (Exception $e) {
-                //throw new Exception('account ' . $authResult->getIdentity() . ' not found in account storage');
+            } catch (Tinebase_Exception_NotFound $e) {
                 echo 'account ' . $authResult->getIdentity() . ' not found in account storage'."\n";
                 exit();
             }

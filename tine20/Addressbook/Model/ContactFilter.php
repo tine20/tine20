@@ -92,7 +92,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data the new data to set
-     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {

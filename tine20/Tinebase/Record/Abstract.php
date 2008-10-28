@@ -128,12 +128,12 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param bool $bypassFilters sets {@see this->bypassFilters}
      * @param bool $convertDates sets {@see $this->convertDates}
      * @return void
-     * @throws Tinebase_Record_Exception_DefinitionFailure
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         if ($this->_identifier === NULL) {
-            throw new Tinebase_Record_Exception_DefinitionFailure('$_identifier is not declared');
+            throw new Tinebase_Exception_Record_DefinitionFailure('$_identifier is not declared');
         }
         
         $this->bypassFilters = (bool)$_bypassFilters;
@@ -192,7 +192,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data            the new data to set
-     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {
@@ -225,7 +225,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @todo move this to a generic __call interceptor setFrom<API>InUsersTimezone
      * 
      * @param  string $_data json encoded data
-     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromJsonInUsersTimezone($_data)
     {
@@ -251,7 +251,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param  string $_timezone
      * @param  bool   $_recursive
      * @return  void
-     * @throws Tinebase_Record_Exception_Validation
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function setTimezone($_timezone, $_recursive = TRUE)
     {
@@ -266,7 +266,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
             foreach ($toConvert as $field => &$value) {
                 if (! $value instanceof Zend_Date) {
-                    throw new Tinebase_Record_Exception_Validation($toConvert[$field] . 'must be an Zend_Date'); 
+                    throw new Tinebase_Exception_Record_Validation($toConvert[$field] . 'must be an Zend_Date'); 
                 }
                 $value->setTimezone($_timezone);
             } 
@@ -347,7 +347,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     );
                 }
                 if ($_throwExceptionOnInvalidData) {
-                    $e = new Tinebase_Record_Exception_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
+                    $e = new Tinebase_Exception_Record_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
                     Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
                         print_r($this->_validationErrors,true). $e);
                     throw $e;
@@ -374,13 +374,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * 
      * @param string _name of property
      * @param mixed _value of property
-     * @throws Tinebase_Record_Exception_NotDefined
+     * @throws Tinebase_Exception_UnexpectedValue
      * @return void
      */
     public function __set($_name, $_value)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
-            throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
         }
         
         $this->_properties[$_name] = $_value;
@@ -395,13 +395,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * unsets record related properties
      * 
      * @param string _name of property
-     * @throws Tinebase_Record_Exception_NotDefined
+     * @throws Tinebase_Exception_UnexpectedValue
      * @return void
      */
     public function __unset($_name)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
-            throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
         }
         
         unset($this->_properties[$_name]);
@@ -428,13 +428,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * gets record related properties
      * 
      * @param string _name of property
-     * @throws Tinebase_Record_Exception_NotDefined
+     * @throws Tinebase_Exception_UnexpectedValue
      * @return mixed value of property
      */
     public function __get($_name)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
-            throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
         }
         
         return array_key_exists($_name, $this->_properties) ? $this->_properties[$_name] : NULL;
@@ -539,11 +539,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     
     /**
      * required by ArrayAccess interface
-     * @throws Tinebase_Record_Exception_NotAllowed
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     public function offsetUnset($_offset)
     {
-        throw new Tinebase_Record_Exception_NotAllowed('Unsetting of properties is not allowed');
+        throw new Tinebase_Exception_Record_NotAllowed('Unsetting of properties is not allowed');
     }
     
     /**

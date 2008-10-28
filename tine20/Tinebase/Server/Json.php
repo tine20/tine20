@@ -21,7 +21,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
 {
     /**
      * handler for JSON api requests
-     * @todo session expre handling
+     * @todo session expire handling
      * 
      * @return JSON
      */
@@ -53,14 +53,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
                     Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
                     
-                    throw new Exception('Not Autorised', 401);
+                    throw new Tinebase_Exception_AccessDenied('Not Autorised', 401);
                 } else {
                     Tinebase_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
                         ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .
                         ' request: ' . print_r($_REQUEST, true)
                     );
                     
-                    throw new Exception('Not Authorised', 401);
+                    throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                     //throw new Exception('Possible CSRF attempt detected!');
                 }
             }
@@ -101,7 +101,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             
             // handle all kind of session exceptions as 'Not Authorised'
             if ($exception instanceof Zend_Session_Exception) {
-                $exception = new Exception('Not Authorised', 401);
+                $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
             }
             
             $server = new Zend_Json_Server();

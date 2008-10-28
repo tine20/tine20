@@ -115,10 +115,10 @@ class Tinebase_Core
     /**
      * returns an instance of the controller of an application
      *
-     * @param string $_applicationName
-     * @param string $_modelName
-     * @return object the controller of the application
-     * 
+     * @param   string $_applicationName
+     * @param   string $_modelName
+     * @return  object the controller of the application
+     * @throws  Tinebase_Exception_NotFound
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '')
     {
@@ -131,14 +131,14 @@ class Tinebase_Core
     
                 // check for generic app controller
                 if (!class_exists($controllerName)) {            
-                    throw new Exception('No Controller found (checked classes '. $controllerName . ' and ' . $controllerNameModel . ')!');
+                    throw new Tinebase_Exception_NotFound('No Controller found (checked classes '. $controllerName . ' and ' . $controllerNameModel . ')!');
                 } 
             } else {
                 $controllerName = $controllerNameModel;
             }
         } else {
             if (!class_exists($controllerName)) {            
-                throw new Exception('No Application Controller found (checked class ' . $controllerName . ')!');
+                throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
             }             
         }
         
@@ -295,6 +295,7 @@ class Tinebase_Core
     /**
      * initializes the database connection
      *
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     public static function setupDatabaseConnection()
     {
@@ -315,7 +316,7 @@ class Tinebase_Core
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
                     break;
                 default:
-                    throw new Exception('Invalid database backend type defined. Please set backend to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.ini.');
+                    throw new Tinebase_Exception_UnexpectedValue('Invalid database backend type defined. Please set backend to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.ini.');
                     break;
             }
             

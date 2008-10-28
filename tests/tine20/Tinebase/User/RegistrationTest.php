@@ -248,7 +248,7 @@ class Tinebase_User_RegistrationTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNonExistantRegistration()
     {
-    	$this->setExpectedException('Tinebase_Record_Exception_NotDefined');
+    	$this->setExpectedException('Tinebase_Exception_Record_NotDefined');
     	
     	$registration = Tinebase_User_Registration::getInstance()->getRegistrationByHash(md5($this->userData['accountLoginName']));
     }

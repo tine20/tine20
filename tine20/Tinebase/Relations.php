@@ -180,8 +180,8 @@ class Tinebase_Relations
     /**
      * creates application records which do not exist
      * 
-     * @param  Tinebase_Record_RecordSet of Tinebase_Model_Relation
-     * @return void
+     * @param   Tinebase_Record_RecordSet of Tinebase_Model_Relation
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     protected function _setAppRecord($_relation)
     {
@@ -205,7 +205,7 @@ class Tinebase_Relations
                 $_relation->related_backend = Tasks_Backend_Factory::SQL;
                 break;
             default:
-                throw new Exception('related model not supportet');
+                throw new Tinebase_Exception_UnexpectedValue('Related model not supported.');
                 break;
         }
     }
@@ -258,15 +258,16 @@ class Tinebase_Relations
     /**
      * adds a new relation
      * 
-     * @param  Tinebase_Model_Relation $_relation 
-     * @return Tinebase_Model_Relation the new relation
+     * @param   Tinebase_Model_Relation $_relation 
+     * @return  Tinebase_Model_Relation the new relation
+     * @throws  Tinebase_Exception_Record_Validation
      */
     protected function _addRelation($_relation)
     {
         $_relation->created_by = Zend_Registry::get('currentAccount')->getId();
         $_relation->creation_time = Zend_Date::now();
         if (!$_relation->isValid()) {
-            throw new Exception('relation is not valid' . print_r($_relation->getValidationErrors(),true));
+            throw new Tinebase_Exception_Record_Validation('Relation is not valid' . print_r($_relation->getValidationErrors(),true));
         }
         return $this->_backend->addRelation($_relation);
     }

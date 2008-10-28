@@ -62,8 +62,9 @@ class Tinebase_User
     /**
      * return an instance of the current rs backend
      *
-     * @param string $_backendType name of the rs backend
-     * @return Tinebase_User_Abstract
+     * @param   string $_backendType name of the rs backend
+     * @return  Tinebase_User_Abstract
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function factory($_backendType) 
     {
@@ -81,7 +82,7 @@ class Tinebase_User
                 break;
             
             default:
-                throw new Exception("rs backend type $_backendType not implemented");
+                throw new Tinebase_Exception_InvalidArgument("User backend type $_backendType not implemented.");
         }
         
         return $result;

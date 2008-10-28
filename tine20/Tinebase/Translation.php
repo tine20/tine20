@@ -89,8 +89,9 @@ class Tinebase_Translation
     /**
      * gets a supported locale
      *
-     * @param string $_localeString
-     * @return Zend_Locale
+     * @param   string $_localeString
+     * @return  Zend_Locale
+     * @throws  Tinebase_Exception_NotFound
      */
     public static function getLocale($_localeString = 'auto')
     {
@@ -119,7 +120,7 @@ class Tinebase_Translation
                             $locale = new Zend_Locale($language);
                         } else {
                             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " no suiteable lang fallback found within this locales: " . print_r($supportedLocales, true) );
-                            throw new Exception('no suiteable lang fallback found');
+                            throw new Tinebase_Exception_NotFound('No suiteable lang fallback found.');
                         }
                         break;
                 }

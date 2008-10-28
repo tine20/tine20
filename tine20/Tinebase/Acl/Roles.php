@@ -91,16 +91,17 @@ class Tinebase_Acl_Roles
     /**
      * check if one of the roles the user is in has a given right for a given application
      *
-     * @param string $_application the name of the application
-     * @param int $_accountId the numeric id of a user account
-     * @param int $_right the right to check for
-     * @return bool
+     * @param   string $_application the name of the application
+     * @param   int $_accountId the numeric id of a user account
+     * @param   int $_right the right to check for
+     * @return  bool
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function hasRight($_application, $_accountId, $_right) 
     {        
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         if ($application->status != 'enabled') {
-            throw new Exception('user has no rights. the application is disabled.');
+            throw new Tinebase_Exception_AccessDenied('User has no rights or the application is disabled.');
         }
         
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
@@ -130,8 +131,9 @@ class Tinebase_Acl_Roles
      * this function takes group memberships into account. Applications the accounts is able to use
      * must have the 'run' right set and the application must be enabled
      * 
-     * @param int $_accountId the numeric account id
-     * @return array list of enabled applications for this account
+     * @param   int $_accountId the numeric account id
+     * @return  array list of enabled applications for this account
+     * @throws  Tinebase_Exception_AccessDenied if user has no role memberships
      */
     public function getApplications($_accountId)
     {  
@@ -139,8 +141,8 @@ class Tinebase_Acl_Roles
 
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
         
-        if ( empty($roleMemberships) ) {
-            throw new Exception('user has no role memberships');
+        if (empty($roleMemberships)) {
+            throw new Tinebase_Exception_AccessDenied('User has no role memberships');
         }
 
         $rightIdentifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right');
@@ -168,9 +170,11 @@ class Tinebase_Acl_Roles
     /**
      * returns rights for given application and accountId
      *
-     * @param string $_application the name of the application
-     * @param int $_accountId the numeric account id
-     * @return array list of rights
+     * @param   string $_application the name of the application
+     * @param   int $_accountId the numeric account id
+     * @return  array list of rights
+     * @throws  Tinebase_Exception_AccessDenied
+     * 
      * @todo    add right group by to statement if possible or remove duplicates in result array
      */
     public function getApplicationRights($_application, $_accountId) 
@@ -178,7 +182,7 @@ class Tinebase_Acl_Roles
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         if ($application->status != 'enabled') {
-            throw new Exception('user has no rights. the application is disabled.');
+            throw new Tinebase_Exception_AccessDenied('User has no rights. the application is disabled.');
         }
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
@@ -233,22 +237,25 @@ class Tinebase_Acl_Roles
         return new Tinebase_Record_RecordSet('Tinebase_Model_Role', $this->_db->fetchAssoc($select));
     }
 
+    
     /**
      * Returns role identified by its id
      * 
-     * @param  int  $_roleId
-     * @return Tinebase_Model_Role  
+     * @param   int  $_roleId
+     * @return  Tinebase_Model_Role  
+     * @throws  Tinebase_Exception_InvalidArgument
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getRoleById($_roleId)
     {
         $roleId = (int)$_roleId;
         if ($roleId != $_roleId && $roleId <= 0) {
-            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $roleId);
         if (!$row = $this->_rolesTable->fetchRow($where)) {
-            throw new Exception("role with id $roleId not found");
+            throw new Tinebase_Exception_NotFound("role with id $roleId not found");
         }
         
         $result = new Tinebase_Model_Role($row->toArray());
@@ -256,19 +263,21 @@ class Tinebase_Acl_Roles
         return $result;
         
     }
+    
 
     /**
      * Returns role identified by its name
      * 
-     * @param  string $_roleName
-     * @return Tinebase_Model_Role  
+     * @param   string $_roleName
+     * @return  Tinebase_Model_Role  
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getRoleByName($_roleName)
     {            
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_roleName);
 
         if (!$row = $this->_rolesTable->fetchRow($where)) {
-            throw new Exception("role $_roleName not found");
+            throw new Tinebase_Exception_NotFound("Role $_roleName not found.");
         }
         
         $result = new Tinebase_Model_Role($row->toArray());
@@ -326,8 +335,9 @@ class Tinebase_Acl_Roles
     /**
      * Deletes roles identified by their identifiers
      * 
-     * @param  string|array id(s) to delete
-     * @return void
+     * @param   string|array id(s) to delete
+     * @return  void
+     * @throws  Tinebase_Exception_Backend
      */
     public function deleteRoles($_ids)
     {        
@@ -348,21 +358,22 @@ class Tinebase_Acl_Roles
         } catch (Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting role ' . $e->__toString());
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw($e);
+            throw new Tinebase_Exception_Backend($e->getMessage());
         }
     }
     
     /**
      * get list of role members 
      *
-     * @param int $_roleId
-     * @return array of array with account ids & types
+     * @param   int $_roleId
+     * @return  array of array with account ids & types
+     * @throws  Tinebase_Exception_AccessDenied
      */
     public function getRoleMembers($_roleId)
     {
         $roleId = (int)$_roleId;
         if ($roleId != $_roleId && $roleId <= 0) {
-            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+            throw new Tinebase_Exception_AccessDenied('$_roleId must be integer and greater than 0');
         }
         
         $members = array();
@@ -378,15 +389,16 @@ class Tinebase_Acl_Roles
     /**
      * get list of role members 
      *
-     * @param int $_accountId
-     * @return array of array with account ids & types
+     * @param   int $_accountId
+     * @return  array of array with account ids & types
+     * @throws  Tinebase_Exception_NotFound
      */
     public function getRoleMemberships($_accountId)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         if(empty($groupMemberships)) {
-            throw new UnderflowException('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');        
+            throw new Tinebase_Exception_NotFound('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');        
         }
         
         $memberships = array();
@@ -411,12 +423,13 @@ class Tinebase_Acl_Roles
      *
      * @param   int $_roleId
      * @param   array $_roleMembers with role members ("account_type" => account type, "account_id" => account id)
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function setRoleMembers($_roleId, array $_roleMembers)
     {
         $roleId = (int)$_roleId;
         if ($roleId != $_roleId && $roleId > 0) {
-            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
         // remove old members
@@ -426,7 +439,7 @@ class Tinebase_Acl_Roles
         $validTypes = array( 'user', 'group', 'anyone');
         foreach ( $_roleMembers as $member ) {
             if ( !in_array($member['account_type'], $validTypes) ) {
-                throw new InvalidArgumentException('account_type must be one of ' . 
+                throw new Tinebase_Exception_InvalidArgument('account_type must be one of ' . 
                     implode(', ', $validTypes) . ' (values given: ' . 
                     print_r($member, true) . ')');
             }
@@ -443,14 +456,15 @@ class Tinebase_Acl_Roles
     /**
      * get list of role rights 
      *
-     * @param int $_roleId
-     * @return array of array with application ids & rights
+     * @param   int $_roleId
+     * @return  array of array with application ids & rights
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function getRoleRights($_roleId)
     {
         $roleId = (int)$_roleId;
         if ($roleId != $_roleId && $roleId > 0) {
-            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
         $rights = array();
@@ -474,12 +488,13 @@ class Tinebase_Acl_Roles
      *
      * @param   int $_roleId
      * @param   array $_roleRights with role rights ("application_id" => app id, "right" => the right to set)
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function setRoleRights($_roleId, array $_roleRights)
     {
         $roleId = (int)$_roleId;
         if ( $roleId != $_roleId && $roleId > 0 ) {
-            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
         // remove old rights

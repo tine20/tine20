@@ -364,7 +364,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         try {
             $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication('Tinebase');
-        } catch ( Exception $e ) {
+        } catch (Tinebase_Exception_NotFound $e) {
             // set default values
             $tinebaseConfig = array(
                 'Default Admin Group'   => 'Administrators',
@@ -526,7 +526,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             $this->renameTable('timemachine_modificationlog', 'timemachine_modlog');
     
             $this->increaseTableVersion('timemachine_modlog');
-        } catch ( Exception $e ) {
+        } catch (Exception $e) {
             echo "renaming table 'timemachine_modificationlog' failed\n";
         }
         
@@ -910,7 +910,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             foreach ($relations as $relation) {
                 try {
                     $relationsBackend->addRelation($relation);
-                } catch (Exception $e) {
+                } catch (Tinebase_Exception_Record_NotAllowed $e) {
                     // cweiss 2008-08-25 this duplicates come from an earlier upgrading failure don't confuse user with verbosity ;-) 
                     // echo 'do not add duplicate relation ' . $relation->own_id . '-' . $relation->related_id . "...<br/>\n";
                 }

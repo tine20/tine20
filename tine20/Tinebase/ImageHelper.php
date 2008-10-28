@@ -32,7 +32,7 @@ class Tinebase_ImageHelper
      * @param  int    $_width desitination width
      * @param  int    $_height destination height
      * @param  int    $_ratiomode
-     * @return void
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function resize(Tinebase_Model_Image $_image, $_width, $_height, $_ratiomode)
     {
@@ -53,7 +53,7 @@ class Tinebase_ImageHelper
                 $imgDumpFunction = 'imagegif';
                 break;
             default:
-                throw new Exception("unsupported image type: " . $_image['mime']);
+                throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_image['mime']);
                 break;
         }
         $src_ratio = $_image->width/$_image->height;
@@ -88,7 +88,7 @@ class Tinebase_ImageHelper
                 imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $_image->width, $_image->height);
                 break;
             default: 
-                throw new Exception('ratiomode not supported');
+                throw new Tinebase_Exception_InvalidArgument('Ratiomode not supported.');
                 break;
         }
         $imgDumpFunction($dst_image, $tmpPath);
@@ -102,8 +102,9 @@ class Tinebase_ImageHelper
     /**
      * returns image metadata
      * 
-     * @param  blob  $_blob
-     * @return array
+     * @param   blob  $_blob
+     * @return  array
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     public static function getImageInfoFromBlob($_blob)
     {
@@ -113,7 +114,7 @@ class Tinebase_ImageHelper
         $imgInfo = getimagesize($tmpPath);
         unlink($tmpPath);
         if (!in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
-            throw new Exception('gvien blob does not contain valid image data');
+            throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
         }
         return array(
             'width'    => $imgInfo[0],
@@ -165,8 +166,9 @@ class Tinebase_ImageHelper
     /**
      * returns binary image data from a image identified by a imagelink
      * 
-     * @param  array  $imageParams
-     * @return string binary data
+     * @param   array  $imageParams
+     * @return  string binary data
+     * @throws  Tinebase_Exception_UnexpectedValue
      */
     public static function getImageData($imageParams)
     {
@@ -188,7 +190,7 @@ class Tinebase_ImageHelper
         //Zend_Registry::get('logger')->debug(print_r($tempFile,true));
         
         if (! Tinebase_ImageHelper::isImageFile($tempFile['path'])) {
-            throw new Exception('given file is not an image');
+            throw new Tinebase_Exception_UnexpectedValue('Given file is not an image.');
         }
         
         return file_get_contents($tempFile['path']);

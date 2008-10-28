@@ -68,8 +68,9 @@ class Tinebase_Group
     /**
      * return an instance of the current groups backend
      *
-     * @param string $_backendType name of the groups backend
-     * @return Tinebase_Group_Abstract
+     * @param   string $_backendType name of the groups backend
+     * @return  Tinebase_Group_Abstract
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function factory($_backendType) 
     {
@@ -87,7 +88,7 @@ class Tinebase_Group
                 break;
             
             default:
-                throw new Exception("groups backend type $_backendType not implemented");
+                throw new Tinebase_Exception_InvalidArgument("Groups backend type $_backendType not implemented.");
         }
         
         return $result;

@@ -26,13 +26,13 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
      * @param string $_dir OPTIONAL
      * @param int $_count OPTIONAL
      * @param int $_offset OPTIONAL
-     * @throws Exception if $_dir is not ASC or DESC
+     * @throws Tinebase_Exception_InvalidArgument if $_dir is not ASC or DESC
      * @return the row results per the Zend_Db_Adapter fetch mode.
      */
     public function fetchAll($_where = NULL, $_order = NULL, $_dir = 'ASC', $_count = NULL, $_offset = NULL)
     {
         if($_dir != 'ASC' && $_dir != 'DESC') {
-            throw new Exception('$_dir can be only ASC or DESC');
+            throw new Tinebase_Exception_InvalidArgument('$_dir can be only ASC or DESC');
         }
         
         $order = NULL;

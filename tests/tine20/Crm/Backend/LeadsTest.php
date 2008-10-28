@@ -199,7 +199,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
     	$id = $this->_objects['initialLead']->getId();
     	
         $this->_backend->delete($id);
-        $this->setExpectedException('UnderflowException');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_backend->get($id);
     }
 }		
