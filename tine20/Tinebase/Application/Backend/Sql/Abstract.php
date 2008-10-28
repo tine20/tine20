@@ -187,10 +187,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
      * Creates new entry
      *
-     * @param Tinebase_Record_Interface $_record
-     * @throws InvalidArgumentException|Exception
-     * @return object Record
-     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  InvalidArgumentException
+     * @throws  UnexpectedValueException
+     *  
      * @todo add support for unique ids (hashs)
      */
     public function create(Tinebase_Record_Interface $_record) {
@@ -207,7 +208,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
 
         // if we insert a record without an id, we need to get back one
         if (empty($_record->id) && $id == 0) {
-            throw new Exception("returned lead id is 0");
+            throw new UnexpectedValueException("Returned record id is 0.");
         }
         
         // if the record had no id set, set the id now

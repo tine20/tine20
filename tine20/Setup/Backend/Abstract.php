@@ -79,7 +79,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * execute insert statement for default values (records)
      * handles some special fields, which can't contain static values
      * 
-     * @param SimpleXMLElement $_record
+     * @param   SimpleXMLElement $_record
+     * @throws  Setup_Exception
      */
     public function execInsertStatement(SimpleXMLElement $_record)
     {
@@ -103,7 +104,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                         break;
                     
                     default:
-                        throw new Exception('unsupported special type ' . strtolower($field->value['special']));                    
+                        throw new Setup_Exception('Unsupported special type ' . strtolower($field->value['special']));                    
                     }
             } else {
                 $value = $field->value;

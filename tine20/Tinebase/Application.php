@@ -103,18 +103,20 @@ class Tinebase_Application
      * returns one application identified by application name
      *
      * @param string $$_applicationName the name of the application
-     * @todo code still needs some testing
-     * @throws InvalidArgumentException, Exception
      * @return Tinebase_Model_Application the information about the application
+     * @throws InvalidArgumentException
+     * @throws Tinebase_Exception_NotFound
+     * 
+     * @todo code still needs some testing
      */
     public function getApplicationByName($_applicationName)
     {
         if(empty($_applicationName)) {
-            throw new InvalidArgumentException('$_applicationName can not be empty');
+            throw new InvalidArgumentException('$_applicationName can not be empty.');
         }
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
         if(!$row = $this->_applicationTable->fetchRow($where)) {
-            throw new Exception("application $_applicationName not found");
+            throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
         }
         
         $result = new Tinebase_Model_Application($row->toArray());

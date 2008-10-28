@@ -85,6 +85,7 @@ class Setup_Controller
     /**
      * initializes the database connection
      *
+     * @throws  InvalidArgumentException
      */
     protected function setupDatabaseConnection()
     {
@@ -107,7 +108,7 @@ class Setup_Controller
                     $this->_backend = Setup_Backend_Factory::factory('Oracle');
                     break;
                 default:
-                    throw new Exception('Invalid database backend type defined. Please set backend to ' . Tinebase_Core::PDO_MYSQL . ' or ' . Tinebase_Core::PDO_OCI . ' in config.ini.');
+                    throw new InvalidArgumentException('Invalid database backend type defined. Please set backend to ' . Tinebase_Core::PDO_MYSQL . ' or ' . Tinebase_Core::PDO_OCI . ' in config.ini.');
                     break;
             }
                         
@@ -277,7 +278,8 @@ class Setup_Controller
     /**
      * check update
      *
-     * @param Tinebase_Model_Application $_application
+     * @param   Tinebase_Model_Application $_application
+     * @throws  Setup_Exception
      */
     public function checkUpdate(Tinebase_Model_Application $_application)  
     {
@@ -288,11 +290,11 @@ class Setup_Controller
                 if (true == $this->_backend->tableExists($table->name)) {
                     try {
                         $this->_backend->checkTable($table);
-                    } catch (Exception $e) {
+                    } catch (Setup_Exception $e) {
                         echo $e->getMessage();
                     }
                 } else {
-                    throw new Exception ('Table ' . $table->name . ' for application' . $_application->name . " does not exists. \n<strong>Update broken</strong>");
+                    throw new Setup_Exception('Table ' . $table->name . ' for application' . $_application->name . " does not exist. \n<strong>Update broken</strong>");
                 }
             }
         }
@@ -301,10 +303,11 @@ class Setup_Controller
     /**
      * update installed application
      *
-     * @param string    $_name application name
-     * @param string    $_updateTo version to update to (example: 1.17)
-     * @param boolean   $_dryRun checks only if update is needed if true
-     * @throws Setup_Exception_SetupRequired if update is needed and dry run is activated
+     * @param   string    $_name application name
+     * @param   string    $_updateTo version to update to (example: 1.17)
+     * @param   boolean   $_dryRun checks only if update is needed if true
+     * @throws  Setup_Exception_SetupRequired if update is needed and dry run is activated
+     * @throws  Setup_Exception if current app version is too high
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion, $_dryRun = FALSE)
     {
@@ -313,7 +316,7 @@ class Setup_Controller
         switch(version_compare($_application->version, $setupXml->version)) {
             case -1:
                 if ($_dryRun) {
-                    throw new Setup_Exception_SetupRequired();
+                    throw new Setup_Exception_SetupRequired('Newer application version is available.');
                 }
                 
                 echo "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")<br>";
@@ -352,7 +355,7 @@ class Setup_Controller
                 if (!$_dryRun) {
                     echo "<span style=color:#ff0000>Something went wrong!!! Current application version is higher than version from setup.xml.</span>";
                 }
-                throw new Exception('Current application version is higher than version from setup.xml');
+                throw new Setup_Exception('Current application version is higher than version from setup.xml');
                 break;
         }        
     }
@@ -370,7 +373,7 @@ class Setup_Controller
         $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         try {
             $result = $this->updateApplications($applications, TRUE);
-        } catch (Setup_Exception_SetupRequired $ure) {
+        } catch (Setup_Exception_SetupRequired $e) {
             $result = TRUE;
         }
         

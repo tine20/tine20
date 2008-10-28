@@ -142,7 +142,13 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         return $existingTable;
     }
-      
+
+    /**
+     * checkTable
+     * 
+     * @param   Setup_Backend_Schema_Table_Abstract $_table
+     * @throws  Setup_Exception
+     */
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table)
     {
         $string = $this->getCreateStatement($_table);
@@ -159,7 +165,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     echo "<font color=red>" . $compareString[$i] . "</font>";
                 }
             }
-            throw new Exception ("<h1>Failure</h1>");
+            throw new Setup_Exception("<h1>Failure</h1>");
         }
         
         /*
@@ -464,8 +470,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * create the right mysql-statement-snippet for keys
      *
-     * @param Setup_Backend_Schema_Index_Abstract $_key
-     * @return string
+     * @param   Setup_Backend_Schema_Index_Abstract $_key
+     * @return  string
+     * @throws  Setup_Exception_NotFound
      */
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {    
@@ -487,7 +494,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         if (empty($keys)) {
-            throw new Exception('no keys for index found');
+            throw new Setup_Exception_NotFound('no keys for index found');
         }
 
         $snippet .= ' (' . implode(",", $keys) . ')';

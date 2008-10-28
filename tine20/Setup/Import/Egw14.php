@@ -191,7 +191,7 @@ class Setup_Import_Egw14
                 // personal container for owner
                 try {
                     $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Model_Container::TYPE_PERSONAL);
-                } catch ( UnderflowException $e ) {
+                } catch (Tinebase_Exception_NotFound $e) {
                     $container = new Tinebase_Model_Container(array(
                         'name' => 'Personal Contacts',
                         'type' => Tinebase_Model_Container::TYPE_PERSONAL,      
@@ -210,7 +210,7 @@ class Setup_Import_Egw14
                 $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
                 try {
                     $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', $sharedContactsContainerName, Tinebase_Model_Container::TYPE_SHARED);
-                } catch ( UnderflowException $e ) {
+                } catch (Tinebase_Exception_NotFound $e) {
                     $container = new Tinebase_Model_Container(array(
                         'name' => $sharedContactsContainerName,
                         'type' => Tinebase_Model_Container::TYPE_SHARED,      

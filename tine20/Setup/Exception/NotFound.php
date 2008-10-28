@@ -12,11 +12,11 @@
  */
 
 /**
- * SetupRequired exception
+ * NotFound exception
  * 
  * @package     Setup
  * @subpackage  Exception
  */
-class Setup_Exception_SetupRequired extends Setup_Exception
+class Setup_Exception_NotFound extends Setup_Exception
 {
 }

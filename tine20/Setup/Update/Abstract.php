@@ -134,14 +134,15 @@ class Setup_Update_Abstract
     /**
 	 * compares version numbers of given table and given number
 	 *
-	 * @param string $_tableName
-	 * @param int version number
+	 * @param  string $_tableName
+	 * @param  int version number
+	 * @throws Setup_Exception
 	 */	 
     public function validateTableVersion($_tableName, $_version)
     {
         $currentVersion = $this->getTableVersion($_tableName);
         if($_version != $currentVersion) {
-            throw new Exception("wrong table version for $_tableName. expected $_version got $currentVersion");
+            throw new Setup_Exception("Wrong table version for $_tableName. expected $_version got $currentVersion");
         }
     }
     

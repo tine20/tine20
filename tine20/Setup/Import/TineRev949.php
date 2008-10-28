@@ -11,6 +11,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
  *
+ * @todo        update this to use new rights/roles classes and models
+ * 
  */
 
 /**
@@ -445,7 +447,7 @@ class Setup_Import_TineRev949
             );
               
         // get crm backend
-        $crmBackend = new Crm_Backend_Sql();
+        $crmBackend = new Crm_Backend_Leads();
         
         foreach ( $leadTableDataArray as $leadTableData ) {
             echo "Import from table ".$this->oldTablePrefix.''.$leadTableData['name']." ... ";
@@ -470,14 +472,11 @@ class Setup_Import_TineRev949
                 
                 if ( $leadTableData['name'] === 'metacrm_lead' ) {
                     
-                    // @todo add modified   created lastreader modifier lastread ??
-                    // -> use Zend_Date
-                    
                     $lead = new Crm_Model_Lead ( $values );
                     try {
                         $crmBackend->create($lead);
-                    } catch ( UnderflowException $e ) {
-                        //echo "error: " . $e->getMessage() . "<br/>";
+                    } catch (Exception $e) {
+                        echo "error: " . $e->getMessage() . "<br/>";
                     }
                 } else {
                     $dataArray[] = $values;
@@ -680,7 +679,7 @@ class Setup_Import_TineRev949
                     //$backend->createTask($task);
                     try {
                         $task = $backend->createTask($task);
-                    } catch ( Exception $e ) {
+                    } catch (Exception $e) {
                         echo "error: " . $e->getMessage() . "<br/>" . print_r ( $values, true ) . "<br/>";
                     }
                     // add old task id => task uid mapping

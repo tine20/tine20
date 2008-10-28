@@ -372,14 +372,17 @@ class Tinebase_Container
     /**
      * return a container by container name
      *
+     * @param   int|Tinebase_Model_Container $_containerId the id of the container
+     * @return  Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
+     * @throws  UnexpectedValueException
+     * 
      * @todo move acl check to another place
-     * @param int|Tinebase_Model_Container $_containerId the id of the container
-     * @return Tinebase_Model_Container
      */
     public function getContainerByName($_application, $_containerName, $_type)
     {
         if($_type !== Tinebase_Model_Container::TYPE_INTERNAL and $_type !== Tinebase_Model_Container::TYPE_PERSONAL and $_type !== Tinebase_Model_Container::TYPE_SHARED) {
-            throw new Exception('invalid $_type supplied');
+            throw new UnexpectedValueException ('Invalid type $_type supplied.');
         }
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
@@ -395,7 +398,7 @@ class Tinebase_Container
         $row = $this->containerTable->fetchRow($select);
         
         if($row === NULL) {
-            throw new UnderflowException('container not found');
+            throw new Tinebase_Exception_NotFound('Container not found.');
         }
         
         $result = new Tinebase_Model_Container($row->toArray());

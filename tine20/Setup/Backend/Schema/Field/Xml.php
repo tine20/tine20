@@ -30,7 +30,8 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
     /**
      * set Setup_Backend_Schema_Table from a given XML 
      *
-     * @param SimpleXMLElement $_declaration
+     * @param   SimpleXMLElement $_declaration
+     * @throws  Setup_Exception
      */
     protected function _setField($_declaration)
     {
@@ -120,7 +121,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 break;
 */      
             default :
-                throw new Exception('unsupported type ' . print_r($_declaration, true));
+                throw new Setup_Exception('Unsupported type ' . print_r($_declaration, true));
                 break;
         }
 
