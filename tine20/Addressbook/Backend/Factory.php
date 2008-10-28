@@ -30,11 +30,13 @@ class Addressbook_Backend_Factory
      *
      */
     const LDAP = 'ldap';
+
     /**
      * factory function to return a selected contacts backend class
      *
-     * @param string $type
-     * @return Tinebase_Application_Backend_Interface
+     * @param   string $type
+     * @return  Tinebase_Application_Backend_Interface
+     * @throws  Addressbook_Exception_Backend if unsupported type was given
      */
     static public function factory ($type)
     {
@@ -46,7 +48,7 @@ class Addressbook_Backend_Factory
                 $instance = Addressbook_Backend_Ldap::getInstance();
                 break;
             default:
-                throw new Exception('unknown type');
+                throw new Addressbook_Exception_Backend('Unknown backend type (' . $type . ').');
                 break;
         }
         return $instance;

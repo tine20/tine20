@@ -117,8 +117,9 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     /**
      * fetch one contact identified by contactid
      *
-     * @param int $_userId
-     * @return Addressbook_Model_Contact 
+     * @param   int $_userId
+     * @return  Addressbook_Model_Contact 
+     * @throws  Addressbook_Exception_NotFound if contact not found
      * 
      * @todo add test
      */
@@ -127,7 +128,7 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('account_id = ?', $_userId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('contact with user id ' . $_userId . ' not found');
+            throw new Addressbook_Exception_NotFound('Contact with user id ' . $_userId . ' not found.');
         }
         $result = new Addressbook_Model_Contact($row);
         return $result;

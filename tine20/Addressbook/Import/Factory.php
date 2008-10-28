@@ -29,8 +29,9 @@ class Addressbook_Import_Factory
     /**
      * factory function to return a selected import class
      *
-     * @param string $type
-     * @return Addressbook_Import_Interface
+     * @param   string $type
+     * @return  Addressbook_Import_Interface
+     * @throws  Addressbook_Exception_Import
      */
     static public function factory ($type)
     {
@@ -39,7 +40,7 @@ class Addressbook_Import_Factory
                 $instance = Addressbook_Import_Csv::getInstance();
                 break;
             default:
-                throw new Exception('unknown type');
+                throw new Addressbook_Exception_Import('Unknown import type.');
                 break;
         }
         return $instance;

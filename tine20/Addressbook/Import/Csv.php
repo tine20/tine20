@@ -104,15 +104,16 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
     /**
      * read data from import file
      *
-     * @param string $_filename filename to import
-     * @param array $_mapping mapping record fields to csv columns (destination => source) 
-     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * @param   string $_filename filename to import
+     * @param   array $_mapping mapping record fields to csv columns (destination => source) 
+     * @return  Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * @throws  Addressbook_Exception_NotFound if file not found
      */
     public function read($_filename, $_mapping)
     {
         // read file
         if (!file_exists($_filename)) {
-            throw new Exception("File $_filename not found.");
+            throw new Addressbook_Exception_NotFound("File $_filename not found.");
         }
         $fileArray = file($_filename);
         

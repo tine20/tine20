@@ -173,14 +173,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     /**
      * converts a int, string or Addressbook_Model_Contact to an contact id
      *
-     * @param int|string|Addressbook_Model_Contact $_contactId the contact id to convert
-     * @return int
+     * @param   int|string|Addressbook_Model_Contact $_contactId the contact id to convert
+     * @return  int
+     * @throws  UnexpectedValueException if no contact id set or 0 
      */
     static public function convertContactIdToInt($_contactId)
     {
         if ($_contactId instanceof Addressbook_Model_Contact) {
             if (empty($_contactId->id)) {
-                throw new Exception('no contact id set');
+                throw new UnexpectedValueException('No contact id set.');
             }
             $id = (string) $_contactId->id;
         } else {
@@ -188,7 +189,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('contact id can not be 0');
+            throw new UnexpectedValueException('Contact id can not be 0.');
         }
         
         return $id;
