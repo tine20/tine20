@@ -88,8 +88,9 @@ class Phone_Backend_Asterisk
     /**
      * get prefered extension of this account
      *
-     * @param int $_accountId the id of the account to get the prefered extension for
-     * @return array
+     * @param   int $_accountId the id of the account to get the prefered extension for
+     * @return  array
+     * @throws  Phone_Exception_NotFound
      */
     public function getPreferedExtension($_accountId)
     {
@@ -103,7 +104,7 @@ class Phone_Backend_Asterisk
         $row = $extensionsTable->fetchRow($select);
         
         if($row === NULL) {
-            throw new Exception('no prefered extension found');
+            throw new Phone_Exception_NotFound('No prefered extension found.');
         }
         
         return $row->toArray();

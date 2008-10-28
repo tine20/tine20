@@ -31,19 +31,22 @@ class Phone_Backend_Factory
     /**
      * factory function to return a selected phone backend class
      *
-     * @param string $type
-     * @return Phone_Backend_Interface
+     * @param   string $type
+     * @return  Phone_Backend_Interface
+     * @throws  Phone_Exception_Backend
+     * @throws  Phone_Exception_NotFound
      */
     static public function factory($type)
     {
         switch($type) {
             case self::ASTERISK:
-                if(isset(Zend_Registry::get('configFile')->asterisk)) {
-                    $url = Zend_Registry::get('configFile')->asterisk->managerurl;
-                    $username = Zend_Registry::get('configFile')->asterisk->managerusername;
-                    $password = Zend_Registry::get('configFile')->asterisk->managerpassword;
+                if(isset(Tinebase_Core::getConfig()->asterisk)) {
+                    $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
+                    $url = $asteriskConfig->managerurl;
+                    $username = $asteriskConfig->managerusername;
+                    $password = $asteriskConfig->managerpassword;
                 } else {
-                    throw new Exception('no settings found for asterisk backend in config.ini');
+                    throw new Phone_Exception_NotFound('No settings found for asterisk backend in config.ini.');
                 }
                 $instance = Phone_Backend_Asterisk::getInstance($url, $username, $password);
                 break;
@@ -53,7 +56,7 @@ class Phone_Backend_Factory
                 break;
                 
             default:
-                throw new Exception('unsupported phone backend');
+                throw new Phone_Exception_Backend('Unsupported phone backend (' . $type . ').');
         }
 
         return $instance;

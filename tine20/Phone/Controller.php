@@ -41,9 +41,10 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
     /**
      * dial number
      *
-     * @param int $_number
-     * @param string $_phoneId
-     * @param string $_lineId
+     * @param   int $_number
+     * @param   string $_phoneId
+     * @param   string $_lineId
+     * @throws  Phone_Exception_NotFound
      * 
      * @todo check dial right here?
      */
@@ -65,10 +66,10 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
                 if(count($phone->lines) > 0) {
                     $asteriskLineId = $phone->lines[0]->asteriskline_id;
                 } else {
-                    throw new Exception('No line found for this phone.');
+                    throw new Phone_Exception_NotFound('No line found for this phone.');
                 }
             } else {
-                throw new Exception('No phones found.');
+                throw new Phone_Exception_NotFound('No phones found.');
             }
             
         } else {
