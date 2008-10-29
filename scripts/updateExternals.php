@@ -9,22 +9,30 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:  $
  *
- * @todo get branch from "svn info"
- * 
  * usage: ./updateExternals.php svn_checkout_dir 
- * (perhaps you will need to change the BRANCH constant in this script)
  */
 
 if (php_sapi_name() != 'cli') {
     die('not allowed!');
 }
 
-define('BRANCH', 'releases/2008-summer-rc1');
+$dir = $argv[1];
+
+if (empty($dir)) {
+    die("You need to set a directory.\n");
+}
+
+//$branch = 'branches/2008-summer';
 define('TRUNK', 'trunk');
+define('BASEURL', 'https://svn.tine20.org/svn/');
+
+// get branch/release
+$branchUrl = system("svn info " . $dir . " | grep 'URL'");
+$branch = str_replace("URL: " . BASEURL, "", $branchUrl);
 
 // get externals
 $externals = array();
-exec("svn status " . $argv[1] . " | grep 'X'", $externals);
+exec("svn status " . $dir . " | grep 'X'", $externals);
 
 //print_r($externals);
 $propsets = array();
@@ -32,7 +40,7 @@ foreach ($externals as $ext) {
 
 	// cut last dir of ext path
     $ext = str_replace("X  ", "", $ext);
-    preg_match("/([\w\/]+)\/(\w+)$/", $ext, $match);
+    preg_match("/([\w\/\-]+)\/([\w\-]+)$/", $ext, $match);
     $extPath = $match[1];
     $dir = $match[2];
 
@@ -42,11 +50,11 @@ foreach ($externals as $ext) {
 		
     // cut last dir of svn url
     $url = str_replace("URL: ", "", $url);
-    preg_match("/([\w\/\.:]+)\/(\w+)$/", $url, $match);
+    preg_match("/([\w\/\.:\-]+)\/([\w\-]+)$/", $url, $match);
     $urlPath = $match[0];			
 		
 	// replace trunk with branch in svn path
-	$newPath = str_replace(TRUNK, BRANCH, $urlPath);
+	$newPath = str_replace(TRUNK, $branch, $urlPath);
 	
 	$propsets[$extPath] .= "$dir $newPath \r\n";
 }
@@ -60,6 +68,6 @@ foreach ($propsets as $path => $props) {
 }
 	
 // commit
-// system('svn ci -m "updated externals" '.$argv[1]);
+// system('svn ci -m "updated externals" '.$dir);
 
 ?>
