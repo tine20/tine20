@@ -36,7 +36,7 @@ class Addressbook_Backend_Factory
      *
      * @param   string $type
      * @return  Tinebase_Application_Backend_Interface
-     * @throws  Addressbook_Exception_Backend if unsupported type was given
+     * @throws  Addressbook_Exception_InvalidArgument if unsupported type was given
      */
     static public function factory ($type)
     {
@@ -48,7 +48,7 @@ class Addressbook_Backend_Factory
                 $instance = Addressbook_Backend_Ldap::getInstance();
                 break;
             default:
-                throw new Addressbook_Exception_Backend('Unknown backend type (' . $type . ').');
+                throw new Addressbook_Exception_InvalidArgument('Unknown backend type (' . $type . ').');
                 break;
         }
         return $instance;

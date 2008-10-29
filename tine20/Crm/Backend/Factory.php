@@ -57,6 +57,7 @@ class Crm_Backend_Factory
      *
      * @param string $type
      * @return object
+     * @throws  Crm_Exception_InvalidArgument
      */
     static public function factory($_type)
     {
@@ -111,7 +112,7 @@ class Crm_Backend_Factory
                 break;
                 
             default:
-                throw new Crm_Exception_Backend('Unknown type (' . $_type . ').');
+                throw new Crm_Exception_InvalidArgument('Unknown type (' . $_type . ').');
         }
 
         return $instance;

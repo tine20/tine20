@@ -33,7 +33,7 @@ class Phone_Backend_Factory
      *
      * @param   string $type
      * @return  Phone_Backend_Interface
-     * @throws  Phone_Exception_Backend
+     * @throws  Phone_Exception_InvalidArgument
      * @throws  Phone_Exception_NotFound
      */
     static public function factory($type)
@@ -56,7 +56,7 @@ class Phone_Backend_Factory
                 break;
                 
             default:
-                throw new Phone_Exception_Backend('Unsupported phone backend (' . $type . ').');
+                throw new Phone_Exception_InvalidArgument('Unsupported phone backend (' . $type . ').');
         }
 
         return $instance;
