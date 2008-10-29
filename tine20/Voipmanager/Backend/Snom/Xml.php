@@ -76,11 +76,12 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
      *
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return string the config as xml string
+     * @throws  Voipmanager_Exception_Validation
      */
     public function getConfig(Voipmanager_Model_SnomPhone $_phone)
     {
         if (!$_phone->isValid()) {
-            throw new Exception('invalid phone');
+            throw new Voipmanager_Exception_Validation('invalid phone');
         }
         
         $baseURL = $this->_getBaseUrl();
@@ -201,11 +202,12 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
      *
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return string the firmware as xml string
+     * @throws  Voipmanager_Exception_Validation
      */
     public function getFirmware(Voipmanager_Model_SnomPhone $_phone)
     {
         if (!$_phone->isValid()) {
-            throw new Exception('invalid phone');
+            throw new Voipmanager_Exception_Validation('invalid phone');
         }
         
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><firmware-settings></firmware-settings>');

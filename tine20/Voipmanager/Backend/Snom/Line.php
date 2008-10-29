@@ -70,6 +70,7 @@ class Voipmanager_Backend_Snom_Line
 	 * 
      * @param string|Voipmanager_Model_SnomLine $_id
 	 * @return Voipmanager_Model_SnomLine the line
+	 * @throws Voipmanager_Exception_NotFound
 	 */
     public function get($_id)
     {	
@@ -81,7 +82,7 @@ class Voipmanager_Backend_Snom_Line
 
         $row = $this->_db->fetchRow($select);
         if (!$row) {
-            throw new UnderflowException('line not found');
+            throw new Voipmanager_Exception_NotFound('line not found');
         }
 
         $result = new Voipmanager_Model_SnomLine($row);
@@ -94,11 +95,12 @@ class Voipmanager_Backend_Snom_Line
      *
      * @param Voipmanager_Model_SnomLine $_line the linedata
      * @return Voipmanager_Model_SnomLine
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_SnomLine $_line)
     {
         if (!$_line->isValid()) {
-            throw new Exception('invalid line');
+            throw new Voipmanager_Exception_Validation('invalid line');
         }
         
         if (empty($_line->id)) {
@@ -118,11 +120,12 @@ class Voipmanager_Backend_Snom_Line
      *
      * @param Voipmanager_Model_SnomLine $_line the linedata
      * @return Voipmanager_Model_SnomLine
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_SnomLine $_line)
     {
         if (!$_line->isValid()) {
-            throw new Exception('invalid line');
+            throw new Voipmanager_Exception_Validation('invalid line');
         }
         $lineId = $_line->getId();
         $lineData = $_line->toArray();
@@ -139,6 +142,7 @@ class Voipmanager_Backend_Snom_Line
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @return void
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -159,7 +163,7 @@ class Voipmanager_Backend_Snom_Line
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }    
 

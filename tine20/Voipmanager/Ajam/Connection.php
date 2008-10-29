@@ -44,8 +44,9 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
     /**
      * login into ajam service
      *
-     * @param string $_username
-     * @param string $_secret
+     * @param   string $_username
+     * @param   string $_secret
+     * @throws  Voipmanager_Exception
      */
     public function login($_username, $_secret)
     {
@@ -59,12 +60,12 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         $response = $this->request('GET');
         
         if($this->debugEnabled === true) {
-            var_dump( $this->getLastRequest());
-            var_dump( $response );
+            var_dump($this->getLastRequest());
+            var_dump($response);
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('HTTP request failed');
+            throw new Voipmanager_Exception('HTTP request failed');
         }
                 
         $xml = new SimpleXMLElement( $response->getBody() );
@@ -74,7 +75,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
         
         if($xml->response->generic['response'] != 'Success') {
-            throw new Exception($xml->response->generic['message']);
+            throw new Voipmanager_Exception($xml->response->generic['message']);
         }
     }
     
@@ -83,7 +84,8 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
      * 
      * http://www.voip-info.org/wiki/index.php?page=Asterisk+Manager+API+Action+Hangup
      *
-     * @param unknown_type $_channel
+     * @param   unknown_type $_channel
+     * @throws  Voipmanager_Exception
      */
     public function hangup($_channel)
     {
@@ -101,7 +103,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('HTTP request failed');
+            throw new Voipmanager_Exception('HTTP request failed');
         }
                 
         $xml = new SimpleXMLElement( $response->getBody() );
@@ -111,7 +113,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
         
         if($xml->response->generic['response'] != 'Success') {
-            throw new Exception($xml->response->generic['message']);
+            throw new Voipmanager_Exception($xml->response->generic['message']);
         }
     }
     
@@ -120,8 +122,9 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
      * 
      * http://www.voip-info.org/wiki/index.php?page=Asterisk+Manager+API+Action+Redirect
      *
-     * @param string $_channel which channel to redirect
-     * @param string $_exten where to redirect
+     * @param   string $_channel which channel to redirect
+     * @param   string $_exten where to redirect
+     * @throws  Voipmanager_Exception
      */
     public function redirect($_channel, $_exten)
     {
@@ -141,7 +144,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('HTTP request failed');
+            throw new Voipmanager_Exception('HTTP request failed');
         }
                 
         $xml = new SimpleXMLElement( $response->getBody() );
@@ -151,7 +154,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
         
         if($xml->response->generic['response'] != 'Success') {
-            throw new Exception($xml->response->generic['message']);
+            throw new Voipmanager_Exception($xml->response->generic['message']);
         }
     }
     
@@ -160,8 +163,9 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
      *
      * http://www.voip-info.org/wiki/index.php?page=Asterisk+Manager+API+Action+Status
      * 
-     * @param string $_channel NULL for all channels as string to filter channels by name
-     * @return array objects of matching channels
+     * @param   string $_channel NULL for all channels as string to filter channels by name
+     * @return  array objects of matching channels
+     * @throws  Voipmanager_Exception
      */
     public function status($_channel = NULL)
     {
@@ -178,7 +182,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('HTTP request failed');
+            throw new Voipmanager_Exception('HTTP request failed');
         }
                 
         $xml = new SimpleXMLElement( $response->getBody() );
@@ -188,7 +192,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
         
         if($xml->response->generic['response'] != 'Success') {
-            throw new Exception($xml->response[0]->generic['message']);
+            throw new Voipmanager_Exception($xml->response[0]->generic['message']);
         }
         
         $result = array();
@@ -210,6 +214,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
      * disconnect from ajam service
      * 
      * http://www.voip-info.org/wiki/index.php?page=Asterisk+Manager+API+Action+Logoff
+     * @throws  Voipmanager_Exception
      */
     public function logout()
     {
@@ -226,7 +231,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('HTTP request failed');
+            throw new Voipmanager_Exception('HTTP request failed');
         }
                 
         $xml = new SimpleXMLElement( $response->getBody() );
@@ -236,7 +241,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
         
         if($xml->response->generic['response'] != 'Goodbye') {
-            throw new Exception($xml->response->generic['message']);
+            throw new Voipmanager_Exception($xml->response->generic['message']);
         }
     }
 
@@ -246,6 +251,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
      * http://www.voip-info.org/wiki/index.php?page=Asterisk+Manager+API+Action+SIPpeers
      * 
      * @return array objects of listpeers
+     * @throws  Voipmanager_Exception
      */
     public function sippeers()
     {
@@ -262,7 +268,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('HTTP request failed');
+            throw new Voipmanager_Exception('HTTP request failed');
         }
                 
         $xml = new SimpleXMLElement( $response->getBody() );
@@ -272,7 +278,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
         
         if($xml->response->generic['response'] != 'Success') {
-            throw new Exception($xml->response->generic['message']);
+            throw new Voipmanager_Exception($xml->response->generic['message']);
         }
 
         $result = array();
@@ -299,6 +305,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
      * @param string $_exten
      * @param int $_priority
      * @param string $_callerId
+     * @throws  Voipmanager_Exception
      */
     public function originate($_channel, $_context, $_exten, $_priority, $_callerId="Ajam Service")
     {
@@ -321,7 +328,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('logout failed');
+            throw new Voipmanager_Exception('logout failed');
         }
 
         $dom = new DomDocument();
@@ -338,6 +345,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
      * http://www.voip-info.org/wiki/index.php?page=Asterisk+Manager+API+Action+Command
      * 
      * @param string $_command
+     * @throws  Voipmanager_Exception
      */
     public function command($_command)
     {
@@ -355,7 +363,7 @@ class Voipmanager_Ajam_Connection extends Voipmanager_Ajam_Http_Client
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('logout failed');
+            throw new Voipmanager_Exception('logout failed');
         }
 
         $dom = new DomDocument();

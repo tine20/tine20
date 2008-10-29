@@ -72,8 +72,9 @@ class Voipmanager_Backend_Asterisk_Meetme
 	/**
 	 * get meetme by id
 	 * 
-     * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
+     * @param   string $_id
+	 * @return  Tinebase_Recod_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
+	 * @throws  Voipmanager_Exception_NotFound
 	 */
     public function get($_id)
     {	
@@ -81,7 +82,7 @@ class Voipmanager_Backend_Asterisk_Meetme
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'asterisk_meetme')->where($this->_db->quoteInto('id = ?', $meetmeId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('meetme not found');
+            throw new Voipmanager_Exception_NotFound('meetme not found');
         }
 #       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskMeetme', $row);
         $result = new Voipmanager_Model_AsteriskMeetme($row);
@@ -93,11 +94,12 @@ class Voipmanager_Backend_Asterisk_Meetme
      *
      * @param Voipmanager_Model_AsteriskMeetme $_meetme the meetme data
      * @return Voipmanager_Model_AsteriskMeetme
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_AsteriskMeetme $_meetme)
     {
         if (! $_meetme->isValid()) {
-            throw new Exception('invalid meetme');
+            throw new Voipmanager_Exception_Validation('invalid meetme');
         }
 
         if ( empty($_meetme->id) ) {
@@ -116,11 +118,12 @@ class Voipmanager_Backend_Asterisk_Meetme
      *
      * @param Voipmanager_Model_AsteriskMeetme $_meetme the meetme data
      * @return Voipmanager_Model_AsteriskMeetme
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_AsteriskMeetme $_meetme)
     {
         if (! $_meetme->isValid()) {
-            throw new Exception('invalid meetme');
+            throw new Voipmanager_Exception_Validation('invalid meetme');
         }
         $meetmeId = $_meetme->getId();
         $meetmeData = $_meetme->toArray();
@@ -138,6 +141,7 @@ class Voipmanager_Backend_Asterisk_Meetme
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @return void
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -158,7 +162,7 @@ class Voipmanager_Backend_Asterisk_Meetme
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }  
 }

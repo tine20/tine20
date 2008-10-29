@@ -184,11 +184,12 @@ class Voipmanager_Backend_Snom_Phone
 	 * 
      * @param string| $_accountId
 	 * @return Voipmanager_Model_SnomPhone the phone
+	 * @throws Voipmanager_Exception_InvalidArgument
 	 */    
     public function getValidPhoneIds($_accountId)
     {
         if(empty($_accountId)) {
-            throw new UnderflowException('no accountId set');
+            throw new Voipmanager_Exception_InvalidArgument('no accountId set');
         }    
         
         $select = $this->_db->select()    
@@ -206,6 +207,7 @@ class Voipmanager_Backend_Snom_Phone
 	 * 
      * @param string|Voipmanager_Model_SnomPhone $_id
 	 * @return Voipmanager_Model_SnomPhone the phone
+	 * @throws Voipmanager_Exception_InvalidArgument
 	 */
     public function get($_id)
     {	
@@ -217,7 +219,7 @@ class Voipmanager_Backend_Snom_Phone
 
         $row = $this->_db->fetchRow($select);
         if (!$row) {
-            throw new UnderflowException('phone not found');
+            throw new Voipmanager_Exception_NotFound('phone not found');
         }
 
         $result = new Voipmanager_Model_SnomPhone($row);
@@ -232,13 +234,14 @@ class Voipmanager_Backend_Snom_Phone
      * @param string|Voipmanager_Model_SnomPhone $_id
      * @param string $_accountId
 	 * @return Voipmanager_Model_SnomPhone the phone
+	 * @throws Voipmanager_Exception_AccessDenied
 	 */
     public function getMyPhone($_id, $_accountId)
     {	
 
         $_validPhoneIds = $this->getValidPhoneIds($_accountId);   
         if(empty($_validPhoneIds)) {
-            throw new UnderflowException('not enough rights to display/edit phone');
+            throw new Voipmanager_Exception_AccessDenied('not enough rights to display/edit phone');
         }         
 
     
@@ -251,7 +254,7 @@ class Voipmanager_Backend_Snom_Phone
             
         $row = $this->_db->fetchRow($select);
         if (!$row) {
-            throw new UnderflowException('phone not found / not enough rights');
+            throw new Voipmanager_Exception_AccessDenied('phone not found / not enough rights');
         }
 
         $result = new Voipmanager_Model_SnomPhone($row);
@@ -265,6 +268,7 @@ class Voipmanager_Backend_Snom_Phone
      * 
      * @param string $_macAddress the macaddress of the phone
      * @return Voipmanager_Model_SnomPhone the phone
+     * @throws Voipmanager_Exception_NotFound
      */
     public function getByMacAddress($_macAddress)
     {   
@@ -274,7 +278,7 @@ class Voipmanager_Backend_Snom_Phone
 
         $row = $this->_db->fetchRow($select);
         if (!$row) {
-            throw new UnderflowException('phone not found');
+            throw new Voipmanager_Exception_NotFound('phone not found');
         }
 
         $result = new Voipmanager_Model_SnomPhone($row);
@@ -287,11 +291,12 @@ class Voipmanager_Backend_Snom_Phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone the phonedata
      * @return Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_SnomPhone $_phone)
     {
         if (!$_phone->isValid()) {
-            throw new Exception('invalid phone');
+            throw new Voipmanager_Exception_Validation('invalid phone');
         }
         
         if (empty($_phone->id)) {
@@ -312,11 +317,12 @@ class Voipmanager_Backend_Snom_Phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone the phonedata
      * @return Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_SnomPhone $_phone)
     {
         if (! $_phone->isValid()) {
-            throw new Exception('invalid phone');
+            throw new Voipmanager_Exception_Validation('invalid phone');
         }
         
         $phoneId = $_phone->getId();
@@ -336,11 +342,12 @@ class Voipmanager_Backend_Snom_Phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone the phonedata
      * @return Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_Validation
      */
     public function updateRedirect(Voipmanager_Model_SnomPhone $_phone)
     {
         if (! $_phone->isValid()) {
-            throw new Exception('invalid phone');
+            throw new Voipmanager_Exception_Validation('invalid phone');
         }
         
         $phoneId = $_phone->getId();
@@ -361,16 +368,18 @@ class Voipmanager_Backend_Snom_Phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone the phonedata
      * @return Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_Validation
+     * @throws  Voipmanager_Exception_AccessDenied
      */
     public function updateMyPhone(Voipmanager_Model_MyPhone $_phone, $_accountId)
     {
         if (! $_phone->isValid()) {
-            throw new Exception('invalid myPhone');
+            throw new Voipmanager_Exception_Validation('invalid myPhone');
         }
         
         $_validPhoneIds = $this->getValidPhoneIds($_accountId);   
         if(empty($_validPhoneIds)) {
-            throw new UnderflowException('not enough rights to edit phone');
+            throw new Voipmanager_Exception_AccessDenied('not enough rights to edit phone');
         }         
         
         $phoneId = $_phone->getId();
@@ -392,6 +401,7 @@ class Voipmanager_Backend_Snom_Phone
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @return void
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -413,7 +423,7 @@ class Voipmanager_Backend_Snom_Phone
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }
         
@@ -422,11 +432,12 @@ class Voipmanager_Backend_Snom_Phone
      *
      * @param Voipmanager_Model_SnomPhone $_phone the phonedata
      * @return Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_Validation
      */
     public function updateStatus(Voipmanager_Model_SnomPhone $_phone)
     {
         if (! $_phone->isValid()) {
-            throw new Exception('invalid phone');
+            throw new Voipmanager_Exception_Validation('invalid phone');
         }
         $phoneId = $_phone->getId();
         $phoneData = $_phone->toArray();
@@ -449,6 +460,7 @@ class Voipmanager_Backend_Snom_Phone
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @param boolean $_status
+     * @throws  Voipmanager_Exception_Backend
      */
     public function setHttpClientInfoSent($_id, $_status)
     {
@@ -475,7 +487,7 @@ class Voipmanager_Backend_Snom_Phone
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }
 }

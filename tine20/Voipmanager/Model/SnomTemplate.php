@@ -64,12 +64,13 @@ class Voipmanager_Model_SnomTemplate extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_Template $_templateId the template id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertSnomTemplateIdToInt($_templateId)
     {
         if ($_templateId instanceof Voipmanager_Model_SnomTemplate) {
             if (empty($_templateId->id)) {
-                throw new Exception('no template id set');
+                throw new Voipmanager_Exception_InvalidArgument('no template id set');
             }
             $id = (string) $_templateId->id;
         } else {
@@ -77,7 +78,7 @@ class Voipmanager_Model_SnomTemplate extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('template id can not be 0');
+            throw new Voipmanager_Exception_InvalidArgument('template id can not be 0');
         }
         
         return $id;

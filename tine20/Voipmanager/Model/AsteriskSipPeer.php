@@ -102,12 +102,13 @@ class Voipmanager_Model_AsteriskSipPeer extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_AsteriskSipPeer $_sipPeerId the sip peer id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertAsteriskSipPeerIdToInt($_sipPeerId)
     {
         if ($_sipPeerId instanceof Voipmanager_Model_AsteriskSipPeer) {
             if (empty($_sipPeerId->id)) {
-                throw new Exception('no sip peer id set');
+                throw new Voipmanager_Exception_InvalidArgument('no sip peer id set');
             }
             $id = (string) $_sipPeerId->id;
         } else {
@@ -115,7 +116,7 @@ class Voipmanager_Model_AsteriskSipPeer extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('sip peer id can not be 0');
+            throw new Voipmanager_Exception_InvalidArgument('sip peer id can not be 0');
         }
         
         return $id;

@@ -98,6 +98,7 @@ class Voipmanager_Backend_Asterisk_SipPeer
 	 * 
      * @param string $_id the id of the Sip peer
 	 * @return Voipmanager_Model_AsteriskSipPeer
+	 * @throws Voipmanager_Exception_NotFound
 	 */
     public function get($_id)
     {	
@@ -109,7 +110,7 @@ class Voipmanager_Backend_Asterisk_SipPeer
         $row = $this->_db->fetchRow($select);
         
         if (!$row) {
-            throw new UnderflowException('sip peer not found');
+            throw new Voipmanager_Exception_NotFound('sip peer not found');
         }
 
         $result = new Voipmanager_Model_AsteriskSipPeer($row);
@@ -122,11 +123,12 @@ class Voipmanager_Backend_Asterisk_SipPeer
      *
      * @param Voipmanager_Model_AsteriskSipPeer $_peer the Sip peer data
      * @return Voipmanager_Model_AsteriskSipPeer
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
     {
         if (!$_sipPeer->isValid()) {
-            throw new Exception('invalid sipPeer');
+            throw new Voipmanager_Exception_Validation('invalid sipPeer');
         }
 
         if (empty($_sipPeer->id) ) {
@@ -145,11 +147,12 @@ class Voipmanager_Backend_Asterisk_SipPeer
      *
      * @param Voipmanager_Model_AsteriskSipPeer $_sipPeer the sip peer data
      * @return Voipmanager_Model_AsteriskSipPeer
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
     {
         if (!$_sipPeer->isValid()) {
-            throw new Exception('invalid sip peer');
+            throw new Voipmanager_Exception_Validation('invalid sip peer');
         }
         
         $sipPeerId = $_sipPeer->getId();
@@ -168,6 +171,7 @@ class Voipmanager_Backend_Asterisk_SipPeer
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @return void
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -188,7 +192,7 @@ class Voipmanager_Backend_Asterisk_SipPeer
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }      
     

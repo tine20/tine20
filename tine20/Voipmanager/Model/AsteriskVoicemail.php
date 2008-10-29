@@ -81,12 +81,13 @@ class Voipmanager_Model_AsteriskVoicemail extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_AsteriskVoicemail $_voicemailId the voicemail id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertAsteriskVoicemailIdToInt($_voicemailId)
     {
         if ($_voicemailId instanceof Voipmanager_Model_AsteriskVoicemail) {
             if (empty($_voicemailId->id)) {
-                throw new Exception('no voicemail id set');
+                throw new Voipmanager_Exception_InvalidArgument('no voicemail id set');
             }
             $id = (string) $_voicemailId->id;
         } else {
@@ -94,7 +95,7 @@ class Voipmanager_Model_AsteriskVoicemail extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('voicemail id can not be 0');
+            throw new Voipmanager_Exception_InvalidArgument('voicemail id can not be 0');
         }
         
         return $id;

@@ -62,12 +62,13 @@ class Voipmanager_Model_AsteriskMeetme extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_AsteriskMeetme $_meetmeId the meetme id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertAsteriskMeetmeIdToInt($_meetmeId)
     {
         if ($_meetmeId instanceof Voipmanager_Model_AsteriskMeetme) {
             if (empty($_meetmeId->id)) {
-                throw new Exception('no meetme id set');
+                throw new Voipmanager_Exception_InvalidArgument('no meetme id set');
             }
             $id = (string) $_meetmeId->id;
         } else {
@@ -75,7 +76,7 @@ class Voipmanager_Model_AsteriskMeetme extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('meetme id can not be 0');
+            throw new Voipmanager_Exception_InvalidArgument('meetme id can not be 0');
         }
         
         return $id;

@@ -61,12 +61,13 @@ class Voipmanager_Model_AsteriskContext extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_AsteriskContext $_contextId the context id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertAsteriskContextIdToInt($_contextId)
     {
         if ($_contextId instanceof Voipmanager_Model_AsteriskContext) {
             if (empty($_contextId->id)) {
-                throw new Exception('no context id set');
+                throw new Voipmanager_Exception_InvalidArgument('no context id set');
             }
             $id = (string) $_contextId->id;
         } else {
@@ -74,7 +75,7 @@ class Voipmanager_Model_AsteriskContext extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('context id can not be 0');
+            throw new Voipmanager_Exception_InvalidArgument('context id can not be 0');
         }
         
         return $id;

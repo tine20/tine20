@@ -62,12 +62,13 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      * @param string $_id
      * @param string $_accountId
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_NotFound
      */
     public function getMyPhone($_id, $_accountId)
     {
         if(empty($_accountId)) 
         {
-            throw new UnderflowException('no accountId set');
+            throw new Voipmanager_Exception_NotFound('no accountId set');
         }   
         
         $phone = $this->_backend->getMyPhone($_id, $_accountId);
@@ -85,13 +86,12 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      *
      * @param Voipmanager_Model_SnomPhone $_phone
      * @return  Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     public function update(Voipmanager_Model_MyPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings, $_accountId)
     {
-       
-        if(empty($_accountId)) 
-        {
-            throw new UnderflowException('no accountId set');
+        if (empty($_accountId)) {
+            throw new Voipmanager_Exception_InvalidArgument('no accountId set');
         }        
        
         $phone = $this->_backend->updateMyPhone($_phone, $_accountId);
@@ -127,28 +127,31 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      * disabled
      *
      * @param unknown_type $_id
+     * @throws  Voipmanager_Exception_AccessDenied
      */
     public function get($_id)
     {
-        throw new Exception('not allowed!');
+        throw new Voipmanager_Exception_AccessDenied('not allowed!');
     }
     
     /**
      * disabled
      *
      * @param Tinebase_Record_Interface $_record
+     * @throws  Voipmanager_Exception_AccessDenied
      */
     public function create(Tinebase_Record_Interface $_record)
     {
-        throw new Exception('not allowed!');        
+        throw new Voipmanager_Exception_AccessDenied('not allowed!');        
     }
     
     /**
      * disabled
      *
      * @param unknown_type $_identifiers
+     * @throws  Voipmanager_Exception_AccessDenied
      */
     public function delete($_identifiers) {
-        throw new Exception('not allowed!');
+        throw new Voipmanager_Exception_AccessDenied('not allowed!');
     }
 }

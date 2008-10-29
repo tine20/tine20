@@ -78,6 +78,7 @@ class Voipmanager_Backend_Asterisk_Voicemail
 	 * 
      * @param string $_id
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskVoicemail
+	 * @throws Voipmanager_Exception_NotFound
 	 */
     public function get($_id)
     {	
@@ -85,7 +86,7 @@ class Voipmanager_Backend_Asterisk_Voicemail
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'asterisk_voicemail')->where($this->_db->quoteInto('id = ?', $voicemailId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('voicemail not found');
+            throw new Voipmanager_Exception_NotFound('voicemail not found');
         }
 #       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskVoicemail', $row);
         $result = new Voipmanager_Model_AsteriskVoicemail($row);
@@ -97,11 +98,12 @@ class Voipmanager_Backend_Asterisk_Voicemail
      *
      * @param Voipmanager_Model_AsteriskVoicemail $_voicemail the voicemail data
      * @return Voipmanager_Model_AsteriskVoicemail
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_AsteriskVoicemail $_voicemail)
     {
         if (! $_voicemail->isValid()) {
-            throw new Exception('invalid voicemail');
+            throw new Voipmanager_Exception_Validation('invalid voicemail');
         }
 
         if ( empty($_voicemail->id) ) {
@@ -120,11 +122,12 @@ class Voipmanager_Backend_Asterisk_Voicemail
      *
      * @param Voipmanager_Model_AsteriskVoicemail $_voicemail the voicemail data
      * @return Voipmanager_Model_AsteriskVoicemail
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_AsteriskVoicemail $_voicemail)
     {
         if (! $_voicemail->isValid()) {
-            throw new Exception('invalid voicemail');
+            throw new Voipmanager_Exception_Validation('invalid voicemail');
         }
         $voicemailId = $_voicemail->getId();
         $voicemailData = $_voicemail->toArray();
@@ -142,6 +145,7 @@ class Voipmanager_Backend_Asterisk_Voicemail
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @return void
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -162,7 +166,7 @@ class Voipmanager_Backend_Asterisk_Voicemail
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }  
 }

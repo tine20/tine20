@@ -61,11 +61,12 @@ class Voipmanager_Backend_Snom_PhoneSettings
      *
      * @param Voipmanager_Model_SnomPhoneSettings $_setting the setting data
      * @return Voipmanager_Model_SnomPhoneSettings
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_SnomPhoneSettings $_setting)
     {
         if (! $_setting->isValid()) {
-            throw new Exception('invalid phoneSetting');
+            throw new Voipmanager_Exception_Validation('invalid phoneSetting');
         }
 
         if ( empty($_setting->phone_id) ) {
@@ -84,11 +85,12 @@ class Voipmanager_Backend_Snom_PhoneSettings
      *
      * @param Voipmanager_Model_SnomPhoneSettings $_setting the setting data
      * @return Voipmanager_Model_SnomPhoneSettings
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_SnomPhoneSettings $_setting)
     {
         if (! $_setting->isValid()) {
-            throw new Exception('invalid phoneSetting');
+            throw new Voipmanager_Exception_Validation('invalid phoneSetting');
         }
         $settingId = $_setting->getId();
         $settingData = $_setting->toArray();
@@ -106,6 +108,7 @@ class Voipmanager_Backend_Snom_PhoneSettings
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @return void
+     * @throws Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -126,7 +129,7 @@ class Voipmanager_Backend_Snom_PhoneSettings
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }
 	        

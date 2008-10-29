@@ -80,12 +80,13 @@ class Voipmanager_Model_SnomLocation extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_SnomLocation $_locationId the location id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertSnomLocationIdToInt($_locationId)
     {
         if ($_locationId instanceof Voipmanager_Model_SnomLocation) {
             if (empty($_locationId->id)) {
-                throw new Exception('no location id set');
+                throw new Voipmanager_Exception_InvalidArgument('no location id set');
             }
             $id = (string) $_locationId->id;
         } else {
@@ -93,7 +94,7 @@ class Voipmanager_Model_SnomLocation extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('location id can not be 0');
+            throw new Voipmanager_Exception_InvalidArgument('location id can not be 0');
         }
         return $id;
     }

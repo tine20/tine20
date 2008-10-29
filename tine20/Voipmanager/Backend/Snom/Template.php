@@ -75,6 +75,7 @@ class Voipmanager_Backend_Snom_Template
 	 * 
      * @param string|Voipmanager_Model_SnomTemplate $_id
 	 * @return Voipmanager_Model_SnomTemplate
+	 * @throws Voipmanager_Exception_NotFound
 	 */
     public function get($_id)
     {	
@@ -86,7 +87,7 @@ class Voipmanager_Backend_Snom_Template
         
         $row = $this->_db->fetchRow($select);
         if (!$row) {
-            throw new UnderflowException('template not found');
+            throw new Voipmanager_Exception_NotFound('template not found');
         }
 
         $result = new Voipmanager_Model_SnomTemplate($row);
@@ -99,11 +100,12 @@ class Voipmanager_Backend_Snom_Template
      *
      * @param Voipmanager_Model_SnomTemplate $_template the template data
      * @return Voipmanager_Model_SnomTemplate
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_SnomTemplate $_template)
     {
         if (! $_template->isValid()) {
-            throw new Exception('invalid template');
+            throw new Voipmanager_Exception_Validation('invalid template');
         }
 
         if ( empty($_template->id) ) {
@@ -122,11 +124,12 @@ class Voipmanager_Backend_Snom_Template
      *
      * @param Voipmanager_Model_SnomTemplate $_template the template data
      * @return Voipmanager_Model_SnomTemplate
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_SnomTemplate $_template)
     {
         if (! $_template->isValid()) {
-            throw new Exception('invalid template');
+            throw new Voipmanager_Exception_Validation('invalid template');
         }
         $templateId = $_template->getId();
         $templateData = $_template->toArray();
@@ -144,6 +147,7 @@ class Voipmanager_Backend_Snom_Template
      *
      * @param string|array|Tinebase_Record_RecordSet $_id
      * @return void
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -164,7 +168,7 @@ class Voipmanager_Backend_Snom_Template
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }
 	        

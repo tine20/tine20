@@ -64,12 +64,13 @@ class Voipmanager_Model_SnomLine extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_SnomLine $_snomLineId the snomline id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertSnomLineIdToInt($_snomLineId)
     {
         if ($_snomLineId instanceof Voipmanager_Model_SnomLine) {
             if (empty($_snomLineId->id)) {
-                throw new Exception('no line id set');
+                throw new Voipmanager_Exception_InvalidArgument('no line id set');
             }
             $id = (string) $_snomLineId->id;
         } else {
@@ -77,7 +78,7 @@ class Voipmanager_Model_SnomLine extends Tinebase_Record_Abstract
         }
         
         if (empty($id)) {
-            throw new Exception('lineid id can not be \'\'');
+            throw new Voipmanager_Exception_InvalidArgument('lineid id can not be \'\'');
         }
         
         return $id;

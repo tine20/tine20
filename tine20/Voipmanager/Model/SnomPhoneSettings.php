@@ -72,12 +72,13 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_SnomPhone $_phoneSettingId the phone id to convert
      * @return int
+     * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertSnomPhoneSettingsIdToInt($_phoneSettingsId)
     {
         if ($_phoneSettingsId instanceof Voipmanager_Model_SnomPhoneSettings) {
             if (empty($_phoneSettingsId->phone_id)) {
-                throw new Exception('no phoneSettings id set');
+                throw new Voipmanager_Exception_InvalidArgument('no phoneSettings id set');
             }
             $id = (string) $_phoneSettingsId->phone_id;
         } else {
@@ -85,7 +86,7 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
         }
         
         if ($id == '') {
-            throw new Exception('phoneSettings id can not be 0');
+            throw new Voipmanager_Exception_InvalidArgument('phoneSettings id can not be 0');
         }
 
         return $id;

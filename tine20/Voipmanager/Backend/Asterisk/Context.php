@@ -72,8 +72,9 @@ class Voipmanager_Backend_Asterisk_Context
 	/**
 	 * get context by id
 	 * 
-     * @param string $_id
+     * @param  string $_id
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskContext
+	 * @throws Voipmanager_Exception_NotFound
 	 */
     public function get($_id)
     {	
@@ -81,7 +82,7 @@ class Voipmanager_Backend_Asterisk_Context
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'asterisk_context')->where($this->_db->quoteInto('id = ?', $contextId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('context not found');
+            throw new Voipmanager_Exception_NotFound('context not found');
         }
 #       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskContext', $row);
         $result = new Voipmanager_Model_AsteriskContext($row);
@@ -114,13 +115,14 @@ class Voipmanager_Backend_Asterisk_Context
     /**
      * update an existing context
      *
-     * @param Voipmanager_Model_AsteriskContext $_context the context data
-     * @return Voipmanager_Model_AsteriskContext
+     * @param   Voipmanager_Model_AsteriskContext $_context the context data
+     * @return  Voipmanager_Model_AsteriskContext
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_AsteriskContext $_context)
     {
         if (! $_context->isValid()) {
-            throw new Exception('invalid context');
+            throw new Voipmanager_Exception_Validation('invalid context');
         }
         $contextId = $_context->getId();
         $contextData = $_context->toArray();
@@ -136,8 +138,9 @@ class Voipmanager_Backend_Asterisk_Context
     /**
      * delete context(s) identified by context id
      *
-     * @param string|array|Tinebase_Record_RecordSet $_id
-     * @return void
+     * @param   string|array|Tinebase_Record_RecordSet $_id
+     * @return  void
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -158,7 +161,7 @@ class Voipmanager_Backend_Asterisk_Context
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
     }  
 }

@@ -122,6 +122,7 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      * @param Voipmanager_Model_SnomPhone $_phone
      * @param unknown_type $_type
      * @return Voipmanager_Model_SnomPhone
+     * @throws  Voipmanager_Exception_UnexpectedValue
      */
     protected function _setStatus($_phone, $_type)
     {
@@ -132,7 +133,7 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             $_phone->current_model = $matches[1];
             $_phone->current_software = $matches[2];
         } else {
-            throw new Exception('unparseable useragent string');
+            throw new Voipmanager_Exception_UnexpectedValue('unparseable useragent string');
         }
         
         $_phone->ipaddress = $_SERVER["REMOTE_ADDR"];

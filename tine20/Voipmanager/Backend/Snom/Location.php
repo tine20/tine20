@@ -74,6 +74,7 @@ class Voipmanager_Backend_Snom_Location
 	 * 
      * @param string|Voipmanager_Model_SnomLocation $_id
 	 * @return Voipmanager_Model_SnomLocation
+	 * @throws Voipmanager_Exception_NotFound
 	 */
     public function get($_id)
     {	
@@ -82,7 +83,7 @@ class Voipmanager_Backend_Snom_Location
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_location')->where($this->_db->quoteInto('id = ?', $locationId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('location not found');
+            throw new Voipmanager_Exception_NotFound('location not found');
         }
 
         $result = new Voipmanager_Model_SnomLocation($row);
@@ -96,11 +97,12 @@ class Voipmanager_Backend_Snom_Location
      *
      * @param Voipmanager_Model_SnomLocation $_location the location data
      * @return Voipmanager_Model_SnomLocation
+     * @throws  Voipmanager_Exception_Validation
      */
     public function create(Voipmanager_Model_SnomLocation $_location)
     {
         if (! $_location->isValid()) {
-            throw new Exception('invalid location');
+            throw new Voipmanager_Exception_Validation('invalid location');
         }
         
         if ( empty($_location->id) ) {
@@ -120,11 +122,12 @@ class Voipmanager_Backend_Snom_Location
      *
      * @param Voipmanager_Model_Location $_location the locationdata
      * @return Voipmanager_Model_Location
+     * @throws  Voipmanager_Exception_Validation
      */
     public function update(Voipmanager_Model_SnomLocation $_location)
     {
         if (! $_location->isValid()) {
-            throw new Exception('invalid location');
+            throw new Voipmanager_Exception_Validation('invalid location');
         }
         $locationId = $_location->getId();
         $locationData = $_location->toArray();
@@ -142,7 +145,7 @@ class Voipmanager_Backend_Snom_Location
      * delete location identified by location id
      *
      * @param int|array $_id location id
-     * 
+     * @throws  Voipmanager_Exception_Backend
      */
     public function delete($_id)
     {
@@ -164,7 +167,7 @@ class Voipmanager_Backend_Snom_Location
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            throw new Voipmanager_Exception_Backend($e->getMessage());
         }
        
     }    
