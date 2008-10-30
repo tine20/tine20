@@ -9,7 +9,6 @@
  * @author      Sebastian Lenk <s.lenk@metaways.de>
  * @version     $Id$
  * 
- * @todo        remove Zend_Db_Table usage 
  */
 
 /**
@@ -184,29 +183,36 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_InvalidArgument
      * @throws  Tinebase_Exception_UnexpectedValue
-     *  
-     * @todo add support for unique ids (hashs)
      */
     public function create(Tinebase_Record_Interface $_record) {
     	if (!$_record instanceof $this->_modelName) {
     		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
     	}
-        
+    	
+        // set uid if record has hash id and id is empty
+    	if ($this->_hasHashId() && empty($_record->id)) {
+            $newId = $_record->generateUID();
+            $_record->setId($newId);
+        }
+    	
         $recordArray = $_record->toArray();        
         $tableKeys = $this->_db->describeTable($this->_tableName);
         $recordArray = array_intersect_key($recordArray, $tableKeys);
         
         $this->_db->insert($this->_tableName, $recordArray);
-        $id = $this->_db->lastInsertId();
+        
+        if (!$this->_hasHashId()) {
+            $newId = $this->_db->lastInsertId();
+        }
 
         // if we insert a record without an id, we need to get back one
-        if (empty($_record->id) && $id == 0) {
+        if (empty($_record->id) && $newId == 0) {
             throw new Tinebase_Exception_UnexpectedValue("Returned record id is 0.");
         }
         
         // if the record had no id set, set the id now
         if ($_record->id == NULL || $_record->id == 'NULL') {
-        	$_record->id = $id;
+        	$_record->id = $newId;
         }
         
         return $this->get($_record->id);
@@ -318,4 +324,17 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         return $id;
     }
     
+    /**
+     * returns true if id is a hash value and false if integer
+     *
+     * @return  boolean
+     * @todo    remove that when all tables use hash ids 
+     */
+    protected function _hasHashId()
+    {
+        $fields = $this->_db->describeTable($this->_tableName);
+        $result = ($fields['id']['DATA_TYPE'] === 'varchar');
+        
+        return $result;
+    }
 }
