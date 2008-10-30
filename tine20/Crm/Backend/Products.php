@@ -25,6 +25,5 @@ class Crm_Backend_Products extends Tinebase_Application_Backend_Sql_Abstract
         $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_products';
         $this->_modelName = 'Crm_Model_Product';
     	$this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table  = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_products'));
     }
 }

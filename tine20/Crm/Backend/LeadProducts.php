@@ -27,7 +27,6 @@ class Crm_Backend_LeadProducts extends Tinebase_Application_Backend_Sql_Abstract
         $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_products';
         $this->_modelName = 'Crm_Model_Product';
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leads_products'));
     }
         
     /**
@@ -40,13 +39,14 @@ class Crm_Backend_LeadProducts extends Tinebase_Application_Backend_Sql_Abstract
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
 
-        $where  = array(
-            $this->_table->getAdapter()->quoteInto('lead_id = ?', $leadId)
-        );
-
-        $rows = $this->_table->fetchAll($where);
-        
-        $result = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $rows->toArray());
+        $select = $this->_db->select();
+        $select->from(SQL_TABLE_PREFIX . 'metacrm_leads_products')
+                ->where($this->_db->quoteInto('lead_id = ?', $leadId));
+            
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+                
+        $result = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $queryResult);
    
         return $result;
     }      

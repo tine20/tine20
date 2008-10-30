@@ -26,6 +26,5 @@ class Crm_Backend_LeadTypes extends Tinebase_Application_Backend_Sql_Abstract
         $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_leadtype';
         $this->_modelName = 'Crm_Model_Leadtype';
     	$this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
     }
 }

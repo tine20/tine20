@@ -56,7 +56,6 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Application_Backend_Sql_Ab
         $this->_tableName = SQL_TABLE_PREFIX . 'phone_callhistory';
         $this->_modelName = 'Phone_Model_Call';
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
     }    
 
     /*********************** helper functions ***********************/

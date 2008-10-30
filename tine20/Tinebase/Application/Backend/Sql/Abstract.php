@@ -46,13 +46,6 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected $_db;
     
-    /**
-    * Instance of backend
-    *
-    * @var mixed
-    */
-    protected $_table;
-    
     /*************************** get/search funcs ************************************/
 
     /**
@@ -199,9 +192,9 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
     	}
         
-        $recordArray = $_record->toArray();
-        $tableDefinition = $this->_table->info();
-        $recordArray = array_intersect_key($recordArray, array_flip($tableDefinition['cols']));
+        $recordArray = $_record->toArray();        
+        $tableKeys = $this->_db->describeTable($this->_tableName);
+        $recordArray = array_intersect_key($recordArray, $tableKeys);
         
         $this->_db->insert($this->_tableName, $recordArray);
         $id = $this->_db->lastInsertId();
@@ -238,11 +231,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $id = $_record->getId();
 
         $recordArray = $_record->toArray();
-        $tableDefinition = $this->_table->info();
-        $recordArray = array_intersect_key($recordArray, array_flip($tableDefinition['cols']));
-        
+        $tableKeys = $this->_db->describeTable($this->_tableName);
+        $recordArray = array_intersect_key($recordArray, $tableKeys);
+                
         $where  = array(
-            $this->_table->getAdapter()->quoteInto($this->_identifier . ' = ?', $id),
+            $this->_db->quoteInto($this->_identifier . ' = ?', $id),
         );
         
         $this->_db->update($this->_tableName, $recordArray, $where);

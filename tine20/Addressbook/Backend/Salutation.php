@@ -55,7 +55,6 @@ class Addressbook_Backend_Salutation extends Tinebase_Application_Backend_Sql_Ab
         $this->_tableName = SQL_TABLE_PREFIX . 'addressbook_salutations';
         $this->_modelName = 'Addressbook_Model_Salutation';
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
     }    
 
 }

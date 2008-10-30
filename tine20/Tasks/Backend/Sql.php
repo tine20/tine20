@@ -69,7 +69,6 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $this->_tableName = $this->_tableNames['tasks'];
         $this->_modelName = 'Tasks_Model_Task';
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
        
         try {
             $this->_currentAccount = Zend_Registry::get('currentAccount');

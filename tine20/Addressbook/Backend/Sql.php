@@ -28,7 +28,6 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $this->_db = Zend_Registry::get('dbAdapter');
         $this->_tableName = SQL_TABLE_PREFIX . 'addressbook';
         $this->_modelName = 'Addressbook_Model_Contact';
-        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));        
     }
 
     /**
