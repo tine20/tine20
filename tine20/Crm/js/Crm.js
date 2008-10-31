@@ -749,23 +749,26 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
          * onclick handler for addContact
          */
         addContact: function(_button, _event) {
-            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({});        	
-            
-            contactWindow.on('update', function(contact) {
-            	// @deprecated
-                switch ( _button.contactType ) {
-                	case 'responsible':
-                	   contact.data.relation_type = 'responsible';
-                	   break;
-                    case 'customer':
-                       contact.data.relation_type = 'customer';
-                       break;
-                    case 'partner':
-                       contact.data.relation_type = 'partner';
-                       break;
+            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
+                listeners: {
+                    scope: this,
+                    'update': function(contact) {
+                        // @deprecated
+                        switch ( _button.contactType ) {
+                            case 'responsible':
+                               contact.data.relation_type = 'responsible';
+                               break;
+                            case 'customer':
+                               contact.data.relation_type = 'customer';
+                               break;
+                            case 'partner':
+                               contact.data.relation_type = 'partner';
+                               break;
+                        }
+                        this.onContactUpdate(contact);
+                    }
                 }
-                this.onContactUpdate(contact);
-            }, this);
+            });        	
         },
             
         /**
@@ -774,8 +777,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         editContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
             
-            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({contact: selectedRows[0]});         
-            contactWindow.on('update', this.onContactUpdate, this);            
+            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
+                contact: selectedRows[0],
+                listeners: {
+                    scope: this,
+                    'update': this.onContactUpdate
+                }
+            });         
         },
 
         /**
@@ -1087,8 +1095,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
         grid.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Tine.Addressbook.ContactEditDialog.openWindow({contact: record});           
-        });
+            Tine.Addressbook.ContactEditDialog.openWindow({
+                contact: record,
+                listeners: {
+                    scope: this,
+                    'update': this.onContactUpdate
+                }
+            });
+        }, this);
             
         return grid;       
     },
