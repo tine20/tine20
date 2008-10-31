@@ -96,14 +96,14 @@ Tine.Tasks.mainGrid = {
             
             var popupWindow = Tine.Tasks.EditDialog.openWindow({
                 task: task,
-                containerId: containerId
+                containerId: containerId,
+                listeners: {
+                    scope: this,
+                    'update': this.onRecordUpdate
+                }
             });
-            
-            popupWindow.on('update', function(task) {
-            	this.store.load({params: this.paging});
-            }, this);
-            
         },
+        
 		deleteTasks: function(_button, _event){
             var selectedRows = this.grid.getSelectionModel().getSelections();
 			Ext.MessageBox.confirm('Confirm', this.translation.ngettext(
@@ -146,6 +146,9 @@ Tine.Tasks.mainGrid = {
 		}
 	},
     
+    onRecordUpdate:  function(task) {
+        this.store.load({params: this.paging});
+    },
         
 	initComponent: function() {
 		
@@ -687,10 +690,12 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     var win = this.windowManager.get(window);
                     // free 0 namespace if record got created
                     win.rename(this.windowNamePrefix + this.task.id);
-                    win.fireEvent('update', this.task);
+                    
+                    
+                    this.fireEvent('update', this.task);
 
 					if (closeWindow) {
-                        this.windowManager.get(window).purgeListeners();
+                        this.purgeListeners();
                         window.setTimeout("window.close()", 1000);
                     } else {
                         // update form with this new data
@@ -720,8 +725,8 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     					identifier: this.task.id
     				},
                     success: function(_result, _request) {
-                        this.windowManager.get(window).fireEvent('update', this.task);
-                        this.windowManager.get(window).purgeListeners();
+                        this.fireEvent('update', this.task);
+                        this.purgeListeners();
     					window.setTimeout("window.close()", 1000);
                     },
                     failure: function ( result, request) { 
