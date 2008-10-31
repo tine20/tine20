@@ -202,8 +202,10 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Abstract
      */ 
     public function createLead(Crm_Model_Lead $_lead)
     {
+        $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+
         try {
-            $db = Zend_Registry::get('dbAdapter');
+            $db = $leadBackend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
                         
             if(!$_lead->isValid()) {
@@ -215,7 +217,6 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Abstract
             }
             
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_lead, 'create');
-            $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
             $lead = $leadBackend->create($_lead);
             
             // set relations & links
@@ -255,14 +256,15 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Abstract
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        
         try {
-            $db = Zend_Registry::get('dbAdapter');
+            $db = $backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if(!$_lead->isValid()) {
                 throw new Tinebase_Exception_Record_Validation('Lead object is not valid');
             }
-            $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
             $currentLead = $backend->get($_lead->getId());
             
             // ACL checks
@@ -321,16 +323,17 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Abstract
      */
     public function deleteLead($_leadId)
     {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        
         try {
-            $db = Zend_Registry::get('dbAdapter');
+            $db = $backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
                 foreach($_leadId as $leadId) {
                     $this->deleteLead($leadId);
                 }
-            } else {
-                $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);            
+            } else {                            
                 $lead = $backend->get($_leadId);
                 
                 if($this->_currentAccount->hasGrant($lead->container_id, Tinebase_Model_Container::GRANT_DELETE)) {

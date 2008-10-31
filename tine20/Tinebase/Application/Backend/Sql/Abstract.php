@@ -276,6 +276,18 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $this->_db->delete($this->_tableName, $where);
     }
     
+    /*************************** other ************************************/
+    
+    /**
+     * returns the db adapter
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function getDb()
+    {
+        return $this->_db;
+    }
+    
     /*************************** protected helper funcs ************************************/
     
     /**

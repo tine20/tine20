@@ -33,7 +33,7 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
      * holds backend instance
      * (only sql atm.)
      *
-     * @var Tasks_Backend_Interface
+     * @var Tasks_Backend_Sql
      */
     protected $_backend;
     
@@ -206,7 +206,7 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
         }
                     
         try {        
-            $db = Zend_Registry::get('dbAdapter');
+            $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($tasks as $task) {

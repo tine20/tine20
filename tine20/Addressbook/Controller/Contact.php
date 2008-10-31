@@ -180,7 +180,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
     public function createContact(Addressbook_Model_Contact $_contact)
     {
         try {
-            $db = Zend_Registry::get('dbAdapter');
+            $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if(empty($_contact->container_id)) {
@@ -226,7 +226,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
         try {
-            $db = Zend_Registry::get('dbAdapter');
+            $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             $currentContact = $this->getContact($_contact->getId());
@@ -284,7 +284,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
     public function deleteContact($_contactId)
     {
         try {
-            $db = Zend_Registry::get('dbAdapter');
+            $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if (is_array($_contactId) or $_contactId instanceof Tinebase_Record_RecordSet) {
