@@ -58,6 +58,16 @@ Date.parseIso = function(isoString) {
     return Date.parseDate(isoString.replace(/\+\d{2}\d{2}/, ''), 'Y-m-d\\Th:i:s');
 };
 
+/**
+ * rename window
+ */
+Ext.Window.prototype.rename = function(newId) {
+    // Note PopupWindows are identified by name, whereas Ext.windows
+    // get identified by id this should be solved some time ;-)
+    this.manager.unregister(this);
+    this.id = newId;
+    this.manager.register(this);
+};
 
 /**
  * utility class used by Button
