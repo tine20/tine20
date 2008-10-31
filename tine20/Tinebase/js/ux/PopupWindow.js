@@ -136,6 +136,16 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.windowManager.register(this);
     },
     
+    /**
+     * Sets the title text for the panel and optionally the icon class.
+     * 
+     * @param {String} title The title text to set
+     * @param {String} iconCls (optional) iconCls A user-defined CSS class that provides the icon image for this panel
+     */
+    setTitle: function(title, iconCls) {
+        this.popup.document.title = title;
+    },
+    
 	/**
 	 * @private
      * 
