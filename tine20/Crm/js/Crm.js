@@ -897,7 +897,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     this.fireEvent('update', this.lead);
                     
                     if (_closeWindow === true) {
-                        window.setTimeout("window.close()", 400);
+                        this.window.close();
                     }
 
                     Ext.MessageBox.hide();
@@ -1864,9 +1864,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         ], 'container_id');
         
         if (! this.lead.id) {
-            window.document.title = this.translation.gettext('Add New Lead');
+            this.window.setTitle(this.translation.gettext('Add New Lead'));
         } else {
-            window.document.title = sprintf(this.translation._('Edit Lead "%s"'), this.lead.get('lead_name'));
+            this.window.setTitle(sprintf(this.translation._('Edit Lead "%s"'), this.lead.get('lead_name')));
         }
         
         this.getForm().loadRecord(this.lead);
