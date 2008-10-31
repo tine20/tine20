@@ -23,8 +23,6 @@ class Crm_Backend_LeadStates extends Tinebase_Application_Backend_Sql_Abstract
      */
     public function __construct ()
     {
-        $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_leadstate';
-        $this->_modelName = 'Crm_Model_Leadstate';
-    	$this->_db = Zend_Registry::get('dbAdapter');
+        parent::__construct(SQL_TABLE_PREFIX . 'metacrm_leadstate', 'Crm_Model_Leadstate');
     }
 }

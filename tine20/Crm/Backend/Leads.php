@@ -22,9 +22,7 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
      */
     public function __construct ()
     {
-        $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_lead';
-        $this->_modelName = 'Crm_Model_Lead';
-    	$this->_db = Zend_Registry::get('dbAdapter');
+        parent::__construct(SQL_TABLE_PREFIX . 'metacrm_lead', 'Crm_Model_Lead');
     }
         
     /****************** update / delete *************/
