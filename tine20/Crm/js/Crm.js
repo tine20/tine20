@@ -151,7 +151,13 @@ Tine.Crm.Main = {
         handlerEdit: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             var lead = _rowIndex[0];
-            Tine.Crm.LeadEditDialog.openWindow({lead:lead});
+            Tine.Crm.LeadEditDialog.openWindow({
+                lead:lead,
+                listeners: {
+                    scope: this,
+                    'update': this.onRecordUpdate
+                }
+            });
         },
         
         /**
@@ -345,7 +351,14 @@ Tine.Crm.Main = {
         
         Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
     },
-        
+    
+    /**
+     * execuded when record updates
+     */
+    onRecordUpdate: function() {
+        this.reload();    
+    },
+    
     /**
      * creates the grid
      * 
@@ -447,8 +460,14 @@ Tine.Crm.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Tine.Crm.LeadEditDialog.openWindow({lead: record});           
-        });
+            Tine.Crm.LeadEditDialog.openWindow({
+                lead: record,
+                listeners: {
+                    scope: this,
+                    'update': this.onRecordUpdate
+                }
+            });           
+        }, this);
        
         this.gridPanel = gridPanel;
         //Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
@@ -469,8 +488,14 @@ Tine.Crm.Main = {
             text: this.translation._('Add lead'),
             tooltip: this.translation._('Add new lead'),
             iconCls: 'actionAdd',
+            scope: this,
             handler: function(){
-                Tine.Crm.LeadEditDialog.openWindow({});                
+                Tine.Crm.LeadEditDialog.openWindow({
+                    listeners: {
+                        scope: this,
+                        'update': this.onRecordUpdate
+                    }
+                });                
             }   
         });
         
@@ -867,14 +892,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     lead: Ext.util.JSON.encode(lead.data)
                 },
                 success: function(response) {
-                    if(window.opener.Tine.Crm) {
-                        window.opener.Tine.Crm.Main.reload();
-                    } 
+                    this.onRecordLoad(response);
+                    
+                    this.fireEvent('update', this.lead);
+                    
                     if (_closeWindow === true) {
                         window.setTimeout("window.close()", 400);
                     }
-                    
-                    this.onRecordLoad(response);
 
                     Ext.MessageBox.hide();
                 },
@@ -1862,7 +1886,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
  */
 Tine.Crm.LeadEditDialog.openWindow = function (config) {
     config.lead = config.lead ? config.lead : new Tine.Crm.Model.Lead({}, 0);
-    //var window = new Ext.ux.PopupWindowMgr.fly({
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 750,
