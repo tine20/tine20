@@ -78,6 +78,9 @@ Ext.ux.WindowFactory.prototype = {
         
         c.items = this.getWindowItems(c);
         
+        // we can only handle one window yet
+        c.modal = true;
+        
         var win = new Ext.Window(c);
         c.items.window = win;
         
