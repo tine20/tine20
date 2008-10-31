@@ -217,10 +217,10 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
                 
                 // remove relations
                 Tinebase_Relations::getInstance()->setRelations('Tasks_Model_Task', 'Sql', $task->getId(), array());
-                
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
-                
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw new Tasks_Exception($e->getMessage());
