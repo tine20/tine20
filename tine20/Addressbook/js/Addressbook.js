@@ -870,10 +870,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         this.updateContactRecord(contactData);
         
         if (! this.contact.id) {
-            window.document.title = this.translation.gettext('Add new contact');
+            this.window.setTitle(this.translation.gettext('Add new contact'));
         } else {
-            window.document.title = sprintf(this.translation._('Edit Contact "%s"'), this.contact.get('n_fn') + 
-                (this.contact.get('org_name') ? ' (' + this.contact.get('org_name') + ')' : '') );
+            this.window.setTitle(sprintf(this.translation._('Edit Contact "%s"'), this.contact.get('n_fn') + 
+                (this.contact.get('org_name') ? ' (' + this.contact.get('org_name') + ')' : '')));
         }
         
         this.getForm().loadRecord(this.contact);
@@ -941,9 +941,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             },
             text: this.translation.gettext('Deleting contact...'),
             success: function(_result, _request) {
-                if(window.opener.Tine.Addressbook) {
-                    window.opener.Tine.Addressbook.Main.reload();
-                }
+                this.fireEvent('update', this.contact);
                 window.close();
             },
             failure: function ( result, request) { 
