@@ -133,7 +133,7 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_ignoreAcl=false)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  get relations $_model, $_backend, $_id");
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  get relations " . $_model . ", $_backend, $_id");
         #$cache = Zend_Registry::get('cache');
         #$cacheId = 'getRelations' . $_model . $_backend . $_id;
         #$result = $cache->load($cacheId);

@@ -75,8 +75,10 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
         if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound('Entry with id ' . $id . ' not found');
+            throw new Tinebase_Exception_NotFound($this->_modelName . ' record with id ' . $id . ' not found!');
         }        
         $result = new $this->_modelName($queryResult);
         

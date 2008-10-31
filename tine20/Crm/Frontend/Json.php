@@ -61,7 +61,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function getLead($leadId)
     {
-        $controller = Crm_Controller_Leads::getInstance();
+        $controller = Crm_Controller_Lead::getInstance();
 
         if(!$leadId ) {   
             $lead = $controller->getEmptyLead();
@@ -88,7 +88,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
-        $leads = Crm_Controller_Leads::getInstance()->searchLeads($filter, $pagination, TRUE);
+        $leads = Crm_Controller_Lead::getInstance()->searchLeads($filter, $pagination, TRUE);
         
         $result = $this->_multipleLeadsToJson($leads);
         
@@ -96,7 +96,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         return array(
             'results'       => $result,
-            'totalcount'    => Crm_Controller_Leads::getInstance()->searchLeadsCount($filter)
+            'totalcount'    => Crm_Controller_Lead::getInstance()->searchLeadsCount($filter)
         );
     }
     
@@ -116,9 +116,9 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $inLead->setFromJsonInUsersTimezone($lead);
                   
         if(empty($inLead->id)) {
-            $savedLead = Crm_Controller_Leads::getInstance()->createLead($inLead);
+            $savedLead = Crm_Controller_Lead::getInstance()->createLead($inLead);
         } else {
-            $savedLead = Crm_Controller_Leads::getInstance()->updateLead($inLead);
+            $savedLead = Crm_Controller_Lead::getInstance()->updateLead($inLead);
         }
         
         $result = $this->getLead($savedLead->getId());
@@ -135,7 +135,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $leadIds = Zend_Json::decode($_leadIds);
 
-        Crm_Controller_Leads::getInstance()->deleteLead($leadIds);
+        Crm_Controller_Lead::getInstance()->deleteLead($leadIds);
         
         $result = array(
             'success'   => TRUE

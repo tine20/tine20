@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add more functions (get/search/delete/getMultiple/...) 
+ *              or create more abstract controllers that extend this one
  */
 
 /**

@@ -55,7 +55,7 @@ class Crm_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
                 $pdf = new Crm_Export_Pdf();
 		        
 		        foreach ($leadIds as $leadId) {
-                    $lead = Crm_Controller_Leads::getInstance()->getLead($leadId);
+                    $lead = Crm_Controller_Lead::getInstance()->getLead($leadId);
                     $pdf->generateLeadPdf($lead);
 		        }
                     

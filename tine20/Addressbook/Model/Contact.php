@@ -9,6 +9,7 @@
  * @version     $Id$
  *
  * @todo        rename some fields (modified, ...)
+ * @todo        add relations as contact attribute
  */
 
 /**

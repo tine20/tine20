@@ -303,6 +303,9 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
                     // delete notes
                     Tinebase_Notes::getInstance()->deleteNotesOfRecord('Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $contact->getId());
                     
+                    // delete relations
+                    Tinebase_Relations::getInstance()->setRelations('Addressbook_Model_Contact', 'Sql', $contact->getId(), array());
+                    
                 } else {
                     throw new Addressbook_Exception_AccessDenied('Delete access to contact denied.');
                 }

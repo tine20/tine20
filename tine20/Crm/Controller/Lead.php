@@ -19,7 +19,7 @@
  * @package     Crm
  * @subpackage  Controller
  */
-class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
+class Crm_Controller_Lead extends Tinebase_Application_Controller_Abstract
 {
     /**
      * application name (is needed in checkRight())
@@ -38,12 +38,12 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
     /**
      * the singleton pattern
      *
-     * @return Crm_Controller_Leads
+     * @return Crm_Controller_Lead
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Controller_Leads;
+            self::$_instance = new Crm_Controller_Lead;
         }
         
         return self::$_instance;
@@ -170,6 +170,26 @@ class Crm_Controller_Leads extends Tinebase_Application_Controller_Abstract
         $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
     }    
         
+    /**
+     * Returns a set of leads identified by their id's
+     * 
+     * @param  array $_leadIds array of string
+     * @return Tinebase_Record_RecordSet of Crm_Model_Lead
+     */
+    public function getMultipleLeads($_leadIds)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);  
+        $records = $backend->getMultiple($_leadIds);
+        
+        foreach ($records as $record) {
+            if (! $this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
+                $index = $records->getIndexById($record->getId());
+                unset($records[$index]);
+            } 
+        }
+        return $records;
+    }    
+    
     /*************** add / update / delete lead *****************/    
     
     /**

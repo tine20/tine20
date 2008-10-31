@@ -131,7 +131,7 @@ class Crm_Controller_LeadProducts extends Tinebase_Application_Controller_Abstra
     public function getLeadProducts($_leadId)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-        $result = $backend->get($_leadId);
+        $result = $backend->getByLeadId($_leadId);
 
         return $result;    
     } 
