@@ -77,47 +77,6 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
     /************************ helper functions ************************/
 
     /**
-     * get the basic select object to fetch leads from the database 
-     * @param $_getCount only get the count
-     *
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_getCount = FALSE)
-    {        
-        if ($_getCount) {
-            $fields = array('count' => 'COUNT(*)');    
-        } else {
-            $fields = array(
-                'id',
-                'lead_name',
-                'leadstate_id',
-                'leadtype_id',
-                'leadsource_id',
-                'container_id',
-                'start',
-                'description',
-                'end',
-                'turnover',
-                'probability',
-                'end_scheduled',
-                'created_by',
-                'creation_time',
-                'last_modified_by',
-                'last_modified_time',
-                'is_deleted',
-                'deleted_time',
-                'deleted_by',
-            );
-        }
-
-        $select = $this->_db->select()
-            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), $fields);
-        
-        return $select;
-    }
-    
-    
-    /**
      * add the fields to search for to the query
      *
      * @param  Zend_Db_Select           $_select current where filter
@@ -126,16 +85,16 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
      */
     protected function _addFilter(Zend_Db_Select $_select, Crm_Model_LeadFilter $_filter)
     {
-        $_select->where($this->_db->quoteInto('lead.container_id IN (?)', $_filter->container));
+        $_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
                         
         if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(lead.lead_name LIKE ? OR lead.description LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(lead_name LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
         }
         if (!empty($_filter->leadstate)) {
-            $_select->where($this->_db->quoteInto('lead.leadstate_id = ?', $_filter->leadstate));
+            $_select->where($this->_db->quoteInto('leadstate_id = ?', $_filter->leadstate));
         }
         if (!empty($_filter->probability)) {
-            $_select->where($this->_db->quoteInto('lead.probability >= ?', (int)$_filter->probability));
+            $_select->where($this->_db->quoteInto('probability >= ?', (int)$_filter->probability));
         }
         if (isset($_filter->showClosed) && $_filter->showClosed){
             // nothing to filter
