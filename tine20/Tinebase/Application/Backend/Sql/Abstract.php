@@ -252,19 +252,17 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
       * Deletes entries
       * 
-      * @param string|array $_id Ids
+      * @param string|integer $_id
       * @return void
-      * 
-      * @todo Change to delete only ONE record. "Delete all" style should be removed from backend to controller.
       */
     public function delete($_id) {
-    	foreach ((array) $_id as $id) {
-	        $where = array(
-	            $this->_db->quoteInto($this->_identifier . ' = ?', $id)
-	        );
-	        
-	        $this->_db->delete($this->_tableName, $where);
-    	}
+        $id = $this->_convertId($_id);
+        
+        $where = array(
+            $this->_db->quoteInto($this->_identifier . ' = ?', $id)
+        );
+        
+        $this->_db->delete($this->_tableName, $where);
     }
     
     /*************************** protected helper funcs ************************************/
@@ -310,9 +308,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     {
         if($_id instanceof $this->_modelName) {
             if(empty($_id->id)) {
-                throw new Exception('No id set!');
+                throw new Tinebase_Exception_InvalidArgument('No id set!');
             }
             $id = $_id->id;
+        } elseif (is_array($_id)) {
+            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
         } else {
             $id = $_id;
         }
