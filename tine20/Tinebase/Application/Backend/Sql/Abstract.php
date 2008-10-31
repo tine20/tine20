@@ -48,10 +48,13 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
      * the constructor
      *
+     * @param string $_tableName
+     * @param string $_modelName
+     * @param Zend_Db_Adapter_Abstract $_db optional
      */
     public function __construct ($_tableName, $_modelName, $_dbAdapter = NULL)
     {
-        $this->_db = ($_dbAdapter === NULL ) ? Tinebase_Core::getDb() : $_dbAdapter;
+        $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_tableName = $_tableName;
         $this->_modelName = $_modelName;
     }
@@ -71,7 +74,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $select = $this->_getSelect();
         $select->where($this->_identifier . ' = ?', $id);
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -197,7 +200,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     public function create(Tinebase_Record_Interface $_record) {
     	if (!$_record instanceof $this->_modelName) {
-    		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
+    		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type. Should be instance of ' . $this->_modelName);
     	}
     	
         // set uid if record has hash id and id is empty
@@ -315,8 +318,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
      * add the fields to search for to the query
      *
-     * @param  Zend_Db_Select           $_select current where filter
-     * @param  Tinebase_Record_Interface   $_filter the string to search for
+     * @param  Zend_Db_Select               $_select current where filter
+     * @param  Tinebase_Record_Interface    $_filter the string to search for
      * @return void
      */
     protected function _addFilter(Zend_Db_Select $_select, Tinebase_Record_Interface $_filter)
