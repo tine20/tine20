@@ -649,9 +649,9 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.updateRecord(recordData);
         
         if (! this.task.id) {
-            window.document.title = this.translation.gettext('Add New Task');
+            this.window.setTitle(this.translation.gettext('Add New Task'));
         } else {
-            window.document.title = sprintf(this.translation._('Edit Task "%s"'), this.task.get('summary'));
+            this.window.setTitle(sprintf(this.translation._('Edit Task "%s"'), this.task.get('summary')));
         }
         
         this.getForm().loadRecord(this.task);
@@ -687,16 +687,15 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     this.onRecordLoad(response);
 					//this.updateRecord(Ext.util.JSON.decode(_result.responseText));
                     
-                    var win = this.windowManager.get(window);
                     // free 0 namespace if record got created
-                    win.rename(this.windowNamePrefix + this.task.id);
+                    this.window.rename(this.windowNamePrefix + this.task.id);
                     
                     
                     this.fireEvent('update', this.task);
 
 					if (closeWindow) {
                         this.purgeListeners();
-                        window.setTimeout("window.close()", 1000);
+                        this.window.close();
                     } else {
                         // update form with this new data
                         form.loadRecord(this.task);
@@ -727,7 +726,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     success: function(_result, _request) {
                         this.fireEvent('update', this.task);
                         this.purgeListeners();
-    					window.setTimeout("window.close()", 1000);
+    					this.window.close();
                     },
                     failure: function ( result, request) { 
                         Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not delete task(s).'));
