@@ -97,9 +97,15 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 
         this.addEvents({
             /**
+             * @event beforecolse
+             * @desc Fires before the Window is closed. A handler can return false to cancel the close.
+             * @param {Ext.ux.PopupWindow}
+             */
+            "beforeclose" : true,
+            /**
              * @event render
              * @desc  Fires after the viewport in the popup window is rendered
-             * @param {window} 
+             * @param {Ext.ux.PopupWindow} 
              */
             "render" : true,
             /**
@@ -144,6 +150,19 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     setTitle: function(title, iconCls) {
         this.popup.document.title = title;
+    },
+    
+    /**
+     * Closes the window, removes it from the DOM and destroys the window object. 
+     * The beforeclose event is fired before the close happens and will cancel 
+     * the close action if it returns false.
+     */
+    close: function() {
+        if(this.fireEvent("beforeclose", this) !== false){
+            this.fireEvent('close', this);
+            this.purgeListeners();
+            this.popup.close();
+        }
     },
     
 	/**
