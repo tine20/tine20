@@ -95,6 +95,12 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
              */
             'saveAndClose',
             /**
+             * @event update
+             * @desc  Fired when the record got updated
+             * @param {Ext.data.record} data data of the entry
+             */
+            'update',
+            /**
              * @event apply
              * Fired when user pressed apply button
              */

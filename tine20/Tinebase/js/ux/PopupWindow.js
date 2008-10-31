@@ -102,12 +102,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
              * @param {window} 
              */
             "render" : true,
-        	/**
-             * @event update
-             * @desc  Fired when a record in the window got updated
-             * @param {Ext.data.record} data data of the new entry
-             */
-            "update" : true,
             /**
              * @event close
              * @desc  Fired, when the window got closed
