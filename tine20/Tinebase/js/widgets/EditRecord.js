@@ -66,7 +66,10 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      * @cfg {String} layout of the containing window
      */
     windowLayout: 'border',
-    
+    /**
+     * @property {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
+     */
+    window: null,
     /**
      * @property {Ext.ux.PopupWindowMgr}
      * @depricated use window instead
@@ -262,12 +265,9 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     
     /**
      * helper function to close window
-     * @todo implemet ;-)
      */
     closeWindow: function() {
-        // find out if its modal or native
-        window.close();
-        //console.log(this.el.getStyle('z-index'));
+        this.window.close();
     }
 });
 
