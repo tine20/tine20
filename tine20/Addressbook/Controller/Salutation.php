@@ -35,7 +35,7 @@ class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Controller_Salutation;
+            self::$_instance = new Addressbook_Controller_Salutation();
         }
         
         return self::$_instance;
