@@ -68,15 +68,14 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         $id = $this->_convertId($_id);
         
-        $select = $this->_db->select();
-        $select->from($this->_tableName)
-            ->where($this->_identifier . ' = ?', $id);
+        $select = $this->_getSelect();
+        $select->where($this->_identifier . ' = ?', $id);
+
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
+                
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound($this->_modelName . ' record with id ' . $id . ' not found!');
         }        
@@ -114,9 +113,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             throw new Tinebase_Exception_InvalidArgument('$_orderDirection is invalid');
         }
         
-        $select = $this->_db->select();
-        $select->from($this->_tableName)
-            ->order($_orderBy . ' ' . $_orderDirection);
+        $select = $this->_getSelect();
+        $select->order($_orderBy . ' ' . $_orderDirection);
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -285,6 +283,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param $_getCount only get the count
      *
      * @return Zend_Db_Select
+     * 
+     * @todo    perhaps we need to add the tablename here for filtering with more than 1 table (like that: ->from(array('blabla' => $this->_tableName))
      */
     protected function _getSelect($_getCount = FALSE)
     {        
