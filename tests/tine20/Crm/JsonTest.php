@@ -392,7 +392,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $result['totalcount']);   
 
         // check if linked task got removed as well
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Tasks_Exception_NotFound');
         $task = Tasks_Controller_Task::getInstance()->getTask($GLOBALS['Crm_JsonTest']['taskId']);
         
         // purge relations
