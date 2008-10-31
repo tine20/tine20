@@ -43,6 +43,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     private $_relationData = array(
+        /*
         array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'SQL',
@@ -53,6 +54,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
             'related_id'             => '8a572723e867dd73dd68d1740dd94f586eff5432',
             'type'                   => 'CRM_TASK'
         ),
+        */
         array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'SQL',
