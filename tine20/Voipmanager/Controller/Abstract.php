@@ -100,12 +100,32 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
      * 
      * If one of the records could not be deleted, no record is deleted
      * 
-     * @param   array array of context identifiers
+     * @param   array array of record identifiers
      * @return  void
      */
     public function delete($_identifiers)
     {
-        $this->_backend->delete($_identifiers);
+        $records = $this->_backend->getMultiple((array)$_identifiers);
+        if (count((array)$_identifiers) != count($records)) {
+            throw new Voipmanager_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$_identifiers) . ' records exist');
+        }
+                    
+        try {        
+            $db = $this->_backend->getDb();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            foreach ($records as $record) {
+                $this->_backend->delete($record);
+            }
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw new Voipmanager_Exception($e->getMessage());
+        }                
+        
+        //$this->_backend->delete($_identifiers);
     }    
 
     /**

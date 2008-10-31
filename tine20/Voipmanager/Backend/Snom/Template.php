@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:  $
  *
- * @todo        extend Tinebase_Application_Backend_Sql_Abstract
  */
  
 
@@ -18,159 +17,28 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Snom_Template
+class Voipmanager_Backend_Snom_Template extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * the constructor
+     * 
+     * @param Zend_Db_Adapter_Abstract $_db
      */
-    protected $_db;    
-
-	/**
-	 * the constructor
-	 */
     public function __construct($_db = NULL)
     {
-        if($_db instanceof Zend_Db_Adapter_Abstract) {
-            $this->_db = $_db;
-        } else {
-            $this->_db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        }
-    }
-      
-	/**
-	 * search templates
-	 * 
-     * @param Voipmanager_Model_SnomTemplateFilter $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomTemplate
-	 */
-    public function search(Voipmanager_Model_SnomTemplateFilter $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
-    {	
-        $where = array();
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_templates');
-            
-        if ($_pagination instanceof Tinebase_Model_Pagination) {
-            $_pagination->appendPagination($select);
-        }
-
-        if(!empty($_filter->query)) {
-            $select->where($this->_db->quoteInto('(model LIKE ? OR description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
-        } else {
-            // handle the other fields separately
-        }
-       
-        $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomTemplate', $rows);
-		
-        return $result;
-	}  
-  
-      
-	/**
-	 * get Template by id
-	 * 
-     * @param string|Voipmanager_Model_SnomTemplate $_id
-	 * @return Voipmanager_Model_SnomTemplate
-	 * @throws Voipmanager_Exception_NotFound
-	 */
-    public function get($_id)
-    {	
-        $templateId = Voipmanager_Model_SnomTemplate::convertSnomTemplateIdToInt($_id);
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_templates')
-            ->where($this->_db->quoteInto('id = ?', $templateId));
-        
-        $row = $this->_db->fetchRow($select);
-        if (!$row) {
-            throw new Voipmanager_Exception_NotFound('template not found');
-        }
-
-        $result = new Voipmanager_Model_SnomTemplate($row);
-        
-        return $result;
-	}
-	   
-    /**
-     * add new template
-     *
-     * @param Voipmanager_Model_SnomTemplate $_template the template data
-     * @return Voipmanager_Model_SnomTemplate
-     * @throws  Voipmanager_Exception_Validation
-     */
-    public function create(Voipmanager_Model_SnomTemplate $_template)
-    {
-        if (! $_template->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid template');
-        }
-
-        if ( empty($_template->id) ) {
-            $_template->setId(Tinebase_Record_Abstract::generateUID());
-        }
-        
-        $template = $_template->toArray();
-        
-        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_templates', $template);
-
-        return $this->get($_template->getId());
+        parent::__construct(SQL_TABLE_PREFIX . 'snom_templates', 'Voipmanager_Model_SnomTemplate', $_db);
     }
     
     /**
-     * update an existing template
+     * add the fields to search for to the query
      *
-     * @param Voipmanager_Model_SnomTemplate $_template the template data
-     * @return Voipmanager_Model_SnomTemplate
-     * @throws  Voipmanager_Exception_Validation
+     * @param  Zend_Db_Select $_select current where filter
+     * @param  Voipmanager_Model_SnomTemplateFilter $_filter the filter values to search for
      */
-    public function update(Voipmanager_Model_SnomTemplate $_template)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_SnomTemplateFilter $_filter)
     {
-        if (! $_template->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid template');
+        if(!empty($_filter->query)) {
+            $_select->where($this->_db->quoteInto('(model LIKE ? OR description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
         }
-        $templateId = $_template->getId();
-        $templateData = $_template->toArray();
-        unset($templateData['id']);
-
-        $where = array($this->_db->quoteInto('id = ?', $templateId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'snom_templates', $templateData, $where);
-        
-        return $this->get($templateId);
-    }    
-
-
-    /**
-     * delete template(s) identified by template id
-     *
-     * @param string|array|Tinebase_Record_RecordSet $_id
-     * @return void
-     * @throws  Voipmanager_Exception_Backend
-     */
-    public function delete($_id)
-    {
-        foreach ((array)$_id as $id) {
-            $templateId = Voipmanager_Model_SnomTemplate::convertSnomTemplateIdToInt($id);
-            $where[] = $this->_db->quoteInto('id = ?', $templateId);
-        }
-
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-
-            // NOTE: using array for second argument won't work as delete function joins array items using "AND"
-            foreach($where AS $where_atom)
-            {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'snom_templates', $where_atom);
-            }
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Voipmanager_Exception_Backend($e->getMessage());
-        }
-    }
-	        
-
+    }                   
 }

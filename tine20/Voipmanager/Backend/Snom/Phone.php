@@ -9,7 +9,6 @@
  * @version     $Id$
  *
  * @todo        add save rights function
- * @todo        extend Tinebase_Application_Backend_Sql_Abstract
  */
 
 /**
@@ -17,33 +16,44 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Snom_Phone
+class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * the constructor
+     * 
+     * @param Zend_Db_Adapter_Abstract $_db
      */
-    protected $_db;    
-
-	/**
-	 * the constructor
-	 */
     public function __construct($_db = NULL)
     {
-        if($_db instanceof Zend_Db_Adapter_Abstract) {
-            $this->_db = $_db;
-        } else {
-            $this->_db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        }
+        parent::__construct(SQL_TABLE_PREFIX . 'snom_phones', 'Voipmanager_Model_SnomPhone', $_db);
     }
-        
+    
+    /**
+     * add the fields to search for to the query
+     *
+     * @param  Zend_Db_Select $_select current where filter
+     * @param  Voipmanager_Model_SnomLocationFilter $_filter the filter values to search for
+     * 
+     * @todo    update/use this
+     */
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_SnomLocationFilter $_filter)
+    {
+        if(!empty($_filter->query)) {
+            $_select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
+        }
+    }               
+    
 	/**
 	 * search phones
 	 * 
      * @param Voipmanager_Model_SnomPhoneFilter $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
+	 * @deprecated
+	 * 
+	 * @todo   replace this
 	 */
-    public function search(Voipmanager_Model_SnomPhoneFilter $_filter, $_pagination)
+    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
     {	
         $where = array();
         
@@ -89,7 +99,6 @@ class Voipmanager_Backend_Snom_Phone
 		
         return $result;
 	}
-    
     
 	/**
 	 * write phone ACL
@@ -203,32 +212,6 @@ class Voipmanager_Backend_Snom_Phone
     }
     
 	/**
-	 * get one phone identified by id
-	 * 
-     * @param string|Voipmanager_Model_SnomPhone $_id
-	 * @return Voipmanager_Model_SnomPhone the phone
-	 * @throws Voipmanager_Exception_InvalidArgument
-	 */
-    public function get($_id)
-    {	
-        $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($_id);
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_phones')
-            ->where($this->_db->quoteInto('id = ?', $phoneId));
-
-        $row = $this->_db->fetchRow($select);
-        if (!$row) {
-            throw new Voipmanager_Exception_NotFound('phone not found');
-        }
-
-        $result = new Voipmanager_Model_SnomPhone($row);
-        
-        return $result;
-	}
-    
-    
-	/**
 	 * get one myPhone identified by id
 	 * 
      * @param string|Voipmanager_Model_SnomPhone $_id
@@ -286,57 +269,6 @@ class Voipmanager_Backend_Snom_Phone
         return $result;
     }     
 	
-    /**
-     * insert new phone into database
-     *
-     * @param Voipmanager_Model_SnomPhone $_phone the phonedata
-     * @return Voipmanager_Model_SnomPhone
-     * @throws  Voipmanager_Exception_Validation
-     */
-    public function create(Voipmanager_Model_SnomPhone $_phone)
-    {
-        if (!$_phone->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid phone');
-        }
-        
-        if (empty($_phone->id)) {
-        	$_phone->setId(Tinebase_Record_Abstract::generateUID());
-        }
-        
-        $phoneData = $_phone->toArray();
-        unset($phoneData['lines']);
-        unset($phoneData['rights']);
-        
-        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones', $phoneData);
-
-        return $this->get($_phone);
-    }
-    
-    /**
-     * update an existing phone
-     *
-     * @param Voipmanager_Model_SnomPhone $_phone the phonedata
-     * @return Voipmanager_Model_SnomPhone
-     * @throws  Voipmanager_Exception_Validation
-     */
-    public function update(Voipmanager_Model_SnomPhone $_phone)
-    {
-        if (! $_phone->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid phone');
-        }
-        
-        $phoneId = $_phone->getId();
-        $phoneData = $_phone->toArray();
-        unset($phoneData['id']);
-        unset($phoneData['lines']);
-        unset($phoneData['rights']);
-        
-        $where = array($this->_db->quoteInto('id = ?', $phoneId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
-        
-        return $this->get($_phone);
-    }        
-    
     /**
      * update redirect for an existing phone
      *
@@ -396,37 +328,6 @@ class Voipmanager_Backend_Snom_Phone
     }      
     
     
-    /**
-     * delete phone(s) identified by phone id
-     *
-     * @param string|array|Tinebase_Record_RecordSet $_id
-     * @return void
-     * @throws  Voipmanager_Exception_Backend
-     */
-    public function delete($_id)
-    {
-        foreach ((array)$_id as $id) {
-            $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($id);
-            $where[] = $this->_db->quoteInto('id = ?', $phoneId);
-        }
-
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-
-            // NOTE: cascading delete for lines and phone_settings
-            // SECOND NOTE: using array for second argument won't work as delete function joins array items using "AND"
-            foreach($where AS $where_atom)
-            {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones', $where_atom);
-            }
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Voipmanager_Exception_Backend($e->getMessage());
-        }
-    }
-        
     /**
      * update an existing phone
      *

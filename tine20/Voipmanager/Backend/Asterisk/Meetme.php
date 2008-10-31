@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     
  *
- * @todo        extend Tinebase_Application_Backend_Sql_Abstract
  */
 
 
@@ -17,152 +16,28 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Asterisk_Meetme
-{
+class Voipmanager_Backend_Asterisk_Meetme extends Tinebase_Application_Backend_Sql_Abstract
+{    
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * the constructor
+     * 
+     * @param Zend_Db_Adapter_Abstract $_db
      */
-    protected $_db;    
-    
-	/**
-	 * the constructor
-	 */
     public function __construct($_db = NULL)
     {
-        if($_db instanceof Zend_Db_Adapter_Abstract) {
-            $this->_db = $_db;
-        } else {
-            $this->_db = Zend_Registry::get('dbAdapter');
-        }
-    }
-      
-	/**
-	 * search meetme
-	 * 
-     * @param Voipmanager_Model_AsteriskMeetmeFilter $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
-	 */
-    public function search(Voipmanager_Model_AsteriskMeetmeFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
-    {	
-        $where = array();
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'asterisk_meetme');
-
-        if($_pagination instanceof Tinebase_Model_Pagination) {            
-            $_pagination->appendPagination($select);
-        }
-
-        if(!empty($_filter->query)) {
-            $select->where($this->_db->quoteInto('(confno LIKE ? OR pin LIKE ? OR adminpin LIKE ?)', '%' . $_filter->query . '%'));
-        } else {
-            // handle the other fields separately
-        }
-       
-        $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskMeetme', $rows);
-		
-        return $result;
-	}  
-  
-      
-	/**
-	 * get meetme by id
-	 * 
-     * @param   string $_id
-	 * @return  Tinebase_Recod_RecordSet of subtype Voipmanager_Model_AsteriskMeetme
-	 * @throws  Voipmanager_Exception_NotFound
-	 */
-    public function get($_id)
-    {	
-        $meetmeId = Voipmanager_Model_AsteriskMeetme::convertAsteriskMeetmeIdToInt($_id);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'asterisk_meetme')->where($this->_db->quoteInto('id = ?', $meetmeId));
-        $row = $this->_db->fetchRow($select);
-        if (! $row) {
-            throw new Voipmanager_Exception_NotFound('meetme not found');
-        }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskMeetme', $row);
-        $result = new Voipmanager_Model_AsteriskMeetme($row);
-        return $result;
-	}
-	   
-    /**
-     * add new meetme
-     *
-     * @param Voipmanager_Model_AsteriskMeetme $_meetme the meetme data
-     * @return Voipmanager_Model_AsteriskMeetme
-     * @throws  Voipmanager_Exception_Validation
-     */
-    public function create(Voipmanager_Model_AsteriskMeetme $_meetme)
-    {
-        if (! $_meetme->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid meetme');
-        }
-
-        if ( empty($_meetme->id) ) {
-            $_meetme->setId(Tinebase_Record_Abstract::generateUID());
-        }
-        
-        $meetme = $_meetme->toArray();
-        
-        $this->_db->insert(SQL_TABLE_PREFIX . 'asterisk_meetme', $meetme);
-
-        return $this->get($_meetme->getId());
+        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_meetme', 'Voipmanager_Model_AsteriskMeetme', $_db);
     }
     
     /**
-     * update an existing meetme
+     * add the fields to search for to the query
      *
-     * @param Voipmanager_Model_AsteriskMeetme $_meetme the meetme data
-     * @return Voipmanager_Model_AsteriskMeetme
-     * @throws  Voipmanager_Exception_Validation
+     * @param  Zend_Db_Select $_select current where filter
+     * @param  Voipmanager_Model_AsteriskMeetmeFilter $_filter the string to search for
      */
-    public function update(Voipmanager_Model_AsteriskMeetme $_meetme)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_AsteriskMeetmeFilter $_filter)
     {
-        if (! $_meetme->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid meetme');
-        }
-        $meetmeId = $_meetme->getId();
-        $meetmeData = $_meetme->toArray();
-        unset($meetmeData['id']);
-
-        $where = array($this->_db->quoteInto('id = ?', $meetmeId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'asterisk_meetme', $meetmeData, $where);
-        
-        return $this->get($meetmeId);
-    }    
-
-
-    /**
-     * delete meetme(s) identified by meetme id
-     *
-     * @param string|array|Tinebase_Record_RecordSet $_id
-     * @return void
-     * @throws  Voipmanager_Exception_Backend
-     */
-    public function delete($_id)
-    {
-        foreach ((array)$_id as $id) {
-            $meetmeId = Voipmanager_Model_AsteriskMeetme::convertAsteriskMeetmeIdToInt($id);
-            $where[] = $this->_db->quoteInto('id = ?', $meetmeId);
-        }
-
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-
-            // NOTE: using array for second argument won't work as delete function joins array items using "AND"
-            foreach($where AS $where_atom)
-            {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'asterisk_meetme', $where_atom);
-            }
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Voipmanager_Exception_Backend($e->getMessage());
-        }
-    }  
+        if(!empty($_filter->query)) {
+            $_select->where($this->_db->quoteInto('(confno LIKE ? OR pin LIKE ? OR adminpin LIKE ?)', '%' . $_filter->query . '%'));
+        }        
+    }        
 }

@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:  $
  *
- * @todo        extend Tinebase_Application_Backend_Sql_Abstract
  */
 
 /**
@@ -17,159 +16,29 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Snom_Location
+class Voipmanager_Backend_Snom_Location extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * the constructor
+     * 
+     * @param Zend_Db_Adapter_Abstract $_db
      */
-    protected $_db;    
-
-	/**
-	 * the constructor
-	 */
     public function __construct($_db = NULL)
     {
-        if($_db instanceof Zend_Db_Adapter_Abstract) {
-            $this->_db = $_db;
-        } else {
-            $this->_db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        }
+        parent::__construct(SQL_TABLE_PREFIX . 'snom_location', 'Voipmanager_Model_SnomLocation', $_db);
     }
-        
-	/**
-	 * search locations
-	 * 
-     * @param Voipmanager_Model_SnomLocationFilter $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomLocation
-	 */
-    public function search(Voipmanager_Model_SnomLocationFilter $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
-    {	
-        $where = array();
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'snom_location');
-            
-        if($_pagination instanceof Tinebase_Model_Pagination) {  
-            $_pagination->appendPagination($select);
-        }
-
+    
+    
+    /**
+     * add the fields to search for to the query
+     *
+     * @param  Zend_Db_Select $_select current where filter
+     * @param  Voipmanager_Model_SnomLocationFilter $_filter the filter values to search for
+     */
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_SnomLocationFilter $_filter)
+    {
         if(!empty($_filter->query)) {
-            $select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
-        } else {
-            // handle the other fields separately
+            $_select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
         }
-       
-        $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLocation', $rows);
-		
-        return $result;
-	}    
-    
-    
-	/**
-	 * get Location by id
-	 * 
-     * @param string|Voipmanager_Model_SnomLocation $_id
-	 * @return Voipmanager_Model_SnomLocation
-	 * @throws Voipmanager_Exception_NotFound
-	 */
-    public function get($_id)
-    {	
-        $locationId = Voipmanager_Model_SnomLocation::convertSnomLocationIdToInt($_id);
-        
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_location')->where($this->_db->quoteInto('id = ?', $locationId));
-        $row = $this->_db->fetchRow($select);
-        if (! $row) {
-            throw new Voipmanager_Exception_NotFound('location not found');
-        }
-
-        $result = new Voipmanager_Model_SnomLocation($row);
-        return $result;
-	}    
-    
-    
-   
-     /**
-     * insert new location
-     *
-     * @param Voipmanager_Model_SnomLocation $_location the location data
-     * @return Voipmanager_Model_SnomLocation
-     * @throws  Voipmanager_Exception_Validation
-     */
-    public function create(Voipmanager_Model_SnomLocation $_location)
-    {
-        if (! $_location->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid location');
-        }
-        
-        if ( empty($_location->id) ) {
-        	$_location->setId(Tinebase_Record_Abstract::generateUID());
-        }
-        
-        $locationData = $_location->toArray();
-        
-        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_location', $locationData);
-
-        return $this->get($_location->id);
-    }
-    
-    
-    /**
-     * update an existing location
-     *
-     * @param Voipmanager_Model_Location $_location the locationdata
-     * @return Voipmanager_Model_Location
-     * @throws  Voipmanager_Exception_Validation
-     */
-    public function update(Voipmanager_Model_SnomLocation $_location)
-    {
-        if (! $_location->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid location');
-        }
-        $locationId = $_location->getId();
-        $locationData = $_location->toArray();
-        unset($locationData['id']);
-
-        $where = array($this->_db->quoteInto('id = ?', $locationId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'snom_location', $locationData, $where);
-        
-        return $this->get($locationId);
-    }    
-     
-    
-    
-    /**
-     * delete location identified by location id
-     *
-     * @param int|array $_id location id
-     * @throws  Voipmanager_Exception_Backend
-     */
-    public function delete($_id)
-    {
-        foreach ((array)$_id as $id) {
-            $locationId = Voipmanager_Model_SnomLocation::convertSnomLocationIdToInt($id);            
-            $where[] = $this->_db->quoteInto('id = ?', $locationId);
-        }
-                
-        
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-
-            // NOTE: using array for second argument won't work as delete function joins array items using "AND"
-            foreach($where AS $where_atom)
-            {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'snom_location', $where_atom);
-            }
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Voipmanager_Exception_Backend($e->getMessage());
-        }
-       
-    }    
-    
+    }               
 }

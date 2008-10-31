@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        extend Tinebase_Application_Backend_Sql_Abstract
  */
 
 /**
@@ -16,184 +15,51 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Asterisk_SipPeer
+class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * the constructor
+     * 
+     * @param Zend_Db_Adapter_Abstract $_db
      */
-    protected $_db;    
-    
-	/**
-	 * the constructor
-	 */
     public function __construct($_db = NULL)
     {
-        if($_db instanceof Zend_Db_Adapter_Abstract) {
-            $this->_db = $_db;
-        } else {
-            $this->_db = Zend_Registry::get('dbAdapter');
-        }
+        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_sip_peers', 'Voipmanager_Model_AsteriskSipPeer', $_db);
     }
     
     /**
-	 * search for Sip Peers
-	 * 
-     * @param Voipmanager_Model_AsteriskSipPeerFilter|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_AsteriskSipPeer
-	 */
-    public function search($_filter = NULL, $_pagination = NULL)
-    {	
-        if(!empty($_context)) {
-            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('context = ?', $_context);
-        }
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'asterisk_sip_peers');
-
-        if($_pagination instanceof Tinebase_Model_Pagination) {
-            $_pagination->appendPagination($select);
-        }
-        
-        if($_filter instanceof Voipmanager_Model_AsteriskSipPeerFilter) {
-            if(!empty($_filter->query)) {
-                $search_values = explode(" ", $_filter->query);
-                
-                $search_fields = array('callerid', 'name', 'ipaddr');
-                $fields = '';
-                foreach($search_fields AS $search_field) {
-                    $fields .= " OR " . $search_field . " LIKE ?";    
-                }
-                $fields = substr($fields, 3);
-            
-                foreach($search_values AS $search_value) {
-                    $select->where($this->_db->quoteInto('('.$fields.')', '%' . trim($search_value) . '%'));                            
-                }
-            }
-            
-            if(!empty($_filter->name)) {
-                $select->where($this->_db->quoteInto('name = ?', $_filter->name));
-            }
-
-            if(!empty($_filter->context)) {
-                $select->where($this->_db->quoteInto('context = ?', $_filter->context));
-            }
-
-            if(!empty($_filter->username)) {
-                $select->where($this->_db->quoteInto('username = ?', $_filter->username));
-            }
-        }
-       
-        $stmt = $this->_db->query($select);
-
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_AsteriskSipPeer', $rows);
-		
-        return $result;
-	}
-    
-	/**
-	 * get Sip peer by id
-	 * 
-     * @param string $_id the id of the Sip peer
-	 * @return Voipmanager_Model_AsteriskSipPeer
-	 * @throws Voipmanager_Exception_NotFound
-	 */
-    public function get($_id)
-    {	
-        $sipPeerId = Voipmanager_Model_AsteriskSipPeer::convertAsteriskSipPeerIdToInt($_id);
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'asterisk_sip_peers')
-            ->where($this->_db->quoteInto('id = ?', $sipPeerId));
-            
-        $row = $this->_db->fetchRow($select);
-        
-        if (!$row) {
-            throw new Voipmanager_Exception_NotFound('sip peer not found');
-        }
-
-        $result = new Voipmanager_Model_AsteriskSipPeer($row);
-        
-        return $result;
-	}
-	   
-    /**
-     * add new asterisk Sip peer
+     * add the fields to search for to the query
      *
-     * @param Voipmanager_Model_AsteriskSipPeer $_peer the Sip peer data
-     * @return Voipmanager_Model_AsteriskSipPeer
-     * @throws  Voipmanager_Exception_Validation
+     * @param  Zend_Db_Select $_select current where filter
+     * @param  Voipmanager_Model_AsteriskSipPeerFilter $_filter the string to search for
      */
-    public function create(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_AsteriskSipPeerFilter $_filter)
     {
-        if (!$_sipPeer->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid sipPeer');
-        }
-
-        if (empty($_sipPeer->id) ) {
-            $_sipPeer->setId(Tinebase_Record_Abstract::generateUID());
-        }
-        
-        $sipPeer = $_sipPeer->toArray();
-        
-        $this->_db->insert(SQL_TABLE_PREFIX . 'asterisk_sip_peers', $sipPeer);
-
-        return $this->get($_sipPeer);
-    }
-    
-    /**
-     * update an existing asterisk sip peer
-     *
-     * @param Voipmanager_Model_AsteriskSipPeer $_sipPeer the sip peer data
-     * @return Voipmanager_Model_AsteriskSipPeer
-     * @throws  Voipmanager_Exception_Validation
-     */
-    public function update(Voipmanager_Model_AsteriskSipPeer $_sipPeer)
-    {
-        if (!$_sipPeer->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid sip peer');
-        }
-        
-        $sipPeerId = $_sipPeer->getId();
-        $sipPeerData = $_sipPeer->toArray();
-        unset($sipPeerData['id']);
-
-        $where = array($this->_db->quoteInto('id = ?', $sipPeerId));
-        
-        $this->_db->update(SQL_TABLE_PREFIX . 'asterisk_sip_peers', $sipPeerData, $where);
-        
-        return $this->get($_sipPeer);
-    }        
-    
-    /**
-     * delete sip peer(s) identified by sip peer id
-     *
-     * @param string|array|Tinebase_Record_RecordSet $_id
-     * @return void
-     * @throws  Voipmanager_Exception_Backend
-     */
-    public function delete($_id)
-    {
-        foreach ((array)$_id as $id) {
-            $sipPeerId = Voipmanager_Model_AsteriskSipPeer::convertAsteriskSipPeerIdToInt($id);
-            $where[] = $this->_db->quoteInto('id = ?', $sipPeerId);
-        }
-
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-
-            // NOTE: using array for second argument won't work as delete function joins array items using "AND"
-            foreach($where AS $where_atom)
-            {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'asterisk_sip_peers', $where_atom);
+        if(!empty($_filter->query)) {
+            $search_values = explode(" ", $_filter->query);
+            
+            $search_fields = array('callerid', 'name', 'ipaddr');
+            $fields = '';
+            foreach($search_fields AS $search_field) {
+                $fields .= " OR " . $search_field . " LIKE ?";    
             }
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Voipmanager_Exception_Backend($e->getMessage());
+            $fields = substr($fields, 3);
+        
+            foreach($search_values AS $search_value) {
+                $_select->where($this->_db->quoteInto('('.$fields.')', '%' . trim($search_value) . '%'));                            
+            }
         }
-    }      
-    
+        
+        if(!empty($_filter->name)) {
+            $_select->where($this->_db->quoteInto('name = ?', $_filter->name));
+        }
+
+        if(!empty($_filter->context)) {
+            $_select->where($this->_db->quoteInto('context = ?', $_filter->context));
+        }
+
+        if(!empty($_filter->username)) {
+            $_select->where($this->_db->quoteInto('username = ?', $_filter->username));
+        }
+    }            
 }
