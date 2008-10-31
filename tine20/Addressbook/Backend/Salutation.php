@@ -19,42 +19,10 @@
 class Addressbook_Backend_Salutation extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Addressbook_Backend_Salutation
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Phone_Backend_Snom_Callhistory
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Backend_Salutation();
-        }
-        
-        return self::$_instance;
-    }
-
-    /**
      * the constructor
-     * 
-     * don't use the constructor. use the singleton
      */
-    private function __construct ()
+    public function __construct ()
     {
-        $this->_tableName = SQL_TABLE_PREFIX . 'addressbook_salutations';
-        $this->_modelName = 'Addressbook_Model_Salutation';
-        $this->_db = Zend_Registry::get('dbAdapter');
+        parent::__construct(SQL_TABLE_PREFIX . 'addressbook_salutations', 'Addressbook_Model_Salutation');
     }    
-
 }

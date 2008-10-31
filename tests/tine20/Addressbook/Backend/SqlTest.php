@@ -29,6 +29,13 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
+     * Backend
+     *
+     * @var Addressbook_Backend_Sql
+     */
+    protected $_backend;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -48,6 +55,8 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -199,7 +208,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testAddContact()
     {
-        $contact = Addressbook_Backend_Sql::getInstance()->create($this->objects['initialContact']);
+        $contact = $this->_backend->create($this->objects['initialContact']);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
@@ -211,7 +220,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContact()
     {
-        $contact = Addressbook_Backend_Sql::getInstance()->get($this->objects['initialContact']);
+        $contact = $this->_backend->get($this->objects['initialContact']);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
@@ -223,7 +232,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testImage()
     {
-        $contact = Addressbook_Backend_Sql::getInstance()->get($this->objects['initialContact']);
+        $contact = $this->_backend->get($this->objects['initialContact']);
         $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
         file_put_contents($tmpPath, $contact->jpegphoto);
         $this->assertFileEquals(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif', $tmpPath);
@@ -236,16 +245,20 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateContact()
     {
-        $contact = Addressbook_Backend_Sql::getInstance()->update($this->objects['updatedContact']);
+        $contact = $this->_backend->update($this->objects['updatedContact']);
         
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
     }
     
+    /**
+     * try to remove image
+     *
+     */
     public function testRemoveImage()
     {
-        $contact = Addressbook_Backend_Sql::getInstance()->get($this->objects['initialContact']);
+        $contact = $this->_backend->get($this->objects['initialContact']);
         $contact->jpegphoto = '';
-        $updatedContact = Addressbook_Backend_Sql::getInstance()->update($contact);
+        $updatedContact = $this->_backend->update($contact);
         $this->assertEquals('', $updatedContact->jpegphoto);
     }
     
@@ -255,11 +268,11 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContact()
     {
-        Addressbook_Backend_Sql::getInstance()->delete($this->objects['initialContact']);
+        $this->_backend->delete($this->objects['initialContact']);
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $contact = Addressbook_Backend_Sql::getInstance()->get($this->objects['initialContact']);
+        $contact = $this->_backend->get($this->objects['initialContact']);
     }
 }		
 	

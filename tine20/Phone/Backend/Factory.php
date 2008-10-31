@@ -17,6 +17,18 @@
 class Phone_Backend_Factory
 {
     /**
+     * object instance
+     *
+     * @var Addressbook_Backend_Factory
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * backend object instances
+     */
+    private static $_backends = array();
+    
+    /**
      * constant for the asterisk backend class
      *
      */
@@ -31,32 +43,36 @@ class Phone_Backend_Factory
     /**
      * factory function to return a selected phone backend class
      *
-     * @param   string $type
+     * @param   string $_type
      * @return  Phone_Backend_Interface
      * @throws  Phone_Exception_InvalidArgument
      * @throws  Phone_Exception_NotFound
      */
-    static public function factory($type)
+    static public function factory($_type)
     {
-        switch($type) {
+        switch($_type) {
             case self::ASTERISK:
-                if(isset(Tinebase_Core::getConfig()->asterisk)) {
-                    $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
-                    $url = $asteriskConfig->managerurl;
-                    $username = $asteriskConfig->managerusername;
-                    $password = $asteriskConfig->managerpassword;
-                } else {
-                    throw new Phone_Exception_NotFound('No settings found for asterisk backend in config.ini.');
+                if (!isset(self::$_backends[$_type])) {
+                    if(isset(Tinebase_Core::getConfig()->asterisk)) {
+                        $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
+                        $url = $asteriskConfig->managerurl;
+                        $username = $asteriskConfig->managerusername;
+                        $password = $asteriskConfig->managerpassword;
+                    } else {
+                        throw new Phone_Exception_NotFound('No settings found for asterisk backend in config.ini!');
+                    }
+                    self::$_backends[$_type] = Phone_Backend_Asterisk::getInstance($url, $username, $password);
                 }
-                $instance = Phone_Backend_Asterisk::getInstance($url, $username, $password);
-                break;
-                
+                $instance = self::$_backends[$_type];
+                break;            
             case self::CALLHISTORY:
-                $instance = Phone_Backend_Snom_Callhistory::getInstance();
-                break;
-                
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Phone_Backend_Snom_Callhistory();
+                }
+                $instance = self::$_backends[$_type];
+                break;                            
             default:
-                throw new Phone_Exception_InvalidArgument('Unsupported phone backend (' . $type . ').');
+                throw new Phone_Exception_InvalidArgument('Unsupported phone backend (' . $_type . ').');
         }
 
         return $instance;

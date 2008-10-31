@@ -20,42 +20,12 @@
 class Phone_Backend_Snom_Callhistory extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Phone_Backend_Snom_Callhistory
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Phone_Backend_Snom_Callhistory
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Phone_Backend_Snom_Callhistory();
-        }
-        
-        return self::$_instance;
-    }
-
-    /**
      * the constructor
      * 
-     * don't use the constructor. use the singleton 
      */
-    private function __construct ()
+    public function __construct ()
     {
-        $this->_tableName = SQL_TABLE_PREFIX . 'phone_callhistory';
-        $this->_modelName = 'Phone_Model_Call';
-        $this->_db = Zend_Registry::get('dbAdapter');
+        parent::__construct(SQL_TABLE_PREFIX . 'phone_callhistory', 'Phone_Model_Call');
     }    
 
     /*********************** helper functions ***********************/

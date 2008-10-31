@@ -21,6 +21,13 @@
 class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_Abstract
 {
     /**
+     * the contacts backend
+     *
+     * @var Addressbook_Backend_Salutation
+     */
+    protected $_backend;
+    
+    /**
      * holdes the instance of the singleton
      *
      * @var Addressbook_Controller_Salutation
@@ -42,6 +49,16 @@ class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_
     }
             
     /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() {
+        $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SALUTATION);
+        $this->_currentAccount = Zend_Registry::get('currentAccount');
+    }
+        
+    /**
      * get salutations
      *
      * @param string $_sort
@@ -50,8 +67,7 @@ class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_
      */
     public function getSalutations($_sort = 'id', $_dir = 'ASC')
     {
-        $backend = Addressbook_Backend_Salutation::getInstance();        
-        $result = $backend->getAll($_sort, $_dir);
+        $result = $this->_backend->getAll($_sort, $_dir);
 
         return $result;    
     }

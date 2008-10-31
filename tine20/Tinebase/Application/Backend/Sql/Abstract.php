@@ -45,6 +45,17 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected $_db;
     
+    /**
+     * the constructor
+     *
+     */
+    public function __construct ($_tableName, $_modelName, $_dbAdapter = NULL)
+    {
+        $this->_db = ($_dbAdapter === NULL ) ? Tinebase_Core::getDb() : $_dbAdapter;
+        $this->_tableName = $_tableName;
+        $this->_modelName = $_modelName;
+    }
+    
     /*************************** get/search funcs ************************************/
 
     /**

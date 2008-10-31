@@ -21,42 +21,11 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
      */
-    private function __construct ()
+    public function __construct ()
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_tableName = SQL_TABLE_PREFIX . 'addressbook';
-        $this->_modelName = 'Addressbook_Model_Contact';
+        parent::__construct(SQL_TABLE_PREFIX . 'addressbook', 'Addressbook_Model_Contact');
     }
-
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone ()
-    {
-    }
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Addressbook_Backend_Sql
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Addressbook_Backend_Sql
-     */
-    public static function getInstance ()
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Backend_Sql();
-        }
-        return self::$_instance;
-    }    
 
     /**
      * Returns a set of contacts identified by their id's
