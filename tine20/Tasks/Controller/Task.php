@@ -191,12 +191,12 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
     }
     
     /**
-     * Deletes an re more existing Task
+     * Deletes one or more existing Task
      *
      * @param   string|array $_identifier
      * @return  void
      * @throws  Tasks_Exception_NotFound
-     * @throws  Tasks_Exception_AccessDenied
+     * @throws  Tasks_Exception
      */
     public function deleteTask($_identifier)
     {
@@ -204,14 +204,26 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
         if (count((array)$_identifier) != count($tasks)) {
             throw new Tasks_Exception_NotFound('Error, only ' . count($tasks) . ' of ' . count((array)$_identifier) . ' tasks exist');
         }
-        
-        foreach ($tasks as $task) {
-            if (!$this->_currentAccount->hasGrant($task->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                throw new Tasks_Exception_AccessDenied('You are only allowed to delete task "' . $task->getId() . '"');
+                    
+        try {        
+            $db = Zend_Registry::get('dbAdapter');
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            foreach ($tasks as $task) {
+                if (!$this->_currentAccount->hasGrant($task->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
+                    throw new Tasks_Exception_AccessDenied('You are only allowed to delete task "' . $task->getId() . '"');
+                }
+                $this->_backend->delete($task);
+                
+                // remove relations
+                Tinebase_Relations::getInstance()->setRelations('Tasks_Model_Task', 'Sql', $task->getId(), array());
+                
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
-        }
-        
-        $this->_backend->delete($_identifier);
+                
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw new Tasks_Exception($e->getMessage());
+        }                
     }
-
 }

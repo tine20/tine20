@@ -22,8 +22,7 @@
  * 
  * @todo    remove current account from sql backend
  * @todo    add function for complete removal of tasks?
- * @todo    split backend (status/tasks)
- * @todo    use more functions from Tinebase_Application_Backend_Sql_Abstract
+ * @todo    split backend (status/tasks)?
  */
 class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
 {
@@ -44,7 +43,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     /**
      * Holds the table instances for the different tables
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_tables = array();
     
@@ -66,67 +65,16 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             $this->_tableNames[$basename] = SQL_TABLE_PREFIX . $name;
         }
         
-        $this->_tableName = $this->_tableNames['tasks'];
-        $this->_modelName = 'Tasks_Model_Task';
-        $this->_db = Zend_Registry::get('dbAdapter');
-       
         try {
             $this->_currentAccount = Zend_Registry::get('currentAccount');
         } catch (Zend_Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'no account available: ' . $e->getMessage());
         }
-    }
-    
-    /************************** check the following functions **********************/
         
-    // @todo check which functions are still needed
-    // @todo check which functions can be replaced by functions from Tinebase_Application_Backend_Sql_Abstract
-    
-    /**
-     * Return a single Task
-     *
-     * @param string $_id
-     * @return Tasks_Model_Task task
-     * @throws Tasks_Exception_NotFound if task could not be found
-     */
-    public function get($_id)
-    {
-        $stmt = $this->_db->query($this->_getSelect()
-            ->where($this->_db->quoteInto('tasks.id = ?', $_id))
-        );
+        // set identifier with table name because we join tables in _getSelect()
+        $this->_identifier = 'tasks.id';
         
-        $TaskArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        if (empty($TaskArray)) {
-            throw new Tasks_Exception_NotFound("Task with uid: $_id not found!");
-        }
-        
-        $Task = new Tasks_Model_Task($TaskArray[0], true, true); 
-        return $Task;
-    }
-
-    /**
-     * returns a set of tasks identified by their id's
-     * 
-     * @param  array $_ids
-     * @return Tinebase_RecordSet of Tasks_Model_Task
-     */
-    public function getMultiple($_ids)
-    {
-        $taskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
-        
-        if (!empty($_ids)) {
-            $stmt = $this->_db->query($this->_getSelect()
-                ->where($this->_db->quoteInto('tasks.id IN (?)', $_ids))
-            );
-            
-            $taskArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            
-            foreach ($taskArray as $task) {
-                $taskSet->addRecord(new Tasks_Model_Task($task));
-            }
-        }
-        return $taskSet;
+        parent::__construct($this->_tableNames['tasks'], 'Tasks_Model_Task');
     }
     
     /**
@@ -214,7 +162,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     }
     
     /**
-     * Deletes one or more existing Task
+     * Deletes a Task
      *
      * @param   string|array $_id
      * @return  void
@@ -222,6 +170,8 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      */
     public function delete($_id)
     {
+        $id = $this->_convertId($_id);
+        
         $tasksTable = $this->getTableInstance('tasks');
         $data = array(
             'is_deleted'   => true, 
@@ -229,21 +179,10 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             'deleted_by'   => $this->_currentAccount->getId()
         );
         
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            foreach ((array)$_id as $id) {
-                // NOTE: cascading delete through the use of forign keys!
-                //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('id = ?', $_uid));
-                $tasksTable->update($data, array(
-                    $this->_db->quoteInto('id = ?', $id)
-                ));
-            }
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Tasks_Exception_Backend($e->getMessage);
-        }
+        //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('id = ?', $_uid));
+        $tasksTable->update($data, array(
+            $this->_db->quoteInto('id = ?', $id)
+        ));
     }
     
     /**
