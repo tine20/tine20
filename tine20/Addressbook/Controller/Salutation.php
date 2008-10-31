@@ -21,7 +21,7 @@
 class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_Abstract
 {
     /**
-     * the contacts backend
+     * the salutation backend
      *
      * @var Addressbook_Backend_Salutation
      */
