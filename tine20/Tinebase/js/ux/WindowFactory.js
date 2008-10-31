@@ -79,6 +79,8 @@ Ext.ux.WindowFactory.prototype = {
         c.items = this.getWindowItems(c);
         
         var win = new Ext.Window(c);
+        c.items.window = win;
+        
         win.show();
         return win;
     },
@@ -94,6 +96,10 @@ Ext.ux.WindowFactory.prototype = {
             for (var i=0; i<parts.length; i++) {
                 ref = ref[parts[i]];
             }
+            
+            // place a referece to current window class in the itemConsturctor.
+            // this may be overwritten depending on concrete window implementation
+            config.itemsConstructorConfig.window = config;
             var items = new ref(config.itemsConstructorConfig);
         } else {
             items = config.items ? config.items : {};
