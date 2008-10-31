@@ -26,45 +26,22 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     {
         parent::__construct(SQL_TABLE_PREFIX . 'addressbook', 'Addressbook_Model_Contact');
     }
-
-    /**
-     * Returns a set of contacts identified by their id's
-     * 
-     * @param  array $_ids array of int
-     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
-     * @deprecated
-     * @todo replace by getMultiple function from SqlTableBackend 
-     */
-    public function getMultiple($_contactIds)
-    {
-        $contacts = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        
-        if (!empty($_contactIds)) {
-            $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('id IN (?)', $_contactIds));
-            $stmt = $this->_db->query($select);
-            $contactsArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            
-            foreach ($contactsArray as $contact) {
-                $contacts->addRecord(new Addressbook_Model_Contact($contact));
-            }
-        }
-        return $contacts;
-    }
     
     /**
-     * delete contact identified by contact id
+     * fetch one contact identified by contactid
      *
-     * @param int $_contactId contact ids
-     * @return int the number of rows deleted
-     * 
-     * @deprecated
-     * @todo replace by delete function from SqlTableBackend 
+     * @param   int $_userId
+     * @return  Addressbook_Model_Contact 
+     * @throws  Addressbook_Exception_NotFound if contact not found
      */
-    public function delete ($_contactId)
+    public function getByUserId($_userId)
     {
-        $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactId);
-        $where = array($this->_db->quoteInto('id = ?', $contactId) , $this->_db->quoteInto('id = ?', $contactId));
-        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'addressbook', $where);
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('account_id = ?', $_userId));
+        $row = $this->_db->fetchRow($select);
+        if (! $row) {
+            throw new Addressbook_Exception_NotFound('Contact with user id ' . $_userId . ' not found.');
+        }
+        $result = new Addressbook_Model_Contact($row);
         return $result;
     }
     
@@ -80,26 +57,5 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
         
         $_filter->appendFilterSql($_select);
-    }
-    
-    /**
-     * fetch one contact identified by contactid
-     *
-     * @param   int $_userId
-     * @return  Addressbook_Model_Contact 
-     * @throws  Addressbook_Exception_NotFound if contact not found
-     * 
-     * @todo add test
-     */
-    public function getByUserId($_userId)
-    {
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('account_id = ?', $_userId));
-        $row = $this->_db->fetchRow($select);
-        if (! $row) {
-            throw new Addressbook_Exception_NotFound('Contact with user id ' . $_userId . ' not found.');
-        }
-        $result = new Addressbook_Model_Contact($row);
-        return $result;
-    }
-    
+    }    
 }

@@ -155,8 +155,6 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
      * 
      * @param  array $_ids array of string
      * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
-     * 
-     * @todo    write test
      */
     public function getMultipleContacts($_contactIds)
     {
