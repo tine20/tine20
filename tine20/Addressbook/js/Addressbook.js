@@ -912,7 +912,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                 	
                     if(_closeWindow === true) {
                       	this.purgeListeners();
-                        window.close();
+                        this.window.close();
                     } else {
                         this.updateToolbarButtons(this.contact);
                         
@@ -942,7 +942,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             text: this.translation.gettext('Deleting contact...'),
             success: function(_result, _request) {
                 this.fireEvent('update', this.contact);
-                window.close();
+                this.window.close();
             },
             failure: function ( result, request) { 
                 Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occured while trying to delete the contact.')); 
