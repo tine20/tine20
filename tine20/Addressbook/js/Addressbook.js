@@ -86,7 +86,11 @@ Tine.Addressbook.Main = {
 	    addContact: function(_button, _event) {
             var selectedNode = Ext.getCmp('Addressbook_Tree').getSelectedContainer();
             Tine.Addressbook.ContactEditDialog.openWindow({
-                forceContainer: selectedNode
+                forceContainer: selectedNode,
+                listeners: {
+                    scope: this,
+                    'update': this.onRecordUpdate
+                }
             });
         },
 
@@ -95,7 +99,13 @@ Tine.Addressbook.Main = {
          */
         editContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
-            Tine.Addressbook.ContactEditDialog.openWindow({contact: selectedRows[0]});
+            Tine.Addressbook.ContactEditDialog.openWindow({
+                contact: selectedRows[0],
+                listeners: {
+                    scope: this,
+                    'update': this.onRecordUpdate
+                }
+            });
         },
 
         /**
@@ -224,8 +234,7 @@ Tine.Addressbook.Main = {
 	    }		
 	},
 
-    initComponent: function()
-    {
+    initComponent: function() {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Addressbook');
     
@@ -289,8 +298,7 @@ Tine.Addressbook.Main = {
         
     },
 
-    updateMainToolbar : function() 
-    {
+    updateMainToolbar : function() {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
         menu.removeAll();
         /*menu.add(
@@ -310,8 +318,14 @@ Tine.Addressbook.Main = {
         preferencesButton.setDisabled(true);
     },
 	
-    initToolbar: function()
-    {
+    /**
+     * execuded when a record gets updated
+     */
+    onRecordUpdate: function() {
+        this.reload();
+    },
+    
+    initToolbar: function() {
         this.contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
             split: false,
@@ -327,8 +341,7 @@ Tine.Addressbook.Main = {
         });
     },
 
-    initContactsGrid: function() 
-    {
+    initContactsGrid: function() {
         // the filter toolbar
         var filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'addressbookFilterToolbar',
@@ -612,7 +625,13 @@ Tine.Addressbook.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            Tine.Addressbook.ContactEditDialog.openWindow({contact: record});
+            Tine.Addressbook.ContactEditDialog.openWindow({
+                contact: record,
+                listeners: {
+                    scope: this,
+                    'update': this.onRecordUpdate
+                }
+            });
         }, this);
 
         gridPanel.on('keydown', function(e){
@@ -887,22 +906,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                     contactData: Ext.util.JSON.encode(this.contact.data)
                 },
                 success: function(response) {
-                	if(window.opener.Tine.Addressbook) {
-                        window.opener.Tine.Addressbook.Main.reload();
-                	}
                     this.onContactLoad(response);
-                	/*
-                	// update record
-                	var contactData = Ext.util.JSON.decode(_result.responseText).updatedData; 
-                	this.updateContactRecord(contactData);
-                	form.loadRecord(this.contact);
-                    Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
-                	*/
-                    // notify opener and return contact data
-                    this.windowManager.get(window).fireEvent('update', this.contact); 
+
+                    this.fireEvent('update', this.contact); 
                 	
                     if(_closeWindow === true) {
-                      	this.windowManager.get(window).purgeListeners();
+                      	this.purgeListeners();
                         window.close();
                     } else {
                         this.updateToolbarButtons(this.contact);
