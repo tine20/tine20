@@ -90,7 +90,7 @@ Ext.ux.form.MirrorTextFieldManager = function() {
             var m = MirrorTextFields[field.name];
             if(m){
                 m.remove(field);
-                field.un("change", toggleGroup);
+                field.un("change", MirrorField);
             }
         },
         
