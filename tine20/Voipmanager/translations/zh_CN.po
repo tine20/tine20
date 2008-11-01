@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-19 23:10-0800\n"
+"PO-Revision-Date: 2008-11-01 00:02-0800\n"
 "Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -262,7 +262,7 @@ msgstr "有资格"
 
 #: js/Asterisk/SipPeer.js:235
 msgid "restrict cid"
-msgstr ""
+msgstr "限制来电"
 
 #: js/Asterisk/SipPeer.js:236
 msgid "rtp timeout"
@@ -270,7 +270,7 @@ msgstr "rtp 超时"
 
 #: js/Asterisk/SipPeer.js:237
 msgid "rtp hold timeout"
-msgstr ""
+msgstr "rtp 等待超时"
 
 #: js/Asterisk/SipPeer.js:238
 msgid "secret"
@@ -294,7 +294,7 @@ msgstr "允许"
 
 #: js/Asterisk/SipPeer.js:243
 msgid "music on hold"
-msgstr ""
+msgstr "等待音乐"
 
 #: js/Asterisk/SipPeer.js:244
 msgid "reg seconds"
@@ -479,7 +479,7 @@ msgstr "允许"
 
 #: js/Asterisk/SipPeer.js:908
 msgid "Music on hold"
-msgstr ""
+msgstr "等待音乐"
 
 #: js/Asterisk/SipPeer.js:922
 msgid "Reg Seconds"
@@ -560,7 +560,7 @@ msgstr "传呼机"
 #: js/Asterisk/Voicemail.js:201
 #: js/Asterisk/Voicemail.js:519
 msgid "tz"
-msgstr ""
+msgstr "时区"
 
 #: js/Asterisk/Voicemail.js:202
 #: js/Asterisk/Voicemail.js:602
@@ -783,7 +783,7 @@ msgstr ""
 #: js/MyPhones.js:176
 #: js/Snom/Phone.js:302
 msgid "last modified"
-msgstr ""
+msgstr "最后修改的"
 
 #: js/MyPhones.js:409
 #: js/Snom/Phone.js:994
@@ -947,7 +947,7 @@ msgstr "安静"
 #: js/Snom/Phone.js:1471
 #: js/Snom/Settings.js:675
 msgid "beep"
-msgstr ""
+msgstr "哔哔"
 
 #: js/MyPhones.js:697
 #: js/Snom/Phone.js:1472
@@ -1250,7 +1250,7 @@ msgstr "没有设置要显示"
 
 #: js/Snom/Settings.js:443
 msgid "SettingsMain"
-msgstr ""
+msgstr "主配置"
 
 #: js/Snom/Software.js:90
 msgid "add software"
