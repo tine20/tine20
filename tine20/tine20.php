@@ -52,5 +52,3 @@ if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || empty($
 
 Tinebase_Core::set('opts', $opts);
 Tinebase_Core::dispatchRequest();
-
-?>
