@@ -158,11 +158,7 @@ class Tinebase_Core
         if(file_exists(dirname(__FILE__) . '/../config.inc.php')) {
             $config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
         } else {
-            try {
-                $config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-            } catch (Zend_Config_Exception $e) {
-                die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
-            }
+            die ('central configuration file ' . dirname(__FILE__) . '/../config.inc.php not found');
         }
         self::set(self::CONFIG, $config);  
     }
