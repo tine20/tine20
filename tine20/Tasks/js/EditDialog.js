@@ -27,11 +27,13 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     labelAlign: 'side',
+    
     /**
      * @private
      */
     windowNamePrefix: 'TasksEditWindow_',
     appName: 'Tasks',
+    modelName: 'Task',
     recordClass: Tine.Tasks.Task,
     titleProperty: 'summary',
     containerItemName: 'Task',
@@ -62,78 +64,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRender: function(ct, position) {
         Tine.Tasks.EditDialog.superclass.onRender.call(this, ct, position);
         Ext.MessageBox.wait(this.translation._('Loading Task...'), _('Please Wait'));
-    },
-    
-    /**
-     * @private
-     */
-    handlerApplyChanges: function(_button, _event) {
-        var closeWindow = arguments[2] ? arguments[2] : false;
-
-        var form = this.getForm();
-        if(form.isValid()) {
-            Ext.MessageBox.wait(this.translation._('Please wait'), this.translation._('Saving Task'));
-            
-            // merge changes from form into task record
-            form.updateRecord(this.record);
-            
-            Ext.Ajax.request({
-                scope: this,
-                params: {
-                    method: 'Tasks.saveTask', 
-                    task: Ext.util.JSON.encode(this.record.data)
-                },
-                success: function(response) {
-                    // override task with returned data
-                    this.onDataLoad(response);
-                    this.fireEvent('update', this.record);
-                    
-                    // free 0 namespace if record got created
-                    this.window.rename(this.windowNamePrefix + this.record.id);
-
-                    if (closeWindow) {
-                        this.purgeListeners();
-                        this.window.close();
-                    } else {
-                        // update form with this new data
-                        form.loadRecord(this.record);
-                        this.action_delete.enable();
-                        Ext.MessageBox.hide();
-                    }
-                },
-                failure: function ( result, request) { 
-                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
-                } 
-            });
-        } else {
-            Ext.MessageBox.alert(this.translation._('Errors'), this.translation._('Please fix the errors noted.'));
-        }
-    },
-    
-    /**
-     * @private
-     */
-    handlerDelete: function(_button, _event) {
-        Ext.MessageBox.confirm(this.translation._('Confirm'), this.translation._('Do you really want to delete this task?'), function(_button) {
-            if(_button == 'yes') {
-                Ext.MessageBox.wait(this.translation._('Please wait a moment...'), this.translation._('Saving Task'));
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Tasks.deleteTask',
-                        identifier: this.record.id
-                    },
-                    success: function(_result, _request) {
-                        this.fireEvent('update', this.record);
-                        this.purgeListeners();
-                        this.window.close();
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not delete task(s).'));
-                        Ext.MessageBox.hide();
-                    }
-                });
-            }
-        });
     },
     
     /**

@@ -26,6 +26,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     appName: null,
     /**
+     * @cfg {String} name of the model/record
+     */
+    modelName: null,
+    /**
      * @cfg {Ext.data.Record} record definition class
      */
     recordClass: null,
@@ -101,45 +105,39 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             'apply'
         );
         
-        this.initHandlers();
         this.action_saveAndClose = new Ext.Action({
             requiredGrant: 'editGrant',
             text: _('Ok'),
-            //tooltip: 'Save changes and close this window',
             minWidth: 70,
-            //handler: this.onSaveAndClose,
-            handler: this.handlerSaveAndClose,
+            scope: this,
+            handler: this.onSaveAndClose,
             iconCls: 'action_saveAndClose',
-            scope: this.handlerScope
         });
     
         this.action_applyChanges =new Ext.Action({
             requiredGrant: 'editGrant',
             text: _('Apply'),
-            //tooltip: 'Save changes',
             minWidth: 70,
-            handler: this.handlerApplyChanges,
+            scope: this,
+            handler: this.onApplyChanges,
             iconCls: 'action_applyChanges',
-            scope: this.handlerScope
-            //disabled: true
         });
         
         this.action_cancel = new Ext.Action({
             text: _('Cancel'),
-            //tooltip: 'Reject changes and close this window',
             minWidth: 70,
-            handler: this.handlerCancel,
+            scope: this,
+            handler: this.onCancel,
             iconCls: 'action_cancel',
-            scope: this.handlerScope
         });
         
         this.action_delete = new Ext.Action({
             requiredGrant: 'deleteGrant',
             text: _('delete'),
             minWidth: 70,
-            handler: this.handlerDelete,
+            scope: this,
+            handler: this.onDelete,
             iconCls: 'action_delete',
-            scope: this.handlerScope,
             disabled: true
         });
         
@@ -264,19 +262,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * @private
-     */
-    initHandlers: function() {
-        this.handlerScope = this.handlerScope ? this.handlerScope : this;
-        
-        this.handlerSaveAndClose = this.handlerSaveAndClose ? this.handlerSaveAndClose : function(e, button) {
-            this.handlerApplyChanges(e, button, true);
-        };
-        
-        this.handlerCancel = this.handlerCancel ? this.handlerCancel : this.closeWindow;
-    },
-    
-    /**
      * update (action updateer) top and bottom toolbars
      */
     updateToolbars: function(record, containerField) {
@@ -303,26 +288,85 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onCancel: function(){
         this.fireEvent('cancel');
         this.purgeListeners();
+        this.window.close();
     },
     
     /**
      * @private
      */
-    onSaveAndClose: function(){
+    onSaveAndClose: function(button, event){
+        this.onApplyChanges(button, event, true);
         this.fireEvent('saveAndClose');
     },
     
     /**
-     * @private
+     * generic apply changes handler
      */
-    onApply: function(){
-        this.fireEvent('apply');
+    onApplyChanges: function(button, event, closeWindow) {
+        var form = this.getForm();
+        if(form.isValid()) {
+            Ext.MessageBox.wait(this.translation._('Please wait'), String.format(this.translation._('Saving {0}'), this.containerItemName));
+            
+            // merge changes from form into task record
+            form.updateRecord(this.record);
+            
+            Ext.Ajax.request({
+                scope: this,
+                params: {
+                    method: this.appName + '.save' + this.modelName, 
+                    task: Ext.util.JSON.encode(this.record.data)
+                },
+                success: function(response) {
+                    // override task with returned data
+                    this.onDataLoad(response);
+                    this.fireEvent('update', this.record);
+                    
+                    // free 0 namespace if record got created
+                    this.window.rename(this.windowNamePrefix + this.record.id);
+
+                    if (closeWindow) {
+                        this.purgeListeners();
+                        this.window.close();
+                    } else {
+                        // update form with this new data
+                        form.loadRecord(this.record);
+                        this.action_delete.enable();
+                        Ext.MessageBox.hide();
+                    }
+                },
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation._('Could not save {0}.'), this.containerItemName)); 
+                } 
+            });
+        } else {
+            Ext.MessageBox.alert(this.translation._('Errors'), this.translation._('Please fix the errors noted.'));
+        }
     },
     
     /**
-     * helper function to close window
+     * generic delete handler
      */
-    closeWindow: function() {
-        this.window.close();
-    }
+    onDelete: function(button, event) {
+        Ext.MessageBox.confirm(this.translation._('Confirm'), String.format(this.translation._('Do you really want to delete this {0}?'), this.containerItemName), function(_button) {
+            if(_button == 'yes') {
+                Ext.MessageBox.wait(this.translation._('Please wait a moment...'), String.format(this.translation._('Deleting {0}'), this.containerItemName));
+                Ext.Ajax.request({
+                    params: {
+                        method: this.appName + '.delete' + this.modelName + 's',
+                        ids: [this.record.id]
+                    },
+                    success: function(_result, _request) {
+                        this.fireEvent('update', this.record);
+                        this.purgeListeners();
+                        this.window.close();
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation.ngettext('Could not delete {0}.', 'Could not delete {0}', 1), this.containerItemName));
+                        Ext.MessageBox.hide();
+                    }
+                });
+            }
+        });
+    },
+
 });
