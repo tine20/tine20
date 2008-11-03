@@ -618,7 +618,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (! this.group.id) {
             window.document.title = this.translation.gettext('Add new group');
         } else {
-            window.document.title = sprintf(this.translation.gettext('Edit Group "%s"'), this.group.get('name'));
+            window.document.title = String.format(this.translation.gettext('Edit Group "{0}"'), this.group.get('name'));
         }
 
         this.getForm().loadRecord(this.group);

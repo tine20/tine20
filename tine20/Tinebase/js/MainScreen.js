@@ -107,8 +107,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             id: 'tineFooter',
             height: 26,
             items:[
-                sprintf(_('User: %s'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), '-',
-                //sprintf(_('Timezone: %s'), Tine.Tinebase.registry.get('timeZone')), '-',
+                String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), '-',
+                //String.format(_('Timezone: {0}'), Tine.Tinebase.registry.get('timeZone')), '-',
                 _('Timezone') + ': ' , new Tine.widgets.TimezoneChooser({}), '-',
                 _('Language') + ': ' , new Tine.widgets.LangChooser({}),
                 '->',
@@ -269,7 +269,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     onChangePassword: function() {
         
         var passwordDialog = new Ext.Window({
-            title: sprintf(_('Change Password For "%s"'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
+            title: String.format(_('Change Password For "{0}"'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
             id: 'changePassword_window',
             closeAction: 'close',
             modal: true,

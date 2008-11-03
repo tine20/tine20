@@ -660,7 +660,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (! this.accountRecord.id) {
             window.document.title = this.translation.gettext('Add New User Account');
         } else {
-            window.document.title = sprintf(this.translation._('Edit User Account "%s"'), this.accountRecord.get('accountDisplayName'));
+            window.document.title = String.format(this.translation._('Edit User Account "{0}"'), this.accountRecord.get('accountDisplayName'));
         }
         
         this.getForm().loadRecord(this.accountRecord);

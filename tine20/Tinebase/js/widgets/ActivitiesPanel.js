@@ -314,7 +314,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
             	
                 var action = new Ext.Action({
                     requiredGrant: 'editGrant',
-                    text: sprintf(this.translation._('Add a %s Note'), record.data.name),
+                    text: String.format(this.translation._('Add a {0} Note'), record.data.name),
                     tooltip: this.translation._(record.data.description),
                     handler: this.handlers.addNote,
                     //iconCls: 'notes_' + record.data.name + 'Icon',

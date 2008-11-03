@@ -614,7 +614,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (! this.tag.id) {
             window.document.title = this.translation.gettext('Add New Tag');
         } else {
-            window.document.title = sprintf(this.translation._('Edit Tag "%s"'), this.tag.get('name'));
+            window.document.title = String.format(this.translation._('Edit Tag "{0}"'), this.tag.get('name'));
         }
         
         Ext.MessageBox.hide();

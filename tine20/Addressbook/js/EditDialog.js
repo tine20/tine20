@@ -488,7 +488,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 record_model: 'Addressbook_Model_Contact'
             }),
             {
-                title: sprintf(translation.ngettext('Link', 'Links [%d]', 1), 1),
+                title: String.format(translation.ngettext('Link', 'Links [%d]', 1), 1),
                 disabled: true
             }
         ]

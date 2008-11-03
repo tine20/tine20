@@ -71,7 +71,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             fields: Tine.Tinebase.Model.Container
         });
         
-        this.title = sprintf(_('Recently used %s:'), this.containersName);
+        this.title = String.format(_('Recently used {0}:'), this.containersName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         
@@ -90,7 +90,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         var cls = 'x-combo-list';
         this.footer = this.list.createChild({cls:cls+'-ft'});
         this.button = new Ext.Button({
-            text: sprintf(_('choose other %s...'), this.containerName),
+            text: String.format(_('choose other {0}...'), this.containerName),
             scope: this,
             handler: this.onChoseOther,
             renderTo: this.footer
@@ -245,7 +245,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
     initComponent: function(){
         Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
         
-        this.title = this.title ? this.title : sprintf(_('please select a %s'), this.containerName);
+        this.title = this.title ? this.title : String.format(_('please select a {0}'), this.containerName);
         
         this.cancleAction = new Ext.Action({
             text: _('Cancel'),

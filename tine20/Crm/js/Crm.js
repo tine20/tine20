@@ -1866,7 +1866,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (! this.lead.id) {
             this.window.setTitle(this.translation.gettext('Add New Lead'));
         } else {
-            this.window.setTitle(sprintf(this.translation._('Edit Lead "%s"'), this.lead.get('lead_name')));
+            this.window.setTitle(String.format(this.translation._('Edit Lead "{0}"'), this.lead.get('lead_name')));
         }
         
         this.getForm().loadRecord(this.lead);

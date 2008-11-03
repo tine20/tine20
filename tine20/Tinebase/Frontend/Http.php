@@ -49,8 +49,6 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/gears_init.js',
             // generic init to be included before parsing of the tine code
             'Tinebase/js/extInit.js',
-            // general helpers
-            'Tinebase/js/Sprintf.js',
             // Locale support
             'Tinebase/js/Locale.js',
             'Tinebase/js/Locale/Gettext.js',

@@ -820,7 +820,7 @@ Tine.Admin.Applications.Main = function() {
     		  break;
     		  
     		default:
-    		  gridValue = sprintf(translation.gettext('unknown status (%s)'), value);
+    		  gridValue = String.format(translation.gettext('unknown status ({0})'), value);
     		  break;
     	}
         

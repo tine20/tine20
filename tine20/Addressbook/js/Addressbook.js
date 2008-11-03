@@ -872,7 +872,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         if (! this.contact.id) {
             this.window.setTitle(this.translation.gettext('Add new contact'));
         } else {
-            this.window.setTitle(sprintf(this.translation._('Edit Contact "%s"'), this.contact.get('n_fn') + 
+            this.window.setTitle(String.format(this.translation._('Edit Contact "{0}"'), this.contact.get('n_fn') + 
                 (this.contact.get('org_name') ? ' (' + this.contact.get('org_name') + ')' : '')));
         }
         
