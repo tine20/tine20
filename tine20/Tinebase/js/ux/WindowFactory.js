@@ -29,6 +29,7 @@ Ext.ux.WindowFactory = function(config) {
         case 'Ext' :
             this.windowClass = Ext.Window;
             this.windowManager = Ext.WindowMgr;
+            Ext.WindowMgr.zseed = 100000;
             break;
         case 'Air' :
             this.windowClass = Ext.air.NativeWindow;
@@ -76,7 +77,7 @@ Ext.ux.WindowFactory.prototype = {
         // add titleBar
         c.height = c.height + 20;
         
-        c.items = this.getWindowItems(c);
+        c.items = this.getContentPanel(c);
         
         // we can only handle one window yet
         c.modal = true;
