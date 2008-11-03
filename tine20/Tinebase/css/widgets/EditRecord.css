@@ -4,3 +4,6 @@
 .x-panel-footer .x-form-item div {
     padding-top: 0px;
 }
+.tw-editdialog .x-panel-footer {
+	background-color: rgb(240, 240, 240);
+}

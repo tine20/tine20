@@ -593,7 +593,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * @cfg {String}
      */
     relatedApp: '',
-    
     /**
      * @private
      */
@@ -808,7 +807,6 @@ Tine.Tasks.EditDialog.openWindow = function (config) {
         width: 700,
         height: 300,
         name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + config.task.id,
-        layout: Tine.Tasks.EditDialog.prototype.windowLayout,
         itemsConstructor: 'Tine.Tasks.EditDialog',
         itemsConstructorConfig: config
     });

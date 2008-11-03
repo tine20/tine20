@@ -91,9 +91,11 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * constructs window items from config properties
      */
-    getWindowItems: function(config) {
+    getContentPanel: function(config) {
         var items;
         if (config.itemsConstructor) {
+            config.itemsConstructorConfig = config.itemsConstructorConfig || {};
+            
             var parts = config.itemsConstructor.split('.');
             var ref = window;
             for (var i=0; i<parts.length; i++) {

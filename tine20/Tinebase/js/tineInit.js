@@ -153,11 +153,7 @@ Tine.Tinebase.tineInit = {
         
         // finaly render the window contentes in a new card  
         var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
-        var card = new Ext.Panel({
-            layout: c.layout ? c.layout : 'border',
-            border: false,
-            items: Tine.WindowFactory.getWindowItems(c)
-        });
+        var card = Tine.WindowFactory.getContentPanel(c);
         mainCardPanel.layout.container.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
         card.doLayout();
@@ -329,9 +325,7 @@ Tine.Tinebase.tineInit = {
             Ext.ux.PopupWindowMgr.register({
                 name: window.name,
                 popup: window,
-                itemsConstructor: 'Tine.Tinebase.MainScreen',
-                itemsConstructorConfig: {},
-                layout: 'fit'
+                itemsConstructor: 'Tine.Tinebase.MainScreen'
             });
         }
     },

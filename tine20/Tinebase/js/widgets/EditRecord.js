@@ -15,6 +15,9 @@ Ext.namespace('Tine.widgets.dialog');
 
 /**
  * Generic 'Edit Record' dialog
+ * @depricated, use EditDialog instead. This class will be removed when all
+ * dialogs are moved to the EditDialog widget
+ *
  */
 Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	/**
@@ -78,6 +81,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     region: 'center',
     deferredRender: false,
     buttonAlign: 'right',
+    cls: 'tw-editdialog',
 	
 	//private
     initComponent: function(){
