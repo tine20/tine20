@@ -32,6 +32,8 @@ class Erp_Backend_Project extends Tinebase_Application_Backend_Sql_Abstract
      *
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
+     * 
+     * @todo    move container & number to controller
      */
     public function create(Tinebase_Record_Interface $_record) {
         
@@ -66,11 +68,14 @@ class Erp_Backend_Project extends Tinebase_Application_Backend_Sql_Abstract
     /**
      * fetches the next incremental project number from erp_numbers
      *
-     * @todo    add Numbers backend
-     * @todo    implement function
+     * @return integer number
+     * @todo    move to controller
      */
     protected function _getNextNumber()
     {
+        //$numberBackend = new Erp_Backend_Number();
+        //return $numberBackend->getNext(Erp_Model_Number::TYPE_PROJECT);
+        
         return 1;
     }
 }
