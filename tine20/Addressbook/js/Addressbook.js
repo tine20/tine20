@@ -662,6 +662,7 @@ Tine.Addressbook.Main = {
         }, this);
         this.gridPanel = new Ext.Panel({
             layout: 'border',
+            border: false,
             items: [/*{
                 id: 'adr-filtertoolbar-panel',
                 region: 'north',
