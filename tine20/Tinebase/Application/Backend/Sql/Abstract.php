@@ -266,7 +266,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
       * Deletes entries
       * 
-      * @param string|integer $_id
+      * @param string|integer|Tinebase_Record_Interface $_id
       * @return void
       */
     public function delete($_id) {
