@@ -845,7 +845,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             var selectedTask = selectedRows[0];
             
             var taskPopup = Tine.Tasks.EditDialog.openWindow({
-                task: selectedTask
+                record: selectedTask
             });
             taskPopup.on('update', this.onTaskUpdate, this);
         },
@@ -1285,7 +1285,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         grid.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Tine.Tasks.EditDialog.openWindow({task: record});
+            Tine.Tasks.EditDialog.openWindow({record: record});
         });            
 
         return grid;       

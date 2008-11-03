@@ -15,7 +15,6 @@ Ext.namespace('Tine.Tasks');
  * Tasks Edit Dialog
  */
 Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-
     /**
      * @cfg {Number}
      */
@@ -32,67 +31,50 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     windowNamePrefix: 'TasksEditWindow_',
-    
     appName: 'Tasks',
+    recordClass: Tine.Tasks.Task,
     showContainerSelector: true,
     
     /**
-     * @private
+     * reqests all data needed in this dialog
      */
-    initComponent: function() {
-        this.task = this.task ? this.task : new Tine.Tasks.Task({}, 0);
-        
+    requestData: function() {
         Ext.Ajax.request({
             scope: this,
-            success: this.onRecordLoad,
+            success: this.onDataLoad,
             params: {
                 method: 'Tasks.getTask',
-                uid: this.task.id,
+                uid: this.record.id,
                 containerId: this.containerId,
                 relatedApp: this.relatedApp
             }
         });
-        
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Tasks');
-        
-        //this.containerItemName =  this.translation._('to do list');
-        this.containerName =  this.translation._('to do list');
-        this.containersName =  this.translation._('to do lists');
-        
-        this.items = this.getTaskFormPanel();
-        Tine.Tasks.EditDialog.superclass.initComponent.call(this);
     },
+    
     /**
      * @private
      */
     onRender: function(ct, position) {
         Tine.Tasks.EditDialog.superclass.onRender.call(this, ct, position);
         Ext.MessageBox.wait(this.translation._('Loading Task...'), _('Please Wait'));
+        //this.getForm().findField('summary').focus(false, 250);
     },
+    
     /**
-     * @private
+     * execuded after record got updated
      */
-    onRecordLoad: function(response) {
-        this.getForm().findField('summary').focus(false, 250);
-        var recordData = Ext.util.JSON.decode(response.responseText);
-        this.updateRecord(recordData);
-        
-        if (! this.task.id) {
+    onRecordLoad: function() {
+        if (! this.record.id) {
             this.window.setTitle(this.translation.gettext('Add New Task'));
         } else {
-            this.window.setTitle(sprintf(this.translation._('Edit Task "%s"'), this.task.get('summary')));
+            this.window.setTitle(sprintf(this.translation._('Edit Task "%s"'), this.record.get('summary')));
         }
         
-        this.getForm().loadRecord(this.task);
-        this.updateToolbars(this.task);
+        this.getForm().loadRecord(this.record);
+        this.updateToolbars(this.record);
         Ext.MessageBox.hide();
     },
     
-    updateRecord: function(recordData) {
-        this.task = new Tine.Tasks.Task(recordData, recordData.id ? recordData.id : 0);
-        Tine.Tasks.fixTask(this.task);
-    },
     /**
      * @private
      */
@@ -104,28 +86,28 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Ext.MessageBox.wait(this.translation._('Please wait'), this.translation._('Saving Task'));
             
             // merge changes from form into task record
-            form.updateRecord(this.task);
+            form.updateRecord(this.record);
             
             Ext.Ajax.request({
                 scope: this,
                 params: {
                     method: 'Tasks.saveTask', 
-                    task: Ext.util.JSON.encode(this.task.data)
+                    task: Ext.util.JSON.encode(this.record.data)
                 },
                 success: function(response) {
                     // override task with returned data
-                    this.onRecordLoad(response);
-                    this.fireEvent('update', this.task);
+                    this.onDataLoad(response);
+                    this.fireEvent('update', this.record);
                     
                     // free 0 namespace if record got created
-                    this.window.rename(this.windowNamePrefix + this.task.id);
+                    this.window.rename(this.windowNamePrefix + this.record.id);
 
                     if (closeWindow) {
                         this.purgeListeners();
                         this.window.close();
                     } else {
                         // update form with this new data
-                        form.loadRecord(this.task);
+                        form.loadRecord(this.record);
                         this.action_delete.enable();
                         Ext.MessageBox.hide();
                     }
@@ -138,6 +120,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Ext.MessageBox.alert(this.translation._('Errors'), this.translation._('Please fix the errors noted.'));
         }
     },
+    
     /**
      * @private
      */
@@ -148,10 +131,10 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 Ext.Ajax.request({
                     params: {
                         method: 'Tasks.deleteTask',
-                        identifier: this.task.id
+                        identifier: this.record.id
                     },
                     success: function(_result, _request) {
-                        this.fireEvent('update', this.task);
+                        this.fireEvent('update', this.record);
                         this.purgeListeners();
                         this.window.close();
                     },
@@ -164,7 +147,12 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
     
-    getTaskFormPanel: function() { return {
+    /**
+     * returns dialog
+     * 
+     * NOTE: when this method gets called, all initalisation is done.
+     */
+    getFormItems: function() { return {
         layout:'column',
         autoHeight: true,
         labelWidth: 90,
@@ -233,11 +221,11 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * Tasks Edit Popup
  */
 Tine.Tasks.EditDialog.openWindow = function (config) {
-    config.task = config.task ? config.task : new Tine.Tasks.Task({}, 0);
+    var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 700,
         height: 300,
-        name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + config.task.id,
+        name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Tasks.EditDialog',
         contentPanelConstructorConfig: config
     });

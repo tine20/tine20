@@ -95,7 +95,7 @@ Tine.Tasks.mainGrid = {
             var containerId = (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1;
             
             var popupWindow = Tine.Tasks.EditDialog.openWindow({
-                task: task,
+                record: task,
                 containerId: containerId,
                 listeners: {
                     scope: this,
