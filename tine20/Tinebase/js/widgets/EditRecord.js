@@ -70,11 +70,6 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      * @property {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
     window: null,
-    /**
-     * @property {Ext.ux.PopupWindowMgr}
-     * @depricated use window instead
-     */
-    windowManager: null,
     
     // private
     bodyStyle:'padding:5px',
@@ -170,7 +165,6 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             });
         }
 		
-        this.windowManager = Ext.ux.PopupWindowMgr;
 		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	},
     
@@ -244,7 +238,6 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     onCancel: function(){
         this.fireEvent('cancel');
         this.purgeListeners();
-        //console.log('cancel');
     },
     
     /**
@@ -252,7 +245,6 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      */
     onSaveAndClose: function(){
         this.fireEvent('saveAndClose');
-        //console.log('save');
     },
     
     /**
@@ -260,7 +252,6 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      */
     onApply: function(){
         this.fireEvent('apply');
-        //console.log('apply');
     },
     
     /**
