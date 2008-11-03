@@ -62,7 +62,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRender: function(ct, position) {
         Tine.Tasks.EditDialog.superclass.onRender.call(this, ct, position);
         Ext.MessageBox.wait(this.translation._('Loading Task...'), _('Please Wait'));
-        //this.getForm().findField('summary').focus(false, 250);
     },
     
     /**
@@ -162,6 +161,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xtype: 'textfield',
                 name: 'summary',
                 emptyText: this.translation._('Enter short name...'),
+                listeners: {render: function(field){field.focus(false, 250);}},
                 allowBlank: false
             }, {
                 fieldLabel: this.translation._('Notes'),
