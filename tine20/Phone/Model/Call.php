@@ -12,7 +12,7 @@
 /**
  * class to hold lead data
  * 
- * @package     Crm
+ * @package     Phone
  */
 class Phone_Model_Call extends Tinebase_Record_Abstract
 {  
