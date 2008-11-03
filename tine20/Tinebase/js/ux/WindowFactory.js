@@ -93,10 +93,10 @@ Ext.ux.WindowFactory.prototype = {
      */
     getContentPanel: function(config) {
         var items;
-        if (config.itemsConstructor) {
-            config.itemsConstructorConfig = config.itemsConstructorConfig || {};
+        if (config.contentPanelConstructor) {
+            config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
             
-            var parts = config.itemsConstructor.split('.');
+            var parts = config.contentPanelConstructor.split('.');
             var ref = window;
             for (var i=0; i<parts.length; i++) {
                 ref = ref[parts[i]];
@@ -104,8 +104,8 @@ Ext.ux.WindowFactory.prototype = {
             
             // place a referece to current window class in the itemConsturctor.
             // this may be overwritten depending on concrete window implementation
-            config.itemsConstructorConfig.window = config;
-            var items = new ref(config.itemsConstructorConfig);
+            config.contentPanelConstructorConfig.window = config;
+            var items = new ref(config.contentPanelConstructorConfig);
         } else {
             items = config.items ? config.items : {};
         }

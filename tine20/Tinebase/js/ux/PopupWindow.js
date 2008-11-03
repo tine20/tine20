@@ -62,11 +62,11 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     /**
      * @cfg {String} Name of a constructor to create item property
      */
-    itemsConstructor: null,
+    contentPanelConstructor: null,
     /**
      * @cfg {Object} Config object to pass to itemContructor
      */
-    itemsConstructorConfig: {},
+    contentPanelConstructorConfig: {},
     /**
      * @property {Browser Window}
      */

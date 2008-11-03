@@ -325,7 +325,7 @@ Tine.Tinebase.tineInit = {
             Ext.ux.PopupWindowMgr.register({
                 name: window.name,
                 popup: window,
-                itemsConstructor: 'Tine.Tinebase.MainScreen'
+                contentPanelConstructor: 'Tine.Tinebase.MainScreen'
             });
         }
     },

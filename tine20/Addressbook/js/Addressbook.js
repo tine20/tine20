@@ -989,8 +989,8 @@ Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
         height: 600,
         layout: Tine.Addressbook.ContactEditDialog.prototype.windowLayout,
         name: Tine.Addressbook.ContactEditDialog.prototype.windowNamePrefix + config.contact.id,
-        itemsConstructor: 'Tine.Addressbook.ContactEditDialog',
-        itemsConstructorConfig: config
+        contentPanelConstructor: 'Tine.Addressbook.ContactEditDialog',
+        contentPanelConstructorConfig: config
     });
     return window;
 };

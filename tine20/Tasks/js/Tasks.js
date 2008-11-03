@@ -807,8 +807,8 @@ Tine.Tasks.EditDialog.openWindow = function (config) {
         width: 700,
         height: 300,
         name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + config.task.id,
-        itemsConstructor: 'Tine.Tasks.EditDialog',
-        itemsConstructorConfig: config
+        contentPanelConstructor: 'Tine.Tasks.EditDialog',
+        contentPanelConstructorConfig: config
     });
     return window;
 };

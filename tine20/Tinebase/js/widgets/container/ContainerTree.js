@@ -323,8 +323,8 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
                         width: 700,
                         height: 450,
                         title: sprintf(_('Manage Permissions for %s :"%s"'), this.containerName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
-                        itemsConstructor: 'Tine.widgets.container.grantDialog',
-                        itemsConstructorConfig: {
+                        contentPanelConstructor: 'Tine.widgets.container.grantDialog',
+                        contentPanelConstructorConfig: {
                             containerName: this.containerName,
                             grantContainer: node.attributes.container
                         }

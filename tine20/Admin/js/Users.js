@@ -679,8 +679,8 @@ Tine.Admin.Users.EditDialog.openWindow = function (config) {
         height: 450,
         name: Tine.Admin.Users.EditDialog.prototype.windowNamePrefix + config.accountRecord.id,
         layout: Tine.Admin.Users.EditDialog.prototype.windowLayout,
-        itemsConstructor: 'Tine.Admin.Users.EditDialog',
-        itemsConstructorConfig: config
+        contentPanelConstructor: 'Tine.Admin.Users.EditDialog',
+        contentPanelConstructorConfig: config
     });
     return window;
 };

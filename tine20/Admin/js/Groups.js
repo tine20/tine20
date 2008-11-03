@@ -638,8 +638,8 @@ Tine.Admin.Groups.EditDialog.openWindow = function (config) {
         height: 600,
         name: Tine.Admin.Groups.EditDialog.prototype.windowNamePrefix + config.group.id,
         layout: Tine.Admin.Groups.EditDialog.prototype.windowLayout,
-        itemsConstructor: 'Tine.Admin.Groups.EditDialog',
-        itemsConstructorConfig: config
+        contentPanelConstructor: 'Tine.Admin.Groups.EditDialog',
+        contentPanelConstructorConfig: config
     });
     return window;
 };

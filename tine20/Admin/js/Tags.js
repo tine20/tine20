@@ -632,8 +632,8 @@ Tine.Admin.Tags.EditDialog.openWindow = function (config) {
         height: 400,
         name: Tine.Admin.Tags.EditDialog.prototype.windowNamePrefix + config.tag.id,
         layout: Tine.Admin.Tags.EditDialog.prototype.windowLayout,
-        itemsConstructor: 'Tine.Admin.Tags.EditDialog',
-        itemsConstructorConfig: config
+        contentPanelConstructor: 'Tine.Admin.Tags.EditDialog',
+        contentPanelConstructorConfig: config
     });
     return window;
 };

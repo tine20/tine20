@@ -1891,8 +1891,8 @@ Tine.Crm.LeadEditDialog.openWindow = function (config) {
         height: 750,
         name: Tine.Crm.LeadEditDialog.prototype.windowNamePrefix + config.lead.id,
         layout: Tine.Crm.LeadEditDialog.prototype.windowLayout,
-        itemsConstructor: 'Tine.Crm.LeadEditDialog',
-        itemsConstructorConfig: config
+        contentPanelConstructor: 'Tine.Crm.LeadEditDialog',
+        contentPanelConstructorConfig: config
     });
     return window;
 };

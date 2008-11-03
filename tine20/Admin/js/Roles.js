@@ -744,8 +744,8 @@ Tine.Admin.Roles.EditDialog.openWindow = function (config) {
         height: 600,
         name: Tine.Admin.Roles.EditDialog.prototype.windowNamePrefix + config.role.id,
         layout: Tine.Admin.Roles.EditDialog.prototype.windowLayout,
-        itemsConstructor: 'Tine.Admin.Roles.EditDialog',
-        itemsConstructorConfig: config
+        contentPanelConstructor: 'Tine.Admin.Roles.EditDialog',
+        contentPanelConstructorConfig: config
     });
     return window;
 };
