@@ -259,6 +259,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 items: ContainerForm
             });
         }
+        
+        Ext.MessageBox.wait(_('Please Wait'), String.format(this.translation._('Loading {0}...'), this.containerItemName));
     },
     
     /**

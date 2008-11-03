@@ -59,14 +59,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * @private
-     */
-    onRender: function(ct, position) {
-        Tine.Tasks.EditDialog.superclass.onRender.call(this, ct, position);
-        Ext.MessageBox.wait(this.translation._('Loading Task...'), _('Please Wait'));
-    },
-    
-    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
