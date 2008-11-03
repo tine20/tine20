@@ -30,6 +30,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     recordClass: null,
     /**
+     * @cfg {String} property of the title attibute, used in generic getTitle function
+     */
+    titleProperty: null,
+    /**
      * @cfg {String} untranslated container item name
      */
     containerItemName: 'record',
@@ -184,19 +188,49 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.record = new this.recordClass(recordData, recordData.id ? recordData.id : 0);
         this.fixRecord(this.record);
         this.onRecordLoad();
-        console.log(this.record);
+    },
+    
+    /**
+     * execuded after record got updated
+     */
+    onRecordLoad: function() {
+        if (! this.record.id) {
+            this.window.setTitle(String.format(this.translation.gettext('Add New {0}'), this.containerItemName));
+        } else {
+            this.window.setTitle(String.format(this.translation._('Edit {0} "{1}"'), this.containerItemName, this.getTitle(this.record)));
+        }
+        
+        this.getForm().loadRecord(this.record);
+        this.updateToolbars(this.record);
+        Ext.MessageBox.hide();
     },
     
     /**
      * fixes record (only dates) atm. cause records not in a store get treaded 
      * differently in ExtJS ;-(
+     * 
+     * @todo move to ExtFixes and use automatically
      */
-    fixRecord: function(record){
+    fixRecord: function(record) {
         record.fields.each(function(field) {
             if(field.type == 'date') {
                 record.data[field.name] = Date.parseDate(record.data[field.name], field.dateFormat);
             }
         });
+    },
+    
+    /**
+     * get title of record
+     * 
+     * NOTE: has noting to do with the title of a window/panel ;-)
+     * @todo move to base class of app/record handler
+     * @param  {Ext.data.Record} record
+     * @return {String} title
+     */
+    getTitle: function(record) {
+        if (this.titleProperty) {
+            return record.get(this.titleProperty);
+        }
     },
     
     /**

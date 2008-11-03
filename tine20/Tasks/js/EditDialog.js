@@ -33,6 +33,11 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'TasksEditWindow_',
     appName: 'Tasks',
     recordClass: Tine.Tasks.Task,
+    titleProperty: 'summary',
+    containerItemName: 'Task',
+    containerItemsName: 'Tasks',
+    containerName: 'to do list',
+    containesrName: 'to do lists',
     showContainerSelector: true,
     
     /**
@@ -58,21 +63,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Tasks.EditDialog.superclass.onRender.call(this, ct, position);
         Ext.MessageBox.wait(this.translation._('Loading Task...'), _('Please Wait'));
         //this.getForm().findField('summary').focus(false, 250);
-    },
-    
-    /**
-     * execuded after record got updated
-     */
-    onRecordLoad: function() {
-        if (! this.record.id) {
-            this.window.setTitle(this.translation.gettext('Add New Task'));
-        } else {
-            this.window.setTitle(sprintf(this.translation._('Edit Task "%s"'), this.record.get('summary')));
-        }
-        
-        this.getForm().loadRecord(this.record);
-        this.updateToolbars(this.record);
-        Ext.MessageBox.hide();
     },
     
     /**
