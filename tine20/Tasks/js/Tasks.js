@@ -685,13 +685,10 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	            success: function(response) {
 					// override task with returned data
                     this.onRecordLoad(response);
-					//this.updateRecord(Ext.util.JSON.decode(_result.responseText));
+                    this.fireEvent('update', this.task);
                     
                     // free 0 namespace if record got created
                     this.window.rename(this.windowNamePrefix + this.task.id);
-                    
-                    
-                    this.fireEvent('update', this.task);
 
 					if (closeWindow) {
                         this.purgeListeners();
