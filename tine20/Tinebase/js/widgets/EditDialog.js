@@ -200,7 +200,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         this.getForm().loadRecord(this.record);
         this.updateToolbars(this.record);
-        Ext.MessageBox.hide();
+        this.LoadMask.hide();
     },
     
     /**
@@ -260,7 +260,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
         
-        Ext.MessageBox.wait(_('Please Wait'), String.format(this.translation._('Loading {0}...'), this.containerItemName));
+        this.LoadMask = new Ext.LoadMask(ct, {msg: String.format(this.translation._('Loading {0}...'), this.containerItemName)});
+        this.LoadMask.show();
     },
     
     /**
@@ -307,7 +308,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
         if(form.isValid()) {
-            Ext.MessageBox.wait(this.translation._('Please wait'), String.format(this.translation._('Saving {0}'), this.containerItemName));
+            var saveMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Saving {0}'), this.containerItemName)});
+            saveMask.show();
             
             // merge changes from form into task record
             form.updateRecord(this.record);
@@ -333,7 +335,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         // update form with this new data
                         form.loadRecord(this.record);
                         this.action_delete.enable();
-                        Ext.MessageBox.hide();
+                        saveMask.hide();
                     }
                 },
                 failure: function ( result, request) { 
@@ -351,7 +353,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onDelete: function(button, event) {
         Ext.MessageBox.confirm(this.translation._('Confirm'), String.format(this.translation._('Do you really want to delete this {0}?'), this.containerItemName), function(_button) {
             if(_button == 'yes') {
-                Ext.MessageBox.wait(this.translation._('Please wait a moment...'), String.format(this.translation._('Deleting {0}'), this.containerItemName));
+                var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Deleting {0}'), this.containerItemName)});
+                deleteMask.show();
+                
                 Ext.Ajax.request({
                     params: {
                         method: this.appName + '.delete' + this.modelName + 's',
