@@ -1,0 +1,16 @@
+/**
+ * fixes to the extjs css files 
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+
+/**
+ * Ext sets the z-index for masks to 20000 and for windows to 9000. As such
+ * Windows get hidden when a underlaying element gets masked. To fix this we set
+ * the mask index to 5000
+ */
+.ext-el-mask {z-index: 5000;}
+.ext-el-mask-msg {z-index: 5001;}

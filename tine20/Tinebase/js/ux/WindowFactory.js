@@ -29,7 +29,6 @@ Ext.ux.WindowFactory = function(config) {
         case 'Ext' :
             this.windowClass = Ext.Window;
             this.windowManager = Ext.WindowMgr;
-            Ext.WindowMgr.zseed = 100000;
             break;
         case 'Air' :
             this.windowClass = Ext.air.NativeWindow;

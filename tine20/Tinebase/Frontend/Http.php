@@ -128,6 +128,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function getCssFilesToInclude()
     {
     	return array(
+    	   'Tinebase/css/ExtFixes.css',
     	   'Tinebase/css/Tinebase.css',
     	   'Tinebase/css/SmallForms.css',
     	   'Tinebase/css/ux/ConnectionStatus.css',
