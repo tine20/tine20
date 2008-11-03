@@ -75,19 +75,17 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             layout: 'form',
             defaults: {
                 anchor: '95%',
+                hideLabel: true,
                 xtype: 'textfield'
             },
             items:[{
                 fieldLabel: this.translation._('Summary'),
-                hideLabel: true,
-                xtype: 'textfield',
                 name: 'summary',
                 emptyText: this.translation._('Enter short name...'),
                 listeners: {render: function(field){field.focus(false, 250);}},
                 allowBlank: false
             }, {
                 fieldLabel: this.translation._('Notes'),
-                hideLabel: true,
                 emptyText: this.translation._('Enter description...'),
                 name: 'description',
                 xtype: 'textarea',
@@ -117,13 +115,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 new Ext.ux.form.ClearableDateField({
                     fieldLabel: this.translation._('Due date'),
                     name: 'due'
-                })/*, 
-                new Tine.widgets.container.selectionComboBox({
-                    fieldLabel: this.translation._('Saved in'),
-                    name: 'container_id',
-                    itemName: 'Tasks',
-                    appName: 'Tasks'
-                })*/
+                })
             ]
         }]
     };}
