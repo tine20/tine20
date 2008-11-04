@@ -585,7 +585,7 @@ Tine.Tasks.fixTask = function(task) {
 // Task model
 Tine.Tasks.TaskArray = [
     // tine record fields
-    { name: 'container_id'                                     },
+    { name: 'container_id', header: 'Container'                                     },
     { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
     { name: 'created_by',         type: 'int'                  },
     { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
@@ -595,7 +595,7 @@ Tine.Tasks.TaskArray = [
     { name: 'deleted_by',         type: 'int'                  },
     // task only fields
     { name: 'id' },
-    { name: 'percent' },
+    { name: 'percent', header: 'Percent' },
     { name: 'completed', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'due', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     // ical common fields
@@ -630,4 +630,3 @@ Tine.Tasks.TaskArray = [
 Tine.Tasks.Task = Ext.data.Record.create(
     Tine.Tasks.TaskArray
 );
-	

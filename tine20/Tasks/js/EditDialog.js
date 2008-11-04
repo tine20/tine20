@@ -48,7 +48,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     requestData: function() {
         this.loadRequest = Ext.Ajax.request({
             scope: this,
-            success: this.onDataLoad,
+            success: this.recordReader,
             params: {
                 method: 'Tasks.getTask',
                 uid: this.record.id,
