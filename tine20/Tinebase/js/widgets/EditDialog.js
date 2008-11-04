@@ -16,60 +16,84 @@ Ext.namespace('Tine.widgets.dialog');
 /**
  * Generic 'Edit Record' dialog
  */
+/**
+ * @class Tine.widgets.dialog.EditDialog
+ * @extends Ext.FormPanel
+ * Base class for all 'Edit Record' dialogs
+ * @constructor
+ * @param {Object} config The configuration options.
+ */
 Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
-     * @cfg {Array} additional toolbar items
+     * @cfg {Array} tbarItems
+     * additional toolbar items (defaults to false)
      */
     tbarItems: false,
     /**
-     * @cfg {String} internal/untranslated app name
+     * @cfg {String} appName
+     * internal/untranslated app name (required)
      */
     appName: null,
     /**
-     * @cfg {String} name of the model/record
+     * @cfg {String} modelName
+     * name of the model/record  (required)
      */
     modelName: null,
     /**
-     * @cfg {Ext.data.Record} record definition class
+     * @cfg {Ext.data.Record} recordClass
+     * record definition class  (required)
      */
     recordClass: null,
     /**
-     * @cfg {String} property of the title attibute, used in generic getTitle function
+     * @cfg {String} titleProperty
+     * property of the title attibute, used in generic getTitle function  (required)
      */
     titleProperty: null,
     /**
-     * @cfg {String} untranslated container item name
+     * @cfg {String} containerItemName
+     * untranslated container item name
      */
     containerItemName: 'record',
     /**
-     * @cfg {String} untranslated container items (plural) name
+     * @cfg {String} containerItemsName
+     * untranslated container items (plural) name
      */
     containerItemsName: 'records',
     /**
-     * @cfg {String} untranslated container name
+     * @cfg {String} containerName
+     * untranslated container name
      */
     containerName: 'container',
     /**
-     * @cfg {string} containerName untranslated name of container (plural)
+     * @cfg {string} containerName
+     * untranslated name of container (plural)
      */
     containersName: 'containers',
     /**
-     * @cfg {String} name of the container property
+     * @cfg {String} containerProperty
+     * name of the container property
      */
     containerProperty: 'container_id',
     /**
-     * @cfg {Bool} show container selector in bottom area
+     * @cfg {Bool} showContainerSelector
+     * show container selector in bottom area
      */
     showContainerSelector: false,
     
     /**
-     * @property {Ext.data.Record} record in edit process
+     * @property {Ext.data.Record} record
+     * record in edit process
      */
-    record: null,
     /**
-     * @property {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
+     * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
-    window: null,
+    /**
+     * @property {Number} loadRequest 
+     * Ajax Request number of loadData request
+     */
+    /**
+     * @property loadMask {Ext.LoadMask}
+     */
     
     // private
     bodyStyle:'padding:5px',
@@ -105,6 +129,26 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             'apply'
         );
         
+        // init translations
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain(this.appName);
+        // init actions
+        this.initActions();
+        // init buttons and tbar
+        this.initButtons();
+        // init record and request data
+        this.record = this.record ? this.record : new this.recordClass({}, 0);
+        this.requestData();
+        // get itmes for this dialog
+        this.items = this.getFormItems();
+        
+        Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * init actions
+     */
+    initActions: function() {
         this.action_saveAndClose = new Ext.Action({
             requiredGrant: 'editGrant',
             text: _('Ok'),
@@ -140,7 +184,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             iconCls: 'action_delete',
             disabled: true
         });
-        
+    },
+    
+    /**
+     * init buttons
+     */
+    initButtons: function() {
         var genericButtons = [
             this.action_delete
         ];
@@ -158,18 +207,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 items: this.tbarItems
             });
         }
-        
-        // init translations
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain(this.appName);
-        
-        // init record and request data
-        this.record = this.record ? this.record : new this.recordClass({}, 0);
-        this.requestData();
-        
-        this.items = this.getFormItems();
-        
-        Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
     },
     
     /**
@@ -200,7 +237,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         this.getForm().loadRecord(this.record);
         this.updateToolbars(this.record);
-        this.LoadMask.hide();
+        
+        this.loadMask.hide();
     },
     
     /**
@@ -260,8 +298,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
         
-        this.LoadMask = new Ext.LoadMask(ct, {msg: String.format(this.translation._('Loading {0}...'), this.containerItemName)});
-        this.LoadMask.show();
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(this.translation._('Loading {0}...'), this.containerItemName)});
+        if (Ext.Ajax.isLoading(this.loadRequest)) {
+            this.loadMask.show();
+        }
     },
     
     /**
