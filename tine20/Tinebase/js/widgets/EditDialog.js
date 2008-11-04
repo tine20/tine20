@@ -45,6 +45,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     recordClass: null,
     /**
+     * @cfg {String} idProperty
+     * property of the id of the record
+     */
+    idProperty: 'id',
+    /**
      * @cfg {String} titleProperty
      * property of the title attibute, used in generic getTitle function  (required)
      */
@@ -218,10 +223,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * 
      * @param XHR response
      */
-    onDataLoad: function(response) {
-        var recordData = Ext.util.JSON.decode(response.responseText);
-        this.record = new this.recordClass(recordData, recordData.id ? recordData.id : 0);
-        this.fixRecord(this.record);
+    recordReader: function(response) {
+        if(!this.jsonReader) {
+            this.jsonReader = new Ext.data.JsonReader({id: this.idProperty, root: 'root'}, this.recordClass);
+        }
+        var recordData = Ext.util.JSON.decode('{root: [' + response.responseText + ']}');
+        
+        var data = this.jsonReader.readRecords(recordData);
+        this.record = data.records[0];
         this.onRecordLoad();
     },
     
@@ -239,20 +248,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.updateToolbars(this.record);
         
         this.loadMask.hide();
-    },
-    
-    /**
-     * fixes record (only dates) atm. cause records not in a store get treaded 
-     * differently in ExtJS ;-(
-     * 
-     * @todo move to ExtFixes and use automatically
-     */
-    fixRecord: function(record) {
-        record.fields.each(function(field) {
-            if(field.type == 'date') {
-                record.data[field.name] = Date.parseDate(record.data[field.name], field.dateFormat);
-            }
-        });
     },
     
     /**
