@@ -356,12 +356,18 @@ class Erp_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContract()
     {
-        /*
-        $contract = Crm_Controller_Lead::getInstance()->getLead($this->_objects['initialLead']);
+        $contractData = $this->_getContract();
+        $this->_backend->create($contractData);
+        $contract = $this->_backend->get($contractData->getId());
         
-        $this->assertEquals($this->_objects['initialLead']->id, $contract->id);
-        $this->assertEquals($this->_objects['initialLead']->description, $contract->description);
-        */
+        // checks
+        $this->assertEquals($contractData->getId(), $contract->getId());
+        $this->assertGreaterThan(0, $contract->number);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contract->created_by);
+        
+        // cleanup
+        $this->_backend->delete($contract->getId());
+        $this->_decreaseNumber();        
     }
     
     /**
