@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add contract status table or as enum?
  */
 
 /**
@@ -46,6 +47,7 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
         'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
