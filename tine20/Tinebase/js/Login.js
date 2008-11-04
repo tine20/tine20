@@ -88,7 +88,8 @@ Tine.Login = {
             buttons: loginButtons
             
         });
-        
+        this.originalTitle = window.document.title;
+        window.document.title = 'Tine 2.0 - ' + _('Please enter your login data');
         this.loginWindow.show();
         Ext.getCmp('username').focus(false, 250);
                     
@@ -130,6 +131,7 @@ Tine.Login = {
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(_('Login successful. Loading Tine 2.0...'), _('Please wait!'));
                         this.loginWindow.hide();
+                        window.document.title = this.originalTitle;
                         this.onLogin.call(this.scope);
                     } else {
                         Ext.MessageBox.show({
