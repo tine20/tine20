@@ -30,6 +30,7 @@ class Erp_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Erp All Tests');
         $suite->addTestSuite('Erp_Backend_ContractTest');
         $suite->addTestSuite('Erp_Backend_NumberTest');
+        $suite->addTestSuite('Erp_ControllerTest');
         return $suite;
     }
 }

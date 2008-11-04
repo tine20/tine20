@@ -27,25 +27,6 @@ class Erp_Backend_Contract extends Tinebase_Application_Backend_Sql_Abstract
         parent::__construct(SQL_TABLE_PREFIX . 'erp_contracts', 'Erp_Model_Contract');
     }
 
-    /**
-     * Creates new entry and adds container and contract number
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * 
-     * @todo    move container & number to controller
-     */
-    public function create(Tinebase_Record_Interface $_record) {
-        
-        // add container
-        $_record->container_id = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId();
-        
-        // add number
-        $_record->number = $this->_getNextNumber();
-        
-        return parent::create($_record);
-    }
-    
     /************************ helper functions ************************/
 
     /**
@@ -63,19 +44,5 @@ class Erp_Backend_Contract extends Tinebase_Application_Backend_Sql_Abstract
         if (!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(title LIKE ? OR description LIKE ? OR number LIKE ?)', '%' . $_filter->query . '%'));
         }
-    }
-
-    /**
-     * fetches the next incremental contract number from erp_numbers
-     *
-     * @return integer number
-     * @todo    move to controller
-     */
-    protected function _getNextNumber()
-    {
-        //$numberBackend = new Erp_Backend_Number();
-        //return $numberBackend->getNext(Erp_Model_Number::TYPE_PROJECT);
-        
-        return 1;
     }
 }

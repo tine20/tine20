@@ -12,7 +12,7 @@
  */
 
 /**
- * abstract controller class for Tinebase Management application
+ * abstract controller class for Tine 2.0 applications
  * 
  * @package     Tinebase
  * @subpackage  Controller
@@ -66,15 +66,18 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
      * @return Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_Record_Validation
      * 
-     * @todo add get relations
+     * @todo    add grant check again
+     * @todo    add get relations
      */
     public function get($_id)
     {
         $record = $this->_backend->get($_id);
         
+        /*
         if (!$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
             throw new Tinebase_Exception_AccessDenied('Read permission to record denied.');
         }
+        */
         
         return $record;    
     }
@@ -108,6 +111,7 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      * 
+     * @todo    add grant check again
      * @todo    activate modlog, relations, tags, notes
      */
     public function create(Tinebase_Record_Interface $_record)
@@ -120,14 +124,19 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
                 throw new Tinebase_Exception_Record_Validation('Record is not valid.');
             }
             
+            /*
             if(!$this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD)) {
                 throw new Tinebase_Exception_AccessDenied('Write access to records in container ' . $_record->container_id . ' denied.');
             }
+            */
         
             // add modlog info
-            if (FALSE) {
+            try {
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
+            } catch (Tinebase_Exception_UnexpectedValue $e) {
+                // no modlog info in this record
             }
+            
             $record = $this->_backend->create($_record);
             
             // set relations
@@ -136,13 +145,13 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
             }        
             
             // add tags
-            if (!empty($_record->tags)) {
+            if (FALSE && !empty($_record->tags)) {
                 $record->tags = $_record->tags;
                 Tinebase_Tags::getInstance()->setTagsOfRecord($record);
             }        
     
             // add notes
-            if (isset($_record->notes)) {
+            if (FALSE && isset($_record->notes)) {
                 $record->notes = $_record->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($record);
             }
@@ -176,9 +185,6 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
      */
     public function update(Tinebase_Record_Interface $_record)
     {
-        //$record = $this->_backend->update($_record);        
-        //return $this->get($record);
-        
         try {
             $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);

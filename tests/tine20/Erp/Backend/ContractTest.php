@@ -74,6 +74,7 @@ class Erp_Backend_ContractTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($created->container_id, Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId());
         
         $this->_backend->delete($contract);
+        $this->_decreaseNumber();
     }
 
     /**
@@ -83,9 +84,36 @@ class Erp_Backend_ContractTest extends PHPUnit_Framework_TestCase
      */
     protected function _getContract()
     {
-        return new Erp_Model_Contract(array(
+        $contract = new Erp_Model_Contract(array(
             'title'         => 'phpunit contract',
             'description'   => 'blabla'
         ), TRUE);
+        
+        // add container
+        $contract->container_id = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId();
+        
+        // add number
+        $numberBackend = new Erp_Backend_Number();
+        $number = $numberBackend->getNext(Erp_Model_Number::TYPE_CONTRACT, Tinebase_Core::getUser()->getId());
+        $contract->number = $number->number;
+
+        return $contract;
+    }
+    
+    /**
+     * decrease contracts number
+     *
+     */
+    protected function _decreaseNumber()
+    {
+        $numberBackend = new Erp_Backend_Number();
+        $number = $numberBackend->getNext(Erp_Model_Number::TYPE_CONTRACT, Tinebase_Core::getUser()->getId());
+        // reset or delete old number
+        if ($number->number == 2) {
+            $numberBackend->delete($number);
+        } else {
+            $number->number -= 2;
+            $numberBackend->update($number);
+        }
     }
 }
