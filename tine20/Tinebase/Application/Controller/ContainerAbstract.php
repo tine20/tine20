@@ -112,7 +112,8 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
      * @throws  Tinebase_Exception_Record_Validation
      * 
      * @todo    add grant check again
-     * @todo    activate modlog, relations, tags, notes
+     * @todo    activate relations, tags, notes
+     * @todo    add check for modlog/relation/note fields in record?
      */
     public function create(Tinebase_Record_Interface $_record)
     {        
@@ -145,13 +146,13 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
             }        
             
             // add tags
-            if (FALSE && !empty($_record->tags)) {
+            if (!empty($_record->tags)) {
                 $record->tags = $_record->tags;
                 Tinebase_Tags::getInstance()->setTagsOfRecord($record);
             }        
     
             // add notes
-            if (FALSE && isset($_record->notes)) {
+            if (isset($_record->notes)) {
                 $record->notes = $_record->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($record);
             }
@@ -252,6 +253,8 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
      * 
      * @param   array array of record identifiers
      * @return  void
+     * 
+     * @todo    add grant check
      */
     public function delete($_identifiers)
     {
