@@ -11,6 +11,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Controller.php 5029 2008-10-21 16:28:16Z p.schuele@metaways.de $
  *
+ * @todo        extend Tinebase_Application_Controller_Abstract to remove some obsolete code
  */
 
 /**
