@@ -14,6 +14,7 @@ Ext.namespace('Tine.Tinebase.registry');
 
 /**
  * @todo make registration working again!
+ * @todo re-facotre showLoginDialog to only create one window and show hide it on demand
  */
 Tine.Login = {
     onLogin: function(){},
@@ -101,6 +102,10 @@ Tine.Login = {
             if(_event.getKey() == _event.ENTER){
                 this.doLogin();
             }
+        }, this);
+        
+        Tine.Tinebase.viewport.on('resize', function() {
+            this.loginWindow.center();
         }, this);
     },
     
