@@ -55,10 +55,17 @@ Tine.Tinebase.tineInit = {
     
     /**
      * Each window has exactly one viewport containing a card layout in its lifetime
-     * The default card is a splash screen. 
+     * The default card is a splash screen.
+     * 
+     * defautl wait panel (picture only no string!)
      */
     initBootSplash: function() {
-        // defautl wait panel (picture only no string!)
+        centerSplash = function() {
+            var vp = Ext.getBody().getSize();
+            p = Ext.get('tine-viewport-waitcycle');
+            p.moveTo(vp.width/2 - this.splash.width/2, vp.height/2 - this.splash.height/2);
+        }
+        
         this.splash = {
             id: 'tine-viewport-waitcycle',
             border: false,
@@ -68,11 +75,8 @@ Tine.Tinebase.tineInit = {
             html: '<div class="loading-indicator" width="16px" height="16px">&#160;</div>',
             listeners: {
                 scope: this,
-                render: function() {
-                    var vp = Ext.getBody().getSize();
-                    p = Ext.get('tine-viewport-waitcycle');
-                    p.moveTo(vp.width/2 - this.splash.width/2, vp.height/2 - this.splash.height/2);
-                }
+                render: centerSplash,
+                resize: centerSplash
             }
         };
         
