@@ -46,7 +46,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * reqests all data needed in this dialog
      */
     requestData: function() {
-        Ext.Ajax.request({
+        this.loadRequest = Ext.Ajax.request({
             scope: this,
             success: this.onDataLoad,
             params: {
