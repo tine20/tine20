@@ -12,10 +12,10 @@
  */
 
 /**
- * Call Filter Class
+ * contract filter Class
  * @package     Erp
  */
-class Erp_Model_ProjectFilter extends Tinebase_Record_Abstract
+class Erp_Model_ContractFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the field which 

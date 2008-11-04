@@ -19,10 +19,10 @@
 class Erp_Model_Number extends Tinebase_Record_Abstract
 {  
     /**
-     * constant for project type
+     * constant for contract type
      *
      */
-    const TYPE_PROJECT = 'project';    
+    const TYPE_CONTRACT = 'contract';    
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -53,7 +53,7 @@ class Erp_Model_Number extends Tinebase_Record_Abstract
         'type'             => array(
             Zend_Filter_Input::ALLOW_EMPTY => false, 
             'presence'=>'required',
-            'InArray' => array(self::TYPE_PROJECT)
+            'InArray' => array(self::TYPE_CONTRACT)
         ),
         'update_time'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
     );

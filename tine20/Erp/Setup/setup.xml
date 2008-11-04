@@ -63,7 +63,7 @@
             </declaration>
         </table>
         <table>
-            <name>erp_projects</name>
+            <name>erp_contracts</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -141,7 +141,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>erp_projects::container_id--container::id</name>
+                    <name>erp_contracts::container_id--container::id</name>
                     <field>
                         <name>container_id</name>
                     </field>
@@ -161,8 +161,8 @@
             </table>
             <field>
                 <name>name</name>
-                <value>Shared Projects</value>
-                <!-- gettext('Shared Projects') -->
+                <value>Shared Contracts</value>
+                <!-- gettext('Shared Contracts') -->
             </field>
             <field>
                 <name>type</name>

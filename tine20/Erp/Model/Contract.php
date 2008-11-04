@@ -1,6 +1,6 @@
 <?php
 /**
- * class to hold project data
+ * class to hold contract data
  * 
  * @package     Erp
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -11,11 +11,11 @@
  */
 
 /**
- * class to hold project data
+ * class to hold contract data
  * 
  * @package     Erp
  */
-class Erp_Model_Project extends Tinebase_Record_Abstract
+class Erp_Model_Contract extends Tinebase_Record_Abstract
 {  
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -54,6 +54,8 @@ class Erp_Model_Project extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // relations (linked users/groups and customers
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
     );
 
     /**

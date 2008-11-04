@@ -28,7 +28,7 @@ class Erp_Backend_Number extends Tinebase_Application_Backend_Sql_Abstract
     }
     
     /**
-     * get next number identified by $_type (i.e. project) and update db
+     * get next number identified by $_type (i.e. contract) and update db
      *
      * @param   string $_type
      * @param   integer $_userId

@@ -12,23 +12,23 @@
 
 
 /**
- * backend for projects
+ * backend for contracts
  *
  * @package     Erp
  * @subpackage  Backend
  */
-class Erp_Backend_Project extends Tinebase_Application_Backend_Sql_Abstract
+class Erp_Backend_Contract extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
      * the constructor
      */
     public function __construct ()
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'erp_projects', 'Erp_Model_Project');
+        parent::__construct(SQL_TABLE_PREFIX . 'erp_contracts', 'Erp_Model_Contract');
     }
 
     /**
-     * Creates new entry and adds container and project number
+     * Creates new entry and adds container and contract number
      *
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
@@ -38,7 +38,7 @@ class Erp_Backend_Project extends Tinebase_Application_Backend_Sql_Abstract
     public function create(Tinebase_Record_Interface $_record) {
         
         // add container
-        $_record->container_id = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Projects', 'shared')->getId();
+        $_record->container_id = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId();
         
         // add number
         $_record->number = $this->_getNextNumber();
@@ -52,11 +52,11 @@ class Erp_Backend_Project extends Tinebase_Application_Backend_Sql_Abstract
      * add the fields to search for to the query
      *
      * @param   Zend_Db_Select           $_select current where filter
-     * @param   Erp_Model_ProjectFilter  $_filter the string to search for
+     * @param   Erp_Model_ContractFilter  $_filter the string to search for
      * 
      * @todo    add container filter later
      */
-    protected function _addFilter(Zend_Db_Select $_select, Erp_Model_ProjectFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Erp_Model_ContractFilter $_filter)
     {
         //$_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
                         
@@ -66,7 +66,7 @@ class Erp_Backend_Project extends Tinebase_Application_Backend_Sql_Abstract
     }
 
     /**
-     * fetches the next incremental project number from erp_numbers
+     * fetches the next incremental contract number from erp_numbers
      *
      * @return integer number
      * @todo    move to controller

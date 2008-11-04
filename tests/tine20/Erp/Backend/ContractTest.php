@@ -16,19 +16,19 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Erp_Backend_ProjectTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Erp_Backend_ContractTest::main');
 }
 
 /**
- * Test class for Erp_Backend_ProjectTest
+ * Test class for Erp_Backend_ContractTest
  */
-class Erp_Backend_ProjectTest extends PHPUnit_Framework_TestCase
+class Erp_Backend_ContractTest extends PHPUnit_Framework_TestCase
 {
     
     /**
-     * the project backend
+     * the contract backend
      *
-     * @var Erp_Backend_Project
+     * @var Erp_Backend_Contract
      */
     protected $_backend;
     
@@ -37,7 +37,7 @@ class Erp_Backend_ProjectTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Erp Project Backend Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Erp Contract Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -48,7 +48,7 @@ class Erp_Backend_ProjectTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Erp_Backend_Project();
+        $this->_backend = new Erp_Backend_Contract();
     }
 
     /**
@@ -61,30 +61,30 @@ class Erp_Backend_ProjectTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * create new project
+     * create new contract
      *
      */
-    public function testCreateProject()
+    public function testCreateContract()
     {
-        $project = $this->_getProject();
-        $created = $this->_backend->create($project);
+        $contract = $this->_getContract();
+        $created = $this->_backend->create($contract);
         
-        $this->assertEquals($created->title, $project->title);
+        $this->assertEquals($created->title, $contract->title);
         $this->assertGreaterThan(0, $created->number);
-        $this->assertEquals($created->container_id, Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Projects', 'shared')->getId());
+        $this->assertEquals($created->container_id, Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId());
         
-        $this->_backend->delete($project);
+        $this->_backend->delete($contract);
     }
 
     /**
-     * get project
+     * get contract
      *
-     * @return Erp_Model_Project
+     * @return Erp_Model_Contract
      */
-    protected function _getProject()
+    protected function _getContract()
     {
-        return new Erp_Model_Project(array(
-            'title'         => 'phpunit project',
+        return new Erp_Model_Contract(array(
+            'title'         => 'phpunit contract',
             'description'   => 'blabla'
         ), TRUE);
     }

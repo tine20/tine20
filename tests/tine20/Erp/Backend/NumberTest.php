@@ -26,7 +26,7 @@ class Erp_Backend_NumberTest extends PHPUnit_Framework_TestCase
 {
     
     /**
-     * the project backend
+     * the number backend
      *
      * @var Erp_Backend_Number
      */
@@ -67,9 +67,9 @@ class Erp_Backend_NumberTest extends PHPUnit_Framework_TestCase
     public function testGetNextNumber()
     {
         $userId = Tinebase_Core::getUser()->getId();
-        $number = $this->_backend->getNext(Erp_Model_Number::TYPE_PROJECT, $userId);
+        $number = $this->_backend->getNext(Erp_Model_Number::TYPE_CONTRACT, $userId);
         
-        $nextNumber = $this->_backend->getNext(Erp_Model_Number::TYPE_PROJECT, $userId);
+        $nextNumber = $this->_backend->getNext(Erp_Model_Number::TYPE_CONTRACT, $userId);
         
         $this->assertEquals($number->number+1, $nextNumber->number);
         $this->assertEquals($number->type, $nextNumber->type);
