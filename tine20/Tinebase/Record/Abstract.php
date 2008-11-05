@@ -651,5 +651,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             }
         }
     }
+
+    /**
+     * check if the model has a specific field (container_id for example)
+     *
+     * @param string $_field
+     * @return boolean
+     */
+    public function has($_field) 
+    {
+        return (array_key_exists ($_field, $this->_validators)); 
+    }   
 }
 
