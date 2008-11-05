@@ -32,14 +32,10 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         $this->_modelName = 'Crm_Model_Lead';
         $this->_backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
         $this->_currentAccount = Tinebase_Core::getUser();
+        
+        // send notifications
+        $this->_sendNotifications = TRUE;
     }
-    
-    /**
-     * application name (is needed in checkRight())
-     *
-     * @var string
-     */
-    protected $_applicationName = 'Crm';
     
     /**
      * holdes the instance of the singleton
@@ -62,33 +58,26 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         return self::$_instance;
     }    
     
-    /*********** get / search / count leads **************/
+    /****************************** overwritten functions ************************/
     
     /**
      * get lead identified by leadId
      *
-     * @param   int $_leadId
+     * @param   int $_id
      * @return  Crm_Model_Lead
-     * @throws  Crm_Exception_AccessDenied
      */
-    public function getLead($_leadId)
+    public function get($_id)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $lead = $backend->get($_leadId);
+        $lead = parent::get($_id);
         
-        if (!$this->_currentAccount->hasGrant($lead->container_id, Tinebase_Model_Container::GRANT_READ)) {
-            throw new Crm_Exception_AccessDenied('Read permission to lead denied.');
-        }
-
-        $this->getLeadLinks($lead);
+        // add products
+        $lead->products = Crm_Controller_LeadProducts::getInstance()->getLeadProducts($lead->getId());
         
-        Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
-        
-        $lead->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Crm_Model_Lead', $lead->getId());        
-                
         return $lead;
     }
-
+    
+    /*********** get / search / count leads **************/
+    
     /**
      * returns an empty lead with some defaults set
      * - add creator as internal contact
@@ -256,7 +245,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
             throw $e;
         }
         
-        return $this->getLead($lead->getId());
+        return $this->get($lead->getId());
     }     
         
    /**
@@ -325,7 +314,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
-        return $this->getLead($lead->getId());
+        return $this->get($lead->getId());
     }
 
     /**

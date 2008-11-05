@@ -367,7 +367,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLead()
     {
-        $lead = Crm_Controller_Lead::getInstance()->getLead($this->_objects['initialLead']);
+        $lead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']);
         
         $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
@@ -448,7 +448,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $task = Tasks_Controller_Task::getInstance()->createTask($this->_objects['task']);
         
         // link task
-        $lead = Crm_Controller_Lead::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $lead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
@@ -462,7 +462,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->updateLead($lead);
         
         // check linked tasks
-        $updatedLead = Crm_Controller_Lead::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $updatedLead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
+        
+        //print_r($updatedLead->toArray());
         
         $this->assertGreaterThan(0, count($updatedLead->relations));
         $this->assertEquals($task->getId(), $updatedLead->relations[0]->related_id);
@@ -483,7 +485,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // link contact
-        $lead = Crm_Controller_Lead::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $lead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
@@ -498,13 +500,11 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->updateLead($lead);
                 
         // check linked contacts
-        $updatedLead = Crm_Controller_Lead::getInstance()->getLead($this->_objects['initialLead']->getId());
+        $updatedLead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
         
         $this->assertGreaterThan(0, count($updatedLead->relations));
         $this->assertEquals($contact->getId(), $updatedLead->relations[0]->related_id);
-        
-        // delete contact
-        Addressbook_Controller_Contact::getInstance()->delete($this->_objects['user']->getId());
+    
     }
     
     /**
@@ -518,9 +518,12 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();        
         $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $this->_objects['initialLead']->getId());
+
+        // delete contact
+        Addressbook_Controller_Contact::getInstance()->delete($this->_objects['user']->getId());
         
         $this->setExpectedException('Tinebase_Exception_NotFound');        
-        Crm_Controller_Lead::getInstance()->getLead($this->_objects['initialLead']);
+        Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']);
     }
     
     /**

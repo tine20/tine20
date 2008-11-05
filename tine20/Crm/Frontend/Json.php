@@ -66,7 +66,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         if(!$leadId ) {   
             $lead = $controller->getEmptyLead();
         } else {
-            $lead = $controller->getLead($leadId);
+            $lead = $controller->get($leadId);
         }   
         $leadData = $this->_leadToJson($lead); 
         

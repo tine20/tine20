@@ -204,7 +204,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     public function testLeadPdfLinkedContact()
     {
     	// create lead + contact + link    
-        $lead = Crm_Controller_Lead::getInstance()->getLead($this->objects['leadWithLink']->getId());
+        $lead = Crm_Controller_Lead::getInstance()->get($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
@@ -240,7 +240,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         // create lead + task + link
         $task = Tasks_Controller_Task::getInstance()->createTask($this->objects['linkedTask']);
 
-        $lead = Crm_Controller_Lead::getInstance()->getLead($this->objects['leadWithLink']->getId());
+        $lead = Crm_Controller_Lead::getInstance()->get($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => Crm_Backend_Factory::SQL,
