@@ -136,9 +136,22 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * check if two records are equal
      * 
      * @param  Tinebase_Record_Interface $_record record for comparism
-     * $param  array                     $_toOmit fields to omit
+     * @param  array                     $_toOmit fields to omit
      * @return bool
      */
     public function isEqual($_record, array $_toOmmit = array());
      
+    /**
+     * translate this records' fields
+     *
+     */
+    public function translate();
+    
+    /**
+     * check if the model has a specific field (container_id for example)
+     *
+     * @param string $_field
+     * @return boolean
+     */
+    public function has($_field);    
 }
