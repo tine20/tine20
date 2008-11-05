@@ -135,7 +135,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         // delete imported contacts
         foreach ($importedContacts as $contact) {
-            Addressbook_Controller_Contact::getInstance()->deleteContact($contact->getId());
+            Addressbook_Controller_Contact::getInstance()->delete($contact->getId());
         }
     }
 }		
