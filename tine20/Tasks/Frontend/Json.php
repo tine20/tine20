@@ -163,15 +163,15 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     /**
      * Deletes an existing Task
      *
-     * @param int $identifier
+     * @param array $ids 
      * @return string
      */
-    public function deleteTask($identifier)
+    public function deleteTasks($ids)
     {
-        if (strlen($identifier) > 40) {
-            $identifier = Zend_Json::decode($identifier);
+        if (strlen($ids) > 40) {
+            $ids = Zend_Json::decode($identifier);
         }
-        Tasks_Controller_Task::getInstance()->deleteTask($identifier);
+        Tasks_Controller_Task::getInstance()->deleteTask($ids);
         return 'success';
     }
     
