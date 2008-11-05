@@ -81,6 +81,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
      * @param Addressbook_Model_ContactPagination $_pagination
      * 
      * @return Tinebase_Record_RecordSet
+     * @deprecated 
      */
     public function searchContacts(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {
@@ -96,6 +97,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
      * 
      * @param Addressbook_Model_ContactFilter $_filter
      * @return int
+     * @deprecated 
      */
     public function searchContactsCount(Addressbook_Model_ContactFilter $_filter) 
     {
@@ -107,24 +109,11 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
     }
     
     /**
-     * Removes containers where current user has no access to.
-     * 
-     * @param Addressbook_Model_ContactFilter $_filter
-     * @return void
-     */
-    protected function _checkContainerACL($_filter)
-    {
-        $readableContainer = $this->_currentAccount->getContainerByACL('Addressbook', Tinebase_Model_Container::GRANT_READ);
-        $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' .$_filter->containerType . ' ' . print_r($_filter->container, true));
-    }    
-
-    /**
      * Returns a set of contacts identified by their id's
      * 
      * @param  array $_ids array of string
      * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * @deprecated 
      */
     public function getMultipleContacts($_contactIds)
     {

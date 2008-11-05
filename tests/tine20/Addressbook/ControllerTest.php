@@ -216,7 +216,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter);
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
         
         $this->assertEquals(1, $count);
     }
@@ -239,7 +239,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
         $filter->container = array($container->getId());
-        $count = Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter);
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
         
         $this->assertGreaterThan(0, $count);
     }
@@ -254,7 +254,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'query',         'operator' => 'contains', 'value' => $this->objects['initialContact']->n_family),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter);
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
         
         $this->assertEquals(1, $count);
     }

@@ -58,13 +58,13 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         
         //Zend_Registry::get('logger')->debug(print_r($decodedFilter,true));
         
-        $contacts = Addressbook_Controller_Contact::getInstance()->searchContacts($filter, $pagination);
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
         //$contacts->setTimezone($this->_userTimezone);
         //$contacts->convertDates = true;
         
         return array(
             'results'       => $this->_multipleContactsToJson($contacts),
-            'totalcount'    => Addressbook_Controller_Contact::getInstance()->searchContactsCount($filter)
+            'totalcount'    => Addressbook_Controller_Contact::getInstance()->searchCount($filter)
         );
     }    
 
