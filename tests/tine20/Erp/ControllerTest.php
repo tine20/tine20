@@ -371,41 +371,6 @@ class Erp_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to update a contract
-     *
-     */
-    public function testUpdateContract()
-    {
-        /*
-        $contract = Crm_Controller_Lead::getInstance()->updateLead($this->_objects['updatedLead']);
-        
-        $this->assertEquals($this->_objects['updatedLead']->id, $contract->id);
-        $this->assertEquals($this->_objects['updatedLead']->description, $contract->description);
-        */
-    }
-
-    /**
-     * try to get all contracts and compare counts
-     *
-     */
-    public function testSearchContracts()
-    {
-        /*
-        $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->_testContainer->id);
-        $filter->query = 'PHPUnit';
-        $filter->showClosed = true;
-        $pagination = new Tinebase_Model_Pagination();
-        $contracts = Crm_Controller_Lead::getInstance()->searchLeads($filter, $pagination);
-        $count = Crm_Controller_Lead::getInstance()->searchLeadsCount($filter);
-                
-        $this->assertEquals(1, count($contracts));
-        $this->assertEquals($count, count($contracts));
-        $this->assertType('Tinebase_Record_RecordSet', $contracts);
-        */
-    }    
-    
-    /**
      * get contract
      *
      * @return Erp_Model_Contract
