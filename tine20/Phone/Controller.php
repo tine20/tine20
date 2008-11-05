@@ -32,7 +32,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Phone_Controller;
+            self::$_instance = new Phone_Controller();
         }
         
         return self::$_instance;

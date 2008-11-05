@@ -42,7 +42,7 @@ class Crm_Controller_LeadTypes extends Tinebase_Application_Controller_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Controller_LeadTypes;
+            self::$_instance = new Crm_Controller_LeadTypes();
         }
         
         return self::$_instance;

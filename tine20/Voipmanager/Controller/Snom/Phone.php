@@ -50,7 +50,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_Snom_Phone;
+            self::$_instance = new Voipmanager_Controller_Snom_Phone();
         }
         
         return self::$_instance;

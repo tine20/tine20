@@ -50,7 +50,7 @@ class Voipmanager_Controller_Asterisk_Meetme extends Voipmanager_Controller_Abst
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_Asterisk_Meetme;
+            self::$_instance = new Voipmanager_Controller_Asterisk_Meetme();
         }
         
         return self::$_instance;

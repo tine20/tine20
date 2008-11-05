@@ -51,7 +51,7 @@ class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstra
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_Snom_Location;
+            self::$_instance = new Voipmanager_Controller_Snom_Location();
         }
         
         return self::$_instance;

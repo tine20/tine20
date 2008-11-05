@@ -42,7 +42,7 @@ class Crm_Controller_LeadSources extends Tinebase_Application_Controller_Abstrac
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Controller_LeadSources;
+            self::$_instance = new Crm_Controller_LeadSources();
         }
         
         return self::$_instance;

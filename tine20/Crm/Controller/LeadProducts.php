@@ -42,7 +42,7 @@ class Crm_Controller_LeadProducts extends Tinebase_Application_Controller_Abstra
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Controller_LeadProducts;
+            self::$_instance = new Crm_Controller_LeadProducts();
         }
         
         return self::$_instance;

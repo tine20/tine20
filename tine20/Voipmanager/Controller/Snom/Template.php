@@ -50,7 +50,7 @@ class Voipmanager_Controller_Snom_Template extends Voipmanager_Controller_Abstra
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_Snom_Template;
+            self::$_instance = new Voipmanager_Controller_Snom_Template();
         }
         
         return self::$_instance;

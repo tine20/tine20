@@ -52,7 +52,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Controller_Contact;
+            self::$_instance = new Addressbook_Controller_Contact();
         }
         
         return self::$_instance;

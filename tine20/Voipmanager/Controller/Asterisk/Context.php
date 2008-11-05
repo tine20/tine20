@@ -51,7 +51,7 @@ class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abs
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_Asterisk_Context;
+            self::$_instance = new Voipmanager_Controller_Asterisk_Context();
         }
         
         return self::$_instance;

@@ -50,7 +50,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_MyPhone;
+            self::$_instance = new Voipmanager_Controller_MyPhone();
         }
         
         return self::$_instance;

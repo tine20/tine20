@@ -50,7 +50,7 @@ class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_A
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_Asterisk_Voicemail;
+            self::$_instance = new Voipmanager_Controller_Asterisk_Voicemail();
         }
         
         return self::$_instance;

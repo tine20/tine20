@@ -51,7 +51,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_Asterisk_SipPeer;
+            self::$_instance = new Voipmanager_Controller_Asterisk_SipPeer();
         }
         
         return self::$_instance;

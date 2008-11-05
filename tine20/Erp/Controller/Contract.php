@@ -56,7 +56,7 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abs
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Erp_Controller_Contract;
+            self::$_instance = new Erp_Controller_Contract();
         }
         
         return self::$_instance;
