@@ -74,60 +74,6 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
         return $contact;            
     }
     
-    /**
-     * Search for contacts matching given filter
-     *
-     * @param Addressbook_Model_ContactFilter $_filter
-     * @param Addressbook_Model_ContactPagination $_pagination
-     * 
-     * @return Tinebase_Record_RecordSet
-     * @deprecated 
-     */
-    public function searchContacts(Addressbook_Model_ContactFilter $_filter, Tinebase_Model_Pagination $_pagination)
-    {
-        $this->_checkContainerACL($_filter);
-        
-        $contacts = $this->_backend->search($_filter, $_pagination);
-        
-        return $contacts;
-    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Addressbook_Model_ContactFilter $_filter
-     * @return int
-     * @deprecated 
-     */
-    public function searchContactsCount(Addressbook_Model_ContactFilter $_filter) 
-    {
-        $this->_checkContainerACL($_filter);
-        
-        $count = $this->_backend->searchCount($_filter);
-        
-        return $count;
-    }
-    
-    /**
-     * Returns a set of contacts identified by their id's
-     * 
-     * @param  array $_ids array of string
-     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
-     * @deprecated 
-     */
-    public function getMultipleContacts($_contactIds)
-    {
-        $contacts = $this->_backend->getMultiple($_contactIds);
-        
-        foreach ($contacts as $contact) {
-            if (! $this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Container::GRANT_READ)) {
-                $index = $contacts->getIndexById($contact->getId());
-                unset($contacts[$index]);
-            } 
-        }
-        return $contacts;
-    }    
-            
     /*************** add / update / delete contact *****************/  
     
     /**
