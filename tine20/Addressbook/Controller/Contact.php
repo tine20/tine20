@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        extend Tinebase_Application_Controller_Abstract to remove some obsolete code
+ * @todo        use function from Tinebase_Application_Controller_Record_Abstract
  */
 
 /**
@@ -18,14 +18,19 @@
  * @package     Addressbook
  * @subpackage  Controller
  */
-class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abstract
+class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
-     * the contacts backend
+     * the constructor
      *
-     * @var Addressbook_Backend_Sql
+     * don't use the constructor. use the singleton 
      */
-    protected $_backend;
+    private function __construct() {
+        $this->_applicationName = 'Addressbook';
+        $this->_modelName = 'Addressbook_Model_Contact';
+        $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
     
     /**
      * holdes the instance of the singleton
@@ -33,16 +38,6 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
      * @var Addressbook_Controller_Contact
      */
     private static $_instance = NULL;
-    
-    /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() {
-        $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        $this->_currentAccount = Zend_Registry::get('currentAccount');
-    }
     
     /**
      * the singleton pattern
@@ -57,6 +52,9 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
         
         return self::$_instance;
     }
+
+    /****************************** overwritten functions ************************/
+    
         
     /*********** get / search / count contacts **************/
     
@@ -66,6 +64,8 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Abs
      * @param   int $_contactId
      * @return  Addressbook_Model_Contact
      * @throws  Addressbook_Exception_AccessDenied if user has no read grant
+     * 
+     * @deprecated
      */
     public function getContact($_contactId)
     {
