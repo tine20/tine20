@@ -309,7 +309,9 @@ Tine.Tinebase.tineInit = {
                     app = userApps[i];
                     
                     if (app.name !== 'Tinebase') {
-                        Tine[app.name].registry = mainWindow.Tine[app.name].registry;
+                    	if (Tine[app.name]) {
+                    	   Tine[app.name].registry = mainWindow.Tine[app.name].registry;	
+                    	} 
                     }
                 }
             }
