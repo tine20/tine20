@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add sendNotifications()
  */
 
 /**
@@ -145,6 +146,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
+     * 
+     * @todo    add notifications
      */
     public function create(Tinebase_Record_Interface $_record)
     {        
@@ -167,26 +170,20 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             
             $record = $this->_backend->create($_record);
             
-            // set relations
+            // set relations / tags / notes
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
-            }        
-            
-            // add tags
+            }                    
             if ($record->has('tags') && !empty($_record->tags)) {
                 $record->tags = $_record->tags;
                 Tinebase_Tags::getInstance()->setTagsOfRecord($record);
             }        
-    
-            // add notes
-            if ($record->has('notes') && isset($_record->notes)) {
-                $record->notes = $_record->notes;
-                Tinebase_Notes::getInstance()->setNotesOfRecord($record);
-            }
-                    
-            // add created note to record
             if ($record->has('notes')) {
-                Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'created');
+                if (isset($_record->notes)) {
+                    $record->notes = $_record->notes;
+                    Tinebase_Notes::getInstance()->setNotesOfRecord($record);
+                }
+                Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'created');                
             }
             
             //$this->sendNotifications($lead, $this->_currentAccount, 'created');
@@ -208,6 +205,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
+     * 
+     * @todo    add notifications
      */
     public function update(Tinebase_Record_Interface $_record)
     {
@@ -249,19 +248,19 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }        
-            
             if ($record->has('tags') && isset($_record->tags)) {
                 Tinebase_Tags::getInstance()->setTagsOfRecord($_record);
             }
-    
-            if ($record->has('notes') && isset($_record->notes)) {
-                Tinebase_Notes::getInstance()->setNotesOfRecord($_record);
+            if ($record->has('notes')) {
+                if (isset($_record->notes)) {
+                    Tinebase_Notes::getInstance()->setNotesOfRecord($_record);
+                }
+                Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'changed', $currentMods);
             }        
             
-            // add changed note to record
+            // send notifications
             if ($record->has('created_by') && count($currentMods) > 0) {
-                Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'changed', $currentMods);
-                $this->sendNotifications($record, $this->_currentAccount, 'changed', $currentMods);
+                //$this->sendNotifications($record, $this->_currentAccount, 'changed', $currentMods);
             }        
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
