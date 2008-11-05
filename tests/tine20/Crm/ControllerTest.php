@@ -477,7 +477,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     {
         // create test contact
         try {
-            $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->_objects['user']->getId());
+            $contact = Addressbook_Controller_Contact::getInstance()->get($this->_objects['user']->getId());
         } catch ( Exception $e ) {
             $contact = Addressbook_Controller_Contact::getInstance()->createContact($this->_objects['user']);
         }

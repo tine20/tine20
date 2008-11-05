@@ -59,37 +59,6 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
     /*********** get / search / count contacts **************/
     
     /**
-     * fetch one contact identified by contactid
-     *
-     * @param   int $_contactId
-     * @return  Addressbook_Model_Contact
-     * @throws  Addressbook_Exception_AccessDenied if user has no read grant
-     * 
-     * @deprecated
-     */
-    public function getContact($_contactId)
-    {
-        if (! $_contactId) { // yes, we mean 0, null, false, ''
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, 'Addressbook', $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
-
-            $contact = new Addressbook_Model_Contact(array(), true);
-            $contact->container_id = $containers[0]->getId();
-        } else {
-            $contact = $this->_backend->get($_contactId);
-            // only get tags the user has view right for
-            Tinebase_Tags::getInstance()->getTagsOfRecord($contact);
-            
-            $contact->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Addressbook_Model_Contact', $contact->getId());
-        
-            if (!$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Container::GRANT_READ)) {
-                throw new Addressbook_Exception_AccessDenied('Read access to contact denied.');
-            }
-        }
-        
-        return $contact;            
-    }
-
-    /**
      * fetch one contact identified by $_userId
      *
      * @param   int $_userId
@@ -215,7 +184,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
             throw $e;
         }
         
-        return $this->getContact($contact->getId());
+        return $this->get($contact->getId());
     }
     
     /**
@@ -230,7 +199,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
             $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $currentContact = $this->getContact($_contact->getId());
+            $currentContact = $this->get($_contact->getId());
             
             // ACL checks
             if ($currentContact->container_id != $_contact->container_id) {
@@ -273,7 +242,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
             throw $e;
         }
 
-        return $this->getContact($contact->getId());
+        return $this->get($contact->getId());
     }
     
     /**

@@ -55,6 +55,8 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abs
         return self::$_instance;
     }        
 
+    /****************************** overwritten functions ************************/
+    
     /**
      * add one record
      *

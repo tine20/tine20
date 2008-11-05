@@ -188,7 +188,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContact()
     {
-        $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($this->objects['initialContact']);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
@@ -277,7 +277,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testRemoveContactImage()
     {
-        $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($this->objects['initialContact']);
         $contact->jpegphoto = '';
         $this->setExpectedException('Exception');
         $image = Addressbook_Controller::getInstance()->getImage($contact->id);
@@ -303,7 +303,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $contact = Addressbook_Controller_Contact::getInstance()->getContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($this->objects['initialContact']);
     }
     
     /**

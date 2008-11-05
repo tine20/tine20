@@ -126,7 +126,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(3, count($importedContacts));
         
-        $firstImportedContact = Addressbook_Controller_Contact::getInstance()->getContact($importedContacts[0]->getId());
+        $firstImportedContact = Addressbook_Controller_Contact::getInstance()->get($importedContacts[0]->getId());
         $this->assertEquals('Krehl, Albert', $firstImportedContact->n_fileas);
         $this->assertEquals('Herr Dr.', $firstImportedContact->n_prefix);
         $note = $firstImportedContact->note;
