@@ -22,7 +22,7 @@ Tine.Tinebase.widgets.app.JsonBackend = function(config) {
     Ext.apply(this, config);
 }
 
-Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, {
+Ext.apply(Tine.Tinebase.widgets.app.JsonBackend.prototype, {
     /**
      * @cfg {String} appName
      * internal/untranslated app name (required)
@@ -92,7 +92,24 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, {
      * @success 
      */
     deleteRecords: function(records, options) {
+        var params = options.params || {};
+        params.method = this.appName + '.delete' + this.modelName + 's';
+        params.ids = this.getRecordIds(records);
         
+        return Ext.Ajax.request({
+            scope: this,
+            params: params,
+            success: function(response) {
+                if (typeof options.success == 'function') {
+                    options.success.call(options.scope);
+                }
+            },
+            failure: function (response) {
+                if (typeof options.failure == 'function') {
+                    options.failure.call(options.scope);
+                }
+            }
+        });
     },
     
     /**
@@ -105,6 +122,26 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, {
      */
     updateRecords: function(records, updates, options) {
         
-    }
+    },
     
+    /**
+     * returns an array of ids
+     * 
+     * @private 
+     * @param  {Ext.data.Record|Array}
+     * @return {Array} of ids
+     */
+    getRecordIds : function(records) {
+        var ids = [];
+        
+        if (! Ext.isArray(records)) {
+            records = [records];
+        }
+        
+        for (var i=0; i<records.length; i++) {
+            ids.push(records[i].id ? records[i].id : records.id);
+        }
+        
+        return ids;
+    }
 });

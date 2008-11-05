@@ -13,6 +13,12 @@ Ext.namespace('Tine.Tasks');
 
 /*********************************** MAIN DIALOG ********************************************/
 
+Tine.Tasks.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Tasks',
+    modelName: 'Task',
+    recordClass: Tine.Tasks.Task,
+});
+
 /**
  * entry point, required by tinebase
  * This function is called once when Tinebase collect the available apps
@@ -104,43 +110,24 @@ Tine.Tasks.mainGrid = {
             });
         },
         
-		deleteTasks: function(_button, _event){
+		deleteTasks: function(){
             var selectedRows = this.grid.getSelectionModel().getSelections();
+            
 			Ext.MessageBox.confirm('Confirm', this.translation.ngettext(
                 'Do you really want to delete the selected task', 
-                'Do you really want to delete the selected task', 
-                 selectedRows.length), function(_button) {
+                'Do you really want to delete the selected tasks', 
+                 selectedRows.length), function(btn) {
                 
-                if(_button == 'yes') {
-				    if (selectedRows.length < 1) {
-				        return;
-				    }
-					if (selectedRows.length > 1) {
-						var identifiers = [];
-						for (var i=0; i < selectedRows.length; i++) {
-							identifiers.push(selectedRows[i].data.id);
-						} 
-						var params = {
-		                    method: 'Tasks.deleteTask', 
-		                    identifier: Ext.util.JSON.encode(identifiers)
-		                };
-					} else {
-						var params = {
-		                    method: 'Tasks.deleteTask', 
-		                    identifier: selectedRows[0].data.id
-		                };
-					}
-				    
-					Ext.Ajax.request({
-						scope: this,
-		                params: params,
-		                success: function(_result, _request) {
-		                    this.store.load({params: this.paging});
-		                },
-		                failure: function ( result, request) { 
-		                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not delete task(s).')); 
-		                }
-		            });
+                if(btn == 'yes') {
+				    Tine.Tasks.JsonBackend.deleteRecords(selectedRows, {
+                        scope: this,
+                        success: function(_result, _request) {
+                            this.store.load({params: this.paging});
+                        },
+                        failure: function ( result, request) { 
+                            Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not delete task(s).')); 
+                        }
+                    });
 				}
 			}, this);
 		}
