@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract controller for Tine 2.0 application with containers
+ * Abstract record controller for Tine 2.0 applications
  * 
  * @package     Tinebase
  * @subpackage  Controller
@@ -12,7 +12,7 @@
  */
 
 /**
- * abstract controller class for Tine 2.0 applications
+ * abstract record controller class for Tine 2.0 applications
  * 
  * @package     Tinebase
  * @subpackage  Controller
@@ -34,6 +34,13 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @todo perhaps we can remove that and build model name from name of the class (replace 'Controller' with 'Model')
      */
     protected $_modelName;
+    
+    /**
+     * check for container ACLs?
+     *
+     * @var boolean
+     */
+    protected $_doContainerACLChecks = TRUE;
 
     /*********** get / search / count leads **************/
     
@@ -46,7 +53,9 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
     {
-        $this->_checkContainerACL($_filter);
+        if ($this->_doContainerACLChecks) {
+            $this->_checkContainerACL($_filter);
+        }
         
         $result = $this->_backend->search($_filter, $_pagination);
         
@@ -61,7 +70,9 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     public function searchCount(Tinebase_Record_Interface $_filter) 
     {
-        $this->_checkContainerACL($_filter);
+        if ($this->_doContainerACLChecks) {
+            $this->_checkContainerACL($_filter);
+        }
 
         $count = $this->_backend->searchCount($_filter);
         
@@ -75,18 +86,15 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @return Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_Record_Validation
      * 
-     * @todo    add grant check again
-     * @todo    add get relations
+     * @todo    add get relations ?
      */
     public function get($_id)
     {
         $record = $this->_backend->get($_id);
         
-        /*
-        if (!$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
+        if ($this->_doContainerACLChecks && !$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
             throw new Tinebase_Exception_AccessDenied('Read permission to record denied.');
         }
-        */
         
         return $record;    
     }
@@ -95,7 +103,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * Returns a set of leads identified by their id's
      * 
      * @param   array array of record identifiers
-     * @return Tinebase_Record_RecordSet of Crm_Model_Lead
+     * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
     public function getMultiple($_identifiers)
     {
@@ -119,10 +127,6 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
-     * 
-     * @todo    add grant check again
-     * @todo    activate relations, tags, notes
-     * @todo    add check for modlog/relation/note fields in record?
      */
     public function create(Tinebase_Record_Interface $_record)
     {        
@@ -134,40 +138,36 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                 throw new Tinebase_Exception_Record_Validation('Record is not valid.');
             }
             
-            /*
-            if(!$this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD)) {
+            if($this->_doContainerACLChecks && !$this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD)) {
                 throw new Tinebase_Exception_AccessDenied('Write access to records in container ' . $_record->container_id . ' denied.');
             }
-            */
         
             // add modlog info
-            try {
+            if ($_record->has('created_by')) {
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
-            } catch (Tinebase_Exception_UnexpectedValue $e) {
-                // no modlog info in this record
             }
             
             $record = $this->_backend->create($_record);
             
             // set relations
-            if (FALSE) {
-                $this->setRelations($record->getId(), $_record);
+            if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
+                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }        
             
             // add tags
-            if (!empty($_record->tags)) {
+            if ($record->has('tags') && !empty($_record->tags)) {
                 $record->tags = $_record->tags;
                 Tinebase_Tags::getInstance()->setTagsOfRecord($record);
             }        
     
             // add notes
-            if (isset($_record->notes)) {
+            if ($record->has('notes') && isset($_record->notes)) {
                 $record->notes = $_record->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($record);
             }
                     
             // add created note to record
-            if (FALSE) {
+            if ($record->has('notes')) {
                 Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'created');
             }
             
@@ -190,8 +190,6 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
-     * 
-     * @todo    activate modlog, relations, tags, notes
      */
     public function update(Tinebase_Record_Interface $_record)
     {
@@ -205,46 +203,48 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $currentRecord = $this->_backend->get($_record->getId());
             
             // ACL checks
-            if ($currentRecord->container_id != $_record->container_id) {
-                if (! $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                    throw new Tinebase_Exception_AccessDenied('Write access in container ' . $_record->container_id . ' denied.');
+            if ($this->_doContainerACLChecks) {                
+                if ($currentRecord->container_id != $_record->container_id) {
+                    if (! $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD)) {
+                        throw new Tinebase_Exception_AccessDenied('Write access in container ' . $_record->container_id . ' denied.');
+                    }
+                    // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
+                    if (! $this->_currentAccount->hasGrant($currentRecord->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
+                        throw new Tinebase_Exception_AccessDenied('Delete access in container ' . $currentRecord->container_id . ' denied.');
+                    }
+                } elseif (! $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
+                    throw new Tinebase_Exception_AccessDenied('Edit access in container ' . $_record->container_id . ' denied.');
                 }
-                // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-                if (! $this->_currentAccount->hasGrant($currentRecord->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                    throw new Tinebase_Exception_AccessDenied('Delete access in container ' . $currentRecord->container_id . ' denied.');
-                }
-            } elseif (! $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
-                throw new Tinebase_Exception_AccessDenied('Edit access in container ' . $_record->container_id . ' denied.');
             }
     
             // concurrency management & history log
-            if (FALSE) {
+            if ($_record->has('created_by')) {
                 $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-                $modLog->manageConcurrentUpdates($_record, $currentRecord, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_record->getId());
+                $modLog->manageConcurrentUpdates($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
                 $modLog->setRecordMetaData($_record, 'update', $currentRecord);
-                $currentMods = $modLog->writeModLog($_record, $currentRecord, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_record->getId());
+                $currentMods = $modLog->writeModLog($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
             }
             
             $record = $this->_backend->update($_record);
     
-            // set relations & links
-            if (FALSE) {
-                $this->setRelations($record->getId(), $_record);        
-                
-                if (isset($_record->tags)) {
-                    Tinebase_Tags::getInstance()->setTagsOfRecord($_record);
-                }
-        
-                if (isset($_record->notes)) {
-                    Tinebase_Notes::getInstance()->setNotesOfRecord($_record);
-                }        
-                
-                // add changed note to record
-                if (count($currentMods) > 0) {
-                    Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'changed', $currentMods);
-                    $this->sendNotifications($record, $this->_currentAccount, 'changed', $currentMods);
-                }        
+            // set relations & tags & notes
+            if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
+                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
+            }        
+            
+            if ($record->has('tags') && isset($_record->tags)) {
+                Tinebase_Tags::getInstance()->setTagsOfRecord($_record);
             }
+    
+            if ($record->has('notes') && isset($_record->notes)) {
+                Tinebase_Notes::getInstance()->setNotesOfRecord($_record);
+            }        
+            
+            // add changed note to record
+            if ($record->has('created_by') && count($currentMods) > 0) {
+                Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'changed', $currentMods);
+                $this->sendNotifications($record, $this->_currentAccount, 'changed', $currentMods);
+            }        
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -262,8 +262,6 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * 
      * @param   array array of record identifiers
      * @return  void
-     * 
-     * @todo    add grant check
      */
     public function delete($_identifiers)
     {
@@ -277,6 +275,9 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($records as $record) {
+                if ($this->_doContainerACLChecks && !$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
+                    throw new Tinebase_Exception_AccessDenied('Delete access in container ' . $record->container_id . ' denied.');
+                }
                 $this->_backend->delete($record);
             }
             
@@ -289,7 +290,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     }
     
     /*********** helper funcs **************/
-
+    
     /**
      * Removes containers where current user has no access to
      * 
@@ -300,5 +301,5 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     {
         $readableContainer = $this->_currentAccount->getContainerByACL($this->_applicationName, Tinebase_Model_Container::GRANT_READ);
         $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
-    }        
+    }     
 }

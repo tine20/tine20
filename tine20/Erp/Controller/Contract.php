@@ -35,6 +35,9 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abs
         $this->_backend = new Erp_Backend_Contract();
         $this->_modelName = 'Erp_Model_Contract';
         $this->_currentAccount = Tinebase_Core::getUser();   
+        
+        // disable container ACL checks for the moment
+        $this->_doContainerACLChecks = FALSE; 
     }
     
     

@@ -75,4 +75,11 @@ interface Tinebase_Application_Backend_Interface
      * @return void
      */
     public function delete($_identifier);
+    
+    /**
+     * get backend type
+     *
+     * @return string
+     */
+    public function getType();
 }

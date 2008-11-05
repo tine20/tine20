@@ -20,6 +20,12 @@
 abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_Application_Backend_Interface
 {
     /**
+     * backend type constant
+     *
+     */
+    const TYPE = 'Sql';
+    
+    /**
      * Table name
      *
      * @var string
@@ -289,6 +295,16 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     public function getDb()
     {
         return $this->_db;
+    }
+    
+    /**
+     * get backend type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
     
     /*************************** protected helper funcs ************************************/
