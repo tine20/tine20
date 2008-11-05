@@ -20,26 +20,19 @@
 class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
-     * application name (is needed in checkRight())
-     *
-     * @var string
-     */
-    protected $_applicationName = 'Erp';
-    
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {        
+        $this->_applicationName = 'Erp';
         $this->_backend = new Erp_Backend_Contract();
         $this->_modelName = 'Erp_Model_Contract';
         $this->_currentAccount = Tinebase_Core::getUser();   
         
-        // disable container ACL checks for the moment
+        // disable container ACL checks as we don't init the 'Shared Contracts' grants in the setup
         $this->_doContainerACLChecks = FALSE; 
-    }
-    
+    }    
     
     /**
      * holdes the instance of the singleton
