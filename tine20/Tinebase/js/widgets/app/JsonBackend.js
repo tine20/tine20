@@ -44,7 +44,6 @@ Ext.apply(Tine.Tinebase.widgets.app.JsonBackend.prototype, {
      */
     idProperty: 'id',
     
-    
     /**
      * loads a single 'full featured' record
      * 
@@ -80,7 +79,14 @@ Ext.apply(Tine.Tinebase.widgets.app.JsonBackend.prototype, {
      * @success {Ext.data.Record}
      */
     saveRecord: function(record, options) {
+        options = options || {};
+        options.beforeSuccess = this.recordReader;
         
+        var p = options.params = options.params || {};
+        p.method = this.appName + '.save' + this.modelName;
+        p.recordData = Ext.util.JSON.encode(record.data);
+        
+        this.request(options);
     },
     
     /**
@@ -92,24 +98,12 @@ Ext.apply(Tine.Tinebase.widgets.app.JsonBackend.prototype, {
      * @success 
      */
     deleteRecords: function(records, options) {
-        var params = options.params || {};
-        params.method = this.appName + '.delete' + this.modelName + 's';
-        params.ids = this.getRecordIds(records);
+        options = options || {};
+        options.params = options.params || {};
+        options.params.method = this.appName + '.delete' + this.modelName + 's';
+        options.params.ids = Ext.util.JSON.encode(this.getRecordIds(records));
         
-        return Ext.Ajax.request({
-            scope: this,
-            params: params,
-            success: function(response) {
-                if (typeof options.success == 'function') {
-                    options.success.call(options.scope);
-                }
-            },
-            failure: function (response) {
-                if (typeof options.failure == 'function') {
-                    options.failure.call(options.scope);
-                }
-            }
-        });
+        this.request(options);
     },
     
     /**
@@ -143,5 +137,54 @@ Ext.apply(Tine.Tinebase.widgets.app.JsonBackend.prototype, {
         }
         
         return ids;
+    },
+    
+    /**
+     * reads a single 'fully featured' record from json data
+     * 
+     * NOTE: You might want to overwride this method if you have a more complex record
+     * 
+     * @param  XHR response
+     * @return {Ext.data.Record}
+     */
+    recordReader: function(response) {
+        if(!this.jsonReader) {
+            this.jsonReader = new Ext.data.JsonReader({id: this.idProperty, root: 'root'}, this.recordClass);
+        }
+        
+        var recordData = Ext.util.JSON.decode('{root: [' + response.responseText + ']}');
+        var data = this.jsonReader.readRecords(recordData);
+        
+        return data.records;
+    },
+    
+    /**
+     * performs an Ajax request
+     */
+    request: function(options) {
+        return Ext.Ajax.request({
+            scope: this,
+            params: options.params,
+            success: function(response) {
+                if (typeof options.success == 'function') {
+                    var args = [];
+                    if (typeof options.beforeSuccess == 'function') {
+                        args = options.beforeSuccess.call(this, response);
+                    }
+                    
+                    options.success.apply(options.scope, args);
+                }
+            },
+            failure: function (response) {
+                if (typeof options.failure == 'function') {
+                    var args = [];
+                    if (typeof options.beforeFailure == 'function') {
+                        args = options.beforeFailure.call(this, response);
+                    }
+                
+                    options.failure.apply(options.scope, args);
+                }
+            }
+        });
     }
 });

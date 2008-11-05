@@ -89,33 +89,17 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         return $this->_taskToJson($task);
     }
-    
-    /**
-     * Upate an existing Task
-     *
-     * @param  $task
-     * @return array the updated task
-     */
-    public function updateTask($task)
-    {
-        $inTask = new Task_Model_Task();
-        $inTask->setFromJson($task);
-        
-        //error_log(print_r($newTask->toArray(),true));
-        $outTask = Tasks_Controller_Task::getInstance()->updateTask($inTask);
-        return $this->_taskToJson($outTask);
-    }
-    
+
     /**
      * creates/updates a Task
      *
-     * @param  $task
+     * @param  $recordData
      * @return array created/updated task
      */
-    public function saveTask($task)
+    public function saveTask($recordData)
     {
         $inTask = new Tasks_Model_Task();
-        $inTask->setFromJsonInUsersTimezone($task);
+        $inTask->setFromJsonInUsersTimezone($recordData);
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 

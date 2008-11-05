@@ -13,12 +13,6 @@ Ext.namespace('Tine.Tasks');
 
 /*********************************** MAIN DIALOG ********************************************/
 
-Tine.Tasks.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
-    appName: 'Tasks',
-    modelName: 'Task',
-    recordClass: Tine.Tasks.Task,
-});
-
 /**
  * entry point, required by tinebase
  * This function is called once when Tinebase collect the available apps
@@ -235,32 +229,23 @@ Tine.Tasks.mainGrid = {
 		this.store.on('update', function(store, task, operation) {
 			switch (operation) {
 				case Ext.data.Record.EDIT:
-					Ext.Ajax.request({
-    					scope: this,
-    	                params: {
-    	                    method: 'Tasks.saveTask', 
-    	                    task: Ext.util.JSON.encode(task.data),
-    						linkingApp: '',
-    						linkedId: ''					
-    	                },
-    	                success: function(_result, _request) {
+                    Tine.Tasks.JsonBackend.saveRecord(task, {
+                        scope: this,
+                        success: function(updatedTask) {
                             store.commitChanges();
-                            
                             // update task in grid store to prevent concurrency problems
-                            var updatedTask = new Tine.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
-                            Tine.Tasks.fixTask(updatedTask);
                             task.data = updatedTask.data;
     
-    						// reloading the store feels like http 1.x
-    						// maybe we should reload if the sort critera changed, 
-    						// but even this might be confusing
-    						//store.load({params: this.paging});
-    	                }
-    				});
-				break;
+                            // reloading the store feels like oldschool 1.x
+                            // maybe we should reload if the sort critera changed, 
+                            // but even this might be confusing
+                            //store.load({params: this.paging});
+                        }
+                    });
+				    break;
 				case Ext.data.Record.COMMIT:
 				    //nothing to do, as we need to reload the store anyway.
-				break;
+				    break;
 			}
 		}, this);
 	},
@@ -528,19 +513,13 @@ Tine.Tasks.mainGrid = {
 	    	var selectedNode = this.tree.getSelectionModel().getSelectedNode();
             taskData.container_id = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : -1;
 	        var task = new Tine.Tasks.Task(taskData);
-
-	        Ext.Ajax.request({
-	        	scope: this,
-                params: {
-                    method: 'Tasks.saveTask', 
-                    task: Ext.util.JSON.encode(task.data),
-                    linkingApp: '',
-                    linkedId: ''
-                },
-                success: function(_result, _request) {
+            
+            Tine.Tasks.JsonBackend.saveRecord(task, {
+                scope: this,
+                success: function() {
                     Ext.StoreMgr.get('TaskGridStore').load({params: this.paging});
                 },
-                failure: function ( result, request) { 
+                failure: function () { 
                     Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
                 }
             });
@@ -617,3 +596,9 @@ Tine.Tasks.TaskArray = [
 Tine.Tasks.Task = Ext.data.Record.create(
     Tine.Tasks.TaskArray
 );
+
+Tine.Tasks.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Tasks',
+    modelName: 'Task',
+    recordClass: Tine.Tasks.Task
+});
