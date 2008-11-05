@@ -1,6 +1,6 @@
 <?php
 /**
- * leads controller for Erp application
+ * contract controller for Erp application
  * 
  * @package     Erp
  * @subpackage  Controller
@@ -17,7 +17,7 @@
  * @package     Erp
  * @subpackage  Controller
  */
-class Erp_Controller_Contract extends Tinebase_Application_Controller_ContainerAbstract
+class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
      * application name (is needed in checkRight())
@@ -33,8 +33,10 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_ContainerA
      */
     private function __construct() {        
         $this->_backend = new Erp_Backend_Contract();
+        $this->_modelName = 'Erp_Model_Contract';
         $this->_currentAccount = Tinebase_Core::getUser();   
     }
+    
     
     /**
      * holdes the instance of the singleton

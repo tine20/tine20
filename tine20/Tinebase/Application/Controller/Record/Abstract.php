@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Controller
  */
-abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebase_Application_Controller_Abstract
+abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_Application_Controller_Abstract
 {
    /**
      * application backend class
@@ -25,7 +25,16 @@ abstract class Tinebase_Application_Controller_ContainerAbstract extends Tinebas
      * @var Tinebase_Application_Backend_Interface
      */
     protected $_backend;
-    
+
+    /**
+     * Model name
+     *
+     * @var string
+     * 
+     * @todo perhaps we can remove that and build model name from name of the class (replace 'Controller' with 'Model')
+     */
+    protected $_modelName;
+
     /*********** get / search / count leads **************/
     
     /**
