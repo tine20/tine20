@@ -276,12 +276,23 @@ Tine.Tinebase.tineInit = {
                     for (var app in registryData) {
                         if (registryData.hasOwnProperty(app)) {
                             var appData = registryData[app];
-                            Tine[app].registry = new Ext.util.MixedCollection();
-                            
-                            for (var key in appData) {
-                                if (appData.hasOwnProperty(key)) {
-                                    Tine[app].registry.add(key, appData[key]);
+                            if (Tine[app]) {
+                                Tine[app].registry = new Ext.util.MixedCollection();
+
+                                for (var key in appData) {
+                                    if (appData.hasOwnProperty(key)) {
+                                        Tine[app].registry.add(key, appData[key]);
+                                    }
                                 }
+                            } else {
+                            	// @todo perhaps we could add more information here
+                                // an error occured
+                                Ext.MessageBox.show({
+                                    title: 'Error', 
+                                    msg: 'Something went wrong with Application ' + app,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.MessageBox.WARNING
+                                });                            	
                             }
                         }
                     }
