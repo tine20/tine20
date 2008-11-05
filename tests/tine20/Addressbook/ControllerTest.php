@@ -299,7 +299,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContact()
     {
-        Addressbook_Controller_Contact::getInstance()->deleteContact($this->objects['initialContact']);
+        Addressbook_Controller_Contact::getInstance()->delete($this->objects['initialContact']);
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
         

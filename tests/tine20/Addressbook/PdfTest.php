@@ -63,7 +63,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // delete contact afterwards
-        Addressbook_Controller_Contact::getInstance()->deleteContact($this->objects['contact']);
+        Addressbook_Controller_Contact::getInstance()->delete($this->objects['contact']);
     }
     
     /**

@@ -173,7 +173,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         }
         
         try { 
-            Addressbook_Controller_Contact::getInstance()->deleteContact($this->objects['linkedContact']);
+            Addressbook_Controller_Contact::getInstance()->delete($this->objects['linkedContact']);
         } catch ( Exception $e ) {
             // access denied ?
         }

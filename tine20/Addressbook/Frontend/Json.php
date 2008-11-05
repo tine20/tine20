@@ -84,7 +84,7 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         
         $contactIds = Zend_Json::decode($_contactIds);
         
-        Addressbook_Controller_Contact::getInstance()->deleteContact($contactIds);
+        Addressbook_Controller_Contact::getInstance()->delete($contactIds);
 
         return $result;
     }

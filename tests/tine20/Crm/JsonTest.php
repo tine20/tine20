@@ -363,7 +363,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($lead->relations));
         
         // delete contact
-        Addressbook_Controller_Contact::getInstance()->deleteContact($this->objects['contact']->getId());
+        Addressbook_Controller_Contact::getInstance()->delete($this->objects['contact']->getId());
 
     }
 

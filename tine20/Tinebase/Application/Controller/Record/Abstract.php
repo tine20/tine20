@@ -124,9 +124,9 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param   array array of record identifiers
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_identifiers)
+    public function getMultiple($_ids)
     {
-        $records = $this->_backend->getMultiple($_identifiers);
+        $records = $this->_backend->getMultiple($_ids);
         
         foreach ($records as $record) {
             if (!$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
@@ -286,11 +286,15 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param   array array of record identifiers
      * @return  void
      */
-    public function delete($_identifiers)
+    public function delete($_ids)
     {
-        $records = $this->_backend->getMultiple((array)$_identifiers);
-        if (count((array)$_identifiers) != count($records)) {
-            throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$_identifiers) . ' records exist');
+        if ($_ids instanceof $this->_modelName) {
+            $_ids = $_ids->getId();
+        }
+        
+        $records = $this->_backend->getMultiple((array)$_ids);
+        if (count((array)$_ids) != count($records)) {
+            throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$_ids) . ' records exist');
         }
                     
         try {        
@@ -298,10 +302,25 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($records as $record) {
-                if ($this->_doContainerACLChecks && !$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
+                $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+                
+                if (!$this->_doContainerACLChecks 
+                    || ($this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_DELETE 
+                    && $container->type != Tinebase_Model_Container::TYPE_INTERNAL))) {
+                        
+                    $this->_backend->delete($record);
+                    
+                    // delete notes & relations
+                    if ($record->has('notes')) {
+                        Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_backend->getType(), $record->getId());
+                    }
+                    if ($record->has('relations')) {
+                        Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), array());
+                    }
+                        
+                } else {
                     throw new Tinebase_Exception_AccessDenied('Delete access in container ' . $record->container_id . ' denied.');
                 }
-                $this->_backend->delete($record);
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);

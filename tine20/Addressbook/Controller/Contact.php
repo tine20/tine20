@@ -71,53 +71,5 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
             throw new Addressbook_Exception_AccessDenied('read access to contact denied');
         }            
         return $contact;            
-    }
-    
-    /*************** add / update / delete contact *****************/  
-    
-    /**
-     * delete one or multiple contacts
-     *
-     * @param mixed $_contactId
-     * @throws Exception 
-     * 
-     * @deprecated 
-     */
-    public function deleteContact($_contactId)
-    {
-        try {
-            $db = $this->_backend->getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            if (is_array($_contactId) or $_contactId instanceof Tinebase_Record_RecordSet) {
-                foreach ($_contactId as $contactId) {
-                    $this->deleteContact($contactId);
-                }
-            } else {
-                $contact = $this->_backend->get($_contactId);
-                $container = Tinebase_Container::getInstance()->getContainerById($contact->container_id);
-                
-                if ($this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Container::GRANT_DELETE &&
-                    $container->type != Tinebase_Model_Container::TYPE_INTERNAL)) {
-                        
-                    $this->_backend->delete($_contactId);
-                    
-                    // delete notes
-                    Tinebase_Notes::getInstance()->deleteNotesOfRecord('Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $contact->getId());
-                    
-                    // delete relations
-                    Tinebase_Relations::getInstance()->setRelations('Addressbook_Model_Contact', 'Sql', $contact->getId(), array());
-                    
-                } else {
-                    throw new Addressbook_Exception_AccessDenied('Delete access to contact denied.');
-                }
-            }
-        
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
-        }
-    }
+    }    
 }
