@@ -11,7 +11,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Controller.php 5029 2008-10-21 16:28:16Z p.schuele@metaways.de $
  *
- * @todo        extend Tinebase_Application_Controller_Abstract to remove some obsolete code
+ * @todo        replace functions (use them from abstract controller)
  */
 
 /**
@@ -20,8 +20,20 @@
  * @package     Crm
  * @subpackage  Controller
  */
-class Crm_Controller_Lead extends Tinebase_Application_Controller_Abstract
+class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstract
 {
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() {
+        $this->_applicationName = 'Crm';
+        $this->_modelName = 'Crm_Model_Lead';
+        $this->_backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
+    
     /**
      * application name (is needed in checkRight())
      *

@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        extend Tinebase_Application_Controller_Abstract to remove some obsolete code
+ * @todo        replace functions (use them from abstract controller)
  */
 
 /**
@@ -21,8 +21,19 @@
  * @package Tasks
  * @subpackage  Controller
  */
-class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
+class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstract
 {
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() {
+        $this->_applicationName = 'Tasks';
+        $this->_modelName = 'Tasks_Model_Task';
+        $this->_backend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
     
     /**
      * holds self
@@ -49,17 +60,6 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Abstract
             self::$_instance = new Tasks_Controller_Task();
         }
         return self::$_instance;
-    }
-    
-    /**
-     * the constructor
-     * 
-     * init backend and currentAccount
-     */
-    protected function __construct()
-    {
-        $this->_backend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);        
-        $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
     
     /**

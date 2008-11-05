@@ -235,7 +235,8 @@ class Tinebase_Relations
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolving " . count($relations) . " relation(s) of $modelName");
             list($appName, $i, $itemName) = explode('_', $modelName);
             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
-            $getMultipleMethod = 'getMultiple' . $itemName . 's';
+            //$getMultipleMethod = 'getMultiple' . $itemName . 's';
+            $getMultipleMethod = 'getMultiple';
             //Zend_Registry::get('logger')->debug('Tinebase_Relations: ' . print_r($relations->related_id, true));
             $records = $appController->$getMultipleMethod($relations->related_id);
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $appName returned " . count($records) . " record(s)");
