@@ -161,18 +161,6 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
     }
     
     /**
-     * Removes containers where current user has no access to.
-     * 
-     * @param Crm_Model_LeadFilter $_filter
-     * @return void
-     */
-    protected function _checkContainerACL($_filter)
-    {
-        $readableContainer = $this->_currentAccount->getContainerByACL('Crm', Tinebase_Model_Container::GRANT_READ);
-        $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
-    }    
-        
-    /**
      * Returns a set of leads identified by their id's
      * 
      * @param  array $_leadIds array of string
