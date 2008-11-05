@@ -172,7 +172,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
             'tel_work'              => '+49TELWORK',
         )); 
         
-        $this->objects['contact'] = Addressbook_Controller_Contact::getInstance()->createContact($contact);
+        $this->objects['contact'] = Addressbook_Controller_Contact::getInstance()->create($contact);
         
         return $this->objects['contact'];
     }

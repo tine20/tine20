@@ -154,7 +154,13 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         try {
             $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-                        
+
+            // add personal container id if container id is missing in record
+            if(empty($_record->container_id)) {
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
+                $_record->container_id = $containers[0]->getId();
+            }            
+            
             if(!$_record->isValid()) {
                 throw new Tinebase_Exception_Record_Validation('Record is not valid.');
             }

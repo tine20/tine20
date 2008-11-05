@@ -54,10 +54,7 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
     }
 
     /****************************** overwritten functions ************************/
-    
-        
-    /*********** get / search / count contacts **************/
-    
+            
     /**
      * fetch one contact identified by $_userId
      *
@@ -81,6 +78,8 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
      *
      * @param   Addressbook_Model_Contact $_contact
      * @return  Addressbook_Model_Contact
+     * 
+     * @deprecated
      */
     public function createContact(Addressbook_Model_Contact $_contact)
     {
@@ -127,6 +126,8 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
      *
      * @param Addressbook_Model_Contact $_contact
      * @return  Addressbook_Model_Contact
+     * 
+     * @deprecated
      */
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
@@ -185,6 +186,8 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
      *
      * @param mixed $_contactId
      * @throws Exception 
+     * 
+     * @deprecated 
      */
     public function deleteContact($_contactId)
     {

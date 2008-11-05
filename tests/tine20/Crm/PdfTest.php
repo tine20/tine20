@@ -148,7 +148,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             // already there
         }
         try {
-            $contact = Addressbook_Controller_Contact::getInstance()->createContact($this->objects['linkedContact']);
+            $contact = Addressbook_Controller_Contact::getInstance()->create($this->objects['linkedContact']);
         } catch ( Exception $e ) {
             // already there
         }

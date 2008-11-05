@@ -166,7 +166,7 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
             if (empty($contact->container_id)) {
                 $contact->container_id = $containerId;
             }
-            $newContact = $addressbookController->createContact($contact);
+            $newContact = $addressbookController->create($contact);
             $result->addRecord($newContact);
         }
         

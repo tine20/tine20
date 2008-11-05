@@ -176,7 +176,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $contact = $this->objects['initialContact'];
         $contact->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
-        $contact = Addressbook_Controller_Contact::getInstance()->createContact($contact);
+        $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
