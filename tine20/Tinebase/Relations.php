@@ -189,9 +189,9 @@ class Tinebase_Relations
         $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
         
         if (!$_relation->related_record->getId()) {
-            $method = 'create' . $itemName;
+            $method = 'create';
         } else {
-            $method = 'update' . $itemName;
+            $method = 'update';
         }
         
         $record = $appController->$method($_relation->related_record);
@@ -233,11 +233,13 @@ class Tinebase_Relations
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolving " . count($relations) . " relation(s) of $modelName");
+
             list($appName, $i, $itemName) = explode('_', $modelName);
             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
-            //$getMultipleMethod = 'getMultiple' . $itemName . 's';
+            
             $getMultipleMethod = 'getMultiple';
             //Zend_Registry::get('logger')->debug('Tinebase_Relations: ' . print_r($relations->related_id, true));
+            
             $records = $appController->$getMultipleMethod($relations->related_id);
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $appName returned " . count($records) . " record(s)");
             

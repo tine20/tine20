@@ -54,6 +54,8 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
     }
 
     /****************************** overwritten functions ************************/
+    
+    /****************************** public functions ************************/
             
     /**
      * fetch one contact identified by $_userId
@@ -72,114 +74,6 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
     }
     
     /*************** add / update / delete contact *****************/  
-    
-    /**
-     * add one contact
-     *
-     * @param   Addressbook_Model_Contact $_contact
-     * @return  Addressbook_Model_Contact
-     * 
-     * @deprecated
-     */
-    public function createContact(Addressbook_Model_Contact $_contact)
-    {
-        try {
-            $db = $this->_backend->getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            if(empty($_contact->container_id)) {
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, 'Addressbook', $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
-                $_contact->container_id = $containers[0]->getId();
-            }
-            if (! $this->_currentAccount->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                throw new Addressbook_Exception_AccessDenied('Add access to contacts in container ' . $_contact->container_id . ' denied.');
-            }
-    
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_contact, 'create');
-            $contact = $this->_backend->create($_contact);
-            
-            if (!empty($_contact->tags)) {
-                $contact->tags = $_contact->tags;
-                Tinebase_Tags::getInstance()->setTagsOfRecord($contact);
-            }
-    
-            if (isset($_contact->notes)) {
-                $contact->notes = $_contact->notes;
-                Tinebase_Notes::getInstance()->setNotesOfRecord($contact);
-            }
-            
-            // add created note to record
-            Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'created');
-    
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
-        }
-        
-        return $this->get($contact->getId());
-    }
-    
-    /**
-     * update one contact
-     *
-     * @param Addressbook_Model_Contact $_contact
-     * @return  Addressbook_Model_Contact
-     * 
-     * @deprecated
-     */
-    public function updateContact(Addressbook_Model_Contact $_contact)
-    {
-        try {
-            $db = $this->_backend->getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            $currentContact = $this->get($_contact->getId());
-            
-            // ACL checks
-            if ($currentContact->container_id != $_contact->container_id) {
-                if (! $this->_currentAccount->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                    throw new Addressbook_Exception_AccessDenied('Add access to contacts in container ' . $_contact->container_id . ' denied.');
-                }
-                // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-                if (! $this->_currentAccount->hasGrant($currentContact->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                    throw new Addressbook_Exception_AccessDenied('Delete access to contacts in container ' . $currentContact->container_id . ' denied.');
-                }
-            } elseif (! $this->_currentAccount->hasGrant($_contact->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
-                throw new Addressbook_Exception_AccessDenied('Edit access to contacts in container ' . $_contact->container_id . ' denied.');
-            }
-            
-            // concurrency management & history log
-            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-            $modLog->manageConcurrentUpdates($_contact, $currentContact, 'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $_contact->getId());
-            $modLog->setRecordMetaData($_contact, 'update', $currentContact);
-            $currentMods = $modLog->writeModLog($_contact, $currentContact, 'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $_contact->getId());
-            
-            $contact = $this->_backend->update($_contact);                
-                    
-            if (isset($_contact->tags)) {
-                Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
-            }
-    
-            if (isset($_contact->notes)) {
-                Tinebase_Notes::getInstance()->setNotesOfRecord($_contact);
-            }
-            
-            // add changed note to record
-            if (count($currentMods) > 0) {
-                Tinebase_Notes::getInstance()->addSystemNote($contact, $this->_currentAccount->getId(), 'changed', $currentMods);
-            }
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
-        }
-
-        return $this->get($contact->getId());
-    }
     
     /**
      * delete one or multiple contacts

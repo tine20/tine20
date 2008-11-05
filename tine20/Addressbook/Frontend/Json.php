@@ -105,7 +105,7 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         if (empty($contact->id)) {
             $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         } else {
-            $contact = Addressbook_Controller_Contact::getInstance()->updateContact($contact);
+            $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
         }
 
         $result =  $this->getContact($contact->getId());
