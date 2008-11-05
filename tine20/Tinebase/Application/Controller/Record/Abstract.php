@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add sendNotifications()
+ * @todo        add (empty) sendNotifications()
  */
 
 /**
@@ -43,6 +43,14 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     protected $_doContainerACLChecks = TRUE;
 
+    /**
+     * send notifications?
+     * - the controller has to define a sendNotifications() function
+     *
+     * @var boolean
+     */
+    protected $_sendNotifications = FALSE;
+    
     /*********** get / search / count leads **************/
     
     /**
@@ -106,13 +114,16 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                 throw new Tinebase_Exception_AccessDenied('Read access to record denied.');
             }
             
-            // get tags & notes
+            // get tags / notes / relations
             if ($record->has('tags')) {
                 Tinebase_Tags::getInstance()->getTagsOfRecord($record);
             }            
             if ($record->has('notes')) {
                 $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
             }        
+            if ($record->has('relations')) {
+                $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
+            }            
         }
         
         return $record;    
@@ -192,7 +203,9 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                 Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'created');                
             }
             
-            //$this->sendNotifications($lead, $this->_currentAccount, 'created');
+            if ($this->_sendNotifications) {
+                $this->sendNotifications($record, $this->_currentAccount, 'created');  
+            }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -265,8 +278,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             }        
             
             // send notifications
-            if ($record->has('created_by') && count($currentMods) > 0) {
-                //$this->sendNotifications($record, $this->_currentAccount, 'changed', $currentMods);
+            if ($this->_sendNotifications && $record->has('created_by') && count($currentMods) > 0) {
+                $this->sendNotifications($record, $this->_currentAccount, 'changed', $currentMods);
             }        
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
