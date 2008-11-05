@@ -84,16 +84,34 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      *
      * @param string $_id
      * @return Tinebase_Record_RecordSet
-     * @throws  Tinebase_Exception_Record_Validation
+     * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo    add get relations ?
      */
     public function get($_id)
     {
-        $record = $this->_backend->get($_id);
-        
-        if ($this->_doContainerACLChecks && !$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
-            throw new Tinebase_Exception_AccessDenied('Read permission to record denied.');
+        if (!$_id) { // yes, we mean 0, null, false, ''
+            $record = new $this->_modelName(array(), true);
+            
+            if ($this->_doContainerACLChecks) {
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
+                $record->container_id = $containers[0]->getId();
+            }
+            
+        } else {
+            $record = $this->_backend->get($_id);
+            
+            if ($this->_doContainerACLChecks && !$this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
+                throw new Tinebase_Exception_AccessDenied('Read access to record denied.');
+            }
+            
+            // get tags & notes
+            if ($record->has('tags')) {
+                Tinebase_Tags::getInstance()->getTagsOfRecord($record);
+            }            
+            if ($record->has('notes')) {
+                $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
+            }        
         }
         
         return $record;    
