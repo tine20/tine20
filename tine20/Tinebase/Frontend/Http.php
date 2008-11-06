@@ -44,7 +44,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
        //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
         return array(
             // base framework fixes
-            'Tinebase/js/ExtFixes.js',
+            'Tinebase/js/extFixes.js',
             // gears
             'Tinebase/js/gears_init.js',
             // generic init to be included before parsing of the tine code
