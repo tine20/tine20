@@ -45,6 +45,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     recordClass: null,
     /**
+     * @cfg {Ext.data.DataProxy} recordProxy
+     */
+    recordProxy: null,
+    /**
      * @cfg {String} idProperty
      * property of the id of the record
      */
@@ -94,7 +98,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     /**
      * @property {Number} loadRequest 
-     * Ajax Request number of loadData request
+     * transaction id of loadData request
      */
     /**
      * @property loadMask {Ext.LoadMask}
@@ -215,26 +219,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * success handler of reqeustData
-     * 
-     * decodes data and updates record and other data needed for the dialog.
-     * NOTE: This method should be overwritten if more than the normal record data
-     * is needed for the dialog
-     * 
-     * @param XHR response
-     */
-    recordReader: function(response) {
-        if(!this.jsonReader) {
-            this.jsonReader = new Ext.data.JsonReader({id: this.idProperty, root: 'root'}, this.recordClass);
-        }
-        var recordData = Ext.util.JSON.decode('{root: [' + response.responseText + ']}');
-        
-        var data = this.jsonReader.readRecords(recordData);
-        this.record = data.records[0];
-        this.onRecordLoad();
-    },
-    
-    /**
      * execuded after record got updated
      */
     onRecordLoad: function() {
@@ -294,7 +278,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(this.translation._('Loading {0}...'), this.containerItemName)});
-        if (Ext.Ajax.isLoading(this.loadRequest)) {
+        if (this.recordProxy.isLoading(this.loadRequest)) {
             this.loadMask.show();
         }
     },
@@ -349,15 +333,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             // merge changes from form into task record
             form.updateRecord(this.record);
             
-            Ext.Ajax.request({
+            this.recordProxy.saveRecord(this.record, {
                 scope: this,
-                params: {
-                    method: this.appName + '.save' + this.modelName, 
-                    task: Ext.util.JSON.encode(this.record.data)
-                },
-                success: function(response) {
-                    // override task with returned data
-                    this.onDataLoad(response);
+                success: function(record) {
+                    // override record with returned data
+                    this.record = record;
                     this.fireEvent('update', this.record);
                     
                     // free 0 namespace if record got created
@@ -375,7 +355,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 },
                 failure: function ( result, request) { 
                     Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation._('Could not save {0}.'), this.containerItemName)); 
-                } 
+                }
             });
         } else {
             Ext.MessageBox.alert(this.translation._('Errors'), this.translation._('Please fix the errors noted.'));
@@ -391,11 +371,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Deleting {0}'), this.containerItemName)});
                 deleteMask.show();
                 
-                Ext.Ajax.request({
-                    params: {
-                        method: this.appName + '.delete' + this.modelName + 's',
-                        ids: [this.record.id]
-                    },
+                this.recordProxy.deleteRecords(this.record, {
+                    scope: this,
                     success: function() {
                         this.fireEvent('update', this.record);
                         this.purgeListeners();
