@@ -20,7 +20,14 @@ Ext.namespace('Tine.Tinebase.widgets.app');
  * @constructor 
  */
 Tine.Tinebase.widgets.app.JsonBackend = function(config) {
+    Tine.Tinebase.widgets.app.JsonBackend.superclass.constructor.call(this);
     Ext.apply(this, config);
+    
+    this.jsonReader = new Ext.data.JsonReader({
+        id: this.idProperty,
+        root: 'results',
+        totalPropery: 'totalcount'
+    }, this.recordClass);
 }
 
 Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
@@ -72,9 +79,23 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     
     /**
      * reqired method for Ext.data.Proxy, used by store
+     * @todo read the specs and implement success/fail handling
+     * @todo move reqest to searchRecord
      */
     load : function(params, reader, callback, scope, arg){
         if(this.fireEvent("beforeload", this, params) !== false){
+            params.method = this.appName + '.search' + this.modelName + 's';
+            
+            this.request({
+                params: params,
+                scope: scope,
+                success: callback,
+                beforeSuccess: function(response) {
+                    var r = this.jsonReader.read(response);
+                    return [r, arg];
+                    this.fireEvent("load", this, {params: params}, arg);
+                }
+            });
             
         } else {
             callback.call(scope||this, null, arg, false);
@@ -160,11 +181,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      * @return {Ext.data.Record}
      */
     recordReader: function(response) {
-        if(!this.jsonReader) {
-            this.jsonReader = new Ext.data.JsonReader({id: this.idProperty, root: 'root'}, this.recordClass);
-        }
-        
-        var recordData = Ext.util.JSON.decode('{root: [' + response.responseText + ']}');
+        var recordData = Ext.util.JSON.decode('{results: [' + response.responseText + ']}');
         var data = this.jsonReader.readRecords(recordData);
         
         return data.records;
