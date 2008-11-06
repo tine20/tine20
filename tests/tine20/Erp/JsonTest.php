@@ -77,7 +77,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
         // cleanup
-        $this->_backend->deleteContract($contract->getId());
+        $this->_backend->deleteContracts($contract->getId());
         $this->_decreaseNumber();
     }
     

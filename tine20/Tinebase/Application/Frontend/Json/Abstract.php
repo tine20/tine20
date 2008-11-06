@@ -54,7 +54,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         $filter = new $_filterModel(Zend_Json::decode($filter));
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        $records = $_controller->searchCalls($filter, $pagination);
+        $records = $_controller->search($filter, $pagination);
         
         // set timezone
         $records->setTimezone(Zend_Registry::get('userTimeZone'));
@@ -74,13 +74,13 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      */
     protected function _save($_recordData, Tinebase_Application_Controller_Record_Interface $_controller, $_modelName)
     {
-        $record = new $_modelName();
+        $record = new $_modelName(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
         //Zend_Registry::get('logger')->debug(print_r($record->toArray(),true));
         
         $savedRecord = (empty($contact->id)) ? 
-            $_controller->update($record): 
-            $_controller->create($record);
+            $_controller->create($record): 
+            $_controller->update($record);
 
         return $savedRecord;
     }
