@@ -384,10 +384,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     /**
      * generic delete handler
+     * 
+     * @todo share this with handler from generic grid?
      */
-    onDelete: function(button, event) {
+    onDelete: function(btn, e) {
         Ext.MessageBox.confirm(this.translation._('Confirm'), String.format(this.translation._('Do you really want to delete this {0}?'), this.containerItemName), function(_button) {
-            if(_button == 'yes') {
+            if(btn == 'yes') {
                 var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Deleting {0}'), this.containerItemName)});
                 deleteMask.show();
                 
