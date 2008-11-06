@@ -62,6 +62,12 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
         return self::$_instance;
     }
     
+    /****************************** overwritten functions ************************/
+    
+    /****************************** tocheck ************************/
+    
+    // @todo check the following
+    
     /**
      * Search for tasks matching given filter
      *
@@ -89,18 +95,6 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
     }
     
     /**
-     * Removes containers where current user has no access to.
-     * 
-     * @param Tasks_Model_Filter $_filter
-     * @return void
-     */
-    protected function _checkContainerACL($_filter)
-    {
-        $readableContainer = $this->_currentAccount->getContainerByACL('Tasks', Tinebase_Model_Container::GRANT_READ);
-        $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
-    }
-    
-    /**
      * Return a single Task
      *
      * @param   string $_uid
@@ -115,24 +109,6 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
         }
         
         return $Task;
-    }
-    
-    /**
-     * Returns a set of tasks identified by their id's
-     * 
-     * @param  array $_ids array of string
-     * @return Tinebase_RecordSet of Tasks_Model_Task
-     */
-    public function getMultipleTasks($_uids)
-    {
-        $tasks = $this->_backend->getMultiple($_uids);
-        foreach ($tasks as $task) {
-            if (! $this->_currentAccount->hasGrant($task->container_id, Tinebase_Model_Container::GRANT_READ)) {
-                $index = $tasks->getIndexById($task->getId());
-                unset($tasks[$index]);
-            } 
-        }
-        return $tasks;
     }
     
     /**
