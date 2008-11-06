@@ -97,6 +97,34 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         
         return $leads;
     }
+
+    /**
+     * add Lead
+     *
+     * @param   Crm_Model_Lead $_lead the lead to add
+     * @return  Crm_Model_Lead the newly added lead
+     */ 
+    public function create(Crm_Model_Lead $_lead)
+    {
+        $lead = parent::create($_lead);
+        $this->_setLeadProducts($lead->getId(), $_lead);
+        
+        return $lead;
+    }
+
+   /**
+     * update Lead
+     *
+     * @param   Crm_Model_Lead $_lead the lead to update
+     * @return  Crm_Model_Lead the updated lead
+     */ 
+    public function update(Crm_Model_Lead $_lead)
+    {
+        $lead = parent::update($_lead);
+        $this->_setLeadProducts($lead->getId(), $_lead);
+        
+        return $lead;
+    }
     
     /*********** other public functions **************/
     
@@ -147,129 +175,6 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
     // @todo check the following funcs
     
     /**
-     * add Lead
-     *
-     * @param   Crm_Model_Lead $_lead the lead to add
-     * @return  Crm_Model_Lead the newly added lead
-     * @throws  Crm_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
-     */ 
-    public function createLead(Crm_Model_Lead $_lead)
-    {
-        $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-
-        try {
-            $db = $leadBackend->getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-                        
-            if(!$_lead->isValid()) {
-                throw new Tinebase_Exception_Record_Validation('Lead object is not valid.');
-            }
-            
-            if(!$this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                throw new Crm_Exception_AccessDenied('Add access to leads in container ' . $_lead->container_id . ' denied.');
-            }
-            
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_lead, 'create');
-            $lead = $leadBackend->create($_lead);
-            
-            // set relations & links
-            $this->setLeadLinks($lead->getId(), $_lead);        
-            
-            if (!empty($_lead->tags)) {
-                $lead->tags = $_lead->tags;
-                Tinebase_Tags::getInstance()->setTagsOfRecord($lead);
-            }        
-    
-            if (isset($_lead->notes)) {
-                $lead->notes = $_lead->notes;
-                Tinebase_Notes::getInstance()->setNotesOfRecord($lead);
-            }
-                    
-            // add created note to record
-            Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'created');
-            $this->sendNotifications($lead, $this->_currentAccount, 'created');
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
-        }
-        
-        return $this->get($lead->getId());
-    }     
-        
-   /**
-     * update Lead
-     *
-     * @param   Crm_Model_Lead $_lead the lead to update
-     * @return  Crm_Model_Lead the updated lead
-     * @throws  Crm_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
-     */ 
-    public function updateLead(Crm_Model_Lead $_lead)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        
-        try {
-            $db = $backend->getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            if(!$_lead->isValid()) {
-                throw new Tinebase_Exception_Record_Validation('Lead object is not valid');
-            }
-            $currentLead = $backend->get($_lead->getId());
-            
-            // ACL checks
-            if ($currentLead->container_id != $_lead->container_id) {
-                if (! $this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_ADD)) {
-                    throw new Crm_Exception_AccessDenied('Add access in container ' . $_lead->container_id . ' denied.');
-                }
-                // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-                if (! $this->_currentAccount->hasGrant($currentLead->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                    throw new Crm_Exception_AccessDenied('Delete access in container ' . $currentLead->container_id . ' denied.');
-                }
-            } elseif (! $this->_currentAccount->hasGrant($_lead->container_id, Tinebase_Model_Container::GRANT_EDIT)) {
-                throw new Crm_Exception_AccessDenied('Edit access in container ' . $_lead->container_id . ' denied.');
-            }
-    
-            // concurrency management & history log
-            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-            $modLog->manageConcurrentUpdates($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
-            $modLog->setRecordMetaData($_lead, 'update', $currentLead);
-            $currentMods = $modLog->writeModLog($_lead, $currentLead, 'Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
-            
-            $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-            $lead = $backend->update($_lead);
-    
-            // set relations & links
-            $this->setLeadLinks($lead->getId(), $_lead);        
-            
-            if (isset($_lead->tags)) {
-                Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
-            }
-    
-            if (isset($_lead->notes)) {
-                Tinebase_Notes::getInstance()->setNotesOfRecord($_lead);
-            }        
-            
-            // add changed note to record
-            if (count($currentMods) > 0) {
-                Tinebase_Notes::getInstance()->addSystemNote($lead, $this->_currentAccount->getId(), 'changed', $currentMods);
-                $this->sendNotifications($lead, $this->_currentAccount, 'changed', $currentMods);
-            }        
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
-        }
-        return $this->get($lead->getId());
-    }
-
-    /**
      * delete a lead
      *
      * @param   int|array|Tinebase_Record_RecordSet|Crm_Model_Lead $_leadId
@@ -311,18 +216,13 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
     /*********************** links functions ************************/
     
     /**
-     * set lead links and relations (contacts, tasks, products)
+     * set lead products
      *
      * @param integer $_leadId
      * @param Crm_Model_Lead $_lead
      */
-    private function setLeadLinks($_leadId, Crm_Model_Lead $_lead)
+    private function _setLeadProducts($_leadId, Crm_Model_Lead $_lead)
     {
-        // set relations
-        if (isset($_lead->relations) && is_array($_lead->relations)) {
-            Tinebase_Relations::getInstance()->setRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_leadId, $_lead->relations);
-        }
-
         // add product links
         $productsArray = array();
         if (isset($_lead->products) && is_array($_lead->products)) {
@@ -330,22 +230,12 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
                 $product['lead_id'] = $_leadId; 
                 $productsArray[] = $product;     
             }
-        }        
+        }       
+        
         $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
         Crm_Controller_LeadProducts::getInstance()->saveLeadProducts($_leadId, $products);                        
     }
 
-    /**
-     * get lead links and relations (contacts, tasks, products)
-     *
-     * @param Crm_Model_Lead $_lead
-     */
-    private function getLeadLinks(Crm_Model_Lead &$_lead)
-    {
-        $_lead->products = Crm_Controller_LeadProducts::getInstance()->getLeadProducts($_lead->getId());
-        $_lead->relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId());
-    }    
-    
     /********************* notifications ***************************/
     
     /**

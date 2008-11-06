@@ -280,7 +280,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($GLOBALS['Crm_JsonTest']['taskId'], $result['relations'][1]['related_id']);
 
         // check linked products
-        $this->assertGreaterThan(0, count($result['products']));
+        $this->assertGreaterThan(0, count($result['products']), 'products are missing!');
         $this->assertEquals($this->objects['productLink']['product_desc'], $result['products'][0]['product_desc']);
         
         // check notes

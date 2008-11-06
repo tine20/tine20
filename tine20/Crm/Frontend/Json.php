@@ -116,9 +116,9 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $inLead->setFromJsonInUsersTimezone($lead);
                   
         if(empty($inLead->id)) {
-            $savedLead = Crm_Controller_Lead::getInstance()->createLead($inLead);
+            $savedLead = Crm_Controller_Lead::getInstance()->create($inLead);
         } else {
-            $savedLead = Crm_Controller_Lead::getInstance()->updateLead($inLead);
+            $savedLead = Crm_Controller_Lead::getInstance()->update($inLead);
         }
         
         $result = $this->getLead($savedLead->getId());

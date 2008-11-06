@@ -143,7 +143,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         ));
         
         try {
-            $lead = Crm_Controller_Lead::getInstance()->createLead($this->objects['leadWithLink']);
+            $lead = Crm_Controller_Lead::getInstance()->create($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // already there
         }
@@ -215,7 +215,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'related_id'             => $this->objects['linkedContact']->id,
             'type'                   => 'RESPONSIBLE'
         ));
-        $lead = Crm_Controller_Lead::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
     	$pdf = new Crm_Export_Pdf();
         $pdf->generateLeadPdf($lead);
@@ -251,7 +251,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'related_id'             => $task->getId(),
             'type'                   => 'TASK'
         ));
-        $lead = Crm_Controller_Lead::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
         $pdf = new Crm_Export_Pdf();
         $pdf->generateLeadPdf($lead);

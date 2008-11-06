@@ -343,7 +343,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $lead = $this->_objects['initialLead'];
         $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
-        $lead = Crm_Controller_Lead::getInstance()->createLead($lead);
+        $lead = Crm_Controller_Lead::getInstance()->create($lead);
         
         $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
@@ -397,7 +397,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateLead()
     {
-        $lead = Crm_Controller_Lead::getInstance()->updateLead($this->_objects['updatedLead']);
+        $lead = Crm_Controller_Lead::getInstance()->update($this->_objects['updatedLead']);
         
         $this->assertEquals($this->_objects['updatedLead']->id, $lead->id);
         $this->assertEquals($this->_objects['updatedLead']->description, $lead->description);
@@ -459,7 +459,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'related_id'             => $task->getId(),
             'type'                   => 'TASK'
         )); 
-        $lead = Crm_Controller_Lead::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
         // check linked tasks
         $updatedLead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
@@ -497,7 +497,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'type'                   => 'RESPONSIBLE'
         ));
          
-        $lead = Crm_Controller_Lead::getInstance()->updateLead($lead);
+        $lead = Crm_Controller_Lead::getInstance()->update($lead);
                 
         // check linked contacts
         $updatedLead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
