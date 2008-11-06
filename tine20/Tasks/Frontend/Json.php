@@ -55,13 +55,13 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $pagination = new Tasks_Model_Pagination($paginationFilter);
         //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
-        $tasks = Tasks_Controller_Task::getInstance()->searchTasks($filter, $pagination);
+        $tasks = Tasks_Controller_Task::getInstance()->search($filter, $pagination);
 
         $results = $this->_multipleTasksToJson($tasks);
         
         return array(
             'results' => $results,
-            'totalcount' => Tasks_Controller_Task::getInstance()->searchTasksCount($filter)
+            'totalcount' => Tasks_Controller_Task::getInstance()->searchCount($filter)
         );
     }
     

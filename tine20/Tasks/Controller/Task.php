@@ -69,32 +69,6 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
     // @todo check the following
     
     /**
-     * Search for tasks matching given filter
-     *
-     * @param Tasks_Model_Filter $_filter
-     * @param Tasks_Model_Pagination $_pagination
-     * @return Tinebase_Record_RecordSet
-     */
-    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination)
-    {
-        $this->_checkContainerACL($_filter);
-        
-        $tasks =  $this->_backend->search($_filter, $_pagination);
-        return $tasks;
-    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Tasks_Model_Filter $_filter
-     * @return int
-     */
-    public function searchTasksCount(Tasks_Model_Filter $_filter) {
-        $this->_checkContainerACL($_filter);
-        return $this->_backend->searchCount($_filter);
-    }
-    
-    /**
      * Return a single Task
      *
      * @param   string $_uid
