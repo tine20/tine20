@@ -76,7 +76,29 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         return $lead;
     }
     
-    /*********** get / search / count leads **************/
+    /**
+     * Search for leads matching given filter
+     *
+     * @param Crm_Model_LeadFilter $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @param bool $_getRelations
+     * 
+     * @return Tinebase_Record_RecordSet
+     */
+    public function search(Crm_Model_LeadFilter $_filter, Tinebase_Model_Pagination $_pagination, $_getRelations = FALSE)
+    {
+        $leads = parent::search($_filter, $_pagination);
+        
+        if ($_getRelations) {
+            foreach ($leads as &$lead) {
+                $lead->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $lead->getId());
+            }
+        }
+        
+        return $leads;
+    }
+    
+    /*********** other public functions **************/
     
     /**
      * returns an empty lead with some defaults set
@@ -119,68 +141,10 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         
         return $emptyLead;
     }
-    
-    /**
-     * Search for leads matching given filter
-     *
-     * @param Crm_Model_LeadFilter $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * @param bool $_getRelations
-     * 
-     * @return Tinebase_Record_RecordSet
-     */
-    public function searchLeads(Crm_Model_LeadFilter $_filter, Tinebase_Model_Pagination $_pagination, $_getRelations = FALSE)
-    {
-        $this->_checkContainerACL($_filter);
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);        
-        $leads = $backend->search($_filter, $_pagination);
-        
-        if ( $_getRelations ) {
-            foreach ($leads as $lead) {
-                $this->getLeadLinks($lead);
-            }
-        }
-        
-        return $leads;
-    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Crm_Model_LeadFilter $_filter
-     * @return int
-     */
-    public function searchLeadsCount(Crm_Model_LeadFilter $_filter) 
-    {
-        $this->_checkContainerACL($_filter);
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $count = $backend->searchCount($_filter);
-        
-        return $count;
-    }
-    
-    /**
-     * Returns a set of leads identified by their id's
-     * 
-     * @param  array $_leadIds array of string
-     * @return Tinebase_Record_RecordSet of Crm_Model_Lead
-     */
-    public function getMultipleLeads($_leadIds)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);  
-        $records = $backend->getMultiple($_leadIds);
-        
-        foreach ($records as $record) {
-            if (! $this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_READ)) {
-                $index = $records->getIndexById($record->getId());
-                unset($records[$index]);
-            } 
-        }
-        return $records;
-    }    
-    
+
     /*************** add / update / delete lead *****************/    
+    
+    // @todo check the following funcs
     
     /**
      * add Lead

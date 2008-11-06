@@ -631,6 +631,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $allDiffs = $this->diff($_record);
         $diff = array_diff(array_keys($allDiffs), $_toOmmit);
         
+        /*
+        print_r($diff);
+        if (count($diff) > 0) {
+            foreach ($diff as $field) {
+                echo $field .":\n";
+                var_dump($_record->$field);
+                var_dump($this->$field);
+            }
+        }
+        */
+        
         return count($diff) == 0;
     }
     

@@ -414,8 +414,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
         $pagination = new Tinebase_Model_Pagination();
-        $leads = Crm_Controller_Lead::getInstance()->searchLeads($filter, $pagination);
-        $count = Crm_Controller_Lead::getInstance()->searchLeadsCount($filter);
+        $leads = Crm_Controller_Lead::getInstance()->search($filter, $pagination);
+        $count = Crm_Controller_Lead::getInstance()->searchCount($filter);
                 
         $this->assertEquals(1, count($leads));
         $this->assertEquals($count, count($leads));
@@ -433,7 +433,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
         $pagination = new Tinebase_Model_Pagination();
-        $leads = Crm_Controller_Lead::getInstance()->searchLeads($filter, $pagination);
+        $leads = Crm_Controller_Lead::getInstance()->search($filter, $pagination);
         
         $this->assertEquals(0, count($leads));
         $this->assertType('Tinebase_Record_RecordSet', $leads);

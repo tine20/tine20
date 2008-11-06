@@ -88,7 +88,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
-        $leads = Crm_Controller_Lead::getInstance()->searchLeads($filter, $pagination, TRUE);
+        $leads = Crm_Controller_Lead::getInstance()->search($filter, $pagination, TRUE);
         
         $result = $this->_multipleLeadsToJson($leads);
         
@@ -96,7 +96,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         return array(
             'results'       => $result,
-            'totalcount'    => Crm_Controller_Lead::getInstance()->searchLeadsCount($filter)
+            'totalcount'    => Crm_Controller_Lead::getInstance()->searchCount($filter)
         );
     }
     
