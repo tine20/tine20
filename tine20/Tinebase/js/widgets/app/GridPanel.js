@@ -14,6 +14,11 @@ Ext.namespace('Tine.Tinebase.widgets.app');
 
 Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
+     * @cfg {Object} gridConfig
+     * Config object for the Ext.grid.GridPanel
+     */
+    gridConfig: {},
+    /**
      * @cfg {String} appName
      * internal/untranslated app name (required)
      */
@@ -67,22 +72,22 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Array} actionToolbarItems
      * additional items for actionToolbar
      */
-    /**
-     * @cfg {Ext.data.DataProxy} recordProxy
-     */
-    recordProxy: null,
-    /**
-     * @cfg {Ext.data.DataReader} recordReader
-     */
-    recordReader:null,
-    
-    
     actionToolbarItems: [],
     /**
      * @cfg {Array} contextMenuItems
      * additional items for contextMenu
      */
     contextMenuItems: [],
+    /**
+     * @cfg {Object} defaultSortInfo
+     */
+    defaultSortInfo: {},
+    /**
+     * @cfg {Ext.data.DataProxy} recordProxy
+     */
+    recordProxy: null,
+    
+    
     
     /**
      * @property {Ext.Tollbar} actionToolbar
@@ -92,6 +97,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @property {Ext.Menu} contextMenu
      */
     contextMenu: null,
+    
+    
+    /**
+     * @private
+     */
+    layout: 'fit',
+    border: false,
     
     /**
      * extend standart initComponent chain
@@ -103,8 +115,14 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.i18n.textdomain(this.appName);
         // init actions with actionToolbar and contextMenu
         this.initActions();
-
-
+        // init store
+        this.initStore();
+        // init (ext) grid
+        this.initGrid();
+        
+        // tmp layout
+        this.tbar = this.pagingToolbar;
+        this.items = this.grid;
         
         Tine.Tinebase.widgets.app.GridPanel.superclass.initComponent.call(this);
     },
@@ -141,22 +159,122 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             pluralText: String.format('Delete {0}', this.containerItemsName),
             translationObject: this.i18n,
             text: String.format(this.i18n.ngettext('Delete {0}', 'Delete {1}', 1), this.containerItemName, this.containerItemsName),
-            handler: this.onDeleteRecord,
+            handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
             scope: this
         });
         
-        var a = [
+        this.actions = [
             this.action_addInNewWindow,
             this.action_editInNewWindow,
             this.action_deleteRecord
         ];
         
-        this.actionToolbar = new Ext.Toolbar(a.concat(this.actionToolbarItems));
-        this.contextMenu = new Ext.Menu(a.concat(this.contextMenuItems));
+        this.actionToolbar = new Ext.Toolbar({
+            split: false,
+            height: 26,
+            items: this.actions.concat(this.actionToolbarItems)
+        });
+        
+        this.contextMenu = new Ext.Menu({
+            items: this.actions.concat(this.contextMenuItems)
+        });
+        
+        // pool together all our actions, so that we can hand them over to our actionUpdater
+        for (var all=this.actionToolbarItems.concat(this.contextMenuItems), i=0; i<all.length; i++) {
+            if(this.actions.indexOf(all[i]) == -1) {
+                this.actions.push(all[i]);
+            }
+        }
+        
     },
     
+    /**
+     * init store
+     * @private
+     */
+    initStore: function() {
+        this.store = new Ext.data.Store({
+            //fields: this.recordClass,
+            proxy: this.recordProxy,
+            remoteSort: true,
+            sortInfo: this.defaultSortInfo
+        });
+        
+        // listeners -> plugins
+    },
+    
+    /**
+     * init ext grid panel
+     * @private
+     */
+    initGrid: function() {
+        // we allways have a paging toolbar
+        this.pagingToolbar = new Ext.PagingToolbar({
+            pageSize: 50,
+            store: this.store,
+            displayInfo: true,
+            displayMsg: this.i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.containerItemsName),
+            emptyMsg: String.format(this.i18n._("No {0} to display"), this.containerItemsName)
+        });
+        
+        // which grid to use?
+        var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : Ext.grid.GridPanel;
+        this.grid = new Grid(this.gridConfig);
+        
+        // init various grid / sm listeners
+        this.grid.on('keydown', this.onKeyDown, this);
+        
+        this.grid.on('rowclick', function(grid, row, e) {
+            // only select one item as expected!
+        }, this);
+        
+        this.grid.on('rowdblclick', function(grid, row, e){
+            this.onEditInNewWindow.call(this, {actionType: 'edit'});
+        }, this);
+        
+        this.grid.on('rowcontextmenu', function(grid, row, e) {
+            e.stopEvent();
+            if(!grid.getSelectionModel().isSelected(row)) {
+                grid.getSelectionModel().selectRow(row);
+            }
+            
+            this.contextMenu.showAt(e.getXY());
+        }, this);
+        
+        this.grid.getView().addListener({
+            beforerefresh: function(v) {
+                v.scrollTop = v.scroller.dom.scrollTop;
+            },
+            refresh: function(v) {
+                v.scroller.dom.scrollTop = v.scrollTop;
+            }
+        }, this);
+        
+        this.grid.getSelectionModel().on('selectionchange', function(sm) {
+            Tine.widgets.ActionUpdater(sm, this.actions);
+        }, this);
+        
+    },
+    
+    /**
+     * key down handler
+     * @private
+     */
+    onKeyDown: function(e){
+        switch (e.getKey()) {
+            case e.DELETE:
+                if (!this.grid.editing) {
+                    this.onDeleteRecords.call(this);
+                }
+                break;
+            case e.RETURN:
+                this.onEditInNewWindow.call(this);
+                break;
+        }
+    },
+        
     /**
      * generic edit in new window handler
      */
@@ -167,7 +285,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
      * generic delete handler
      */
-    onDeleteRecord: function(btn, e) {
+    onDeleteRecords: function(btn, e) {
         var records = this.grid.getSelectionModel().getSelections();
         
         var i18nItems    = this.i18n.ngettext(this.containerItemName, this.containerItemsName, records.length);
@@ -193,5 +311,5 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 });
             }
         }, this);
-    },
+    }
 });
