@@ -79,34 +79,12 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
     }
     
     /**
-     * Search for leads matching given filter
-     *
-     * @param Crm_Model_LeadFilter $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * @param bool $_getRelations
-     * 
-     * @return Tinebase_Record_RecordSet
-     */
-    public function search(Crm_Model_LeadFilter $_filter, Tinebase_Model_Pagination $_pagination, $_getRelations = FALSE)
-    {
-        $leads = parent::search($_filter, $_pagination);
-        
-        if ($_getRelations) {
-            foreach ($leads as &$lead) {
-                $lead->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $lead->getId());
-            }
-        }
-        
-        return $leads;
-    }
-
-    /**
      * add Lead
      *
-     * @param   Crm_Model_Lead $_lead the lead to add
+     * @param   Tinebase_Record_Interface $_lead the lead to add
      * @return  Crm_Model_Lead the newly added lead
      */ 
-    public function create(Crm_Model_Lead $_lead)
+    public function create(Tinebase_Record_Interface $_lead)
     {
         $lead = parent::create($_lead);
         $this->_setLeadProducts($lead->getId(), $_lead);
@@ -117,10 +95,10 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
    /**
      * update Lead
      *
-     * @param   Crm_Model_Lead $_lead the lead to update
+     * @param   Tinebase_Record_Interface $_lead the lead to update
      * @return  Crm_Model_Lead the updated lead
      */ 
-    public function update(Crm_Model_Lead $_lead)
+    public function update(Tinebase_Record_Interface $_lead)
     {
         $lead = parent::update($_lead);
         $this->_setLeadProducts($lead->getId(), $_lead);

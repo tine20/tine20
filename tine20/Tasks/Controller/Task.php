@@ -66,10 +66,10 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
     /**
      * Create a new Task
      *
-     * @param   Tasks_Model_Task $_task
+     * @param   Tinebase_Record_Interface $_task
      * @return  Tasks_Model_Task
      */
-    public function create(Tasks_Model_Task $_task)
+    public function create(Tinebase_Record_Interface $_task)
     {
         if (empty($_task->container_id) || (int)$_task->container_id < 0) {
             $_task->container_id = Tasks_Controller::getInstance()->getDefaultContainer()->getId();

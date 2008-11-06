@@ -60,10 +60,10 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abs
     /**
      * add one record
      *
-     * @param   Erp_Model_Contract $_record
+     * @param   Tinebase_Record_Interface $_record
      * @return  Erp_Model_Contract
      */
-    public function create(Erp_Model_Contract $_record)
+    public function create(Tinebase_Record_Interface $_record)
     {        
         // add container
         $_record->container_id = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId();

@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Controller
  */
-abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_Application_Controller_Abstract
+abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_Application_Controller_Abstract implements Tinebase_Application_Controller_Record_Interface
 {
    /**
      * application backend class
@@ -65,15 +65,22 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      *
      * @param Tinebase_Record_Interface|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
+    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
     {
         if ($this->_doContainerACLChecks) {
             $this->_checkContainerACL($_filter);
         }
         
         $result = $this->_backend->search($_filter, $_pagination);
+        
+        if ($_getRelations) {
+            foreach ($result as &$record) {
+                $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
+            }
+        }
         
         return $result;    
     }
@@ -164,8 +171,6 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
-     * 
-     * @todo    add notifications
      */
     public function create(Tinebase_Record_Interface $_record)
     {        
@@ -231,8 +236,6 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
-     * 
-     * @todo    add notifications
      */
     public function update(Tinebase_Record_Interface $_record)
     {
