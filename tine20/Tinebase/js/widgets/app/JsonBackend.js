@@ -16,13 +16,14 @@ Ext.namespace('Tine.Tinebase.widgets.app');
  * Generic JSON Backdend for an model/datatype of an application
  * 
  * @class Tine.Tinebase.widgets.app.JsonBackend
+ * @extends Ext.data.DataProxy
  * @constructor 
  */
 Tine.Tinebase.widgets.app.JsonBackend = function(config) {
     Ext.apply(this, config);
 }
 
-Ext.apply(Tine.Tinebase.widgets.app.JsonBackend.prototype, {
+Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     /**
      * @cfg {String} appName
      * internal/untranslated app name (required)
@@ -67,6 +68,17 @@ Ext.apply(Tine.Tinebase.widgets.app.JsonBackend.prototype, {
      */
     searchRecords: function(filter, paging, options) {
         
+    },
+    
+    /**
+     * reqired method for Ext.data.Proxy, used by store
+     */
+    load : function(params, reader, callback, scope, arg){
+        if(this.fireEvent("beforeload", this, params) !== false){
+            
+        } else {
+            callback.call(scope||this, null, arg, false);
+        }
     },
     
     /**
