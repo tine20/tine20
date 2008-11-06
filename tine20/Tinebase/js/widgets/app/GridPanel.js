@@ -34,6 +34,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     recordClass: null,
     /**
+     * @cfg {Ext.data.DataProxy} recordProxy
+     */
+    recordProxy: null,
+    /**
      * @cfg {String} idProperty
      * property of the id of the record
      */
@@ -82,12 +86,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Object} defaultSortInfo
      */
     defaultSortInfo: {},
-    /**
-     * @cfg {Ext.data.DataProxy} recordProxy
-     */
-    recordProxy: null,
-    
-    
     
     /**
      * @property {Ext.Tollbar} actionToolbar
@@ -177,7 +175,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             items: this.actions.concat(this.actionToolbarItems)
         });
         
-        this.contextMenu = new Ext.Menu({
+        this.contextMenu = new Ext.menu.Menu({
             items: this.actions.concat(this.contextMenuItems)
         });
         
@@ -219,9 +217,33 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             emptyMsg: String.format(this.i18n._("No {0} to display"), this.containerItemsName)
         });
         
+        // init view
+        var view =  new Ext.grid.GridView({
+            autoFill: true,
+            forceFit:true,
+            ignoreAdd: true,
+            emptyText: String.format(this.i18n._("No {0} to display"), this.containerItemsName),
+            onLoad: Ext.emptyFn,
+            listeners: {
+                beforerefresh: function(v) {
+                    v.scrollTop = v.scroller.dom.scrollTop;
+                },
+                refresh: function(v) {
+                    v.scroller.dom.scrollTop = v.scrollTop;
+                }
+            }
+        })
+        
         // which grid to use?
         var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : Ext.grid.GridPanel;
-        this.grid = new Grid(this.gridConfig);
+        
+        this.gridConfig.store = this.store;
+        this.grid = new Grid(Ext.applyIf(this.gridConfig, {
+            border: false,
+            store: this.store,
+            sm: new Ext.grid.RowSelectionModel({}),
+            view: view
+        }));
         
         // init various grid / sm listeners
         this.grid.on('keydown', this.onKeyDown, this);
@@ -241,15 +263,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             }
             
             this.contextMenu.showAt(e.getXY());
-        }, this);
-        
-        this.grid.getView().addListener({
-            beforerefresh: function(v) {
-                v.scrollTop = v.scroller.dom.scrollTop;
-            },
-            refresh: function(v) {
-                v.scroller.dom.scrollTop = v.scrollTop;
-            }
         }, this);
         
         this.grid.getSelectionModel().on('selectionchange', function(sm) {
@@ -302,7 +315,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     scope: this,
                     success: function() {
                         this.deleteMask.hide();
-                        this.store.load({params: this.paging});
+                        this.store.load({});
                     },
                     failure: function () {
                         this.deleteMask.hide();
