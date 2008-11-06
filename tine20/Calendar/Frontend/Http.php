@@ -27,7 +27,7 @@ class Calendar_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     {
         return array(
             'Calendar/js/Calendar.js',
-            'Calendar/js/GridView_Days.js'
+            //'Calendar/js/GridView_Days.js'
         );
     }
     

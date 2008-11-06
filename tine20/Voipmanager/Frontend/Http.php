@@ -40,8 +40,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
             'Voipmanager/js/Asterisk/Context.js',
             'Voipmanager/js/Asterisk/Voicemail.js',
 			'Voipmanager/js/Asterisk/Meetme.js',
-			'Voipmanager/js/widgets.js',
-			'Voipmanager/js/MyPhones.js'
+			'Voipmanager/js/widgets.js'
         );
     }
     
