@@ -113,7 +113,9 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      */
     saveRecord: function(record, options) {
         options = options || {};
-        options.beforeSuccess = this.recordReader;
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        }
         
         var p = options.params = options.params || {};
         p.method = this.appName + '.save' + this.modelName;
@@ -184,7 +186,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         var recordData = Ext.util.JSON.decode('{results: [' + response.responseText + ']}');
         var data = this.jsonReader.readRecords(recordData);
         
-        return data.records;
+        return data.records[0];
     },
     
     /**
