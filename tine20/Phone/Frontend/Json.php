@@ -79,8 +79,8 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function searchCalls($filter, $paging)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($filter), true));
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($paging), true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($filter), true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($paging), true));
         
         $filter = new Phone_Model_CallFilter(Zend_Json::decode($filter));
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
