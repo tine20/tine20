@@ -76,7 +76,7 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     public function getTask($uid, $containerId = -1, $relatedApp = '')
     {
         if(strlen($uid) == 40) {
-            $task = Tasks_Controller_Task::getInstance()->getTask($uid);
+            $task = Tasks_Controller_Task::getInstance()->get($uid);
         } else {
             $task = new Tasks_Model_Task(array(
                 'container_id' => $containerId
@@ -103,8 +103,8 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 
-            Tasks_Controller_Task::getInstance()->updateTask($inTask): 
-            Tasks_Controller_Task::getInstance()->createTask($inTask);
+            Tasks_Controller_Task::getInstance()->update($inTask): 
+            Tasks_Controller_Task::getInstance()->create($inTask);
 
         return $this->_taskToJson($outTask);
     }
@@ -155,7 +155,7 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         if (strlen($ids) > 40) {
             $ids = Zend_Json::decode($ids);
         }
-        Tasks_Controller_Task::getInstance()->deleteTask($ids);
+        Tasks_Controller_Task::getInstance()->delete($ids);
         return 'success';
     }
     

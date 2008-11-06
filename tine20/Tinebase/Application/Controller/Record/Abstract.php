@@ -50,6 +50,13 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @var boolean
      */
     protected $_sendNotifications = FALSE;
+
+    /**
+     * if some of the relations should be deleted
+     *
+     * @var array
+     */
+    protected $_relatedObjectsToDelete = array();
     
     /*********** get / search / count leads **************/
     
@@ -328,7 +335,21 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                         Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_backend->getType(), $record->getId());
                     }
                     if ($record->has('relations')) {
-                        Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), array());
+                        $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
+                        if (!empty($relations)) {
+                            // remove relations
+                            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), array());
+                            // remove related objects
+                            if (!empty($this->_relatedObjectsToDelete)) {
+                                foreach ($relations as $relation) {
+                                    if (in_array($relation->related_model, $this->_relatedObjectsToDelete)) {
+                                        list($appName, $i, $itemName) = explode('_', $relation->related_model);
+                                        $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+                                        $appController->delete($relation->related_id);
+                                    }
+                                }                
+                            }
+                        }
                     }
                         
                 } else {
@@ -340,6 +361,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getTraceAsString(), true));
             throw new Tinebase_Exception($e->getMessage());
         }                        
     }

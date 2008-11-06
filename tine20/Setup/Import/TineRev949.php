@@ -676,9 +676,9 @@ class Setup_Import_TineRev949
                 
                 if ( $tableData['name'] === 'tasks' ) {
                     $task = new Tasks_Model_Task ( $values );
-                    //$backend->createTask($task);
+                    //$backend->create($task);
                     try {
-                        $task = $backend->createTask($task);
+                        $task = $backend->create($task);
                     } catch (Exception $e) {
                         echo "error: " . $e->getMessage() . "<br/>" . print_r ( $values, true ) . "<br/>";
                     }

@@ -137,7 +137,7 @@ class Tasks_Setup_MigrateFromTine14
                     print_r($validation_errors,true));
                     continue;
             }
-            $tasksBackend->createTask($Task20);
+            $tasksBackend->create($Task20);
         }
     }
     

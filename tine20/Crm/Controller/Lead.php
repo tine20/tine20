@@ -34,6 +34,9 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         
         // send notifications
         $this->_sendNotifications = TRUE;
+        
+        // delete related tasks
+        $this->_relatedObjectsToDelete = array('Tasks_Model_Task');
     }
     
     /**

@@ -229,7 +229,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         }
 
         // create test task
-        $task = Tasks_Controller_Task::getInstance()->createTask($this->objects['task']);
+        $task = Tasks_Controller_Task::getInstance()->create($this->objects['task']);
         $GLOBALS['Crm_JsonTest']['taskId'] = $task->getId();
 
         $leadData = $this->objects['initialLead']->toArray();
@@ -401,7 +401,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         // check if linked task got removed as well
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $task = Tasks_Controller_Task::getInstance()->getTask($GLOBALS['Crm_JsonTest']['taskId']);
+        $task = Tasks_Controller_Task::getInstance()->get($GLOBALS['Crm_JsonTest']['taskId']);
         
         // purge relations
         foreach ($deleteIds as $id) {

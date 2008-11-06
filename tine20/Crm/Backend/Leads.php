@@ -31,10 +31,9 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
      * delete lead
      *
      * @param int|Crm_Model_Lead $_leads lead ids
-     * @param boolean $_deleteTasks delete linked tasks
      * @return void
      */
-    public function delete($_leadId, $_deleteTasks = TRUE)
+    public function delete($_leadId)
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
         
@@ -47,15 +46,19 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
             );          
             $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
             
-            // remove linked tasks
+            // remove linked tasks (that is handled by the abstract controllers delete function now)
+            // @todo remove
+            /*
             if ($_deleteTasks) {
                 $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', 'Sql', $leadId);
                 foreach ($relations as $relation) {
-                    if ($relation->related_model === 'Tasks_Model_Task' /* && $relation->own_degree === 'sibling' */) {
-                        Tasks_Controller_Task::getInstance()->deleteTask($relation->related_id);
+                    if ($relation->related_model === 'Tasks_Model_Task' ) {
+                    // && $relation->own_degree === 'sibling' 
+                        Tasks_Controller_Task::getInstance()->delete($relation->related_id);
                     }
                 }                
             }
+            */
             
             // delete lead
             $where = array(

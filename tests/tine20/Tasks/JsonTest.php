@@ -73,7 +73,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create task
         $task = $this->_getTask();
-        $task = Tasks_Controller_Task::getInstance()->createTask($task);
+        $task = Tasks_Controller_Task::getInstance()->create($task);
         
         // search tasks
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()));
@@ -82,8 +82,11 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $tasks['totalcount']);
         
         // delete task
-        // @todo move that to generic cleanup function
-        Tasks_Controller_Task::getInstance()->deleteTask($task->getId());        
+        Tasks_Controller_Task::getInstance()->delete($task->getId());        
+
+        // search and check again
+        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()));
+        $this->assertEquals(0, $tasks['totalcount']);
     }
     
     /**
