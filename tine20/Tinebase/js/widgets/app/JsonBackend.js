@@ -188,6 +188,16 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     },
     
     /**
+     * is request still loading?
+     * 
+     * @param  {Number} Ext.Ajax transaction id
+     * @return {Bool}
+     */
+    isLoading: function(tid) {
+        return Ext.Ajax.isLoading(tid);
+    },
+    
+    /**
      * performs an Ajax request
      */
     request: function(options) {
