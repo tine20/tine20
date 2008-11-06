@@ -47,7 +47,17 @@ class Crm_Controller_LeadStates extends Tinebase_Application_Controller_Abstract
         
         return self::$_instance;
     }    
-        
+
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() 
+    {
+        $this->_currentAccount = Zend_Registry::get('currentAccount');        
+    }
+    
     /**
      * get one state identified by id
      *

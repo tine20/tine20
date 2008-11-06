@@ -49,6 +49,16 @@ class Crm_Controller_LeadTypes extends Tinebase_Application_Controller_Abstract
     }    
         
     /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() 
+    {
+        $this->_currentAccount = Zend_Registry::get('currentAccount');        
+    }
+    
+    /**
      * get one leadtype identified by id
      *
      * @param int $_typeId

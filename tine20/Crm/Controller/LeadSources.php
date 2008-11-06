@@ -49,6 +49,16 @@ class Crm_Controller_LeadSources extends Tinebase_Application_Controller_Abstrac
     }    
         
     /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() 
+    {
+        $this->_currentAccount = Zend_Registry::get('currentAccount');        
+    }
+    
+    /**
      * get one leadsource identified by id
      *
      * @return Crm_Model_Leadsource

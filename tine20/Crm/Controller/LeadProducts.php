@@ -47,6 +47,16 @@ class Crm_Controller_LeadProducts extends Tinebase_Application_Controller_Abstra
         
         return self::$_instance;
     }    
+
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() 
+    {
+        $this->_currentAccount = Zend_Registry::get('currentAccount');        
+    }
     
     /*************** products functions *****************/
 
