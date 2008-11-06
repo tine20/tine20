@@ -384,8 +384,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     /**
      * generic delete handler
-     * 
-     * @todo share this with handler from generic grid?
      */
     onDelete: function(btn, e) {
         Ext.MessageBox.confirm(this.translation._('Confirm'), String.format(this.translation._('Do you really want to delete this {0}?'), this.containerItemName), function(_button) {
@@ -398,12 +396,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         method: this.appName + '.delete' + this.modelName + 's',
                         ids: [this.record.id]
                     },
-                    success: function(_result, _request) {
+                    success: function() {
                         this.fireEvent('update', this.record);
                         this.purgeListeners();
                         this.window.close();
                     },
-                    failure: function ( result, request) { 
+                    failure: function () { 
                         Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation.ngettext('Could not delete {0}.', 'Could not delete {0}', 1), this.containerItemName));
                         Ext.MessageBox.hide();
                     }

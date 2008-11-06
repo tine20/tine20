@@ -67,6 +67,16 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Array} actionToolbarItems
      * additional items for actionToolbar
      */
+    /**
+     * @cfg {Ext.data.DataProxy} recordProxy
+     */
+    recordProxy: null,
+    /**
+     * @cfg {Ext.data.DataReader} recordReader
+     */
+    recordReader:null,
+    
+    
     actionToolbarItems: [],
     /**
      * @cfg {Array} contextMenuItems
@@ -120,7 +130,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             actionType: 'add',
             text: String.format(this.i18n._('Add {0}'), this.containerItemName),
             handler: this.onEditInNewWindow,
-            iconCls: 'TasksIconCls',
+            iconCls: this.appName + 'IconCls',
             scope: this
         });
         
@@ -129,7 +139,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             allowMultiple: true,
             singularText: String.format('Delete {0}', this.containerItemName),
             pluralText: String.format('Delete {0}', this.containerItemsName),
-            translationObject: this.translation,
+            translationObject: this.i18n,
             text: String.format(this.i18n.ngettext('Delete {0}', 'Delete {1}', 1), this.containerItemName, this.containerItemsName),
             handler: this.onDeleteRecord,
             disabled: true,
@@ -147,5 +157,41 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.contextMenu = new Ext.Menu(a.concat(this.contextMenuItems));
     },
     
+    /**
+     * generic edit in new window handler
+     */
+    onEditInNewWindow: function(btn, e) {
+        
+    },
     
+    /**
+     * generic delete handler
+     */
+    onDeleteRecord: function(btn, e) {
+        var records = this.grid.getSelectionModel().getSelections();
+        
+        var i18nItems    = this.i18n.ngettext(this.containerItemName, this.containerItemsName, records.length);
+        var i18nQuestion = String.format(this.i18n.ngettext('Do you really want to delete the selected {0}', 'Do you really want to delete the selected {0}', records.length), i18nItems);
+            
+        Ext.MessageBox.confirm(this.i18n._('Confirm'), i18nQuestion, function(btn) {
+            if(btn == 'yes') {
+                if (! this.deleteMask) {
+                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: String.format(this.i18n._('Deleting {0}'), i18nItems)});
+                }
+                this.deleteMask.show();
+                
+                this.recordProxy.deleteRecords(records, {
+                    scope: this,
+                    success: function() {
+                        this.deleteMask.hide();
+                        this.store.load({params: this.paging});
+                    },
+                    failure: function () {
+                        this.deleteMask.hide();
+                        Ext.MessageBox.alert(this.i18n._('Failed'), String.format(this.i18n._('Could not delete {0}.'), i18nItems)); 
+                    }
+                });
+            }
+        }, this);
+    },
 });
