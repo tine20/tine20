@@ -23,10 +23,10 @@ Tine.Tasks.getPanel =  function() {
     
     // this function is called each time the user activates the Tasks app
     tree.on('beforeexpand', function(panel) {
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.toolbar, true);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.gridPanel.actionToolbar, true);
         this.updateMainToolbar();
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.grid, true);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
         this.store.load({
             params: this.paging
         });
@@ -47,23 +47,12 @@ Tine.Tasks.mainGrid = {
      */
     tree: null,
     /**
-     * {Ext.Toolbar}
+     * @property {Tine.Tinebase.widgets.app.GridPanel} gridPanel
      */
-    toolbar: null,
+    gridPanel: null,
     /**
-     * holds grid
-     */
-    grid: null,
-    /**
-     * holds selection model of grid
-     */
-    sm: null,
-    /**
-     * holds underlaying store
-     */
-    store: null,
-    /**
-     * holds paging information
+     * holds default paging information
+     * @depricated, to be moved to gridPanel
      */
     paging: {
         start: 0,
@@ -83,122 +72,80 @@ Tine.Tasks.mainGrid = {
         tag: false
     },
 
-    handlers: {
-		editInPopup: function(_button, _event){
-			var taskId = -1;
-			if (_button.actionType == 'edit') {
-			    var selectedRows = this.grid.getSelectionModel().getSelections();
-                var task = selectedRows[0];
-			} else {
-                var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
-            }
-            var containerId = (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1;
-            
-            var popupWindow = Tine.Tasks.EditDialog.openWindow({
-                record: task,
-                containerId: containerId,
-                listeners: {
-                    scope: this,
-                    'update': this.onRecordUpdate
+	editInPopup: function(_button, _event){
+		var taskId = -1;
+		if (_button.actionType == 'edit') {
+		    var selectedRows = this.gridPanel.grid.getSelectionModel().getSelections();
+            var task = selectedRows[0];
+		} else {
+            var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
+        }
+        var containerId = (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1;
+        
+        var popupWindow = Tine.Tasks.EditDialog.openWindow({
+            record: task,
+            containerId: containerId,
+            listeners: {
+                scope: this,
+                'update': function(task) {
+                    this.store.load({params: this.paging});
                 }
-            });
-        },
-        
-		deleteTasks: function(){
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            
-			Ext.MessageBox.confirm('Confirm', this.translation.ngettext(
-                'Do you really want to delete the selected task', 
-                'Do you really want to delete the selected tasks', 
-                 selectedRows.length), function(btn) {
-                
-                if(btn == 'yes') {
-				    Tine.Tasks.JsonBackend.deleteRecords(selectedRows, {
-                        scope: this,
-                        success: function(_result, _request) {
-                            this.store.load({params: this.paging});
-                        },
-                        failure: function ( result, request) { 
-                            Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not delete task(s).')); 
-                        }
-                    });
-				}
-			}, this);
-		}
-	},
-    
-    onRecordUpdate:  function(task) {
-        this.store.load({params: this.paging});
+            }
+        });
     },
-        
+    
 	initComponent: function() {
 		
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
-    
-    	this.actions = {
-            editInPopup: new Ext.Action({
-                requiredGrant: 'readGrant',
-                
-                text: this.translation._('Edit task'),
-    			disabled: true,
-    			actionType: 'edit',
-                handler: this.handlers.editInPopup,
-                iconCls: 'action_edit',
-                scope: this
-            }),
-            addInPopup: new Ext.Action({
-                requiredGrant: 'addGrant',
-    			actionType: 'add',
-                text: this.translation._('Add task'),
-                handler: this.handlers.editInPopup,
-                iconCls: 'TasksIconCls',
-                scope: this
-            }),
-            deleteTasks: new Ext.Action({
-                requiredGrant: 'deleteGrant',
-                allowMultiple: true,
-                singularText: 'Delete task',
-                pluralText: 'Delete tasks',
-                translationObject: this.translation,
-                text: this.translation.ngettext('Delete task', 'Delete tasks', 1),
-                handler: this.handlers.deleteTasks,
-    			disabled: true,
-                iconCls: 'action_delete',
-                scope: this
-            })
-        };
-        
         this.filter.owner = Tine.Tinebase.registry.get('currentAccount').accountId;
-        this.initStore();
-        this.initToolbar();
-        this.initGrid();
         
+        // tmp hack for edit handler
+        scopehelper = this;
+        
+        this.gridPanel = new Tine.Tinebase.widgets.app.GridPanel({
+            // model generics
+            appName: 'Tasks',
+            modelName: 'Task',
+            recordClass: Tine.Tasks.Task,
+            titleProperty: 'summary',
+            containerItemName: 'Task',
+            containerItemsName: 'Tasks',
+            containerName: 'to do list',
+            containesrName: 'to do lists',
+            
+            // grid spechials
+            actionToolbarItems: this.getToolbarItems(),
+            defaultSortInfo: {field: 'due', dir: 'ASC'},
+            recordProxy: Tine.Tasks.JsonBackend,
+            gridConfig: {
+                clicksToEdit: 'auto',
+                enableColumnHide:false,
+                enableColumnMove:false,
+                region:'center',
+                loadMask: true,
+                quickaddMandatory: 'summary',
+                autoExpandColumn: 'summary',
+                columns: this.getColumns()
+            },
+            
+            // tmp edit handler
+            onEditInNewWindow: function(btn, e) {
+                scopehelper.editInPopup(btn, e);
+            },
+            
+        });
+        this.store = this.gridPanel.store;
+        this.initStoreEvents();
+        this.initGridEvents();
     },
     
-	initStore: function(){
-	    this.store = new Ext.data.JsonStore({
-			id: 'id',
-            root: 'results',
-            totalProperty: 'totalcount',
-			successProperty: 'status',
-			fields: Tine.Tasks.Task,
-			remoteSort: true,
-			baseParams: {
-                method: 'Tasks.searchTasks'
-            },
-            sortInfo: {
-                field: 'due',
-                dir: 'ASC'
-            }
-        });
-		
-		// register store
-		Ext.StoreMgr.add('TaskGridStore', this.store);
-		
+	initStoreEvents: function(){
 		// prepare filter
-		this.store.on('beforeload', function(store, options){
-			// console.log(options);
+		this.gridPanel.store.on('beforeload', function(store, options) {
+            options.params = options.params || {};
+            Ext.applyIf(options.params, this.paging);
+            
 			// for some reasons, paging toolbar eats sort and dir
 			if (store.getSortState()) {
 				this.filter.sort = store.getSortState().field;
@@ -226,7 +173,7 @@ Tine.Tasks.mainGrid = {
 			options.params.filter = Ext.util.JSON.encode(this.filter);
 		}, this);
 		
-		this.store.on('update', function(store, task, operation) {
+		this.gridPanel.store.on('update', function(store, task, operation) {
 			switch (operation) {
 				case Ext.data.Record.EDIT:
                     Tine.Tasks.JsonBackend.saveRecord(task, {
@@ -249,49 +196,40 @@ Tine.Tasks.mainGrid = {
 			}
 		}, this);
 	},
-	
-    updateMainToolbar : function() 
-    {
-        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
-        menu.removeAll();
-
-        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-        adminButton.setIconClass('TasksTreePanel');
-
-        adminButton.setDisabled(true);
-
-        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('TasksTreePanel');
-        preferencesButton.setDisabled(true);
-    },
-
-	getTree: function() {
-        var translation = new Locale.Gettext();
-        translation.textdomain('Tasks');
-
-        this.tree =  new Tine.widgets.container.TreePanel({
-            id: 'TasksTreePanel',
-            iconCls: 'TasksIconCls',
-            title: translation._('Tasks'),
-            containersName: translation._('to do lists'),
-            containerName: translation._('to do list'),
-            appName: 'Tasks',
-            border: false
-        });
-        
-        
-        this.tree.on('click', function(node){
-        	// note: if node is clicked, it is not selected!
-        	node.getOwnerTree().selectPath(node.getPath());
-            this.store.load({params: this.paging});
+            
+    initGridEvents: function() {    
+        this.gridPanel.grid.on('newentry', function(taskData){
+            var selectedNode = this.tree.getSelectionModel().getSelectedNode();
+            taskData.container_id = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : -1;
+            var task = new Tine.Tasks.Task(taskData);
+            
+            Tine.Tasks.JsonBackend.saveRecord(task, {
+                scope: this,
+                success: function() {
+                    this.store.load({params: this.paging});
+                },
+                failure: function () { 
+                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
+                }
+            });
+            return true;
         }, this);
         
-        return this.tree;
+        // hack to get percentage editor working
+        this.gridPanel.grid.on('rowclick', function(grid,row,e) {
+            var cell = Ext.get(grid.getView().getCell(row,1));
+            var dom = cell.child('div:last');
+            while (cell.first()) {
+                cell = cell.first();
+                cell.on('click', function(e){
+                    e.stopPropagation();
+                    grid.fireEvent('celldblclick', grid, row, 1, e);
+                });
+            }
+        }, this);
     },
-    
-	// toolbar must be generated each time this fn is called, 
-	// as tinebase destroys the old toolbar when setting a new one.
-	initToolbar: function(){
+	
+	getToolbarItems: function(){
 		var TasksQuickSearchField = new Ext.ux.SearchField({
 			id: 'TasksQuickSearchField',
 			width: 200,
@@ -345,206 +283,136 @@ Tine.Tasks.mainGrid = {
             //combo.triggers[0].show();
         }, this);
 		
-		this.toolbar = new Ext.Toolbar({
-			id: 'Tasks_Toolbar',
-			split: false,
-			height: 26,
-			items: [
-			    this.actions.addInPopup,
-				this.actions.editInPopup,
-				this.actions.deleteTasks,
-				new Ext.Toolbar.Separator(),
-				'->',
-				showClosedToggle,
-				//'Status: ',	' ', statusFilter,
-				//'Organizer: ', ' ',	organizerFilter,
-				new Ext.Toolbar.Separator(),
-				'->',
-				this.translation._('Search:'), ' ', ' ', TasksQuickSearchField]
-		});
+		return [
+			new Ext.Toolbar.Separator(),
+			'->',
+			showClosedToggle,
+			//'Status: ',	' ', statusFilter,
+			//'Organizer: ', ' ',	organizerFilter,
+			new Ext.Toolbar.Separator(),
+			'->',
+			this.translation._('Search:'), ' ', ' ', TasksQuickSearchField
+        ];
 	},
 	
-    initGrid: function(){
-        //this.sm = new Ext.grid.CheckboxSelectionModel();
-        var pagingToolbar = new Ext.PagingToolbar({
-	        pageSize: 50,
-	        store: this.store,
-	        displayInfo: true,
-	        displayMsg: this.translation._('Displaying tasks {0} - {1} of {2}'),
-	        emptyMsg: this.translation._("No tasks to display")
-	    });
-		
-		this.grid = new Ext.ux.grid.QuickaddGridPanel({
-            id: 'TasksMainGrid',
-			border: false,
-            store: this.store,
-			tbar: pagingToolbar,
-			clicksToEdit: 'auto',
-            enableColumnHide:false,
-            enableColumnMove:false,
-            region:'center',
-			sm: new Ext.grid.RowSelectionModel(),
-			loadMask: true,
-            columns: [{
-                    id: 'summary',
-                    header: this.translation._("Summary"),
-                    width: 400,
-                    sortable: true,
-                    dataIndex: 'summary',
-                    //editor: new Ext.form.TextField({
-                    //  allowBlank: false
-                    //}),
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: this.translation._('Add a task...')
-                    })
-                }, {
-                    id: 'due',
-                    header: this.translation._("Due Date"),
-                    width: 55,
-                    sortable: true,
-                    dataIndex: 'due',
-                    renderer: Tine.Tinebase.common.dateRenderer,
-                    editor: new Ext.ux.form.ClearableDateField({
-                        //format : 'd.m.Y'
-                    }),
-                    quickaddField: new Ext.ux.form.ClearableDateField({
-                        //value: new Date(),
-                        //format : "d.m.Y"
-                    })
-                }, {
-                    id: 'priority',
-                    header: this.translation._("Priority"),
-                    width: 45,
-                    sortable: true,
-                    dataIndex: 'priority',
-                    renderer: Tine.widgets.Priority.renderer,
-                    editor: new Tine.widgets.Priority.Combo({
-                        allowBlank: false,
-                        autoExpand: true,
-                        blurOnSelect: true
-                    }),
-                    quickaddField: new Tine.widgets.Priority.Combo({
-                        autoExpand: true
-                    })
-                }, {
-                    id: 'percent',
-                    header: this.translation._("Percent"),
-                    width: 50,
-                    sortable: true,
-                    dataIndex: 'percent',
-                    renderer: Ext.ux.PercentRenderer,
-                    editor: new Ext.ux.PercentCombo({
-                        autoExpand: true,
-                        blurOnSelect: true
-                    }),
-                    quickaddField: new Ext.ux.PercentCombo({
-                        autoExpand: true
-                    })
-                }, {
-					id: 'status_id',
-					header: this.translation._("Status"),
-					width: 45,
-					sortable: true,
-					dataIndex: 'status_id',
-					renderer: Tine.Tasks.status.getStatusIcon,
-                    editor: new Tine.Tasks.status.ComboBox({
-		                autoExpand: true,
-                        blurOnSelect: true,
-		                listClass: 'x-combo-list-small'
-		            }),
-		            quickaddField: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true
-                    })
-				}
-				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
-		    ],
-		    quickaddMandatory: 'summary',
-			autoExpandColumn: 'summary',
-			view: new Ext.grid.GridView({
-                autoFill: true,
-	            forceFit:true,
-	            ignoreAdd: true,
-	            emptyText: this.translation._('No Tasks to display'),
-                onLoad: Ext.emptyFn,
-                listeners: {
-                    beforerefresh: function(v) {
-                        v.scrollTop = v.scroller.dom.scrollTop;
-                    },
-                    refresh: function(v) {
-                        v.scroller.dom.scrollTop = v.scrollTop;
-                    }
-                }
-	        })
+    /**
+     * returns cm
+     * @private
+     */
+    getColumns: function(){
+		return  [{
+            id: 'summary',
+            header: this.translation._("Summary"),
+            width: 400,
+            sortable: true,
+            dataIndex: 'summary',
+            //editor: new Ext.form.TextField({
+            //  allowBlank: false
+            //}),
+            quickaddField: new Ext.form.TextField({
+                emptyText: this.translation._('Add a task...')
+            })
+        }, {
+            id: 'due',
+            header: this.translation._("Due Date"),
+            width: 55,
+            sortable: true,
+            dataIndex: 'due',
+            renderer: Tine.Tinebase.common.dateRenderer,
+            editor: new Ext.ux.form.ClearableDateField({
+                //format : 'd.m.Y'
+            }),
+            quickaddField: new Ext.ux.form.ClearableDateField({
+                //value: new Date(),
+                //format : "d.m.Y"
+            })
+        }, {
+            id: 'priority',
+            header: this.translation._("Priority"),
+            width: 45,
+            sortable: true,
+            dataIndex: 'priority',
+            renderer: Tine.widgets.Priority.renderer,
+            editor: new Tine.widgets.Priority.Combo({
+                allowBlank: false,
+                autoExpand: true,
+                blurOnSelect: true
+            }),
+            quickaddField: new Tine.widgets.Priority.Combo({
+                autoExpand: true
+            })
+        }, {
+            id: 'percent',
+            header: this.translation._("Percent"),
+            width: 50,
+            sortable: true,
+            dataIndex: 'percent',
+            renderer: Ext.ux.PercentRenderer,
+            editor: new Ext.ux.PercentCombo({
+                autoExpand: true,
+                blurOnSelect: true
+            }),
+            quickaddField: new Ext.ux.PercentCombo({
+                autoExpand: true
+            })
+        }, {
+			id: 'status_id',
+			header: this.translation._("Status"),
+			width: 45,
+			sortable: true,
+			dataIndex: 'status_id',
+			renderer: Tine.Tasks.status.getStatusIcon,
+            editor: new Tine.Tasks.status.ComboBox({
+                autoExpand: true,
+                blurOnSelect: true,
+                listClass: 'x-combo-list-small'
+            }),
+            quickaddField: new Tine.Tasks.status.ComboBox({
+                autoExpand: true
+            })
+		}];
+    },
+    
+    
+    
+    
+    
+    updateMainToolbar : function() {
+        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+        menu.removeAll();
+
+        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+        adminButton.setIconClass('TasksTreePanel');
+
+        adminButton.setDisabled(true);
+
+        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
+        preferencesButton.setIconClass('TasksTreePanel');
+        preferencesButton.setDisabled(true);
+    },
+
+    getTree: function() {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Tasks');
+
+        this.tree =  new Tine.widgets.container.TreePanel({
+            id: 'TasksTreePanel',
+            iconCls: 'TasksIconCls',
+            title: translation._('Tasks'),
+            containersName: translation._('to do lists'),
+            containerName: translation._('to do list'),
+            appName: 'Tasks',
+            border: false
         });
-		
-		this.grid.on('rowdblclick', function(grid, row, event){
-			this.handlers.editInPopup.call(this, {actionType: 'edit'});
-		}, this);
-		
-		this.grid.getSelectionModel().on('selectionchange', function(sm){
-            Tine.widgets.ActionUpdater(sm, this.actions);
-		}, this);
-		
-		this.grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-			_eventObject.stopEvent();
-            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                _grid.getSelectionModel().selectRow(_rowIndex);
-            }
-
-			var ctxMenu = new Ext.menu.Menu({
-		        items: [
-                    this.actions.editInPopup,
-                    this.actions.deleteTasks,
-                    '-',
-                    this.actions.addInPopup
-                ]
-		    });
-            
-            ctxMenu.showAt(_eventObject.getXY());
+        
+        
+        this.tree.on('click', function(node){
+            // note: if node is clicked, it is not selected!
+            node.getOwnerTree().selectPath(node.getPath());
+            this.store.load({params: this.paging});
         }, this);
-		
-		this.grid.on('keydown', function(e){
-	         if(e.getKey() == e.DELETE && !this.grid.editing){
-	             this.handlers.deleteTasks.call(this);
-	         }
-	    }, this);
-        		
-	    this.grid.on('newentry', function(taskData){
-	    	var selectedNode = this.tree.getSelectionModel().getSelectedNode();
-            taskData.container_id = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : -1;
-	        var task = new Tine.Tasks.Task(taskData);
-            
-            Tine.Tasks.JsonBackend.saveRecord(task, {
-                scope: this,
-                success: function() {
-                    Ext.StoreMgr.get('TaskGridStore').load({params: this.paging});
-                },
-                failure: function () { 
-                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
-                }
-            });
-            return true;
-	    }, this);
-	    
-		// hack to get percentage editor working
-		this.grid.on('rowclick', function(grid,row,e) {
-			var cell = Ext.get(grid.getView().getCell(row,1));
-			var dom = cell.child('div:last');
-			while (cell.first()) {
-				cell = cell.first();
-				cell.on('click', function(e){
-					e.stopPropagation();
-					grid.fireEvent('celldblclick', grid, row, 1, e);
-				});
-			}
-		}, this);
-    }    
-};
-
-// fixes a task
-Tine.Tasks.fixTask = function(task) {
-    if (task.data.due) {
-        task.data.due = Date.parseDate(task.data.due, Date.patterns.ISO8601Long);
+        
+        return this.tree;
     }
 };
 
