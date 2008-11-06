@@ -11,7 +11,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Controller.php 5029 2008-10-21 16:28:16Z p.schuele@metaways.de $
  *
- * @todo        replace functions (use them from abstract controller)
  */
 
 /**
@@ -40,7 +39,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
     /**
      * holdes the instance of the singleton
      *
-     * @var Crm_Controller
+     * @var Crm_Controller_Lead
      */
     private static $_instance = NULL;
     
@@ -170,72 +169,6 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         return $emptyLead;
     }
 
-    /*************** add / update / delete lead *****************/    
-    
-    // @todo check the following funcs
-    
-    /**
-     * delete a lead
-     *
-     * @param   int|array|Tinebase_Record_RecordSet|Crm_Model_Lead $_leadId
-     * @throws  Crm_Exception_AccessDenied
-     */
-    public function deleteLead($_leadId)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        
-        try {
-            $db = $backend->getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
-                foreach($_leadId as $leadId) {
-                    $this->deleteLead($leadId);
-                }
-            } else {                            
-                $lead = $backend->get($_leadId);
-                
-                if($this->_currentAccount->hasGrant($lead->container_id, Tinebase_Model_Container::GRANT_DELETE)) {
-                    $backend->delete($_leadId);
-    
-                    // delete notes
-                    Tinebase_Notes::getInstance()->deleteNotesOfRecord('Crm_Model_Lead', 'Sql', $lead->getId());                
-                } else {
-                    throw new Crm_Exception_AccessDenied('Delete access to lead denied.');
-                }
-            }
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
-        }
-    }
-
-    /*********************** links functions ************************/
-    
-    /**
-     * set lead products
-     *
-     * @param integer $_leadId
-     * @param Crm_Model_Lead $_lead
-     */
-    private function _setLeadProducts($_leadId, Crm_Model_Lead $_lead)
-    {
-        // add product links
-        $productsArray = array();
-        if (isset($_lead->products) && is_array($_lead->products)) {
-            foreach ($_lead->products as $product) {
-                $product['lead_id'] = $_leadId; 
-                $productsArray[] = $product;     
-            }
-        }       
-        
-        $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
-        Crm_Controller_LeadProducts::getInstance()->saveLeadProducts($_leadId, $products);                        
-    }
-
     /********************* notifications ***************************/
     
     /**
@@ -326,13 +259,37 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, $pdfOutput);
     }
     
+    /*********************** helper functions ************************/
+    
+    /**
+     * set lead products
+     *
+     * @param integer $_leadId
+     * @param Crm_Model_Lead $_lead
+     */
+    protected function _setLeadProducts($_leadId, Crm_Model_Lead $_lead)
+    {
+        // add product links
+        $productsArray = array();
+        if (isset($_lead->products) && is_array($_lead->products)) {
+            foreach ($_lead->products as $product) {
+                $product['lead_id'] = $_leadId; 
+                $productsArray[] = $product;     
+            }
+        }       
+        
+        $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
+        Crm_Controller_LeadProducts::getInstance()->saveLeadProducts($_leadId, $products);                        
+    }
+    
     /**
      * returns recipients for a lead notification
      *
      * @param  Crm_Model_Lead $_lead
      * @return array          array of int|Addressbook_Model_Contact
      */
-    protected function _getNotificationRecipients(Crm_Model_Lead $_lead) {
+    protected function _getNotificationRecipients(Crm_Model_Lead $_lead) 
+    {
         $recipients = array();
         
         $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId(), true);

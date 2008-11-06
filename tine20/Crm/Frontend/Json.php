@@ -135,7 +135,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $leadIds = Zend_Json::decode($_leadIds);
 
-        Crm_Controller_Lead::getInstance()->deleteLead($leadIds);
+        Crm_Controller_Lead::getInstance()->delete($leadIds);
         
         $result = array(
             'success'   => TRUE

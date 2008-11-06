@@ -167,7 +167,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     {
         // delete the db entries
         try { 
-            Crm_Controller_Lead::getInstance()->deleteLead($this->objects['leadWithLink']);
+            Crm_Controller_Lead::getInstance()->delete($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // access denied ?
         }

@@ -513,7 +513,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteLead()
     {
-        Crm_Controller_Lead::getInstance()->deleteLead($this->_objects['initialLead']);
+        Crm_Controller_Lead::getInstance()->delete($this->_objects['initialLead']);
 
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();        
