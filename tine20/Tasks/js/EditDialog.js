@@ -35,6 +35,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Tasks',
     modelName: 'Task',
     recordClass: Tine.Tasks.Task,
+    recordProxy: Tine.Tasks.JsonBackend,
     titleProperty: 'summary',
     containerItemName: 'Task',
     containerItemsName: 'Tasks',
@@ -48,7 +49,10 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     requestData: function() {
         this.loadRequest = Ext.Ajax.request({
             scope: this,
-            success: this.recordReader,
+            success: function(response) {
+                this.record = this.recordProxy.recordReader(response);
+                this.onRecordLoad();
+            },
             params: {
                 method: 'Tasks.getTask',
                 uid: this.record.id,
