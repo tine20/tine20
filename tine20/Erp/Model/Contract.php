@@ -70,4 +70,22 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+    
+    /**
+     * fill record from json data
+     *
+     * @param string $_data json encoded data
+     * @return void
+     * 
+     * @todo    discuss this concept / move to json abstract? / record abstract?
+     */
+    public function setFromJson($_data)
+    {
+        $data = Zend_Json::decode($_data);
+        if (isset($data['container_id']) && is_array($data['container_id'])) {
+            $data['container_id'] = $data['container_id']['id'];
+        }
+        
+        $this->setFromArray($data);
+    }
 }

@@ -31,6 +31,7 @@ class Erp_AllTests
         $suite->addTestSuite('Erp_Backend_ContractTest');
         $suite->addTestSuite('Erp_Backend_NumberTest');
         $suite->addTestSuite('Erp_ControllerTest');
+        $suite->addTestSuite('Erp_JsonTest');
         return $suite;
     }
 }
