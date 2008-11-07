@@ -27,7 +27,7 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     public function getContract($uid)
     {
         $contract = Erp_Controller_Contract::getInstance()->get($uid);
-        return $this->_recordToJson($Contract);
+        return $this->_recordToJson($contract);
     }
     
     /**

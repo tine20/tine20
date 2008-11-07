@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        complete code coverage of erp json
  */
 
 /**
@@ -87,20 +88,18 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContract()
     {
-        /*
-        $contractData = $this->_getContract();
-        $this->_backend->create($contractData);
-        $contract = $this->_backend->get($contractData->getId());
+        $contract = $this->_getContract();
+        $contractData = $this->_backend->saveContract(Zend_Json::encode($contract->toArray()));
+        $contractData = $this->_backend->getContract($contractData['id']);
         
         // checks
-        $this->assertEquals($contractData->getId(), $contract->getId());
-        $this->assertGreaterThan(0, $contract->number);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contract->created_by);
+        $this->assertEquals($contractData['id'], $contract->getId());
+        $this->assertGreaterThan(0, $contractData['number']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
         // cleanup
-        $this->_backend->delete($contract->getId());
+        $this->_backend->deleteContracts($contract->getId());
         $this->_decreaseNumber();
-        */        
     }
 
     /**
@@ -124,6 +123,8 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $this->_decreaseNumber();
         */        
     }
+    
+    /************ protected helper funcs *************/
     
     /**
      * get contract
