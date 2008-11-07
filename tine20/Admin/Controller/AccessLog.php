@@ -32,6 +32,15 @@ class Admin_Controller_AccessLog extends Tinebase_Application_Controller_Abstrac
      */
     private static $_instance = NULL;
     
+        /**
+     * Call parent constructor
+     */
+    private function __construct() 
+    {
+	    $this->_currentAccount = Zend_Registry::get('currentAccount');        
+    }
+
+
     /**
      * the singleton pattern
      *

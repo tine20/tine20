@@ -31,7 +31,17 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
      * @var Admin_Controller_User
      */
     private static $_instance = NULL;
-    
+
+
+    /**
+     * Call parent constructor
+     */
+    private function __construct() 
+    {
+	    $this->_currentAccount = Zend_Registry::get('currentAccount');        
+    }
+
+
     /**
      * the singleton pattern
      *
