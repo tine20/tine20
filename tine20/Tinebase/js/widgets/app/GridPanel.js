@@ -86,6 +86,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Object} defaultSortInfo
      */
     defaultSortInfo: {},
+    /**
+     * @cfg {Object } defaultPaging 
+     */
+    defaultPaging: {
+        start: 0,
+        limit: 50
+    },
     
     /**
      * @property {Ext.Tollbar} actionToolbar
@@ -197,9 +204,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             //fields: this.recordClass,
             proxy: this.recordProxy,
             remoteSort: true,
-            sortInfo: this.defaultSortInfo
+            sortInfo: this.defaultSortInfo,
+            listeners: {
+                scope: this,
+                'update': this.onStoreUpdate
+            }
         });
-        
+       
         // listeners -> plugins
     },
     
@@ -247,10 +258,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         
         // init various grid / sm listeners
         this.grid.on('keydown', this.onKeyDown, this);
-        
-        this.grid.on('rowclick', function(grid, row, e) {
-            // only select one item as expected!
-        }, this);
+        this.grid.on('rowclick',  this.onRowClick, this);
         
         this.grid.on('rowdblclick', function(grid, row, e){
             this.onEditInNewWindow.call(this, {actionType: 'edit'});
@@ -268,7 +276,32 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.grid.getSelectionModel().on('selectionchange', function(sm) {
             Tine.widgets.ActionUpdater(sm, this.actions);
         }, this);
-        
+    },
+    
+    /**
+     * called when the store gets updated, e.g. from editgrid
+     */
+    onStoreUpdate: function(store, record, operation) {
+        switch (operation) {
+            case Ext.data.Record.EDIT:
+                this.recordProxy.saveRecord(record, {
+                    scope: this,
+                    success: function(updatedRecord) {
+                        store.commitChanges();
+                        // update record in store to prevent concurrency problems
+                        record.data = updatedRecord.data;
+                        
+                        // reloading the store feels like oldschool 1.x
+                        // maybe we should reload if the sort critera changed, 
+                        // but even this might be confusing
+                        //store.load({});
+                    }
+                });
+                break;
+            case Ext.data.Record.COMMIT:
+                //nothing to do, as we need to reload the store anyway.
+                break;
+        }
     },
     
     /**
@@ -287,7 +320,27 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 break;
         }
     },
+    
+    /**
+     * row click handler
+     */
+    onRowClick: function(grid, row, e) {
+        /* @todo check if we need this in IE
+        // hack to get percentage editor working
+        var cell = Ext.get(grid.getView().getCell(row,1));
+        var dom = cell.child('div:last');
+        while (cell.first()) {
+            cell = cell.first();
+            cell.on('click', function(e){
+                e.stopPropagation();
+                grid.fireEvent('celldblclick', grid, row, 1, e);
+            });
+        }
+        */
         
+        // only select one item as expected!
+    },
+    
     /**
      * generic edit in new window handler
      */
