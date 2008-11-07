@@ -101,12 +101,16 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     public function getMultiple($_id) {
         $resultRecordSet = new Tinebase_Record_RecordSet($this->_modelName);
+
+        $select = $this->_getSelect();
+        $select->where($this->_identifier . ' in (?)', (array) $_id);
         
-        foreach ((array) $_id as $id) {
-            $resultRecordSet->addRecord($this->get($id));
-        }
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
         
-        return $resultRecordSet;
+        $result = new Tinebase_Record_RecordSet($this->_modelName, $queryResult);
+        
+        return $result;
     }
     
     /**
