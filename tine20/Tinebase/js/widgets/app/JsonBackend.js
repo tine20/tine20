@@ -74,7 +74,18 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      * @success {Object} root:[recrods], totalcount: number
      */
     searchRecords: function(filter, paging, options) {
+        options = options || {};
+        var p = options.params = options.params || {};
         
+        p.method = this.appName + '.search' + this.modelName + 's';
+        p.filter = Ext.util.JSON.encode(filter);
+        p.paging = Ext.util.JSON.encode(paging);
+        
+        options.beforeSuccess = function(response) {
+            return [this.jsonReader.read(response)];
+        }
+                
+        return this.request(options);
     },
     
     /**
@@ -84,16 +95,19 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      */
     load : function(params, reader, callback, scope, arg){
         if(this.fireEvent("beforeload", this, params) !== false){
-            params.method = this.appName + '.search' + this.modelName + 's';
             
-            this.request({
-                params: params,
-                scope: scope,
-                success: callback,
-                beforeSuccess: function(response) {
-                    var r = this.jsonReader.read(response);
-                    return [r, arg];
-                    this.fireEvent("load", this, {params: params}, arg);
+            // move paging to own object
+            var paging = {
+                sort:  params.sort,
+                dir:   params.dir,
+                start: params.start,
+                limit: params.limit
+            };
+            
+            this.searchRecords(params.filter, paging, {
+                scope: this,
+                success: function(records) {
+                    callback.call(scope||this, records, arg, true);
                 }
             });
             
@@ -104,7 +118,6 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     
     /**
      * saves a single record
-     * 
      * 
      * @param   {Ext.data.Record} record
      * @param   {Object} options
@@ -121,7 +134,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         p.method = this.appName + '.save' + this.modelName;
         p.recordData = Ext.util.JSON.encode(record.data);
         
-        this.request(options);
+        return this.request(options);
     },
     
     /**
@@ -138,7 +151,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         options.params.method = this.appName + '.delete' + this.modelName + 's';
         options.params.ids = Ext.util.JSON.encode(this.getRecordIds(records));
         
-        this.request(options);
+        return this.request(options);
     },
     
     /**
