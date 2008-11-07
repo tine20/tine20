@@ -356,13 +356,14 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         unset($initialLead['relations'][0]);
         
         //print_r($initialLead['relations']);
-        sleep(1);
         
         $updatedLead->relations = new Tinebase_Record_Recordset('Tinebase_Model_Relation', $initialLead['relations']);
         
         //print_r($updatedLead->toArray());
         
         $encodedData = Zend_Json::encode($updatedLead->toArray());
+        
+        sleep(2);
         
         $result = $this->_backend->saveLead($encodedData);
         
