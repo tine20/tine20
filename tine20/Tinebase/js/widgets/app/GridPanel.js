@@ -201,8 +201,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     initStore: function() {
         this.store = new Ext.data.Store({
-            //fields: this.recordClass,
+            fields: this.recordClass,
             proxy: this.recordProxy,
+            reader: this.recordProxy.getReader(),
             remoteSort: true,
             sortInfo: this.defaultSortInfo,
             listeners: {

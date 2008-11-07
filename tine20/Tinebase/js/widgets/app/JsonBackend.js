@@ -89,34 +89,6 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     },
     
     /**
-     * reqired method for Ext.data.Proxy, used by store
-     * @todo read the specs and implement success/fail handling
-     * @todo move reqest to searchRecord
-     */
-    load : function(params, reader, callback, scope, arg){
-        if(this.fireEvent("beforeload", this, params) !== false){
-            
-            // move paging to own object
-            var paging = {
-                sort:  params.sort,
-                dir:   params.dir,
-                start: params.start,
-                limit: params.limit
-            };
-            
-            this.searchRecords(params.filter, paging, {
-                scope: this,
-                success: function(records) {
-                    callback.call(scope||this, records, arg, true);
-                }
-            });
-            
-        } else {
-            callback.call(scope||this, null, arg, false);
-        }
-    },
-    
-    /**
      * saves a single record
      * 
      * @param   {Ext.data.Record} record
@@ -185,6 +157,43 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         }
         
         return ids;
+    },
+    
+    /**
+     * reqired method for Ext.data.Proxy, used by store
+     * @todo read the specs and implement success/fail handling
+     * @todo move reqest to searchRecord
+     */
+    load : function(params, reader, callback, scope, arg){
+        if(this.fireEvent("beforeload", this, params) !== false){
+            
+            // move paging to own object
+            var paging = {
+                sort:  params.sort,
+                dir:   params.dir,
+                start: params.start,
+                limit: params.limit
+            };
+            
+            this.searchRecords(params.filter, paging, {
+                scope: this,
+                success: function(records) {
+                    callback.call(scope||this, records, arg, true);
+                }
+            });
+            
+        } else {
+            callback.call(scope||this, null, arg, false);
+        }
+    },
+    
+    /**
+     * returns reader
+     * 
+     * @return {Ext.data.DataReader}
+     */
+    getReader: function() {
+        return this.jsonReader;
     },
     
     /**
