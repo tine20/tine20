@@ -8,7 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        complete code coverage of erp json
+ * @todo        add tests for linked contacts/accoutns
  */
 
 /**
