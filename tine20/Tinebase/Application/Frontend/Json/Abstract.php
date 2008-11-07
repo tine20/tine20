@@ -38,6 +38,29 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     }
 
     /**
+     * call save/get/search functions in corresponding controller, get Model name from fname
+     *
+     * @param string $_fname
+     * @param array $_arguments
+     * @return array array index => return value
+     * 
+     * @todo implement
+     */
+    public function __call($_fname, $_arguments)
+    {
+        /*
+        $returnValues = array();
+        foreach ($this->_listOfRecords as $index => $record) {
+            $returnValues[$index] = call_user_func_array(array($record, $_fname), $_arguments);
+        }
+        
+        return $returnValues;
+        */
+        
+        throw new Tinebase_Exception('function not found.');
+    }
+        
+    /**
      * Search for records matching given arguments
      *
      * @param string $_filter json encoded
