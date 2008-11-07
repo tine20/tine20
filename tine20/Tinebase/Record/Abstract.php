@@ -591,13 +591,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             //echo $fieldName . "\n";
             if (in_array($fieldName, $this->_datetimeFields)) {
                 if ($this->__get($fieldName) instanceof Zend_Date
-                    && $_record->$fieldName instanceof Zend_Date
-                    && $this->__get($fieldName)->compare($_record->$fieldName) === 0) {
+                    && $_record->$fieldName instanceof Zend_Date) {
+                    if ($this->__get($fieldName)->compare($_record->$fieldName) === 0) {
                         continue;
+                    } else {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'datetime fields not equal: ');
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $this->__get($fieldName)->getIso());
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->$fieldName->getIso());
+                    } 
                 } elseif (!$_record->$fieldName instanceof Zend_Date
                           && $this->__get($fieldName) == $_record->$fieldName) {
                     continue;
-                }
+                } 
             } elseif($fieldName == $this->_identifier
                      && $this->getId() == $_record->getId()) {
                     continue;
