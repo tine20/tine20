@@ -27,6 +27,15 @@ class Addressbook_Controller extends Tinebase_Application_Controller_Abstract im
      * @var Addressbook_Controller
      */
     private static $_instance = NULL;
+
+
+    /**
+     * call parent constroctor
+     */
+    private function __construct() {
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
+    
     
     /**
      * the singleton pattern
