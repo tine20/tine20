@@ -40,7 +40,7 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     public function searchContracts($filter, $paging)
     {
         $controller = Erp_Controller_Contract::getInstance();
-        return $this->_search($filter, $paging, $controller, 'Erp_Model_Contract_Filter');
+        return $this->_search($filter, $paging, $controller, 'Erp_Model_ContractFilter');
     }
     
     /**

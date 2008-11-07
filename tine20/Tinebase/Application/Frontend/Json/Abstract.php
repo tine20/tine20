@@ -51,8 +51,8 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($filter), true));
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($paging), true));
         
-        $filter = new $_filterModel(Zend_Json::decode($filter));
-        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
+        $filter = new $_filterModel(Zend_Json::decode($_filter));
+        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($_paging));
         
         $records = $_controller->search($filter, $pagination);
         

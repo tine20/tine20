@@ -78,7 +78,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
         // cleanup
-        $this->_backend->deleteContracts($contract->getId());
+        $this->_backend->deleteContracts($contractData['id']);
         $this->_decreaseNumber();
     }
     
@@ -98,7 +98,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
         // cleanup
-        $this->_backend->deleteContracts($contract->getId());
+        $this->_backend->deleteContracts($contractData['id']);
         $this->_decreaseNumber();
     }
 
@@ -108,20 +108,18 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchContracts()
     {
-        /*
-        $contractData = $this->_getContract();
-        $this->_backend->create($contractData);
-        $contract = $this->_backend->get($contractData->getId());
+        // create
+        $contract = $this->_getContract();
+        $contractData = $this->_backend->saveContract(Zend_Json::encode($contract->toArray()));
         
-        // checks
-        $this->assertEquals($contractData->getId(), $contract->getId());
-        $this->assertGreaterThan(0, $contract->number);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contract->created_by);
+        // search & check
+        $search = $this->_backend->searchContracts(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $this->assertEquals($contract->title, $search['results'][0]['title']);
+        $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
-        $this->_backend->delete($contract->getId());
-        $this->_decreaseNumber();
-        */        
+        $this->_backend->deleteContracts($contractData['id']);
+        $this->_decreaseNumber();        
     }
     
     /************ protected helper funcs *************/
@@ -138,6 +136,33 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
             'description'   => 'blabla',
             'id'            => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
+    }
+
+    /**
+     * get paging
+     *
+     * @return array
+     */
+    protected function _getPaging()
+    {
+        return array(
+            'start' => 0,
+            'limit' => 50,
+            'sort' => 'number',
+            'dir' => 'ASC',
+        );
+    }
+
+    /**
+     * get filter
+     *
+     * @return array
+     */
+    protected function _getFilter()
+    {
+        return array(
+            'query' => 'blabla'     
+        );        
     }
     
     /**
