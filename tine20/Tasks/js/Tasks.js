@@ -57,7 +57,8 @@ Tine.Tasks.mainGrid = {
         this.translation.textdomain('Tasks');
                 
         this.gridPanel = new Tine.Tasks.GridPanel({
-            recordProxy: Tine.Tasks.JsonBackend
+            recordProxy: Tine.Tasks.JsonBackend,
+            plugins: [new Ext.ux.grid.FilterPlugin()]
         });
         
         // legacy

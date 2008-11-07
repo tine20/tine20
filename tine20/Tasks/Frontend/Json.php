@@ -45,14 +45,14 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     /**
      * Search for tasks matching given arguments
      *
-     * @param $filter
+     * @param array $filter
+     * @param array $paging
      * @return array
      */
-    public function searchTasks($filter)
+    public function searchTasks($filter, $paging)
     {
-        $paginationFilter = Zend_Json::decode($filter);
-        $filter = new Tasks_Model_Filter($paginationFilter);
-        $pagination = new Tasks_Model_Pagination($paginationFilter);
+        $filter = new Tasks_Model_Filter(Zend_Json::decode($filter));
+        $pagination = new Tasks_Model_Pagination(Zend_Json::decode($paging));
         //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
         $tasks = Tasks_Controller_Task::getInstance()->search($filter, $pagination);

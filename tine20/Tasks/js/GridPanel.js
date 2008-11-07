@@ -91,7 +91,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             this.filter.status_id = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
             //this.filter.due
             //this.filter.tag
-            options.params.filter = Ext.util.JSON.encode(this.filter);
+            options.params.filter = this.filter;
         }, this);
     },
             
