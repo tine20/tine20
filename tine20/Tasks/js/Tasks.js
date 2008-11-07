@@ -49,93 +49,23 @@ Tine.Tasks.mainGrid = {
      */
     gridPanel: null,
     
-    
-    
-    
+    /**
+     * @private
+     */
 	initComponent: function() {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
                 
         this.gridPanel = new Tine.Tasks.GridPanel({
-            actionToolbarItems: this.getToolbarItems(),
             recordProxy: Tine.Tasks.JsonBackend
         });
         
         // legacy
-        
         this.store = this.gridPanel.store;
         this.filter = this.gridPanel.filter;
         this.filter.owner = Tine.Tinebase.registry.get('currentAccount').accountId;
         
     },
-    
-	
-	
-	getToolbarItems: function(){
-		var TasksQuickSearchField = new Ext.ux.SearchField({
-			id: 'TasksQuickSearchField',
-			width: 200,
-			emptyText: this.translation._('Enter searchfilter')
-		});
-		TasksQuickSearchField.on('change', function(field){
-			if(this.filter.query != field.getValue()){
-				this.store.load({});
-			}
-		}, this);
-		
-		var showClosedToggle = new Ext.Button({
-			id: 'TasksShowClosed',
-			enableToggle: true,
-			handler: function(){
-				this.store.load({});
-			},
-			scope: this,
-			text: this.translation._('Show closed'),
-			iconCls: 'action_showArchived'
-		});
-		
-		var statusFilter = new Ext.ux.form.ClearableComboBox({
-			id: 'TasksStatusFilter',
-			//name: 'statusFilter',
-			hideLabel: true,
-			store: Tine.Tasks.status.getStore(),
-			displayField: 'status_name',
-			valueField: 'id',
-			typeAhead: true,
-			mode: 'local',
-			triggerAction: 'all',
-			emptyText: 'any',
-			selectOnFocus: true,
-			editable: false,
-			width: 150
-		});
-		
-		statusFilter.on('select', function(combo, record, index){
-			this.store.load({});
-		},this);
-		
-		var organizerFilter = new Tine.widgets.AccountpickerField({
-			id: 'TasksorganizerFilter',
-			width: 200,
-		    emptyText: 'any'
-		});
-		
-		organizerFilter.on('select', function(combo, record, index){
-            this.store.load({});
-            //combo.triggers[0].show();
-        }, this);
-		
-		return [
-			new Ext.Toolbar.Separator(),
-			'->',
-			showClosedToggle,
-			//'Status: ',	' ', statusFilter,
-			//'Organizer: ', ' ',	organizerFilter,
-			new Ext.Toolbar.Separator(),
-			'->',
-			this.translation._('Search:'), ' ', ' ', TasksQuickSearchField
-        ];
-	},
 	
     updateMainToolbar : function() {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
@@ -164,7 +94,6 @@ Tine.Tasks.mainGrid = {
             appName: 'Tasks',
             border: false
         });
-        
         
         this.tree.on('click', function(node){
             // note: if node is clicked, it is not selected!

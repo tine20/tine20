@@ -31,7 +31,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         clicksToEdit: 'auto',
         enableColumnHide:false,
         enableColumnMove:false,
-        //region:'center',
         loadMask: true,
         quickaddMandatory: 'summary',
         autoExpandColumn: 'summary'
@@ -52,9 +51,12 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
         
+        this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
+
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
         
+        // legacy
         this.initStoreEvents();
         this.initGridEvents();
     },
@@ -112,10 +114,10 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }, this);
     },
     
-    editInPopup: function(_button, _event){
+    onEditInNewWindow: function(_button, _event){
         var taskId = -1;
         if (_button.actionType == 'edit') {
-            var selectedRows = this.gridPanel.grid.getSelectionModel().getSelections();
+            var selectedRows = this.grid.getSelectionModel().getSelections();
             var task = selectedRows[0];
         } else {
             var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
@@ -210,5 +212,74 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 autoExpand: true
             })
         }];
+    },
+    
+    /**
+     * return additional tb items
+     */
+    getToolbarItems: function(){
+        var TasksQuickSearchField = new Ext.ux.SearchField({
+            id: 'TasksQuickSearchField',
+            width: 200,
+            emptyText: this.translation._('Enter searchfilter')
+        });
+        TasksQuickSearchField.on('change', function(field){
+            if(this.filter.query != field.getValue()){
+                this.store.load({});
+            }
+        }, this);
+        
+        var showClosedToggle = new Ext.Button({
+            id: 'TasksShowClosed',
+            enableToggle: true,
+            handler: function(){
+                this.store.load({});
+            },
+            scope: this,
+            text: this.translation._('Show closed'),
+            iconCls: 'action_showArchived'
+        });
+        
+        var statusFilter = new Ext.ux.form.ClearableComboBox({
+            id: 'TasksStatusFilter',
+            //name: 'statusFilter',
+            hideLabel: true,
+            store: Tine.Tasks.status.getStore(),
+            displayField: 'status_name',
+            valueField: 'id',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            emptyText: 'any',
+            selectOnFocus: true,
+            editable: false,
+            width: 150
+        });
+        
+        statusFilter.on('select', function(combo, record, index){
+            this.store.load({});
+        },this);
+        
+        var organizerFilter = new Tine.widgets.AccountpickerField({
+            id: 'TasksorganizerFilter',
+            width: 200,
+            emptyText: 'any'
+        });
+        
+        organizerFilter.on('select', function(combo, record, index){
+            this.store.load({});
+            //combo.triggers[0].show();
+        }, this);
+        
+        return [
+            new Ext.Toolbar.Separator(),
+            '->',
+            showClosedToggle,
+            //'Status: ',   ' ', statusFilter,
+            //'Organizer: ', ' ',   organizerFilter,
+            new Ext.Toolbar.Separator(),
+            '->',
+            this.translation._('Search:'), ' ', ' ', TasksQuickSearchField
+        ];
     }
 });
