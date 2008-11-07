@@ -76,7 +76,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $task = Tasks_Controller_Task::getInstance()->create($task);
         
         // search tasks
-        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()));
+        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
         
         // check
         $this->assertEquals(1, $tasks['totalcount']);
@@ -85,7 +85,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         Tasks_Controller_Task::getInstance()->delete($task->getId());        
 
         // search and check again
-        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()));
+        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals(0, $tasks['totalcount']);
     }
     
@@ -112,12 +112,24 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         // define filter
         return array(
+            'containerType' => 'all',
+            'query' => 'minimal task by PHPUnit'     
+        );
+    }
+    
+    /**
+     * get default paging
+     *
+     * @return array
+     */
+    protected function _getPaging()
+    {
+        // define paging
+        return array(
             'start' => 0,
             'limit' => 50,
             'sort' => 'summary',
             'dir' => 'ASC',
-            'containerType' => 'all',
-            'query' => 'minimal task by PHPUnit'     
         );
     }
 }
