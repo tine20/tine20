@@ -289,7 +289,9 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function getJsTranslations()
     {
         $locale = Zend_Registry::get('locale');
-        echo Tinebase_Translation::getJsTranslations($locale);
+        $translations = Tinebase_Translation::getJsTranslations($locale);
+        header('Content-Type: application/javascript');
+        die($translations);
     }
     
     /**
