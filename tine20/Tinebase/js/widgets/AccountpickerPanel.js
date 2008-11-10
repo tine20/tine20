@@ -75,6 +75,7 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
     
     setValue: function (value) {
         if (value) {
+            this.triggers[0].show();
             if(value.accountId) {
                 // account object
                 this.accountId = value.accountId;
