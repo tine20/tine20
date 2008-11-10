@@ -595,7 +595,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     if ($this->__get($fieldName)->compare($_record->$fieldName) === 0) {
                         continue;
                     } else {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'datetime fields not equal: ');
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' datetime for field ' . $fieldName . ' is not equal: ');
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $this->__get($fieldName)->getIso());
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->$fieldName->getIso());
                     } 
