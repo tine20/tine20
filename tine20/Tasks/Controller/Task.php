@@ -85,6 +85,33 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
         if(empty($_task->class_id)) {
             $_task->class_id = NULL;
         }
+        $this->_handleCompletedDate($_task);
         return parent::create($_task);
     }
+    
+    public function update(Tinebase_Record_Interface $_task)
+    {
+        $this->_handleCompletedDate($_task);
+        return parent::update($_task);
+    }
+    
+    /**
+     * handles completed date
+     * 
+     * @param Tasks_Model_Task $_task
+     */
+    protected function _handleCompletedDate($_task)
+    {
+        $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
+        $status = $allStatus[$allStatus->getIndexById($_task->status_id)];
+        
+        if ($status) {
+            if($status->status_is_open) {
+                $_task->completed = NULL;
+            } elseif (! $_task->completed instanceof Zend_Date) {
+                $_task->completed = Zend_Date::now();
+            }
+        }
+    }
+    
 }
