@@ -42,6 +42,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     containerName: 'to do list',
     containesrName: 'to do lists',
     showContainerSelector: true,
+    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
      * reqests all data needed in this dialog
@@ -67,7 +68,93 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { return {
+    getFormItems: function() { 
+        return {
+            xtype: 'tabpanel',
+            border: false,
+            plain:true,
+            activeTab: 0,
+            border: false,
+            items:[{
+                title: this.translation._('Task'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                layout: 'border',
+                items: [{
+                    region: 'center',
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype:'textfield',
+                        anchor: '100%',
+                        labelSeparator: '',
+                        columnWidth: .333
+                    },
+                    items: [[{
+                        columnWidth: 1,
+                        fieldLabel: this.translation._('Summary'),
+                        name: 'summary',
+                        emptyText: this.translation._('Enter short name...'),
+                        listeners: {render: function(field){field.focus(false, 250);}},
+                        allowBlank: false
+                    }], [ new Ext.ux.form.ClearableDateField({
+                        fieldLabel: this.translation._('Due date'),
+                        name: 'due'
+                    }), new Tine.widgets.Priority.Combo({
+                        fieldLabel: this.translation._('Priority'),
+                        name: 'priority'
+                    }), new Tine.widgets.AccountpickerField({
+                        fieldLabel: this.translation._('Responsible'),
+                    })], [{
+                        columnWidth: 1,
+                        fieldLabel: this.translation._('Notes'),
+                        emptyText: this.translation._('Enter description...'),
+                        name: 'description',
+                        xtype: 'textarea',
+                        height: 200
+                    }], [new Ext.ux.PercentCombo({
+                        fieldLabel: this.translation._('Percentage'),
+                        editable: false,
+                        name: 'percent'
+                    }), new Tine.Tasks.status.ComboBox({
+                        fieldLabel: this.translation._('Status'),
+                        name: 'status_id'
+                    })]]
+                }, {
+                    // activities and tags
+                    layout: 'accordion',
+                    animate: true,
+                    region: 'east',
+                    width: 210,
+                    split: true,
+                    collapsible: true,
+                    collapseMode: 'mini',
+                    margins: '0 5 0 5',
+                    border: true,
+                    items: [
+                        new Tine.widgets.activities.ActivitiesPanel({
+                            app: 'Tasks',
+                            showAddNoteForm: false,
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
+                        new Tine.widgets.tags.TagPanel({
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        })
+                    ]
+                }]
+            }, new Tine.widgets.activities.ActivitiesTabPanel({
+                app: this.appName,
+                record_id: this.idProperty,
+                record_model: this.appName + '_Model_' + this.modelName
+            })]
+        };
+    
+    
+    /*
+    return {
         layout:'column',
         autoHeight: true,
         labelWidth: 90,
@@ -122,7 +209,9 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 })
             ]
         }]
-    };}
+    };
+    */
+    }
 });
 
 /**
@@ -131,8 +220,8 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.Tasks.EditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 700,
-        height: 300,
+        width: 800,
+        height: 600,
         name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Tasks.EditDialog',
         contentPanelConstructorConfig: config
