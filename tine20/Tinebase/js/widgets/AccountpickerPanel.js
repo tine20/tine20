@@ -29,6 +29,15 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
      */
 	selectOnFocus: true,
 	
+    /**
+     * @property {Ext.data.Record} account
+     */
+    account: null,
+    
+    
+    /**
+     * @private
+     */
 	allowBlank: true,
 	editable: false,
     readOnly:true,
@@ -45,7 +54,7 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 		if (this.selectOnFocus) {
 			this.on('focus', function(){
 				return this.onTrigger2Click();
-			});
+			}, this);
 		}
 		
 		this.onTrigger2Click = function(e) {
@@ -56,13 +65,29 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 		
 		this.on('select', function(){
 			this.triggers[0].show();
-		});
+		}, this);
 	},
 	
     // private
-    getValue: function(){
+    getValue: function() {
         return this.accountId;
     },
+    
+    setValue: function (value) {
+        if (value) {
+            if(value.accountId) {
+                // account object
+                this.accountId = value.accountId;
+                value = value.accountFullName;
+            } else if (typeof(value.get == 'function')) {
+                // account record
+                this.accountId = value.get('id');
+                value = value.get('name');
+            }
+        }
+        Tine.widgets.AccountpickerField.superclass.setValue.call(this, value);
+    },
+    
 	// private
 	onTrigger1Click: function(){
 		this.accountId = null;
@@ -112,7 +137,8 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
         
         var cancle_button = new Ext.Button({
             iconCls: 'action_cancel',
-            handler: function() {this.close();},
+            scope: this,
+            handler: function() {this.window.close();},
             text: _('Cancel')
         })
 			
@@ -133,7 +159,6 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 		this.accountPicker = new Tine.widgets.account.PickerPanel({
 			'buttons': this.buttons
 		});
-		
         
 		this.accountPicker.on('accountdblclick', function(account){
 			this.account = account;
@@ -152,8 +177,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	
 	// private
 	handler_okbutton: function(){
-		this.TriggerField.accountId = this.account.data.accountId;
-		this.TriggerField.setValue(this.account.data.data.accountDisplayName);
+		this.TriggerField.setValue(this.account);
 		this.TriggerField.fireEvent('select');
 		this.window.close();
 	}
