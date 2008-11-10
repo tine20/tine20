@@ -144,7 +144,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	// private
 	handler_okbutton: function(){
 		this.TriggerField.accountId = this.account.data.accountId;
-		this.TriggerField.setValue(this.account.data.accountDisplayName);
+		this.TriggerField.setValue(this.account.data.data.accountDisplayName);
 		this.TriggerField.fireEvent('select');
 		this.window.hide();
 	}
