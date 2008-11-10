@@ -57,7 +57,14 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
 		//this.on('select', function(){console.log(this.value)});
 	    Tine.Tasks.status.ComboBox.superclass.initComponent.call(this);
-	}
+	},
+    
+    setValue: function(value) {
+        if(! value) {
+            return;
+        }
+        Tine.Tasks.status.ComboBox.superclass.setValue.call(this, value);
+    }
         
 });
 Ext.reg('tasksstatuscombo', Tine.Tasks.status.ComboBox);
