@@ -99,7 +99,8 @@ Tine.Tinebase.common = {
     /**
      * Returns a username or groupname with according icon in front
      */
-    accountRenderer: function(_accountObject, _metadata, _record, _rowIndex, _colIndex, _store){
+    accountRenderer: function(_accountObject, _metadata, _record, _rowIndex, _colIndex, _store) {
+        if (! _accountObject) return '';
         var type, iconCls, displayName;
         
         if(_accountObject.accountDisplayName){
