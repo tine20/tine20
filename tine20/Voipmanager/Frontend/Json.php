@@ -7,7 +7,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        still too much code duplication (in get/search/save/delete functions), remove that (but how?)
+ * @todo        still too much code duplication (in get/search/save/delete functions), remove that
+ *              -> extend Tinebase_Application_Frontend_Json_Abstract and use __call interceptor
  */
 
 /**
@@ -17,7 +18,7 @@
  *
  * @package     Voipmanager Management
  */
-class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Abstract
 {
     /**
      * the internal name of the application
