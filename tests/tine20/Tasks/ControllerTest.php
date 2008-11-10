@@ -24,7 +24,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Tinebase_Relations
  */
-class Tasks_ControllerTest extends Tinebase_AbstractControllerTest
+class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_AbstractControllerTest
 {
     /**
      * application name of the controller to test
@@ -54,10 +54,11 @@ class Tasks_ControllerTest extends Tinebase_AbstractControllerTest
      */
     protected function setUp()
     {
-        $this->_miminamDatas = array('Task' => array(
+        $this->_controller = Tasks_Controller_Task::getInstance();
+        $this->_minimalDatas = array('Task' => array(
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
         ));
-        parent::setUp();
+        //parent::setUp();
     }
 
     /**
@@ -68,7 +69,49 @@ class Tasks_ControllerTest extends Tinebase_AbstractControllerTest
      */
     protected function tearDown()
     {
-        parent::tearDown();
+        //parent::tearDown();
+    }
+
+    /**
+     * tests if completed gets deleted when status is open
+     *
+     */
+    public function testCompletedNULL()
+    {
+        $task = new Tasks_Model_Task($this->_minimalDatas['Task']);
+        $task->status_id = $this->_getStatus()->getId();
+        $task->completed = Zend_Date::now();
+        
+        $pTask = $this->_controller->create($task);
+        $this->assertNull($pTask->completed);
+        
+        $this->_controller->delete($pTask->getId());
+    }
+    
+    public function testCompletedViaStatus()
+    {
+        $task = new Tasks_Model_Task($this->_minimalDatas['Task']);
+        $task->status_id = $this->_getStatus(false)->getId();
+        //$task->completed = Zend_Date::now();
+        
+        $pTask = $this->_controller->create($task);
+        $this->assertTrue($pTask->completed instanceof Zend_Date);
+        
+        $this->_controller->delete($pTask->getId());
+    }
+    
+    /**
+     * returns a status which is defined as open state
+     *
+     * @return Tasks_Model_Status
+     */
+    protected function _getStatus($_open=true)
+    {
+        foreach (Tasks_Controller_Status::getInstance()->getAllStatus() as $idx => $status) {
+            if (! ($status->status_is_open xor $_open)) {
+                return $status;
+            }
+        }
     }
 }
 
