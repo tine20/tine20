@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Container
  */
-class Tinebase_Json_Container
+class Tinebase_Frontend_Json_Container
 {
    /**
      * gets container / container folder

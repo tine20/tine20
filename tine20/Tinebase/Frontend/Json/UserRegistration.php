@@ -18,9 +18,8 @@
  * 
  * @package     Tinebase
  */
-class Tinebase_Json_UserRegistration
+class Tinebase_Frontend_Json_UserRegistration
 {
-			
 	/**
 	 * suggests a username
 	 *

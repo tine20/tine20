@@ -69,7 +69,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             
             // add json apis which require no auth
             $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
-            $server->setClass('Tinebase_Json_UserRegistration', 'Tinebase_UserRegistration');
+            $server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
             
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
@@ -82,7 +82,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 switch($applicationName) {
                     case 'Tinebase_Container':
                         // additional Tinebase json apis
-                        $server->setClass('Tinebase_Json_Container', 'Tinebase_Container');                
+                        $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');                
                         break;
                         
                     default;
