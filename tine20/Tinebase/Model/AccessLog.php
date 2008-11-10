@@ -59,7 +59,7 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
         'lo'            => array('presence' => 'required', 'allowEmpty' => true),
         'id'            => array('presence' => 'required'),
         'result'        => array('presence' => 'required', 'Digits'),
-        'account_id'    => array('presence' => 'required', 'allowEmpty' => true)
+        'account_id'    => array('presence' => 'required')
     );
     
 }
