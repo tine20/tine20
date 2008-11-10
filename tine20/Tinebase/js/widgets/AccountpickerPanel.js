@@ -103,11 +103,18 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
         this.title = this.title ? this.title : _('please select an account');
         
         var ok_button = new Ext.Button({
+            iconCls: 'action_saveAndClose',
             disabled: true,
             handler: this.handler_okbutton,
             text: _('Ok'),
             scope: this
         });
+        
+        var cancle_button = new Ext.Button({
+            iconCls: 'action_cancel',
+            handler: function() {this.close();},
+            text: _('Cancel')
+        })
 			
 		this.window = new Ext.Window({
             title: this.title,
@@ -119,19 +126,21 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
             layout: 'fit',
             plain: true,
             bodyStyle: 'padding:5px;',
-			buttons: [ok_button],
-            buttonAlign: 'center'
+            buttonAlign: 'right',
+			buttons: [cancle_button, ok_button],
         });
 		
 		this.accountPicker = new Tine.widgets.account.PickerPanel({
 			'buttons': this.buttons
 		});
 		
+        
 		this.accountPicker.on('accountdblclick', function(account){
 			this.account = account;
 			this.handler_okbutton();
 		}, this);
 		
+        
 		this.accountPicker.on('accountselectionchange', function(account){
 			this.account = account;
 			ok_button.setDisabled(account ? false : true);
@@ -146,6 +155,6 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 		this.TriggerField.accountId = this.account.data.accountId;
 		this.TriggerField.setValue(this.account.data.data.accountDisplayName);
 		this.TriggerField.fireEvent('select');
-		this.window.hide();
+		this.window.close();
 	}
 });
