@@ -121,7 +121,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 1,
                         fieldLabel: this.translation._('Summary'),
                         name: 'summary',
-                        emptyText: this.translation._('Enter short name...'),
                         listeners: {render: function(field){field.focus(false, 250);}},
                         allowBlank: false
                     }], [ new Ext.ux.form.ClearableDateField({
