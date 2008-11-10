@@ -63,6 +63,11 @@ Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
                 this.fireEvent('blur', this);
             }, this);
         }
+    },
+    
+    setValue: function(value) {
+        value = value || 1;
+        Tine.widgets.Priority.Combo.superclass.setValue.call(this, value);
     }
 });
 
