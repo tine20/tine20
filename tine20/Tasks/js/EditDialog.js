@@ -131,6 +131,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'priority'
                     }), new Tine.widgets.AccountpickerField({
                         fieldLabel: this.translation._('Responsible'),
+                        name: 'organizer'
                     })], [{
                         columnWidth: 1,
                         fieldLabel: this.translation._('Notes'),
