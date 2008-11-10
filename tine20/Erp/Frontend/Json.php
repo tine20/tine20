@@ -26,47 +26,4 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $this->_applicationName = 'Erp';
     }
-    
-    /**
-     * Return a single Contract
-     *
-     * @param string $uid
-     * @return array contract data
-     */
-    public function getContract($uid)
-    {
-        $contract = Erp_Controller_Contract::getInstance()->get($uid);
-        return $this->_recordToJson($contract);
-    }
-    
-    
-    /**
-     * creates/updates a Contract
-     *
-     * @param  $recordData
-     * @return array created/updated Contract
-     */
-    public function saveContract($recordData)
-    {
-        $controller = Erp_Controller_Contract::getInstance();
-        $record = $this->_save($recordData, $controller, 'Erp_Model_Contract');
-        
-        return $this->_recordToJson($record);
-    }
-    
-    
-    /**
-     * Deletes existing Contracts
-     *
-     * @param array $ids 
-     * @return string
-     */
-    public function deleteContracts($ids)
-    {
-        if (strlen($ids) > 40) {
-            $ids = Zend_Json::decode($ids);
-        }
-        Erp_Controller_Contract::getInstance()->delete($ids);
-        return 'success';
-    }
 }
