@@ -338,6 +338,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         Tine.widgets.activities.ActivitiesAddButton.superclass.initComponent.call(this);
     }
 });
+Ext.reg('widget-activitiesaddbutton', Tine.widgets.activities.ActivitiesAddButton);
 
 /************************* tab panel *********************************/
 
