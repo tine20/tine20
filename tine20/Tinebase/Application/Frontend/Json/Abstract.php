@@ -97,7 +97,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
      * @return  array record data
      */
-    public function _get($_uid, Tinebase_Application_Controller_Record_Interface $_controller)
+    protected function _get($_uid, Tinebase_Application_Controller_Record_Interface $_controller)
     {
         $record = $_controller->get($_uid);
         return $this->_recordToJson($record);
@@ -161,7 +161,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
      * @return string
      */
-    public function _delete($_ids, Tinebase_Application_Controller_Record_Interface $_controller)
+    protected function _delete($_ids, Tinebase_Application_Controller_Record_Interface $_controller)
     {
         if (strlen($_ids) > 40) {
             $_ids = Zend_Json::decode($_ids);
