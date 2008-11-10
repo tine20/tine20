@@ -53,7 +53,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                               '<p>' + _('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occoured.') + '</p>' + 
                           '</div>'
                 }, {
-                    id: 'tb-exceptiondialog-descrioption',
+                    id: 'tb-exceptiondialog-description',
                     height: 200,
                     xtype: 'textfield',
                     fieldLabel: _('Description'),
@@ -62,7 +62,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     readOnly: false
                 }, {
                     xtype: 'panel',
-                    width: this.width * .88,
+                    width: '95%',
                     layout: 'form',
                     collapsible: true,
                     collapsed: true,
