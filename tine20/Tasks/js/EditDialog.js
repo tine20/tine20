@@ -64,6 +64,32 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * executed when record is loaded
+     */
+    onRecordLoad: function() {
+        Tine.Tasks.EditDialog.superclass.onRecordLoad.call(this);
+        this.handleCompletedDate();
+    },
+    
+    /**
+     * handling for the completed field
+     */
+    handleCompletedDate: function() {
+        var status = Tine.Tasks.status.getStatus(this.getForm().findField('status_id').getValue());
+        var completed = this.getForm().findField('completed');
+        
+        if (status.get('status_is_open') == 1) {
+            completed.setValue(null);
+            completed.setDisabled(true);
+        } else {
+            if (! Ext.isDate(completed.getValue())){
+                completed.setValue(new Date());
+            }
+            completed.setDisabled(false);
+        }
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -119,7 +145,11 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'percent'
                     }), new Tine.Tasks.status.ComboBox({
                         fieldLabel: this.translation._('Status'),
-                        name: 'status_id'
+                        name: 'status_id',
+                        listeners: {scope: this, 'change': this.handleCompletedDate}
+                    }), new Ext.form.DateField({
+                        fieldLabel: this.translation._('Completed'),
+                        name: 'completed'
                     })]]
                 }, {
                     // activities and tags
@@ -151,66 +181,6 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_model: this.appName + '_Model_' + this.modelName
             })]
         };
-    
-    
-    /*
-    return {
-        layout:'column',
-        autoHeight: true,
-        labelWidth: 90,
-        border: false,
-
-        items: [{
-            columnWidth: 0.65,
-            border:false,
-            layout: 'form',
-            defaults: {
-                anchor: '95%',
-                hideLabel: true,
-                xtype: 'textfield'
-            },
-            items:[{
-                fieldLabel: this.translation._('Summary'),
-                name: 'summary',
-                emptyText: this.translation._('Enter short name...'),
-                listeners: {render: function(field){field.focus(false, 250);}},
-                allowBlank: false
-            }, {
-                fieldLabel: this.translation._('Notes'),
-                emptyText: this.translation._('Enter description...'),
-                name: 'description',
-                xtype: 'textarea',
-                height: 150
-            }]
-        }, {
-            columnWidth: 0.35,
-            border:false,
-            layout: 'form',
-            defaults: {
-                anchor: '95%'
-            },
-            items:[ 
-                new Ext.ux.PercentCombo({
-                    fieldLabel: this.translation._('Percentage'),
-                    editable: false,
-                    name: 'percent'
-                }), 
-                new Tine.Tasks.status.ComboBox({
-                    fieldLabel: this.translation._('Status'),
-                    name: 'status_id'
-                }), 
-                new Tine.widgets.Priority.Combo({
-                    fieldLabel: this.translation._('Priority'),
-                    name: 'priority'
-                }), 
-                new Ext.ux.form.ClearableDateField({
-                    fieldLabel: this.translation._('Due date'),
-                    name: 'due'
-                })
-            ]
-        }]
-    };
-    */
     }
 });
 
@@ -221,7 +191,7 @@ Tine.Tasks.EditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 600,
+        height: 470,
         name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Tasks.EditDialog',
         contentPanelConstructorConfig: config
