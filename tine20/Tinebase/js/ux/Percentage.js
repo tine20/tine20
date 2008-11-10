@@ -70,6 +70,11 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
                 this.fireEvent('blur', this);
             }, this);
         }
+    },
+    
+    setValue: function(value) {
+        value = value ? value : 0;
+        Ext.ux.PercentCombo.superclass.setValue.call(this, value);
     }
 });
 Ext.reg('extuxpercentcombo', Ext.ux.PercentCombo);
