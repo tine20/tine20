@@ -120,27 +120,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     {
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
-            $id = $_task->getId();
-            $oldTask = $this->get($_task->id);
-            
-            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-            
-            // concurrency management
-            $modLog->manageConcurrentUpdates($_task, $oldTask, 'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $id);
-            
-            // meta data sanetizing
-            $modLog->setRecordMetaData($_task, 'update', $oldTask);
-            
-            // write modification log
-            $currentMods = $modLog->writeModLog($_task, $oldTask, 'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $id);
-            
-            // are there changes?
-            if (empty($currentMods)) {
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                return $_task;
-            }
-            
+
             // database update
             $taskParts = $this->seperateTaskData($_task);
             $tasksTable = $this->getTableInstance('tasks');
