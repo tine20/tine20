@@ -22,13 +22,6 @@
 abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Json_Interface
 {
     /**
-     * application name
-     *
-     * @var string
-     */
-    protected $_applicationName = "";
-    
-    /**
      * Returns registry data of the application.
      *
      * Each application has its own registry to supply static data to the client.
@@ -55,12 +48,40 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     {
         //print_r($_arguments);
         
+        /************ SEARCH *************************************/
+        
         if (preg_match("/search([A-Za-z]+)/", $_fname, $matches)) {
             $modelName = substr($matches[1], 0, strlen($matches[1]) - 1);   
             $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
             $filterModelName = $this->_applicationName . "_Model_" . $modelName . "Filter";
             
             $result = $this->_search($_arguments[0], $_arguments[1], $controller, $filterModelName);    
+
+        /************ GET ****************************************/
+            
+        } else if (preg_match("/get([A-Za-z]+)/", $_fname, $matches)) {
+            $modelName = $matches[1];   
+            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
+
+            $result = $this->_get($_arguments[0], $controller);    
+            
+        /************ SAVE ***************************************/
+            
+        } else if (preg_match("/save([A-Za-z]+)/", $_fname, $matches)) {
+            $modelName = $matches[1];   
+            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
+
+            $result = $this->_save($_arguments[0], $controller, $modelName);    
+            
+        /************ DELETE *************************************/
+            
+        } else if (preg_match("/delete([A-Za-z]+)/", $_fname, $matches)) {
+            $modelName = substr($matches[1], 0, strlen($matches[1]) - 1);
+            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
+
+            $result = $this->_delete($_arguments[0], $controller);    
+        
+        /************ FUNCTION NOT FOUND *************************/
             
         } else {
             throw new Tinebase_Exception("Function $_fname not found.");
@@ -69,6 +90,19 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         return $result;
     }
         
+    /**
+     * Return a single record
+     *
+     * @param string $_uid
+     * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @return array record data
+     */
+    public function _get($_uid, Tinebase_Application_Controller_Record_Interface $_controller)
+    {
+        $record = $_controller->get($_uid);
+        return $this->_recordToJson($record);
+    }
+    
     /**
      * Search for records matching given arguments
      *
@@ -101,12 +135,14 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * creates/updates a record
      *
      * @param  $_recordData
+     * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
      * @param  $_modelName
      * @return array created/updated record
      */
     protected function _save($_recordData, Tinebase_Application_Controller_Record_Interface $_controller, $_modelName)
     {
-        $record = new $_modelName(array(), TRUE);
+        $modelClass = $this->_applicationName . "_Model_" . $_modelName;
+        $record = new $modelClass(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
         //Zend_Registry::get('logger')->debug(print_r($record->toArray(),true));
         
@@ -117,6 +153,22 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         return $savedRecord;
     }
 
+    /**
+     * Deletes existing Contracts
+     *
+     * @param array $_ids 
+     * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @return string
+     */
+    public function _delete($_ids, Tinebase_Application_Controller_Record_Interface $_controller)
+    {
+        if (strlen($_ids) > 40) {
+            $_ids = Zend_Json::decode($_ids);
+        }
+        $_controller->delete($_ids);
+        return 'success';
+    }
+    
     /**
      * returns task prepared for json transport
      *
