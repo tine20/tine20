@@ -38,7 +38,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     }
 
     /**
-     * call save/get/search functions in corresponding controller, get Model name from fname
+     * call save/get/search/delete functions in corresponding controller, get Model name from fname
      *
      * @param string $_fname
      * @param array $_arguments
@@ -46,7 +46,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      */
     public function __call($_fname, $_arguments)
     {
-        //print_r($_arguments);
+        // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_arguments, true));
         
         /************ SEARCH *************************************/
         
@@ -144,6 +144,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         $modelClass = $this->_applicationName . "_Model_" . $_modelName;
         $record = new $modelClass(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
+        
         //Zend_Registry::get('logger')->debug(print_r($record->toArray(),true));
         
         $savedRecord = (empty($contact->id)) ? 
