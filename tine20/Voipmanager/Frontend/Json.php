@@ -24,7 +24,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * @var string
      */
-    protected $_appname = 'Voipmanager';
+    protected $_applicationName = 'Voipmanager';
 
 
 

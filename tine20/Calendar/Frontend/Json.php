@@ -15,7 +15,7 @@
  */
 class Calendar_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
-    protected $_appname = 'Calendar';
+    protected $_applicationName = 'Calendar';
     
     /**
      * @var Calendar_Backend_Sql

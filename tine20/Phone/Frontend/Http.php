@@ -18,7 +18,7 @@
  */
 class Phone_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
-    protected $_appname = 'Phone';
+    protected $_applicationName = 'Phone';
     
     /**
      * Returns all JS files which must be included for this app

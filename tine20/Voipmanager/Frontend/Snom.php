@@ -24,7 +24,7 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      *
      * @var string
      */
-    protected $_appname = 'Voipmanager';
+    protected $_applicationName = 'Voipmanager';
 
     /**
      * set redirect

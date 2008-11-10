@@ -23,7 +23,7 @@ abstract class Tinebase_Application_Frontend_Abstract implements Tinebase_Applic
      *
      * @var string
      */
-    protected $_appname;
+    protected $_applicationName;
     
     /**
      * Returns application name
@@ -32,6 +32,6 @@ abstract class Tinebase_Application_Frontend_Abstract implements Tinebase_Applic
      */
     public function getApplicationName()
     {
-        return $this->_appname;
+        return $this->_applicationName;
     }
 }

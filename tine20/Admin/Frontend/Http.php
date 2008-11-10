@@ -22,7 +22,7 @@ class Admin_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      *
      * @var string
      */
-    protected $_appname = 'Admin';
+    protected $_applicationName = 'Admin';
     
     /**
      * overwrite getJsFilesToInclude from abstract class to add groups js file

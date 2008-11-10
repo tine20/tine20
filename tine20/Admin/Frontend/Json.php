@@ -23,7 +23,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      *
      * @var string
      */
-    protected $_appname = 'Admin';
+    protected $_applicationName = 'Admin';
     
     /******************************* Access Log *******************************/
     

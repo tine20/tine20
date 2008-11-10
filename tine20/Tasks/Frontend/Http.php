@@ -18,7 +18,7 @@
  */
 class Tasks_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
-    protected $_appname = 'Tasks';
+    protected $_applicationName = 'Tasks';
     
     /**
      * Returns all JS files which must be included for this app

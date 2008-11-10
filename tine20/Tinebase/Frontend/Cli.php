@@ -22,7 +22,7 @@ class Tinebase_Frontend_Cli
      *
      * @var string
      */
-    protected $_appname = 'Tinebase';
+    protected $_applicationName = 'Tinebase';
 
     /**
      * authentication

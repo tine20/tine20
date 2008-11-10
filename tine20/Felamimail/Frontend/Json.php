@@ -13,7 +13,7 @@
  */
 class Felamimail_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
-    protected $_appname = 'Felamimail';
+    protected $_applicationName = 'Felamimail';
     
     public function getEmailOverview($accountId, $folderName, $filter, $sort, $dir, $limit, $start)
     {

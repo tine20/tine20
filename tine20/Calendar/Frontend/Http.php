@@ -21,7 +21,7 @@
  */
 class Calendar_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
-    protected $_appname = 'Calendar';
+    protected $_applicationName = 'Calendar';
     
     public function getJsFilesToInclude()
     {

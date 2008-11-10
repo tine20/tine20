@@ -23,7 +23,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      *
      * @var string
      */
-    protected $_appname = 'Phone';
+    protected $_applicationName = 'Phone';
 
     /**
      * public function to access the directory

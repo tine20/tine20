@@ -142,7 +142,7 @@ class Setup_Import_Egw14
         $aclTable = new Tinebase_Db_Table(array('name' => 'egw_acl'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('acl_appname = ?', 'phpgw_group')
+            Zend_Registry::get('dbAdapter')->quoteInto('acl_applicationName = ?', 'phpgw_group')
         );
         
         $groupMembers = $aclTable->fetchAll($where);

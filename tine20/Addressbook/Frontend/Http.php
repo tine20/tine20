@@ -18,7 +18,7 @@
  */
 class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
-    protected $_appname = 'Addressbook';
+    protected $_applicationName = 'Addressbook';
 
     /**
      * export contact

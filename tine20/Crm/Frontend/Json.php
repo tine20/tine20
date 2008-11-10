@@ -22,7 +22,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      *
      * @var string
      */
-    protected $_appname = 'Crm';
+    protected $_applicationName = 'Crm';
     
     /**
      * user timezone

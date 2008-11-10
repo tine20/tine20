@@ -22,7 +22,7 @@ class Addressbook_Frontend_Cli
      *
      * @var string
      */
-    protected $_appname = 'Addressbook';
+    protected $_applicationName = 'Addressbook';
     
     /**
      * import config filename

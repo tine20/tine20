@@ -18,5 +18,5 @@
  */
 class Erp_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
-    protected $_appname = 'Erp';
+    protected $_applicationName = 'Erp';
 }

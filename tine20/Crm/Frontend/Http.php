@@ -18,7 +18,7 @@
  */
 class Crm_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
-    protected $_appname = 'Crm';
+    protected $_applicationName = 'Crm';
     
     /**
      * Returns all JS files which must be included for this app

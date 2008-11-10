@@ -22,7 +22,7 @@
  */
 class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
-    protected $_appname = 'Addressbook';
+    protected $_applicationName = 'Addressbook';
     
     /****************************************** get contacts *************************************/
 

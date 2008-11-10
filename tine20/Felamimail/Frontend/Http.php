@@ -13,5 +13,5 @@
  */
 class Felamimail_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
-    protected $_appname = 'Felamimail';
+    protected $_applicationName = 'Felamimail';
 }

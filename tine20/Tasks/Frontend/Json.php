@@ -16,7 +16,7 @@
  */
 class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
-    protected $_appname = 'Tasks';
+    protected $_applicationName = 'Tasks';
     
     /**
      * user timezone
