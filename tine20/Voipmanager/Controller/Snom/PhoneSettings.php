@@ -36,6 +36,14 @@ class Voipmanager_Controller_Snom_PhoneSettings extends Voipmanager_Controller_A
     }
         
     /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+            
+    /**
      * holdes the instance of the singleton
      *
      * @var Voipmanager_Controller_Snom_PhoneSettings

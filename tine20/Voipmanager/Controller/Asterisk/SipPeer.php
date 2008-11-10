@@ -37,6 +37,14 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     }
         
     /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+            
+    /**
      * holdes the instance of the singleton
      *
      * @var Voipmanager_Controller_Asterisk_SipPeer

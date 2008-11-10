@@ -34,7 +34,15 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
     private function __construct() {
         $this->_backend      = new Voipmanager_Backend_Snom_Phone($this->_getDatabaseBackend());
     }
-        
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+            
     /**
      * holdes the instance of the singleton
      *

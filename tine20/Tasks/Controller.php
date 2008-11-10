@@ -22,6 +22,23 @@
  */
 class Tasks_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
 {
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() {
+        $this->_applicationName = 'Tasks';
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
     
     /**
      * holds self

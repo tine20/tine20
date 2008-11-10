@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add more functions (get/search/delete/getMultiple/...) 
- *              or create more abstract controllers that extend this one
  */
 
 /**
@@ -33,33 +31,8 @@ abstract class Tinebase_Application_Controller_Abstract
      * 
      * @var Tinebase_Model_User
      */
-    protected $_currentAccount;
+    protected $_currentAccount = NULL;
     
-    /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() 
-    {
-        $this->_currentAccount = Zend_Registry::get('currentAccount');        
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {        
-    }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return mixed
-     */
-    abstract public static function getInstance();
-
     /**
      * generic check admin rights function
      * rules: 

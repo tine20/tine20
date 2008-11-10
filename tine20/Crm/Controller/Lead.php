@@ -40,6 +40,14 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
     }
     
     /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+    
+    /**
      * holdes the instance of the singleton
      *
      * @var Crm_Controller_Lead

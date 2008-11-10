@@ -19,28 +19,30 @@
 class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
 {
     /**
-     * application name (is needed in checkRight())
-     *
-     * @var string
-     */
-    protected $_applicationName = 'Admin';
-    
-    /**
      * holdes the instance of the singleton
      *
      * @var Admin_Controller_Group
      */
     private static $_instance = NULL;
 
-
     /**
-     * Call parent constructor
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
      */
     private function __construct() 
     {
-	    $this->_currentAccount = Zend_Registry::get('currentAccount');        
+        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_applicationName = 'Admin';
     }
 
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
 
     /**
      * the singleton pattern

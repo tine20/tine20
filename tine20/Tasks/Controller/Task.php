@@ -33,7 +33,15 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
         $this->_backend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
         $this->_currentAccount = Tinebase_Core::getUser();
     }
-    
+
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+
     /**
      * holds self
      * @var Tasks_Controller_Task

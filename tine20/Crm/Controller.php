@@ -22,12 +22,24 @@
 class Crm_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
 {
     /**
-     * application name (is needed in checkRight())
+     * the constructor
      *
-     * @var string
+     * don't use the constructor. use the singleton 
      */
-    protected $_applicationName = 'Crm';
-    
+    private function __construct() 
+    {
+        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_applicationName = 'Crm';
+    }
+
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+
     /**
      * holdes the instance of the singleton
      *

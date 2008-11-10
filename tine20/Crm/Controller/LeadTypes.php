@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add abstract crm controller and extend it here
+ * @todo        extend Tinebase_Application_Controller_Record_Abstract
  */
 
 /**
@@ -21,12 +21,24 @@
 class Crm_Controller_LeadTypes extends Tinebase_Application_Controller_Abstract
 {
     /**
-     * application name (is needed in checkRight())
+     * the constructor
      *
-     * @var string
+     * don't use the constructor. use the singleton 
      */
-    protected $_applicationName = 'Crm';
-    
+    private function __construct() 
+    {
+        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_applicationName = 'Crm';
+    }
+
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+
     /**
      * holdes the instance of the singleton
      *
@@ -47,16 +59,6 @@ class Crm_Controller_LeadTypes extends Tinebase_Application_Controller_Abstract
         
         return self::$_instance;
     }    
-        
-    /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() 
-    {
-        $this->_currentAccount = Zend_Registry::get('currentAccount');        
-    }
     
     /**
      * get one leadtype identified by id

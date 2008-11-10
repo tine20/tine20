@@ -28,14 +28,20 @@ class Addressbook_Controller extends Tinebase_Application_Controller_Abstract im
      */
     private static $_instance = NULL;
 
-
     /**
-     * call parent constroctor
+     * constructor (get current user)
      */
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
     }
     
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
     
     /**
      * the singleton pattern

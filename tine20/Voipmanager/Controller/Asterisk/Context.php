@@ -35,7 +35,14 @@ class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abs
         $this->_backend      = new Voipmanager_Backend_Asterisk_Context($this->_getDatabaseBackend());          
     }
     
-
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+            
     /**
      * holdes the instance of the singleton
      *

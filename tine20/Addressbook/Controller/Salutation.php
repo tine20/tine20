@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add possiblity to change salutations
+ * @todo        add possiblity to change salutations (extend Tinebase_Application_Controller_Record_Abstract)
  */
 
 /**
@@ -56,6 +56,14 @@ class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_
     private function __construct() {
         $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SALUTATION);
         $this->_currentAccount = Zend_Registry::get('currentAccount');
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
     }
         
     /**

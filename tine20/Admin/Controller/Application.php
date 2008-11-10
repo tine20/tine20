@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        extend Tinebase_Application_Controller_Record_Abstract
  */
 
 /**
@@ -17,15 +18,7 @@
  * @package     Admin
  */
 class Admin_Controller_Application extends Tinebase_Application_Controller_Abstract
-{
-   
-    /**
-     * application name (is needed in checkRight())
-     *
-     * @var string
-     */
-    protected $_applicationName = 'Admin';
-    
+{   
     /**
      * holdes the instance of the singleton
      *
@@ -33,16 +26,25 @@ class Admin_Controller_Application extends Tinebase_Application_Controller_Abstr
      */
     private static $_instance = NULL;
 
-
     /**
-     * Call parent constructor
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
      */
     private function __construct() 
     {
-	    $this->_currentAccount = Zend_Registry::get('currentAccount');        
+        $this->_currentAccount = Tinebase_Core::getUser();
+        $this->_applicationName = 'Admin';
     }
 
-
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+    
     /**
      * the singleton pattern
      *

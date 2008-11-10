@@ -32,6 +32,14 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
     }
     
     /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+    
+    /**
      * holdes the instance of the singleton
      *
      * @var Addressbook_Controller_Contact

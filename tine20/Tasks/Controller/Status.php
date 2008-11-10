@@ -22,6 +22,29 @@
  */
 class Tasks_Controller_Status extends Tinebase_Application_Controller_Abstract
 {
+    /**
+     * the constructor
+     * 
+     * init status array
+     * 
+     * @todo move db query to backend
+     */
+    protected function __construct()
+    {
+        $statusTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
+        $this->_status = new Tinebase_Record_RecordSet('Tasks_Model_Status', $statusTable->fetchAll()->toArray(),  true);
+        
+        $this->_currentAccount = Tinebase_Core::getUser();
+        $this->_applicationName = 'Tasks';
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
     
     /**
      * holds self
@@ -47,21 +70,6 @@ class Tasks_Controller_Status extends Tinebase_Application_Controller_Abstract
             self::$_instance = new Tasks_Controller_Status();
         }
         return self::$_instance;
-    }
-    
-    /**
-     * the constructor
-     * 
-     * init status array
-     * 
-     * @todo move db query to backend
-     */
-    protected function __construct()
-    {
-        $statusTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
-        $this->_status = new Tinebase_Record_RecordSet('Tasks_Model_Status', $statusTable->fetchAll()->toArray(),  true);
-        
-        $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
     
     /**
