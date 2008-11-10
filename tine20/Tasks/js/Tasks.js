@@ -135,7 +135,7 @@ Tine.Tasks.TaskArray = [
     // ical common fields with multiple appearance
     { name: 'attach' },
     { name: 'attendee' },
-    { name: 'categories' },
+    { name: 'tags' },
     { name: 'comment' },
     { name: 'contact' },
     { name: 'related' },
@@ -149,7 +149,9 @@ Tine.Tasks.TaskArray = [
     { name: 'exdate' },
     { name: 'exrule' },
     { name: 'rdate' },
-    { name: 'rrule' }
+    { name: 'rrule' },
+    // tine 2.0 notes field
+    { name: 'notes'}
 ];
 Tine.Tasks.Task = Ext.data.Record.create(
     Tine.Tasks.TaskArray

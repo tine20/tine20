@@ -176,7 +176,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                record_id: this.idProperty,
+                record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.modelName
             })]
         };
