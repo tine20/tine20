@@ -85,6 +85,8 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             if ($containerId <= 0) {
                 $task->container_id = Tasks_Controller::getInstance()->getDefaultContainer($relatedApp)->getId();
             }
+            
+            $task->organizer = Tinebase_Core::getUser()->getId();
         }
         
         return $this->_taskToJson($task);
@@ -123,6 +125,8 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         $taskArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray();
         $taskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
+        
+        $taskArray['organizer'] = $taskArray['organizer'] ? Tinebase_User::getInstance()->getUserById($taskArray['organizer'])->toArray() : $taskArray['organizer'];
         return $taskArray;
     }
     
