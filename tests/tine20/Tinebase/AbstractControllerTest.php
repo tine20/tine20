@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo adopt this class to new controller logig
  */
 
 
@@ -35,7 +37,7 @@ class Tinebase_AbstractControllerTest extends PHPUnit_Framework_TestCase
      *
      * @var array modelName => array data
      */
-    protected $_miminamDatas = array();
+    protected $_minimalDatas = array();
     
     /**
      * @var <Application>_Controller
@@ -77,7 +79,7 @@ class Tinebase_AbstractControllerTest extends PHPUnit_Framework_TestCase
     {
         foreach($this->_modelNames as $fullModelName => $modelName) {
             $createFunctionName = 'Create' . $modelName;
-            $record = new $fullModelName($this->_miminamDatas[$modelName]);
+            $record = new $fullModelName($this->$_minimalDatas[$modelName]);
             
             //$currentAccount = $this->_currentAccount = Zend_Registry::get('currentAccount');
             //$personalContainer = $this->_controller->createPersonalFolder($currentAccount);
