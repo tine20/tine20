@@ -29,12 +29,9 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     defaultSortInfo: {field: 'due', dir: 'ASC'},
     gridConfig: {
         clicksToEdit: 'auto',
-        enableColumnHide:false,
-        enableColumnMove:false,
         loadMask: true,
         quickaddMandatory: 'summary',
         autoExpandColumn: 'summary'
-        
     },
     
     // legacy
@@ -211,7 +208,29 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             quickaddField: new Tine.Tasks.status.ComboBox({
                 autoExpand: true
             })
-        }];
+        }, {
+            id: 'creation_time',
+            header: this.translation._("Creation Time"),
+            hidden: true,
+            width: 90,
+            sortable: true,
+            dataIndex: 'creation_time',
+            renderer: Tine.Tinebase.common.dateTimeRenderer
+        }/* we don't resolve accounts yet (same with creator), {
+            id: 'organizer',
+            header: this.translation._('Responsible'),
+            width: 150,
+            sortable: true,
+            dataIndex: 'organizer',
+            renderer: Tine.Tinebase.common.accountRenderer,
+            editor: new Tine.widgets.AccountpickerField({
+                autoExpand: true,
+                blurOnSelect: true
+            }),
+            quickaddField: new Tine.widgets.AccountpickerField({
+                autoExpand: true
+            })
+        }*/];
     },
     
     /**
