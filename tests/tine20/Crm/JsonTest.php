@@ -342,13 +342,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to update a lead and remove linked contact 
      *
-     * @todo some strange error occurs here: sometimes the task relations are equal, sometimes not -> fix that / watch it
-     * -> there seems to be a problem with the datetime fields (sometimes the timezone seems to be wrong / unset)
-     * -> use incremental integers in modlog table
      */
     public function testUpdateLead()
     {
-        /*
         $result = $this->_backend->searchLeads(Zend_Json::encode($this->objects['filter']));        
         $initialLead = $result['results'][0];
         
@@ -365,8 +361,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         $encodedData = Zend_Json::encode($updatedLead->toArray());
         
-        sleep(2);
-        
         $result = $this->_backend->saveLead($encodedData);
         
         $this->assertEquals($this->objects['updatedLead']->description, $result['description']);
@@ -374,10 +368,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         // check if contact is no longer linked
         $lead = Crm_Controller_Lead::getInstance()->get($initialLead['id']);
         $this->assertEquals(1, count($lead->relations));
-        
-        // delete contact
-        Addressbook_Controller_Contact::getInstance()->delete($this->objects['contact']->getId());
-        */
     }
 
     /**
