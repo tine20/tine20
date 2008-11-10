@@ -22,6 +22,13 @@
 abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Json_Interface
 {
     /**
+     * application name
+     *
+     * @var string
+     */
+    protected $_applicationName = "";
+    
+    /**
      * Returns registry data of the application.
      *
      * Each application has its own registry to supply static data to the client.
@@ -43,21 +50,23 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @param string $_fname
      * @param array $_arguments
      * @return array array index => return value
-     * 
-     * @todo implement
      */
     public function __call($_fname, $_arguments)
     {
-        /*
-        $returnValues = array();
-        foreach ($this->_listOfRecords as $index => $record) {
-            $returnValues[$index] = call_user_func_array(array($record, $_fname), $_arguments);
+        //print_r($_arguments);
+        
+        if (preg_match("/search([A-Za-z]+)/", $_fname, $matches)) {
+            $modelName = substr($matches[1], 0, strlen($matches[1]) - 1);   
+            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
+            $filterModelName = $this->_applicationName . "_Model_" . $modelName . "Filter";
+            
+            $result = $this->_search($_arguments[0], $_arguments[1], $controller, $filterModelName);    
+            
+        } else {
+            throw new Tinebase_Exception("Function $_fname not found.");
         }
         
-        return $returnValues;
-        */
-        
-        throw new Tinebase_Exception('function not found.');
+        return $result;
     }
         
     /**

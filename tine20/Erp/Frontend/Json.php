@@ -19,6 +19,15 @@
 class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {    
     /**
+     * the constructor
+     *
+     */
+    public function __construct()
+    {
+        $this->_applicationName = 'Erp';
+    }
+    
+    /**
      * Return a single Contract
      *
      * @param string $uid
@@ -30,18 +39,6 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         return $this->_recordToJson($contract);
     }
     
-    /**
-     * Search for records matching given arguments
-     *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
-     * @return array
-     */
-    public function searchContracts($filter, $paging)
-    {
-        $controller = Erp_Controller_Contract::getInstance();
-        return $this->_search($filter, $paging, $controller, 'Erp_Model_ContractFilter');
-    }
     
     /**
      * creates/updates a Contract
@@ -56,6 +53,7 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         return $this->_recordToJson($record);
     }
+    
     
     /**
      * Deletes existing Contracts
