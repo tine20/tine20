@@ -93,9 +93,9 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     /**
      * Return a single record
      *
-     * @param string $_uid
-     * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
-     * @return array record data
+     * @param   string $_uid
+     * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @return  array record data
      */
     public function _get($_uid, Tinebase_Application_Controller_Record_Interface $_controller)
     {
@@ -155,7 +155,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     }
 
     /**
-     * Deletes existing Contracts
+     * deletes existing records
      *
      * @param array $_ids 
      * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
