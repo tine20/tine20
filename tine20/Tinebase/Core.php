@@ -137,7 +137,7 @@ class Tinebase_Core
                 $controllerName = $controllerNameModel;
             }
         } else {
-            if (!class_exists($controllerName)) {            
+            if (!@class_exists($controllerName)) {            
                 throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
             }             
         }
