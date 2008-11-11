@@ -117,7 +117,7 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
                     
                     switch ($relation['type']) {
                         case self::RELATION_TYPE_ACCOUNT:                        
-                            $relationData['related_model'] = 'Tinebase_Model_FullUser';
+                            $relationData['related_model'] = 'Tinebase_Model_User';
                             $relationData['related_backend'] = Tinebase_User::getConfiguredBackend();
                             break;                    
                         case self::RELATION_TYPE_CUSTOMER:
