@@ -208,7 +208,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             sortInfo: this.defaultSortInfo,
             listeners: {
                 scope: this,
-                'update': this.onStoreUpdate
+                'update': this.onStoreUpdate,
+                'beforeload': this.onStoreBeforeload
             }
         });
        
@@ -303,6 +304,16 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 //nothing to do, as we need to reload the store anyway.
                 break;
         }
+    },
+    
+    /**
+     * called before store queries for data
+     */
+    onStoreBeforeload: function(store, options) {
+        options.params = options.params || {};
+        
+        // fix nasty paging tb
+        Ext.applyIf(options.params, this.defaultPaging);
     },
     
     /**
