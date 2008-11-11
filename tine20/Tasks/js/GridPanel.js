@@ -42,10 +42,26 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.gridConfig.columns = this.getColumns();
         this.plugins.push(this.action_showClosedToggle);
         
+        this.initFilterToolbar();
+        
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
         
         // legacy
         this.initGridEvents();
+    },
+    
+    /**
+     * initialises filter toolbar
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            filterModels: [
+                {label: this.translation._('Task'),    field: 'query',    operators: ['contains']},
+                {label: this.translation._('Summary'), field: 'summary' }
+             ],
+             defaultFilter: 'query',
+             filters: []
+        });
     },
     
     // legacy
@@ -189,17 +205,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * return additional tb items
      */
     getToolbarItems: function(){
-        var TasksQuickSearchField = new Ext.ux.SearchField({
-            id: 'TasksQuickSearchField',
-            width: 200,
-            emptyText: this.translation._('Enter searchfilter')
-        });
-        TasksQuickSearchField.on('change', function(field){
-            if(this.filter.query != field.getValue()){
-                this.store.load({});
-            }
-        }, this);
-        
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.translation._('Show closed'),
             iconCls: 'action_showArchived',
@@ -208,11 +213,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         return [
             new Ext.Toolbar.Separator(),
-            '->',
-            this.action_showClosedToggle,
-            new Ext.Toolbar.Separator(),
-            '->',
-            this.translation._('Search:'), ' ', ' ', TasksQuickSearchField
+            this.action_showClosedToggle
         ];
     }
 });
