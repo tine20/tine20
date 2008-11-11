@@ -81,7 +81,10 @@ Ext.extend(Ext.ux.grid.FilterPlugin, Ext.util.Observable, {
         
         var value = this.getValue();
         if (value && Ext.isArray(filter)) {
-            filter.push(value);
+            value = Ext.isArray(value) ? value : [value];
+            for (var i=0; i<value.length; i++) {
+                filter.push(value[i]);
+            }
         }
     }
 });
