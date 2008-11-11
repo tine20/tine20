@@ -234,8 +234,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 'beforeload': this.onStoreBeforeload
             }
         });
-       
-        // listeners -> plugins
     },
     
     /**
@@ -375,7 +373,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         }
         */
         
-        // only select one item as expected!
+        // fix selection of one record if shift/ctrl key is not pressed any longer
+        if(e.button === 0 && !e.shiftKey && !e.ctrlKey) {
+            var sm = grid.getSelectionModel();
+            sm.clearSelections();
+            sm.selectRow(row, false);
+            grid.view.focusRow(row);
+        }
     },
     
     /**
