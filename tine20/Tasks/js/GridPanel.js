@@ -40,9 +40,9 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
-        this.plugins.push(this.action_showClosedToggle);
-        
         this.initFilterToolbar();
+        
+        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);
         
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
         
