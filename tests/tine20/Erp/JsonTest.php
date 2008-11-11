@@ -112,17 +112,24 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $contractData = $this->_backend->saveContract(Zend_Json::encode($contract->toArray()));
         $contractData = $this->_backend->getContract($contractData['id']);
         
-        //-- add account and contact + update contract
+        // add account and contact + update contract
         $contractData['relations'] = $this->_getRelations();
+
+        //print_r($contractData);
+        
         $contractUpdated = $this->_backend->saveContract(Zend_Json::encode($contractData));
+        
+        //print_r($contractUpdated);
         
         //-- check
         $this->assertEquals($contractData['id'], $contractUpdated['id']);
-        //$this->assertGreaterThan(0, count($contractUpdated['relations']));
+        $this->assertGreaterThan(0, count($contractUpdated['relations']));
+        $this->assertEquals('Addressbook_Model_Contact', $contractUpdated['relations'][0]['related_model']);
+        $this->assertEquals(Erp_Model_Contract::RELATION_TYPE_CUSTOMER, $contractUpdated['relations'][0]['type']);
         
         // cleanup
-        //-- delete contact as well
         $this->_backend->deleteContracts($contractData['id']);
+        Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][0]['related_id']);
         $this->_decreaseNumber();
     }
     
@@ -193,10 +200,34 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
      * get relations
      *
      * @return array
+     * @todo    add account
      */
     protected function _getRelations()
     {
-        return array(     
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'), 
+            'Addressbook', 
+            Zend_Registry::get('currentAccount'), 
+            Tinebase_Model_Container::GRANT_EDIT
+        );
+        
+        return array(
+            /*   
+            array(
+                'type'              => Erp_Model_Contract::RELATION_TYPE_ACCOUNT,
+                'related_record'    => array(
+                    
+                )
+            ),
+            */
+            array(
+                'type'              => Erp_Model_Contract::RELATION_TYPE_CUSTOMER,
+                'related_record'    => array(
+                    //'n_family'      => 'unit customer',
+                    'org_name'         => 'phpunit erp test company',
+                    'container_id'  => $personalContainer[0]->getId(),
+                )
+            )  
         );        
     }
     

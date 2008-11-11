@@ -105,7 +105,7 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
             foreach ((array)$data['relations'] as $key => $relation) {
                 
                 if (!isset($relation['id'])) {
-                    $data = array(
+                    $relationData = array(
                         'own_model'              => 'Erp_Model_Contract',
                         'own_backend'            => Erp_Backend_Contract::TYPE,
                         'own_id'                 => (isset($data['id'])) ? $data['id'] : 0,
@@ -117,12 +117,12 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
                     
                     switch ($relation['type']) {
                         case self::RELATION_TYPE_ACCOUNT:                        
-                            $data['related_model'] = 'Tinebase_Model_FullUser';
-                            $data['related_backend'] = Tinebase_User::getConfiguredBackend();
+                            $relationData['related_model'] = 'Tinebase_Model_FullUser';
+                            $relationData['related_backend'] = Tinebase_User::getConfiguredBackend();
                             break;                    
                         case self::RELATION_TYPE_CUSTOMER:
-                            $data['related_model'] = 'Addressbook_Model_Contact';
-                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                            $relationData['related_model'] = 'Addressbook_Model_Contact';
+                            $relationData['related_backend'] = Addressbook_Backend_Factory::SQL;
                             break;                    
                         default:
                             throw new Erp_Exception_UnexpectedValue('Relation type not supported.');
@@ -133,7 +133,7 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
                         $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
                     }
                     
-                    $data['relations'][$key] = $data;
+                    $data['relations'][$key] = $relationData;
                 }
             }
         }
