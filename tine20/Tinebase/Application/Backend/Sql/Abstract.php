@@ -212,6 +212,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_InvalidArgument
      * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo    remove autoincremental ids later
      */
     public function create(Tinebase_Record_Interface $_record) {
     	if (!$_record instanceof $this->_modelName) {
@@ -224,7 +226,13 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             $_record->setId($newId);
         }
     	
-        $recordArray = $_record->toArray();        
+        $recordArray = $_record->toArray();
+        
+        // unset id if autoincrement & still empty
+        if (empty($_record->id)) {
+            unset($recordArray['id']);
+        }
+        
         $tableKeys = $this->_db->describeTable($this->_tableName);
         $recordArray = array_intersect_key($recordArray, $tableKeys);
         
