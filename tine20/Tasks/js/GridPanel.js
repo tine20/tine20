@@ -54,7 +54,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
         
         // legacy
-        this.initStoreEvents();
+        // this.initStoreEvents();
         this.initGridEvents();
     },
     

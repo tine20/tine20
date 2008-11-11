@@ -19,7 +19,7 @@ Ext.namespace('Tine.Tasks');
  */
 Tine.Tasks.getPanel =  function() {
     Tine.Tasks.mainGrid.initComponent();
-	var tree = Tine.Tasks.mainGrid.getTree();
+	var tree = Tine.Tasks.mainGrid.tree;
     
     // this function is called each time the user activates the Tasks app
     tree.on('beforeexpand', function(panel) {
@@ -55,10 +55,26 @@ Tine.Tasks.mainGrid = {
 	initComponent: function() {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
-                
+        
+        this.tree = new Tine.widgets.container.TreePanel({
+            id: 'TasksTreePanel',
+            iconCls: 'TasksIconCls',
+            title: this.translation._('Tasks'),
+            containersName: this.translation._('to do lists'),
+            containerName: this.translation._('to do list'),
+            appName: 'Tasks',
+            border: false
+        });
+        
+        this.tree.on('click', function(node){
+            // note: if node is clicked, it is not selected!
+            node.getOwnerTree().selectPath(node.getPath());
+            this.store.load({});
+        }, this);
+        
         this.gridPanel = new Tine.Tasks.GridPanel({
             recordProxy: Tine.Tasks.JsonBackend,
-            plugins: [new Ext.ux.grid.FilterPlugin()]
+            plugins: [this.tree.getFilterPlugin()]
         });
         
         // legacy
