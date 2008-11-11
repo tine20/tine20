@@ -109,7 +109,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $persitantTask = $this->_backend->create($task);
         
         $pagination = new Tasks_Model_Pagination();
-        $filter = new Tasks_Model_Filter();
+        $filter = new Tasks_Model_TaskFilter();
         $filter->query     = $summary;
         $filter->container = array($task->container_id);
 
@@ -130,7 +130,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
     	$testId = $this->_persistantTestTask1->getId();
         $this->_backend->delete($testId);
-        $filter = new Tasks_Model_Filter();
+        $filter = new Tasks_Model_TaskFilter();
         $filter->query = 'our fist test task';
         $filter->container = array($this->_persistantTestTask1->container_id);
         $pagination = new Tasks_Model_Pagination();
@@ -259,7 +259,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $pagination = new Tasks_Model_Pagination();
         
-        $filter = new Tasks_Model_Filter();
+        $filter = new Tasks_Model_TaskFilter();
         $filter->query = $this->_persistantTestTask1->getId();
         $filter->container = array($this->_persistantTestTask1->container_id);
         $tasks = $this->_backend->search($filter, $pagination);

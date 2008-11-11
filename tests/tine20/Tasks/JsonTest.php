@@ -112,8 +112,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         // define filter
         return array(
-            'containerType' => 'all',
-            'query' => 'minimal task by PHPUnit'     
+            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+            array('field' => 'query'        , 'operator' => 'equals', 'value' => 'minimal task by PHPUnit'),
         );
     }
     
