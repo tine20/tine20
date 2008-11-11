@@ -11,8 +11,6 @@
  
 Ext.namespace('Tine.Tasks');
 
-/*********************************** MAIN DIALOG ********************************************/
-
 /**
  * entry point, required by tinebase
  * This function is called once when Tinebase collect the available apps
@@ -27,7 +25,7 @@ Tine.Tasks.getPanel =  function() {
         this.updateMainToolbar();
         
         Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-        this.store.load({});
+        this.gridPanel.store.load({});
     }, Tine.Tasks.mainGrid);
     
     return tree;
@@ -66,22 +64,10 @@ Tine.Tasks.mainGrid = {
             border: false
         });
         
-        this.tree.on('click', function(node){
-            // note: if node is clicked, it is not selected!
-            node.getOwnerTree().selectPath(node.getPath());
-            this.store.load({});
-        }, this);
-        
         this.gridPanel = new Tine.Tasks.GridPanel({
             recordProxy: Tine.Tasks.JsonBackend,
             plugins: [this.tree.getFilterPlugin()]
         });
-        
-        // legacy
-        this.store = this.gridPanel.store;
-        this.filter = this.gridPanel.filter;
-        this.filter.owner = Tine.Tinebase.registry.get('currentAccount').accountId;
-        
     },
 	
     updateMainToolbar : function() {
@@ -96,29 +82,6 @@ Tine.Tasks.mainGrid = {
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
         preferencesButton.setIconClass('TasksTreePanel');
         preferencesButton.setDisabled(true);
-    },
-
-    getTree: function() {
-        var translation = new Locale.Gettext();
-        translation.textdomain('Tasks');
-
-        this.tree = new Tine.widgets.container.TreePanel({
-            id: 'TasksTreePanel',
-            iconCls: 'TasksIconCls',
-            title: translation._('Tasks'),
-            containersName: translation._('to do lists'),
-            containerName: translation._('to do list'),
-            appName: 'Tasks',
-            border: false
-        });
-        
-        this.tree.on('click', function(node){
-            // note: if node is clicked, it is not selected!
-            node.getOwnerTree().selectPath(node.getPath());
-            this.store.load({});
-        }, this);
-        
-        return this.tree;
     }
 };
 

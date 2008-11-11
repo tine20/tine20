@@ -34,16 +34,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         autoExpandColumn: 'summary'
     },
     
-    // legacy
-    filter: {
-        containerType: 'personal',
-        query: '',
-        due: false,
-        container: false,
-        organizer: false,
-        tag: false
-    },
-    
     initComponent: function() {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
@@ -54,44 +44,10 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
         
         // legacy
-        // this.initStoreEvents();
         this.initGridEvents();
     },
     
-    initStoreEvents: function(){
-        // prepare filter
-        this.store.on('beforeload', function(store, options) {
-            options.params = options.params || {};
-            Ext.applyIf(options.params, this.defaultPaging);
-            
-            // for some reasons, paging toolbar eats sort and dir
-            if (store.getSortState()) {
-                this.filter.sort = store.getSortState().field;
-                this.filter.dir = store.getSortState().direction;
-            } else {
-                this.filter.sort = this.store.sort;
-                this.filter.dir = this.store.dir;
-            }
-            this.filter.start = options.params.start;
-            this.filter.limit = options.params.limit;
-            
-            // container
-            var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
-            this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
-            this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
-            this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
-            
-            // toolbar
-            this.filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
-            this.filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
-            this.filter.query = Ext.getCmp('TasksQuickSearchField') ? Ext.getCmp('TasksQuickSearchField').getValue() : '';
-            this.filter.status_id = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
-            //this.filter.due
-            //this.filter.tag
-            options.params.filter = this.filter;
-        }, this);
-    },
-            
+    // legacy
     initGridEvents: function() {    
         this.grid.on('newentry', function(taskData){
             var selectedNode = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode();
@@ -157,13 +113,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             sortable: true,
             dataIndex: 'due',
             renderer: Tine.Tinebase.common.dateRenderer,
-            editor: new Ext.ux.form.ClearableDateField({
-                //format : 'd.m.Y'
-            }),
-            quickaddField: new Ext.ux.form.ClearableDateField({
-                //value: new Date(),
-                //format : "d.m.Y"
-            })
+            editor: new Ext.ux.form.ClearableDateField({}),
+            quickaddField: new Ext.ux.form.ClearableDateField({})
         }, {
             id: 'priority',
             header: this.translation._("Priority"),
