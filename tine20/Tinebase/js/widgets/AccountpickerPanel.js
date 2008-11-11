@@ -80,7 +80,7 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
                 // account object
                 this.accountId = value.accountId;
                 value = value.accountDisplayName;
-            } else if (typeof(value.get == 'function')) {
+            } else if (typeof(value.get) == 'function') {
                 // account record
                 this.accountId = value.get('id');
                 value = value.get('name');
