@@ -386,7 +386,9 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     protected function _hasHashId()
     {
         $fields = $this->_db->describeTable($this->_tableName);
-        $result = ($fields['id']['DATA_TYPE'] === 'varchar');
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($fields, true));
+        
+        $result = ($fields['id']['DATA_TYPE'] === 'varchar' && $fields['id']['LENGTH'] == 40);
         
         return $result;
     }
