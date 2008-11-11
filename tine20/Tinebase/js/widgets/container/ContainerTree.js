@@ -194,8 +194,28 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	    for(var i=0; i<initialTree.length; i++) {
            treeRoot.appendChild( new Ext.tree.AsyncTreeNode(initialTree[i]) );
         }
-		
 	},
+    
+    /**
+     * returns a filter plugin to be used in a grid
+     */
+    getFilterPlugin: function() {
+        if (!this.filterPlugin) {
+            var scope = this;
+            this.filterPlugin = new Ext.ux.grid.FilterPlugin({
+                getValue: function() {
+                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
+                    return [
+                        {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
+                        {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
+                        {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+                    ];
+                }
+            });
+        }
+        
+        return this.filterPlugin;
+    },
     
     /**
      * returns object of selected container or null

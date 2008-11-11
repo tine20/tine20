@@ -81,6 +81,7 @@ Ext.extend(Ext.ux.grid.FilterPlugin, Ext.util.Observable, {
         
         //console.log(options);
         var value = this.getValue();
+        //console.log(value);
         if (value && Ext.isArray(filter)) {
             filter.push(value);
         }
