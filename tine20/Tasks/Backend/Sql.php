@@ -308,7 +308,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      * @param  Crm_Model_LeadFilter $_filter the string to search for
      * @return void
      */
-    protected function _addFilter(Zend_Db_Select $_select, Tasks_Model_Filter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Tasks_Model_TaskFilter $_filter)
     {
         $_select->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
                                 
