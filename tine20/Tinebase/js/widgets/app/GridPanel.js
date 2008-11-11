@@ -347,12 +347,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     this.onDeleteRecords.call(this);
                 }
                 break;
-            /* NOTE: e.RETURN is also used bei QuickAddGrid.
-             * we should better use something like 'strg+e'
-            case e.RETURN:
-                this.onEditInNewWindow.call(this);
+            case e.E:
+                if (e.ctrlKey) {
+                    this.onEditInNewWindow.call(this, {
+                        actionType: 'edit'
+                    });
+                }
                 break;
-            */
         }
     },
     
