@@ -177,7 +177,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         $data['related_backend'] = Tasks_Backend_Factory::SQL;
                         break;                    
                     default:
-                        throw new UnexpectedValueException('Relation type not supported.');
+                        throw new Crm_Exception_UnexpectedValue('Relation type not supported.');
                 }
 
                 // sanitize container id
