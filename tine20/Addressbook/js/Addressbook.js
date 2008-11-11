@@ -364,7 +364,7 @@ Tine.Addressbook.Main = {
              filters: []
         });
         
-        filterToolbar.on('filtertrigger', function() {
+        filterToolbar.on('change', function() {
             this.store.load({});
         }, this);
         // the paging toolbar
@@ -746,7 +746,7 @@ Tine.Addressbook.Main = {
             options.params.paging = Ext.util.JSON.encode(options.params);
             
             var filterToolbar = Ext.getCmp('addressbookFilterToolbar');
-            var filter = filterToolbar ? filterToolbar.getFilter() : [];
+            var filter = filterToolbar ? filterToolbar.getValue() : [];
             
             // add container to filter
             var nodeAttributes = Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode().attributes || {};
