@@ -678,5 +678,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         return (array_key_exists ($_field, $this->_validators)); 
     }   
-}
 
+    /**
+     * fills a record from json data
+     *
+     * @param string $_data json encoded data
+     * @return void
+     */
+    public function setFromJson($_data)
+    {
+        $contactData = Zend_Json::decode($_data);
+        $this->setFromArray($contactData);
+    }
+}
