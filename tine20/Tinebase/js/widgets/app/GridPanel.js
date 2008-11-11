@@ -78,6 +78,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     actionToolbarItems: [],
     /**
+     * @cfg {Tine.widgets.grid.FilterToolbar} filterToolbar
+     */
+    filterToolbar: null,
+    /**
      * @cfg {Array} contextMenuItems
      * additional items for contextMenu
      */
@@ -107,7 +111,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
      * @private
      */
-    layout: 'fit',
+    layout: 'border',
     border: false,
     
     /**
@@ -125,13 +129,31 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         // init (ext) grid
         this.initGrid();
         
-        // tmp layout
-        this.tbar = this.pagingToolbar;
-        this.items = this.grid;
-        
+        this.initLayout();
+
         Tine.Tinebase.widgets.app.GridPanel.superclass.initComponent.call(this);
     },
     
+    initLayout: function() {
+        this.items = [{
+            region: 'center',
+            xtype: 'panel',
+            layout: 'fit',
+            border: false,
+            tbar: this.pagingToolbar,
+            items: this.grid
+        }];
+        
+        // add filter toolbar
+        if (this.filterToolbar) {
+            this.items.push(this.filterToolbar);
+            this.filterToolbar.on('bodyresize', function(ftb, w, h) {
+                if (this.filterToolbar.rendered) {
+                    this.layout.layout();
+                }
+            }, this);
+        }
+    },
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 

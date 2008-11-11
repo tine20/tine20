@@ -59,6 +59,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     border: false,
     monitorResize: true,
+    region: 'north',
     
     record: Ext.data.Record.create([
         {name: 'field'},
@@ -350,6 +351,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.arrangeButtons();
         if (! this.supressEvents) {
             var size = this.tableEl.getSize();
+            
             //this.setSize(size.width, size.height);
             //this.syncSize();
             this.fireEvent('bodyresize', this, size.width, size.height);
