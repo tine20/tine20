@@ -73,7 +73,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $contractData = $this->_backend->saveContract(Zend_Json::encode($contract->toArray()));
         
         // checks
-        $this->assertEquals($contractData['id'], $contract->getId());
+        //$this->assertEquals($contractData['id'], $contract->getId());
         $this->assertGreaterThan(0, $contractData['number']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
@@ -93,7 +93,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $contractData = $this->_backend->getContract($contractData['id']);
         
         // checks
-        $this->assertEquals($contractData['id'], $contract->getId());
+        //$this->assertEquals($contractData['id'], $contract->getId());
         $this->assertGreaterThan(0, $contractData['number']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
@@ -102,6 +102,30 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $this->_decreaseNumber();
     }
 
+    /**
+     * try to update a contract (with relations)
+     *
+     */
+    public function testUpdateContract()
+    {
+        $contract = $this->_getContract();
+        $contractData = $this->_backend->saveContract(Zend_Json::encode($contract->toArray()));
+        $contractData = $this->_backend->getContract($contractData['id']);
+        
+        //-- add account and contact + update contract
+        $contractData['relations'] = $this->_getRelations();
+        $contractUpdated = $this->_backend->saveContract(Zend_Json::encode($contractData));
+        
+        //-- check
+        $this->assertEquals($contractData['id'], $contractUpdated['id']);
+        //$this->assertGreaterThan(0, count($contractUpdated['relations']));
+        
+        // cleanup
+        //-- delete contact as well
+        $this->_backend->deleteContracts($contractData['id']);
+        $this->_decreaseNumber();
+    }
+    
     /**
      * try to get a contract
      *
@@ -134,7 +158,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         return new Erp_Model_Contract(array(
             'title'         => 'phpunit contract',
             'description'   => 'blabla',
-            'id'            => Tinebase_Record_Abstract::generateUID()
+            //'id'            => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
     }
 
@@ -162,6 +186,17 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             'query' => 'blabla'     
+        );        
+    }
+    
+    /**
+     * get relations
+     *
+     * @return array
+     */
+    protected function _getRelations()
+    {
+        return array(     
         );        
     }
     
