@@ -174,6 +174,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     public function create(Tinebase_Record_Interface $_record)
     {        
+        //Tinebase_Core::getLogger()->debug(print_r($_record->toArray(),true));
+        
         try {
             $db = $this->_backend->getDb();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -185,7 +187,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             }            
             
             if(!$_record->isValid()) {
-                throw new Tinebase_Exception_Record_Validation('Record is not valid.');
+                throw new Tinebase_Exception_Record_Validation('Record is not valid. Invalid fields: ' . print_r($_record->getValidationErrors(), true));
             }
             
             if($this->_doContainerACLChecks && !$this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD)) {
