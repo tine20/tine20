@@ -164,6 +164,11 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
         
 		this.initContextMenu();
 		
+        this.on('click', function(node){
+            // note: if node is clicked, it is not selected!
+            node.getOwnerTree().selectPath(node.getPath());
+        }, this);
+        
 	    this.on('contextmenu', function(node, event){
 			this.ctxNode = node;
 			var container = node.attributes.container;
@@ -212,6 +217,10 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
                     ];
                 }
             });
+            
+            this.on('click', function(node){
+                this.filterPlugin.onFilterChange();
+            }, this);
         }
         
         return this.filterPlugin;
