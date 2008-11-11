@@ -67,7 +67,10 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
      * fires our change event
      */
     onFilterChange: function() {
-        this.store.load({});
+        if (this.store) {
+            this.store.load({});
+        }
+        
         this.fireEvent('change', this);
     },
     

@@ -484,7 +484,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             options.params.paging = Ext.util.JSON.encode(options.params);
             
             var filterToolbar = Ext.getCmp('activitiesFilterToolbar');
-            var filter = filterToolbar ? filterToolbar.getFilter() : [];
+            var filter = filterToolbar ? filterToolbar.getValue() : [];
             filter.push(
                 {field: 'record_model', operator: 'equals', value: this.record_model },
                 {field: 'record_id', operator: 'equals', value: (this.record_id) ? this.record_id : 0 },
@@ -540,7 +540,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
              filters: []
         });
         
-        filterToolbar.on('filtertrigger', function() {
+        filterToolbar.on('change', function() {
             this.store.load({});
         }, this);
                                                 
