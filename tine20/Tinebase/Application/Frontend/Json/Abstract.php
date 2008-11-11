@@ -151,7 +151,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
             $_controller->create($record): 
             $_controller->update($record);
 
-        return $savedRecord;
+        return $this->_recordToJson($savedRecord);
     }
 
     /**
