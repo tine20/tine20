@@ -217,6 +217,8 @@ class Tinebase_Relations
      * 
      * @param  Tinebase_Record_RecordSet of Tinebase_Model_Relation
      * @return void
+     * 
+     * @todo    make getApplicationInstance work for tinebase record (Tinebase_Model_User for example)
      */
     protected function resolveAppRecords($_relations)
     {
@@ -234,8 +236,14 @@ class Tinebase_Relations
         foreach ($modelMap as $modelName => $relations) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolving " . count($relations) . " relation(s) of $modelName");
 
-            list($appName, $i, $itemName) = explode('_', $modelName);
-            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+            if ($modelName === 'Tinebase_Model_User') {
+                // @todo add related backend here
+                //$appController = Tinebase_User::factory($relations->related_backend);
+                $appController = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
+            } else {
+                list($appName, $i, $itemName) = explode('_', $modelName);
+                $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+            }
             
             $getMultipleMethod = 'getMultiple';
             //Zend_Registry::get('logger')->debug('Tinebase_Relations: ' . print_r($relations->related_id, true));

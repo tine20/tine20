@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        extend Tinebase_Application_Backend_Sql and replace some functions
  */
 
 /**
@@ -557,5 +559,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         foreach ( $_accountIds as $accountId ) {
             $this->deleteUser($accountId);
         }
+    }
+
+    /**
+     * Get multiple users
+     *
+     * @param string|array $_id Ids
+     * @return Tinebase_Record_RecordSet
+     * @todo implement
+     */
+    public function getMultiple($_id) 
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_User'); 
+        return $result;
     }
 }

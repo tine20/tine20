@@ -145,4 +145,12 @@ abstract class Tinebase_User_Abstract
      * @param array $_accountIds
      */
     abstract public function deleteUsers(array $_accountIds);
+    
+    /**
+     * Get multiple users
+     *
+     * @param string|array $_id Ids
+     * @return Tinebase_Record_RecordSet
+     */
+    abstract public function getMultiple($_id);
 }

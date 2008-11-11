@@ -365,4 +365,16 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         throw new Exception('not yet implemented');
     }
+
+    /**
+     * Get multiple users
+     *
+     * @param string|array $_id Ids
+     * @return Tinebase_Record_RecordSet
+     * @todo implement
+     */
+    public function getMultiple($_id) 
+    {
+        throw new Tinebase_Exception('Not implemented yet.');
+    }
 }
