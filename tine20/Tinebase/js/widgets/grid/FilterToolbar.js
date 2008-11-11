@@ -12,6 +12,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
 /**
  * @class Tine.widgets.grid.FilterToolbar
  * @extends Ext.Panel
+ * 
  * <br>Usage:<br>
      <pre><code>
      tb = new Tine.widgets.grid.FilterToolbar({
@@ -34,14 +35,8 @@ Tine.widgets.grid.FilterToolbar = function(config) {
     Ext.apply(this, config);
     Tine.widgets.grid.FilterToolbar.superclass.constructor.call(this);
     
-    this.addEvents(
-      /**
-       * @event filtertrigger
-       * is fired when user request to update list by filter
-       * @param {Tine.widgets.grid.FilterToolbar}
-       */
-      'filtertrigger'
-    );
+    // become filterPlugin
+    Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
     
 };
 
@@ -110,6 +105,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.templates = ts;
         this.delRowSelector = 'td[class=tw-ftb-frow-deleterow]';
     },
+    
     /**
      * @private
      */
@@ -143,6 +139,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             })
         };
     },
+    
     /**
      * @private
      */
@@ -170,6 +167,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // arrange static action buttons
         this.onFilterRowsChange();
     },
+    
     /**
      * renders static table
      * @private
@@ -186,6 +184,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         this.tableEl = ts.master.overwrite(this.bwrap, {tbody: tbody}, true);
     },
+    
     /**
      * renders the filter specific stuff of a single filter row
      * 
@@ -240,6 +239,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
         });
     },
+    
     /**
      * @private
      */
@@ -277,15 +277,17 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
         }, this);
     },
+    
     /**
      * called  when a filter action is to be triggered (start new search)
      * @private
      */
     onFiltertrigger: function() {
         if (! this.supressEvents) {
-            this.fireEvent('filtertrigger', this);
+            this.onFilterChange();            
         }
     },
+    
     /**
      * called on field change of a filter row
      * @private
@@ -343,6 +345,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             data: this.filterModels
         });
     },
+    
     /**
      * called when a filter row gets added/deleted
      * @private
@@ -386,6 +389,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         return filter;
     },
+    
     /**
      * resets a filter
      * @param {Ext.Record} filter to reset
@@ -393,6 +397,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     resetFilter: function(filter) {
         
     },
+    
     /**
      * deletes a filter
      * @param {Ext.Record} filter to delete
@@ -414,6 +419,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.onFiltertrigger();
         }
     },
+    
     /**
      * deletes all filters
      */
@@ -433,9 +439,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.onFilterRowsChange();
     },
     
-    
-    
-    getFilter: function() {
+    getValue: function() {
         var filters = [];
         this.filterStore.each(function(filter) {
             var line = {};
