@@ -129,7 +129,7 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
                     }
     
                     // sanitize container id
-                    if (isset($relation['related_record']) && is_array($relation['related_record']['container_id'])) {
+                    if (isset($relation['related_record']['container_id']) && is_array($relation['related_record']['container_id'])) {
                         $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
                     }
                     
