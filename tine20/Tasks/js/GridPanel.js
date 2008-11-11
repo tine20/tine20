@@ -40,7 +40,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
-
+        this.plugins.push(this.action_showClosedToggle);
+        
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
         
         // legacy
@@ -199,54 +200,16 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
         }, this);
         
-        var showClosedToggle = new Ext.Button({
-            id: 'TasksShowClosed',
-            enableToggle: true,
-            handler: function(){
-                this.store.load({});
-            },
-            scope: this,
+        this.action_showClosedToggle = new Ext.ux.grid.FilterButton({
             text: this.translation._('Show closed'),
-            iconCls: 'action_showArchived'
+            iconCls: 'action_showArchived',
+            field: 'showClosed'
         });
-        
-        var statusFilter = new Ext.ux.form.ClearableComboBox({
-            id: 'TasksStatusFilter',
-            //name: 'statusFilter',
-            hideLabel: true,
-            store: Tine.Tasks.status.getStore(),
-            displayField: 'status_name',
-            valueField: 'id',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            emptyText: 'any',
-            selectOnFocus: true,
-            editable: false,
-            width: 150
-        });
-        
-        statusFilter.on('select', function(combo, record, index){
-            this.store.load({});
-        },this);
-        
-        var organizerFilter = new Tine.widgets.AccountpickerField({
-            id: 'TasksorganizerFilter',
-            width: 200,
-            emptyText: 'any'
-        });
-        
-        organizerFilter.on('select', function(combo, record, index){
-            this.store.load({});
-            //combo.triggers[0].show();
-        }, this);
         
         return [
             new Ext.Toolbar.Separator(),
             '->',
-            showClosedToggle,
-            //'Status: ',   ' ', statusFilter,
-            //'Organizer: ', ' ',   organizerFilter,
+            this.action_showClosedToggle,
             new Ext.Toolbar.Separator(),
             '->',
             this.translation._('Search:'), ' ', ' ', TasksQuickSearchField
