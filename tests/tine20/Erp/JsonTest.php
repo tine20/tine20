@@ -105,6 +105,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to update a contract (with relations)
      *
+     * @todo    add account (as relation?)
      */
     public function testUpdateContract()
     {
@@ -121,7 +122,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         
         //print_r($contractUpdated);
         
-        //-- check
+        // check
         $this->assertEquals($contractData['id'], $contractUpdated['id']);
         $this->assertGreaterThan(0, count($contractUpdated['relations']));
         $this->assertEquals('Addressbook_Model_Contact', $contractUpdated['relations'][0]['related_model']);
@@ -211,23 +212,23 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
             Tinebase_Model_Container::GRANT_EDIT
         );
         
+        $currentUser = Tinebase_Core::getUser();
+        
         return array(
-            /*   
-            array(
-                'type'              => Erp_Model_Contract::RELATION_TYPE_ACCOUNT,
-                'related_record'    => array(
-                    
-                )
-            ),
-            */
             array(
                 'type'              => Erp_Model_Contract::RELATION_TYPE_CUSTOMER,
                 'related_record'    => array(
-                    //'n_family'      => 'unit customer',
                     'org_name'         => 'phpunit erp test company',
                     'container_id'  => $personalContainer[0]->getId(),
                 )
-            )  
+            ),
+            /*  
+            array(
+                'type'              => Erp_Model_Contract::RELATION_TYPE_ACCOUNT,
+                'related_id'        => $currentUser->getId(),
+                'related_record'    => $currentUser->toArray()
+            ),
+            */
         );        
     }
     
