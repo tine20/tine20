@@ -60,9 +60,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     border: false,
     monitorResize: true,
     
-    // fix layout bug IE
-    bodyStyle: 'margin-bottom: -16px;',
-    
     record: Ext.data.Record.create([
         {name: 'field'},
         {name: 'operator'},
@@ -186,7 +183,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             });
         }, this);
         
-        this.tableEl = ts.master.insertFirst(this.el, {tbody: tbody}, true);
+        this.tableEl = ts.master.overwrite(this.bwrap, {tbody: tbody}, true);
     },
     /**
      * renders the filter specific stuff of a single filter row
