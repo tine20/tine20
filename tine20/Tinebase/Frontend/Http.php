@@ -78,6 +78,8 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/ux/LockCombo.js',
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/ux/layout/AppLeftLayout.js',
+            'Tinebase/js/ux/layout/CenterLayout.js',
+            'Tinebase/js/ux/layout/RowLayout.js',
             'Tinebase/js/ux/state/JsonProvider.js',
             'Tinebase/js/ux/GMapPanel.js',
             'Tinebase/js/ux/DatepickerRange.js',
