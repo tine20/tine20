@@ -34,6 +34,18 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
     protected $_application = 'Erp';
     
     /**
+     * relation type: customer
+     *
+     */
+    const RELATION_TYPE_CUSTOMER = 'CUSTOMER';
+    
+    /**
+     * relation type: acount
+     *
+     */
+    const RELATION_TYPE_ACCOUNT = 'ACCOUNT';
+    
+    /**
      * list of zend validator
      * 
      * this validators get used when validating user generated content with Zend_Input_Filter
@@ -82,8 +94,48 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
     public function setFromJson($_data)
     {
         $data = Zend_Json::decode($_data);
+        
         if (isset($data['container_id']) && is_array($data['container_id'])) {
             $data['container_id'] = $data['container_id']['id'];
+        }
+        
+        /************* add new relations *******************/
+        
+        if (isset($data['relations'])) {
+            foreach ((array)$data['relations'] as $key => $relation) {
+                
+                if (!isset($relation['id'])) {
+                    $data = array(
+                        'own_model'              => 'Erp_Model_Contract',
+                        'own_backend'            => Erp_Backend_Contract::TYPE,
+                        'own_id'                 => (isset($data['id'])) ? $data['id'] : 0,
+                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                        'type'                   => $relation['type'],
+                        'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
+                        'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
+                    );
+                    
+                    switch ($relation['type']) {
+                        case self::RELATION_TYPE_ACCOUNT:                        
+                            $data['related_model'] = 'Tinebase_Model_FullUser';
+                            $data['related_backend'] = Tinebase_User::getConfiguredBackend();
+                            break;                    
+                        case self::RELATION_TYPE_CUSTOMER:
+                            $data['related_model'] = 'Addressbook_Model_Contact';
+                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                            break;                    
+                        default:
+                            throw new Erp_Exception_UnexpectedValue('Relation type not supported.');
+                    }
+    
+                    // sanitize container id
+                    if (isset($relation['related_record']) && is_array($relation['related_record']['container_id'])) {
+                        $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
+                    }
+                    
+                    $data['relations'][$key] = $data;
+                }
+            }
         }
         
         $this->setFromArray($data);
