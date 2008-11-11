@@ -147,7 +147,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         
         //Zend_Registry::get('logger')->debug(print_r($record->toArray(),true));
         
-        $savedRecord = (empty($contact->id)) ? 
+        $savedRecord = (empty($record->id)) ? 
             $_controller->create($record): 
             $_controller->update($record);
 
