@@ -33,14 +33,13 @@ if (ini_get('magic_quotes_gpc')) {
         }
         return $requests;
     } 
-  // Change the incomming data if needed
-    $_GET = __magic_quotes_gpc( $_GET );
-  $_POST = __magic_quotes_gpc( $_POST );
-  $_COOKIE = __magic_quotes_gpc( $_COOKIE );
-    $_ENV = __magic_quotes_gpc(  $_ENV );
-  $_REQUEST = __magic_quotes_gpc( $_REQUEST );
+	// Change the incomming data if needed
+	$_GET = __magic_quotes_gpc( $_GET );
+	$_POST = __magic_quotes_gpc( $_POST );
+	$_COOKIE = __magic_quotes_gpc( $_COOKIE );
+	$_ENV = __magic_quotes_gpc(  $_ENV );
+	$_REQUEST = __magic_quotes_gpc( $_REQUEST );
 } // end magic_quotes_gpc Hack
- // end magic_quotes_gpc Hack
 */
 
 $time_start = microtime(true);
