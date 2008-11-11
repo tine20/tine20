@@ -20,8 +20,6 @@
  */
 /*
 if (ini_get('magic_quotes_gpc')) {
-    exit('magic quotes');
-
     function __magic_quotes_gpc(  $requests ) {
         $a = array();
         foreach(  $requests AS $k=>&$v ) {
