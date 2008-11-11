@@ -8,15 +8,15 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.grid');
+Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
 
 /**
- * @class Ext.ux.grid.FilterPlugin
+ * @class Tine.widgets.grid.FilterPlugin
  * @extends Ext.util.Observable
  * <p>Base class for all grid filter plugins.</p>
  * @constructor
  */
-Ext.ux.grid.FilterPlugin = function(config) {
+Tine.widgets.grid.FilterPlugin = function(config) {
     config = config || {};
     Ext.apply(this, config);
     
@@ -24,15 +24,15 @@ Ext.ux.grid.FilterPlugin = function(config) {
         /**
          * @event change
          * Fired when the filter changed.
-         * @param {Ext.ux.grid.FilterPlugin} this
+         * @param {Tine.widgets.grid.FilterPlugin} this
          */
         'change'
     );
     
-    Ext.ux.grid.FilterPlugin.superclass.constructor.call(this);
+    Tine.widgets.grid.FilterPlugin.superclass.constructor.call(this);
 };
 
-Ext.extend(Ext.ux.grid.FilterPlugin, Ext.util.Observable, {
+Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
     
     /**
      * @property {Ext.data.Store} store

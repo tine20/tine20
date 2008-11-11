@@ -207,7 +207,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             var scope = this;
-            this.filterPlugin = new Ext.ux.grid.FilterPlugin({
+            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
                 getValue: function() {
                     var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
                     return [

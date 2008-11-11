@@ -200,7 +200,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
         }, this);
         
-        this.action_showClosedToggle = new Ext.ux.grid.FilterButton({
+        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.translation._('Show closed'),
             iconCls: 'action_showArchived',
             field: 'showClosed'

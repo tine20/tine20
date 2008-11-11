@@ -8,23 +8,23 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.grid');
+Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
 
 /**
- * @class Ext.ux.grid.FilterButton
+ * @class Tine.widgets.grid.FilterButton
  * @extends Ext.Button
  * <p>Toggle Button to be used as filter</p>
  * @constructor
  */
-Ext.ux.grid.FilterButton = function(config) {
+Tine.widgets.grid.FilterButton = function(config) {
     config = config || {};
     Ext.apply(this, config);
     
-    Ext.ux.grid.FilterButton.superclass.constructor.call(this);
-    Ext.applyIf(this, new Ext.ux.grid.FilterPlugin());
+    Tine.widgets.grid.FilterButton.superclass.constructor.call(this);
+    Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
 };
 
-Ext.extend(Ext.ux.grid.FilterButton, Ext.Button, {
+Ext.extend(Tine.widgets.grid.FilterButton, Ext.Button, {
     /**
      * @cfg {String} field the filed to filter
      */
