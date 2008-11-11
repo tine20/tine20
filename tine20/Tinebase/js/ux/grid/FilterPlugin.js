@@ -77,11 +77,9 @@ Ext.extend(Ext.ux.grid.FilterPlugin, Ext.util.Observable, {
     onBeforeLoad: function(store, options) {
         options = options || {};
         options.params = options.params || {};
-        var filter = options.params.filter ? options.params.filter : [];
+        var filter = options.params.filter = options.params.filter ? options.params.filter : [];
         
-        //console.log(options);
         var value = this.getValue();
-        //console.log(value);
         if (value && Ext.isArray(filter)) {
             filter.push(value);
         }
