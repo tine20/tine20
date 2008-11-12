@@ -911,7 +911,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 try {
                     echo "set relation: " . $relation->type . " " . $relation->related_model ."<br/>\n";
                     $relationsBackend->addRelation($relation);
-                } catch (Tinebase_Exception_Record_NotAllowed $e) {
+                } catch (Exception $e) {
                     // cweiss 2008-08-25 this duplicates come from an earlier upgrading failure don't confuse user with verbosity ;-) 
                     // echo 'do not add duplicate relation ' . $relation->own_id . '-' . $relation->related_id . "...<br/>\n";
                 }
