@@ -72,7 +72,6 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $contractData = $this->_backend->saveContract(Zend_Json::encode($contract->toArray()));
         
         // checks
-        //$this->assertEquals($contractData['id'], $contract->getId());
         $this->assertGreaterThan(0, $contractData['number']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
@@ -92,7 +91,6 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $contractData = $this->_backend->getContract($contractData['id']);
         
         // checks
-        //$this->assertEquals($contractData['id'], $contract->getId());
         $this->assertGreaterThan(0, $contractData['number']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
         
@@ -166,7 +164,6 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         return new Erp_Model_Contract(array(
             'title'         => 'phpunit contract',
             'description'   => 'blabla',
-            //'id'            => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
     }
 
