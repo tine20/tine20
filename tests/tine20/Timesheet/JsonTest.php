@@ -68,19 +68,20 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddTimesheet()
     {
-        /*
-        $Timesheet = $this->_getTimesheet();
-        $TimesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($Timesheet->toArray()));
+        $contract = $this->_getContract();
+        $contract = Erp_Controller_Contract::getInstance()->create($contract);
+        
+        $timesheet = $this->_getTimesheet($contract->getId());
+        $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         
         // checks
-        //$this->assertEquals($TimesheetData['id'], $Timesheet->getId());
-        $this->assertGreaterThan(0, $TimesheetData['number']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $TimesheetData['created_by']);
+        $this->assertEquals($timesheet->description, $timesheetData['description']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']);
         
         // cleanup
-        $this->_backend->deleteTimesheets($TimesheetData['id']);
-        $this->_decreaseNumber();
-        */
+        $this->_backend->deleteTimesheets($timesheetData['id']);
+        Erp_Controller_Contract::getInstance()->delete($contract);
     }
     
     /**
@@ -90,17 +91,17 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetTimesheet()
     {
         /*
-        $Timesheet = $this->_getTimesheet();
-        $TimesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($Timesheet->toArray()));
-        $TimesheetData = $this->_backend->getTimesheet($TimesheetData['id']);
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_backend->getTimesheet($timesheetData['id']);
         
         // checks
-        //$this->assertEquals($TimesheetData['id'], $Timesheet->getId());
-        $this->assertGreaterThan(0, $TimesheetData['number']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $TimesheetData['created_by']);
+        //$this->assertEquals($timesheetData['id'], $timesheet->getId());
+        $this->assertGreaterThan(0, $timesheetData['number']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
         
         // cleanup
-        $this->_backend->deleteTimesheets($TimesheetData['id']);
+        $this->_backend->deleteTimesheets($timesheetData['id']);
         $this->_decreaseNumber();
         */
     }
@@ -112,30 +113,30 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateTimesheet()
     {
         /*
-        $Timesheet = $this->_getTimesheet();
-        $TimesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($Timesheet->toArray()));
-        $TimesheetData = $this->_backend->getTimesheet($TimesheetData['id']);
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_backend->getTimesheet($timesheetData['id']);
         
         // add account and contact + update Timesheet
-        $TimesheetData['relations'] = $this->_getRelations();
+        $timesheetData['relations'] = $this->_getRelations();
 
-        //print_r($TimesheetData);
+        //print_r($timesheetData);
         
-        $TimesheetUpdated = $this->_backend->saveTimesheet(Zend_Json::encode($TimesheetData));
+        $timesheetUpdated = $this->_backend->saveTimesheet(Zend_Json::encode($timesheetData));
         
-        //print_r($TimesheetUpdated);
+        //print_r($timesheetUpdated);
         
         // check
-        $this->assertEquals($TimesheetData['id'], $TimesheetUpdated['id']);
-        $this->assertGreaterThan(0, count($TimesheetUpdated['relations']));
-        $this->assertEquals('Addressbook_Model_Contact', $TimesheetUpdated['relations'][0]['related_model']);
-        $this->assertEquals(Timesheet_Model_Timesheet::RELATION_TYPE_CUSTOMER, $TimesheetUpdated['relations'][0]['type']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $TimesheetUpdated['relations'][1]['related_id']);
-        $this->assertEquals(Timesheet_Model_Timesheet::RELATION_TYPE_ACCOUNT, $TimesheetUpdated['relations'][1]['type']);
+        $this->assertEquals($timesheetData['id'], $timesheetUpdated['id']);
+        $this->assertGreaterThan(0, count($timesheetUpdated['relations']));
+        $this->assertEquals('Addressbook_Model_Contact', $timesheetUpdated['relations'][0]['related_model']);
+        $this->assertEquals(Timesheet_Model_Timesheet::RELATION_TYPE_CUSTOMER, $timesheetUpdated['relations'][0]['type']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['relations'][1]['related_id']);
+        $this->assertEquals(Timesheet_Model_Timesheet::RELATION_TYPE_ACCOUNT, $timesheetUpdated['relations'][1]['type']);
         
         // cleanup
-        $this->_backend->deleteTimesheets($TimesheetData['id']);
-        Addressbook_Controller_Contact::getInstance()->delete($TimesheetUpdated['relations'][0]['related_id']);
+        $this->_backend->deleteTimesheets($timesheetData['id']);
+        Addressbook_Controller_Contact::getInstance()->delete($timesheetUpdated['relations'][0]['related_id']);
         $this->_decreaseNumber();
         */
     }
@@ -148,16 +149,16 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
     {
         /*
         // create
-        $Timesheet = $this->_getTimesheet();
-        $TimesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($Timesheet->toArray()));
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         
         // search & check
         $search = $this->_backend->searchTimesheets(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
-        $this->assertEquals($Timesheet->title, $search['results'][0]['title']);
+        $this->assertEquals($timesheet->title, $search['results'][0]['title']);
         $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
-        $this->_backend->deleteTimesheets($TimesheetData['id']);
+        $this->_backend->deleteTimesheets($timesheetData['id']);
         $this->_decreaseNumber();
         */        
     }
@@ -167,14 +168,28 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get Timesheet
      *
+     * @param string $_contractId
      * @return Timesheet_Model_Timesheet
      */
-    protected function _getTimesheet()
+    protected function _getTimesheet($_contractId)
     {
         return new Timesheet_Model_Timesheet(array(
-            'title'         => 'phpunit Timesheet',
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'contract_id'   => $_contractId,
             'description'   => 'blabla',
-            //'id'            => Tinebase_Record_Abstract::generateUID()
+        ), TRUE);
+    }
+
+    /**
+     * get contract
+     *
+     * @return Erp_Model_Contract
+     */
+    protected function _getContract()
+    {
+        return new Erp_Model_Contract(array(
+            'title'         => 'phpunit timesheet contract',
+            'description'   => 'blabla',
         ), TRUE);
     }
 
