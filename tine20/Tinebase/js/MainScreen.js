@@ -31,41 +31,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     layout: 'border',
     
     /**
-     * direct actions of MainScreen
-     * @private
-     */
-    actions: {
-        changePassword: null,
-        installGoogleGears: null,
-        logout: null
-    },
-    
-    /**
      * @private
      */
     initComponent: function() {
         this.onlineStatus = new Ext.ux.ConnectionStatus({});
         
         // init actions
-        this.actions.changePassword = new Ext.Action({
-            text: _('Change password'),
-            handler: this.onChangePassword,
-            disabled: !Tine.Tinebase.registry.get('changepw')
-        });
-        
-        this.actions.installGoogleGears = new Ext.Action({
-            text: _('Install Google Gears'),
-            handler: this.onInstallGoogleGears,
-            disabled: (window.google && google.gears) ? true : false
-        });
-
-        this.actions.logout = new Ext.Action({
-            text: _('Logout'),
-            tooltip:  _('Logout from Tine 2.0'),
-            id: 'tblogout',
-            iconCls: 'action_logOut',
-            handler: this.onLogout
-        });
+        this.initActions();
         
         // init main menu
         this.tineMenu = new Ext.Toolbar({
@@ -76,10 +48,10 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 menu: {
                     id: 'Tinebase_System_Menu',     
                     items: [
-                        this.actions.changePassword,
-                        this.actions.installGoogleGears,
+                        this.action_changePassword,
+                        this.action_installGoogleGears,
                         '-', 
-                        this.actions.logout
+                        this.action_logout
                     ]                
                 }
             }, {
@@ -99,7 +71,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                     id: 'Tinebase_System_PreferencesMenu'
                 }
             }, '->', 
-            this.actions.logout
+            this.action_logout
         ]});
         
         // init footer
@@ -116,19 +88,9 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             ]
     
         });
-    
-        // init app chooser
-        this.applicationArcordion = new Ext.Panel({
-            //baseCls: 'appleftlayout',
-            title: '&nbsp;',
-            layout:'appleft',
-            border: false,
-            layoutConfig: {
-                titleCollapse: true,
-                hideCollapseTool: true
-            },
-            items: this.getPanels()
-        });
+        
+        // init app picker
+        this.initAppPicker();
                     
         // init generic mainscreen layout
         this.items = [{
@@ -196,12 +158,46 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             containerScroll: true,
             collapseMode: 'mini',
             layout: 'fit',
-            items: this.applicationArcordion
+            items: this.appPicker
         }];
         
         Tine.Tinebase.MainScreen.superclass.initComponent.call(this);
     },
+    
+    /**
+     * initialize actions
+     * @private
+     */
+    initActions: function() {
+        this.action_changePassword = new Ext.Action({
+            text: _('Change password'),
+            handler: this.onChangePassword,
+            disabled: !Tine.Tinebase.registry.get('changepw')
+        });
+        
+        this.action_installGoogleGears = new Ext.Action({
+            text: _('Install Google Gears'),
+            handler: this.onInstallGoogleGears,
+            disabled: (window.google && google.gears) ? true : false
+        });
 
+        this.action_logout = new Ext.Action({
+            text: _('Logout'),
+            tooltip:  _('Logout from Tine 2.0'),
+            id: 'tblogout',
+            iconCls: 'action_logOut',
+            handler: this.onLogout
+        });
+    },
+    
+    // init app picker
+    initAppPicker: function() {
+        this.appPicker = new Tine.Tinebase.AppPicker({
+            appPanels: this.getPanels(),
+            defaultAppPanel: this.defaultAppPanel
+        });
+    },
+    
     /**
      * returns array of panels to display in south region
      * 
@@ -261,6 +257,76 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             this.defaultAppPanel.expand();
         } else {
             this.ativateDefaultApp.defer(10, this);
+        }
+    },
+    
+    /**
+     * sets the active content panel
+     * 
+     * @param {Ext.Panel} _panel Panel to activate
+     * @param {Bool} _keep keep panel
+     */
+    setActiveContentPanel: function(_panel, _keep) {
+        // get container to which component will be added
+        var centerPanel = Ext.getCmp('center-panel');
+        _panel.keep = _keep;
+
+        var i,p;
+        if(centerPanel.items) {
+            for (i=0; i<centerPanel.items.length; i++){
+                p =  centerPanel.items.get(i);
+                if (! p.keep) {
+                    centerPanel.remove(p);
+                }
+            }  
+        }
+        if(_panel.keep && _panel.rendered) {
+            centerPanel.layout.setActiveItem(_panel.id);
+        } else {
+            centerPanel.add(_panel);
+            centerPanel.layout.setActiveItem(_panel.id);
+        }
+    },
+    
+    /**
+     * gets the currently displayed toolbar
+     * 
+     * @return {Ext.Toolbar}
+     */
+    getActiveToolbar: function() {
+        var northPanel = Ext.getCmp('north-panel-2');
+
+        if(northPanel.layout.activeItem && northPanel.layout.activeItem.el) {
+            return northPanel.layout.activeItem.el;
+        } else {
+            return false;            
+        }
+    },
+    
+    /**
+     * sets toolbar
+     * 
+     * @param {Ext.Toolbar}
+     */
+    setActiveToolbar: function(_toolbar, _keep) {
+        var northPanel = Ext.getCmp('north-panel-2');
+        _toolbar.keep = _keep;
+        
+        var i,t;
+        if(northPanel.items) {
+            for (i=0; i<northPanel.items.length; i++){
+                t = northPanel.items.get(i);
+                if (! t.keep) {
+                    northPanel.remove(t);
+                }
+            }  
+        }
+        
+        if(_toolbar.keep && _toolbar.rendered) {
+            northPanel.layout.setActiveItem(_toolbar.id);
+        } else {
+            northPanel.add(_toolbar);
+            northPanel.layout.setActiveItem(_toolbar.id);
         }
     },
     
@@ -369,12 +435,12 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @private
      */
     onInstallGoogleGears: function() {
-    	var message = _('Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer.');
-    	Tine.WindowFactory.getWindow({
-	        width: 800,
-	        height: 400,
-	        url: "http://gears.google.com/?action=install&message=" + message
-	    });
+        var message = _('Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer.');
+        Tine.WindowFactory.getWindow({
+            width: 800,
+            height: 400,
+            url: "http://gears.google.com/?action=install&message=" + message
+        });
     },
     
     /**
@@ -397,76 +463,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 });
             }
         });
-    },
-    
-    /**
-     * sets the active content panel
-     * 
-     * @param {Ext.Panel} _panel Panel to activate
-     * @param {Bool} _keep keep panel
-     */
-    setActiveContentPanel: function(_panel, _keep) {
-        // get container to which component will be added
-        var centerPanel = Ext.getCmp('center-panel');
-        _panel.keep = _keep;
-
-        var i,p;
-        if(centerPanel.items) {
-            for (i=0; i<centerPanel.items.length; i++){
-                p =  centerPanel.items.get(i);
-                if (! p.keep) {
-                    centerPanel.remove(p);
-                }
-            }  
-        }
-        if(_panel.keep && _panel.rendered) {
-            centerPanel.layout.setActiveItem(_panel.id);
-        } else {
-            centerPanel.add(_panel);
-            centerPanel.layout.setActiveItem(_panel.id);
-        }
-    },
-    
-    /**
-     * gets the currently displayed toolbar
-     * 
-     * @return {Ext.Toolbar}
-     */
-    getActiveToolbar: function() {
-        var northPanel = Ext.getCmp('north-panel-2');
-
-        if(northPanel.layout.activeItem && northPanel.layout.activeItem.el) {
-            return northPanel.layout.activeItem.el;
-        } else {
-            return false;            
-        }
-    },
-    
-    /**
-     * sets toolbar
-     * 
-     * @param {Ext.Toolbar}
-     */
-    setActiveToolbar: function(_toolbar, _keep) {
-        var northPanel = Ext.getCmp('north-panel-2');
-        _toolbar.keep = _keep;
-        
-        var i,t;
-        if(northPanel.items) {
-            for (i=0; i<northPanel.items.length; i++){
-                t = northPanel.items.get(i);
-                if (! t.keep) {
-                    northPanel.remove(t);
-                }
-            }  
-        }
-        
-        if(_toolbar.keep && _toolbar.rendered) {
-            northPanel.layout.setActiveItem(_toolbar.id);
-        } else {
-            northPanel.add(_toolbar);
-            northPanel.layout.setActiveItem(_toolbar.id);
-        }
     }
 
 });
