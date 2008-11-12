@@ -917,7 +917,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 }
             }
         }
-        echo "done<br/>\n";"
+        echo "done<br/>\n";
         $this->setApplicationVersion('Tinebase', '0.10');        
     }
 
