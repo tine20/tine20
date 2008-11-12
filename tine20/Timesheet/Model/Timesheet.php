@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add contract status table or as enum?
  */
 
 /**
@@ -42,12 +41,14 @@ class Timesheet_Model_Timesheet extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-    /*
-        'parent_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'contract_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'category_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'duration'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'quantity'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'unitprice'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -56,9 +57,6 @@ class Timesheet_Model_Timesheet extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked users/groups and customers
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-    */        
     );
 
     /**
@@ -67,6 +65,7 @@ class Timesheet_Model_Timesheet extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
+        'start',
         'creation_time',
         'last_modified_time',
         'deleted_time'
