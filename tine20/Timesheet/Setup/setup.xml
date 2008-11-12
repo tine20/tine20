@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--application>
+<application>
     <name>Timesheet</name>
     <version>0.1</version>
-    <order>50</order>
+    <order>60</order>
     <status>disabled</status>
     <tables>
         <table>
-            <name>timesheets</name>
+            <name>timesheet_category</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -16,35 +16,66 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>container_id</name>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>timesheet</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
                     <type>integer</type>
                     <notnull>true</notnull>
-                </field>                
+                </field>
                 <field>
-                    <name>parent_id</name>
+                    <name>contract_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>number</name>
+                    <name>category_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>start</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>duration</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>title</name>
-                    <type>text</type>
-                    <length>256</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>status</name>
-                    <type>text</type>
-                    <length>64</length>
                 </field>
                 <field>
                     <name>description</name>
                     <type>text</type>
+                </field>
+                <field>
+                    <name>quantity</name>
+                    <type>double</type>
+                </field>
+                <field>
+                    <name>unitprice</name>
+                    <type>double</type>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -83,23 +114,42 @@
                     </field>
                 </index>
                 <index>
-                    <name>container_id</name>
+                    <name>timesheet::account_id--accounts::id</name>
                     <field>
-                        <name>container_id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>erp_timesheets::container_id--container::id</name>
-                    <field>
-                        <name>container_id</name>
+                        <name>account_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>container</table>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>timesheet::category_id--timesheet_category::id</name>
+                    <field>
+                        <name>category_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>timesheet_category</table>
                         <field>id</field>
                     </reference>
                 </index>
             </declaration>
         </table>
     </tables>
-</application-->
+    <!-- @todo add foreign key timesheet::contract_id erp_contracts::id / erp has to be installed first -->
+    <!-- @todo add more categories -->
+    <defaultRecords>
+        <record>
+            <table>
+                <name>timesheet_category</name>
+            </table>
+            <field>
+                <name>name</name>
+                <value>Implementation</value>
+                <!-- gettext('Implementation') -->
+            </field>
+        </record>
+    </defaultRecords>    
+</application>
