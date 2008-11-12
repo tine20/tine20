@@ -103,6 +103,10 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                         $value = $application->id;
                         break;
                     
+                    case 'uid':
+                        $value = Tinebase_Record_Abstract::generateUID();
+                        break;
+                        
                     default:
                         throw new Setup_Exception('Unsupported special type ' . strtolower($field->value['special']));                    
                     }

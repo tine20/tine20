@@ -146,6 +146,10 @@
                 <name>timesheet_category</name>
             </table>
             <field>
+                <name>id</name>
+                <value special="uid">uid</value>
+            </field>
+            <field>
                 <name>name</name>
                 <value>Implementation</value>
                 <!-- gettext('Implementation') -->
