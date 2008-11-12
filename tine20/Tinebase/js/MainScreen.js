@@ -29,6 +29,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     
     //private
     layout: 'border',
+    border: false,
     
     /**
      * @private
