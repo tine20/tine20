@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add tests for linked contacts/accoutns
  */
 
 /**
@@ -105,7 +104,6 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to update a contract (with relations)
      *
-     * @todo    add account check
      */
     public function testUpdateContract()
     {
