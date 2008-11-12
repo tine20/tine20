@@ -909,6 +909,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         foreach ($relationsByLeadId as $leadId => $relations) {
             foreach ($relations as $relation) {
                 try {
+                    echo "set relation: " . $relation->type . " " . $relation->related_model ."<br/>\n";
                     $relationsBackend->addRelation($relation);
                 } catch (Tinebase_Exception_Record_NotAllowed $e) {
                     // cweiss 2008-08-25 this duplicates come from an earlier upgrading failure don't confuse user with verbosity ;-) 
@@ -916,6 +917,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 }
             }
         }
+        echo "done<br/>\n";"
         $this->setApplicationVersion('Tinebase', '0.10');        
     }
 
