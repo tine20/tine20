@@ -1,6 +1,6 @@
 <?php
 /**
- * contract controller for Timesheet application
+ * Category controller for Timesheet application
  * 
  * @package     Timesheet
  * @subpackage  Controller
@@ -12,12 +12,12 @@
  */
 
 /**
- * Timesheet controller class for Timesheet application
+ * Category controller class for Timesheet application
  * 
  * @package     Timesheet
  * @subpackage  Controller
  */
-class Timesheet_Controller_Timesheet extends Tinebase_Application_Controller_Record_Abstract
+class Timesheet_Controller_Category extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -26,30 +26,27 @@ class Timesheet_Controller_Timesheet extends Tinebase_Application_Controller_Rec
      */
     private function __construct() {        
         $this->_applicationName = 'Timesheet';
-        $this->_backend = new Timesheet_Backend_Timesheet();
-        $this->_modelName = 'Timesheet_Model_Timesheet';
+        $this->_backend = new Timesheet_Backend_Category();
+        $this->_modelName = 'Timesheet_Model_Category';
         $this->_currentAccount = Tinebase_Core::getUser();   
-        
-        // disable container ACL checks as we don't init the 'Shared Timesheets' grants in the setup
-        $this->_doContainerACLChecks = FALSE; 
     }    
     
     /**
      * holdes the instance of the singleton
      *
-     * @var Timesheet_Controller_Timesheet
+     * @var Timesheet_Controller_Category
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Timesheet_Controller_Timesheet
+     * @return Timesheet_Controller_Category
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Timesheet_Controller_Timesheet();
+            self::$_instance = new Timesheet_Controller_Category();
         }
         
         return self::$_instance;

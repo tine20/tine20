@@ -143,6 +143,19 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteTimesheets($timesheetData['id']);
         Erp_Controller_Contract::getInstance()->delete($timesheet->contract_id);
     }
+
+    /**
+     * try to get categories
+     *
+     */
+    public function testGetCategories()
+    {
+        $categories = $this->_backend->getAllCategorys();
+        
+        // check
+        $this->assertGreaterThan(0, $categories['totalcount']);
+        $this->assertTrue(!empty($categories['results'][0]['name']));
+    }
     
     /************ protected helper funcs *************/
     
