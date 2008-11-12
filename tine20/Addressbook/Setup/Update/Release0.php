@@ -105,7 +105,11 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
                 <length>64</length>
                 <notnull>false</notnull>
             </field>');
-        $this->_backend->addCol('addressbook', $declaration);
+        try {
+            $this->_backend->addCol('addressbook', $declaration);
+        } catch (Exception $e) {
+            echo "salutation_id already exists.\n";
+        }        
 
         $tableDefinition = ('
         <table>
@@ -145,27 +149,32 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         ');
     
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);    
+        try {
+            $this->_backend->createTable($table);
+        } catch (Exception $e) {
+            echo "salutation table already exists.\n";
+        }        
         
         // add initial values
+        $backend = new Addressbook_Backend_Salutation();
         $maleSalutation = new Addressbook_Model_Salutation(array(
             'id'        => 1,
             'name'      => 'Mr',
             'gender'    => Addressbook_Model_Salutation::GENDER_MALE
         ));
-        Addressbook_Backend_Salutation::getInstance()->create($maleSalutation);
+        $backend->create($maleSalutation);
         $femaleSalutation = new Addressbook_Model_Salutation(array(
             'id'        => 2,
             'name'      => 'Ms',
             'gender'    => Addressbook_Model_Salutation::GENDER_FEMALE
         ));
-        Addressbook_Backend_Salutation::getInstance()->create($femaleSalutation);
+        $backend->create($femaleSalutation);
         $companySalutation = new Addressbook_Model_Salutation(array(
             'id'        => 3,
             'name'      => 'Company',
             'gender'    => Addressbook_Model_Salutation::GENDER_OTHER
         ));
-        Addressbook_Backend_Salutation::getInstance()->create($companySalutation);
+        $backend->create($companySalutation);
         
         $this->setApplicationVersion('Addressbook', '0.5');
     }
