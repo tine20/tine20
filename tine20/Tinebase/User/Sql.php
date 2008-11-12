@@ -135,7 +135,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {
-//        $db = Zend_Registry::get('dbAdapter');
         // quote into expects 2 params
         $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.login_name') . ' = ?', $_loginName));
@@ -175,7 +174,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        #$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.id') . ' = ?', $accountId));
 
@@ -213,9 +211,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     
     protected function _getUserSelectObject()
     {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 
                 array(
                     'accountId'             => $this->rowNameMapping['accountId'],
@@ -565,12 +561,22 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * Get multiple users
      *
      * @param string|array $_id Ids
-     * @return Tinebase_Record_RecordSet
-     * @todo implement
+     * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User'
      */
     public function getMultiple($_id) 
     {
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_User'); 
+        if (empty($_id)) {
+            return new Tinebase_Record_RecordSet('Tinebase_Model_User');
+        }
+
+        $select = $this->_getUserSelectObject()            
+            ->where(SQL_TABLE_PREFIX . 'accounts.id in (?)', (array) $_id);
+        
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_User', $queryResult);
+        
         return $result;
     }
 }

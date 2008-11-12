@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @deprecated  user backends should be refactored
  */
 
 /**
