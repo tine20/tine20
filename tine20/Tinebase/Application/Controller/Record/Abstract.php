@@ -181,7 +181,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             // add personal container id if container id is missing in record
-            if(empty($_record->container_id)) {
+            if($_record->has('container_id') && empty($_record->container_id)) {
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
                 $_record->container_id = $containers[0]->getId();
             }            
@@ -327,9 +327,12 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($records as $record) {
-                $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+                if ($record->has('container_id')) {
+                    $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+                }
                 
                 if (!$this->_doContainerACLChecks 
+                    || !$record->has('container_id')
                     || ($this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_DELETE 
                     && $container->type != Tinebase_Model_Container::TYPE_INTERNAL))) {
                         
