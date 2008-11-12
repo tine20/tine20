@@ -57,6 +57,14 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
             
             $result = $this->_search($_arguments[0], $_arguments[1], $controller, $filterModelName);    
 
+        /************ GET All ************************************/
+            
+        } else if (preg_match("/getAll([A-Za-z]+)s/", $_fname, $matches)) {
+            $modelName = $matches[1];   
+            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
+
+            $result = $this->_getAll($controller);    
+            
         /************ GET ****************************************/
             
         } else if (preg_match("/get([A-Za-z]+)/", $_fname, $matches)) {
@@ -101,6 +109,24 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     {
         $record = $_controller->get($_uid);
         return $this->_recordToJson($record);
+    }
+
+    /**
+     * Returns all records
+     *
+     * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @return  array record data
+     * 
+     * @todo    add sort/dir params here?
+     */
+    protected function _getAll(Tinebase_Application_Controller_Record_Interface $_controller)
+    {
+        $records = $_controller->getAll();
+        
+        return array(
+            'results'       => $records->toArray(),
+            'totalcount'    => count($records)
+        );        
     }
     
     /**

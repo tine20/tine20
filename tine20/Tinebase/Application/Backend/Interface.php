@@ -51,6 +51,16 @@ interface Tinebase_Application_Backend_Interface
      * @return Tinebase_RecordSet of Tinebase_Record_Interface
      */
     public function getMultiple($_ids);
+
+    /**
+     * Gets all entries
+     *
+     * @param string $_orderBy Order result by
+     * @param string $_orderDirection Order direction - allowed are ASC and DESC
+     * @throws Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC');
     
     /**
      * Create a new persistent contact

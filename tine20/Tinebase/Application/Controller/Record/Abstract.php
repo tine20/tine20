@@ -162,6 +162,19 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         return $records;
     }    
     
+    /**
+     * Gets all entries
+     *
+     * @param string $_orderBy Order result by
+     * @param string $_orderDirection Order direction - allowed are ASC and DESC
+     * @throws Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') 
+    {
+        return $this->_backend->getAll($_orderBy, $_orderDirection);
+    }
+    
     /*************** add / update / delete lead *****************/    
 
     /**

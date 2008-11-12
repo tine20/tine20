@@ -127,15 +127,19 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @return Tinebase_Record_RecordSet
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') {
-        if(in_array($_orderDirection, array('ASC', 'DESC')) === FALSE) {
+        if(!in_array($_orderDirection, array('ASC', 'DESC'))) {
             throw new Tinebase_Exception_InvalidArgument('$_orderDirection is invalid');
         }
         
         $select = $this->_getSelect();
         $select->order($_orderBy . ' ' . $_orderDirection);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, true));
         
         $result = new Tinebase_Record_RecordSet($this->_modelName, $queryResult);
         
