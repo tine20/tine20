@@ -43,7 +43,7 @@ Ext.extend(Tine.Tinebase.AppManager, {
             return false;
         }
         
-        var app = this.apps.get(appName);
+        var app = this.apps.get(app);
         if (! app.isInitialised) {
             var appObj = this.getAppObj(appName);
             appObj.isInitialised = true;
@@ -83,21 +83,41 @@ Ext.extend(Tine.Tinebase.AppManager, {
     /**
      * @private
      */
-    getAppObj: function(appName) {
+    getAppObj: function(app) {
         try{
             // legacy
-            if (typeof(Tine[appName].getPanel) == 'function') {
-                var appPanel = Tine[appName].getPanel();
+            if (typeof(Tine[app.appName].getPanel) == 'function') {
+                var appPanel = Tine[app.appName].getPanel();
                 // make a legacy Tine.Application
-                // return application;
+                return this.getLegacyApp(app, appPanel);
             }
             
-            return new Tine[appName]();
+            return new Tine[app.appName](app);
             
         } catch(e) {
-            console.error('Initialising of Application "' + appName + '" failed with the following message:' + e);
+            console.error('Initialising of Application "' + app.appName + '" failed with the following message:' + e);
             console.warn(e);
             return false;
         }
+    },
+    
+    /**
+     * @private
+     */
+    getLegacyApp: function(app, appPanel) {
+        var appObj =  new Tine.Tinebase.Application(app);
+        var mainScreen = new Tine.Tinebase.widgets.app.MainScreen(appObj);
+        
+        Ext.override(mainScreen, {
+            appPanel: appPanel,
+            show: function() {
+                Tine.Tinebase.MainScreen.setActiveTreePanel(this.appPanel, true);
+                this.appPanel.fireEvent('beforeexpand', this.appPanel);
+            }
+        });
+        
+        Ext.override(appObj, {
+            mainScreen: mainScreen
+        });
     }
 });
