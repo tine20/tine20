@@ -27,7 +27,7 @@ Tine.Tinebase.Application = function(config) {
     this.i18n.textdomain(this.appName);
 };
 
-Ext.extend(Tine.Tinebase.application, Ext.util.Observable , {
+Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     
     /**
      * @cfg {String} appName
