@@ -24,6 +24,12 @@ Tine.Tinebase.AppManager = function() {
     var app;
     for(var i=0; i<enabledApps.length; i++) {
         app = enabledApps[i];
+
+        //we don't have a Tinebase 'Application'
+        if (app.name == 'Tinebase') {
+            continue;
+        }
+            
         app.appName = app.name;
         app.isInitialised = false;
         this.apps.add(app.appName, app);
