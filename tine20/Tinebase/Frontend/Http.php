@@ -104,6 +104,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/widgets/tags/TagCombo.js',
             'Tinebase/js/widgets/tags/TagFilter.js',
             'Tinebase/js/widgets/app/JsonBackend.js',
+            'Tinebase/js/widgets/app/MainScreen.js',
             'Tinebase/js/widgets/app/GridPanel.js',
             'Tinebase/js/widgets/GroupSelect.js',
             'Tinebase/js/widgets/CountryCombo.js',
