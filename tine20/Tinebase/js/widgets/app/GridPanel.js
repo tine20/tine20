@@ -14,15 +14,15 @@ Ext.namespace('Tine.Tinebase.widgets.app');
 
 Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
+     * @cfg {Tine.Tinebase.Application} app
+     * instance of the app object (required)
+     */
+    app: null,
+    /**
      * @cfg {Object} gridConfig
      * Config object for the Ext.grid.GridPanel
      */
     gridConfig: {},
-    /**
-     * @cfg {String} appName
-     * internal/untranslated app name (required)
-     */
-    appName: null,
     /**
      * @cfg {String} modelName
      * name of the model/record  (required)
@@ -121,7 +121,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     initComponent: function(){
         // init translations
         this.i18n = new Locale.Gettext();
-        this.i18n.textdomain(this.appName);
+        this.i18n.textdomain(this.app.appName);
         // init actions with actionToolbar and contextMenu
         this.initActions();
         // init store
@@ -175,7 +175,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             actionType: 'add',
             text: String.format(this.i18n._('Add {0}'), this.containerItemName),
             handler: this.onEditInNewWindow,
-            iconCls: this.appName + 'IconCls',
+            iconCls: this.app.appName + 'IconCls',
             scope: this
         });
         
