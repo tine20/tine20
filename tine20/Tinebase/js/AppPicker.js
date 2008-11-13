@@ -150,6 +150,10 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     onRender: function(ct, position) {
         Tine.Tinebase.AppPile.superclass.onRender.call(this, ct, position);
         
+        this.apps.sort("ASC", function(app1, app2) {
+           return app1.order<app2.order;
+        });
+        
         this.apps.each(function(app) {
             this.els[app.appName] = this.tpl.insertFirst(this.bwrap, {title: app.getTitle(), iconCls: app.getIconCls()}, true);
             this.els[app.appName] .setStyle('cursor', 'pointer');
