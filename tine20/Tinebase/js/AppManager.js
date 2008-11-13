@@ -36,7 +36,7 @@ Tine.Tinebase.AppManager = function() {
     }
 };
 
-Ext.extend(Tine.Tinebase.AppManager, {
+Ext.apply(Tine.Tinebase.AppManager.prototype, {
     
     /**
      * returns an appObject
@@ -49,9 +49,9 @@ Ext.extend(Tine.Tinebase.AppManager, {
             return false;
         }
         
-        var app = this.apps.get(app);
+        var app = this.apps.get(appName);
         if (! app.isInitialised) {
-            var appObj = this.getAppObj(appName);
+            var appObj = this.getAppObj(app);
             appObj.isInitialised = true;
             Ext.applyIf(appObj, app);
             this.apps.replace(appName, appObj);
@@ -90,12 +90,11 @@ Ext.extend(Tine.Tinebase.AppManager, {
      * @private
      */
     getAppObj: function(app) {
-        try{
+       try{
             // legacy
             if (typeof(Tine[app.appName].getPanel) == 'function') {
-                var appPanel = Tine[app.appName].getPanel();
                 // make a legacy Tine.Application
-                return this.getLegacyApp(app, appPanel);
+                return this.getLegacyApp(app);
             }
             
             return new Tine[app.appName](app);
@@ -110,20 +109,26 @@ Ext.extend(Tine.Tinebase.AppManager, {
     /**
      * @private
      */
-    getLegacyApp: function(app, appPanel) {
+    getLegacyApp: function(app) {
+        var appPanel = Tine[app.appName].getPanel();
         var appObj =  new Tine.Tinebase.Application(app);
         var mainScreen = new Tine.Tinebase.widgets.app.MainScreen(appObj);
         
-        Ext.override(mainScreen, {
+        Ext.apply(mainScreen, {
             appPanel: appPanel,
             show: function() {
-                Tine.Tinebase.MainScreen.setActiveTreePanel(this.appPanel, true);
-                this.appPanel.fireEvent('beforeexpand', this.appPanel);
+                Tine.Tinebase.MainScreen.setActiveTreePanel(appPanel, true);
+                appPanel.fireEvent('beforeexpand', appPanel);
             }
         });
-        
-        Ext.override(appObj, {
+        Ext.apply(appObj, {
             mainScreen: mainScreen
         });
+        appPanel.on('render', function(p) {
+            p.header.remove()
+            p.doLayout();
+        });
+        
+        return appObj;
     }
 });
