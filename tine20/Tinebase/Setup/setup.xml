@@ -1855,7 +1855,7 @@
             </field>
             <field>
                 <name>is_user_type</name>
-                <value>false</value>
+                <value>0</value>
             </field>            
         </record>
         <record>
@@ -1886,7 +1886,7 @@
             </field>
             <field>
                 <name>is_user_type</name>
-                <value>false</value>
+                <value>0</value>
             </field>            
         </record>
     </defaultRecords>    
