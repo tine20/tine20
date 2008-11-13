@@ -290,6 +290,39 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     },
     
     /**
+     * sets the active tree panel
+     * 
+     * @param {Ext.Panel} panel Panel to activate
+     * @param {Bool} keep keep panel
+     */
+    setActiveTreePanel: function(panel, keep) {
+        // get card panel to which component will be added
+        var cardPanel =  this.appPicker.getTreeCardPanel();
+        panel.keep = keep;
+        
+        // remove all panels which should not be keeped
+        var i,p;
+        if(cardPanel.items) {
+            for (i=0; i<cardPanel.items.length; i++){
+                p =  cardPanel.items.get(i);
+                if (! p.keep) {
+                    cardPanel.remove(p);
+                }
+            }  
+        }
+        
+        // add or set given panel
+        if(panel.keep && panel.rendered) {
+            cardPanel.layout.setActiveItem(panel.id);
+        } else {
+            cardPanel.add(panel);
+            cardPanel.layout.setActiveItem(panel.id);
+            cardPanel.doLayout();
+        }
+        
+    },
+    
+    /**
      * gets the currently displayed toolbar
      * 
      * @return {Ext.Toolbar}
