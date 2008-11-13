@@ -26,68 +26,39 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
      */
     defaultAppPanel: null,
     
+    /**
+     * @cfg {Ext.util.Observable} apps (required)
+     */
+    apps: null,
+    /**
+     * @cfg {String} defaultAppName (required)
+     */
+    defaultAppName: '',
+    
+    /**
+     * @private
+     */
     layout: 'border',
     border: false,
     
+    /**
+     * @private
+     */
     initComponent: function() {
-        this.initAppPile();
+        this.appTitle = this.apps.get(this.defaultAppName).getTitle();
+        
+        this.appPile = new Tine.Tinebase.AppPile({
+            apps: this.apps,
+            defaultAppName: this.defaultAppName,
+            scope: this,
+            handler: function(app) {
+                this.setAppTitle(app.getTitle());
+                app.getMainScreen().show();
+            }
+        });
         
         this.initLayout();
         Tine.Tinebase.AppPicker.superclass.initComponent.call(this);
-        
-        document.title = 'Tine 2.0 - ' + this.defaultAppPanel.title;
-    },
-    
-    
-    initAppPile: function() {
-        // legacy: init app pile and cards
-        var appPileItems = [];
-        var activeItem;
-        
-        var appPanel, appItem;
-        for (var i=0; i<this.appPanels.length; i++) {
-            appPanel = this.appPanels[i];
-            //console.log(appPanel.header);
-            //appPanel.header = false;
-            appPanel.on('render', function(p) {
-                p.header.remove()
-                //p.header.hide();
-                p.doLayout();
-                //console.log(p);
-                //p.layout.layout();
-            });
-            
-            appItem = {
-                appName: appPanel.appName,
-                iconCls: appPanel.iconCls,
-                title: appPanel.title,
-                panel: appPanel
-            }
-            
-            appPileItems.push(appItem);
-            if (appPanel == this.defaultAppPanel) {
-                activeItem = appItem;
-            }
-        }
-        
-        this.appPile = new Tine.Tinebase.AppPile({
-            appItems: appPileItems,
-            activeItem: activeItem
-        });
-        
-        this.appPile.on('showapplication', function(appItem) {
-            var cp = this.getTreeCardPanel();
-            var tp = this.items.get(0);
-            
-            cp.layout.setActiveItem(appItem.panel);
-            tp.body.dom.innerHTML = '<div class ="app-panel-title">' + appItem.title + '</div>'
-            
-            // update domument title
-            document.title = 'Tine 2.0 - ' + appItem.title;
-            
-            // legacy: fire beforeexpand
-            appItem.panel.fireEvent('beforeexpand', appItem.panel);
-        }, this);
     },
     
     initLayout: function() {
@@ -97,20 +68,28 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
             border: false,
             height: 40,
             baseCls: 'x-panel-header',
-            html: '<div class ="app-panel-title">' + this.defaultAppPanel.title + '</div>'
+            html: '<div class ="app-panel-title">' + this.getAppTitle() + '</div>'
         }, {
             region: 'center',
             layout: 'card',
-            border: false,
-            activeItem: this.defaultAppPanel,
-            items: this.appPanels
+            border: false
         }, {
             region: 'south',
             layout: 'fit',
             border: false,
-            height: this.appPanels.length * 24,
+            height: this.apps.getCount() * 24,
             items: this.appPile
         }];
+    },
+    
+    setAppTitle: function(appTitle) {
+        this.appTitle = appTitle;
+        document.title = 'Tine 2.0 - ' + appTitle;
+        this.items.get(0).body.dom.innerHTML = '<div class ="app-panel-title">' + appTitle + '</div>'
+    },
+    
+    getAppTitle: function() {
+        return this.appTitle;
     },
     
     getTreeCardPanel: function() {
@@ -120,29 +99,40 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
 
 Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     /**
-     * @cfg {Array} appItems
-     * ordered list off app arrays (appName/title/iconCls)
+     * @cfg {Ext.util.Observable} apps (required)
      */
-    appItems: [],
+    apps: null,
     /**
-     * @cfg {Object} activeItem
-     * active app abject
+     * @cfg {String} defaultAppName (required)
      */
-    activeItem: null,
+    defaultAppName: '',
+    /**
+     * @cfg {Object} scope
+     * scope hander is called int
+     */
+    scope: null,
+    /**
+     * @cfg {Function} handler
+     * click handler of apps
+     */
+    handler: null,
     
-    // private
+    /**
+     * @private
+     * @property {Object} items
+     * holds internal item elements
+     */
+    els: {},
+    
+    /**
+     * @private
+     */
     border: false,
     
-    /*
-    setTitle: function(appName, title) {
-        
-    },
-    
-    setIconCls: function(appName, icon) {
-        
-    },
-    */
-    
+    /**
+     * @private
+     * @todo: register app.on('titlechange', ...)
+     */
     initComponent: function() {
         Tine.Tinebase.AppPile.superclass.initComponent.call(this);
         
@@ -154,34 +144,39 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
         ).compile();
     },
     
+    /**
+     * @private
+     */
     onRender: function(ct, position) {
         Tine.Tinebase.AppPile.superclass.onRender.call(this, ct, position);
         
-        var item;
-        for (var i=this.appItems.length; i>0; i--) {
-            item = this.appItems[i-1];
-            item.el = this.tpl.insertFirst(this.bwrap, item, true);
-            item.el.setStyle('cursor', 'pointer');
-            item.el.addClassOnOver('app-panel-header-over');
-            item.el.on('click', this.onAppTitleClick, this, item);
-        }
+        this.apps.each(function(app) {
+            this.els[app.appName] = this.tpl.insertFirst(this.bwrap, {title: app.getTitle(), iconCls: app.getIconCls()}, true);
+            this.els[app.appName] .setStyle('cursor', 'pointer');
+            this.els[app.appName] .addClassOnOver('app-panel-header-over');
+            this.els[app.appName] .on('click', this.onAppTitleClick, this, app);
+        }, this);
         
-        this.setActiveItem(this.activeItem);
+        this.setActiveItem(this.els[this.defaultAppName]);
     },
     
-    onAppTitleClick: function(e, dom, item) {
-        this.setActiveItem(item);
-        this.fireEvent('showapplication', item);
+    /**
+     * @private
+     */
+    onAppTitleClick: function(e, dom, app) {
+        this.setActiveItem(Ext.get(dom));
+        this.handler.call(this.scope|| this, app);
     },
     
-    setActiveItem: function(item) {
-        var current;
-        for (var i=0; i<this.appItems.length; i++) {
-            current = this.appItems[i];
-            if (item == current) {
-                current.el.addClass('app-panel-header-active');
+    /**
+     * @private
+     */
+    setActiveItem: function(el) {
+        for (var appName in this.els) {
+            if (el == this.els[appName]) {
+                this.els[appName].addClass('app-panel-header-active');
             } else {
-                current.el.removeClass('app-panel-header-active');
+                this.els[appName].removeClass('app-panel-header-active');
             }
         }
     }

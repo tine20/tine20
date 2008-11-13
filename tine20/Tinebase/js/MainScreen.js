@@ -21,12 +21,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      */
     defaultAppName: 'Addressbook',
     
-    /**
-     * holds default app panel
-     * @private
-     */
-    defaultAppPanel: null,
-    
     //private
     layout: 'border',
     border: false,
@@ -91,7 +85,10 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         });
         
         // init app picker
-        this.initAppPicker();
+        this.appPicker = new Tine.Tinebase.AppPicker({
+            apps: Tine.Tinebase.appMgr.getAll(),
+            defaultAppName: this.defaultAppName
+        });
                     
         // init generic mainscreen layout
         this.items = [{
@@ -191,54 +188,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         });
     },
     
-    // init app picker
-    initAppPicker: function() {
-        this.appPicker = new Tine.Tinebase.AppPicker({
-            appPanels: this.getPanels(),
-            defaultAppPanel: this.defaultAppPanel
-        });
-    },
-    
-    /**
-     * returns array of panels to display in south region
-     * 
-     * @private
-     * @return {Array}
-     */
-    getPanels:  function() {
-        var userApps = Tine.Tinebase.registry.get('userApplications');
-        
-        var panels = [];
-        var app, appPanel;
-        for(var i=0; i<userApps.length; i++) {
-            app = userApps[i];
-            
-            /**
-             * we don't have a Tinebase 'Application'
-             */
-            if (app.name == 'Tinebase') {
-                continue;
-            }
-            
-            if(app.status != 'enabled') {
-                continue;
-            }
-            try{
-                appPanel = Tine[app.name].getPanel();
-                panels.push(appPanel);
-                
-                if (i === 0 || app.name == this.defaultAppName) {
-                    this.defaultAppPanel = appPanel;
-                }
-            } catch(e) {
-                console.error('Initialising of Application "' + app.name + '" failed with the following message:' + e);
-                console.warn(e);
-            }
-        }
-        
-        return panels;
-    },
-    
     onRender: function(ct, position) {
         Tine.Tinebase.MainScreen.superclass.onRender.call(this, ct, position);
         Tine.Tinebase.MainScreen = this;
@@ -251,11 +200,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     },
     
     ativateDefaultApp: function() {
-        if (this.defaultAppPanel.rendered) {
-            if(! this.defaultAppPanel.collapsed) {
-                this.defaultAppPanel.fireEvent('beforeexpand', this.defaultAppPanel);
-            }
-            this.defaultAppPanel.expand();
+        if (this.appPicker.getTreeCardPanel().rendered) {
+            Tine.Tinebase.appMgr.get(this.defaultAppName).getMainScreen().show();
         } else {
             this.ativateDefaultApp.defer(10, this);
         }
