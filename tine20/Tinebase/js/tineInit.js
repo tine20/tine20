@@ -141,6 +141,8 @@ Tine.Tinebase.tineInit = {
                     break;
             }
         }
+        // todo: find a better place for stuff to do after successfull login
+        Tine.Tinebase.tineInit.initAppMgr();
         
         /** temporary Tine.onReady for smooth transition to new window handling **/
         if (typeof(Tine.onReady) == 'function') {
@@ -360,7 +362,14 @@ Tine.Tinebase.tineInit = {
             Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainWindow().Ext.state.Manager.getProvider().getStateStore());
         }
     },
-
+    
+    /**
+     * initialise application manager
+     */
+    initAppMgr: function() {
+        Tine.Tinebase.appMgr = new Tine.Tinebase.AppManager();
+    },
+    
     /**
      * config locales
      */
