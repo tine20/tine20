@@ -10,7 +10,7 @@
  *
  */
  
-Ext.namespace('Tine.Tinebase');
+Ext.ns('Tine.Tinebase');
 
 Tine.Tinebase.AppManager = function() {
     /**

@@ -117,6 +117,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/ExceptionDialog.js',
             'Tinebase/js/Container.js',
             'Tinebase/js/Models.js',
+            'Tinebase/js/Application.js',
             'Tinebase/js/AppManager.js',
             'Tinebase/js/AppPicker.js',
             'Tinebase/js/MainScreen.js',
