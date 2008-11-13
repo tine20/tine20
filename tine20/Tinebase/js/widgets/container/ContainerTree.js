@@ -33,7 +33,18 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
     });
   </code></pre>
   */
- Tine.widgets.container.TreePanel = Ext.extend(Ext.tree.TreePanel, {
+
+Tine.widgets.container.TreePanel = function(config) {
+    Ext.apply(this, config);
+    
+    if (this.app) {
+        this.appName = this.app.appName;
+    }
+    
+    Tine.widgets.container.TreePanel.superclass.constructor.call(this);
+}
+
+Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
  	/**
      * @cfg {string} appName
      * name of application
