@@ -133,7 +133,8 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
             'leadtype_id'    => $defaultType,
             'leadsource_id'  => $defaultSource,
             'start'          => Zend_Date::now(),
-            'probability'    => 0
+            'probability'    => 0,
+            'turnover'       => 0
         );
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
         $emptyLead = new Crm_Model_Lead($defaultData, true);
