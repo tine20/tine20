@@ -26,25 +26,6 @@ Tine.Tasks.TreePanel = function(config) {
 }
 Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel);
 
-/*
-// Tasks main screen
-Tine.Tasks.mainGrid = {
-    updateMainToolbar : function() {
-        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
-        menu.removeAll();
-
-        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-        adminButton.setIconClass('TasksTreePanel');
-
-        adminButton.setDisabled(true);
-
-        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('TasksTreePanel');
-        preferencesButton.setDisabled(true);
-    }
-};
-*/
-
 // Task model
 Tine.Tasks.TaskArray = [
     // tine record fields
@@ -96,6 +77,24 @@ Tine.Tasks.Task = Ext.data.Record.create(
     Tine.Tasks.TaskArray
 );
 
+/* 'meta' properties of a record
+Ext.apply(Tine.Tasks.Task, {
+    appName: 'Tasks',
+    modelName: 'Task',
+    recordClass: Tine.Tasks.Task,
+    idProperty: 'id',
+    titleProperty: 'summary',
+    recordName: 'Task',
+    recordssName: 'Tasks',
+    containerProperty: 'container_id',
+    containerName: 'to do list',
+    containesrName: 'to do lists'
+});
+*/
+
+/**
+ * default tasks backend
+ */
 Tine.Tasks.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Tasks',
     modelName: 'Task',

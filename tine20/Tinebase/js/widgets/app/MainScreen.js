@@ -59,6 +59,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
             this.setTreePanel();
             this.setContentPanel();
             this.setToolbar();
+            this.updateMainToolbar();
             
             this.fireEvent('show', this);
         }
@@ -104,6 +105,23 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
+    },
+    
+    /**
+     * updates main toolbar
+     */
+    updateMainToolbar : function() {
+        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+        menu.removeAll();
+
+        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+        adminButton.setIconClass('TasksTreePanel');
+
+        adminButton.setDisabled(true);
+
+        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
+        preferencesButton.setIconClass('TasksTreePanel');
+        preferencesButton.setDisabled(true);
     }
     
 });
