@@ -34,12 +34,19 @@ Tine.Tinebase.widgets.app.MainScreen = function(config) {
 
 Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     /**
-     * @cfg {String} appName
-     * internal/untranslated app name (required)
+     * @cfg {Tine.Tinebase.Application} app
+     * instance of the app object (required)
      */
+    app: null,
     
     /**
-     * @property {Locale.Gettext} i18n
+     * @property {Ext.Panel} treePanel
+     */
+    /**
+     * @property {Tine.widgets.app.GridPanel} gridPanel 
+     */
+    /**
+     * @property {Ext.Toolbar} actionToolbar
      */
     
     /**
@@ -49,9 +56,9 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      */
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){
-            this.setNorthPanel();
-            this.setWestPanel();
-            this.setCenterPanel();
+            this.setTreePanel();
+            this.setContentPanel();
+            this.setToolbar();
             
             this.fireEvent('show', this);
         }
@@ -62,36 +69,41 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         
     },
     
-    getTitle: function() {
-        return this.i18n._(this.appName);
-    },
-    
     /**
-     * sets title in mainscreen
+     * sets tree panel in mainscreen
      */
-    setTitle: function(title) {
-        this.mainScreen.setTitle(this, appName, this.i18n._(this.appName));
-    },
-    
-    /**
-     * sets west panel in mainscreen
-     */
-    setWestPanel: function() {
+    setTreePanel: function() {
+        if(!this.treePanel) {
+            this.treePanel = new Tine[this.app.appName].TreePanel({app: this.app});
+        }
         
+        Tine.Tinebase.MainScreen.setActiveTreePanel(this.treePanel, true);
     },
     
     /**
-     * sets center panel in mainscreen
+     * sets content panel in mainscreen
      */
-    setCenterPanel: function() {
+    setContentPanel: function() {
+        if(!this.gridPanel) {
+            this.gridPanel = new Tine[this.app.appName].GridPanel({
+                app: this.app,
+                plugins: [this.treePanel.getFilterPlugin()]
+            });
+        }
         
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+        this.gridPanel.store.load();
     },
     
     /**
-     * sets north panel in mainscreen
+     * sets toolbar in mainscreen
      */
-    setNorthPanel: function() {
+    setToolbar: function() {
+        if(!this.actionToolbar) {
+            this.actionToolbar = this.gridPanel.actionToolbar;
+        }
         
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
     }
     
 });
