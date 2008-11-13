@@ -28,8 +28,8 @@ class Tasks_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Tasks/js/Status.js',
             'Tasks/js/Tasks.js',
+            'Tasks/js/Status.js',
             'Tasks/js/GridPanel.js',
             'Tasks/js/EditDialog.js',
         );

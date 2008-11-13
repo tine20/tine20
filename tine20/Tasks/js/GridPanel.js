@@ -38,6 +38,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
         
+        this.recordProxy = Tine.Tasks.JsonBackend;
+        
         this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();

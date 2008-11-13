@@ -9,67 +9,26 @@
  *
  */
  
-Ext.namespace('Tine.Tasks');
+Ext.namespace('Tine');
 
-/**
- * entry point, required by tinebase
- * This function is called once when Tinebase collect the available apps
- */
-Tine.Tasks.getPanel =  function() {
-    Tine.Tasks.mainGrid.initComponent();
-	var tree = Tine.Tasks.mainGrid.tree;
+
+Tine.Tasks = Tine.Tinebase.Application;
+Tine.Tasks.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
+
+// legacy
+Tine.Tasks.TreePanel = function(config) {
+    Ext.apply(this, config);
+
+    this.containersName = this.app.i18n._('to do lists');
+    this.containerName = this.app.i18n._('to do list');
     
-    // this function is called each time the user activates the Tasks app
-    tree.on('beforeexpand', function(panel) {
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.gridPanel.actionToolbar, true);
-        this.updateMainToolbar();
-        
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-        this.gridPanel.store.load({});
-    }, Tine.Tasks.mainGrid);
-    
-    return tree;
-};
+    Tine.Tasks.TreePanel.superclass.constructor.call(this);
+}
+Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel);
 
-
+/*
 // Tasks main screen
 Tine.Tasks.mainGrid = {
-    /**
-     * holds translation
-     */
-    translation: null,
-	/**
-     * holds instance of application tree
-     */
-    tree: null,
-    /**
-     * @property {Tine.Tinebase.widgets.app.GridPanel} gridPanel
-     */
-    gridPanel: null,
-    
-    /**
-     * @private
-     */
-	initComponent: function() {
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Tasks');
-        
-        this.tree = new Tine.widgets.container.TreePanel({
-            id: 'TasksTreePanel',
-            iconCls: 'TasksIconCls',
-            title: this.translation._('Tasks'),
-            containersName: this.translation._('to do lists'),
-            containerName: this.translation._('to do list'),
-            appName: 'Tasks',
-            border: false
-        });
-        
-        this.gridPanel = new Tine.Tasks.GridPanel({
-            recordProxy: Tine.Tasks.JsonBackend,
-            plugins: [this.tree.getFilterPlugin()]
-        });
-    },
-	
     updateMainToolbar : function() {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
         menu.removeAll();
@@ -84,6 +43,7 @@ Tine.Tasks.mainGrid = {
         preferencesButton.setDisabled(true);
     }
 };
+*/
 
 // Task model
 Tine.Tasks.TaskArray = [
