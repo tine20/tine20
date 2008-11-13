@@ -76,7 +76,7 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
         });
         
         this.appPile.on('showapplication', function(appItem) {
-            var cp = this.items.get(1);
+            var cp = this.getTreeCardPanel();
             var tp = this.items.get(0);
             
             cp.layout.setActiveItem(appItem.panel);
@@ -111,6 +111,10 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
             height: this.appPanels.length * 24,
             items: this.appPile
         }];
+    },
+    
+    getTreeCardPanel: function() {
+        return this.items.get(1);
     }
 });
 
