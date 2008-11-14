@@ -96,7 +96,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             activeTab: 0,
             border: false,
             items:[{
-                title: this.translation._('Task'),
+                title: this.app.i18n._('Task'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -113,36 +113,36 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     },
                     items: [[{
                         columnWidth: 1,
-                        fieldLabel: this.translation._('Summary'),
+                        fieldLabel: this.app.i18n._('Summary'),
                         name: 'summary',
                         listeners: {render: function(field){field.focus(false, 250);}},
                         allowBlank: false
                     }], [ new Ext.ux.form.ClearableDateField({
-                        fieldLabel: this.translation._('Due date'),
+                        fieldLabel: this.app.i18n._('Due date'),
                         name: 'due'
                     }), new Tine.widgets.Priority.Combo({
-                        fieldLabel: this.translation._('Priority'),
+                        fieldLabel: this.app.i18n._('Priority'),
                         name: 'priority'
                     }), new Tine.widgets.AccountpickerField({
-                        fieldLabel: this.translation._('Responsible'),
+                        fieldLabel: this.app.i18n._('Responsible'),
                         name: 'organizer'
                     })], [{
                         columnWidth: 1,
-                        fieldLabel: this.translation._('Notes'),
-                        emptyText: this.translation._('Enter description...'),
+                        fieldLabel: this.app.i18n._('Notes'),
+                        emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
                         xtype: 'textarea',
                         height: 200
                     }], [new Ext.ux.PercentCombo({
-                        fieldLabel: this.translation._('Percentage'),
+                        fieldLabel: this.app.i18n._('Percentage'),
                         editable: false,
                         name: 'percent'
                     }), new Tine.Tasks.status.ComboBox({
-                        fieldLabel: this.translation._('Status'),
+                        fieldLabel: this.app.i18n._('Status'),
                         name: 'status_id',
                         listeners: {scope: this, 'change': this.handleCompletedDate}
                     }), new Ext.form.DateField({
-                        fieldLabel: this.translation._('Completed'),
+                        fieldLabel: this.app.i18n._('Completed'),
                         name: 'completed'
                     })]]
                 }, {
