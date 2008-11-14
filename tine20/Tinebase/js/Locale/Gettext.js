@@ -94,11 +94,11 @@ Locale.Gettext.prototype.dngettext = function (domain, msgid, msgid_plural, n) {
   return this.dcngettext(domain, msgid, msgid_plural, n, this.category);
 };
 
-Locale.Gettext.prototype.gettext = Locale.Gettext.prototype._ = function (msgid) {
+Locale.Gettext.prototype.gettext = Locale.Gettext.prototype._ = Locale.Gettext.prototype._hidden = function (msgid) {
   return this.dcgettext(this.domain, msgid, this.category);
 };
 
-Locale.Gettext.prototype.ngettext = Locale.Gettext.prototype.n_ = function (msgid, msgid_plural, n) {
+Locale.Gettext.prototype.ngettext = Locale.Gettext.prototype.n_ = Locale.Gettext.prototype.n_hidden = function (msgid, msgid_plural, n) {
   return this.dcngettext(this.domain, msgid, msgid_plural, n, this.category);
 };
 
