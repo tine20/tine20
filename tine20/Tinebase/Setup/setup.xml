@@ -1627,7 +1627,7 @@
                     <name>icon_class</name>
                     <type>text</type>
                     <length>128</length>
-                    <notnull>true</notnull>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>is_user_type</name>
