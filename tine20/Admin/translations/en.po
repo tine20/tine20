@@ -218,9 +218,8 @@ msgid "enabled"
 msgstr "enabled"
 
 #: js/Admin.js:823
-#, python-format
-msgid "unknown status (%s)"
-msgstr "unknown status (%s)"
+msgid "unknown status ({0})"
+msgstr "unknown status ({0})"
 
 #: js/Admin.js:852
 msgid "Displaying application {0} - {1} of {2}"
@@ -338,9 +337,8 @@ msgid "Add new group"
 msgstr "Add new group"
 
 #: js/Groups.js:621
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr "Edit Group \"%s\""
+msgid "Edit Group \"{0}\""
+msgstr "Edit Group \"{0}\""
 
 #: js/Roles.js:48
 msgid "Do you really want to delete the selected roles?"
@@ -411,9 +409,8 @@ msgid "Add New Role"
 msgstr "Add New Role"
 
 #: js/Roles.js:728
-#, python-format
-msgid "Edit Role \"%s\""
-msgstr "Edit Role \"%s\""
+msgid "Edit Role \"{0}\""
+msgstr "Edit Role \"{0}\""
 
 #: js/Tags.js:41
 msgid "Do you really want to delete the selected tags?"
@@ -488,9 +485,8 @@ msgid "Add New Tag"
 msgstr "Add New Tag"
 
 #: js/Tags.js:617
-#, python-format
-msgid "Edit Tag \"%s\""
-msgstr "Edit Tag \"%s\""
+msgid "Edit Tag \"{0}\""
+msgstr "Edit Tag \"{0}\""
 
 #: js/Users.js:141
 msgid "Set new password"
@@ -641,6 +637,5 @@ msgid "Add New User Account"
 msgstr "Add New User Account"
 
 #: js/Users.js:663
-#, python-format
-msgid "Edit User Account \"%s\""
-msgstr "Edit User Account \"%s\""
+msgid "Edit User Account \"{0}\""
+msgstr "Edit User Account \"{0}\""

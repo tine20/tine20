@@ -25,394 +25,426 @@ msgstr "Обработать указания продажи"
 msgid "add, edit and delete leads"
 msgstr "Добавить, обработать и удалить, указания продажи"
 
-#: Controller.php:745
-#, python-format
-msgid "%s's personal leads"
-msgstr "%s's Личные советы продажи"
-
-#: Controller.php:820
+#: Controller/Lead.php:210
 msgid "State"
 msgstr "Статус"
 
-#: Controller.php:821 js/Crm.js:1035
+#: Controller/Lead.php:211 js/Crm.js:1067
 msgid "Type"
 msgstr "Тип"
 
-#: Controller.php:822
+#: Controller/Lead.php:212
 msgid "Source"
 msgstr "Источник"
 
-#: Controller.php:823 js/LeadEditDialog.js:112 Pdf.php:89
+#: Controller/Lead.php:213 Export/Pdf.php:89 js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "Начать"
 
-#: Controller.php:824
+#: Controller/Lead.php:214
 msgid "Scheduled end"
 msgstr "Запланированный конец"
 
-#: Controller.php:825 js/LeadEditDialog.js:126 Pdf.php:92
+#: Controller/Lead.php:215 Export/Pdf.php:92 js/LeadEditDialog.js:126
 msgid "End"
 msgstr "Конец"
 
-#: Controller.php:826 js/Crm.js:394 Pdf.php:83
+#: Controller/Lead.php:216 Export/Pdf.php:83 js/Crm.js:407
 msgid "Turnover"
 msgstr "Оборот "
 
-#: Controller.php:827 js/Crm.js:259 js/Crm.js:260 js/Crm.js:261 js/Crm.js:393
-#: js/LeadEditDialog.js:104 Pdf.php:86
+#: Controller/Lead.php:217 Export/Pdf.php:86 js/Crm.js:265 js/Crm.js:266
+#: js/Crm.js:267 js/Crm.js:406 js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "Вероятность"
 
-#: Controller.php:828
+#: Controller/Lead.php:218
 msgid "Folder"
 msgstr "Папка"
 
-#: Controller.php:829
+#: Controller/Lead.php:219
 msgid "Updated by"
 msgstr "Обновленно"
 
-#: Controller.php:830
+#: Controller/Lead.php:220
 msgid "Updated Fields:"
 msgstr ""
 
-#: Controller.php:831
+#: Controller/Lead.php:221
 #, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s изменен с %s на %s."
+msgid "{0} changed from {0} to {0}."
+msgstr "{0} изменен с {0} на {0}."
 
-#: Controller.php:837
+#: Controller/Lead.php:227
 #, python-format
-msgid "Lead %s has been changed"
-msgstr "Совет продажи %s был изменен"
+msgid "Lead {0} has been changed"
+msgstr "Совет продажи {0} был изменен"
 
-#: Controller.php:839
+#: Controller/Lead.php:229
 #, python-format
-msgid "Lead %s has been creaded"
-msgstr "Совет продажи %s был произведен"
+msgid "Lead {0} has been creaded"
+msgstr "Совет продажи {0} был произведен"
 
-#: js/Crm.js:161
-msgid "Are you sure you want to delete this lead?"
-msgstr "Вы уверены что хотите удалить указание продажи?"
+#: Controller.php:100
+#, python-format
+msgid "{0}'s personal leads"
+msgstr "{0}'s Личные советы продажи"
 
-#: js/Crm.js:177
-msgid "Deleting lead"
-msgstr "Указание продажи удаляется"
+#: Export/Pdf.php:71
+msgid "Lead Data"
+msgstr "Дата совета продажи"
 
-#: js/Crm.js:182
-msgid "Some error occured while trying to delete the lead."
-msgstr "При удаление указания продажи, произошла ошибка."
-
-#: js/Crm.js:226
-msgid "Enter searchfilter"
-msgstr "Введите поисковой фильтр"
-
-#: js/Crm.js:237 js/Crm.js:238 js/Crm.js:392 js/LeadEditDialog.js:41
-#: Pdf.php:74
+#: Export/Pdf.php:74 js/Crm.js:243 js/Crm.js:244 js/Crm.js:405
+#: js/LeadEditDialog.js:41
 msgid "Leadstate"
 msgstr "Статус"
 
-#: js/Crm.js:239
+#: Export/Pdf.php:77 js/LeadEditDialog.js:70
+msgid "Leadtype"
+msgstr "Тип Указания"
+
+#: Export/Pdf.php:80 js/LeadEditDialog.js:87
+msgid "Leadsource"
+msgstr "Источник"
+
+#: Export/Pdf.php:95
+msgid "End Scheduled"
+msgstr "Конец запланирован"
+
+#: Export/Pdf.php:173 js/Crm.js:1098
+msgid "Contacts"
+msgstr "Контакты"
+
+#: Export/Pdf.php:200 js/Crm.js:1045
+msgid "Address"
+msgstr "Адрес"
+
+#: Export/Pdf.php:207
+msgid "Telephone"
+msgstr "Телефон"
+
+#: Export/Pdf.php:208
+msgid "Email"
+msgstr "Электронная почта"
+
+#: Export/Pdf.php:221 js/Crm.js:1232
+msgid "Tasks"
+msgstr "Задания"
+
+#: Export/Pdf.php:240 js/Crm.js:1156
+msgid "Due Date"
+msgstr "Число истечения срока"
+
+#: Export/Pdf.php:245 js/Crm.js:1170
+msgid "Priority"
+msgstr "Приоритет"
+
+#: Export/Pdf.php:259 js/Crm.js:650 js/Crm.js:1375
+msgid "Products"
+msgstr "Продукты"
+
+#: Export/Pdf.php:297
+msgid "low"
+msgstr "Низко"
+
+#: Export/Pdf.php:298
+msgid "normal"
+msgstr "Нормально"
+
+#: Export/Pdf.php:299
+msgid "high"
+msgstr "Высоко"
+
+#: Export/Pdf.php:300
+msgid "urgent"
+msgstr "Срочный"
+
+#: js/Crm.js:167
+msgid "Are you sure you want to delete this lead?"
+msgstr "Вы уверены что хотите удалить указание продажи?"
+
+#: js/Crm.js:183
+msgid "Deleting lead"
+msgstr "Указание продажи удаляется"
+
+#: js/Crm.js:188
+msgid "Some error occured while trying to delete the lead."
+msgstr "При удаление указания продажи, произошла ошибка."
+
+#: js/Crm.js:232
+msgid "Enter searchfilter"
+msgstr "Введите поисковой фильтр"
+
+#: js/Crm.js:245
 msgid "leadstate"
 msgstr "Статус"
 
-#: js/Crm.js:317
+#: js/Crm.js:323
 msgid "Show details"
 msgstr "Показать детали"
 
-#: js/Crm.js:326
+#: js/Crm.js:332
 msgid "Show closed leads"
 msgstr "Показать законьчиные указания продажи"
 
-#: js/Crm.js:363
+#: js/Crm.js:376
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr "Показ указания продажи {0} - {1} of {2}"
 
-#: js/Crm.js:364 js/Crm.js:426
+#: js/Crm.js:377 js/Crm.js:439
 msgid "No leads found."
 msgstr "Никаких указаний не бло найдено."
 
-#: js/Crm.js:388
+#: js/Crm.js:401
 msgid "Lead id"
 msgstr "Идентификацыя указания продажи"
 
-#: js/Crm.js:389
+#: js/Crm.js:402
 msgid "Lead name"
 msgstr "Название указания продажи"
 
-#: js/Crm.js:390 js/Crm.js:1640 js/LeadEditDialog.js:332
+#: js/Crm.js:403 js/Crm.js:1678 js/LeadEditDialog.js:332
 #: js/LeadEditDialog.js:375
 msgid "Partner"
 msgstr "Партнёр"
 
-#: js/Crm.js:391 js/Crm.js:1620 js/LeadEditDialog.js:331
+#: js/Crm.js:404 js/Crm.js:1658 js/LeadEditDialog.js:331
 #: js/LeadEditDialog.js:371
 msgid "Customer"
 msgstr "Клиент"
 
-#: js/Crm.js:469
+#: js/Crm.js:488
 msgid "Add lead"
 msgstr "Добавить указание продажи"
 
-#: js/Crm.js:470
+#: js/Crm.js:489
 msgid "Add new lead"
 msgstr "Добавить новое указание продажи"
 
-#: js/Crm.js:479
+#: js/Crm.js:504
 msgid "Edit lead"
 msgstr "Обработать указание продажи"
 
-#: js/Crm.js:480
+#: js/Crm.js:505
 msgid "Edit selected lead"
 msgstr "Обработать выбраное указание продажи"
 
-#: js/Crm.js:493
+#: js/Crm.js:518
 msgid "Delete lead"
 msgid_plural "Delete leads"
 msgstr[0] "Удалить указание продажи"
 msgstr[1] "Удалить указания продажи"
 msgstr[2] "Удалить указаний продажи "
 
-#: js/Crm.js:494
+#: js/Crm.js:519
 msgid "Delete selected leads"
 msgstr "Удалить выбраное указание продажи"
 
-#: js/Crm.js:504 js/Crm.js:1727 js/Crm.js:1728
+#: js/Crm.js:529 js/Crm.js:1765 js/Crm.js:1766
 msgid "Export as PDF"
 msgstr "Экспортировать как пдф"
 
-#: js/Crm.js:505
+#: js/Crm.js:530
 msgid "Export selected lead as PDF"
 msgstr "Экспортировать выброное указание как пдф"
 
-#: js/Crm.js:514 js/Crm.js:1672 js/Crm.js:1691
+#: js/Crm.js:539 js/Crm.js:1710 js/Crm.js:1729
 msgid "Add task"
 msgstr "Добавьте задание"
 
-#: js/Crm.js:515
+#: js/Crm.js:540
 msgid "Add task for selected lead"
 msgstr "Добавить задачу выброному указанию продажи"
 
-#: js/Crm.js:622
+#: js/Crm.js:647
 msgid "Lead states"
 msgstr "Статуси указания продажи"
 
-#: js/Crm.js:623
+#: js/Crm.js:648
 msgid "Lead sources"
 msgstr "Источники указания продажи"
 
-#: js/Crm.js:624
+#: js/Crm.js:649
 msgid "Lead types"
 msgstr "Типы указания продажи"
 
-#: js/Crm.js:625 js/Crm.js:1337 Pdf.php:262
-msgid "Products"
-msgstr "Продукты"
-
-#: js/Crm.js:684 js/Crm.js:1027
+#: js/Crm.js:709 js/Crm.js:1059
 msgid "Phone"
 msgstr "Телефон"
 
-#: js/Crm.js:685 js/Crm.js:1028
+#: js/Crm.js:710 js/Crm.js:1060
 msgid "Cellphone"
 msgstr "Сотовый телефон"
 
-#: js/Crm.js:849
+#: js/Crm.js:882
 msgid "Please wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Crm.js:849
+#: js/Crm.js:882
 msgid "Saving lead"
 msgstr "Сохраняю указание продажи"
 
-#: js/Crm.js:874
+#: js/Crm.js:906
 msgid "Failed"
 msgstr "Неудача"
 
-#: js/Crm.js:874
+#: js/Crm.js:906
 msgid "Could not save lead."
 msgstr "Указание продажи не смогло быть сохранено."
 
-#: js/Crm.js:878
+#: js/Crm.js:910
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста исправьте ошибки."
 
-#: js/Crm.js:1004
+#: js/Crm.js:1036
 msgid "Name"
 msgstr "Имя"
 
-#: js/Crm.js:1013 Pdf.php:202
-msgid "Address"
-msgstr "Адрес"
-
-#: js/Crm.js:1024
+#: js/Crm.js:1056
 msgid "Contactdata"
 msgstr "Контакты"
 
-#: js/Crm.js:1066 Pdf.php:175
-msgid "Contacts"
-msgstr "Контакты"
-
-#: js/Crm.js:1080
+#: js/Crm.js:1112
 #, fuzzy
 msgid "Search for Contacts to add ..."
 msgstr "Поиск контактов"
 
-#: js/Crm.js:1106
+#: js/Crm.js:1144
 msgid "Summary"
 msgstr "Содержание"
 
-#: js/Crm.js:1114
+#: js/Crm.js:1152
 msgid "Add a task..."
 msgstr "Добавить задание..."
 
-#: js/Crm.js:1118 Pdf.php:243
-msgid "Due Date"
-msgstr "Число истечения срока"
-
-#: js/Crm.js:1132 Pdf.php:248
-msgid "Priority"
-msgstr "Приоритет"
-
-#: js/Crm.js:1147
+#: js/Crm.js:1185
 msgid "Percent"
 msgstr "Процент"
 
-#: js/Crm.js:1161
+#: js/Crm.js:1199
 msgid "Status"
 msgstr "Статус"
 
-#: js/Crm.js:1194 Pdf.php:223
-msgid "Tasks"
-msgstr "Задания"
-
-#: js/Crm.js:1211
+#: js/Crm.js:1249
 msgid "No Tasks to display"
 msgstr "Задания отсутствуют"
 
-#: js/Crm.js:1266
+#: js/Crm.js:1304
 msgid "Product"
 msgstr "Продукт"
 
-#: js/Crm.js:1275
+#: js/Crm.js:1313
 msgid "Add a product..."
 msgstr "Добавить продукты..."
 
-#: js/Crm.js:1284 js/LeadEditDialog.js:163
+#: js/Crm.js:1322 js/LeadEditDialog.js:163
 msgid "Description"
 msgstr "Описание"
 
-#: js/Crm.js:1297
+#: js/Crm.js:1335
 msgid "Price"
 msgstr "Цена"
 
-#: js/Crm.js:1381
+#: js/Crm.js:1419
 msgid "Change contact type"
 msgstr ""
 
-#: js/Crm.js:1610
+#: js/Crm.js:1648
 msgid "Add new contact"
 msgstr "Добавить новый контакт"
 
-#: js/Crm.js:1611
+#: js/Crm.js:1649
 msgid "Add new customer contact"
 msgstr "Добавьте нового клиента"
 
-#: js/Crm.js:1621
+#: js/Crm.js:1659
 msgid "Change type to Customer"
 msgstr ""
 
-#: js/Crm.js:1630 js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
+#: js/Crm.js:1668 js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
 msgid "Responsible"
 msgstr "Ответственный"
 
-#: js/Crm.js:1631
+#: js/Crm.js:1669
 msgid "Change type to Responsible"
 msgstr ""
 
-#: js/Crm.js:1641
+#: js/Crm.js:1679
 msgid "Change type to Partner"
 msgstr ""
 
-#: js/Crm.js:1649
+#: js/Crm.js:1687
 msgid "Edit contact"
 msgstr "Обработать контакт"
 
-#: js/Crm.js:1650
+#: js/Crm.js:1688
 msgid "Edit selected contact"
 msgstr "Обработать выбранную запись"
 
-#: js/Crm.js:1659
+#: js/Crm.js:1697
 msgid "Unlink contact"
 msgstr "Убрать контакт"
 
-#: js/Crm.js:1660
+#: js/Crm.js:1698
 msgid "Unlink selected contacts"
 msgstr "Убрать выбранный контакт"
 
-#: js/Crm.js:1673
+#: js/Crm.js:1711
 msgid "Add new task"
 msgstr "Добавьте новую задание"
 
-#: js/Crm.js:1681
+#: js/Crm.js:1719
 msgid "Edit task"
 msgstr "Обработать задание"
 
-#: js/Crm.js:1682
+#: js/Crm.js:1720
 msgid "Edit selected task"
 msgstr "Выбранную запись редактировать"
 
-#: js/Crm.js:1692
+#: js/Crm.js:1730
 msgid "Add existing task to lead"
 msgstr "Добавить существующее задание"
 
-#: js/Crm.js:1701
+#: js/Crm.js:1739
 msgid "Remove tasks"
 msgstr "Уберите задания"
 
-#: js/Crm.js:1702
+#: js/Crm.js:1740
 msgid "Remove selected tasks"
 msgstr "Уберите выбранные записи"
 
-#: js/Crm.js:1714
+#: js/Crm.js:1752
 msgid "Remove products"
 msgstr "Убрать продукты"
 
-#: js/Crm.js:1715
+#: js/Crm.js:1753
 msgid "Remove selected products"
 msgstr "Убрать отобранные продукты"
 
-#: js/Crm.js:1756 js/Crm.js:1757
+#: js/Crm.js:1794 js/Crm.js:1795
 msgid "Leads"
 msgstr "Советы продажи"
 
-#: js/Crm.js:1803
+#: js/Crm.js:1841
 msgid "Loading Lead..."
 msgstr "Загрузка совета продажи..."
 
-#: js/Crm.js:1803
+#: js/Crm.js:1841
 msgid "Please Wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Crm.js:1829
+#: js/Crm.js:1867
 msgid "Add New Lead"
 msgstr "Добавить новый совет продажи"
 
-#: js/Crm.js:1831
-#, python-format
-msgid "Edit Lead \"%s\""
-msgstr "Обработать совет продажи \"%s\""
+#: js/Crm.js:1869
+#, fuzzy
+msgid "Edit Lead \"{0}\""
+msgstr "Обработать совет продажи \"{0}\""
 
 #: js/LeadEditDialog.js:32
 msgid "Enter short name"
 msgstr "Введите короткое имя"
-
-#: js/LeadEditDialog.js:70 Pdf.php:77
-msgid "Leadtype"
-msgstr "Тип Указания"
-
-#: js/LeadEditDialog.js:87 Pdf.php:80
-msgid "Leadsource"
-msgstr "Источник"
 
 #: js/LeadEditDialog.js:119
 msgid "Estimated end"
@@ -433,38 +465,6 @@ msgstr "Введите описание"
 #: js/LeadEditDialog.js:227
 msgid "Expected turnover"
 msgstr "Ожидаемый оборот"
-
-#: Pdf.php:71
-msgid "Lead Data"
-msgstr "Дата совета продажи"
-
-#: Pdf.php:95
-msgid "End Scheduled"
-msgstr "Конец запланирован"
-
-#: Pdf.php:209
-msgid "Telephone"
-msgstr "Телефон"
-
-#: Pdf.php:210
-msgid "Email"
-msgstr "Электронная почта"
-
-#: Pdf.php:300
-msgid "low"
-msgstr "Низко"
-
-#: Pdf.php:301
-msgid "normal"
-msgstr "Нормально"
-
-#: Pdf.php:302
-msgid "high"
-msgstr "Высоко"
-
-#: Pdf.php:303
-msgid "urgent"
-msgstr "Срочный"
 
 #: Setup/setup.xml:362
 msgid "telephone"

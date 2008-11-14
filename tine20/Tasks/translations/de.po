@@ -13,175 +13,92 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:305
+#: Controller.php:97
 #, python-format
-msgid "%s's personal tasks"
-msgstr "%s's persönliche Aufgaben"
+msgid "{0}'s personal tasks"
+msgstr "{0}'s persönliche Aufgaben"
+
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks, n);"
+msgstr[0] "Aufgaben"
+msgstr[1] "Aufgaben"
+
+#: js/EditDialog.js:116 js/GridPanel.js:56 js/GridPanel.js:112
+msgid "Summary"
+msgstr "Beschreibung"
+
+#: js/EditDialog.js:121
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
+
+#: js/EditDialog.js:124 js/GridPanel.js:133
+msgid "Priority"
+msgstr "Priorität"
+
+#: js/EditDialog.js:127 js/GridPanel.js:185
+msgid "Responsible"
+msgstr ""
+
+#: js/EditDialog.js:131
+msgid "Notes"
+msgstr "Anmerkungen"
+
+#: js/EditDialog.js:132
+msgid "Enter description..."
+msgstr "Beschreibung eingeben..."
+
+#: js/EditDialog.js:137
+msgid "Percentage"
+msgstr "Prozent"
+
+#: js/EditDialog.js:141 js/GridPanel.js:162
+msgid "Status"
+msgstr "Status"
+
+#: js/EditDialog.js:145
+msgid "Completed"
+msgstr ""
+
+#: js/GridPanel.js:76
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#: js/GridPanel.js:76
+msgid "Could not save task."
+msgstr "Konnte Aufgabe nicht speichern."
+
+#: js/GridPanel.js:120
+msgid "Add a task..."
+msgstr "Aufgabe hinzufügen..."
+
+#: js/GridPanel.js:124
+msgid "Due Date"
+msgstr "Fällig am"
+
+#: js/GridPanel.js:148
+msgid "Percent"
+msgstr "Prozent"
+
+#: js/GridPanel.js:177
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:205
+msgid "Show closed"
+msgstr "Geschlossene Aufgaben anzeigen"
 
 #: js/Status.js:45 Setup/setup.xml:431
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
-#: js/Tasks.js:110
-msgid "Do you really want to delete the selected task"
-msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
-msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
-
-#: js/Tasks.js:141 js/Tasks.js:554 js/Tasks.js:703 js/Tasks.js:728
-msgid "Failed"
-msgstr "Fehlgeschlagen"
-
-#: js/Tasks.js:141 js/Tasks.js:728
-msgid "Could not delete task(s)."
-msgstr "Konnte Aufgabe(n) nicht löschen."
-
-#: js/Tasks.js:159
-msgid "Edit task"
-msgstr "Aufgabe bearbeiten"
-
-#: js/Tasks.js:169
-msgid "Add task"
-msgstr "Aufgabe hinzufügen"
-
-#: js/Tasks.js:180
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Aufgabe löschen"
-msgstr[1] "Aufgaben löschen"
-
-#: js/Tasks.js:300
-msgid "Tasks"
-msgstr "Aufgaben"
-
-#: js/Tasks.js:301 js/Tasks.js:628
-msgid "to do lists"
-msgstr "Aufgabenlisten"
-
-#: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
+#: js/Tasks.js:87
+#, fuzzy
 msgid "to do list"
-msgstr "ToDo Liste"
-
-#: js/Tasks.js:323
-msgid "Enter searchfilter"
-msgstr "Suchfilter eingeben"
-
-#: js/Tasks.js:338
-msgid "Show closed"
-msgstr "Geschlossene Aufgaben anzeigen"
-
-#: js/Tasks.js:388
-msgid "Search:"
-msgstr "Suchen nach:"
-
-#: js/Tasks.js:398
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zeige Aufgabe {0} - {1} von {2}"
-
-#: js/Tasks.js:399
-msgid "No tasks to display"
-msgstr "Keine Aufgaben vorhanden"
-
-#: js/Tasks.js:415 js/Tasks.js:751
-msgid "Summary"
-msgstr "Beschreibung"
-
-#: js/Tasks.js:423
-msgid "Add a task..."
-msgstr "Aufgabe hinzufügen..."
-
-#: js/Tasks.js:427
-msgid "Due Date"
-msgstr "Fällig am"
-
-#: js/Tasks.js:441 js/Tasks.js:783
-msgid "Priority"
-msgstr "Priorität"
-
-#: js/Tasks.js:456
-msgid "Percent"
-msgstr "Prozent"
-
-#: js/Tasks.js:470 js/Tasks.js:779
-msgid "Status"
-msgstr "Status"
-
-#: js/Tasks.js:492
-msgid "No Tasks to display"
-msgstr "Keine Aufgaben vorhanden"
-
-#: js/Tasks.js:554 js/Tasks.js:703
-msgid "Could not save task."
-msgstr "Konnte Aufgabe nicht speichern."
-
-#: js/Tasks.js:638
-msgid "Loading Task..."
-msgstr "lade Task..."
-
-#: js/Tasks.js:638
-msgid "Please Wait"
-msgstr "Bitte warten"
-
-#: js/Tasks.js:649
-msgid "Add New Task"
-msgstr "Neuen Task erstellen"
-
-#: js/Tasks.js:651
-#, python-format
-msgid "Edit Task \"%s\""
-msgstr "Task \"%s\" bearbeiten"
-
-#: js/Tasks.js:671
-msgid "Please wait"
-msgstr "Bitte warten"
-
-#: js/Tasks.js:671 js/Tasks.js:716
-msgid "Saving Task"
-msgstr "Aufgabe speichern"
-
-#: js/Tasks.js:707
-msgid "Errors"
-msgstr "Fehler"
-
-#: js/Tasks.js:707
-msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie die angezeigten Fehler."
-
-#: js/Tasks.js:714
-msgid "Confirm"
-msgstr "Bestätigen"
-
-#: js/Tasks.js:714
-msgid "Do you really want to delete this task?"
-msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
-
-#: js/Tasks.js:716
-msgid "Please wait a moment..."
-msgstr "Einen Moment noch..."
-
-#: js/Tasks.js:755
-msgid "Enter short name..."
-msgstr "Kurzbezeichnung eingeben..."
-
-#: js/Tasks.js:758
-msgid "Notes"
-msgstr "Anmerkungen"
-
-#: js/Tasks.js:760
-msgid "Enter description..."
-msgstr "Beschreibung eingeben..."
-
-#: js/Tasks.js:774
-msgid "Percentage"
-msgstr "Prozent"
-
-#: js/Tasks.js:787
-msgid "Due date"
-msgstr "Fälligkeitsdatum"
-
-#: js/Tasks.js:791
-msgid "Saved in"
-msgstr "Gespeichert in"
+msgid_plural "to do lists"
+msgstr[0] "ToDo Liste"
+msgstr[1] "ToDo Liste"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
@@ -194,6 +111,82 @@ msgstr "ERLEDIGT"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
+
+#~ msgid "Do you really want to delete the selected task"
+#~ msgid_plural "Do you really want to delete the selected task"
+#~ msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+#~ msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
+
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Konnte Aufgabe(n) nicht löschen."
+
+#~ msgid "Edit task"
+#~ msgstr "Aufgabe bearbeiten"
+
+#~ msgid "Add task"
+#~ msgstr "Aufgabe hinzufügen"
+
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "Aufgabe löschen"
+#~ msgstr[1] "Aufgaben löschen"
+
+#~ msgid "to do lists"
+#~ msgstr "Aufgabenlisten"
+
+#~ msgid "Enter searchfilter"
+#~ msgstr "Suchfilter eingeben"
+
+#~ msgid "Search:"
+#~ msgstr "Suchen nach:"
+
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Zeige Aufgabe {0} - {1} von {2}"
+
+#~ msgid "No tasks to display"
+#~ msgstr "Keine Aufgaben vorhanden"
+
+#~ msgid "No Tasks to display"
+#~ msgstr "Keine Aufgaben vorhanden"
+
+#~ msgid "Loading Task..."
+#~ msgstr "lade Task..."
+
+#~ msgid "Please Wait"
+#~ msgstr "Bitte warten"
+
+#~ msgid "Add New Task"
+#~ msgstr "Neuen Task erstellen"
+
+#~ msgid "Edit Task \"{0}\""
+#~ msgstr "Task \"{0}\" bearbeiten"
+
+#~ msgid "Please wait"
+#~ msgstr "Bitte warten"
+
+#~ msgid "Saving Task"
+#~ msgstr "Aufgabe speichern"
+
+#~ msgid "Errors"
+#~ msgstr "Fehler"
+
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Bitte beheben Sie die angezeigten Fehler."
+
+#~ msgid "Confirm"
+#~ msgstr "Bestätigen"
+
+#~ msgid "Do you really want to delete this task?"
+#~ msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+
+#~ msgid "Please wait a moment..."
+#~ msgstr "Einen Moment noch..."
+
+#~ msgid "Enter short name..."
+#~ msgstr "Kurzbezeichnung eingeben..."
+
+#~ msgid "Saved in"
+#~ msgstr "Gespeichert in"
 
 #~ msgid "Folder"
 #~ msgstr "Ordner"

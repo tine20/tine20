@@ -237,9 +237,9 @@ msgid "enabled"
 msgstr "aktiviert"
 
 #: js/Admin.js:823
-#, python-format
-msgid "unknown status (%s)"
-msgstr "unbekannter Status (%s)"
+#, fuzzy
+msgid "unknown status ({0})"
+msgstr "unbekannter Status ({0})"
 
 #: js/Admin.js:852
 msgid "Displaying application {0} - {1} of {2}"
@@ -358,9 +358,9 @@ msgid "Add new group"
 msgstr "Neue Gruppe erstellen"
 
 #: js/Groups.js:621
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr "Gruppe \"%s\" bearbeiten"
+#, fuzzy
+msgid "Edit Group \"{0}\""
+msgstr "Gruppe \"{0}\" bearbeiten"
 
 #: js/Roles.js:48
 msgid "Do you really want to delete the selected roles?"
@@ -432,9 +432,9 @@ msgid "Add New Role"
 msgstr "Neue Rolle hinzufügen"
 
 #: js/Roles.js:728
-#, python-format
-msgid "Edit Role \"%s\""
-msgstr "Rolle \"%s\" bearbeiten"
+#, fuzzy
+msgid "Edit Role \"{0}\""
+msgstr "Rolle \"{0}\" bearbeiten"
 
 #: js/Tags.js:41
 msgid "Do you really want to delete the selected tags?"
@@ -509,9 +509,9 @@ msgid "Add New Tag"
 msgstr "Neuen Tag hinzufügen"
 
 #: js/Tags.js:617
-#, python-format
-msgid "Edit Tag \"%s\""
-msgstr "Tag \"%s\" bearbeiten"
+#, fuzzy
+msgid "Edit Tag \"{0}\""
+msgstr "Tag \"{0}\" bearbeiten"
 
 #: js/Users.js:141
 msgid "Set new password"
@@ -664,9 +664,9 @@ msgid "Add New User Account"
 msgstr "Neuen User Account hinzufügen"
 
 #: js/Users.js:663
-#, python-format
-msgid "Edit User Account \"%s\""
-msgstr "Bearbeite User Account \"%s\""
+#, fuzzy
+msgid "Edit User Account \"{0}\""
+msgstr "Bearbeite User Account \"{0}\""
 
 #~ msgid "manage roles right description"
 #~ msgstr ""

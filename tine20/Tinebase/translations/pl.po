@@ -58,29 +58,31 @@ msgstr "Export danych"
 msgid "Created by"
 msgstr "Utworzone przez"
 
-#: Export/Pdf.php:461 js/widgets/ActivitiesPanel.js:519
+#: Export/Pdf.php:462 js/widgets/ActivitiesPanel.js:520
 msgid "Activities"
 msgstr ""
 
-#: Http.php:214 js/tineInit.js:170
+#: Frontend/Http.php:248 js/tineInit.js:218
 msgid "Authorisation Required"
 msgstr "Wymagana autoryzacja"
 
-#: Http.php:215
+#: Frontend/Http.php:249
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Upłynął limit czasu twojej sesji. Musisz się zalogować ponownie."
 
-#: Http.php:241 js/ExceptionDialog.js:26
+#: Frontend/Http.php:275 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Nietypowe zakończenie"
 
-#: Http.php:242 js/ExceptionDialog.js:51
+#: Frontend/Http.php:276 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd, program zostanie zakończony awaryjnie."
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:315
-#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditRecord.js:123
+#: js/ExceptionDialog.js:34 js/MainScreen.js:355
+#: js/widgets/AccountpickerPanel.js:143
+#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:151
+#: js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -125,142 +127,143 @@ msgid "Your report has been send. Thanks for your contribution"
 msgstr ""
 "Twój raport został zakończony. Dziękujemy za udział w poprawie programu."
 
-#: js/Login.js:29
+#: js/Login.js:37
 msgid "Login"
 msgstr "Logowanie"
 
-#: js/Login.js:36
+#: js/Login.js:44
 msgid "Register"
 msgstr "Zarejestruj się"
 
-#: js/Login.js:50
+#: js/Login.js:58 js/Login.js:92
 msgid "Please enter your login data"
 msgstr "Proszę podać swoje dane logowania"
 
-#: js/Login.js:67
+#: js/Login.js:75
 msgid "Username"
 msgstr "Imię użytkownika"
 
-#: js/Login.js:73
+#: js/Login.js:81
 msgid "Password"
 msgstr "Hasło"
 
-#: js/Login.js:119
+#: js/Login.js:120
 msgid "Logging you in..."
 msgstr "Logowanie w …"
 
-#: js/Login.js:119 js/widgets/container/ContainerGrants.js:34
-#: js/widgets/container/ContainerTree.js:231
-#: js/widgets/container/ContainerTree.js:259
-#: js/widgets/container/ContainerTree.js:291
+#: js/Login.js:120 js/widgets/container/ContainerGrants.js:34
+#: js/widgets/container/ContainerTree.js:274
+#: js/widgets/container/ContainerTree.js:302
+#: js/widgets/container/ContainerTree.js:334
 msgid "Please wait"
 msgstr "Proszę czekać"
 
-#: js/Login.js:130
+#: js/Login.js:132
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Udane logowanie. Ładowanie Tiny 2.0 …"
 
-#: js/Login.js:130 js/MainScreen.js:393
+#: js/Login.js:132 js/MainScreen.js:433
 msgid "Please wait!"
 msgstr "Proszę poczekać!"
 
-#: js/Login.js:134
+#: js/Login.js:138
 msgid "Login failure"
 msgstr "Logowanie bez powodzenia"
 
-#: js/Login.js:135
+#: js/Login.js:139
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Imię użytkownika i / albo hasło są błędne!"
 
-#: js/MainScreen.js:48
-msgid "Change password"
-msgstr "Zmień hasło"
-
-#: js/MainScreen.js:54
-msgid "Install Google Gears"
-msgstr "Zanstaluj Gears (dawniej Google Gears)."
-
-#: js/MainScreen.js:60
-msgid "Logout"
-msgstr "Wyloguj"
-
-#: js/MainScreen.js:61
-msgid "Logout from Tine 2.0"
-msgstr "Wylogowanie z Tiny 2.0"
-
-#: js/MainScreen.js:83 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:53 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "Admin"
 
-#: js/MainScreen.js:91
+#: js/MainScreen.js:61
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: js/MainScreen.js:107
-#, python-format
-msgid "User: %s"
-msgstr "Użytkownik: %s"
+#: js/MainScreen.js:77
+#, fuzzy
+msgid "User: {0}"
+msgstr "Użytkownik: {0}"
 
-#: js/MainScreen.js:108
-#, python-format
-msgid "Timezone: %s"
-msgstr "Strefa czasowa: %s"
+#: js/MainScreen.js:78
+#, fuzzy
+msgid "Timezone: {0}"
+msgstr "Strefa czasowa: {0}"
 
-#: js/MainScreen.js:109 js/widgets/TimezoneChooser.js:34
+#: js/MainScreen.js:79 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr "Strefa czasowa"
 
-#: js/MainScreen.js:110 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:80 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Język"
 
-#: js/MainScreen.js:279
-#, python-format
-msgid "Change Password For \"%s\""
-msgstr "Zmień hasło dla \"%s\""
+#: js/MainScreen.js:171
+msgid "Change password"
+msgstr "Zmień hasło"
 
-#: js/MainScreen.js:303
+#: js/MainScreen.js:177
+msgid "Install Google Gears"
+msgstr "Zanstaluj Gears (dawniej Google Gears)."
+
+#: js/MainScreen.js:183
+msgid "Logout"
+msgstr "Wyloguj"
+
+#: js/MainScreen.js:184
+msgid "Logout from Tine 2.0"
+msgstr "Wylogowanie z Tiny 2.0"
+
+#: js/MainScreen.js:319
+#, fuzzy
+msgid "Change Password For \"{0}\""
+msgstr "Zmień hasło dla \"{0}\""
+
+#: js/MainScreen.js:343
 msgid "Old Password"
 msgstr "Stare hasło"
 
-#: js/MainScreen.js:307
+#: js/MainScreen.js:347
 msgid "New Password"
 msgstr "Nowe hasło"
 
-#: js/MainScreen.js:311
+#: js/MainScreen.js:351
 msgid "Repeat new Password"
 msgstr "Powtórz nowe hasło"
 
-#: js/MainScreen.js:321 js/widgets/AccountpickerPanel.js:108
-#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditRecord.js:102
+#: js/MainScreen.js:361 js/widgets/AccountpickerPanel.js:135
+#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:134
+#: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "OK"
 
-#: js/MainScreen.js:330
+#: js/MainScreen.js:370
 msgid "Please Wait!"
 msgstr "Proszę poczekać!"
 
-#: js/MainScreen.js:331
+#: js/MainScreen.js:371
 msgid "changing password..."
 msgstr "zmiana hasła …"
 
-#: js/MainScreen.js:342
+#: js/MainScreen.js:382
 msgid "Success"
 msgstr "Pomyślnie"
 
-#: js/MainScreen.js:343
+#: js/MainScreen.js:383
 msgid "Your password has been changed."
 msgstr "Twoje hasło zostało zmienione."
 
-#: js/MainScreen.js:349 js/MainScreen.js:359
+#: js/MainScreen.js:389 js/MainScreen.js:399
 msgid "Failure"
 msgstr "Bez powodzenia"
 
-#: js/MainScreen.js:360
+#: js/MainScreen.js:400
 msgid "The new passwords mismatch, please correct them."
 msgstr "Nie ma zgodności obu haseł. Proszę je skorygować."
 
-#: js/MainScreen.js:378
+#: js/MainScreen.js:418
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -269,32 +272,48 @@ msgstr ""
 "Tiny 2.0 przez lokalne buforowanie wszystkiech potrzebnych plików na tym "
 "komputerze."
 
-#: js/MainScreen.js:391 js/widgets/container/ContainerTree.js:257
+#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:364
+#: js/widgets/container/ContainerTree.js:300 js/widgets/EditDialog.js:326
 msgid "Confirm"
 msgstr "Potwierdź"
 
-#: js/MainScreen.js:391
+#: js/MainScreen.js:431
 msgid "Are you sure you want to logout?"
 msgstr "Jesteś pewien, że chcesz się wylogować?"
 
-#: js/MainScreen.js:393
+#: js/MainScreen.js:433
 msgid "Logging you out..."
 msgstr "Wylogowanie trwa …"
 
-#: js/tineInit.js:160
+#: js/Record.js:97
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Record.js:93
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks, n);"
+msgstr[0] "Tagi"
+msgstr[1] "Tagi"
+msgstr[2] "Tagi"
+
+#: js/tineInit.js:208
 msgid "Connection lost, please check your network!"
 msgstr "Połączenie zostało utracone, proszę sprawdzić swoją sieć!"
 
-#: js/tineInit.js:171
+#: js/tineInit.js:219
 msgid "Your session timed out. You need to login again."
 msgstr "Upłynął limit czasu twojej sesji. Musisz się zalogować ponownie."
 
-#: js/tineInit.js:184
+#: js/tineInit.js:232
 #, fuzzy
 msgid "Concurrent Updates"
 msgstr "Jednoczesna aktualizacja"
 
-#: js/tineInit.js:185
+#: js/tineInit.js:233
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -411,7 +430,7 @@ msgstr ""
 msgid "Browse"
 msgstr ""
 
-#: js/widgets/AccountpickerPanel.js:103
+#: js/widgets/AccountpickerPanel.js:129
 msgid "please select an account"
 msgstr ""
 
@@ -424,8 +443,8 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:403
-#: js/widgets/ActivitiesPanel.js:531
+#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:404
+#: js/widgets/ActivitiesPanel.js:532
 msgid "Note"
 msgstr ""
 
@@ -446,36 +465,79 @@ msgid "Enter new note:"
 msgstr ""
 
 #: js/widgets/ActivitiesPanel.js:317
-#, python-format
-msgid "Add a %s Note"
+msgid "Add a {0} Note"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:401 js/widgets/ActivitiesPanel.js:536
+#: js/widgets/ActivitiesPanel.js:402 js/widgets/ActivitiesPanel.js:537
 msgid "Type"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:404
+#: js/widgets/ActivitiesPanel.js:405
 msgid "Created By"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:405
+#: js/widgets/ActivitiesPanel.js:406
 msgid "Timestamp"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:419
+#: js/widgets/ActivitiesPanel.js:420
 msgid "Displaying notes {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:420
+#: js/widgets/ActivitiesPanel.js:421
 msgid "No notes to display"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:532
+#: js/widgets/ActivitiesPanel.js:533
 msgid "Time"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:534
+#: js/widgets/ActivitiesPanel.js:535
 msgid "User"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:126
+msgid "Edit {0}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:137 js/widgets/container/ContainerTree.js:381
+msgid "Add {0}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:150 js/widgets/container/ContainerTree.js:387
+msgid "Delete {0}"
+msgid_plural "Delete {1}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/widgets/app/GridPanel.js:211
+msgid "Displaying records {0} - {1} of {2}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:212 js/widgets/app/GridPanel.js:220
+msgid "No {0} to display"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:362
+msgid "Do you really want to delete the selected {0}"
+msgid_plural "Do you really want to delete the selected {0}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/widgets/app/GridPanel.js:367 js/widgets/EditDialog.js:328
+msgid "Deleting {0}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:314
+#: js/widgets/EditDialog.js:339 js/widgets/tags/TagsPanel.js:250
+#: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:392
+msgid "Failed"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:339
+msgid "Could not delete {0}."
 msgstr ""
 
 #: js/widgets/container/ContainerGrants.js:34
@@ -503,13 +565,11 @@ msgid "Permissions"
 msgstr ""
 
 #: js/widgets/container/ContainerSelect.js:74
-#, python-format
-msgid "Recently used %s:"
+msgid "Recently used {0}:"
 msgstr ""
 
 #: js/widgets/container/ContainerSelect.js:93
-#, python-format
-msgid "choose other %s..."
+msgid "choose other {0}..."
 msgstr ""
 
 #: js/widgets/container/ContainerSelect.js:105
@@ -523,99 +583,107 @@ msgid "shared"
 msgstr ""
 
 #: js/widgets/container/ContainerSelect.js:248
-#, python-format
-msgid "please select a %s"
+msgid "please select a {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:115
-#, python-format
-msgid "All %s"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:120
-#, python-format
-msgid "My %s"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:127
-#, python-format
-msgid "Shared %s"
+#: js/widgets/container/ContainerTree.js:129
+msgid "All {0}"
 msgstr ""
 
 #: js/widgets/container/ContainerTree.js:134
-#, python-format
-msgid "Other Users %s"
+msgid "My {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "New %s"
+#: js/widgets/container/ContainerTree.js:141
+msgid "Shared {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "Please enter the name of the new %s:"
+#: js/widgets/container/ContainerTree.js:148
+msgid "Other Users {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:231
-#, python-format
-msgid "Creating %s..."
+#: js/widgets/container/ContainerTree.js:272
+msgid "New {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:257
-#, python-format
-msgid "Do you really want to delete the %s \"%s\"?"
+#: js/widgets/container/ContainerTree.js:272
+msgid "Please enter the name of the new {0}:"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:259
-#, python-format
-msgid "Deleting %s \"%s\""
+#: js/widgets/container/ContainerTree.js:274
+msgid "Creating {0}..."
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:286
-#, python-format
-msgid "Please enter the new name of the %s:"
+#: js/widgets/container/ContainerTree.js:300
+msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:291
-#, python-format
-msgid "Updating %s \"%s\""
+#: js/widgets/container/ContainerTree.js:302
+msgid "Deleting {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:325
-#, python-format
-msgid "Manage Permissions for %s :\"%s\""
+#: js/widgets/container/ContainerTree.js:329
+msgid "Please enter the new name of the {0}:"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:338
-#, python-format
-msgid "Add %s"
+#: js/widgets/container/ContainerTree.js:334
+msgid "Updating {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:344
-#, python-format
-msgid "Delete %s"
+#: js/widgets/container/ContainerTree.js:368
+msgid "Manage Permissions for {0} :\"{0}\""
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:350
-#, python-format
-msgid "Rename %s"
+#: js/widgets/container/ContainerTree.js:393
+msgid "Rename {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:356
+#: js/widgets/container/ContainerTree.js:399
 msgid "Manage permissions"
 msgstr ""
 
-#: js/widgets/EditRecord.js:113
+#: js/widgets/EditDialog.js:143 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr ""
 
-#: js/widgets/EditRecord.js:133
+#: js/widgets/EditDialog.js:160 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr ""
 
-#: js/widgets/EditRecord.js:178
+#: js/widgets/EditDialog.js:197
+msgid "Add New {0}"
+msgstr ""
+
+#: js/widgets/EditDialog.js:199
+msgid "Edit {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/EditDialog.js:218 js/widgets/EditRecord.js:185
 msgid "Saved in"
+msgstr ""
+
+#: js/widgets/EditDialog.js:237
+msgid "Loading {0}..."
+msgstr ""
+
+#: js/widgets/EditDialog.js:287
+msgid "Saving {0}"
+msgstr ""
+
+#: js/widgets/EditDialog.js:314
+msgid "Could not save {0}."
+msgstr ""
+
+#: js/widgets/EditDialog.js:318
+msgid "Errors"
+msgstr ""
+
+#: js/widgets/EditDialog.js:318
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/widgets/EditDialog.js:326
+msgid "Do you really want to delete this {0}?"
 msgstr ""
 
 #: js/widgets/grid/FilterModel.js:87
@@ -646,35 +714,35 @@ msgstr ""
 msgid "select a operator"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:122
+#: js/widgets/grid/FilterToolbar.js:116
 msgid "add new filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:128
+#: js/widgets/grid/FilterToolbar.js:122
 msgid "Delete all filters"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:134
+#: js/widgets/grid/FilterToolbar.js:128
 msgid "start search"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:143
+#: js/widgets/grid/FilterToolbar.js:137
 msgid "save filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:210
+#: js/widgets/grid/FilterToolbar.js:207
 msgid "select a field"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:234
+#: js/widgets/grid/FilterToolbar.js:231
 msgid "Delete this filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:257
+#: js/widgets/grid/FilterToolbar.js:255
 msgid "and"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:276
+#: js/widgets/grid/FilterToolbar.js:274
 msgid "Show"
 msgstr ""
 
@@ -794,11 +862,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/tags/TagsPanel.js:250 js/widgets/tags/TagsPanel.js:359
-#: js/widgets/tags/TagsPanel.js:392
-msgid "Failed"
-msgstr ""
-
 #: js/widgets/tags/TagsPanel.js:250
 msgid "Could not delete Tag(s)."
 msgstr ""
@@ -840,8 +903,7 @@ msgid "New version of Tine 2.0 available"
 msgstr ""
 
 #: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
-#, python-format
-msgid "Version \"%s\" of Tine 2.0 is available."
+msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr ""
 
 #: js/widgets/VersionCheck.js:41
@@ -852,42 +914,42 @@ msgstr ""
 msgid "Please consider updating!"
 msgstr ""
 
-#: Setup/setup.xml:1748
+#: Setup/setup.xml:1749
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:1753
+#: Setup/setup.xml:1754
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:1779
+#: Setup/setup.xml:1780
 msgid "telephone"
 msgstr ""
 
-#: Setup/setup.xml:1784
+#: Setup/setup.xml:1785
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:1810
+#: Setup/setup.xml:1811
 msgid "email"
 msgstr ""
 
-#: Setup/setup.xml:1815
+#: Setup/setup.xml:1816
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:1841
+#: Setup/setup.xml:1842
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:1846
+#: Setup/setup.xml:1847
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:1872
+#: Setup/setup.xml:1873
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:1877
+#: Setup/setup.xml:1878
 msgid "record changed"
 msgstr ""

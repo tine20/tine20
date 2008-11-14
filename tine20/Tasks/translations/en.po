@@ -1,172 +1,87 @@
-#: Controller.php:305
+#: Controller.php:97
 #, python-format
-msgid "%s's personal tasks"
-msgstr "%s's personal tasks"
+msgid "{0}'s personal tasks"
+msgstr "{0}'s personal tasks"
+
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+msgid "Task"
+msgid_plural "Tasks, n);"
+msgstr[0] "Task"
+msgstr[1] "Tasks, n);"
+
+#: js/EditDialog.js:116 js/GridPanel.js:56 js/GridPanel.js:112
+msgid "Summary"
+msgstr "Summary"
+
+#: js/EditDialog.js:121
+msgid "Due date"
+msgstr "Due date"
+
+#: js/EditDialog.js:124 js/GridPanel.js:133
+msgid "Priority"
+msgstr "Priority"
+
+#: js/EditDialog.js:127 js/GridPanel.js:185
+msgid "Responsible"
+msgstr "Responsible"
+
+#: js/EditDialog.js:131
+msgid "Notes"
+msgstr "Notes"
+
+#: js/EditDialog.js:132
+msgid "Enter description..."
+msgstr "Enter description..."
+
+#: js/EditDialog.js:137
+msgid "Percentage"
+msgstr "Percentage"
+
+#: js/EditDialog.js:141 js/GridPanel.js:162
+msgid "Status"
+msgstr "Status"
+
+#: js/EditDialog.js:145
+msgid "Completed"
+msgstr "Completed"
+
+#: js/GridPanel.js:76
+msgid "Failed"
+msgstr "Failed"
+
+#: js/GridPanel.js:76
+msgid "Could not save task."
+msgstr "Could not save task."
+
+#: js/GridPanel.js:120
+msgid "Add a task..."
+msgstr "Add a task..."
+
+#: js/GridPanel.js:124
+msgid "Due Date"
+msgstr "Due Date"
+
+#: js/GridPanel.js:148
+msgid "Percent"
+msgstr "Percent"
+
+#: js/GridPanel.js:177
+msgid "Creation Time"
+msgstr "Creation Time"
+
+#: js/GridPanel.js:205
+msgid "Show closed"
+msgstr "Show closed"
 
 #: js/Status.js:45 Setup/setup.xml:431
 msgid "IN-PROCESS"
 msgstr "IN-PROCESS"
 
-#: js/Tasks.js:110
-msgid "Do you really want to delete the selected task"
-msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Do you really want to delete the selected task"
-msgstr[1] "Do you really want to delete the selected task"
-
-#: js/Tasks.js:141 js/Tasks.js:554 js/Tasks.js:703 js/Tasks.js:728
-msgid "Failed"
-msgstr "Failed"
-
-#: js/Tasks.js:141 js/Tasks.js:728
-msgid "Could not delete task(s)."
-msgstr "Could not delete task(s)."
-
-#: js/Tasks.js:159
-msgid "Edit task"
-msgstr "Edit task"
-
-#: js/Tasks.js:169
-msgid "Add task"
-msgstr "Add task"
-
-#: js/Tasks.js:180
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Delete task"
-msgstr[1] "Delete tasks"
-
-#: js/Tasks.js:300
-msgid "Tasks"
-msgstr "Tasks"
-
-#: js/Tasks.js:301 js/Tasks.js:628
-msgid "to do lists"
-msgstr "to do lists"
-
-#: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
+#: js/Tasks.js:87
 msgid "to do list"
-msgstr "to do list"
-
-#: js/Tasks.js:323
-msgid "Enter searchfilter"
-msgstr "Enter searchfilter"
-
-#: js/Tasks.js:338
-msgid "Show closed"
-msgstr "Show closed"
-
-#: js/Tasks.js:388
-msgid "Search:"
-msgstr "Search:"
-
-#: js/Tasks.js:398
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Displaying tasks {0} - {1} of {2}"
-
-#: js/Tasks.js:399
-msgid "No tasks to display"
-msgstr "No tasks to display"
-
-#: js/Tasks.js:415 js/Tasks.js:751
-msgid "Summary"
-msgstr "Summary"
-
-#: js/Tasks.js:423
-msgid "Add a task..."
-msgstr "Add a task..."
-
-#: js/Tasks.js:427
-msgid "Due Date"
-msgstr "Due Date"
-
-#: js/Tasks.js:441 js/Tasks.js:783
-msgid "Priority"
-msgstr "Priority"
-
-#: js/Tasks.js:456
-msgid "Percent"
-msgstr "Percent"
-
-#: js/Tasks.js:470 js/Tasks.js:779
-msgid "Status"
-msgstr "Status"
-
-#: js/Tasks.js:492
-msgid "No Tasks to display"
-msgstr "No Tasks to display"
-
-#: js/Tasks.js:554 js/Tasks.js:703
-msgid "Could not save task."
-msgstr "Could not save task."
-
-#: js/Tasks.js:638
-msgid "Loading Task..."
-msgstr "Loading Task..."
-
-#: js/Tasks.js:638
-msgid "Please Wait"
-msgstr "Please Wait"
-
-#: js/Tasks.js:649
-msgid "Add New Task"
-msgstr "Add New Task"
-
-#: js/Tasks.js:651
-#, python-format
-msgid "Edit Task \"%s\""
-msgstr "Edit Task \"%s\""
-
-#: js/Tasks.js:671
-msgid "Please wait"
-msgstr "Please wait"
-
-#: js/Tasks.js:671 js/Tasks.js:716
-msgid "Saving Task"
-msgstr "Saving Task"
-
-#: js/Tasks.js:707
-msgid "Errors"
-msgstr "Errors"
-
-#: js/Tasks.js:707
-msgid "Please fix the errors noted."
-msgstr "Please fix the errors noted."
-
-#: js/Tasks.js:714
-msgid "Confirm"
-msgstr "Confirm"
-
-#: js/Tasks.js:714
-msgid "Do you really want to delete this task?"
-msgstr "Do you really want to delete this task?"
-
-#: js/Tasks.js:716
-msgid "Please wait a moment..."
-msgstr "Please wait a moment..."
-
-#: js/Tasks.js:755
-msgid "Enter short name..."
-msgstr "Enter short name..."
-
-#: js/Tasks.js:758
-msgid "Notes"
-msgstr "Notes"
-
-#: js/Tasks.js:760
-msgid "Enter description..."
-msgstr "Enter description..."
-
-#: js/Tasks.js:774
-msgid "Percentage"
-msgstr "Percentage"
-
-#: js/Tasks.js:787
-msgid "Due date"
-msgstr "Due date"
-
-#: js/Tasks.js:791
-msgid "Saved in"
-msgstr "Saved in"
+msgid_plural "to do lists"
+msgstr[0] "to do list"
+msgstr[1] "to do lists"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"

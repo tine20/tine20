@@ -17,178 +17,94 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
-#: Controller.php:305
+#: Controller.php:97
 #, python-format
-msgid "%s's personal tasks"
-msgstr "%s's личные задания"
+msgid "{0}'s personal tasks"
+msgstr "{0}'s личные задания"
+
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks, n);"
+msgstr[0] "Задания"
+msgstr[1] "Задания"
+msgstr[2] "Задания"
+
+#: js/EditDialog.js:116 js/GridPanel.js:56 js/GridPanel.js:112
+msgid "Summary"
+msgstr "Содержание"
+
+#: js/EditDialog.js:121
+msgid "Due date"
+msgstr "Число истечения срока"
+
+#: js/EditDialog.js:124 js/GridPanel.js:133
+msgid "Priority"
+msgstr "Приоритет"
+
+#: js/EditDialog.js:127 js/GridPanel.js:185
+msgid "Responsible"
+msgstr ""
+
+#: js/EditDialog.js:131
+msgid "Notes"
+msgstr "Примечания"
+
+#: js/EditDialog.js:132
+msgid "Enter description..."
+msgstr "Введите описание..."
+
+#: js/EditDialog.js:137
+msgid "Percentage"
+msgstr "Подтвердить"
+
+#: js/EditDialog.js:141 js/GridPanel.js:162
+msgid "Status"
+msgstr "Статус"
+
+#: js/EditDialog.js:145
+msgid "Completed"
+msgstr ""
+
+#: js/GridPanel.js:76
+msgid "Failed"
+msgstr "Неудача"
+
+#: js/GridPanel.js:76
+msgid "Could not save task."
+msgstr "Задание не смогла быть сохранино"
+
+#: js/GridPanel.js:120
+msgid "Add a task..."
+msgstr "Добавить задание..."
+
+#: js/GridPanel.js:124
+msgid "Due Date"
+msgstr "Число истечения срока"
+
+#: js/GridPanel.js:148
+msgid "Percent"
+msgstr "Процент"
+
+#: js/GridPanel.js:177
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:205
+msgid "Show closed"
+msgstr "Показ закрылся"
 
 #: js/Status.js:45 Setup/setup.xml:431
 msgid "IN-PROCESS"
 msgstr "НЕЗАВЕРШЕННЫЙ"
 
-#: js/Tasks.js:110
-msgid "Do you really want to delete the selected task"
-msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Вы уверены что хотите удалить выбранное задание"
-msgstr[1] "Вы уверены что хотите удалить выбранные задания"
-msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
-
-#: js/Tasks.js:141 js/Tasks.js:554 js/Tasks.js:703 js/Tasks.js:728
-msgid "Failed"
-msgstr "Неудача"
-
-#: js/Tasks.js:141 js/Tasks.js:728
-msgid "Could not delete task(s)."
-msgstr "Задание(я) не могло быть удалино."
-
-#: js/Tasks.js:159
-msgid "Edit task"
-msgstr "Введите задание"
-
-#: js/Tasks.js:169
-msgid "Add task"
-msgstr "Добавть задание"
-
-#: js/Tasks.js:180
+#: js/Tasks.js:87
 #, fuzzy
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Удолить задание"
-msgstr[1] "Удолить задание"
-msgstr[2] "Удолить задание"
-
-#: js/Tasks.js:300
-msgid "Tasks"
-msgstr "Задания"
-
-#: js/Tasks.js:301 js/Tasks.js:628
-msgid "to do lists"
-msgstr "Делать списки"
-
-#: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
 msgid "to do list"
-msgstr "Сделать список"
-
-#: js/Tasks.js:323
-msgid "Enter searchfilter"
-msgstr "Введите поисковый фильтр"
-
-#: js/Tasks.js:338
-msgid "Show closed"
-msgstr "Показ закрылся"
-
-#: js/Tasks.js:388
-msgid "Search:"
-msgstr "Поиск:"
-
-#: js/Tasks.js:398
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Показ задач {0} - {1} of {2}"
-
-#: js/Tasks.js:399
-msgid "No tasks to display"
-msgstr "Никаких заданий не было найдено"
-
-#: js/Tasks.js:415 js/Tasks.js:751
-msgid "Summary"
-msgstr "Содержание"
-
-#: js/Tasks.js:423
-msgid "Add a task..."
-msgstr "Добавить задание..."
-
-#: js/Tasks.js:427
-msgid "Due Date"
-msgstr "Число истечения срока"
-
-#: js/Tasks.js:441 js/Tasks.js:783
-msgid "Priority"
-msgstr "Приоритет"
-
-#: js/Tasks.js:456
-msgid "Percent"
-msgstr "Процент"
-
-#: js/Tasks.js:470 js/Tasks.js:779
-msgid "Status"
-msgstr "Статус"
-
-#: js/Tasks.js:492
-msgid "No Tasks to display"
-msgstr "Никаких заданий не было найдено"
-
-#: js/Tasks.js:554 js/Tasks.js:703
-msgid "Could not save task."
-msgstr "Задание не смогла быть сохранино"
-
-#: js/Tasks.js:638
-msgid "Loading Task..."
-msgstr "Задание загружается"
-
-#: js/Tasks.js:638
-msgid "Please Wait"
-msgstr "Пожалуйста подождите"
-
-#: js/Tasks.js:649
-msgid "Add New Task"
-msgstr "Добавить новое задание"
-
-#: js/Tasks.js:651
-#, python-format
-msgid "Edit Task \"%s\""
-msgstr "Обработать задание \"%s\""
-
-#: js/Tasks.js:671
-msgid "Please wait"
-msgstr "Пожалуйста подождите"
-
-#: js/Tasks.js:671 js/Tasks.js:716
-msgid "Saving Task"
-msgstr "Сохранить задание"
-
-#: js/Tasks.js:707
-msgid "Errors"
-msgstr "Ошибки"
-
-#: js/Tasks.js:707
-msgid "Please fix the errors noted."
-msgstr "Пожалуйста, устраните показанные ошибки."
-
-#: js/Tasks.js:714
-msgid "Confirm"
-msgstr "Подтвердить"
-
-#: js/Tasks.js:714
-msgid "Do you really want to delete this task?"
-msgstr "Вы уверены что хотите удалить задание?"
-
-#: js/Tasks.js:716
-msgid "Please wait a moment..."
-msgstr "Пожалуйста подождите момент..."
-
-#: js/Tasks.js:755
-msgid "Enter short name..."
-msgstr "Введите короткое имя..."
-
-#: js/Tasks.js:758
-msgid "Notes"
-msgstr "Примечания"
-
-#: js/Tasks.js:760
-msgid "Enter description..."
-msgstr "Введите описание..."
-
-#: js/Tasks.js:774
-msgid "Percentage"
-msgstr "Подтвердить"
-
-#: js/Tasks.js:787
-msgid "Due date"
-msgstr "Число истечения срока"
-
-#: js/Tasks.js:791
-msgid "Saved in"
-msgstr "Сохранено в"
+msgid_plural "to do lists"
+msgstr[0] "Сделать список"
+msgstr[1] "Сделать список"
+msgstr[2] "Сделать список"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
@@ -201,6 +117,85 @@ msgstr "ЗАКОНЧЕНО"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "ОТСТАВЛЕНО"
+
+#~ msgid "Do you really want to delete the selected task"
+#~ msgid_plural "Do you really want to delete the selected task"
+#~ msgstr[0] "Вы уверены что хотите удалить выбранное задание"
+#~ msgstr[1] "Вы уверены что хотите удалить выбранные задания"
+#~ msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
+
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Задание(я) не могло быть удалино."
+
+#~ msgid "Edit task"
+#~ msgstr "Введите задание"
+
+#~ msgid "Add task"
+#~ msgstr "Добавть задание"
+
+#, fuzzy
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "Удолить задание"
+#~ msgstr[1] "Удолить задание"
+#~ msgstr[2] "Удолить задание"
+
+#~ msgid "to do lists"
+#~ msgstr "Делать списки"
+
+#~ msgid "Enter searchfilter"
+#~ msgstr "Введите поисковый фильтр"
+
+#~ msgid "Search:"
+#~ msgstr "Поиск:"
+
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Показ задач {0} - {1} of {2}"
+
+#~ msgid "No tasks to display"
+#~ msgstr "Никаких заданий не было найдено"
+
+#~ msgid "No Tasks to display"
+#~ msgstr "Никаких заданий не было найдено"
+
+#~ msgid "Loading Task..."
+#~ msgstr "Задание загружается"
+
+#~ msgid "Please Wait"
+#~ msgstr "Пожалуйста подождите"
+
+#~ msgid "Add New Task"
+#~ msgstr "Добавить новое задание"
+
+#~ msgid "Edit Task \"{0}\""
+#~ msgstr "Обработать задание \"{0}\""
+
+#~ msgid "Please wait"
+#~ msgstr "Пожалуйста подождите"
+
+#~ msgid "Saving Task"
+#~ msgstr "Сохранить задание"
+
+#~ msgid "Errors"
+#~ msgstr "Ошибки"
+
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Пожалуйста, устраните показанные ошибки."
+
+#~ msgid "Confirm"
+#~ msgstr "Подтвердить"
+
+#~ msgid "Do you really want to delete this task?"
+#~ msgstr "Вы уверены что хотите удалить задание?"
+
+#~ msgid "Please wait a moment..."
+#~ msgstr "Пожалуйста подождите момент..."
+
+#~ msgid "Enter short name..."
+#~ msgstr "Введите короткое имя..."
+
+#~ msgid "Saved in"
+#~ msgstr "Сохранено в"
 
 #~ msgid "Folder"
 #~ msgstr "Папка"

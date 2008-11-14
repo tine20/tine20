@@ -45,8 +45,7 @@ msgstr "运行"
 msgid "run right description"
 msgstr "运行权限描述"
 
-#: Export/Pdf.php:206
-#: js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "标签"
 
@@ -58,34 +57,30 @@ msgstr "输出日期"
 msgid "Created by"
 msgstr "创建者"
 
-#: Export/Pdf.php:461
-#: js/widgets/ActivitiesPanel.js:519
+#: Export/Pdf.php:462 js/widgets/ActivitiesPanel.js:520
 msgid "Activities"
 msgstr "活动"
 
-#: Http.php:214
-#: js/tineInit.js:170
+#: Frontend/Http.php:248 js/tineInit.js:218
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Http.php:215
+#: Frontend/Http.php:249
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Http.php:241
-#: js/ExceptionDialog.js:26
+#: Frontend/Http.php:275 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Http.php:242
-#: js/ExceptionDialog.js:51
+#: Frontend/Http.php:276 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
-#: js/ExceptionDialog.js:34
-#: js/MainScreen.js:315
-#: js/widgets/container/ContainerSelect.js:251
-#: js/widgets/EditRecord.js:123
+#: js/ExceptionDialog.js:34 js/MainScreen.js:355
+#: js/widgets/AccountpickerPanel.js:143
+#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:151
+#: js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "取消"
 
@@ -98,11 +93,14 @@ msgid "The last action you made was potentially not performed correctly."
 msgstr "最后的动作可能没有正确执行"
 
 #: js/ExceptionDialog.js:53
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occoured."
-msgstr "请协助改进本软件并通知供应商，并包含一个关于在哪里有什么错误发生的简短的描述。"
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occoured."
+msgstr ""
+"请协助改进本软件并通知供应商，并包含一个关于在哪里有什么错误发生的简短的描"
+"述。"
 
-#: js/ExceptionDialog.js:59
-#: js/widgets/tags/TagsPanel.js:556
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
 msgid "Description"
 msgstr "描述"
 
@@ -126,180 +124,188 @@ msgstr "发送完成"
 msgid "Your report has been send. Thanks for your contribution"
 msgstr "报告已经发送，谢谢你的贡献"
 
-#: js/Login.js:29
+#: js/Login.js:37
 msgid "Login"
 msgstr "登录"
 
-#: js/Login.js:36
+#: js/Login.js:44
 msgid "Register"
 msgstr "注册"
 
-#: js/Login.js:50
+#: js/Login.js:58 js/Login.js:92
 msgid "Please enter your login data"
 msgstr "请输入登录数据"
 
-#: js/Login.js:67
+#: js/Login.js:75
 msgid "Username"
 msgstr "用户名"
 
-#: js/Login.js:73
+#: js/Login.js:81
 msgid "Password"
 msgstr "密码"
 
-#: js/Login.js:119
+#: js/Login.js:120
 msgid "Logging you in..."
 msgstr "正在登录 ..."
 
-#: js/Login.js:119
-#: js/widgets/container/ContainerGrants.js:34
-#: js/widgets/container/ContainerTree.js:231
-#: js/widgets/container/ContainerTree.js:259
-#: js/widgets/container/ContainerTree.js:291
+#: js/Login.js:120 js/widgets/container/ContainerGrants.js:34
+#: js/widgets/container/ContainerTree.js:274
+#: js/widgets/container/ContainerTree.js:302
+#: js/widgets/container/ContainerTree.js:334
 msgid "Please wait"
 msgstr "请等待"
 
-#: js/Login.js:130
+#: js/Login.js:132
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "登录成功，正加载 Tine 2.0 ..."
 
-#: js/Login.js:130
-#: js/MainScreen.js:393
+#: js/Login.js:132 js/MainScreen.js:433
 msgid "Please wait!"
 msgstr "请等待！"
 
-#: js/Login.js:134
+#: js/Login.js:138
 msgid "Login failure"
 msgstr "登录失败"
 
-#: js/Login.js:135
+#: js/Login.js:139
 msgid "Your username and/or your password are wrong!!!"
 msgstr "你的用户名或者密码有误！！！"
 
-#: js/MainScreen.js:48
-msgid "Change password"
-msgstr "修改密码"
-
-#: js/MainScreen.js:54
-msgid "Install Google Gears"
-msgstr "安装 Google Gears"
-
-#: js/MainScreen.js:60
-msgid "Logout"
-msgstr "登出"
-
-#: js/MainScreen.js:61
-msgid "Logout from Tine 2.0"
-msgstr "从 Tine 2.0 登出"
-
-#: js/MainScreen.js:83
-#: js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:53 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "管理"
 
-#: js/MainScreen.js:91
+#: js/MainScreen.js:61
 msgid "Preferences"
 msgstr "参考"
 
-#: js/MainScreen.js:107
-#, python-format
-msgid "User: %s"
-msgstr "用户：%s"
+#: js/MainScreen.js:77
+#, fuzzy
+msgid "User: {0}"
+msgstr "用户：{0}"
 
-#: js/MainScreen.js:108
-#, python-format
-msgid "Timezone: %s"
-msgstr "时区：%s"
+#: js/MainScreen.js:78
+#, fuzzy
+msgid "Timezone: {0}"
+msgstr "时区：{0}"
 
-#: js/MainScreen.js:109
-#: js/widgets/TimezoneChooser.js:34
+#: js/MainScreen.js:79 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr "时区"
 
-#: js/MainScreen.js:110
-#: js/widgets/LangChooser.js:40
+#: js/MainScreen.js:80 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "语言"
 
-#: js/MainScreen.js:279
-#, python-format
-msgid "Change Password For \"%s\""
-msgstr "为 \"%s\"修改密码"
+#: js/MainScreen.js:171
+msgid "Change password"
+msgstr "修改密码"
 
-#: js/MainScreen.js:303
+#: js/MainScreen.js:177
+msgid "Install Google Gears"
+msgstr "安装 Google Gears"
+
+#: js/MainScreen.js:183
+msgid "Logout"
+msgstr "登出"
+
+#: js/MainScreen.js:184
+msgid "Logout from Tine 2.0"
+msgstr "从 Tine 2.0 登出"
+
+#: js/MainScreen.js:319
+#, fuzzy
+msgid "Change Password For \"{0}\""
+msgstr "为 \"{0}\"修改密码"
+
+#: js/MainScreen.js:343
 msgid "Old Password"
 msgstr "旧密码"
 
-#: js/MainScreen.js:307
+#: js/MainScreen.js:347
 msgid "New Password"
 msgstr "新密码"
 
-#: js/MainScreen.js:311
+#: js/MainScreen.js:351
 msgid "Repeat new Password"
 msgstr "重复新密码"
 
-#: js/MainScreen.js:321
-#: js/widgets/AccountpickerPanel.js:108
-#: js/widgets/container/ContainerSelect.js:260
-#: js/widgets/EditRecord.js:102
+#: js/MainScreen.js:361 js/widgets/AccountpickerPanel.js:135
+#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:134
+#: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "确认"
 
-#: js/MainScreen.js:330
+#: js/MainScreen.js:370
 msgid "Please Wait!"
 msgstr "请等待"
 
-#: js/MainScreen.js:331
+#: js/MainScreen.js:371
 msgid "changing password..."
 msgstr "修改密码..."
 
-#: js/MainScreen.js:342
+#: js/MainScreen.js:382
 msgid "Success"
 msgstr "成功"
 
-#: js/MainScreen.js:343
+#: js/MainScreen.js:383
 msgid "Your password has been changed."
 msgstr "你的密码已经被修改"
 
-#: js/MainScreen.js:349
-#: js/MainScreen.js:359
+#: js/MainScreen.js:389 js/MainScreen.js:399
 msgid "Failure"
 msgstr "失败"
 
-#: js/MainScreen.js:360
+#: js/MainScreen.js:400
 msgid "The new passwords mismatch, please correct them."
 msgstr "新密码不匹配，请纠正"
 
-#: js/MainScreen.js:378
-msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
+#: js/MainScreen.js:418
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:391
-#: js/widgets/container/ContainerTree.js:257
+#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:364
+#: js/widgets/container/ContainerTree.js:300 js/widgets/EditDialog.js:326
 msgid "Confirm"
 msgstr "确认"
 
-#: js/MainScreen.js:391
+#: js/MainScreen.js:431
 msgid "Are you sure you want to logout?"
 msgstr "确实想登出？"
 
-#: js/MainScreen.js:393
+#: js/MainScreen.js:433
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
-#: js/tineInit.js:160
+#: js/Record.js:97
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] ""
+
+#: js/Record.js:93
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks, n);"
+msgstr[0] "标签"
+
+#: js/tineInit.js:208
 msgid "Connection lost, please check your network!"
 msgstr "失去连接，请检查网络"
 
-#: js/tineInit.js:171
+#: js/tineInit.js:219
 msgid "Your session timed out. You need to login again."
 msgstr "会话超时，需要重新登录"
 
-#: js/tineInit.js:184
+#: js/tineInit.js:232
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/tineInit.js:185
-msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+#: js/tineInit.js:233
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
 msgstr "当你编辑时，有人保存了这条记录。你 ..."
 
 #: js/UserRegistration.js:33
@@ -327,7 +333,9 @@ msgid "Congratulations!"
 msgstr "恭喜！"
 
 #: js/UserRegistration.js:167
-msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
 msgstr "你已经输入了所需信息，如果你按完成按钮我们将给你发送注册邮件。"
 
 #: js/ux/ConnectionStatus.js:52
@@ -370,8 +378,7 @@ msgstr "不能上载图像，请通知你的管理员"
 msgid "Change Image"
 msgstr "修改图像"
 
-#: js/ux/form/ImageField.js:166
-#: js/ux/form/ImageField.js:184
+#: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
 msgid "Crop Image"
 msgstr "修剪图像"
 
@@ -391,8 +398,7 @@ msgstr "不能加载图像，请通知你的管理员"
 msgid "remove account"
 msgstr "删除帐户"
 
-#: js/widgets/account/ConfigGrid.js:79
-#: js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
 msgid "Name"
 msgstr "名子"
 
@@ -400,24 +406,20 @@ msgstr "名子"
 msgid "add account"
 msgstr "添加帐户"
 
-#: js/widgets/account/PickerPanel.js:177
-#: js/widgets/GridPicker.js:389
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
 
-#: js/widgets/account/PickerPanel.js:221
-#: js/widgets/GridPicker.js:410
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "搜索"
 
-#: js/widgets/account/PickerPanel.js:257
-#: js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:448
-#: js/widgets/GridPicker.js:449
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "浏览"
 
-#: js/widgets/AccountpickerPanel.js:103
+#: js/widgets/AccountpickerPanel.js:129
 msgid "please select an account"
 msgstr "请选择帐户"
 
@@ -425,20 +427,17 @@ msgstr "请选择帐户"
 msgid "Add a Note..."
 msgstr "添加一个注释..."
 
-#: js/widgets/ActivitiesPanel.js:161
-#: js/widgets/ActivitiesPanel.js:173
+#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:173
 #: js/widgets/container/ContainerGrants.js:87
 msgid "Add"
 msgstr "添加"
 
-#: js/widgets/ActivitiesPanel.js:161
-#: js/widgets/ActivitiesPanel.js:403
-#: js/widgets/ActivitiesPanel.js:531
+#: js/widgets/ActivitiesPanel.js:161 js/widgets/ActivitiesPanel.js:404
+#: js/widgets/ActivitiesPanel.js:532
 msgid "Note"
 msgstr "注释"
 
-#: js/widgets/ActivitiesPanel.js:174
-#: js/widgets/ActivitiesPanel.js:331
+#: js/widgets/ActivitiesPanel.js:174 js/widgets/ActivitiesPanel.js:331
 msgid "Add new note"
 msgstr "添加新注释"
 
@@ -446,8 +445,7 @@ msgstr "添加新注释"
 msgid "Recent Activities"
 msgstr "最近的活动"
 
-#: js/widgets/ActivitiesPanel.js:269
-#: js/widgets/ActivitiesPanel.js:330
+#: js/widgets/ActivitiesPanel.js:269 js/widgets/ActivitiesPanel.js:330
 msgid "Add Note"
 msgstr "添加注释"
 
@@ -456,38 +454,85 @@ msgid "Enter new note:"
 msgstr "输入新注释："
 
 #: js/widgets/ActivitiesPanel.js:317
-#, python-format
-msgid "Add a %s Note"
-msgstr "添加一个  %s 注释"
+#, fuzzy
+msgid "Add a {0} Note"
+msgstr "添加一个  {0} 注释"
 
-#: js/widgets/ActivitiesPanel.js:401
-#: js/widgets/ActivitiesPanel.js:536
+#: js/widgets/ActivitiesPanel.js:402 js/widgets/ActivitiesPanel.js:537
 msgid "Type"
 msgstr "类型"
 
-#: js/widgets/ActivitiesPanel.js:404
+#: js/widgets/ActivitiesPanel.js:405
 msgid "Created By"
 msgstr "创建者"
 
-#: js/widgets/ActivitiesPanel.js:405
+#: js/widgets/ActivitiesPanel.js:406
 msgid "Timestamp"
 msgstr "时间戳"
 
-#: js/widgets/ActivitiesPanel.js:419
+#: js/widgets/ActivitiesPanel.js:420
 msgid "Displaying notes {0} - {1} of {2}"
 msgstr "显示注释 {0} - {1} of {2}"
 
-#: js/widgets/ActivitiesPanel.js:420
+#: js/widgets/ActivitiesPanel.js:421
 msgid "No notes to display"
 msgstr "没有注释要显示"
 
-#: js/widgets/ActivitiesPanel.js:532
+#: js/widgets/ActivitiesPanel.js:533
 msgid "Time"
 msgstr "时间"
 
-#: js/widgets/ActivitiesPanel.js:534
+#: js/widgets/ActivitiesPanel.js:535
 msgid "User"
 msgstr "用户"
+
+#: js/widgets/app/GridPanel.js:126
+#, fuzzy
+msgid "Edit {0}"
+msgstr "编辑"
+
+#: js/widgets/app/GridPanel.js:137 js/widgets/container/ContainerTree.js:381
+#, fuzzy
+msgid "Add {0}"
+msgstr "添加{0}"
+
+#: js/widgets/app/GridPanel.js:150 js/widgets/container/ContainerTree.js:387
+#, fuzzy
+msgid "Delete {0}"
+msgid_plural "Delete {1}"
+msgstr[0] "删除"
+
+#: js/widgets/app/GridPanel.js:211
+#, fuzzy
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "显示注释 {0} - {1} of {2}"
+
+#: js/widgets/app/GridPanel.js:212 js/widgets/app/GridPanel.js:220
+#, fuzzy
+msgid "No {0} to display"
+msgstr "没有标签要显示"
+
+#: js/widgets/app/GridPanel.js:362
+#, fuzzy
+msgid "Do you really want to delete the selected {0}"
+msgid_plural "Do you really want to delete the selected {0}"
+msgstr[0] "真的想删除 {0} \"{0}\" ？"
+
+#: js/widgets/app/GridPanel.js:367 js/widgets/EditDialog.js:328
+#, fuzzy
+msgid "Deleting {0}"
+msgstr "正删除标签"
+
+#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:314
+#: js/widgets/EditDialog.js:339 js/widgets/tags/TagsPanel.js:250
+#: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:392
+msgid "Failed"
+msgstr "失败"
+
+#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:339
+#, fuzzy
+msgid "Could not delete {0}."
+msgstr "不能删除标签"
 
 #: js/widgets/container/ContainerGrants.js:34
 msgid "Updating Grants"
@@ -514,18 +559,17 @@ msgid "Permissions"
 msgstr "许可"
 
 #: js/widgets/container/ContainerSelect.js:74
-#, python-format
-msgid "Recently used %s:"
-msgstr "当前使用的  %s:"
+#, fuzzy
+msgid "Recently used {0}:"
+msgstr "当前使用的  {0}:"
 
 #: js/widgets/container/ContainerSelect.js:93
-#, python-format
-msgid "choose other %s..."
-msgstr "选择其它 %s..."
+#, fuzzy
+msgid "choose other {0}..."
+msgstr "选择其它 {0}..."
 
 #: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:105
-#: js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
 #: js/widgets/tags/TagsPanel.js:410
 msgid "personal"
 msgstr "个人的"
@@ -535,100 +579,126 @@ msgid "shared"
 msgstr "共享的"
 
 #: js/widgets/container/ContainerSelect.js:248
-#, python-format
-msgid "please select a %s"
-msgstr "请选择一个 %s"
+#, fuzzy
+msgid "please select a {0}"
+msgstr "请选择一个 {0}"
 
-#: js/widgets/container/ContainerTree.js:115
-#, python-format
-msgid "All %s"
-msgstr "所有 %s"
-
-#: js/widgets/container/ContainerTree.js:120
-#, python-format
-msgid "My %s"
-msgstr "我的 %s"
-
-#: js/widgets/container/ContainerTree.js:127
-#, python-format
-msgid "Shared %s"
-msgstr "共享的 %s"
+#: js/widgets/container/ContainerTree.js:129
+#, fuzzy
+msgid "All {0}"
+msgstr "所有 {0}"
 
 #: js/widgets/container/ContainerTree.js:134
-#, python-format
-msgid "Other Users %s"
-msgstr "其它用户 %s"
+msgid "My {0}"
+msgstr ""
 
-#: js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "New %s"
-msgstr "新的 %s"
+#: js/widgets/container/ContainerTree.js:141
+#, fuzzy
+msgid "Shared {0}"
+msgstr "共享的 {0}"
 
-#: js/widgets/container/ContainerTree.js:229
-#, python-format
-msgid "Please enter the name of the new %s:"
-msgstr "请输入新的 %s 的名字："
+#: js/widgets/container/ContainerTree.js:148
+#, fuzzy
+msgid "Other Users {0}"
+msgstr "其它用户 {0}"
 
-#: js/widgets/container/ContainerTree.js:231
-#, python-format
-msgid "Creating %s..."
-msgstr "正生成  %s..."
+#: js/widgets/container/ContainerTree.js:272
+#, fuzzy
+msgid "New {0}"
+msgstr "新的 {0}"
 
-#: js/widgets/container/ContainerTree.js:257
-#, python-format
-msgid "Do you really want to delete the %s \"%s\"?"
-msgstr "真的想删除 %s \"%s\" ？"
+#: js/widgets/container/ContainerTree.js:272
+#, fuzzy
+msgid "Please enter the name of the new {0}:"
+msgstr "请输入新的 {0} 的名字："
 
-#: js/widgets/container/ContainerTree.js:259
-#, python-format
-msgid "Deleting %s \"%s\""
-msgstr "正删除  %s \"%s\""
+#: js/widgets/container/ContainerTree.js:274
+#, fuzzy
+msgid "Creating {0}..."
+msgstr "正生成  {0}..."
 
-#: js/widgets/container/ContainerTree.js:286
-#, python-format
-msgid "Please enter the new name of the %s:"
-msgstr "请输入 %s 的新名字："
+#: js/widgets/container/ContainerTree.js:300
+#, fuzzy
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "真的想删除 {0} \"{0}\" ？"
 
-#: js/widgets/container/ContainerTree.js:291
-#, python-format
-msgid "Updating %s \"%s\""
-msgstr "正在更新 %s \"%s\""
+#: js/widgets/container/ContainerTree.js:302
+#, fuzzy
+msgid "Deleting {0} \"{1}\""
+msgstr "正删除  {0} \"{0}\""
 
-#: js/widgets/container/ContainerTree.js:325
-#, python-format
-msgid "Manage Permissions for %s :\"%s\""
-msgstr "管理 %s :\"%s\" 的权限"
+#: js/widgets/container/ContainerTree.js:329
+#, fuzzy
+msgid "Please enter the new name of the {0}:"
+msgstr "请输入 {0} 的新名字："
 
-#: js/widgets/container/ContainerTree.js:338
-#, python-format
-msgid "Add %s"
-msgstr "添加%s"
+#: js/widgets/container/ContainerTree.js:334
+#, fuzzy
+msgid "Updating {0} \"{1}\""
+msgstr "正在更新 {0} \"{0}\""
 
-#: js/widgets/container/ContainerTree.js:344
-#, python-format
-msgid "Delete %s"
-msgstr "删除 %s"
+#: js/widgets/container/ContainerTree.js:368
+#, fuzzy
+msgid "Manage Permissions for {0} :\"{0}\""
+msgstr "管理 {0} :\"{0}\" 的权限"
 
-#: js/widgets/container/ContainerTree.js:350
-#, python-format
-msgid "Rename %s"
-msgstr "改 %s 的名字"
+#: js/widgets/container/ContainerTree.js:393
+#, fuzzy
+msgid "Rename {0}"
+msgstr "改 {0} 的名字"
 
-#: js/widgets/container/ContainerTree.js:356
+#: js/widgets/container/ContainerTree.js:399
 msgid "Manage permissions"
 msgstr "管理许可"
 
-#: js/widgets/EditRecord.js:113
+#: js/widgets/EditDialog.js:143 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "应用"
 
-#: js/widgets/EditRecord.js:133
+#: js/widgets/EditDialog.js:160 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "删除"
 
-#: js/widgets/EditRecord.js:178
+#: js/widgets/EditDialog.js:197
+#, fuzzy
+msgid "Add New {0}"
+msgstr "添加新的个人标签"
+
+#: js/widgets/EditDialog.js:199
+msgid "Edit {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/EditDialog.js:218 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "保存到"
+
+#: js/widgets/EditDialog.js:237
+#, fuzzy
+msgid "Loading {0}..."
+msgstr "正加载"
+
+#: js/widgets/EditDialog.js:287
+msgid "Saving {0}"
+msgstr ""
+
+#: js/widgets/EditDialog.js:314
+#, fuzzy
+msgid "Could not save {0}."
+msgstr "不能创建标签"
+
+#: js/widgets/EditDialog.js:318
+msgid "Errors"
+msgstr ""
+
+#: js/widgets/EditDialog.js:318
+#, fuzzy
+msgid "Please fix the errors noted."
+msgstr "请输入新名字给"
+
+#: js/widgets/EditDialog.js:326
+#, fuzzy
+msgid "Do you really want to delete this {0}?"
+msgstr "真的想删除 {0} \"{0}\" ？"
 
 #: js/widgets/grid/FilterModel.js:87
 msgid "contains"
@@ -658,35 +728,35 @@ msgstr "在其中"
 msgid "select a operator"
 msgstr "选择一个操作者"
 
-#: js/widgets/grid/FilterToolbar.js:122
+#: js/widgets/grid/FilterToolbar.js:116
 msgid "add new filter"
 msgstr "添加新的过滤器"
 
-#: js/widgets/grid/FilterToolbar.js:128
+#: js/widgets/grid/FilterToolbar.js:122
 msgid "Delete all filters"
 msgstr "删除所有的过滤器"
 
-#: js/widgets/grid/FilterToolbar.js:134
+#: js/widgets/grid/FilterToolbar.js:128
 msgid "start search"
 msgstr "开始搜索"
 
-#: js/widgets/grid/FilterToolbar.js:143
+#: js/widgets/grid/FilterToolbar.js:137
 msgid "save filter"
 msgstr "保存过滤器"
 
-#: js/widgets/grid/FilterToolbar.js:210
+#: js/widgets/grid/FilterToolbar.js:207
 msgid "select a field"
 msgstr "选择一个字段"
 
-#: js/widgets/grid/FilterToolbar.js:234
+#: js/widgets/grid/FilterToolbar.js:231
 msgid "Delete this filter"
 msgstr "删除这个过滤器"
 
-#: js/widgets/grid/FilterToolbar.js:257
+#: js/widgets/grid/FilterToolbar.js:255
 msgid "and"
 msgstr "和"
 
-#: js/widgets/grid/FilterToolbar.js:276
+#: js/widgets/grid/FilterToolbar.js:274
 msgid "Show"
 msgstr "显示"
 
@@ -702,8 +772,7 @@ msgstr "请选择一个组"
 msgid "setting new language..."
 msgstr "设置新语言..."
 
-#: js/widgets/LangChooser.js:72
-#: js/widgets/LangChooser.js:93
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:93
 #: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "请等待"
@@ -749,8 +818,7 @@ msgstr[0] "删除标签"
 msgid "Edit tag"
 msgstr "编辑标签"
 
-#: js/widgets/tags/TagsPanel.js:165
-#: js/widgets/tags/TagsPanel.js:170
+#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
 msgid "Rename Tag"
 msgstr "改标签名"
 
@@ -799,22 +867,14 @@ msgid_plural "Deleting Tags"
 msgstr[0] "正删除标签"
 
 #: js/widgets/tags/TagsPanel.js:250
-#: js/widgets/tags/TagsPanel.js:359
-#: js/widgets/tags/TagsPanel.js:392
-msgid "Failed"
-msgstr "失败"
-
-#: js/widgets/tags/TagsPanel.js:250
 msgid "Could not delete Tag(s)."
 msgstr "不能删除标签"
 
-#: js/widgets/tags/TagsPanel.js:311
-#: js/widgets/tags/TagsPanel.js:373
+#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
 msgid "Notice"
 msgstr "通知"
 
-#: js/widgets/tags/TagsPanel.js:312
-#: js/widgets/tags/TagsPanel.js:374
+#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
 msgid "The minimum tag length is three."
 msgstr "标签最小长度为三"
 
@@ -826,8 +886,7 @@ msgstr "不能创建标签"
 msgid "Could not update tag."
 msgstr "不能更新标签"
 
-#: js/widgets/tags/TagsPanel.js:425
-#: js/widgets/tags/TagsPanel.js:483
+#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
 msgid "Enter tag name"
 msgstr "输入标签名"
 
@@ -843,16 +902,14 @@ msgstr "颜色"
 msgid "setting new timezone..."
 msgstr "设置新时区"
 
-#: js/widgets/VersionCheck.js:39
-#: js/widgets/VersionCheck.js:48
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
 msgid "New version of Tine 2.0 available"
 msgstr "Tine 2.0新版本可用"
 
-#: js/widgets/VersionCheck.js:40
-#: js/widgets/VersionCheck.js:49
-#, python-format
-msgid "Version \"%s\" of Tine 2.0 is available."
-msgstr "Tine 2.0 的  \"%s\"  版可用。"
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#, fuzzy
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Tine 2.0 的  \"{0}\"  版可用。"
 
 #: js/widgets/VersionCheck.js:41
 msgid "It's a critical update and must be installed as soon as possible!"
@@ -862,45 +919,51 @@ msgstr "这是重要的更新，必需尽快安装！"
 msgid "Please consider updating!"
 msgstr "请考虑更新！"
 
-#: Setup/setup.xml:1748
+#: Setup/setup.xml:1749
 msgid "note"
 msgstr "注释"
 
-#: Setup/setup.xml:1753
+#: Setup/setup.xml:1754
 msgid "default note type"
 msgstr "缺省注释类型"
 
-#: Setup/setup.xml:1779
+#: Setup/setup.xml:1780
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:1784
+#: Setup/setup.xml:1785
 msgid "telephone call"
 msgstr "电话呼叫"
 
-#: Setup/setup.xml:1810
+#: Setup/setup.xml:1811
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:1815
+#: Setup/setup.xml:1816
 msgid "email contact"
 msgstr "电子邮件联系"
 
-#: Setup/setup.xml:1841
+#: Setup/setup.xml:1842
 msgid "created"
 msgstr "生成的"
 
-#: Setup/setup.xml:1846
+#: Setup/setup.xml:1847
 msgid "record created"
 msgstr "记录已生成"
 
-#: Setup/setup.xml:1872
+#: Setup/setup.xml:1873
 msgid "changed"
 msgstr "已修改"
 
-#: Setup/setup.xml:1877
+#: Setup/setup.xml:1878
 msgid "record changed"
 msgstr "记录已修改"
+
+#~ msgid "My {0}"
+#~ msgstr "我的 {0}"
+
+#~ msgid "Delete {0}"
+#~ msgstr "删除 {0}"
 
 #, fuzzy
 #~ msgid "Internal Contacts"
@@ -913,7 +976,7 @@ msgstr "记录已修改"
 #, fuzzy
 #~ msgid "Do you really want to delete the selected contact?"
 #~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "真的想删除 %s \"%s\" ？"
+#~ msgstr[0] "真的想删除 {0} \"{0}\" ？"
 
 #, fuzzy
 #~ msgid "Deleting contact..."
@@ -990,10 +1053,6 @@ msgstr "记录已修改"
 #~ msgstr "不能创建标签"
 
 #, fuzzy
-#~ msgid "Please fix the errors noted."
-#~ msgstr "请输入新名字给"
-
-#, fuzzy
 #~ msgid "Title"
 #~ msgstr "时间"
 
@@ -1008,11 +1067,11 @@ msgstr "记录已修改"
 
 #, fuzzy
 #~ msgid "Shared Tags"
-#~ msgstr "共享的 %s"
+#~ msgstr "共享的 {0}"
 
 #, fuzzy
 #~ msgid "Do you really want to delete the selected access log entries?"
-#~ msgstr "真的想删除 %s \"%s\" ？"
+#~ msgstr "真的想删除 {0} \"{0}\" ？"
 
 #, fuzzy
 #~ msgid "delete entry"
@@ -1096,7 +1155,7 @@ msgstr "记录已修改"
 
 #, fuzzy
 #~ msgid "Do you really want to delete the selected account(s)?"
-#~ msgstr "真的想删除 %s \"%s\" ？"
+#~ msgstr "真的想删除 {0} \"{0}\" ？"
 
 #, fuzzy
 #~ msgid "Displaying accounts {0} - {1} of {2}"
@@ -1176,7 +1235,7 @@ msgstr "记录已修改"
 
 #, fuzzy
 #~ msgid "Do you really want to delete the selected groups?"
-#~ msgstr "真的想删除 %s \"%s\" ？"
+#~ msgstr "真的想删除 {0} \"{0}\" ？"
 
 #, fuzzy
 #~ msgid "Deleting group(s)..."
@@ -1220,7 +1279,7 @@ msgstr "记录已修改"
 
 #, fuzzy
 #~ msgid "Do you really want to delete the selected tags?"
-#~ msgstr "真的想删除 %s \"%s\" ？"
+#~ msgstr "真的想删除 {0} \"{0}\" ？"
 
 #, fuzzy
 #~ msgid "Deleting tag(s)..."
@@ -1247,10 +1306,6 @@ msgstr "记录已修改"
 #~ msgstr "没有标签要显示"
 
 #, fuzzy
-#~ msgid "Could not save tag."
-#~ msgstr "不能创建标签"
-
-#, fuzzy
 #~ msgid "Deleting tag..."
 #~ msgstr "正删除标签"
 
@@ -1263,24 +1318,16 @@ msgstr "记录已修改"
 #~ msgstr "标签名"
 
 #, fuzzy
-#~ msgid "Loading Tag..."
-#~ msgstr "正加载"
-
-#, fuzzy
-#~ msgid "Add New Tag"
-#~ msgstr "添加新的个人标签"
-
-#, fuzzy
-#~ msgid "Edit Tag \"%s\""
+#~ msgid "Edit Tag \"{0}\""
 #~ msgstr "编辑标签"
 
 #, fuzzy
 #~ msgid "Do you really want to delete the selected roles?"
-#~ msgstr "真的想删除 %s \"%s\" ？"
+#~ msgstr "真的想删除 {0} \"{0}\" ？"
 
 #, fuzzy
 #~ msgid "Deleting role(s)..."
-#~ msgstr "正生成  %s..."
+#~ msgstr "正生成  {0}..."
 
 #, fuzzy
 #~ msgid "add role"
@@ -1289,10 +1336,6 @@ msgstr "记录已修改"
 #, fuzzy
 #~ msgid "delete role"
 #~ msgstr "删除"
-
-#, fuzzy
-#~ msgid "Displaying roles {0} - {1} of {2}"
-#~ msgstr "显示注释 {0} - {1} of {2}"
 
 #, fuzzy
 #~ msgid "No roles to display"
@@ -1373,7 +1416,7 @@ msgstr "记录已修改"
 
 #, fuzzy
 #~ msgid "Add task"
-#~ msgstr "添加%s"
+#~ msgstr "添加{0}"
 
 #, fuzzy
 #~ msgid "Cellphone"
@@ -1429,7 +1472,7 @@ msgstr "记录已修改"
 
 #, fuzzy
 #~ msgid "Remove selected tasks"
-#~ msgstr "请选择一个 %s"
+#~ msgstr "请选择一个 {0}"
 
 #, fuzzy
 #~ msgid "Remove products"
@@ -1442,10 +1485,6 @@ msgstr "记录已修改"
 #, fuzzy
 #~ msgid "Contacts"
 #~ msgstr "包含"
-
-#, fuzzy
-#~ msgid "Tasks"
-#~ msgstr "标签"
 
 #, fuzzy
 #~ msgid "Loading Lead..."
@@ -1500,18 +1539,13 @@ msgstr "记录已修改"
 #~ msgstr "描述"
 
 #, fuzzy
-#~ msgid "Do you really want to delete the selected task"
-#~ msgid_plural "Do you really want to delete the selected task"
-#~ msgstr[0] "真的想删除 %s \"%s\" ？"
-
-#, fuzzy
 #~ msgid "Could not delete task(s)."
 #~ msgstr "不能删除标签"
 
 #, fuzzy
 #~ msgid "Delete task"
 #~ msgid_plural "Delete tasks"
-#~ msgstr[0] "删除 %s"
+#~ msgstr[0] "删除 {0}"
 
 #, fuzzy
 #~ msgid "Could not save task."
@@ -1532,10 +1566,6 @@ msgstr "记录已修改"
 #, fuzzy
 #~ msgid "Add New Task"
 #~ msgstr "添加新的个人标签"
-
-#, fuzzy
-#~ msgid "Do you really want to delete this task?"
-#~ msgstr "真的想删除 %s \"%s\" ？"
 
 #, fuzzy
 #~ msgid "Enter short name..."
@@ -1840,16 +1870,21 @@ msgstr "记录已修改"
 #, fuzzy
 #~ msgid "No myphones to display"
 #~ msgstr "没有注释要显示"
+
 #~ msgid "please select a container"
 #~ msgstr "请选择容器"
+
 #~ msgid "There Where Errors"
 #~ msgstr "出错的地方"
+
 #~ msgid "New"
 #~ msgstr "新的"
+
 #~ msgid "Do you really want to delete the"
 #~ msgstr "真的要删除"
+
 #~ msgid "Save"
 #~ msgstr "保存"
+
 #~ msgid "Close"
 #~ msgstr "关闭"
-

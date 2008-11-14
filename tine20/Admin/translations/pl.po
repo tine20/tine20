@@ -237,9 +237,9 @@ msgid "enabled"
 msgstr "włączone"
 
 #: js/Admin.js:823
-#, python-format
-msgid "unknown status (%s)"
-msgstr "status nie znany (%s)"
+#, fuzzy
+msgid "unknown status ({0})"
+msgstr "status nie znany ({0})"
 
 #: js/Admin.js:852
 msgid "Displaying application {0} - {1} of {2}"
@@ -358,9 +358,9 @@ msgid "Add new group"
 msgstr "Utwórz nową grupę"
 
 #: js/Groups.js:621
-#, python-format
-msgid "Edit Group \"%s\""
-msgstr "Edituj grupę \"%s\""
+#, fuzzy
+msgid "Edit Group \"{0}\""
+msgstr "Edituj grupę \"{0}\""
 
 #: js/Roles.js:48
 msgid "Do you really want to delete the selected roles?"
@@ -432,9 +432,9 @@ msgid "Add New Role"
 msgstr "Tworzenie nowej roli"
 
 #: js/Roles.js:728
-#, python-format
-msgid "Edit Role \"%s\""
-msgstr "Edycja roli Edit \"%s\""
+#, fuzzy
+msgid "Edit Role \"{0}\""
+msgstr "Edycja roli Edit \"{0}\""
 
 #: js/Tags.js:41
 #, fuzzy
@@ -510,9 +510,9 @@ msgid "Add New Tag"
 msgstr "Dodaj nowy tag"
 
 #: js/Tags.js:617
-#, python-format
-msgid "Edit Tag \"%s\""
-msgstr "Edycja tagu \"%s\""
+#, fuzzy
+msgid "Edit Tag \"{0}\""
+msgstr "Edycja tagu \"{0}\""
 
 #: js/Users.js:141
 #, fuzzy
@@ -667,6 +667,6 @@ msgid "Add New User Account"
 msgstr "Utwórz nowe konto użytkownika"
 
 #: js/Users.js:663
-#, python-format
-msgid "Edit User Account \"%s\""
-msgstr "Edycja konta użytkownika \"%s\""
+#, fuzzy
+msgid "Edit User Account \"{0}\""
+msgstr "Edycja konta użytkownika \"{0}\""

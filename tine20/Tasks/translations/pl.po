@@ -15,177 +15,94 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: 0,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: Controller.php:305
+#: Controller.php:97
 #, python-format
-msgid "%s's personal tasks"
-msgstr "%s's osobiste zadania"
+msgid "{0}'s personal tasks"
+msgstr "{0}'s osobiste zadania"
+
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks, n);"
+msgstr[0] "Zadania"
+msgstr[1] "Zadania"
+msgstr[2] "Zadania"
+
+#: js/EditDialog.js:116 js/GridPanel.js:56 js/GridPanel.js:112
+msgid "Summary"
+msgstr "Podsumowanie"
+
+#: js/EditDialog.js:121
+msgid "Due date"
+msgstr "Data ukończenia"
+
+#: js/EditDialog.js:124 js/GridPanel.js:133
+msgid "Priority"
+msgstr "Priorytet"
+
+#: js/EditDialog.js:127 js/GridPanel.js:185
+msgid "Responsible"
+msgstr ""
+
+#: js/EditDialog.js:131
+msgid "Notes"
+msgstr "Notatki"
+
+#: js/EditDialog.js:132
+msgid "Enter description..."
+msgstr "Wprowadź opis"
+
+#: js/EditDialog.js:137
+msgid "Percentage"
+msgstr "Procentowo"
+
+#: js/EditDialog.js:141 js/GridPanel.js:162
+msgid "Status"
+msgstr "Status"
+
+#: js/EditDialog.js:145
+msgid "Completed"
+msgstr ""
+
+#: js/GridPanel.js:76
+msgid "Failed"
+msgstr "Nie powiodło się"
+
+#: js/GridPanel.js:76
+msgid "Could not save task."
+msgstr "Zapisanie zadania nie jest możliwe"
+
+#: js/GridPanel.js:120
+msgid "Add a task..."
+msgstr "Utwórz zadanie"
+
+#: js/GridPanel.js:124
+msgid "Due Date"
+msgstr "Data ukończenia"
+
+#: js/GridPanel.js:148
+msgid "Percent"
+msgstr "Procent"
+
+#: js/GridPanel.js:177
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:205
+msgid "Show closed"
+msgstr "Pokaż zamknięte"
 
 #: js/Status.js:45 Setup/setup.xml:431
 msgid "IN-PROCESS"
 msgstr "W PRZETWARZANIU"
 
-#: js/Tasks.js:110
-msgid "Do you really want to delete the selected task"
-msgid_plural "Do you really want to delete the selected task"
-msgstr[0] "Czy rzeczywiście chcesz wymazać wybrane zadanie?"
-msgstr[1] "Czy rzeczywiście chcesz wymazać wybrane zadania?"
-msgstr[2] "Czy rzeczywiście chcesz wymazać wybrane zadań?"
-
-#: js/Tasks.js:141 js/Tasks.js:554 js/Tasks.js:703 js/Tasks.js:728
-msgid "Failed"
-msgstr "Nie powiodło się"
-
-#: js/Tasks.js:141 js/Tasks.js:728
-msgid "Could not delete task(s)."
-msgstr "Nie mogę wymazać zadania / zadań."
-
-#: js/Tasks.js:159
-msgid "Edit task"
-msgstr "Edycja zadania"
-
-#: js/Tasks.js:169
-msgid "Add task"
-msgstr "Utwórz zadanie"
-
-#: js/Tasks.js:180
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Wymazanie zadanie"
-msgstr[1] "Wymazanie zadań"
-msgstr[2] "Wymazanie zadań"
-
-#: js/Tasks.js:300
-msgid "Tasks"
-msgstr "Zadania"
-
-#: js/Tasks.js:301 js/Tasks.js:628
-msgid "to do lists"
-msgstr "Listy to do"
-
-#: js/Tasks.js:302 js/Tasks.js:626 js/Tasks.js:627
+#: js/Tasks.js:87
+#, fuzzy
 msgid "to do list"
-msgstr "Lista to do"
-
-#: js/Tasks.js:323
-msgid "Enter searchfilter"
-msgstr "Wprowadź filtr szukania"
-
-#: js/Tasks.js:338
-msgid "Show closed"
-msgstr "Pokaż zamknięte"
-
-#: js/Tasks.js:388
-msgid "Search:"
-msgstr "Szkanie:"
-
-#: js/Tasks.js:398
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Prezentacja zadań {0} - {1} z {2}"
-
-#: js/Tasks.js:399
-msgid "No tasks to display"
-msgstr "Nie ma zadań do prezentacji"
-
-#: js/Tasks.js:415 js/Tasks.js:751
-msgid "Summary"
-msgstr "Podsumowanie"
-
-#: js/Tasks.js:423
-msgid "Add a task..."
-msgstr "Utwórz zadanie"
-
-#: js/Tasks.js:427
-msgid "Due Date"
-msgstr "Data ukończenia"
-
-#: js/Tasks.js:441 js/Tasks.js:783
-msgid "Priority"
-msgstr "Priorytet"
-
-#: js/Tasks.js:456
-msgid "Percent"
-msgstr "Procent"
-
-#: js/Tasks.js:470 js/Tasks.js:779
-msgid "Status"
-msgstr "Status"
-
-#: js/Tasks.js:492
-msgid "No Tasks to display"
-msgstr "Nie ma zdań do prezentacji"
-
-#: js/Tasks.js:554 js/Tasks.js:703
-msgid "Could not save task."
-msgstr "Zapisanie zadania nie jest możliwe"
-
-#: js/Tasks.js:638
-msgid "Loading Task..."
-msgstr "Wprowadzanie danych zadania"
-
-#: js/Tasks.js:638
-msgid "Please Wait"
-msgstr "Proszę poczekać"
-
-#: js/Tasks.js:649
-msgid "Add New Task"
-msgstr "Utwórz nowe zadanie"
-
-#: js/Tasks.js:651
-#, python-format
-msgid "Edit Task \"%s\""
-msgstr "Edycja zadania \"%s\""
-
-#: js/Tasks.js:671
-msgid "Please wait"
-msgstr "Proszę poczekać"
-
-#: js/Tasks.js:671 js/Tasks.js:716
-msgid "Saving Task"
-msgstr "Zapisywanie zadania"
-
-#: js/Tasks.js:707
-msgid "Errors"
-msgstr "Błędy"
-
-#: js/Tasks.js:707
-msgid "Please fix the errors noted."
-msgstr "Proszę naprawić wskazane błędy."
-
-#: js/Tasks.js:714
-msgid "Confirm"
-msgstr "Potwierdzenie"
-
-#: js/Tasks.js:714
-msgid "Do you really want to delete this task?"
-msgstr "Czy rzyczywiście chcesz wymazać to zadanie?"
-
-#: js/Tasks.js:716
-msgid "Please wait a moment..."
-msgstr "Proszę chwileczkę poczekać …"
-
-#: js/Tasks.js:755
-msgid "Enter short name..."
-msgstr "Wprowadź krótkie imię"
-
-#: js/Tasks.js:758
-msgid "Notes"
-msgstr "Notatki"
-
-#: js/Tasks.js:760
-msgid "Enter description..."
-msgstr "Wprowadź opis"
-
-#: js/Tasks.js:774
-msgid "Percentage"
-msgstr "Procentowo"
-
-#: js/Tasks.js:787
-msgid "Due date"
-msgstr "Data ukończenia"
-
-#: js/Tasks.js:791
-msgid "Saved in"
-msgstr "Zapisane w"
+msgid_plural "to do lists"
+msgstr[0] "Lista to do"
+msgstr[1] "Lista to do"
+msgstr[2] "Lista to do"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
@@ -198,3 +115,81 @@ msgstr "ZAKOŃCZONY"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "ODWOŁANY "
+
+#~ msgid "Do you really want to delete the selected task"
+#~ msgid_plural "Do you really want to delete the selected task"
+#~ msgstr[0] "Czy rzeczywiście chcesz wymazać wybrane zadanie?"
+#~ msgstr[1] "Czy rzeczywiście chcesz wymazać wybrane zadania?"
+#~ msgstr[2] "Czy rzeczywiście chcesz wymazać wybrane zadań?"
+
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Nie mogę wymazać zadania / zadań."
+
+#~ msgid "Edit task"
+#~ msgstr "Edycja zadania"
+
+#~ msgid "Add task"
+#~ msgstr "Utwórz zadanie"
+
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "Wymazanie zadanie"
+#~ msgstr[1] "Wymazanie zadań"
+#~ msgstr[2] "Wymazanie zadań"
+
+#~ msgid "to do lists"
+#~ msgstr "Listy to do"
+
+#~ msgid "Enter searchfilter"
+#~ msgstr "Wprowadź filtr szukania"
+
+#~ msgid "Search:"
+#~ msgstr "Szkanie:"
+
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Prezentacja zadań {0} - {1} z {2}"
+
+#~ msgid "No tasks to display"
+#~ msgstr "Nie ma zadań do prezentacji"
+
+#~ msgid "No Tasks to display"
+#~ msgstr "Nie ma zdań do prezentacji"
+
+#~ msgid "Loading Task..."
+#~ msgstr "Wprowadzanie danych zadania"
+
+#~ msgid "Please Wait"
+#~ msgstr "Proszę poczekać"
+
+#~ msgid "Add New Task"
+#~ msgstr "Utwórz nowe zadanie"
+
+#~ msgid "Edit Task \"{0}\""
+#~ msgstr "Edycja zadania \"{0}\""
+
+#~ msgid "Please wait"
+#~ msgstr "Proszę poczekać"
+
+#~ msgid "Saving Task"
+#~ msgstr "Zapisywanie zadania"
+
+#~ msgid "Errors"
+#~ msgstr "Błędy"
+
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Proszę naprawić wskazane błędy."
+
+#~ msgid "Confirm"
+#~ msgstr "Potwierdzenie"
+
+#~ msgid "Do you really want to delete this task?"
+#~ msgstr "Czy rzyczywiście chcesz wymazać to zadanie?"
+
+#~ msgid "Please wait a moment..."
+#~ msgstr "Proszę chwileczkę poczekać …"
+
+#~ msgid "Enter short name..."
+#~ msgstr "Wprowadź krótkie imię"
+
+#~ msgid "Saved in"
+#~ msgstr "Zapisane w"
