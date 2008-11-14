@@ -445,7 +445,7 @@
                     <name>name</name>
                     <type>text</type>
                     <length>80</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>accountcode</name>
@@ -583,7 +583,7 @@
                     <name>port</name>
                     <type>text</type>
                     <length>5</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>qualify</name>
@@ -628,7 +628,7 @@
                     <name>username</name>
                     <type>text</type>
                     <length>80</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>disallow</name>
@@ -658,13 +658,13 @@
                     <name>ipaddr</name>
                     <type>text</type>
                     <length>15</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>regexten</name>
                     <type>text</type>
                     <length>80</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>cancallforward</name>
@@ -675,7 +675,7 @@
                     <name>setvar</name>
                     <type>text</type>
                     <length>100</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>notifyringing</name>
