@@ -140,7 +140,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             scope: this
         });
         
-        // TODO: rework button translations!!! @see onDeleteRecords
+        // note: unprecise plural form here, but this is hard to change
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
