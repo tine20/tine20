@@ -9,13 +9,13 @@
  * @version     $Id$
  */
  
-Ext.ns('Tine.Tinebase', 'Tine.Tinebase.Record');
+Ext.ns('Tine.Tinebase');
 
 /**
  * @class Tine.Tinebase.Record
  * @extends {Ext.data.Record}
  */
-Ext.override(Ext.data.Record, {
+Tine.Tinebase.Record = Ext.extend(Ext.data.Record, {
     /**
      * @cfg {String} appName
      * internal/untranslated app name (required)
@@ -70,13 +70,14 @@ Ext.override(Ext.data.Record, {
     getTitle: function() {
         return this.titleProperty ? this.get(this.titleProperty) : '';
     }
+
 });
 
 /**
  * Generate a constructor for a specific Record layout.
  * 
  * @param {Array} def see {@link Ext.data.Record#create}
- * @param {Object} options see {@link Tine.Tinebase.Record}
+ * @param {Object} meta information see {@link Tine.Tinebase.Record}
  * 
  * <br>usage:<br>
 <b>IMPORTANT: the ngettext comments are required for the translation system!</b>
@@ -99,7 +100,21 @@ var TopicRecord = Tine.Tinebase.Record.create([
 });
 </code></pre>
  */
-Tine.Tinebase.Record.create = function(def, opts) {
-    var f = Ext.data.Record.create(def);
-    return Ext.apply(f, opts);
+Tine.Tinebase.Record.create = function(o, meta) {
+    var f = Ext.extend(Tine.Tinebase.Record, {});
+    var p = f.prototype;
+    Ext.apply(p, meta);
+    p.fields = new Ext.util.MixedCollection(false, function(field){
+        return field.name;
+    });
+    for(var i = 0, len = o.length; i < len; i++){
+        p.fields.add(new Ext.data.Field(o[i]));
+    }
+    f.getField = function(name){
+        return p.fields.get(name);
+    };
+    f.getMeta = function(name) {
+        return p[name];
+    };
+    return f;
 };

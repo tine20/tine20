@@ -183,9 +183,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     onRecordLoad: function() {
         if (! this.record.id) {
-            this.window.setTitle(String.format(this.translation.gettext('Add New {0}'), this.recordClass.recordName));
+            this.window.setTitle(String.format(this.translation.gettext('Add New {0}'), this.recordClass.getMeta('recordName')));
         } else {
-            this.window.setTitle(String.format(this.translation._('Edit {0} "{1}"'), this.recordClass.recordName, this.record.getTitle()));
+            this.window.setTitle(String.format(this.translation._('Edit {0} "{1}"'), this.recordClass.getMeta('recordName'), this.record.getTitle()));
         }
         
         this.getForm().loadRecord(this.record);
@@ -206,10 +206,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 id: this.appName + 'EditDialogContainerSelector',
                 fieldLabel: _('Saved in'),
                 width: 300,
-                name: this.recordClass.containerProperty,
+                name: this.recordClass.getMeta('containerProperty'),
                 //itemName: this.recordClass.recordName,
-                containerName: this.recordClass.containerName,
-                containersName: this.recordClass.containersName,
+                containerName: this.recordClass.getMeta('containerName'),
+                containersName: this.recordClass.getMeta('containersName'),
                 appName: this.appName
             });
             this.getForm().add(ContainerForm);
@@ -223,7 +223,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
         
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(this.translation._('Loading {0}...'), this.recordClass.recordName)});
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(this.translation._('Loading {0}...'), this.recordClass.getMeta('recordName'))});
         if (this.recordProxy.isLoading(this.loadRequest)) {
             this.loadMask.show();
         }
@@ -273,7 +273,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
         if(form.isValid()) {
-            var saveMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Saving {0}'), this.recordClass.recordName)});
+            var saveMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Saving {0}'), this.recordClass.getMeta('recordName'))});
             saveMask.show();
             
             // merge changes from form into task record
@@ -300,7 +300,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation._('Could not save {0}.'), this.recordClass.recordName)); 
+                    Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation._('Could not save {0}.'), this.recordClass.getMeta('recordName'))); 
                 }
             });
         } else {
@@ -312,9 +312,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * generic delete handler
      */
     onDelete: function(btn, e) {
-        Ext.MessageBox.confirm(this.translation._('Confirm'), String.format(this.translation._('Do you really want to delete this {0}?'), this.recordClass.recordName), function(_button) {
+        Ext.MessageBox.confirm(this.translation._('Confirm'), String.format(this.translation._('Do you really want to delete this {0}?'), this.recordClass.getMeta('recordName')), function(_button) {
             if(btn == 'yes') {
-                var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Deleting {0}'), this.recordClass.recordName)});
+                var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Deleting {0}'), this.recordClass.getMeta('recordName'))});
                 deleteMask.show();
                 
                 this.recordProxy.deleteRecords(this.record, {
@@ -325,7 +325,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         this.window.close();
                     },
                     failure: function () { 
-                        Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation.ngettext('Could not delete {0}.', 'Could not delete {0}', 1), this.recordClass.recordName));
+                        Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation.ngettext('Could not delete {0}.', 'Could not delete {0}', 1), this.recordClass.getMeta('recordName')));
                         Ext.MessageBox.hide();
                     }
                 });
