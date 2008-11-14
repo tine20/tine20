@@ -11,6 +11,10 @@
  
 Ext.ns('Tine.Tinebase');
 
+/**
+ * @class Tine.Tinebase.Record
+ * @extends {Ext.data.Record}
+ */
 Tine.Tinebase.Record = Ext.extend(Ext.data.Record, {
     /**
      * @cfg {String} appName
@@ -68,6 +72,33 @@ Tine.Tinebase.Record = Ext.extend(Ext.data.Record, {
     }
 });
 
+/**
+ * Generate a constructor for a specific Record layout.
+ * 
+ * @param {Array} def see {@link Ext.data.Record#create}
+ * @param {Object} options see {@link Tine.Tinebase.Record}
+ * 
+ * <br>usage:<br>
+<b>IMPORTANT: the ngettext comments are required for the translation system!</b>
+<pre><code>
+var TopicRecord = Tine.Tinebase.Record.create([
+    {name: 'summary', mapping: 'topic_title'},
+    {name: 'details', mapping: 'username'}
+], {
+    appName: 'Tasks',
+    modelName: 'Task',
+    idProperty: 'id',
+    titleProperty: 'summary',
+    // ngettext('Task', 'Tasks, n);
+    recordName: 'Task',
+    recordssName: 'Tasks',
+    containerProperty: 'container_id',
+    // ngettext('to do list', 'to do lists', n);
+    containerName: 'to do list',
+    containesrName: 'to do lists'
+});
+</code></pre>
+ */
 Tine.Tinebase.Record.create = function(def, opts) {
     Ext.apply(this, opts);
     return Ext.data.Record.create.call(this, def);
