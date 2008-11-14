@@ -80,7 +80,7 @@ Tine.Tasks.Task = Tine.Tinebase.Record.create(Tine.Tasks.TaskArray, {
     modelName: 'Task',
     idProperty: 'id',
     titleProperty: 'summary',
-    // ngettext('Task', 'Tasks, n);
+    // ngettext('Task', 'Tasks', n);
     recordName: 'Task',
     recordsName: 'Tasks',
     containerProperty: 'container_id',
