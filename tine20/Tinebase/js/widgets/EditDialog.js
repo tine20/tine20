@@ -25,6 +25,11 @@ Ext.namespace('Tine.widgets.dialog');
  */
 Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
+     * @cfg {Tine.Tinebase.Application} app
+     * instance of the app object (required)
+     */
+    app: null,
+    /**
      * @cfg {Array} tbarItems
      * additional toolbar items (defaults to false)
      */
@@ -98,9 +103,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             'apply'
         );
         
-        // init translations
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain(this.appName);
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+        
+        // init some translations
+        this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+        this.i18nRecordsName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 50);
+        
+        
         // init actions
         this.initActions();
         // init buttons and tbar
@@ -183,9 +194,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     onRecordLoad: function() {
         if (! this.record.id) {
-            this.window.setTitle(String.format(this.translation.gettext('Add New {0}'), this.recordClass.getMeta('recordName')));
+            this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
         } else {
-            this.window.setTitle(String.format(this.translation._('Edit {0} "{1}"'), this.recordClass.getMeta('recordName'), this.record.getTitle()));
+            this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
         }
         
         this.getForm().loadRecord(this.record);
@@ -203,14 +214,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.showContainerSelector) {
             this.recordContainerEl = this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
             var ContainerForm = new Tine.widgets.container.selectionComboBox({
-                id: this.appName + 'EditDialogContainerSelector',
+                id: this.app.appName + 'EditDialogContainerSelector',
                 fieldLabel: _('Saved in'),
                 width: 300,
                 name: this.recordClass.getMeta('containerProperty'),
                 //itemName: this.recordClass.recordName,
-                containerName: this.recordClass.getMeta('containerName'),
-                containersName: this.recordClass.getMeta('containersName'),
-                appName: this.appName
+                containerName: this.app.i18n._hidden(this.recordClass.getMeta('containerName')),
+                containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
+                appName: this.app.appName
             });
             this.getForm().add(ContainerForm);
             
@@ -223,7 +234,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
         
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(this.translation._('Loading {0}...'), this.recordClass.getMeta('recordName'))});
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Loading {0}...'), this.i18nRecordName)});
         if (this.recordProxy.isLoading(this.loadRequest)) {
             this.loadMask.show();
         }
@@ -273,7 +284,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
         if(form.isValid()) {
-            var saveMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Saving {0}'), this.recordClass.getMeta('recordName'))});
+            var saveMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Saving {0}'), this.i18nRecordName)});
             saveMask.show();
             
             // merge changes from form into task record
@@ -300,11 +311,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     }
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation._('Could not save {0}.'), this.recordClass.getMeta('recordName'))); 
+                    Ext.MessageBox.alert(_('Failed'), String.format(_('Could not save {0}.'), this.i18nRecordName)); 
                 }
             });
         } else {
-            Ext.MessageBox.alert(this.translation._('Errors'), this.translation._('Please fix the errors noted.'));
+            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
         }
     },
     
@@ -312,9 +323,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * generic delete handler
      */
     onDelete: function(btn, e) {
-        Ext.MessageBox.confirm(this.translation._('Confirm'), String.format(this.translation._('Do you really want to delete this {0}?'), this.recordClass.getMeta('recordName')), function(_button) {
+        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete this {0}?'), this.i18nRecordName), function(_button) {
             if(btn == 'yes') {
-                var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.translation._('Deleting {0}'), this.recordClass.getMeta('recordName'))});
+                var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Deleting {0}'), this.i18nRecordName)});
                 deleteMask.show();
                 
                 this.recordProxy.deleteRecords(this.record, {
@@ -325,7 +336,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         this.window.close();
                     },
                     failure: function () { 
-                        Ext.MessageBox.alert(this.translation._('Failed'), String.format(this.translation.ngettext('Could not delete {0}.', 'Could not delete {0}', 1), this.recordClass.getMeta('recordName')));
+                        Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), this.i18nRecordName));
                         Ext.MessageBox.hide();
                     }
                 });
