@@ -24,11 +24,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     gridConfig: {},
     /**
-     * @cfg {String} modelName
-     * name of the model/record  (required)
-     */
-    modelName: null,
-    /**
      * @cfg {Ext.data.Record} recordClass
      * record definition class  (required)
      */
@@ -37,41 +32,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Ext.data.DataProxy} recordProxy
      */
     recordProxy: null,
-    /**
-     * @cfg {String} idProperty
-     * property of the id of the record
-     */
-    idProperty: 'id',
-    /**
-     * @cfg {String} titleProperty
-     * property of the title attibute, used in generic getTitle function  (required)
-     */
-    titleProperty: null,
-    /**
-     * @cfg {String} containerItemName
-     * untranslated container item name
-     */
-    containerItemName: 'record',
-    /**
-     * @cfg {String} containerItemsName
-     * untranslated container items (plural) name
-     */
-    containerItemsName: 'records',
-    /**
-     * @cfg {String} containerName
-     * untranslated container name
-     */
-    containerName: 'container',
-    /**
-     * @cfg {string} containerName
-     * untranslated name of container (plural)
-     */
-    containersName: 'containers',
-    /**
-     * @cfg {String} containerProperty
-     * name of the container property
-     */
-    containerProperty: 'container_id',
     /**
      * @cfg {Array} actionToolbarItems
      * additional items for actionToolbar
@@ -162,7 +122,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     initActions: function() {
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: String.format(this.i18n._('Edit {0}'), this.containerItemName),
+            text: String.format(this.i18n._('Edit {0}'), this.recordClass.recordName),
             disabled: true,
             actionType: 'edit',
             handler: this.onEditInNewWindow,
@@ -173,7 +133,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.action_addInNewWindow= new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
-            text: String.format(this.i18n._('Add {0}'), this.containerItemName),
+            text: String.format(this.i18n._('Add {0}'), this.recordClass.recordName),
             handler: this.onEditInNewWindow,
             iconCls: this.app.appName + 'IconCls',
             scope: this
@@ -182,10 +142,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: String.format('Delete {0}', this.containerItemName),
-            pluralText: String.format('Delete {0}', this.containerItemsName),
+            singularText: String.format('Delete {0}', this.recordClass.recordName),
+            pluralText: String.format('Delete {0}', this.recordClass.recordsName),
             translationObject: this.i18n,
-            text: String.format(this.i18n.ngettext('Delete {0}', 'Delete {1}', 1), this.containerItemName, this.containerItemsName),
+            text: String.format(this.i18n.ngettext('Delete {0}', 'Delete {1}', 1), this.recordClass.recordName, this.recordClass.recordsName),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
@@ -246,8 +206,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             pageSize: 50,
             store: this.store,
             displayInfo: true,
-            displayMsg: this.i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.containerItemsName),
-            emptyMsg: String.format(this.i18n._("No {0} to display"), this.containerItemsName)
+            displayMsg: this.i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.recordClass.recordsName),
+            emptyMsg: String.format(this.i18n._("No {0} to display"), this.recordClass.recordsName)
         });
         
         // init view
@@ -255,7 +215,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             autoFill: true,
             forceFit:true,
             ignoreAdd: true,
-            emptyText: String.format(this.i18n._("No {0} to display"), this.containerItemsName),
+            emptyText: String.format(this.i18n._("No {0} to display"), this.recordClass.recordsName),
             onLoad: Ext.emptyFn,
             listeners: {
                 beforerefresh: function(v) {
@@ -396,7 +356,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onDeleteRecords: function(btn, e) {
         var records = this.grid.getSelectionModel().getSelections();
         
-        var i18nItems    = this.i18n.ngettext(this.containerItemName, this.containerItemsName, records.length);
+        var i18nItems    = this.i18n.ngettext(this.recordClass.recordName, this.recordClass.recordsName, records.length);
         var i18nQuestion = String.format(this.i18n.ngettext('Do you really want to delete the selected {0}', 'Do you really want to delete the selected {0}', records.length), i18nItems);
             
         Ext.MessageBox.confirm(this.i18n._('Confirm'), i18nQuestion, function(btn) {
