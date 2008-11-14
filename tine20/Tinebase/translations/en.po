@@ -263,17 +263,17 @@ msgstr "Are you sure you want to logout?"
 msgid "Logging you out..."
 msgstr "Logging you out..."
 
+#: js/Record.js:93
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Task"
+msgstr[1] "Tasks"
+
 #: js/Record.js:97
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "to do list"
 msgstr[1] "to do lists"
-
-#: js/Record.js:93
-msgid "Task"
-msgid_plural "Tasks, n);"
-msgstr[0] "Task"
-msgstr[1] "Tasks, n);"
 
 #: js/tineInit.js:208
 msgid "Connection lost, please check your network!"

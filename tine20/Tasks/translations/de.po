@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-10-10 16:57+0100\n"
-"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2008-11-14 15:17+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,18 +14,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Controller.php:97
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal tasks"
 msgstr "{0}'s persönliche Aufgaben"
 
-#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
-#, fuzzy
+#: js/EditDialog.js:99
+#: js/GridPanel.js:55
+#: js/Tasks.js:83
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] "Aufgaben"
+msgstr[0] "Aufgabe"
 msgstr[1] "Aufgaben"
 
-#: js/EditDialog.js:116 js/GridPanel.js:56 js/GridPanel.js:112
+#: js/EditDialog.js:116
+#: js/GridPanel.js:56
+#: js/GridPanel.js:112
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -33,13 +36,15 @@ msgstr "Beschreibung"
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/EditDialog.js:124 js/GridPanel.js:133
+#: js/EditDialog.js:124
+#: js/GridPanel.js:133
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/EditDialog.js:127 js/GridPanel.js:185
+#: js/EditDialog.js:127
+#: js/GridPanel.js:185
 msgid "Responsible"
-msgstr ""
+msgstr "Verantwortlich"
 
 #: js/EditDialog.js:131
 msgid "Notes"
@@ -53,13 +58,14 @@ msgstr "Beschreibung eingeben..."
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/EditDialog.js:141 js/GridPanel.js:162
+#: js/EditDialog.js:141
+#: js/GridPanel.js:162
 msgid "Status"
 msgstr "Status"
 
 #: js/EditDialog.js:145
 msgid "Completed"
-msgstr ""
+msgstr "Abgeschlossen"
 
 #: js/GridPanel.js:76
 msgid "Failed"
@@ -83,22 +89,22 @@ msgstr "Prozent"
 
 #: js/GridPanel.js:177
 msgid "Creation Time"
-msgstr ""
+msgstr "Angelegt am"
 
 #: js/GridPanel.js:205
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:45 Setup/setup.xml:431
+#: js/Status.js:45
+#: Setup/setup.xml:431
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
 #: js/Tasks.js:87
-#, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] "ToDo Liste"
-msgstr[1] "ToDo Liste"
+msgstr[0] "Aufgabenliste"
+msgstr[1] "Aufgabenlisten"
 
 #: Setup/setup.xml:387
 msgid "NEEDS-ACTION"
@@ -116,80 +122,56 @@ msgstr "ZURÜCKGESTELLT"
 #~ msgid_plural "Do you really want to delete the selected task"
 #~ msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 #~ msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
-
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Konnte Aufgabe(n) nicht löschen."
-
 #~ msgid "Edit task"
 #~ msgstr "Aufgabe bearbeiten"
-
 #~ msgid "Add task"
 #~ msgstr "Aufgabe hinzufügen"
-
 #~ msgid "Delete task"
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "Aufgabe löschen"
 #~ msgstr[1] "Aufgaben löschen"
-
 #~ msgid "to do lists"
 #~ msgstr "Aufgabenlisten"
-
 #~ msgid "Enter searchfilter"
 #~ msgstr "Suchfilter eingeben"
-
 #~ msgid "Search:"
 #~ msgstr "Suchen nach:"
-
 #~ msgid "Displaying tasks {0} - {1} of {2}"
 #~ msgstr "Zeige Aufgabe {0} - {1} von {2}"
-
 #~ msgid "No tasks to display"
 #~ msgstr "Keine Aufgaben vorhanden"
-
 #~ msgid "No Tasks to display"
 #~ msgstr "Keine Aufgaben vorhanden"
-
 #~ msgid "Loading Task..."
 #~ msgstr "lade Task..."
-
 #~ msgid "Please Wait"
 #~ msgstr "Bitte warten"
-
 #~ msgid "Add New Task"
 #~ msgstr "Neuen Task erstellen"
-
 #~ msgid "Edit Task \"{0}\""
 #~ msgstr "Task \"{0}\" bearbeiten"
-
 #~ msgid "Please wait"
 #~ msgstr "Bitte warten"
-
 #~ msgid "Saving Task"
 #~ msgstr "Aufgabe speichern"
-
 #~ msgid "Errors"
 #~ msgstr "Fehler"
-
 #~ msgid "Please fix the errors noted."
 #~ msgstr "Bitte beheben Sie die angezeigten Fehler."
-
 #~ msgid "Confirm"
 #~ msgstr "Bestätigen"
-
 #~ msgid "Do you really want to delete this task?"
 #~ msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
-
 #~ msgid "Please wait a moment..."
 #~ msgstr "Einen Moment noch..."
-
 #~ msgid "Enter short name..."
 #~ msgstr "Kurzbezeichnung eingeben..."
-
 #~ msgid "Saved in"
 #~ msgstr "Gespeichert in"
-
 #~ msgid "Folder"
 #~ msgstr "Ordner"
-
 #~ msgid "Delete tasks"
 #~ msgstr "Aufgaben löschen"
+

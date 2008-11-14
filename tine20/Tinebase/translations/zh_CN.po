@@ -279,16 +279,16 @@ msgstr "确实想登出？"
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
+#: js/Record.js:93
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "标签"
+
 #: js/Record.js:97
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
-
-#: js/Record.js:93
-#, fuzzy
-msgid "Task"
-msgid_plural "Tasks, n);"
-msgstr[0] "标签"
 
 #: js/tineInit.js:208
 msgid "Connection lost, please check your network!"

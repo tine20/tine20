@@ -285,18 +285,18 @@ msgstr "Наистина ли желаете да излезете?"
 msgid "Logging you out..."
 msgstr "Подготвя излизане..."
 
+#: js/Record.js:93
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Тагове"
+msgstr[1] "Тагове"
+
 #: js/Record.js:97
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
-
-#: js/Record.js:93
-#, fuzzy
-msgid "Task"
-msgid_plural "Tasks, n);"
-msgstr[0] "Тагове"
-msgstr[1] "Тагове"
 
 #: js/tineInit.js:208
 msgid "Connection lost, please check your network!"

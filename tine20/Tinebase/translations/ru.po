@@ -288,20 +288,20 @@ msgstr "Вы уверены что хотите покинуть програм�
 msgid "Logging you out..."
 msgstr "выключаю программу..."
 
+#: js/Record.js:93
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Тэги"
+msgstr[1] "Тэги"
+msgstr[2] "Тэги"
+
 #: js/Record.js:97
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-#: js/Record.js:93
-#, fuzzy
-msgid "Task"
-msgid_plural "Tasks, n);"
-msgstr[0] "Тэги"
-msgstr[1] "Тэги"
-msgstr[2] "Тэги"
 
 #: js/tineInit.js:208
 msgid "Connection lost, please check your network!"

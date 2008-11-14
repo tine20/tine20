@@ -286,20 +286,20 @@ msgstr "Určitě se chcete odhlásit?"
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
+#: js/Record.js:93
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Štítky"
+msgstr[1] "Štítky"
+msgstr[2] "Štítky"
+
 #: js/Record.js:97
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-#: js/Record.js:93
-#, fuzzy
-msgid "Task"
-msgid_plural "Tasks, n);"
-msgstr[0] "Štítky"
-msgstr[1] "Štítky"
-msgstr[2] "Štítky"
 
 #: js/tineInit.js:208
 msgid "Connection lost, please check your network!"
