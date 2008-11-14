@@ -146,7 +146,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             allowMultiple: true,
             singularText: String.format('Delete {0}', this.i18nRecordName),
             pluralText: String.format('Delete {0}', this.i18nRecordsName),
-            translationObject: this.i18n,
+            translationObject: this.app.i18n,
             text: String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {1}', 1), this.i18nRecordName, this.i18nRecordsName),
             handler: this.onDeleteRecords,
             disabled: true,
@@ -358,7 +358,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onDeleteRecords: function(btn, e) {
         var records = this.grid.getSelectionModel().getSelections();
         
-        var i18nItems    = this.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
+        var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
         var i18nQuestion = String.format(Tine.Tinebase.tranlation.ngettext('Do you really want to delete the selected {0}', 'Do you really want to delete the selected {0}', records.length), i18nItems);
             
         Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
