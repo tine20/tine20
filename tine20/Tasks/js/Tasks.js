@@ -73,24 +73,24 @@ Tine.Tasks.TaskArray = [
     // tine 2.0 notes field
     { name: 'notes'}
 ];
-Tine.Tasks.Task = Ext.data.Record.create(
-    Tine.Tasks.TaskArray
-);
 
-/* 'meta' properties of a record
-Ext.apply(Tine.Tasks.Task, {
+/**
+ * Task record definition
+ */
+Tine.Tasks.Task = Tine.Tinebase.Record.create(Tine.Tasks.TaskArray, {
     appName: 'Tasks',
     modelName: 'Task',
-    recordClass: Tine.Tasks.Task,
     idProperty: 'id',
     titleProperty: 'summary',
+    // ngettext('Task', 'Tasks, n);
     recordName: 'Task',
-    recordssName: 'Tasks',
+    recordsName: 'Tasks',
     containerProperty: 'container_id',
+    // ngettext('to do list', 'to do lists', n);
     containerName: 'to do list',
     containesrName: 'to do lists'
 });
-*/
+
 
 /**
  * default tasks backend

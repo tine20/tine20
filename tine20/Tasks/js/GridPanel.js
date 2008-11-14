@@ -17,13 +17,7 @@ Ext.namespace('Tine.Tasks');
 Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
     appName: 'Tasks',
-    modelName: 'Task',
     recordClass: Tine.Tasks.Task,
-    titleProperty: 'summary',
-    containerItemName: 'Task',
-    containerItemsName: 'Tasks',
-    containerName: 'to do list',
-    containesrName: 'to do lists',
     
     // grid specific
     defaultSortInfo: {field: 'due', dir: 'ASC'},
@@ -35,6 +29,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     initComponent: function() {
+        console.log(this.recordClass.prototype);
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
         
