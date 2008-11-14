@@ -67,23 +67,23 @@ msgid "Updated Fields:"
 msgstr "Актуализирани полета:"
 
 #: Controller/Lead.php:221
-#, python-format
-msgid "{0} changed from {0} to {0}."
+#, fuzzy, python-format
+msgid "%s changed from %s to %s."
 msgstr "{0} променено от {0} на {0}"
 
 #: Controller/Lead.php:227
-#, python-format
-msgid "Lead {0} has been changed"
+#, fuzzy, python-format
+msgid "Lead %s has been changed"
 msgstr "Променено {0} предложение"
 
 #: Controller/Lead.php:229
-#, python-format
-msgid "Lead {0} has been creaded"
+#, fuzzy, python-format
+msgid "Lead %s has been creaded"
 msgstr "Подготвено {0} предложение"
 
 #: Controller.php:100
-#, python-format
-msgid "{0}'s personal leads"
+#, fuzzy, python-format
+msgid "%s's personal leads"
 msgstr "{0}'s лични предложения"
 
 #: Export/Pdf.php:71

@@ -16,14 +16,14 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 
 #: Controller.php:97
-#, python-format
-msgid "{0}'s personal tasks"
+#, fuzzy, python-format
+msgid "%s's personal tasks"
 msgstr "osobní úkoly uživatele {0}"
 
 #: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
 #, fuzzy
 msgid "Task"
-msgid_plural "Tasks, n);"
+msgid_plural "Tasks"
 msgstr[0] "Úkoly"
 msgstr[1] "Úkoly"
 msgstr[2] "Úkoly"

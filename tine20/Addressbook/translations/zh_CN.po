@@ -14,8 +14,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: Controller.php:96
-#, python-format
-msgid "{0}'s personal addressbook"
+#, fuzzy, python-format
+msgid "%s's personal addressbook"
 msgstr "{0} 的个人地址本"
 
 #: Export/Pdf.php:37

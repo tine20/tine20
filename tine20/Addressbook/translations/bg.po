@@ -15,8 +15,8 @@ msgstr ""
 "X-Poedit-Bookmarks: 23,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: Controller.php:96
-#, python-format
-msgid "{0}'s personal addressbook"
+#, fuzzy, python-format
+msgid "%s's personal addressbook"
 msgstr "{0}'s лични адреси"
 
 #: Export/Pdf.php:37

@@ -72,22 +72,22 @@ msgstr ""
 
 #: Controller/Lead.php:221
 #, python-format
-msgid "{0} changed from {0} to {0}."
+msgid "%s changed from %s to %s."
 msgstr ""
 
 #: Controller/Lead.php:227
 #, python-format
-msgid "Lead {0} has been changed"
+msgid "Lead %s has been changed"
 msgstr ""
 
 #: Controller/Lead.php:229
 #, python-format
-msgid "Lead {0} has been creaded"
+msgid "Lead %s has been creaded"
 msgstr ""
 
 #: Controller.php:100
 #, python-format
-msgid "{0}'s personal leads"
+msgid "%s's personal leads"
 msgstr ""
 
 #: Export/Pdf.php:71

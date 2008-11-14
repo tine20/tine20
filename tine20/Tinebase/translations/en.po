@@ -607,8 +607,8 @@ msgid "Updating {0} \"{1}\""
 msgstr "Updating {0} \"{1}\""
 
 #: js/widgets/container/ContainerTree.js:368
-msgid "Manage Permissions for {0} :\"{0}\""
-msgstr "Manage Permissions for {0} :\"{0}\""
+msgid "Manage Permissions for {0} :\"{1}\""
+msgstr "Manage Permissions for {0} :\"{1}\""
 
 #: js/widgets/container/ContainerTree.js:393
 msgid "Rename {0}"

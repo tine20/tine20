@@ -67,23 +67,23 @@ msgid "Updated Fields:"
 msgstr "更新的字段："
 
 #: Controller/Lead.php:221
-#, python-format
-msgid "{0} changed from {0} to {0}."
+#, fuzzy, python-format
+msgid "%s changed from %s to %s."
 msgstr "{0} 是从 {0} 修改到 {0}."
 
 #: Controller/Lead.php:227
-#, python-format
-msgid "Lead {0} has been changed"
+#, fuzzy, python-format
+msgid "Lead %s has been changed"
 msgstr "线索 {0} 已经被更新"
 
 #: Controller/Lead.php:229
-#, python-format
-msgid "Lead {0} has been creaded"
+#, fuzzy, python-format
+msgid "Lead %s has been creaded"
 msgstr "线索 {0} 已经被生成"
 
 #: Controller.php:100
-#, python-format
-msgid "{0}'s personal leads"
+#, fuzzy, python-format
+msgid "%s's personal leads"
 msgstr "{0} 的个人线索"
 
 #: Export/Pdf.php:71

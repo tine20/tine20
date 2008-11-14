@@ -5,7 +5,7 @@ msgstr ""
 
 #: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
 msgid "Task"
-msgid_plural "Tasks, n);"
+msgid_plural "Tasks"
 msgstr[0] ""
 msgstr[1] ""
 

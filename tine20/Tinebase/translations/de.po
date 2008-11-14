@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2008-09-23 14:17+0100\n"
-"Last-Translator: Richard <richard@radbasteln.de>\n"
+"PO-Revision-Date: 2008-11-14 14:52+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,7 +68,6 @@ msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
 #: Frontend/Http.php:249
-#, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
@@ -184,12 +183,10 @@ msgid "Preferences"
 msgstr "Einstellungen"
 
 #: js/MainScreen.js:77
-#, fuzzy
 msgid "User: {0}"
 msgstr "Benutzer: {0}"
 
 #: js/MainScreen.js:78
-#, fuzzy
 msgid "Timezone: {0}"
 msgstr "Zeitzone: {0}"
 
@@ -218,7 +215,6 @@ msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
 #: js/MainScreen.js:319
-#, fuzzy
 msgid "Change Password For \"{0}\""
 msgstr "Passwort für \"{0}\" ändern"
 
@@ -472,9 +468,8 @@ msgid "Enter new note:"
 msgstr "Neue Notiz eingeben:"
 
 #: js/widgets/ActivitiesPanel.js:317
-#, fuzzy
 msgid "Add a {0} Note"
-msgstr "Notiz {0} hinzufügen"
+msgstr "{0} Notiz hinzufügen"
 
 #: js/widgets/ActivitiesPanel.js:402 js/widgets/ActivitiesPanel.js:537
 msgid "Type"
@@ -505,21 +500,18 @@ msgid "User"
 msgstr "Benutzer"
 
 #: js/widgets/app/GridPanel.js:126
-#, fuzzy
 msgid "Edit {0}"
-msgstr "Editieren"
+msgstr "{0} Bearbeiten"
 
 #: js/widgets/app/GridPanel.js:137 js/widgets/container/ContainerTree.js:381
-#, fuzzy
 msgid "Add {0}"
-msgstr "{0} hinzufügen"
+msgstr "{0} Hinzufügen"
 
 #: js/widgets/app/GridPanel.js:150 js/widgets/container/ContainerTree.js:387
-#, fuzzy
 msgid "Delete {0}"
 msgid_plural "Delete {1}"
-msgstr[0] "Löschen"
-msgstr[1] "Löschen"
+msgstr[0] "{0} Löschen"
+msgstr[1] "{0} Löschen"
 
 #: js/widgets/app/GridPanel.js:211
 #, fuzzy
@@ -611,7 +603,7 @@ msgstr "Alle {0}"
 
 #: js/widgets/container/ContainerTree.js:134
 msgid "My {0}"
-msgstr ""
+msgstr "Meine {0}"
 
 #: js/widgets/container/ContainerTree.js:141
 #, fuzzy
@@ -660,7 +652,7 @@ msgstr "{0} \"{0}\" aktualisieren"
 
 #: js/widgets/container/ContainerTree.js:368
 #, fuzzy
-msgid "Manage Permissions for {0} :\"{0}\""
+msgid "Manage Permissions for {0} :\"{1}\""
 msgstr "Rechte für {0} :\"{0}\" verwalten"
 
 #: js/widgets/container/ContainerTree.js:393
@@ -687,7 +679,7 @@ msgstr "Neuen persönlichen Tag hinzufügen"
 
 #: js/widgets/EditDialog.js:199
 msgid "Edit {0} \"{1}\""
-msgstr ""
+msgstr "{0} \"{1}\" bearbeiten"
 
 #: js/widgets/EditDialog.js:218 js/widgets/EditRecord.js:185
 msgid "Saved in"
@@ -700,7 +692,7 @@ msgstr "Laden"
 
 #: js/widgets/EditDialog.js:287
 msgid "Saving {0}"
-msgstr ""
+msgstr "Speichere {0}"
 
 #: js/widgets/EditDialog.js:314
 #, fuzzy
@@ -709,7 +701,7 @@ msgstr "Konnte Tag nicht erzeugen."
 
 #: js/widgets/EditDialog.js:318
 msgid "Errors"
-msgstr ""
+msgstr "Fehler"
 
 #: js/widgets/EditDialog.js:318
 #, fuzzy
@@ -987,12 +979,6 @@ msgstr "geändert"
 #: Setup/setup.xml:1878
 msgid "record changed"
 msgstr "Eintrag geändert"
-
-#~ msgid "My {0}"
-#~ msgstr "Meine {0}"
-
-#~ msgid "Delete {0}"
-#~ msgstr "{0} löschen"
 
 #, fuzzy
 #~ msgid "Internal Contacts"

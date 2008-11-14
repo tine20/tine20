@@ -614,12 +614,11 @@ msgstr "Все {0}"
 
 #: js/widgets/container/ContainerTree.js:134
 msgid "My {0}"
-msgstr ""
+msgstr "Мои {0}"
 
 #: js/widgets/container/ContainerTree.js:141
-#, fuzzy
 msgid "Shared {0}"
-msgstr "Разделение"
+msgstr "Разделение {0}"
 
 #: js/widgets/container/ContainerTree.js:148
 #, fuzzy
@@ -663,7 +662,7 @@ msgstr "Обновление {0} \"{0}\""
 
 #: js/widgets/container/ContainerTree.js:368
 #, fuzzy
-msgid "Manage Permissions for {0} :\"{0}\""
+msgid "Manage Permissions for {0} :\"{1}\""
 msgstr "Управлять правами {0} :\"{0}\""
 
 #: js/widgets/container/ContainerTree.js:393
@@ -995,15 +994,6 @@ msgstr "Изменено"
 #: Setup/setup.xml:1878
 msgid "record changed"
 msgstr "Запись изменена"
-
-#~ msgid "My {0}"
-#~ msgstr "Мои {0}"
-
-#~ msgid "Shared {0}"
-#~ msgstr "Разделение {0}"
-
-#~ msgid "Delete {0}"
-#~ msgstr "Удалить {0}"
 
 #, fuzzy
 #~ msgid "contacts"

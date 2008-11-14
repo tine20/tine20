@@ -68,23 +68,23 @@ msgid "Updated Fields:"
 msgstr "Geänderte Felder:"
 
 #: Controller/Lead.php:221
-#, python-format
-msgid "{0} changed from {0} to {0}."
+#, fuzzy, python-format
+msgid "%s changed from %s to %s."
 msgstr "{0} wurde von {0} auf {0} geändert."
 
 #: Controller/Lead.php:227
-#, python-format
-msgid "Lead {0} has been changed"
+#, fuzzy, python-format
+msgid "Lead %s has been changed"
 msgstr "Lead {0} wurde geändert"
 
 #: Controller/Lead.php:229
-#, python-format
-msgid "Lead {0} has been creaded"
+#, fuzzy, python-format
+msgid "Lead %s has been creaded"
 msgstr "Lead {0} wurde erstellt "
 
 #: Controller.php:100
-#, python-format
-msgid "{0}'s personal leads"
+#, fuzzy, python-format
+msgid "%s's personal leads"
 msgstr "{0}'s persönliche Leads"
 
 #: Export/Pdf.php:71

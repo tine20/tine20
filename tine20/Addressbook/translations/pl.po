@@ -15,8 +15,8 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 
 #: Controller.php:96
-#, python-format
-msgid "{0}'s personal addressbook"
+#, fuzzy, python-format
+msgid "%s's personal addressbook"
 msgstr "{0}'s osobista książka adresowa"
 
 #: Export/Pdf.php:37

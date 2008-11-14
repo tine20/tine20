@@ -517,8 +517,8 @@ msgstr "Добавяне {0}"
 #, fuzzy
 msgid "Delete {0}"
 msgid_plural "Delete {1}"
-msgstr[0] "Изтриване"
-msgstr[1] "Изтриване"
+msgstr[0] "Изтриване {0}"
+msgstr[1] "Изтриване {0}"
 
 #: js/widgets/app/GridPanel.js:211
 #, fuzzy
@@ -610,12 +610,11 @@ msgstr "Всички {0}"
 
 #: js/widgets/container/ContainerTree.js:134
 msgid "My {0}"
-msgstr ""
+msgstr "Моите {0}"
 
 #: js/widgets/container/ContainerTree.js:141
-#, fuzzy
 msgid "Shared {0}"
-msgstr "Общите"
+msgstr "Общи  {0}"
 
 #: js/widgets/container/ContainerTree.js:148
 #, fuzzy
@@ -659,7 +658,7 @@ msgstr "Актуализиране {0} \"{0}\""
 
 #: js/widgets/container/ContainerTree.js:368
 #, fuzzy
-msgid "Manage Permissions for {0} :\"{0}\""
+msgid "Manage Permissions for {0} :\"{1}\""
 msgstr "Управление на правата за {0} :\"{0}\""
 
 #: js/widgets/container/ContainerTree.js:393
@@ -987,15 +986,6 @@ msgstr "променен"
 #: Setup/setup.xml:1878
 msgid "record changed"
 msgstr "променена документация"
-
-#~ msgid "My {0}"
-#~ msgstr "Моите {0}"
-
-#~ msgid "Shared {0}"
-#~ msgstr "Общи  {0}"
-
-#~ msgid "Delete {0}"
-#~ msgstr "Изтриване {0}"
 
 #, fuzzy
 #~ msgid "contacts"

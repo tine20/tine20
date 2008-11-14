@@ -15,7 +15,7 @@ msgstr ""
 
 #: Controller.php:96
 #, python-format
-msgid "{0}'s personal addressbook"
+msgid "%s's personal addressbook"
 msgstr ""
 
 #: Export/Pdf.php:37

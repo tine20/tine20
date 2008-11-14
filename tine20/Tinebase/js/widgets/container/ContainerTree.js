@@ -365,7 +365,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                         modal: true,
                         width: 700,
                         height: 450,
-                        title: String.format(_('Manage Permissions for {0} :"{0}"'), this.containerName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                        title: String.format(_('Manage Permissions for {0} :"{1}"'), this.containerName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
                         contentPanelConstructor: 'Tine.widgets.container.grantDialog',
                         contentPanelConstructorConfig: {
                             containerName: this.containerName,

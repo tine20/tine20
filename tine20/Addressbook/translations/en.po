@@ -1,7 +1,7 @@
 #: Controller.php:96
 #, python-format
-msgid "{0}'s personal addressbook"
-msgstr "{0}'s personal addressbook"
+msgid "%s's personal addressbook"
+msgstr "%s's personal addressbook"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"

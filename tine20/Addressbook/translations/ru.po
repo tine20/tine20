@@ -18,8 +18,8 @@ msgstr ""
 "X-Poedit-SearchPath-0: Addressbook\n"
 
 #: Controller.php:96
-#, python-format
-msgid "{0}'s personal addressbook"
+#, fuzzy, python-format
+msgid "%s's personal addressbook"
 msgstr "{0}'s Личная книга адресов"
 
 #: Export/Pdf.php:37

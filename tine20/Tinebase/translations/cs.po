@@ -515,9 +515,9 @@ msgstr "Přidat {0}"
 #, fuzzy
 msgid "Delete {0}"
 msgid_plural "Delete {1}"
-msgstr[0] "Smazat"
-msgstr[1] "Smazat"
-msgstr[2] "Smazat"
+msgstr[0] "Smazat {0}"
+msgstr[1] "Smazat {0}"
+msgstr[2] "Smazat {0}"
 
 #: js/widgets/app/GridPanel.js:211
 #, fuzzy
@@ -609,7 +609,7 @@ msgstr "Všechny {0}"
 
 #: js/widgets/container/ContainerTree.js:134
 msgid "My {0}"
-msgstr ""
+msgstr "Moje {0}"
 
 #: js/widgets/container/ContainerTree.js:141
 #, fuzzy
@@ -658,7 +658,7 @@ msgstr "Aktualizuji {0} \"{0}\""
 
 #: js/widgets/container/ContainerTree.js:368
 #, fuzzy
-msgid "Manage Permissions for {0} :\"{0}\""
+msgid "Manage Permissions for {0} :\"{1}\""
 msgstr "Spravovat oprávnění pro {0} :\"{0}\""
 
 #: js/widgets/container/ContainerTree.js:393
@@ -987,12 +987,6 @@ msgstr "změněno"
 #: Setup/setup.xml:1878
 msgid "record changed"
 msgstr "záznam byl změněn"
-
-#~ msgid "My {0}"
-#~ msgstr "Moje {0}"
-
-#~ msgid "Delete {0}"
-#~ msgstr "Smazat {0}"
 
 #, fuzzy
 #~ msgid "contacts"
