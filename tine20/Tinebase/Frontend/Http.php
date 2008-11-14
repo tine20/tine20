@@ -115,6 +115,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             //'../yui/build/resize/resize-beta-min.js',
             //'../yui/build/imagecropper/imagecropper-beta-min.js',
             // Tinebase
+            'Tinebase/js/Record.js',
             'Tinebase/js/ExceptionDialog.js',
             'Tinebase/js/Container.js',
             'Tinebase/js/Models.js',
