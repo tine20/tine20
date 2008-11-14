@@ -29,7 +29,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     initComponent: function() {
-        console.log(this.recordClass.prototype);
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tasks');
         

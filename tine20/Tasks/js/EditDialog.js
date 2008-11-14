@@ -33,14 +33,8 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'TasksEditWindow_',
     appName: 'Tasks',
-    modelName: 'Task',
     recordClass: Tine.Tasks.Task,
     recordProxy: Tine.Tasks.JsonBackend,
-    titleProperty: 'summary',
-    containerItemName: 'Task',
-    containerItemsName: 'Tasks',
-    containerName: 'to do list',
-    containesrName: 'to do lists',
     showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
@@ -178,7 +172,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.modelName
+                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
     }

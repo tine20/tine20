@@ -88,9 +88,8 @@ Tine.Tasks.Task = Tine.Tinebase.Record.create(Tine.Tasks.TaskArray, {
     containerProperty: 'container_id',
     // ngettext('to do list', 'to do lists', n);
     containerName: 'to do list',
-    containesrName: 'to do lists'
+    containersName: 'to do lists'
 });
-
 
 /**
  * default tasks backend
