@@ -11,17 +11,15 @@
  
 Ext.namespace('Tine');
 
-
+// default app
 Tine.Tasks = Tine.Tinebase.Application;
+
+// default mainscreen
 Tine.Tasks.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
 
-// legacy
 Tine.Tasks.TreePanel = function(config) {
     Ext.apply(this, config);
-
-    this.containersName = this.app.i18n._('to do lists');
-    this.containerName = this.app.i18n._('to do list');
-    
+    this.recordClass = Tine.Tasks.Task;
     Tine.Tasks.TreePanel.superclass.constructor.call(this);
 }
 Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel);
