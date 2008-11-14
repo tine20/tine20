@@ -505,7 +505,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         if ($tagId) {
             $tag = Admin_Controller_Tags::getInstance()->getTag($tagId)->toArray();
             //$tag->rights = $tag->rights->toArray();
-            $tag['rights'] = Admin_Json::resolveAccountName($tag['rights'] , true);
+            $tag['rights'] = self::resolveAccountName($tag['rights'] , true);
         }
         $tag['appList'] = Tinebase_Application::getInstance()->getApplications('%')->toArray();
         
