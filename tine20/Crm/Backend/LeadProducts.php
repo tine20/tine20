@@ -71,6 +71,9 @@ class Crm_Backend_LeadProducts extends Tinebase_Application_Backend_Sql_Abstract
             $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', 'lead_id = '.$_leadId);
 
             foreach($products as $data) {
+                if (empty($data['id'])) {
+                    unset($data['id']);
+                }
                 $this->_db->insert(SQL_TABLE_PREFIX . 'metacrm_leads_products', $data);                
             }
 
