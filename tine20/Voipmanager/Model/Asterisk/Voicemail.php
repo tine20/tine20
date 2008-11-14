@@ -59,21 +59,21 @@ class Voipmanager_Model_Asterisk_Voicemail extends Tinebase_Record_Abstract
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pager'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'attach'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'saycid'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'attach'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'saycid'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'dialout'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'callback'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),  
-        'review'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'operator'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'envelope'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'sayduration'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'review'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'operator'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'envelope'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'sayduration'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0), 
         'saydurationm'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),  
-        'sendvoicemail'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'delete'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'nextaftercmd'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),  
-        'forcename'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'forcegreetings'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'hidefromdir'           => array(Zend_Filter_Input::ALLOW_EMPTY => true) 
+        'sendvoicemail'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'delete'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'nextaftercmd'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),  
+        'forcename'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'forcegreetings'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'hidefromdir'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0) 
     );
 
     /**
