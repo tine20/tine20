@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @subpackage  Application
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Sebastian Lenk <s.lenk@metaways.de>
  * @version     $Id$
