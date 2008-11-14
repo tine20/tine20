@@ -79,9 +79,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function(){
-        // init translations
-        this.i18n = new Locale.Gettext();
-        this.i18n.textdomain(this.app.appName);
+        // init some translations
+        this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+        this.i18nRecordsName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 50);
+        
         // init actions with actionToolbar and contextMenu
         this.initActions();
         // init store
@@ -122,7 +123,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     initActions: function() {
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: String.format(this.i18n._('Edit {0}'), this.recordClass.getMeta('recordName')),
+            text: String.format(_('Edit {0}'), this.i18nRecordName),
             disabled: true,
             actionType: 'edit',
             handler: this.onEditInNewWindow,
@@ -133,19 +134,20 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.action_addInNewWindow= new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
-            text: String.format(this.i18n._('Add {0}'), this.recordClass.getMeta('recordName')),
+            text: String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow,
             iconCls: this.app.appName + 'IconCls',
             scope: this
         });
         
+        // TODO: rework button translations!!! @see onDeleteRecords
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: String.format('Delete {0}', this.recordClass.getMeta('recordName')),
-            pluralText: String.format('Delete {0}', this.recordClass.getMeta('recordsName')),
+            singularText: String.format('Delete {0}', this.i18nRecordName),
+            pluralText: String.format('Delete {0}', this.i18nRecordsName),
             translationObject: this.i18n,
-            text: String.format(this.i18n.ngettext('Delete {0}', 'Delete {1}', 1), this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName')),
+            text: String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {1}', 1), this.i18nRecordName, this.i18nRecordsName),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
@@ -206,8 +208,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             pageSize: 50,
             store: this.store,
             displayInfo: true,
-            displayMsg: this.i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.recordClass.getMeta('recordsName')),
-            emptyMsg: String.format(this.i18n._("No {0} to display"), this.recordClass.getMeta('recordsName'))
+            displayMsg: Tine.Tinebase.tranlation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
+            emptyMsg: String.format(Tine.Tinebase.tranlation._("No {0} to display"), this.i18nRecordsName)
         });
         
         // init view
@@ -215,7 +217,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             autoFill: true,
             forceFit:true,
             ignoreAdd: true,
-            emptyText: String.format(this.i18n._("No {0} to display"), this.recordClass.getMeta('recordsName')),
+            emptyText: String.format(Tine.Tinebase.tranlation._("No {0} to display"), this.i18nRecordsName),
             onLoad: Ext.emptyFn,
             listeners: {
                 beforerefresh: function(v) {
@@ -356,13 +358,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onDeleteRecords: function(btn, e) {
         var records = this.grid.getSelectionModel().getSelections();
         
-        var i18nItems    = this.i18n.ngettext(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
-        var i18nQuestion = String.format(this.i18n.ngettext('Do you really want to delete the selected {0}', 'Do you really want to delete the selected {0}', records.length), i18nItems);
+        var i18nItems    = this.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
+        var i18nQuestion = String.format(Tine.Tinebase.tranlation.ngettext('Do you really want to delete the selected {0}', 'Do you really want to delete the selected {0}', records.length), i18nItems);
             
-        Ext.MessageBox.confirm(this.i18n._('Confirm'), i18nQuestion, function(btn) {
+        Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
             if(btn == 'yes') {
                 if (! this.deleteMask) {
-                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: String.format(this.i18n._('Deleting {0}'), i18nItems)});
+                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: String.format(_('Deleting {0}'), i18nItems)});
                 }
                 this.deleteMask.show();
                 
@@ -374,7 +376,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     },
                     failure: function () {
                         this.deleteMask.hide();
-                        Ext.MessageBox.alert(this.i18n._('Failed'), String.format(this.i18n._('Could not delete {0}.'), i18nItems)); 
+                        Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                     }
                 });
             }
