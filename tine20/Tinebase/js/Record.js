@@ -90,7 +90,7 @@ var TopicRecord = Tine.Tinebase.Record.create([
     modelName: 'Task',
     idProperty: 'id',
     titleProperty: 'summary',
-    // ngettext('Task', 'Tasks, n);
+    // ngettext('Task', 'Tasks', n);
     recordName: 'Task',
     recordsName: 'Tasks',
     containerProperty: 'container_id',
