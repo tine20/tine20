@@ -33,14 +33,17 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
     });
   </code></pre>
   */
-
 Tine.widgets.container.TreePanel = function(config) {
     Ext.apply(this, config);
     
     if (this.app) {
         this.appName = this.app.appName;
+        
+        if (this.recordClass) {
+            this.containerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
+            this.containersName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 50);
+        }
     }
-    
     Tine.widgets.container.TreePanel.superclass.constructor.call(this);
 }
 
