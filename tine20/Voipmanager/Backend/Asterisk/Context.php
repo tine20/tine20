@@ -25,16 +25,16 @@ class Voipmanager_Backend_Asterisk_Context extends Tinebase_Application_Backend_
 	 */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_context', 'Voipmanager_Model_AsteriskContext', $_db);
+        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_context', 'Voipmanager_Model_Asterisk_Context', $_db);
     }
     
     /**
      * add the fields to search for to the query
      *
      * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_AsteriskContextFilter $_filter the string to search for
+     * @param  Voipmanager_Model_Asterisk_ContextFilter $_filter the string to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_AsteriskContextFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_ContextFilter $_filter)
     {
         if(!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(name LIKE ? OR description LIKE ? )', '%' . $_filter->query . '%'));

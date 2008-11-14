@@ -50,7 +50,7 @@ class Phone_Model_CallFilter extends Tinebase_Record_Abstract
      */
     public function checkUserPhones($_userId) {
         // set user phone ids as filter
-        $filter = new Voipmanager_Model_SnomPhoneFilter(array(
+        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
             'accountId' => $_userId
         ));        
         $pagination = new Tinebase_Model_Pagination(array(

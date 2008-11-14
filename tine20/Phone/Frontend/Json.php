@@ -50,7 +50,7 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {        
         $voipController = Voipmanager_Controller_MyPhone::getInstance();
         
-        $filter = new Voipmanager_Model_SnomPhoneFilter(array(
+        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
             'accountId' => $accountId
         ));
         $phones = $voipController->search($filter);
@@ -118,7 +118,7 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $phone = new Voipmanager_Model_MyPhone();
         $phone->setFromArray($phoneData);
         
-        $phoneSettings = new Voipmanager_Model_SnomPhoneSettings();
+        $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
         $phoneSettings->setFromArray($phoneData);
 
         $currentAccount = Zend_Registry::get('currentAccount')->toArray();

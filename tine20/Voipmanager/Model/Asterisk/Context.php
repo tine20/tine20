@@ -15,7 +15,7 @@
  * 
  * @package     Voipmanager 
  */
-class Voipmanager_Model_AsteriskContext extends Tinebase_Record_Abstract
+class Voipmanager_Model_Asterisk_Context extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -57,15 +57,15 @@ class Voipmanager_Model_AsteriskContext extends Tinebase_Record_Abstract
     );
 
     /**
-     * converts a int, string or Voipmanager_Model_AsteriskContext to an context id
+     * converts a int, string or Voipmanager_Model_Asterisk_Context to an context id
      *
-     * @param int|string|Voipmanager_Model_AsteriskContext $_contextId the context id to convert
+     * @param int|string|Voipmanager_Model_Asterisk_Context $_contextId the context id to convert
      * @return int
      * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertAsteriskContextIdToInt($_contextId)
     {
-        if ($_contextId instanceof Voipmanager_Model_AsteriskContext) {
+        if ($_contextId instanceof Voipmanager_Model_Asterisk_Context) {
             if (empty($_contextId->id)) {
                 throw new Voipmanager_Exception_InvalidArgument('no context id set');
             }

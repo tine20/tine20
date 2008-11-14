@@ -24,16 +24,16 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'snom_lines', 'Voipmanager_Model_SnomLine', $_db);
+        parent::__construct(SQL_TABLE_PREFIX . 'snom_lines', 'Voipmanager_Model_Snom_Line', $_db);
     }
     
     /**
      * add the fields to search for to the query
      *
      * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_SnomLineFilter $_filter the filter values to search for
+     * @param  Voipmanager_Model_Snom_LineFilter $_filter the filter values to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_SnomLineFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_LineFilter $_filter)
     {
         if(!empty($_filter->snomphone_id)) {
             $_select->where($this->_db->quoteInto('snomphone_id = ?', $_filter->snomphone_id));
@@ -43,11 +43,11 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
     /**
      * delete lines(s) identified by phone id
      *
-     * @param string|Voipmanager_Model_SnomPhone $_id
+     * @param string|Voipmanager_Model_Snom_Phone $_id
      */
     public function deletePhoneLines($_id)
     {
-        $phoneId = Voipmanager_Model_SnomPhone::convertSnomPhoneIdToInt($_id);
+        $phoneId = Voipmanager_Model_Snom_Phone::convertSnomPhoneIdToInt($_id);
         $where[] = $this->_db->quoteInto('snomphone_id = ?', $phoneId);
 
         $this->_db->delete(SQL_TABLE_PREFIX . 'snom_lines', $where);

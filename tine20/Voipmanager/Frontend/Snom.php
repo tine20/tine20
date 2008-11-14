@@ -119,9 +119,9 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
     /**
      * set status
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      * @param unknown_type $_type
-     * @return Voipmanager_Model_SnomPhone
+     * @return Voipmanager_Model_Snom_Phone
      * @throws  Voipmanager_Exception_UnexpectedValue
      */
     protected function _setStatus($_phone, $_type)

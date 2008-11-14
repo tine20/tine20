@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: SnomPhone.php 3245 2008-07-09 07:12:42Z lkneschke $
+ * @version     $Id$
  *
  */
 
@@ -15,7 +15,7 @@
  * 
  * @package     Voipmanager Management
  */
-class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
+class Voipmanager_Model_Snom_PhoneSettings extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -68,15 +68,15 @@ class Voipmanager_Model_SnomPhoneSettings extends Tinebase_Record_Abstract
     
     
     /**
-     * converts a int, string or Voipmanager_Model_SnomPhoneSetting to an phoneSetting id
+     * converts a int, string or Voipmanager_Model_Snom_PhoneSetting to an phoneSetting id
      *
-     * @param int|string|Voipmanager_Model_SnomPhone $_phoneSettingId the phone id to convert
+     * @param int|string|Voipmanager_Model_Snom_Phone $_phoneSettingId the phone id to convert
      * @return int
      * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertSnomPhoneSettingsIdToInt($_phoneSettingsId)
     {
-        if ($_phoneSettingsId instanceof Voipmanager_Model_SnomPhoneSettings) {
+        if ($_phoneSettingsId instanceof Voipmanager_Model_Snom_PhoneSettings) {
             if (empty($_phoneSettingsId->phone_id)) {
                 throw new Voipmanager_Exception_InvalidArgument('no phoneSettings id set');
             }

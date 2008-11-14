@@ -69,13 +69,13 @@ class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstra
      * get snom location by id
      *
      * @param string $_id the id of the peer
-     * @return Voipmanager_Model_SnomLocation
+     * @return Voipmanager_Model_Snom_Location
      * 
      * @todo move that to Voipmanager_Controller_Abstract ?
      */
     public function get($_id)
     {
-        $id = Voipmanager_Model_SnomLocation::convertSnomLocationIdToInt($_id);
+        $id = Voipmanager_Model_Snom_Location::convertSnomLocationIdToInt($_id);
         if (($result = $this->_cache->load('snomLocation_' . $id)) === false) {
             $result = $this->_backend->get($id);
             $this->_cache->save($result, 'snomLocation_' . $id, array('snomLocation'), 5);

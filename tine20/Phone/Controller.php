@@ -76,7 +76,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
         if ($_phoneId === NULL && $_lineId === NULL) {
             
             // use first phone and first line
-            $filter = new Voipmanager_Model_SnomPhoneFilter(array(
+            $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
                 'accountId' => $accountId 
             ));
             $phones = $vmController->getSnomPhones($filter);
@@ -148,7 +148,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
         
         $_call->start = Zend_Date::now();
         
-        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
+        $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
             'name'     => $_call->line_id
         ));
         $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);

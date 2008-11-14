@@ -81,8 +81,8 @@ class Phone_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             // encode the data arrays
             $encodedSnomPhone = Zend_Json::encode($_phoneData);
         } else {
-            //$phone = new Voipmanager_Model_SnomPhone();
-            //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomLine');
+            //$phone = new Voipmanager_Model_Snom_Phone();
+            //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line');
             $encodedWritable = '{}';
             $encodedSnomPhone = '{}';            
             //$encodedSettings = '{}';

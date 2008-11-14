@@ -11,10 +11,10 @@
  */
 
 /**
- * Asterisk Meetme Filter Class
+ * Location Filter Class
  * @package Voipmanager
  */
-class Voipmanager_Model_AsteriskMeetmeFilter extends Tinebase_Record_Abstract
+class Voipmanager_Model_Snom_LocationFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -35,9 +35,14 @@ class Voipmanager_Model_AsteriskMeetmeFilter extends Tinebase_Record_Abstract
     
         'id'                    => array('allowEmpty' => true,  'Int'   ),
 
-        'confno'                => array('allowEmpty' => true           ),
-        'pin'		            => array('allowEmpty' => true           ),
-        'adminpin'		        => array('allowEmpty' => true           ),		
+        'firmware_interval'     => array('allowEmpty' => true           ),
+        'firmware_status'       => array('allowEmpty' => true           ),
+        'update_policy'         => array('allowEmpty' => true           ),
+        'setting_server'        => array('allowEmpty' => true           ),
+        'admin_mode'            => array('allowEmpty' => true           ),
+        'ntp_server'            => array('allowEmpty' => true           ),
+        'http_user'             => array('allowEmpty' => true           ),
+        'description'           => array('allowEmpty' => true           ),
         'query'                 => array('allowEmpty' => true           )        
     );
 }

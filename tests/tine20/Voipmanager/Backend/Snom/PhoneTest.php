@@ -57,28 +57,28 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
     {
         $this->_backend = new Voipmanager_Backend_Snom_Phone();
         
-        $this->_objects['location'] = new Voipmanager_Model_SnomLocation(array(
+        $this->_objects['location'] = new Voipmanager_Model_Snom_Location(array(
             'id' => 20001,
             'name' => 'phpunit test location',
             'registrar' => 'registrar'        
         ));
 
-        $this->_objects['software'] = new Voipmanager_Model_SnomSoftware(array(
+        $this->_objects['software'] = new Voipmanager_Model_Snom_Software(array(
             'id' => 20003
         ));       
         
-        $this->_objects['setting'] = new Voipmanager_Model_SnomSetting(array(
+        $this->_objects['setting'] = new Voipmanager_Model_Snom_Setting(array(
             'id' => 20004
         ));       
         
-        $this->_objects['template'] = new Voipmanager_Model_SnomTemplate(array(
+        $this->_objects['template'] = new Voipmanager_Model_Snom_Template(array(
             'id' => 20002,
             'name' => 'phpunit test location',
             'software_id' => $this->_objects['software']->getId(),
             'setting_id' => $this->_objects['setting']->getId()
         ));
         
-        $this->_objects['phone'] = new Voipmanager_Model_SnomPhone(array(
+        $this->_objects['phone'] = new Voipmanager_Model_Snom_Phone(array(
             'id' => 1001,
             'macaddress' => "1234567890cd",
             'location_id' => $this->_objects['location']->getId(),
@@ -92,7 +92,7 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
             'account_type' => 'user'
         );
         
-        $rights = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight', array(
+        $rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
             $this->_objects['phoneOwner']
         )); 
         
@@ -135,7 +135,7 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Zend_Registry::get('currentAccount')->getId(), $testRight->account_id);
         
         // delete rights
-        $this->_objects['phone']->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhoneRight');
+        $this->_objects['phone']->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight');
         $this->_backend->setPhoneRights($this->_objects['phone']);
 
         $rights = $this->_backend->getPhoneRights($this->_objects['phone']->getId());

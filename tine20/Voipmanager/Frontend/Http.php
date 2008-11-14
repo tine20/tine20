@@ -128,7 +128,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
         if (!empty($sipPeerId)) {
             $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($sipPeerId);
         } else {
-            $sipPeer = new Voipmanager_Model_AsteriskSipPeer(array(
+            $sipPeer = new Voipmanager_Model_Asterisk_SipPeer(array(
                 'type'  => 'user'
             )); 
         }
@@ -215,7 +215,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
         if (!empty($locationId)) {
             $location = Voipmanager_Controller_Snom_Location::getInstance()->get($locationId);
         } else {
-            $location = new Voipmanager_Model_SnomLocation(array(
+            $location = new Voipmanager_Model_Snom_Location(array(
                 'webserver_type'    => 'http',
                 'http_port'         => 80,
                 'https_port'        => 443

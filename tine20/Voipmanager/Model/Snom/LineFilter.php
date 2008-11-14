@@ -14,7 +14,7 @@
  * Phone Filter Class
  * @package Voipmanager
  */
-class Voipmanager_Model_SnomPhoneFilter extends Tinebase_Record_Abstract
+class Voipmanager_Model_Snom_LineFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -34,11 +34,6 @@ class Voipmanager_Model_SnomPhoneFilter extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array('allowEmpty' => true,  'Int'   ),
 
-        'macaddress'            => array('allowEmpty' => true           ),
-        'ipaddress'             => array('allowEmpty' => true           ),
-        'description'           => array('allowEmpty' => true           ),
-        'accountId'             => array('allowEmpty' => true           ),
-        'query'                 => array('allowEmpty' => true           )
-        //'showClosed'          => array('allowEmpty' => true, 'InArray' => array(true,false)),
+        'snomphone_id'          => array('allowEmpty' => true           )
     );
 }

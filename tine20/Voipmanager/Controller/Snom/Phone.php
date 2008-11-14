@@ -68,13 +68,13 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * get snom_phone by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Snom_Phone
      */
     public function get($_id)
     {
         $phone = $this->_backend->get($_id);
         
-        $filter = new Voipmanager_Model_SnomLineFilter(array(
+        $filter = new Voipmanager_Model_Snom_LineFilter(array(
             'snomphone_id'  => $phone->id
         ));
         $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
@@ -93,13 +93,13 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * get snom_phone by macAddress
      *
      * @param string $_macAddress
-     * @return Voipmanager_Model_SnomPhone
+     * @return Voipmanager_Model_Snom_Phone
      */
     public function getByMacAddress($_macAddress)
     {
         $phone = $this->_backend->getByMacAddress($_macAddress);
         
-        $filter = new Voipmanager_Model_SnomLineFilter(array(
+        $filter = new Voipmanager_Model_Snom_LineFilter(array(
             'snomphone_id'  => $phone->id
         ));
         $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
@@ -117,10 +117,10 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     /**
      * add one phone
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
-     * @return  Voipmanager_Model_SnomPhone
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @return  Voipmanager_Model_Snom_Phone
      */
-    public function create(Voipmanager_Model_SnomPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings)
+    public function create(Voipmanager_Model_Snom_Phone $_phone, Voipmanager_Model_Snom_PhoneSettings $_phoneSettings)
     {
         // auto generate random http client username and password        
         // limit length because of Snom phone limitations
@@ -170,9 +170,9 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     /**
      * set redirect settings only
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      */
-    public function updateRedirect(Voipmanager_Model_SnomPhone $_phone)
+    public function updateRedirect(Voipmanager_Model_Snom_Phone $_phone)
     {
         $this->_backend->updateRedirect($_phone);
     }
@@ -180,11 +180,11 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     /**
      * update one phone
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
-     * @param Voipmanager_Model_SnomPhoneSettings|optional $_phoneSettings
-     * @return  Voipmanager_Model_SnomPhone
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param Voipmanager_Model_Snom_PhoneSettings|optional $_phoneSettings
+     * @return  Voipmanager_Model_Snom_Phone
      */
-    public function update(Voipmanager_Model_SnomPhone $_phone, $_phoneSettings = NULL)
+    public function update(Voipmanager_Model_Snom_Phone $_phone, $_phoneSettings = NULL)
     {
         unset($_phone->settings_loaded_at);
         unset($_phone->firmware_checked_at);
@@ -194,7 +194,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         
         $phone = $this->_backend->update($_phone);
         
-        if($_phoneSettings instanceof Voipmanager_Model_SnomPhoneSettings) {
+        if($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
         
             // force the right phone_id
             $_phoneSettings->setId($phone->getId());

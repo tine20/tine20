@@ -24,16 +24,16 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_sip_peers', 'Voipmanager_Model_AsteriskSipPeer', $_db);
+        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_sip_peers', 'Voipmanager_Model_Asterisk_SipPeer', $_db);
     }
     
     /**
      * add the fields to search for to the query
      *
      * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_AsteriskSipPeerFilter $_filter the string to search for
+     * @param  Voipmanager_Model_Asterisk_SipPeerFilter $_filter the string to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_AsteriskSipPeerFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_SipPeerFilter $_filter)
     {
         if(!empty($_filter->query)) {
             $search_values = explode(" ", $_filter->query);

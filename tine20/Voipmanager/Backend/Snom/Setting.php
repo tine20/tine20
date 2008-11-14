@@ -26,16 +26,16 @@ class Voipmanager_Backend_Snom_Setting extends Tinebase_Application_Backend_Sql_
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'snom_default_settings', 'Voipmanager_Model_SnomSetting', $_db);
+        parent::__construct(SQL_TABLE_PREFIX . 'snom_default_settings', 'Voipmanager_Model_Snom_Setting', $_db);
     }
     
     /**
      * add the fields to search for to the query
      *
      * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_SnomSettingFilter $_filter the filter values to search for
+     * @param  Voipmanager_Model_Snom_SettingFilter $_filter the filter values to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_SnomSettingFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_SettingFilter $_filter)
     {
         if(!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(name LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));

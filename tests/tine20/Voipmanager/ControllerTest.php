@@ -129,7 +129,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $test = $this->_backends['Asterisk_Context']->create($test);
         
-        $filter = new Voipmanager_Model_AsteriskContextFilter(array(
+        $filter = new Voipmanager_Model_Asterisk_ContextFilter(array(
             'query' => $test->name
         ));        
         $returned = $this->_backends['Asterisk_Context']->search($filter);
@@ -140,7 +140,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     
     protected function _getAsteriskContext()
     {
-        return new Voipmanager_Model_AsteriskContext(array(
+        return new Voipmanager_Model_Asterisk_Context(array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
             'description' => Tinebase_Record_Abstract::generateUID()
         ));
@@ -192,7 +192,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskMeetme();
         $test = $this->_backends['Asterisk_Meetme']->create($test);
         
-        $filter = new Voipmanager_Model_AsteriskMeetmeFilter(array(
+        $filter = new Voipmanager_Model_Asterisk_MeetmeFilter(array(
             'query' => $test->confno
         ));        
         $returned = $this->_backends['Asterisk_Meetme']->search($filter);
@@ -203,7 +203,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     
     protected function _getAsteriskMeetme()
     {
-        return new Voipmanager_Model_AsteriskMeetme(array(
+        return new Voipmanager_Model_Asterisk_Meetme(array(
             'confno'  => Tinebase_Record_Abstract::generateUID(),
             'adminpin' => Tinebase_Record_Abstract::generateUID(),
             'pin' => Tinebase_Record_Abstract::generateUID()
@@ -239,7 +239,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Asterisk_SipPeer']->create($test);
         $returned = $this->_backends['Asterisk_SipPeer']->get($test);
 
-        $this->assertType('Voipmanager_Model_AsteriskSipPeer', $returned);
+        $this->assertType('Voipmanager_Model_Asterisk_SipPeer', $returned);
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->callerid, $returned->callerid);
@@ -277,13 +277,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $test = $this->_backends['Asterisk_SipPeer']->create($test);
         
-        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
+        $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
             'name' => $test->name
         ));
         $returned = $this->_backends['Asterisk_SipPeer']->search($filter);
         $this->assertEquals(1, count($returned));
         
-        $filter = new Voipmanager_Model_AsteriskSipPeerFilter(array(
+        $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
             'query' => $test->name
         ));
         $returned = $this->_backends['Asterisk_SipPeer']->search($filter);
@@ -294,7 +294,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     
     protected function _getAsteriskSipPeer()
     {
-        return new Voipmanager_Model_AsteriskSipPeer(array(
+        return new Voipmanager_Model_Asterisk_SipPeer(array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
             'callerid' => Tinebase_Record_Abstract::generateUID(),
             'qualify' => 'yes'
@@ -348,7 +348,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $test = $this->_backends['Asterisk_Voicemail']->create($test);
         
-        $filter = new Voipmanager_Model_AsteriskVoicemailFilter(array(
+        $filter = new Voipmanager_Model_Asterisk_VoicemailFilter(array(
             'query' => $test->mailbox
         ));
         $returned = $this->_backends['Asterisk_Voicemail']->search($filter);
@@ -358,13 +358,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * return random Voipmanager_Model_AsteriskVoicemail
+     * return random Voipmanager_Model_Asterisk_Voicemail
      *
-     * @return Voipmanager_Model_AsteriskVoicemail
+     * @return Voipmanager_Model_Asterisk_Voicemail
      */
     protected function _getAsteriskVoicemail()
     {
-        return new Voipmanager_Model_AsteriskVoicemail(array(
+        return new Voipmanager_Model_Asterisk_Voicemail(array(
             'mailbox'  => substr(Tinebase_Record_Abstract::generateUID(), 0, 11),
             'fullname' => Tinebase_Record_Abstract::generateUID()
         ));
@@ -400,7 +400,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Software']->create($test);
         $returned = $this->_backends['Snom_Software']->get($test);
         
-        $this->assertType('Voipmanager_Model_SnomSoftware', $returned);
+        $this->assertType('Voipmanager_Model_Snom_Software', $returned);
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
@@ -437,7 +437,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $test = $this->_backends['Snom_Software']->create($test);
         
-        $filter = new Voipmanager_Model_SnomSoftwareFilter(array(
+        $filter = new Voipmanager_Model_Snom_SoftwareFilter(array(
             'query' => $test->name
         ));
         $returned = $this->_backends['Snom_Software']->search($filter);
@@ -447,13 +447,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * return random Voipmanager_Model_SnomSoftware
+     * return random Voipmanager_Model_Snom_Software
      *
-     * @return Voipmanager_Model_SnomSoftware
+     * @return Voipmanager_Model_Snom_Software
      */
     protected function _getSnomSoftware()
     {
-        return new Voipmanager_Model_SnomSoftware(array(
+        return new Voipmanager_Model_Snom_Software(array(
             'name'                  => Tinebase_Record_Abstract::generateUID(),
             'description'           => Tinebase_Record_Abstract::generateUID(),
             'softwareimage_snom320' => Tinebase_Record_Abstract::generateUID()
@@ -515,7 +515,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $test = $this->_backends['Snom_Setting']->create($test);
         
-        $filter = new Voipmanager_Model_SnomSettingFilter(array(
+        $filter = new Voipmanager_Model_Snom_SettingFilter(array(
             'query' => $test->name
         ));
         $returned = $this->_backends['Snom_Setting']->search($filter);
@@ -525,13 +525,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * return random Voipmanager_Model_SnomSetting
+     * return random Voipmanager_Model_Snom_Setting
      *
-     * @return Voipmanager_Model_SnomSetting
+     * @return Voipmanager_Model_Snom_Setting
      */
     protected function _getSnomSetting()
     {
-        return new Voipmanager_Model_SnomSetting(array(
+        return new Voipmanager_Model_Snom_Setting(array(
             'name'                      => Tinebase_Record_Abstract::generateUID(),
             'description'               => Tinebase_Record_Abstract::generateUID(),
             'display_method'            => 'display_name_number',
@@ -570,7 +570,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Location']->create($test);
         $returned = $this->_backends['Snom_Location']->get($test);
         
-        $this->assertType('Voipmanager_Model_SnomLocation', $returned);
+        $this->assertType('Voipmanager_Model_Snom_Location', $returned);
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
@@ -608,7 +608,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $test = $this->_backends['Snom_Location']->create($test);
         
-        $filter = new Voipmanager_Model_SnomLocationFilter(array(
+        $filter = new Voipmanager_Model_Snom_LocationFilter(array(
             'name' => $test->name
         ));
         
@@ -619,13 +619,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * return random Voipmanager_Model_SnomLocation
+     * return random Voipmanager_Model_Snom_Location
      *
-     * @return Voipmanager_Model_SnomLocation
+     * @return Voipmanager_Model_Snom_Location
      */
     protected function _getSnomLocation()
     {
-        return new Voipmanager_Model_SnomLocation(array(
+        return new Voipmanager_Model_Snom_Location(array(
             'name'                      => Tinebase_Record_Abstract::generateUID(),
             'description'               => Tinebase_Record_Abstract::generateUID(),
             'registrar'                 => Tinebase_Record_Abstract::generateUID()
@@ -667,7 +667,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Template']->create($test);
         $returned = $this->_backends['Snom_Template']->get($test);
         
-        $this->assertType('Voipmanager_Model_SnomTemplate', $returned);
+        $this->assertType('Voipmanager_Model_Snom_Template', $returned);
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
@@ -713,7 +713,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
                 
         $test = $this->_backends['Snom_Template']->create($test);
         
-        $filter = new Voipmanager_Model_SnomTemplateFilter(array(
+        $filter = new Voipmanager_Model_Snom_TemplateFilter(array(
             'query' => $test->name
         ));
         $returned = $this->_backends['Snom_Template']->search($filter);
@@ -725,13 +725,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * return random Voipmanager_Model_SnomTemplate
+     * return random Voipmanager_Model_Snom_Template
      *
-     * @return Voipmanager_Model_SnomTemplate
+     * @return Voipmanager_Model_Snom_Template
      */
-    protected function _getSnomTemplate(Voipmanager_Model_SnomSoftware $_software, Voipmanager_Model_SnomSetting $_settings)
+    protected function _getSnomTemplate(Voipmanager_Model_Snom_Software $_software, Voipmanager_Model_Snom_Setting $_settings)
     {
-        return new Voipmanager_Model_SnomTemplate(array(
+        return new Voipmanager_Model_Snom_Template(array(
             'name'          => Tinebase_Record_Abstract::generateUID(),
             'description'   => Tinebase_Record_Abstract::generateUID(),
             'software_id'   => $_software->getId(),

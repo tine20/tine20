@@ -1,22 +1,21 @@
 <?php
 /**
- * class to hold phone owner data
+ * class to hold phone rights data
  * 
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     
+ * @version     $Id$
  *
- * @todo delete that? is that needed?
  */
 
 /**
- * class to hold phone owner data
+ * class to hold phone rights data
  * 
  * @package     Voipmanager Management
  */
-class Voipmanager_Model_SnomPhoneOwner extends Tinebase_Record_Abstract
+class Voipmanager_Model_Snom_PhoneRight extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -24,7 +23,7 @@ class Voipmanager_Model_SnomPhoneOwner extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'phone_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -51,8 +50,15 @@ class Voipmanager_Model_SnomPhoneOwner extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'phone_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-        'account_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')
-    );
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'snom_phone_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'account_type'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
     
+        'accountDisplayName' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    
+        'read_right'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'write_right'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'dial_right'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+    );    
 }

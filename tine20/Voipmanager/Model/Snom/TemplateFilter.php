@@ -2,19 +2,19 @@
 /**
  * Tine 2.0
  * 
- * @package     Voipmanager
+ * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:  $
  *
  */
 
 /**
- * Phone Filter Class
+ * Template Filter Class
  * @package Voipmanager
  */
-class Voipmanager_Model_SnomLineFilter extends Tinebase_Record_Abstract
+class Voipmanager_Model_Snom_TemplateFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -34,6 +34,8 @@ class Voipmanager_Model_SnomLineFilter extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array('allowEmpty' => true,  'Int'   ),
 
-        'snomphone_id'          => array('allowEmpty' => true           )
+        'model'                 => array('allowEmpty' => true           ),
+        'description'           => array('allowEmpty' => true           ),
+        'query'                 => array('allowEmpty' => true           )
     );
 }

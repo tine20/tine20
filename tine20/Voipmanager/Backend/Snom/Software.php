@@ -24,16 +24,16 @@ class Voipmanager_Backend_Snom_Software extends Tinebase_Application_Backend_Sql
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'snom_software', 'Voipmanager_Model_SnomSoftware', $_db);
+        parent::__construct(SQL_TABLE_PREFIX . 'snom_software', 'Voipmanager_Model_Snom_Software', $_db);
     }
     
     /**
      * add the fields to search for to the query
      *
      * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_SnomSoftwareFilter $_filter the filter values to search for
+     * @param  Voipmanager_Model_Snom_SoftwareFilter $_filter the filter values to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_SnomSoftwareFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_SoftwareFilter $_filter)
     {
         if(!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));

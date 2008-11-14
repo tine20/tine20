@@ -74,11 +74,11 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
     /**
      * get config of one phone
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      * @return string the config as xml string
      * @throws  Voipmanager_Exception_Validation
      */
-    public function getConfig(Voipmanager_Model_SnomPhone $_phone)
+    public function getConfig(Voipmanager_Model_Snom_Phone $_phone)
     {
         if (!$_phone->isValid()) {
             throw new Voipmanager_Exception_Validation('invalid phone');
@@ -200,11 +200,11 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
     /**
      * get phone firmware
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      * @return string the firmware as xml string
      * @throws  Voipmanager_Exception_Validation
      */
-    public function getFirmware(Voipmanager_Model_SnomPhone $_phone)
+    public function getFirmware(Voipmanager_Model_Snom_Phone $_phone)
     {
         if (!$_phone->isValid()) {
             throw new Voipmanager_Exception_Validation('invalid phone');
@@ -233,10 +233,10 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
      * get general phonesettings like http client username/password and
      * call forward settings
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      * @return array
      */
-    protected function _getPhoneSettings(Voipmanager_Model_SnomPhone $_phone)
+    protected function _getPhoneSettings(Voipmanager_Model_Snom_Phone $_phone)
     {
         $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
         $phoneSettings['http_client_user']['perms'] = 'RO';
@@ -259,10 +259,10 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
     /**
      * get location settings
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      * @return array
      */
-    protected function _getLocationSettings(Voipmanager_Model_SnomPhone $_phone)
+    protected function _getLocationSettings(Voipmanager_Model_Snom_Phone $_phone)
     {
         $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);        
         $location = $snomLocation->get($_phone->location_id);
@@ -289,10 +289,10 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
     /**
      * get user editable settings
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      * @return array
      */
-    protected function _getUserSettings(Voipmanager_Model_SnomPhone $_phone)
+    protected function _getUserSettings(Voipmanager_Model_Snom_Phone $_phone)
     {
         $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings($this->_db);
         $phoneSettings = $phoneSettinsgBackend->get($_phone->getId());
@@ -329,10 +329,10 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
     /**
      * return array of phone lines
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
+     * @param Voipmanager_Model_Snom_Phone $_phone
      * @return array the lines
      */
-    protected function _getLines(Voipmanager_Model_SnomPhone $_phone)
+    protected function _getLines(Voipmanager_Model_Snom_Phone $_phone)
     {
         $asteriskPeer = new Voipmanager_Backend_Asterisk_SipPeer($this->_db);
         $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);

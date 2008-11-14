@@ -25,16 +25,16 @@ class Voipmanager_Backend_Asterisk_Voicemail extends Tinebase_Application_Backen
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_voicemail', 'Voipmanager_Model_AsteriskVoicemail', $_db);
+        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_voicemail', 'Voipmanager_Model_Asterisk_Voicemail', $_db);
     }
     
     /**
      * add the fields to search for to the query
      *
      * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_AsteriskVoicemailFilter $_filter the string to search for
+     * @param  Voipmanager_Model_Asterisk_VoicemailFilter $_filter the string to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_AsteriskVoicemailFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_VoicemailFilter $_filter)
     {
         if(!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(context LIKE ? OR mailbox LIKE ? OR fullname LIKE ? OR email LIKE ? OR pager LIKE ? )', '%' . $_filter->query . '%'));

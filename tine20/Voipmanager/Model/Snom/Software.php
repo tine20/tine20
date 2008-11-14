@@ -15,7 +15,7 @@
  * 
  * @package     Voipmanager Management
  */
-class Voipmanager_Model_SnomSoftware extends Tinebase_Record_Abstract
+class Voipmanager_Model_Snom_Software extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -61,15 +61,15 @@ class Voipmanager_Model_SnomSoftware extends Tinebase_Record_Abstract
     );
 
     /**
-     * converts a int, string or Voipmanager_Model_SnomSoftware to an software id
+     * converts a int, string or Voipmanager_Model_Snom_Software to an software id
      *
-     * @param int|string|Voipmanager_Model_SnomSoftware $_softwareId the software id to convert
+     * @param int|string|Voipmanager_Model_Snom_Software $_softwareId the software id to convert
      * @return int
      * @throws  Voipmanager_Exception_InvalidArgument
      */
     static public function convertSoftwareIdToInt($_softwareId)
     {
-        if ($_softwareId instanceof Voipmanager_Model_SnomSoftware) {
+        if ($_softwareId instanceof Voipmanager_Model_Snom_Software) {
             if (empty($_softwareId->id)) {
                 throw new Voipmanager_Exception_InvalidArgument('no software id set');
             }

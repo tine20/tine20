@@ -68,7 +68,7 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
     /**
      * delete lines(s) identified by phone id
      *
-     * @param string|Voipmanager_Model_SnomPhone $_phoneId
+     * @param string|Voipmanager_Model_Snom_Phone $_phoneId
      * @return void
      */
     public function deletePhoneLines($_phoneId)
@@ -80,11 +80,11 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
      * get snom_phone_line by id
      *
      * @param string $_id the id of the line
-     * @return Voipmanager_Model_SnomLine
+     * @return Voipmanager_Model_Snom_Line
      */
     public function get($_id)
     {
-        $id = Voipmanager_Model_SnomLine::convertSnomLineIdToInt($_id);
+        $id = Voipmanager_Model_Snom_Line::convertSnomLineIdToInt($_id);
         if (($result = $this->_cache->load('snomPhoneLine_' . $id)) === false) {
             $result = $this->_backend->get($id);
             $this->_cache->save($result, 'snomPhoneLine_' . $id, array('snomPhoneLine'), 5);

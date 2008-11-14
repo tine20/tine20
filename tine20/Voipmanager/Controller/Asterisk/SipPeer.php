@@ -69,13 +69,13 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
      * get asterisk sip peer by id
      *
      * @param string $_id the id of the peer
-     * @return Voipmanager_Model_AsteriskSipPeer
+     * @return Voipmanager_Model_Asterisk_SipPeer
      * 
      * @todo move that to Voipmanager_Controller_Abstract ?
      */
     public function get($_id)
     {
-        $id = Voipmanager_Model_AsteriskSipPeer::convertAsteriskSipPeerIdToInt($_id);
+        $id = Voipmanager_Model_Asterisk_SipPeer::convertAsteriskSipPeerIdToInt($_id);
         if (($result = $this->_cache->load('asteriskSipPeer_' . $id)) === false) {
             $result = $this->_backend->get($id);
             $this->_cache->save($result, 'asteriskSipPeer_' . $id, array('asteriskSipPeer'), 5);

@@ -69,7 +69,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      *
      * @param string $_id
      * @param string $_accountId
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Snom_Phone
      * @throws  Voipmanager_Exception_NotFound
      */
     public function getMyPhone($_id, $_accountId)
@@ -81,7 +81,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
         
         $phone = $this->_backend->getMyPhone($_id, $_accountId);
         
-        $filter = new Voipmanager_Model_SnomLineFilter(array(
+        $filter = new Voipmanager_Model_Snom_LineFilter(array(
             'snomphone_id'  => $phone->id
         ));
         $phone->lines = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
@@ -92,11 +92,11 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
    /**
      * update one myPhone
      *
-     * @param Voipmanager_Model_SnomPhone $_phone
-     * @return  Voipmanager_Model_SnomPhone
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @return  Voipmanager_Model_Snom_Phone
      * @throws  Voipmanager_Exception_InvalidArgument
      */
-    public function update(Voipmanager_Model_MyPhone $_phone, Voipmanager_Model_SnomPhoneSettings $_phoneSettings, $_accountId)
+    public function update(Voipmanager_Model_MyPhone $_phone, Voipmanager_Model_Snom_PhoneSettings $_phoneSettings, $_accountId)
     {
         if (empty($_accountId)) {
             throw new Voipmanager_Exception_InvalidArgument('no accountId set');

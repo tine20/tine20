@@ -4,17 +4,17 @@
  * 
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:  $
  *
  */
 
 /**
- * Software Filter Class
+ * Asterisk Context Filter Class
  * @package Voipmanager
  */
-class Voipmanager_Model_SnomSoftwareFilter extends Tinebase_Record_Abstract
+class Voipmanager_Model_Asterisk_ContextFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -32,10 +32,11 @@ class Voipmanager_Model_SnomSoftwareFilter extends Tinebase_Record_Abstract
     protected $_application = 'Voipmanager';
     
     protected $_validators = array(
+    
         'id'                    => array('allowEmpty' => true,  'Int'   ),
+
         'name'                  => array('allowEmpty' => true           ),
-        'description'           => array('allowEmpty' => true           ),     
-        'query'                 => array('allowEmpty' => true           )
-//        'showClosed'          => array('allowEmpty' => true, 'InArray' => array(true,false)),
+        'description'           => array('allowEmpty' => true           ),
+        'query'                 => array('allowEmpty' => true           )        
     );
 }
