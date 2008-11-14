@@ -846,7 +846,7 @@
                     <name>context</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>mailbox</name>
@@ -870,13 +870,13 @@
                    <name>email</name>
                    <type>text</type>
                    <length>50</length>
-                   <notnull>true</notnull>
+                   <notnull>false</notnull>
                </field>
                <field>
                    <name>pager</name>
                    <type>text</type>
                    <length>50</length>
-                   <notnull>true</notnull>
+                   <notnull>false</notnull>
                </field>
                <field>
                    <name>tz</name>
@@ -898,13 +898,13 @@
                    <name>dialout</name>
                    <type>text</type>
                    <length>10</length>
-                   <notnull>true</notnull>
+                   <notnull>false</notnull>
                </field>
                <field>
                    <name>callback</name>
                    <type>text</type>
                    <length>10</length>
-                   <notnull>true</notnull>
+                   <notnull>false</notnull>
                </field>
                <field>
                    <name>review</name>
