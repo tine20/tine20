@@ -66,7 +66,7 @@
                     <name>firmware_interval</name>
                     <type>integer</type>
                     <length>11</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>update_policy</name>
@@ -89,7 +89,7 @@
                     <name>base_download_url</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>admin_mode</name>
@@ -102,13 +102,13 @@
                     <name>admin_mode_password</name>
                     <type>text</type>
                     <length>20</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>ntp_server</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>webserver_type</name>
@@ -122,24 +122,24 @@
                 <field>
                     <name>http_port</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>https_port</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>http_user</name>
                     <type>text</type>
                     <length>20</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>http_pass</name>
                     <type>text</type>
                     <length>20</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>id</name>
@@ -157,7 +157,7 @@
                     <name>description</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>timezone</name>
@@ -167,7 +167,7 @@
                 <field>
                     <name>ntp_refresh</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>                    
                     <name>tone_scheme</name>
@@ -233,7 +233,7 @@
                     <name>description</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>model</name>
@@ -248,7 +248,7 @@
                     <name>keylayout_id</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>setting_id</name>
