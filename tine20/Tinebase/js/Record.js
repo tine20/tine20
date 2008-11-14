@@ -9,13 +9,13 @@
  * @version     $Id$
  */
  
-Ext.ns('Tine.Tinebase');
+Ext.ns('Tine.Tinebase', 'Tine.Tinebase.Record');
 
 /**
  * @class Tine.Tinebase.Record
  * @extends {Ext.data.Record}
  */
-Tine.Tinebase.Record = {
+Ext.override(Ext.data.Record, {
     /**
      * @cfg {String} appName
      * internal/untranslated app name (required)
@@ -70,7 +70,7 @@ Tine.Tinebase.Record = {
     getTitle: function() {
         return this.titleProperty ? this.get(this.titleProperty) : '';
     }
-};
+});
 
 /**
  * Generate a constructor for a specific Record layout.
@@ -101,5 +101,5 @@ var TopicRecord = Tine.Tinebase.Record.create([
  */
 Tine.Tinebase.Record.create = function(def, opts) {
     var f = Ext.data.Record.create(def);
-    return Ext.apply(f, opts, Tine.Tinebase.Record);
+    return Ext.apply(f, opts);
 };
