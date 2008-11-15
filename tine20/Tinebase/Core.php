@@ -301,7 +301,7 @@ class Tinebase_Core
             
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         
-            $dbBackend = constant('self::' . strtoupper($dbConfig->get('backend', self::PDO_MYSQL)));
+            $dbBackend = constant('self::' . strtoupper($dbConfig->get('adapter', self::PDO_MYSQL)));
             
             switch($dbBackend) {
                 case self::PDO_MYSQL:
