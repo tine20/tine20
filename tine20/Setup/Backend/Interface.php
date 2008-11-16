@@ -25,18 +25,7 @@ interface Setup_Backend_Interface
      * @param object $_table xml stream
      */
     public function createTable(Setup_Backend_Schema_Table_Abstract $_table);
-    
-    
-    /**
-    * add table to tine registry
-    *
-    * @param Tinebase_Model_Application
-    * @param string name of table
-    * @param int version of table
-    * @return int
-    */
-    public function addTable(Tinebase_Model_Application $_application, $_name, $_version);
-    
+        
     /*
     * removes table from database
     * 
