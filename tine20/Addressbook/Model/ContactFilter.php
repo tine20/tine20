@@ -144,7 +144,12 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_Abstract
                 case 'query':
                     $queries = explode(' ', $value);
                     foreach ($queries as $query) {
-                        $_select->where($db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ? or adr_one_locality LIKE ?)', '%' . trim($query) . '%'));
+                        $_select->where($db->quoteInto('(' . 
+                            $db->quoteIdentifier('n_family') . ' LIKE ? OR ' . 
+                            $db->quoteIdentifier('n_given') . ' LIKE ? OR ' . 
+                            $db->quoteIdentifier('org_name')  . 'LIKE ? OR ' . 
+                            $db->quoteIdentifier('email') . 'LIKE ? OR ' . 
+                            $db->quoteIdentifier('adr_one_locality') . ' LIKE ?)', '%' . trim($query) . '%'));
                     
                     }
                     break;

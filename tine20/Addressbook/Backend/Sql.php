@@ -35,7 +35,8 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      */
     public function getByUserId($_userId)
     {
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('account_id = ?', $_userId));
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_userId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new Addressbook_Exception_NotFound('Contact with user id ' . $_userId . ' not found.');
@@ -53,7 +54,7 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      */
     protected function _addFilter (Zend_Db_Select $_select, Addressbook_Model_ContactFilter $_filter)
     {        
-        $_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
+        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' IN (?)', $_filter->container));
         
         $_filter->appendFilterSql($_select);
     }    
