@@ -141,7 +141,7 @@ class Tinebase_Record_PersistentObserver
     public function removeObserver( $_persistentObserver ) {
         if ($_persistentObserver->getId() && $_persistentObserver->isValid()) {
         	$where = array(
-        	    'identifier = ' . $_persistentObserver->getId()
+        	    $this->_db->quoteIdentifier('identifier') . ' = ' . $_persistentObserver->getId()
         	);
         	
         	$this->_db->update(array(
@@ -161,8 +161,8 @@ class Tinebase_Record_PersistentObserver
     public function removeAllObservables( $_observer ) {
     	if ($_observer->getApplication() && $_observer->getId()) {
 	        $where = array(
-	            'observer_application =' . $_observer->getApplication(),
-	            'observer_identifier  =' . $_observer->getId()
+	            $this->_db->quoteIdentifier('observer_application') . ' =' . $_observer->getApplication(),
+	            $this->_db->quoteIdentifier('observer_identifier') . '  =' . $_observer->getId()
 	        );
 	        
             $this->_db->update(array(
@@ -184,8 +184,8 @@ class Tinebase_Record_PersistentObserver
     public function getAllObservables( $_observer ) {
     	if ($_observer->getApplication() && $_observer->getId()) {
     		$where = array(
-    		    'observer_application =' . $_observer->getApplication(),
-                'observer_identifier  =' . $_observer->getId()
+    		    $this->_db->quoteIdentifier('observer_application') . ' =' . $_observer->getApplication(),
+                $this->_db->quoteIdentifier('observer_identifier') . '  =' . $_observer->getId()
     		);
     		
     		return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true); 
@@ -207,9 +207,9 @@ class Tinebase_Record_PersistentObserver
     	} 
     	
     	$where = array(
-    	    'observer_application =' . $_observer->getApplication(),
-            'observer_identifier  =' . $_observer->getId(),
-    	    'observed_event       =' . $this->_db->getAdapter()->quote($_event)
+    	    $this->_db->quoteIdentifier('observer_application') . ' =' . $_observer->getApplication(),
+            $this->_db->quoteIdentifier('observer_identifier') . '  =' . $_observer->getId(),
+    	    $this->_db->quoteIdentifier('observed_event') . '       =' . $this->_db->getAdapter()->quote($_event)
     	);
     	
     	return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true);
@@ -229,9 +229,9 @@ class Tinebase_Record_PersistentObserver
         }
         
         $where = array(
-            'observable_application =' . $_observable->getApplication(),
-            'observable_identifier  =' . $_observable->getId(),
-            'observed_event         =' . $this->_db->getAdapter()->quote($_event)
+            $this->_db->quoteIdentifier('observable_application') . ' =' . $_observable->getApplication(),
+            $this->_db->quoteIdentifier('observable_identifier') . '  =' . $_observable->getId(),
+            $this->_db->quoteIdentifier('observed_event') . '         =' . $this->_db->getAdapter()->quote($_event)
         );
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true);

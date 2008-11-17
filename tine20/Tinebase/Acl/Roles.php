@@ -325,7 +325,7 @@ class Tinebase_Acl_Roles
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
 
-        $where = $this->_db->quoteInto('id = ?', $_role->getId());
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_role->getId());
         $this->_rolesTable->update($data, $where); 
         
         $role = $this->getRoleById($_role->getId());

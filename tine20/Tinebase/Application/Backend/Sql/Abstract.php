@@ -78,7 +78,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $id = $this->_convertId($_id);
         
         $select = $this->_getSelect();
-        $select->where($this->_identifier . ' = ?', $id);
+        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             

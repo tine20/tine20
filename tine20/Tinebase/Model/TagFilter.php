@@ -59,7 +59,7 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         $db = Zend_Registry::get('dbAdapter');
         $select = $db->select()
             ->from (array('tags' => SQL_TABLE_PREFIX . 'tags'))
-            ->where('is_deleted = 0')
+            ->where($db->quoteIdentifier('is_deleted') . ' = 0')
             //->order('type', 'DESC')
             ->order('name', 'ASC');
         

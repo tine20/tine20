@@ -32,19 +32,26 @@ class Tinebase_Relation_Backend_Sql
 {
 
 	/**
-	 * Holds instance for SQL_TABLE_PREFIX . 'record_relations' table
-	 * 
-	 * @var Tinebase_Db_Table
-	 */
+     * @var Zend_Db_Adapter_Abstract
+     */
 	protected $_db;
+	
+	/**
+     * Holds instance for SQL_TABLE_PREFIX . 'record_relations' table
+     * 
+     * @var Tinebase_Db_Table
+     */
+    protected $_dbTable;
 	
 	/**
 	 * constructor
 	 */
     public function __construct()
     {
+    	$this->_db = Tinebase_Core::getDb();
+    	
     	// temporary on the fly creation of table
-    	$this->_db = new Tinebase_Db_Table(array(
+    	$this->_dbTable = new Tinebase_Db_Table(array(
     	    'name' => SQL_TABLE_PREFIX . 'relations',
     	    'primary' => 'id'
     	));
@@ -68,8 +75,8 @@ class Tinebase_Relation_Backend_Sql
 		$data = $_relation->toArray();
 		unset($data['related_record']);
 
-		$this->_db->insert($data);
-		$this->_db->insert($this->_swapRoles($data));
+		$this->_dbTable->insert($data);
+		$this->_dbTable->insert($this->_swapRoles($data));
 		
 		return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
     		
@@ -90,12 +97,12 @@ class Tinebase_Relation_Backend_Sql
         
         foreach (array($data, $this->_swapRoles($data)) as $toUpdate) {
             $where = array(
-                'id          = ' . $this->_db->getAdapter()->quote($id),
-                'own_model   = ' . $this->_db->getAdapter()->quote($toUpdate['own_model']),
-                'own_backend = ' . $this->_db->getAdapter()->quote($toUpdate['own_backend']),
-                'own_id      = ' . $this->_db->getAdapter()->quote($toUpdate['own_id']),
+                $this->_db->quoteIdentifier('id') . '          = ' . $this->_db->quote($id),
+                $this->_db->quoteIdentifier('own_model') . '   = ' . $this->_db->quote($toUpdate['own_model']),
+                $this->_db->quoteIdentifier('own_backend') . ' = ' . $this->_db->quote($toUpdate['own_backend']),
+                $this->_db->quoteIdentifier('own_id') . '      = ' . $this->_db->quote($toUpdate['own_id']),
             );
-            $this->_db->update($toUpdate, $where);
+            $this->_dbTable->update($toUpdate, $where);
         }
         
         return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
@@ -111,10 +118,10 @@ class Tinebase_Relation_Backend_Sql
     public function breakRelation( $_id )
     {
     	$where = array(
-    	    'id = ' . $this->_db->getAdapter()->quote($_id)
+    	    $this->_db->quoteIdentifier('id') . ' = ' . $this->_db->quote($_id)
     	);
     	
-    	$this->_db->update(array(
+    	$this->_dbTable->update(array(
     	    'is_deleted'   => true,
     	    'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
     	    'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
@@ -136,10 +143,10 @@ class Tinebase_Relation_Backend_Sql
         $relationIds = $this->getAllRelations($_model, $_backend, $_id, $_degree, $_type)->getArrayOfIds();
         if (!empty($relationIds)) {
             $where = array(
-                $this->_db->getAdapter()->quoteInto('id IN (?)', $relationIds)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $relationIds)
             );
         
-            $this->_db->update(array(
+            $this->_dbTable->update(array(
                 'is_deleted'   => true,
                 'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
                 'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
@@ -161,26 +168,26 @@ class Tinebase_Relation_Backend_Sql
     public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false  )
     {
     	$where = array(
-    	    'own_model   = ' . $this->_db->getAdapter()->quote($_model),
-    	    'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
-            'own_id      = ' . $this->_db->getAdapter()->quote($_id),
-    	    //'is_deleted  = '  . $this->_db->getAdapter()->quote((bool)$_returnBroken)
+    	    $this->_db->quoteIdentifier('own_model') . '   = ' . $this->_db->quote($_model),
+    	    $this->_db->quoteIdentifier('own_backend') . ' = ' . $this->_db->quote($_backend),
+            $this->_db->quoteIdentifier('own_id') . '      = ' . $this->_db->quote($_id),
+    	    //'is_deleted  = '  . $this->_db->quote((bool)$_returnBroken)
     	);
     	
     	if (!$_returnAll) {
-    	    $where[] = 'is_deleted = FALSE';
+    	    $where[] = $this->_db->quoteIdentifier('is_deleted') . ' = FALSE';
     	}
     	if ($_degree) {
-            $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('own_degree') . ' = ?', $_degree);
         }
         if ($_type) {
-            $where[] = $this->_db->getAdapter()->quoteInto('type = ?', $_type);
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?', $_type);
         }
         
        // Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
         
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-        foreach ($this->_db->fetchAll($where) as $relation) {
+        foreach ($this->_dbTable->fetchAll($where) as $relation) {
         	$relations->addRecord(new Tinebase_Model_Relation($relation->toArray(), true));
         }
    		return $relations; 
@@ -199,15 +206,15 @@ class Tinebase_Relation_Backend_Sql
     public function getRelation($_id, $_ownModel, $_ownBackend, $_ownId, $_returnBroken = false)
     {
         $where = array(
-            $this->_db->getAdapter()->quoteInto('id = ?', $_id),
-            $this->_db->getAdapter()->quoteInto('own_model = ?', $_ownModel),
-            $this->_db->getAdapter()->quoteInto('own_backend = ?', $_ownBackend),
-            $this->_db->getAdapter()->quoteInto('own_id = ?', $_ownId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_id),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') . ' = ?', $_ownModel),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') . ' = ?', $_ownBackend),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') . ' = ?', $_ownId),
         );
         if ($_returnBroken !== true) {
-            $where[] = 'is_deleted = FALSE';
+            $where[] = $this->_db->quoteIdentifier('is_deleted') . ' = FALSE';
         }
-    	$relationRow = $this->_db->fetchRow($where);
+    	$relationRow = $this->_dbTable->fetchRow($where);
     	
     	if($relationRow) {
     		return new Tinebase_Model_Relation($relationRow->toArray(), true);
@@ -235,10 +242,10 @@ class Tinebase_Relation_Backend_Sql
         
         if (!empty($relationIds)) {
             $where = array(
-                $this->_db->getAdapter()->quoteInto('id IN (?)', $relationIds)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $relationIds)
             );
         
-            $this->_db->delete($where);
+            $this->_dbTable->delete($where);
         }
     }
     /**

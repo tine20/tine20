@@ -128,7 +128,7 @@ class Tinebase_Model_NoteFilter extends Tinebase_Record_Abstract
                     //--
                     break;
                 case 'query':
-                    $_select->where($db->quoteInto('(note LIKE ?)', '%' . trim($value) . '%'));
+                    $_select->where($db->quoteInto('(' . $db->quoteIdentifier('note') . ' LIKE ?)', '%' . trim($value) . '%'));
                     break;
                 default:
                     $value = $op == 'contains' ? '%' . trim($value) . '%' : trim($value);

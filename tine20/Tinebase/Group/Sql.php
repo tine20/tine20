@@ -18,6 +18,11 @@
  */
 class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 {
+	/**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_db;
+    
     /**
      * the groups table
      *
@@ -38,6 +43,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
+    	$this->_db = Tinebase_Core::getDb();
         $this->groupsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'groups'));
         $this->groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
     
@@ -81,9 +87,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $memberships = array();
-        $colName = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
         $select = $this->groupMembersTable->select();
-        $select->where($colName . ' = ?', $accountId);
+        $select->where($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId);
         
         $rows = $this->groupMembersTable->fetchAll($select);
         
@@ -107,7 +112,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $members = array();
         
         $select = $this->groupMembersTable->select();
-        $select->where('group_id = ?', $groupId);
+        $select->where($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
         
         $rows = $this->groupMembersTable->fetchAll($select);
         
@@ -129,8 +134,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         // remove old members
         
-        $colName = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
-        $where = Zend_Registry::get('dbAdapter')->quoteInto($colName . ' = ?', $_groupId);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $_groupId);
         $this->groupMembersTable->delete($where);
         
         // add new members
@@ -175,13 +179,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $colNameGroup = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
-        $colNameAccount = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
         
         $where = array(
         
-            $this->groupMembersTable->getAdapter()->quoteInto($colNameGroup . '= ?', $groupId),
-            $this->groupMembersTable->getAdapter()->quoteInto($colNameAccount . '= ?', $accountId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . '= ?', $groupId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . '= ?', $accountId),
         );
          
         $this->groupMembersTable->delete($where);
@@ -235,9 +237,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             'description'   => $_group->description
         );
         
-        
-        $colName = $this->groupsTable->getAdapter()->quoteIdentifier('id');
-        $where = Zend_Registry::get('dbAdapter')->quoteInto( $colName . ' = ?', $groupId);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $groupId);
         
         $this->groupsTable->update($data, $where);
         
@@ -266,11 +266,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Zend_Registry::get('dbAdapter'));
             
-            $colNameGroup = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
-            $where = Zend_Registry::get('dbAdapter')->quoteInto($colNameGroup . ' IN (?)', $groupIds);
+            $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' IN (?)', $groupIds);
             $this->groupMembersTable->delete($where);
-            $colName = $this->groupsTable->getAdapter()->quoteIdentifier('id');
-            $where = Zend_Registry::get('dbAdapter')->quoteInto($colName . ' IN (?)', $groupIds);
+            $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $groupIds);
             $this->groupsTable->delete($where);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -297,8 +295,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         if($_filter !== NULL) {
         
-            $colName = $this->groupsTable->getAdapter()->quoteIdentifier('name');
-            $select->where($colName . ' LIKE ?', '%' . $_filter . '%');
+            $select->where($this->_db->quoteIdentifier('name') . ' LIKE ?', '%' . $_filter . '%');
         }
         if($_sort !== NULL) {
             $select->order("$_sort $_dir");
@@ -324,9 +321,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function getGroupByName($_name)
     {        
         $select = $this->groupsTable->select();
-        
-        $colName = $this->groupsTable->getAdapter()->quoteIdentifier('name');        
-        $select->where( $colName . ' = ?', $_name);
+                
+        $select->where($this->_db->quoteIdentifier('name') . ' = ?', $_name);
         
         $row = $this->groupsTable->fetchRow($select);
 
@@ -351,9 +347,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         $select = $this->groupsTable->select();
-
-        $colName = $this->groupsTable->getAdapter()->quoteIdentifier('id');                
-        $select->where($colName . ' = ?', $groupdId);
+                
+        $select->where($this->_db->quoteIdentifier('id') . ' = ?', $groupdId);
         
         $row = $this->groupsTable->fetchRow($select);
         

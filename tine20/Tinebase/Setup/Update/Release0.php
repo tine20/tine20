@@ -86,8 +86,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'account_type' => 'anyone'
         );
         $where = array(
-            'account_id IS NULL',
-            'group_id IS NULL'
+            $this->_db->quoteIdentifier('account_id') . ' IS NULL',
+            $this->_db->quoteIdentifier('group_id') . ' IS NULL'
         );
         $rightsTable->update($data, $where);
 
@@ -96,8 +96,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'account_type' => 'account'
         );
         $where = array(
-            'account_id IS NOT NULL',
-            'group_id IS NULL'
+            $this->_db->quoteIdentifier('account_id') . ' IS NOT NULL',
+            $this->_db->quoteIdentifier('group_id') . ' IS NULL'
         );
         $rightsTable->update($data, $where);
         
@@ -106,8 +106,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'account_type' => 'group'
         );
         $where = array(
-            'account_id IS NULL',
-            'group_id IS NOT NULL'
+            $this->_db->quoteIdentifier('account_id') . ' IS NULL',
+            $this->_db->quoteIdentifier('group_id') . ' IS NOT NULL'
         );
         $rightsTable->update($data, $where);
         
@@ -116,7 +116,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'account_id' => new Zend_Db_Expr('group_id'),
         );
         $where = array(
-            $rightsTable->getAdapter()->quoteInto('account_type = ?', 'group'),
+            $rightsTable->getAdapter()->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'group'),
         );
         $rightsTable->update($data, $where);
 
