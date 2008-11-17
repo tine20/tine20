@@ -16,7 +16,6 @@ Ext.namespace('Tine.Tasks');
  */
 Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
-    appName: 'Tasks',
     recordClass: Tine.Tasks.Task,
     
     // grid specific
@@ -29,9 +28,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     initComponent: function() {
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Tasks');
-        
         this.recordProxy = Tine.Tasks.JsonBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
@@ -52,8 +48,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.translation._('Task'),    field: 'query',    operators: ['contains']},
-                {label: this.translation._('Summary'), field: 'summary' }
+                {label: this.app.i18n._('Task'),    field: 'query',    operators: ['contains']},
+                {label: this.app.i18n._('Summary'), field: 'summary' }
              ],
              defaultFilter: 'query',
              filters: []
@@ -73,7 +69,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     this.store.load({});
                 },
                 failure: function () { 
-                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
+                    Ext.MessageBox.alert(this.app.i18n._('Failed'), this.app.i18n._('Could not save task.')); 
                 }
             });
             return true;
@@ -109,7 +105,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     getColumns: function(){
         return  [{
             id: 'summary',
-            header: this.translation._("Summary"),
+            header: this.app.i18n._("Summary"),
             width: 400,
             sortable: true,
             dataIndex: 'summary',
@@ -117,11 +113,11 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             //  allowBlank: false
             //}),
             quickaddField: new Ext.form.TextField({
-                emptyText: this.translation._('Add a task...')
+                emptyText: this.app.i18n._('Add a task...')
             })
         }, {
             id: 'due',
-            header: this.translation._("Due Date"),
+            header: this.app.i18n._("Due Date"),
             width: 55,
             sortable: true,
             dataIndex: 'due',
@@ -130,7 +126,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             quickaddField: new Ext.ux.form.ClearableDateField({})
         }, {
             id: 'priority',
-            header: this.translation._("Priority"),
+            header: this.app.i18n._("Priority"),
             width: 45,
             sortable: true,
             dataIndex: 'priority',
@@ -145,7 +141,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             })
         }, {
             id: 'percent',
-            header: this.translation._("Percent"),
+            header: this.app.i18n._("Percent"),
             width: 50,
             sortable: true,
             dataIndex: 'percent',
@@ -159,7 +155,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             })
         }, {
             id: 'status_id',
-            header: this.translation._("Status"),
+            header: this.app.i18n._("Status"),
             width: 45,
             sortable: true,
             dataIndex: 'status_id',
@@ -174,7 +170,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             })
         }, {
             id: 'creation_time',
-            header: this.translation._("Creation Time"),
+            header: this.app.i18n._("Creation Time"),
             hidden: true,
             width: 90,
             sortable: true,
@@ -182,7 +178,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }/* we don't resolve accounts yet (same with creator), {
             id: 'organizer',
-            header: this.translation._('Responsible'),
+            header: this.app.i18n._('Responsible'),
             width: 150,
             sortable: true,
             dataIndex: 'organizer',
@@ -202,7 +198,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     getToolbarItems: function(){
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
-            text: this.translation._('Show closed'),
+            text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',
             field: 'showClosed'
         });
