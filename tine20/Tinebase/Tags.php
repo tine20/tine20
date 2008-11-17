@@ -329,8 +329,9 @@ class Tinebase_Tags
             $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
                 'tag_id'         => $tagId,
                 'application_id' => $appId,
-                'record_id'      => $recordId
+                'record_id'      => $recordId,
                 // backend property not supported by record yet
+                'record_backend_id' => ''
             ));
             $this->addOccurrence($tagId, +1);
         }
