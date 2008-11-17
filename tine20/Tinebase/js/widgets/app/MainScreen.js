@@ -86,9 +86,14 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      */
     setContentPanel: function() {
         if(!this.gridPanel) {
+            var plugins = [];
+            if (typeof(this.treePanel.getFilterPlugin) == 'function') {
+                plugins.push(this.treePanel.getFilterPlugin());
+            }
+            
             this.gridPanel = new Tine[this.app.appName].GridPanel({
                 app: this.app,
-                plugins: [this.treePanel.getFilterPlugin()]
+                plugins: plugins
             });
         }
         
