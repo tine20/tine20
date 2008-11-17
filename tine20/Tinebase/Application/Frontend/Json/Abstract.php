@@ -43,6 +43,8 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @param string $_fname
      * @param array $_arguments
      * @return array array index => return value
+     * 
+     * @todo    remove this (zend reflection can't handle the __call interceptor)
      */
     public function __call($_fname, $_arguments)
     {
