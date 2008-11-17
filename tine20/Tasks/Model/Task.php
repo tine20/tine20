@@ -54,7 +54,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         // ical common fields
         'class_id'             => array('allowEmpty' => true, 'Int'  ),
         'description'          => array('allowEmpty' => true         ),
-        'geo'                  => array('allowEmpty' => true         ),
+        'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true         ),
         'organizer'            => array('allowEmpty' => true, 'Int' ),
         'priority'             => array('allowEmpty' => true, 'default' => 1),
@@ -108,6 +108,12 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     public function setFromJson($_data)
     {
         $data = Zend_Json::decode($_data);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+        
+        if (empty($data['geo'])) {
+            $data['geo'] = NULL;
+        }
+        
         if (isset($data['container_id']) && is_array($data['container_id'])) {
             $data['container_id'] = $data['container_id']['id'];
         }
