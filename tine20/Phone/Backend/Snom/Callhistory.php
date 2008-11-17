@@ -40,14 +40,14 @@ class Phone_Backend_Snom_Callhistory extends Tinebase_Application_Backend_Sql_Ab
     protected function _addFilter(Zend_Db_Select $_select, Phone_Model_CallFilter $_filter)
     {
         if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('('.$this->_tableName.'.source LIKE ? OR '.$this->_tableName.'.destination LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('('.$this->_db->quoteIdentifier($this->_tableName).'.source LIKE ? OR '.$this->_tableName.'.destination LIKE ?)', '%' . $_filter->query . '%'));
         }
 
         if (!empty($_filter->phone_id)) {
             if (is_array($_filter->phone_id)) {
-                $_select->where($this->_db->quoteInto($this->_tableName.'.phone_id IN (?)', $_filter->phone_id));
+                $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName).'.phone_id IN (?)', $_filter->phone_id));
             } else {
-                $_select->where($this->_db->quoteInto($this->_tableName.'.phone_id = ?', $_filter->phone_id));
+                $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName).'.phone_id = ?', $_filter->phone_id));
             }
         }        
     }        
