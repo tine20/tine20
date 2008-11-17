@@ -277,7 +277,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     protected function _getSelect($_getCount = FALSE)
     {
         $select = $this->_db->select()
-            ->where('tasks.is_deleted = FALSE');
+            ->where($this->_db->quoteIdentifier('tasks.is_deleted') . ' = FALSE');
         
         $tablename = array('tasks' => $this->_tableNames['tasks']);
         
@@ -310,21 +310,23 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      */
     protected function _addFilter(Zend_Db_Select $_select, Tasks_Model_TaskFilter $_filter)
     {
-        $_select->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
+        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('tasks.container_id') . ' IN (?)', $_filter->container));
                                 
         if(!empty($_filter->query)){
-            $_select->where($this->_db->quoteInto('(tasks.summary LIKE ? OR tasks.description LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('tasks.summary') . ' LIKE ? OR ' .
+                    $this->_db->quoteIdentifier('tasks.description') . ' LIKE ?)', '%' . $_filter->query . '%'));
         }
         if(!empty($_filter->status)){
-            $_select->where($this->_db->quoteInto('tasks.status_id = ?',$_filter->status));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('tasks.status_id') . ' = ?',$_filter->status));
         }
         if(!empty($_filter->organizer)){
-            $_select->where($this->_db->quoteInto('tasks.organizer = ?', (int)$_filter->organizer));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('tasks.organizer') . ' = ?', (int)$_filter->organizer));
         }
         if(isset($_filter->showClosed) && $_filter->showClosed){
             // nothing to filter
         } else {
-            $_select->where('status.status_is_open = TRUE OR tasks.status_id IS NULL');
+            $_select->where($this->_db->quoteIdentifier('status.status_is_open') . ' = TRUE OR ' . 
+                    $this->_db->quoteIdentifier('tasks.status_id') . ' IS NULL');
         }
     }        
     
