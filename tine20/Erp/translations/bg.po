@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Erp\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/ContractGridPanel.js:49 js/Erp.js:61 js/ContractEditDialog.js:68
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContractGridPanel.js:50 js/ContractEditDialog.js:86
+msgid "Summary"
+msgstr ""
+
+#: js/ContractGridPanel.js:66
+msgid "Title"
+msgstr ""
+
+#: js/Erp.js:65
+msgid "contracts list"
+msgid_plural "contracts lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContractEditDialog.js:91
+msgid "Due date"
+msgstr ""
+
+#: js/ContractEditDialog.js:94
+msgid "Priority"
+msgstr ""
+
+#: js/ContractEditDialog.js:97
+msgid "Responsible"
+msgstr ""
+
+#: js/ContractEditDialog.js:101
+msgid "Notes"
+msgstr ""
+
+#: js/ContractEditDialog.js:102
+msgid "Enter description..."
+msgstr ""
+
+#: js/ContractEditDialog.js:107
+msgid "Percentage"
+msgstr ""
+
+#: js/ContractEditDialog.js:111
+msgid "Status"
+msgstr ""
+
+#: js/ContractEditDialog.js:115
+msgid "Completed"
+msgstr ""
+
+#: Setup/setup.xml:171
+msgid "Shared Contracts"
+msgstr ""

@@ -19,4 +19,18 @@
 class Erp_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Erp';
+    
+    /**
+     * Returns all JS files which must be included for this app
+     *
+     * @return array Array of filenames
+     */
+    public function getJsFilesToInclude()
+    {
+        return array(
+            'Erp/js/Erp.js',
+            'Erp/js/ContractGridPanel.js',
+            'Erp/js/ContractEditDialog.js',
+        );
+    }
 }

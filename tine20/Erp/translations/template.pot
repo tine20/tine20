@@ -1,0 +1,55 @@
+#: js/ContractGridPanel.js:49 js/Erp.js:61 js/ContractEditDialog.js:68
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContractGridPanel.js:50 js/ContractEditDialog.js:86
+msgid "Summary"
+msgstr ""
+
+#: js/ContractGridPanel.js:66
+msgid "Title"
+msgstr ""
+
+#: js/Erp.js:65
+msgid "contracts list"
+msgid_plural "contracts lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContractEditDialog.js:91
+msgid "Due date"
+msgstr ""
+
+#: js/ContractEditDialog.js:94
+msgid "Priority"
+msgstr ""
+
+#: js/ContractEditDialog.js:97
+msgid "Responsible"
+msgstr ""
+
+#: js/ContractEditDialog.js:101
+msgid "Notes"
+msgstr ""
+
+#: js/ContractEditDialog.js:102
+msgid "Enter description..."
+msgstr ""
+
+#: js/ContractEditDialog.js:107
+msgid "Percentage"
+msgstr ""
+
+#: js/ContractEditDialog.js:111
+msgid "Status"
+msgstr ""
+
+#: js/ContractEditDialog.js:115
+msgid "Completed"
+msgstr ""
+
+#: Setup/setup.xml:171
+msgid "Shared Contracts"
+msgstr ""
