@@ -42,7 +42,9 @@ class Erp_Backend_Contract extends Tinebase_Application_Backend_Sql_Abstract
         //$_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
                         
         if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(title LIKE ? OR description LIKE ? OR number LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('title') . ' LIKE ? OR ' .
+                    $this->_db->quoteIdentifier('description') . ' LIKE ? OR ' .
+                    $this->_db->quoteIdentifier('number') . ' LIKE ?)', '%' . $_filter->query . '%'));
         }
     }
 }

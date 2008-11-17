@@ -40,7 +40,7 @@ class Erp_Backend_Number extends Tinebase_Application_Backend_Sql_Abstract
     {
         // get number for type
         $select = $this->_getSelect();
-        $select->where('type = ?', $_type);
+        $select->where($this->_db->quoteIdentifier('type') . ' = ?', $_type);
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
                 
