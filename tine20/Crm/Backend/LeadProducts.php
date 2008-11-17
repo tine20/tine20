@@ -42,7 +42,7 @@ class Crm_Backend_LeadProducts extends Tinebase_Application_Backend_Sql_Abstract
 
         $select = $this->_db->select();
         $select->from(SQL_TABLE_PREFIX . 'metacrm_leads_products')
-                ->where($this->_db->quoteInto('lead_id = ?', $leadId));
+                ->where($this->_db->quoteInto( $this->_db->quoteIdentifier('lead_id') . ' = ?', $leadId));
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();

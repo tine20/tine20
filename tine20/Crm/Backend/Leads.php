@@ -42,13 +42,13 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
                     
             // delete products
             $where = array(
-                $this->_db->quoteInto('lead_id = ?', $leadId)
+                $this->_db->quoteInto( $this->_db->quoteIdentifier('lead_id') . ' = ?', $leadId)
             );          
             $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
             
             // delete lead
             $where = array(
-                $this->_db->quoteInto('id = ?', $leadId)
+                $this->_db->quoteInto( $this->_db->quoteIdentifier('id') . ' = ?', $leadId)
             );
             $this->_db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where);
             
@@ -72,21 +72,22 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
      */
     protected function _addFilter(Zend_Db_Select $_select, Crm_Model_LeadFilter $_filter)
     {
-        $_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
+        $_select->where($this->_db->quoteInto( $this->_db->quoteIdentifier('container_id') . ' IN (?)', $_filter->container));
                         
         if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(lead_name LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('lead_name') . ' LIKE ? OR ' .
+                    $this->_db->quoteIdentifier('description') . ' LIKE ?)', '%' . $_filter->query . '%'));
         }
         if (!empty($_filter->leadstate)) {
-            $_select->where($this->_db->quoteInto('leadstate_id = ?', $_filter->leadstate));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('leadstate_id') . ' = ?', $_filter->leadstate));
         }
         if (!empty($_filter->probability)) {
-            $_select->where($this->_db->quoteInto('probability >= ?', (int)$_filter->probability));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('probability') . ' >= ?', (int)$_filter->probability));
         }
         if (isset($_filter->showClosed) && $_filter->showClosed){
             // nothing to filter
         } else {
-            $_select->where('end IS NULL');
+            $_select->where($this->_db->quoteIdentifier('end') . ' IS NULL');
         }
     }        
 }
