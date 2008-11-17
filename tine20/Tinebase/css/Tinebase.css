@@ -112,7 +112,6 @@ html, body {
     font-size: 15px;
     font-weight: normal;
     padding-top: 7px;
-    text-align: 'center';
 }
 .app-panel-header-active {
     background:transparent url(../../ExtJS/resources/images/default/panel/light-hd.gif) repeat-x scroll 0pt -9px;
