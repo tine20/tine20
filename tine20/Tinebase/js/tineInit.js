@@ -88,7 +88,7 @@ Tine.Tinebase.tineInit = {
                 layout: 'card',
                 border: false,
                 activeItem: 0,
-                items: this.splash,
+                items: this.splash
             },
             listeners: {
                 scope: this,
@@ -118,7 +118,7 @@ Tine.Tinebase.tineInit = {
                         }
                     };
                     waitForRegistry();
-                },
+                }
             });
             return;
         }
