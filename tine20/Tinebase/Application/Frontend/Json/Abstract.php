@@ -140,15 +140,16 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @param Tinebase_Record_Interface $_record
      * @return array record data
      */
-    protected function _recordToJson($_record, $_resolveContainer = FALSE)
+    protected function _recordToJson($_record/*, $_resolveContainer = FALSE*/)
     {
         $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
         $_record->bypassFilters = true;
         $recordArray = $_record->toArray();
         
-        if ($_resolveContainer) {
-            $recordArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray();
-            $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
+        //if ($_resolveContainer) {
+        if ($_record->has('container_id')) {
+            $recordArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_record->container_id)->toArray();
+            $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_record->container_id)->toArray();
         }
         return $recordArray;
     }
