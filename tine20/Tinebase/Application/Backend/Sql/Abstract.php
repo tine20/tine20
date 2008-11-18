@@ -106,7 +106,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
 
         $select = $this->_getSelect();
-        $select->where($this->_identifier . ' in (?)', (array) $_id);
+        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' in (?)', (array) $_id);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
@@ -282,7 +282,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $recordArray = array_intersect_key($recordArray, $tableKeys);
                 
         $where  = array(
-            $this->_db->quoteInto($this->_identifier . ' = ?', $id),
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id),
         );
         
         $this->_db->update($this->_tableName, $recordArray, $where);
@@ -300,7 +300,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $id = $this->_convertId($_id);
         
         $where = array(
-            $this->_db->quoteInto($this->_identifier . ' = ?', $id)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id)
         );
         
         $this->_db->delete($this->_tableName, $where);

@@ -70,13 +70,13 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         // WHERE name LIKE %$_filter->name% 
         
         if (!empty($this->name)) {
-            $select->where($db->quoteInto('tags.name LIKE ?', $this->name));
+            $select->where($db->quoteInto($db->quoteIdentifier('tags.name') . ' LIKE ?', $this->name));
         }
         if (!empty($this->description)) {
-            $select->where($db->quoteInto('tags.description LIKE ?', $this->description));
+            $select->where($db->quoteInto($db->quoteIdentifier('tags.description') . ' LIKE ?', $this->description));
         }
         if ($this->type) {
-            $select->where($db->quoteInto('tags.type = ?', $this->type));
+            $select->where($db->quoteInto($db->quoteIdentifier('tags.type') . ' = ?', $this->type));
         }
         return $select;
     }
