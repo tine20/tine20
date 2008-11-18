@@ -3,7 +3,7 @@
 msgid "%s's personal tasks"
 msgstr "%s's personal tasks"
 
-#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:85
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Task"
@@ -45,6 +45,12 @@ msgstr "Status"
 msgid "Completed"
 msgstr "Completed"
 
+#: js/GridPanel.js:31
+msgid "Do you realy want to delte the selected task?"
+msgid_plural "Do you relay want to delete the selected tasks?"
+msgstr[0] "Do you realy want to delte the selected task?"
+msgstr[1] "Do you relay want to delete the selected tasks?"
+
 #: js/GridPanel.js:76
 msgid "Failed"
 msgstr "Failed"
@@ -77,7 +83,7 @@ msgstr "Show closed"
 msgid "IN-PROCESS"
 msgstr "IN-PROCESS"
 
-#: js/Tasks.js:87
+#: js/Tasks.js:89
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "to do list"

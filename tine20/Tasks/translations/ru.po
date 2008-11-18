@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0}'s личные задания"
 
-#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:85
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -66,6 +66,14 @@ msgstr "Статус"
 msgid "Completed"
 msgstr ""
 
+#: js/GridPanel.js:31
+#, fuzzy
+msgid "Do you realy want to delte the selected task?"
+msgid_plural "Do you relay want to delete the selected tasks?"
+msgstr[0] "Вы уверены что хотите удалить выбранное задание"
+msgstr[1] "Вы уверены что хотите удалить выбранные задания"
+msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
+
 #: js/GridPanel.js:76
 msgid "Failed"
 msgstr "Неудача"
@@ -98,7 +106,7 @@ msgstr "Показ закрылся"
 msgid "IN-PROCESS"
 msgstr "НЕЗАВЕРШЕННЫЙ"
 
-#: js/Tasks.js:87
+#: js/Tasks.js:89
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -117,12 +125,6 @@ msgstr "ЗАКОНЧЕНО"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "ОТСТАВЛЕНО"
-
-#~ msgid "Do you really want to delete the selected task"
-#~ msgid_plural "Do you really want to delete the selected task"
-#~ msgstr[0] "Вы уверены что хотите удалить выбранное задание"
-#~ msgstr[1] "Вы уверены что хотите удалить выбранные задания"
-#~ msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
 
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Задание(я) не могло быть удалино."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-14 15:17+0100\n"
+"PO-Revision-Date: 2008-11-18 12:42+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
-msgstr "{0}'s persönliche Aufgaben"
+msgstr "{%s's persönliche Aufgaben"
 
 #: js/EditDialog.js:99
 #: js/GridPanel.js:55
-#: js/Tasks.js:83
+#: js/Tasks.js:85
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Aufgabe"
@@ -67,6 +67,12 @@ msgstr "Status"
 msgid "Completed"
 msgstr "Abgeschlossen"
 
+#: js/GridPanel.js:31
+msgid "Do you realy want to delte the selected task?"
+msgid_plural "Do you relay want to delete the selected tasks?"
+msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
+
 #: js/GridPanel.js:76
 msgid "Failed"
 msgstr "Fehlgeschlagen"
@@ -100,7 +106,7 @@ msgstr "Geschlossene Aufgaben anzeigen"
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
-#: js/Tasks.js:87
+#: js/Tasks.js:89
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
@@ -118,10 +124,6 @@ msgstr "ERLEDIGT"
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
 
-#~ msgid "Do you really want to delete the selected task"
-#~ msgid_plural "Do you really want to delete the selected task"
-#~ msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
-#~ msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Konnte Aufgabe(n) nicht löschen."
 #~ msgid "Edit task"

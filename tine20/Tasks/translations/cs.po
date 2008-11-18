@@ -20,7 +20,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "osobní úkoly uživatele {0}"
 
-#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:85
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -64,6 +64,14 @@ msgstr "Status"
 msgid "Completed"
 msgstr ""
 
+#: js/GridPanel.js:31
+#, fuzzy
+msgid "Do you realy want to delte the selected task?"
+msgid_plural "Do you relay want to delete the selected tasks?"
+msgstr[0] "Opravdu chcete smazat vybraný úkol"
+msgstr[1] "Opravdu chcete smazat vybrané úkoly"
+msgstr[2] "Opravdu chcete smazat vybrané úkoly"
+
 #: js/GridPanel.js:76
 msgid "Failed"
 msgstr "Nepodařilo se"
@@ -96,7 +104,7 @@ msgstr "Zobrazit uzavřené"
 msgid "IN-PROCESS"
 msgstr "ROZPRACOVANÝ"
 
-#: js/Tasks.js:87
+#: js/Tasks.js:89
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -115,12 +123,6 @@ msgstr "DOKONČENÝ"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "ZRUŠENÝ"
-
-#~ msgid "Do you really want to delete the selected task"
-#~ msgid_plural "Do you really want to delete the selected task"
-#~ msgstr[0] "Opravdu chcete smazat vybraný úkol"
-#~ msgstr[1] "Opravdu chcete smazat vybrané úkoly"
-#~ msgstr[2] "Opravdu chcete smazat vybrané úkoly"
 
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Nepodařilo se smazat úkol(y)."

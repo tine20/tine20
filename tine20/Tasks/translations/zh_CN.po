@@ -18,7 +18,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0} 的个人任务"
 
-#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:83
+#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:85
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -60,6 +60,12 @@ msgstr "状态"
 msgid "Completed"
 msgstr ""
 
+#: js/GridPanel.js:31
+#, fuzzy
+msgid "Do you realy want to delte the selected task?"
+msgid_plural "Do you relay want to delete the selected tasks?"
+msgstr[0] "确实想删除选中的任务？"
+
 #: js/GridPanel.js:76
 msgid "Failed"
 msgstr "失败"
@@ -92,7 +98,7 @@ msgstr "显示关闭的"
 msgid "IN-PROCESS"
 msgstr "正在处理"
 
-#: js/Tasks.js:87
+#: js/Tasks.js:89
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -109,10 +115,6 @@ msgstr "完成"
 #: Setup/setup.xml:453
 msgid "CANCELLED"
 msgstr "取消了"
-
-#~ msgid "Do you really want to delete the selected task"
-#~ msgid_plural "Do you really want to delete the selected task"
-#~ msgstr[0] "确实想删除选中的任务？"
 
 #~ msgid "Could not delete task(s)."
 #~ msgstr "不能删除任务"
