@@ -150,7 +150,7 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCategories()
     {
-        $categories = $this->_backend->getAllCategorys();
+        $categories = $this->_backend->getAllCategories();
         
         // check
         $this->assertGreaterThan(0, $categories['totalcount']);

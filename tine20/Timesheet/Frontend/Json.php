@@ -19,11 +19,77 @@
 class Timesheet_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {    
     /**
+     * timesheet controller
+     *
+     * @var Timesheet_Controller_Timesheet
+     */
+    protected $_timesheetController = NULL;
+    
+    /**
      * the constructor
      *
      */
     public function __construct()
     {
         $this->_applicationName = 'Timesheet';
+        $this->_timesheetController = Timesheet_Controller_Timesheet::getInstance();
+    }
+    
+    /**
+     * Returns all records
+     *
+     * @return  array record data
+     * 
+     * @todo    add sort/dir params here?
+     */
+    public function getAllCategories()
+    {
+        $controller = Timesheet_Controller_Category::getInstance();
+        return $this->_getAll($controller);
+    }
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param string $filter json encoded
+     * @param string $paging json encoded
+     * @return array
+     */
+    public function searchTimesheets($filter, $paging)
+    {
+        return $this->_search($filter, $paging, $this->_timesheetController, 'Timesheet_Model_TimesheetFilter');
+    }     
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $uid
+     * @return  array record data
+     */
+    public function getTimesheet($uid)
+    {
+        return $this->_get($uid, $this->_timesheetController);
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  string $recordData
+     * @return array created/updated record
+     */
+    public function saveTimesheet($recordData)
+    {
+        return $this->_save($recordData, $this->_timesheetController, 'Timesheet');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param string $ids 
+     * @return string
+     */
+    public function deleteTimesheets($ids)
+    {
+        $this->_delete($ids, $this->_timesheetController);
     }
 }

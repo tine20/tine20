@@ -38,69 +38,6 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     }
 
     /**
-     * call save/get/search/delete functions in corresponding controller, get Model name from fname
-     *
-     * @param string $_fname
-     * @param array $_arguments
-     * @return array array index => return value
-     * 
-     * @todo    remove this (zend reflection can't handle the __call interceptor)
-     */
-    public function __call($_fname, $_arguments)
-    {
-        // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_arguments, true));
-        
-        /************ SEARCH *************************************/
-        
-        if (preg_match("/search([A-Za-z]+)/", $_fname, $matches)) {
-            $modelName = substr($matches[1], 0, strlen($matches[1]) - 1);   
-            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
-            $filterModelName = $this->_applicationName . "_Model_" . $modelName . "Filter";
-            
-            $result = $this->_search($_arguments[0], $_arguments[1], $controller, $filterModelName);    
-
-        /************ GET All ************************************/
-            
-        } else if (preg_match("/getAll([A-Za-z]+)s/", $_fname, $matches)) {
-            $modelName = $matches[1];   
-            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
-
-            $result = $this->_getAll($controller);    
-            
-        /************ GET ****************************************/
-            
-        } else if (preg_match("/get([A-Za-z]+)/", $_fname, $matches)) {
-            $modelName = $matches[1];   
-            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
-
-            $result = $this->_get($_arguments[0], $controller);    
-            
-        /************ SAVE ***************************************/
-            
-        } else if (preg_match("/save([A-Za-z]+)/", $_fname, $matches)) {
-            $modelName = $matches[1];   
-            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
-
-            $result = $this->_save($_arguments[0], $controller, $modelName);    
-            
-        /************ DELETE *************************************/
-            
-        } else if (preg_match("/delete([A-Za-z]+)/", $_fname, $matches)) {
-            $modelName = substr($matches[1], 0, strlen($matches[1]) - 1);
-            $controller = Tinebase_Core::getApplicationInstance($this->_applicationName, $modelName);
-
-            $result = $this->_delete($_arguments[0], $controller);    
-        
-        /************ FUNCTION NOT FOUND *************************/
-            
-        } else {
-            throw new Tinebase_Exception("Function $_fname not found.");
-        }
-        
-        return $result;
-    }
-        
-    /**
      * Return a single record
      *
      * @param   string $_uid

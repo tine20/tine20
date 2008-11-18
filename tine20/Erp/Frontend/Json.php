@@ -20,7 +20,14 @@
  * @subpackage  Frontend
  */
 class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
-{    
+{   
+    /**
+     * contract controller
+     *
+     * @var Erp_Controller_Contract
+     */
+    protected $_contractController = NULL;
+    
     /**
      * the constructor
      *
@@ -28,6 +35,7 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     public function __construct()
     {
         $this->_applicationName = 'Erp';
+        $this->_contractController = Erp_Controller_Contract::getInstance();
     }
     
     /**
@@ -39,7 +47,39 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function searchContracts($filter, $paging)
     {
-        $controller = Erp_Controller_Contract::getInstance();
-        return $this->_search($filter, $paging, $controller, 'Erp_Model_ContractFilter');
+        return $this->_search($filter, $paging, $this->_contractController, 'Erp_Model_ContractFilter');
     }     
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $uid
+     * @return  array record data
+     */
+    public function getContract($uid)
+    {
+        return $this->_get($uid, $this->_contractController);
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  string $recordData
+     * @return array created/updated record
+     */
+    public function saveContract($recordData)
+    {
+        return $this->_save($recordData, $this->_contractController, 'Contract');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param string $ids 
+     * @return string
+     */
+    public function deleteContracts($ids)
+    {
+        $this->_delete($ids, $this->_contractController);
+    }
 }
