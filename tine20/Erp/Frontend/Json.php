@@ -38,6 +38,28 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $this->_contractController = Erp_Controller_Contract::getInstance();
     }
     
+   /**
+     * Returns registry data of the application.
+     *
+     * Each application has its own registry to supply static data to the client.
+     * Registry data is queried only once per session from the client.
+     *
+     * This registry must not be used for rights or ACL purposes. Use the generic
+     * rights and ACL mechanisms instead!
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $sharedContainerId = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId(); 
+        
+        return array(
+            'containerId' => $sharedContainerId
+        );
+    }
+    
+    /*************************** contracts functions *****************************/
+    
     /**
      * Search for records matching given arguments
      *
