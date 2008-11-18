@@ -57,6 +57,26 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         start: 0,
         limit: 50
     },
+    /**
+     * @cfg {Array} i18nDeleteQuestion 
+     * spechialised strings for deleteQuestion
+     */
+    i18nDeleteQuestion: null,
+    /**
+     * @cfg {String} i18nAddRecordAction 
+     * spechialised strings for add action button
+     */
+    i18nAddActionText: null,
+    /**
+     * @cfg {String} i18nEditRecordAction 
+     * spechialised strings for edit action button
+     */
+    i18nEditActionText: null,
+    /**
+     * @cfg {Array} i18nDeleteRecordAction 
+     * spechialised strings for delete action button
+     */
+    i18nDeleteActionText: null,
     
     /**
      * @property {Ext.Tollbar} actionToolbar
@@ -123,7 +143,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     initActions: function() {
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: String.format(_('Edit {0}'), this.i18nRecordName),
+            text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
             disabled: true,
             actionType: 'edit',
             handler: this.onEditInNewWindow,
@@ -134,7 +154,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.action_addInNewWindow= new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
-            text: String.format(_('Add {0}'), this.i18nRecordName),
+            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow,
             iconCls: this.app.appName + 'IconCls',
             scope: this
@@ -144,10 +164,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: String.format('Delete {0}', this.i18nRecordName),
-            pluralText: String.format('Delete {0}', this.i18nRecordsName),
-            translationObject: this.app.i18n,
-            text: String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {1}', 1), this.i18nRecordName, this.i18nRecordsName),
+            singularText: this.i18nDeleteActionText ? i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nDeleteActionText ? i18nDeleteActionText[1] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.tranlation,
+            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
