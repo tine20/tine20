@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        create initial setup scripts for each application
  */
 
 /**
@@ -202,6 +203,20 @@ class Setup_Import_TineInitial
             Tinebase_Model_Container::GRANT_READ
         ), TRUE);
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
+            Tinebase_Model_Container::GRANT_READ,
+            Tinebase_Model_Container::GRANT_EDIT,
+            Tinebase_Model_Container::GRANT_ADMIN
+        ), TRUE);
+        
+        // @todo move that to erp application initial setup script
+        // add shared container for erp contracts
+        $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $userGroup, array(
+            Tinebase_Model_Container::GRANT_READ,
+            Tinebase_Model_Container::GRANT_EDIT
+        ), TRUE);
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $adminGroup, array(
+            Tinebase_Model_Container::GRANT_ADD,
             Tinebase_Model_Container::GRANT_READ,
             Tinebase_Model_Container::GRANT_EDIT,
             Tinebase_Model_Container::GRANT_ADMIN
