@@ -81,15 +81,15 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if(!ts.filterrow){
             ts.filterrow = new Ext.Template(
                 '<tr id="{id}" class="fw-ftb-frow">',
-                    '<td class="tw-ftb-frow-pmbutton"></td>',
+                    '<td class="tw-ftb-frow-pbutton"></td>',
+                    '<td class="tw-ftb-frow-mbutton"></td>',
                     '<td class="tw-ftb-frow-prefix">{prefix}</td>',
                     '<td class="tw-ftb-frow-field">{field}</td>',
                     '<td class="tw-ftb-frow-operator" width="90px" >{operator}</td>',
                     '<td class="tw-ftb-frow-value">{value}</td>',
-                    '<td class="tw-ftb-frow-deleterow"></td>',
                     '<td class="tw-ftb-frow-searchbutton"></td>',
-                    '<td class="tw-ftb-frow-deleteallfilters"></td>',
-                    '<td class="tw-ftb-frow-savefilterbutton"></td>',
+                    //'<td class="tw-ftb-frow-deleteallfilters"></td>',
+                    //'<td class="tw-ftb-frow-savefilterbutton"></td>',
                 '</tr>'
             );
         }
@@ -103,7 +103,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
 
         this.templates = ts;
-        this.delRowSelector = 'td[class=tw-ftb-frow-deleterow]';
     },
     
     /**
@@ -231,8 +230,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             tooltip: _('Delete this filter'),
             filter: filter,
             iconCls: 'action_delThisFilter',
-            //renderTo: fRow.child('td[class=tw-ftb-frow-deleterow]'),
-            renderTo: fRow.child('td[class=tw-ftb-frow-pmbutton]'),
+            renderTo: fRow.child('td[class=tw-ftb-frow-mbutton]'),
             scope: this,
             handler: function(button) {
                 this.deleteFilter(button.filter);
@@ -253,25 +251,32 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             
             // prefix
             tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('and');
-            filter.deleteRowButton.setVisible(filter.id != lastId);
+            //filter.deleteRowButton.setVisible(filter.id != lastId);
                 
             if (filter.id == lastId) {
                 // move add filter button
-                tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.addFilterRow.getEl());
+                tr.child('td[class=tw-ftb-frow-pbutton]').insertFirst(this.actions.addFilterRow.getEl());
                 this.actions.addFilterRow.show();
                 // move start search button
                 tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
                 this.actions.startSearch.show();
                 // move delete all filters
-                tr.child('td[class=tw-ftb-frow-deleteallfilters]').insertFirst(this.actions.removeAllFilters.getEl());
+                // tr.child('td[class=tw-ftb-frow-deleteallfilters]').insertFirst(this.actions.removeAllFilters.getEl());
                 this.actions.removeAllFilters.setVisible(numFilters > 1);
                 // move save filter button
-                tr.child('td[class=tw-ftb-frow-savefilterbutton]').insertFirst(this.actions.saveFilter.getEl());
+                // tr.child('td[class=tw-ftb-frow-savefilterbutton]').insertFirst(this.actions.saveFilter.getEl());
                 this.actions.saveFilter.setVisible(numFilters > 1);
             }
             
             if (filter.id == firstId) {
                 tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('Show');
+                
+                // hack for the save/delete all btns which are now in the first row
+                this.actions.saveFilter.getEl().applyStyles('display: inline');
+                this.actions.removeAllFilters.getEl().applyStyles('display: inline');
+                tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.removeAllFilters.getEl());
+                
                 //tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.removeAllFilters.getEl());
                 //this.actions.removeAllFilters.setVisible(numFilters > 1);
             }
