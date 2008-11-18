@@ -108,7 +108,7 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
         $contractData = $this->_backend->getContract(0);
         
         // checks
-        $this->assertEquals(Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId(), $contractData['container_id']);        
+        $this->assertEquals(Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId(), $contractData['container_id']['id']);        
     }
     
     /**
