@@ -29,9 +29,6 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abs
         $this->_backend = new Erp_Backend_Contract();
         $this->_modelName = 'Erp_Model_Contract';
         $this->_currentAccount = Tinebase_Core::getUser();   
-        
-        // disable container ACL checks as we don't init the 'Shared Contracts' grants in the setup
-        $this->_doContainerACLChecks = FALSE; 
     }    
     
     /**
@@ -74,5 +71,37 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abs
         $_record->number = $number->number;
         
         return parent::create($_record);
+    }
+    
+    /**
+     * get list of records
+     *
+     * @param Tinebase_Record_Interface|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param bool $_getRelations
+     * @return Tinebase_Record_RecordSet
+     */
+    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
+    {
+        // add shared contracts folder
+        $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared');
+        $_filter->container = array($sharedContracts->getId());
+        
+        return parent::search($_filter, $_pagination, $_getRelations);
+    }
+    
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Record_Interface $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Record_Interface $_filter) 
+    {
+        // add shared contracts folder
+        $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared');
+        $_filter->container = array($sharedContracts->getId());
+        
+        return parent::searchCount($_filter);
     }
 }
