@@ -100,6 +100,18 @@ class Erp_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to get an empty contract
+     *
+     */
+    public function testGetEmptyContract()
+    {
+        $contractData = $this->_backend->getContract(0);
+        
+        // checks
+        $this->assertEquals(Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId(), $contractData['container_id']);        
+    }
+    
+    /**
      * try to update a contract (with relations)
      *
      */

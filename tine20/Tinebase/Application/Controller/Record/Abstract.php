@@ -106,19 +106,24 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * get by id
      *
      * @param string $_id
+     * @param int $_containerId
      * @return Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo    add get relations ?
      */
-    public function get($_id)
+    public function get($_id, $_containerId = NULL)
     {
         if (!$_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
             
             if ($this->_doContainerACLChecks) {
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
-                $record->container_id = $containers[0]->getId();
+                if ($_containerId === NULL) {
+                    $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
+                    $record->container_id = $containers[0]->getId();
+                } else {
+                    $record->container_id = $_containerId;
+                }
             }
             
         } else {

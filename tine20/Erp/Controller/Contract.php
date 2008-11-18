@@ -53,6 +53,18 @@ class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abs
     }        
 
     /****************************** overwritten functions ************************/
+
+    /**
+     * get by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet
+     */
+    public function get($_id)
+    {
+        $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared');
+        return parent::get($_id, $sharedContracts->getId());
+    }
     
     /**
      * add one record
