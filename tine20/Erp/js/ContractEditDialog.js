@@ -42,7 +42,6 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this,
             success: function(response) {
                 this.record = this.recordProxy.recordReader(response);
-                //console.log(this.record);
                 this.onRecordLoad();
             },
             params: {
