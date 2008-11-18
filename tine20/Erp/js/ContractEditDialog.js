@@ -64,14 +64,13 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             plain:true,
             activeTab: 0,
             border: false,
-            items:[{            	
+            items:[
+                {            	
                 title: this.app.i18n._('Contract'),
                 autoScroll: true,
                 border: false,
                 frame: true,
                 layout: 'border',
-                items: []
-                /*,
                 items: [{
                     region: 'center',
                     xtype: 'columnform',
@@ -84,38 +83,18 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     },
                     items: [[{
                         columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Summary'),
-                        name: 'summary',
-                        listeners: {render: function(field){field.focus(false, 250);}},
+                        fieldLabel: this.app.i18n._('Title'),
+                        name: 'title',
+                        //listeners: {render: function(field){field.focus(false, 250);}},
                         allowBlank: false
-                    }], [ new Ext.ux.form.ClearableDateField({
-                        fieldLabel: this.app.i18n._('Due date'),
-                        name: 'due'
-                    }), new Tine.widgets.Priority.Combo({
-                        fieldLabel: this.app.i18n._('Priority'),
-                        name: 'priority'
-                    }), new Tine.widgets.AccountpickerField({
-                        fieldLabel: this.app.i18n._('Responsible'),
-                        name: 'organizer'
-                    })], [{
+                    }], [{
                         columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Notes'),
+                        fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
                         xtype: 'textarea',
                         height: 200
-                    }], [new Ext.ux.PercentCombo({
-                        fieldLabel: this.app.i18n._('Percentage'),
-                        editable: false,
-                        name: 'percent'
-                    }), new Tine.Erp.status.ComboBox({
-                        fieldLabel: this.app.i18n._('Status'),
-                        name: 'status_id',
-                        listeners: {scope: this, 'change': this.handleCompletedDate}
-                    }), new Ext.form.DateField({
-                        fieldLabel: this.app.i18n._('Completed'),
-                        name: 'completed'
-                    })]]
+                    }]] 
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -139,7 +118,7 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
-                }]*/
+                }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
