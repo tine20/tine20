@@ -21,6 +21,11 @@
  */
 class Tinebase_Container
 {
+	/**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_db;
+		
     /**
      * the table object for the SQL_TABLE_PREFIX .container table
      *
@@ -41,6 +46,7 @@ class Tinebase_Container
     private function __construct() {
         $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
         $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
+        $this->_db = Zend_Registry::get('dbAdapter');
     }
     /**
      * don't clone. Use the singleton.
@@ -265,19 +271,19 @@ class Tinebase_Container
             
             $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
                    
-            $db = Zend_Registry::get('dbAdapter');
+            /* $db = Zend_Registry::get('dbAdapter'); */
             
-            $tableContainer = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
-            $tableContainerAcl = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
-            $colId = $db->quoteIdentifier('id');
-            #$colName = $db->quoteIdentifier('name');
-            $colContainerId = $db->quoteIdentifier('container_id');
-            $colApplicationId = $db->quoteIdentifier('application_id');
-            $colAccountGrant = $db->quoteIdentifier('account_grant');
-            $colAccountId = $db->quoteIdentifier('account_id');
-            $colAccountType = $db->quoteIdentifier('account_type');
+            $tableContainer = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
+            $tableContainerAcl = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
+            $colId = $this->_db->quoteIdentifier('id');
+            #$colName = $this->_db->quoteIdentifier('name');
+            $colContainerId = $this->_db->quoteIdentifier('container_id');
+            $colApplicationId = $this->_db->quoteIdentifier('application_id');
+            $colAccountGrant = $this->_db->quoteIdentifier('account_grant');
+            $colAccountId = $this->_db->quoteIdentifier('account_id');
+            $colAccountType = $this->_db->quoteIdentifier('account_type');
             
-            $select = $db->select()
+            $select = $this->_db->select()
                 ->from(SQL_TABLE_PREFIX . 'container')
                 ->join(
                     SQL_TABLE_PREFIX . 'container_acl',
@@ -314,7 +320,7 @@ class Tinebase_Container
     */
             //error_log("getContainer:: " . $select->__toString());
     
-            $stmt = $db->query($select);
+            $stmt = $this->_db->query($select);
             
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             
@@ -472,11 +478,11 @@ class Tinebase_Container
         }
         $ownerId            = Tinebase_Model_User::convertUserIdToInt($_owner);
         
-        $db = Zend_Registry::get('dbAdapter');
+        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
             ->join(
                 array('user' => SQL_TABLE_PREFIX . 'container_acl'),
@@ -500,7 +506,7 @@ class Tinebase_Container
             
         //error_log("getContainer:: " . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $this->_db->query($select);
         
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -537,11 +543,11 @@ class Tinebase_Container
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
-        $db = Zend_Registry::get('dbAdapter');
+        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array())
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
@@ -558,7 +564,7 @@ class Tinebase_Container
             
         //error_log("getContainer:: " . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $this->_db->query($select);
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
@@ -582,11 +588,11 @@ class Tinebase_Container
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
-        $db = Zend_Registry::get('dbAdapter');
+        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id'))
             ->join(array('user' => SQL_TABLE_PREFIX . 'container_acl'),'owner.container_id = user.container_id', array())
             ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array())
@@ -606,7 +612,7 @@ class Tinebase_Container
             
         //error_log("getContainer:: " . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_User');
@@ -640,11 +646,11 @@ class Tinebase_Container
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
-        $db = Zend_Registry::get('dbAdapter');
+        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
             ->join(
                 array('user' => SQL_TABLE_PREFIX . 'container_acl'),
@@ -667,7 +673,7 @@ class Tinebase_Container
             
         //error_log("getContainer:: " . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $this->_db->query($select);
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
@@ -766,9 +772,9 @@ class Tinebase_Container
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
-        $db = Zend_Registry::get('dbAdapter');
+        /* $db = Zend_Registry::get('dbAdapter'); */
 
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array())
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
 
@@ -782,7 +788,7 @@ class Tinebase_Container
                     
         //error_log("getContainer:: " . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $this->_db->query($select);
         
         $grants = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         if(empty($grants)) {
@@ -809,9 +815,9 @@ class Tinebase_Container
             }            
         }
         
-        $db = Zend_Registry::get('dbAdapter');
+        /* $db = Zend_Registry::get('dbAdapter'); */
         
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container', array('id'))
             ->join(SQL_TABLE_PREFIX . 'container_acl', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', 
                 array('id', 'account_type', 'account_id', 'account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
@@ -820,7 +826,7 @@ class Tinebase_Container
 
         //error_log("getAllGrants:: " . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $this->_db->query($select);
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
@@ -887,9 +893,9 @@ class Tinebase_Container
                 throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
             }
             
-            $db = Zend_Registry::get('dbAdapter');
+            /* $db = Zend_Registry::get('dbAdapter'); */
             
-            $select = $db->select()
+            $select = $this->_db->select()
                 ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grant'))
                 ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
     
@@ -903,7 +909,7 @@ class Tinebase_Container
     
             //error_log("getContainer:: " . $select->__toString());
     
-            $stmt = $db->query($select);
+            $stmt = $this->_db->query($select);
     
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
     
@@ -946,9 +952,9 @@ class Tinebase_Container
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), true));
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
         
-        $db = Zend_Registry::get('dbAdapter');
+        /* $db = Zend_Registry::get('dbAdapter'); */
         
-        $select = $db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
@@ -962,7 +968,7 @@ class Tinebase_Container
 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $this->_db->query($select);
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
