@@ -53,7 +53,7 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'parent_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
