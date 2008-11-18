@@ -379,7 +379,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         var records = this.grid.getSelectionModel().getSelections();
         
         var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
-        var i18nQuestion = String.format(Tine.Tinebase.tranlation.ngettext('Do you really want to delete the selected {0}', 'Do you really want to delete the selected {0}', records.length), i18nItems);
+        var i18nQuestion = this.i18nDeleteQuestion ?
+            this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
+            Tine.Tinebase.tranlation.ngettext('Do you really want to delete the selected record', 'Do you really want to delete the selected records', records.length);
             
         Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
             if(btn == 'yes') {
