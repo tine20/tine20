@@ -115,8 +115,8 @@ class Tinebase_Tags
         if (!empty($_id)) {
             $select = $this->_db->select()
                 ->from(SQL_TABLE_PREFIX . 'tags')
-                ->where('is_deleted = 0')
-                ->where($this->_db->quoteInto('id IN (?)', $_id));
+                ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_id));
             if ($_ignoreAcl !== true) {
                 Tinebase_Model_TagRight::applyAclSql($select, $_right);
             }
@@ -271,7 +271,7 @@ class Tinebase_Tags
         $idProperty = $db->quoteIdentifier($_idProperty);
         
         $_select->join(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), "tagging.record_id = $idProperty", array());
-        $_select->where($db->quoteInto('tagging.tag_id = ?', $_tagId));
+        $_select->where($db->quoteInto($this->_db->quoteIdentifier('tagging.tag_id') . ' = ?', $_tagId));
         Tinebase_Model_TagRight::applyAclSql($_select, Tinebase_Model_TagRight::VIEW_RIGHT, 'tagging.tag_id');
     }
     
@@ -292,9 +292,9 @@ class Tinebase_Tags
             $select = $this->_db->select()
                 ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
                 ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
-                ->where('application_id = ?', Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId())
-                ->where('record_id = ? ', $recordId)
-                ->where('is_deleted = 0');
+                ->where($this->_db->quoteIdentifier('application_id') . ' = ?', Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId())
+                ->where($this->_db->quoteIdentifier('record_id') . ' = ? ', $recordId)
+                ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
             Tinebase_Model_TagRight::applyAclSql($select, $_right, 'tagging.tag_id');
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
@@ -407,7 +407,7 @@ class Tinebase_Tags
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'tags_acl', array('tag_id', 'account_type', 'account_id',
                  'account_right' => 'GROUP_CONCAT(DISTINCT account_right)'))
-            ->where($this->_db->quoteInto('tag_id = ?', $_tagId))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
             ->group(array('tag_id', 'account_type', 'account_id'));
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -426,7 +426,7 @@ class Tinebase_Tags
      */
     public function purgeRights($_tagId)
     {
-        $where = $this->_db->quoteInto('tag_id = ?', $_tagId);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId);
         $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', $where);
     }
     
@@ -473,7 +473,7 @@ class Tinebase_Tags
     {
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'tags_context', array('application_id' => 'GROUP_CONCAT(DISTINCT application_id)'))
-            ->where($this->_db->quoteInto('tag_id = ?', $_tagId))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
             ->group('tag_id');
         $apps = $this->_db->fetchOne($select);
         
@@ -496,7 +496,7 @@ class Tinebase_Tags
      */
     public function purgeContexts($_tagId)
     {
-        $where = $this->_db->quoteInto('tag_id = ?', $_tagId);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId);
         $this->_db->delete(SQL_TABLE_PREFIX . 'tags_context', $where);
     }
     

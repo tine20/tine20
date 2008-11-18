@@ -321,7 +321,7 @@ class Tinebase_Notes
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_noteIds, true));
         
         if (!empty($_noteIds)) {
-            $where = array($this->_db->quoteInto('id in (?)', $_noteIds));
+            $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' in (?)', $_noteIds));
             $this->_notesTable->delete($where);
         }
     }
@@ -406,7 +406,7 @@ class Tinebase_Notes
         $data = $_noteType->toArray();
 
         $where  = array(
-            $this->_noteTypesTable->getAdapter()->quoteInto('id = ?', $_noteType->getId()),
+            $this->_noteTypesTable->getAdapter()->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteType->getId()),
         );
         
         $this->_noteTypesTable->update($data, $where);

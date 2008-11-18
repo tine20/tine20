@@ -460,7 +460,7 @@ class Tinebase_User_Registration
             "status"     => $_registration->status ,
             "email_sent" => $_registration->email_sent);
         //--   
-        $where = array($this->_registrationsTable->getAdapter()->quoteInto('id = ?', $_registration->id));
+        $where = array($this->_registrationsTable->getAdapter()->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_registration->id));
         $result = $this->_registrationsTable->update($registrationData, $where);
         return $this->getRegistrationByHash($_registration->login_hash);
     }
@@ -473,7 +473,7 @@ class Tinebase_User_Registration
      */
     public function deleteRegistrationByLoginName ($_username)
     {
-        $where = $this->_db->quoteInto('login_name = ?', $_username);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('login_name') . ' = ?', $_username);
         $result = $this->_registrationsTable->delete($where);
         return $result;
     }
@@ -487,7 +487,7 @@ class Tinebase_User_Registration
      */
     public function getRegistrationByHash ($_hash)
     {
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'registrations')->where('login_hash = ?', $_hash);
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'registrations')->where($this->_db->quoteIdentifier('login_hash') . ' = ?', $_hash);
         $stmt = $select->query();
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {

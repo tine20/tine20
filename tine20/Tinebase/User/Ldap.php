@@ -18,6 +18,11 @@
  */
 class Tinebase_User_Ldap extends Tinebase_User_Abstract
 {
+	/**
+     * @var Zend_Db_Adapter_Pdo_Mysql
+     */
+    protected $_db;
+    
     /**
      * the constructor
      *
@@ -28,6 +33,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
+        $this->_db = Zend_Registry::get('dbAdapter');
     }
     
     /**
@@ -254,7 +260,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $accountData['last_login']      = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);

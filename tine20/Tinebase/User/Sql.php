@@ -570,7 +570,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         $select = $this->_getUserSelectObject()            
-            ->where(SQL_TABLE_PREFIX . 'accounts.id in (?)', (array) $_id);
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.id') . ' in (?)', (array) $_id);
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
