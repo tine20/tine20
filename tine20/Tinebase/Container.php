@@ -354,8 +354,15 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         // load from cache
-        $cache = Zend_Registry::get('cache');
-        $result = $cache->load('getContainerById' . $containerId);
+        try {
+            $cache = Zend_Registry::get('cache');
+            $result = $cache->load('getContainerById' . $containerId);
+            $nocache = FALSE;
+        } catch (Zend_Exception $ze) {
+            // no cache available (in setup for example)
+            $result = FALSE;
+            $nocache = TRUE;
+        }
 
         if(!$result) {
                 
@@ -367,7 +374,9 @@ class Tinebase_Container
             
             $result = new Tinebase_Model_Container($row->toArray());
             
-            $cache->save($result, 'getContainerById' . $containerId);
+            if (!$nocache) {
+                $cache->save($result, 'getContainerById' . $containerId);
+            }
         }
         
         return $result;
