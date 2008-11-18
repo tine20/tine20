@@ -35,8 +35,6 @@ Tine.Erp.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.plugins.push(this.filterToolbar);
         
         Tine.Erp.ContractGridPanel.superclass.initComponent.call(this);
-        
-        console.log(Tine.Erp.registry.get('containerId'));
     },
     
     /**
