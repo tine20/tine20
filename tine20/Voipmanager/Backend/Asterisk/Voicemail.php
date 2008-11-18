@@ -37,11 +37,15 @@ class Voipmanager_Backend_Asterisk_Voicemail extends Tinebase_Application_Backen
     protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_VoicemailFilter $_filter)
     {
         if(!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(context LIKE ? OR mailbox LIKE ? OR fullname LIKE ? OR email LIKE ? OR pager LIKE ? )', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('context') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('mailbox') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('fullname') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('email') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('pager') . ' LIKE ? )', '%' . $_filter->query . '%'));
         } 
         
         if(!empty($_filter->context)) {
-            $_select->where($this->_db->quoteInto('context = ?', $_filter->context));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('context') . ' = ?', $_filter->context));
         }
     }            
 }

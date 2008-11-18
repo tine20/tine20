@@ -36,7 +36,7 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
     protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_LineFilter $_filter)
     {
         if(!empty($_filter->snomphone_id)) {
-            $_select->where($this->_db->quoteInto('snomphone_id = ?', $_filter->snomphone_id));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('snomphone_id') . ' = ?', $_filter->snomphone_id));
         }
     }               
 
@@ -48,7 +48,7 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
     public function deletePhoneLines($_id)
     {
         $phoneId = Voipmanager_Model_Snom_Phone::convertSnomPhoneIdToInt($_id);
-        $where[] = $this->_db->quoteInto('snomphone_id = ?', $phoneId);
+        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('snomphone_id') . ' = ?', $phoneId);
 
         $this->_db->delete(SQL_TABLE_PREFIX . 'snom_lines', $where);
     }    

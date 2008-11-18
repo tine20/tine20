@@ -38,7 +38,8 @@ class Voipmanager_Backend_Snom_Location extends Tinebase_Application_Backend_Sql
     protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_LocationFilter $_filter)
     {
         if(!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('description') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('name') . ' LIKE ?)', '%' . $_filter->query . '%'));
         }
     }               
 }

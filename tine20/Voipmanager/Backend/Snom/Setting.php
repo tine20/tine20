@@ -38,7 +38,8 @@ class Voipmanager_Backend_Snom_Setting extends Tinebase_Application_Backend_Sql_
     protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_SettingFilter $_filter)
     {
         if(!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(name LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('name') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('description') . ' LIKE ?)', '%' . $_filter->query . '%'));
         }
     }                   
 }

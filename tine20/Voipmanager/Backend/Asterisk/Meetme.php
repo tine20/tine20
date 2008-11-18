@@ -37,7 +37,9 @@ class Voipmanager_Backend_Asterisk_Meetme extends Tinebase_Application_Backend_S
     protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_MeetmeFilter $_filter)
     {
         if(!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(confno LIKE ? OR pin LIKE ? OR adminpin LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('confno') . ' LIKE ? OR ' .
+                    $this->_db->quoteIdentifier('pin') . ' LIKE ? OR ' .
+                    $this->_db->quoteIdentifier('adminpin') . ' LIKE ?)', '%' . $_filter->query . '%'));
         }        
     }        
 }

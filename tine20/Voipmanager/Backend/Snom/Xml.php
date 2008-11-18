@@ -216,7 +216,7 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
-            ->where(SQL_TABLE_PREFIX . 'snom_phones.macaddress = ?', $_phone->macaddress)
+            ->where(SQL_TABLE_PREFIX . $this->_db->quoteIdentifier('snom_phones.macaddress') . ' = ?', $_phone->macaddress)
             ->join(SQL_TABLE_PREFIX . 'snom_templates', SQL_TABLE_PREFIX . 'snom_phones.template_id = ' . SQL_TABLE_PREFIX . 'snom_templates.id', array())
             ->join(SQL_TABLE_PREFIX . 'snom_software', SQL_TABLE_PREFIX . 'snom_templates.software_id = ' . SQL_TABLE_PREFIX . 'snom_software.id', array('softwareimage_' . $_phone->current_model));
             

@@ -38,7 +38,10 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_
         if(!empty($_filter->query)) {
             $search_values = explode(" ", $_filter->query);
             
-            $search_fields = array('callerid', 'name', 'ipaddr');
+            $search_fields = array( $this->_db->quoteIdentifier('callerid'), 
+                                    $this->_db->quoteIdentifier('name'), 
+                                    $this->_db->quoteIdentifier('ipaddr')
+                                   );
             $fields = '';
             foreach($search_fields AS $search_field) {
                 $fields .= " OR " . $search_field . " LIKE ?";    
@@ -51,15 +54,15 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_
         }
         
         if(!empty($_filter->name)) {
-            $_select->where($this->_db->quoteInto('name = ?', $_filter->name));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_filter->name));
         }
 
         if(!empty($_filter->context)) {
-            $_select->where($this->_db->quoteInto('context = ?', $_filter->context));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('context') . ' = ?', $_filter->context));
         }
 
         if(!empty($_filter->username)) {
-            $_select->where($this->_db->quoteInto('username = ?', $_filter->username));
+            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $_filter->username));
         }
     }            
 }

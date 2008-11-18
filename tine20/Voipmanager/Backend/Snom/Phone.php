@@ -39,7 +39,8 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
     protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_LocationFilter $_filter)
     {
         if(!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(description LIKE ? OR name LIKE ?)', '%' . $_filter->query . '%'));
+            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('description') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('name') . ' LIKE ?)', '%' . $_filter->query . '%'));
         }
     }               
     
@@ -79,7 +80,9 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
         }
 
         if(!empty($_filter->query)) {
-            $select->where($this->_db->quoteInto('(macaddress LIKE ? OR ipaddress LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
+            $select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('macaddress') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('ipaddress') . ' LIKE ? OR ' .
+                            $this->_db->quoteIdentifier('description') . ' LIKE ?)', '%' . $_filter->query . '%'));
         } else {
             // handle the other fields separately
         }
@@ -89,7 +92,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
             if(empty($_validPhoneIds)) {
                 return new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Phone', array());    
             }         
-            $select->where($this->_db->quoteInto('id IN (?)', $_validPhoneIds));
+            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_validPhoneIds));
         }
 
         $stmt = $select->query();
@@ -128,7 +131,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
 	 */
     public function deleteACLs($_phoneId)
     {        
-        $where = $this->_db->quoteInto('snom_phone_id = ?', $_phoneId);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('snom_phone_id') . ' = ?', $_phoneId);
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones_acl', $where);
         
         return $result;
@@ -146,8 +149,8 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
         
         $select = $this->_db->select()    
             ->from(SQL_TABLE_PREFIX . 'snom_phones_acl')
-            ->where($this->_db->quoteInto('account_type = ?', 'user'))
-            ->where($this->_db->quoteInto('snom_phone_id = ?', $phoneId))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'user'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('snom_phone_id') . ' = ?', $phoneId))
             ->where($this->_db->quoteIdentifier('read_right'). '= 1')
             ->where($this->_db->quoteIdentifier('write_right'). '= 1')
             ->where($this->_db->quoteIdentifier('dial_right'). '= 1');            
@@ -203,7 +206,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
         
         $select = $this->_db->select()    
             ->from(SQL_TABLE_PREFIX . 'snom_phones_acl', array('snom_phone_id'))
-            ->where($this->_db->quoteInto('account_id = ?', $_accountId));            
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_accountId));            
 
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
@@ -232,8 +235,8 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'snom_phones')
-            ->where($this->_db->quoteInto('id = ?', $phoneId))
-            ->where($this->_db->quoteInto('id IN (?)', $_validPhoneIds));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $phoneId))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_validPhoneIds));
             
         $row = $this->_db->fetchRow($select);
         if (!$row) {
@@ -257,7 +260,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
     {   
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'snom_phones')
-            ->where($this->_db->quoteInto('macaddress = ?', $_macAddress));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('macaddress') . ' = ?', $_macAddress));
 
         $row = $this->_db->fetchRow($select);
         if (!$row) {
@@ -289,7 +292,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
             'redirect_time'     => $_phone->redirect_time
         );
         
-        $where = array($this->_db->quoteInto('id = ?', $phoneId));
+        $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $phoneId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $redirectData, $where);
         
         return $this->get($_phone);
@@ -319,7 +322,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
         unset($phoneData['id']);
         unset($phoneData['template_id']);
 
-        $where = array($this->_db->quoteInto('id = ?', $phoneId), $this->_db->quoteInto('id IN (?)', $_validPhoneIds) );
+        $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $phoneId), $this->_db->quoteInto('id IN (?)', $_validPhoneIds) );
 
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
 
@@ -350,7 +353,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
             'firmware_checked_at'   => $phoneData['firmware_checked_at']
         );
 
-        $where = array($this->_db->quoteInto('id = ?', $phoneId));
+        $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $phoneId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $statusData, $where);
         
         return $this->get($_phone);
@@ -367,7 +370,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
     {
         foreach ((array)$_id as $id) {
             $phoneId = Voipmanager_Model_Snom_Phone::convertSnomPhoneIdToInt($id);
-            $where[] = $this->_db->quoteInto('id = ?', $phoneId);
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $phoneId);
         }
 
         try {
