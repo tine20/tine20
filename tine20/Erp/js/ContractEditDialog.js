@@ -31,7 +31,7 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Erp',
     recordClass: Tine.Erp.Contract,
     recordProxy: Tine.Erp.JsonBackend,
-    showContainerSelector: true,
+    //showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
@@ -42,12 +42,13 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this,
             success: function(response) {
                 this.record = this.recordProxy.recordReader(response);
+                //console.log(this.record);
                 this.onRecordLoad();
             },
             params: {
                 method: 'Erp.getContract',
-                uid: this.record.id,
-                containerId: this.containerId
+                uid: this.record.id
+                //containerId: this.containerId
             }
         });
     },
@@ -69,7 +70,8 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 autoScroll: true,
                 border: false,
                 frame: true,
-                layout: 'border'
+                layout: 'border',
+                items: []
                 /*,
                 items: [{
                     region: 'center',

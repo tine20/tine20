@@ -35,6 +35,8 @@ Tine.Erp.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.plugins.push(this.filterToolbar);
         
         Tine.Erp.ContractGridPanel.superclass.initComponent.call(this);
+        
+        console.log(Tine.Erp.registry.get('containerId'));
     },
     
     /**
@@ -50,6 +52,30 @@ Tine.Erp.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
              filters: []
         });
     },    
+    
+    /**
+     * open contract edit dialog
+     */
+    onEditInNewWindow: function(_button, _event) {
+        if (_button.actionType == 'edit') {
+            var selectedRows = this.grid.getSelectionModel().getSelections();
+            var record = selectedRows[0];
+        } else {
+        	var record = {};
+        }
+        var containerId = Tine.Erp.registry.get('containerId'); 
+        
+        var popupWindow = Tine.Erp.ContractEditDialog.openWindow({
+            record: record,
+            containerId: containerId,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.store.load({});
+                }
+            }
+        });    	
+    },
     
     /**
      * returns cm
@@ -77,5 +103,5 @@ Tine.Erp.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             sortable: true,
             dataIndex: 'status'
         }];
-    },    
+    }  
 });
