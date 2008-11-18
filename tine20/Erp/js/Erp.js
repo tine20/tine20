@@ -10,10 +10,7 @@
  * @todo        activate different gridpanels if subapp from treepanel is clicked
  */
  
-Ext.namespace('Tine');
-
-// default app
-Tine.Erp = Tine.Tinebase.Application;
+Ext.namespace('Tine.Erp');
 
 // default mainscreen
 Tine.Erp.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
