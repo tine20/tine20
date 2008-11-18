@@ -411,14 +411,19 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         var fRow = this.el.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
         var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
         this.filterStore.remove(this.filterStore.getById(filter.id));
-        // save buttons somewhere
+        
         if (isLast) {
+            // add a new first row
+            var firstFilter = this.addFilter();
+            
+            // save buttons somewhere
         	for (action in this.actions) {
 	            this.actions[action].hide();
 	            this.el.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
 	        }
         }
         fRow.remove();
+        
         if (!this.supressEvents) {
             this.onFilterRowsChange();
             this.onFiltertrigger();
@@ -431,13 +436,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     deleteAllFilters: function() {
         this.supressEvents = true;
         
-        var firstFilter = this.addFilter();
-        this.filterStore.remove(this.filterStore.getById(firstFilter.id));
-        
         this.filterStore.each(function(filter) {
             this.deleteFilter(filter);
         },this);
-        this.filterStore.insert(0, firstFilter);
         
         this.supressEvents = false;
         this.onFiltertrigger();
