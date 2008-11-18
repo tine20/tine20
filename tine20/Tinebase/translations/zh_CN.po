@@ -266,7 +266,7 @@ msgid ""
 "needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:364
+#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:386
 #: js/widgets/container/ContainerTree.js:300 js/widgets/EditDialog.js:326
 msgid "Confirm"
 msgstr "确认"
@@ -486,50 +486,51 @@ msgstr "时间"
 msgid "User"
 msgstr "用户"
 
-#: js/widgets/app/GridPanel.js:126
+#: js/widgets/app/GridPanel.js:146
 #, fuzzy
 msgid "Edit {0}"
 msgstr "编辑"
 
-#: js/widgets/app/GridPanel.js:137 js/widgets/container/ContainerTree.js:381
+#: js/widgets/app/GridPanel.js:157 js/widgets/container/ContainerTree.js:381
 #, fuzzy
 msgid "Add {0}"
 msgstr "添加{0}"
 
-#: js/widgets/app/GridPanel.js:150 js/widgets/container/ContainerTree.js:387
+#: js/widgets/app/GridPanel.js:167 js/widgets/app/GridPanel.js:168
+#: js/widgets/app/GridPanel.js:170 js/widgets/container/ContainerTree.js:387
 #, fuzzy
 msgid "Delete {0}"
-msgid_plural "Delete {1}"
+msgid_plural "Delete {0}"
 msgstr[0] "删除"
 
-#: js/widgets/app/GridPanel.js:211
+#: js/widgets/app/GridPanel.js:231
 #, fuzzy
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "显示注释 {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:212 js/widgets/app/GridPanel.js:220
+#: js/widgets/app/GridPanel.js:232 js/widgets/app/GridPanel.js:240
 #, fuzzy
 msgid "No {0} to display"
 msgstr "没有标签要显示"
 
-#: js/widgets/app/GridPanel.js:362
+#: js/widgets/app/GridPanel.js:384
 #, fuzzy
-msgid "Do you really want to delete the selected {0}"
-msgid_plural "Do you really want to delete the selected {0}"
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除 {0} \"{0}\" ？"
 
-#: js/widgets/app/GridPanel.js:367 js/widgets/EditDialog.js:328
+#: js/widgets/app/GridPanel.js:389 js/widgets/EditDialog.js:328
 #, fuzzy
 msgid "Deleting {0}"
 msgstr "正删除标签"
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:314
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:314
 #: js/widgets/EditDialog.js:339 js/widgets/tags/TagsPanel.js:250
 #: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:392
 msgid "Failed"
 msgstr "失败"
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:339
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:339
 #, fuzzy
 msgid "Could not delete {0}."
 msgstr "不能删除标签"
@@ -960,6 +961,11 @@ msgid "record changed"
 msgstr "记录已修改"
 
 #, fuzzy
+#~ msgid "Do you really want to delete the selected {0}"
+#~ msgid_plural "Do you really want to delete the selected {0}"
+#~ msgstr[0] "真的想删除 {0} \"{0}\" ？"
+
+#, fuzzy
 #~ msgid "Internal Contacts"
 #~ msgstr "电子邮件联系"
 
@@ -1314,10 +1320,6 @@ msgstr "记录已修改"
 #, fuzzy
 #~ msgid "Edit Tag \"{0}\""
 #~ msgstr "编辑标签"
-
-#, fuzzy
-#~ msgid "Do you really want to delete the selected roles?"
-#~ msgstr "真的想删除 {0} \"{0}\" ？"
 
 #, fuzzy
 #~ msgid "Deleting role(s)..."

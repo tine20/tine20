@@ -275,7 +275,7 @@ msgstr ""
 "Инсталляция Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "local на компьютере."
 
-#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:364
+#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:386
 #: js/widgets/container/ContainerTree.js:300 js/widgets/EditDialog.js:326
 msgid "Confirm"
 msgstr "Подтверждение"
@@ -505,54 +505,55 @@ msgstr "Время"
 msgid "User"
 msgstr "Пользователь"
 
-#: js/widgets/app/GridPanel.js:126
+#: js/widgets/app/GridPanel.js:146
 #, fuzzy
 msgid "Edit {0}"
 msgstr "Обработать"
 
-#: js/widgets/app/GridPanel.js:137 js/widgets/container/ContainerTree.js:381
+#: js/widgets/app/GridPanel.js:157 js/widgets/container/ContainerTree.js:381
 #, fuzzy
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
-#: js/widgets/app/GridPanel.js:150 js/widgets/container/ContainerTree.js:387
+#: js/widgets/app/GridPanel.js:167 js/widgets/app/GridPanel.js:168
+#: js/widgets/app/GridPanel.js:170 js/widgets/container/ContainerTree.js:387
 #, fuzzy
 msgid "Delete {0}"
-msgid_plural "Delete {1}"
+msgid_plural "Delete {0}"
 msgstr[0] "Удалить"
 msgstr[1] "Удалить"
 msgstr[2] "Удалить"
 
-#: js/widgets/app/GridPanel.js:211
+#: js/widgets/app/GridPanel.js:231
 #, fuzzy
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Показываю действия {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:212 js/widgets/app/GridPanel.js:220
+#: js/widgets/app/GridPanel.js:232 js/widgets/app/GridPanel.js:240
 #, fuzzy
 msgid "No {0} to display"
 msgstr "Никаких тэгов в наличии не имеется"
 
-#: js/widgets/app/GridPanel.js:362
+#: js/widgets/app/GridPanel.js:384
 #, fuzzy
-msgid "Do you really want to delete the selected {0}"
-msgid_plural "Do you really want to delete the selected {0}"
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Вы уверены что хотите удалить"
 msgstr[1] "Вы уверены что хотите удалить"
 msgstr[2] "Вы уверены что хотите удалить"
 
-#: js/widgets/app/GridPanel.js:367 js/widgets/EditDialog.js:328
+#: js/widgets/app/GridPanel.js:389 js/widgets/EditDialog.js:328
 #, fuzzy
 msgid "Deleting {0}"
 msgstr "Тэг удаляется"
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:314
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:314
 #: js/widgets/EditDialog.js:339 js/widgets/tags/TagsPanel.js:250
 #: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:392
 msgid "Failed"
 msgstr "Неудалось"
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:339
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:339
 #, fuzzy
 msgid "Could not delete {0}."
 msgstr "Не смог удалить тэг(и)."
@@ -996,6 +997,13 @@ msgid "record changed"
 msgstr "Запись изменена"
 
 #, fuzzy
+#~ msgid "Do you really want to delete the selected {0}"
+#~ msgid_plural "Do you really want to delete the selected {0}"
+#~ msgstr[0] "Вы уверены что хотите удалить"
+#~ msgstr[1] "Вы уверены что хотите удалить"
+#~ msgstr[2] "Вы уверены что хотите удалить"
+
+#, fuzzy
 #~ msgid "contacts"
 #~ msgstr "Содержит"
 
@@ -1334,10 +1342,6 @@ msgstr "Запись изменена"
 #, fuzzy
 #~ msgid "Edit Tag \"{0}\""
 #~ msgstr "Обработать тэг"
-
-#, fuzzy
-#~ msgid "Do you really want to delete the selected roles?"
-#~ msgstr "Вы уверены что хотите удалить"
 
 #, fuzzy
 #~ msgid "add role"

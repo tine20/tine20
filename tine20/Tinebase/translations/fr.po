@@ -261,7 +261,7 @@ msgid ""
 "needed files locally on this computer."
 msgstr ""
 
-#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:364
+#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:386
 #: js/widgets/container/ContainerTree.js:300 js/widgets/EditDialog.js:326
 msgid "Confirm"
 msgstr ""
@@ -481,45 +481,46 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:126
+#: js/widgets/app/GridPanel.js:146
 msgid "Edit {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:137 js/widgets/container/ContainerTree.js:381
+#: js/widgets/app/GridPanel.js:157 js/widgets/container/ContainerTree.js:381
 msgid "Add {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:150 js/widgets/container/ContainerTree.js:387
+#: js/widgets/app/GridPanel.js:167 js/widgets/app/GridPanel.js:168
+#: js/widgets/app/GridPanel.js:170 js/widgets/container/ContainerTree.js:387
 msgid "Delete {0}"
-msgid_plural "Delete {1}"
+msgid_plural "Delete {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/app/GridPanel.js:211
+#: js/widgets/app/GridPanel.js:231
 msgid "Displaying records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:212 js/widgets/app/GridPanel.js:220
+#: js/widgets/app/GridPanel.js:232 js/widgets/app/GridPanel.js:240
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:362
-msgid "Do you really want to delete the selected {0}"
-msgid_plural "Do you really want to delete the selected {0}"
+#: js/widgets/app/GridPanel.js:384
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/app/GridPanel.js:367 js/widgets/EditDialog.js:328
+#: js/widgets/app/GridPanel.js:389 js/widgets/EditDialog.js:328
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:314
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:314
 #: js/widgets/EditDialog.js:339 js/widgets/tags/TagsPanel.js:250
 #: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:392
 msgid "Failed"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:339
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:339
 msgid "Could not delete {0}."
 msgstr ""
 

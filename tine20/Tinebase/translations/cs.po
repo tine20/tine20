@@ -273,7 +273,7 @@ msgstr ""
 "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
 "potřebných souborů na tomto počítači."
 
-#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:364
+#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:386
 #: js/widgets/container/ContainerTree.js:300 js/widgets/EditDialog.js:326
 msgid "Confirm"
 msgstr "Potvrdit"
@@ -501,54 +501,55 @@ msgstr "Čas"
 msgid "User"
 msgstr "Uživatel"
 
-#: js/widgets/app/GridPanel.js:126
+#: js/widgets/app/GridPanel.js:146
 #, fuzzy
 msgid "Edit {0}"
 msgstr "Editovat"
 
-#: js/widgets/app/GridPanel.js:137 js/widgets/container/ContainerTree.js:381
+#: js/widgets/app/GridPanel.js:157 js/widgets/container/ContainerTree.js:381
 #, fuzzy
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
-#: js/widgets/app/GridPanel.js:150 js/widgets/container/ContainerTree.js:387
+#: js/widgets/app/GridPanel.js:167 js/widgets/app/GridPanel.js:168
+#: js/widgets/app/GridPanel.js:170 js/widgets/container/ContainerTree.js:387
 #, fuzzy
 msgid "Delete {0}"
-msgid_plural "Delete {1}"
+msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/app/GridPanel.js:211
+#: js/widgets/app/GridPanel.js:231
 #, fuzzy
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
-#: js/widgets/app/GridPanel.js:212 js/widgets/app/GridPanel.js:220
+#: js/widgets/app/GridPanel.js:232 js/widgets/app/GridPanel.js:240
 #, fuzzy
 msgid "No {0} to display"
 msgstr "Žádné štítky ke zobrazení"
 
-#: js/widgets/app/GridPanel.js:362
+#: js/widgets/app/GridPanel.js:384
 #, fuzzy
-msgid "Do you really want to delete the selected {0}"
-msgid_plural "Do you really want to delete the selected {0}"
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Opravdu chcete smazat"
 msgstr[1] "Opravdu chcete smazat"
 msgstr[2] "Opravdu chcete smazat"
 
-#: js/widgets/app/GridPanel.js:367 js/widgets/EditDialog.js:328
+#: js/widgets/app/GridPanel.js:389 js/widgets/EditDialog.js:328
 #, fuzzy
 msgid "Deleting {0}"
 msgstr "Mažu štítek"
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:314
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:314
 #: js/widgets/EditDialog.js:339 js/widgets/tags/TagsPanel.js:250
 #: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:392
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/app/GridPanel.js:379 js/widgets/EditDialog.js:339
+#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:339
 #, fuzzy
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat štítek/štítky."
@@ -989,6 +990,13 @@ msgid "record changed"
 msgstr "záznam byl změněn"
 
 #, fuzzy
+#~ msgid "Do you really want to delete the selected {0}"
+#~ msgid_plural "Do you really want to delete the selected {0}"
+#~ msgstr[0] "Opravdu chcete smazat"
+#~ msgstr[1] "Opravdu chcete smazat"
+#~ msgstr[2] "Opravdu chcete smazat"
+
+#, fuzzy
 #~ msgid "contacts"
 #~ msgstr "obsahuje"
 
@@ -1323,10 +1331,6 @@ msgstr "záznam byl změněn"
 #, fuzzy
 #~ msgid "Edit Tag \"{0}\""
 #~ msgstr "Editovat štítek"
-
-#, fuzzy
-#~ msgid "Do you really want to delete the selected roles?"
-#~ msgstr "Opravdu chcete smazat"
 
 #, fuzzy
 #~ msgid "add role"
