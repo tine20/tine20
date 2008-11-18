@@ -87,11 +87,10 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         
         $records = $_controller->search($filter, $pagination);
         
-        // set timezone
-        $records->setTimezone(Zend_Registry::get('userTimeZone'));
-                
+        $result = $this->_multipleRecordsToJson($records);
+        
         return array(
-            'results'       => $records->toArray(),
+            'results'       => $result,
             'totalcount'    => $_controller->searchCount($filter)
         );
     }
@@ -152,5 +151,30 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
             $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
         }
         return $recordArray;
+    }
+
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    {       
+        if (empty($_records)) {
+            return array();
+        }
+        
+        // get acls for records
+        if ($_records[0]->has('container_id')) {
+            Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Zend_Registry::get('currentAccount'));
+        }
+        
+        $_records->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_records->convertDates = true;
+        
+        $result = $_records->toArray();
+        
+        return $result;
     }
 }
