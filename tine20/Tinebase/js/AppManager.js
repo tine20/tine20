@@ -97,7 +97,7 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
                 return this.getLegacyApp(app);
             }
             
-            return new Tine[app.appName](app);
+            return typeof(Tine[app.appName].Application) == 'function' ? new Tine[app.appName].Application(app) : new Tine.Tinebase.Application(app);
             
         } catch(e) {
             console.error('Initialising of Application "' + app.appName + '" failed with the following message:' + e);
