@@ -79,11 +79,13 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      */
     protected function _search($_filter, $_paging, Tinebase_Application_Controller_Record_Interface $_controller, $_filterModel)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($filter), true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($_filter), true));
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($paging), true));
         
         $filter = new $_filterModel(Zend_Json::decode($_filter));
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($_paging));
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
         
         $records = $_controller->search($filter, $pagination);
         
@@ -166,7 +168,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
             return array();
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
         
         // get acls for records
         if ($_records[0]->has('container_id')) {
