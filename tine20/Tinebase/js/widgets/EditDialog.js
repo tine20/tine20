@@ -135,7 +135,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             scope: this,
             handler: this.onSaveAndClose,
-            iconCls: 'action_saveAndClose',
+            iconCls: 'action_saveAndClose'
         });
     
         this.action_applyChanges =new Ext.Action({
@@ -144,7 +144,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             scope: this,
             handler: this.onApplyChanges,
-            iconCls: 'action_applyChanges',
+            iconCls: 'action_applyChanges'
         });
         
         this.action_cancel = new Ext.Action({
@@ -152,7 +152,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
-            iconCls: 'action_cancel',
+            iconCls: 'action_cancel'
         });
         
         this.action_delete = new Ext.Action({
@@ -342,6 +342,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 });
             }
         });
-    },
+    }
 
 });
