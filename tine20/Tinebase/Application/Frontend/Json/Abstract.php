@@ -162,9 +162,11 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
     {       
-        if (empty($_records)) {
+        if (count($_records) == 0) {
             return array();
         }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
         
         // get acls for records
         if ($_records[0]->has('container_id')) {
