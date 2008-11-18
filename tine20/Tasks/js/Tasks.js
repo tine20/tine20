@@ -9,10 +9,7 @@
  *
  */
  
-Ext.namespace('Tine');
-
-// default app
-Tine.Tasks = Tine.Tinebase.Application;
+Ext.namespace('Tine', 'Tine.Tasks');
 
 // default mainscreen
 Tine.Tasks.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
