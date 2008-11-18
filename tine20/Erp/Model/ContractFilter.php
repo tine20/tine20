@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        create and extend Tinebase_ContainerRecord_Abstract ?
+ * @todo        extend Tinebase_Record_Filter_Abstract
  */
 
 /**
