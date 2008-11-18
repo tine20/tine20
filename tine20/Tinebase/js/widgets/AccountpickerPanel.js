@@ -154,7 +154,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
             plain: true,
             bodyStyle: 'padding:5px;',
             buttonAlign: 'right',
-			buttons: [cancle_button, ok_button],
+			buttons: [cancle_button, ok_button]
         });
 		
 		this.accountPicker = new Tine.widgets.account.PickerPanel({
