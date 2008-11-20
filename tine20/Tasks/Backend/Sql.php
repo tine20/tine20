@@ -301,33 +301,4 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         return $select;
     }
 
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select           $_select current where filter
-     * @param  Crm_Model_LeadFilter $_filter the string to search for
-     * @return void
-     */
-    protected function _addFilter(Zend_Db_Select $_select, Tasks_Model_TaskFilter $_filter)
-    {
-        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('tasks.container_id') . ' IN (?)', $_filter->container));
-                                
-        if(!empty($_filter->query)){
-            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('tasks.summary') . ' LIKE ? OR ' .
-                    $this->_db->quoteIdentifier('tasks.description') . ' LIKE ?)', '%' . $_filter->query . '%'));
-        }
-        if(!empty($_filter->status)){
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('tasks.status_id') . ' = ?',$_filter->status));
-        }
-        if(!empty($_filter->organizer)){
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('tasks.organizer') . ' = ?', (int)$_filter->organizer));
-        }
-        if(isset($_filter->showClosed) && $_filter->showClosed){
-            // nothing to filter
-        } else {
-            $_select->where($this->_db->quoteIdentifier('status.status_is_open') . ' = TRUE OR ' . 
-                    $this->_db->quoteIdentifier('tasks.status_id') . ' IS NULL');
-        }
-    }        
-    
 }

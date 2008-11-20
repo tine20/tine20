@@ -8,109 +8,51 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        generalise that and extend Tinebase_Record_Filter_Abstract
  */
 
 /**
  * Tasks Filter Class
  * @package Tasks
  */
-class Tasks_Model_TaskFilter extends Tinebase_Record_Abstract
-{
-    
-    
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
+class Tasks_Model_TaskFilter extends Tinebase_Record_AbstractFilter
+{    
     /**
      * application the record belongs to
      *
      * @var string
      */
     protected $_application = 'Tasks';
-    
-    protected $_validators = array(
-        'id'                   => array('allowEmpty' => true,  'Int'   ),
-        
-        'containerType'        => array('allowEmpty' => true           ),
-        'owner'                => array('allowEmpty' => true           ),
-        'container'            => array('allowEmpty' => true           ),
 
-        'query'                => array('allowEmpty' => true           ),
-        'organizer'            => array('allowEmpty' => true           ),
-        'status'               => array('allowEmpty' => true           ),
-        'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false)),
-        'due'                  => array('allowEmpty' => true           ),
-        'tag'                  => array('allowEmpty' => true           ),
-        
-    );
-    
     /**
-     * @var array hold selected operators
-     */
-    protected $_operators = array();
-    
-    /**
-     * @var array holds additional options
-     */
-    protected $_options = array();
-    
-    /**
-     * @var array maps abstract operators to sql operators
-     */
-    protected $_opSqlMap = array(
-        'contains' => 'LIKE',
-        'equals'   => 'LIKE',
-        'greater'  => '>',
-        'less'     => '<',
-        'not'      => 'NOT LIKE'
-    );
-    
-    /**
+     * the constructor
+     * it is needed because we have more validation fields in Tasks
      * 
+     * @param mixed $_data
+     * @param bool $bypassFilters sets {@see this->bypassFilters}
+     * @param bool $convertDates sets {@see $this->convertDates}
      */
-    //public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    //{
-        
-    //}
-    
-    /**
-     * sets the record related properties from user generated input.
-     * 
-     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
-     *
-     * @param array $_data the new data to set
-     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
-     */
-    public function setFromArray(array $_data)
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " setting filters from array with data: " .
-        //    print_r($_data, true));
+        // add more filters
+        $this->_validators = array_merge($this->_validators, array(
+            'organizer'            => array('allowEmpty' => true           ),
+            'status'               => array('allowEmpty' => true           ),
+            'due'                  => array('allowEmpty' => true           ),
+            'tag'                  => array('allowEmpty' => true           ),
+            'description'          => array('allowEmpty' => true           ),              
+            'summary'              => array('allowEmpty' => true           ),              
         
-        $data = array();
-        foreach ($_data as $filter) {
-            $field = (isset($filter['field']) && isset($filter['value'])) ? $filter['field'] : '';
-            if (array_key_exists($field, $this->_validators)) {
-                $data[$field] = $filter['value'];
-                $this->_operators[$field] = $filter['operator'];
-                $this->_options[$field] = array_diff_key($filter, array(
-                    'field'    => NULL, 
-                    'operator' => NULL,
-                    'value'    => NULL
-                ));
-            }
-        }
+        // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
+            'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
+        ));
         
-        if ($this->bypassFilters !== true) {
-            // $this->validateOperators();
-            // $this->validateOptions();
-        }
-        parent::setFromArray($data);
+        // define query fields
+        $this->_queryFields = array(
+            'description',
+            'summary',
+        );
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     
     /**
@@ -118,111 +60,29 @@ class Tasks_Model_TaskFilter extends Tinebase_Record_Abstract
      * 
      * @param  Zend_Db_Select
      * @return void
+     * 
+     * @todo    add status & organizer filters
      */
     public function appendFilterSql($_select)
     {
-        $db = Zend_Registry::get('dbAdapter');
+        $db = Tinebase_Core::getDb();
         
-        foreach ($this->_properties as $field => $value)
-        {
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " append sql for filter '$field' width value '$value'");
-            $value = str_replace(array('*', '_'), array('%', '\_'), $value);
-            
-            switch ($field) {
-                case 'containerType':
-                case 'container':
-                case 'owner':
-                    // skip container here handling for the moment
-                    break;
-                case 'query':
-                    $queries = explode(' ', $value);
-                    foreach ($queries as $query) {
-                        $_select->where($db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ? or adr_one_locality LIKE ?)', '%' . trim($query) . '%'));
-                    
-                    }
-                    break;
-                case 'tag':
-                    if (strlen($value) == 40) {
-                        Tinebase_Tags::appendSqlFilter($_select, $value);
-                    }
-                    break;
-                default:
-                    $op = $this->_operators[$field];
-                    $value = $op == 'contains' ? '%' . trim($value) . '%' : trim($value);
-                    $where = array(
-                        $db->quoteIdentifier($field),
-                        $this->_opSqlMap[$op],
-                        $db->quote($value)
-                    );
-                    $_select->where(implode(' ', $where));
-                    break;
-            }
+        if(isset($_this->showClosed) && $_this->showClosed){
+            // nothing to filter
+        } else {
+            $_select->where($db->quoteIdentifier('status.status_is_open') . ' = TRUE OR ' . 
+                    $db->quoteIdentifier('tasks.status_id') . ' IS NULL');
         }
+        
+        /*
+        if(!empty($_filter->status)){
+            $_select->where($this->_db->quoteInto($db->quoteIdentifier('tasks.status_id') . ' = ?',$_filter->status));
+        }
+        if(!empty($_filter->organizer)){
+            $_select->where($this->_db->quoteInto($db->quoteIdentifier('tasks.organizer') . ' = ?', (int)$_filter->organizer));
+        }
+        */
+        
+        parent::appendFilterSql($_select);
     }
-
-    /**
-     * gets record related properties
-     * 
-     * @param string name of property
-     * @return mixed value of property
-     */
-    public function __get($_name)
-    {
-        switch ($_name) {
-            case 'container':
-                $this->_resolveContainer();
-                break;
-            default:
-        }
-        return parent::__get($_name);
-    }
-    
-    /**
-     * Resolves containers from selected nodes
-     * 
-     * @throws Tasks_Exception_UnexpectedValue
-     * @return void
-     */
-    protected function _resolveContainer()
-    {
-        if (isset($this->_properties['container']) && is_array($this->_properties['container'])) {
-            return;
-        }
-        if (!$this->containerType) {
-            throw new Tasks_Exception_UnexpectedValue('You need to set a containerType.');
-        }
-        if ($this->containerType == 'Personal' && !$this->owner) {
-            throw new Tasks_Exception_UnexpectedValue('You need to set an owner when containerType is "Personal".');
-        }
-        
-        $cc = Tinebase_Container::getInstance();
-        switch($this->containerType) {
-            case 'all':
-                $containers = $cc->getContainerByACL(Zend_Registry::get('currentAccount'), $this->_application, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'personal':
-                $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->owner, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'shared':
-                $containers = Zend_Registry::get('currentAccount')->getSharedContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'otherUsers':
-                $containers = Zend_Registry::get('currentAccount')->getOtherUsersContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'internal':
-                $containers = array(Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Tasks'));
-                break;    
-            case 'singleContainer':
-                $this->_properties['container'] = array($this->_properties['container']);
-                return;
-            default:
-                throw new Tasks_Exception_UnexpectedValue('ContainerType not supported.');
-        }
-        $container = array();
-        foreach ($containers as $singleContainer) {
-            $container[] = $singleContainer->getId();
-        }
-        
-        $this->_properties['container'] = $container;
-    }    
 }
