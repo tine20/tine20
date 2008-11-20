@@ -361,6 +361,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _addFilter(Zend_Db_Select $_select, Tinebase_Record_Interface $_filter)
     {
+        $_filter->appendFilterSql($_select);
     }
     
     /**
