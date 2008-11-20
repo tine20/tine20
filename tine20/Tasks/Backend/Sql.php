@@ -301,4 +301,17 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         return $select;
     }
 
+    /**
+     * add the fields to search for to the query
+     *
+     * @param  Zend_Db_Select           $_select current where filter
+     * @param  Tasks_Model_TaskFilter   $_filter filter settings
+     * @return void
+     */
+    protected function _addFilter (Zend_Db_Select $_select, Tasks_Model_TaskFilter $_filter)
+    {        
+        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' IN (?)', $_filter->container));
+        
+        $_filter->appendFilterSql($_select);
+    }    
 }
