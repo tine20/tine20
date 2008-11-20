@@ -27,7 +27,7 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     }
     
     /**
-     * fetch one contact identified by contactid
+     * fetch one contact of a user identified by his user_id
      *
      * @param   int $_userId
      * @return  Addressbook_Model_Contact 
