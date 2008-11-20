@@ -104,7 +104,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Tasks_Exception_Backend($e->getMessage);
+            throw new Tasks_Exception_Backend($e->getMessage());
         }
     }
     
