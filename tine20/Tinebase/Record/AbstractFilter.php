@@ -77,32 +77,37 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data the new data to set
+     * @param boolean $_getOperators legacy: we have filters which don't use the field|operator|value structure
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array $_data, $_getOperators = TRUE)
     {
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " setting filters from array with data: " .
         //    print_r($_data, true));
         
-        $data = array();
-        foreach ($_data as $filter) {
-            $field = (isset($filter['field']) && isset($filter['value'])) ? $filter['field'] : '';
-            if (array_key_exists($field, $this->_validators)) {
-                $data[$field] = $filter['value'];
-                $this->_operators[$field] = $filter['operator'];
-                $this->_options[$field] = array_diff_key($filter, array(
-                    'field'    => NULL, 
-                    'operator' => NULL,
-                    'value'    => NULL
-                ));
+        if ($_getOperators) {
+            $data = array();
+            foreach ($_data as $filter) {
+                $field = (isset($filter['field']) && isset($filter['value'])) ? $filter['field'] : '';
+                if (array_key_exists($field, $this->_validators)) {
+                    $data[$field] = $filter['value'];
+                    $this->_operators[$field] = $filter['operator'];
+                    $this->_options[$field] = array_diff_key($filter, array(
+                        'field'    => NULL, 
+                        'operator' => NULL,
+                        'value'    => NULL
+                    ));
+                }
             }
+            
+            if ($this->bypassFilters !== true) {
+                // $this->validateOperators();
+                // $this->validateOptions();
+            }
+            parent::setFromArray($data);
+        } else {
+            parent::setFromArray($_data);
         }
-        
-        if ($this->bypassFilters !== true) {
-            // $this->validateOperators();
-            // $this->validateOptions();
-        }
-        parent::setFromArray($data);
     }
     
     /**
