@@ -177,6 +177,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }        
         $this->_addFilter($select, $_filter);
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($select, true));
+        
         // get records
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
