@@ -65,7 +65,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {	
     }
     
-    /** Context tests **/
+    /** Asterisk Context tests **/
     
     /**
      * test creation of asterisk context
@@ -134,7 +134,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         );
     }
     
-    /** SipPeer tests **/
+    /** Asterisk SipPeer tests **/
     
     /**
      * test creation of asterisk SipPeer
@@ -203,7 +203,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         );
     }
     
-    /** MeetMe tests **/
+    /** Asterisk MeetMe tests **/
     
     /**
      * test creation of asterisk meetme room
@@ -276,7 +276,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         );
     }
     
-/** Voicemail tests **/
+    /** Asterisk Voicemail tests **/
     
     /**
      * test creation of asterisk meetme room
@@ -345,6 +345,82 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             'context'  => Tinebase_Record_Abstract::generateUID(),
             'fullname' => Tinebase_Record_Abstract::generateUID()
+        );
+    }
+    
+    /** Snom Location tests **/
+    
+    /**
+     * test creation of snom location
+     *
+     */
+    public function testCreateSnomLocation()
+    {
+        $test = $this->_getSnomLocation();
+        
+        $returned = $this->_backend->saveSnomLocation(Zend_Json::encode($test));
+        // print_r($returned);
+        $this->assertEquals($test['name'], $returned['updatedData']['name']);
+        $this->assertEquals($test['description'], $returned['updatedData']['description']);
+        $this->assertEquals($test['registrar'], $returned['updatedData']['registrar']);
+        $this->assertNotNull($returned['updatedData']['id']);
+        
+        // test getSnomLocation as well
+        $returnedGet = $this->_backend->getSnomLocation($returned['updatedData']['id']);
+        // print_r($returnedGet)
+        $this->assertEquals($test['name'], $returnedGet['name']);
+        $this->assertEquals($test['description'], $returnedGet['description']);
+        $this->assertEquals($test['registrar'], $returnedGet['registrar']);
+        
+        $this->_backend->deleteSnomLocations(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test update of snom location
+     *
+     */
+    public function testUpdateSnomLocation()
+    {
+        $test = $this->_getSnomLocation();
+        
+        $returned = $this->_backend->saveSnomLocation(Zend_Json::encode($test));
+        $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
+        
+        $updated = $this->_backend->saveSnomLocation(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
+        $this->assertEquals($returned['updatedData']['description'], $updated['updatedData']['description']);
+        $this->assertEquals($returned['updatedData']['registrar'], $updated['updatedData']['registrar']);
+        $this->assertNotNull($updated['updatedData']['id']);
+                
+        $this->_backend->deleteSnomLocations(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test search of snom location
+     *
+     */
+    public function testSearchSnomLocation()
+    {
+        $test = $this->_getSnomLocation();        
+        $returned = $this->_backend->saveSnomLocation(Zend_Json::encode($test));
+                
+        $searchResult = $this->_backend->getSnomLocations('description', 'ASC', $test['description']);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        
+        $this->_backend->deleteSnomLocations(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * get snom location data
+     *
+     * @return array
+     */
+    protected function _getSnomLocation()
+    {
+        return array(
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'description' => Tinebase_Record_Abstract::generateUID(),
+            'registrar' => Tinebase_Record_Abstract::generateUID()
         );
     }
 }		
