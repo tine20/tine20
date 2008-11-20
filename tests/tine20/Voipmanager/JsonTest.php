@@ -423,4 +423,309 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
             'registrar' => Tinebase_Record_Abstract::generateUID()
         );
     }
+    
+    /** Snom Phone tests **/
+    
+    /**
+     * test creation of snom phone
+     *
+     *//*
+    public function testCreateSnomPhone()
+    {
+        $test = $this->_getSnomPhone();
+        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test));
+        // print_r($returned);
+        $this->assertEquals($test['name'], $returned['updatedData']['name']);
+        $this->assertEquals($test['description'], $returned['updatedData']['description']);
+        $this->assertEquals($test['registrar'], $returned['updatedData']['registrar']);
+        $this->assertNotNull($returned['updatedData']['id']);
+        
+        // test getSnomPhone as well
+        $returnedGet = $this->_backend->getSnomPhone($returned['updatedData']['id']);
+        // print_r($returnedGet)
+        $this->assertEquals($test['name'], $returnedGet['name']);
+        $this->assertEquals($test['description'], $returnedGet['description']);
+        $this->assertEquals($test['registrar'], $returnedGet['registrar']);
+        
+        $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    */
+    /**
+     * test update of snom phone
+     *
+     *//*
+    public function testUpdateSnomPhone()
+    {
+        $test = $this->_getSnomPhone();
+        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test));
+        $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
+        
+        $updated = $this->_backend->saveSnomPhone(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
+        $this->assertEquals($returned['updatedData']['description'], $updated['updatedData']['description']);
+        $this->assertEquals($returned['updatedData']['registrar'], $updated['updatedData']['registrar']);
+        $this->assertNotNull($updated['updatedData']['id']);
+                
+        $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    */
+    /**
+     * test search of snom phone
+     *
+     *//*
+    public function testSearchSnomPhone()
+    {
+        $test = $this->_getSnomPhone();        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test));
+                
+        $searchResult = $this->_backend->getSnomPhones('description', 'ASC', $test['description']);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        
+        $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    */
+    /**
+     * get snom phone data
+     *
+     * @return array
+     *//*
+    protected function _getSnomPhone()
+    {
+        return array(
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'description' => Tinebase_Record_Abstract::generateUID(),
+            'registrar' => Tinebase_Record_Abstract::generateUID()
+        );
+    }
+    */
+    /** Snom Settings tests **/
+    
+    /**
+     * test creation of snom settings
+     *
+     */
+    public function testCreateSnomSetting()
+    {
+        $test = $this->_getSnomSetting();
+        
+        $returned = $this->_backend->saveSnomSetting(Zend_Json::encode($test));
+        // print_r($returned);
+        $this->assertEquals($test['name'], $returned['updatedData']['name']);
+        $this->assertEquals($test['description'], $returned['updatedData']['description']);
+        $this->assertNotNull($returned['updatedData']['id']);
+        
+        // test getSnomSettings as well
+        $returnedGet = $this->_backend->getSnomSetting($returned['updatedData']['id']);
+        // print_r($returnedGet)
+        $this->assertEquals($test['name'], $returnedGet['name']);
+        $this->assertEquals($test['description'], $returnedGet['description']);
+        
+        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test update of snom settings
+     *
+     */
+    public function testUpdateSnomSetting()
+    {
+        $test = $this->_getSnomSetting();
+        
+        $returned = $this->_backend->saveSnomSetting(Zend_Json::encode($test));
+        $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
+        
+        $updated = $this->_backend->saveSnomSetting(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
+        $this->assertEquals($returned['updatedData']['description'], $updated['updatedData']['description']);
+        $this->assertNotNull($updated['updatedData']['id']);
+        
+        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test search of snom settings
+     *
+     */
+    public function testSearchSnomSetting()
+    {
+        $test = $this->_getSnomSetting();        
+        $returned = $this->_backend->saveSnomSetting(Zend_Json::encode($test));
+                
+        $searchResult = $this->_backend->getSnomSettings('description', 'ASC', $test['description']);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        
+        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * get snom settings data
+     *
+     * @return array
+     */
+    protected function _getSnomSetting()
+    {
+        return array(
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'description' => Tinebase_Record_Abstract::generateUID()
+        );
+    }
+    
+    /** Snom Software tests **/
+    
+    /**
+     * test creation of snom software
+     *
+     */
+    public function testCreateSnomSoftware()
+    {
+        $test = $this->_getSnomSoftware();
+        
+        $returned = $this->_backend->saveSnomSoftware(Zend_Json::encode($test));
+        $this->assertEquals($test['name'], $returned['updatedData']['name']);
+        $this->assertEquals($test['description'], $returned['updatedData']['description']);
+        $this->assertNotNull($returned['updatedData']['id']);
+        
+        // test getSnomSoftware as well
+        $returnedGet = $this->_backend->getSnomSoftware($returned['updatedData']['id']);
+        // print_r($returnedGet)
+        $this->assertEquals($test['name'], $returnedGet['name']);
+        $this->assertEquals($test['description'], $returnedGet['description']);
+        
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test update of snom software
+     *
+     */
+    public function testUpdateSnomSoftware()
+    {
+        $test = $this->_getSnomSoftware();
+        
+        $returned = $this->_backend->saveSnomSoftware(Zend_Json::encode($test));
+        $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
+        
+        $updated = $this->_backend->saveSnomSoftware(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
+        $this->assertEquals($returned['updatedData']['description'], $updated['updatedData']['description']);
+        $this->assertNotNull($updated['updatedData']['id']);
+                
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test search of snom software
+     *
+     */
+    public function testSearchSnomSoftware()
+    {
+        $test = $this->_getSnomSoftware();
+        $returned = $this->_backend->saveSnomSoftware(Zend_Json::encode($test));
+        
+        $searchResult = $this->_backend->searchSnomSoftware('description', 'ASC', $test['description']);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * get snom software data
+     *
+     * @return array
+     */
+    protected function _getSnomSoftware()
+    {
+        return array(
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'description' => Tinebase_Record_Abstract::generateUID()
+        );
+    }
+    
+    /** Snom Template tests **/
+    
+    /**
+     * test creation of snom template
+     *
+     */
+    public function testCreateSnomTemplate()
+    {
+    	$testSoftware = $this->_getSnomSoftware();
+        $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
+        
+        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id']);
+        $returned = $this->_backend->saveSnomTemplate(Zend_Json::encode($test));
+        
+        $this->assertEquals($test['name'], $returned['updatedData']['name']);
+        $this->assertEquals($test['setting_id'], $returned['updatedData']['setting_id']);
+        $this->assertEquals($test['software_id'], $returned['updatedData']['software_id']);
+        $this->assertNotNull($returned['updatedData']['id']);
+        
+        // test getSnomTemplate as well
+        $returnedGet = $this->_backend->getSnomTemplate($returned['updatedData']['id']);
+        
+        $this->assertEquals($test['name'], $returnedGet['name']);
+        $this->assertEquals($test['setting_id'], $returnedGet['setting_id']);
+        $this->assertEquals($test['software_id'], $returnedGet['software_id']);
+        
+        $this->_backend->deleteSnomTemplates(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($returnedSoftware['updatedData']['id'])));
+    }
+    
+    /**
+     * test update of snom template
+     *
+     */
+    public function testUpdateSnomTemplate()
+    {   
+    	$testSoftware = $this->_getSnomSoftware();
+        $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
+        
+        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id']);
+        $returned = $this->_backend->saveSnomTemplate(Zend_Json::encode($test));
+        $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
+        
+        $updated = $this->_backend->saveSnomTemplate(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
+        $this->assertEquals($returned['updatedData']['setting_id'], $updated['updatedData']['setting_id']);
+        $this->assertEquals($returned['updatedData']['software_id'], $updated['updatedData']['software_id']);
+        $this->assertNotNull($updated['updatedData']['id']);
+        
+        $this->_backend->deleteSnomTemplates(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($returnedSoftware['updatedData']['id'])));
+    }
+    
+    /**
+     * test search of snom template
+     *
+     */
+    public function testSearchSnomTemplate()
+    {
+    	$testSoftware = $this->_getSnomSoftware();
+        $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
+        
+        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id']);
+        $returned = $this->_backend->saveSnomTemplate(Zend_Json::encode($test));
+        
+        $searchResult = $this->_backend->getSnomTemplates('description', 'ASC', $test['name']);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        
+        $this->_backend->deleteSnomTemplates(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($returnedSoftware['updatedData']['id'])));
+    }
+    
+    /**
+     * get snom phone template
+     *
+     * @return array
+     */
+    protected function _getSnomTemplate($software_id)
+    {
+        return array(
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'setting_id' => Tinebase_Record_Abstract::generateUID(),
+            'software_id' => $software_id
+        );
+    }
 }		
