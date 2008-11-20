@@ -275,4 +275,76 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
             'pin' => Tinebase_Record_Abstract::generateUID()
         );
     }
+    
+/** Voicemail tests **/
+    
+    /**
+     * test creation of asterisk meetme room
+     *
+     */
+    public function testCreateAsteriskVoicemail()
+    {
+        $test = $this->_getAsteriskVoicemail();
+        
+        $returned = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($test));
+        // print_r($returned);
+        $this->assertEquals($test['context'], $returned['updatedData']['context']);
+        $this->assertEquals($test['fullname'], $returned['updatedData']['fullname']);
+        $this->assertNotNull($returned['updatedData']['id']);
+        
+        // test getAsteriskVoicemail as well
+        $returnedGet = $this->_backend->getAsteriskVoicemail($returned['updatedData']['id']);
+        // print_r($returnedGet)
+        $this->assertEquals($test['context'], $returnedGet['context']);
+        $this->assertEquals($test['fullname'], $returnedGet['fullname']);
+        
+        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test update of asterisk voice mail
+     *
+     */
+    public function testUpdateAsteriskVoicemail()
+    {
+        $test = $this->_getAsteriskVoicemail();
+        
+        $returned = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($test));
+        $returned['updatedData']['fullname'] = Tinebase_Record_Abstract::generateUID();
+        
+        $updated = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['context'], $updated['updatedData']['context']);
+        $this->assertEquals($returned['updatedData']['fullname'], $updated['updatedData']['fullname']);
+        $this->assertNotNull($updated['updatedData']['id']);
+                
+        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * test search of asterisk voicemail
+     *
+     */
+    public function testSearchAsteriskVoicemail()
+    {
+        $test = $this->_getAsteriskVoicemail();        
+        $returned = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($test));
+                
+        $searchResult = $this->_backend->getAsteriskVoicemails('context', 'ASC', $test['fullname'], $test['context']);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        
+        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['updatedData']['id'])));
+    }
+    
+    /**
+     * get asterisk voicemail data
+     *
+     * @return array
+     */
+    protected function _getAsteriskVoicemail()
+    {
+        return array(
+            'context'  => Tinebase_Record_Abstract::generateUID(),
+            'fullname' => Tinebase_Record_Abstract::generateUID()
+        );
+    }
 }		
