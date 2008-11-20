@@ -270,8 +270,6 @@ class Tinebase_Container
             }
             
             $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
-                   
-            /* $db = Zend_Registry::get('dbAdapter'); */
             
             $tableContainer = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
             $tableContainerAcl = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
@@ -478,8 +476,6 @@ class Tinebase_Container
         }
         $ownerId            = Tinebase_Model_User::convertUserIdToInt($_owner);
         
-        /* $db = Zend_Registry::get('dbAdapter'); */
-        
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $this->_db->select()
@@ -543,8 +539,6 @@ class Tinebase_Container
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
-        /* $db = Zend_Registry::get('dbAdapter'); */
-        
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $this->_db->select()
@@ -587,8 +581,6 @@ class Tinebase_Container
         if(count($groupMemberships) === 0) {
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
-        
-        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
@@ -645,8 +637,6 @@ class Tinebase_Container
         if(count($groupMemberships) === 0) {
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
-        
-        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
@@ -772,8 +762,6 @@ class Tinebase_Container
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
-        /* $db = Zend_Registry::get('dbAdapter'); */
-
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array())
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
@@ -814,8 +802,6 @@ class Tinebase_Container
                 throw new Tinebase_Exception_AccessDenied('Permission to get grants of container denied.');
             }            
         }
-        
-        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container', array('id'))
@@ -893,8 +879,6 @@ class Tinebase_Container
                 throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
             }
             
-            /* $db = Zend_Registry::get('dbAdapter'); */
-            
             $select = $this->_db->select()
                 ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grant'))
                 ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
@@ -951,8 +935,6 @@ class Tinebase_Container
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), true));
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
-        
-        /* $db = Zend_Registry::get('dbAdapter'); */
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
