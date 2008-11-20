@@ -73,21 +73,7 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
     protected function _addFilter(Zend_Db_Select $_select, Crm_Model_LeadFilter $_filter)
     {
         $_select->where($this->_db->quoteInto( $this->_db->quoteIdentifier('container_id') . ' IN (?)', $_filter->container));
-                        
-        if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('lead_name') . ' LIKE ? OR ' .
-                    $this->_db->quoteIdentifier('description') . ' LIKE ?)', '%' . $_filter->query . '%'));
-        }
-        if (!empty($_filter->leadstate)) {
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('leadstate_id') . ' = ?', $_filter->leadstate));
-        }
-        if (!empty($_filter->probability)) {
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('probability') . ' >= ?', (int)$_filter->probability));
-        }
-        if (isset($_filter->showClosed) && $_filter->showClosed){
-            // nothing to filter
-        } else {
-            $_select->where($this->_db->quoteIdentifier('end') . ' IS NULL');
-        }
+                                
+        $_filter->appendFilterSql($_select);
     }        
 }

@@ -8,23 +8,14 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add more filters (tags, start, end, ...)?
  */
 
 /**
  * Leads Filter Class
- * @package Tasks
+ * @package Crm
  */
-class Crm_Model_LeadFilter extends Tinebase_Record_Abstract
+class Crm_Model_LeadFilter extends Tinebase_Record_AbstractFilter
 {
-	/**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
     /**
      * application the record belongs to
      *
@@ -32,91 +23,69 @@ class Crm_Model_LeadFilter extends Tinebase_Record_Abstract
      */
     protected $_application = 'Crm';
     
-    protected $_validators = array(
-        'id'                   => array('allowEmpty' => true,  'Int'   ),
-
-        'containerType'        => array('allowEmpty' => true           ),
-        'container'            => array('allowEmpty' => true           ),        
-        'query'                => array('allowEmpty' => true           ),
-        'probability'          => array('allowEmpty' => true,  'Int'   ),
-        'leadstate'            => array('allowEmpty' => true           ),
-        'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false)),
-        'owner'                => array('allowEmpty' => true           ),
-        //'start'                => array('allowEmpty' => true           ),
-        //'end'                  => array('allowEmpty' => true           ),
-        //'end_scheduled'        => array('allowEmpty' => true           ),
-        //'tag'                  => array('allowEmpty' => true           ),
-        
-    );
-    
-    /*
-    protected $_datetimeFields = array(
-        'start',
-        'end',
-        'end_scheduled',
-    );
-    */
-    
     /**
-     * gets record related properties
+     * the constructor
+     * it is needed because we have more validation fields in Tasks
      * 
-     * @param string name of property
-     * @return mixed value of property
+     * @param mixed $_data
+     * @param bool $bypassFilters sets {@see this->bypassFilters}
+     * @param bool $convertDates sets {@see $this->convertDates}
      */
-    public function __get($_name)
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        switch ($_name) {
-            case 'container':
-                $this->_resolveContainer();
-                break;
-            default:
-        }
-        return parent::__get($_name);
-    }
+        $this->_validators = array_merge($this->_validators, array(
+        // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
+            'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
+            'probability'          => array('allowEmpty' => true, 'Int',    'special' => TRUE),
+            'leadstate'            => array('allowEmpty' => true,           'special' => TRUE),
+        ));
+        
+        // define query fields
+        $this->_queryFields = array(
+            'description',
+            'lead_name',
+        );
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }    
     
     /**
-     * Resolves containers from selected nodes
+     * appends current filters to a given select object
      * 
-     * @throws Exception
+     * @param  Zend_Db_Select
      * @return void
      */
-    protected function _resolveContainer()
+    public function appendFilterSql($_select)
     {
-        if (isset($this->_properties['container']) && is_array($this->_properties['container'])) {
-            return;
+        $db = Tinebase_Core::getDb();
+        
+        if(isset($this->showClosed) && $this->showClosed){
+            // nothing to filter
+        } else {
+            $_select->where($db->quoteIdentifier('end') . ' IS NULL');
         }
-        if (!$this->containerType) {
-            throw new Exception('You need to set a containerType.');
+
+        if (!empty($this->leadstate)) {
+            $_select->where($this->_db->quoteInto($db->quoteIdentifier('leadstate_id') . ' = ?', $this->leadstate));
         }
-        if ($this->containerType == 'Personal' && !$this->owner) {
-            throw new Exception('You need to set an owner when containerType is "Personal".');
+        if (!empty($this->probability)) {
+            $_select->where($this->_db->quoteInto($db->quoteIdentifier('probability') . ' >= ?', (int)$this->probability));
         }
         
-        $cc = Tinebase_Container::getInstance();
-        switch($this->containerType) {
-            case 'all':
-                $containers = $cc->getContainerByACL(Zend_Registry::get('currentAccount'), $this->_application, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'personal':
-                $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->owner, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'shared':
-                $containers = Zend_Registry::get('currentAccount')->getSharedContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'otherUsers':
-                $containers = Zend_Registry::get('currentAccount')->getOtherUsersContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
-                break;
-            case 'singleContainer':
-                $this->_properties['container'] = array($this->_properties['container']);
-                return;
-            default:
-                throw new Exception('containerType not supported.');
-        }
-        $container = array();
-        foreach ($containers as $singleContainer) {
-            $container[] = $singleContainer->getId();
-        }
-        
-        $this->_properties['container'] = $container;
+        parent::appendFilterSql($_select);
+    }    
+    
+    /**
+     * sets the record related properties from user generated input.
+     * 
+     * overwrite this because we don't have the right filter structure in the crm yet
+     *
+     * @param array $_data            the new data to set
+     * 
+     * @todo    remove this when the crm filter toolbar has been updated to the general widget
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data, FALSE);        
     }
 }
