@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  */
 
@@ -40,7 +40,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'contract_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'category_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
