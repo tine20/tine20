@@ -341,6 +341,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         return $result;
     }
     
+    /**
+     * sorts this recordset
+     *
+     * @param string $_field
+     * @param string $_direction
+     */
     public function sort($_field, $_direction)
     {
         $offsetToSortFieldMap = $this->__get($_field);
