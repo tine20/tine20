@@ -8,23 +8,14 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        create and extend Tinebase_ContainerRecord_Abstract ?
  */
 
 /**
  * contract filter Class
  * @package     Timesheet
  */
-class Timesheet_Model_TimesheetFilter extends Tinebase_Record_Abstract
+class Timesheet_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
 {
-	/**
-     * key in $_validators/$_properties array for the field which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
     /**
      * application the record belongs to
      *
@@ -33,13 +24,25 @@ class Timesheet_Model_TimesheetFilter extends Tinebase_Record_Abstract
     protected $_application = 'Timesheet';
     
     /**
-     * zend validators
-     *
-     * @var array
+     * the constructor
+     * it is needed because we have more validation fields in Tasks
+     * 
+     * @param mixed $_data
+     * @param bool $bypassFilters sets {@see this->bypassFilters}
+     * @param bool $convertDates sets {@see $this->convertDates}
+     * 
+     * @todo    add more validators/filters
      */
-    protected $_validators = array(
-        'id'                   => array('allowEmpty' => true,  'Int'   ),
-        'query'                => array('allowEmpty' => true           ), 
-        'container'            => array('allowEmpty' => true           ),        
-    );         
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_validators = array_merge($this->_validators, array(
+        ));
+        
+        // define query fields
+        $this->_queryFields = array(
+            'description',
+        );
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }    
 }

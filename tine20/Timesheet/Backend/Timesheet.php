@@ -37,8 +37,6 @@ class Timesheet_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abstr
      */
     protected function _addFilter(Zend_Db_Select $_select, Timesheet_Model_TimesheetFilter $_filter)
     {
-        if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('description') . ' LIKE ?)', '%' . $_filter->query . '%'));
-        }
+        $_filter->appendFilterSql($_select);
     }
 }

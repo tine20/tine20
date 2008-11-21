@@ -203,7 +203,11 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getFilter()
     {
         return array(
-            'query' => 'blabla'     
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => 'blabla'
+            ),     
         );        
     }
     
