@@ -336,10 +336,10 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
         
         updateLocationRecord: function(_locationData)
         {            
-            if(_locationData.admin_mode == '1') {
+            if(_locationData.admin_mode == 'true') {
                 Ext.getCmp('admin_mode_switch').expand();
             }  
-            if(_locationData.admin_mode == '0') {
+            if(_locationData.admin_mode == 'false') {
                 Ext.getCmp('admin_mode_switch').collapse();
             }
 
@@ -657,10 +657,10 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                         id: 'admin_mode_switch',
                         listeners: {
                             expand: function(){
-                                Ext.getCmp('admin_mode').setValue('1');
+                                Ext.getCmp('admin_mode').setValue('true');
                             },
                             collapse: function(){
-                                Ext.getCmp('admin_mode').setValue('0');
+                                Ext.getCmp('admin_mode').setValue('false');
                             }
                         },
                         title: translation._('Enable admin mode'),
