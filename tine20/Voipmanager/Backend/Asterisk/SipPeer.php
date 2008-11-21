@@ -33,7 +33,7 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_
      * @param  Zend_Db_Select $_select current where filter
      * @param  Voipmanager_Model_Asterisk_SipPeerFilter $_filter the string to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_SipPeerFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_SipPeerFilter $_filter= NULL)
     {
         if(!empty($_filter->query)) {
             $search_values = explode(" ", $_filter->query);
