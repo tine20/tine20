@@ -42,12 +42,19 @@ class Tinebase_Ldap extends Zend_Ldap
         
         // strip non Zend_Ldap options
         $options = array_intersect_key($_options, array(
-            'host'                 => NULL,
-            'username'             => NULL,
-            'password'             => NULL,
-            'bindRequiresDn'       => NULL,
-            'baseDn'               => NULL,
-            'accountCanonicalForm' => NULL
+            'host'                      => null,
+            'port'                      => null,
+            'useSsl'                    => null,
+            'username'                  => null,
+            'password'                  => null,
+            'bindRequiresDn'            => null,
+            'baseDn'                    => null,
+            'accountCanonicalForm'      => null,
+            'accountDomainName'         => null,
+            'accountDomainNameShort'    => null,
+            'accountFilterFormat'       => null,
+            'allowEmptyPassword'        => null,
+            'useStartTls'               => null,
         ));
         
         return parent::__construct($options);
