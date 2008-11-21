@@ -98,5 +98,4 @@ class Voipmanager_Model_Snom_Location extends Tinebase_Record_Abstract
         }
         return $id;
     }
-
 }
