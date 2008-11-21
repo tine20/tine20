@@ -1,0 +1,62 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Timetracker\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+
+#: js/TimesheetGridPanel.js:46 js/Timetracker.js:88
+#: js/TimesheetEditDialog.js:69
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/TimesheetGridPanel.js:47
+msgid "Summary"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:87
+msgid "Timesheet number"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:93
+msgid "Title"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:99
+msgid "Status"
+msgstr ""
+
+#: js/Timetracker.js:50
+msgid "Timesheets"
+msgstr ""
+
+#: js/Timetracker.js:92
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/TimesheetEditDialog.js:86
+msgid "Description"
+msgstr ""
+
+#: js/TimesheetEditDialog.js:87
+msgid "Enter description..."
+msgstr ""
+
+#: Setup/setup.xml:155
+msgid "Implementation"
+msgstr ""

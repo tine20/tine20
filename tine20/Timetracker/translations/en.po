@@ -1,0 +1,44 @@
+#: js/TimesheetGridPanel.js:46 js/Timetracker.js:88
+#: js/TimesheetEditDialog.js:69
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "Timesheet"
+msgstr[1] "Timesheets"
+
+#: js/TimesheetGridPanel.js:47
+msgid "Summary"
+msgstr "Summary"
+
+#: js/TimesheetGridPanel.js:87
+msgid "Timesheet number"
+msgstr "Timesheet number"
+
+#: js/TimesheetGridPanel.js:93
+msgid "Title"
+msgstr "Title"
+
+#: js/TimesheetGridPanel.js:99
+msgid "Status"
+msgstr "Status"
+
+#: js/Timetracker.js:50
+msgid "Timesheets"
+msgstr "Timesheets"
+
+#: js/Timetracker.js:92
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] "timesheets list"
+msgstr[1] "timesheets lists"
+
+#: js/TimesheetEditDialog.js:86
+msgid "Description"
+msgstr "Description"
+
+#: js/TimesheetEditDialog.js:87
+msgid "Enter description..."
+msgstr "Enter description..."
+
+#: Setup/setup.xml:155
+msgid "Implementation"
+msgstr "Implementation"
