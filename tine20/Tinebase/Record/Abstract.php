@@ -33,11 +33,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public  $bypassFilters;
     
     /**
-     * should datetimeFields be converted from iso8601 strings to ZendDate objects and back 
+     * should datetimeFields be converted from iso8601 (or optionally others {@see $this->dateConversionFormat}) strings to ZendDate objects and back 
      *
      * @var bool
      */
     public  $convertDates;
+    
+    /**
+     * differnet format than iso8601 to use for conversions 
+     *
+     * @var string
+     */
+    public $dateConversionFormat = NULL;
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -126,7 +133,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * 
      * @param mixed $_data
      * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
+     * @param mixed $convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
      * @return void
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
@@ -138,6 +145,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         $this->bypassFilters = (bool)$_bypassFilters;
         $this->convertDates = (bool)$_convertDates;
+        if (is_string($_convertDates)) {
+            $this->dateConversionFormat = $_convertDates;
+        }
 
         if(is_array($_data)) {
             $this->setFromArray($_data);
@@ -197,7 +207,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function setFromArray(array $_data)
     {
         if($this->convertDates === true) {
-            $this->_convertISO8601ToZendDate($_data);
+            if (! is_string($this->dateConversionFormat)) {
+                $this->_convertISO8601ToZendDate($_data);
+            } else {
+                $this->_convertCustomDateToZendDate($_data, $this->dateConversionFormat);
+            }
         }
         
         // set internal state to "not validated"
@@ -304,7 +318,12 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         $recordArray = $this->_properties;
         if ($this->convertDates === true) {
-            $this->_convertZendDateToISO8601($recordArray);
+            if (! is_string($this->dateConversionFormat)) {
+                $this->_convertZendDateToString($recordArray, Tinebase_Record_Abstract::ISO8601LONG);
+            } else {
+                $this->_convertZendDateToString($recordArray, $this->dateConversionFormat);
+            }
+            
         }
         
         if ($_recursive) {
@@ -455,24 +474,25 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
-     * Converts Zend_Dates into ISO8601 representation
+     * Converts Zend_Dates into custom representation
      *
      * @param array &$_toConvert
+     * @param string $_format
      * @return void
      */
-    protected function _convertZendDateToISO8601(&$_toConvert)
+    protected function _convertZendDateToString(&$_toConvert, $_format)
     {
         foreach ($_toConvert as $field => &$value) {
             if ($value instanceof Zend_Date) {
-                $_toConvert[$field] = $value->get(Tinebase_Record_Abstract::ISO8601LONG);
+                $_toConvert[$field] = $value->get($_format);
             } elseif (is_array($value)) {
-                $this->_convertZendDateToISO8601($value);
+                $this->_convertZendDateToString($value, $_format);
             }
         }
     }
     
     /**
-     * Converts dates into Zend_Date representation
+     * Converts iso8601 formated dates into Zend_Date representation
      *
      * @param array &$_data
      * 
@@ -492,6 +512,30 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } else {
                 $_data[$field] = $this->_convertISO8601ToISO8601LONG($_data[$field]);
                 $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], Tinebase_Record_Abstract::ISO8601LONG);
+            }
+        }
+    }
+    
+    /**
+     * Converts custom formated dates into Zend_Date representation
+     *
+     * @param array &$_data
+     * @param string $_format {@see Zend_Date}
+     * 
+     * @return void
+     */
+    protected function _convertCustomDateToZendDate(array &$_data, $_format)
+    {
+        foreach ($this->_datetimeFields as $field) {
+            if (!isset($_data[$field]) || $_data[$field] instanceof Zend_Date) continue;
+            
+            if(is_array($_data[$field])) {
+                foreach($_data[$field] as $dataKey => $dataValue) {
+                    if ($dataValue instanceof Zend_Date) continue;
+                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, $_format);
+                }
+            } else {
+                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], $_format);
             }
         }
     }
