@@ -323,12 +323,13 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
             throw new Tinebase_Exception_InvalidArgument('$_orderBy field "'. $_orderBy . '" is not supported by this backend instance');
         }
         
-        $rawLdapData = $this->_ldap->fetchAll($this->_options['userDn'], 'objectclass=inetorgperson', $this->_getSupportedLdapAttributes());
+        //$rawLdapData = $this->_ldap->fetchAll($this->_options['userDn'], 'objectclass=inetorgperson', $this->_getSupportedLdapAttributes());
+        $rawLdapData = $this->_ldap->fetchAll("ou=contacts,ou=von-und-zu-weiss.de,dc=d80-237-148-76", 'objectclass=inetorgperson', $this->_getSupportedLdapAttributes());
         
         $contacts = $this->_ldap2Contacts($rawLdapData);
         
         $contacts->sort($_orderBy, $_orderDirection);
-        
+        print_r($contacts->toArray());
         return $contacts;
     }
     
@@ -408,6 +409,7 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
     protected function _mapLdap2Contact($_data)
     {
         $contactArray = array();
+        $schemaMap = array();
         
         // look for each supported record filed if we find a value in the data
         foreach ($this->_getSupportedRecordFields() as $field) {
@@ -419,40 +421,34 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
                         if (array_key_exists($attributeName, $_data) && $_data[$attributeName]['count'] > 0) {
                             // heureka! we found a value for the current field.
                             // Lets take it and search for the next field.
-                            $value = $this->_ldap2Field($field, $_data[$attributeName], $schemaName);
-                            $contactArray[$field] = $value;
+                            $schemaMap[$field] = $schemaName;
+                            if ($_data[$attributeName]['count'] == 1) {
+                                $contactArray[$field] = $_data[$attributeName][0];
+                            } else {
+                                unset($_data[$attributeName]['count']);
+                                $contactArray[$field] = $_data[$attributeName];
+                            }
                             break;
                         }
                     }
                 }
             }
         }
+        
+        $this->_transformLdap2Contact($contactArray, $schemaMap);
         return $contactArray;
     }
     
     /**
-     * returns value of a field
-     * 
-     * @todo add spechial handling for fields maybe depending on schema here!
+     * do final transformation from ldap to contact after mapping
      *
-     * @param  string $_fieldName
-     * @param  array  $_ldapValue
-     * @param  string $_schemaName
-     * @return mixed  field value in the representation expected by the record
+     * @param array $_contactArray $fieldName => $fieldValue
+     * @param array $_schemaMap $fieldName => $schemaName (origin of value)
      */
-    protected function _ldap2Field($_fieldName, $_ldapValue, $_schemaName)
+    protected function _transformLdap2Contact(&$_contactArray, $_schemaMap)
     {
-        switch ($_fieldName) {
-            
-        	default:
-        		if ($_ldapValue['count'] == 1) {
-        		    return $_ldapValue[0];
-        		} else {
-        		    unset($_ldapValue['count']);
-        		    return $_ldapValue;
-        		}
-        		break;
-        }
+        // find out n_prefix/n_suffix and clear n_given (inetorgperson)
+        // adopt country codes (do we need a mapping?)
     }
     
     /**
