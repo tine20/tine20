@@ -340,7 +340,27 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $result;
     }
-
+    
+    public function sort($_field, $_direction)
+    {
+        $offsetToSortFieldMap = $this->__get($_field);
+        
+        $fn = $_direction == 'ASC' ? 'asort' : 'arsort';
+        $fn($offsetToSortFieldMap);
+        
+        // save old indexes and records
+        $oldListOfRecords = $this->_listOfRecords;
+        
+        // reset indexes and records
+        $this->_idLess        = array();
+        $this->_idMap         = array();
+        $this->_listOfRecords = array();
+        
+        foreach (array_keys($offsetToSortFieldMap) as $oldOffset) {
+            $this->addRecord($oldListOfRecords[$oldOffset]);
+        }
+    }
+    
    /**
      * translate all member records of this set
      * 
