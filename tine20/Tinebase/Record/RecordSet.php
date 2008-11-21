@@ -354,7 +354,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $fn = $_direction == 'ASC' ? 'asort' : 'arsort';
         $fn($offsetToSortFieldMap);
         
-        // save old indexes and records
+        // tmp records
         $oldListOfRecords = $this->_listOfRecords;
         
         // reset indexes and records
