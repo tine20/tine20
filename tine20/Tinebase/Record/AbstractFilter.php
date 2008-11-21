@@ -100,10 +100,6 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                 }
             }
             
-            if ($this->bypassFilters !== true) {
-                // $this->validateOperators();
-                // $this->validateOptions();
-            }
             parent::setFromArray($data);
         } else {
             parent::setFromArray($_data);
@@ -144,13 +140,11 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                         }                        
                         $whereClause = '';
                         if (!empty($whereParts)) {
-                            //$whereClause = '(' . implode(' OR ', $whereParts) . ')';
                             $whereClause = implode(' OR ', $whereParts);
                         }                        
                         if (!empty($whereClause)) {
                             $_select->where($db->quoteInto($whereClause, '%' . trim($query) . '%'));
                         }
-                        //$_select->where($db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ? or adr_one_locality LIKE ?)', '%' . trim($query) . '%'));                    
                     }
                     break;
                 case 'tag':
