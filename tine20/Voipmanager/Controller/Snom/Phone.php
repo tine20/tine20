@@ -141,7 +141,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
 
         // set all settings which are equal to the default settings to NULL
         $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
-        $settingDefaults = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($template->setting_id);
+        $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
 
         foreach($_phoneSettings AS $key => $value) {
             if($key == 'phone_id') {
@@ -201,7 +201,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     
             // set all settings which are equal to the default settings to NULL
             $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
-            $settingDefaults = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($template->setting_id);
+            $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
     
             foreach($_phoneSettings AS $key => $value) {
                 if($key == 'phone_id') {
@@ -212,7 +212,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
                 }    
             }
 
-            if($this->_snomPhoneSettingsBackend->get($phone->getId())) {
+            if(Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($phone->getId())) {
                 $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->update($_phoneSettings);
             } else {
                 $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);            
