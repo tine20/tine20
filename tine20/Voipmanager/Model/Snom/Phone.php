@@ -135,12 +135,12 @@ class Voipmanager_Model_Snom_Phone extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-    	if ($_data['redirect_time'] == '') {
+    	if (isset($_data['redirect_time']) && $_data['redirect_time'] == '') {
     		$_data['redirect_time'] = 0;
     	}
         
         Zend_Registry::get('logger')->debug(print_r($_data,true));
     	
     	parent::setFromArray($_data);
-    }    
+    }
 }
