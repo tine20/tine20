@@ -35,7 +35,7 @@ class Voipmanager_Backend_Snom_Template extends Tinebase_Application_Backend_Sql
      * @param  Zend_Db_Select $_select current where filter
      * @param  Voipmanager_Model_Snom_TemplateFilter $_filter the filter values to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_TemplateFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_TemplateFilter $_filter = NULL)
     {
         if(!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('model') . ' LIKE ? OR ' .
