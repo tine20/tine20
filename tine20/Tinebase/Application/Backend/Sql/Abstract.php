@@ -222,12 +222,15 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @todo    remove autoincremental ids later
      */
     public function create(Tinebase_Record_Interface $_record) {
+    	
+    	$identifier = $this->_getRecordIdentifier();
+    	
     	if (!$_record instanceof $this->_modelName) {
     		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type. Should be instance of ' . $this->_modelName);
     	}
     	
         // set uid if record has hash id and id is empty
-    	if ($this->_hasHashId() && empty($_record->id)) {
+    	if ($this->_hasHashId() && empty($_record->$identifier)) {
             $newId = $_record->generateUID();
             $_record->setId($newId);
         }
@@ -235,7 +238,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $recordArray = $_record->toArray();
         
         // unset id if autoincrement & still empty
-        if (empty($_record->id)) {
+        if (empty($_record->$identifier)) {
             unset($recordArray['id']);
         }
         
@@ -249,16 +252,16 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
 
         // if we insert a record without an id, we need to get back one
-        if (empty($_record->id) && $newId == 0) {
+        if (empty($_record->$identifier) && $newId == 0) {
             throw new Tinebase_Exception_UnexpectedValue("Returned record id is 0.");
         }
         
         // if the record had no id set, set the id now
-        if ($_record->id == NULL || $_record->id == 'NULL') {
-        	$_record->id = $newId;
+        if ($_record->$identifier == NULL || $_record->$identifier == 'NULL') {
+        	$_record->$identifier = $newId;
         }
         
-        return $this->get($_record->id);
+        return $this->get($_record->$identifier);
     }
     
     /**
@@ -375,10 +378,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     protected function _convertId($_id)
     {
         if($_id instanceof $this->_modelName) {
-            if(empty($_id->id)) {
+            $identifier = $this->_getRecordIdentifier();
+        	if(empty($_id->$identifier)) {
                 throw new Tinebase_Exception_InvalidArgument('No id set!');
             }
-            $id = $_id->id;
+            $id = $_id->$identifier;
         } elseif (is_array($_id)) {
             throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
         } else {
@@ -406,5 +410,23 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $result = ($fields['id']['DATA_TYPE'] === 'varchar' && $fields['id']['LENGTH'] == 40);
         
         return $result;
+    }
+    
+    /**
+     * splits identifier if table name is given (i.e. for joined tables)
+     *
+     * @return string identifier name
+     * 
+     * @todo    remove legacy code when joins are removed from sql backends
+     */
+    protected function _getRecordIdentifier()
+    {
+        if (preg_match("/\./", $this->_identifier)) {
+            list($table, $identifier) = explode('.', $this->_identifier);
+    	} else {
+    		$identifier = $this->_identifier;
+    	}
+    	
+        return $identifier;    
     }
 }
