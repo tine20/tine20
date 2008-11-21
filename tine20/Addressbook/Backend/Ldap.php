@@ -380,14 +380,13 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
      * 
      * @param  array $_data raw ldap contacts data
      * @return Tinebase_Record_RecordSet of Addressbook_Model_Contacts
-     *
      */
     protected function _ldap2Contacts($_data)
     {
         $contactsArray = array();
         
         foreach ($_data as $ldapEntry) {
-            $contactArray = $this->_doMapping($ldapEntry);
+            $contactArray = $this->_mapLdap2Contact($ldapEntry);
             array_push($contactsArray, $contactArray);
         }
         
@@ -401,12 +400,12 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
     }
     
     /**
-     * returns an array of raw contact data
+     * maps data of raw ldapEntry to fields of a contact record
      * 
      * @param array natvie ldap data of an entry
      * @return array raw contact data
      */
-    protected function _doMapping($_data)
+    protected function _mapLdap2Contact($_data)
     {
         $contactArray = array();
         
@@ -457,14 +456,13 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
     }
     
     /**
-     * checks available and required schemas
+     * checks if all required schemas are available
      * 
+     * @throws Addressbook_Exception_Backend
      * @return void
      */
     protected function _checkSchemas()
     {
-        $this->_availableSchemas = array('posixaccount', 'openldap', 'inetorgperson', 'mozillaabpersonalpha', 'evolutionperson');
-        
         $missingSchemas = array_diff($this->_requierdSchemas, $this->_availableSchemas);
         if (count($missingSchemas) > 0) {
             throw new Addressbook_Exception_Backend("missing required schemas: " . print_r($missingSchemas, true));
