@@ -126,7 +126,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         // limit length because of Snom phone limitations
         $_phone->http_client_user = Tinebase_Record_Abstract::generateUID(30);
         $_phone->http_client_pass = Tinebase_Record_Abstract::generateUID(20);
-        $_phone->http_client_info_sent = false;
+        $_phone->http_client_info_sent = 0;
         
         unset($_phone->settings_loaded_at);
         unset($_phone->firmware_checked_at);
