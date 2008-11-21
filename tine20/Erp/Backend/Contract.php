@@ -40,11 +40,6 @@ class Erp_Backend_Contract extends Tinebase_Application_Backend_Sql_Abstract
     protected function _addFilter(Zend_Db_Select $_select, Erp_Model_ContractFilter $_filter)
     {
         //$_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
-                        
-        if (!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('title') . ' LIKE ? OR ' .
-                    $this->_db->quoteIdentifier('description') . ' LIKE ? OR ' .
-                    $this->_db->quoteIdentifier('number') . ' LIKE ?)', '%' . $_filter->query . '%'));
-        }
+        $_filter->appendFilterSql($_select);
     }
 }
