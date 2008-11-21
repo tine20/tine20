@@ -66,8 +66,8 @@ class Voipmanager_Model_Snom_Phone extends Tinebase_Record_Abstract
         'rights'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'redirect_event'        => array('presence' => 'required', 'InArray' => array('none','time','busy', 'all')),
         'redirect_number'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),        
-        'http_client_info_sent' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'http_client_info_sent' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'http_client_user'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'http_client_pass'      => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
@@ -123,4 +123,24 @@ class Voipmanager_Model_Snom_Phone extends Tinebase_Record_Abstract
             return false;
         }
     }
+
+    /**
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * 
+     * @todo    check if this is really needed!
+     */
+    public function setFromArray(array $_data)
+    {
+    	if ($_data['redirect_time'] == '') {
+    		$_data['redirect_time'] = 0;
+    	}
+        
+        Zend_Registry::get('logger')->debug(print_r($_data,true));
+    	
+    	parent::setFromArray($_data);
+    }    
 }
