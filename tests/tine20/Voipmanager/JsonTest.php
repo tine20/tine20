@@ -434,19 +434,24 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->_getSnomPhone();
         
-        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test));
+        $lineData = array('a' => 'a');
+        $rightsData = array('b' => 'b');
+        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test), Zend_Json::encode($lineData), Zend_Json::encode($rightsData));
         // print_r($returned);
         $this->assertEquals($test['name'], $returned['updatedData']['name']);
-        $this->assertEquals($test['description'], $returned['updatedData']['description']);
-        $this->assertEquals($test['registrar'], $returned['updatedData']['registrar']);
+        $this->assertEquals($test['macaddress'], $returned['updatedData']['macaddress']);
+        $this->assertEquals($test['location_id'], $returned['updatedData']['location_id']);
+        $this->assertEquals($test['template_id'], $returned['updatedData']['template_id']);
         $this->assertNotNull($returned['updatedData']['id']);
         
         // test getSnomPhone as well
         $returnedGet = $this->_backend->getSnomPhone($returned['updatedData']['id']);
         // print_r($returnedGet)
         $this->assertEquals($test['name'], $returnedGet['name']);
-        $this->assertEquals($test['description'], $returnedGet['description']);
-        $this->assertEquals($test['registrar'], $returnedGet['registrar']);
+        $this->assertEquals($test['macaddress'], $returnedGet['macaddress']);
+        $this->assertEquals($test['location_id'], $returnedGet['location_id']);
+        $this->assertEquals($test['template_id'], $returnedGet['template_id']);
         
         $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
@@ -490,16 +495,19 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      * get snom phone data
      *
      * @return array
-     *//*
+     */
     protected function _getSnomPhone()
     {
         return array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
-            'description' => Tinebase_Record_Abstract::generateUID(),
-            'registrar' => Tinebase_Record_Abstract::generateUID()
+            'macaddress' => Tinebase_Record_Abstract::generateUID(),
+            'location_id' => Tinebase_Record_Abstract::generateUID(),
+            'template_id' => Tinebase_Record_Abstract::generateUID(),
+            'current_model' => 'snom300',
+            'redirect_event' => 'none'
         );
     }
-    */
+    
     /** Snom Settings tests **/
     
     /**
