@@ -2,7 +2,7 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     Timesheet
+ * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -16,16 +16,16 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Timesheet_JsonTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Timetracker_JsonTest::main');
 }
 
 /**
  * Test class for Tinebase_Group
  */
-class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
+class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Timesheet_Frontend_Json
+     * @var Timetracker_Frontend_Json
      */
     protected $_backend = array();
     
@@ -37,7 +37,7 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Timesheet Json Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -49,7 +49,7 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Timesheet_Frontend_Json();        
+        $this->_backend = new Timetracker_Frontend_Json();        
     }
 
     /**
@@ -173,7 +173,7 @@ class Timesheet_JsonTest extends PHPUnit_Framework_TestCase
             ), TRUE)
         );
         
-        return new Timesheet_Model_Timesheet(array(
+        return new Timetracker_Model_Timesheet(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'contract_id'   => $contract->getId(),
             'description'   => 'blabla',

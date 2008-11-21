@@ -2,7 +2,7 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     Timesheet
+ * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -15,10 +15,10 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Timesheet_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Timetracker_AllTests::main');
 }
 
-class Timesheet_AllTests
+class Timetracker_AllTests
 {
     public static function main ()
     {
@@ -27,12 +27,12 @@ class Timesheet_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Timesheet All Tests');
-        $suite->addTestSuite('Timesheet_JsonTest');
+        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker All Tests');
+        $suite->addTestSuite('Timetracker_JsonTest');
         return $suite;
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'Timesheet_AllTests::main') {
-    Timesheet_AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'Timetracker_AllTests::main') {
+    Timetracker_AllTests::main();
 }

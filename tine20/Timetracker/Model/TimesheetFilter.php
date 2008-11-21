@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Timesheet
+ * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,16 +12,16 @@
 
 /**
  * contract filter Class
- * @package     Timesheet
+ * @package     Timetracker
  */
-class Timesheet_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
+class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
 {
     /**
      * application the record belongs to
      *
      * @var string
      */
-    protected $_application = 'Timesheet';
+    protected $_application = 'Timetracker';
     
     /**
      * the constructor

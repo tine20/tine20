@@ -2,7 +2,7 @@
 /**
  * class to hold Timesheet data
  * 
- * @package     Timesheet
+ * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,9 +13,9 @@
 /**
  * class to hold Timesheet data
  * 
- * @package     Timesheet
+ * @package     Timetracker
  */
-class Timesheet_Model_Timesheet extends Tinebase_Record_Abstract
+class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
 {  
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -30,7 +30,7 @@ class Timesheet_Model_Timesheet extends Tinebase_Record_Abstract
      *
      * @var string
      */
-    protected $_application = 'Timesheet';
+    protected $_application = 'Timetracker';
     
     /**
      * list of zend validator

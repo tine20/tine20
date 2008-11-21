@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
- * @package     Timesheet
+ * @package     Timetracker
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -11,17 +11,17 @@
 
 /**
  *
- * This class handles all Json requests for the Timesheet application
+ * This class handles all Json requests for the Timetracker application
  *
- * @package     Timesheet
+ * @package     Timetracker
  * @subpackage  Frontend
  */
-class Timesheet_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {    
     /**
      * timesheet controller
      *
-     * @var Timesheet_Controller_Timesheet
+     * @var Timetracker_Controller_Timesheet
      */
     protected $_timesheetController = NULL;
     
@@ -31,8 +31,8 @@ class Timesheet_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstrac
      */
     public function __construct()
     {
-        $this->_applicationName = 'Timesheet';
-        $this->_timesheetController = Timesheet_Controller_Timesheet::getInstance();
+        $this->_applicationName = 'Timetracker';
+        $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
     }
     
     /**
@@ -44,7 +44,7 @@ class Timesheet_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstrac
      */
     public function getAllCategories()
     {
-        $controller = Timesheet_Controller_Category::getInstance();
+        $controller = Timetracker_Controller_Category::getInstance();
         return $this->_getAll($controller);
     }
     
@@ -57,7 +57,7 @@ class Timesheet_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstrac
      */
     public function searchTimesheets($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_timesheetController, 'Timesheet_Model_TimesheetFilter');
+        return $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter');
     }     
     
     /**

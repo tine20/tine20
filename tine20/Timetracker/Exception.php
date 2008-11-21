@@ -2,21 +2,22 @@
 /**
  * Tine 2.0
  * 
- * @package     Timesheet
+ * @package     Timetracker
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  *
+ * @todo        add methods/attributes? application name for example?
  */
 
 /**
- * UnexpectedValue exception
+ * Timetracker exception
  * 
- * @package     Timesheet
+ * @package     Timetracker
  * @subpackage  Exception
  */
-class Timesheet_Exception_UnexpectedValue extends Timesheet_Exception
+class Timetracker_Exception extends Exception
 {
 }

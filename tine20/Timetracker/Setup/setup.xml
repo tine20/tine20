@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
-    <name>Timesheet</name>
+    <name>Timetracker</name>
     <version>0.1</version>
     <order>60</order>
     <status>disabled</status>
     <tables>
         <table>
-            <name>timesheet_category</name>
+            <name>timetracker_category</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -31,7 +31,7 @@
             </declaration>
         </table>
         <table>
-            <name>timesheet</name>
+            <name>timetracker_timesheet</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -125,25 +125,25 @@
                     </reference>
                 </index>
                 <index>
-                    <name>timesheet::category_id--timesheet_category::id</name>
+                    <name>timesheet::category_id--category::id</name>
                     <field>
                         <name>category_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>timesheet_category</table>
+                        <table>timetracker_category</table>
                         <field>id</field>
                     </reference>
                 </index>
             </declaration>
         </table>
     </tables>
-    <!-- @todo add foreign key timesheet::contract_id erp_contracts::id / erp has to be installed first -->
+    <!-- @todo add foreign key timetracker_timesheet::contract_id erp_contracts::id / erp has to be installed first -->
     <!-- @todo add more categories -->
     <defaultRecords>
         <record>
             <table>
-                <name>timesheet_category</name>
+                <name>timetracker_category</name>
             </table>
             <field>
                 <name>id</name>
