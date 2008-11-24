@@ -3,7 +3,7 @@
     <name>Timetracker</name>
     <version>0.1</version>
     <order>60</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <tables>
         <table>
             <name>timetracker_timeaccount</name>
@@ -117,6 +117,16 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>is_billable</name>
+                    <type>boolean</type>
+                    <default>true</default>
+                </field>
+                <field>
+                    <name>is_cleared</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>start</name>
