@@ -362,7 +362,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         if ($this->_modlogActive) {
             // don't fetch deleted objects
-            $select->where($db->quoteIdentifier('is_deleted') . ' = 0');                        
+            $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');                        
         }
         
         return $select;
