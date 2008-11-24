@@ -429,33 +429,45 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test creation of snom phone
      *
-     *//*
+     */
     public function testCreateSnomPhone()
     {
-        $test = $this->_getSnomPhone();
+        $testLocation = $this->_getSnomLocation();
+        $returnedLocation = $this->_backend->saveSnomLocation(Zend_Json::encode($testLocation));
         
-        $lineData = array('a' => 'a');
-        $rightsData = array('b' => 'b');
+        $testSoftware = $this->_getSnomSoftware();
+        $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
         
-        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test), Zend_Json::encode($lineData), Zend_Json::encode($rightsData));
-        // print_r($returned);
-        $this->assertEquals($test['name'], $returned['updatedData']['name']);
-        $this->assertEquals($test['macaddress'], $returned['updatedData']['macaddress']);
-        $this->assertEquals($test['location_id'], $returned['updatedData']['location_id']);
-        $this->assertEquals($test['template_id'], $returned['updatedData']['template_id']);
+        $testSetting = $this->_getSnomSetting();
+        $returnedSetting = $this->_backend->saveSnomSetting(Zend_Json::encode($testSetting));
+        
+        $testTemplate = $this->_getSnomTemplate($returnedSoftware['updatedData']['id'], $returnedSetting['updatedData']['id']);
+        $returnedTemplate = $this->_backend->saveSnomTemplate(Zend_Json::encode($testTemplate)); 
+        
+        $testPhone = $this->_getSnomPhone($returnedLocation['updatedData']['id'], $returnedTemplate['updatedData']['id']);
+        
+        $lineData = array();
+        $rightsData = array();
+        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($testPhone), Zend_Json::encode($lineData), Zend_Json::encode($rightsData));
+        
+        $this->assertEquals($testPhone['description'], $returned['updatedData']['description']);
+        $this->assertEquals(strtoupper($testPhone['macaddress']), $returned['updatedData']['macaddress']);
+        $this->assertEquals($testPhone['location_id'], $returnedLocation['updatedData']['id']);
+        $this->assertEquals($testPhone['template_id'], $returnedTemplate['updatedData']['id']);
         $this->assertNotNull($returned['updatedData']['id']);
         
         // test getSnomPhone as well
         $returnedGet = $this->_backend->getSnomPhone($returned['updatedData']['id']);
-        // print_r($returnedGet)
-        $this->assertEquals($test['name'], $returnedGet['name']);
-        $this->assertEquals($test['macaddress'], $returnedGet['macaddress']);
-        $this->assertEquals($test['location_id'], $returnedGet['location_id']);
-        $this->assertEquals($test['template_id'], $returnedGet['template_id']);
+        
+        $this->assertEquals($testPhone['description'], $returnedGet['description']);
+        $this->assertEquals(strtoupper($testPhone['macaddress']), $returnedGet['macaddress']);
+        $this->assertEquals($testPhone['location_id'], $returnedGet['location_id']);
+        $this->assertEquals($testPhone['template_id'], $returnedGet['template_id']);
         
         $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
-    */
+    
     /**
      * test update of snom phone
      *
@@ -496,13 +508,13 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getSnomPhone()
+    protected function _getSnomPhone($location_id, $template_id)
     {
         return array(
-            'name'  => Tinebase_Record_Abstract::generateUID(),
-            'macaddress' => Tinebase_Record_Abstract::generateUID(),
-            'location_id' => Tinebase_Record_Abstract::generateUID(),
-            'template_id' => Tinebase_Record_Abstract::generateUID(),
+            'description'  => Tinebase_Record_Abstract::generateUID(),
+            'macaddress' => substr(Tinebase_Record_Abstract::generateUID(), 0, 12),
+            'location_id' => $location_id,
+            'template_id' => $template_id,
             'current_model' => 'snom300',
             'redirect_event' => 'none'
         );
@@ -662,7 +674,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     	$testSoftware = $this->_getSnomSoftware();
         $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
         
-        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id']);
+        $testSetting = $this->_getSnomSetting();
+        $returnedSetting = $this->_backend->saveSnomSetting(Zend_Json::encode($testSetting));
+        
+        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id'], $returnedSetting['updatedData']['id']);
         $returned = $this->_backend->saveSnomTemplate(Zend_Json::encode($test));
         
         $this->assertEquals($test['name'], $returned['updatedData']['name']);
@@ -690,7 +705,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     	$testSoftware = $this->_getSnomSoftware();
         $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
         
-        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id']);
+        $testSetting = $this->_getSnomSetting();
+        $returnedSetting = $this->_backend->saveSnomSetting(Zend_Json::encode($testSetting));
+        
+        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id'], $returnedSetting['updatedData']['id']);
         $returned = $this->_backend->saveSnomTemplate(Zend_Json::encode($test));
         $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
         
@@ -713,7 +731,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     	$testSoftware = $this->_getSnomSoftware();
         $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
         
-        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id']);
+        $testSetting = $this->_getSnomSetting();
+        $returnedSetting = $this->_backend->saveSnomSetting(Zend_Json::encode($testSetting));
+        
+        $test = $this->_getSnomTemplate($returnedSoftware['updatedData']['id'], $returnedSetting['updatedData']['id']);
         $returned = $this->_backend->saveSnomTemplate(Zend_Json::encode($test));
         
         $searchResult = $this->_backend->getSnomTemplates('description', 'ASC', $test['name']);
@@ -728,11 +749,11 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getSnomTemplate($software_id)
+    protected function _getSnomTemplate($software_id, $setting_id)
     {
         return array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
-            'setting_id' => Tinebase_Record_Abstract::generateUID(),
+            'setting_id' => $setting_id,
             'software_id' => $software_id
         );
     }
