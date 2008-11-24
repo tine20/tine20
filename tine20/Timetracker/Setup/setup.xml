@@ -49,6 +49,11 @@
                     <length>128</length>
                 </field>
                 <field>
+                    <name>is_open</name>
+                    <type>boolean</type>
+                    <default>true</default>
+                </field>                
+                <field>
                     <name>created_by</name>
                     <type>integer</type>
                 </field>
