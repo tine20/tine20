@@ -64,7 +64,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to add a Timesheet
+     * try to add a Timeaccount
      *
      */
     public function testAddTimeaccount()
@@ -77,6 +77,67 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
         $this->assertTrue(is_array($timeaccountData['container_id']));
         $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
+        
+        // cleanup
+        $this->_backend->deleteTimeaccounts($timeaccountData['id']);
+    }
+    
+    /**
+     * try to get a Timeaccount
+     *
+     */
+    public function testGetTimeaccount()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_backend->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        $timeaccountData = $this->_backend->getTimeaccount($timeaccountData['id']);
+        
+        // checks
+        $this->assertEquals($timeaccount->description, $timeaccountData['description']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
+        $this->assertTrue(is_array($timeaccountData['container_id']));
+        $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
+                        
+        // cleanup
+        $this->_backend->deleteTimeaccounts($timeaccountData['id']);
+    }
+
+    /**
+     * try to update a Timeaccount
+     *
+     */
+    public function testUpdateTimeaccount()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_backend->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        
+        // update Timeaccount
+        $timeaccountData['description'] = "blubbblubb";
+        $timeaccountUpdated = $this->_backend->saveTimeaccount(Zend_Json::encode($timeaccountData));
+        
+        // check
+        $this->assertEquals($timeaccountData['id'], $timeaccountUpdated['id']);
+        $this->assertEquals($timeaccountData['description'], $timeaccountUpdated['description']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountUpdated['last_modified_by']);
+        
+        // cleanup
+        $this->_backend->deleteTimeaccounts($timeaccountData['id']);
+    }
+    
+    /**
+     * try to get a Timeaccount
+     *
+     */
+    public function testSearchTimeaccounts()
+    {
+        // create
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_backend->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        
+        // search & check
+        $search = $this->_backend->searchTimeaccounts(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
+        $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
         $this->_backend->deleteTimeaccounts($timeaccountData['id']);
@@ -238,6 +299,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
                 'field' => 'query', 
                 'operator' => 'contains', 
                 'value' => 'blabla'
+            ),     
+            array(
+                'field' => 'containerType', 
+                'operator' => 'equals', 
+                'value' => Tinebase_Model_Container::TYPE_SHARED
             ),     
         );        
     }
