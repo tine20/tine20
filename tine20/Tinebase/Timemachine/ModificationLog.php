@@ -346,7 +346,7 @@ class Tinebase_Timemachine_ModificationLog
                 $_newRecord->last_modified_by   = $currentAccountId;
                 $_newRecord->last_modified_time = $currentTime;
                 break;
-            case 'update':
+            case 'delete':
                 $_newRecord->deleted_by   = $currentAccountId;
                 $_newRecord->deleted_time = $currentTime;
                 $_newRecord->is_deleted   = true;

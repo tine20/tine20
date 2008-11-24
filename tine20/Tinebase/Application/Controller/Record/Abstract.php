@@ -44,6 +44,14 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     protected $_doContainerACLChecks = TRUE;
 
     /**
+     * delete or just set is_delete=1 if record is going to be deleted
+     * - legacy code -> remove that when all backends/applications are using the history logging
+     *
+     * @var boolean
+     */
+    protected $_purgeRecords = TRUE;
+    
+    /**
      * send notifications?
      * - the controller has to define a sendNotifications() function
      *
@@ -354,7 +362,12 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                     || ($this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_DELETE 
                     && $container->type != Tinebase_Model_Container::TYPE_INTERNAL))) {
                         
-                    $this->_backend->delete($record);
+                    if (!$this->_purgeRecords && $record->has('created_by')) {
+                        Tinebase_Timemachine_Modificationlog::setRecordMetaData($record, 'delete');
+                        $this->_backend->update($record);
+                    } else {
+                        $this->_backend->delete($record);
+                    }
                     
                     // delete notes & relations
                     if ($record->has('notes')) {
