@@ -17,6 +17,8 @@
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @version    $Id: Adapter.php 1326 2008-03-24 10:38:03Z nelius_weiss $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * 
+ * @todo        update that for ZF 1.7 (see: http://framework.zend.com/manual/en/zend.locale.migration.html)
  */
 
 

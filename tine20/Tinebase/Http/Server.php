@@ -287,4 +287,33 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
 	{
 		
 	}
+
+    /**
+     * Map PHP type to protocol type
+     * -> we need to implement that because it is declared abstract in Zend_Server_Abstract
+     * -> is needed for ZF 1.7
+     * 
+     * @param  string $type 
+     * @return string
+     * 
+     */
+    protected function _fixType($type)
+    {
+        return $type;
+    }
+    
+    /**
+     * Lowercase a string
+     *
+     * Lowercase's a string by reference
+     * -> moved here from Zend_Server_Abstract because it is marked as deprecated there
+     * 
+     * @param  string $string value
+     * @param  string $key
+     * @return string Lower cased string
+     */
+    public static function lowerCase(&$value, &$key)
+    {
+        return $value = strtolower($value);
+    }    
 }
