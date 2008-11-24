@@ -731,7 +731,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function setFromJson($_data)
     {
-        $contactData = Zend_Json::decode($_data);
-        $this->setFromArray($contactData);
+        $recordData = Zend_Json::decode($_data);
+        
+        // sanitize container id if it is an array
+        if ($this->has('container_id') && isset($recordData['container_id']) && is_array($recordData['container_id'])) {
+            $recordData['container_id'] = $recordData['container_id']['id'];
+        }
+        
+        $this->setFromArray($recordData);
     }
 }
