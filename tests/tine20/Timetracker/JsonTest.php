@@ -67,6 +67,25 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * try to add a Timesheet
      *
      */
+    public function testAddTimeaccount()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_backend->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        
+        // checks
+        $this->assertEquals($timeaccount->description, $timeaccountData['description']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
+        $this->assertTrue(is_array($timeaccountData['container_id']));
+        $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
+        
+        // cleanup
+        $this->_backend->deleteTimeaccounts($timeaccountData['id']);
+    }
+    
+    /**
+     * try to add a Timesheet
+     *
+     */
     public function testAddTimesheet()
     {
         /*
@@ -157,22 +176,37 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /************ protected helper funcs *************/
     
     /**
-     * get Timesheet (create contract as well)
+     * get Timesheet
      *
-     * @return Timesheet_Model_Timesheet
+     * @return Timetracker_Model_Timeaccount
+     */
+    protected function _getTimeaccount()
+    {
+        return new Timetracker_Model_Timeaccount(array(
+            'title'         => Tinebase_Record_Abstract::generateUID(),
+            'description'   => 'blabla',
+        ), TRUE);
+    }
+    
+    /**
+     * get Timesheet (create timeaccount as well)
+     *
+     * @return Timetracker_Model_Timesheet
      */
     protected function _getTimesheet()
     {
+        /*
         $contract = Erp_Controller_Contract::getInstance()->create(new Erp_Model_Contract(
             array(
                 'title'         => 'phpunit timesheet contract',
                 'description'   => 'blabla',
             ), TRUE)
         );
+        */
         
         return new Timetracker_Model_Timesheet(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
-            'contract_id'   => $contract->getId(),
+           // 'contract_id'   => $contract->getId(),
             'description'   => 'blabla',
         ), TRUE);
     }
