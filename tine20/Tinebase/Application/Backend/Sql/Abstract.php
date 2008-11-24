@@ -38,6 +38,13 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @var string
      */
     protected $_modelName;
+
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = FALSE;
     
     /**
      * Identifier
@@ -351,6 +358,10 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             $select->from($this->_tableName, array('count' => 'COUNT(*)'));    
         } else {
             $select->from($this->_tableName);
+        }
+        
+        if ($this->_modlogActive) {
+            $select->where($db->quoteIdentifier('is_deleted') . ' = 0');                        
         }
         
         return $select;
