@@ -24,6 +24,7 @@ class Timetracker_Backend_Timeaccount extends Tinebase_Application_Backend_Sql_A
      */
     public function __construct ()
     {
+        $this->_modlogActive = TRUE;
         parent::__construct(SQL_TABLE_PREFIX . 'timetracker_timeaccount', 'Timetracker_Model_Timeaccount');
     }
     
