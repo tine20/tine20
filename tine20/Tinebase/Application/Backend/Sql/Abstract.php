@@ -406,8 +406,9 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     {
         $fields = $this->_db->describeTable($this->_tableName);
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($fields, true));
-        
-        $result = ($fields['id']['DATA_TYPE'] === 'varchar' && $fields['id']['LENGTH'] == 40);
+
+        $identifier = $this->_getRecordIdentifier();
+        $result = ($fields[$identifier]['DATA_TYPE'] === 'varchar' && $fields[$identifier]['LENGTH'] == 40);
         
         return $result;
     }
