@@ -6,7 +6,7 @@
     <status>disabled</status>
     <tables>
         <table>
-            <name>timetracker_category</name>
+            <name>timetracker_timeaccount</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -16,10 +16,66 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>name</name>
+                    <name>container_id</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                </field>                
+                <field>
+                    <name>title</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
                     <type>text</type>
                     <length>128</length>
-                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>budget</name>
+                    <type>double</type>
+                </field>
+                <field>
+                    <name>unitprice</name>
+                    <type>double</type>
+                </field>
+                <field>
+                    <name>unit</name>
+                    <type>text</type>
+                    <length>128</length>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>integer</type>
+                </field>            
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
                 </field>
                 <index>
                     <name>id</name>
@@ -28,6 +84,17 @@
                         <name>id</name>
                     </field>
                 </index>
+                <index>
+                    <name>timeaccount::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
             </declaration>
         </table>
         <table>
@@ -46,13 +113,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>contract_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>category_id</name>
+                    <name>timeaccount_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>
@@ -68,14 +129,6 @@
                 <field>
                     <name>description</name>
                     <type>text</type>
-                </field>
-                <field>
-                    <name>quantity</name>
-                    <type>double</type>
-                </field>
-                <field>
-                    <name>unitprice</name>
-                    <type>double</type>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -125,35 +178,63 @@
                     </reference>
                 </index>
                 <index>
-                    <name>timesheet::category_id--category::id</name>
+                    <name>timesheet::timeaccount_id--timeaccount::id</name>
                     <field>
-                        <name>category_id</name>
+                        <name>timeaccount_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>timetracker_category</table>
+                        <table>timetracker_timeaccount</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>timetracker_timesheet_custom</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>timesheet_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>value</name>
+                    <type>text</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>timesheet_custom::timesheet_id--timesheet::id</name>
+                    <field>
+                        <name>timesheet_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>timetracker_timesheet</table>
                         <field>id</field>
                     </reference>
                 </index>
             </declaration>
         </table>
     </tables>
-    <!-- @todo add foreign key timetracker_timesheet::contract_id erp_contracts::id / erp has to be installed first -->
-    <!-- @todo add more categories -->
-    <defaultRecords>
-        <record>
-            <table>
-                <name>timetracker_category</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value special="uid">uid</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>Implementation</value>
-                <!-- gettext('Implementation') -->
-            </field>
-        </record>
-    </defaultRecords>    
 </application>

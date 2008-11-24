@@ -1,24 +1,23 @@
 <?php
 /**
- * Category controller for Timetracker application
+ * Timeaccount controller for Timetracker application
  * 
  * @package     Timetracker
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
- * @todo        move categories to Erp?
  */
 
 /**
- * Category controller class for Timetracker application
+ * Timeaccount controller class for Timetracker application
  * 
  * @package     Timetracker
  * @subpackage  Controller
  */
-class Timetracker_Controller_Category extends Tinebase_Application_Controller_Record_Abstract
+class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -27,27 +26,27 @@ class Timetracker_Controller_Category extends Tinebase_Application_Controller_Re
      */
     private function __construct() {        
         $this->_applicationName = 'Timetracker';
-        $this->_backend = new Timetracker_Backend_Category();
-        $this->_modelName = 'Timetracker_Model_Category';
+        $this->_backend = new Timetracker_Backend_Timeaccount();
+        $this->_modelName = 'Timetracker_Model_Timeaccount';
         $this->_currentAccount = Tinebase_Core::getUser();   
     }    
     
     /**
      * holdes the instance of the singleton
      *
-     * @var Timetracker_Controller_Category
+     * @var Timetracker_Controller_Timeaccount
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Timetracker_Controller_Category
+     * @return Timetracker_Controller_Timeaccount
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Timetracker_Controller_Category();
+            self::$_instance = new Timetracker_Controller_Timeaccount();
         }
         
         return self::$_instance;

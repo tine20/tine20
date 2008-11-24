@@ -1,21 +1,22 @@
 <?php
 /**
- * class to hold Timesheet data
+ * class to hold Timeaccount data
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        update validators (default values, mandatory fields)
  */
 
 /**
- * class to hold Timesheet data
+ * class to hold Timeaccount data
  * 
  * @package     Timetracker
  */
-class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
+class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
 {  
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -41,11 +42,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'timeaccount_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'duration'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'budget'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'unit'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
+        'unitprice'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -62,7 +65,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'start',
         'creation_time',
         'last_modified_time',
         'deleted_time'
