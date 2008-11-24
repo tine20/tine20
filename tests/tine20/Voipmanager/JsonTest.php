@@ -471,38 +471,70 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test update of snom phone
      *
-     *//*
+     */
     public function testUpdateSnomPhone()
     {
-        $test = $this->_getSnomPhone();
+        $testLocation = $this->_getSnomLocation();
+        $returnedLocation = $this->_backend->saveSnomLocation(Zend_Json::encode($testLocation));
         
-        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test));
+        $testSoftware = $this->_getSnomSoftware();
+        $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
+        
+        $testSetting = $this->_getSnomSetting();
+        $returnedSetting = $this->_backend->saveSnomSetting(Zend_Json::encode($testSetting));
+        
+        $testTemplate = $this->_getSnomTemplate($returnedSoftware['updatedData']['id'], $returnedSetting['updatedData']['id']);
+        $returnedTemplate = $this->_backend->saveSnomTemplate(Zend_Json::encode($testTemplate)); 
+        
+        $testPhone = $this->_getSnomPhone($returnedLocation['updatedData']['id'], $returnedTemplate['updatedData']['id']);
+        
+        $lineData = array();
+        $rightsData = array();
+        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($testPhone), Zend_Json::encode($lineData), Zend_Json::encode($rightsData));
         $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
         
-        $updated = $this->_backend->saveSnomPhone(Zend_Json::encode($returned['updatedData']));
-        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
+        $updated = $this->_backend->saveSnomPhone(Zend_Json::encode($returned['updatedData']), Zend_Json::encode($returned['updatedData']['lines']), Zend_Json::encode($returned['updatedData']['rights']));
         $this->assertEquals($returned['updatedData']['description'], $updated['updatedData']['description']);
-        $this->assertEquals($returned['updatedData']['registrar'], $updated['updatedData']['registrar']);
+        $this->assertEquals($returned['updatedData']['macaddress'], $updated['updatedData']['macaddress']);
+        $this->assertEquals($returned['updatedData']['location_id'], $updated['updatedData']['location_id']);
+        $this->assertEquals($returned['updatedData']['template_id'], $updated['updatedData']['template_id']);
         $this->assertNotNull($updated['updatedData']['id']);
                 
         $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
-    */
+    
     /**
      * test search of snom phone
      *
-     *//*
+     */
     public function testSearchSnomPhone()
     {
-        $test = $this->_getSnomPhone();        
-        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($test));
+        $testLocation = $this->_getSnomLocation();
+        $returnedLocation = $this->_backend->saveSnomLocation(Zend_Json::encode($testLocation));
+        
+        $testSoftware = $this->_getSnomSoftware();
+        $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
+        
+        $testSetting = $this->_getSnomSetting();
+        $returnedSetting = $this->_backend->saveSnomSetting(Zend_Json::encode($testSetting));
+        
+        $testTemplate = $this->_getSnomTemplate($returnedSoftware['updatedData']['id'], $returnedSetting['updatedData']['id']);
+        $returnedTemplate = $this->_backend->saveSnomTemplate(Zend_Json::encode($testTemplate)); 
+        
+        $testPhone = $this->_getSnomPhone($returnedLocation['updatedData']['id'], $returnedTemplate['updatedData']['id']);
+        
+        $lineData = array();
+        $rightsData = array();
+        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($testPhone), Zend_Json::encode($lineData), Zend_Json::encode($rightsData));
                 
-        $searchResult = $this->_backend->getSnomPhones('description', 'ASC', $test['description']);
+        $searchResult = $this->_backend->getSnomPhones('description', 'ASC', $testPhone['description']);
         $this->assertEquals(1, $searchResult['totalcount']);
         
         $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
     }
-    */
+    
     /**
      * get snom phone data
      *
