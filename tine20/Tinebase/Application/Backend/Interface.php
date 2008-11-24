@@ -74,9 +74,10 @@ interface Tinebase_Application_Backend_Interface
      * Upates an existing persistent record
      *
      * @param  Tinebase_Record_Interface $_contact
-     * @return Tinebase_Record_Interface
+     * @param boolean $_noReturn true if no record should be returned
+     * @return Tinebase_Record_Interface|NULL
      */
-    public function update(Tinebase_Record_Interface $_record);
+    public function update(Tinebase_Record_Interface $_record, $_noReturn = FALSE);
     
     /**
      * Deletes one or more existing persistent record(s)

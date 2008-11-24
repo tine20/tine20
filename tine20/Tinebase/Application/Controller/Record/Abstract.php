@@ -364,7 +364,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                         
                     if (!$this->_purgeRecords && $record->has('created_by')) {
                         Tinebase_Timemachine_Modificationlog::setRecordMetaData($record, 'delete', $record);
-                        $this->_backend->update($record);
+                        $this->_backend->update($record, TRUE);
                     } else {
                         $this->_backend->delete($record);
                     }

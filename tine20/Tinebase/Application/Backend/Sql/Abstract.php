@@ -115,7 +115,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $select = $this->_getSelect();
         $select->where($this->_db->quoteIdentifier($this->_identifier) . ' in (?)', (array) $_id);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -275,10 +275,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * Updates existing entry
      *
      * @param Tinebase_Record_Interface $_record
+     * @param boolean $_noReturn true if no record should be returned
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_Interface Record
+     * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record) {
+    public function update(Tinebase_Record_Interface $_record, $_noReturn = FALSE) {
         if (!$_record instanceof $this->_modelName) {
             throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
         }
@@ -299,7 +300,12 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         $this->_db->update($this->_tableName, $recordArray, $where);
                 
-        return $this->get($id);
+        if ($_noReturn) {
+            $result = NULL;
+        } else {
+            $result = $this->get($id);
+        }
+        return $result;
     }
     
     /**
