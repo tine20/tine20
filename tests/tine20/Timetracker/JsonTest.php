@@ -138,7 +138,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timeaccountData = $this->_backend->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
         
         // search & check
-        $search = $this->_backend->searchTimeaccounts(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_backend->searchTimeaccounts(Zend_Json::encode($this->_getTimeaccountFilter()), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         
@@ -174,7 +174,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTimesheet()
     {
-        /*
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         $timesheetData = $this->_backend->getTimesheet($timesheetData['id']);
@@ -185,9 +184,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']);
                 
         // cleanup
-        $this->_backend->deleteTimesheets($timesheetData['id']);
-        Erp_Controller_Contract::getInstance()->delete($timesheet->contract_id);
-        */
+        $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
     }
 
     /**
@@ -196,7 +193,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateTimesheet()
     {
-        /*
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         
@@ -210,33 +206,27 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']);
         
         // cleanup
-        $this->_backend->deleteTimesheets($timesheetData['id']);
-        Erp_Controller_Contract::getInstance()->delete($timesheet->contract_id);
-        */
+        $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
     }
     
     /**
-     * try to get a Timesheet
+     * try to search for Timesheets
      *
      */
     public function testSearchTimesheets()
     {
-        /*
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         
         // search & check
-        $search = $this->_backend->searchTimesheets(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_backend->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
-        $this->_backend->deleteTimesheets($timesheetData['id']);
-        Erp_Controller_Contract::getInstance()->delete($timesheet->contract_id);
-        */
+        $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
     }
-
 
     /************ protected helper funcs *************/
     
@@ -285,11 +275,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * get filter
+     * get Timeaccount filter
      *
      * @return array
      */
-    protected function _getFilter()
+    protected function _getTimeaccountFilter()
     {
         return array(
             array(
@@ -305,4 +295,19 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         );        
     }
     
+    /**
+     * get Timesheet filter
+     *
+     * @return array
+     */
+    protected function _getTimesheetFilter()
+    {
+        return array(
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => 'blabla'
+            ),
+        );        
+    }
 }
