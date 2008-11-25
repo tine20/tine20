@@ -201,8 +201,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $this->_get($controller, $phoneSettingsId); 
         return $result;        
     }              
-        
-        
+    
     /**
      * save one phoneSettings
      *
@@ -214,7 +213,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     public function saveSnomPhoneSettings($phoneSettingsData)
     {
         $controller = Voipmanager_Controller_Snom_PhoneSettings::getInstance();
-        $result = $this->_save($controller, $phoneSettingsData, 'Voipmanager_Model_Snom_PhoneSettings');
+        $result = $this->_save($controller, $phoneSettingsData, 'Voipmanager_Model_Snom_PhoneSettings', 'phone_id');
         return $result;        
     }     
 
@@ -227,7 +226,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     public function deleteSnomPhoneSettings($_phoneSettingsId)
     {
         $controller = Voipmanager_Controller_Snom_PhoneSettings::getInstance();
-        $result = $this->_delete($controller, $_phoneIds);
+        $result = $this->_delete($controller, $_phoneSettingsId);
         return $result;
     }          
         
@@ -784,7 +783,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $this->_delete($controller, $_voicemailIds);
         return $result;
     }     
-
+    
     /********************* generic get/search/save/delete functions ************************************/
     
     /**
@@ -799,7 +798,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $record->toArray();      
         return $result;
     }
-
+    
     /**
      * generic search function
      *
@@ -835,19 +834,19 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * @param Voipmanager_Controller_Interface $_controller
      * @param integer $_id
      */
-    protected function _save(Voipmanager_Controller_Interface $_controller, $_data, $_model)
+    protected function _save(Voipmanager_Controller_Interface $_controller, $_data, $_model, $_identifier = 'id')
     {
         $data = Zend_Json::decode($_data);
         
         // unset if empty
-        if (empty($data['id'])) {
-            unset($data['id']);
+        if (empty($data[$_identifier])) {
+            unset($data[$_identifier]);
         }
 
         $record = new $_model();
         $record->setFromArray($data);
 
-        if (empty($record->id)) {
+        if (empty($record->$_identifier)) {
             $record = $_controller->create($record);
         } else {
             $record = $_controller->update($record);
