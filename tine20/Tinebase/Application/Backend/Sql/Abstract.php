@@ -98,6 +98,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }        
         $result = new $this->_modelName($queryResult);
         
+        // get custom fields
+        if ($result->has('customfields')) {
+            $this->_getCustomFields($result);
+        }
+        
         return $result;
     }
     
@@ -244,6 +249,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
     	
         $recordArray = $_record->toArray();
+        // print_r($recordArray);
         
         // unset id if autoincrement & still empty
         if (empty($_record->$identifier)) {
@@ -267,6 +273,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         // if the record had no id set, set the id now
         if ($_record->$identifier == NULL || $_record->$identifier == 'NULL') {
         	$_record->$identifier = $newId;
+        }
+        
+        // add custom fields
+        if ($_record->has('customfields') && !empty($_record->customfields)) {
+            $this->_saveCustomFields($_record);
         }
         
         return $this->get($_record->$identifier);
@@ -299,6 +310,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         );
         
         $this->_db->update($this->_tableName, $recordArray, $where);
+        
+        // update custom fields
+        if ($_record->has('customfields')) {
+            $this->_saveCustomFields($_record);
+        }
                 
         return $this->get($id, TRUE);
     }
@@ -308,6 +324,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
       * 
       * @param string|integer|Tinebase_Record_Interface $_id
       * @return void
+      * 
+      * @todo   delete custom fields?
       */
     public function delete($_id) {
         $id = $this->_convertId($_id);
@@ -317,6 +335,13 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         );
         
         $this->_db->delete($this->_tableName, $where);
+        
+        // delete custom fields
+        /*
+        if ($_record->has('customfields')) {
+            $this->_saveCustomFields($_record);
+        }
+        */
     }
     
     /*************************** other ************************************/
@@ -443,5 +468,68 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     	}
     	
         return $identifier;    
+    }
+
+    /**
+     * save custom fields of record in its custom fields table
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _saveCustomFields(Tinebase_Record_Interface $_record)
+    {
+        $customFieldsTableName = $this->_tableName . '_' . 'custom';
+        
+        // delete all custom fields for this record first
+        $this->_deleteCustomFields($_record->getId());
+        
+        // save custom fields
+        $customFields = Tinebase_Config::getInstance()->getCustomFieldsForApplication($_record->getApplication(), $this->_modelName)->name;
+        foreach ($customFields as $customField) {
+            if (!empty($_record->customfields[$customField])) {
+                $data = array(
+                    'record_id' => $_record->getId(),
+                    'name'      => $customField,
+                    'value'     => $_record->customfields[$customField]
+                );
+                $this->_db->insert($customFieldsTableName, $data);
+            }
+        }
+    }
+
+    /**
+     * get custom fields and add them to $_record->customfields arraay
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _getCustomFields(Tinebase_Record_Interface &$_record)
+    {
+        $customFieldsTableName = $this->_tableName . '_' . 'custom';
+
+        $select = $this->_db->select()
+            ->from($customFieldsTableName)
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_record->getId()));
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $customFields = array();
+        foreach ($rows as $row) {            
+            $customFields[$row['name']] = $row['value'];
+        }
+        $_record->customfields = $customFields; 
+    }
+    
+    /**
+     * delete custom fields of record
+     *
+     * @param string $_recordId
+     */
+    protected function _deleteCustomFields($_recordId)
+    {
+        $customFieldsTableName = $this->_tableName . '_' . 'custom';
+
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_recordId)
+        );        
+        $this->_db->delete($customFieldsTableName, $where);
     }
 }
