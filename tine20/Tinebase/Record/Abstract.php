@@ -216,20 +216,35 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         // set internal state to "not validated"
         $this->_isValidated = false;
+
+        // get custom fields
+        if ($this->has('customfields')) {
+            $application = Tinebase_Application::getInstance()->getApplicationByName($this->_application);
+            $customFields = Tinebase_Config::getInstance()->getCustomFieldsForApplication($application, get_class($this))->name;
+            $recordCustomFields = array();
+        } else {
+            $customFields = array();    
+        }
         
-        // make shure we run through the setters
+        // make sure we run through the setters
         $bypassFilter = $this->bypassFilters;
         $this->bypassFilters = true;
         foreach ($_data as $key => $value) {
             if (array_key_exists ($key, $this->_validators)) {
                 $this->$key = $value;
+            } else if (in_array($key, $customFields)) {
+                $recordCustomFields[$key] = $value;                
             }
         }
+        if (!empty($recordCustomFields)) {
+            $this->customfields = $recordCustomFields;
+        }
+        
         $this->bypassFilters = $bypassFilter;
         
         if ($this->bypassFilters !== true) {
             $this->isValid(true);
-        }
+        }        
     }
     
     /**
