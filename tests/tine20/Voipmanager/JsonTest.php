@@ -549,13 +549,30 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateSnomPhoneSettings()
     {
         $test = $this->_getSnomPhoneSettings();
-        $test['web_language'] = 'Deutsch';
         
-        $updated = $this->_backend->saveSnomPhoneSettings(Zend_Json::encode($test));
-        $this->assertEquals($test['web_language'], $updated['updatedData']['web_language']);
+        $returned = $this->_backend->saveSnomPhoneSettings(Zend_Json::encode($test));
+        $returned['updatedData']['web_language'] = 'Deutsch';
+        
+        $settingsPhone = $this->_backend->getSnomPhone($test['phone_id']);
+        
+        $location_id = $settingsPhone['location_id'];
+        $template_id = $settingsPhone['template_id'];
+        
+        $phoneTemplate = $this->_backend->getSnomTemplate($template_id);
+        
+        $settings_id = $phoneTemplate['setting_id'];  
+        $software_id = $phoneTemplate['software_id'];
+        
+        $updated = $this->_backend->saveSnomPhoneSettings(Zend_Json::encode($returned['updatedData']));
+        $this->assertEquals($returned['updatedData']['web_language'], $updated['updatedData']['web_language']);
         $this->assertNotNull($updated['updatedData']['phone_id']);
         
-        $this->_backend->deleteSnomPhoneSettings(Zend_Json::encode(array($test['phone_id'])));
+        $this->_backend->deleteSnomPhoneSettings(Zend_Json::encode(array($returned['updatedData']['phone_id'])));
+        $this->_backend->deleteSnomPhones(Zend_Json::encode(array($settingsPhone['id'])));
+        $this->_backend->deleteSnomTemplates(Zend_Json::encode(array($template_id)));
+        $this->_backend->deleteSnomLocations(Zend_Json::encode(array($location_id)));
+        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($settings_id)));
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($software_id)));
     }
     
     /**
