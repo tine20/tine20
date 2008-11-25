@@ -137,6 +137,14 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         );
         $this->assertGreaterThan(0, count($appCustomFields));
         $this->assertEquals($application->getId(), $appCustomFields[0]->application_id);
+
+        // check with model name
+        $appCustomFieldsWithModelName = $this->_instance->getCustomFieldsForApplication(
+            $application->getId(),
+            $customField->model
+        );
+        $this->assertGreaterThan(0, count($appCustomFieldsWithModelName));
+        $this->assertEquals($customField->model, $appCustomFieldsWithModelName[0]->model, 'didn\'t get correct model name');
         
         // delete
         $this->_instance->deleteCustomField($createdCustomField);
