@@ -41,6 +41,13 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
     protected $_ldap = NULL;
     
     /**
+     * base dn
+     *
+     * @var string
+     */
+    protected $_baseDn = NULL;
+    
+    /**
      * options object 
      * @see Zend_Ldap options + userDn + groupDn
      *
@@ -260,6 +267,9 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
         
+        //$this->_baseDn = "ou=contacts,ou=von-und-zu-weiss.de,dc=d80-237-148-76";
+        $this->baseDn = $this->_options['userDn'];
+        
         $this->_checkSchemas();
         
     }
@@ -288,6 +298,16 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
     }
     
     /**
+     * returns a ldap filter string
+     *
+     * @param  Tinebase_Record_Abstract $_filter
+     * @return String
+     */
+    protected function _getFilter(Tinebase_Record_Abstract $_filter) {
+        
+    }
+    
+    /**
      * Return a single record
      *
      * @param string $_id uuid / uidnumber ???
@@ -295,7 +315,15 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
      */
     public function get($_id)
     {
+        $contactData = $this->_ldap->fetch($this->_baseDn, "entryuuid=$_id", $this->_getSupportedLdapAttributes());
         
+        if (! $contactData) {
+            throw new Addressbook_Exception_NotFound("Contact with id $_id not found.");
+        }
+        $contact = $this->_ldap2Contacts(array($contactData))->offsetGet(0);
+        $contact->jpegphoto = $this->_ldap->fetchBinaryAttribute($this->_baseDn, "entryuuid=$_id", 'jpegphoto');
+        
+        return $contact;
     }
     
     /**
@@ -306,7 +334,19 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
      */
     public function getMultiple($_ids)
     {
+        $ids = is_array($_ids) ? $_ids : (array) $_ids;
         
+        $idFilter = '';
+        foreach ($ids as $id) {
+            $idFilter .= "(entryuuid=$id)";
+        }
+        $filter = "(&(objectclass=inetorgperson)(|$idFilter))";
+        
+        $rawLdapData = $this->_ldap->fetchAll($this->_baseDn, $filter, $this->_getSupportedLdapAttributes());
+        
+        $contacts = $this->_ldap2Contacts($rawLdapData);
+        
+        return $contacts;
     }
 
     /**
@@ -323,13 +363,12 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
             throw new Tinebase_Exception_InvalidArgument('$_orderBy field "'. $_orderBy . '" is not supported by this backend instance');
         }
         
-        //$rawLdapData = $this->_ldap->fetchAll($this->_options['userDn'], 'objectclass=inetorgperson', $this->_getSupportedLdapAttributes());
-        $rawLdapData = $this->_ldap->fetchAll("ou=contacts,ou=von-und-zu-weiss.de,dc=d80-237-148-76", 'objectclass=inetorgperson', $this->_getSupportedLdapAttributes());
+        $rawLdapData = $this->_ldap->fetchAll($this->_baseDn, 'objectclass=inetorgperson', $this->_getSupportedLdapAttributes());
         
         $contacts = $this->_ldap2Contacts($rawLdapData);
         
         $contacts->sort($_orderBy, $_orderDirection);
-        print_r($contacts->toArray());
+
         return $contacts;
     }
     
@@ -364,6 +403,28 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
     public function delete($_identifier)
     {
         
+    }
+    
+    /**
+     * fetch one contact of a user identified by his user_id
+     *
+     * @param   int $_userId
+     * @return  Addressbook_Model_Contact 
+     * @throws  Addressbook_Exception_NotFound if contact not found
+     */
+    public function getByUserId($_userId)
+    {
+        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        
+        $contactData = $this->_ldap->fetch($this->_baseDn, "uidnumber=$userId", $this->_getSupportedLdapAttributes());
+        
+        if (! $contactData) {
+            throw new Addressbook_Exception_NotFound("Contact with user id $_userId not found.");
+        }
+        $contact = $this->_ldap2Contacts(array($contactData))->offsetGet(0);
+        $contact->jpegphoto = $this->_ldap->fetchBinaryAttribute($this->_baseDn, "uidnumber=$userId", 'jpegphoto');
+        
+        return $contact;
     }
     
     /**
@@ -491,7 +552,7 @@ class Addressbook_Backend_Ldap implements Tinebase_Application_Backend_Interface
      *
      * @return array
      */
-    protected function _getSupportedRecordFields()
+    public function _getSupportedRecordFields()
     {
         if (! $this->_supportedRecordFields) {
             $fields = array();
