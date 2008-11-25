@@ -210,13 +210,7 @@
             <version>1</version>
             <declaration>
                 <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>timesheet_id</name>
+                    <name>record_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -232,16 +226,16 @@
                     <type>text</type>
                 </field>
                 <index>
-                    <name>id</name>
+                    <name>record_id</name>
                     <primary>true</primary>
                     <field>
-                        <name>id</name>
+                        <name>record_id</name>
                     </field>
                 </index>
                 <index>
-                    <name>timesheet_custom::timesheet_id--timesheet::id</name>
+                    <name>timesheet_custom::record_id--timesheet::id</name>
                     <field>
-                        <name>timesheet_id</name>
+                        <name>record_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>

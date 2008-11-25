@@ -169,6 +169,29 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to add a Timesheet
+     *
+     */
+    public function testAddTimesheetWithCustomFields()
+    {
+        // create custom field
+        $customField = $this->_getCustomField();
+        
+        // create timesheet and add custom fields
+        $timesheetArray = $this->_getTimesheet()->toArray();
+        $timesheetArray[$customField->name] = Tinebase_Record_Abstract::generateUID();
+        $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheetArray));
+        
+        // checks
+        $this->assertGreaterThan(0, count($timesheetData['customfields']));
+        $this->assertEquals($timesheetArray[$customField->name], $timesheetData['customfields'][$customField->name]);
+        
+        // cleanup
+        $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
+        Tinebase_Config::getInstance()->deleteCustomField($customField);
+    }
+    
+    /**
      * try to get a Timesheet
      *
      */
@@ -259,6 +282,25 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         ), TRUE);
     }
 
+    /**
+     * get custom field record
+     *
+     * @return Tinebase_Model_CustomField
+     */
+    protected function _getCustomField()
+    {
+        $record = new Tinebase_Model_CustomField(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'label'             => Tinebase_Record_Abstract::generateUID(),        
+            'model'             => 'Timetracker_Model_Timesheet',
+            'type'              => Tinebase_Record_Abstract::generateUID(),
+            'length'            => 10,        
+        ));
+        
+        return Tinebase_Config::getInstance()->addCustomField($record);
+    }
+    
     /**
      * get paging
      *
