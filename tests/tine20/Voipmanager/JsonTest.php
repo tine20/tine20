@@ -542,76 +542,42 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     
     /** Snom Phone Settings tests **/
     
-/**
-     * test creation of snom phone settings
-     *
-     *//*
-    public function testCreateSnomPhoneSettings()
-    {
-        $test = $this->_getSnomSetting();
-        
-        $returned = $this->_backend->saveSnomSetting(Zend_Json::encode($test));
-        // print_r($returned);
-        $this->assertEquals($test['name'], $returned['updatedData']['name']);
-        $this->assertEquals($test['description'], $returned['updatedData']['description']);
-        $this->assertNotNull($returned['updatedData']['id']);
-        
-        // test getSnomSettings as well
-        $returnedGet = $this->_backend->getSnomSetting($returned['updatedData']['id']);
-        // print_r($returnedGet)
-        $this->assertEquals($test['name'], $returnedGet['name']);
-        $this->assertEquals($test['description'], $returnedGet['description']);
-        
-        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($returned['updatedData']['id'])));
-    }
-    */
     /**
      * test update of snom phone settings
      *
-     *//*
+     */
     public function testUpdateSnomPhoneSettings()
     {
-        $test = $this->_getSnomSetting();
+        $test = $this->_getSnomPhoneSettings();
+        $test['web_language'] = 'Deutsch';
         
-        $returned = $this->_backend->saveSnomSetting(Zend_Json::encode($test));
-        $returned['updatedData']['description'] = Tinebase_Record_Abstract::generateUID();
+        $updated = $this->_backend->saveSnomPhoneSettings(Zend_Json::encode($test));
+        $this->assertEquals($test['web_language'], $updated['updatedData']['web_language']);
+        $this->assertNotNull($updated['updatedData']['phone_id']);
         
-        $updated = $this->_backend->saveSnomSetting(Zend_Json::encode($returned['updatedData']));
-        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
-        $this->assertEquals($returned['updatedData']['description'], $updated['updatedData']['description']);
-        $this->assertNotNull($updated['updatedData']['id']);
-        
-        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteSnomPhoneSettings(Zend_Json::encode(array($test['phone_id'])));
     }
-    */
-    /**
-     * test search of snom phone settings
-     *
-     *//*
-    public function testSearchSnomPhoneSettings()
-    {
-        $test = $this->_getSnomSetting();        
-        $returned = $this->_backend->saveSnomSetting(Zend_Json::encode($test));
-                
-        $searchResult = $this->_backend->getSnomSettings('description', 'ASC', $test['description']);
-        $this->assertEquals(1, $searchResult['totalcount']);
-        
-        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($returned['updatedData']['id'])));
-    }
-    */
+    
     /**
      * get snom phone settings data
      *
      * @return array
-     *//*
+     */
     protected function _getSnomPhoneSettings()
     {
+        $testPhone = $this->_getSnomPhone();
+        
+        $lineData = array();
+        $rightsData = array();
+        
+        $returnedPhone = $this->_backend->saveSnomPhone(Zend_Json::encode($testPhone), Zend_Json::encode($lineData), Zend_Json::encode($rightsData));
+        
         return array(
-            'name'  => Tinebase_Record_Abstract::generateUID(),
-            'description' => Tinebase_Record_Abstract::generateUID()
+            'phone_id'  => $returnedPhone['updatedData']['id'],
+            'web_language' => 'English'
         );
     }
-    */
+    
     /**
      * test creation of snom settings
      *
