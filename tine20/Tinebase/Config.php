@@ -307,17 +307,22 @@ class Tinebase_Config
      * get custom fields for an application
      *
      * @param integer $_applicationId
+     * @param string $_modelName
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField records
      */
-    public function getCustomFieldsForApplication($_applicationId)
+    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $select = $this->_db->select();
         $select->from($this->_configCustomFieldsTablename)
-               ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId);
+               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId));
+               
+        if ($_modelName !== NULL) {
+            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ?', $_modelName));
+        }
+        
         $rows = $this->_db->fetchAssoc($select);
-
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
         
         return $result;
