@@ -1299,4 +1299,93 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.16');
     }
+
+    /**
+     * update to 0.17
+     * - add config customfields table 
+     */
+    function update_16()
+    {
+        $tableDefinition = ('
+        <table>
+            <name>config_customfields</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>label</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>                
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>length</name>
+                    <type>integer</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id-name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+                <index>
+                    <name>config_customfields::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        ');
+    
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+        
+        //$this->setApplicationVersion('Tinebase', '0.17');
+    }
 }
