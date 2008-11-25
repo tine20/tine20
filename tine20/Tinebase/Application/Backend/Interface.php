@@ -40,9 +40,10 @@ interface Tinebase_Application_Backend_Interface
      * Return a single record
      *
      * @param string $_id
+     * @param $_getDeleted get deleted records
      * @return Tinebase_Record_Interface
      */
-    public function get($_id);
+    public function get($_id, $_getDeleted = FALSE);
     
     /**
      * Returns a set of contacts identified by their id's
@@ -74,10 +75,9 @@ interface Tinebase_Application_Backend_Interface
      * Upates an existing persistent record
      *
      * @param  Tinebase_Record_Interface $_contact
-     * @param boolean $_noReturn true if no record should be returned
      * @return Tinebase_Record_Interface|NULL
      */
-    public function update(Tinebase_Record_Interface $_record, $_noReturn = FALSE);
+    public function update(Tinebase_Record_Interface $_record);
     
     /**
      * Deletes one or more existing persistent record(s)
