@@ -527,17 +527,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $testLocation = $this->_getSnomLocation();
         $returnedLocation = $this->_backend->saveSnomLocation(Zend_Json::encode($testLocation));
         
-        $testSoftware = $this->_getSnomSoftware();
-        $returnedSoftware = $this->_backend->saveSnomSoftware(Zend_Json::encode($testSoftware));
-        
-        $testSetting = $this->_getSnomSetting();
-        $returnedSetting = $this->_backend->saveSnomSetting(Zend_Json::encode($testSetting));
-        
-        $testTemplate = $this->_getSnomTemplate($returnedSoftware['updatedData']['id'], $returnedSetting['updatedData']['id']);
+        $testTemplate = $this->_getSnomTemplate();
         $returnedTemplate = $this->_backend->saveSnomTemplate(Zend_Json::encode($testTemplate));
-        
-        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($returnedSoftware['updatedData']['id'])));
-        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($returnedSetting['updatedData']['id'])));
         
         return array(
             'description'  => Tinebase_Record_Abstract::generateUID(),
