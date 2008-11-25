@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  */
 
 
@@ -24,19 +24,9 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
      */
     public function __construct ()
     {
+        $this->_modlogActive = TRUE;
         parent::__construct(SQL_TABLE_PREFIX . 'timetracker_timesheet', 'Timetracker_Model_Timesheet');
     }
 
     /************************ helper functions ************************/
-
-    /**
-     * add the fields to search for to the query
-     *
-     * @param   Zend_Db_Select           $_select current where filter
-     * @param   Timetracker_Model_TimesheetFilter  $_filter the string to search for
-     */
-    protected function _addFilter(Zend_Db_Select $_select, Timetracker_Model_TimesheetFilter $_filter)
-    {
-        $_filter->appendFilterSql($_select);
-    }
 }

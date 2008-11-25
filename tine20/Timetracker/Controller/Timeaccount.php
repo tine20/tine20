@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
- * @todo        delete timesheets on delete as well
  */
 
 /**
@@ -83,4 +82,19 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
         
         return parent::create($_record);
     }    
+    
+    /**
+     * delete linked objects / timesheets
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {    
+        // delete linked timesheets
+        $timesheets = Timetracker_Controller_Timesheet::getInstance()->getTimesheetsByTimeaccountId($_record->getId());
+        Timetracker_Controller_Timesheet::getInstance()->delete($timesheets->getArrayOfIds());
+        
+        // delete other linked objects
+        parent::_deleteLinkedObjects($_record);
+    }
 }

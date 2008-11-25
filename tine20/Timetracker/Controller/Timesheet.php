@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
  */
 
@@ -32,6 +32,9 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
         
         // disable container ACL checks as we don't init the 'Shared Timesheets' grants in the setup
         $this->_doContainerACLChecks = FALSE; 
+        
+        // use modlog and don't completely delete records
+        $this->_purgeRecords = FALSE;
     }    
     
     /**
@@ -55,5 +58,28 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
         return self::$_instance;
     }        
 
+    /****************************** functions ************************/
+
+    /**
+     * get all timesheets for a timeaccount
+     *
+     * @param string $_timeaccountId
+     * @return Tinebase_Record_RecordSet of Timetracker_Model_Timesheet records
+     */
+    public function getTimesheetsByTimeaccountId($_timeaccountId)
+    {
+        $filter = new Timetracker_Model_TimesheetFilter(array(
+            array(
+                'field' => 'timeaccount_id', 
+                'operator' => 'equals', 
+                'value' => $_timeaccountId
+            ),             
+        ));
+        
+        $records = $this->search($filter);
+        
+        return $records;
+    }
+    
     /****************************** overwritten functions ************************/    
 }

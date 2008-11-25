@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        add timeaccount tests and reactivate timesheet tests
  */
 
 /**
@@ -80,6 +79,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_backend->deleteTimeaccounts($timeaccountData['id']);
+
+        // check if it got deleted
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
     }
     
     /**
@@ -149,7 +152,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddTimesheet()
     {
-        /*
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         
@@ -159,9 +161,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']);
         
         // cleanup
-        $this->_backend->deleteTimesheets($timesheetData['id']);
-        Erp_Controller_Contract::getInstance()->delete($timesheet->contract_id);
-        */
+        $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
+        
+        // check if everything got deleted
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Timetracker_Controller_Timesheet::getInstance()->get($timesheetData['id']);
     }
     
     /**
@@ -256,19 +260,12 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getTimesheet()
     {
-        /*
-        $contract = Erp_Controller_Contract::getInstance()->create(new Erp_Model_Contract(
-            array(
-                'title'         => 'phpunit timesheet contract',
-                'description'   => 'blabla',
-            ), TRUE)
-        );
-        */
+        $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($this->_getTimeaccount());
         
         return new Timetracker_Model_Timesheet(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-           // 'contract_id'   => $contract->getId(),
-            'description'   => 'blabla',
+            'account_id'        => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id'    => $timeaccount->getId(),
+            'description'       => 'blabla',
         ), TRUE);
     }
 
