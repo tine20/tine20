@@ -8,10 +8,12 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        replace Zend_Db_Table_Abstract with Zend_Db_Adapter_Abstract
  */
 
 /**
- * the class provides functions to handle applications
+ * the class provides functions to handle config options
  * 
  * @package     Tinebase
  * @subpackage  Config
@@ -31,6 +33,13 @@ class Tinebase_Config
      * @var Zend_Db_Table_Abstract
      */
     protected $_configUserTable;
+
+    /**
+     * the name of the customfields table
+     *
+     * @var string
+     */
+    protected $_configCustomFieldsTablename;
     
     /**
      * the db adapter
@@ -55,6 +64,8 @@ class Tinebase_Config
     {
         $this->_configTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config'));
         $this->_configUserTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config_user'));
+        
+        $this->_configCustomFieldsTablename = SQL_TABLE_PREFIX . 'config_customfields';
         $this->_db = $this->_configTable->getAdapter();
     }
 
@@ -241,5 +252,88 @@ class Tinebase_Config
     public function deleteConfig(Tinebase_Model_Config $_config)
     {
         $this->_configTable->delete($this->_db->quoteInto('id = ?', $_config->getId()));
+    }
+
+    /************************ custom field functions **************************/
+    
+    /**
+     * add new custom field
+     *
+     * @param Tinebase_Model_CustomField $_customField
+     * @return Tinebase_Model_CustomField
+     * 
+     * @todo    add check for existance
+     */
+    public function addCustomField(Tinebase_Model_CustomField $_record)
+    {
+        // set uid if record has hash id and id is empty
+        if (empty($_record->id)) {
+            $newId = $_record->generateUID();
+            $_record->setId($newId);
+        }
+        
+        $recordArray = $_record->toArray();        
+        $tableKeys = $this->_db->describeTable($this->_configCustomFieldsTablename);
+        $recordArray = array_intersect_key($recordArray, $tableKeys);
+        
+        $this->_db->insert($this->_configCustomFieldsTablename, $recordArray);
+        
+        return $this->getCustomField($_record->getId());
+    }
+
+    /**
+     * get custom field by id
+     *
+     * @param string $_customFieldId
+     * @return Tinebase_Model_CustomField
+     */
+    public function getCustomField($_customFieldId)
+    {
+        $select = $this->_db->select()
+            ->from($this->_configCustomFieldsTablename)
+            ->where($this->_db->quoteIdentifier('id') . ' = ?', $_customFieldId);
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+                
+        if (!$queryResult) {
+            throw new Tinebase_Exception_NotFound('Tinebase_Model_CustomField record with id ' . $_customFieldId . ' not found!');
+        }        
+        $result = new Tinebase_Model_CustomField($queryResult);
+        
+        return $result;
+    }
+
+    /**
+     * get custom fields for an application
+     *
+     * @param integer $_applicationId
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField records
+     */
+    public function getCustomFieldsForApplication($_applicationId)
+    {
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+        
+        $select = $this->_db->select();
+        $select->from($this->_configCustomFieldsTablename)
+               ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId);
+        $rows = $this->_db->fetchAssoc($select);
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
+        
+        return $result;
+    }
+
+    /**
+     * delete a custom field
+     *
+     * @param Tinebase_Model_CustomField $_customField
+     */
+    public function deleteCustomField(Tinebase_Model_CustomField $_customField)
+    {
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_customField->getId())
+        );
+        
+        $this->_db->delete($this->_configCustomFieldsTablename, $where);
     }
 }

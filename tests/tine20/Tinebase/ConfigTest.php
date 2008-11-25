@@ -24,6 +24,12 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * unit under test (UIT)
+     * @var Tinebase_Config
+     */
+    protected $_instance;
+
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -48,6 +54,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_instance = Tinebase_Config::getInstance();
+        
         $this->objects['config'] = new Tinebase_Model_Config(array(
             "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
             "name"              => "Test Name",
@@ -71,9 +79,9 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testSetConfig()
     {
-        $configSet = Tinebase_Config::getInstance()->setConfig($this->objects['config']);
+        $configSet = $this->_instance->setConfig($this->objects['config']);
         
-        $configGet = Tinebase_Config::getInstance()->getConfig($configSet->name);
+        $configGet = $this->_instance->getConfig($configSet->name);
             
         $this->assertEquals($this->objects['config']->value, $configGet->value);
     }
@@ -84,7 +92,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testGetApplicationConfig()
     {
-        $result = Tinebase_Config::getInstance()->getConfigForApplication('Tinebase');
+        $result = $this->_instance->getConfigForApplication('Tinebase');
             
         //print_r($result);    
             
@@ -98,13 +106,58 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteConfig()
     {
-        $config = Tinebase_Config::getInstance()->getConfig($this->objects['config']->name);
+        $config = $this->_instance->getConfig($this->objects['config']->name);
         
-        Tinebase_Config::getInstance()->deleteConfig($config);
+        $this->_instance->deleteConfig($config);
             
         $this->setExpectedException('Exception');
         
-        $config = Tinebase_Config::getInstance()->getConfig($this->objects['config']->name);        
+        $config = $this->_instance->getConfig($this->objects['config']->name);        
+    }
+
+    /**
+     * test custom fields
+     *
+     * - add custom field
+     * - get custom fields for app
+     * - delete custom field
+     */
+    public function testCustomFields()
+    {
+        // create
+        $customField = $this->_getCustomField();
+        $createdCustomField = $this->_instance->addCustomField($customField);
+        $this->assertEquals($customField->name, $createdCustomField->name);
+        $this->assertNotNull($createdCustomField->getId());
+        
+        // fetch
+        $application = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $appCustomFields = $this->_instance->getCustomFieldsForApplication(
+            $application->getId()
+        );
+        $this->assertGreaterThan(0, count($appCustomFields));
+        $this->assertEquals($application->getId(), $appCustomFields[0]->application_id);
+        
+        // delete
+        $this->_instance->deleteCustomField($createdCustomField);
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_instance->getCustomField($createdCustomField->getId());
     }
     
+    /**
+     * get custom field record
+     *
+     * @return Tinebase_Model_CustomField
+     */
+    protected function _getCustomField()
+    {
+        return new Tinebase_Model_CustomField(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'label'             => Tinebase_Record_Abstract::generateUID(),        
+            'model'             => Tinebase_Record_Abstract::generateUID(),
+            'type'              => Tinebase_Record_Abstract::generateUID(),
+            'length'            => 10,        
+        ));
+    }
 }
