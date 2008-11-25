@@ -336,6 +336,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * 
      * @param   array array of record identifiers
      * @return  void
+     * @throws Tinebase_Exception_NotFound|Tinebase_Exception
      */
     public function delete($_ids)
     {
@@ -353,47 +354,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($records as $record) {
-                if ($record->has('container_id')) {
-                    $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
-                }
-                
-                if (!$this->_doContainerACLChecks 
-                    || !$record->has('container_id')
-                    || ($this->_currentAccount->hasGrant($record->container_id, Tinebase_Model_Container::GRANT_DELETE 
-                    && $container->type != Tinebase_Model_Container::TYPE_INTERNAL))) {
-                        
-                    if (!$this->_purgeRecords && $record->has('created_by')) {
-                        Tinebase_Timemachine_Modificationlog::setRecordMetaData($record, 'delete', $record);
-                        $this->_backend->update($record, TRUE);
-                    } else {
-                        $this->_backend->delete($record);
-                    }
-                    
-                    // delete notes & relations
-                    if ($record->has('notes')) {
-                        Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_backend->getType(), $record->getId());
-                    }
-                    if ($record->has('relations')) {
-                        $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
-                        if (!empty($relations)) {
-                            // remove relations
-                            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), array());
-                            // remove related objects
-                            if (!empty($this->_relatedObjectsToDelete)) {
-                                foreach ($relations as $relation) {
-                                    if (in_array($relation->related_model, $this->_relatedObjectsToDelete)) {
-                                        list($appName, $i, $itemName) = explode('_', $relation->related_model);
-                                        $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
-                                        $appController->delete($relation->related_id);
-                                    }
-                                }                
-                            }
-                        }
-                    }
-                        
-                } else {
-                    throw new Tinebase_Exception_AccessDenied('Delete access in container ' . $record->container_id . ' denied.');
-                }
+                $this->_deleteRecord($record);
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -419,4 +380,66 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         $readableContainer = $this->_currentAccount->getContainerByACL($this->_applicationName, Tinebase_Model_Container::GRANT_READ);
         $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
     }     
+
+    /**
+     * delete one recod
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        if ($_record->has('container_id')) {
+            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+        }
+        
+        if (!$this->_doContainerACLChecks 
+            || !$_record->has('container_id')
+            || ($this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_DELETE 
+            && $container->type != Tinebase_Model_Container::TYPE_INTERNAL))) {
+                
+            if (!$this->_purgeRecords && $_record->has('created_by')) {
+                Tinebase_Timemachine_Modificationlog::setRecordMetaData($_record, 'delete', $_record);
+                $this->_backend->update($_record);
+            } else {
+                $this->_backend->delete($_record);
+            }
+
+            $this->_deleteLinkedObjects($_record);
+            
+        } else {
+            throw new Tinebase_Exception_AccessDenied('Delete access in container ' . $_record->container_id . ' denied.');
+        }        
+    }
+    
+    /**
+     * delete linked objects (notes, relations, ...) of record
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        // delete notes & relations
+        if ($_record->has('notes')) {
+            Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_backend->getType(), $_record->getId());
+        }
+        if ($_record->has('relations')) {
+            $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $_record->getId());
+            if (!empty($relations)) {
+                // remove relations
+                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $_record->getId(), array());
+                
+                // remove related objects
+                if (!empty($this->_relatedObjectsToDelete)) {
+                    foreach ($relations as $relation) {
+                        if (in_array($relation->related_model, $this->_relatedObjectsToDelete)) {
+                            list($appName, $i, $itemName) = explode('_', $relation->related_model);
+                            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+                            $appController->delete($relation->related_id);
+                        }
+                    }                
+                }
+            }
+        }        
+    }
 }
