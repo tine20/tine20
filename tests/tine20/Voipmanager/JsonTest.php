@@ -76,16 +76,16 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskContext();
         
         $returned = $this->_backend->saveAsteriskContext(Zend_Json::encode($test));
-        $this->assertEquals($test['name'], $returned['updatedData']['name']);
-        $this->assertEquals($test['description'], $returned['updatedData']['description']);
-        $this->assertNotNull($returned['updatedData']['id']);
+        $this->assertEquals($test['name'], $returned['name']);
+        $this->assertEquals($test['description'], $returned['description']);
+        $this->assertNotNull($returned['id']);
         
         // test getAsteriskContext($contextId) as well
-        $returnedGet = $this->_backend->getAsteriskContext($returned['updatedData']['id']);
+        $returnedGet = $this->_backend->getAsteriskContext($returned['id']);
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['description'], $returnedGet['description']);
         
-        $this->_backend->deleteAsteriskContexts(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskContexts(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -97,14 +97,14 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskContext();
         
         $returned = $this->_backend->saveAsteriskContext(Zend_Json::encode($test));
-        $returned['updatedData']['name'] = Tinebase_Record_Abstract::generateUID();
+        $returned['name'] = Tinebase_Record_Abstract::generateUID();
         
-        $updated = $this->_backend->saveAsteriskContext(Zend_Json::encode($returned['updatedData']));
-        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
-        $this->assertEquals($returned['updatedData']['description'], $updated['updatedData']['description']);
-        $this->assertNotNull($updated['updatedData']['id']);
+        $updated = $this->_backend->saveAsteriskContext(Zend_Json::encode($returned));
+        $this->assertEquals($returned['name'], $updated['name']);
+        $this->assertEquals($returned['description'], $updated['description']);
+        $this->assertNotNull($updated['id']);
                 
-        $this->_backend->deleteAsteriskContexts(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskContexts(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -118,7 +118,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $searchResult = $this->_backend->getAsteriskContexts('name', 'ASC', $test['name']);
         $this->assertEquals(1, $searchResult['totalcount']);
         
-        $this->_backend->deleteAsteriskContexts(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskContexts(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -146,15 +146,15 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $returned = $this->_backend->saveAsteriskSipPeer(Zend_Json::encode($test));
         
-        $this->assertEquals($test['name'], $returned['updatedData']['name']);
-        $this->assertEquals($test['context'], $returned['updatedData']['context']);
-        $this->assertNotNull($returned['updatedData']['id']);
+        $this->assertEquals($test['name'], $returned['name']);
+        $this->assertEquals($test['context'], $returned['context']);
+        $this->assertNotNull($returned['id']);
         
         // test getAsteriskSipPeer($SipPeerId) as well
-        $returnedGet = $this->_backend->getAsteriskSipPeer($returned['updatedData']['id']);
+        $returnedGet = $this->_backend->getAsteriskSipPeer($returned['id']);
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['context'], $returnedGet['context']);
-        $this->_backend->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -166,14 +166,14 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskSipPeer();
         
         $returned = $this->_backend->saveAsteriskSipPeer(Zend_Json::encode($test));
-        $returned['updatedData']['name'] = Tinebase_Record_Abstract::generateUID();
+        $returned['name'] = Tinebase_Record_Abstract::generateUID();
         
-        $updated = $this->_backend->saveAsteriskSipPeer(Zend_Json::encode($returned['updatedData']));
-        $this->assertEquals($returned['updatedData']['name'], $updated['updatedData']['name']);
-        $this->assertEquals($returned['updatedData']['context'], $updated['updatedData']['context']);
-        $this->assertNotNull($updated['updatedData']['id']);
+        $updated = $this->_backend->saveAsteriskSipPeer(Zend_Json::encode($returned));
+        $this->assertEquals($returned['name'], $updated['name']);
+        $this->assertEquals($returned['context'], $updated['context']);
+        $this->assertNotNull($updated['id']);
                 
-        $this->_backend->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -187,7 +187,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $searchResult = $this->_backend->getAsteriskSipPeers('name', 'ASC', $test['name'], $test['context']);
         $this->assertEquals(1, $searchResult['totalcount']);
         
-        $this->_backend->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -215,17 +215,17 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $returned = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($test));
         
-        $this->assertEquals($test['confno'], $returned['updatedData']['confno']);
-        $this->assertEquals($test['adminpin'], $returned['updatedData']['adminpin']);
-        $this->assertNotNull($returned['updatedData']['id']);
+        $this->assertEquals($test['confno'], $returned['confno']);
+        $this->assertEquals($test['adminpin'], $returned['adminpin']);
+        $this->assertNotNull($returned['id']);
         
         // test getAsteriskMeetme($meetmeId) as well
-        $returnedGet = $this->_backend->getAsteriskMeetme($returned['updatedData']['id']);
+        $returnedGet = $this->_backend->getAsteriskMeetme($returned['id']);
         //print_r($returnedGet);
         $this->assertEquals($test['confno'], $returnedGet['confno']);
         $this->assertEquals($test['adminpin'], $returnedGet['adminpin']);
         
-        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -237,14 +237,14 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskMeetme();
         
         $returned = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($test));
-        $returned['updatedData']['adminpin'] = Tinebase_Record_Abstract::generateUID();
+        $returned['adminpin'] = Tinebase_Record_Abstract::generateUID();
         
-        $updated = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($returned['updatedData']));
-        $this->assertEquals($returned['updatedData']['confno'], $updated['updatedData']['confno']);
-        $this->assertEquals($returned['updatedData']['adminpin'], $updated['updatedData']['adminpin']);
-        $this->assertNotNull($updated['updatedData']['id']);
+        $updated = $this->_backend->saveAsteriskMeetme(Zend_Json::encode($returned));
+        $this->assertEquals($returned['confno'], $updated['confno']);
+        $this->assertEquals($returned['adminpin'], $updated['adminpin']);
+        $this->assertNotNull($updated['id']);
                 
-        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -259,7 +259,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $searchResult = $this->_backend->getAsteriskMeetmes('confno', 'ASC', $test['confno']);
         $this->assertEquals(1, $searchResult['totalcount']);
         
-        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskMeetmes(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -288,17 +288,17 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $returned = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($test));
         // print_r($returned);
-        $this->assertEquals($test['context'], $returned['updatedData']['context']);
-        $this->assertEquals($test['fullname'], $returned['updatedData']['fullname']);
-        $this->assertNotNull($returned['updatedData']['id']);
+        $this->assertEquals($test['context'], $returned['context']);
+        $this->assertEquals($test['fullname'], $returned['fullname']);
+        $this->assertNotNull($returned['id']);
         
         // test getAsteriskVoicemail as well
-        $returnedGet = $this->_backend->getAsteriskVoicemail($returned['updatedData']['id']);
+        $returnedGet = $this->_backend->getAsteriskVoicemail($returned['id']);
         // print_r($returnedGet)
         $this->assertEquals($test['context'], $returnedGet['context']);
         $this->assertEquals($test['fullname'], $returnedGet['fullname']);
         
-        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -310,14 +310,14 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskVoicemail();
         
         $returned = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($test));
-        $returned['updatedData']['fullname'] = Tinebase_Record_Abstract::generateUID();
+        $returned['fullname'] = Tinebase_Record_Abstract::generateUID();
         
-        $updated = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($returned['updatedData']));
-        $this->assertEquals($returned['updatedData']['context'], $updated['updatedData']['context']);
-        $this->assertEquals($returned['updatedData']['fullname'], $updated['updatedData']['fullname']);
-        $this->assertNotNull($updated['updatedData']['id']);
+        $updated = $this->_backend->saveAsteriskVoicemail(Zend_Json::encode($returned));
+        $this->assertEquals($returned['context'], $updated['context']);
+        $this->assertEquals($returned['fullname'], $updated['fullname']);
+        $this->assertNotNull($updated['id']);
                 
-        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -332,7 +332,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $searchResult = $this->_backend->getAsteriskVoicemails('context', 'ASC', $test['fullname'], $test['context']);
         $this->assertEquals(1, $searchResult['totalcount']);
         
-        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteAsteriskVoicemails(Zend_Json::encode(array($returned['id'])));
     }
     
     /**

@@ -17,21 +17,15 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstract
-{
-    /**
-     * Voipmanager backend class
-     *
-     * @var Voipmanager_Backend_Snom_Location
-     */
-    protected $_backend;
-    
+class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_AbstractNew
+{    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
+        $this->_modelName = 'Voipmanager_Model_Snom_Location';
         $this->_backend      = new Voipmanager_Backend_Snom_Location($this->_getDatabaseBackend());
         $this->_cache        = Zend_Registry::get('cache');        
     }

@@ -17,21 +17,15 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abstract
+class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_AbstractNew
 {
-    /**
-     * Voipmanager backend class
-     *
-     * @var Voipmanager_Backend_Asterisk_SipPeer
-     */
-    protected $_backend;
-    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
+        $this->_modelName = 'Voipmanager_Model_Asterisk_SipPeer';
         $this->_backend      = new Voipmanager_Backend_Asterisk_SipPeer($this->_getDatabaseBackend());
         $this->_cache        = Zend_Registry::get('cache');        
     }

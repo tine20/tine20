@@ -17,21 +17,15 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Snom_Setting extends Voipmanager_Controller_Abstract
+class Voipmanager_Controller_Snom_Setting extends Voipmanager_Controller_AbstractNew
 {
-    /**
-     * Voipmanager backend class
-     *
-     * @var Voipmanager_Backend_Snom_Setting
-     */
-    protected $_backend;
-    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
+        $this->_modelName = 'Voipmanager_Model_Snom_Setting';
         $this->_backend      = new Voipmanager_Backend_Snom_Setting($this->_getDatabaseBackend());
     }
         

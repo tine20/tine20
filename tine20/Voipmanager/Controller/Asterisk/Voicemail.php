@@ -17,21 +17,15 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_Abstract
+class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_AbstractNew
 {
-    /**
-     * Voipmanager backend class
-     *
-     * @var Voipmanager_Backend_Asterisk_Voicemail
-     */
-    protected $_backend;
-    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
+        $this->_modelName = 'Voipmanager_Model_Asterisk_Voicemail';
         $this->_backend     = new Voipmanager_Backend_Asterisk_Voicemail($this->_getDatabaseBackend());
     }
         
