@@ -100,12 +100,13 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     /**
      * creates/updates a record
      *
-     * @param  $_recordData
-     * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
-     * @param  $_modelName
+     * @param   $_recordData
+     * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @param   $_modelName
+     * @param   $_identifier of the record (default: id)
      * @return array created/updated record
      */
-    protected function _save($_recordData, Tinebase_Application_Controller_Record_Interface $_controller, $_modelName)
+    protected function _save($_recordData, Tinebase_Application_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id')
     {
         $modelClass = $this->_applicationName . "_Model_" . $_modelName;
         $record = new $modelClass(array(), TRUE);
@@ -113,7 +114,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         
         //Zend_Registry::get('logger')->debug(print_r($record->toArray(),true));
         
-        $savedRecord = (empty($record->id)) ? 
+        $savedRecord = (empty($record->$_identifier)) ? 
             $_controller->create($record): 
             $_controller->update($record);
 
