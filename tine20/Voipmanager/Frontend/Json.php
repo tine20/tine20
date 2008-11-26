@@ -53,6 +53,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
             'query' => $query
         ));
+        
         $pagination = new Tinebase_Model_Pagination(array(
             'sort'  => $sort,
             'dir'   => $dir
@@ -95,7 +96,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         $controller = Voipmanager_Controller_Snom_Phone::getInstance();       
         $result = $this->_getOld($controller, $phoneId); 
-        return $result;        
+        return $result;
     }    
         
     /**
@@ -213,7 +214,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $controller = Voipmanager_Controller_Snom_PhoneSettings::getInstance();
         $result = $this->_saveOld($controller, $phoneSettingsData, 'Voipmanager_Model_Snom_PhoneSettings', 'phone_id');
         return $result;        
-    }     
+    }
 
     /**
      * delete phoneSettings
@@ -275,10 +276,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function saveSnomLocation($locationData)
     {
-        $controller = Voipmanager_Controller_Snom_Location::getInstance();
-        $result = $this->_saveOld($controller, $locationData, 'Voipmanager_Model_Snom_Location');
-        return $result;                
-    }     
+        return $this->_save($locationData, Voipmanager_Controller_Snom_Location::getInstance(), 'Snom_Location');              
+    }
      
         
     /**
@@ -342,9 +341,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function saveSnomSoftware($softwareData)
     {
-        $controller = Voipmanager_Controller_Snom_Software::getInstance();
-        $result = $this->_saveOld($controller, $softwareData, 'Voipmanager_Model_Snom_Software');
-        return $result;                
+        return $this->_save($softwareData, Voipmanager_Controller_Snom_Software::getInstance(), 'Snom_Software');
     }     
       
       
@@ -407,9 +404,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function saveSnomTemplate($templateData)
     {
-        $controller = Voipmanager_Controller_Snom_Template::getInstance();
-        $result = $this->_saveOld($controller, $templateData, 'Voipmanager_Model_Snom_Template');
-        return $result;                
+        return $this->_save($templateData, Voipmanager_Controller_Snom_Template::getInstance(), 'Snom_Template');               
     }     
     
     /**
@@ -469,9 +464,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function saveSnomSetting($settingData)
     {
-        $controller = Voipmanager_Controller_Snom_Setting::getInstance();
-        $result = $this->_saveOld($controller, $settingData, 'Voipmanager_Model_Snom_Setting');
-        return $result;                
+        return $this->_save($settingData, Voipmanager_Controller_Snom_Setting::getInstance(), 'Snom_Setting');
     }
     
    
