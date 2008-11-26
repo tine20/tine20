@@ -247,10 +247,10 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             $_identifiers = (array)$_identifiers;
         }
         foreach ($_identifiers as $id) {
-            $phone = $this->getSnomPhone($id);
+            $phone = $this->get($id);
             $phone->http_client_user = Tinebase_Record_Abstract::generateUID(30);
             $phone->http_client_pass = Tinebase_Record_Abstract::generateUID(20);
-            $phone->http_client_info_sent = false;
+            $phone->http_client_info_sent = 0;
             
             $phone = $this->_backend->update($phone);
         }
