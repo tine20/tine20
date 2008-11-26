@@ -94,9 +94,9 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function getSnomPhone($phoneId)
     {
-        $controller = Voipmanager_Controller_Snom_Phone::getInstance();       
-        $result = $this->_getOld($controller, $phoneId); 
-        return $result;
+        $record = Voipmanager_Controller_Snom_Phone::getInstance()->get($phoneId);        
+        $result = $record->toArray();      
+        return $result;        
     }    
         
     /**
@@ -165,7 +165,14 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     public function deleteSnomPhones($_phoneIds)
     {
         $controller = Voipmanager_Controller_Snom_Phone::getInstance();
-        $result = $this->_deleteOld($controller, $_phoneIds);
+        
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $ids = Zend_Json::decode($_phoneIds);
+        Voipmanager_Controller_Snom_Phone::getInstance()->delete($ids);
+        
         return $result;
     }    
 
@@ -211,9 +218,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function saveSnomPhoneSettings($phoneSettingsData)
     {
-        $controller = Voipmanager_Controller_Snom_PhoneSettings::getInstance();
-        $result = $this->_saveOld($controller, $phoneSettingsData, 'Voipmanager_Model_Snom_PhoneSettings', 'phone_id');
-        return $result;        
+        return $this->_save($phoneSettingsData, Voipmanager_Controller_Snom_PhoneSettings::getInstance(), 'Snom_PhoneSettings', 'phone_id');       
     }
 
     /**
@@ -249,7 +254,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'query'     => $query
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;            
     }        
     
@@ -314,7 +319,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'query'     => $query
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;            
     }        
     
@@ -379,7 +384,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'query'     => $query
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;            
     }
     
@@ -439,7 +444,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'query'     => $query
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;            
     }
     
@@ -501,7 +506,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'query'     => $query
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;            
     }
     
@@ -564,7 +569,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'query'     => $query
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;    
     }
     
@@ -628,7 +633,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'context'   => $context
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;                    
     }
     
@@ -693,7 +698,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             'context'   => $context
         ));
                 
-        $result = $this->_searchOld($controller, $sort, $dir, $filter);
+        $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;
     }
     
@@ -735,18 +740,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     
     /********************* generic get/search/save/delete functions ************************************/
     
-    /**
-     * generic get function
-     *
-     * @param Voipmanager_Controller_Interface $_controller
-     * @param integer $_id
-     */
-    protected function _getOld($_controller, $_id)
-    {
-        $record = $_controller->get($_id);        
-        $result = $record->toArray();      
-        return $result;
-    }
     
     /**
      * generic search function
@@ -757,7 +750,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * @param Tinebase_Record_Interface $_filter
      * @return array
      */
-    protected function _searchOld($_controller, $_sort, $_dir, $_filter)
+    protected function _search($_controller, $_sort, $_dir, $_filter)
     {
         $result = array(
             'results'     => array(),
@@ -775,55 +768,5 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         }
         
         return $result;    
-    }
-    
-    /**
-     * generic save function
-     *
-     * @param Voipmanager_Controller_Interface $_controller
-     * @param integer $_id
-     */
-    protected function _saveOld($_controller, $_data, $_model, $_identifier = 'id')
-    {
-        $data = Zend_Json::decode($_data);
-        
-        // unset if empty
-        if (empty($data[$_identifier])) {
-            unset($data[$_identifier]);
-        }
-
-        $record = new $_model();
-        $record->setFromArray($data);
-
-        if (empty($record->$_identifier)) {
-            $record = $_controller->create($record);
-        } else {
-            $record = $_controller->update($record);
-        }
-
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $this->_getOld($_controller, $record->getId())
-        ); 
-        
-        return $result;
-    }
-
-    /**
-     * generic delete function
-     *
-     * @param Voipmanager_Controller_Interface $_controller
-     * @param array $_meetmeIDs list of meetmeId's to delete
-     * @return array
-     */
-    protected function _deleteOld($_controller, $_ids)
-    {
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $ids = Zend_Json::decode($_ids);
-        $_controller->delete($ids);
-        return $result;
     }
 }

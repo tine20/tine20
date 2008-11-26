@@ -590,8 +590,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returned['web_language'] = 'Deutsch';
                 
         $updated = $this->_backend->saveSnomPhoneSettings(Zend_Json::encode($returned));
-        $this->assertEquals($returned['web_language'], $updated['updatedData']['web_language']);
-        $this->assertNotNull($updated['updatedData']['phone_id']);
+        $this->assertEquals($returned['web_language'], $updated['web_language']);
+        $this->assertNotNull($updated['phone_id']);
         
         // delete everything
         $settingsPhone = $this->_backend->getSnomPhone($test['phone_id']);
