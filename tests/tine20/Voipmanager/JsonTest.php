@@ -484,7 +484,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['updatedData']['location_id'], $updated['updatedData']['location_id']);
         $this->assertEquals($returned['updatedData']['template_id'], $updated['updatedData']['template_id']);
         $this->assertNotNull($updated['updatedData']['id']);
-                
+        
         $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
         $this->_backend->deleteSnomLocations(Zend_Json::encode(array($returned['updatedData']['location_id'])));
         $this->_backend->deleteSnomTemplates(Zend_Json::encode(array($returned['updatedData']['template_id'])));
@@ -518,6 +518,39 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * reset http client info
+     *
+     * @return array
+     */
+    
+    public function testResetHttpClientInfo()
+    {
+        $testPhone = $this->_getSnomPhone();
+        
+        $lineData = array();
+        $rightsData = array();
+        
+        $returned = $this->_backend->saveSnomPhone(Zend_Json::encode($testPhone), Zend_Json::encode($lineData), Zend_Json::encode($rightsData));
+        
+        $this->_backend->resetHttpClientInfo(Zend_Json::encode(array($returned['updatedData']['id'])));
+        
+        // delete everything
+        $location_id = $testPhone['location_id'];
+        $template_id = $testPhone['template_id'];
+        
+        $phoneTemplate = $this->_backend->getSnomTemplate($template_id);
+        
+        $settings_id = $phoneTemplate['setting_id'];  
+        $software_id = $phoneTemplate['software_id'];
+        
+        $this->_backend->deleteSnomPhones(Zend_Json::encode(array($returned['updatedData']['id'])));
+        $this->_backend->deleteSnomTemplates(Zend_Json::encode(array($template_id)));
+        $this->_backend->deleteSnomLocations(Zend_Json::encode(array($location_id)));
+        $this->_backend->deleteSnomSettings(Zend_Json::encode(array($settings_id)));
+        $this->_backend->deleteSnomSoftware(Zend_Json::encode(array($software_id)));
+    }
+    
+    /**
      * get snom phone data
      *
      * @return array
@@ -536,7 +569,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
             'location_id' => $returnedLocation['updatedData']['id'],
             'template_id' => $returnedTemplate['updatedData']['id'],
             'current_model' => 'snom300',
-            'redirect_event' => 'none'
+            'redirect_event' => 'none',
+            'http_client_info_sent' => '1',
+            'http_client_user' => Tinebase_Record_Abstract::generateUID(),
+            'http_client_pass' => Tinebase_Record_Abstract::generateUID()
         );
     }
     
@@ -556,7 +592,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $updated = $this->_backend->saveSnomPhoneSettings(Zend_Json::encode($returned));
         $this->assertEquals($returned['web_language'], $updated['updatedData']['web_language']);
         $this->assertNotNull($updated['updatedData']['phone_id']);
-
+        
         // delete everything
         $settingsPhone = $this->_backend->getSnomPhone($test['phone_id']);
         
