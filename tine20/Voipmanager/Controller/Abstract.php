@@ -9,8 +9,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add Factory ?
- * @todo        move that (or parts) to Tinebase_Application_Controller_Abstract
+ * @deprecated
+ * @todo        remove later
  */
 
 /**

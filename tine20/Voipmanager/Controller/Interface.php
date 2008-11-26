@@ -9,7 +9,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        rework interface (Snom_Phone controllers use differen create/update functions)?
+ * @deprecated 
+ * @todo        remove later
  */
 
 /**
