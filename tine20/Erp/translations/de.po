@@ -2,69 +2,72 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-11-26 11:40+0100\n"
+"Last-Translator: Matthias Greiling <m.greiling@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ContractGridPanel.js:49 js/Erp.js:61 js/ContractEditDialog.js:68
+#: js/ContractGridPanel.js:49
+#: js/Erp.js:61
+#: js/ContractEditDialog.js:68
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
 
-#: js/ContractGridPanel.js:50 js/ContractEditDialog.js:86
+#: js/ContractGridPanel.js:50
+#: js/ContractEditDialog.js:86
 msgid "Summary"
-msgstr ""
+msgstr "Zusammenfassung"
 
 #: js/ContractGridPanel.js:66
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: js/Erp.js:65
 msgid "contracts list"
 msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vertragsliste"
+msgstr[1] "Vertragslisten"
 
 #: js/ContractEditDialog.js:91
 msgid "Due date"
-msgstr ""
+msgstr "Fälligkeitsdatum"
 
 #: js/ContractEditDialog.js:94
 msgid "Priority"
-msgstr ""
+msgstr "Priorität"
 
 #: js/ContractEditDialog.js:97
 msgid "Responsible"
-msgstr ""
+msgstr "Verantwortlicher"
 
 #: js/ContractEditDialog.js:101
 msgid "Notes"
-msgstr ""
+msgstr "Notiz"
 
 #: js/ContractEditDialog.js:102
 msgid "Enter description..."
-msgstr ""
+msgstr "Bitte geben Sie eine Beschreibung ein..."
 
 #: js/ContractEditDialog.js:107
 msgid "Percentage"
-msgstr ""
+msgstr "Prozentsatz"
 
 #: js/ContractEditDialog.js:111
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/ContractEditDialog.js:115
 msgid "Completed"
-msgstr ""
+msgstr "Fertig"
 
 #: Setup/setup.xml:171
 msgid "Shared Contracts"
-msgstr ""
+msgstr "Gemeinsame Verträge"
+
