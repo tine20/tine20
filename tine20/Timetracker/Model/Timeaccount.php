@@ -9,6 +9,7 @@
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  * @todo        update validators (default values, mandatory fields)
+ * @todo        add setFromJson with relation handling
  */
 
 /**
@@ -32,6 +33,12 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Timetracker';
+
+    /**
+     * relation type: contract
+     *
+     */
+    const RELATION_TYPE_CONTRACT = 'CONTRACT';
     
     /**
      * list of zend validator
@@ -58,6 +65,8 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // relations (linked Erp_Model_Contract records)
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),    
     );
 
     /**
