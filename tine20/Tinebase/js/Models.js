@@ -11,6 +11,21 @@
 Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Tinebase.Model');
 
 /**
+ * @type {Array}
+ * generic Record fields
+ */
+Tine.Tinebase.Model.genericFields = [
+    { name: 'container_id', header: 'Container'                                     },
+    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    { name: 'created_by',         type: 'int'                  },
+    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    { name: 'last_modified_by',   type: 'int'                  },
+    { name: 'is_deleted',         type: 'boolean'              },
+    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    { name: 'deleted_by',         type: 'int'                  }
+]
+    
+/**
  * Model of the tine (simple) user account
  */
 Tine.Tinebase.Model.User = Ext.data.Record.create([
