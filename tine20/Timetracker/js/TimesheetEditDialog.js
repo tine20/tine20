@@ -22,15 +22,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     /**
      * @private
      */
-    labelAlign: 'side',
+    //labelAlign: 'side',
     
     /**
      * @private
      */
     windowNamePrefix: 'TimesheetEditWindow_',
     appName: 'Timetracker',
-    recordClass: Tine.Timetracker.Timesheet,
-    recordProxy: Tine.Timetracker.JsonBackend,
+    recordClass: Tine.Timetracker.Model.Timesheet,
+    recordProxy: Tine.Timetracker.timesheetBackend,
     //showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
@@ -90,6 +90,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     },
                     items: [[{
                         columnWidth: 1,
+                        fieldLabel: this.app.i18n._('Time Account'),
+                        emptyText: this.app.i18n._('Select Time Accont...'),
+                        allowEmpty: false,
+                        name: 'contract_id'
+                    }], [{
+                        columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
@@ -102,11 +108,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         fieldLabel: this.app.i18n._('Account'),
                         value: 1,
                         name: 'account_id'
-                    }],[{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Contract'),
-                        value: 1,
-                        name: 'contract_id'
                     }]] 
                 }, {
                     // activities and tags

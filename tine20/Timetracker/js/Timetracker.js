@@ -58,49 +58,13 @@ Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 	}
 });
     
-// Timesheet model
-Tine.Timetracker.TimesheetArray = [
-    // tine record fields
-    { name: 'container_id', header: 'Container'                                     },
-    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'created_by',         type: 'int'                  },
-    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'last_modified_by',   type: 'int'                  },
-    { name: 'is_deleted',         type: 'boolean'              },
-    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'deleted_by',         type: 'int'                  },
-    // timesheet only fields
-    // @todo add more fields
-    { name: 'id' },
-    { name: 'description' },
-    { name: 'account_id' },
-    { name: 'contract_id' },
-    // tine 2.0 notes field
-    { name: 'notes'}
-];
 
-/**
- * Timesheet record definition
- */
-Tine.Timetracker.Timesheet = Tine.Tinebase.Record.create(Tine.Timetracker.TimesheetArray, {
-    appName: 'Timetracker',
-    modelName: 'Timesheet',
-    idProperty: 'id',
-    titleProperty: 'title',
-    // ngettext('Timesheet', 'Timesheets', n);
-    recordName: 'Timesheets',
-    recordsName: 'Timesheets',
-    containerProperty: 'container_id',
-    // ngettext('timesheets list', 'timesheets lists', n);
-    containerName: 'timesheets list',
-    containersName: 'timesheets lists'
-});
 
 /**
  * default timesheets backend
  */
-Tine.Timetracker.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Timetracker.timesheetBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Timetracker',
     modelName: 'Timesheet',
-    recordClass: Tine.Timetracker.Timesheet
+    recordClass: Tine.Timetracker.Model.Timesheet
 });

@@ -16,7 +16,7 @@ Ext.namespace('Tine.Timetracker');
  */
 Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
-    recordClass: Tine.Timetracker.Timesheet,
+    recordClass: Tine.Timetracker.Model.Timesheet,
     
     // grid specific
     defaultSortInfo: {field: 'creation_time', dir: 'DESC'},
@@ -26,7 +26,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     },
     
     initComponent: function() {
-        this.recordProxy = Tine.Timetracker.JsonBackend;
+        this.recordProxy = Tine.Timetracker.timesheetBackend;
         
         //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
