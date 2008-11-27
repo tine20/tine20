@@ -35,12 +35,15 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function getContact($contactId)
     {
+        /*
         $result = array();
                
         $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
         $result = $this->_contactToJson($contact);
         
         return $result;
+        */
+        return $this->_get($contactId, Addressbook_Controller_Contact::getInstance());
     }
     
     /**
@@ -79,6 +82,7 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function deleteContacts($_contactIds)
     {
+        /*
         $result = array(
             'success'   => TRUE
         );
@@ -88,8 +92,11 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         Addressbook_Controller_Contact::getInstance()->delete($contactIds);
 
         return $result;
+        */
+        
+        return $this->_delete($_contactIds, Addressbook_Controller_Contact::getInstance());
     }
-          
+    
     /**
      * save one contact
      *
@@ -108,18 +115,18 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         } else {
             $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
         }
-
+        
         $result =  $this->getContact($contact->getId());
         return $result;
-         
     }
-
+    
     /****************************************** get salutations ****************************/
     
     /**
      * get salutations
      *
      * @return array
+     * @todo   use _getAll() from Tinebase_Application_Frontend_Json_Abstract
      */
    public function getSalutations()
     {
@@ -134,7 +141,7 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             $result['totalcount']   = count($result['results']);
         }
 
-        return $result;    
+        return $result;
     }  
     
     /****************************************** helper functions ***********************************/
