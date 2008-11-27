@@ -29,17 +29,4 @@ class Erp_Backend_Contract extends Tinebase_Application_Backend_Sql_Abstract
 
     /************************ helper functions ************************/
 
-    /**
-     * add the fields to search for to the query
-     *
-     * @param   Zend_Db_Select           $_select current where filter
-     * @param   Erp_Model_ContractFilter  $_filter the string to search for
-     * 
-     * @todo    add container filter later
-     */
-    protected function _addFilter(Zend_Db_Select $_select, Erp_Model_ContractFilter $_filter)
-    {
-        //$_select->where($this->_db->quoteInto('container_id IN (?)', $_filter->container));
-        $_filter->appendFilterSql($_select);
-    }
 }
