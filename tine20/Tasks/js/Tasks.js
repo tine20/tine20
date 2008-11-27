@@ -24,17 +24,7 @@ Tine.Tasks.TreePanel = function(config) {
 Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel);
 
 // Task model
-Tine.Tasks.TaskArray = [
-    // tine record fields
-    { name: 'container_id', header: 'Container'                                     },
-    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'created_by',         type: 'int'                  },
-    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'last_modified_by',   type: 'int'                  },
-    { name: 'is_deleted',         type: 'boolean'              },
-    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'deleted_by',         type: 'int'                  },
-    // task only fields
+Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'percent', header: 'Percent' },
     { name: 'completed', type: 'date', dateFormat: Date.patterns.ISO8601Long },
@@ -69,7 +59,7 @@ Tine.Tasks.TaskArray = [
     { name: 'rrule' },
     // tine 2.0 notes field
     { name: 'notes'}
-];
+]);
 
 /**
  * Task record definition
