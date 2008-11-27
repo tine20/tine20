@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add contract status table or as enum?
+ * @todo        add contract status table
  */
 
 /**
