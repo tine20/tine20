@@ -19,7 +19,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Controller_Abstract implements Voipmanager_Controller_Interface
+abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Controller_Abstract
 {
     /**
      * application name (is needed in checkRight())

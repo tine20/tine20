@@ -744,11 +744,13 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * generic search function
      *
-     * @param Voipmanager_Controller_Interface $_controller
+     * @param $_controller
      * @param string $_sort
      * @param string $_dir
      * @param Tinebase_Record_Interface $_filter
      * @return array
+     * 
+     * @deprecated remove that when frontend gets refactored
      */
     protected function _search($_controller, $_sort, $_dir, $_filter)
     {
