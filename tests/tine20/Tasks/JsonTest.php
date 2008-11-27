@@ -64,7 +64,26 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         parent::tearDown();
     }
-
+    
+    /**
+     * test creation of a task
+     *
+     */
+    public function testCreateTask()
+    {
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        
+        $this->assertEquals($task['summary'], $returned['summary']);
+        $this->assertNotNull($returned['id']);
+        
+        // test getAsteriskContext($contextId) as well
+        $returnedGet = $this->_backend->getTask($returned['id']);
+        $this->assertEquals($task['summary'], $returnedGet['summary']);
+        
+        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+    }
+    
     /**
      * try to search for tasks
      *
