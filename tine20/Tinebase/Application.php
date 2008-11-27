@@ -108,6 +108,7 @@ class Tinebase_Application
      * @throws Tinebase_Exception_NotFound
      * 
      * @todo code still needs some testing
+     * @todo add caching
      */
     public function getApplicationByName($_applicationName)
     {

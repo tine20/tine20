@@ -309,6 +309,8 @@ class Tinebase_Config
      * @param integer $_applicationId
      * @param string $_modelName
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField records
+     * 
+     * @todo    add caching here
      */
     public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL)
     {
