@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:TimesheetFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
  */
 
@@ -36,6 +36,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_validators = array_merge($this->_validators, array(
+            'timeaccount_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         ));
         
         // define query fields
