@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        add test for contract <-> timeaccount relations
  */
 
 /**
