@@ -57,6 +57,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @return  array record data
      * 
      * @todo    add sort/dir params here?
+     * @todo    add translation here? that is needed for example for getSalutations() in the addressbook
      */
     protected function _getAll(Tinebase_Application_Controller_Record_Interface $_controller)
     {

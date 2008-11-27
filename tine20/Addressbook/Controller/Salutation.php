@@ -72,6 +72,8 @@ class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_
      * @param string $_sort
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Addressbook_Model_Salutation
+     * 
+     * @todo    use getAll from generic controller
      */
     public function getSalutations($_sort = 'id', $_dir = 'ASC')
     {
