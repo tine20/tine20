@@ -143,6 +143,8 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      *
      * @param Tinebase_Record_Interface $_record
      * @return array record data
+     * 
+     * @todo move that to Tinebase_Record_Abstract
      */
     protected function _recordToJson($_record/*, $_resolveContainer = FALSE*/)
     {
@@ -163,6 +165,8 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      *
      * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
      * @return array data
+     * 
+     * @todo move that to Tinebase_Record_RecordSet
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
     {       

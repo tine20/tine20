@@ -10,6 +10,8 @@
  * @version     $Id$
  *
  * @todo        use functions from Tinebase_Application_Frontend_Json_Abstract
+ *              -> get/search/save/getAll
+ * @todo        remove deprecated functions afterwards
  */
 
 /**
@@ -35,15 +37,13 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function getContact($contactId)
     {
-        /*
         $result = array();
                
         $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
         $result = $this->_contactToJson($contact);
         
         return $result;
-        */
-        return $this->_get($contactId, Addressbook_Controller_Contact::getInstance());
+        //return $this->_get($contactId, Addressbook_Controller_Contact::getInstance());
     }
     
     /**
@@ -82,18 +82,6 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function deleteContacts($_contactIds)
     {
-        /*
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $contactIds = Zend_Json::decode($_contactIds);
-        
-        Addressbook_Controller_Contact::getInstance()->delete($contactIds);
-
-        return $result;
-        */
-        
         return $this->_delete($_contactIds, Addressbook_Controller_Contact::getInstance());
     }
     
@@ -151,6 +139,8 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * @param Addressbook_Model_Contact $_contact
      * @return array contact data
+     * 
+     * @deprecated
      */
     protected function _contactToJson($_contact)
     {   
@@ -171,6 +161,8 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * @param Tinebase_Record_RecordSet $_contacts Addressbook_Model_Contact
      * @return array contacts data
+     * 
+     * @deprecated 
      */
     protected function _multipleContactsToJson(Tinebase_Record_RecordSet $_contacts)
     {        
