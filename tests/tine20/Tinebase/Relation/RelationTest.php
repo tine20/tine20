@@ -28,6 +28,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      * @var    Tinebase_Relation
      */
     protected $_object;
+    
     /**
      * crm lead identifiers we make relations to
      * @var array
@@ -37,6 +38,17 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         'backend' => 'SQL',
         'id'      => '268d586e46aad336de8fa2530b5b8faf921e494d'
     );
+    
+    /**
+     * a second crm lead identifiers we make relations to
+     * @var array
+     */
+    private $_crmId2 = array(
+        'model'   => 'Crm_Model_Lead',
+        'backend' => 'SQL',
+        'id'      => '268d586e46aad336de8fa2530b5b8faf921e495f'
+    );
+    
     /**
      * Relation data as they come from e.g. JSON update request
      *
@@ -192,6 +204,63 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Testing to update from relation set", $updatedRelations[0]->related_record->note);
     }
     
+    /**
+     * test if getting multiple relations returns en empty record set for a missing record
+     *
+     */
+    public function testGetMultipleRelationsWithMissingRecord()
+    {
+        // note: crmId2 is not created yet
+        $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array($this->_crmId['id'], $this->_crmId2['id']));
+
+        $this->assertEquals(2, count($relations), 'number of relation sets does not fit requested number');
+        $this->assertArrayHasKey($this->_crmId['id'], $relations, 'crmId is missing');
+        $this->assertGreaterThanOrEqual(2, count($relations[$this->_crmId['id']]), 'not enough relations found for crmId');
+        $this->assertArrayHasKey($this->_crmId2['id'], $relations, 'crmId2 is missing');
+        $this->assertEquals(0, count($relations[$this->_crmId2['id']]), 'to much relations for crmId2');
+    }
+    
+    /**
+     * test getting of multiple relations for existing records
+     *
+     */
+    public function testGetMultipleRelations()
+    {
+        $crmIdRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'])->toArray();
+        $sharedRelation = $crmIdRelations[1];
+        $sharedRelation['id'] = $sharedRelation['own_id'] = $sharedRelation['own_model'] = $sharedRelation['own_backend'] = '';
+        
+        // lets second entry only have one shared relation
+        $relationData = array($sharedRelation, array(
+            'own_model'              => '',
+            'own_backend'            => '',
+            'own_id'                 => '',
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_backend'        => '',
+            'related_id'             => '',
+            'related_record'         => array(
+                'n_family'              => 'Weiss',
+                'n_given'               => 'Leonie',
+                'bday'                  => '2005-07-13T00:00:00+02:00',
+                'container_id'          => '',
+            ),
+            'type'                   => 'CUSTOMER',
+        ));
+        $this->_object->setRelations($this->_crmId2['model'], $this->_crmId2['backend'], $this->_crmId2['id'], $relationData);
+        
+        $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array($this->_crmId['id'], $this->_crmId2['id']));
+        $this->assertEquals(2, count($relations), 'number of relation sets does not fit requested number');
+        
+        $this->assertArrayHasKey($this->_crmId['id'], $relations, 'crmId is missing');
+        $this->assertGreaterThanOrEqual(2, count($relations[$this->_crmId['id']]), 'not enough relations found for crmId');
+        
+        $this->assertArrayHasKey($this->_crmId2['id'], $relations, 'crmId2 is missing');
+        $this->assertEquals(2, count($relations[$this->_crmId2['id']]), 'number of relations does not fit');
+        
+        
+    }
+    
     public function testBreakRelations()
     {
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], array());
@@ -203,6 +272,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     {
         $backend = new Tinebase_Relation_Backend_Sql();
         $backend->purgeAllRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $backend->purgeAllRelations($this->_crmId2['model'], $this->_crmId2['backend'], $this->_crmId2['id']);
     }
 }
 
