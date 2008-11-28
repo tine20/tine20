@@ -159,6 +159,11 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
                 );
                 
+                // set id from related record (if it didn't got set in javascript frontend)
+                if ($data['related_id'] === NULL && !empty($relation['related_record']['id'])) {
+                    $data['related_id'] = $relation['related_record']['id'];
+                }                
+                
                 switch ($relation['type']) {
                     case 'RESPONSIBLE':                        
                         $data['related_model'] = 'Addressbook_Model_Contact';
