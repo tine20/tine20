@@ -157,12 +157,12 @@ class Tinebase_Relation_Backend_Sql
     /**
      * returns all relations of a given record and optionally only of given role
      * 
-     * @param  string $_model    own model to get all relations for
-     * @param  string $_backend  own backend to get all relations for
-     * @param  string $_id       own id to get all relations for 
-     * @param  string $_degree   only breaks relations of given degree
-     * @param  string $_type     only breaks relations of given type
-     * @param  boolean $_returnAll gets all relations (default: only get not deleted/broken relations)
+     * @param  string       $_model    own model to get all relations for
+     * @param  string       $_backend  own backend to get all relations for
+     * @param  string|array $_id       own id to get all relations for 
+     * @param  string       $_degree   only breaks relations of given degree
+     * @param  string       $_type     only breaks relations of given type
+     * @param  boolean      $_returnAll gets all relations (default: only get not deleted/broken relations)
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
     public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false  )
@@ -170,7 +170,7 @@ class Tinebase_Relation_Backend_Sql
     	$where = array(
     	    $this->_db->quoteIdentifier('own_model') . '   = ' . $this->_db->quote($_model),
     	    $this->_db->quoteIdentifier('own_backend') . ' = ' . $this->_db->quote($_backend),
-            $this->_db->quoteIdentifier('own_id') . '      = ' . $this->_db->quote($_id),
+            $this->_db->quoteIdentifier('own_id') . '    IN (' . $this->_db->quote((array)$_id) . ')',
     	    //'is_deleted  = '  . $this->_db->quote((bool)$_returnBroken)
     	);
     	
@@ -186,7 +186,7 @@ class Tinebase_Relation_Backend_Sql
         
        // Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
         
-        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(), true);
         foreach ($this->_dbTable->fetchAll($where) as $relation) {
         	$relations->addRecord(new Tinebase_Model_Relation($relation->toArray(), true));
         }
