@@ -77,10 +77,35 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($task['summary'], $returned['summary']);
         $this->assertNotNull($returned['id']);
         
-        // test getAsteriskContext($contextId) as well
+        // test getTask($contextId) as well
         $returnedGet = $this->_backend->getTask($returned['id']);
         $this->assertEquals($task['summary'], $returnedGet['summary']);
         
+        $returnedGet = $this->_backend->getTask($returned['id'], '0', '');
+        $this->assertEquals($task['summary'], $returnedGet['summary']);
+        
+        $returnedGet = $this->_backend->getTask('');
+        $this->assertEquals($returnedGet['organizer']['accountDisplayName'], 'Tine 2.0 Admin Account');
+        $this->assertEquals($returnedGet['container_id']['type'], 'personal');
+        
+        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+    }
+    
+    /**
+     * test update of a task
+     *
+     */
+    public function testUpdateTask()
+    {
+        $task = $this->_getTask();
+        
+        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $returned['summary'] = 'new summary';
+        
+        $updated = $this->_backend->saveTask(Zend_Json::encode($returned));
+        $this->assertEquals($returned['summary'], $updated['summary']);
+        $this->assertNotNull($updated['id']);
+                
         $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
     }
     
