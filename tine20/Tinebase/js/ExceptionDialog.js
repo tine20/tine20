@@ -55,7 +55,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                 }, {
                     id: 'tb-exceptiondialog-description',
                     height: 200,
-                    xtype: 'textfield',
+                    xtype: 'textarea',
                     fieldLabel: _('Description'),
                     name: 'description',
                     anchor: '95%',
@@ -91,11 +91,12 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     onSendReport: function() {
         Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
         var baseUrl = 'http://www.tine20.org/bugreport.php';
-        var hash = this.geerateHash();
+        var hash = this.generateHash();
 
         var info = {
-           msg:  this.exceptionInfo,
-           trace: this.exceptionInfo.traceHTML
+           msg: this.exceptionInfo,
+           description: Ext.getCmp('tb-exceptiondialog-description').getValue(),
+           build: Tine.Build
         };
         var chunks = this.strChunk(Ext.util.JSON.encode(info), 1000);
         
@@ -108,7 +109,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             img.push(Ext.DomHelper.insertFirst(this.el, {tag: 'img', src: url, hidden: true}, true));
         }
         
-        window.setTimeout(this.showTransmissionCompleted, 3000);
+        window.setTimeout(this.showTransmissionCompleted, 10000);
         
         this.close();
     },
@@ -135,7 +136,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     /**
      * @private
      */
-    geerateHash: function(){
+    generateHash: function(){
         // if the time isn't unique enough, the addition 
         // of random chars should be
         var t = String(new Date().getTime()).substr(4);
