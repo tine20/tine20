@@ -242,7 +242,7 @@ class Tinebase_Timemachine_ModificationLog
             foreach ($diffs as $diff) {
                 if ($_newRecord[$diff->modified_attribute] instanceof Zend_Date) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " we can't deal with dates yet -> non resolvable conflict!");
-                    throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency confilict!');
+                    throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
                 if ($_newRecord[$diff->modified_attribute] == $diff->new_value) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " user updated to same value for field '" . 
