@@ -180,10 +180,11 @@ class Tinebase_Relation_Backend_Sql
      */
     public function getAllRelations($_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false)
     {
+        $_id = $_id ? (array)$_id : array('');
     	$where = array(
-    	    $this->_db->quoteIdentifier('own_model') . '   = ' . $this->_db->quote($_model),
-    	    $this->_db->quoteIdentifier('own_backend') . ' = ' . $this->_db->quote($_backend),
-            $this->_db->quoteIdentifier('own_id') . '    IN (' . $this->_db->quote((array)$_id) . ')',
+    	    $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') .' = ?', $_model),
+    	    $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') .' = ?',$_backend),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' IN (?)' , $_id),
     	    //'is_deleted  = '  . $this->_db->quote((bool)$_returnBroken)
     	);
     	
