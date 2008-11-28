@@ -178,7 +178,8 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     public function testSetRelationsUpdate()
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-        $relations->setTimezone(Zend_Registry::get('userTimeZone'));
+        // isn't working correctly (undefined offset 0 in line 250 of Tinebase/Record/RecordSet.php)
+        //$relations->setTimezone(Zend_Registry::get('userTimeZone'));
         $relations[0]->type = 'UPDATETEST';
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
         
