@@ -76,7 +76,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
             'related_record'           => array(
                 'summary'              => 'phpunit test task for relations from crm',
                 'description'          => 'This task was created by phpunit when testing relations',
-                'due'                  => '2010-06-11T15:47:40+02:00',
+                'due'                  => '2010-06-11T15:47:40',
             ),
             'type'                   => 'CRM_TASK',
         ),
@@ -91,7 +91,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
             'related_record'           => array(
                 'n_family'              => 'Weiss',
                 'n_given'               => 'Cornelius',
-                'bday'                  => '1979-06-05T00:00:00+02:00',
+                'bday'                  => '1979-06-05T00:00:00',
                 'container_id'                 => '',
             ),
             'type'                   => 'PARTNER',
@@ -178,6 +178,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     public function testSetRelationsUpdate()
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $relations->setTimezone(Zend_Registry::get('userTimeZone'));
         $relations[0]->type = 'UPDATETEST';
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
         
@@ -194,10 +195,12 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     public function testSetRelationUpdateRelatedRecord()
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $relations->setTimezone(Zend_Registry::get('userTimeZone'));
         $relations[0]->related_record->note = "Testing to update from relation set";
         foreach ($relations as $relation) {
             $relation->related_record = $relation->related_record->toArray();
-        }
+        }        
+        //print_r($relations->toArray());
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
         
         $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
