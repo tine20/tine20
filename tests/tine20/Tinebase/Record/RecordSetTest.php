@@ -265,6 +265,19 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('idLess1', $record['string']);
     }    
     
+    /**
+     * test validation errors 
+     */
+    public function testGetValidationErrors()
+    {
+        $this->object = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('string' => 'idLess1'), true));
+        //$record = $this->object[0];
+        if(!$this->object->isValid()) {
+            $errors = $this->object->getValidationErrors();
+            print_r($errors);
+        }
+    }
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordSetTest::main') {
