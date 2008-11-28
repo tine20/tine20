@@ -197,7 +197,7 @@ class Tinebase_Timemachine_ModificationLog
      * @return  string id;
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function setModification( Tinebase_Model_ModificationLog $_modification ) {
+    public function setModification(Tinebase_Model_ModificationLog $_modification) {
         if ($_modification->isValid()) {
         	$id = $_modification->generateUID();
             $_modification->setId($id);
@@ -217,11 +217,11 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * merges changes made to local storage on concurrent updates into the new record 
      * 
-     * @param  Tinebase_Record_Abstract $_newRecord record from user data
-     * @param  Tinebase_Record_Abstract $_curRecord record from storage
-     * @return resolved concurrent updates
+     * @param  Tinebase_Record_Interface $_newRecord record from user data
+     * @param  Tinebase_Record_Interface $_curRecord record from storage
+     * @return Tinebase_Record_RecordSet with resolved concurrent updates (Tinebase_Model_ModificationLog records)
      */
-    public function manageConcurrentUpdates($_newRecord, $_curRecord, $_model, $_backend, $_id)
+    public function manageConcurrentUpdates(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_curRecord, $_model, $_backend, $_id)
     {
         list($appName, $i, $modelName) = explode('_', $_model);
         
