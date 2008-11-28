@@ -150,14 +150,14 @@ class Tinebase_Relations
      * @param  string $_backend   own backend to get relations for
      * @param  array  $_ids       own ids to get relations for 
      * @param  bool   $_ignoreAcl get relations without checking permissions
-     * @return array  id => Tinebase_Record_RecordSet of Tinebase_Model_Relation
+     * @return array  key from $_ids => Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
     public function getMultipleRelations($_model, $_backend, $_ids, $_ignoreAcl=false)
     {
         // prepare a record set for each given id
         $result = array();
-        foreach ($_ids as $id) {
-            $result[$id] = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(),  true);
+        foreach ($_ids as $key => $id) {
+            $result[$key] = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(),  true);
         }
         
         // fetch all relations in a single set
@@ -165,7 +165,10 @@ class Tinebase_Relations
         
         // sort relations into corrensponding sets
         foreach ($relations as $relation) {
-            $result[$relation->own_id]->addRecord($relation);
+            $keys = array_keys($_ids, $relation->own_id);
+            foreach ($keys as $key) {
+                $result[$key]->addRecord($relation);
+            }
         }
         
         return $result;
