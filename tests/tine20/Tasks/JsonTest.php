@@ -71,6 +71,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateTask()
     {
+        $application = 'Tasks';
+        
         $task = $this->_getTask();
         $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
         
@@ -87,6 +89,15 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $returnedGet = $this->_backend->getTask('');
         $this->assertEquals($returnedGet['organizer']['accountDisplayName'], 'Tine 2.0 Admin Account');
         $this->assertEquals($returnedGet['container_id']['type'], 'personal');
+        
+        $test_container = $this->_backend->getDefaultContainer();
+        $this->assertEquals($returnedGet['container_id']['type'], 'personal');
+        
+        $application_id_1 = $test_container['application_id'];
+        $application_id_2 = Tinebase_Application::getInstance()->getApplicationByName($application)->toArray();
+        $application_id_2 = $application_id_2['id'];
+        
+        $this->assertEquals($application_id_1, $application_id_2);
         
         $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
     }
