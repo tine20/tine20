@@ -289,6 +289,16 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '200', 'string' => 'Test2'), true));
         $result = $this->object->getMigration(array('100', '200'));
     }
+    
+    /**
+     * test translate 
+     */
+    public function testTranslate()
+    {
+        $this->object = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '100', 'string' => 'Test1'), true));
+        $result = $this->object->translate();
+    }
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordSetTest::main') {
