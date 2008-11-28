@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        remove db table usage
  */
 
 
@@ -62,8 +64,10 @@ class Tinebase_Relation_Backend_Sql
      * 
      * @param  Tinebase_Model_Relation $_relation 
      * @return Tinebase_Model_Relation the new relation
+     * 
+     * @todo    move check existance and update / modlog to controller?
      */
-    public function addRelation( $_relation )
+    public function addRelation($_relation)
     {
     	if ($_relation->getId()) {
     		throw new Tinebase_Exception_Record_NotAllowed('Could not add existing relation');
@@ -72,12 +76,21 @@ class Tinebase_Relation_Backend_Sql
     	$id = $_relation->generateUID();
     	$_relation->setId($id);
     	
-		$data = $_relation->toArray();
-		unset($data['related_record']);
 
-		$this->_dbTable->insert($data);
-		$this->_dbTable->insert($this->_swapRoles($data));
-		
+		// check if relation is already set (with is_deleted=1)
+		if ($deletedId = $this->_checkExistance($_relation)) {
+		    $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $deletedId)
+            );
+            $this->_dbTable->delete($where);
+		} 
+				
+        $data = $_relation->toArray();
+        unset($data['related_record']);
+	    
+	    $this->_dbTable->insert($data);
+		$this->_dbTable->insert($this->_swapRoles($data));		
+				
 		return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
     		
     } // end of member function addRelation
@@ -165,7 +178,7 @@ class Tinebase_Relation_Backend_Sql
      * @param  boolean      $_returnAll gets all relations (default: only get not deleted/broken relations)
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false  )
+    public function getAllRelations($_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnAll = false)
     {
     	$where = array(
     	    $this->_db->quoteIdentifier('own_model') . '   = ' . $this->_db->quote($_model),
@@ -273,5 +286,28 @@ class Tinebase_Relation_Backend_Sql
         }
         return $data;
     }
+    
+    /**
+     * check if relation already exists but is_deleted
+     *
+     * @param Tinebase_Model_Relation $_relation
+     * @return string relation id
+     */
+    protected function _checkExistance($_relation)
+    {
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') . ' = ?', $_relation->own_model),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') . ' = ?', $_relation->own_backend),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') . ' = ?', $_relation->own_id),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') . ' = ?', $_relation->related_id),
+            $this->_db->quoteIdentifier('is_deleted') . ' = 1'
+        );
+        $relationRow = $this->_dbTable->fetchRow($where);
+        
+        if($relationRow) {
+            return $relationRow->id;
+        } else {
+            return FALSE;
+        }
+    }
 } // end of Tinebase_Relation_Backend_Sql
-?>
