@@ -217,10 +217,10 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array($this->_crmId['id'], $this->_crmId2['id']));
 
         $this->assertEquals(2, count($relations), 'number of relation sets does not fit requested number');
-        $this->assertArrayHasKey($this->_crmId['id'], $relations, 'crmId is missing');
-        $this->assertGreaterThanOrEqual(2, count($relations[$this->_crmId['id']]), 'not enough relations found for crmId');
-        $this->assertArrayHasKey($this->_crmId2['id'], $relations, 'crmId2 is missing');
-        $this->assertEquals(0, count($relations[$this->_crmId2['id']]), 'to much relations for crmId2');
+        $this->assertArrayHasKey(0, $relations, 'crmId is missing');
+        $this->assertGreaterThanOrEqual(2, count($relations[0]), 'not enough relations found for crmId');
+        $this->assertArrayHasKey(1, $relations, 'crmId2 is missing');
+        $this->assertEquals(0, count($relations[1]), 'to much relations for crmId2');
     }
     
     /**
@@ -252,14 +252,14 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         ));
         $this->_object->setRelations($this->_crmId2['model'], $this->_crmId2['backend'], $this->_crmId2['id'], $relationData);
         
-        $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array($this->_crmId['id'], $this->_crmId2['id']));
+        $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array(0 => $this->_crmId['id'], 12 => $this->_crmId2['id']));
         $this->assertEquals(2, count($relations), 'number of relation sets does not fit requested number');
         
-        $this->assertArrayHasKey($this->_crmId['id'], $relations, 'crmId is missing');
-        $this->assertGreaterThanOrEqual(2, count($relations[$this->_crmId['id']]), 'not enough relations found for crmId');
+        $this->assertArrayHasKey(0, $relations, 'crmId is missing');
+        $this->assertGreaterThanOrEqual(2, count($relations[0]), 'not enough relations found for crmId');
         
-        $this->assertArrayHasKey($this->_crmId2['id'], $relations, 'crmId2 is missing');
-        $this->assertEquals(2, count($relations[$this->_crmId2['id']]), 'number of relations does not fit');
+        $this->assertArrayHasKey(12, $relations, 'crmId2 is missing');
+        $this->assertEquals(2, count($relations[12]), 'number of relations does not fit');
         
         
     }
