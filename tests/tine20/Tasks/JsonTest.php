@@ -71,8 +71,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateTask()
     {
-        $application = 'Tasks';
-        
         $task = $this->_getTask();
         $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
         
@@ -89,15 +87,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $returnedGet = $this->_backend->getTask('');
         $this->assertEquals($returnedGet['organizer']['accountDisplayName'], 'Tine 2.0 Admin Account');
         $this->assertEquals($returnedGet['container_id']['type'], 'personal');
-        
-        $test_container = $this->_backend->getDefaultContainer();
-        $this->assertEquals($returnedGet['container_id']['type'], 'personal');
-        
-        $application_id_1 = $test_container['application_id'];
-        $application_id_2 = Tinebase_Application::getInstance()->getApplicationByName($application)->toArray();
-        $application_id_2 = $application_id_2['id'];
-        
-        $this->assertEquals($application_id_1, $application_id_2);
         
         $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
     }
@@ -142,6 +131,60 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         // search and check again
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals(0, $tasks['totalcount']);
+    }
+    
+    /**
+     * test create default container
+     *
+     */
+    public function testDefaultContainer()
+    {
+        $application = 'Tasks';
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        
+        $test_container = $this->_backend->getDefaultContainer();
+        $this->assertEquals($returned['container_id']['type'], 'personal');
+        
+        $application_id_1 = $test_container['application_id'];
+        $application_id_2 = Tinebase_Application::getInstance()->getApplicationByName($application)->toArray();
+        $application_id_2 = $application_id_2['id'];
+        
+        $this->assertEquals($application_id_1, $application_id_2);
+        
+        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+    }
+    
+    /**
+     * test get status
+     *
+     */
+    public function testGetStatus()
+    {
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $status = $this->_backend->getAllStatus();
+        
+        $this->assertGreaterThan(0, count($status));
+        $this->assertNotEquals('', $status[0]['status_name']);
+        
+        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+    }
+    
+    /**
+     * test get registry data
+     *
+     */
+    public function testGetRegistryData()
+    {
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $regData = $this->_backend->getRegistryData();
+        
+        $this->assertGreaterThan(0, count($regData['AllStatus']));
+        $this->assertNotEquals('', $regData['AllStatus'][0]['status_name']);
+        
+        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
