@@ -109,7 +109,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             img.push(Ext.DomHelper.insertFirst(this.el, {tag: 'img', src: url, hidden: true}, true));
         }
         
-        window.setTimeout(this.showTransmissionCompleted, 10000);
+        window.setTimeout(this.showTransmissionCompleted, 4000);
         
         this.close();
     },
