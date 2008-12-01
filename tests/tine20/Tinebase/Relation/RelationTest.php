@@ -179,8 +179,15 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         // isn't working correctly (undefined offset 0 in line 250 of Tinebase/Record/RecordSet.php)
-        //$relations->setTimezone(Zend_Registry::get('userTimeZone'));
+        $relations->setTimezone(Zend_Registry::get('userTimeZone'));
         $relations[0]->type = 'UPDATETEST';
+        
+        // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
+        // their dates converted in the JSON frontends
+        foreach ($relations as $relation) {
+            $relation->setTimezone(Zend_Registry::get('userTimeZone'));
+        }
+        
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
         
         $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
@@ -198,7 +205,11 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         $relations->setTimezone(Zend_Registry::get('userTimeZone'));
         $relations[0]->related_record->note = "Testing to update from relation set";
+        
+        // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
+        // their dates converted in the JSON frontends
         foreach ($relations as $relation) {
+            $relation->setTimezone(Zend_Registry::get('userTimeZone'));
             $relation->related_record = $relation->related_record->toArray();
         }        
         //print_r($relations->toArray());
