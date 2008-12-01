@@ -264,7 +264,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function exception()
     {
         ob_start();
-        $html = $this->login();
+        $this->login();
         $html = ob_get_clean();
         
         $script = "
@@ -300,20 +300,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         header('Content-Type: application/javascript');
         die($translations);
     }
-    
-    /**
-     * returns registry data
-     * 
-     * @return array
-     * 
-     * @deprecated 
-     */
-    public function getRegistryData()
-    {
-        
-        return $registryData;
-    }
-    
+      
 	/**
 	 * activate user account
 	 *
@@ -428,8 +415,8 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	        $db = Zend_Registry::get('dbAdapter');
             $select = $db->select()
                ->from(SQL_TABLE_PREFIX . 'temp_files')
-               ->where($db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $id))
-               ->where($db->quoteInto($this->_db->quoteIdentifier('session_id') . ' = ?', session_id()));
+               ->where($db->quoteInto($db->quoteIdentifier('id') . ' = ?', $id))
+               ->where($db->quoteInto($db->quoteIdentifier('session_id') . ' = ?', session_id()));
             $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
 
             $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile['path']));
