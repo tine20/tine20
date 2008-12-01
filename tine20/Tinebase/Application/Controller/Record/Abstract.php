@@ -85,9 +85,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         $result = $this->_backend->search($_filter, $_pagination);
         
         if ($_getRelations) {
-            foreach ($result as &$record) {
-                $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
-            }
+            $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $result->getId()));
         }
         
         return $result;    
