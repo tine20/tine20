@@ -77,7 +77,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->fail('An expected exception has not been raised.');
     }
     /**
-     * test addidtion of a record
+     * test addition of a record
      */
     public function testAddRecords ()
     {
@@ -298,6 +298,30 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->object = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
         $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '100', 'string' => 'Test1'), true));
         $result = $this->object->translate();
+    }
+    
+    /**
+     * test set by indices 
+     */
+    public function testSetByIndices()
+    {
+        $this->object = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '100', 'string' => 'Test1'), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '200', 'string' => 'Test2'), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '300', 'string' => 'Test3'), true));
+        $result = $this->object->setByIndices('string', array('a', 'b', 'c'));
+    }
+    
+    /**
+     * test sort 
+     */
+    public function testSort()
+    {
+        $this->object = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '100', 'string' => 'Test3'), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '200', 'string' => 'Test1'), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '300', 'string' => 'Test2'), true));
+        $result = $this->object->sort('string', 'ASC');
     }
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
