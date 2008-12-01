@@ -244,6 +244,10 @@ class Tinebase_Core
         // getting a Zend_Cache_Core object
         $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
         
+        // some important caches
+        Zend_Date::setOptions(array('cache' => $cache));
+        Zend_Locale::setCache($cache);
+        
         self::set(self::CACHE, $cache);
     }
     
@@ -306,6 +310,7 @@ class Tinebase_Core
             switch($dbBackend) {
                 case self::PDO_MYSQL:
                     $db = Zend_Db::factory('Pdo_Mysql', $dbConfig->toArray());
+                    $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
                     break;
                 case self::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
