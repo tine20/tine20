@@ -85,22 +85,31 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function getGroupMemberships($_accountId)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        
-        $memberships = array();
-        $select = $this->groupMembersTable->select();
-        $select->where($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId);
-        
-        $rows = $this->groupMembersTable->fetchAll($select);
-        
-        foreach($rows as $membership) {
-            $memberships[] = $membership->group_id;
+
+        $cache = Zend_Registry::get('cache');
+        $cacheId = 'getGroupMemberships' . $accountId;
+        $memberships = $cache->load($cacheId);
+
+        if (! $memberships) {
+            $memberships = array();
+            $colName = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
+            $select = $this->groupMembersTable->select();
+            $select->where($colName . ' = ?', $accountId);
+
+            $rows = $this->groupMembersTable->fetchAll($select);
+
+            foreach($rows as $membership) {
+                $memberships[] = $membership->group_id;
+            }
+
+            $cache->save($memberships, $cacheId, array('group'));
         }
 
         return $memberships;
     }
     
     /**
-     * get list of groupmembers 
+     * get list of groupmembers
      *
      * @param int $_groupId
      * @return array with account ids
@@ -108,16 +117,24 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function getGroupMembers($_groupId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-        
-        $members = array();
-        
-        $select = $this->groupMembersTable->select();
-        $select->where($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
-        
-        $rows = $this->groupMembersTable->fetchAll($select);
-        
-        foreach($rows as $member) {
-            $members[] = $member->account_id;
+
+        $cache = Zend_Registry::get('cache');
+        $cacheId = 'getGroupMembers' . $groupId;
+        $members = $cache->load($cacheId);
+
+        if (! $members) {
+            $members = array();
+
+            $select = $this->groupMembersTable->select();
+            $select->where('group_id = ?', $groupId);
+
+            $rows = $this->groupMembersTable->fetchAll($select);
+
+            foreach($rows as $member) {
+                $members[] = $member->account_id;
+            }
+
+            $cache->save($members, $cacheId, array('group'));
         }
 
         return $members;
