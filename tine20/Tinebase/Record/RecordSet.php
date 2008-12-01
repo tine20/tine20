@@ -168,6 +168,19 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * sets given property in all given records identified by their indices
+     *
+     * @param string $_name property name
+     * @param array  $_values index => property value
+     */
+    public function setByIndices($_name, array $_values)
+    {
+        foreach ($_values as $index => $value) {
+            $this->_listOfRecords[$index]->$_name = $value;
+        }
+    }
+    
+    /**
      * sets given property in all member records of this set
      * 
      * @param string $_name
