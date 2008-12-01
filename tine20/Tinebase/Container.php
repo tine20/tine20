@@ -749,41 +749,51 @@ class Tinebase_Container
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-        
         $grant = (int)$_grant;
-        if($grant != $_grant) {
-            throw new Tinebase_Exception_InvalidArgument('$_grant must be integer');
-        }
         
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        if(count($groupMemberships) === 0) {
-            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-        }
+        $cache = Zend_Registry::get('cache');
+        $cacheId = 'hasGrant' . $accountId . $containerId . $grant;
+        $result = $cache->load($cacheId);
         
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'container_acl', array())
-            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
-
-            # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+        if (! $result) {
+            if($grant != $_grant) {
+                throw new Tinebase_Exception_InvalidArgument('$_grant must be integer');
+            }
             
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
-            ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId);
-                    
-        //error_log("getContainer:: " . $select->__toString());
-
-        $stmt = $this->_db->query($select);
-        
-        $grants = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        if(empty($grants)) {
-            return FALSE;
-        } else {
-            return TRUE;
+            $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+            if(count($groupMemberships) === 0) {
+                throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
+            }
+            
+            $select = $this->_db->select()
+                ->from(SQL_TABLE_PREFIX . 'container_acl', array())
+                ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
+    
+                # beware of the extra parenthesis of the next 3 rows
+                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
+                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+                
+                ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
+                ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId);
+                        
+            //error_log("getContainer:: " . $select->__toString());
+    
+            $stmt = $this->_db->query($select);
+            
+            $grants = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            if(empty($grants)) {
+                $result = FALSE;
+            } else {
+                $result = TRUE;
+            }
+            
+            // save result and tag it with 'container'
+            $cache->save($result, $cacheId, array('container'));
         }
+        
+        return $result;
     }
     
     /**
