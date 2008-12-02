@@ -53,7 +53,7 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
                 header("Cache-Control: max-age=0");
                 header("Content-Disposition: inline; filename=contact.pdf"); 
                 header("Content-type: application/x-pdf"); 
-                echo $pdfOutput;            
+                echo $pdfOutput;
                 break;
                 
             default:
