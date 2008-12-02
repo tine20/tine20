@@ -201,7 +201,9 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     public function testSetRelationUpdateRelatedRecord()
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-        $relations[0]->related_record->note = "Testing to update from relation set";
+
+        $relatedContacts = $relations->filter('related_model', 'Addressbook_Model_Contact');
+        $relatedContacts[0]->related_record->note = "Testing to update from relation set";
         
         // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
         // their dates converted in the JSON frontends
@@ -209,11 +211,12 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
             $relation->setTimezone(Zend_Registry::get('userTimeZone'));
             $relation->related_record = $relation->related_record->toArray();
         }        
-        //print_r($relations->toArray());
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
         
         $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-        $this->assertEquals("Testing to update from relation set", $updatedRelations[0]->related_record->note);
+        $updatedConacts = $updatedRelations->filter('related_model', 'Addressbook_Model_Contact');
+
+        $this->assertEquals("Testing to update from relation set", $updatedConacts[0]->related_record->note);
     }
     
     /**
