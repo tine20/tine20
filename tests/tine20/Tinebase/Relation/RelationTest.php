@@ -203,6 +203,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
 
         $relatedContacts = $relations->filter('related_model', 'Addressbook_Model_Contact');
+        $relatedContacts->sort('related_model', 'ASC');
         $relatedContacts[0]->related_record->note = "Testing to update from relation set";
         
         // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
@@ -215,6 +216,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         
         $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         $updatedConacts = $updatedRelations->filter('related_model', 'Addressbook_Model_Contact');
+        $updatedConacts->sort('related_model', 'ASC');
 
         $this->assertEquals("Testing to update from relation set", $updatedConacts[0]->related_record->note);
     }
