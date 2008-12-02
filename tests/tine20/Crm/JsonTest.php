@@ -261,7 +261,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
                 'related_model'          => 'Addressbook_Model_Contact',
                 'related_backend'        => Addressbook_Backend_Factory::SQL,
                 'related_id'             => $this->objects['contact']->getId(),
-                'type'                   => 'RESPONSIBLE',
+                'type'                   => 'PARTNER',
                 //'related_record'         => $this->objects['contact']->toArray()
             )        
         );
@@ -346,7 +346,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateLead()
     {
         $result = $this->_backend->searchLeads(Zend_Json::encode($this->objects['filter']));        
-        $initialLead = $result['results'][0];
+        $initialLeadId = $result['results'][0]['id'];
+        
+        $initialLead = $this->_backend->getLead($initialLeadId);
         
         $updatedLead = $this->objects['updatedLead'];
         $updatedLead->id = $initialLead['id'];

@@ -114,6 +114,17 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         return $lead;
     }
     
+    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
+    {
+        $leads = parent::search($_filter, $_pagination);
+        
+        if ($_getRelations) {
+            $leads->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $leads->getId(), NULL, array('CUSTOMER', 'PARTNER')));
+        }
+        
+        return $leads;
+    }
+    
     /*********** other public functions **************/
     
     /**
