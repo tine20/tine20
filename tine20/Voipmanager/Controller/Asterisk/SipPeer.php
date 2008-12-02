@@ -77,4 +77,11 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         return $result;    
     }
+    
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $this->_cache->clean('all', array('asteriskSipPeer'));
+        return parent::update($_record);
+    }
+    
 }

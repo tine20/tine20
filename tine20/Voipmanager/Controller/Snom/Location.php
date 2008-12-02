@@ -77,4 +77,10 @@ class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstra
 
         return $result;    
     }
+    
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $this->_cache->clean('all', array('snomLocation'));
+        return parent::update($_record);
+    }
 }
