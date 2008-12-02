@@ -126,7 +126,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         
-        $result = new Tinebase_Record_RecordSet($this->_modelName, $queryResult);
+        $result = new Tinebase_Record_RecordSet($this->_modelName, $queryResult, true);
         
         return $result;
     }
