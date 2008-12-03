@@ -60,7 +60,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_validators = array(
-            'id'        => array('Digits', 'allowEmpty' => true),
+            'id'        => array('allowEmpty' => true),
             'name'      => array('presence' => 'required'),
             'status'    => array(new Zend_Validate_InArray(array('enabled', 'disabled'))),
             'order'     => array('Digits', 'presence' => 'required'),
@@ -84,15 +84,9 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
             if(empty($_applicationId->id)) {
                 throw new Tinebase_Exception_InvalidArgument('No application id set.');
             }
-            $applicationId = (int) $_applicationId->id;
-        } elseif (is_string($_applicationId) && ((int) $_applicationId) === 0) {
-            $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_applicationId)->getId();
+            $applicationId = $_applicationId->id;
         } else {
-            $applicationId = (int) $_applicationId;
-        }
-        
-        if($applicationId === 0) {
-            throw new Tinebase_Exception_InvalidArgument('Application id can not be 0.');
+            $applicationId = $_applicationId;
         }
         
         return $applicationId;
