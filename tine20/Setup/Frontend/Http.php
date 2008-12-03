@@ -90,7 +90,12 @@ class Setup_Frontend_Http
     {
         $controller = new Setup_Controller();
         
-        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        try {
+            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        } catch(Zend_Db_Statement_Exception $e) {
+            // application installed at all
+            return;
+        }
         
         foreach($applications as $key => &$application) {
             if(!$controller->updateNeeded($application)) {
