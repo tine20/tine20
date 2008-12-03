@@ -71,16 +71,7 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
     {
         switch ($_name) {
             case 'application_id':
-                if ($_value instanceof Tinebase_Model_Application ) {
-                    $_value = $_value->getId();
-                } elseif ((int)$_value > 0) {
-                    $_value = (int)$_value;
-                } elseif (is_string($_value)) {
-                    $_value = Tinebase_Application::getInstance()->getApplicationByName($_value)->getId();
-                } else {
-                    throw new Tinebase_Exception_InvalidArgument("$_value is not supported");
-                }
-                break;
+                $_value = Tinebase_Model_Application::convertApplicationIdToInt($_value);
         }
         parent::__set($_name, $_value);
     }

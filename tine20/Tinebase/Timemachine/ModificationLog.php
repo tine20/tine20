@@ -125,7 +125,7 @@ class Tinebase_Timemachine_ModificationLog
         $select = $db->select()
             ->from($this->_tablename)
             ->order('modification_time ASC')
-            ->where($db->quoteIdentifier('application_id') . ' = ' . $application->id)
+            ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' = ?', $application->id))
             ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $_id))
             ->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' > ?', $_from->toString($isoDef)))
             ->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' <= ?', $_until->toString($isoDef)));
@@ -278,7 +278,7 @@ class Tinebase_Timemachine_ModificationLog
         list($appName, $i, $modelName) = explode('_', $_model);
         
         $modLogEntry = new Tinebase_Model_ModificationLog(array(
-            'application_id'       => $appName,
+            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
             'record_id'            => $_id,
             'record_type'          => $_model,
             'record_backend'       => $_backend,
