@@ -13,6 +13,9 @@ Ext.ns('Tine.Timetracker');
 
 // default mainscreen
 Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+    
+    activeContentType: 'Timesheet',
+    
     /*
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){
@@ -25,20 +28,35 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         }
         return this;
     },*/
+    
     setContentPanel: function() {
-        if(!this.gridPanel) {
-            var plugins = [];
-            if (typeof(this.treePanel.getFilterPlugin) == 'function') {
-                plugins.push(this.treePanel.getFilterPlugin());
-            }
-            
-            this.gridPanel = new Tine[this.app.appName].TimesheetGridPanel({
-                app: this.app,
-                plugins: plugins
+        
+        // which content panel?
+        //var type = this.treePanel.getSelectionModel().getSelectedNode().getPath().split('/')[2];
+        var type = this.activeContentType;
+        //console.log(type);
+        
+        if (! this[type + 'GridPanel']) {
+            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
+                app: this.app
             });
+            
         }
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-        this.gridPanel.store.load();
-    }    
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this[type + 'GridPanel'], true);
+        this[type + 'GridPanel'].store.load();
+    },
+    
+    /**
+     * sets toolbar in mainscreen
+     */
+    setToolbar: function() {
+        var type = this.activeContentType;
+        
+        if (! this[type + 'ActionToolbar']) {
+            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].actionToolbar;
+        }
+        
+        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
+    }
 });

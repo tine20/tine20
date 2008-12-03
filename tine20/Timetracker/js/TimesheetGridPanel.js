@@ -32,6 +32,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
+        this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);

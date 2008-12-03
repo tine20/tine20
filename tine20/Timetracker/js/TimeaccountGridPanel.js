@@ -32,6 +32,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
+        this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
         Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);

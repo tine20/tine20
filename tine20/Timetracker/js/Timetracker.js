@@ -21,36 +21,35 @@ Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
             id: 'root',
             children: [{
                 text: this.app.i18n._('Timesheets'),
-                id : 'timesheets',
+                id : 'Timesheet',
                 iconCls: 'TimetrackerTimesheet',
                 expanded: true,
                 children: [{
                     text: this.app.i18n._('All Timesheets'),
                     id: 'alltimesheets',
-                    leaf: true,
-                    listeners: {
-                        scope: this,
-                        click: function() {alert('timesheets');}
-                    }
+                    leaf: true
                 }]
             }, {
                 text: this.app.i18n._('Timeaccounts'),
-                id: 'timeaccounts',
+                id: 'Timeaccount',
                 iconCls: 'TimetrackerTimeaccount',
                 expanded: true,
                 children: [{
                     text: this.app.i18n._('All Timeaccounts'),
                     id: 'alltimeaccounts',
-                    leaf: true,
-                    listeners: {
-                        scope: this,
-                        click: function() {alert('timeaccounts');}
-                    }
+                    leaf: true
                 }]
             }]
         };
         
     	Tine.Timetracker.TreePanel.superclass.initComponent.call(this);
+        
+        this.on('click', function(node) {
+            var contentType = node.getPath().split('/')[2];
+            
+            this.app.getMainScreen().activeContentType = contentType;
+            this.app.getMainScreen().show();
+        }, this);
 	},
     
     /**
@@ -58,8 +57,10 @@ Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
      */
     afterRender: function() {
         Tine.Timetracker.TreePanel.superclass.afterRender.call(this);
-        this.expandPath('/root/timesheets/alltimesheets');
-        this.selectPath('/root/timesheets/alltimesheets');
+        var type = this.app.getMainScreen().activeContentType;
+
+        this.expandPath('/root/' + type + '/alltimesheets');
+        this.selectPath('/root/' + type + '/alltimesheets');
     }
 });
     
