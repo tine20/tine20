@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Setuo_Server_Cli extends Setup_Server_Abstract
+class Setup_Server_Cli extends Setup_Server_Abstract
 {
     /**
      * handler for command line scripts
@@ -26,15 +26,37 @@ class Setuo_Server_Cli extends Setup_Server_Abstract
      */
     public function handle()
     {        
+        try {
+            $opts = new Zend_Console_Getopt(
+            array(
+                'help|h'                => 'Display this help Message',
+                'verbose|v'             => 'Output messages',
+                'config|c=w'            => 'Path to config.inc.php file',
+            
+                'install-s'             => 'Install applications [All] or comma separated list',              
+                'update-s'              => 'Update applications [All] or comma separated list',             
+                'uninstall-s'           => 'Uninstall application [All] or comma separated list',
+                'list-s'           => 'List installed applications'
+                #'username'             => 'Username [required]',              
+                #'password'             => 'Password [required]',              
+            ));
+            $opts->parse();
+        } catch (Zend_Console_Getopt_Exception $e) {
+            echo $e->getUsageMessage();
+            exit;
+        }
+
+        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list))) {
+            echo $opts->getUsageMessage();
+            exit;
+        }
+
         $this->_initFramework();
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->mode) ? $opts->mode : 'EMPTY'));
         
-        $opts = Tinebase_Core::get('opts');
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
-        //Zend_Registry::get('logger')->debug('Cli args: ' . print_r($opts->getRemainingArgs(), true));
-
-        $tinebaseServer = new Tinebase_Frontend_Cli();
-        $tinebaseServer->authenticate($opts->username, $opts->password);
-        return $tinebaseServer->handle($opts);        
+        $setupServer = new Setup_Frontend_Cli();
+        #$setupServer->authenticate($opts->username, $opts->password);
+        return $setupServer->handle($opts);        
     }
 }

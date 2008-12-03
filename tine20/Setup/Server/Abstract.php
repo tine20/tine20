@@ -32,7 +32,7 @@ abstract class Setup_Server_Abstract
         
         Tinebase_Core::setupLogger();
 
-        Tinebase_Core::setupSession();
+        #Tinebase_Core::setupSession();
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
@@ -40,15 +40,15 @@ abstract class Setup_Server_Abstract
         Tinebase_Core::set('locale', new Zend_Locale('en_US'));
         Tinebase_Core::set('userTimeZone', 'UTC');
         
-        Tinebase_Core::setupMailer();
+        #Tinebase_Core::setupMailer();
 
         Tinebase_Core::setupDatabaseConnection();
 
-        Tinebase_Core::setupUserTimezone();
+        #Tinebase_Core::setupUserTimezone();
         
-        Tinebase_Core::setupUserLocale();
+        #Tinebase_Core::setupUserLocale();
         
-        Tinebase_Core::setupCache();
+        #Tinebase_Core::setupCache();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }

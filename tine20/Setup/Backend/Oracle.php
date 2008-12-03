@@ -83,15 +83,13 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         return $statement;
     }
     
-    public function getCreateStatement(Setup_Backend_Schema_Table_Abstract  $_table)
+    public function getCreateStatement(Setup_Backend_Schema_Table_Abstract $_table)
     {
         $statement = 'CREATE TABLE "' . SQL_TABLE_PREFIX . $_table->name . "\" (\n";
         $statementSnippets = array();
      
         foreach ($_table->fields as $field) {
-            if (isset($field->name)) {
-               $statementSnippets[] = $this->getFieldDeclarations($field);
-            }
+           $statementSnippets[] = $this->getFieldDeclarations($field);
         }
 
         foreach ($_table->indices as $index) {    
@@ -232,43 +230,17 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         }
         */
     }
-    
-    /**
-     * add table to tine registry
-     *
-     * @param Tinebase_Model_Application
-     * @param string name of table
-     * @param int version of table
-     * @return int
-     */
-    public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
-    {
-        $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
-        $applicationData = array(
-            'application_id'    => $_application->id,
-            'name'              =>  SQL_TABLE_PREFIX . $_name,
-            'version'           => $_version
-        );
-
-        $applicationID = $applicationTable->insert($applicationData);
-		if ($applicationID->id != ((int) $applicationID->id )) {
-            $applicationID->id = $this->applicationTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . '_applications_seq');
-        }
-        				
-        return $applicationID;
-    }
-    
+        
     /**
      * removes table from database
      * 
      * @param string tableName
      */
-    public function dropTable($_tableName)
-    {
-        $statement = "DROP TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`;";
-        $this->execQueryVoid($statement);
-        echo  $_tableName . " geloescht\n";
-    }
+#    public function dropTable($_tableName)
+#    {
+#        $statement = "DROP TABLE " . Tinebase_Core::getDb()->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
+#        $this->execQueryVoid($statement);
+#    }
     
     /**
      * renames table in database
@@ -288,7 +260,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * @param Setup_Backend_Schema_Field declaration
      * @param int position of future column
      */    
-    public function addCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_position = NULL)
+    public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
         
@@ -313,7 +285,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * @param Setup_Backend_Schema_Field declaration
      * @param string old column/field name 
      */    
-    public function alterCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_oldName = NULL)
+    public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
         $oldName = $_oldName ;
@@ -504,10 +476,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         }
         
         if ($_field->type != 'enum') {
-            if ($_field->notnull === true) {
-                $buffer[] = 'NOT NULL';
-            }
-
             if (isset($_field->default)) {
                 if($_field->default === NULL) {
                     $buffer[] = "DEFAULT NULL" ;
@@ -515,6 +483,10 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                     $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("DEFAULT ?", $_field->default) ;
                 }
             }    
+
+            if ($_field->notnull === true) {
+                $buffer[] = 'NOT NULL';
+            }
         }
         
         if (isset($_field->autoincrement)) {

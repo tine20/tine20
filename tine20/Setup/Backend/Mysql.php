@@ -33,7 +33,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     {
         $statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
-        echo "<pre>$statement</pre><hr>";
+        #echo "<pre>$statement</pre><hr>";
     }
     
     public function getCreateStatement(Setup_Backend_Schema_Table_Abstract  $_table)
@@ -90,6 +90,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         if ($table === false) {
             return false;
         }
+        
         return true; 
     }
     
@@ -192,39 +193,15 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     }
     
     /**
-     * add table to tine registry
-     *
-     * @param Tinebase_Model_Application
-     * @param string name of table
-     * @param int version of table
-     * @return int
-     */
-    public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
-    {
-        $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
-
-        $applicationData = array(
-            'application_id'    => $_application->id,
-            'name'              =>  SQL_TABLE_PREFIX . $_name,
-            'version'           => $_version
-        );
-
-        $applicationID = $applicationTable->insert($applicationData);
-
-        return $applicationID;
-    }    
-
-    /**
      * removes table from database
      * 
      * @param string tableName
      */
-    public function dropTable($_tableName)
-    {
-        $statement = "DROP TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`;";
-        $this->execQueryVoid($statement);
-        echo  $_tableName . " deleted\n";
-    }
+#    public function dropTable($_tableName)
+#    {
+#        $statement = "DROP TABLE " . Tinebase_Core::getDb()->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
+#        $this->execQueryVoid($statement);
+#    }
     
     /**
      * renames table in database

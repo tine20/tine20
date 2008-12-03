@@ -84,10 +84,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function execInsertStatement(SimpleXMLElement $_record)
     {
-        $table = new Tinebase_Db_Table(array(
-           'name' => SQL_TABLE_PREFIX . $_record->table->name
-        ));
-
+        $data = array();
+        
         foreach ($_record->field as $field) {
             if (isset($field->value['special'])) {
                 switch(strtolower($field->value['special'])) {
@@ -114,11 +112,19 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                 $value = $field->value;
             }
             // buffer for insert statement
-            $data[(string)$field->name] = $value;
+            $data[(string)$field->name] = (string)$value;
         }
         
-        // final insert process
-        $table->insert($data);
+        #$table = new Tinebase_Db_Table(array(
+        #   'name' => SQL_TABLE_PREFIX . $_record->table->name
+        #));
+
+        #// final insert process
+        #$table->insert($data);
+        
+        #var_dump($data);
+        #var_dump(SQL_TABLE_PREFIX . $_record->table->name);
+        Tinebase_Core::getDb()->insert(SQL_TABLE_PREFIX . $_record->table->name, $data);
     }
 
     /**
@@ -142,5 +148,16 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
         
         return $stmt->fetchAll();
+    }
+    
+    /**
+     * removes table from database
+     * 
+     * @param string tableName
+     */
+    public function dropTable($_tableName)
+    {
+        $statement = "DROP TABLE " . Tinebase_Core::getDb()->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
+        $this->execQueryVoid($statement);
     }
 }

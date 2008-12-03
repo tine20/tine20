@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        create initial setup scripts for each application
  */
 
 /**
@@ -221,7 +220,5 @@ class Setup_Import_TineInitial
             Tinebase_Model_Container::GRANT_EDIT,
             Tinebase_Model_Container::GRANT_ADMIN
         ), TRUE);
-        
-        echo "TINE 2.0 now ready to use - try <a href=\"./index.php\">TINE 2.0 Login</a>";
     }
 }

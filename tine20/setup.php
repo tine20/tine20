@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * Tine 2.0 - this file starts the setup process
@@ -10,10 +9,20 @@
  * @version     $Id$
  *
  */
-define ( 'IMPORT_INITIALDATA', TRUE );
-define ( 'IMPORT_EGW_14', FALSE );
-define ( 'IMPORT_EGW_14_ADDRESSBOOK', FALSE );
-define ( 'IMPORT_TINE_REV_949', FALSE );
+#define ( 'IMPORT_INITIALDATA', TRUE );
+#define ( 'IMPORT_EGW_14', FALSE );
+#define ( 'IMPORT_EGW_14_ADDRESSBOOK', FALSE );
+#define ( 'IMPORT_TINE_REV_949', FALSE );
+
+set_include_path(dirname(__FILE__) .'/Zend' . PATH_SEPARATOR . dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
+
+require_once 'Zend/Loader.php';
+
+Zend_Loader::registerAutoload();
+
+Setup_Core::dispatchRequest();
+
+exit;
 
 /**
  * initialize autoloader
