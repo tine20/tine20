@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.17</version>
+    <version>0.18</version>
     <tables>
         <table>
             <name>applications</name>
@@ -9,8 +9,9 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>name</name>
@@ -59,7 +60,8 @@
             <declaration>
                 <field>
                     <name>application_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -93,6 +95,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -421,7 +424,8 @@
                 </field>
                 <field>
                     <name>application_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <index>
@@ -444,7 +448,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>container_application_id</name>
+                    <name>container::application_id--applications::id</name>
                     <field>
                         <name>application_id</name>
                     </field>
@@ -524,7 +528,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>container_id</name>
+                    <name>container_acl::container_id--container::id</name>
                     <field>
                         <name>container_id</name>
                     </field>
@@ -532,6 +536,7 @@
                     <reference>
                         <table>container</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -854,11 +859,12 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
-                <field>
-                    <name>application_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
+	            <field>
+	                <name>application_id</name>
+	                <type>text</type>
+	                <length>40</length>
+	                <notnull>true</notnull>
+	            </field>
                 <field>
                     <name>record_id</name>
                     <type>text</type>
@@ -1290,13 +1296,12 @@
                     <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
-                <field>
-                    <name>application_id</name>
-                    <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                </field>
+	            <field>
+	                <name>application_id</name>
+	                <type>text</type>
+	                <length>40</length>
+	                <notnull>true</notnull>
+	            </field>
                 <field>
                     <name>right</name>
                     <type>text</type>
@@ -1480,12 +1485,12 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
-                <field>
-                    <name>application_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                </field>
+	            <field>
+	                <name>application_id</name>
+	                <type>text</type>
+	                <length>40</length>
+	                <notnull>true</notnull>
+	            </field>
                 <field>
                     <name>name</name>
                     <type>text</type>
@@ -1546,8 +1551,8 @@
                 </field>
                 <field>
                     <name>application_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1606,10 +1611,10 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>application_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
+	                <name>application_id</name>
+	                <type>text</type>
+	                <length>40</length>
+	                <notnull>true</notnull>
                 </field>
                 <field>
                     <name>name</name>

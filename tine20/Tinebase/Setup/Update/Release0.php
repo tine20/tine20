@@ -1299,7 +1299,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.16');
     }
-
+    
     /**
      * update to 0.17
      * - add config customfields table 
@@ -1387,5 +1387,173 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->createTable($table);        
         
         //$this->setApplicationVersion('Tinebase', '0.17');
+    }
+    
+    /**
+     * update to 0.18
+     * - change columtype of applications.id and application_table.applications_id to text/40
+     */
+    function update_17()
+    {
+        $this->_backend->dropForeignKey('application_tables', 'application_tables::application_id--applications::id');
+        $this->_backend->dropForeignKey('container', 'container_application_id');
+        $this->_backend->dropForeignKey('role_rights', 'role_rights::application_id--applications::id');
+        $this->_backend->dropForeignKey('config', 'config::application_id--applications::id');
+        $this->_backend->dropForeignKey('config_user', 'config_user::application_id--applications::id');
+        $this->_backend->dropForeignKey('config_customfields', 'config_customfields::application_id--applications::id');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('applications', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>application_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('application_tables', $declaration);
+        $this->_backend->alterCol('container', $declaration);
+        $this->_backend->alterCol('timemachine_modlog', $declaration);
+        $this->_backend->alterCol('role_rights', $declaration);
+        $this->_backend->alterCol('config', $declaration);
+        $this->_backend->alterCol('config_user', $declaration);
+        $this->_backend->alterCol('config_customfields', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>application_tables::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('application_tables', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>container::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('container', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>timemachine_modlog::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('timemachine_modlog', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>role_rights::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('role_rights', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                 <index>
+                    <name>config::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('config', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>config_user::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('config_user', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>config_customfields::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('config_customfields', $declaration);
+        
+        // remove container acl, when deleting container
+        // and give foreign key a proper name
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>container_acl::container_id--container::id</name>
+                <field>
+                    <name>container_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>container</table>
+                    <field>id</field>
+                    <ondelete>cascade</ondelete>
+                </reference>
+            </index>
+        ');
+        $this->_backend->dropForeignKey('container_acl', 'container_id');
+        $this->_backend->addForeignKey('container_acl', $declaration);
+        
+        
+        $this->setApplicationVersion('Tinebase', '0.18');
     }
 }
