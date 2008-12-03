@@ -26,7 +26,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
     },
     
     initComponent: function() {
-        this.recordProxy = Tine.Timetracker.timesheetBackend;
+        this.recordProxy = Tine.Timetracker.timeaccountBackend;
         
         //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();

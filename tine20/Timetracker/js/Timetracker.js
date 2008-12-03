@@ -61,6 +61,27 @@ Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 
         this.expandPath('/root/' + type + '/alltimesheets');
         this.selectPath('/root/' + type + '/alltimesheets');
+    },
+    
+    /**
+     * returns a filter plugin to be used in a grid
+     */
+    getFilterPlugin: function() {
+        if (!this.filterPlugin) {
+            var scope = this;
+            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
+                getValue: function() {
+                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
+                    return [
+                        {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
+                        {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
+                        {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+                    ];
+                }
+            });
+        }
+        
+        return this.filterPlugin;
     }
 });
     

@@ -38,7 +38,8 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         
         if (! this[type + 'GridPanel']) {
             this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
-                app: this.app
+                app: this.app,
+                plugins: [this.treePanel.getFilterPlugin()]
             });
             
         }
