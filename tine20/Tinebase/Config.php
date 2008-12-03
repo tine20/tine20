@@ -96,7 +96,7 @@ class Tinebase_Config
      * returns one config value identified by config name and application id
      * 
      * @param   string  $_name config name/key
-     * @param   int|string     $_applicationId application id
+     * @param   string  $_applicationId application id
      * @return  Tinebase_Model_Config  the config record
      * @throws  Tinebase_Exception_NotFound
      */
@@ -307,7 +307,7 @@ class Tinebase_Config
      * get custom fields for an application
      *
      * @param integer $_applicationId
-     * @param string $_modelName
+     * @param string  $_modelName
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField records
      * 
      * @todo    add caching here

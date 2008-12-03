@@ -483,7 +483,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $this->_deleteCustomFields($_record->getId());
         
         // save custom fields
-        $customFields = Tinebase_Config::getInstance()->getCustomFieldsForApplication($_record->getApplication(), $this->_modelName)->name;
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
+        $customFields = Tinebase_Config::getInstance()->getCustomFieldsForApplication($applicationId, $this->_modelName)->name;
         foreach ($customFields as $customField) {
             if (!empty($_record->customfields[$customField])) {
                 $data = array(
