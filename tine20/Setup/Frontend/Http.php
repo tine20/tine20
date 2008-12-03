@@ -66,7 +66,7 @@ class Setup_Frontend_Http
             } catch (Tinebase_Exception_NotFound $e) {
                 // application is not yet installed
             } catch(Zend_Db_Statement_Exception $e) {
-                // base tables not yet installedf
+                // base tables not yet installed
             }
         }
         
