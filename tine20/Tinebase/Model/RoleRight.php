@@ -60,7 +60,7 @@ class Tinebase_Model_RoleRight extends Tinebase_Record_Abstract
     {
         $this->_validators = array(
             'id'                => array('allowEmpty' => true),
-            'application_id'    => array('presence' => 'required'),
+            'application_id'    => array('Alnum', 'presence' => 'required'),
             'account_id'        => array('presence' => 'required', 'allowEmpty' => true),
             'account_type'      => array(
                 new Zend_Validate_InArray(array('user', 'group', 'anyone')) 
