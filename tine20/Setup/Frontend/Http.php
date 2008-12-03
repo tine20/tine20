@@ -72,7 +72,7 @@ class Setup_Frontend_Http
         
         $controller->installApplications(array_keys($applications));
         
-        if(in_array('Tinebase', $applications)) {
+        if(array_key_exists('Tinebase', $applications)) {
             $import = new Setup_Import_TineInitial();
             //$import = new Setup_Import_Egw14();
             $import->import();
