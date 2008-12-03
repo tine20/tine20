@@ -44,7 +44,7 @@ class Tinebase_Application
     private function __construct() 
     {
         $this->_applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'applications'));
-        $this->_db = $this->_applicationTable->getAdapter();
+        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -80,19 +80,17 @@ class Tinebase_Application
     /**
      * returns one application identified by id
      *
-     * @param int $_applicationId the id of the application
+     * @param Tinebase_Model_Application|string $_applicationId the id of the application
      * @todo code still needs some testing
      * @throws Tinebase_Exception_InvalidArgument if $_applicationId is not integer and not greater 0
      * @return Tinebase_Model_Application the information about the application
      */
     public function getApplicationById($_applicationId)
     {
-        $applicationId = (int)$_applicationId;
-        if($applicationId != $_applicationId) {
-            throw new Tinebase_Exception_InvalidArgument('$_applicationId must be integer');
-        }
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $row = $this->_applicationTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId));
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId);
+        $row = $this->_applicationTable->fetchRow($where);
         
         $result = new Tinebase_Model_Application($row->toArray());
         
@@ -220,13 +218,19 @@ class Tinebase_Application
      */
     public function addApplication(Tinebase_Model_Application $_application)
     {
+        if (empty($_application->id)) {
+            $newId = $_application->generateUID();
+            $_application->setId($newId);
+        }
+        
         $data = $_application->toArray();
         unset($data['tables']);
-        $_application->id = $this->_applicationTable->insert($data);
-        if ($_application->id === NULL) {
-            $_application->id = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'applications', 0,26) . '_seq');
-        }
-        return $_application;
+        
+        $this->_applicationTable->insert($data);
+
+        $result = $this->getApplicationById($_application->id);
+        
+        return $result;
     }
     
     /**
@@ -372,6 +376,86 @@ class Tinebase_Application
         return $description;
     }
     
+    /**
+     * get tables of application
+     *
+     * @param Tinebase_Model_Application $_applicationId
+     * @return array
+     */
+    public function getApplicationTables($_applicationId)
+    {
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+        
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'application_tables', array('name'))
+            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId);
+            
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        if($rows === NULL) {
+            return array();
+        }
+        
+        $tables = array();
+        foreach($rows as $row) {
+            $tables[] = $row['name'];
+        }
+        return $tables;
+    }
     
+    /**
+     * remove table from application_tables table
+     *
+     * @param Tinebase_Model_Application|string $_applicationId the applicationId
+     * @param string $_tableName the table name
+     */
+    public function removeApplicationTable($_applicationId, $_tableName)
+    {
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $applicationId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . '= ?', $_tableName)
+        );
+        
+        $this->_db->delete(SQL_TABLE_PREFIX . 'application_tables', $where);
+    }
     
+    /**
+     * remove application from applications table
+     *
+     * @param Tinebase_Model_Application|string $_applicationId the applicationId
+     */
+    public function deleteApplication($_applicationId)
+    {
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+                
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . '= ?', $applicationId)
+        );
+        
+        $this->_db->delete(SQL_TABLE_PREFIX . 'applications', $where);        
+    }
+    
+    /**
+     * add table to tine registry
+     *
+     * @param Tinebase_Model_Application
+     * @param string name of table
+     * @param int version of table
+     * @return int
+     */
+    public function addApplicationTable($_applicationId, $_name, $_version)
+    {
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+        
+        $applicationData = array(
+            'application_id'    => $applicationId,
+            'name'              => $_name,
+            'version'           => $_version
+        );
+        
+        $this->_db->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
+    }        
 }
