@@ -80,7 +80,6 @@ class Setup_Frontend_Cli
             }
         }
         
-        print_r($applications);
         $controller->installApplications($applications);
         
         if(in_array('Tinebase', $applications)) {
