@@ -12,17 +12,17 @@
 Ext.namespace('Tine.Timetracker');
 
 /**
- * Timesheet grid panel
+ * Timeaccount grid panel
  */
-Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
-    recordClass: Tine.Timetracker.Model.Timesheet,
+    recordClass: Tine.Timetracker.Model.Timeaccount,
     
     // grid specific
     defaultSortInfo: {field: 'creation_time', dir: 'DESC'},
     gridConfig: {
         loadMask: true,
-        autoExpandColumn: 'description'
+        autoExpandColumn: 'title'
     },
     
     initComponent: function() {
@@ -34,11 +34,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         
         this.plugins.push(this.filterToolbar);
         
-        Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);
+        Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);
         
         // remove selectionchange listener with actionUpdater
         // @todo remove that when we have containers here
-        this.grid.getSelectionModel().purgeListeners();
+        // this.grid.getSelectionModel().purgeListeners();
     },
     
     /**
@@ -47,7 +47,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Timesheet'),    field: 'query',    operators: ['contains']}
+                {label: this.app.i18n._('Timeaccount'),    field: 'query',    operators: ['contains']}
                 //{label: this.app.i18n._('Summary'), field: 'summary' }
              ],
              defaultFilter: 'query',
@@ -63,11 +63,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             var selectedRows = this.grid.getSelectionModel().getSelections();
             var record = selectedRows[0];
         } else {
-        	var record = {};
+            var record = {};
         }
         //var containerId = Tine.Timetracker.registry.get('containerId'); 
         
-        var popupWindow = Tine.Timetracker.TimesheetEditDialog.openWindow({
+        var popupWindow = Tine.Timetracker.TimeaccountEditDialog.openWindow({
             record: record,
             //containerId: containerId,
             listeners: {
@@ -76,7 +76,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                     this.store.load({});
                 }
             }
-        });    	
+        });     
     },
     
     /**
@@ -87,23 +87,23 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
      */
     getColumns: function(){
         return [{
-            id: 'description',
-            header: this.app.i18n._("Description"),
-            width: 300,
-            sortable: true,
-            dataIndex: 'description'
-        },{
-            id: 'account_id',
-            header: this.app.i18n._("Account"),
+            id: 'number',
+            header: this.app.i18n._("Number"),
             width: 100,
             sortable: true,
-            dataIndex: 'account_id'
+            dataIndex: 'number'
         },{
-            id: 'contract_id',
-            header: this.app.i18n._("Contract"),
+            id: 'title',
+            header: this.app.i18n._("Title"),
+            width: 400,
+            sortable: true,
+            dataIndex: 'title'
+        },{
+            id: 'budget',
+            header: this.app.i18n._("Budget"),
             width: 100,
             sortable: true,
-            dataIndex: 'contract_id'
+            dataIndex: 'budget'
         }];
     }  
 });

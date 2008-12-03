@@ -30,6 +30,10 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
         return array(
             'Timetracker/js/Models.js',
             'Timetracker/js/Timetracker.js',
+            'Timetracker/js/MainScreen.js',
+            'Timetracker/js/TimeaccountSelect.js',
+            'Timetracker/js/TimeaccountGridPanel.js',
+            'Timetracker/js/TimeaccountEditDialog.js',
             'Timetracker/js/TimesheetGridPanel.js',
             'Timetracker/js/TimesheetEditDialog.js',
         );

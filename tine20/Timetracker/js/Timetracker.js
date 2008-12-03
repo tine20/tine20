@@ -12,50 +12,55 @@
  
 Ext.namespace('Tine.Timetracker');
 
-// default mainscreen
-Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
-	/*
-    show: function() {
-        if(this.fireEvent("beforeshow", this) !== false){
-            this.setTreePanel();
-            this.setContentPanel();
-            this.setToolbar();
-            this.updateMainToolbar();
-            
-            this.fireEvent('show', this);
-        }
-        return this;
-    },*/
-    setContentPanel: function() {
-        if(!this.gridPanel) {
-            var plugins = [];
-            if (typeof(this.treePanel.getFilterPlugin) == 'function') {
-                plugins.push(this.treePanel.getFilterPlugin());
-            }
-            
-            this.gridPanel = new Tine[this.app.appName].TimesheetGridPanel({
-                app: this.app,
-                plugins: plugins
-            });
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-        this.gridPanel.store.load();
-    }    
-});
-
 Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
+    rootVisible: false,
+    border: false,
+    
     initComponent: function() {
-    	this.root = new Ext.tree.TreeNode({
-            text: this.app.i18n._('Timesheets'),
-            cls: 'treemain',
-            allowDrag: false,
-            allowDrop: true,
+        this.root = {
             id: 'root',
-            icon: false
-        });
+            children: [{
+                text: this.app.i18n._('Timesheets'),
+                id : 'timesheets',
+                iconCls: 'TimetrackerTimesheet',
+                expanded: true,
+                children: [{
+                    text: this.app.i18n._('All Timesheets'),
+                    id: 'alltimesheets',
+                    leaf: true,
+                    listeners: {
+                        scope: this,
+                        click: function() {alert('timesheets');}
+                    }
+                }]
+            }, {
+                text: this.app.i18n._('Timeaccounts'),
+                id: 'timeaccounts',
+                iconCls: 'TimetrackerTimeaccount',
+                expanded: true,
+                children: [{
+                    text: this.app.i18n._('All Timeaccounts'),
+                    id: 'alltimeaccounts',
+                    leaf: true,
+                    listeners: {
+                        scope: this,
+                        click: function() {alert('timeaccounts');}
+                    }
+                }]
+            }]
+        };
+        
     	Tine.Timetracker.TreePanel.superclass.initComponent.call(this);
-	}
+	},
+    
+    /**
+     * @private
+     */
+    afterRender: function() {
+        Tine.Timetracker.TreePanel.superclass.afterRender.call(this);
+        this.expandPath('/root/timesheets/alltimesheets');
+        this.selectPath('/root/timesheets/alltimesheets');
+    }
 });
     
 
@@ -67,4 +72,13 @@ Tine.Timetracker.timesheetBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Timetracker',
     modelName: 'Timesheet',
     recordClass: Tine.Timetracker.Model.Timesheet
+});
+
+/**
+ * default timesaccounts backend
+ */
+Tine.Timetracker.timeaccountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Timetracker',
+    modelName: 'Timeaccount',
+    recordClass: Tine.Timetracker.Model.Timeaccount
 });
