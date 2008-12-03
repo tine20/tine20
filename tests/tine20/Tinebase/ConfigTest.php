@@ -92,7 +92,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testGetApplicationConfig()
     {
-        $result = $this->_instance->getConfigForApplication('Tinebase');
+        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $result = $this->_instance->getConfigForApplication($tinebase);
             
         //print_r($result);    
             
