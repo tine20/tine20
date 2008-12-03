@@ -40,7 +40,7 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,  'Alnum'                           ),
-        'application_id'       => array('presence' => 'required', 'allowEmpty' => false, 'Int'   ),
+        'application_id'       => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
         'record_id'            => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
         'record_type'          => array('allowEmpty' => true                                     ),
         'record_backend'       => array('presence' => 'required', 'allowEmpty' => false          ),
