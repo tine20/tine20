@@ -146,7 +146,8 @@ abstract class Tinebase_Group_Abstract
     public function getDefaultGroup()
     {
         // get default group name from config
-        $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication('Tinebase');
+        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication($tinebase);
         
         /*
         if(isset(Zend_Registry::get('configFile')->registration)) {

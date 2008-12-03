@@ -363,7 +363,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         /************ create roles ***************/
         
         try {
-            $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication('Tinebase');
+            $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+            $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication($tinebase);
         } catch (Tinebase_Exception_NotFound $e) {
             // set default values
             $tinebaseConfig = array(

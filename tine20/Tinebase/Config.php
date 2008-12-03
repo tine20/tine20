@@ -124,7 +124,7 @@ class Tinebase_Config
      * 
      * @param   int     $_userId 
      * @param   string  $_name config name/key
-     * @param   int|string   $_applicationId application id (if NULL -> use Tinebase application)
+     * @param   string  $_applicationId application id (if NULL -> use Tinebase application)
      * @param   bool    $_checkDefault
      * @return  Tinebase_Model_Config  the config record
      * @throws  Tinebase_Exception_NotFound
@@ -156,7 +156,7 @@ class Tinebase_Config
     /**
      * returns all config settings for one application
      * 
-     * @param   int|string     $_applicationId application id
+     * @param   string $_applicationId application id
      * @return  array with config name => value pairs
      * @throws  Tinebase_Exception_NotFound
      */
