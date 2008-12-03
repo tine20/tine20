@@ -3,4 +3,7 @@
 	<name>Admin</name>
 	<version>0.1</version>
 	<order>1</order>
+    <depends>
+        <application>Tinebase</application>
+    </depends>
 </application>

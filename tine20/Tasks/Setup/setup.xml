@@ -3,6 +3,9 @@
     <name>Tasks</name>
     <version>0.1</version>
     <order>30</order>
+    <depends>
+        <application>Admin</application>
+    </depends>
     <tables>
         <table>
             <name>class</name>

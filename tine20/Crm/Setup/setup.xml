@@ -3,6 +3,9 @@
     <name>Crm</name>
     <version>0.4</version>
     <order>20</order>
+    <depends>
+        <application>Admin</application>
+    </depends>
     <tables>
         <table>
             <name>metacrm_leadsource</name>

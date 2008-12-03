@@ -3,6 +3,9 @@
     <name>Addressbook</name>
     <version>0.6</version>
     <order>10</order>
+    <depends>
+        <application>Admin</application>
+    </depends>
     <tables>
         <table>
             <name>addressbook</name>

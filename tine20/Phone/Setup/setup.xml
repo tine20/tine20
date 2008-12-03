@@ -3,6 +3,9 @@
     <name>Phone</name>
     <version>0.6</version>
     <order>11</order>
+    <depends>
+        <application>Admin</application>
+    </depends>
     <tables>
         <table>
             <name>phone_extensions</name>

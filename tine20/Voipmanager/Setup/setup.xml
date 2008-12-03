@@ -3,6 +3,9 @@
     <name>Voipmanager</name>
     <version>0.24</version>
     <order>50</order>
+    <depends>
+        <application>Admin</application>
+    </depends>
     <tables>
         <table>
             <name>snom_software</name>
