@@ -118,7 +118,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'name'              => array('presence' => 'required'),
         'type'              => array('InArray' => array(self::TYPE_INTERNAL, self::TYPE_PERSONAL, self::TYPE_SHARED)),
         'backend'           => array('presence' => 'required'),
-        'application_id'    => array('Digits', 'presence' => 'required'),
+        'application_id'    => array('Alnum', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true, /*'presence' => 'required'*/)
     );
     
