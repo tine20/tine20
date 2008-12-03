@@ -305,7 +305,13 @@ class Setup_Controller
             $this->_installApplication($this->getSetupXml($application));
         }
     }
-
+    
+    /**
+     * install given application
+     *
+     * @param  SimpleXMLElement $_xml
+     * @return void
+     */
     protected function _installApplication($_xml)
     {
         $createdTables = array();
@@ -323,8 +329,8 @@ class Setup_Controller
             'order'     => $_xml->order ? $_xml->order : 99,
             'version'   => $_xml->version
         ));
-    
-       $application = Tinebase_Application::getInstance()->addApplication($application);
+        
+        $application = Tinebase_Application::getInstance()->addApplication($application);
         
         // keep track of tables belonging to this application
         foreach ($createdTables as $table) {
