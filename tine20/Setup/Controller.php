@@ -58,7 +58,7 @@ class Setup_Controller
     /**
      * get list of applications as found in the filesystem
      *
-     * @return array
+     * @return array appName => setupXML
      */
     public function getInstallableApplications()
     {
@@ -115,7 +115,6 @@ class Setup_Controller
      */
     public function getSetupXml($_applicationName)
     {
-    
         $setupXML = $this->_baseDir . ucfirst($_applicationName) . '/Setup/setup.xml';
       
         if (!file_exists($setupXML)) {

@@ -65,6 +65,7 @@ class Setup_Frontend_Cli
         
         if($_opts->install === true) {
             $applications = $controller->getInstallableApplications();
+            $applications = array_keys($applications);
         } else {
             $applications = array();
             $applicationNames = explode(',', $_opts->install);
@@ -79,6 +80,7 @@ class Setup_Frontend_Cli
             }
         }
         
+        print_r($applications);
         $controller->installApplications($applications);
         
         if(in_array('Tinebase', $applications)) {
