@@ -26,7 +26,7 @@ Tine.Tinebase.widgets.app.JsonBackend = function(config) {
     this.jsonReader = new Ext.data.JsonReader({
         id: this.idProperty,
         root: 'results',
-        totalPropery: 'totalcount'
+        totalProperty: 'totalcount'
     }, this.recordClass);
 }
 
@@ -65,7 +65,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     },
     
     /**
-     * searches all (lightway) records matching filter
+     * searches all (lightweight) records matching filter
      * 
      * @param   {Object} filter
      * @param   {Object} paging
