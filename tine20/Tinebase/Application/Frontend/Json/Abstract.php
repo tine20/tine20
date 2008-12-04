@@ -131,7 +131,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      */
     protected function _delete($_ids, Tinebase_Application_Controller_Record_Interface $_controller)
     {
-        if (strlen($_ids) > 40) {
+        if (strpos($_ids, '[') !== false) {
             $_ids = Zend_Json::decode($_ids);
         }
         $_controller->delete($_ids);
