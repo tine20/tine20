@@ -117,13 +117,7 @@ Tine.Voipmanager.Snom.Phones.Main = {
             for (var i = 0; i < selectedRows.length; ++i) {
                 phoneIp = selectedRows[i].get('ipaddress');
                 if (phoneIp && phoneIp.length >= 7) {
-                    Tine.WindowFactory.getWindow({
-                        url: 'http://' + phoneIp,
-                        width: 1024,
-                        height: 768,
-                        scrollbars: 1,
-                        resizable: 1
-                    });
+                    window.open('http://' + phoneIp, '_blank',  'width=1024,height=768');
                 }
             }
         }
