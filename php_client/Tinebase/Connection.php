@@ -125,11 +125,14 @@ class Tinebase_Connection
         $_params['jsonKey'] = $this->_jsonKey;
         switch ($_method) {
             case 'POST' :
+                $_params['requestType'] = 'JSON';
                 $this->_httpClient->setParameterPost($_params);
                 $this->_httpClient->setHeaders('X-Requested-With', 'XMLHttpRequest');
                 $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'JSON');
+                
                 break;
             case 'GET' :
+                $_params['requestType'] = 'HTTP';
                 $this->_httpClient->setParameterGet($_params);
                 $this->_httpClient->setHeaders('X-Requested-With', '');
                 $this->_httpClient->setHeaders('X-Tine20-Request-Type', 'HTTP');
