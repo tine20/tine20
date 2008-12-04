@@ -186,23 +186,42 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      * test constructor
      *
      */
-    public function testConstructor()
+    public function testConstructor1()
     {
         /* Standard record */
         $record1 = new Tinebase_Record_DummyRecord();
-        $this->assertEquals((bool)1, (bool)$record1->isValid());
+        $this->assertEquals(true, $record1->isValid());
         
         /* Invalid record bypassing filters */
-        $record2 = new Tinebase_Record_DummyRecord(array('string' => '123'), 'true');
-        $this->assertEquals((bool)0, (bool)$record2->isValid());
+        $record2 = new Tinebase_Record_DummyRecord(array('string' => '123'), true);
+        $this->assertEquals(false, $record2->isValid());
         
+        /* Test exception on invalid data */
+        //$this->setExpectedException('Tinebase_Exception_Record_Validation');
+        //$record2 = new Tinebase_Record_DummyRecord(array('string' => '123'));
+                
         /* Record for testing single date entry */
-        $record3 = new Tinebase_Record_DummyRecord(array('date_single' => '20081212'), '', 1);
-        $this->assertEquals('12.12.2008 00:00:00', $record3['date_single']);
+        $record3 = new Tinebase_Record_DummyRecord(array('date_single' => '2008-12-12 00:00:00'));
+        $this->assertEquals('2008-12-12 00:00:00', $record3->date_single->get(Tinebase_Record_Abstract::ISO8601LONG));
         
-        /* Record for testing mutiple date entries */
-        $record3 = new Tinebase_Record_DummyRecord(array('date_multiple' => array('20080101112233', '2009-02-02 23:59:59')), '', 1);
-        $this->assertEquals(array('01.01.2008 11:22:33', '02.02.2009 23:59:59'), $record3['date_multiple']);
+        /* Test implicit date to string conversion (error source)*/
+        $record = new Tinebase_Record_DummyRecord(array('date_stringtrim' => '2008-12-12 00:00:00'));
+        $this->assertType('string', $record->date_stringtrim, 'implicit conversion of Zend_Date to string failed');
+        
+        /* Test string trim */
+        $record = new Tinebase_Record_DummyRecord(array('stringtrim' => '   teststring   '));
+        $this->assertEquals('teststring', $record->stringtrim, 'string trim filter failed');
+        
+        
+        
+        
+        $record = new Tinebase_Record_DummyRecord(array(), true);
+        $record->string = '123';
+        $record->bypassFilters = false;
+        $record->isValid();
+        
+        //$record3 = new Tinebase_Record_DummyRecord(array('date_multiple' => array('20080101112233', '2009-02-02 23:59:59')), '', 1);
+        //$this->assertEquals(array('01.01.2008 11:22:33', '02.02.2009 23:59:59'), $record3['date_multiple']);
     }
     
     /**

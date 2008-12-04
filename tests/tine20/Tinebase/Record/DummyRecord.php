@@ -12,10 +12,13 @@
 
 class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
 {   
-
+    
 	protected $_filters = array(
-        '*'      => 'StringTrim'
+        'date_stringtrim' => 'StringTrim',
+	    'stringtrim'      => 'StringTrim'
+        
     );
+    
 	
 	
 	protected  $_identifier = 'id';
@@ -24,16 +27,18 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
 	
 	
 	protected $_validators = array(
-		'id'            => array('allowEmpty' => true,  'Int'   ),
-        'string'        => array('allowEmpty' => false, 'Alpha' ),
-        'test_1'        => array('allowEmpty' => true,  'Int'   ),
-        'test_2'        => array('allowEmpty' => true,  'Int'   ),
-        'test_3'        => array('allowEmpty' => true,  'Int'   ),
-        'test_4'        => array('allowEmpty' => true,  'Int'   ),
-		'test_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-		'date_single'   => array(),
-		'date_multiple' => array(),
-	    'leadstate'     => array('allowEmpty' => false, 'Alpha' ),
+		'id'              => array('allowEmpty' => true,  'Int'   ),
+        'string'          => array('allowEmpty' => false, 'Alpha' ),
+	    'stringtrim'      => array('allowEmpty' => false, 'Alpha' ),
+        'test_1'          => array('allowEmpty' => true,  'Int'   ),
+        'test_2'          => array('allowEmpty' => true,  'Int'   ),
+        'test_3'          => array('allowEmpty' => true,  'Int'   ),
+        'test_4'          => array('allowEmpty' => true,  'Int'   ),
+		'test_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+		'date_single'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+	    'date_stringtrim' => array(),
+		'date_multiple'   => array(),
+	    'leadstate'       => array('allowEmpty' => false, 'Alpha' ),
 	);
 
 	protected $_datetimeFields = array(
