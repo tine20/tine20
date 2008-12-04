@@ -32,9 +32,7 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     setContentPanel: function() {
         
         // which content panel?
-        //var type = this.treePanel.getSelectionModel().getSelectedNode().getPath().split('/')[2];
         var type = this.activeContentType;
-        //console.log(type);
         
         if (! this[type + 'GridPanel']) {
             this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
