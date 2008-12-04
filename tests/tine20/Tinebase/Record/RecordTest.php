@@ -181,9 +181,77 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $this->assertEquals('Wartet auf Feedback', $record->leadstate);
         Zend_Registry::set('locale', $oldLocale);
     }
+    
+    /**
+     * test constructor
+     *
+     */
+    public function testConstructor()
+    {
+        /* Standard record */
+        $record1 = new Tinebase_Record_DummyRecord();
+        $this->assertEquals((bool)1, (bool)$record1->isValid());
+        
+        /* Invalid record bypassing filters */
+        $record2 = new Tinebase_Record_DummyRecord(array('string' => '123'), 'true');
+        $this->assertEquals((bool)0, (bool)$record2->isValid());
+        
+        /* Record for testing single date entry */
+        $record3 = new Tinebase_Record_DummyRecord(array('date_single' => '20081212'), '', 1);
+        $this->assertEquals('12.12.2008 00:00:00', $record3['date_single']);
+        
+        /* Record for testing mutiple date entries */
+        $record3 = new Tinebase_Record_DummyRecord(array('date_multiple' => array('20080101112233', '2009-02-02 23:59:59')), '', 1);
+        $this->assertEquals(array('01.01.2008 11:22:33', '02.02.2009 23:59:59'), $record3['date_multiple']);
+    }
+    
+    /**
+     * test set ID
+     *
+     */
+    public function testSetId()
+    {
+        $record = new Tinebase_Record_DummyRecord(array('string' => 'test'));
+        $test_id = '1';
+        $record->setId($test_id);
+        $this->assertEquals($test_id, $record['id']);
+    }
+    
+    /**
+     * test get ID
+     *
+     */
+    public function testGetId()
+    {
+        $test_id = '1';
+        $record = new Tinebase_Record_DummyRecord(array('id' => $test_id, 'string' => 'test'));
+        $this->assertEquals($test_id, $record->getId());
+    }
+    
+    /**
+     * test get application
+     *
+     */
+    public function testGetApplication()
+    {
+        $record = new Tinebase_Record_DummyRecord();
+        $this->assertEquals($record->getApplication(), 'Crm');
+    }
+    
+    /**
+     * test has
+     *
+     */
+    public function testHas()
+    {
+        $record = new Tinebase_Record_DummyRecord(array(
+            'test_4' => 'test'
+        ), true);
+        $this->assertEquals((bool)1, (bool)$record->has('test_4'));
+    }
 }
-		
-	
+
+
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordTest::main') {
     Tinebase_Record_AbstractRecordTest::main();
