@@ -86,7 +86,9 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
         //    print_r($_data, true));
         
         if ($_getOperators) {
+            // field => value array to fit the record schema
             $data = array();
+            //$this->_
             foreach ($_data as $filter) {
                 $field = (isset($filter['field']) && isset($filter['value'])) ? $filter['field'] : '';
                 if (array_key_exists($field, $this->_validators)) {
@@ -196,7 +198,8 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
             return;
         }
         if (!$this->containerType) {
-            throw new Tinebase_Exception_UnexpectedValue('You need to set a containerType.');
+            $this->containerType = 'all';
+            //throw new Tinebase_Exception_UnexpectedValue('You need to set a containerType.');
         }
         if ($this->containerType == 'Personal' && !$this->owner) {
             throw new Tinebase_Exception_UnexpectedValue('You need to set an owner when containerType is "Personal".');
