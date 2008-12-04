@@ -88,13 +88,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         labelSeparator: '',
                         columnWidth: .333
                     },
-                    items: [[{
+                    items: [[new Tine.Timetracker.TimeAccountSelect({
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Time Account'),
                         emptyText: this.app.i18n._('Select Time Accont...'),
+                        loadingText: this.app.i18n._('Searching...'),
                         allowEmpty: false,
                         name: 'contract_id'
-                    }], [{
+                    })], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
