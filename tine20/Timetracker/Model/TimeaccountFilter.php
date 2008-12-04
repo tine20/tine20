@@ -40,6 +40,8 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
         
         // define query fields
         $this->_queryFields = array(
+            'number',
+            'title',
             'description',
         );
         
