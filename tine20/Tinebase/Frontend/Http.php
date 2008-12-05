@@ -152,6 +152,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     	   'Tinebase/css/widgets/EditRecord.css',
     	   'Tinebase/css/widgets/TagsPanel.css',
     	   'Tinebase/css/widgets/FilterToolbar.css',
+    	   'Tinebase/css/widgets/AccountPicker.css',
     	   // yui stuff
     	   //'../yui/build/assets/skins/sam/resize.css',
     	   //'../yui/build/assets/skins/sam/imagecropper.css',
