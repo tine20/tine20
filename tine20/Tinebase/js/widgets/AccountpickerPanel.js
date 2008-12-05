@@ -38,6 +38,7 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
     /**
      * @private
      */
+    trigger2Class: 'x-form-account-trigger',
 	allowBlank: true,
 	editable: false,
     readOnly:true,
