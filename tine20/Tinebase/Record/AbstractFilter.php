@@ -126,6 +126,7 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
         {
             //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " append sql for filter '$field' width value '$value'");
             $value = str_replace(array('*', '_'), array('%', '\_'), $value);
+            $operator = $this->_operators[$field];
             
             switch ($field) {
                 case 'containerType':
@@ -151,16 +152,16 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                     break;
                 case 'tag':
                     if (strlen($value) == 40) {
-                        Tinebase_Tags::appendSqlFilter($_select, $value);
+                        Tinebase_Tags::appendSqlFilter($_select, $value, $operator);
                     }
                     break;
                 default:
                     if (!isset($this->_validators[$field]['special']) || !$this->_validators[$field]['special']) {
-                        $op = $this->_operators[$field];
-                        $value = $op == 'contains' ? '%' . trim($value) . '%' : trim($value);
+                        
+                        $value = $operator == 'contains' ? '%' . trim($value) . '%' : trim($value);
                         $where = array(
                             $db->quoteIdentifier($field),
-                            $this->_opSqlMap[$op],
+                            $this->_opSqlMap[$operator],
                             $db->quote($value)
                         );
                         $_select->where(implode(' ', $where));
