@@ -126,7 +126,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $tasks['totalcount']);
         
         // delete task
-        Tasks_Controller_Task::getInstance()->delete($task->getId());        
+        // Tasks_Controller_Task::getInstance()->delete($task->getId());
+        $this->_backend->deleteTasks(Zend_Json::encode(array($task->getId())));
 
         // search and check again
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
