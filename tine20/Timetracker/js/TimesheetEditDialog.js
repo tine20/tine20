@@ -95,20 +95,33 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         loadingText: this.app.i18n._('Searching...'),
                         allowEmpty: false,
                         name: 'contract_id'
-                    })], [{
+                    })], [  new Tine.widgets.AccountpickerField({
+                        columnWidth: .4,
+                        disabled: true,
+                        fieldLabel: this.app.i18n._('Account'),
+                        name: 'account_id'
+                    }), {
+                        columnWidth: .2,
+                        fieldLabel: this.app.i18n._('Date'),
+                        name: 'date',
+                        xtype: 'datefield'
+                    }, {
+                        columnWidth: .2,
+                        fieldLabel: this.app.i18n._('Duration'),
+                        name: 'duration'
+                    }, {
+                        columnWidth: .2,
+                        fieldLabel: this.app.i18n._('Start'),
+                        name: 'start',
+                        xtype: 'timefield'
+                    
+                    }], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
                         xtype: 'textarea',
                         height: 200
-                    }],
-                    // @todo replace these fields later
-                    [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Account'),
-                        value: 1,
-                        name: 'account_id'
                     }]] 
                 }, {
                     // activities and tags
