@@ -274,8 +274,12 @@ class Tinebase_Tags
         $db = Zend_Registry::get('dbAdapter');
         $idProperty = $db->quoteIdentifier($_idProperty);
         
-        $_select->join(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), $db->quoteIdentifier('tagging.record_id') . " = $idProperty", array());
-        $_select->where($db->quoteInto($db->quoteIdentifier('tagging.tag_id') . ' = ?', $_tagId));
+        // per inner join we throw out all rows not matching our tag criteria
+        // NOTE: we name the column we join like the tag, to be able to join multiple tag criteria (multiple invocations of this function)
+        $_select->join(
+            /* what */    array($_tagId => SQL_TABLE_PREFIX . 'tagging'), 
+            /* on   */    $db->quoteIdentifier("$_tagId.record_id") . " = $idProperty AND $_tagId.tag_id = " . $db->quote($_tagId),
+            /* selecct */ array());
     }
     
     /**
