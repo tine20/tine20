@@ -261,18 +261,21 @@ class Tinebase_Tags
      * Apends sql to a given select object to filter by the given tagId
      * 
      * @param  Zend_Db_Select $_select
+     * @param  string         $_operator
      * @param  string         $_tagId
      * $param  string         $_idProperty id property of records
      * @return void
      */
-    public static function appendSqlFilter(Zend_Db_Select $_select, $_tagId, $_idProperty='id')
+    public static function appendSqlFilter(Zend_Db_Select $_select, $_operator, $_tagId, $_idProperty='id')
     {
+        // check the view right of the tag (throws Exception if not accessable)
+        self::getInstance()->getTagsById($_tagId);
+        
         $db = Zend_Registry::get('dbAdapter');
         $idProperty = $db->quoteIdentifier($_idProperty);
         
-        $_select->join(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), "tagging.record_id = $idProperty", array());
-        $_select->where($db->quoteInto($this->_db->quoteIdentifier('tagging.tag_id') . ' = ?', $_tagId));
-        Tinebase_Model_TagRight::applyAclSql($_select, Tinebase_Model_TagRight::VIEW_RIGHT, 'tagging.tag_id');
+        $_select->join(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), $db->quoteIdentifier('tagging.record_id') . " = $idProperty", array());
+        $_select->where($db->quoteInto($db->quoteIdentifier('tagging.tag_id') . ' = ?', $_tagId));
     }
     
     /**
