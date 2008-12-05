@@ -156,8 +156,8 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                     }
                     break;
                 default:
-                    $operator = $this->_operators[$field];
                     if (!isset($this->_validators[$field]['special']) || !$this->_validators[$field]['special']) {
+                        $operator = $this->_operators[$field];
                         
                         $value = $operator == 'contains' ? '%' . trim($value) . '%' : trim($value);
                         $where = array(
