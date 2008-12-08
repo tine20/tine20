@@ -1387,7 +1387,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);        
         
-        //$this->setApplicationVersion('Tinebase', '0.17');
+        $this->setApplicationVersion('Tinebase', '0.17');
     }
     
     /**
@@ -1396,12 +1396,23 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      */
     function update_17()
     {
-        $this->_backend->dropForeignKey('application_tables', 'application_tables::application_id--applications::id');
-        $this->_backend->dropForeignKey('container', 'container_application_id');
-        $this->_backend->dropForeignKey('role_rights', 'role_rights::application_id--applications::id');
-        $this->_backend->dropForeignKey('config', 'config::application_id--applications::id');
-        $this->_backend->dropForeignKey('config_user', 'config_user::application_id--applications::id');
-        $this->_backend->dropForeignKey('config_customfields', 'config_customfields::application_id--applications::id');
+        // tables with application_id as foreign key
+        $appIdTables = array(
+            'application_tables' => 'application_tables::application_id--applications::id',
+            'container' => 'container_application_id',
+            'role_rights' => 'role_rights::application_id--applications::id',
+            'config' => 'config::application_id--applications::id',
+            'config_user' => 'config_user::application_id--applications::id',
+            'config_customfields' => 'config_customfields::application_id--applications::id'
+        );
+        
+        foreach($appIdTables as $table => $key) {
+            try {
+                $this->_backend->dropForeignKey($table, $key);
+            } catch (Zend_Db_Statement_Exception $ze) {
+                // skip error
+            }
+        }
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -1421,14 +1432,11 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 <notnull>true</notnull>
             </field>
         ');
-        $this->_backend->alterCol('application_tables', $declaration);
-        $this->_backend->alterCol('container', $declaration);
-        $this->_backend->alterCol('timemachine_modlog', $declaration);
-        $this->_backend->alterCol('role_rights', $declaration);
-        $this->_backend->alterCol('config', $declaration);
-        $this->_backend->alterCol('config_user', $declaration);
-        $this->_backend->alterCol('config_customfields', $declaration);
         
+        foreach ($appIdTables as $table => $fk) {
+            $this->_backend->alterCol($table, $declaration);
+        }
+
         $declaration = new Setup_Backend_Schema_Index_Xml('
                 <index>
                     <name>application_tables::application_id--applications::id</name>
