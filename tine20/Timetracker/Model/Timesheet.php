@@ -44,7 +44,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
     // record fields
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'timeaccount_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'start_time'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'duration'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
@@ -67,7 +68,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'start',
         'creation_time',
         'last_modified_time',
         'deleted_time'

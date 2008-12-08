@@ -160,6 +160,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($timesheet->description, $timesheetData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']);
+        $this->assertEquals(Zend_Date::now()->toString('YYYY-MM-dd'),  $timesheetData['start_date']);
         
         // cleanup
         $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
@@ -280,6 +281,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             'account_id'        => Tinebase_Core::getUser()->getId(),
             'timeaccount_id'    => $timeaccount->getId(),
             'description'       => 'blabla',
+            'start_date'        => Zend_Date::now()->toString('YYYY-MM-dd')
         ), TRUE);
     }
 
