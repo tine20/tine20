@@ -59,6 +59,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     	
     },
     
+    onRecordLoad: function() {
+        this.record.set('date', this.record.get('date') ? this.record.get('date') : new Date());
+        this.record.set('duration', this.record.get('duration') ? this.record.get('duration') : '00:30');
+        
+        Tine.Timetracker.TimesheetEditDialog.superclass.onRecordLoad.call(this);
+    },
+    
     /**
      * returns dialog
      * 
@@ -95,42 +102,32 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         loadingText: this.app.i18n._('Searching...'),
                         allowEmpty: false,
                         name: 'timeaccount_id'
-                    })], [  new Tine.widgets.AccountpickerField({
-                        columnWidth: .4,
-                        disabled: true,
-                        fieldLabel: this.app.i18n._('Account'),
-                        name: 'account_id'
-                    }), {
-                        columnWidth: .2,
-                        fieldLabel: this.app.i18n._('Date'),
-                        name: 'date',
-                        xtype: 'datefield'
-                    }, {
-                        columnWidth: .2,
+                    })], [{
                         fieldLabel: this.app.i18n._('Duration'),
                         name: 'duration',
+                        xtype: 'uxspinner',
                         strategy: new Ext.ux.form.Spinner.TimeStrategy({
-                            minValye: '00:15',
-                            maxValue: '24:00',
-                            defaultValue: '00:30',
                             incrementValue : 15
-                        }),
-                        xtype: 'uxspinner'
-                    }/*{
-                        columnWidth: .2,
-                        fieldLabel: this.app.i18n._('Duration'),
-                        name: 'duration',
-                        minValue: 0.5,
-                        maxValue: 24,
-                        increment: 0.5,
-                        xtype: 'slider'
-                    }*/, {
-                        columnWidth: .2,
+                        })}, {
+                        fieldLabel: this.app.i18n._('Date'),
+                        name: 'start_date',
+                        xtype: 'datefield'
+                        }, {
                         fieldLabel: this.app.i18n._('Start'),
                         emptyText: this.app.i18n._('not set'),
-                        name: 'start',
-                        xtype: 'timefield'
-                    
+                        name: 'start_time',
+                        xtype: 'timefield'/*,
+                        listeners: {
+                            scope: this, 
+                            'expand': function(field) {
+                                if (! field.getValue()) {
+                                    var now = new Date().getHours();
+                                    //console.log(field.store.find('text', '18:00'));
+                                    field.select(field.store.find('text', '18:00'));
+                                    
+                                }
+                            }
+                        }*/
                     }], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
@@ -138,15 +135,20 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'description',
                         xtype: 'textarea',
                         height: 200
-                    }], [{
+                    }], [new Tine.widgets.AccountpickerField({
                         columnWidth: .5,
+                        disabled: true,
+                        fieldLabel: this.app.i18n._('Account'),
+                        name: 'account_id'
+                    }), {
+                        columnWidth: .25,
                         hideLabel: true,
                         disabled: true,
                         boxLabel: this.app.i18n._('Billable'),
                         name: 'is_billable',
                         xtype: 'checkbox'
                     }, {
-                        columnWidth: .5,
+                        columnWidth: .25,
                         hideLabel: true,
                         disabled: true,
                         boxLabel: this.app.i18n._('Cleared'),
