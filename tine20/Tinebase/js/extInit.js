@@ -103,8 +103,8 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         if(!isNaN(v)) {
             return v + " %";                        
         } 
-   },
-   pad: function(v,l,s){
+    },
+    pad: function(v,l,s){
         if (!s) {
             s = '&nbsp;';
         }
