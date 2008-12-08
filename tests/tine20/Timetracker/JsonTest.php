@@ -206,10 +206,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // checks
         $this->assertEquals($timesheet->description, $timesheetData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId']);
+        
                 
         // cleanup
-        $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
+        $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
     /**
