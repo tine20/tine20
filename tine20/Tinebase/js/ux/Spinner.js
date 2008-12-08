@@ -45,7 +45,7 @@ Ext.extend(Ext.ux.form.Spinner, Ext.form.TriggerField, {
 
 		this.splitter = this.wrap.createChild({tag:'div', cls:this.splitterClass, style:'width:13px; height:2px;'});
 		this.splitter.show().setRight( (Ext.isIE) ? 1 : 2 );
-		this.splitter.show().setTop(10);
+		this.splitter.show().setTop(8);
 
 		this.proxy = this.trigger.createProxy('', this.splitter, true);
 		this.proxy.addClass("x-form-spinner-proxy");
