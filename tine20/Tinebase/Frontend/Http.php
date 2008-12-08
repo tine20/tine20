@@ -59,6 +59,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/ux/PopupWindow.js',
             'Tinebase/js/ux/PopupWindowManager.js',
             'Tinebase/js/ux/WindowFactory.js',
+            'Tinebase/js/ux/SliderTip.js',
             'Tinebase/js/ux/Wizard.js',
             'Tinebase/js/ux/SearchField.js',
             'Tinebase/js/ux/grid/CheckColumn.js',
