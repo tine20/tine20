@@ -17,9 +17,13 @@ Ext.ns('Tine.Timetracker', 'Tine.Timetracker.Model');
  */
 Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
-    { name: 'description' },
     { name: 'account_id' },
-    { name: 'contract_id' },
+    { name: 'timeaccount_id' },
+    { name: 'start' },
+    { name: 'duration' },
+    { name: 'description' },
+    { name: 'is_billable' },
+    { name: 'is_cleared' },
     // tine 2.0 notes field
     { name: 'notes'}
 ]);
