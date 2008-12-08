@@ -94,6 +94,14 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 $this->type = 'datetime';
                 break;
     
+            case 'time':
+                $this->type = 'time';
+                break;
+    
+            case 'date':
+                $this->type = 'date';
+                break;
+                
             case 'double':
                 $this->type = 'double';
                 break;
