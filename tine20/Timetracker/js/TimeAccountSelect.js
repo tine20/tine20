@@ -25,6 +25,11 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         limit: 50
     },
     
+    /**
+     * @property {Tine.Timetracker.Model.Timeaccount} record
+     */
+    record: null,
+    
     itemSelector: 'div.search-item',
     typeAhead: false,
     minChars: 3,
@@ -71,14 +76,32 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         Tine.Timetracker.TimeAccountSelect.superclass.initComponent.call(this);
     },
     
-    /*
+    getValue: function() {
+        return this.record ? this.record.get('id') : null;
+    },
+    
     setValue: function(value) {
-        
-    }
-    */
+        if (value) {
+            if (typeof(value.get) == 'function') {
+                this.record = value;
+                
+            } else if (typeof(value) == 'string') {
+                // NOTE: the string also could be the string for the display field!!!
+                //console.log('id');
+                
+            } else {
+                // we try raw data
+                this.record = new Tine.Timetracker.Model.Timeaccount(value, value.id);
+            }
+            
+            Tine.Timetracker.TimeAccountSelect.superclass.setValue.call(this, this.record.getTitle());
+        }
+    },
     
     onSelect: function(record){
         record.set('displaytitle', record.getTitle());
+        this.record = record;
+        
         Tine.Timetracker.TimeAccountSelect.superclass.onSelect.call(this, record);
     },
         
