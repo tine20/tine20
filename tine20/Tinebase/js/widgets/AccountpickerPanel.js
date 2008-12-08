@@ -59,9 +59,11 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 		}
 		
 		this.onTrigger2Click = function(e) {
-            this.dlg = new Tine.widgets.AccountpickerDialog({
-                TriggerField: this
-            });
+            if (! this.disabled) {
+                this.dlg = new Tine.widgets.AccountpickerDialog({
+                    TriggerField: this
+                });
+            }
         };
 		
 		this.on('select', function(){
@@ -91,11 +93,13 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
     },
     
 	// private
-	onTrigger1Click: function(){
-		this.accountId = null;
-		this.setValue('');
-		this.fireEvent('select', this, null, 0);
-		this.triggers[0].hide();
+	onTrigger1Click: function() {
+        if (! this.disabled) {
+    		this.accountId = null;
+    		this.setValue('');
+    		this.fireEvent('select', this, null, 0);
+    		this.triggers[0].hide();
+        }
 	}
 });
 
