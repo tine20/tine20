@@ -198,4 +198,217 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '0.24');
     }
+    
+    /**
+     * set proper default values for several fields
+     *
+     */
+    public function update_24()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>firmware_interval</name>
+                <type>integer</type>
+                <length>11</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>base_download_url</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>admin_mode_password</name>
+                <type>text</type>
+                <length>20</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>ntp_server</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>http_port</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>https_port</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>http_user</name>
+                <type>text</type>
+                <length>20</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>http_pass</name>
+                <type>text</type>
+                <length>20</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>description</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>ntp_refresh</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_location', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>description</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_templates', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>keylayout_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_templates', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>name</name>
+                <type>text</type>
+                <length>80</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>port</name>
+                <type>text</type>
+                <length>5</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>username</name>
+                <type>text</type>
+                <length>80</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>ipaddr</name>
+                <type>text</type>
+                <length>15</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>regexten</name>
+                <type>text</type>
+                <length>80</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>setvar</name>
+                <type>text</type>
+                <length>100</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>context</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>email</name>
+                <type>text</type>
+                <length>50</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>pager</name>
+                <type>text</type>
+                <length>50</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>dialout</name>
+                <type>text</type>
+                <length>10</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>callback</name>
+                <type>text</type>
+                <length>10</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_voicemail', $declaration);
+        
+        $this->setApplicationVersion('Voipmanager', '0.25');
+    }
 }
