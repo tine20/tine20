@@ -94,7 +94,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         emptyText: this.app.i18n._('Select Time Accont...'),
                         loadingText: this.app.i18n._('Searching...'),
                         allowEmpty: false,
-                        name: 'contract_id'
+                        name: 'timeaccount_id'
                     })], [  new Tine.widgets.AccountpickerField({
                         columnWidth: .4,
                         disabled: true,
@@ -108,10 +108,26 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     }, {
                         columnWidth: .2,
                         fieldLabel: this.app.i18n._('Duration'),
-                        name: 'duration'
-                    }, {
+                        name: 'duration',
+                        strategy: new Ext.ux.form.Spinner.TimeStrategy({
+                            minValye: '00:15',
+                            maxValue: '24:00',
+                            defaultValue: '00:30',
+                            incrementValue : 15
+                        }),
+                        xtype: 'uxspinner'
+                    }/*{
+                        columnWidth: .2,
+                        fieldLabel: this.app.i18n._('Duration'),
+                        name: 'duration',
+                        minValue: 0.5,
+                        maxValue: 24,
+                        increment: 0.5,
+                        xtype: 'slider'
+                    }*/, {
                         columnWidth: .2,
                         fieldLabel: this.app.i18n._('Start'),
+                        emptyText: this.app.i18n._('not set'),
                         name: 'start',
                         xtype: 'timefield'
                     
@@ -122,6 +138,20 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'description',
                         xtype: 'textarea',
                         height: 200
+                    }], [{
+                        columnWidth: .5,
+                        hideLabel: true,
+                        disabled: true,
+                        boxLabel: this.app.i18n._('Billable'),
+                        name: 'is_billable',
+                        xtype: 'checkbox'
+                    }, {
+                        columnWidth: .5,
+                        hideLabel: true,
+                        disabled: true,
+                        boxLabel: this.app.i18n._('Cleared'),
+                        name: 'is_cleared',
+                        xtype: 'checkbox'
                     }]] 
                 }, {
                     // activities and tags
