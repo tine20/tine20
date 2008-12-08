@@ -64,7 +64,12 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function getTimesheet($uid)
     {
-        return $this->_get($uid, $this->_timesheetController);
+        $ts = $this->_get($uid, $this->_timesheetController);
+        
+        $ts['timeaccount_id'] = $ts['timeaccount_id'] ? $this->_timeaccountController->get($ts['timeaccount_id'])->toArray() : $ts['timeaccount_id'];
+        $ts['account_id'] = $ts['account_id'] ? Tinebase_User::getInstance()->getUserById($ts['account_id'])->toArray() : $ts['account_id'];
+        
+        return $ts;
     }
 
     /**
