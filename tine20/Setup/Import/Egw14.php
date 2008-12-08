@@ -80,7 +80,7 @@ class Setup_Import_Egw14
         $accountsTable = new Tinebase_Db_Table(array('name' => 'egw_accounts'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('account_type = ?', 'u')
+            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'u')
         );
         
         $accounts = $accountsTable->fetchAll($where);
@@ -116,7 +116,7 @@ class Setup_Import_Egw14
         $groupsTable = new Tinebase_Db_Table(array('name' => 'egw_accounts'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('account_type = ?', 'g')
+            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'g')
         );
         
         $groups = $groupsTable->fetchAll($where);
@@ -142,7 +142,7 @@ class Setup_Import_Egw14
         $aclTable = new Tinebase_Db_Table(array('name' => 'egw_acl'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('acl_applicationName = ?', 'phpgw_group')
+            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('acl_applicationName') . ' = ?', 'phpgw_group')
         );
         
         $groupMembers = $aclTable->fetchAll($where);

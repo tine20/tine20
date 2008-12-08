@@ -113,7 +113,7 @@ class Setup_Import_TineRev949
         $accountsTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'accounts'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('account_type = ?', 'u')
+            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'u')
         );
         
         $accounts = $accountsTable->fetchAll($where);
@@ -155,7 +155,7 @@ class Setup_Import_TineRev949
         $groupMapping = array ( "Default" => "Users", "Admins" => "Administrators" );
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('account_type = ?', 'g')
+            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'g')
         );
         
         $groups = $groupsTable->fetchAll($where);
@@ -186,7 +186,7 @@ class Setup_Import_TineRev949
         $aclTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'acl'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('acl_appname = ?', 'phpgw_group')
+            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('acl_appname') . ' = ?', 'phpgw_group')
         );
         
         $groupMembers = $aclTable->fetchAll($where);
@@ -431,7 +431,7 @@ class Setup_Import_TineRev949
                 ),
                 'model'     => 'Crm_Model_Product',
                 'delete'    => TRUE,
-                'where'     => array( 'lead_product_id > 0' ),
+                'where'     => array( $this->_db->quoteIdentifier('lead_product_id') . ' > 0' ),
             ),
             array (
                 'name' => 'metacrm_products',
@@ -531,7 +531,7 @@ class Setup_Import_TineRev949
                 ),
                 'model'     => 'Tinebase_Model_AccessLog',
                 'delete'    => TRUE,
-                'where'     => array(Zend_Registry::get('dbAdapter')->quoteInto('application_id IN (?)', array_keys($this->applicationIdMapping))),
+                'where'     => array(Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('application_id') . ' IN (?)', array_keys($this->applicationIdMapping))),
             ), 
         );
               
@@ -639,7 +639,7 @@ class Setup_Import_TineRev949
             ),
                 'model'     => 'Tasks_Model_Task',
                 'delete'    => TRUE,
-                'where'     => array( "is_deleted = 0"),
+                'where'     => array( $this->_db->quoteIdentifier('is_deleted') . ' = 0'),
             ), 
         );
               

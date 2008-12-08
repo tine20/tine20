@@ -45,7 +45,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     {
         $select = Zend_Registry::get('dbAdapter')->select()
             ->from( SQL_TABLE_PREFIX . 'application_tables')
-            ->where('name = ?', SQL_TABLE_PREFIX . $_tableName);
+            ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();
@@ -63,7 +63,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     {    
         $select = Zend_Registry::get('dbAdapter')->select()
             ->from( SQL_TABLE_PREFIX . 'applications')
-            ->where('name = ?', $_application);
+            ->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();

@@ -118,8 +118,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
          $select = Zend_Registry::get('dbAdapter')->select()
           ->from('information_schema.tables')
-          ->where('TABLE_SCHEMA = ?', $this->_config->database->dbname)
-          ->where('TABLE_NAME = ?',  SQL_TABLE_PREFIX . $_tableName);
+          ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
+          ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
 
         try {
             $stmt = $select->query();
@@ -135,8 +135,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         // Get common table information
          $select = Zend_Registry::get('dbAdapter')->select()
           ->from('information_schema.tables')
-          ->where('TABLE_SCHEMA = ?', $this->_config->database->dbname)
-          ->where('TABLE_NAME = ?',  SQL_TABLE_PREFIX . $_tableName);
+          ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
+          ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
           
           
         $stmt = $select->query();
@@ -147,7 +147,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
        // get field informations
         $select = Zend_Registry::get('dbAdapter')->select()
           ->from('information_schema.COLUMNS')
-          ->where('TABLE_NAME = ?', SQL_TABLE_PREFIX .  $_tableName);
+          ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName);
 
         $stmt = $select->query();
         $tableColumns = $stmt->fetchAll();
@@ -162,8 +162,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 // get foreign keys
                 $select = Zend_Registry::get('dbAdapter')->select()
                   ->from('information_schema.KEY_COLUMN_USAGE')
-                  ->where('TABLE_NAME = ?', SQL_TABLE_PREFIX .  $_tableName)
-                  ->where('COLUMN_NAME = ?', $tableColumn['COLUMN_NAME']);
+                  ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName)
+                  ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
 
                 $stmt = $select->query();
                 $keyUsage = $stmt->fetchAll();
