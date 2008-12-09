@@ -38,10 +38,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
-    /**
-     * reqests all data needed in this dialog
-     */
-    requestData: function() {
+    initRecord: function() {
         this.loadRequest = Ext.Ajax.request({
             scope: this,
             success: function(response) {
