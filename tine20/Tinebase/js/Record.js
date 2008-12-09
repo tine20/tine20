@@ -69,16 +69,7 @@ Tine.Tinebase.Record = Ext.extend(Ext.data.Record, {
      */
     getTitle: function() {
         return this.titleProperty ? this.get(this.titleProperty) : '';
-    },
-    
-    /**
-     * returns default data for this record
-     * @return {Object}
-     */
-    getDefaultData: function() {
-        return {};
-    }
-
+    }    
 });
 
 /**
@@ -124,5 +115,9 @@ Tine.Tinebase.Record.create = function(o, meta) {
     f.getMeta = function(name) {
         return p[name];
     };
+    f.getDefaultData = function() {
+        return {};
+    };
+
     return f;
 };
