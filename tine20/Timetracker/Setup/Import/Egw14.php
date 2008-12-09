@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
  *
- * @todo        create additional timeaccounts for special (egw-)timesheet categories
- * @todo        add members / container grants
  * @todo        parse description fields (striptags)
  * @todo        import more relevant record fields?
  */
@@ -64,16 +62,16 @@ class Timetracker_Setup_Import_Egw14
     protected $_tsCategories = array();
     
     /**
-     * timesheet categories that belong to seperate timeaccounts (cat_id)
+     * timesheet categories that belong to seperate timeaccounts (cat_id => name)
      *
      * @var array
      */
     protected $_newTimeaccountCategories = array(
-        70,
-        27,
-        29,
-        33,
-        30
+        70 => 'Bereitschaft',
+        27 => 'Implementierung',
+        29 => 'Konzeption',
+        33 => 'Support',
+        30 => 'Vertrieb'
     );
     
     /**
@@ -260,8 +258,14 @@ class Timetracker_Setup_Import_Egw14
             // add timesheets
             foreach ($timesheets as $timesheet) {
                 // scan timesheets and add additional timeaccounts for special categories
-                if (in_array($timesheet['cat_id'], $this->_newTimeaccountCategories)) {
-                    // @todo create new timeaccount
+                if (isset($this->_newTimeaccountCategories[$timesheet['cat_id']])) {
+                    // create new timeaccount
+                    if (!isset($timeaccounts[$timesheet['cat_id']])) {
+                        $data = $_data;
+                        $data['pm_title'] .= ' ' . $this->_newTimeaccountCategories[$timesheet['cat_id']];
+                        $timeaccounts[$timesheet['cat_id']] = $this->_createTimeaccount($_data, $contract);
+                    } 
+                    $this->_createTimesheet($timesheet['record'], $timeaccounts[$timesheet['cat_id']]->getId());
                     
                 } else {
                     // add category name as tag
@@ -289,7 +293,7 @@ class Timetracker_Setup_Import_Egw14
      * @param array $_data with egw project data
      * @return Erp_Model_Contract
      * 
-     * @todo    add more fields
+     * @todo    add more fields?
      */
     protected function _createContract($_data)
     {
@@ -311,7 +315,8 @@ class Timetracker_Setup_Import_Egw14
      * @param Erp_Model_Contract $_contract
      * @return Tinebase_Record_RecordSet of Timetracker_Model_Timeaccount
      * 
-     * @todo    add more fields
+     * @todo    add more fields?
+     * @todo    check egw member roles?
      */
     protected function _createTimeaccount($_data, $_contract)
     {
@@ -321,7 +326,6 @@ class Timetracker_Setup_Import_Egw14
             'description'           => $_data['pm_description'],
             'budget'                => $_data['pm_planned_budget'],
             'is_open'               => ($_data['pm_status'] == 'archive') ? 0 : 1,
-        //-- add modlog info?
         /*
             'unit'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
             'unitprice'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
@@ -341,6 +345,18 @@ class Timetracker_Setup_Import_Egw14
         ));
            
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount);
+        
+        // add user grants to this timeaccount (container)
+        $members = $this->_getProjectMembers($_data['pm_id']);
+        echo "    Got " . count($members) . " members for that project.\n";
+        foreach ($members as $userId) {
+            // @todo check if user still exists
+            $timeaccountContainer = Tinebase_Container::getInstance()->getContainerById($timeaccount->container_id);
+            Tinebase_Container::getInstance()->addGrants($timeaccountContainer, 'user', $userId, array(
+                Tinebase_Model_Container::GRANT_READ,
+                Tinebase_Model_Container::GRANT_EDIT
+            ), TRUE);            
+        }
         
         $this->_counters['timeaccounts']++;
         
@@ -428,6 +444,32 @@ class Timetracker_Setup_Import_Egw14
     /*************************** get from egw *************************/
     
     /**
+     * get members of a egw project
+     *
+     * @param integer $_projectId
+     * @return array of member ids
+     * 
+     * @todo    get role as well?
+     */
+    protected function _getProjectMembers($_projectId)
+    {
+       // get ts custom fields   
+        $select = $this->_db->select()
+            ->from($this->_oldTablePrefix . 'pm_members')
+            ->where($this->_db->quoteInto("pm_id = ?", $_projectId));
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        //print_r($queryResult);
+
+        $result = array();
+        foreach ($queryResult as $row) {
+            $result[] = $row['member_uid'];
+        }        
+        return $result;
+    }
+    
+    /**
      * get all available timesheet categories and create tags for them
      *
      * @return array with categories (id => '')
@@ -441,12 +483,12 @@ class Timetracker_Setup_Import_Egw14
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
+        //print_r($queryResult);
 
         $result = array();
         foreach ($queryResult as $row) {
-            //$result[$row['cat_id']] = $row['cat_name'];
             $result[$row['cat_id']] = 
-                (!in_array($row['cat_id'], $this->_newTimeaccountCategories)) 
+                (!in_array($row['cat_id'], array_keys($this->_newTimeaccountCategories))) 
                 ? $this->_createTag($row)
                 : 0;
         }        
