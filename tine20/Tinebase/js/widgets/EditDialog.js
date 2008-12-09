@@ -218,7 +218,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 });
             }
         } else {
-            this.onRcordLoad();
+            this.onRecordLoad();
         }
     },
     
