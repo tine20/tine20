@@ -9,13 +9,9 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
  *
- * @todo        get timesheet custom fields
  * @todo        create additional timeaccounts for special (egw-)timesheet categories
  * @todo        parse description fields (striptags?)
- * @todo        import all relevant record fields
- * @todo        add db transaction?
- * @todo        remove limit() in sql stmts
- * @todo        finish import script
+ * @todo        import more relevant record fields?
  */
 
 /**
@@ -46,6 +42,27 @@ class Timetracker_Setup_Import_Egw14
     protected $_counters = array();
     
     /**
+     * limit number of projects/timesheet to import
+     *
+     * @var integer
+     */
+    protected $_limit = 0;
+    
+    /**
+     * begin with this project id
+     *
+     * @var integer
+     */
+    protected $_beginId = 8;
+    
+    /**
+     * egw timesheet categories
+     *
+     * @var array
+     */
+    protected $_tsCategories = array();
+    
+    /**
      * the constructor 
      *
      * @param   string $_importAccountName [OPTIONAL]
@@ -73,13 +90,16 @@ class Timetracker_Setup_Import_Egw14
      */
     public function import()
     {
-        echo "Importing projects data from egroupware ...\n";
+        // @todo get timesheet categories
+        //$_tsCategories = $this->_getCategories();
         
-        //-- get+save timesheet custom fields
+        echo "Importing custom fields for timesheets data from egroupware ...";
+        $this->importTimesheetCustomFields();
+        echo "done.\n";
         
+        echo "Importing projects data from egroupware ...";
         $this->importProjects();
-                
-        echo "done with import.\n";
+        echo "done.\n";
         
         foreach ($this->_counters as $key => $value) {
             echo "Imported $value $key \n";
@@ -103,6 +123,42 @@ class Timetracker_Setup_Import_Egw14
     }
     
     /**
+     * get and create timesheet custom fields
+     *
+     */
+    public function importTimesheetCustomFields()
+    {
+        // get all custom fields   
+        $select = $this->_db->select()
+            ->from($this->_oldTablePrefix . 'timesheet_extra', 'ts_extra_name')
+            ->distinct()
+            ->group('ts_extra_name');
+            
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();       
+        
+        foreach($queryResult as $row) {
+            $customField = new Tinebase_Model_CustomField(array(
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
+                'name'              => $row['ts_extra_name'],
+                'label'             => $row['ts_extra_name'],        
+                'model'             => 'Timetracker_Model_Timesheet',
+                'type'              => 'text',
+                'length'            => 256,        
+            ));
+            
+            try {
+                Tinebase_Config::getInstance()->addCustomField($customField);
+            } catch (Zend_Db_Statement_Exception $ze) {                
+                // ignore duplicates
+                if (!preg_match("/SQLSTATE\[23000\]/", $ze->getMessage())) {
+                    throw $ze;
+                }
+            }
+        }
+    }
+    
+    /**
      * import egw projects
      *
      */
@@ -117,11 +173,13 @@ class Timetracker_Setup_Import_Egw14
                 array()
             )
             ->where('links.link_id2 IS NULL')
-            //->limit(10)
-            ->limit(5)
-            //-- order by project number?
+            ->where($this->_db->quoteInto('pm_id >= ?', $this->_beginId))
+            ->order('pm_id')
             ;
             
+        if ($this->_limit > 0) {
+            $select->limit($this->_limit);
+        }
         //echo $select->__toString();
             
         $stmt = $this->_db->query($select);
@@ -149,20 +207,30 @@ class Timetracker_Setup_Import_Egw14
                 "(link_app2='projectmanager' AND link_app1='projectmanager' AND link_id2=projects.pm_id)", 
                 array()
             )
-            ->where($this->_db->quoteInto('link_id1 = ?', $_data['pm_id']))
-            ->limit(5)
-        ;
-
+            ->where($this->_db->quoteInto('link_id1 = ?', $_data['pm_id']));
+            
+        if ($this->_limit > 0) {
+            $select->limit($this->_limit);
+        }
+        
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
 
         if (count($queryResult) > 0) {
             // import subprojects
             foreach ($queryResult as $row) {
+                
+                // testing
+                if ($row['pm_id'] != 970) {
+                    continue;
+                }
+                
                 $this->_importProject($row, $_data['pm_id']);
             }
         
         } else {
+            $timeaccounts = array();
+            
             // no subprojects
             if ($_parentId == 0) {
                 echo "Importing mainproject: " . $_data['pm_title'] . ' ' .$_data['pm_id'] . "\n";
@@ -174,8 +242,7 @@ class Timetracker_Setup_Import_Egw14
             $contract = $this->_createContract($_data);        
             
             // create timeaccount
-            // @todo put timeaccounts for this project in an array
-            $timeaccount = $this->_createTimeaccount($_data, $contract);
+            $timeaccounts['main'] = $this->_createTimeaccount($_data, $contract);
 
             // get timesheets
             $timesheets = $this->_getTimesheetsForProject($_data['pm_id']);
@@ -184,7 +251,7 @@ class Timetracker_Setup_Import_Egw14
             foreach ($timesheets as &$timesheet) {
                 // @todo scan timesheets and add additional timeaccounts for special categories
                 
-                $timesheet = $this->_createTimesheet($timesheet, $timeaccount->getId());
+                $timesheet = $this->_createTimesheet($timesheet, $timeaccounts['main']->getId());
             }
         }        
     }
@@ -276,7 +343,7 @@ class Timetracker_Setup_Import_Egw14
         if ($_record->isValid()) {
             Timetracker_Controller_Timesheet::getInstance()->create($_record);
         } else {
-            //echo "  Timesheet invalid: ". print_r($_record->getValidationErrors(), true) . "\n";
+            echo "  Timesheet invalid: ". print_r($_record->getValidationErrors(), true) . "\n";
             return NULL;
         }
 
@@ -300,10 +367,12 @@ class Timetracker_Setup_Import_Egw14
                 "(link_app1='timesheet' AND link_app2='projectmanager' AND link_id2=timesheets.ts_id)", 
                 array()
             )
-            ->where($this->_db->quoteInto('links.link_id2 = ?', $_projectId))
-            //->limit(10)
+            ->where($this->_db->quoteInto('links.link_id2 = ?', $_projectId));
             //-- order by?
-            ;
+                        
+        if ($this->_limit > 0) {
+            $select->limit($this->_limit);
+        }
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -312,24 +381,56 @@ class Timetracker_Setup_Import_Egw14
         
         $timesheets = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
         foreach ($queryResult as $row) {
-            
-            //-- get custom fields
-            
-            // create timesheet record
-            $record = new Timetracker_Model_Timesheet(array(
+
+            $data = array(
                 //'account_id'            => $row['ts_owner'],
                 'account_id'            => Tinebase_Core::getUser()->getId(),
-                'start'                 => $row['ts_start'],
+                'start_date'            => date("Y-m-d", $row['ts_start']),
                 'duration'              => $row['ts_duration'],
-                'description'           => $row['ts_description'],
+                'description'           => (!empty($row['ts_description'])) ? $row['ts_description'] : 'not set (imported)',
                 'is_cleared'            => 1,
                 //'timeaccount_id'        => ,
                 //'is_billable'           => ,
-            ), TRUE);
+            );
+            
+            // add custom fields
+            $customFields = $this->_getCustomFieldsForTimesheet($row['ts_id']);
+            
+            // create timesheet record
+            $record = new Timetracker_Model_Timesheet(array_merge($data, $customFields), TRUE);
+
+            //print_r($record->toArray());
             
             $timesheets->addRecord($record);
         }        
         
         return $timesheets;
+    }
+    
+    /**
+     * add custom fields to timesheet record
+     *
+     * @param integer $_oldTsId
+     * @return array with custom fields
+     */
+    protected function _getCustomFieldsForTimesheet($_oldTsId) 
+    {
+        // get ts custom fields   
+        $select = $this->_db->select()
+            ->from($this->_oldTablePrefix . 'timesheet_extra')
+            ->where($this->_db->quoteInto("ts_id = ?", $_oldTsId));
+
+        $stmt = $this->_db->query($select);
+        //echo $select->__toString();
+        $queryResult = $stmt->fetchAll();
+
+        $result = array();
+        foreach ($queryResult as $row) {
+            //print_r($row);
+            if (!empty($row['ts_extra_value'])) {
+                $result[$row['ts_extra_name']] = $row['ts_extra_value'];
+            }
+        }        
+        return $result;
     }
 }
