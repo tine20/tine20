@@ -10,7 +10,8 @@
  * @version     $Id$ 
  *
  * @todo        create additional timeaccounts for special (egw-)timesheet categories
- * @todo        parse description fields (striptags?)
+ * @todo        add members / container grants
+ * @todo        parse description fields (striptags)
  * @todo        import more relevant record fields?
  */
 
@@ -46,14 +47,14 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var integer
      */
-    protected $_limit = 0;
+    protected $_limit = 5;
     
     /**
      * begin with this project id
      *
      * @var integer
      */
-    protected $_beginId = 8;
+    protected $_beginId = 0;
     
     /**
      * egw timesheet categories
@@ -61,6 +62,19 @@ class Timetracker_Setup_Import_Egw14
      * @var array
      */
     protected $_tsCategories = array();
+    
+    /**
+     * timesheet categories that belong to seperate timeaccounts (cat_id)
+     *
+     * @var array
+     */
+    protected $_newTimeaccountCategories = array(
+        70,
+        27,
+        29,
+        33,
+        30
+    );
     
     /**
      * the constructor 
@@ -90,8 +104,8 @@ class Timetracker_Setup_Import_Egw14
      */
     public function import()
     {
-        // @todo get timesheet categories
-        //$_tsCategories = $this->_getCategories();
+        // get timesheet categories
+        $this->_tsCategories = $this->_getTimesheetCategories();
         
         echo "Importing custom fields for timesheets data from egroupware ...";
         $this->importTimesheetCustomFields();
@@ -104,22 +118,6 @@ class Timetracker_Setup_Import_Egw14
         foreach ($this->_counters as $key => $value) {
             echo "Imported $value $key \n";
         }
-    }
-    
-    /**
-     * init the environment
-     *
-     */
-    protected function _init()
-    {
-        // init environment
-        Tinebase_Core::setupConfig();
-        Tinebase_Core::setupServerTimezone();
-        Tinebase_Core::setupLogger();
-        Tinebase_Core::setupCache();
-        Tinebase_Core::set('locale', new Zend_Locale('de_DE'));
-        Tinebase_Core::set('userTimeZone', 'UTC');
-        Tinebase_Core::setupDatabaseConnection();        
     }
     
     /**
@@ -192,6 +190,24 @@ class Timetracker_Setup_Import_Egw14
         }        
     }
     
+    /***************************** protected functions ********************************/
+    
+    /**
+     * init the environment
+     *
+     */
+    protected function _init()
+    {
+        // init environment
+        Tinebase_Core::setupConfig();
+        Tinebase_Core::setupServerTimezone();
+        Tinebase_Core::setupLogger();
+        Tinebase_Core::setupCache();
+        Tinebase_Core::set('locale', new Zend_Locale('de_DE'));
+        Tinebase_Core::set('userTimeZone', 'UTC');
+        Tinebase_Core::setupDatabaseConnection();        
+    }
+    
     /**
      * import single project
      *
@@ -219,12 +235,6 @@ class Timetracker_Setup_Import_Egw14
         if (count($queryResult) > 0) {
             // import subprojects
             foreach ($queryResult as $row) {
-                
-                // testing
-                if ($row['pm_id'] != 970) {
-                    continue;
-                }
-                
                 $this->_importProject($row, $_data['pm_id']);
             }
         
@@ -248,13 +258,30 @@ class Timetracker_Setup_Import_Egw14
             $timesheets = $this->_getTimesheetsForProject($_data['pm_id']);
              
             // add timesheets
-            foreach ($timesheets as &$timesheet) {
-                // @todo scan timesheets and add additional timeaccounts for special categories
-                
-                $timesheet = $this->_createTimesheet($timesheet, $timeaccounts['main']->getId());
+            foreach ($timesheets as $timesheet) {
+                // scan timesheets and add additional timeaccounts for special categories
+                if (in_array($timesheet['cat_id'], $this->_newTimeaccountCategories)) {
+                    // @todo create new timeaccount
+                    
+                } else {
+                    // add category name as tag
+                    if (!empty($this->_tsCategories[$timesheet['cat_id']])) {
+                        $tag = new Tinebase_Model_Tag(array(
+                            'id'    => $this->_tsCategories[$timesheet['cat_id']],
+                            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                            'name'  => 'x'
+                        ));
+                        $timesheet['record']->tags = new Tinebase_Record_Recordset('Tinebase_Model_Tag', array($tag)); 
+                    }
+                    
+                    $this->_createTimesheet($timesheet['record'], $timeaccounts['main']->getId());
+                }
             }
         }        
     }
+    
+    
+    /********************** create tine records ***********************/
     
     /**
      * create tine contract
@@ -351,12 +378,88 @@ class Timetracker_Setup_Import_Egw14
     }
     
     /**
+     * create new tag with rights and context
+     *
+     * @param array $_catData
+     * @return string tag_id
+     */
+    protected function _createTag($_catData)
+    {
+        $tags = Tinebase_Tags::getInstance()->searchTags(new Tinebase_Model_TagFilter(array(
+            'name' => $_catData['cat_name'],
+            'type' => Tinebase_Model_Tag::TYPE_SHARED
+        )), new Tinebase_Model_Pagination());
+        
+        //print_r($tags->toArray());
+        
+        if (count($tags) == 0) {
+            $catData = unserialize($_catData['cat_data']);
+            
+            // create tag
+            $sharedTag = new Tinebase_Model_Tag(array(
+                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                'name'  => $_catData['cat_name'],
+                'description' => 'Imported timesheet category ' . $_catData['cat_name'],
+                'color' => (!empty($catData['color'])) ? $catData['color'] :  '#009B31',                        
+            ));
+            //$sharedTag->contexts =
+            
+            $newTag = Tinebase_Tags::getInstance()->createTag($sharedTag);
+            
+            $tagRights = new Tinebase_Model_TagRight(array(
+                'tag_id'        => $newTag->getId(),
+                'account_type'  => 'anyone',
+                'account_id'    => 0,
+                'view_right'    => TRUE,
+                'use_right'     => TRUE,
+            ));
+            Tinebase_Tags::getInstance()->setRights($tagRights);
+            
+            $tagContext = array(Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId());
+            Tinebase_Tags::getInstance()->setContexts($tagContext, $newTag->getId());
+            
+            // add to our cat_id => tag_id mapping array
+            return $newTag->getId();
+        } else {
+            return $tags[0]->getId();
+        }
+    }
+    
+    /*************************** get from egw *************************/
+    
+    /**
+     * get all available timesheet categories and create tags for them
+     *
+     * @return array with categories (id => '')
+     */
+    protected function _getTimesheetCategories()
+    {
+        // get ts custom fields   
+        $select = $this->_db->select()
+            ->from($this->_oldTablePrefix . 'categories')
+            ->where($this->_db->quoteInto("cat_appname = ?", 'timesheet'));
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+
+        $result = array();
+        foreach ($queryResult as $row) {
+            //$result[$row['cat_id']] = $row['cat_name'];
+            $result[$row['cat_id']] = 
+                (!in_array($row['cat_id'], $this->_newTimeaccountCategories)) 
+                ? $this->_createTag($row)
+                : 0;
+        }        
+        return $result;
+    }
+    
+    /**
      * get timesheets for project
      *
      * @param integer $_projectId
-     * @return Tinebase_Record_RecordSet of Timetracker_Model_Timesheet records
+     * @return array with categories and Timetracker_Model_Timesheet records
      * 
-     * @todo add correct account id again
+     * @todo add correct account id again?
      */
     protected function _getTimesheetsForProject($_projectId)
     {
@@ -379,7 +482,8 @@ class Timetracker_Setup_Import_Egw14
         
         echo "  Timesheets to import for project id $_projectId: " . count($queryResult) . "\n";
         
-        $timesheets = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
+        //$timesheets = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
+        $timesheets = array();
         foreach ($queryResult as $row) {
 
             $data = array(
@@ -401,7 +505,11 @@ class Timetracker_Setup_Import_Egw14
 
             //print_r($record->toArray());
             
-            $timesheets->addRecord($record);
+            //$timesheets->addRecord($record);
+            $timesheets[] = array(
+                'cat_id' => $row['cat_id'],
+                'record' => $record
+            );
         }        
         
         return $timesheets;
