@@ -1089,10 +1089,10 @@ class Tinebase_Container
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt(Zend_Registry::get('currentAccount'));
         
-        try {
-            // remove container from cache
-            $cache = Zend_Registry::get('cache');
-            if (ucfirst(Zend_Registry::get('configFile')->caching->backend) !== 'Memcached') {
+        // remove container from cache
+        if (Tinebase_Core::getConfig()->caching) {
+            $cache = Tinebase_Core::get(Tinebase_Core::CACHE);        
+            if (ucfirst(Tinebase_Core::getConfig()->caching->backend) !== 'Memcached') {
                 $cache->remove('getContainerById' . $_containerId);
                 $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
                 $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
@@ -1100,8 +1100,6 @@ class Tinebase_Container
             } else {
                 $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
             }
-        } catch (Exception $e) {
-            // caching not configured
         }
     }
 
