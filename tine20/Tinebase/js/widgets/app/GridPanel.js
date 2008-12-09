@@ -373,6 +373,29 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     },
     
     /**
+     * generic edit in new window handler
+     */
+    onEditInNewWindow: function(button, event) {
+        var record; 
+        if (button.actionType == 'edit') {
+            var selectedRows = this.grid.getSelectionModel().getSelections();
+            record = selectedRows[0];
+        } else {
+            record = new this.recordClass({}, 0);
+        }
+        
+        var popupWindow = Tine.Timetracker[this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
+            record: record,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.store.load({});
+                }
+            }
+        });     
+    },
+    
+    /**
      * generic delete handler
      */
     onDeleteRecords: function(btn, e) {
