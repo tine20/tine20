@@ -21,7 +21,7 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
     { name: 'timeaccount_id' },
     { name: 'start_date' },
     { name: 'start_time' },
-    { name: 'start' },
+    { name: 'duration' },
     { name: 'description' },
     { name: 'is_billable' },
     { name: 'is_cleared' },
@@ -46,6 +46,13 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.Record.create(Tine.Timetracker.
     containerName: 'timesheets list',
     containersName: 'timesheets lists'
 });
+Tine.Timetracker.Model.Timesheet.getDefaultData = function() { 
+    return {
+        account_id: Tine.Tinebase.registry.get('currentAccount'),
+        duration:   '00:30',
+        start_date: new Date()
+    }
+};
 
 /**
  * @type {Array}

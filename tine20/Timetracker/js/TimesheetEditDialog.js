@@ -15,14 +15,7 @@ Ext.namespace('Tine.Timetracker');
  * Timetracker Edit Dialog
  */
 Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    /**
-     * @cfg {Number}
-     */
-    containerId: -1,
-    /**
-     * @private
-     */
-    //labelAlign: 'side',
+
     
     /**
      * @private
@@ -31,7 +24,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     appName: 'Timetracker',
     recordClass: Tine.Timetracker.Model.Timesheet,
     recordProxy: Tine.Timetracker.timesheetBackend,
-    //showContainerSelector: true,
+    loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
@@ -39,13 +32,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     updateToolbars: function() {
     	
-    },
-    
-    onRecordLoad: function() {
-        this.record.set('date', this.record.get('date') ? this.record.get('date') : new Date());
-        this.record.set('duration', this.record.get('duration') ? this.record.get('duration') : '00:30');
-        
-        Tine.Timetracker.TimesheetEditDialog.superclass.onRecordLoad.call(this);
     },
     
     /**
@@ -82,17 +68,19 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         fieldLabel: this.app.i18n._('Time Account'),
                         emptyText: this.app.i18n._('Select Time Accont...'),
                         loadingText: this.app.i18n._('Searching...'),
-                        allowEmpty: false,
+                        allowBlank: false,
                         name: 'timeaccount_id'
                     })], [{
                         fieldLabel: this.app.i18n._('Duration'),
                         name: 'duration',
+                        allowBlank: false,
                         xtype: 'uxspinner',
                         strategy: new Ext.ux.form.Spinner.TimeStrategy({
                             incrementValue : 15
                         })}, {
                         fieldLabel: this.app.i18n._('Date'),
                         name: 'start_date',
+                        allowBlank: false,
                         xtype: 'datefield'
                         }, {
                         fieldLabel: this.app.i18n._('Start'),
@@ -115,9 +103,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
+                        allowBlank: false,
                         xtype: 'textarea',
                         height: 200
                     }], [new Tine.widgets.AccountpickerField({
+                        allowBlank: false,
                         columnWidth: .5,
                         disabled: true,
                         fieldLabel: this.app.i18n._('Account'),
