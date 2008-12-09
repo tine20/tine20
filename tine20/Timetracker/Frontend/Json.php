@@ -59,12 +59,12 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * Return a single record
      *
-     * @param   string $uid
+     * @param   string $id
      * @return  array record data
      */
-    public function getTimesheet($uid)
+    public function getTimesheet($id)
     {
-        $ts = $this->_get($uid, $this->_timesheetController);
+        $ts = $this->_get($id, $this->_timesheetController);
         
         $ts['timeaccount_id'] = $ts['timeaccount_id'] ? $this->_timeaccountController->get($ts['timeaccount_id'])->toArray() : $ts['timeaccount_id'];
         $ts['account_id'] = $ts['account_id'] ? Tinebase_User::getInstance()->getUserById($ts['account_id'])->toArray() : $ts['account_id'];
@@ -109,12 +109,12 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * Return a single record
      *
-     * @param   string $uid
+     * @param   string $id
      * @return  array record data
      */
-    public function getTimeaccount($uid)
+    public function getTimeaccount($id)
     {
-        return $this->_get($uid, $this->_timeaccountController);
+        return $this->_get($id, $this->_timeaccountController);
     }
 
     /**
