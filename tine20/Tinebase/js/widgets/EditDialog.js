@@ -30,6 +30,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     app: null,
     /**
+     * @cfg {String} mode
+     * Set to 'local' if the EditDialog only operates on this.record (defaults to 'remote' which loads and saves with the server)
+     */
+     mode : 'remote',
+    /**
      * @cfg {Array} tbarItems
      * additional toolbar items (defaults to false)
      */
@@ -53,11 +58,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * show container selector in bottom area
      */
     showContainerSelector: false,
-    
     /**
-     * @property {Ext.data.Record} record
-     * record in edit process
+     * @cfg {Bool} loadRecord
+     * wether the record to edit is given or must be loaded from proxy. (defaults to true)
+     * If set to true, the proxy's getRecord method will be called to load the record
      */
+    loadRecord: true,
+    /**
+     * @cfg {Ext.data.Record} record
+     * record in edit process.
+     */
+    record: null,
+    
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -116,9 +128,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initActions();
         // init buttons and tbar
         this.initButtons();
-        // init record and request data
-        this.record = this.record ? this.record : new this.recordClass({}, 0);
-        this.requestData();
+        // init record 
+        this.initRecord();
         // get itmes for this dialog
         this.items = this.getFormItems();
         
@@ -190,9 +201,37 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
+     * init record to edit
+     */
+    initRecord: function() {
+        // note: in local mode we expect a valid record
+        if (this.mode !== 'local') {
+            this.record = this.record ? this.record : new this.recordClass({}, 0);
+            
+            if (this.loadRecord) {
+                this.loadRequest = this.recordProxy.loadRecord(this.record, {
+                    scope: this,
+                    success: function(record) {
+                        this.record = record;
+                        this.onRecordLoad();
+                    }
+                });
+            }
+        } else {
+            this.onRcordLoad();
+        }
+    },
+    
+    /**
      * execuded after record got updated
      */
     onRecordLoad: function() {
+        // interrupt process flow till dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+        
         if (! this.record.id) {
             this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
         } else {
