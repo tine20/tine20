@@ -381,7 +381,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             var selectedRows = this.grid.getSelectionModel().getSelections();
             record = selectedRows[0];
         } else {
-            record = new this.recordClass({}, 0);
+            record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
         
         var popupWindow = Tine.Timetracker[this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
