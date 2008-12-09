@@ -55,13 +55,22 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     /**
      * loads a single 'full featured' record
      * 
-     * @param   {String} id
+     * @param   {Ext.data.Record} record
      * @param   {Object} options
      * @return  {Number} Ext.Ajax transaction id
      * @success {Ext.data.Record}
      */
-    loadRecord: function(id, options) {
+    loadRecord: function(record, options) {
+        options = options || {};
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        }
         
+        var p = options.params = options.params || {};
+        p.method = this.appName + '.get' + this.modelName;
+        p.id = record.get(this.idProperty); 
+        
+        return this.request(options);
     },
     
     /**
