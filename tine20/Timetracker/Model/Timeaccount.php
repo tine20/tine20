@@ -66,7 +66,9 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // relations (linked Erp_Model_Contract records)
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),    
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
+        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
