@@ -249,6 +249,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
             throw $e;
         }
         
