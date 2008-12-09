@@ -64,11 +64,24 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
      */
     getColumns: function(){
         return [{
-            id: 'description',
-            header: this.app.i18n._("Description"),
-            width: 300,
+            id: 'start_date',
+            header: this.app.i18n._("Date"),
+            width: 100,
             sortable: true,
-            dataIndex: 'description'
+            dataIndex: 'start_date'
+        }, {
+            id: 'start_time',
+            hidden: true,
+            header: this.app.i18n._("Start time"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'start_time'
+        }, {
+            id: 'timeaccount_id',
+            header: this.app.i18n._("Time account"),
+            width: 800,
+            sortable: true,
+            dataIndex: 'timeaccount_id'
         },{
             id: 'account_id',
             header: this.app.i18n._("Account"),
@@ -76,11 +89,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             sortable: true,
             dataIndex: 'account_id'
         },{
-            id: 'contract_id',
-            header: this.app.i18n._("Contract"),
+            id: 'duration',
+            header: this.app.i18n._("Duration"),
             width: 100,
             sortable: true,
-            dataIndex: 'contract_id'
+            dataIndex: 'duration'
         }];
     }  
 });
