@@ -27,7 +27,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function() {
-        
+
     },
     
     /**
@@ -70,13 +70,30 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         allowBlank: false
                         }], [{
                         columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Description'),
-                        emptyText: this.app.i18n._('Enter description...'),
-                        name: 'description',
-                        allowBlank: false,
-                        xtype: 'textarea',
-                        height: 200
-                    }]] 
+                        xtype: 'tabpanel',
+                        height: 270,
+                        activeItem: 0,
+                        items: [{
+                            title: 'Access',
+                            //items: []
+                            html: ''
+                        }, {
+                            title: 'Budget',
+                            //items: []
+                            html: ''
+                        }]}], [{
+                            fieldLabel: this.app.i18n._('Unit'),
+                            name: 'unit'
+                        }, {
+                            fieldLabel: this.app.i18n._('Unit Price'),
+                            name: 'unitprice'
+                        }, {
+                            fieldLabel: this.app.i18n._('Status'),
+                            name: 'is_open',
+                            xtype: 'combo'
+                            //checkboxLabel: this.app.i18n._('Times could be added')
+                        
+                        }]] 
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -88,18 +105,35 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     collapseMode: 'mini',
                     margins: '0 5 0 5',
                     border: true,
-                    items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Timetracker',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        })
-                    ]
+                    items: [new Ext.Panel({
+                        // @todo generalise!
+                        title: this.app.i18n._('Description'),
+                        iconCls: 'descriptionIcon',
+                        layout: 'form',
+                        labelAlign: 'top',
+                        border: false,
+                        items: [{
+                            style: 'margin-top: -4px; border 0px;',
+                            labelSeparator: '',
+                            xtype:'textarea',
+                            name: 'description',
+                            hideLabel: true,
+                            grow: false,
+                            preventScrollbars:false,
+                            anchor:'100% 100%',
+                            emptyText: this.app.i18n._('Enter description')                            
+                        }]
+                    }),
+                    new Tine.widgets.activities.ActivitiesPanel({
+                        app: 'Timetracker',
+                        showAddNoteForm: false,
+                        border: false,
+                        bodyStyle: 'border:1px solid #B5B8C8;'
+                    }),
+                    new Tine.widgets.tags.TagPanel({
+                        border: false,
+                        bodyStyle: 'border:1px solid #B5B8C8;'
+                    })]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
