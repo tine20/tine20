@@ -68,7 +68,7 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
-    public function getGroups($filter, $sort, $dir, $start, $limit)
+    public function search($filter, $sort, $dir, $start, $limit)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
@@ -81,7 +81,7 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * @param int $_groupId
      * @return Tinebase_Model_Group
      */
-    public function getGroup($_groupId)
+    public function get($_groupId)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
@@ -98,7 +98,7 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * 
      * @return Tinebase_Model_Group
      */
-    public function addGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
+    public function create(Tinebase_Model_Group $_group, array $_groupMembers = array ())
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -119,7 +119,7 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * 
      * @return Tinebase_Model_Group
      */
-    public function updateGroup(Tinebase_Model_Group $_group, array $_groupMembers = array ())
+    public function update(Tinebase_Model_Group $_group, array $_groupMembers = array ())
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -136,7 +136,7 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * @param   array $_groupIds
      * @return  array with success flag
      */
-    public function deleteGroups($_groupIds)
+    public function delete($_groupIds)
     {        
         $this->checkRight('MANAGE_ACCOUNTS');
         

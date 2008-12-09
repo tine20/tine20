@@ -69,7 +69,7 @@ class Admin_Controller_Application extends Tinebase_Application_Controller_Abstr
      * @param int $_limit
      * @return Tinebase_RecordSet_Application
      */
-    public function getApplications($filter, $sort, $dir, $start, $limit)
+    public function search($filter, $sort, $dir, $start, $limit)
     {
         $this->checkRight('VIEW_APPS');        
         
@@ -84,7 +84,7 @@ class Admin_Controller_Application extends Tinebase_Application_Controller_Abstr
      * @param   int $_applicationId application id to get
      * @return  Tinebase_Model_Application
      */
-    public function getApplication($_applicationId)
+    public function get($_applicationId)
     {
         $this->checkRight('VIEW_APPS');        
         

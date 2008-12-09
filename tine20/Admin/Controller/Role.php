@@ -69,7 +69,7 @@ class Admin_Controller_Role extends Tinebase_Application_Controller_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Role
      */
-    public function getRoles($query, $sort, $dir, $start, $limit)
+    public function search($query, $sort, $dir, $start, $limit)
     {
         $this->checkRight('VIEW_ROLES');
        
@@ -94,7 +94,7 @@ class Admin_Controller_Role extends Tinebase_Application_Controller_Abstract
      * @param int $_roleId
      * @return Tinebase_Model_Role
      */
-    public function getRole($_roleId)
+    public function get($_roleId)
     {
         $this->checkRight('VIEW_ROLES');
         
@@ -111,7 +111,7 @@ class Admin_Controller_Role extends Tinebase_Application_Controller_Abstract
      * @param   array role rights
      * @return  Tinebase_Model_Role
      */
-    public function addRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
+    public function create(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         $this->checkRight('MANAGE_ROLES');
         
@@ -130,7 +130,7 @@ class Admin_Controller_Role extends Tinebase_Application_Controller_Abstract
      * @param   array role rights
      * @return Tinebase_Model_Role
      */
-    public function updateRole(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
+    public function update(Tinebase_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         $this->checkRight('MANAGE_ROLES');
         
@@ -147,7 +147,7 @@ class Admin_Controller_Role extends Tinebase_Application_Controller_Abstract
      * @param   array $_roleIds
      * @void
      */
-    public function deleteRoles($_roleIds)
+    public function delete($_roleIds)
     {        
         $this->checkRight('MANAGE_ROLES');
         

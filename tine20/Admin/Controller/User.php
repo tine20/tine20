@@ -60,7 +60,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     }
     
     /**
-     * get list of accounts
+     * get list of accounts -> obsolete
      *
      * @param string $_filter string to search accounts for
      * @param string $_sort
@@ -69,6 +69,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
      */
+    /*
     public function getUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
         $this->checkRight('VIEW_ACCOUNTS');
@@ -79,9 +80,9 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         return $result;
     }
-
+    */
     /**
-     * get list of full accounts
+     * get list of full accounts -> renamed to search full users
      *
      * @param string $_filter string to search accounts for
      * @param string $_sort
@@ -90,7 +91,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_FullUser
      */
-    public function getFullUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    public function searchFullUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
@@ -102,19 +103,18 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     }
     
     /**
-     * get account
+     * get account -> renamed to get user
      *
      * @param   int $_accountId account id to get
      * @return  Tinebase_Model_User
      */
-    public function getAccount($_accountId)
+    public function get($_accountId)
     {        
         $this->checkRight('VIEW_ACCOUNTS');
         
         return Tinebase_User::getInstance()->getUserById($_accountId);
     }
     
-
     /**
      * set account status
      *
@@ -130,7 +130,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         return $result;
     }
-
+    
     /**
      * set the password for a given account
      *
@@ -151,7 +151,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         return $result;
     }
-
+    
     /**
      * save or update account
      *
@@ -160,7 +160,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
      * @param string $_passwordRepeat the new password again
      * @return Tinebase_Model_FullUser
      */
-    public function updateUser(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function update(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -187,7 +187,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
      * @param string $_passwordRepeat the new password again
      * @return Tinebase_Model_FullUser
      */
-    public function addUser(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function create(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -204,7 +204,6 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         return $account;
     }
-
     
     /**
      * delete accounts
@@ -212,7 +211,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
      * @param   array $_accountIds  array of account ids
      * @return  array with success flag
      */
-    public function deleteUsers(array $_accountIds)
+    public function delete(array $_accountIds)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         

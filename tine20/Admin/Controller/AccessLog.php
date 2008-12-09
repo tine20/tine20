@@ -70,7 +70,7 @@ class Admin_Controller_AccessLog extends Tinebase_Application_Controller_Abstrac
      * @param int $_limit
      * @return Tinebase_RecordSet_AccessLog set of matching access log entries
      */
-    public function getAccessLogEntries($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
+    public function search($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
     {
         $this->checkRight('VIEW_ACCESS_LOG');        
         
@@ -80,7 +80,7 @@ class Admin_Controller_AccessLog extends Tinebase_Application_Controller_Abstrac
         
         return $result;
     }
-
+    
     /**
      * returns the total number of access logs
      * 
@@ -90,7 +90,7 @@ class Admin_Controller_AccessLog extends Tinebase_Application_Controller_Abstrac
      * 
      * @return int
      */
-    public function getTotalAccessLogEntryCount($_from, $_to, $_filter)
+    public function searchCount($_from, $_to, $_filter)
     {
         return Tinebase_AccessLog::getInstance()->getTotalCount($_from, $_to, $_filter);
     }
@@ -100,7 +100,7 @@ class Admin_Controller_AccessLog extends Tinebase_Application_Controller_Abstrac
      *
      * @param   array $_logIds list of logIds to delete
      */
-    public function deleteAccessLogEntries($_logIds)
+    public function delete($_logIds)
     {
         $this->checkRight('MANAGE_ACCESS_LOG');        
         

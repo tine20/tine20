@@ -69,7 +69,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Tag
      */
-    public function getTags($query, $sort, $dir, $start, $limit)
+    public function search($query, $sort, $dir, $start, $limit)
     {
         $filter = new Tinebase_Model_TagFilter(array(
             'name'        => '%' . $query . '%',
@@ -92,7 +92,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Abstract
      * @param int $_tagId
      * @return Tinebase_Model_FullTag
      */
-    public function getTag($_tagId)
+    public function get($_tagId)
     {
         $tag = Tinebase_Tags::getInstance()->getTagsById($_tagId);
         $fullTag = new Tinebase_Model_FullTag($tag[0]->toArray(), true);
@@ -108,7 +108,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Abstract
      * @param  Tinebase_Model_FullTag $_tag
      * @return Tinebase_Model_FullTag
      */
-    public function addTag(Tinebase_Model_FullTag $_tag)
+    public function create(Tinebase_Model_FullTag $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
@@ -128,7 +128,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Abstract
      * @param  Tinebase_Model_FullTag $_tag
      * @return Tinebase_Model_FullTag
      */
-    public function updateTag(Tinebase_Model_FullTag $_tag)
+    public function update(Tinebase_Model_FullTag $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
@@ -150,7 +150,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Abstract
      * @param   array $_tagIds
      * @void
      */
-    public function deleteTags($_tagIds)
+    public function delete($_tagIds)
     {        
         $this->checkRight('MANAGE_SHARED_TAGS');
         
