@@ -26,16 +26,18 @@ interface Tinebase_Application_Controller_Record_Interface
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
+     * @todo add that again when all controllers use the same search() footprint
      */
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE);
+    //public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE);
     
     /**
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Record_Interface $_filter
      * @return int
+     * @todo add that again when all controllers use the same search() footprint
      */
-    public function searchCount(Tinebase_Record_Interface $_filter);
+    //public function searchCount(Tinebase_Record_Interface $_filter);
 
     /**
      * get by id
