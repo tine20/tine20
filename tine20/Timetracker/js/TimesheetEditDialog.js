@@ -35,24 +35,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
-     * reqests all data needed in this dialog
-     */
-    requestData: function() {
-        this.loadRequest = Ext.Ajax.request({
-            scope: this,
-            success: function(response) {
-                this.record = this.recordProxy.recordReader(response);
-                this.onRecordLoad();
-            },
-            params: {
-                method: 'Timetracker.getTimesheet',
-                uid: this.record.id
-                //containerId: this.containerId
-            }
-        });
-    },
-    
-    /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function() {

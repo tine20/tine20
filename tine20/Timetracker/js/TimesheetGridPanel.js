@@ -57,30 +57,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     },    
     
     /**
-     * open timesheet edit dialog
-     */
-    onEditInNewWindow: function(_button, _event) {
-        if (_button.actionType == 'edit') {
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            var record = selectedRows[0];
-        } else {
-        	var record = {};
-        }
-        //var containerId = Tine.Timetracker.registry.get('containerId'); 
-        
-        var popupWindow = Tine.Timetracker.TimesheetEditDialog.openWindow({
-            record: record,
-            //containerId: containerId,
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    this.store.load({});
-                }
-            }
-        });    	
-    },
-    
-    /**
      * returns cm
      * @private
      * 
