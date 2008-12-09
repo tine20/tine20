@@ -230,10 +230,13 @@
                     <type>text</type>
                 </field>
                 <index>
-                    <name>record_id</name>
-                    <primary>true</primary>
+                    <name>record_id_name</name>
+                    <unique>true</unique>
                     <field>
                         <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
                     </field>
                 </index>
                 <index>

@@ -176,21 +176,26 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddTimesheetWithCustomFields()
     {
-        // create custom field
-        $customField = $this->_getCustomField();
+        // create custom fields
+        $customField1 = $this->_getCustomField();
+        $customField2 = $this->_getCustomField();
         
         // create timesheet and add custom fields
         $timesheetArray = $this->_getTimesheet()->toArray();
-        $timesheetArray[$customField->name] = Tinebase_Record_Abstract::generateUID();
+        $timesheetArray[$customField1->name] = Tinebase_Record_Abstract::generateUID();
+        $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
+        
         $timesheetData = $this->_backend->saveTimesheet(Zend_Json::encode($timesheetArray));
         
         // checks
         $this->assertGreaterThan(0, count($timesheetData['customfields']));
-        $this->assertEquals($timesheetArray[$customField->name], $timesheetData['customfields'][$customField->name]);
+        $this->assertEquals($timesheetArray[$customField1->name], $timesheetData['customfields'][$customField1->name]);
+        $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
         
         // cleanup
         $this->_backend->deleteTimeaccounts($timesheetData['timeaccount_id']);
-        Tinebase_Config::getInstance()->deleteCustomField($customField);
+        Tinebase_Config::getInstance()->deleteCustomField($customField1);
+        Tinebase_Config::getInstance()->deleteCustomField($customField2);
     }
     
     /**
