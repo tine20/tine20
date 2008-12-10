@@ -73,10 +73,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         fieldLabel: this.app.i18n._('Duration'),
                         name: 'duration',
                         allowBlank: false,
-                        xtype: 'uxspinner',
-                        strategy: new Ext.ux.form.Spinner.TimeStrategy({
-                            incrementValue : 15
-                        })}, {
+                        xtype: 'tinedurationspinner'
+                        }, {
                         fieldLabel: this.app.i18n._('Date'),
                         name: 'start_date',
                         allowBlank: false,
