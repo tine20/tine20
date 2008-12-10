@@ -41,7 +41,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     protected $_filters = array(
         'id'            => 'Digits',
         'lead_name'     => 'StringTrim',
-        'probability'   => 'Digits'
+        'probability'   => 'Digits',
     );
     
     /**
@@ -93,6 +93,22 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+
+    /**
+     * overwrite constructor to add more filters
+     *
+     * @param unknown_type $_data
+     * @param unknown_type $_bypassFilters
+     * @param unknown_type $_convertDates
+     * @return unknown
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set turnover to 0 if not set
+        $this->_filters['turnover'] = new Zend_Filter_Empty(0);
+        
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
     
     /**
      * key in $_validators/$_properties array for the filed which 
