@@ -78,6 +78,14 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
         ));        
         $container = Tinebase_Container::getInstance()->addContainer($newContainer);
+        
+        // add all grants to container for creator
+        Tinebase_Container::getInstance()->addGrants($container, 'user', $this->_currentAccount->getId(), array(
+            Tinebase_Model_Container::GRANT_READ,
+            Tinebase_Model_Container::GRANT_EDIT,
+            Tinebase_Model_Container::GRANT_ADMIN
+        ), TRUE);            
+        
         $_record->container_id = $container->getId();
         
         return parent::create($_record);
