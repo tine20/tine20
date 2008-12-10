@@ -48,7 +48,7 @@ abstract class Setup_Server_Abstract
         
         #Tinebase_Core::setupUserLocale();
         
-        #Tinebase_Core::setupCache();
+        Tinebase_Core::setupCache();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
