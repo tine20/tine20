@@ -255,7 +255,7 @@ class Tinebase_Container
      * @return  Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getContainerByACL($_accountId, $_application, $_grant)
+    public function getContainerByACL($_accountId, $_application, $_grant, $_emptyOK = FALSE)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
@@ -326,11 +326,15 @@ class Tinebase_Container
                 // no containers found. maybe something went wrong when creating the initial folder
                 // any account should have at least one personal folder
                 // let's check if the controller of the application has a function to create the needed folders
-                $application = Tinebase_Core::getApplicationInstance($_application);
-                
-                if($application instanceof Tinebase_Container_Interface) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
-                    return $application->createPersonalFolder($_accountId);
+                try {
+                    $application = Tinebase_Core::getApplicationInstance($_application);
+                    
+                    if($application instanceof Tinebase_Container_Interface) {
+                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
+                        return $application->createPersonalFolder($_accountId);
+                    }
+                } catch (Tinebase_Exception_NotFound $enf) {
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
                 }
             }
     
