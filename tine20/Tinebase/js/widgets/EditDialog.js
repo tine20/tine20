@@ -31,9 +31,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     app: null,
     /**
      * @cfg {String} mode
-     * Set to 'local' if the EditDialog only operates on this.record (defaults to 'remote' which loads and saves with the server)
+     * Set to 'local' if the EditDialog only operates on this.record (defaults to 'remote' which loads and saves using the recordProxy)
      */
-     mode : 'remote',
+    mode : 'remote',
     /**
      * @cfg {Array} tbarItems
      * additional toolbar items (defaults to false)
@@ -58,12 +58,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * show container selector in bottom area
      */
     showContainerSelector: false,
-    /**
-     * @cfg {Bool} loadRecord
-     * wether the record to edit is given or must be loaded from proxy. (defaults to true)
-     * If set to true, the proxy's getRecord method will be called to load the record
-     */
-    loadRecord: true,
     /**
      * @cfg {Ext.data.Record} record
      * record in edit process.
@@ -206,9 +200,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     initRecord: function() {
         // note: in local mode we expect a valid record
         if (this.mode !== 'local') {
-            this.record = this.record ? this.record : new this.recordClass({}, 0);
             
-            if (this.loadRecord) {
+            if (this.record && this.record.id) {
                 this.loadRequest = this.recordProxy.loadRecord(this.record, {
                     scope: this,
                     success: function(record) {
@@ -216,10 +209,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         this.onRecordLoad();
                     }
                 });
-                return;
+            } else {
+                this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+                this.onRecordLoad();
             }
         }
-        this.onRecordLoad();
     },
     
     /**
@@ -329,30 +323,44 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             // merge changes from form into task record
             form.updateRecord(this.record);
             
-            this.recordProxy.saveRecord(this.record, {
-                scope: this,
-                success: function(record) {
-                    // override record with returned data
-                    this.record = record;
-                    this.fireEvent('update', this.record);
-                    
-                    // free 0 namespace if record got created
-                    this.window.rename(this.windowNamePrefix + this.record.id);
-
-                    if (closeWindow) {
-                        this.purgeListeners();
-                        this.window.close();
-                    } else {
-                        // update form with this new data
-                        form.loadRecord(this.record);
-                        this.action_delete.enable();
-                        saveMask.hide();
+            if (this.mode !== 'local') {
+                this.recordProxy.saveRecord(this.record, {
+                    scope: this,
+                    success: function(record) {
+                        // override record with returned data
+                        this.record = record;
+                        this.fireEvent('update', this.record);
+                        
+                        // free 0 namespace if record got created
+                        this.window.rename(this.windowNamePrefix + this.record.id);
+    
+                        if (closeWindow) {
+                            this.purgeListeners();
+                            this.window.close();
+                        } else {
+                            // update form with this new data
+                            form.loadRecord(this.record);
+                            this.action_delete.enable();
+                            saveMask.hide();
+                        }
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert(_('Failed'), String.format(_('Could not save {0}.'), this.i18nRecordName)); 
                     }
-                },
-                failure: function ( result, request) { 
-                    Ext.MessageBox.alert(_('Failed'), String.format(_('Could not save {0}.'), this.i18nRecordName)); 
+                });
+            } else {
+                this.fireEvent('update', this.record);
+                
+                if (closeWindow) {
+                    this.purgeListeners();
+                    this.window.close();
+                } else {
+                    // update form with this new data
+                    form.loadRecord(this.record);
+                    this.action_delete.enable();
+                    saveMask.hide();
                 }
-            });
+            }
         } else {
             Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
         }
