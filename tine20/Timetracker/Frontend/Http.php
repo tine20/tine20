@@ -28,7 +28,7 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
     public function getJsFilesToInclude()
     {
         return array(
-            'Timetracker/js/DurationField.js',
+            'Timetracker/js/DurationSpinner.js',
             'Timetracker/js/Models.js',
             'Timetracker/js/Timetracker.js',
             'Timetracker/js/MainScreen.js',
