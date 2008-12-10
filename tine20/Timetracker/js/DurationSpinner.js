@@ -27,11 +27,15 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     },
     
     setValue: function(value) {
-        if(typeof value != 'string'){
-            var miliseconds = value * 60000;
-            var time = new Date(miliseconds);
+        if(! value.match(/:/)){
+            var time = new Date(0);
+            var hours = Math.floor(value / 60);
+            var minutes = value - hours * 60;
             
-            value = Ext.util.Format.date(time,this.format);
+            time.setHours(hours);
+            time.setMinutes(minutes);
+            
+            value = Ext.util.Format.date(time, this.format);
         }
 
         Tine.Timetracker.DurationSpinner.superclass.setValue.call(this, value);
