@@ -56,6 +56,8 @@ class Tinebase_Connection
      */
     public function __construct($_url, $_username, $_password)
     {
+        set_include_path(dirname(dirname(__FILE__)) .'/Zend' . PATH_SEPARATOR . get_include_path());
+        
         $this->_config = array(
             'url'       => $_url,
             'username'  => $_username,
