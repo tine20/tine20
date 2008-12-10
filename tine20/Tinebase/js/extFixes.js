@@ -38,6 +38,19 @@ Ext.form.DateField.prototype.getValue = function(){
 };
 
 /**
+ * Times are allways in ISO normalized! form
+ */
+Ext.form.TimeField.prototype.setValue = function(value) {
+    value = this.formatDate(this.parseDate(value)) || this.formatDate(Date.parseDate(value, 'H:i:s'));
+    Ext.form.TimeField.superclass.setValue.call(this, value);
+}
+
+Ext.form.TimeField.prototype.getValue = function() {
+    var v = Ext.form.TimeField.superclass.getValue.call(this);
+    return Ext.util.Format.date(this.parseDate(v), 'H:i:s' ) || null;
+}
+
+/**
  * fix interpretation of ISO-8601  formatcode (Date.patterns.ISO8601Long) 
  * 
  * Browsers do not support timezones and also javascripts Date object has no 
