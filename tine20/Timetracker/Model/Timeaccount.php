@@ -81,5 +81,14 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'creation_time',
         'last_modified_time',
         'deleted_time'
-    );    
+    );
+    
+public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_filters['budget']  = new Zend_Filter_Empty(NULL);
+        $this->_filters['price']   = new Zend_Filter_Empty(NULL);
+        $this->_filters['is_open'] = new Zend_Filter_Empty(1);
+        
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
 }
