@@ -753,13 +753,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             $recordData['container_id'] = $recordData['container_id']['id'];
         }
         
+        // @deprecated we should not need that
+        /*
         // decode notes & tags
         if (isset($recordData['tags'])) {
             $recordData['tags'] = Zend_Json::decode($recordData['tags']);
         }
         if (isset($recordData['notes'])) {
             $recordData['notes'] = Zend_Json::decode($recordData['notes']);
-        }                         
+        } 
+        */                        
         
         $this->setFromArray($recordData);
     }
