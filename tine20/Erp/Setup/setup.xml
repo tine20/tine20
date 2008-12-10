@@ -50,17 +50,6 @@
                         <name>type</name>
                     </field>
                 </index>
-                <index>
-                    <name>erp_numbers::account_id--accounts::id</name>
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
-                        <field>id</field>
-                    </reference>
-                </index>
             </declaration>
         </table>
         <table>
