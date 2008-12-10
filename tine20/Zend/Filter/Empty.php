@@ -80,6 +80,6 @@ class Zend_Filter_Empty implements Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return empty($value) ? $this->_replacement : null;
+        return empty($value) ? $this->_replacement : $value;
     }
 }
