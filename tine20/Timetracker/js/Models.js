@@ -25,8 +25,9 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
     { name: 'description' },
     { name: 'is_billable' },
     { name: 'is_cleared' },
-    // tine 2.0 notes field
-    { name: 'notes'}
+    // tine 2.0 notes + tags
+    { name: 'notes'},
+    { name: 'tags' }
 ]);
 
 /**
@@ -67,8 +68,9 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'unitprice' },
     { name: 'unit' },
     { name: 'is_open' },
-    // tine 2.0 notes field
-    { name: 'notes'}
+    // tine 2.0 notes + tags
+    { name: 'notes'},
+    { name: 'tags' }
 ]);
 
 /**
