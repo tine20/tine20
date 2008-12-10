@@ -1403,7 +1403,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'role_rights' => 'role_rights::application_id--applications::id',
             'config' => 'config::application_id--applications::id',
             'config_user' => 'config_user::application_id--applications::id',
-            'config_customfields' => 'config_customfields::application_id--applications::id'
+            'config_customfields' => 'config_customfields::application_id--applications::id',
+            'timemachine_modlog' => 'timemachine_modlog::application_id--applications::id'
         );
         
         foreach($appIdTables as $table => $key) {
