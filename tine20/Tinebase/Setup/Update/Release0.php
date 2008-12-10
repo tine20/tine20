@@ -1399,7 +1399,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         // tables with application_id as foreign key
         $appIdTables = array(
             'application_tables' => 'application_tables::application_id--applications::id',
-            'container' => 'application_id',
+            'container' => 'container::application_id--applications::id',
             'role_rights' => 'role_rights::application_id--applications::id',
             'config' => 'config::application_id--applications::id',
             'config_user' => 'config_user::application_id--applications::id',
