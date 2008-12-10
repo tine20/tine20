@@ -309,7 +309,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $newContactData = array(
             'n_family'  => 'PHPUNIT',
             'container_id'     => $this->container->id,
-            'notes'     => Zend_Json::encode(array($note))
+            'notes'     => array($note)
         );        
 
         $newContact = $this->_backend->saveContact(Zend_Json::encode($newContactData));

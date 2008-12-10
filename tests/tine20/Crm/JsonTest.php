@@ -239,7 +239,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',            
         );
-        $leadData['notes'] = Zend_Json::encode(array($note));        
+        $leadData['notes'] = array($note);        
         
         $leadData['relations'] = array(
             array(
@@ -265,7 +265,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
                 //'related_record'         => $this->objects['contact']->toArray()
             )        
         );
-        $leadData['tags'] = Zend_Json::encode(array());
+        $leadData['tags'] = array();
         $leadData['products'] = array($this->objects['productLink']);
         
         $encodedData = Zend_Json::encode($leadData);
