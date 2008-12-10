@@ -258,6 +258,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         $tableKeys = $this->_db->describeTable($this->_tableName);
         $recordArray = array_intersect_key($recordArray, $tableKeys);
+
+        $this->_prepareData($recordArray);
         
         $this->_db->insert($this->_tableName, $recordArray);
         
@@ -304,6 +306,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $recordArray = $_record->toArray();
         $tableKeys = $this->_db->describeTable($this->_tableName);
         $recordArray = array_intersect_key($recordArray, $tableKeys);
+        
+        $this->_prepareData($recordArray);
                 
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id),
@@ -532,5 +536,23 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             $this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_recordId)
         );        
         $this->_db->delete($customFieldsTableName, $where);
+    }
+
+    /**
+     * prepare record data array
+     * - replace int and bool values by Zend_Db_Expr
+     *
+     * @param array &$_recordArray
+     * @return array with the prepared data
+     */
+    protected function _prepareData(&$_recordArray) {
+        
+        foreach ($_recordArray as $key => $value) {
+            if (is_bool($value)) {
+                $_recordArray[$key] = ($value) ? new Zend_Db_Expr('1') : new Zend_Db_Expr('0');
+            } elseif (is_int($value)) {
+                $_recordArray[$key] = new Zend_Db_Expr((string) $value);
+            }
+        }
     }
 }
