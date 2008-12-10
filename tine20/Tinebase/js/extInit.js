@@ -64,6 +64,7 @@ Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
 Date.patterns = {
     ISO8601Long:"Y-m-d H:i:s",
     ISO8601Short:"Y-m-d",
+    ISO8601Time:"H:i:s",
     ShortDate: "n/j/Y",
     LongDate: "l, F d, Y",
     FullDateTime: "l, F d, Y g:i:s A",
