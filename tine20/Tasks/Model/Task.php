@@ -118,13 +118,6 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             $data['container_id'] = $data['container_id']['id'];
         }
         
-        if (isset($data['tags']) && !is_array($data['tags'])) {
-            $data['tags'] = Zend_Json::decode($data['tags']);
-        }
-
-        if (isset($data['notes']) && !is_array($data['notes'])) {
-            $data['notes'] = Zend_Json::decode($data['notes']);
-        }
         $this->setFromArray($data);
     }
 }

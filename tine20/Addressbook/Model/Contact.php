@@ -207,15 +207,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     public function setFromJson($_data)
     {
         $contactData = Zend_Json::decode($_data);
-        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
-        
-        if (isset($contactData['tags']) && !is_array($contactData['tags'])) {
-            $contactData['tags'] = Zend_Json::decode($contactData['tags']);
-        }
-
-        if (isset($contactData['notes']) && !is_array($contactData['notes'])) {
-            $contactData['notes'] = Zend_Json::decode($contactData['notes']);
-        }
         
         if (isset($contactData['jpegphoto'])) {
             if ($contactData['jpegphoto'] != '') {

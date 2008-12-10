@@ -217,18 +217,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
             }
         }        
         
-        /********************** add tags ***********************/
-        
-        if (isset($decodedLead['tags'])) {
-            $decodedLead['tags'] = Zend_Json::decode($decodedLead['tags']);
-        }                             
-
-        /********************** add notes ***********************/
-        
-        if (isset($decodedLead['notes'])) {
-            $decodedLead['notes'] = Zend_Json::decode($decodedLead['notes']);
-        }                             
-        
         /********************** create record ***********************/
 
         //Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
