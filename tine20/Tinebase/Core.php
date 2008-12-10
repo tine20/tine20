@@ -82,6 +82,8 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
+        self::setupExceptionErrorHandler();
+        
         $server = NULL;
         
         /**************************** JSON API *****************************/
@@ -148,6 +150,22 @@ class Tinebase_Core
     }
     
     /******************************* SETUP ************************************/
+    
+    /**
+     * PHP < 5.3 don't throws exceptions for Catchable fatal errors per default, 
+     * so we convert them into exceptions manually
+     */
+    public static function setupExceptionErrorHandler()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0') === 1) {
+            set_error_handler('Tinebase_Core::exceptionErrorHandler');
+        }
+    }
+    
+    public static function exceptionErrorHandler($errno, $errstr, $errfile, $errline )
+    {
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    }
     
     /**
      * initializes the config
