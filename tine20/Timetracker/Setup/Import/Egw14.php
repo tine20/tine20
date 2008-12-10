@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
  *
- * @todo        parse description fields (striptags)
  * @todo        import more relevant record fields?
  */
 
@@ -45,7 +44,7 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var integer
      */
-    protected $_limit = 5;
+    protected $_limit = 0;
     
     /**
      * begin with this project id
@@ -176,7 +175,6 @@ class Timetracker_Setup_Import_Egw14
         if ($this->_limit > 0) {
             $select->limit($this->_limit);
         }
-        //echo $select->__toString();
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -285,7 +283,7 @@ class Timetracker_Setup_Import_Egw14
     }
     
     
-    /********************** create tine records ***********************/
+    /********************** create records ***********************/
     
     /**
      * create tine contract
@@ -299,8 +297,7 @@ class Timetracker_Setup_Import_Egw14
     {
         $contract = new Erp_Model_Contract(array(
             'title'                 => $_data['pm_title'],
-            'description'           => $_data['pm_description'],
-        //-- add modlog info?
+            'description'           => strip_tags($_data['pm_description']),
         ), TRUE);
         
         $this->_counters['contracts']++;
@@ -323,7 +320,7 @@ class Timetracker_Setup_Import_Egw14
         $timeaccount = new Timetracker_Model_Timeaccount(array(
             'title'                 => $_data['pm_title'],
             'number'                => $_data['pm_number'],
-            'description'           => $_data['pm_description'],
+            'description'           => strip_tags($_data['pm_description']),
             'budget'                => $_data['pm_planned_budget'],
             'is_open'               => ($_data['pm_status'] == 'archive') ? 0 : 1,
         /*
@@ -406,8 +403,6 @@ class Timetracker_Setup_Import_Egw14
             'type' => Tinebase_Model_Tag::TYPE_SHARED
         )), new Tinebase_Model_Pagination());
         
-        //print_r($tags->toArray());
-        
         if (count($tags) == 0) {
             $catData = unserialize($_catData['cat_data']);
             
@@ -418,10 +413,10 @@ class Timetracker_Setup_Import_Egw14
                 'description' => 'Imported timesheet category ' . $_catData['cat_name'],
                 'color' => (!empty($catData['color'])) ? $catData['color'] :  '#009B31',                        
             ));
-            //$sharedTag->contexts =
             
             $newTag = Tinebase_Tags::getInstance()->createTag($sharedTag);
             
+            // set rights
             $tagRights = new Tinebase_Model_TagRight(array(
                 'tag_id'        => $newTag->getId(),
                 'account_type'  => 'anyone',
@@ -431,14 +426,17 @@ class Timetracker_Setup_Import_Egw14
             ));
             Tinebase_Tags::getInstance()->setRights($tagRights);
             
+            // set context (Timetracker app)
             $tagContext = array(Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId());
             Tinebase_Tags::getInstance()->setContexts($tagContext, $newTag->getId());
             
-            // add to our cat_id => tag_id mapping array
-            return $newTag->getId();
+            $result = $newTag->getId();
         } else {
-            return $tags[0]->getId();
+            $result = $tags[0]->getId();
         }
+
+        // return new tag id
+        return $result;
     }
     
     /*************************** get from egw *************************/
@@ -453,14 +451,13 @@ class Timetracker_Setup_Import_Egw14
      */
     protected function _getProjectMembers($_projectId)
     {
-       // get ts custom fields   
+        // get members
         $select = $this->_db->select()
             ->from($this->_oldTablePrefix . 'pm_members')
             ->where($this->_db->quoteInto("pm_id = ?", $_projectId));
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
-        //print_r($queryResult);
 
         $result = array();
         foreach ($queryResult as $row) {
@@ -476,14 +473,13 @@ class Timetracker_Setup_Import_Egw14
      */
     protected function _getTimesheetCategories()
     {
-        // get ts custom fields   
+        // get categories
         $select = $this->_db->select()
             ->from($this->_oldTablePrefix . 'categories')
             ->where($this->_db->quoteInto("cat_appname = ?", 'timesheet'));
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
-        //print_r($queryResult);
 
         $result = array();
         foreach ($queryResult as $row) {
@@ -513,7 +509,7 @@ class Timetracker_Setup_Import_Egw14
                 array()
             )
             ->where($this->_db->quoteInto('links.link_id2 = ?', $_projectId));
-            //-- order by?
+            // order by?
                         
         if ($this->_limit > 0) {
             $select->limit($this->_limit);
@@ -524,7 +520,6 @@ class Timetracker_Setup_Import_Egw14
         
         echo "  Timesheets to import for project id $_projectId: " . count($queryResult) . "\n";
         
-        //$timesheets = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
         $timesheets = array();
         foreach ($queryResult as $row) {
 
@@ -533,7 +528,7 @@ class Timetracker_Setup_Import_Egw14
                 'account_id'            => Tinebase_Core::getUser()->getId(),
                 'start_date'            => date("Y-m-d", $row['ts_start']),
                 'duration'              => $row['ts_duration'],
-                'description'           => (!empty($row['ts_description'])) ? $row['ts_description'] : 'not set (imported)',
+                'description'           => (!empty($row['ts_description'])) ? strip_tags($row['ts_description']) : 'not set (imported)',
                 'is_cleared'            => 1,
                 //'timeaccount_id'        => ,
                 //'is_billable'           => ,
@@ -544,10 +539,7 @@ class Timetracker_Setup_Import_Egw14
             
             // create timesheet record
             $record = new Timetracker_Model_Timesheet(array_merge($data, $customFields), TRUE);
-
-            //print_r($record->toArray());
             
-            //$timesheets->addRecord($record);
             $timesheets[] = array(
                 'cat_id' => $row['cat_id'],
                 'record' => $record
@@ -571,7 +563,6 @@ class Timetracker_Setup_Import_Egw14
             ->where($this->_db->quoteInto("ts_id = ?", $_oldTsId));
 
         $stmt = $this->_db->query($select);
-        //echo $select->__toString();
         $queryResult = $stmt->fetchAll();
 
         $result = array();
