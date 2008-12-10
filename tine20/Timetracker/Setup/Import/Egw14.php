@@ -318,9 +318,9 @@ class Timetracker_Setup_Import_Egw14
     protected function _createTimeaccount($_data, $_contract)
     {
         $timeaccount = new Timetracker_Model_Timeaccount(array(
-            'title'                 => $_data['pm_title'],
+            'title'                 => utf8_encode($_data['pm_title']),
             'number'                => $_data['pm_number'],
-            'description'           => strip_tags($_data['pm_description']),
+            'description'           => strip_tags(utf8_encode($_data['pm_description'])),
             'budget'                => $_data['pm_planned_budget'],
             'is_open'               => ($_data['pm_status'] == 'archive') ? 0 : 1,
         /*
@@ -409,8 +409,8 @@ class Timetracker_Setup_Import_Egw14
             // create tag
             $sharedTag = new Tinebase_Model_Tag(array(
                 'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                'name'  => $_catData['cat_name'],
-                'description' => 'Imported timesheet category ' . $_catData['cat_name'],
+                'name'  => utf8_encode($_catData['cat_name']),
+                'description' => 'Imported timesheet category ' . utf8_encode($_catData['cat_name']),
                 'color' => (!empty($catData['color'])) ? $catData['color'] :  '#009B31',                        
             ));
             
@@ -497,7 +497,6 @@ class Timetracker_Setup_Import_Egw14
      * @param integer $_projectId
      * @return array with categories and Timetracker_Model_Timesheet records
      * 
-     * @todo add correct account id again?
      */
     protected function _getTimesheetsForProject($_projectId)
     {
@@ -524,13 +523,12 @@ class Timetracker_Setup_Import_Egw14
         foreach ($queryResult as $row) {
 
             $data = array(
-                //'account_id'            => $row['ts_owner'],
-                'account_id'            => Tinebase_Core::getUser()->getId(),
+                'account_id'            => $row['ts_owner'],
+                //'account_id'            => Tinebase_Core::getUser()->getId(),
                 'start_date'            => date("Y-m-d", $row['ts_start']),
                 'duration'              => $row['ts_duration'],
-                'description'           => (!empty($row['ts_description'])) ? strip_tags($row['ts_description']) : 'not set (imported)',
+                'description'           => (!empty($row['ts_description'])) ? strip_tags(utf8_encode($row['ts_description'])) : 'not set (imported)',
                 'is_cleared'            => 1,
-                //'timeaccount_id'        => ,
                 //'is_billable'           => ,
             );
             
@@ -569,7 +567,7 @@ class Timetracker_Setup_Import_Egw14
         foreach ($queryResult as $row) {
             //print_r($row);
             if (!empty($row['ts_extra_value'])) {
-                $result[$row['ts_extra_name']] = $row['ts_extra_value'];
+                $result[$row['ts_extra_name']] = strip_tags(utf8_encode($row['ts_extra_value']));
             }
         }        
         return $result;
