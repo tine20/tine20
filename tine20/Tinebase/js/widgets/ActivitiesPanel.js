@@ -584,14 +584,14 @@ Tine.widgets.activities.NotesFormField = Ext.extend(Ext.form.Field, {
         this.hide();
     },
     /**
-     * returns JSON encoded notes data of the current record
+     * returns notes data of the current record
      */
     getValue: function() {
         var value = [];
         this.recordNotesStore.each(function(note){
         	value.push(note.data);
         });
-        return Ext.util.JSON.encode(value);
+        return value;
     },
     /**
      * sets notes from an array of note data objects (not records)

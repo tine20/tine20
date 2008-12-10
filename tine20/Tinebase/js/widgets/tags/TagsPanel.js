@@ -506,7 +506,7 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
         //this.hide();
     },
     /**
-     * returns JSON encoded tags data of the current record
+     * returns tags data of the current record
      */
     getValue: function() {
         var value = [];
@@ -519,7 +519,7 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
                 value.push(tag.data);
             }
         });
-        return Ext.util.JSON.encode(value);
+        return value;
     },
     /**
      * sets tags from an array of tag data objects (not records)
