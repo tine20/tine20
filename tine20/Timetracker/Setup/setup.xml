@@ -40,11 +40,16 @@
                     <type>double</type>
                 </field>
                 <field>
-                    <name>unitprice</name>
+                    <name>budget_unit</name>
+                    <type>text</type>
+                    <length>128</length>
+                </field>
+                <field>
+                    <name>price</name>
                     <type>double</type>
                 </field>
                 <field>
-                    <name>unit</name>
+                    <name>price_unit</name>
                     <type>text</type>
                     <length>128</length>
                 </field>
@@ -89,6 +94,18 @@
                         <name>id</name>
                     </field>
                 </index>
+                <index>
+                    <name>title</name>
+                    <field>
+                        <name>title</name>
+                    </field>
+                </index>                
+                <index>
+                    <name>number</name>
+                    <field>
+                        <name>number</name>
+                    </field>
+                </index>                
                 <index>
                     <name>timeaccount::container_id--container::id</name>
                     <field>

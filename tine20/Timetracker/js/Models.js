@@ -65,8 +65,9 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'number' },
     { name: 'description' },
     { name: 'budget' },
-    { name: 'unitprice' },
-    { name: 'unit' },
+    { name: 'budget_unit' },
+    { name: 'price' },
+    { name: 'price_unit' },
     { name: 'is_open' },
     // tine 2.0 notes + tags
     { name: 'notes'},
