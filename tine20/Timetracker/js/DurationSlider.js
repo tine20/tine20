@@ -8,7 +8,9 @@
  * @version     $Id$
  *
  */
- 
+
+/** NOTE: THIS CODE IS NOT USED YET!!! IT WAS THE FIRST IMPLEMENTATION WITH A SLIDER **/
+
 Ext.ns('Tine.Timetracker');
 
 Tine.Timetracker.DurationField = Ext.extend(Ext.form.Field,  {
