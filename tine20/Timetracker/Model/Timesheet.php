@@ -74,5 +74,15 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'creation_time',
         'last_modified_time',
         'deleted_time'
-    );    
+    );
+    
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // strip time information from datetime string
+        $this->_filters['start_date'] = new Zend_Filter_PregReplace('/(\d{4}-\d{2}-\d{2}).*/', '$1');
+        // set start_time to NULL if not set
+        $this->_filters['start_time'] = new Zend_Filter_Empty(NULL);
+        
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
 }
