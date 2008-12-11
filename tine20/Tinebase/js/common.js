@@ -87,6 +87,21 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * Returns prettyfied minutes
+     * @param  {Number} minutes
+     * @return {String}
+     */
+    minutesRenderer: function(minutes){
+        var H = Math.floor(minutes / 60);
+        var i = minutes - H * 60;
+        
+        var Hs = String.format(Tine.Tinebase.tranlation.ngettext('{0} hour', '{0} hours', H), H);
+        var is = String.format(Tine.Tinebase.tranlation.ngettext('{0} minute', '{0} minutes', i), i);
+        
+        return '<div style="width: 100%; text-align: right;">' + ( H ? Hs + ', ' + is : is ) + '</div>';
+    },
+    
+    /**
      * Returns the formated username
      * 
      * @param {object} account object 

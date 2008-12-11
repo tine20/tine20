@@ -97,9 +97,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         },{
             id: 'duration',
             header: this.app.i18n._("Duration"),
-            width: 100,
+            width: 150,
             sortable: true,
-            dataIndex: 'duration'
+            dataIndex: 'duration',
+            renderer: Tine.Tinebase.common.minutesRenderer
         }];
     }  
 });
