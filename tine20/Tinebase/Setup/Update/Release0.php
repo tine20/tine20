@@ -1563,7 +1563,54 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->dropForeignKey('container_acl', 'container_id');
         $this->_backend->addForeignKey('container_acl', $declaration);
         
-        
         $this->setApplicationVersion('Tinebase', '0.18');
+    }
+
+    /**
+     * update to 0.19
+     * - add 'shared contracts' container for erp
+     */
+    function update_18()
+    {
+        try {
+            $application = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
+        } catch (Tinebase_Exception_NotFound $enf) {
+            // timetracker not installed
+            $this->setApplicationVersion('Tinebase', '0.19');
+            return TRUE;
+        }
+
+        try {
+            $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
+        } catch (Tinebase_Exception_NotFound $enf) {            
+            // create it if it doesn't exists
+            $newContainer = new Tinebase_Model_Container(array(
+                'name'              => 'Shared Contracts',
+                'type'              => Tinebase_Model_Container::TYPE_SHARED,
+                'backend'           => 'Sql',
+                'application_id'    => $application->getId() 
+            ));        
+            $sharedContracts = Tinebase_Container::getInstance()->addContainer($newContainer);
+        }            
+
+        // get admin and user groups
+        $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase')
+        );
+        $adminGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default Admin Group']);
+        $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default User Group']);
+        
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $userGroup, array(
+            Tinebase_Model_Container::GRANT_READ,
+            Tinebase_Model_Container::GRANT_EDIT
+        ), TRUE);
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $adminGroup, array(
+            Tinebase_Model_Container::GRANT_ADD,
+            Tinebase_Model_Container::GRANT_READ,
+            Tinebase_Model_Container::GRANT_EDIT,
+            Tinebase_Model_Container::GRANT_ADMIN
+        ), TRUE);
+        
+        $this->setApplicationVersion('Tinebase', '0.19');
     }
 }
