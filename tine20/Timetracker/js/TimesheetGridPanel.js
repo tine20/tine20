@@ -19,7 +19,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     recordClass: Tine.Timetracker.Model.Timesheet,
     
     // grid specific
-    defaultSortInfo: {field: 'creation_time', dir: 'DESC'},
+    defaultSortInfo: {field: 'start_date', dir: 'DESC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'description'
@@ -29,6 +29,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.recordProxy = Tine.Timetracker.timesheetBackend;
         
         //this.actionToolbarItems = this.getToolbarItems();
+        this.actionToolbarItems = [{
+            text: this.app.i18n._('Duplicate'),
+            iconCls: 'action_duplicate'
+        }];
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
