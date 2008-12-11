@@ -351,11 +351,10 @@ class Timetracker_Setup_Import_Egw14
         $members = $this->_getProjectMembers($_data['pm_id']);
         echo "    Got " . count($members) . " members for that project.\n";
         foreach ($members as $userId) {
-            // @todo check if user still exists
+            // @todo check if user still exists?
             $timeaccountContainer = Tinebase_Container::getInstance()->getContainerById($timeaccount->container_id);
             Tinebase_Container::getInstance()->addGrants($timeaccountContainer, 'user', $userId, array(
-                Tinebase_Model_Container::GRANT_READ,
-                Tinebase_Model_Container::GRANT_EDIT
+                Tinebase_Model_Container::GRANT_READ
             ), TRUE);            
         }
         
