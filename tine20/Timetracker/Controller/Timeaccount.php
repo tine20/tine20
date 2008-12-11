@@ -81,6 +81,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
         
         // add all grants to container for creator
         Tinebase_Container::getInstance()->addGrants($container, 'user', $this->_currentAccount->getId(), array(
+            Tinebase_Model_Container::GRANT_ADD,
             Tinebase_Model_Container::GRANT_READ,
             Tinebase_Model_Container::GRANT_EDIT,
             Tinebase_Model_Container::GRANT_ADMIN
