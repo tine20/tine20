@@ -228,8 +228,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (isset($contactData['container_id']) && is_array($contactData['container_id'])) {
             $contactData['container_id'] = $contactData['container_id']['id'];
         }        
-
-        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
+        
         $this->setFromArray($contactData);
         return;
     }

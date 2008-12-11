@@ -68,7 +68,7 @@ class Addressbook_Controller extends Tinebase_Application_Controller_Abstract im
      */
     public function handleEvents(Tinebase_Events_Abstract $_eventObject)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        Tinebase_Core::getLogger();
         
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
@@ -84,7 +84,7 @@ class Addressbook_Controller extends Tinebase_Application_Controller_Abstract im
      * creates the initial folder for new accounts
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
+     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_account)
     {

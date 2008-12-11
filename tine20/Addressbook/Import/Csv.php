@@ -69,7 +69,7 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
      */
     private function __construct ()
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -148,10 +148,10 @@ class Addressbook_Import_Csv implements Addressbook_Import_Interface
     {
         if ($_containerId === NULL) {
             // get personal container
-            $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-                Zend_Registry::get('currentAccount'), 
+            $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer( 
+                Tinebase_Core::getUser(),
                 'Addressbook', 
-                Zend_Registry::get('currentAccount'), 
+                Tinebase_Core::getUser(), 
                 Tinebase_Model_Container::GRANT_EDIT
             );
             $containerId = $personalContainer[0]->getId();

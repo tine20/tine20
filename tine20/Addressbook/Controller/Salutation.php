@@ -55,7 +55,7 @@ class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_
      */
     private function __construct() {
         $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SALUTATION);
-        $this->_currentAccount = Zend_Registry::get('currentAccount');
+        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**

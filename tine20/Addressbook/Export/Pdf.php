@@ -28,9 +28,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
      */
     public function generateContactPdf(Addressbook_Model_Contact $_contact)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_contact->toArray(), true));
-        
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
         $translate = Tinebase_Translation::getTranslation('Addressbook');
                  
         $contactFields = array (
@@ -133,8 +131,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
             $contactPhoto = Zend_Pdf_Image::imageWithPath($tmpPath);
             unlink($tmpPath);
         } catch (Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' image not found or no contact image set');
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
+            Tinebase_Core::getLogger();
             //$contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');
             $contactPhoto = NULL;
         }
@@ -163,9 +160,9 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
                         $keys = array ( $valueFields );
                     }
                     foreach ( $keys as $key ) {
-                        if ( $_contact->$key instanceof Zend_Date ) {
-                            $content[] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), 
-                                Zend_Registry::get('locale'));
+                        if ( $_contact->$key instanceof Zend_Date ) { 
+                            $content[] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')),
+                                Tinebase_Core::get('locale'));
                         } elseif (!empty($_contact->$key) ) {
                             if (preg_match("/countryname/", $key)) {
                                 $content[] = $locale->getCountryTranslation($_contact->$key);

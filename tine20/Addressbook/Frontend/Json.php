@@ -60,8 +60,6 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $filter = new Addressbook_Model_ContactFilter(Zend_Json::decode($filter));
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        //Zend_Registry::get('logger')->debug(print_r($decodedFilter,true));
-        
         $contacts = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
         //$contacts->setTimezone($this->_userTimezone);
         //$contacts->convertDates = true;
@@ -144,12 +142,11 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     protected function _contactToJson($_contact)
     {   
-        
-        $_contact->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_contact->setTimezone(Tinebase_Core::get('userTimeZone'));
         $result = $_contact->toArray();
         
         $result['container_id'] = Tinebase_Container::getInstance()->getContainerById($_contact->container_id)->toArray();
-        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_contact->container_id)->toArray();
+        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_contact->container_id)->toArray();
         
         $result['jpegphoto'] = $this->_getImageLink($_contact);
         
@@ -167,16 +164,14 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     protected function _multipleContactsToJson(Tinebase_Record_RecordSet $_contacts)
     {        
         // get acls for contacts
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_contacts, Zend_Registry::get('currentAccount'));
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_contacts, Tinebase_Core::get('currentAccount'));
         
-        $_contacts->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_contacts->setTimezone(Tinebase_Core::get('userTimeZone'));
         $result = $_contacts->toArray();
         
         foreach ($result as &$contact) {
             $contact['jpegphoto'] = $this->_getImageLink($contact);
         }
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }
