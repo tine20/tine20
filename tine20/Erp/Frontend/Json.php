@@ -51,10 +51,11 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $sharedContainerId = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->getId(); 
+        $sharedContainer = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', 'shared')->toArray();
+        $sharedContainer['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $sharedContainer['id'])->toArray();
         
         return array(
-            'containerId' => $sharedContainerId
+            'DefaultContainer' => $sharedContainer
         );
     }
     
