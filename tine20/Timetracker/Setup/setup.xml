@@ -209,17 +209,6 @@
                     </field>
                 </index>                
                 <index>
-                    <name>timesheet::account_id--accounts::id</name>
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-                <index>
                     <name>timesheet::timeaccount_id--timeaccount::id</name>
                     <field>
                         <name>timeaccount_id</name>
