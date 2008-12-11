@@ -249,18 +249,19 @@ class Tinebase_Container
      *
      * used to get a list of all containers accesssible by the current user
      * 
-     * @param   int $_accountId
+     * @param   int    $_accountId
      * @param   string $_application the application name
-     * @param   int $_grant the required grant
+     * @param   int    $_grant the required grant
+     * @param   bool   $_onlyIds return only ids
      * @return  Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getContainerByACL($_accountId, $_application, $_grant, $_emptyOK = FALSE)
+    public function getContainerByACL($_accountId, $_application, $_grant, $_onlyIds = FALSE)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
         $cache = Zend_Registry::get('cache');
-        $cacheId = 'getContainerByACL' . $accountId . $_application . $_grant;
+        $cacheId = 'getContainerByACL' . $accountId . $_application . $_grant . $_onlyIds;
         $result = $cache->load($cacheId);
         
         if (!$result) {
@@ -282,7 +283,7 @@ class Tinebase_Container
             $colAccountType = $this->_db->quoteIdentifier('account_type');
             
             $select = $this->_db->select()
-                ->from(SQL_TABLE_PREFIX . 'container')
+                ->from(SQL_TABLE_PREFIX . 'container', $_onlyIds ? 'id' : '*')
                 ->join(
                     SQL_TABLE_PREFIX . 'container_acl',
                     $tableContainer . '.' . $colId . ' = ' . $tableContainerAcl . '.' . $colContainerId , 
@@ -298,25 +299,6 @@ class Tinebase_Container
                 
                 ->group(SQL_TABLE_PREFIX . 'container.id')
                 ->order(SQL_TABLE_PREFIX . 'container.name');
-           /* $select = $db->select()
-                ->from(SQL_TABLE_PREFIX . 'container')
-                ->join(
-                    SQL_TABLE_PREFIX . 'container_acl',
-                    SQL_TABLE_PREFIX . 'container.id = ' . SQL_TABLE_PREFIX . 'container_acl.container_id', 
-                    array()
-                )
-                ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $applicationId)
-                ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
-                
-                # beware of the extra parenthesis of the next 3 rows
-                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
-                
-                ->group(SQL_TABLE_PREFIX . 'container.id')
-                ->order(SQL_TABLE_PREFIX . 'container.name');
-    */
-            //error_log("getContainer:: " . $select->__toString());
     
             $stmt = $this->_db->query($select);
             
@@ -337,8 +319,16 @@ class Tinebase_Container
                     Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
                 }
             }
-    
-            $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
+            
+            if ($_onlyIds) {
+                $result = array();
+                //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . print_r($rows, true));
+                foreach ($rows as $row) {
+                    $result[] = $row['id'];
+                }
+            } else {
+                $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
+            }
             
             // save result and tag it with 'container'
             $cache->save($result, $cacheId, array('container'));

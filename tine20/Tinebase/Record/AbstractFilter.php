@@ -236,29 +236,25 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
         $cc = Tinebase_Container::getInstance();
         switch($this->containerType) {
             case 'all':
-                $containers = $cc->getContainerByACL($currentAccount, $this->_application, Tinebase_Model_Container::GRANT_READ);
+                $container = $cc->getContainerByACL($currentAccount, $this->_application, Tinebase_Model_Container::GRANT_READ, TRUE);
                 break;
             case 'personal':
-                $containers = $currentAccount->getPersonalContainer($this->_application, $this->owner, Tinebase_Model_Container::GRANT_READ);
+                $container = $currentAccount->getPersonalContainer($this->_application, $this->owner, Tinebase_Model_Container::GRANT_READ)->getId();
                 break;
             case 'shared':
-                $containers = $currentAccount->getSharedContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
+                $container = $currentAccount->getSharedContainer($this->_application, Tinebase_Model_Container::GRANT_READ)->getId();
                 break;
             case 'otherUsers':
-                $containers = $currentAccount->getOtherUsersContainer($this->_application, Tinebase_Model_Container::GRANT_READ);
+                $container = $currentAccount->getOtherUsersContainer($this->_application, Tinebase_Model_Container::GRANT_READ)->getId();
                 break;
             case 'internal':
-                $containers = array(Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $this->_application));
+                $container = array(Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $this->_application)->getId());
                 break;    
             case 'singleContainer':
                 $this->_properties['container'] = array($this->_properties['container']);
                 return;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('ContainerType not supported.');
-        }
-        $container = array();
-        foreach ($containers as $singleContainer) {
-            $container[] = $singleContainer->getId();
         }
         
         $this->_properties['container'] = $container;
