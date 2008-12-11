@@ -148,7 +148,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         })
                     ]
                 }]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
+            }, new Tine.widgets.customfields.CustomfieldsPanel ({
+                record: this.record
+            }), new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
