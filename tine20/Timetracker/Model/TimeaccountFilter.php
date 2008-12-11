@@ -37,6 +37,8 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
     {
         $this->_validators = array_merge($this->_validators, array(
             'description'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
+            'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
         ));
         
         // define query fields
@@ -47,4 +49,23 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }    
+
+   /**
+     * appends current filters to a given select object
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendFilterSql($_select)
+    {
+        $db = Tinebase_Core::getDb();
+        
+        if(isset($_this->showClosed) && $_this->showClosed){
+            // nothing to filter
+        } else {
+            $_select->where($db->quoteIdentifier('is_open') . ' = TRUE');
+        }
+                
+        parent::appendFilterSql($_select);
+    }
 }
