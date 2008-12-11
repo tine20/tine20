@@ -73,6 +73,16 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * returns name of record class this recordSet contains
+     * 
+     * @returns string
+     */
+    public function getRecordClassName()
+    {
+        return $this->_recordClass;
+    }
+    
+    /**
      * add Tinebase_Record_Interface like object to internal list
      *
      * @param Tinebase_Record_Interface $_record
