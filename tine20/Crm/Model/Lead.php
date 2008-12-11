@@ -97,17 +97,17 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     /**
      * overwrite constructor to add more filters
      *
-     * @param unknown_type $_data
-     * @param unknown_type $_bypassFilters
-     * @param unknown_type $_convertDates
-     * @return unknown
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         // set turnover to 0 if not set
         $this->_filters['turnover'] = new Zend_Filter_Empty(0);
         
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     
     /**
