@@ -94,7 +94,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
      */
     public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
     {
-        if (!$this->checkRight(Timetracker_Acl_Rights::VIEW_TIMESHEETS)) {
+        if (!$this->checkRight(Timetracker_Acl_Rights::VIEW_TIMESHEETS, FALSE)) {
             $_filter->account_id = array(
                 'value' => $this->_currentAccount->getId(),
                 'operator' => 'equals'
