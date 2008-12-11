@@ -74,7 +74,23 @@ class Voipmanager_Model_Snom_Location extends Tinebase_Record_Abstract
         'date_us_format'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'time_24_format'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0)
     );
-
+    
+    /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set default value if field is empty
+        $this->_filters['admin_mode'] = new Zend_Filter_Empty('false');
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
     /**
      * converts a int, string or Voipmanager_Model_Snom_Location to an location id
      *
