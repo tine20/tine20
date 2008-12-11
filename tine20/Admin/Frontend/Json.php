@@ -59,7 +59,6 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         );
         
         // debug params
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' function params: '. $from . ', ' . $to . ', ... ');
         
         $fromDateObject = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
         $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
@@ -80,7 +79,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             } catch (Tinebase_Exception_NotFound $e) {
                 // account not found
                 // do nothing so far
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' account ' . $value['account_id'] .' not found');
+                Tinebase_Core::getLogger();
             }
         }
         
@@ -167,7 +166,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         if (!empty($userId)) {
             $user = Tinebase_User::getInstance()->getFullUserById($userId);
-            $user->setTimezone(Zend_Registry::get('userTimeZone'));
+            $user->setTimezone(Tinebase_Core::get('userTimeZone'));
             $userArray = $user->toArray();
             
             // add primary group to account for the group selection combo box
@@ -536,7 +535,6 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $decodedTagData = Zend_Json::decode($tagData);
         
-        //Zend_Registry::get('logger')->debug(print_r($decodedTagData,true));
         // unset if empty
         if (empty($decodedTagData['id'])) {
             unset($decodedTagData['id']);
@@ -544,7 +542,6 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         $tag = new Tinebase_Model_FullTag($decodedTagData);
         $tag->rights = new Tinebase_Record_RecordSet('Tinebase_Model_TagRight', $decodedTagData['rights']);
-        //Zend_Registry::get('logger')->debug(print_r($tag->toArray(),true));
         
         if ( empty($tag->id) ) {
             $tag = Admin_Controller_Tags::getInstance()->create($tag);
@@ -629,9 +626,6 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $decodedRoleData = Zend_Json::decode($roleData);
         $decodedRoleMembers = Zend_Json::decode($roleMembers);
         $decodedRoleRights = Zend_Json::decode($roleRights);
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleData, true));
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleMembers, true));
         
         // unset if empty
         if (empty($decodedRoleData['id'])) {
