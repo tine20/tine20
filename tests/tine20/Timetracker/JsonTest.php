@@ -340,7 +340,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'query', 
+                'field' => 'description', 
                 'operator' => 'contains', 
                 'value' => 'blabla'
             ),     

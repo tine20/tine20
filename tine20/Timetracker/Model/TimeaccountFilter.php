@@ -36,6 +36,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_validators = array_merge($this->_validators, array(
+            'description'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         ));
         
         // define query fields
