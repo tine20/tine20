@@ -93,7 +93,7 @@ class Tasks_Setup_MigrateFromTine14
     {
         $tasksBackend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
 
-        $db = Zend_Registry::get('dbAdapter');
+        $db = Tinebase_Core::getDb();
         $stmt = $db->query($db->select()
             ->from('egw_infolog')
         );
@@ -129,8 +129,8 @@ class Tasks_Setup_MigrateFromTine14
                 $Task20->setFromArray($Task);
                 
             } catch (Tinebase_Exception_Record_Validation $e) {
-                $validation_errors = $Task20->getValidationErrors();
-                Zend_Registry::get('logger')->debug( 
+                $validation_errors = $Task20->getValidationErrors(); 
+                Tinebase_Core::getLogger()->debug(
                     'Could not migrate Infolog with info_id ' . $infolog->info_id . "\n" . 
                     'Tasks_Setup_MigrateFromTine14::infolog2Task: ' . $e->getMessage() . "\n" .
                     "Tasks_Model_Task::validation_errors: \n" .
@@ -196,7 +196,7 @@ class Tasks_Setup_MigrateFromTine14
             $class = $classTable->fetchRow($classTable->getAdapter()->quoteInto('class LIKE ?', $oldclass));
             if (!$class) {
                 $identifier = $classTable->insert(array(
-                    'created_by'    => Zend_Registry::get('currentAccount')->getId(),
+                    'created_by'    => Tinebase_Core::getUser()->getId(),
                     'creation_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
                     'class'         => $oldclass
                 ));
@@ -226,7 +226,7 @@ class Tasks_Setup_MigrateFromTine14
             $status = $statusTable->fetchRow($statusTable->getAdapter()->quoteInto('status LIKE ?', $oldstatus));
             if (!$status) {
                 $identifier = $statusTable->insert(array(
-                    'created_by'    => Zend_Registry::get('currentAccount')->getId(),
+                    'created_by'    => Tinebase_Core::getUser()->getId(),
                     'creation_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
                     'status'         => $oldstatus
                 ));

@@ -66,9 +66,9 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         }
         
         try {
-            $this->_currentAccount = Zend_Registry::get('currentAccount');
+            $this->_currentAccount = Tinebase_Core::getUser();
         } catch (Zend_Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'no account available: ' . $e->getMessage());
+            Tinebase_Core::getLogger();
         }
         
         // set identifier with table name because we join tables in _getSelect()

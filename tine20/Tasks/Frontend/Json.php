@@ -40,7 +40,7 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function __construct()
     {
-        $this->_userTimezone = Zend_Registry::get('userTimeZone');
+        $this->_userTimezone = Tinebase_Core::get('userTimeZone');
         $this->_serverTimezone = date_default_timezone_get();
     }
 
@@ -55,7 +55,6 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $filter = new Tasks_Model_TaskFilter(Zend_Json::decode($filter));
         $pagination = new Tasks_Model_Pagination(Zend_Json::decode($paging));
-        //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
         $tasks = Tasks_Controller_Task::getInstance()->search($filter, $pagination);
 
@@ -104,7 +103,6 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $inTask = new Tasks_Model_Task();
         $inTask->setFromJsonInUsersTimezone($recordData);
-        //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
         $outTask = strlen($inTask->getId()) > 10 ? 
             Tasks_Controller_Task::getInstance()->update($inTask): 
@@ -126,7 +124,7 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $taskArray = $_task->toArray();
         
         $taskArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray();
-        $taskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_task->container_id)->toArray();
+        $taskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_task->container_id)->toArray();
         
         $taskArray['organizer'] = $taskArray['organizer'] ? Tinebase_User::getInstance()->getUserById($taskArray['organizer'])->toArray() : $taskArray['organizer'];
         return $taskArray;
@@ -141,7 +139,7 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     protected function _multipleTasksToJson(Tinebase_Record_RecordSet $_tasks)
     {        
         // get acls for tasks
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_tasks, Zend_Registry::get('currentAccount'));
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_tasks, Tinebase_Core::getUser());
         $_tasks->setTimezone($this->_userTimezone);
         $_tasks->convertDates = true;
         
@@ -202,7 +200,7 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         );
         
         foreach ($registryData as &$data) {
-            $data->setTimezone(Zend_Registry::get('userTimeZone'));
+            $data->setTimezone(Tinebase_Core::get('userTimeZone'));
             $data->translate();
             $data = $data->toArray();
         }

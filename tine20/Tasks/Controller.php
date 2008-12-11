@@ -67,7 +67,7 @@ class Tasks_Controller extends Tinebase_Application_Controller_Abstract implemen
      */
     public function getDefaultContainer($_referingApplication = 'tasks')
     {
-        $taskConfig = Zend_Registry::get('configFile')->tasks;
+        $taskConfig = Tinebase_Core::getConfig()->tasks;
         $configString = 'defaultcontainer_' . ( empty($_referingApplication) ? 'tasks' : $_referingApplication );
         
         if (isset($taskConfig->$configString)) {
@@ -117,7 +117,7 @@ class Tasks_Controller extends Tinebase_Application_Controller_Abstract implemen
      */
     public function handleEvents(Tinebase_Events_Abstract $_eventObject)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        Tinebase_Core::getLogger();
         
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
