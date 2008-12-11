@@ -68,26 +68,32 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             header: this.app.i18n._("Date"),
             width: 100,
             sortable: true,
-            dataIndex: 'start_date'
+            dataIndex: 'start_date',
+            renderer: Tine.Tinebase.common.dateRenderer
         }, {
             id: 'start_time',
             hidden: true,
             header: this.app.i18n._("Start time"),
             width: 100,
             sortable: true,
-            dataIndex: 'start_time'
+            dataIndex: 'start_time',
+            renderer: Tine.Tinebase.common.timeRenderer
         }, {
             id: 'timeaccount_id',
             header: this.app.i18n._("Time account"),
             width: 800,
             sortable: true,
-            dataIndex: 'timeaccount_id'
+            dataIndex: 'timeaccount_id',
+            renderer: function(timeaccount) {
+                return new Tine.Timetracker.Model.Timeaccount(timeaccount).getTitle();
+            }
         },{
             id: 'account_id',
             header: this.app.i18n._("Account"),
-            width: 100,
+            width: 200,
             sortable: true,
-            dataIndex: 'account_id'
+            dataIndex: 'account_id',
+            renderer: Tine.Tinebase.common.usernameRenderer
         },{
             id: 'duration',
             header: this.app.i18n._("Duration"),
