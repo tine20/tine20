@@ -189,6 +189,31 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
     }
     
     /**
+     * set filter value
+     *
+     * @param string $name
+     * @param string|array $value
+     * 
+     * @todo write test
+     */
+    public function __set($name, $value)
+    {
+        if (is_array($value) && isset($value['value']) && array_key_exists($name, $this->_validators)) {            
+            if (isset($value['operator'])) {
+                $this->_operators[$name] = $value['operator'];
+            }
+            $this->_options[$name] = array_diff_key($value, array(
+                'field'    => NULL, 
+                'operator' => NULL,
+                'value'    => NULL
+            ));
+            $value = $value['value'];
+        }
+                        
+        parent::__set($name, $value);
+    }
+    
+    /**
      * Resolves containers from selected nodes
      * 
      * @throws Tinebase_Exception_UnexpectedValue
