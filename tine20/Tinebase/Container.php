@@ -1090,16 +1090,20 @@ class Tinebase_Container
      * @todo memcached can't use tags -> clear complete cache or don't use tags in caching?
      */
     protected function _removeFromCache($_containerId) 
-    {
-        $accountId          = Tinebase_Model_User::convertUserIdToInt(Zend_Registry::get('currentAccount'));
-        
+    {        
         // remove container from cache
         if (Tinebase_Core::getConfig()->caching) {
             $cache = Tinebase_Core::get(Tinebase_Core::CACHE);        
             if (ucfirst(Tinebase_Core::getConfig()->caching->backend) !== 'Memcached') {
+                try {
+                    $accountId          = Tinebase_Model_User::convertUserIdToInt(Tinebase_Core::getUser());
+                    $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
+                    $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
+                } catch (Zend_Exception $ze) {
+                    // no user account set
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set.');
+                }
                 $cache->remove('getContainerById' . $_containerId);
-                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
-                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
                 $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
             } else {
                 $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
