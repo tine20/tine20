@@ -257,10 +257,13 @@ class Timetracker_Setup_Import_Egw14
             foreach ($timesheets as $timesheet) {
                 // scan timesheets and add additional timeaccounts for special categories
                 if (isset($this->_newTimeaccountCategories[$timesheet['cat_id']])) {
+                    $catName = $this->_newTimeaccountCategories[$timesheet['cat_id']];
+                    
                     // create new timeaccount
+                    echo "    create new timeaccount for category: " . $catName . "\n";
                     if (!isset($timeaccounts[$timesheet['cat_id']])) {
                         $data = $_data;
-                        $data['pm_title'] .= ' ' . $this->_newTimeaccountCategories[$timesheet['cat_id']];
+                        $data['pm_title'] .= ' [' . $catName . ']';
                         $timeaccounts[$timesheet['cat_id']] = $this->_createTimeaccount($_data, $contract);
                     } 
                     $this->_createTimesheet($timesheet['record'], $timeaccounts[$timesheet['cat_id']]->getId());
