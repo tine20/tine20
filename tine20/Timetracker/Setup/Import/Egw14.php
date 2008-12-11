@@ -297,7 +297,7 @@ class Timetracker_Setup_Import_Egw14
     {
         $contract = new Erp_Model_Contract(array(
             'title'                 => $_data['pm_title'],
-            'description'           => strip_tags($_data['pm_description']),
+            'description'           => $this->_convertDescription($_data['pm_description']),
         ), TRUE);
         
         $this->_counters['contracts']++;
@@ -320,7 +320,7 @@ class Timetracker_Setup_Import_Egw14
         $timeaccount = new Timetracker_Model_Timeaccount(array(
             'title'                 => utf8_encode($_data['pm_title']),
             'number'                => $_data['pm_number'],
-            'description'           => strip_tags(utf8_encode($_data['pm_description'])),
+            'description'           => $this->_convertDescription($_data['pm_description']),
             'budget'                => $_data['pm_planned_budget'],
             'is_open'               => ($_data['pm_status'] == 'archive') ? 0 : 1,
         /*
@@ -528,7 +528,7 @@ class Timetracker_Setup_Import_Egw14
                 //'account_id'            => Tinebase_Core::getUser()->getId(),
                 'start_date'            => date("Y-m-d", $row['ts_start']),
                 'duration'              => $row['ts_duration'],
-                'description'           => (!empty($row['ts_description'])) ? strip_tags(utf8_encode($row['ts_description'])) : 'not set (imported)',
+                'description'           => (!empty($row['ts_description'])) ? $this->_convertDescription($row['ts_description']) : 'not set (imported)',
                 'is_cleared'            => 1,
                 //'is_billable'           => ,
             );
@@ -568,9 +568,24 @@ class Timetracker_Setup_Import_Egw14
         foreach ($queryResult as $row) {
             //print_r($row);
             if (!empty($row['ts_extra_value'])) {
-                $result[$row['ts_extra_name']] = strip_tags(utf8_encode($row['ts_extra_value']));
+                $result[$row['ts_extra_name']] = $this->_convertDescription($row['ts_extra_value']);
             }
         }        
+        return $result;
+    }
+    
+    /***************** helper funcs ***********************/
+    
+    /**
+     * convert to utf8 / decode htmlentities / ...
+     *
+     * @param string $_description
+     * @return string
+     */
+    protected function _convertDescription($_description)
+    {
+        $result = strip_tags(utf8_encode(html_entity_decode($_description)));
+        
         return $result;
     }
 }
