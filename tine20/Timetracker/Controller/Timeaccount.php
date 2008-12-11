@@ -106,4 +106,16 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
         // delete other linked objects
         parent::_deleteLinkedObjects($_record);
     }
+
+    /**
+     * Removes containers where current user has no access to
+     * 
+     * @param Tinebase_Record_Interface $_filter
+     * @return void
+     * 
+     * @todo add functionality again, we have to many containers in this app
+     */
+    protected function _checkContainerACL($_filter)
+    {
+    }     
 }
