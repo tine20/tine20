@@ -191,14 +191,15 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * 
      * @param string $_application the application name
      * @param int $_right the required right
+     * @param   bool   $_onlyIds return only ids
      * @return Tinebase_Record_RecordSet
      * @todo write test for that
      */
-    public function getContainerByACL($_application, $_right)
+    public function getContainerByACL($_application, $_right, $_onlyIds = FALSE)
     {
         $container = Tinebase_Container::getInstance();
         
-        $result = $container->getContainerByACL($this->accountId, $_application, $_right);
+        $result = $container->getContainerByACL($this->accountId, $_application, $_right, $_onlyIds);
         
         return $result;
     }
