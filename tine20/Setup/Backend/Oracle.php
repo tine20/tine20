@@ -25,7 +25,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
    
     public function __construct()
     {
-        $this->_config = Zend_Registry::get('configFile');
+        $this->_config = Tinebase_Core::getConfig();
     }
     
     /**
@@ -116,7 +116,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function tableExists($_tableName)
     {
-         $select = Zend_Registry::get('dbAdapter')->select()
+         $select = Tinebase_core::getDb()->select()
           ->from('information_schema.tables')
           ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
           ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
@@ -133,7 +133,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     public function getExistingSchema($_tableName)
     {
         // Get common table information
-         $select = Zend_Registry::get('dbAdapter')->select()
+         $select = Tinebase_Core::getDb()->select()
           ->from('information_schema.tables')
           ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
           ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
@@ -145,7 +145,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         //$existingTable = new Setup_Backend_Schema_Table($tableInfo);
         $existingTable = Setup_Backend_Schema_Table_Factory::factory('Mysql', $tableInfo);
        // get field informations
-        $select = Zend_Registry::get('dbAdapter')->select()
+        $select = Tinebase_Core::getDb()->select()
           ->from('information_schema.COLUMNS')
           ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName);
 
@@ -160,7 +160,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 $index = Setup_Backend_Schema_Index_Factory::factory('Mysql', $tableColumn);
                         
                 // get foreign keys
-                $select = Zend_Registry::get('dbAdapter')->select()
+                $select = Tinebase_Core::getDb()->select()
                   ->from('information_schema.KEY_COLUMN_USAGE')
                   ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName)
                   ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
@@ -444,7 +444,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                     if($_field->default === NULL) {
                         $buffer[] = "DEFAULT NULL" ;
                     } else {
-                        $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("DEFAULT ?", $_field->default) ;
+                        $buffer[] = Tinebase_Core::getDb()->quoteInto("DEFAULT ?", $_field->default) ;
                     }
                 }    
                 
@@ -480,7 +480,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 if($_field->default === NULL) {
                     $buffer[] = "DEFAULT NULL" ;
                 } else {
-                    $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("DEFAULT ?", $_field->default) ;
+                    $buffer[] = Tinebase_Core::getDb()->quoteInto("DEFAULT ?", $_field->default) ;
                 }
             }    
 

@@ -93,7 +93,7 @@ class Setup_Import_TineInitial
 
         $accountsBackend->addUser($account);
 
-        Zend_Registry::set('currentAccount', $account);
+        Tinebase_Core::set('currentAccount', $account);
 
         // set the password for the tine20admin account
         Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');

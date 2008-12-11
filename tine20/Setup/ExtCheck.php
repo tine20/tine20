@@ -377,7 +377,7 @@ class Setup_ExtCheck
                     break;
                 case 'MySQL':
                     // get setup controller for database connection
-                    $dbConfig = Zend_Registry::get('configFile')->database;
+                    $dbConfig = Tinebase_Core::getConfig()->database;
                     $link = mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
                     if (!$link) {
                         die('Could not connect to mysql database: ' . mysql_error());

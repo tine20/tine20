@@ -36,7 +36,7 @@ class Setup_Update_Abstract
 	public function __construct($_backend)
 	{
 	    $this->_backend = $_backend;
-	    $this->_db = Zend_Registry::get('dbAdapter');
+	    $this->_db = Tinebase_Core::getDb();
 	}
 	
 	/**

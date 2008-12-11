@@ -113,7 +113,7 @@ class Setup_Import_TineRev949
         $accountsTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'accounts'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'u')
+            Tinebase_Core::getDb()->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'u')
         );
         
         $accounts = $accountsTable->fetchAll($where);
@@ -155,7 +155,7 @@ class Setup_Import_TineRev949
         $groupMapping = array ( "Default" => "Users", "Admins" => "Administrators" );
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'g')
+            Tinebase_Core::getDb()->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'g')
         );
         
         $groups = $groupsTable->fetchAll($where);
@@ -186,7 +186,7 @@ class Setup_Import_TineRev949
         $aclTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'acl'));
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('acl_appname') . ' = ?', 'phpgw_group')
+            Tinebase_Core::getDb()->quoteInto($this->_db->quoteIdentifier('acl_appname') . ' = ?', 'phpgw_group')
         );
         
         $groupMembers = $aclTable->fetchAll($where);
@@ -233,7 +233,7 @@ class Setup_Import_TineRev949
             // get grants
             $grantsArray = array();
             $aclTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'container_acl'));
-            $grants = $aclTable->fetchAll( array(Zend_Registry::get('dbAdapter')->quoteInto('container_id = ?', $row->container_id)) );
+            $grants = $aclTable->fetchAll( array(Tinebase_Core::getDb()->quoteInto('container_id = ?', $row->container_id)) );
             foreach ( $grants as $grant ) {
                              
                 $type = 'user';
@@ -531,7 +531,7 @@ class Setup_Import_TineRev949
                 ),
                 'model'     => 'Tinebase_Model_AccessLog',
                 'delete'    => TRUE,
-                'where'     => array(Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('application_id') . ' IN (?)', array_keys($this->applicationIdMapping))),
+                'where'     => array(Tinebase_Core::getDb()->quoteInto($this->_db->quoteIdentifier('application_id') . ' IN (?)', array_keys($this->applicationIdMapping))),
             ), 
         );
               

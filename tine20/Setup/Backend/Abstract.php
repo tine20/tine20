@@ -43,7 +43,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function tableVersionQuery($_tableName)
     {
-        $select = Zend_Registry::get('dbAdapter')->select()
+        $select = Tinebase_Core::getDb()->select()
             ->from( SQL_TABLE_PREFIX . 'application_tables')
             ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
@@ -60,8 +60,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * @return boolean return string "version" if the table exists, otherwise false
      */
     public function applicationVersionQuery($_application)
-    {    
-        $select = Zend_Registry::get('dbAdapter')->select()
+    {
+        $select = Tinebase_Core::getDb()->select()
             ->from( SQL_TABLE_PREFIX . 'applications')
             ->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
 
@@ -134,7 +134,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */    
     public function execQueryVoid($_statement)
     {
-        $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
+        $stmt = Tinebase_Core::getDb()->query($_statement);
     }
     
     /**
@@ -145,7 +145,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */       
     public function execQuery($_statement)
     {
-        $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
+        $stmt = Tinebase_Core::getDb()->query($_statement);
         
         return $stmt->fetchAll();
     }

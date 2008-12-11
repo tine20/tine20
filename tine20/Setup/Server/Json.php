@@ -47,8 +47,8 @@ class Setup_Server_Json extends Setup_Server_Abstract
                 'Tinebase.setLocale'
             );
             // check json key for all methods but some exceptoins
-            if ( !(in_array($_POST['method'], $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
-                    && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
+            if ( !(in_array($_POST['method'], $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $_POST['method']))  
+                    && $_POST['jsonKey'] != Tinebase_Core::get('jsonKey') ) {
     
                 if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
                     Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
