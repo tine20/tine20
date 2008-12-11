@@ -55,7 +55,6 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     protected function _recordToJson($_record)
     {
         $_record->bypassFilters = true;
-        //$recordArray = parent::_recordToJson($_record);
         
         if ($_record instanceof Timetracker_Model_Timesheet) {
             $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
@@ -63,18 +62,6 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         }
         
         return parent::_recordToJson($_record);
-        /*
-        $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
-        $_record->bypassFilters = true;
-        $recordArray = $_record->toArray();
-        
-        //if ($_resolveContainer) {
-        if ($_record->has('container_id')) {
-            $recordArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_record->container_id)->toArray();
-            $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $_record->container_id)->toArray();
-        }
-        */
-        return $recordArray;
     }
 
     /**
@@ -86,24 +73,27 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * @todo move that to Tinebase_Record_RecordSet
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
-    {       
+    {
         if (count($_records) == 0) {
             return array();
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
-        
-        // get acls for records
-        if ($_records[0]->has('container_id')) {
-            Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Zend_Registry::get('currentAccount'));
+        if ($_records->getRecordClassName() == 'Timetracker_Model_Timesheet') {
+            
+            // resolve timeaccounts
+            $timeaccountIds = $_records->timeaccount_id;
+            $timeaccounts = $this->_timeaccountController->getMultiple(array_unique(array_values($timeaccountIds)));
+            // resolve accounts
+            $accountIds = $_records->account_id;
+            $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+            
+            foreach ($_records as $record) {
+                $record->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($record->timeaccount_id)];
+                $record->account_id = $accounts[$accounts->getIndexById($record->account_id)];
+            }
         }
         
-        $_records->setTimezone(Zend_Registry::get('userTimeZone'));
-        $_records->convertDates = true;
-        
-        $result = $_records->toArray();
-        
-        return $result;
+        return parent::_multipleRecordsToJson($_records);
     }
     
     /**

@@ -259,6 +259,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // search & check
         $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
+        $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
+        $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
         $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
