@@ -508,7 +508,7 @@ class Timetracker_Setup_Import_Egw14
             ->from(array('timesheets' => $this->_oldTablePrefix . 'timesheet'))
             ->joinLeft(
                 array('links'  => $this->_oldTablePrefix . 'links'), 
-                "(link_app1='timesheet' AND link_app2='projectmanager' AND link_id2=timesheets.ts_id)", 
+                "(link_app1='timesheet' AND link_app2='projectmanager' AND link_id1=timesheets.ts_id)", 
                 array()
             )
             ->where($this->_db->quoteInto('links.link_id2 = ?', $_projectId))
