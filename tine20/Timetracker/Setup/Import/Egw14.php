@@ -260,11 +260,11 @@ class Timetracker_Setup_Import_Egw14
                     $catName = $this->_newTimeaccountCategories[$timesheet['cat_id']];
                     
                     // create new timeaccount
-                    echo "    create new timeaccount for category: " . $catName . "\n";
                     if (!isset($timeaccounts[$timesheet['cat_id']])) {
+                        echo "    create new timeaccount for category: " . $catName . "\n";
                         $data = $_data;
                         $data['pm_title'] .= ' [' . $catName . ']';
-                        $timeaccounts[$timesheet['cat_id']] = $this->_createTimeaccount($_data, $contract);
+                        $timeaccounts[$timesheet['cat_id']] = $this->_createTimeaccount($data, $contract);
                     } 
                     $this->_createTimesheet($timesheet['record'], $timeaccounts[$timesheet['cat_id']]->getId());
                     
