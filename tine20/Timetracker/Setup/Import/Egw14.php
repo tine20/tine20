@@ -51,7 +51,7 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var integer
      */
-    protected $_beginId = 0;
+    protected $_beginId = 7;
     
     /**
      * egw timesheet categories
@@ -511,9 +511,10 @@ class Timetracker_Setup_Import_Egw14
                 "(link_app1='timesheet' AND link_app2='projectmanager' AND link_id2=timesheets.ts_id)", 
                 array()
             )
-            ->where($this->_db->quoteInto('links.link_id2 = ?', $_projectId));
+            ->where($this->_db->quoteInto('links.link_id2 = ?', $_projectId))
+            ->group('timesheets.ts_id');
             // order by?
-                        
+            
         if ($this->_limit > 0) {
             $select->limit($this->_limit);
         }
