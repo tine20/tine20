@@ -37,21 +37,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function deleteAccessLogEntries($logIds)
     {
-        try {
-            $logIds = Zend_Json::decode($logIds);
-
-            Admin_Controller_AccessLog::getInstance()->delete($logIds);
-
-            $result = array(
-                'success' => TRUE
-            );
-        } catch (Exception $e) {
-            $result = array(
-                'success' => FALSE 
-            );
-        }
-        
-        return $result;
+        return $this->_delete($logIds, Admin_Controller_AccessLog::getInstance());
     }
     
     
@@ -108,6 +94,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      *
      * @param   int $applicationId application id to get
      * @return  array with application data
+     * 
      */
     public function getApplication($applicationId)
     {
@@ -543,6 +530,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @param   string $tagData
      * 
      * @return  array with success, message, tag data and tag members
+     * 
      */
     public function saveTag($tagData)
     {
@@ -576,15 +564,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function deleteTags($tagIds)
     {
-        $result = array(
-            'success'   => TRUE
-        );
-        
-        $tagIds = Zend_Json::decode($tagIds);
-        
-        Admin_Controller_Tags::getInstance()->delete($tagIds);
-
-        return $result;
+        return $this->_delete($tagIds, Admin_Controller_Tags::getInstance());
     }
     
     /********************************* Roles **********************************/
