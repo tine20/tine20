@@ -378,8 +378,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     protected function _checkContainerACL($_filter)
     {
-        $readableContainer = $this->_currentAccount->getContainerByACL($this->_applicationName, Tinebase_Model_Container::GRANT_READ);
-        $_filter->container = array_intersect($_filter->container, $readableContainer->getArrayOfIds());
+        $readableContainerIds = $this->_currentAccount->getContainerByACL($this->_applicationName, Tinebase_Model_Container::GRANT_READ, TRUE);
+        $_filter->container = array_intersect($_filter->container, $readableContainerIds);
     }     
 
     /**
