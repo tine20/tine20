@@ -338,7 +338,8 @@ class Timetracker_Setup_Import_Egw14
             'type'                   => Timetracker_Model_Timeaccount::RELATION_TYPE_CONTRACT,
             'related_id'             => $_contract->getId(),   
             'related_model'          => 'Erp_Model_Contract',
-            'related_backend'        => Erp_Backend_Contract::TYPE     
+            'related_backend'        => Erp_Backend_Contract::TYPE,
+            'remark'                 => Timetracker_Model_Timeaccount::RELATION_TYPE_CONTRACT
         ));
            
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount);
