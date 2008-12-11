@@ -40,10 +40,12 @@ abstract class Tinebase_Application_Controller_Abstract
      * - MANAGE_* right includes VIEW_* right 
      * 
      * @param   string  $_right to check
+     * @param   boolean $_throwException [optional]
+     * @return  boolean
      * @throws  Tinebase_Exception_UnexpectedValue
      * @throws  Tinebase_Exception_AccessDenied
      */    
-    public function checkRight($_right) {
+    public function checkRight($_right, $_throwException = TRUE) {
         
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
@@ -73,8 +75,10 @@ abstract class Tinebase_Application_Controller_Abstract
             }
         }
         
-        if (!$hasRight) {
+        if (!$hasRight && $_throwException) {
             throw new Tinebase_Exception_AccessDenied("You are not allowed to $_right in application $this->_applicationName !");
-        }        
+        }
+
+        return $hasRight;
     }
 }
