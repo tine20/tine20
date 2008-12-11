@@ -59,16 +59,7 @@ Tine.Erp.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 });
     
 // Contract model
-Tine.Erp.ContractArray = [
-    // tine record fields
-    { name: 'container_id', header: 'Container'                                     },
-    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'created_by',         type: 'int'                  },
-    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'last_modified_by',   type: 'int'                  },
-    { name: 'is_deleted',         type: 'boolean'              },
-    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'deleted_by',         type: 'int'                  },
+Tine.Erp.ContractArray = Tine.Tinebase.Model.genericFields.concat([
     // contract only fields
     { name: 'id' },
     { name: 'number' },
@@ -80,7 +71,7 @@ Tine.Erp.ContractArray = [
     // linked contacts/accounts
     { name: 'customers'},
     { name: 'accounts'}
-];
+]);
 
 /**
  * Contract record definition
@@ -98,6 +89,11 @@ Tine.Erp.Contract = Tine.Tinebase.Record.create(Tine.Erp.ContractArray, {
     containerName: 'contracts list',
     containersName: 'contracts lists'
 });
+Tine.Erp.Contract.getDefaultData = function() { 
+    return {
+        container_id: Tine.Erp.registry.get('DefaultContainer')
+    }
+};
 
 /**
  * default contracts backend
