@@ -203,6 +203,12 @@
                     </field>
                 </index>
                 <index>
+                    <name>start_date</name>
+                    <field>
+                        <name>start_date</name>
+                    </field>
+                </index>                
+                <index>
                     <name>timesheet::account_id--accounts::id</name>
                     <field>
                         <name>account_id</name>
