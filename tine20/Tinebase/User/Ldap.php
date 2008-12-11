@@ -111,41 +111,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $filter = 'objectclass=posixaccount';
         }
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
-        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, $filter, array_values($this->_rowNameMapping));
         
-        $result = new Tinebase_Record_RecordSet($_accountClass);
-        
-        foreach ($accounts as $account) {
-            $accountArray = array(
-                'accountStatus' => 'enabled'
-            );
-            
-            foreach ($account as $key => $value) {
-                if (is_int($key)) {
-                    continue;
-                }
-                $keyMapping = array_search($key, $this->_rowNameMapping);
-                if ($keyMapping !== FALSE) {
-                    switch($keyMapping) {
-                        case 'accountLastPasswordChange':
-                        case 'accountExpires':
-                            $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
-                            break;
-                        case 'accountStatus':
-                            break;
-                        default: 
-                            $accountArray[$keyMapping] = $value[0];
-                            break;
-                    }
-                }
-            }
-            
-            $accountObject = new $_accountClass($accountArray);
-            
-            $result->addRecord($accountObject);
-        }
-        
-        return $result;
+        return $this->_getUsersFromBackend($filter, $_accountClass);
     }
     
     /**
@@ -161,39 +128,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $loginName = Zend_Ldap::filterEscape($_loginName);
         $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $loginName);
                 
-        // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
-        // because of the wrong type that is not catched by the block below)
-/*        if ( $row === false ) {
-             throw new Exception('user not found');
-        } */        
-
-        $accountArray = array(
-            'accountStatus' => 'enabled'
-        );
-        
-        foreach ($account as $key => $value) {
-            if (is_int($key)) {
-                continue;
-            }
-            $keyMapping = array_search($key, $this->_rowNameMapping);
-            if ($keyMapping !== FALSE) {
-                switch($keyMapping) {
-                    case 'accountLastPasswordChange':
-                    case 'accountExpires':
-                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
-                        break;
-                    case 'accountStatus':
-                        break;
-                    default: 
-                        $accountArray[$keyMapping] = $value[0];
-                        break;
-                }
-            }
-        }
-        
-        $account = new $_accountClass($accountArray);
-                
-        return $account;
+        return $this->_ldap2User($account, $_accountClass);
     }
     
     /**
@@ -207,40 +142,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
-                
-        // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
-        // because of the wrong type that is not catched by the block below)
-/*        if ( $row === false ) {
-             throw new Exception('user not found');
-        } */        
-
-        $accountArray = array(
-            'accountStatus' => 'enabled'
-        );
         
-        foreach ($account as $key => $value) {
-            if (is_int($key)) {
-                continue;
-            }
-            $keyMapping = array_search($key, $this->_rowNameMapping);
-            if ($keyMapping !== FALSE) {
-                switch($keyMapping) {
-                    case 'accountLastPasswordChange':
-                    case 'accountExpires':
-                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
-                        break;
-                    case 'accountStatus':
-                        break;
-                    default: 
-                        $accountArray[$keyMapping] = $value[0];
-                        break;
-                }
-            }
-        }
-        
-        $account = new $_accountClass($accountArray);
-                
-        return $account;
+        return $this->_ldap2User($account, $_accountClass);
     }
     
     /**
@@ -375,12 +278,80 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * Get multiple users
      *
-     * @param string|array $_id Ids
+     * @param string|array $_ids Ids
      * @return Tinebase_Record_RecordSet
      * @todo implement
      */
-    public function getMultiple($_id) 
+    public function getMultiple($_ids) 
     {
-        throw new Tinebase_Exception('Not implemented yet.');
+        $ids = is_array($_ids) ? $_ids : (array) $_ids;
+        
+        $idFilter = '';
+        foreach ($ids as $id) {
+            $idFilter .= "(uidnumber=$id)";
+        }
+        $filter = "(&(objectclass=posixaccount)(|$idFilter))";
+        
+        return $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
     }
+    
+    /**
+     * Fetches all accounts from backend matching the given filter
+     *
+     * @param string $_filter
+     * @param string $_accountClass
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getUsersFromBackend($_filter, $_accountClass = 'Tinebase_Model_User')
+    {
+        $result = new Tinebase_Record_RecordSet($_accountClass);
+        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, $_filter, array_values($this->_rowNameMapping));
+        
+        foreach ($accounts as $account) {
+            $accountObject = $this->_ldap2User($account, $_accountClass);
+            
+            $result->addRecord($accountObject);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Returns a user obj with raw data from ldap
+     *
+     * @param array $_userData
+     * @param string $_accountClass
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _ldap2User($_userData, $_accountClass)
+    {
+        $accountArray = array(
+            'accountStatus' => 'enabled'
+        );
+        
+        foreach ($_userData as $key => $value) {
+                if (is_int($key)) {
+                    continue;
+                }
+                $keyMapping = array_search($key, $this->_rowNameMapping);
+                if ($keyMapping !== FALSE) {
+                    switch($keyMapping) {
+                        case 'accountLastPasswordChange':
+                        case 'accountExpires':
+                            $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                            break;
+                        case 'accountStatus':
+                            break;
+                        default: 
+                            $accountArray[$keyMapping] = $value[0];
+                            break;
+                    }
+                }
+            }
+            
+            $accountObject = new $_accountClass($accountArray);
+            
+            return $accountObject;
+    }
+    
 }
