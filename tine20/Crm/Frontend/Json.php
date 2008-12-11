@@ -46,7 +46,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function __construct()
     {
-        $this->_userTimezone = Zend_Registry::get('userTimeZone');
+        $this->_userTimezone = Tinebase_Core::get('userTimeZone');
         $this->_serverTimezone = date_default_timezone_get();
     }
     
@@ -72,7 +72,6 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         }   
         $leadData = $this->_leadToJson($lead); 
         
-        //Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __METHOD__ . '(' . __LINE__ . ')' .  print_r($leadData,true));
         return $leadData;
     }
         
@@ -88,13 +87,9 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $filter = new Crm_Model_LeadFilter($paginationFilter);
         $pagination = new Tinebase_Model_Pagination($paginationFilter);
         
-        //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
-        
         $leads = Crm_Controller_Lead::getInstance()->search($filter, $pagination, TRUE);
         
         $result = $this->_multipleLeadsToJson($leads);
-        
-        //Zend_Registry::get('logger')->debug(print_r($result,true));
         
         return array(
             'results'       => $result,
@@ -162,13 +157,13 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         // set container
         if (!$_lead->container_id) {
-            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Model_Container::GRANT_READ);
+            $personalFolders = Tinebase_Core::getUser()->getPersonalContainer('Crm', Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_READ);
             $container_id = $personalFolders[0];
         } else {
             $container_id = $_lead->container_id;
         }
         $result['container_id'] = Tinebase_Container::getInstance()->getContainerById($container_id)->toArray();
-        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container_id)->toArray();
+        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container_id)->toArray();
         
         return $result;                
     }
@@ -182,7 +177,7 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     protected function _multipleLeadsToJson(Tinebase_Record_RecordSet $_leads)
     {        
         // get acls for leads
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_leads, Zend_Registry::get('currentAccount'));
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_leads, Tinebase_Core::getUser());
         
         $_leads->setTimezone($this->_userTimezone);
         $_leads->convertDates = true;
@@ -207,12 +202,6 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             'Products'    => $this->getProducts('productsource','ASC'),
         );
         
-        /*
-        foreach ($registryData as &$data) {
-            $data->setTimezone(Zend_Registry::get('userTimeZone'));
-            $data = $data->toArray();
-        }
-        */
         return $registryData;    
     }
     

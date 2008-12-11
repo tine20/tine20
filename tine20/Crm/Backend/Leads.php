@@ -55,7 +55,7 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting lead ' . $e->__toString());
+            Tinebase_Core::getLogger();
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }

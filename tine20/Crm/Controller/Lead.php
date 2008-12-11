@@ -135,9 +135,9 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
      */
     public function getEmptyLead()
     {
-        $defaultState  = (isset(Zend_Registry::get('configFile')->crm->defaultstate) ? Zend_Registry::get('configFile')->crm->defaultstate : 1);
-        $defaultType   = (isset(Zend_Registry::get('configFile')->crm->defaulttype) ? Zend_Registry::get('configFile')->crm->defaulttype : 1);
-        $defaultSource = (isset(Zend_Registry::get('configFile')->crm->defaultsource) ? Zend_Registry::get('configFile')->crm->defaultsource : 1);
+        $defaultState  = (isset(Tinebase_Core::getConfig()->crm->defaultstate) ? Tinebase_Core::getConfig()->crm->defaultstate : 1);
+        $defaultType   = (isset(Tinebase_Core::getConfig()->crm->defaulttype) ? Tinebase_Core::getConfig()->crm->defaulttype : 1);
+        $defaultSource = (isset(Tinebase_Core::getConfig()->crm->defaultsource) ? Tinebase_Core::getConfig()->crm->defaultsource : 1);
         
         $defaultData = array(
             'leadstate_id'   => $defaultState,
@@ -147,7 +147,6 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
             'probability'    => 0,
             'turnover'       => 0
         );
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
         $emptyLead = new Crm_Model_Lead($defaultData, true);
         
         // add creator as RESPONSIBLE (only if user backend isn't LDAP)
@@ -201,19 +200,19 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         $view->updates = $_updates;
         
         if($_lead->start instanceof Zend_Date) {
-            $view->start = $_lead->start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+            $view->start = $_lead->start->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale'));
         } else {
             $view->start = '-';
         }
         
         if($_lead->end instanceof Zend_Date) {
-            $view->leadEnd = $_lead->end->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+            $view->leadEnd = $_lead->end->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale'));
         } else {
             $view->leadEnd = '-';
         }
         
         if($_lead->end_scheduled instanceof Zend_Date) {
-            $view->ScheduledEnd = $_lead->end_scheduled->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+            $view->ScheduledEnd = $_lead->end_scheduled->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale'));
         } else {
             $view->ScheduledEnd = '-';
         }
@@ -246,7 +245,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
             $pdfGenerator->generateLeadPdf($_lead);
             $pdfOutput = $pdfGenerator->render();
         } catch ( Zend_Pdf_Exception $e ) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+            Tinebacse_Core::getLogger();
             $pdfOutput = NULL;
         }
                 
@@ -256,7 +255,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         //if (! in_array($_updater->accountId, $recipients)) {
         //    $recipients[] = $_updater->accountId;
         //}
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . $plain);
+        Tinebase_Core::getLogger();
         Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, $pdfOutput);
     }
     
@@ -303,8 +302,8 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         
         // if no responsibles are defined, send message to all readers of container
         if (empty($recipients)) {
-            Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
-                $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id);
+            Tinebase_Core::getLogger(); 
+                $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id;
                 
             $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container_id, TRUE);
             // NOTE: we just send notifications to users, not to groups or anyones!

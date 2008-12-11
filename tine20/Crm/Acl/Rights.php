@@ -88,8 +88,6 @@ class Crm_Acl_Rights extends Tinebase_Application_Rights_Abstract
         );
         $allRights = array_merge($allRights, $addRights);
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allRights, true));
-        
         return $allRights;
     }
 

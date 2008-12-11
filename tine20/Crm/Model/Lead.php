@@ -157,8 +157,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     public function setFromJson($_data)
     {
         $decodedLead = Zend_Json::decode($_data);
-
-        //Zend_Registry::get('logger')->debug("setFromJson:" . print_r($decodedLead,true));
         
         /************* add new relations *******************/
         
@@ -218,8 +216,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         }        
         
         /********************** create record ***********************/
-
-        //Zend_Registry::get('logger')->debug("setFromJson (after relation adding):" . print_r($decodedLead,true));
         
         $this->setFromArray($decodedLead);
     }            

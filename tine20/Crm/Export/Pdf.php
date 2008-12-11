@@ -29,7 +29,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      */
     public function generateLeadPdf(Crm_Model_Lead $_lead, $_pageNumber = 0)
     {
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
         $translate = Tinebase_Translation::getTranslation('Crm');    
 
         /*********************** build data array ***************************/
@@ -112,7 +112,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                     }
                     foreach ( $keys as $key ) {
                         if ( $_lead->$key instanceof Zend_Date ) {
-                            $content[] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
+                            $content[] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale') );
                         } elseif (!empty($_lead->$key) ) {
                             if ( $key === 'turnover' ) {
                                 $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
@@ -237,7 +237,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         // get due date
                         if ( !empty($task->due) ) {
                             $dueDate = new Zend_Date ( $task->due, ISO8601LONG );                 
-                            $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
+                            $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale')) );
                         }    
                         
                         // get task priority
@@ -246,7 +246,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         
                     } catch (Exception $e) {
                         // do nothing so far
-                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
+                        Tinebase_Core::getLogger();
                     }
                 }
             }
@@ -272,7 +272,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                     
                 } catch (Exception $e) {
                     // do nothing so far
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
+                    Tinebase_Core::getLogger();
                 }
             }
         }
