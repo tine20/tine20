@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        extend Tinebase_Application_Controller_Record_Abstract
+ * @todo        refactoring: use functions from Tinebase_Application_Controller_Record_Abstract
  */
 
 /**
@@ -17,7 +17,7 @@
  *
  * @package     Admin
  */
-class Admin_Controller_Tags extends Tinebase_Application_Controller_Abstract
+class Admin_Controller_Tags extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
      * the constructor
