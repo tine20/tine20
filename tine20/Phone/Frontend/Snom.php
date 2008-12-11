@@ -66,7 +66,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         $this->_authenticate();
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $mac. ' search for ' . $query);
+        Tinebase_Core::getLogger();
             
         $phone = Voipmanager_Controller::getInstance()->getSnomPhoneByMacAddress($mac);
         
@@ -89,7 +89,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         $filter->query = $query;
         
         $contacts = $contactsBackend->search($filter, new Tinebase_Model_Pagination());
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($contacts) . ' contacts');
+        Tinebase_Core::getLogger();
         
         if(count($contacts) == 0) {
             $baseUrl = $this->_getBaseUrl();
@@ -155,7 +155,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
     {        
         $this->_authenticate();
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
+        Tinebase_Core::getLogger();
         
         $vmController = Voipmanager_Controller::getInstance();
         $phone = $vmController->getSnomPhoneByMacAddress($mac);

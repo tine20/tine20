@@ -30,8 +30,6 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function dialNumber($number, $phoneId, $lineId)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $number, $phoneId, $lineId");
-        
         $result = array(
             'success'   => TRUE
         );
@@ -79,16 +77,13 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function searchCalls($filter, $paging)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($filter), true));
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($paging), true));
-        
         $filter = new Phone_Model_CallFilter(Zend_Json::decode($filter));
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
         
         // set timezone
-        $calls->setTimezone(Zend_Registry::get('userTimeZone'));
+        $calls->setTimezone(Tinebase_Core::get('userTimeZone'));
                 
         return array(
             'results'       => $calls->toArray(),
@@ -113,15 +108,14 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         if (empty($phoneData['id'])) {
             unset($phoneData['id']);
         }
-
-        //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
+        
         $phone = new Voipmanager_Model_MyPhone();
         $phone->setFromArray($phoneData);
         
         $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
         $phoneSettings->setFromArray($phoneData);
 
-        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
+        $currentAccount = Tinebase_Core::getUser()->toArray();
         
         if (!empty($phone->id)) {
             $phone = $voipController->updateMyPhone($phone, $phoneSettings, $currentAccount['accountId']);
@@ -144,10 +138,8 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @return mixed array 'variable name' => 'data'
      */
     public function getRegistryData()
-    {   
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__);
-    
-        $accountId = Zend_Registry::get('currentAccount')->getId();
+    {
+        $accountId = Tinebase_Core::getUser()->getId();
         
         $registryData = array(
             'Phones' => $this->getUserPhones($accountId)

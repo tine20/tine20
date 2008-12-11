@@ -43,8 +43,7 @@ class Phone_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function editMyPhone($phoneId = NULL)
     {
         $controller = Voipmanager_Controller::getInstance();
-
-        $currentAccount = Zend_Registry::get('currentAccount')->toArray();
+        $currentAccount = Tinebase_Core::getUser()->toArray();
         
         if (!empty($phoneId)) {
             $snomPhone = $controller->getMyPhone($phoneId, $currentAccount['accountId']);

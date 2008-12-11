@@ -69,7 +69,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
      */
     public function dialNumber($_number, $_phoneId = NULL, $_lineId = NULL)
     {
-        $accountId = Zend_Registry::get('currentAccount')->getId();
+        $accountId = Tinebase_Core::getUser()->getId();
         $vmController = Voipmanager_Controller::getInstance();
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::ASTERISK);
         
@@ -112,8 +112,8 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
      */
     public function searchCalls(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {        
-        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);   
-        $_filter->checkUserPhones(Zend_Registry::get('currentAccount')->getId());        
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);           
+        $_filter->checkUserPhones(Tinebase_Core::getUser()->getId());
         $calls = $backend->search($_filter, $_pagination);
         
         return $calls;
@@ -128,8 +128,8 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
      */
     public function searchCallsCount(Phone_Model_CallFilter $_filter)
     {
-        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
-        $_filter->checkUserPhones(Zend_Registry::get('currentAccount')->getId());        
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);        
+        $_filter->checkUserPhones(Tinebase_Core::getUser()->getId());
         $count = $backend->searchCount($_filter);
         return $count;
     }
