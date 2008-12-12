@@ -445,12 +445,15 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             $userApplications = Zend_Registry::get('currentAccount')->getApplications();
             
             foreach($userApplications as $application) {
-                $jsonAppName = ucfirst((string) $application) . '_Frontend_Json';
+                $jsonAppName = $application->name . '_Frontend_Json';
+                
                 if(class_exists($jsonAppName)) {
                     $applicationJson = new $jsonAppName;
                     
-                    $registryData[ucfirst((string) $application)] = $applicationJson->getRegistryData();
-                    $registryData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
+                    $registryData[$application->name] = $applicationJson->getRegistryData();
+                    $registryData[$application->name]['rights'] = Zend_Registry::get('currentAccount')->getRights($application->name);
+                    $registryData[$application->name]['config'] = Tinebase_Config::getInstance()->getConfigForApplication($application);
+                    $registryData[$application->name]['customfields'] = Tinebase_Config::getInstance()->getCustomFieldsForApplication($application)->toArray();
                 }
             }
         } else {
