@@ -80,9 +80,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $filter = "(&(objectclass=posixgroup)(memberuid=$memberuid))";
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
         
-        $groups = $this->_ldap->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, $filter, array('gidnumber'));
+        $groups = $this->_ldap->fetchAll(Tinebase_Core::getConfig()->accounts->get('ldap')->groupsDn, $filter, array('gidnumber'));
         
         $memberships = array();
         
@@ -105,7 +105,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         try {
-            $groupMembers = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('member', 'memberuid'));
+            $groupMembers = $this->_ldap->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('member', 'memberuid'));
         } catch (Exception $e) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
@@ -146,7 +146,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groupName = Zend_Ldap::filterEscape($_name);
         
         try {
-            $group = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'cn=' . $groupName, array('cn','description','gidnumber'));
+            $group = $this->_ldap->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->groupsDn, 'cn=' . $groupName, array('cn','description','gidnumber'));
         } catch (Exception $e) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
@@ -172,7 +172,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         try {
-            $group = $this->_ldap->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('cn','description','gidnumber'));
+            $group = $this->_ldap->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('cn','description','gidnumber'));
         } catch (Exception $e) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
@@ -205,9 +205,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $filter = 'objectclass=posixgroup';
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
         
-        $groups = $this->_ldap->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, $filter, array('cn','description','gidnumber'), 'cn');
+        $groups = $this->_ldap->fetchAll(Tinebase_Core::getConfig()->accounts->get('ldap')->groupsDn, $filter, array('cn','description','gidnumber'), 'cn');
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
         

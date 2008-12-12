@@ -86,7 +86,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
-        $cache = Zend_Registry::get('cache');
+        $cache = Tinebase_Core::get('cache');
         $cacheId = 'getGroupMemberships' . $accountId;
         $memberships = $cache->load($cacheId);
 
@@ -118,7 +118,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
 
-        $cache = Zend_Registry::get('cache');
+        $cache = Tinebase_Core::get('cache');
         $cacheId = 'getGroupMembers' . $groupId;
         $members = $cache->load($cacheId);
 
@@ -281,7 +281,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }        
         
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Zend_Registry::get('dbAdapter'));
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
             $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' IN (?)', $groupIds);
             $this->groupMembersTable->delete($where);
