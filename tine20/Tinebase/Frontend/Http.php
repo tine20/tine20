@@ -24,7 +24,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     protected function checkAuth()
     {
         try {
-            Zend_Registry::get('currentAccount');
+            Tinebase_Core::getUser();
         } catch (Exception $e) {
             $this->sessionTimedOut();
             exit;
@@ -302,7 +302,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     public function getJsTranslations()
     {
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
         $translations = Tinebase_Translation::getJsTranslations($locale);
         header('Content-Type: application/javascript');
         die($translations);
@@ -319,7 +319,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 		// update registration table and get username / account values
 		$account = Tinebase_User_Registration::getInstance()->activateUser( $id );
 
-		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
+		Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
 		
 		$view = new Zend_View();
         $view->title="Tine 2.0 User Activation";
@@ -384,7 +384,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
                'size'        => $uploadedFile['size'],
     	    ));
     	    
-    	    $db = Zend_Registry::get('dbAdapter');
+    	    $db = Tinebase_Core::getDb();
     	    $db->insert(SQL_TABLE_PREFIX . 'temp_files', $tempFile->toArray());
     	    
     	    die(Zend_Json::encode(array(
@@ -392,7 +392,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     	       'tempFile' => $tempFile->toArray(),
     	    )));
 	    } catch (Tinebase_Exception $exception) {
-	        Zend_Registry::get('logger')->WARN("File upload could not done, due to the following exception: \n" . $exception);
+	        Tinebase_Core::getLogger()->WARN("File upload could not done, due to the following exception: \n" . $exception);
 	        
 	        if (! headers_sent()) {
 	           header("HTTP/1.0 500 Internal Server Error");
@@ -419,7 +419,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	    $this->checkAuth();
 	    
 	    if ($application == 'Tinebase' && $location=='tempFile') {
-	        $db = Zend_Registry::get('dbAdapter');
+	        $db = Tinebase_Core::getDb();
             $select = $db->select()
                ->from(SQL_TABLE_PREFIX . 'temp_files')
                ->where($db->quoteInto($db->quoteIdentifier('id') . ' = ?', $id))
