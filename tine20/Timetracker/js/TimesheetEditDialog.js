@@ -45,6 +45,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             border: false,
             plain:true,
             activeTab: 0,
+            deferredRender: false,
             items:[
                 {            	
                 title: this.app.i18n._('Timesheet'),
