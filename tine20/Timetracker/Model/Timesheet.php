@@ -76,6 +76,14 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'deleted_time'
     );
     
+    /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         // strip time information from datetime string
