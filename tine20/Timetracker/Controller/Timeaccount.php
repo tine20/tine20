@@ -59,13 +59,15 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
      * add one record
      * - create new container as well
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Erp_Model_Contract
+     * @param   Timetracker_Model_Timeaccount $_record
+     * @return  Timetracker_Model_Timeaccount
      * 
      * @todo    check if container name exists ?
      */
     public function create(Tinebase_Record_Interface $_record)
-    {        
+    {   
+        $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS);
+        
         // create container and add container_id to record
         $containerName = $_record->title;
         if (!empty($_record->number)) {
@@ -76,20 +78,27 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => $this->_backend->getType(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
-        ));        
-        $container = Tinebase_Container::getInstance()->addContainer($newContainer);
+        ));
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => $this->_currentAccount->getId(),
+            'account_type'  => 'user',
+            'book_own'      => TRUE,
+            'view_all'      => TRUE,
+            'book_all'      => TRUE,
+            'manage_clearing' => TRUE,
+            'manage_all'    => TRUE,
+        )));
         
-        // add all grants to container for creator
-        Tinebase_Container::getInstance()->addGrants($container, 'user', $this->_currentAccount->getId(), array(
-            Tinebase_Model_Container::GRANT_ADD,
-            Tinebase_Model_Container::GRANT_READ,
-            Tinebase_Model_Container::GRANT_EDIT,
-            Tinebase_Model_Container::GRANT_ADMIN
-        ), TRUE);            
-        
+        // add container with grants (all grants for creator) and ignore ACL here
+        $container = Tinebase_Container::getInstance()->addContainer(
+            $newContainer, 
+            Timetracker_Model_TimeaccountGrants::doMapping($grants), 
+            TRUE
+        );
+
         $_record->container_id = $container->getId();
         
-        return parent::create($_record);
+        return parent::create($_record);       
     }    
     
     /**

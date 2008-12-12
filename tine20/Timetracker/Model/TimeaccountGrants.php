@@ -89,6 +89,10 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = FALSE, $_convertDates = NULL)
     {
         $this->_validators = array(
+            'id'          => array('Alnum', 'allowEmpty' => TRUE),
+            'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => 0),
+            'account_type' => array('presence' => 'required', 'InArray' => array('anyone','user','group')),
+        
             'book_own'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
@@ -174,7 +178,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     public static function setTimeaccountGrants($_timeaccount, Tinebase_Record_RecordSet $_grants, $_ignoreACL = FALSE)
     {
         // map Timetracker_Model_TimeaccountGrants to Tinebase_Model_Grants
-        $grants = $this->_doMapping($grant);
+        $grants = self::doMapping($grant);
         
         Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $_grants, $_ignoreACL);
     }
@@ -185,16 +189,18 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      * @param Tinebase_Record_RecordSet $_grants
      * @return Tinebase_Record_RecordSet
      */
-    protected function _doMapping(Tinebase_Record_RecordSet $_grants)
+    public static function doMapping(Tinebase_Record_RecordSet $_grants)
     {
-        $result = new Tinebase_Record_RecordSet('Tinenbase_Model_Grants');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         foreach ($_grants as $grant) {
-            $result->addRecord(new Tinenbase_Model_Grants(array(
-                'readGrant'   => $grant->book_own,
-                'addGrant'    => $grant->view_all,
-                'editGrant'   => $grant->book_all,
-                'deleteGrant' => $grant->manage_clearing,
-                'adminGrant'  => $grant->manage_all
+            $result->addRecord(new Tinebase_Model_Grants(array(
+                'account_id'    => $grant->account_id,
+                'account_type'  => $grant->account_type,
+                'readGrant'     => $grant->book_own,
+                'addGrant'      => $grant->view_all,
+                'editGrant'     => $grant->book_all,
+                'deleteGrant'   => $grant->manage_clearing,
+                'adminGrant'    => $grant->manage_all
             )));
         }
         return $result;
