@@ -165,30 +165,49 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     {
         // get timesheet
         $timesheet = $this->_getTimesheet();
+        $timeaccount = $this->_timeaccountController->get($timesheet->timeaccount_id);
         
-        //-- remove BOOK_OWN + ADMIN grant
+        // remove BOOK_OWN + BOOK_ALL + ADMIN grant
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'view_all'      => TRUE,
+            'manage_clearing' => TRUE,
+        )));
+        Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
+            $timeaccount,
+            $grants,
+            TRUE
+        );
         
-        //-- try to save timesheet
+        // try to save timesheet
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->_timesheetController->create($timesheet);
         
-        //-- add BOOK_OWN grant again
+        // add grants again
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'book_own'      => TRUE,
+            'view_all'      => TRUE,
+            'book_all'      => TRUE,
+            'manage_clearing' => TRUE,
+            'manage_all'    => TRUE,
+        )));
+        Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
+            $timeaccount,
+            $grants,
+            TRUE
+        );
         
-        //-- try to save again
+        // try to save again
+        $newTS = $this->_timesheetController->create($timesheet);
         
-//        $timesheet = $this->_getTimesheet();
-//        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-//        
-//        // checks
-//        $this->assertEquals($timesheet->description, $timesheetData['description']);
-//        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
-//        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'], 'account is not resolved');
-//        $this->assertEquals(Zend_Date::now()->toString('YYYY-MM-dd'),  $timesheetData['start_date']);
-//        
-//        // cleanup
-//        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-//        
-//        // check if everything got deleted
-//        $this->setExpectedException('Tinebase_Exception_NotFound');
-//        Timetracker_Controller_Timesheet::getInstance()->get($timesheetData['id']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $newTS->created_by);
+        
+        // delete
+        $this->_timesheetController->delete($timesheet->getId());
+        $this->_timeaccountController->delete($timeaccount->getId());        
     }
     
     /**

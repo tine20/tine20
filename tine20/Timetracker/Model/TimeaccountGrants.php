@@ -124,11 +124,13 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      * @param integer $_grant
      * @return boolean
      */
-    public static function hasGrant($_timeaccount, $_grant)
+    public static function hasGrant($_timeaccountId, $_grant)
     {
+        $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
+        
         return Tinebase_Container::getInstance()->hasGrant(
             Tinebase_Core::getUser()->getId(), 
-            $_timeaccount->container_id, 
+            $timeaccount->container_id, 
             $_grant
         );
     }
@@ -175,12 +177,12 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      * @param Tinebase_Record_RecordSet $_grants
      * @param boolean $_ignoreACL
      */
-    public static function setTimeaccountGrants($_timeaccount, Tinebase_Record_RecordSet $_grants, $_ignoreACL = FALSE)
+    public static function setTimeaccountGrants(Timetracker_Model_Timeaccount $_timeaccount, Tinebase_Record_RecordSet $_grants, $_ignoreACL = FALSE)
     {
         // map Timetracker_Model_TimeaccountGrants to Tinebase_Model_Grants
-        $grants = self::doMapping($grant);
+        $grants = self::doMapping($_grants);
         
-        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $_grants, $_ignoreACL);
+        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, $_ignoreACL);
     }
     
     /**

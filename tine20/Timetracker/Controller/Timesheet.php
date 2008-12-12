@@ -125,5 +125,23 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
         */
         
         return parent::searchCount($_filter);
-    }    
+    }
+
+
+    /**
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {        
+        if (!Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
+            || !Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL)) {
+            throw new Tinebase_Exception_AccessDenied('No permission to create this Timesheet');
+        }
+        
+        return parent::create($_record);
+    }
 }
