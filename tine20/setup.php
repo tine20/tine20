@@ -66,11 +66,11 @@ try {
     if(file_exists($configPath)) {
         $config = new Zend_Config(require $configPath);
     } else {
-        die ('central configuration file ' . $configPath . ' not found.<br>Did you migrate from config.ini to config.inc.php?');
+        die ('Central configuration file ' . $configPath . ' not found.<br>Did you migrate from config.ini to config.inc.php?');
     }
     Zend_Registry::set('configFile', $config);
 } catch (Zend_Config_Exception $e) {
-    die ('central configuration file ' . $configPath . ' not found or invalid');
+    die ('Central configuration file ' . $configPath . ' not found or invalid');
 }
     
 /**

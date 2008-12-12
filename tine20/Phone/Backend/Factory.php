@@ -59,7 +59,7 @@ class Phone_Backend_Factory
                         $username = $asteriskConfig->managerusername;
                         $password = $asteriskConfig->managerpassword;
                     } else {
-                        throw new Phone_Exception_NotFound('No settings found for asterisk backend in config.ini!');
+                        throw new Phone_Exception_NotFound('No settings found for asterisk backend in config file!');
                     }
                     self::$_backends[$_type] = Phone_Backend_Asterisk::getInstance($url, $username, $password);
                 }

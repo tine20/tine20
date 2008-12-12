@@ -36,7 +36,7 @@ abstract class Setup_Server_Abstract
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
-        // @todo add fallback locale to config.ini
+        // @todo add fallback locale to config file
         Tinebase_Core::set('locale', new Zend_Locale('en_US'));
         Tinebase_Core::set('userTimeZone', 'UTC');
         

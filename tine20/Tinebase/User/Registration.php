@@ -177,7 +177,7 @@ class Tinebase_User_Registration
         }
         
         // add more required fields to regData
-        // get default values from config.ini if available
+        // get default values from config if available
         $regData['accountStatus'] = (isset($this->_config->accountStatus)) ? 
             $this->_config->accountStatus : 'enabled';
         $regData['accountDisplayName'] = $regData['accountFirstName'] . 
