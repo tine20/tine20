@@ -107,7 +107,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		parent::__construct();
 		
 		// get config
-		$config = Zend_Registry::get('configFile')->pdfexport;
+		$config = Tinebase_Core::getConfig()->pdfexport;
 		
 		// add first page 
 		$this->pages[] = $this->newPage(Zend_Pdf_Page::SIZE_A4); 	
@@ -129,7 +129,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // set fonts
         if (!empty($config->fontpath) && file_exists($config->fontpath)) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $config->fontpath);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $config->fontpath);
                          
             $boldpath = $config->get('fontboldpath', $config->fontpath);
             $embed = ($config->fontembed) ? 0 : Zend_Pdf_Font::EMBED_DONT_EMBED;
@@ -138,7 +138,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $this->_font = Zend_Pdf_Font::fontWithPath($config->fontpath, $embed);
             $this->_fontBold = Zend_Pdf_Font::fontWithPath($boldpath, $embed);
         } else {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' use zend_pdf font: ' . $this->_fontName);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' use zend_pdf font: ' . $this->_fontName);
             
             $this->_font = Zend_Pdf_Font::fontWithName($this->_fontName);
             $this->_fontBold = Zend_Pdf_Font::fontWithName($this->_fontNameBold);
@@ -235,7 +235,6 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         }
 
         // debug record
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' given record: '. print_r($_record, true));
         
         // fill data array for table
         $data = array ();
@@ -276,7 +275,6 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         }
         
         // debug $data
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' table data: '. print_r($data, true));
         
         // create table
         if ( !empty($data) ) {
@@ -395,7 +393,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	protected function _CreateFooter ()
 	{
 		// get translations from tinebase
-		$locale = Zend_Registry::get('locale');
+		$locale = Tinebase_Core::get('locale');
 		$translate = Tinebase_Translation::getTranslation('Tinebase');
 		
 		$xPos = 50;
@@ -451,7 +449,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     protected function _addActivities($record, $_notes)
     {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
         
         
         if (!empty($_notes)) {
@@ -504,7 +502,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
             $this->pages[$this->_pageNumber]->drawImage($icon, $_xPos-170, $_yPos-6, $_xPos-154, $_yPos + 10);                            
         } else {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
         }
     }
 }
