@@ -17,29 +17,11 @@
  * a right is always specific to an application and not to a record
  * examples for rights are: admin, run
  * 
- * @package     Tinebase
+ * @package     Timetracker
  * @subpackage  Acl
  */
 class Timetracker_Acl_Rights extends Tinebase_Application_Rights_Abstract
 {
-   /**
-     * the right to view other users timesheets
-     * @staticvar string
-     */
-    const VIEW_TIMESHEETS = 'view_timesheets';
-    
-    /**
-     * the right to manage other users timesheets and edit is_billable / cleared status
-     * @staticvar string
-     */
-    const MANAGE_TIMESHEETS = 'manage_timesheets';
-        
-   /**
-     * the right to view all timeaccounts
-     * @staticvar string
-     */
-    const VIEW_TIMEACCOUNTS = 'view_timeaccounts';
-    
     /**
      * the right to manage timeaccounts
      * @staticvar string
@@ -92,13 +74,9 @@ class Timetracker_Acl_Rights extends Tinebase_Application_Rights_Abstract
      */
     public function getAllApplicationRights()
     {
-        
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array ( 
-            self::VIEW_TIMESHEETS,
-            self::MANAGE_TIMESHEETS,
-            self::VIEW_TIMEACCOUNTS,
             self::MANAGE_TIMEACCOUNTS
         );
         $allRights = array_merge($allRights, $addRights);
@@ -116,18 +94,6 @@ class Timetracker_Acl_Rights extends Tinebase_Application_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Timetracker');
         
         $rightDescriptions = array(
-            self::VIEW_TIMESHEETS  => array(
-                'text'          => $translate->_('View all timesheets'),
-                'description'   => $translate->_('View other users timesheets'),
-            ),
-            self::MANAGE_TIMESHEETS  => array(
-                'text'          => $translate->_('Manage timesheets'),
-                'description'   => $translate->_('Add, edit and delete timesheets of all users and set billable/cleared status'),
-            ),
-            self::VIEW_TIMEACCOUNTS  => array(
-                'text'          => $translate->_('View all timeaccounts'),
-                'description'   => $translate->_('View all timeaccounts'),
-            ),
             self::MANAGE_TIMEACCOUNTS  => array(
                 'text'          => $translate->_('Manage timeaccounts'),
                 'description'   => $translate->_('Add, edit and delete timeaccounts'),
