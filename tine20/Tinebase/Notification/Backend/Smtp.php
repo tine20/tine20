@@ -86,7 +86,7 @@ class Tinebase_Notification_Backend_Smtp
         }
         
         if(!empty($_recipient->accountEmailAddress)) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->email);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->email);
 
             $mail->addTo($_recipient->email, $_recipient->n_fileas);
         
