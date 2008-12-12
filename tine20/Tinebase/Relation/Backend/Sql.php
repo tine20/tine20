@@ -136,7 +136,7 @@ class Tinebase_Relation_Backend_Sql
     	
     	$this->_dbTable->update(array(
     	    'is_deleted'   => true,
-    	    'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
+    	    'deleted_by'   => Tinebase_Core::getUser()->getId(),
     	    'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
     	), $where);
     } // end of member function breakRelation
@@ -161,7 +161,7 @@ class Tinebase_Relation_Backend_Sql
         
             $this->_dbTable->update(array(
                 'is_deleted'   => true,
-                'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
+                'deleted_by'   => Tinebase_Core::getUser()->getId(),
                 'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ), $where);
         }
@@ -197,8 +197,6 @@ class Tinebase_Relation_Backend_Sql
         if (! empty($_type)) {
             $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' IN (?)', $_type);
         }
-        
-       // Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, true));
         
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(), true);
         foreach ($this->_dbTable->fetchAll($where) as $relation) {
@@ -251,8 +249,6 @@ class Tinebase_Relation_Backend_Sql
     public function purgeAllRelations($_ownModel, $_ownBackend, $_ownId)
     {
         $relationIds = $this->getAllRelations($_ownModel, $_ownBackend, $_ownId, NULL, array(), true)->getArrayOfIds();
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($relationIds, true));
         
         if (!empty($relationIds)) {
             $where = array(
