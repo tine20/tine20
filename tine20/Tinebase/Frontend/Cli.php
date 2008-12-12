@@ -43,7 +43,7 @@ class Tinebase_Frontend_Cli
                 exit();
             }
             
-            Zend_Registry::set('currentAccount', $account);
+            Tinebase_Core::set('currentAccount', $account);
 
             $ipAddress = '127.0.0.1';
             $account->setLoginTime($ipAddress);
@@ -53,7 +53,7 @@ class Tinebase_Frontend_Cli
                 $authResult->getIdentity(),
                 $ipAddress,
                 $authResult->getCode(),
-                Zend_Registry::get('currentAccount')
+                Tinebase_Core::getUser()
             ); 
         } else {
             echo "Wrong username and/or password.\n";
