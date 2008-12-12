@@ -26,7 +26,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function getCountryList()
     {
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
 
         $countries = $locale->getCountryTranslationList();
         asort($countries);
@@ -70,7 +70,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     public function setLocale($localeString, $saveaspreference)
     {
         Tinebase_Core::setupUserLocale($localeString, $saveaspreference);
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
         /* No need for return values yet. Client needs to reload!
         return array(
             'locale' => array(
@@ -91,7 +91,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function getAvailableTimezones()
     {
-        $locale =  Zend_Registry::get('locale');
+        $locale =  Tinebase_Core::get('locale');
 
         $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
         //asort($availableTimezones);
@@ -227,10 +227,10 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $inTag = new Tinebase_Model_Tag($tagData);
         
         if (strlen($inTag->getId()) < 40) {
-            Zend_Registry::get('logger')->debug('creating tag: ' . print_r($inTag->toArray(), true));
+            Tinebase_Core::getLogger()->debug('creating tag: ' . print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
         } else {
-            Zend_Registry::get('logger')->debug('updating tag: ' .print_r($inTag->toArray(), true));
+            Tinebase_Core::getLogger()->debug('updating tag: ' .print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->updateTag($inTag);
         }
         return $outTag->toArray();
@@ -298,9 +298,6 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $filter = new Tinebase_Model_NoteFilter(Zend_Json::decode($filter));
         $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        //Zend_Registry::get('logger')->debug(print_r($filter->toArray(),true));
-        //Zend_Registry::get('logger')->debug(print_r($paging->toArray(),true));
-        
         return array(
             'results'       => Tinebase_Notes::getInstance()->searchNotes($filter, $paging)->toArray(),
             'totalcount'    => Tinebase_Notes::getInstance()->searchNotesCount($filter)
@@ -348,8 +345,8 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         if (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
             $response = array(
 				'success'       => TRUE,
-                'account'       => Zend_Registry::get('currentAccount')->getPublicUser()->toArray(),
-				'jsonKey'       => Zend_Registry::get('jsonKey'),
+                'account'       => Tinebase_Core::getUser()->getPublicUser()->toArray(),
+				'jsonKey'       => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
 			);
         } else {
@@ -386,11 +383,11 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
         
         // default credentials
-        if(isset(Zend_Registry::get('configFile')->login)) {
-            $loginConfig = Zend_Registry::get('configFile')->login;
+        if(isset(Tinebase_Core::getConfig()->login)) {
+            $loginConfig = Tinebase_Core::getConfig()->login;
             $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
             $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
         } else {
@@ -399,7 +396,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         }
         
         $registryData =  array(
-            'timeZone'         => Zend_Registry::get('userTimeZone'),
+            'timeZone'         => Tinebase_Core::get('userTimeZone'),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
@@ -411,20 +408,20 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $registryData += array(    
-                'currentAccount'   => Zend_Registry::get('currentAccount')->toArray(),
+                'currentAccount'   => Tinebase_Core::getUser()->toArray(),
                 'accountBackend'   => Tinebase_User::getConfiguredBackend(),
-                'jsonKey'          => Zend_Registry::get('jsonKey'),
-                'userApplications' => Zend_Registry::get('currentAccount')->getApplications()->toArray(),
+                'jsonKey'          => Tinebase_Core::get('jsonKey'),
+                'userApplications' => Tinebase_Core::getUser()->getApplications()->toArray(),
                 'NoteTypes'        => $this->getNoteTypes(),
                 'CountryList'      => $this->getCountryList(),
                 'version'          => array(
                     'codename'      => TINE20_CODENAME,
                     'packageString' => TINE20_PACKAGESTRING,
                     'releasetime'   => TINE20_RELEASETIME
-                ),
-                'changepw'         => (isset(Zend_Registry::get('configFile')->accounts) 
-                                        && isset(Zend_Registry::get('configFile')->accounts->changepw))
-                                            ? Zend_Registry::get('configFile')->accounts->changepw
+                ), 
+                'changepw'         => (isset(Tinebase_Core::getConfig()->accounts)
+                                        && isset(Tinebase_Core::getConfig()->accounts->changepw))
+                                            ? Tinebase_Core::getConfig()->accounts->changepw
                                             : false
             );
         }
@@ -442,7 +439,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $registryData = array();
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
-            $userApplications = Zend_Registry::get('currentAccount')->getApplications();
+            $userApplications = Tinebase_Core::getUser()->getApplications();
             
             foreach($userApplications as $application) {
                 $jsonAppName = $application->name . '_Frontend_Json';
@@ -451,7 +448,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
                     $applicationJson = new $jsonAppName;
                     
                     $registryData[$application->name] = $applicationJson->getRegistryData();
-                    $registryData[$application->name]['rights'] = Zend_Registry::get('currentAccount')->getRights($application->name);
+                    $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = Tinebase_Config::getInstance()->getConfigForApplication($application);
                     $registryData[$application->name]['customfields'] = Tinebase_Config::getInstance()->getCustomFieldsForApplication($application)->toArray();
                 }
