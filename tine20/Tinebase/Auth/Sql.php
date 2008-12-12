@@ -26,7 +26,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
      */
     public function authenticate()
     {
-        Zend_Registry::get('logger')->debug('trying to authenticate '. $this->_identity);
+        Tinebase_Core::getLogger()->debug('trying to authenticate '. $this->_identity);
         
         $result = parent::authenticate();
         
@@ -34,7 +34,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
             // username and password are correct, let's do some additional tests
             
             if($this->_resultRow['status'] != 'enabled') {
-                Zend_Registry::get('logger')->debug('account: '. $this->_identity . ' is disabled');
+                Tinebase_Core::getLogger()->debug('account: '. $this->_identity . ' is disabled');
                 // account is disabled
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
                 $authResult['messages'][] = 'Account disabled.';
@@ -44,15 +44,15 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
             //if(($this->_resultRow['expires_at'] !== NULL) && $this->_resultRow['expires_at'] < Zend_Date::now()->getTimestamp()) {
             if(($this->_resultRow['expires_at'] !== NULL) && Zend_Date::now()->isLater($this->_resultRow['expires_at'])) {
                 // account is expired
-                Zend_Registry::get('logger')->debug('account: '. $this->_identity . ' is expired');
+                Tinebase_Core::getLogger()->debug('account: '. $this->_identity . ' is expired');
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
                 $authResult['messages'][] = 'Account expired.';
                 return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
             }
             
-            Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' succeeded');
+            Tinebase_Core::getLogger()->debug('authentication of '. $this->_identity . ' succeeded');
         } else {
-            Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' failed');
+            Tinebase_Core::getLogger()->debug('authentication of '. $this->_identity . ' failed');
         }
         
         return $result;

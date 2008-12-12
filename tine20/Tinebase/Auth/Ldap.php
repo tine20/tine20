@@ -49,15 +49,15 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap
      */
     public function authenticate()
     {
-        Zend_Registry::get('logger')->debug('trying to authenticate '. $this->getUsername());
+        Tinebase_Core::getLogger()->debug('trying to authenticate '. $this->getUsername());
         
         $result = parent::authenticate();
         
         if($result->isValid()) {
             // username and password are correct, let's do some additional tests            
-            Zend_Registry::get('logger')->debug('authentication of '. $this->getUsername() . ' succeeded');
+            Tinebase_Core::getLogger()->debug('authentication of '. $this->getUsername() . ' succeeded');
         } else {
-            Zend_Registry::get('logger')->debug('authentication of '. $this->getUsername() . ' failed');
+            Tinebase_Core::getLogger()->debug('authentication of '. $this->getUsername() . ' failed');
         }
         
         return $result;
@@ -78,7 +78,7 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap
             throw new Zend_Auth_Adapter_Exception('credential can not be empty');
         }        
         
-        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') trying to authenticate '. $this->_identity . ' against ' . $this->_host);
+        Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') trying to authenticate '. $this->_identity . ' against ' . $this->_host);
         
         $ldapServer = new Tinebase_Ldap_LdapServer($this->_host);
         
@@ -94,14 +94,14 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap
         
         if(count($account) < 1) {
             $result = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
-            Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') account ' . $this->_identity . ' not found');
+            Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') account ' . $this->_identity . ' not found');
         } elseif(count($account) > 1) {
             $result = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
-            Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') multiple accounts for ' . $this->_identity . ' found');
+            Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') multiple accounts for ' . $this->_identity . ' found');
         } else {
             if(!$ldapServer->bind($account[0]['dn'], $this->_credential)) {
                 $result = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
-                Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') invalid password for ' . $account[0]['dn']);
+                Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') invalid password for ' . $account[0]['dn']);
             }
         }
         
@@ -113,7 +113,7 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap
 
         $this->_resultRow = $account[0];
     
-        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') authentication of '. $this->_identity . ' succeeded');
+        Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') authentication of '. $this->_identity . ' succeeded');
         return $this->_getAuthResult(Zend_Auth_Result::SUCCESS);
     }
     

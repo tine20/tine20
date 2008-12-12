@@ -42,7 +42,7 @@ class Tinebase_Auth_Factory
     {
         switch($_type) {
             case self::LDAP:
-                $options = Zend_Registry::get('configFile')->authentication->toArray();
+                $options = Tinebase_Core::getConfig()->authentication->toArray();
                 unset($options['backend']);
 
                 $instance = new Tinebase_Auth_Ldap($options);
@@ -50,7 +50,7 @@ class Tinebase_Auth_Factory
                 
             case self::SQL:
                 $instance = new Tinebase_Auth_Sql(
-                    Zend_Registry::get('dbAdapter'),
+                    Tinebase_Core::getDb(),
                     SQL_TABLE_PREFIX . 'accounts',
                     'login_name',
                     'password',
