@@ -50,14 +50,14 @@ class Tinebase_Group
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            if(isset(Zend_Registry::get('configFile')->accounts)) {
-                $backendType = Zend_Registry::get('configFile')->accounts->get('backend', self::SQL);
+            if(isset(Tinebase_Core::getConfig()->accounts)) {
+                $backendType = Tinebase_Core::getConfig()->accounts->get('backend', self::SQL);
                 $backendType = ucfirst($backendType);
             } else {
                 $backendType = self::SQL;
             }
             
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' groups backend: ' . $backendType);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' groups backend: ' . $backendType);
 
             self::$_instance = self::factory($backendType);
         }
@@ -76,7 +76,7 @@ class Tinebase_Group
     {
         switch($_backendType) {
             case self::LDAP:
-                $options = Zend_Registry::get('configFile')->accounts->get('ldap')->toArray();
+                $options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
                 unset($options['userDn']);
                 unset($options['groupsDn']);
                 

@@ -57,7 +57,7 @@ class Tinebase_Tags
     
     private function __construct()
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -141,12 +141,12 @@ class Tinebase_Tags
      */
     public function createTag(Tinebase_Model_Tag $_tag)
     {
-        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+        $currentAccountId = Tinebase_Core::getUser()->getId();
         
         $newId = $_tag->generateUID();
         $_tag->setId($newId);
         $_tag->occurrence = 0;
-        $_tag->created_by = Zend_Registry::get('currentAccount')->getId();
+        $_tag->created_by = Tinebase_Core::getUser()->getId();
         $_tag->creation_time = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         switch ($_tag->type) {
@@ -197,7 +197,7 @@ class Tinebase_Tags
      */
     public function updateTag(Tinebase_Model_Tag $_tag)
     {
-        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+        $currentAccountId = Tinebase_Core::getUser()->getId();
         $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
             ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         
@@ -234,7 +234,7 @@ class Tinebase_Tags
      */
     public function deleteTags($_ids)
     {
-        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+        $currentAccountId = Tinebase_Core::getUser()->getId();
         $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
             ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         $tags = $this->getTagsById($_ids);
@@ -271,7 +271,7 @@ class Tinebase_Tags
         // check the view right of the tag (throws Exception if not accessable)
         self::getInstance()->getTagsById($_tagId);
         
-        $db = Zend_Registry::get('dbAdapter');
+        $db = Tinebase_Core::getDb();
         $idProperty = $db->quoteIdentifier($_idProperty);
         
         // per left join we add a tag column named as the tag and filter this joined column
@@ -423,7 +423,6 @@ class Tinebase_Tags
         
         $rights = new Tinebase_Record_RecordSet('Tinebase_Model_TagRight', $rows, true);
         
-        //Zend_Registry::get('logger')->debug(print_r($rights->toArray(), true));
         return $rights;
     }
     
@@ -486,7 +485,6 @@ class Tinebase_Tags
             ->group('tag_id');
         $apps = $this->_db->fetchOne($select);
         
-        //Zend_Registry::get('logger')->debug($apps);
         if ($apps == 0){
             $apps = 'any';
         }

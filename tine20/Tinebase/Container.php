@@ -46,7 +46,7 @@ class Tinebase_Container
     private function __construct() {
         $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
         $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }
     /**
      * don't clone. Use the singleton.
@@ -95,19 +95,18 @@ class Tinebase_Container
         if ( $_accountId !== NULL ) {
             $accountId = $_accountId;
         } else {
-            $accountId = Zend_Registry::get('currentAccount')->getId();
+            $accountId = Tinebase_Core::getUser()->getId();
         }
         
         if($_ignoreAcl !== TRUE) {
             switch($_container->type) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
                     // is the user allowed to create personal container?
-                    //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'create container: ' . print_r($_container->toArray(), true));
                     break;
                     
                 case Tinebase_Model_Container::TYPE_SHARED:
                     $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
-                    if(!Zend_Registry::get('currentAccount')->hasRight((string) $application, Tinebase_Acl_Rights::ADMIN)) {
+                    if(!Tinebase_Core::getUser()->hasRight((string) $application, Tinebase_Acl_Rights::ADMIN)) {
                         throw new Tinebase_Exception_AccessDenied('permission to add shared container denied');
                     }
                     break;
@@ -204,7 +203,7 @@ class Tinebase_Container
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        if($_ignoreAcl !== TRUE and !$this->hasGrant(Zend_Registry::get('currentAccount'), $_containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+        if($_ignoreAcl !== TRUE and !$this->hasGrant(Tinebase_Core::getUser(), $_containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to manage grants on container denied.');
         }
         
@@ -260,7 +259,7 @@ class Tinebase_Container
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
-        $cache = Zend_Registry::get('cache');
+        $cache = Tinebase_Core::get('cache');
         $cacheId = 'getContainerByACL' . $accountId . $_application . $_grant . $_onlyIds;
         $result = $cache->load($cacheId);
         
@@ -312,11 +311,11 @@ class Tinebase_Container
                     $application = Tinebase_Core::getApplicationInstance($_application);
                     
                     if($application instanceof Tinebase_Container_Interface) {
-                        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
                         return $application->createPersonalFolder($_accountId);
                     }
                 } catch (Tinebase_Exception_NotFound $enf) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
                 }
             }
             
@@ -353,7 +352,7 @@ class Tinebase_Container
         
         // load from cache
         try {
-            $cache = Zend_Registry::get('cache');
+            $cache = Tinebase_Core::get('cache');
             $result = $cache->load('getContainerById' . $containerId);
             $nocache = FALSE;
         } catch (Zend_Exception $ze) {
@@ -676,7 +675,7 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         if($_ignoreAcl !== TRUE) {
-            if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
             }
             
@@ -711,7 +710,7 @@ class Tinebase_Container
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
 
-        if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+        if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('Permission to rename container denied.');
         }
         
@@ -746,7 +745,7 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $grant = (int)$_grant;
         
-        $cache = Zend_Registry::get('cache');
+        $cache = Tinebase_Core::get('cache');
         $cacheId = 'hasGrant' . $accountId . $containerId . $grant;
         $result = $cache->load($cacheId);
         
@@ -802,7 +801,7 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         if($_ignoreAcl !== TRUE) {
-            if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to get grants of container denied.');
             }            
         }
@@ -867,14 +866,14 @@ class Tinebase_Container
         
         $cacheKey = 'getGrantsOfAccount' . $containerId . $accountId . (int)$_ignoreAcl;
         // load from cache
-        $cache = Zend_Registry::get('cache');
+        $cache = Tinebase_Core::get('cache');
         $grants = $cache->load($cacheKey);
 
         if(!$grants) {
             $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
             
             #if($_ignoreAcl !== TRUE) {
-            #    if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            #    if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
             #        throw new Exception('permission to get grants of container denied');
             #    }            
             #}
@@ -937,9 +936,6 @@ class Tinebase_Container
             }
         }
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), true));
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
-        
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
@@ -952,8 +948,6 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.id IN (?)', array_keys($containers))
             ->group(SQL_TABLE_PREFIX . 'container.id');
 
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-
         $stmt = $this->_db->query($select);
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -964,8 +958,6 @@ class Tinebase_Container
             $row['account_grants'] = $this->_getGrantsFromArray($grantsArray, $accountId)->toArray();
             $containers[$row['id']] = $row;
         }
-
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($containers, true));
         
         // add container & grants to records
         foreach ($_records as &$record) {
@@ -988,7 +980,8 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         if($_ignoreAcl !== TRUE) {
-            if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            // if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to set grants of container denied.');
             }            
         }
@@ -998,7 +991,7 @@ class Tinebase_Container
         # @todo find a new solution for this block
         
 /*        if($container->type === Tinebase_Model_Container::TYPE_PERSONAL) {
-            $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+            $currentAccountId = Tinebase_Core::getUser()->getId();
             // make sure that only the current user has admin rights
             foreach($_grants as $key => $recordGrants) {
                 $_grants[$key]->adminGrant = false;
@@ -1028,7 +1021,7 @@ class Tinebase_Container
         //error_log(print_r($_grants->toArray(), true));
         
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Zend_Registry::get('dbAdapter'));
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
             $where = $this->containerAclTable->getAdapter()->quoteInto('container_id = ?', $containerId);
             $this->containerAclTable->delete($where);

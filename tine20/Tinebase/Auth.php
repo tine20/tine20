@@ -98,7 +98,7 @@ class Tinebase_Auth
      */
     private function __construct() {
         try {
-            $authConfig = Zend_Registry::get('configFile')->authentication;
+            $authConfig = Tinebase_Core::getConfig()->authentication;
             if ( isset($authConfig) ) {
                 $this->_backendType = $authConfig->get('backend', Tinebase_Auth_Factory::SQL);
                 $this->_backendType = ucfirst($this->_backendType);
@@ -108,7 +108,7 @@ class Tinebase_Auth
             // there is a default set for $this->_backendType
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $this->_backendType);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $this->_backendType);
         
         $this->_backend = Tinebase_Auth_Factory::factory($this->_backendType);
     }

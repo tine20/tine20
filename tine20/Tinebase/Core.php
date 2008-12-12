@@ -381,7 +381,7 @@ class Tinebase_Core
         self::set('locale', $locale);
         
         // save locale in config
-        if ($_saveaspreference && Zend_Registry::isRegistered(self::USER)) {
+        if ($_saveaspreference && Tinebase_Core::isRegistered(self::USER)) {
             $preference = new Tinebase_Model_Config(array(
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
                 'name' => 'Locale',

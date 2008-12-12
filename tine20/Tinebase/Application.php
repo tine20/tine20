@@ -287,8 +287,6 @@ class Tinebase_Application
             
             $result[] = $rightArray;
         }
-
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights record: ' . print_r($result, true));
         
         return $result;
         */
@@ -312,9 +310,7 @@ class Tinebase_Application
             $right['application_id'] = $_applicationId;
             
             $allRights = $this->getAllRights($_applicationId);
-
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' all rights: ' . print_r($allRights, true));
-                        
+            
             foreach ( $allRights as $key ) {
                 if ( isset($right[$key]) && $right[$key] === TRUE ) {
                     unset ( $right['id'] );
@@ -324,8 +320,6 @@ class Tinebase_Application
                 }
             }
         }
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($tineRights, true));
         
         return $tineAclRights->setApplicationPermissions($_applicationId, $tineRights);
         */

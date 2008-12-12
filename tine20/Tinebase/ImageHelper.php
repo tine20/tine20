@@ -153,13 +153,12 @@ class Tinebase_ImageHelper
     public static function parseImageLink($link)
     {
         $params = array();
-        Zend_Registry::get('logger')->debug(parse_url($link, PHP_URL_QUERY));
+        Tinebase_Core::getLogger()->debug(parse_url($link, PHP_URL_QUERY));
         parse_str(parse_url($link, PHP_URL_QUERY), $params);
         $params['isNewImage'] = false;
         if (isset($params['application']) && $params['application'] == 'Tinebase') {
             $params['isNewImage'] = true;
         }
-        //Zend_Registry::get('logger')->debug(print_r($params,true));
         return $params;
     }
 
@@ -173,21 +172,19 @@ class Tinebase_ImageHelper
     public static function getImageData($imageParams)
     {
         try {
-            $db = Zend_Registry::get('dbAdapter');
+            $db = Tinebase_Core::getDb();
             $select = $db->select()
                ->from(SQL_TABLE_PREFIX . 'temp_files')
                ->where($db->quoteInto('id = ?', $imageParams['id']))
                ->where($db->quoteInto('session_id = ?', session_id()));
             $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
         } catch (Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " could not fetch row from temp_files table." .
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not fetch row from temp_files table." .
                 ' given $imageParams : ' . print_r($imageParams,true) . 
                 ' thrown exception : ' . $e
             );
             return NULL;
         }
-        
-        //Zend_Registry::get('logger')->debug(print_r($tempFile,true));
         
         if (! Tinebase_ImageHelper::isImageFile($tempFile['path'])) {
             throw new Tinebase_Exception_UnexpectedValue('Given file is not an image.');

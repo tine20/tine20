@@ -115,7 +115,7 @@ class Tinebase_Relations
         }
         
         // remove relations from cache
-        #$cache = Zend_Registry::get('cache');
+        #$cache = Tinebase_Core::get('cache');
         #$result = $cache->remove('getRelations' . $_model . $_backend . $_id);
     }
     
@@ -135,7 +135,7 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreAcl=false)
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' ids:" . print_r((array)$_id, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' ids:" . print_r((array)$_id, true));
     
         $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type);
         $this->resolveAppRecords($result);
@@ -250,7 +250,6 @@ class Tinebase_Relations
      */
     protected function resolveAppRecords($_relations)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolve app records for " . count($_relations) . " relations");
         // seperate relations by model
         $modelMap = array();
         foreach ($_relations as $relation) {
@@ -262,8 +261,6 @@ class Tinebase_Relations
         
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . "  resolving " . count($relations) . " relation(s) of $modelName");
-
             if ($modelName === 'Tinebase_Model_User') {
                 // @todo add related backend here
                 //$appController = Tinebase_User::factory($relations->related_backend);
@@ -274,10 +271,8 @@ class Tinebase_Relations
             }
             
             $getMultipleMethod = 'getMultiple';
-            //Zend_Registry::get('logger')->debug('Tinebase_Relations: ' . print_r($relations->related_id, true));
             
             $records = $appController->$getMultipleMethod($relations->related_id);
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $appName returned " . count($records) . " record(s)");
             
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
@@ -285,8 +280,8 @@ class Tinebase_Relations
                 if ($recordIndex !== false) {
                     $_relations[$relationIndex]->related_record = $records[$recordIndex];
                 } else {
-                    // delete relation from set, as READ ACL is abviously not granted
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
+                    // delete relation from set, as READ ACL is abviously not granted 
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         " removing $relation->related_model $relation->related_backend $relation->related_id (ACL)");
                     unset($_relations[$relationIndex]);
                 }
@@ -303,7 +298,7 @@ class Tinebase_Relations
      */
     protected function _addRelation($_relation)
     {
-        $_relation->created_by = Zend_Registry::get('currentAccount')->getId();
+        $_relation->created_by = Tinebase_Core::getUser()->getId();
         $_relation->creation_time = Zend_Date::now();
         if (!$_relation->isValid()) {
             throw new Tinebase_Exception_Record_Validation('Relation is not valid' . print_r($_relation->getValidationErrors(),true));
@@ -319,7 +314,7 @@ class Tinebase_Relations
      */
     protected function _updateRelation($_relation)
     {
-        $_relation->last_modified_by = Zend_Registry::get('currentAccount')->getId();
+        $_relation->last_modified_by = Tinebase_Core::getUser()->getId();
         $_relation->last_modified_time = Zend_Date::now();
         
         return $this->_backend->updateRelation($_relation);

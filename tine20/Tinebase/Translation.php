@@ -95,7 +95,7 @@ class Tinebase_Translation
      */
     public static function getLocale($_localeString = 'auto')
     {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         try {
             $locale = new Zend_Locale($_localeString);
             
@@ -107,7 +107,7 @@ class Tinebase_Translation
             }
             
             if (! in_array($_localeString, $supportedLocales)) {
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " '$locale' is not supported, checking fallback");
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " '$locale' is not supported, checking fallback");
                 
                 // check if we find suiteable fallback
                 $language = $locale->getLanguage();
@@ -119,18 +119,18 @@ class Tinebase_Translation
                         if (in_array($language, $supportedLocales)) {
                             $locale = new Zend_Locale($language);
                         } else {
-                            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " no suiteable lang fallback found within this locales: " . print_r($supportedLocales, true) );
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no suiteable lang fallback found within this locales: " . print_r($supportedLocales, true) );
                             throw new Tinebase_Exception_NotFound('No suiteable lang fallback found.');
                         }
                         break;
                 }
             }
         } catch (Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " $e, falling back to locale en");
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $e, falling back to locale en");
             $locale = new Zend_Locale('en');
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
         return $locale;
     }
     
@@ -144,15 +144,13 @@ class Tinebase_Translation
     */
     public static function getTranslation($_applicationName)
     {
-        $locale = Zend_Registry::get('locale');
+        $locale = Tinebase_Core::get('locale');
         
         // check if translation exists
         if (isset(self::$_translations[(string)$locale][$_applicationName])) {
 
             // use saved translation
             $translate = self::$_translations[(string)$locale][$_applicationName];
-
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' use saved translation for: ' . $_applicationName);
             
         } else {
             
@@ -162,15 +160,14 @@ class Tinebase_Translation
 
             try {
                 $translate->setLocale($locale);
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)$locale);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)$locale);
                 
             } catch (Zend_Translate_Exception $e) {
                 // the locale of the user is not available
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)$locale);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)$locale);
             }
             
             self::$_translations[(string)$locale][$_applicationName] = $translate;
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' created new translation for: ' . $_applicationName);
         }
         
         return $translate;

@@ -33,11 +33,11 @@ class Tinebase_Events
                 continue;
             }
             if($controller instanceof Tinebase_Events_Interface) {
-                Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') calling eventhandler of ' . (string) $application);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') calling eventhandler of ' . (string) $application);
                 try {
                     $controller->handleEvents($_eventObject);
                 } catch (Exception $e) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . (string) $application . ' threw an exception.');
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') ' . (string) $application . ' threw an exception.');
                 }
             }
         }

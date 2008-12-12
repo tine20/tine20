@@ -132,10 +132,10 @@ class Tinebase_Controller
     {
         //error_log(print_r(Tinebase_Core::getUser()->toArray(), true));
         
-        // check config setting
-        if (!isset(Zend_Registry::get('configFile')->accounts) 
-            || !isset(Zend_Registry::get('configFile')->accounts->changepw)
-            || !Zend_Registry::get('configFile')->accounts->changepw) {
+        // check config setting 
+        if (!isset(Tinebase_Core::getConfig()->accounts)
+            || !isset(Tinebase_Core::getConfig()->accounts->changepw)
+            || !Tinebase_Core::getConfig()->accounts->changepw) {
             throw new Tinebase_Exception_AccessDenied('Password change not allowed.');                
         }
         

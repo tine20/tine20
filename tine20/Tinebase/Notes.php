@@ -81,7 +81,8 @@ class Tinebase_Notes
      */
     private function __construct()
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
+
+        $this->_db = Tinebase_Core::getDb();
         
         $this->_notesTable = new Tinebase_Db_Table(array(
             'name' => SQL_TABLE_PREFIX . 'notes',
@@ -110,8 +111,6 @@ class Tinebase_Notes
         
         $_filter->appendFilterSql($select);
         $_pagination->appendPagination($select);
-        
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($select->__toString(), true));
         
         $rows = $this->_db->fetchAssoc($select);
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
@@ -166,7 +165,7 @@ class Tinebase_Notes
     {
         $backend = ucfirst(strtolower($_backend));
 
-        $cache = Zend_Registry::get('cache');
+        $cache = Tinebase_Core::get('cache');
         $cacheId = 'getNotesOfRecord' . $_model . $_id . $backend;
         $result = $cache->load($cacheId);
         
@@ -219,8 +218,6 @@ class Tinebase_Notes
         $model = get_class($_record);
         $backend = ucfirst(strtolower($_backend));        
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record[$_notesProperty], true));
-                
         $currentNotesIds = $this->getNotesOfRecord($model, $_record->getId(), $backend)->getArrayOfIds();
                 
         if ($_record[$_notesProperty] instanceOf Tinebase_Record_RecordSet) {
@@ -229,8 +226,6 @@ class Tinebase_Notes
             $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $_record[$_notesProperty]);
         }
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notesToSet->toArray(), true));
-                
         //$toAttach = array_diff($notesToSet->getArrayOfIds(), $currentNotesIds);
         $toDetach = array_diff($currentNotesIds, $notesToSet->getArrayOfIds());
 
@@ -249,7 +244,7 @@ class Tinebase_Notes
         }
         
         // invalidate cache
-        Zend_Registry::get('cache')->remove('getNotesOfRecord' . $model . $_record->getId() . $backend);
+        Tinebase_Core::get('cache')->remove('getNotesOfRecord' . $model . $_record->getId() . $backend);
     }
     
     /**
@@ -291,8 +286,6 @@ class Tinebase_Notes
         
         $noteText = $_type . ' by ' . $user->accountDisplayName;
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_mods->toArray(), true));
-        
         if ($_mods !== NULL ) {
             $noteText .= ' | changed fields:';
             foreach ($_mods as $mod) {
@@ -318,8 +311,6 @@ class Tinebase_Notes
      */
     public function deleteNotes(array $_noteIds)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_noteIds, true));
-        
         if (!empty($_noteIds)) {
             $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' in (?)', $_noteIds));
             $this->_notesTable->delete($where);
@@ -342,7 +333,7 @@ class Tinebase_Notes
         $this->deleteNotes($notes->getArrayOfIds());
         
         // invalidate cache
-        Zend_Registry::get('cache')->remove('getNotesOfRecord' . $_model . $_id . $backend);
+        Tinebase_Core::get('cache')->remove('getNotesOfRecord' . $_model . $_id . $backend);
     }
     
     /************************** note types *******************/
