@@ -71,7 +71,7 @@ class Tinebase_Acl_Roles
         $this->_rolesTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'roles'));
         $this->_roleMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
         $this->_roleRightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_rights'));
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }    
     
     /**
@@ -113,8 +113,6 @@ class Tinebase_Acl_Roles
         $select = $this->_roleRightsTable->select();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right));
-               
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
             
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
             $result = false;
@@ -157,9 +155,7 @@ class Tinebase_Acl_Roles
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'applications.status') . ' = ?', Tinebase_Application::ENABLED))
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id')
             ->order('order', 'ASC');
-            
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-
+        
         $stmt = $this->_db->query($select);
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
@@ -195,9 +191,7 @@ class Tinebase_Acl_Roles
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
             //->group(SQL_TABLE_PREFIX . 'role_rights.right');
-            
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
-            
+        
         $stmt = $this->_db->query($select);
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
@@ -215,8 +209,6 @@ class Tinebase_Acl_Roles
                 $result[] = $right;
             }
         }    
-
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'rights: ' . print_r($result, true));      
         
         return $result;
     }
@@ -295,12 +287,10 @@ class Tinebase_Acl_Roles
     {
         $data = $_role->toArray();
         if(Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $data['created_by'] = Zend_Registry::get('currentAccount')->getId();
+            $data['created_by'] = Tinebase_Core::getUser()->getId();
         }
         $data['creation_time'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-                
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-                        
+        
         $newId = $this->_rolesTable->insert($data); 
         
         if ($newId === NULL) {
@@ -320,11 +310,9 @@ class Tinebase_Acl_Roles
     public function updateRole(Tinebase_Model_Role $_role)
     {
         $data = $_role->toArray();
-        $data['last_modified_by'] = Zend_Registry::get('currentAccount')->getId();
+        $data['last_modified_by'] = Tinebase_Core::getUser()->getId();
         $data['last_modified_time'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_role->getId());
         $this->_rolesTable->update($data, $where); 
         
@@ -356,7 +344,7 @@ class Tinebase_Acl_Roles
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting role ' . $e->__toString());
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting role ' . $e->__toString());
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw new Tinebase_Exception_Backend($e->getMessage());
         }
@@ -406,8 +394,6 @@ class Tinebase_Acl_Roles
         $select = $this->_roleMembersTable->select();
         $select ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_accountId) . ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'user'))
                 ->orwhere($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND ' .  $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'group'));
-            
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
@@ -525,9 +511,7 @@ class Tinebase_Acl_Roles
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?', $_roleId))
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right))
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId));
-               
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
-            
+        
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {                        
             $data = array(
                 'role_id'           => $_roleId,
