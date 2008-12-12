@@ -158,7 +158,7 @@ class Tinebase_Config
      * 
      * @param   string $_applicationId application id
      * @return  array with config name => value pairs
-     * @throws  Tinebase_Exception_NotFound
+     * //@throws  Tinebase_Exception_NotFound
      */
     public function getConfigForApplication($_applicationId)
     {
@@ -170,9 +170,9 @@ class Tinebase_Config
         $rows = $this->_db->fetchAssoc($select);
         //$result = new Tinebase_Record_RecordSet('Tinebase_Model_Config', $rows, true);
 
-        if (empty($rows)) {
-            throw new Tinebase_Exception_NotFound("application $_applicationName config settings not found!");
-        }
+        //if (empty($rows)) {
+        //    throw new Tinebase_Exception_NotFound("application $_applicationName config settings not found!");
+        //}
         
         $result = array();
         foreach ( $rows as $row ) {
@@ -306,8 +306,8 @@ class Tinebase_Config
     /**
      * get custom fields for an application
      *
-     * @param integer $_applicationId
-     * @param string  $_modelName
+     * @param string|Tinebase_Model_Application $_applicationId
+     * @param string                            $_modelName
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField records
      * 
      * @todo    add caching here
@@ -329,7 +329,22 @@ class Tinebase_Config
         
         return $result;
     }
-
+    
+    /**
+     * gets all custom fields
+     * 
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField
+     */
+    public function getAllCustomFields()
+    {
+        $select = $this->_db->select()->from($this->_configCustomFieldsTablename);
+        
+        $rows = $this->_db->fetchAssoc($select);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
+        
+        return $result;
+    }
+    
     /**
      * delete a custom field
      *
