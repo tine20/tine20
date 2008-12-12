@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
+ * @version     $Id:AllTests.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  */
 
 /**
@@ -29,6 +29,7 @@ class Timetracker_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker All Tests');
         $suite->addTestSuite('Timetracker_JsonTest');
+        $suite->addTestSuite('Timetracker_ControllerTest');
         return $suite;
     }
 }
