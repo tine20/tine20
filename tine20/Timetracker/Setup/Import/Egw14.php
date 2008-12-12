@@ -51,7 +51,7 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var integer
      */
-    protected $_beginId = 7;
+    protected $_beginId = 22;
     
     /**
      * egw timesheet categories
@@ -66,12 +66,22 @@ class Timetracker_Setup_Import_Egw14
      * @var array
      */
     protected $_newTimeaccountCategories = array(
-        70 => 'Bereitschaft',
+        41 => 'Initial Load',
+        42 => 'Maintenance',
+        /*
         27 => 'Implementierung',
         29 => 'Konzeption',
         33 => 'Support',
         30 => 'Vertrieb'
+        */
     );
+    
+    /**
+     * unbillable cat id
+     *
+     * @var integer
+     */
+    protected $_unbillableCatId = 26;
     
     /**
      * the constructor 
@@ -208,8 +218,9 @@ class Timetracker_Setup_Import_Egw14
      * import single project
      *
      * @param array $_data
+     * @param array $_parentData
      */
-    protected function _importProject($_data, $_parentId = 0)
+    protected function _importProject($_data, $_parentData = array())
     {
         // get subprojects
         $select = $this->_db->select()
@@ -231,17 +242,26 @@ class Timetracker_Setup_Import_Egw14
         if (count($queryResult) > 0) {
             // import subprojects
             foreach ($queryResult as $row) {
-                $this->_importProject($row, $_data['pm_id']);
+                $this->_importProject($row, $_data);
             }
         
         } else {
+            // no subprojects
             $timeaccounts = array();
             
-            // no subprojects
-            if ($_parentId == 0) {
+            if (empty($_parentData)) {
                 echo "Importing mainproject: " . $_data['pm_title'] . ' ' .$_data['pm_id'] . "\n";
             } else {
                 echo "- Importing subproject: " . $_data['pm_title'] . ' ' .$_data['pm_id'] . "\n";
+                // add main project title to some subprojects
+                $specialReplacements = array(
+                    'SOW-43474' => 'CMSLite',
+                    //'SOW-42248' ?
+                    //'SOW-42246' ?
+                );
+                if (in_array($_parentData['pm_number'], $specialReplacements)) {
+                    $_data['pm_title'] = $specialReplacements[$_parentData['pm_number']] . ' ' . $_data['pm_title'];
+                }
             }
             
             // create contract
@@ -267,6 +287,16 @@ class Timetracker_Setup_Import_Egw14
                         $timeaccounts[$timesheet['cat_id']] = $this->_createTimeaccount($data, $contract);
                     } 
                     $this->_createTimesheet($timesheet['record'], $timeaccounts[$timesheet['cat_id']]->getId());
+                    
+                } elseif (!empty($_parentData) && $_parentData['pm_number'] == 'SOW-42246/0005') {
+                    // special project number eshop
+                    if (!isset($timeaccounts['eshop'])) {
+                        echo "    create new timeaccount for eshop subprojects\n";
+                        $data = $_data;
+                        $data['pm_title'] .= ' [E-Shop]';
+                        $timeaccounts['eshop'] = $this->_createTimeaccount($data, $contract);
+                    }
+                    $this->_createTimesheet($timesheet['record'], $timeaccounts['eshop']->getId());
                     
                 } else {
                     // add category name as tag
@@ -350,12 +380,43 @@ class Timetracker_Setup_Import_Egw14
         // add user grants to this timeaccount (container)
         $members = $this->_getProjectMembers($_data['pm_id']);
         echo "    Got " . count($members) . " members for that project.\n";
-        foreach ($members as $userId) {
-            // @todo check if user still exists?
+        foreach ($members as $userId => $role) {
             $timeaccountContainer = Tinebase_Container::getInstance()->getContainerById($timeaccount->container_id);
-            Tinebase_Container::getInstance()->addGrants($timeaccountContainer, 'user', $userId, array(
-                Tinebase_Model_Container::GRANT_READ
-            ), TRUE);            
+            
+            // add more different grants depending on roles
+            switch ($role) {
+                case 1:
+                    $grants = array(
+                        Tinebase_Model_Container::GRANT_READ
+                    );
+                    break;
+                case 2:
+                    $grants = array(
+                        Tinebase_Model_Container::GRANT_READ,
+                        Tinebase_Model_Container::GRANT_EDIT,
+                        Tinebase_Model_Container::GRANT_ADD,
+                    );
+                    break;
+                case 3:
+                    $grants = array(
+                        Tinebase_Model_Container::GRANT_READ,
+                        Tinebase_Model_Container::GRANT_EDIT,
+                        Tinebase_Model_Container::GRANT_ADD,
+                        Tinebase_Model_Container::GRANT_DELETE,
+                    );
+                    break;
+                case 4:
+                    $grants = array(
+                        Tinebase_Model_Container::GRANT_READ,
+                        Tinebase_Model_Container::GRANT_EDIT,
+                        Tinebase_Model_Container::GRANT_ADD,
+                        Tinebase_Model_Container::GRANT_DELETE,
+                        Tinebase_Model_Container::GRANT_ADMIN
+                    );
+                    break;
+            }
+            
+            Tinebase_Container::getInstance()->addGrants($timeaccountContainer, 'user', $userId, $grants, TRUE);            
         }
         
         $this->_counters['timeaccounts']++;
@@ -402,7 +463,7 @@ class Timetracker_Setup_Import_Egw14
     protected function _createTag($_catData)
     {
         $tags = Tinebase_Tags::getInstance()->searchTags(new Tinebase_Model_TagFilter(array(
-            'name' => $_catData['cat_name'],
+            'name' => utf8_encode($_catData['cat_name']),
             'type' => Tinebase_Model_Tag::TYPE_SHARED
         )), new Tinebase_Model_Pagination());
         
@@ -450,7 +511,6 @@ class Timetracker_Setup_Import_Egw14
      * @param integer $_projectId
      * @return array of member ids
      * 
-     * @todo    get role as well?
      */
     protected function _getProjectMembers($_projectId)
     {
@@ -464,7 +524,7 @@ class Timetracker_Setup_Import_Egw14
 
         $result = array();
         foreach ($queryResult as $row) {
-            $result[] = $row['member_uid'];
+            $result[$row['member_uid']] = $row['role_id'];
         }        
         return $result;
     }
@@ -533,7 +593,7 @@ class Timetracker_Setup_Import_Egw14
                 'duration'              => $row['ts_duration'],
                 'description'           => (!empty($row['ts_description'])) ? $this->_convertDescription($row['ts_description']) : 'not set (imported)',
                 'is_cleared'            => 1,
-                //'is_billable'           => ,
+                'is_billable'           => ($row['cat_id'] == $this->_unbillableCatId) ? 0 : 1,
             );
             
             // add custom fields
