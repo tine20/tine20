@@ -1613,4 +1613,88 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.19');
     }
+    
+    /**
+     * update to 0.20
+     * - set proper default values for several database fields
+     *
+     */
+    public function update_19()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>remark</name>
+                <type>text</type>
+                <length>256</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>created_by</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>creation_time</name>
+                <type>datetime</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_time</name>
+                <type>datetime</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>icon_class</name>
+                <type>text</type>
+                <length>128</length>
+                <default>NULL</default>
+            </field>
+        ');
+        $this->_backend->alterCol('note_types', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '0.20');
+    }
 }
