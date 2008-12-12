@@ -51,7 +51,7 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var integer
      */
-    protected $_beginId = 22;
+    protected $_beginId = 0;
     
     /**
      * egw timesheet categories
