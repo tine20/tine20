@@ -33,7 +33,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -110,7 +110,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         } else {
             $filter = 'objectclass=posixaccount';
         }
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
         
         return $this->_getUsersFromBackend($filter, $_accountClass);
     }
@@ -126,7 +126,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {
         $loginName = Zend_Ldap::filterEscape($_loginName);
-        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $loginName);
+        $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uid=' . $loginName);
                 
         return $this->_ldap2User($account, $_accountClass);
     }
@@ -141,7 +141,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
+        $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
         
         return $this->_ldap2User($account, $_accountClass);
     }
@@ -173,7 +173,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     
     protected function _getUserSelectObject()
     {
-        $db = Zend_Registry::get('dbAdapter');
+        $db = Tinebase_Core::getDb();
         
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 
