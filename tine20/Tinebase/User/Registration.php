@@ -52,15 +52,15 @@ class Tinebase_User_Registration
     private function __construct ()
     {
         // get config
-        if(isset(Zend_Registry::get('configFile')->registration)) {
-            $this->_config = Zend_Registry::get('configFile')->registration;
+        if(isset(Tinebase_Core::getConfig()->registration)) {
+            $this->_config = Tinebase_Core::getConfig()->registration;
         } else {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ');
         }
         // create table objects and get db adapter
         $this->_registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
         $this->_invitationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registration_invitations'));
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -101,7 +101,7 @@ class Tinebase_User_Registration
     {
         // if exists -> return false
         try {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' call getUserByLoginName with username ' . $_username);
             // get user with this username from db
             $account = Tinebase_User::getInstance()->getUserByLoginName($_username);
@@ -141,8 +141,8 @@ class Tinebase_User_Registration
      * 
      */
     public function registerUser ($regData, $_sendMail = true)
-    {
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
+    { 
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' call registerUser with regData: ' . print_r($regData, true));
         
         // validate unique username
@@ -163,7 +163,6 @@ class Tinebase_User_Registration
                     $debugMessage .= $message . " ";
                 }
                 $debugMessage .= ')';
-                //Zend_Registry::get('logger')->debug($debugMessage);
                 // throw exception
                 throw (new Exception('Invalid registration email address: ' . $debugMessage));
             }
@@ -194,16 +193,16 @@ class Tinebase_User_Registration
             $regData['accountExpires'] = new Zend_Date();
             // add 'expires' from config hours
             $timeToAdd = $this->_config->expires . ":00:00";
-            Zend_Registry::get('logger')->debug("this account expires in $timeToAdd hours ...");
+            TinebaseCore::getLogger()->debug("this account expires in $timeToAdd hours ...");
             $regData['accountExpires']->add($timeToAdd, Zend_Date::TIMES);
         } else {
-            Zend_Registry::get('logger')->debug("this account never expires.");
+            Tinebase_Core::getLogger()->debug("this account never expires.");
             $regData['accountExpires'] = NULL;
         }
         // get model & save user data (account & contact) via the User and Addressbook controllers
         $account = new Tinebase_Model_FullUser($regData);
         Tinebase_User::getInstance()->addUser($account);
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' saved user ' . $regData['accountLoginName']);
         // generate password and save it
         $regData['password'] = $this->generatePassword();
@@ -272,8 +271,8 @@ class Tinebase_User_Registration
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
         $result = false;
-        if (! empty($recipientEmail)) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
+        if (! empty($recipientEmail)) { 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' send registration email to ' . $recipientEmail);
             $mail->addTo($recipientEmail, $recipientName);
             if ($mail->send()) {
@@ -327,8 +326,8 @@ class Tinebase_User_Registration
         }
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
-        if (! empty($recipientEmail)) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
+        if (! empty($recipientEmail)) { 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' send lost password email to ' . $recipientEmail);
             $mail->addTo($recipientEmail, $recipientName);
             $mail->send();
@@ -492,16 +491,15 @@ class Tinebase_User_Registration
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
             throw (new Tinebase_Exception_Record_NotDefined('registration entry not found error'));
-            //Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
-        }
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
+        } 
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             "Tinebase_Model_Registration::row values: \n" . print_r($row, true));
         try {
             $registration = new Tinebase_Model_Registration();
             $registration->setFromArray($row);
         } catch (Exception $e) {
-            $validationErrors = $registration->getValidationErrors();
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
+            $validationErrors = $registration->getValidationErrors(); 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 $e->getMessage() . "\n" . "Tinebase_Model_Registration::validation_errors: \n" . 
                 print_r($validationErrors, true));
             throw ($e);

@@ -26,7 +26,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -43,7 +43,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     private static $_instance = NULL;
     
     /**
-     * copy of Zend_Registry::get('dbAdapter')
+     * copy of Tinebase_Core::get('dbAdapter')
      *
      * @var Zend_Db_Adapter_Abstract
      */
@@ -154,7 +154,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
+            Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
                 "Tinebase_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
@@ -189,7 +189,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $account->setFromArray($row);
         } catch (Tinebase_Exception_Record_Validation $e) {
             $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
+            Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
                 "Tinebase_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
@@ -538,12 +538,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' deleted user ' . $account->accountLoginName);
     }
     
     /**
