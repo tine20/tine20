@@ -56,7 +56,7 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
      */
     public function getSelect()
     {
-        $db = Zend_Registry::get('dbAdapter');
+        $db = Tinebase_Core::getDb();
         $select = $db->select()
             ->from (array('tags' => SQL_TABLE_PREFIX . 'tags'))
             ->where($db->quoteIdentifier('is_deleted') . ' = 0')

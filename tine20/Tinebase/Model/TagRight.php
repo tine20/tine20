@@ -81,8 +81,8 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
      */
     public static function applyAclSql($_select, $_right, $_idProperty='id')
     {
-        $db = Zend_Registry::get('dbAdapter');
-        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+        $db = Tinebase_Core::getDb();
+        $currentAccountId = Tinebase_Core::getUser()->getId();
         $currentGroupIds = Tinebase_Group::getInstance()->getGroupMemberships($currentAccountId);
         $groupCondition = ( !empty($currentGroupIds) ) ? ' OR (' . $db->quoteInto('acl.account_type = ?', 'group') . 
             ' AND ' . $db->quoteInto('acl.account_id IN (?)', $currentGroupIds, Zend_Db::INT_TYPE) . ' )' : '';

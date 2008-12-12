@@ -57,7 +57,7 @@ class Tinebase_Model_RoleFilter extends Tinebase_Record_Abstract
      */
     public function getSelect()
     {
-        $db = Zend_Registry::get('dbAdapter');
+        $db = Tinebase_Core::getDb();
         $select = $db->select()
             ->from(array('roles' => SQL_TABLE_PREFIX . 'roles'));
         
