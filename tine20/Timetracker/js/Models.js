@@ -27,7 +27,8 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
     { name: 'is_cleared' },
     // tine 2.0 notes + tags
     { name: 'notes'},
-    { name: 'tags' }
+    { name: 'tags' },
+    { name: 'customfields'}
 ]);
 
 /**
