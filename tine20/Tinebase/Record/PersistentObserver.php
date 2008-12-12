@@ -73,12 +73,12 @@ class Tinebase_Record_PersistentObserver
         	$controllerName = $observer->observer_application . '_Controller';
         	
             if(!class_exists($controllerName)) {
-                Zend_Registry::get('logger')->debug("No such application controller: '$controllerName'");
+                Tinebase_Core::getLogger()->debug("No such application controller: '$controllerName'");
                 continue;
             }
             
             if(!class_exists($_event)) {
-                Zend_Registry::get('logger')->debug("No such event: '$_event'");
+                Tinebase_Core::getLogger()->debug("No such event: '$_event'");
                 continue;
             }
             
@@ -86,7 +86,7 @@ class Tinebase_Record_PersistentObserver
                 $controller = call_user_func(array($controllerName, 'getInstance'));
             } catch (Exception $e) {
                 // application has no controller or is not useable at all
-                Zend_Registry::get('logger')->debug("can't get instance of $controllerName : $e");
+                Tinebase_Core::getLogger()->debug("can't get instance of $controllerName : $e");
                 continue;
             }
             
@@ -110,7 +110,7 @@ class Tinebase_Record_PersistentObserver
     		throw new Tinebase_Exception_Record_NotAllowed('Could not add existing observer');
     	}
     	
-    	$_persistentObserver->created_by = Zend_Registry::get('currentAccount')->getId();
+    	$_persistentObserver->created_by = Tinebase_Core::getUser()->getId();
     	$_persistentObserver->creation_time = Zend_Date::now();
     	
     	if ($_persistentObserver->isValid()) {
@@ -146,7 +146,7 @@ class Tinebase_Record_PersistentObserver
         	
         	$this->_db->update(array(
         	    'is_deleted'   => true,
-        	    'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
+        	    'deleted_by'   => Tinebase_Core::getUser()->getId(),
         	    'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
         	), $where);
         }
@@ -167,7 +167,7 @@ class Tinebase_Record_PersistentObserver
 	        
             $this->_db->update(array(
                 'is_deleted'   => true,
-                'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
+                'deleted_by'   => Tinebase_Core::getUser()->getId(),
                 'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ), $where);
     	} else {

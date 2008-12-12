@@ -261,7 +261,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         // change timezone of current php process to usertimezone to let new dates be in the users timezone
         // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
         //       lead to incorrect results on DST transistions 
-        date_default_timezone_set(Zend_Registry::get('userTimeZone'));
+        date_default_timezone_set(Tinebase_Core::get('userTimeZone'));
 
         // NOTE: setFromArray creates new Zend_Dates of $this->datetimeFields
         $this->setFromJson($_data);
@@ -382,7 +382,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 }
                 if ($_throwExceptionOnInvalidData) {
                     $e = new Tinebase_Exception_Record_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
-                    Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
+                    Tinebase_Core::getLogger()->debug(__CLASS__ . ":\n" .
                         print_r($this->_validationErrors,true). $e);
                     throw $e;
                 }
@@ -718,7 +718,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         // get translation object
         if (!empty($this->_toTranslate)) {
             
-            $locale = Zend_Registry::get('locale');
+            $locale = Tinebase_Core::get('locale');
             $translate = Tinebase_Translation::getTranslation($this->_application);
             
             foreach ($this->_toTranslate as $field) {

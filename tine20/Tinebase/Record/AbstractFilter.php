@@ -82,7 +82,6 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data, $_getOperators = TRUE)
     {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " setting filters from array with data: " .
         //    print_r($_data, true));
         
         if ($_getOperators) {
@@ -124,7 +123,6 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
         
         foreach ($this->_properties as $field => $value)
         {
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . " append sql for filter '$field' width value '$value'");
             $value = str_replace(array('*', '_'), array('%', '\_'), $value);
             
             switch ($field) {
