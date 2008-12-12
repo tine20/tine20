@@ -114,7 +114,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      *
      * @param string $_id
      * @param int $_containerId
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo    add get relations ?
