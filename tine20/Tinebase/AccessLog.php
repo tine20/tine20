@@ -42,7 +42,7 @@ class Tinebase_AccessLog
     private function __construct()
     {
         $this->_accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
