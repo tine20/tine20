@@ -338,6 +338,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param   array array of record identifiers
      * @return  void
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
+     * 
+     * @todo check container grants!!
      */
     public function delete($_ids)
     {
@@ -355,7 +357,9 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($records as $record) {
-                $this->_deleteRecord($record);
+                if ($this->_checkGrant($record, 'delete')) {
+                    $this->_deleteRecord($record);
+                }
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -399,14 +403,14 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             || ($this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_DELETE 
             && $container->type != Tinebase_Model_Container::TYPE_INTERNAL))) {
                 
+            $this->_deleteLinkedObjects($_record);
+            
             if (!$this->_purgeRecords && $_record->has('created_by')) {
                 Tinebase_Timemachine_Modificationlog::setRecordMetaData($_record, 'delete', $_record);
                 $this->_backend->update($_record);
             } else {
                 $this->_backend->delete($_record);
             }
-
-            $this->_deleteLinkedObjects($_record);
             
         } else {
             throw new Tinebase_Exception_AccessDenied('Delete access in container ' . $_record->container_id . ' denied.');
@@ -442,5 +446,23 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                 }
             }
         }        
+    }
+
+    /**
+     * check grant for action (CRUD)
+     *
+     * @param Timetracker_Model_Timeaccount $_record
+     * @param string $_action
+     * @param boolean $_throw
+     * @param string $_errorMessage
+     * @return boolean
+     * @throws Tinebase_Exception_AccessDenied
+     * 
+     * @todo use this function in other CRUD functions
+     * @todo invent concept for simple adding of grants (plugins?) 
+     */
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.')
+    {
+        return TRUE;
     }
 }
