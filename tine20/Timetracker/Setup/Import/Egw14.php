@@ -130,6 +130,7 @@ class Timetracker_Setup_Import_Egw14
     /**
      * get and create timesheet custom fields
      *
+     * @todo add more values (options, order, ...)
      */
     public function importTimesheetCustomFields()
     {
@@ -148,7 +149,7 @@ class Timetracker_Setup_Import_Egw14
                 'name'              => $row['ts_extra_name'],
                 'label'             => $row['ts_extra_name'],        
                 'model'             => 'Timetracker_Model_Timesheet',
-                'type'              => 'text',
+                'type'              => 'textfield',
                 'length'            => 256,        
             ));
             
@@ -247,7 +248,6 @@ class Timetracker_Setup_Import_Egw14
         
         } else {
             // no subprojects
-            $timeaccounts = array();
             
             if (empty($_parentData)) {
                 echo "Importing mainproject: " . $_data['pm_title'] . ' ' .$_data['pm_id'] . "\n";
@@ -267,13 +267,11 @@ class Timetracker_Setup_Import_Egw14
             // create contract
             $contract = $this->_createContract($_data);        
             
-            // create timeaccount
-            $timeaccounts['main'] = $this->_createTimeaccount($_data, $contract);
-
             // get timesheets
             $timesheets = $this->_getTimesheetsForProject($_data['pm_id']);
              
-            // add timesheets
+            // add timesheets and timeaccounts
+            $timeaccounts = array();
             foreach ($timesheets as $timesheet) {
                 // scan timesheets and add additional timeaccounts for special categories
                 if (isset($this->_newTimeaccountCategories[$timesheet['cat_id']])) {
@@ -281,7 +279,7 @@ class Timetracker_Setup_Import_Egw14
                     
                     // create new timeaccount
                     if (!isset($timeaccounts[$timesheet['cat_id']])) {
-                        echo "    create new timeaccount for category: " . $catName . "\n";
+                        echo "   create new timeaccount for category: " . $catName . "\n";
                         $data = $_data;
                         $data['pm_title'] .= ' [' . $catName . ']';
                         $timeaccounts[$timesheet['cat_id']] = $this->_createTimeaccount($data, $contract);
@@ -291,7 +289,7 @@ class Timetracker_Setup_Import_Egw14
                 } elseif (!empty($_parentData) && $_parentData['pm_number'] == 'SOW-42246/0005') {
                     // special project number eshop
                     if (!isset($timeaccounts['eshop'])) {
-                        echo "    create new timeaccount for eshop subprojects\n";
+                        echo "   create new timeaccount for eshop subprojects\n";
                         $data = $_data;
                         $data['pm_title'] .= ' [E-Shop]';
                         $timeaccounts['eshop'] = $this->_createTimeaccount($data, $contract);
@@ -299,6 +297,12 @@ class Timetracker_Setup_Import_Egw14
                     $this->_createTimesheet($timesheet['record'], $timeaccounts['eshop']->getId());
                     
                 } else {
+                    // create timeaccount
+                    if (!isset($timeaccounts['main'])) {
+                        echo "  create main timeaccount for project\n";
+                        $timeaccounts['main'] = $this->_createTimeaccount($_data, $contract);
+                    }
+                    
                     // add category name as tag
                     if (!empty($this->_tsCategories[$timesheet['cat_id']])) {
                         $tag = new Tinebase_Model_Tag(array(
