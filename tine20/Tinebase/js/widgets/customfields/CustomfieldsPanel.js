@@ -22,16 +22,45 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     record: null,
     
     //private
-    layout: 'fit',
+    layout: 'form',
     border: true,
     frame: true,
+    labelAlign: 'top',
+    autoScroll: true,
+    defaults: {
+        anchor: '100%',
+        labelSeparator: ''
+    },
     
     initComponent: function() {
         this.title = _('Custom Fields');
         
-        var cfd = this.getCustomFieldDefinition();
-        if (cfd) {
-            this.items = [new Tine.widgets.customfields.CustomfieldsPanelFormField()];
+        var cfStore = this.getCustomFieldDefinition();
+        if (cfStore) {
+            this.items = [];
+            cfStore.each(function(def) {
+                var fieldDef = {
+                    fieldLabel: def.get('label'),
+                    name: 'customfield_' + def.get('name'),
+                    xtype: def.get('type')
+                };
+                
+                try {
+                    var fieldObj = Ext.ComponentMgr.create(fieldDef);
+                    this.items.push(fieldObj);
+                    
+                    // ugh a bit ugly
+                    def.fieldObj = fieldObj;
+                } catch (e) {
+                    console.error('unable to create custom field "' + def.get('name') + '". Check definition!');
+                    cfStore.remove(def);
+                }
+                
+            }, this);
+            this.items.push(new Tine.widgets.customfields.CustomfieldsPanelFormField({
+                cfStore: cfStore
+            }));
+            
         } else {
             this.html = '<div class="x-grid-empty">' + _('There are no custom fields yet') + "</div>";
         }
@@ -40,14 +69,22 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     },
     
     getCustomFieldDefinition: function() {
-        
-        if (this.record && typeof(this.record.getMeta) == 'function') {
-            var appName = this.record.getMeta('appName');
-            //Tine[appName].registry.get()
-            return true;
-        } else {
-            return false;
-        }
+        if (this.record && typeof(this.record.getTitle) == 'function') {
+            var appName = this.record.appName;
+            if (Tine[appName].registry.containsKey('customfields')) {
+                var allCfs = Tine[appName].registry.get('customfields');
+                var cfStore = new Ext.data.JsonStore({
+                    fields: Tine.Tinebase.Model.Customfield,
+                    data: allCfs
+                });
+                
+                cfStore.filter('model', this.record.appName + '_Model_' + this.record.modelName);
+                
+                if (cfStore.getCount() > 0) {
+                    return cfStore;
+                }
+            }
+        } 
     }
 });
 
@@ -55,6 +92,12 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
  * @private Helper class to have customfields processing in the standard form/record cycle
  */
 Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field, {
+    /**
+     * @cfg {Ext.data.store} cfObject
+     * Custom field Objects
+     */
+    cfStore: null,
+    
     name: 'customfields',
     hidden: true,
     labelSeparator: '',
@@ -67,27 +110,36 @@ Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field
     },*/
     
     /**
-     * returns tags data of the current record
+     * returns cf data of the current record
      */
     getValue: function() {
-        var value = [];
-        this.recordTagsStore.each(function(tag){
-            if(tag.id.length > 5) {
-                //if we have a valid id we just return the id
-                value.push(tag.id);
-            } else {
-                //it's a new tag and will be saved on the fly
-                value.push(tag.data);
-            }
-        });
-        return value;
+        var values = new Tine.widgets.customfields.Cftransport();
+        this.cfStore.each(function(def) {
+            values[def.get('name')] = def.fieldObj.getValue();
+        }, this);
+        
+        return values;
     },
     
     /**
-     * sets tags from an array of tag data objects (not records)
+     * sets cfs from data
      */
-    setValue: function(value){
-        this.recordTagsStore.loadData(value);
+    setValue: function(values){
+        this.cfStore.each(function(def) {
+            def.fieldObj.setValue(values[def.get('name')]);
+        });
     }
 
+});
+
+/**
+ * helper class to workaround String Casts in record class
+ * 
+ * @class Tine.widgets.customfields.Cftransport
+ * @extends Object
+ */
+Tine.widgets.customfields.Cftransport = Ext.extend(Object , {
+    toString: function() {
+        return Ext.util.JSON.encode(this);
+    }
 });
