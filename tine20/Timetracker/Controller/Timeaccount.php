@@ -141,14 +141,15 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
                 $hasGrant = (
                     $hasGrant
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::VIEW_ALL)
-                );
-            case 'update':
-                //$hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
-            case 'delete':
-                $hasGrant = (
-                    $hasGrant
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_OWN)
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING) 
+                    );
+            case 'delete':
+            case 'update':
+                $hasGrant = (
+                    $hasGrant
+                    || $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
                 );
                 break;
         }
