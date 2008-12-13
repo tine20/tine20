@@ -126,7 +126,8 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function hasGrant($_timeaccountId, $_grant)
     {
-        $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
+        $timeaccountBackend = new Timetracker_Backend_Timeaccount();
+        $timeaccount = $timeaccountBackend->get($_timeaccountId);
         
         return Tinebase_Container::getInstance()->hasGrant(
             Tinebase_Core::getUser()->getId(), 
