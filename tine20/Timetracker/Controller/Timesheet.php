@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
+ * @todo        check manage_clearing grant in create/update functions
  */
 
 /**
@@ -169,22 +170,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
         
         return parent::update($_record);
     }
-    
-    /**
-     * Deletes a set of records.
-     * 
-     * If one of the records could not be deleted, no record is deleted
-     * 
-     * @param   array array of record identifiers
-     * @deprecated ?
-     */
-    /*
-    public function delete($_ids)
-    {
-        return parent::delete($_ids);
-    }
-    */
-    
+        
     /****************************** protected functions ************************/
     
     /**
@@ -199,23 +185,23 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
      */
     protected function _checkGrant($_record, $_action, $_throw = FALSE, $_errorMessage = 'No Permission.')
     {
+        $hasGrant = FALSE;
+        
         switch ($_action) {
             case 'create':
             case 'update':
+                $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
             case 'delete':
-                $hasGrant = (   
-                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
+                $hasGrant = (
+                    $hasGrant
+                    || (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
                         && $_record->account_id == $this->_currentAccount->getId())
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
-                        
                 );
-                break;
             case 'get':
-                $hasGrant = (   
-                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId())
+                $hasGrant = (
+                    $hasGrant   
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::VIEW_ALL)
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 break;
             default:

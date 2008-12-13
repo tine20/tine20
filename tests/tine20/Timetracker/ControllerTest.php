@@ -71,97 +71,76 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /************ test functions follow **************/
-    
+
     /**
-     * try to add a Timeaccount
+     * test to create TS with book_own grant
      *
      */
-    public function testAddTimeaccount()
+    public function testBookOwnGrantTS()
     {
-//        $timeaccount = $this->_getTimeaccount();
-//        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
-//        
-//        // checks
-//        $this->assertEquals($timeaccount->description, $timeaccountData['description']);
-//        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
-//        $this->assertTrue(is_array($timeaccountData['container_id']));
-//        $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
-//        
-//        // cleanup
-//        $this->_json->deleteTimeaccounts($timeaccountData['id']);
-//
-//        // check if it got deleted
-//        $this->setExpectedException('Tinebase_Exception_NotFound');
-//        Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'book_own'      => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants);
     }
     
     /**
-     * try to get a Timeaccount
+     * test to create TS with book_all grant
      *
      */
-    public function testGetTimeaccount()
+    public function testBookAllGrantTS()
     {
-//        $timeaccount = $this->_getTimeaccount();
-//        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
-//        $timeaccountData = $this->_json->getTimeaccount($timeaccountData['id']);
-//        
-//        // checks
-//        $this->assertEquals($timeaccount->description, $timeaccountData['description']);
-//        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
-//        $this->assertTrue(is_array($timeaccountData['container_id']));
-//        $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
-//                        
-//        // cleanup
-//        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'book_all'      => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants);
+    }
+    
+    /**
+     * test to create TS with manage_clearing grant
+     *
+     * @todo change this test later
+     */
+    public function testManageClearingGrantTS()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'manage_clearing'      => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants);
     }
 
     /**
-     * try to update a Timeaccount
+     * test to create TS with manage_all grant
      *
      */
-    public function testUpdateTimeaccount()
+    public function testManageAllGrantTS()
     {
-//        $timeaccount = $this->_getTimeaccount();
-//        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
-//        
-//        // update Timeaccount
-//        $timeaccountData['description'] = "blubbblubb";
-//        $timeaccountUpdated = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccountData));
-//        
-//        // check
-//        $this->assertEquals($timeaccountData['id'], $timeaccountUpdated['id']);
-//        $this->assertEquals($timeaccountData['description'], $timeaccountUpdated['description']);
-//        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountUpdated['last_modified_by']);
-//        
-//        // cleanup
-//        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'manage_all'      => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants);
     }
     
-    /**
-     * try to get a Timeaccount
-     *
-     */
-    public function testSearchTimeaccounts()
-    {
-//        // create
-//        $timeaccount = $this->_getTimeaccount();
-//        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
-//        
-//        // search & check
-//        $search = $this->_json->searchTimeaccounts(Zend_Json::encode($this->_getTimeaccountFilter()), Zend_Json::encode($this->_getPaging()));
-//        $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
-//        $this->assertEquals(1, $search['totalcount']);
-//        
-//        // cleanup
-//        $this->_json->deleteTimeaccounts($timeaccountData['id']);
-    }
+    /************ protected helper funcs *************/
     
     /**
      * try to add a Timesheet
-     * - test BOOK_OWN right
      * 
+     * @param Tinebase_Record_RecordSet $_grants
      */
-    public function testAddTimesheet()
+    protected function _grantTestHelper($_grants)
     {
         // get timesheet
         $timesheet = $this->_getTimesheet();
@@ -172,7 +151,6 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             'view_all'      => TRUE,
-            'manage_clearing' => TRUE,
         )));
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $timeaccount,
@@ -185,18 +163,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_timesheetController->create($timesheet);
         
         // add grants again
-        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => 'user',
-            'book_own'      => TRUE,
-            'view_all'      => TRUE,
-            'book_all'      => TRUE,
-            'manage_clearing' => TRUE,
-            'manage_all'    => TRUE,
-        )));
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $timeaccount,
-            $grants,
+            $_grants,
             TRUE
         );
         
@@ -209,107 +178,6 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_timesheetController->delete($timesheet->getId());
         $this->_timeaccountController->delete($timeaccount->getId());        
     }
-    
-    /**
-     * try to add a Timesheet
-     *
-     */
-    public function testAddTimesheetWithCustomFields()
-    {
-//        // create custom fields
-//        $customField1 = $this->_getCustomField();
-//        $customField2 = $this->_getCustomField();
-//        
-//        // create timesheet and add custom fields
-//        $timesheetArray = $this->_getTimesheet()->toArray();
-//        $timesheetArray[$customField1->name] = Tinebase_Record_Abstract::generateUID();
-//        $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
-//        
-//        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheetArray));
-//        
-//        // checks
-//        $this->assertGreaterThan(0, count($timesheetData['customfields']));
-//        $this->assertEquals($timesheetArray[$customField1->name], $timesheetData['customfields'][$customField1->name]);
-//        $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
-//        
-//        // cleanup
-//        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-//        Tinebase_Config::getInstance()->deleteCustomField($customField1);
-//        Tinebase_Config::getInstance()->deleteCustomField($customField2);
-    }
-    
-    /**
-     * try to get a Timesheet
-     *
-     */
-    public function testGetTimesheet()
-    {
-/*        $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-        $timesheetData = $this->_json->getTimesheet($timesheetData['id']);
-        
-        // checks
-        $this->assertEquals($timesheet->description, $timesheetData['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'], 'account is not resolved');
-        $this->assertEquals($timesheet['timeaccount_id'], $timesheetData['timeaccount_id']['id'], 'timeaccount is not resolved');
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-*/    }
-
-    /**
-     * try to update a Timesheet (with relations)
-     *
-     */
-    public function testUpdateTimesheet()
-    {
-/*        $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-        
-        // update Timesheet
-        $timesheetData['description'] = "blubbblubb";
-        //$timesheetData['container_id'] = $timesheetData['container_id']['id'];
-        $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
-        $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
-        
-        $timesheetUpdated = $this->_json->saveTimesheet(Zend_Json::encode($timesheetData));
-        
-        // check
-        $this->assertEquals($timesheetData['id'], $timesheetUpdated['id']);
-        $this->assertEquals($timesheetData['description'], $timesheetUpdated['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['account_id']['accountId'], 'account is not resolved');
-        $this->assertEquals($timesheetData['timeaccount_id'], $timesheetUpdated['timeaccount_id']['id'], 'timeaccount is not resolved');
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']);
-*/    }
-    
-    /**
-     * try to search for Timesheets
-     *
-     */
-    public function testSearchTimesheets()
-    {
-        /*
-        // create
-        $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-        
-        // search & check
-        $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
-        $this->assertEquals($timesheet->description, $search['results'][0]['description']);
-        $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
-        $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
-        $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-        */
-    }
-    
-    /************ protected helper funcs *************/
     
     // @todo check if we need all of these
     
