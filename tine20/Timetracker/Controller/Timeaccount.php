@@ -129,6 +129,11 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.')
     {
+        if ($_action == 'create') {
+            // no check here because the MANAGE_TIMEACCOUNTS right has been already checked before
+            return TRUE;
+        }
+        
         $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::MANAGE_ALL);
         
         switch ($_action) {
@@ -137,7 +142,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
                     $hasGrant
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::VIEW_ALL)
                 );
-            case 'create':
             case 'update':
                 //$hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
             case 'delete':
