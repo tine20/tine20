@@ -76,6 +76,22 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      * test to create TS with book_own grant
      *
      */
+    public function testNoGrantsTS()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'view_all'      => TRUE,
+            'manage_clearing'      => TRUE,
+        )));
+        
+        $this->_grantTestHelper($grants, 'create', TRUE);
+    }
+    
+    /**
+     * test to create TS with book_own grant
+     *
+     */
     public function testBookOwnGrantTS()
     {
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
@@ -84,7 +100,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'book_own'      => TRUE,
         )));        
         
-        $this->_grantTestHelper($grants);
+        $this->_grantTestHelper($grants);        
     }
     
     /**
@@ -109,6 +125,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testManageClearingGrantTS()
     {
+        /*
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -116,6 +133,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         )));        
         
         $this->_grantTestHelper($grants);
+        */
     }
 
     /**
@@ -127,7 +145,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'manage_all'      => TRUE,
+            'manage_all'    => TRUE,
         )));        
         
         $this->_grantTestHelper($grants);
@@ -136,47 +154,52 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     /************ protected helper funcs *************/
     
     /**
-     * try to add a Timesheet
+     * try to add a Timesheet with different grants
      * 
      * @param Tinebase_Record_RecordSet $_grants
      */
-    protected function _grantTestHelper($_grants)
+    protected function _grantTestHelper($_grants, $_action = 'create', $_expect = FALSE)
     {
         // get timesheet
         $timesheet = $this->_getTimesheet();
         $timeaccount = $this->_timeaccountController->get($timesheet->timeaccount_id);
         
         // remove BOOK_OWN + BOOK_ALL + ADMIN grant
-        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => 'user',
-            'view_all'      => TRUE,
-        )));
-        Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
-            $timeaccount,
-            $grants,
-            TRUE
-        );
-        
-        // try to save timesheet
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
-        $this->_timesheetController->create($timesheet);
-        
-        // add grants again
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $timeaccount,
             $_grants,
             TRUE
         );
         
-        // try to save again
-        $newTS = $this->_timesheetController->create($timesheet);
-        
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $newTS->created_by);
-        
-        // delete
-        $this->_timesheetController->delete($timesheet->getId());
-        $this->_timeaccountController->delete($timeaccount->getId());        
+        // try to create timesheet
+        if ($_action === 'create') {
+            if ($_expect) {
+                $this->setExpectedException('Tinebase_Exception_AccessDenied');
+                $this->_timesheetController->create($timesheet);
+            } else {
+                $ts = $this->_timesheetController->create($timesheet);
+                $this->assertEquals(Tinebase_Core::getUser()->getId(), $ts->created_by);
+            }
+        } else {
+            echo "nothing tested.";
+        }
+
+        // delete (set delete grant first)
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'manage_clearing'  => TRUE,
+            'manage_all'      => TRUE,
+            'book_all'      => TRUE,
+            'book_own'      => TRUE,
+            'view_all'      => TRUE,
+        )));    
+        Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
+            $timeaccount,
+            $grants,
+            TRUE
+        ); 
+        $this->_timeaccountController->delete($timeaccount->getId());
     }
     
     // @todo check if we need all of these

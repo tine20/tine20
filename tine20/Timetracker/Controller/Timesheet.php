@@ -185,12 +185,17 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
      */
     protected function _checkGrant($_record, $_action, $_throw = FALSE, $_errorMessage = 'No Permission.')
     {
-        $hasGrant = FALSE;
+        $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL);
         
         switch ($_action) {
+            case 'get':
+                $hasGrant = (
+                    $hasGrant 
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::VIEW_ALL)
+                );
             case 'create':
             case 'update':
-                $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
+                //$hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
             case 'delete':
                 $hasGrant = (
                     $hasGrant
@@ -198,14 +203,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
                         && $_record->account_id == $this->_currentAccount->getId())
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
-            case 'get':
-                $hasGrant = (
-                    $hasGrant   
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::VIEW_ALL)
-                );
                 break;
-            default:
-                $hasGrant = FALSE;
         }
         
         if ($_throw && !$hasGrant) {

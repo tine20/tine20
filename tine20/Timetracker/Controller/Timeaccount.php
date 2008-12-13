@@ -116,4 +116,40 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
         parent::_deleteLinkedObjects($_record);
     }
 
+    /**
+     * check grant for action (CRUD)
+     *
+     * @param Timetracker_Model_Timeaccount $_record
+     * @param string $_action
+     * @param boolean $_throw
+     * @param string $_errorMessage
+     * @return boolean
+     * @throws Tinebase_Exception_AccessDenied
+     * 
+     */
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.')
+    {
+        $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::MANAGE_ALL);
+        
+        switch ($_action) {
+            case 'get':
+                $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::VIEW_ALL);
+            case 'create':
+            case 'update':
+                //$hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
+            case 'delete':
+                $hasGrant = (
+                    $hasGrant
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_OWN)
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
+                );
+                break;
+        }
+        
+        if ($_throw && !$hasGrant) {
+            throw new Tinebase_Exception_AccessDenied($_errorMessage);
+        }
+        
+        return $hasGrant;
+    }
 }
