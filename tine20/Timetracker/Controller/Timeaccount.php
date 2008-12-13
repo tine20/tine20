@@ -133,7 +133,10 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
         
         switch ($_action) {
             case 'get':
-                $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::VIEW_ALL);
+                $hasGrant = (
+                    $hasGrant
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::VIEW_ALL)
+                );
             case 'create':
             case 'update':
                 //$hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
