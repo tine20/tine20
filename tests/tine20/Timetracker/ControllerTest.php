@@ -42,6 +42,13 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_roleRights = array();
+
+    /**
+     * objects
+     *
+     * @var array
+     */
+    protected $_objects = array();
     
     /**
      * Runs the test methods of this class.
@@ -79,6 +86,10 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             }
         }
         Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $rightsWithoutManageAll);
+
+        // get timesheet
+        $this->_objects['timesheet'] = $this->_getTimesheet();
+        $this->_objects['timeaccount'] = $this->_timeaccountController->get($this->_objects['timesheet']->timeaccount_id);
     }
 
     /**
@@ -91,6 +102,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     {
         // reset old admin role rights        
         Tinebase_Acl_Roles::getInstance()->setRoleRights(Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role')->getId(), $this->_roleRights);
+        
+        // delete timeaccount
+        $this->_timeaccountController->delete($this->_objects['timeaccount']->getId());
     }
     
     /************ test functions follow **************/
@@ -228,14 +242,10 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      * @param   mixed $_expect
      */
     protected function _grantTestHelper($_grants, $_action = 'create', $_expect = NULL)
-    {
-        // get timesheet
-        $timesheet = $this->_getTimesheet();
-        $timeaccount = $this->_timeaccountController->get($timesheet->timeaccount_id);
-        
+    {        
         // remove BOOK_OWN + BOOK_ALL + ADMIN grant
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
-            $timeaccount,
+            $this->_objects['timeaccount'],
             $_grants,
             TRUE
         );
@@ -245,9 +255,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             case 'create':
                 if ($_expect === 'Exception') {
                     $this->setExpectedException('Tinebase_Exception_AccessDenied');
-                    $this->_timesheetController->create($timesheet);
+                    $this->_timesheetController->create($this->_objects['timesheet']);
                 } else {
-                    $ts = $this->_timesheetController->create($timesheet);
+                    $ts = $this->_timesheetController->create($this->_objects['timesheet']);
                     $this->assertEquals(Tinebase_Core::getUser()->getId(), $ts->created_by);
                 }
                 break;
@@ -277,11 +287,10 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'view_all'      => TRUE,
         )));    
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
-            $timeaccount,
+            $this->_objects['timeaccount'],
             $grants,
             TRUE
         ); 
-        $this->_timeaccountController->delete($timeaccount->getId());
     }
     
     // @todo check if we need all of these
