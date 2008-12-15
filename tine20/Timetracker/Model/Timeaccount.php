@@ -50,6 +50,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_grants'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
