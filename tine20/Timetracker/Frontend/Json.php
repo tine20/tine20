@@ -56,14 +56,28 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         $_record->bypassFilters = true;
         
-        if ($_record instanceof Timetracker_Model_Timesheet) {
-            $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
-            $_record['timeaccount_id']['account_grants'] = Timetracker_Model_TimeaccountGrants::getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_record['timeaccount_id']);
-            $_record['timeaccount_id']['account_grants'] = $this->getTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
-            $_record['account_id'] = $_record['account_id'] ? Tinebase_User::getInstance()->getUserById($_record['account_id']) : $_record['account_id'];
+        switch (get_class($_record)) {
+            case 'Timetracker_Model_Timesheet':
+                $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
+                $_record['timeaccount_id']['account_grants'] = Timetracker_Model_TimeaccountGrants::getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_record['timeaccount_id']);
+                $_record['timeaccount_id']['account_grants'] = $this->getTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
+                $_record['account_id'] = $_record['account_id'] ? Tinebase_User::getInstance()->getUserById($_record['account_id']) : $_record['account_id'];
+                
+                $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
+                $recordArray = $_record->toArray();
+                break;
+            case 'Timetracker_Model_Timeaccount':
+                // When editing a single TA we send _ALL_ grants to the client
+                $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
+                $recordArray = $_record->toArray();
+                
+                $recordArray['grants'] = Timetracker_Model_TimeaccountGrants::getGrants($_record)->toArray();
+                break;
         }
         
-        return parent::_recordToJson($_record);
+        
+        
+        return $recordArray;
     }
 
     /**
