@@ -280,7 +280,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
                     // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
                     $this->_checkGrant($currentRecord, 'delete');
                 } else {
-                    $this->_checkGrant($_record, 'update');
+                    $this->_checkGrant($_record, 'update', TRUE, 'No permission to update record.', $currentRecord);
                 }
             }
     
@@ -432,17 +432,18 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     /**
      * check grant for action (CRUD)
      *
-     * @param Timetracker_Model_Timeaccount $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_action
      * @param boolean $_throw
      * @param string $_errorMessage
+     * @param Tinebase_Record_Interface $_oldRecord
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
      * 
      * @todo use this function in other create + update functions
      * @todo invent concept for simple adding of grants (plugins?) 
      */
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.')
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
         if (    !$this->_doContainerACLChecks 
             ||  !$_record->has('container_id') 
