@@ -94,11 +94,13 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
     {
         $db = Tinebase_Core::getDb();
         
-        if (!empty($this->timeaccount_id)) {
-            $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id) .
-                ' OR ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
-        } elseif (empty($this->account_id)) {
-            $_select->where($db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
+        if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
+            if (!empty($this->timeaccount_id)) {
+                $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id) .
+                    ' OR ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
+            } elseif (empty($this->account_id)) {
+                $_select->where($db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
+            }
         }
         
         parent::appendFilterSql($_select);
