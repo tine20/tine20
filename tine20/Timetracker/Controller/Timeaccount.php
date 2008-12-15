@@ -172,11 +172,12 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
      * @param string $_action
      * @param boolean $_throw
      * @param string $_errorMessage
+     * @param Timetracker_Model_Timeaccount $_oldRecord
+     * 
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
-     * 
      */
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.')
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
         if ($_action == 'create') {
             // no check here because the MANAGE_TIMEACCOUNTS right has been already checked before

@@ -83,52 +83,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
     }
     
     /****************************** overwritten functions ************************/    
-    
-    /**
-     * get by id
-     *
-     * @param string $_id
-     * @param int $_containerId
-     * @return Tinebase_Record_Interface
-     */
-    public function get($_id, $_containerId = NULL)
-    {
-        $result = parent::get($_id, $_containerId);
-
-        $this->_checkGrant($result, 'get', TRUE, 'No permission to read this Timesheet.');
-        
-        return $result;
-    }
-
-    /**
-     * add one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
-     */
-    public function create(Tinebase_Record_Interface $_record)
-    {        
-        $this->_checkGrant($_record, 'create', TRUE, 'No permission to create this Timesheet.');
-        
-        return parent::create($_record);
-    }
-
-    /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function update(Tinebase_Record_Interface $_record)
-    {
-        $this->_checkGrant($_record, 'update', TRUE, 'No permission to update this Timesheet.');
-        
-        return parent::update($_record);
-    }
-        
-    /****************************** protected functions ************************/
-    
+            
     /**
      * check grant for action
      *
@@ -136,26 +91,58 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
      * @param string $_action
      * @param boolean $_throw
      * @param string $_errorMessage
+     * @param Timetracker_Model_Timesheet $_oldRecord
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
      */
-    protected function _checkGrant($_record, $_action, $_throw = FALSE, $_errorMessage = 'No Permission.')
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL);
+        if (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
+            return TRUE;
+        }
+        
+        $hasGrant = FALSE;
         
         switch ($_action) {
             case 'get':
                 $hasGrant = (
-                    $hasGrant 
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::VIEW_ALL)
-                );
+                    Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::VIEW_ALL)
+                    || (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
+                        && $_record->account_id == $this->_currentAccount->getId())
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
+                    );
+                break;
             case 'create':
-            case 'update':
-                //$hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING);
-            case 'delete':
+                $hasGrant = (
+                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
+                        && $_record->account_id == $this->_currentAccount->getId())
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
+                );
+                // check manage clearing grant
                 $hasGrant = (
                     $hasGrant
-                    || (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
+                    && (($_record->is_billable == 1 && $_record->is_cleared == 0)
+                        || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING)
+                    )
+                );
+                break;
+            case 'update':
+                $hasGrant = (
+                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
+                        && $_record->account_id == $this->_currentAccount->getId())
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
+                );
+                // check manage clearing grant
+                $hasGrant = (
+                    $hasGrant
+                    && (($_record->is_billable == $_oldRecord->is_billable && $_record->is_cleared == $_oldRecord->is_cleared)
+                        || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING)
+                    )
+                );
+                break;
+            case 'delete':
+                $hasGrant = (
+                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
                         && $_record->account_id == $this->_currentAccount->getId())
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
