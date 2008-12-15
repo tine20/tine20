@@ -229,7 +229,11 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function saveTimeaccount($recordData)
     {
-        return $this->_save($recordData, $this->_timeaccountController, 'Timeaccount');
+        // I know this is ugly, be we need to finish ...
+        $timeaccount = $this->_save($recordData, $this->_timeaccountController, 'Timeaccount');
+        
+        $timeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $recordData['grants']);
+        Timetracker_Model_TimeaccountGrants::setTimeaccountGrants($timeaccount, $timeaccountGrants);
     }
     
     /**
