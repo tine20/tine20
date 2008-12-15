@@ -43,7 +43,7 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.Record.create(Tine.Timetracker.
     // ngettext('Timesheet', 'Timesheets', n);
     recordName: 'Timesheet',
     recordsName: 'Timesheets',
-    containerProperty: 'container_id',
+    containerProperty: 'timeaccount_id',
     // ngettext('timesheets list', 'timesheets lists', n);
     containerName: 'timesheets list',
     containersName: 'timesheets lists'
