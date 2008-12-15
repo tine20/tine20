@@ -278,7 +278,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         }, this);
         
         this.grid.getSelectionModel().on('selectionchange', function(sm) {
-            Tine.widgets.ActionUpdater(sm, this.actions);
+            Tine.widgets.ActionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'));
         }, this);
     },
     
