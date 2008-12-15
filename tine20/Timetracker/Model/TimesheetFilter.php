@@ -36,7 +36,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_validators = array_merge($this->_validators, array(
-            'timeaccount_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'timeaccount_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'special' => TRUE),
             'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         ));
         
@@ -47,4 +47,62 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }    
+    
+    /**
+     * gets record related properties
+     * 
+     * @param string name of property
+     * @return mixed value of property
+     */
+    public function __get($_name)
+    {
+        switch ($_name) {
+            case 'timeaccount_id':
+                $this->_resolveTimeaccount();
+                break;
+            default:
+        }
+        return parent::__get($_name);
+    }
+    
+    /**
+     * Resolves timeaccount_id
+     * 
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return void
+     */
+    protected function _resolveTimeaccount()
+    {
+        if (isset($this->_properties['timeaccount_id']) && is_array($this->_properties['timeaccount_id'])) {
+            return;
+        }
+        
+        // @todo we should need only one function call here
+        // @todo what about MANAGE_ALL ?
+        $timeaccountsViewAll = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::VIEW_ALL, TRUE); 
+        $timeaccountsBookAll = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_ALL, TRUE);
+      
+        $this->_properties['timeaccount_id'] = array_merge($timeaccountsViewAll, $timeaccountsBookAll);
+    }    
+
+    /**
+     * appends current filters to a given select object
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendFilterSql($_select)
+    {
+        $db = Tinebase_Core::getDb();
+        
+        if (!empty($this->timeaccount_id)) {
+            $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id) .
+                ' OR ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
+        } elseif (empty($this->account_id)) {
+            $_select->where($db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
+        }
+        
+        parent::appendFilterSql($_select);
+    }
+    
 }
