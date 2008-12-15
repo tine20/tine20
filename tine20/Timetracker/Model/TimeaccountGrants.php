@@ -182,6 +182,31 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     }
     
     /**
+     * returns accont_grants of given timeaccount
+     *
+     * @param  Tinebase_Model_User|int              $_accountId
+     * @param  Timetracker_Model_Timeaccount|string $_timeaccountId
+     * @param  bool                                 $_ignoreAcl
+     * @return array
+     */
+    public static function getGrantsOfAccount($_accountId, $_timeaccountId, $_ignoreAcl = FALSE)
+    {
+        $timeaccount = $_timeaccountId instanceof Timetracker_Model_Timeaccount ? $_timeaccountId : 
+            Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
+            
+        $containerGrantsArray = Tinebase_Container::getInstance()->getGrantsOfAccount($_accountId, $timeaccount->container_id, $_ignoreAcl)->toArray();
+        // mapping
+        foreach ($containerGrantsArray as $grantName => $grantValue) {
+            if (array_key_exists($grantName, self::$_mapping)) {
+                $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+            }
+        }
+        
+        $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
+        return $account_grants->toArray();
+    }
+    
+    /**
      * get timeaccounts by grant
      *
      * @param integer $_grant
