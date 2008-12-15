@@ -79,8 +79,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
     {
-        if ($this->_doContainerACLChecks) {
-            $this->_checkContainerACL($_filter);
+        if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
+            return new Tinebase_Record_RecordSet($this->_modelName);
         }
         
         $result = $this->_backend->search($_filter, $_pagination);
@@ -100,8 +100,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     public function searchCount(Tinebase_Record_Interface $_filter) 
     {
-        if ($this->_doContainerACLChecks) {
-            $this->_checkContainerACL($_filter);
+        if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
+            return 0;
         }
 
         $count = $this->_backend->searchCount($_filter);
@@ -368,12 +368,14 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * Removes containers where current user has no access to
      * 
      * @param Tinebase_Record_Interface $_filter
-     * @return void
+     * @return boolean
      */
     protected function _checkContainerACL($_filter)
     {
         $readableContainerIds = $this->_currentAccount->getContainerByACL($this->_applicationName, Tinebase_Model_Container::GRANT_READ, TRUE);
         $_filter->container = array_intersect($_filter->container, $readableContainerIds);
+        
+        return TRUE;
     }     
 
     /**
