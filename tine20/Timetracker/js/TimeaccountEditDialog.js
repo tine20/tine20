@@ -30,12 +30,18 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
     },
     
+    onRecordLoad: function() {
+        var grants = this.record.get('grants');
+        this.grantsStore.loadData(grants);
+        Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
+    },
+    
     /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
@@ -75,8 +81,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         activeItem: 0,
                         items: [{
                             title: 'Access',
-                            //items: []
-                            html: ''
+                            items: [this.getGrantsGrid()]
                         }, {
                             title: 'Budget',
                             //items: []
@@ -141,6 +146,54 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
+    },
+    
+    getGrantsGrid: function() {
+        if (! this.grantsGrid) {
+            this.grantsStore =  new Ext.data.JsonStore({
+                //root: 'results',
+                //totalProperty: 'totalcount',
+                id: 'id',
+                fields: Tine.Timetracker.Model.TimeaccountGrant
+            });
+            
+            var columns = [
+                new Ext.ux.grid.CheckColumn({
+                    header: this.app.i18n._('Book Own'),
+                    dataIndex: 'book_own',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header: this.app.i18n._('View All'),
+                    dataIndex: 'view_all',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header: this.app.i18n._('Book All'),
+                    dataIndex: 'book_all',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header:this.app.i18n. _('Manage Clearing'),
+                    dataIndex: 'manage_clearing',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header: this.app.i18n._('Manage All'),
+                    dataIndex: 'manage_all',
+                    width: 55
+                })
+            ];
+            
+            this.grantsGrid = new Tine.widgets.account.ConfigGrid({
+                accountPickerType: 'both',
+                accountListTitle: this.app.i18n._('Permissions'),
+                configStore: this.grantsStore,
+                hasAccountPrefix: true,
+                configColumns: columns
+            });
+        }
+        return this.grantsGrid;
     }
 });
 
