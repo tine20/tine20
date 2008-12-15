@@ -53,6 +53,19 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     const MANAGE_ALL = 16;
 
+    /**
+     * mapping container_grants => timeaccount_grants
+     *
+     * @var array
+     */
+    protected static $_mapping = array(
+        'readGrant'     => 'book_own',
+        'addGrant'      => 'view_all',
+        'editGrant'     => 'book_all',
+        'deleteGrant'   => 'manage_clearing',
+        'adminGrant'    => 'manage_all'
+    );
+    
 	/**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -154,8 +167,18 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         Tinebase_Container::getInstance()->getGrantsOfRecords($timeaccounts, $_accountId);
         
         foreach ($timeaccounts as $timeaccount) {
-            $timeaccount->account_grants = $timeaccount->container_id['account_grants'];
+            $containerGrantsArray = $timeaccount->container_id['account_grants'];
+            // mapping
+            foreach ($containerGrantsArray as $grantName => $grantValue) {
+                if (array_key_exists($grantName, self::$_mapping)) {
+                    $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+                }
+            }
+            
+            $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
+            $timeaccount->account_grants = $account_grants->toArray();
         }
+        
     }
     
     /**
