@@ -72,6 +72,7 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'price_unit' },
     { name: 'is_open' },
     { name: 'account_grants'},
+    { name: 'grants'},
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' }
@@ -97,3 +98,18 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.Record.create(Tine.Timetracke
         return this.get('number') + ' ' + this.get('title');
     }
 });
+
+/**
+ * Model of a grant
+ */
+Tine.Timetracker.Model.TimeaccountGrant = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'account_id'},
+    {name: 'account_type'},
+    {name: 'account_name'},
+    {name: 'book_own',        type: 'boolean'},
+    {name: 'view_all',        type: 'boolean'},
+    {name: 'book_all',        type: 'boolean'},
+    {name: 'manage_clearing', type: 'boolean'},
+    {name: 'manage_all',      type: 'boolean'}
+]);
