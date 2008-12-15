@@ -72,16 +72,27 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
      */
     protected function _resolveTimeaccount()
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_properties['timeaccount_id'], true));
+        
         if (isset($this->_properties['timeaccount_id']) && is_array($this->_properties['timeaccount_id'])) {
             return;
         }
         
         // @todo we should need only one function call here
-        // @todo what about MANAGE_ALL ?
-        $timeaccountsViewAll = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::VIEW_ALL, TRUE); 
-        $timeaccountsBookAll = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_ALL, TRUE);
+        $grants = array(
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL,
+            Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+            Timetracker_Model_TimeaccountGrants::MANAGE_ALL
+        );
+        
+        $result = array();
+        foreach ($grants as $grant) {
+            $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
       
-        $this->_properties['timeaccount_id'] = array_merge($timeaccountsViewAll, $timeaccountsBookAll);
+        $this->_properties['timeaccount_id'] = $result;
     }    
 
     /**
@@ -92,10 +103,16 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
      */
     public function appendFilterSql($_select)
     {
-        $db = Tinebase_Core::getDb();
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->timeaccount_id, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
         
         if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
-            if (!empty($this->timeaccount_id)) {
+            $db = Tinebase_Core::getDb();
+            
+            // we have to save the timeaccount_id property to a variable because empty() does not resolve the property 
+            $timeaccountIds = $this->timeaccount_id;
+            if (!empty($timeaccountIds)) {
                 $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id) .
                     ' OR ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
             } elseif (empty($this->account_id)) {

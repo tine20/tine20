@@ -85,50 +85,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
     /****************************** overwritten functions ************************/    
     
     /**
-     * get list of records
-     * - update filter depending on right to see all timesheets
-     *
-     * @param Tinebase_Record_Interface|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-     * @param bool $_getRelations
-     * @return Tinebase_Record_RecordSet
-     */
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
-    {
-        /*
-        if (!$this->checkRight(Timetracker_Acl_Rights::VIEW_TIMESHEETS, FALSE)) {
-            $_filter->account_id = array(
-                'value' => $this->_currentAccount->getId(),
-                'operator' => 'equals'
-            );
-        }
-        */
-        
-        return parent::search($_filter, $_pagination);   
-    }
-
-    /**
-     * Gets total count of search with $_filter
-     * - update filter depending on right to see all timesheets
-     * 
-     * @param Tinebase_Record_Interface $_filter
-     * @return int
-     */
-    public function searchCount(Tinebase_Record_Interface $_filter) 
-    {
-        /*
-        if (!$this->checkRight(Timetracker_Acl_Rights::VIEW_TIMESHEETS, FALSE)) {
-            $_filter->account_id = array(
-                'value' => $this->_currentAccount->getId(),
-                'operator' => 'equals'
-            );
-        }
-        */
-        
-        return parent::searchCount($_filter);
-    }
-
-    /**
      * get by id
      *
      * @param string $_id

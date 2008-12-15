@@ -26,7 +26,7 @@ class Timetracker_Acl_Rights extends Tinebase_Application_Rights_Abstract
      * the right to manage timeaccounts
      * @staticvar string
      */
-    const MANAGE_TIMEACCOUNTS = 'manage_timeaccounts';
+    const MANAGE_TIMEACCOUNTS = 'MANAGE_TIMEACCOUNTS';
         
     /**
      * holdes the instance of the singleton
