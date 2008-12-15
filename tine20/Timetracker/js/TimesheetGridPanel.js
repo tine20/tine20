@@ -29,10 +29,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.recordProxy = Tine.Timetracker.timesheetBackend;
         
         //this.actionToolbarItems = this.getToolbarItems();
-        this.actionToolbarItems = [{
-            text: this.app.i18n._('Duplicate'),
-            iconCls: 'action_duplicate'
-        }];
+        //this.actionToolbarItems = [{
+        //    text: this.app.i18n._('Duplicate'),
+        //    iconCls: 'action_duplicate'
+        //}];
+        
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
@@ -40,10 +41,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.plugins.push(this.filterToolbar);
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);
-        
-        // remove selectionchange listener with actionUpdater
-        // @todo remove that when we have containers here
-        this.grid.getSelectionModel().purgeListeners();
     },
     
     /**
