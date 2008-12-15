@@ -233,7 +233,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         
         this.getForm().loadRecord(this.record);
-        this.updateToolbars(this.record);
+        this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         
         this.loadMask.hide();
     },
