@@ -45,6 +45,8 @@ abstract class Tinebase_Application_Controller_Abstract
      * @return  boolean
      * @throws  Tinebase_Exception_UnexpectedValue
      * @throws  Tinebase_Exception_AccessDenied
+     * 
+     * @todo move that to *_Acl_Rights
      */    
     public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) {
         
@@ -52,17 +54,19 @@ abstract class Tinebase_Application_Controller_Abstract
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
         }
         
+        $right = strtoupper($_right);
+        
         $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
         
         // array with the rights that should be checked, ADMIN is in it per default
         $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
         
-        if (preg_match("/MANAGE_/", $_right)) {
-            $rightsToCheck[] = constant($applicationRightsClass. '::' . $_right);
+        if (preg_match("/MANAGE_/", $right)) {
+            $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
         }
 
-        if (preg_match("/VIEW_([A-Z_]*)/", $_right, $matches)) {
-            $rightsToCheck[] = constant($applicationRightsClass. '::' . $_right);
+        if (preg_match("/VIEW_([A-Z_]*)/", $right, $matches)) {
+            $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
             // manage right includes view right
             $rightsToCheck[] = constant($applicationRightsClass. '::MANAGE_' . $matches[1]);
         }
@@ -78,7 +82,7 @@ abstract class Tinebase_Application_Controller_Abstract
         }
         
         if (!$hasRight && $_throwException) {
-            throw new Tinebase_Exception_AccessDenied("You are not allowed to $_right in application $this->_applicationName !");
+            throw new Tinebase_Exception_AccessDenied("You are not allowed to $right in application $this->_applicationName !");
         }
 
         return $hasRight;
