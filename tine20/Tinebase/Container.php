@@ -962,7 +962,9 @@ class Tinebase_Container
         // add container & grants to records
         foreach ($_records as &$record) {
             $containerId = $record[$_containerProperty];
-            $record[$_containerProperty] = $containers[$containerId];
+            if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract) {
+                $record[$_containerProperty] = $containers[$containerId];
+            }
         }
     }
     
