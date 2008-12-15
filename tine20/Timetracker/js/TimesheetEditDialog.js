@@ -30,8 +30,16 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
-    updateToolbars: function() {
-    	
+    updateToolbars: function(record) {
+        //console.log(record.get('timeaccount_id'));
+        var grants = record.get('timeaccount_id') ? record.get('timeaccount_id').account_grants : null;
+        if (grants) {
+            this.getForm().findField('account_id').setDisabled(! (grants.book_all || grants.manage_all));
+            this.getForm().findField('is_billable').setDisabled(! (grants.manage_clearing || grants.manage_all));
+            this.getForm().findField('is_cleared').setDisabled(! (grants.manage_clearing || grants.manage_all));
+            
+        	Tine.Timetracker.TimesheetEditDialog.superclass.updateToolbars.call(this, record, 'timeaccount_id');
+        }
     },
     
     /**
@@ -69,7 +77,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         emptyText: this.app.i18n._('Select Time Accont...'),
                         loadingText: this.app.i18n._('Searching...'),
                         allowBlank: false,
-                        name: 'timeaccount_id'
+                        name: 'timeaccount_id',
+                        listeners: {
+                            scope: this,
+                            select: function(field, timeaccount) {
+                                this.record.set('timeaccount_id', timeaccount.data);
+                                this.updateToolbars(this.record);
+                            }
+                        }
                     })], [{
                         fieldLabel: this.app.i18n._('Duration'),
                         name: 'duration',

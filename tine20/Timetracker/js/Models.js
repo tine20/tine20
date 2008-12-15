@@ -52,7 +52,8 @@ Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
     return {
         account_id: Tine.Tinebase.registry.get('currentAccount'),
         duration:   '00:30',
-        start_date: new Date()
+        start_date: new Date(),
+        is_billable: true
     }
 };
 
@@ -70,6 +71,7 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'price' },
     { name: 'price_unit' },
     { name: 'is_open' },
+    { name: 'account_grants'},
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' }
