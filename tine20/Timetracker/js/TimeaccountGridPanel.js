@@ -39,7 +39,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         
         // remove selectionchange listener with actionUpdater
         // @todo remove that when we have containers here
-        // this.grid.getSelectionModel().purgeListeners();
+        this.grid.getSelectionModel().purgeListeners();
     },
     
     /**
