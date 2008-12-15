@@ -68,7 +68,6 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
     /**
      * Resolves timeaccount_id
      * 
-     * @throws Tinebase_Exception_UnexpectedValue
      * @return void
      */
     protected function _resolveTimeaccount()
