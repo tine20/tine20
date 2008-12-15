@@ -41,11 +41,12 @@ abstract class Tinebase_Application_Controller_Abstract
      * 
      * @param   string  $_right to check
      * @param   boolean $_throwException [optional]
+     * @param   boolean $_includeTinebaseAdmin [optional]
      * @return  boolean
      * @throws  Tinebase_Exception_UnexpectedValue
      * @throws  Tinebase_Exception_AccessDenied
      */    
-    public function checkRight($_right, $_throwException = TRUE) {
+    public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) {
         
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
@@ -54,7 +55,7 @@ abstract class Tinebase_Application_Controller_Abstract
         $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
         
         // array with the rights that should be checked, ADMIN is in it per default
-        $rightsToCheck = array ( Tinebase_Acl_Rights::ADMIN );
+        $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
         
         if (preg_match("/MANAGE_/", $_right)) {
             $rightsToCheck[] = constant($applicationRightsClass. '::' . $_right);
@@ -69,6 +70,7 @@ abstract class Tinebase_Application_Controller_Abstract
         $hasRight = FALSE;
         
         foreach ($rightsToCheck as $rightToCheck) {
+            //echo "check right: " . $rightToCheck;
             if (Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck)) {
                 $hasRight = TRUE;
                 break;    
