@@ -16,6 +16,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
 
+.action_duplicate {
+    background-image:url(../../images/oxygen/16x16/actions/edit-copy.png) !important;
+}
+
 .action_applyChanges {
     background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png) !important;
 }
