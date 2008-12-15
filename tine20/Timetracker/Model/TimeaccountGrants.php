@@ -150,38 +150,6 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     }
     
     /**
-     * returns all grants of a given timeaccount
-     *
-     * @param  Timetracker_Model_Timeaccount $_timeaccountId
-     * @return Tinebase_Record_RecordSet
-     */
-    public static function getGrants($_timeaccount)
-    {
-        if (! Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)) {
-            if (! self::hasGrant($_timeaccount, self::MANAGE_ALL)) {
-                throw new Tinebase_Exception_AccessDenied("You nor have the RIGHT either the GRANT to get see all grants for this timeaccount");
-            }
-        }
-        
-        $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_timeaccount->container_id, true);
-        $allTimeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
-        
-        foreach ($allContainerGrants as $index => $containerGrants) {
-            // mapping
-            $containerGrantsArray = $containerGrants->toArray();
-            foreach ($containerGrantsArray as $grantName => $grantValue) {
-                if (array_key_exists($grantName, self::$_mapping)) {
-                    $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
-                }
-            }
-            $timeaccountGrants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
-            $allTimeaccountGrants->addRecord($timeaccountGrants);
-        }
-        
-        return $allTimeaccountGrants;
-    }
-    
-    /**
      * get grants assigned to multiple records
      *
      * @param   Tinebase_Record_RecordSet $_timeaccounts records to get the grants for
@@ -272,6 +240,41 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     }
     
     /**
+     * returns all grants of a given timeaccount
+     *
+     * @param  Timetracker_Model_Timeaccount $_timeaccountId
+     * @param  boolean $_ignoreACL
+     * @return Tinebase_Record_RecordSet
+     */
+    public static function getTimeaccountGrants($_timeaccount, $_ignoreACL = FALSE)
+    {
+        if (! $_ignoreACL) {
+            if (! Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)) {
+                if (! self::hasGrant($_timeaccount, self::MANAGE_ALL)) {
+                    throw new Tinebase_Exception_AccessDenied("You nor have the RIGHT either the GRANT to get see all grants for this timeaccount");
+                }
+            }
+        }
+        
+        $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_timeaccount->container_id, true);
+        $allTimeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
+        
+        foreach ($allContainerGrants as $index => $containerGrants) {
+            // mapping
+            $containerGrantsArray = $containerGrants->toArray();
+            foreach ($containerGrantsArray as $grantName => $grantValue) {
+                if (array_key_exists($grantName, self::$_mapping)) {
+                    $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+                }
+            }
+            $timeaccountGrants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
+            $allTimeaccountGrants->addRecord($timeaccountGrants);
+        }
+        
+        return $allTimeaccountGrants;
+    }
+    
+    /**
      * set timeaccount grants
      *
      * @param Timetracker_Model_Timeaccount $_timeaccount
@@ -280,10 +283,18 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function setTimeaccountGrants(Timetracker_Model_Timeaccount $_timeaccount, Tinebase_Record_RecordSet $_grants, $_ignoreACL = FALSE)
     {
+        if (! $_ignoreACL) {
+            if (! Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)) {
+                if (! self::hasGrant($_timeaccount, self::MANAGE_ALL)) {
+                    throw new Tinebase_Exception_AccessDenied("You nor have the RIGHT either the GRANT to get see all grants for this timeaccount");
+                }
+            }
+        }
+        
         // map Timetracker_Model_TimeaccountGrants to Tinebase_Model_Grants
         $grants = self::doMapping($_grants);
         
-        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, $_ignoreACL);
+        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, TRUE);
     }
     
     /**

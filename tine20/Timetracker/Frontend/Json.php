@@ -71,7 +71,7 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
                 $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
                 $recordArray = $_record->toArray();
                 
-                $recordArray['grants'] = Timetracker_Model_TimeaccountGrants::getGrants($_record)->toArray();
+                $recordArray['grants'] = Timetracker_Model_TimeaccountGrants::getTimeaccountGrants($_record)->toArray();
                 break;
         }
         
