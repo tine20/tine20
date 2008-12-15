@@ -95,9 +95,32 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             
             // resolve timeaccounts grants
             Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+            foreach ($_records as $record) {
+                $record->timeaccount_id->account_grants = $this->getTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id->getId());
+            }
+            
         }
         
         return parent::_multipleRecordsToJson($_records);
+    }
+    
+    /**
+     * calculate effective ts grants so the client doesn't need to calculate them
+     *
+     * @param  array  $TimeaccountGrantsArray
+     * @param  int    $timesheetOwnerId
+     * @return array
+     */
+    protected function getTimesheetGrantsByTimeaccountGrants($timeaccountGrantsArray, $timesheetOwnerId)
+    {
+        $currentUserId = Tinebase_Core::getUser()->getId();
+        $modifyGrant = ($timeaccountGrantsArray['book_own'] && $timesheetOwnerId == $currentUserId) || $timeaccountGrantsArray['book_all'];
+            
+        $timeaccountGrantsArray['readGrant']   = true;
+        $timeaccountGrantsArray['editGrant']   = $modifyGrant;
+        $timeaccountGrantsArray['deleteGrant'] = $modifyGrant;
+        
+        return $timeaccountGrantsArray;
     }
     
     /**
