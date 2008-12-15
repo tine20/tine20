@@ -217,7 +217,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     {
         $containerIds = Tinebase_Container::getInstance()->getContainerByACL(
             Tinebase_Core::getUser()->getId(),
-            $this->_application,
+            'Timetracker',
             $_grant,
             TRUE
         );
