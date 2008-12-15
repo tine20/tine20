@@ -200,9 +200,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'view_all'      => TRUE,
         )));        
         
-        $this->_grantTestHelper($grants, 'search', 1);
+        $this->_grantTestHelper($grants, 'searchTA', 1);
     }
-    
+
     /**
      * test to search TAs (no grants)
      *
@@ -214,7 +214,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_type'  => 'user',
         )));        
         
-        $this->_grantTestHelper($grants, 'search', 0);
+        $this->_grantTestHelper($grants, 'searchTA', 0);
     }
 
     /**
@@ -231,6 +231,23 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->_grantTestHelper($grants, 'search_bookable', 1);
     }
+
+    /**
+     * test to search TSs (view_all)
+     *
+     */
+    public function testSearchTS()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'book_own'      => TRUE,
+            'view_all'      => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants, 'searchTS', 1);
+    }
+    
     
     /************ protected helper funcs *************/
     
@@ -266,10 +283,15 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                 $result = $this->_timeaccountController->search($filter);
                 $this->assertEquals($_expect, count($result));                
                 break;
-            case 'search':
+            case 'searchTA':
                 $filter = $this->_getTimeaccountFilter();
                 $result = $this->_timeaccountController->search($filter);
-                //print_r($result->toArray());
+                $this->assertEquals($_expect, count($result));                
+                break;
+            case 'searchTS':
+                $filter = $this->_getTimesheetFilter();
+                $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+                $result = $this->_timesheetController->search($filter);
                 $this->assertEquals($_expect, count($result));                
                 break;
             default:
@@ -375,12 +397,12 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function _getTimesheetFilter()
     {
-        return array(
+        return new Timetracker_Model_TimesheetFilter(array(
             array(
                 'field' => 'query', 
                 'operator' => 'contains', 
                 'value' => 'blabla'
             ),
-        );        
+        ));        
     }
 }
