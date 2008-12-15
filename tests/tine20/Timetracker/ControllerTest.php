@@ -37,6 +37,13 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     protected $_timesheetController = array();
     
     /**
+     * role rights
+     *
+     * @var array
+     */
+    protected $_roleRights = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -57,7 +64,21 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();        
-        $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();        
+        $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();     
+
+        // remove MANAGE_ALL & ADMIN for Timetracker right
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+        $app = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
+        $this->_roleRights = Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId());
+        $rightsWithoutManageAll = array();
+        foreach ($this->_roleRights as $right) {
+            if ($right['right'] != Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS 
+                && !($right['application_id'] == $app->getId() && $right['right'] == 'admin')
+            ) {
+                $rightsWithoutManageAll[] = $right;
+            }
+        }
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $rightsWithoutManageAll);
     }
 
     /**
@@ -67,7 +88,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {
+        // reset old admin role rights        
+        Tinebase_Acl_Roles::getInstance()->setRoleRights(Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role')->getId(), $this->_roleRights);
     }
     
     /************ test functions follow **************/
@@ -85,7 +108,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'manage_clearing'      => TRUE,
         )));
         
-        $this->_grantTestHelper($grants, 'create', TRUE);
+        $this->_grantTestHelper($grants, 'create', 'Exception');
     }
     
     /**
@@ -151,14 +174,60 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_grantTestHelper($grants);
     }
     
+    /**
+     * test to search TAs (view_all)
+     *
+     */
+    public function testSearchTA()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'view_all'      => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants, 'search', 1);
+    }
+    
+    /**
+     * test to search TAs (no grants)
+     *
+     */
+    public function testSearchTAWithNoRights()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+        )));        
+        
+        $this->_grantTestHelper($grants, 'search', 0);
+    }
+
+    /**
+     * test to search TAs (book_own)
+     *
+     */
+    public function testSearchTABookable()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'book_own'      => TRUE,            
+        )));        
+        
+        $this->_grantTestHelper($grants, 'search_bookable', 1);
+    }
+    
     /************ protected helper funcs *************/
     
     /**
      * try to add a Timesheet with different grants
      * 
-     * @param Tinebase_Record_RecordSet $_grants
+     * @param   Tinebase_Record_RecordSet $_grants
+     * @param   string $_action
+     * @param   mixed $_expect
      */
-    protected function _grantTestHelper($_grants, $_action = 'create', $_expect = FALSE)
+    protected function _grantTestHelper($_grants, $_action = 'create', $_expect = NULL)
     {
         // get timesheet
         $timesheet = $this->_getTimesheet();
@@ -172,16 +241,29 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         );
         
         // try to create timesheet
-        if ($_action === 'create') {
-            if ($_expect) {
-                $this->setExpectedException('Tinebase_Exception_AccessDenied');
-                $this->_timesheetController->create($timesheet);
-            } else {
-                $ts = $this->_timesheetController->create($timesheet);
-                $this->assertEquals(Tinebase_Core::getUser()->getId(), $ts->created_by);
-            }
-        } else {
-            echo "nothing tested.";
+        switch ($_action) {
+            case 'create':
+                if ($_expect === 'Exception') {
+                    $this->setExpectedException('Tinebase_Exception_AccessDenied');
+                    $this->_timesheetController->create($timesheet);
+                } else {
+                    $ts = $this->_timesheetController->create($timesheet);
+                    $this->assertEquals(Tinebase_Core::getUser()->getId(), $ts->created_by);
+                }
+                break;
+            case 'search_bookable':
+                $filter = $this->_getTimeaccountFilter(TRUE);
+                $result = $this->_timeaccountController->search($filter);
+                $this->assertEquals($_expect, count($result));                
+                break;
+            case 'search':
+                $filter = $this->_getTimeaccountFilter();
+                $result = $this->_timeaccountController->search($filter);
+                //print_r($result->toArray());
+                $this->assertEquals($_expect, count($result));                
+                break;
+            default:
+                echo "nothing tested.";
         }
 
         // delete (set delete grant first)
@@ -214,6 +296,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         return new Timetracker_Model_Timeaccount(array(
             'title'         => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
+            'is_open'       => 1
         ), TRUE);
     }
     
@@ -252,22 +335,28 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * get Timeaccount filter
      *
-     * @return array
+     * @return Timetracker_Model_TimeaccountFilter
      */
-    protected function _getTimeaccountFilter()
+    protected function _getTimeaccountFilter($bookable = FALSE)
     {
-        return array(
+        $result = new Timetracker_Model_TimeaccountFilter(array(
             array(
                 'field' => 'description', 
                 'operator' => 'contains', 
                 'value' => 'blabla'
-            ),     
+            ),
             array(
                 'field' => 'containerType', 
                 'operator' => 'equals', 
                 'value' => Tinebase_Model_Container::TYPE_SHARED
-            ),     
-        );        
+            ),  
+        )); 
+        
+        if ($bookable) {
+            $result->isBookable = TRUE;
+        }
+        
+        return ($result);        
     }
     
     /**

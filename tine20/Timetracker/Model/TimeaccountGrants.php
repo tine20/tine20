@@ -215,6 +215,8 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function getTimeaccountsByAcl($_grant, $_onlyIds = FALSE)
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get grant: ' . print_r($_grant, true));
+        
         $containerIds = Tinebase_Container::getInstance()->getContainerByACL(
             Tinebase_Core::getUser()->getId(),
             'Timetracker',
@@ -222,10 +224,13 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             TRUE
         );
         
-        $filter = new Timetracker_Model_TimeaccountFilter(array(
-            'container' => $containerIds
-        ), FALSE);
+        // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
         
+        $filter = new Timetracker_Model_TimeaccountFilter(array(
+        ));        
+        $filter->container = $containerIds;
+        $filter->showClosed = TRUE;
+                
         $backend = new Timetracker_Backend_Timeaccount();
         $result = $backend->search($filter, new Tinebase_Model_Pagination());
         

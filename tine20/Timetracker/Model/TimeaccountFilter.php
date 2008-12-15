@@ -39,6 +39,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
             'description'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
             'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
+            'isBookable'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
         ));
         
         // define query fields
@@ -63,9 +64,14 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
         if(isset($_this->showClosed) && $_this->showClosed){
             // nothing to filter
         } else {
-            $_select->where($db->quoteIdentifier('is_open') . ' = TRUE');
+            $_select->where($db->quoteIdentifier('is_open') . ' = 1');
         }
-                
+        
+        // add container filter
+        if (!empty($this->container) && is_array($this->container)) {
+            $_select->where($db->quoteInto($db->quoteIdentifier('container_id') . ' IN (?)', $this->container));
+        }
+        
         parent::appendFilterSql($_select);
     }
 }
