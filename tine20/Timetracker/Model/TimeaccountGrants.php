@@ -157,16 +157,16 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     /**
      * get grants assigned to multiple records
      *
-     * @param   Tinebase_Record_RecordSet $_records records to get the grants for
+     * @param   Tinebase_Record_RecordSet $_timeaccounts records to get the grants for
      * @param   int|Tinebase_Model_User $_accountId the account to get the grants for
      * @throws  Tinebase_Exception_NotFound
      */
-    public static function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_timeaccountProperty = 'timeaccount_id')
+    public static function getGrantsOfRecords(Tinebase_Record_RecordSet $_timeaccounts, $_accountId)
     {
-        $timeaccounts = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount', $_records->$_timeaccountProperty);
-        Tinebase_Container::getInstance()->getGrantsOfRecords($timeaccounts, $_accountId);
+        //$timeaccounts = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount', $_records->$_timeaccountProperty);
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_timeaccounts, $_accountId);
         
-        foreach ($timeaccounts as $timeaccount) {
+        foreach ($_timeaccounts as $timeaccount) {
             $containerGrantsArray = $timeaccount->container_id['account_grants'];
             // mapping
             foreach ($containerGrantsArray as $grantName => $grantValue) {
@@ -177,6 +177,9 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             
             $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
             $timeaccount->account_grants = $account_grants->toArray();
+            $timeaccount->container_id = $timeaccount->container_id['id'];
+            
+            //Tinebase_Core::getLogger()->debug(print_r($_timeaccounts->toArray(), true));
         }
         
     }

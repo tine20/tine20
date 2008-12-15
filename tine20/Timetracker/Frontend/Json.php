@@ -59,6 +59,7 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         if ($_record instanceof Timetracker_Model_Timesheet) {
             $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
             $_record['timeaccount_id']['account_grants'] = Timetracker_Model_TimeaccountGrants::getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_record['timeaccount_id']);
+            $_record['timeaccount_id']['account_grants'] = $this->getTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
             $_record['account_id'] = $_record['account_id'] ? Tinebase_User::getInstance()->getUserById($_record['account_id']) : $_record['account_id'];
         }
         
@@ -79,29 +80,37 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             return array();
         }
         
-        if ($_records->getRecordClassName() == 'Timetracker_Model_Timesheet') {
-            
-            // resolve timeaccounts
-            $timeaccountIds = $_records->timeaccount_id;
-            $timeaccounts = $this->_timeaccountController->getMultiple(array_unique(array_values($timeaccountIds)));
-            // resolve accounts
-            $accountIds = $_records->account_id;
-            $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
-            
-            foreach ($_records as $record) {
-                $record->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($record->timeaccount_id)];
-                $record->account_id = $accounts[$accounts->getIndexById($record->account_id)];
-            }
-            
-            // resolve timeaccounts grants
-            Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
-            foreach ($_records as $record) {
-                $record->timeaccount_id->account_grants = $this->getTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id->getId());
-            }
-            
+        switch ($_records->getRecordClassName()) {
+            case 'Timetracker_Model_Timesheet':
+                // resolve timeaccounts
+                $timeaccountIds = $_records->timeaccount_id;
+                $timeaccounts = $this->_timeaccountController->getMultiple(array_unique(array_values($timeaccountIds)));
+                Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
+                
+                // resolve accounts
+                $accountIds = $_records->account_id;
+                $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+                
+                foreach ($_records as $record) {
+                    $record->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($record->timeaccount_id)];
+                    $record->timeaccount_id->account_grants = $this->getTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id);
+                    $record->account_id = $accounts[$accounts->getIndexById($record->account_id)];
+                }
+                
+                break;
+            case 'Timetracker_Model_Timeaccount':
+                // resolve timeaccounts grants
+                Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+                Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+                break;
         }
         
-        return parent::_multipleRecordsToJson($_records);
+        $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $_records->convertDates = true;
+        
+        $result = $_records->toArray();
+        
+        return $result;
     }
     
     /**
