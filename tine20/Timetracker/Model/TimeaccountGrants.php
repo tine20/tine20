@@ -172,7 +172,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             
             $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
             $timeaccount->account_grants = $account_grants->toArray();
-            $timeaccount->container_id = $timeaccount->container_id['id'];
+            
+            $containerId = $timeaccount->container_id;
+            $containerId['account_grants'] = $timeaccount->account_grants;
+            $timeaccount->container_id = $containerId['account_grants'];
+            //$timeaccount->container_id = $timeaccount->container_id['id'];
             
             //Tinebase_Core::getLogger()->debug(print_r($_timeaccounts->toArray(), true));
         }
