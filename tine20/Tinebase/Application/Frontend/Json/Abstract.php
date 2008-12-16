@@ -139,13 +139,12 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * 
      * @todo move that to Tinebase_Record_Abstract
      */
-    protected function _recordToJson($_record/*, $_resolveContainer = FALSE*/)
+    protected function _recordToJson($_record)
     {
         $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
         $_record->bypassFilters = true;
         $recordArray = $_record->toArray();
-        
-        //if ($_resolveContainer) {
+
         if ($_record->has('container_id')) {
             $recordArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_record->container_id)->toArray();
             $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
