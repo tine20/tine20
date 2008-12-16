@@ -63,6 +63,7 @@ Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
  */
 Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
+    { name: 'container_id' },
     { name: 'title' },
     { name: 'number' },
     { name: 'description' },
