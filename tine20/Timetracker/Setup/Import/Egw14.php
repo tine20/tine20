@@ -274,7 +274,8 @@ class Timetracker_Setup_Import_Egw14
             $timeaccounts = array();
             foreach ($timesheets as $timesheet) {
                 // scan timesheets and add additional timeaccounts for special categories
-                if (isset($this->_newTimeaccountCategories[$timesheet['cat_id']])) {
+                // only do that for SOW-xxx
+                if (isset($this->_newTimeaccountCategories[$timesheet['cat_id']]) && preg_match("/^SOW/", $_parentData['pm_number'])) {
                     $catName = $this->_newTimeaccountCategories[$timesheet['cat_id']];
                     
                     // create new timeaccount
