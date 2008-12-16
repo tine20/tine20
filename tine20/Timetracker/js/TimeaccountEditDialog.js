@@ -32,8 +32,20 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     onRecordLoad: function() {
         var grants = this.record.get('grants');
-        this.grantsStore.loadData(grants);
+        this.grantsStore.loadData({results: grants});
         Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
+    },
+    
+    onRecordUpdate: function() {
+        Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordUpdate.call(this);
+        this.record.set('grants', '');
+        
+        var grants = [];
+        this.grantsStore.each(function(_record){
+            grants.push(_record.data);
+        });
+        
+        this.record.set('grants', grants);
     },
     
     /**
@@ -48,8 +60,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             plain:true,
             activeTab: 0,
             border: false,
-            items:[
-                {               
+            items:[{               
                 title: this.app.i18n._('Timeaccount'),
                 autoScroll: true,
                 border: false,
@@ -76,6 +87,11 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         allowBlank: false
                         }], [{
                         columnWidth: 1,
+                        xtype: 'textarea',
+                        name: 'description',
+                        height: 150
+                        }], /*[{
+                        columnWidth: 1,
                         xtype: 'tabpanel',
                         height: 270,
                         activeItem: 0,
@@ -86,7 +102,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             title: 'Budget',
                             //items: []
                             html: ''
-                        }]}], [{
+                        }]}],*/ [{
                             fieldLabel: this.app.i18n._('Unit'),
                             name: 'price_unit'
                         }, {
@@ -110,7 +126,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     collapseMode: 'mini',
                     margins: '0 5 0 5',
                     border: true,
-                    items: [new Ext.Panel({
+                    items: [/*new Ext.Panel({
                         // @todo generalise!
                         title: this.app.i18n._('Description'),
                         iconCls: 'descriptionIcon',
@@ -128,7 +144,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             anchor:'100% 100%',
                             emptyText: this.app.i18n._('Enter description')                            
                         }]
-                    }),
+                    }),*/
                     new Tine.widgets.activities.ActivitiesPanel({
                         app: 'Timetracker',
                         showAddNoteForm: false,
@@ -140,6 +156,10 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
                 }]
+            },{
+                title: 'Access',
+                layout: 'fit',
+                items: [this.getGrantsGrid()]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
@@ -151,8 +171,8 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     getGrantsGrid: function() {
         if (! this.grantsGrid) {
             this.grantsStore =  new Ext.data.JsonStore({
-                //root: 'results',
-                //totalProperty: 'totalcount',
+                root: 'results',
+                totalProperty: 'totalcount',
                 id: 'id',
                 fields: Tine.Timetracker.Model.TimeaccountGrant
             });
