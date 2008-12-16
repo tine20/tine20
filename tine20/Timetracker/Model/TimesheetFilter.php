@@ -114,7 +114,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
             $timeaccountIds = $this->timeaccount_id;
             
             if (!empty($timeaccountIds)) {
-                $timeaccountIds = ''; 
+                $timeaccountIds = array(''); 
             }
                 
             $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id));
