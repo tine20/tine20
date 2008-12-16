@@ -31,9 +31,13 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     onRecordLoad: function() {
-        var grants = this.record.get('grants');
+        // make shure grants grid is initialised
+        this.getGrantsGrid();
+        
+        var grants = this.record.get('grants') || [];
         this.grantsStore.loadData({results: grants});
         Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
+        
     },
     
     onRecordUpdate: function() {
@@ -111,7 +115,11 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }, {
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'is_open',
-                            xtype: 'combo'
+                            xtype: 'combo',
+                            mode: 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
                             //checkboxLabel: this.app.i18n._('Times could be added')
                         
                         }]] 
