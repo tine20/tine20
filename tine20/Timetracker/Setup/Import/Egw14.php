@@ -253,17 +253,20 @@ class Timetracker_Setup_Import_Egw14
                 echo "Importing mainproject: " . $_data['pm_title'] . ' ' .$_data['pm_id'] . "\n";
             } else {
                 echo "- Importing subproject: " . $_data['pm_title'] . ' ' .$_data['pm_id'] . "\n";
-                // add main project title to some subprojects
-                $specialReplacements = array(
-                    'SOW-43474' => 'CMSLite',
-                    //'SOW-42248' ?
-                    //'SOW-42246' ?
-                );
-                if (in_array($_parentData['pm_number'], $specialReplacements)) {
-                    $_data['pm_title'] = $specialReplacements[$_parentData['pm_number']] . ' ' . $_data['pm_title'];
-                }
             }
             
+            // add main project title to some (sub?)projects
+            $specialReplacements = array(
+                'SOW-43474' => 'CMSLite',
+                //'SOW-42248' ?
+                //'SOW-42246' ?
+            );
+            foreach ($specialReplacements as $key => $value) {
+                if (preg_match("/^" . $key . "/", $_data['pm_number'])) {
+                    $_data['pm_title'] = $value . ' ' . $_data['pm_title'];
+                }
+            }
+        
             // create contract
             $contract = $this->_createContract($_data);        
             
