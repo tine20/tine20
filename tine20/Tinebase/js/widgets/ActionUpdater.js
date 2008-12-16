@@ -12,7 +12,6 @@
  
  Ext.namespace('Tine', 'Tine.widgets');
  
- 
 /**
  * sets text and disabled status of a set of actions according to the grants 
  * of a set of records
