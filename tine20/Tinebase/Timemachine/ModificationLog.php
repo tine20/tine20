@@ -296,7 +296,8 @@ class Tinebase_Timemachine_ModificationLog
             'relations',
             'notes',
             'products',
-            'jpegphoto'
+            'jpegphoto',
+            'grants'
         ));
         
         foreach ($diffs as $field => $newValue) {
