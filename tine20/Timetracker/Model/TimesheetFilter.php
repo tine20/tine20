@@ -113,16 +113,17 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
             // we have to save the timeaccount_id property to a variable because empty() does not resolve the property 
             $timeaccountIds = $this->timeaccount_id;
             
-            if (!empty($timeaccountIds)) {
+            // sanitize $timeaccountIds
+            if (empty($timeaccountIds)) {
                 $timeaccountIds = array(''); 
             }
                 
-            $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id));
+            $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $timeaccountIds));
             
             // get timeaccounts with BOOK_OWN right
             $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
             if (!empty($bookOwnTS)) {
-                $_select->orwhere($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id)
+                $_select->orwhere($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $bookOwnTS)
                     . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId())
                 );
             }            
