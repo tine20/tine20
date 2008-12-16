@@ -67,10 +67,11 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked Erp_Model_Contract records)
+    // relations (linked Erp_Model_Contract records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
@@ -84,6 +85,14 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'deleted_time'
     );
     
+    /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_filters['budget']  = new Zend_Filter_Empty(NULL);
@@ -91,5 +100,23 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         $this->_filters['is_open'] = new Zend_Filter_Empty(0);
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+
+    /**
+     * fills a record from json data
+     *
+     * @param string $_data json encoded data
+     * @return void
+     */
+    public function setFromJson($_data)
+    {
+        parent::setFromJson($_data);
+        
+        $_data = Zend_Json::decode($_data);
+        if (isset($_data['grants']) && !empty($_data['grants'])) {
+            $this->grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $_data['grants']);
+        }  else {
+            $this->grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
+        }
     }
 }

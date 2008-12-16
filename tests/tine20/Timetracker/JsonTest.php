@@ -70,7 +70,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddTimeaccount()
     {
-        /*
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
         
@@ -79,6 +78,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
         $this->assertTrue(is_array($timeaccountData['container_id']));
         $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
+        $this->assertGreaterThan(0, count($timeaccountData['grants']));
         
         // cleanup
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
@@ -86,7 +86,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // check if it got deleted
         $this->setExpectedException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
-        */
     }
     
     /**
@@ -95,7 +94,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTimeaccount()
     {
-        /*
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
         $timeaccountData = $this->_json->getTimeaccount($timeaccountData['id']);
@@ -108,7 +106,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
                         
         // cleanup
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
-        */
     }
 
     /**
@@ -117,7 +114,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateTimeaccount()
     {
-        /*
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
         
@@ -132,7 +128,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
-        */
     }
     
     /**
@@ -141,7 +136,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchTimeaccounts()
     {
-        /*
         // create
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
@@ -153,7 +147,30 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
-        */
+    }
+    
+    /**
+     * try to add a Timeaccount with grants
+     *
+     */
+    public function testAddTimeaccountWithGrants()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $timeaccount->toArray();
+        $grants = $this->_getGrants();
+        $timeaccountData['grants'] = $this->_getGrants();
+        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccountData));
+        
+        // checks
+        $this->assertGreaterThan(0, count($timeaccountData['grants']));
+        $this->assertEquals($grants[0]['account_type'], $timeaccountData['grants'][0]['account_type']);
+        
+        // cleanup
+        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+
+        // check if it got deleted
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
     }
     
     /**
@@ -289,6 +306,26 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             'title'         => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
         ), TRUE);
+    }
+    
+    /**
+     * get grants
+     *
+     * @return array
+     */
+    protected function _getGrants()
+    {
+        return array(
+            array(
+                'account_id' => 0,
+                'account_type' => 'anyone',
+                'book_own' => TRUE,
+                'view_all' => TRUE,
+                'book_all' => TRUE,
+                'manage_clearing' => TRUE,
+                'manage_all' => TRUE
+            )
+        );        
     }
     
     /**

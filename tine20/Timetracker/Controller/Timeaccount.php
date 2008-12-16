@@ -98,8 +98,34 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
 
         $_record->container_id = $container->getId();
         
-        return parent::create($_record);       
+        $timeaccount = parent::create($_record);
+        
+        // save grants
+        if (count($_record->grants) > 0) {
+            Timetracker_Model_TimeaccountGrants::setTimeaccountGrants($timeaccount, $_record->grants);
+        }        
+
+        return $timeaccount;
     }    
+    
+    /**
+     * update one record
+     * - save timeaccount grants
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $timeaccount = parent::update($_record);
+
+        // save grants
+        if (count($_record->grants) > 0) {
+            Timetracker_Model_TimeaccountGrants::setTimeaccountGrants($timeaccount, $_record->grants);
+        }
+
+        return $timeaccount;
+    }
     
     /**
      * Removes containers where current user has no access to
