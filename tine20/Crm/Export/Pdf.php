@@ -246,7 +246,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         
                     } catch (Exception $e) {
                         // do nothing so far
-                        Tinebase_Core::getLogger();
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
                     }
                 }
             }
@@ -272,7 +272,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                     
                 } catch (Exception $e) {
                     // do nothing so far
-                    Tinebase_Core::getLogger();
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
                 }
             }
         }

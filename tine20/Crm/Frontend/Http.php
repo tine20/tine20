@@ -62,7 +62,7 @@ class Crm_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
                 try {
                     $pdfOutput = $pdf->render();
                 } catch ( Zend_Pdf_Exception $e ) {
-                    Tinebase_Core::getLogger();
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString() );
                     echo "could not create pdf <br/>". $e->__toString();
                     exit();            
                 }

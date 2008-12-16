@@ -79,7 +79,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             } catch (Tinebase_Exception_NotFound $e) {
                 // account not found
                 // do nothing so far
-                Tinebase_Core::getLogger();
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' account ' . $value['account_id'] .' not found');
             }
         }
         

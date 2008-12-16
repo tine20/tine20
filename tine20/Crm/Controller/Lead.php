@@ -245,7 +245,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
             $pdfGenerator->generateLeadPdf($_lead);
             $pdfOutput = $pdfGenerator->render();
         } catch ( Zend_Pdf_Exception $e ) {
-            Tinebacse_Core::getLogger();
+            Tinebacse_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
             $pdfOutput = NULL;
         }
                 
@@ -255,7 +255,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         //if (! in_array($_updater->accountId, $recipients)) {
         //    $recipients[] = $_updater->accountId;
         //}
-        Tinebase_Core::getLogger();
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
         Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, $pdfOutput);
     }
     
@@ -302,8 +302,8 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         
         // if no responsibles are defined, send message to all readers of container
         if (empty($recipients)) {
-            Tinebase_Core::getLogger(); 
-                $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id;
+            Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
+                $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id);
                 
             $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container_id, TRUE);
             // NOTE: we just send notifications to users, not to groups or anyones!
