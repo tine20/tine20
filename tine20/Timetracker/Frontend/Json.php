@@ -131,7 +131,8 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             case 'Timetracker_Model_Timeaccount':
                 // resolve timeaccounts grants
                 Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
-                Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+                $this->getTimeaccountGrantsByTimeaccountGrants($_records);
+                //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
                 break;
         }
         
@@ -160,6 +161,31 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $timeaccountGrantsArray['deleteGrant'] = $modifyGrant;
         
         return $timeaccountGrantsArray;
+    }
+    
+    /**
+     * calculate effective ta grants so the client doesn't need to calculate them
+     *
+     * @param  array  $TimeaccountGrantsArray
+     */
+    protected function getTimeaccountGrantsByTimeaccountGrants(Tinebase_Record_RecordSet $_timesaccounts)
+    {
+         $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
+         foreach ($_timesaccounts as $timeaccount) {
+             $timeaccountGrantsArray = $timeaccount->account_grants;
+             $modifyGrant = $manageAllRight || $timeaccountGrantsArray['manage_all'];
+             
+             $timeaccountGrantsArray['readGrant']   = true;
+             $timeaccountGrantsArray['editGrant']   = $modifyGrant;
+             $timeaccountGrantsArray['deleteGrant'] = $modifyGrant;
+             $timeaccount->account_grants = $timeaccountGrantsArray;
+             
+             // also move the grants into the container_id prpoerty, as the clients expects records to 
+             // be contained in some kind of container where it searches the grants in
+             $containerId = $timeaccount->container_id;
+             $containerId['account_grants'] = $timeaccountGrantsArray;
+             $timeaccount->container_id = $containerId;
+         }
     }
     
     /**
