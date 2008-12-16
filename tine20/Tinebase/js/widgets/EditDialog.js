@@ -217,7 +217,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * execuded after record got updated
+     * execuded after record got updated from proxy
      */
     onRecordLoad: function() {
         // interrupt process flow till dialog is rendered
@@ -236,6 +236,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         
         this.loadMask.hide();
+    },
+    
+    /**
+     * execuded when record gets updated from form
+     */
+    onRecordUpdate: function() {
+        var form = this.getForm();
+        
+        // merge changes from form into task record
+        form.updateRecord(this.record);
     },
     
     /**
@@ -267,7 +277,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
         
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Loading {0}...'), this.i18nRecordName)});
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transfering {0}...'), this.i18nRecordName)});
         if (this.recordProxy.isLoading(this.loadRequest)) {
             this.loadMask.show();
         }
@@ -317,11 +327,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
         if(form.isValid()) {
-            var saveMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Saving {0}'), this.i18nRecordName)});
-            saveMask.show();
+            this.loadMask.show();
             
-            // merge changes from form into task record
-            form.updateRecord(this.record);
+            this.onRecordUpdate();
             
             if (this.mode !== 'local') {
                 this.recordProxy.saveRecord(this.record, {
@@ -339,9 +347,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             this.window.close();
                         } else {
                             // update form with this new data
-                            form.loadRecord(this.record);
-                            this.action_delete.enable();
-                            saveMask.hide();
+                            this.onRecordLoad()
                         }
                     },
                     failure: function ( result, request) { 
@@ -356,9 +362,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     this.window.close();
                 } else {
                     // update form with this new data
-                    form.loadRecord(this.record);
-                    this.action_delete.enable();
-                    saveMask.hide();
+                    this.onRecordLoad();
                 }
             }
         } else {
