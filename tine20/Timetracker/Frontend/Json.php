@@ -72,6 +72,22 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
                 $recordArray = $_record->toArray();
                 
                 $recordArray['grants'] = Timetracker_Model_TimeaccountGrants::getTimeaccountGrants($_record)->toArray();
+                foreach($recordArray['grants'] as &$value) {
+                    switch($value['account_type']) {
+                        case 'user':
+                            $value['account_name'] = Tinebase_User::getInstance()->getUserById($value['account_id'])->toArray();
+                            break;
+                        case 'group':
+                            $value['account_name'] = Tinebase_Group::getInstance()->getGroupById($value['account_id'])->toArray();
+                            break;
+                        case 'anyone':
+                            $value['account_name'] = array('accountDisplayName' => 'Anyone');
+                            break;
+                        default:
+                            throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');
+                            break;    
+                    }            
+                }
                 break;
         }
         
