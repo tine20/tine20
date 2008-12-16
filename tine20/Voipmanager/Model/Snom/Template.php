@@ -55,11 +55,28 @@ class Voipmanager_Model_Snom_Template extends Tinebase_Record_Abstract
         'id'						=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'name'                      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'model'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'keylayout_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'setting_id'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'software_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required')
     );
-
+    
+/**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set turnover to 0 if not set
+        $this->_filters['model'] = new Zend_Filter_Empty('snom300');
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
     /**
      * converts a int, string or Voipmanager_Model_Template to an template id
      *
