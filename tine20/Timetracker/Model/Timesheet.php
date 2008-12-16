@@ -50,6 +50,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'is_cleared'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // custom fields array
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    
     // modlog information

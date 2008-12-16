@@ -151,6 +151,12 @@
                     <default>false</default>
                 </field>
                 <field>
+                    <name>billed_in</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>start_date</name>
                     <type>date</type>
                 </field>
