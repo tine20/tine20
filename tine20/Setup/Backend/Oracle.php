@@ -116,7 +116,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function tableExists($_tableName)
     {
-         $select = Tinebase_core::getDb()->select()
+         $select = Tinebase_Core::getDb()->select()
           ->from('information_schema.tables')
           ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
           ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
