@@ -98,7 +98,11 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.Record.create(Tine.Timetracke
         return this.get('number') + ' ' + this.get('title');
     }
 });
-
+Tine.Timetracker.Model.Timeaccount.getDefaultData = function() { 
+    return {
+        is_open: 1
+    }
+};
 /**
  * Model of a grant
  */
