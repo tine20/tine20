@@ -389,16 +389,9 @@ class Timetracker_Setup_Import_Egw14
             
             // add more different grants depending on roles
             switch ($role) {
-                case 1:
+                case 4:
                     $grants = array(
                         Tinebase_Model_Container::GRANT_READ
-                    );
-                    break;
-                case 2:
-                    $grants = array(
-                        Tinebase_Model_Container::GRANT_READ,
-                        Tinebase_Model_Container::GRANT_EDIT,
-                        Tinebase_Model_Container::GRANT_ADD,
                     );
                     break;
                 case 3:
@@ -406,10 +399,17 @@ class Timetracker_Setup_Import_Egw14
                         Tinebase_Model_Container::GRANT_READ,
                         Tinebase_Model_Container::GRANT_EDIT,
                         Tinebase_Model_Container::GRANT_ADD,
+                    );
+                    break;
+                case 2:
+                    $grants = array(
+                        Tinebase_Model_Container::GRANT_READ,
+                        Tinebase_Model_Container::GRANT_EDIT,
+                        Tinebase_Model_Container::GRANT_ADD,
                         Tinebase_Model_Container::GRANT_DELETE,
                     );
                     break;
-                case 4:
+                case 1:
                     $grants = array(
                         Tinebase_Model_Container::GRANT_READ,
                         Tinebase_Model_Container::GRANT_EDIT,
