@@ -110,13 +110,28 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
         if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
             $db = Tinebase_Core::getDb();
             
+            // we need to check that because if no more filters are set, we need to invalidate the query
+            $whereAdded = FALSE;
+            
             // we have to save the timeaccount_id property to a variable because empty() does not resolve the property 
             $timeaccountIds = $this->timeaccount_id;
             if (!empty($timeaccountIds)) {
-                $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id) .
-                    ' OR ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
-            } elseif (empty($this->account_id)) {
-                $_select->where($db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()));
+                $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id)
+                );
+                $whereAdded = TRUE;
+            }
+            
+            // get timeaccounts with BOOK_OWN right
+            $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
+            if (!empty($bookOwnTS)) {
+                $_select->orwhere($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $this->timeaccount_id)
+                    . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId())
+                );
+                $whereAdded = TRUE;
+            }
+            
+            if (!$whereAdded) {
+                $_select()->where('1=0');
             }
         }
         

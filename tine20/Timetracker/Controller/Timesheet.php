@@ -108,14 +108,16 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
                 $hasGrant = (
                     Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::VIEW_ALL)
                     || (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId())
+                        && $_record->account_id == $this->_currentAccount->getId()
+                    )
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                     );
                 break;
             case 'create':
                 $hasGrant = (
                     (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId())
+                        && $_record->account_id == $this->_currentAccount->getId()
+                    )
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 // check manage clearing grant
@@ -143,7 +145,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
             case 'delete':
                 $hasGrant = (
                     (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId())
+                        && $_record->account_id == $this->_currentAccount->getId()
+                    )
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 break;
