@@ -68,7 +68,7 @@ class Addressbook_Controller extends Tinebase_Application_Controller_Abstract im
      */
     public function handleEvents(Tinebase_Events_Abstract $_eventObject)
     {
-        Tinebase_Core::getLogger();
+        Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
