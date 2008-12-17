@@ -16,10 +16,10 @@ Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
 Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     
     /**
-     * @cfg {Tine.Tinebase.Record} record
-     * the record this customfields panel is for
+     * @cfg {Tine.Tinebase.Record} recordClass
+     * the recordClass this customfields panel is for
      */
-    record: null,
+    recordClass: null,
     
     //private
     layout: 'form',
@@ -57,34 +57,45 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                 }
                 
             }, this);
-            this.items.push(new Tine.widgets.customfields.CustomfieldsPanelFormField({
+            
+            this.formField = new Tine.widgets.customfields.CustomfieldsPanelFormField({
                 cfStore: cfStore
-            }));
+            });
+            
+            this.items.push(this.formField);
             
         } else {
             this.html = '<div class="x-grid-empty">' + _('There are no custom fields yet') + "</div>";
         }
         
         Tine.widgets.customfields.CustomfieldsPanel.superclass.initComponent.call(this);
+        
+        // added support for defered rendering as a quick hack: it would be better to 
+        // let cfpanel be a plugin of editDialog
+        this.on('render', function() {
+            // fill data from record into form wich is not done due to defered rendering
+            console.log(this.quickHack.record.get('customfields'));
+            this.formField.setValue(this.quickHack.record.get('customfields'));
+        }, this);
+        
     },
     
     getCustomFieldDefinition: function() {
-        if (this.record && typeof(this.record.getTitle) == 'function') {
-            var appName = this.record.appName;
-            if (Tine[appName].registry.containsKey('customfields')) {
-                var allCfs = Tine[appName].registry.get('customfields');
-                var cfStore = new Ext.data.JsonStore({
-                    fields: Tine.Tinebase.Model.Customfield,
-                    data: allCfs
-                });
-                
-                cfStore.filter('model', this.record.appName + '_Model_' + this.record.modelName);
-                
-                if (cfStore.getCount() > 0) {
-                    return cfStore;
-                }
+        var appName = this.recordClass.getMeta('appName');
+        var modelName = this.recordClass.getMeta('modelName');
+        if (Tine[appName].registry.containsKey('customfields')) {
+            var allCfs = Tine[appName].registry.get('customfields');
+            var cfStore = new Ext.data.JsonStore({
+                fields: Tine.Tinebase.Model.Customfield,
+                data: allCfs
+            });
+            
+            cfStore.filter('model', appName + '_Model_' + modelName);
+            
+            if (cfStore.getCount() > 0) {
+                return cfStore;
             }
-        } 
+        }
     }
 });
 
