@@ -29,21 +29,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
-     *
+     */
     updateToolbars: function(record) {
-        //console.log(record.get('timeaccount_id'));
-        var grants = record.get('timeaccount_id') ? record.get('timeaccount_id').account_grants : null;
-        if (grants) {
-            this.getForm().findField('account_id').setDisabled(! (grants.book_all || grants.manage_all));
-            this.getForm().findField('is_billable').setDisabled(! (grants.manage_clearing || grants.manage_all));
-            this.getForm().findField('is_cleared').setDisabled(! (grants.manage_clearing || grants.manage_all));
-            
-        	Tine.Timetracker.TimesheetEditDialog.superclass.updateToolbars.call(this, record, 'timeaccount_id');
-        }
-    },*/
+        this.onTimeaccountUpdate();
+    	Tine.Timetracker.TimesheetEditDialog.superclass.updateToolbars.call(this, record, 'timeaccount_id');
+    },
     
     onTimeaccountUpdate: function(field, timeaccount) {
-        var grants = timeaccount.get('account_grants');
+        var grants = timeaccount ? timeaccount.get('account_grants') this.record.get('timeaccount_id').account_grants;
         if (grants) {
             this.getForm().findField('account_id').setDisabled(! (grants.book_all || grants.manage_all));
             this.getForm().findField('is_billable').setDisabled(! (grants.manage_clearing || grants.manage_all));
