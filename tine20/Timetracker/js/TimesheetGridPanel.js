@@ -67,7 +67,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         return [{
             id: 'start_date',
             header: this.app.i18n._("Date"),
-            width: 100,
+            width: 120,
             sortable: true,
             dataIndex: 'start_date',
             renderer: Tine.Tinebase.common.dateRenderer
