@@ -103,10 +103,6 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
      */
     public function appendFilterSql($_select)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->timeaccount_id, true));
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
-        
         if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
             $db = Tinebase_Core::getDb();
                         
@@ -127,17 +123,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
                     . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';
             } 
             
-            $_select->where($where);
-            
-            // @deprecated
-            /*
-            $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
-            if (!empty($bookOwnTS)) {
-                $_select->orwhere($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $bookOwnTS)
-                    . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId())
-                );
-            } 
-            */           
+            $_select->where($where);            
         }
         
         parent::appendFilterSql($_select);
