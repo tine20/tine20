@@ -161,6 +161,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
             $readableContainerIds = array_merge($readableContainerIds, 
                 $this->_currentAccount->getContainerByACL($this->_applicationName, $right, TRUE));
         }
+        $readableContainerIds = array_unique($readableContainerIds);
                 
         if (!empty($_filter->container) && is_array($_filter->container)) {
             $_filter->container = array_intersect($_filter->container, $readableContainerIds);

@@ -92,7 +92,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
       
-        $this->_properties['timeaccount_id'] = $result;
+        $this->_properties['timeaccount_id'] = array_unique($result);
     }    
 
     /**
