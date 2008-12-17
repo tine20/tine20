@@ -293,8 +293,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.action_delete,
             this.action_cancel
         ];
-        Tine.widgets.ActionUpdater(record, actions, containerField);
-        Tine.widgets.ActionUpdater(record, this.tbarItems, containerField);
+        Tine.widgets.actionUpdater(record, actions, containerField);
+        Tine.widgets.actionUpdater(record, this.tbarItems, containerField);
     },
     
     /**

@@ -423,7 +423,7 @@ Tine.Addressbook.Main = {
 
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             // update toolbars
-            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'container_id');
+            Tine.widgets.actionUpdater(_selectionModel, this.actions, 'container_id');
             
             var rowCount = _selectionModel.getCount();
             if(rowCount < 1) {

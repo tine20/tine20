@@ -413,7 +413,7 @@ Tine.Crm.Main = {
         
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             // update toolbars
-            Tine.widgets.ActionUpdater(_selectionModel, this.actions, 'container_id');
+            Tine.widgets.actionUpdater(_selectionModel, this.actions, 'container_id');
         }, this);
         
         var gridPanel = new Ext.grid.GridPanel({
@@ -1856,7 +1856,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.loadProductsStore(this.lead.data.products, true);
         
         this.updateToolbars.defer(10, this, [this.lead, 'container_id']);
-        Tine.widgets.ActionUpdater(this.lead, [
+        Tine.widgets.actionUpdater(this.lead, [
             this.actions.addContact,
             this.actions.addTask,
             this.actions.linkTask,
