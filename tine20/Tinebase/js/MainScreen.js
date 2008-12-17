@@ -19,7 +19,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     /**
      * @cfg {String} Appname of default app
      */
-    defaultAppName: 'Addressbook',
+    //defaultAppName: 'Addressbook',
+    defaultAppName: 'Timetracker',
     
     //private
     layout: 'border',
