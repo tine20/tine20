@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        add test for timeaccount grants (set/get) and fix tests to work with grants
  * @todo        add test for contract <-> timeaccount relations
  */
 
@@ -271,6 +270,27 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']);
     }
+
+    /**
+     * try to get a Timesheet
+     *
+     */
+    public function testDeleteTimesheet()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        
+        // delete
+        $this->_json->deleteTimesheets($timesheetData['id']);
+        
+        // checks
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $timesheetDataDeleted = $this->_json->getTimesheet($timesheetData['id']);
+        
+        // cleanup
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+    }
+    
     
     /**
      * try to search for Timesheets
