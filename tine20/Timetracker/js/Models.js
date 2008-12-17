@@ -53,7 +53,8 @@ Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
         account_id: Tine.Tinebase.registry.get('currentAccount'),
         duration:   '00:30',
         start_date: new Date(),
-        is_billable: true
+        is_billable: true,
+        timeaccount_id: {account_grants: {editGrant: true}}
     }
 };
 
@@ -96,7 +97,7 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.Record.create(Tine.Timetracke
     containerName: 'timeaccount list',
     containersName: 'timeaccount lists',
     getTitle: function() {
-        return this.get('number') + ' ' + this.get('title');
+        return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
     }
 });
 Tine.Timetracker.Model.Timeaccount.getDefaultData = function() { 
