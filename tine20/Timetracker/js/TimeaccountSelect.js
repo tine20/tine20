@@ -114,6 +114,9 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
     onStoreBeforeload: function(store, options) {
         options.params = options.params || {};
         
-        options.params.filter = [{field: 'query', operator: 'contains', value: store.baseParams.query}];
+        options.params.filter = [
+            {field: 'query', operator: 'contains', value: store.baseParams.query},
+            {field: 'isBookable', operator: 'equals', value: 1 }
+        ];
     }
 });
