@@ -38,6 +38,8 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);
         
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'));
+        this.action_editInNewWindow.requiredGrant = 'editGrant';
+        
     },
     
     /**
