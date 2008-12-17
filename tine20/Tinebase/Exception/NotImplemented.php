@@ -19,4 +19,5 @@
  */
 class Tinebase_Exception_NotImplemented extends Tinebase_Exception
 {
+    protected $code = 501;
 }
