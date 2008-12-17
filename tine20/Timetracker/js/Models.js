@@ -46,7 +46,16 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.Record.create(Tine.Timetracker.
     containerProperty: 'timeaccount_id',
     // ngettext('timesheets list', 'timesheets lists', n);
     containerName: 'timesheets list',
-    containersName: 'timesheets lists'
+    containersName: 'timesheets lists',
+    getTitle: function() {
+        var timeaccount = this.get('timeaccount_id');
+        if (timeaccount) {
+            if (typeof(timeaccount.get) !== 'function') {
+                timeaccount = new Tine.Timetracker.Model.Timeaccount(timeaccount);
+            }
+            return timeaccount.getTitle();
+        }
+    }
 });
 Tine.Timetracker.Model.Timesheet.getDefaultData = function() { 
     return {
