@@ -55,7 +55,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             border: false,
             plain:true,
             activeTab: 0,
-            deferredRender: false,
             items:[
                 {            	
                 title: this.app.i18n._('Timesheet'),
@@ -164,7 +163,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     ]
                 }]
             }, new Tine.widgets.customfields.CustomfieldsPanel ({
-                record: this.record
+                recordClass: this.recordClass,
+                quickHack: this
             }), new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
