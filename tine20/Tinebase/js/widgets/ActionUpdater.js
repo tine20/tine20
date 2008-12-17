@@ -198,7 +198,7 @@ Tine.widgets.actionUpdater = function(records, actions, containerField) {
     
     // calculate sum of grants
     for (var i=0; i<records.length; i++) {
-        var recordGrants = records[i].get(containerField).account_grants;
+        var recordGrants = records[i].get(containerField) ? records[i].get(containerField).account_grants : {};
         for (var grant in grants) {
             grants[grant] = grants[grant] & recordGrants[grant];
         }
