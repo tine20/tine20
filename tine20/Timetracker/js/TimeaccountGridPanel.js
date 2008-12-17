@@ -19,7 +19,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
     recordClass: Tine.Timetracker.Model.Timeaccount,
     
     // grid specific
-    defaultSortInfo: {field: 'creation_time', dir: 'DESC'},
+    defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'title'

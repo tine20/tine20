@@ -19,7 +19,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     recordClass: Tine.Timetracker.Model.Timesheet,
     
     // grid specific
-    defaultSortInfo: {field: 'start_date', dir: 'DESC'},
+    defaultSortInfo: {field: 'start_date', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'description'
