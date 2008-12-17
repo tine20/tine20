@@ -10,6 +10,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        add test for manage_clearing
  */
 
 /**
@@ -158,7 +159,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * test to create TS with manage_clearing grant
      *
-     * @todo change this test later
+     * @todo implement
      */
     public function testManageClearingGrantTS()
     {
@@ -315,8 +316,6 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         ); 
     }
     
-    // @todo check if we need all of these
-    
     /**
      * get Timesheet
      *
@@ -346,21 +345,6 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'description'       => 'blabla',
             'start_date'        => Zend_Date::now()->toString('YYYY-MM-dd')
         ), TRUE);
-    }
-
-    /**
-     * get paging
-     *
-     * @return array
-     */
-    protected function _getPaging()
-    {
-        return array(
-            'start' => 0,
-            'limit' => 50,
-            'sort' => 'creation_time',
-            'dir' => 'ASC',
-        );
     }
 
     /**
