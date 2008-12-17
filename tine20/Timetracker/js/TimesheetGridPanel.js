@@ -19,7 +19,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     recordClass: Tine.Timetracker.Model.Timesheet,
     
     // grid specific
-    defaultSortInfo: {field: 'start_date', dir: 'DESC'},
+    defaultSortInfo: {field: 'start_date', dir: 'ASC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'description'
@@ -91,7 +91,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         },{
             id: 'account_id',
             header: this.app.i18n._("Account"),
-            width: 200,
+            width: 350,
             sortable: true,
             dataIndex: 'account_id',
             renderer: Tine.Tinebase.common.usernameRenderer
