@@ -391,7 +391,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         $this->_deleteLinkedObjects($_record);
         
         if (!$this->_purgeRecords && $_record->has('created_by')) {
-            Tinebase_Timemachine_Modificationlog::setRecordMetaData($_record, 'delete', $_record);
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'delete', $_record);
             $this->_backend->update($_record);
         } else {
             $this->_backend->delete($_record);
