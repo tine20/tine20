@@ -94,7 +94,10 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
                 this.record = new Tine.Timetracker.Model.Timeaccount(value, value.id);
             }
             
-            Tine.Timetracker.TimeAccountSelect.superclass.setValue.call(this, this.record.getTitle());
+            var title = this.record.getTitle();
+            if (title) {
+                Tine.Timetracker.TimeAccountSelect.superclass.setValue.call(this, title);
+            }
         }
     },
     
