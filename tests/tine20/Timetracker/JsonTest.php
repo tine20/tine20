@@ -283,9 +283,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // delete
         $this->_json->deleteTimesheets($timesheetData['id']);
         
+        $timesheets = Timetracker_Controller_Timesheet::getInstance()->getTimesheetsByTimeaccountId($timesheetData['timeaccount_id']['id']);
+        
         // checks
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        $timesheetDataDeleted = $this->_json->getTimesheet($timesheetData['id']);
+        $this->assertEquals(0, count($timesheets));
         
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
