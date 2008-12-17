@@ -46,7 +46,7 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },
             params: {
                 method: 'Erp.getContract',
-                uid: this.record.id
+                id: this.record.id
                 //containerId: this.containerId
             }
         });

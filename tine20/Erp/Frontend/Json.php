@@ -76,12 +76,12 @@ class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     /**
      * Return a single record
      *
-     * @param   string $uid
+     * @param   string $id
      * @return  array record data
      */
-    public function getContract($uid)
+    public function getContract($id)
     {
-        return $this->_get($uid, $this->_contractController);
+        return $this->_get($id, $this->_contractController);
     }
 
     /**
