@@ -117,16 +117,27 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
             if (empty($timeaccountIds)) {
                 $timeaccountIds = array(''); 
             }
-                
-            $_select->where($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $timeaccountIds));
-            
+
+            $where = $db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $timeaccountIds);
+
             // get timeaccounts with BOOK_OWN right
+            $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
+            if (!empty($bookOwnTS)) {
+                $where .= ' OR (' . $db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $bookOwnTS)
+                    . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';
+            } 
+            
+            $_select->where($where);
+            
+            // @deprecated
+            /*
             $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
             if (!empty($bookOwnTS)) {
                 $_select->orwhere($db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $bookOwnTS)
                     . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId())
                 );
-            }            
+            } 
+            */           
         }
         
         parent::appendFilterSql($_select);
