@@ -74,7 +74,6 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         // let cfpanel be a plugin of editDialog
         this.on('render', function() {
             // fill data from record into form wich is not done due to defered rendering
-            console.log(this.quickHack.record.get('customfields'));
             this.formField.setValue(this.quickHack.record.get('customfields'));
         }, this);
         
