@@ -19,4 +19,5 @@
  */
 class Tinebase_Exception_AccessDenied extends Tinebase_Exception
 {
+    protected $code = 403;
 }
