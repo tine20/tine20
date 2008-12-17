@@ -146,15 +146,19 @@
                     <default>true</default>
                 </field>
                 <field>
+                    <name>billed_in</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>is_cleared</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>
                 <field>
-                    <name>billed_in</name>
-                    <type>text</type>
-                    <length>256</length>
-                    <notnull>false</notnull>
+                    <name>cleared_time</name>
+                    <type>datetime</type>
                 </field>
                 <field>
                     <name>start_date</name>
