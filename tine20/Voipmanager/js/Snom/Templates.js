@@ -364,7 +364,7 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateTemplateRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateTemplateRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.templateRecord);
                         }

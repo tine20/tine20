@@ -386,7 +386,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateVoicemailRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateVoicemailRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.voicemailRecord);
                         }

@@ -361,7 +361,7 @@ Tine.Voipmanager.Asterisk.Context.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateContextRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateContextRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.contextRecord);
                         }

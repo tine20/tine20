@@ -385,7 +385,7 @@ Tine.Voipmanager.Snom.Software.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateSoftwareRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateSoftwareRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.softwareRecord);
                         }

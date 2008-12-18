@@ -535,7 +535,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updatePhoneRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updatePhoneRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.phoneRecord);
                         }

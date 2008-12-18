@@ -148,12 +148,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             $_ownerData[] = $_owner;
         } */
 
-        $result = array('success'           => true,
-            'welcomeMessage'    => 'Entry updated',
-            'updatedData'       => $phone
-        );
-
-        return $result;         
+        return $phone;         
     }     
     
     /**

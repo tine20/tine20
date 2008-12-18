@@ -421,7 +421,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
                     if(_closeWindow === true) {
                         window.close();
                     } else {
-                        this.updateSipPeerRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                        this.updateSipPeerRecord(Ext.util.JSON.decode(_result.responseText));
                         this.updateToolbarButtons();
                         form.loadRecord(this.sipPeerRecord);
                     }

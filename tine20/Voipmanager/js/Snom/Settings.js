@@ -410,7 +410,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateSettingRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateSettingRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.settingRecord);
                         }

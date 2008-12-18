@@ -362,7 +362,7 @@ Tine.Voipmanager.Asterisk.Meetme.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateMeetmeRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateMeetmeRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.meetmeRecord);
                         }

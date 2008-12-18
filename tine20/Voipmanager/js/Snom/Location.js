@@ -398,7 +398,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateLocationRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateLocationRecord(Ext.util.JSON.decode(_result.responseText));
                             this.updateToolbarButtons();
                             form.loadRecord(this.locationRecord);
                         }
