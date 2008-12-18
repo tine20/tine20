@@ -226,12 +226,12 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }                    
-            if ($record->has('tags') && !empty($_record->tags)) {
+            if ($record->has('tags') && !empty($_record->tags) && is_array($_record->tags)) {
                 $record->tags = $_record->tags;
                 Tinebase_Tags::getInstance()->setTagsOfRecord($record);
             }        
             if ($record->has('notes')) {
-                if (isset($_record->notes)) {
+                if (isset($_record->notes) && is_array($_record->notes)) {
                     $record->notes = $_record->notes;
                     Tinebase_Notes::getInstance()->setNotesOfRecord($record);
                 }
@@ -298,11 +298,11 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }        
-            if ($record->has('tags') && isset($_record->tags)) {
+            if ($record->has('tags') && isset($_record->tags) && is_array($_record->tags)) {
                 Tinebase_Tags::getInstance()->setTagsOfRecord($_record);
             }
             if ($record->has('notes')) {
-                if (isset($_record->notes)) {
+                if (isset($_record->notes) && is_array($_record->notes)) {
                     Tinebase_Notes::getInstance()->setNotesOfRecord($_record);
                 }
                 Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'changed', $currentMods);
