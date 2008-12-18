@@ -98,6 +98,22 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
     );
 
     /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set default value if field is empty
+        $this->_filters['nat'] = new Zend_Filter_Empty('no');
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
+    /**
      * converts a int, string or Voipmanager_Model_Asterisk_SipPeer to an line id
      *
      * @param int|string|Voipmanager_Model_Asterisk_SipPeer $_sipPeerId the sip peer id to convert

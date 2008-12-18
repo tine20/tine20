@@ -77,6 +77,34 @@ class Voipmanager_Model_Asterisk_Voicemail extends Tinebase_Record_Abstract
     );
 
     /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set default value if field is empty
+        $this->_filters['attach'] = new Zend_Filter_Empty(0);
+        $this->_filters['saycid'] = new Zend_Filter_Empty(0);
+        $this->_filters['review'] = new Zend_Filter_Empty(0);
+        $this->_filters['operator'] = new Zend_Filter_Empty(0);
+        $this->_filters['envelope'] = new Zend_Filter_Empty(0);
+        $this->_filters['sayduration'] = new Zend_Filter_Empty(0);
+        $this->_filters['saydurationm'] = new Zend_Filter_Empty(0);
+        $this->_filters['sendvoicemail'] = new Zend_Filter_Empty(0);
+        $this->_filters['delete'] = new Zend_Filter_Empty(0);
+        $this->_filters['nextaftercmd'] = new Zend_Filter_Empty(0);
+        $this->_filters['forcename'] = new Zend_Filter_Empty(0);
+        $this->_filters['forcegreetings'] = new Zend_Filter_Empty(0);
+        $this->_filters['hidefromdir'] = new Zend_Filter_Empty(0);
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
+    /**
      * converts a int, string or Voipmanager_Model_Asterisk_Voicemail to an voicemail id
      *
      * @param int|string|Voipmanager_Model_Asterisk_Voicemail $_voicemailId the voicemail id to convert
