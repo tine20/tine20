@@ -178,6 +178,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
                     }]
                 }),
                 new Tine.widgets.tags.TagPanel({
+                    app: 'Crm',
                     border: false,
                     bodyStyle: 'border:1px solid #B5B8C8;'
                 }),
