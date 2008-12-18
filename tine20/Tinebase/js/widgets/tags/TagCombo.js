@@ -42,8 +42,11 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             totalProperty: 'totalCount',
             fields: Tine.Tinebase.Model.Tag,
             baseParams: {
-                method: 'Tinebase.getTags',
-                context: this.app
+                method: 'Tinebase.searchTags',
+                filter: Ext.util.JSON.encode({
+                    application: this.app
+                }),
+                paging : Ext.util.JSON.encode({})
             }
         });
         Tine.widgets.tags.TagCombo.superclass.initComponent.call(this);

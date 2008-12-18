@@ -66,8 +66,11 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             totalProperty: 'totalCount',
             fields: Tine.Tinebase.Model.Tag,
             baseParams: {
-                method: 'Tinebase.getTags',
-                context: this.app
+                method: 'Tinebase.searchTags',
+                filter: Ext.util.JSON.encode({
+                    application: this.app
+                }),
+                paging : Ext.util.JSON.encode({})
             }
         });
         

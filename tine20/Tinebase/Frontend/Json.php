@@ -237,48 +237,16 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     }
     
     /**
-     * gets tags for application / owners
-     * 
-     * @param   string  $context
-     * @return array 
-     * @deprecated ? use getTags or searchTags ?
-     */
-    public function getTags($context)
-    {
-        $filter = new Tinebase_Model_TagFilter(array(
-            'name'        => '%',
-            'application' => $context,
-        ));
-        $paging = new Tinebase_Model_Pagination();
-        
-        $tags = Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray();
-        return array(
-            'results'    => $tags,
-            'totalCount' => count($tags)
-        );
-    }
-    
-    /**
      * search tags
      *
-     * @param string $query
-     * @param string $context (application)
-     * @param integer $start
-     * @param integer $limit
+     * @param string $filter json encoded filter array
+     * @param string $paging json encoded pagination info
      * @return array
      */
-    public function searchTags($query, $context, $start=0, $limit=0)
+    public function searchTags($filter, $paging)
     {
-        $filter = new Tinebase_Model_TagFilter(array(
-            'name'        => $query . '%',
-            'application' => $context,
-        ));
-        $paging = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => 'name',
-            'dir'   => 'ASC'
-        ));
+        $filter = new Tinebase_Model_TagFilter(Zend_Json::decode($filter));
+        $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         return array(
             'results'    => Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray(),
