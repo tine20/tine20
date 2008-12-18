@@ -63,18 +63,24 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
             //->order('type', 'DESC')
             ->order('name', 'ASC');
         
-        // IF SHARED {
-        //  LEFT JOIN tags tags_acl ON id, grant
-        //  LEFT JOIN tags_context ON id, context
-        // }
-        // WHERE name LIKE %$_filter->name% 
+        if (!empty($this->application)) {
+            $applicationId = Tinebase_Application::getInstance()->getApplicationByName($this->application)->getId();
+            
+            $select->join(
+                array('context' => SQL_TABLE_PREFIX . 'tags_context'), 
+                $db->quoteIdentifier('tags.id') . ' = ' . $db->quoteIdentifier('context.tag_id'),
+                array()
+            )->where($db->quoteInto($db->quoteIdentifier('context.application_id') . ' IN (0, ?)', $applicationId));
+        }
         
         if (!empty($this->name)) {
             $select->where($db->quoteInto($db->quoteIdentifier('tags.name') . ' LIKE ?', $this->name));
         }
+        
         if (!empty($this->description)) {
             $select->where($db->quoteInto($db->quoteIdentifier('tags.description') . ' LIKE ?', $this->description));
         }
+        
         if ($this->type) {
             $select->where($db->quoteInto($db->quoteIdentifier('tags.type') . ' = ?', $this->type));
         }
