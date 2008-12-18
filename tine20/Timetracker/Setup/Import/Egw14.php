@@ -90,10 +90,18 @@ class Timetracker_Setup_Import_Egw14
      * @var array
      */
     protected $_projectFilter = array(
-        'name' => 'pm_number',
-        'operator' => 'not',
-        //'operator' => 'contains',
-        'value' => '^SOW',
+        array(
+            'name' => 'pm_number',
+            'operator' => 'not',
+            //'operator' => 'contains',
+            'value' => '^SOW',
+        ),
+        array(
+            'name' => 'pm_number',
+            'operator' => 'not',
+            //'operator' => 'contains',
+            'value' => '^VT',
+        )
     );
     
     /**
@@ -208,15 +216,17 @@ class Timetracker_Setup_Import_Egw14
         foreach ($queryResult as $row) {
             // check filter
             if (!empty($this->_projectFilter)) {
-                if (
-                    ($this->_projectFilter['operator'] == 'not' 
-                        && preg_match('/' . $this->_projectFilter['value'] . '/', $row[$this->_projectFilter['name']]))
-                    ||
-                    ($this->_projectFilter['operator'] == 'contains' 
-                        && !preg_match('/' . $this->_projectFilter['value'] . '/', $row[$this->_projectFilter['name']]))
-                ) {
-                    echo "filter not matched for project: " . $row['pm_number'] . $row['pm_title'] . "\n";
-                    continue;        
+                foreach($this->_projectFilter as $filter) {
+                    if (
+                        ($filter['operator'] == 'not' 
+                            && preg_match('/' . $filter['value'] . '/', $row[$filter['name']]))
+                        ||
+                        ($filter['operator'] == 'contains' 
+                            && !preg_match('/' . $filter['value'] . '/', $row[$filter['name']]))
+                    ) {
+                        echo "filter not matched for project: " . $row['pm_number'] . $row['pm_title'] . "\n";
+                        continue;        
+                    }
                 }
             }
             
