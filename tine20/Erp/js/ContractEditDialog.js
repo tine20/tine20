@@ -114,6 +114,7 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
+                            app: 'Erp',
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         })
