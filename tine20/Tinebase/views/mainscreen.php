@@ -89,5 +89,6 @@
     </script>
 </head>
 <body>
+    <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></noscript>
 </body>
 </html>
