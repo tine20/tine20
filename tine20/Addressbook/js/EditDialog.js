@@ -456,6 +456,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         }]
                     }),
                     new Tine.widgets.tags.TagPanel({
+                        app: 'Addressbook',
                         border: false,
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
