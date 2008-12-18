@@ -47,6 +47,11 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
                                         'InArray'    => array(Tinebase_Model_Tag::TYPE_PERSONAL, Tinebase_Model_Tag::TYPE_SHARED),
                                         'default'    => ''
                                   ),
+        'grant'                => array('presence'   => 'required',
+                                        'allowEmpty' => false,
+                                        'InArray'    => array(Tinebase_Model_TagRight::VIEW_RIGHT, Tinebase_Model_TagRight::USE_RIGHT),
+                                        'default'    => Tinebase_Model_TagRight::VIEW_RIGHT
+                                  ),
     );
     
     /**
