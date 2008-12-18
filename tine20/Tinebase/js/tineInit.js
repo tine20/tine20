@@ -226,6 +226,16 @@ Tine.Tinebase.tineInit = {
                 }
                 break;
                 
+                // insufficient rights
+                case 403:
+                Ext.MessageBox.show({
+                    title: _('Insufficient Rights'), 
+                    msg: _('Sorry, you are not permitted to perform this action'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+                break;
+                
                 // concurrency conflict
                 case 409:
                 Ext.MessageBox.show({
