@@ -235,8 +235,8 @@ Tine.Addressbook.Main = {
 	},
 
     initComponent: function() {
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Addressbook');
+        this.app = Tine.Tinebase.appMgr.get('Addressbook');
+        this.translation = this.app.i18n;
     
         this.actions.addContact = new Ext.Action({
             requiredGrant: 'addGrant',
@@ -352,7 +352,7 @@ Tine.Addressbook.Main = {
                 {label: this.translation._('Company'),    field: 'org_name'},
                 {label: this.translation._('Job Title'),    field: 'title'},
                 {label: this.translation._('Job Role'),    field: 'role'},
-                new Tine.widgets.tags.TagFilter({}),
+                new Tine.widgets.tags.TagFilter({app: this.app}),
                 {label: this.translation._('Street') + ' (' + this.translation._('Company Address') + ')',      field: 'adr_one_street', defaultOperator: 'equals', valueType: 'int'},
                 {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals', valueType: 'int'},
                 {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality'},
