@@ -34,7 +34,7 @@ class Voipmanager_Backend_Asterisk_Meetme extends Tinebase_Application_Backend_S
      * @param  Zend_Db_Select $_select current where filter
      * @param  Voipmanager_Model_Asterisk_MeetmeFilter $_filter the string to search for
      */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_MeetmeFilter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_MeetmeFilter $_filter = NULL)
     {
         if(!empty($_filter->query)) {
             $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('confno') . ' LIKE ? OR ' .
