@@ -108,7 +108,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Record_Abstr
      * @param  Tinebase_Model_FullTag $_tag
      * @return Tinebase_Model_FullTag
      */
-    public function create(Tinebase_Model_FullTag $_tag)
+    public function create(Tinebase_Record_Interface $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
@@ -119,7 +119,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Record_Abstr
         Tinebase_Tags::getInstance()->setRights($_tag->rights);
         Tinebase_Tags::getInstance()->setContexts($_tag->contexts, $newTag->getId());
         
-        return $this->getTag($newTag->getId());
+        return $this->get($newTag->getId());
     }  
 
    /**
@@ -128,7 +128,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Record_Abstr
      * @param  Tinebase_Model_FullTag $_tag
      * @return Tinebase_Model_FullTag
      */
-    public function update(Tinebase_Model_FullTag $_tag)
+    public function update(Tinebase_Record_Interface $_tag)
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
@@ -141,7 +141,7 @@ class Admin_Controller_Tags extends Tinebase_Application_Controller_Record_Abstr
         Tinebase_Tags::getInstance()->purgeContexts($_tag->getId());
         Tinebase_Tags::getInstance()->setContexts($_tag->contexts, $_tag->getId());
         
-        return $this->getTag($_tag->getId());
+        return $this->get($_tag->getId());
     }  
     
     /**
