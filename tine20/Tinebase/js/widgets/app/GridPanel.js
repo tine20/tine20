@@ -378,7 +378,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onEditInNewWindow: function(button, event) {
         var record; 
         if (button.actionType == 'edit') {
-            if (this.action_editInNewWindow.isDisabled) {
+            if (this.action_editInNewWindow.isDisabled()) {
                 // if edit action is disabled, we also don't open a new 
                 return false;
             }
