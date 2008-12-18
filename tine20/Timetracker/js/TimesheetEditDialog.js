@@ -157,6 +157,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
+                            app: 'Timetracker',
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         })

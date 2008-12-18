@@ -160,6 +160,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
                     new Tine.widgets.tags.TagPanel({
+                        app: 'Timetracker',
                         border: false,
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
