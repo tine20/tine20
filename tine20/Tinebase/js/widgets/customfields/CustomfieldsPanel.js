@@ -135,9 +135,11 @@ Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field
      * sets cfs from data
      */
     setValue: function(values){
-        this.cfStore.each(function(def) {
-            def.fieldObj.setValue(values[def.get('name')]);
-        });
+        if (values) {
+            this.cfStore.each(function(def) {
+                def.fieldObj.setValue(values[def.get('name')]);
+            });
+        }
     }
 
 });
