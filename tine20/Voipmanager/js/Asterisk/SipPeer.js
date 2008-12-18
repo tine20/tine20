@@ -1048,6 +1048,7 @@ Tine.Voipmanager.Asterisk.SipPeers.EditDialog =  {
             handlerApplyChanges: this.applyChanges,
             handlerSaveAndClose: this.saveChanges,
             handlerDelete: this.deleteSipPeer,
+            handlerCancel: function() {window.close();},
             items: [{
 		        defaults: {
 		            frame: true

@@ -928,6 +928,7 @@ Tine.Voipmanager.Asterisk.Voicemail.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteVoicemail,
+                handlerCancel: function() {window.close();},
                 items: [{
 	                defaults: {
 	                    frame: true

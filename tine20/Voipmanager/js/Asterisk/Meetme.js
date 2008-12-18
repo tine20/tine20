@@ -443,6 +443,7 @@ Tine.Voipmanager.Asterisk.Meetme.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteMeetme,
+                handlerCancel: function() {window.close();},
                 items: this.editMeetmeDialog()
             });
 

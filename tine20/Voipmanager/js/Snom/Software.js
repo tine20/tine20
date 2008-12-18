@@ -477,6 +477,7 @@ Tine.Voipmanager.Snom.Software.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteSoftware,
+                handlerCancel: function() {window.close();},
                 items: this.editSoftwareDialog(this._phoneModels)
             });
 

@@ -433,6 +433,7 @@ Tine.Voipmanager.Asterisk.Context.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteContext,
+                handlerCancel: function() {window.close();},
                 frame: true,
                 items: this.editContextDialog()
             });

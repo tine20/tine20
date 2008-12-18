@@ -492,6 +492,7 @@ Tine.Voipmanager.Snom.Templates.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteTemplate,
+                handlerCancel: function() {window.close();},
                 items: this.editTemplateDialog()
             });
 

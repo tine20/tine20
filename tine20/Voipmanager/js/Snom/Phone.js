@@ -1698,6 +1698,7 @@ Tine.Voipmanager.Snom.Phones.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deletePhone,
+                handlerCancel: function() {window.close();},
                 items: [{
                     defaults: {
                         frame: true

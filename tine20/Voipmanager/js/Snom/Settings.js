@@ -920,6 +920,7 @@ Tine.Voipmanager.Snom.Settings.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteSetting,
+                handlerCancel: function() {window.close();},
                 items: [{
                     defaults: {
                         frame: true

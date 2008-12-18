@@ -844,6 +844,7 @@ Tine.Voipmanager.Snom.Location.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteLocation,
+                handlerCancel: function() {window.close();},
                 items: this.editLocationDialog()
             });
 
