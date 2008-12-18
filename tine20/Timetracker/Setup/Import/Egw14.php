@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
  *
+ * @todo        timeaccount grants: user groups for special projects (SOW-42248, ...) 
  * @todo        import more relevant record fields?
  */
 
@@ -82,6 +83,18 @@ class Timetracker_Setup_Import_Egw14
      * @var integer
      */
     protected $_unbillableCatId = 26;
+    
+    /**
+     * project filter
+     *
+     * @var array
+     */
+    protected $_projectFilter = array(
+        'name' => 'pm_number',
+        'operator' => 'not',
+        //'operator' => 'contains',
+        'value' => '^SOW',
+    );
     
     /**
      * the constructor 
@@ -193,6 +206,20 @@ class Timetracker_Setup_Import_Egw14
         echo "Projects to import: " . count($queryResult) . "\n";
         
         foreach ($queryResult as $row) {
+            // check filter
+            if (!empty($this->_projectFilter)) {
+                if (
+                    ($this->_projectFilter['operator'] == 'not' 
+                        && preg_match('/' . $this->_projectFilter['value'] . '/', $row[$this->_projectFilter['name']]))
+                    ||
+                    ($this->_projectFilter['operator'] == 'contains' 
+                        && !preg_match('/' . $this->_projectFilter['value'] . '/', $row[$this->_projectFilter['name']]))
+                ) {
+                    echo "filter not matched for project: " . $row['pm_number'] . $row['pm_title'] . "\n";
+                    continue;        
+                }
+            }
+            
             $this->_importProject($row);
         }        
     }
@@ -276,55 +303,68 @@ class Timetracker_Setup_Import_Egw14
             // add timesheets and timeaccounts
             $timeaccounts = array();
             foreach ($timesheets as $timesheet) {
-                // scan timesheets and add additional timeaccounts for special categories
-                // only do that for SOW-xxx
-                if (isset($this->_newTimeaccountCategories[$timesheet['cat_id']]) 
-                    && preg_match("/^SOW/", $_data['pm_number'])) {
-                        
-                    $catName = $this->_newTimeaccountCategories[$timesheet['cat_id']];
-                    
-                    // create new timeaccount
-                    if (!isset($timeaccounts[$timesheet['cat_id']])) {
-                        echo "   create new timeaccount for category: " . $catName . "\n";
-                        $data = $_data;
-                        $data['pm_title'] .= ' [' . $catName . ']';
-                        $timeaccounts[$timesheet['cat_id']] = $this->_createTimeaccount($data, $contract);
-                    } 
-                    $this->_createTimesheet($timesheet['record'], $timeaccounts[$timesheet['cat_id']]->getId());
-                    
-                } elseif (!empty($_parentData) && $_parentData['pm_number'] == 'SOW-42246/0005') {
-                    // special project number eshop
-                    if (!isset($timeaccounts['eshop'])) {
-                        echo "   create new timeaccount for eshop subprojects\n";
-                        $data = $_data;
-                        $data['pm_title'] .= ' [E-Shop]';
-                        $timeaccounts['eshop'] = $this->_createTimeaccount($data, $contract);
-                    }
-                    $this->_createTimesheet($timesheet['record'], $timeaccounts['eshop']->getId());
-                    
-                } else {
-                    // create timeaccount
-                    if (!isset($timeaccounts['main'])) {
-                        echo "  create main timeaccount for project\n";
-                        $timeaccounts['main'] = $this->_createTimeaccount($_data, $contract);
-                    }
-                    
-                    // add category name as tag
-                    if (!empty($this->_tsCategories[$timesheet['cat_id']])) {
-                        $tag = new Tinebase_Model_Tag(array(
-                            'id'    => $this->_tsCategories[$timesheet['cat_id']],
-                            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                            'name'  => 'x'
-                        ));
-                        $timesheet['record']->tags = new Tinebase_Record_Recordset('Tinebase_Model_Tag', array($tag)); 
-                    }
-                    
-                    $this->_createTimesheet($timesheet['record'], $timeaccounts['main']->getId());
-                }
+                $this->_importTimesheet($timesheet, $_data, $timeaccounts, $contract->getId());
             }
         }        
     }
-    
+
+    /**
+     * import timesheet
+     *
+     * @param array $_timesheet
+     * @param array $_projectData
+     * @param array $_timeaccounts
+     * @param string $_contractId
+     */
+    protected function _importTimesheet($_timesheet, $_projectData, &$_timeaccounts, $_contractId)
+    {
+        // scan timesheets and add additional timeaccounts for special categories
+        // only do that for SOW-xxx
+        if (isset($this->_newTimeaccountCategories[$_timesheet['cat_id']]) 
+            && preg_match("/^SOW/", $_projectData['pm_number'])) {
+                
+            $catName = $this->_newTimeaccountCategories[$_timesheet['cat_id']];
+            
+            // create new timeaccount
+            if (!isset($_timeaccounts[$_timesheet['cat_id']])) {
+                echo "   create new timeaccount for category: " . $catName . "\n";
+                $data = $_projectData;
+                $data['pm_title'] .= ' [' . $catName . ']';
+                $_timeaccounts[$_timesheet['cat_id']] = $this->_createTimeaccount($data, $_contractId);
+            } 
+            $this->_createTimesheet($_timesheet['record'], $_timeaccounts[$_timesheet['cat_id']]->getId());
+            
+        } elseif (!empty($_parentData) && $_parentData['pm_number'] == 'SOW-42246/0005') {
+            // special project number eshop
+            if (!isset($_timeaccounts['eshop'])) {
+                echo "   create new timeaccount for eshop subprojects\n";
+                $data = $_projectData;
+                $data['pm_title'] .= ' [E-Shop]';
+                $_timeaccounts['eshop'] = $this->_createTimeaccount($data, $_contractId);
+            }
+            $this->_createTimesheet($_timesheet['record'], $_timeaccounts['eshop']->getId());
+            
+        } else {
+            // create timeaccount
+            if (!isset($_timeaccounts['main'])) {
+                echo "  create main timeaccount for project\n";
+                $_timeaccounts['main'] = $this->_createTimeaccount($_projectData, $_contractId);
+            }
+            
+            // add category name as tag
+            if (!empty($this->_tsCategories[$_timesheet['cat_id']])) {
+                $tag = new Tinebase_Model_Tag(array(
+                    'id'    => $this->_tsCategories[$_timesheet['cat_id']],
+                    'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                    'name'  => 'x'
+                ));
+                $_timesheet['record']->tags = new Tinebase_Record_Recordset('Tinebase_Model_Tag', array($tag)); 
+            }
+            
+            $this->_createTimesheet($_timesheet['record'], $_timeaccounts['main']->getId());
+        }
+        
+    }
     
     /********************** create records ***********************/
     
@@ -352,13 +392,13 @@ class Timetracker_Setup_Import_Egw14
      * create tine timeaccount
      *
      * @param array $_data with egw project data
-     * @param Erp_Model_Contract $_contract
+     * @param string $_contractId
      * @return Tinebase_Record_RecordSet of Timetracker_Model_Timeaccount
      * 
+     * @todo    add members as groups (which?)
      * @todo    add more fields?
-     * @todo    check egw member roles?
      */
-    protected function _createTimeaccount($_data, $_contract)
+    protected function _createTimeaccount($_data, $_contractId)
     {
         $timeaccount = new Timetracker_Model_Timeaccount(array(
             'title'                 => utf8_encode($_data['pm_title']),
@@ -379,7 +419,7 @@ class Timetracker_Setup_Import_Egw14
             'own_backend'            => Timetracker_Backend_Timeaccount::TYPE,
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'type'                   => Timetracker_Model_Timeaccount::RELATION_TYPE_CONTRACT,
-            'related_id'             => $_contract->getId(),   
+            'related_id'             => $_contractId,   
             'related_model'          => 'Erp_Model_Contract',
             'related_backend'        => Erp_Backend_Contract::TYPE,
             'remark'                 => Timetracker_Model_Timeaccount::RELATION_TYPE_CONTRACT
