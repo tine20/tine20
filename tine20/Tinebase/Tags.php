@@ -66,16 +66,13 @@ class Tinebase_Tags
      * 
      * @param  Tinebase_Model_TagFilter $_filter
      * @param  Tinebase_Model_Pagination  $_paging
-     * @param  string                     $_right   the required right current user must have on the tags
      * @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
      */
-    public function searchTags($_filter, $_paging, $_right=Tinebase_Model_TagRight::VIEW_RIGHT, $_ignoreAcl=false)
+    public function searchTags($_filter, $_paging)
     {
         $select = $_filter->getSelect();
         
-        if ($_ignoreAcl !== true) {
-            Tinebase_Model_TagRight::applyAclSql($select, $_right);
-        }
+        Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
         $_paging->appendPagination($select);
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
@@ -86,13 +83,12 @@ class Tinebase_Tags
      * @todo automate the count query if paging is active!
      * 
      * @param  Tinebase_Model_TagFilter $_filter
-     * @param  string                     $_right   the required right current user must have on the tags
      * @return int
      */
-    public function getSearchTagsCount($_filter, $_right=Tinebase_Model_TagRight::VIEW_RIGHT)
+    public function getSearchTagsCount($_filter)
     {
         $select = $_filter->getSelect();
-        Tinebase_Model_TagRight::applyAclSql($select, $_right);
+        Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
         
         $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
         return count($tags);
