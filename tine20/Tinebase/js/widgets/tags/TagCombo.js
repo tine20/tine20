@@ -12,9 +12,10 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
 
 Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     /**
-     * @cfg {String} app Application which uses this panel
+     * @cfg {Tine.Tinebase.Application} app
      */
-    app: '',
+    app: null,
+    
     /**
      * @cfg {Bool} findGlobalTags true to find global tags during search (default: true)
      */
@@ -44,7 +45,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             baseParams: {
                 method: 'Tinebase.searchTags',
                 filter: Ext.util.JSON.encode({
-                    application: this.app
+                    application: this.app ? this.app.appName : ''
                 }),
                 paging : Ext.util.JSON.encode({})
             }

@@ -11,6 +11,10 @@
 Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
 
 Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
+    /**
+     * @cfg {Tine.Tinebase.Application} app
+     */
+    app: null,
     
     field: 'tag',
     
@@ -34,6 +38,7 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     valueRenderer: function(filter, el) {
         // value
         var value = new Tine.widgets.tags.TagCombo({
+            app: this.app,
             filter: filter,
             width: 200,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
