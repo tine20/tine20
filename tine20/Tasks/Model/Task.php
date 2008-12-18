@@ -56,7 +56,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'description'          => array('allowEmpty' => true         ),
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true         ),
-        'organizer'            => array('allowEmpty' => true, 'Int' ),
+        'organizer'            => array('allowEmpty' => true, 'Int'  ),
         'priority'             => array('allowEmpty' => true, 'default' => 1),
         'status_id'            => array('allowEmpty' => true         ),
         'summary'              => array('presence' => 'required'     ),
@@ -98,6 +98,21 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'exdate', 
         'rdate'
     );
+    
+    /**
+     * the constructor
+     * it is needed because we have more validation fields in Tasks
+     * 
+     * @param mixed $_data
+     * @param bool $bypassFilters sets {@see this->bypassFilters}
+     * @param bool $convertDates sets {@see $this->convertDates}
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_filters['organizer'] = new Zend_Filter_Empty(NULL);
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
     
     /**
      * fill record from json data
