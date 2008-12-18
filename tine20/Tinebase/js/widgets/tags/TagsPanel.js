@@ -68,7 +68,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             baseParams: {
                 method: 'Tinebase.searchTags',
                 filter: Ext.util.JSON.encode({
-                    application: this.app
+                    application: this.app,
+                    grant: 'use'
                 }),
                 paging : Ext.util.JSON.encode({})
             }
