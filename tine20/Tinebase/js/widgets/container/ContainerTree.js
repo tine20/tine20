@@ -201,7 +201,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 					}
 					break;
 				case Tine.Tinebase.container.TYPE_SHARED:
-				    if(Tine[this.appName].rights.indexOf('admin') > -1) {
+//				    if(Tine[this.appName].rights.indexOf('admin') > -1) {
+				    if(Tine.Tinebase.common.hasRight('admin', this.appName)) {
 				        this.contextMenuUserFolder.showAt(event.getXY());
 				    }
 					break;
