@@ -314,6 +314,51 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
+    /**
+     * try to search for Timesheets with date filtering
+     *
+     */
+    public function testSearchTimesheetsWithDateFilter()
+    {
+        // create
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        
+        // search & check
+        $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetDateFilter()), Zend_Json::encode($this->_getPaging()));
+        $this->assertEquals($timesheet->description, $search['results'][0]['description']);
+        $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
+        $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
+        $this->assertEquals(1, $search['totalcount']);
+        
+        // cleanup
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+    }
+    
+    /**
+     * test get sum of timesheets
+     *
+     * @todo implement
+     */
+    public function testTimesheetSum()
+    {
+        /*
+        // create
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        
+        // search & check
+        $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetDateFilter()), Zend_Json::encode($this->_getPaging()));
+        $this->assertEquals($timesheet->description, $search['results'][0]['description']);
+        $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
+        $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
+        $this->assertEquals(1, $search['totalcount']);
+        
+        // cleanup
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+        */
+    }
+    
     /************ protected helper funcs *************/
     
     /**
@@ -433,6 +478,27 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
                 'field' => 'query', 
                 'operator' => 'contains', 
                 'value' => 'blabla'
+            ),
+        );        
+    }
+
+    /**
+     * get Timesheet filter with date
+     *
+     * @return array
+     */
+    protected function _getTimesheetDateFilter()
+    {
+        return array(
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => 'blabla'
+            ),
+            array(
+                'field' => 'start_date', 
+                'operator' => 'within', 
+                'value' => 'weekThis'
             ),
         );        
     }

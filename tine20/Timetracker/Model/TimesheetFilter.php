@@ -24,6 +24,15 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
     protected $_application = 'Timetracker';
     
     /**
+     * name of fields containing date or an array of date information
+     *
+     * @var array list of date fields
+     */    
+    protected $_dateFields = array(
+        'start_date'
+    );
+    
+    /**
      * the constructor
      * it is needed because we have more validation fields in Tasks
      * 
@@ -38,6 +47,8 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
         $this->_validators = array_merge($this->_validators, array(
             'timeaccount_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'special' => TRUE),
             'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // date filter
+            'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         ));
         
         // define query fields

@@ -44,6 +44,15 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
     );
     
     /**
+     * name of fields containing date or an array of date information
+     *
+     * @var array list of date fields
+     * 
+     * @todo move that to abstrat record?
+     */    
+    protected $_dateFields = array();
+    
+    /**
      * @var array hold selected operators
      */
     protected $_operators = array();
@@ -61,7 +70,10 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
         'equals'   => 'LIKE',
         'greater'  => '>',
         'less'     => '<',
-        'not'      => 'NOT LIKE'
+        'not'      => 'NOT LIKE',
+        'within'   => array('>=', '<='),
+        'before'   => '<',
+        'after'    => '>'
     );
     
     /**
@@ -157,13 +169,30 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                     if (!isset($this->_validators[$field]['special']) || !$this->_validators[$field]['special']) {
                         $operator = $this->_operators[$field];
                         
-                        $value = $operator == 'contains' ? '%' . trim($value) . '%' : trim($value);
-                        $where = array(
-                            $db->quoteIdentifier($field),
-                            $this->_opSqlMap[$operator],
-                            $db->quote($value)
-                        );
-                        $_select->where(implode(' ', $where));
+                        if (in_array($field, $this->_dateFields)) {
+                            $value = $this->_getDateValues($value);
+                        }
+                        
+                        // check if multiple operators/values
+                        if (is_array($this->_opSqlMap[$operator]) && is_array($value)) {
+                            for ($i = 0; $i<sizeof($value); $i++) {
+                                $where[] = implode(' ', array(
+                                    $db->quoteIdentifier($field),
+                                    $this->_opSqlMap[$operator][$i],
+                                    $db->quote($value[$i])
+                                ));
+                            }
+                            $_select->where(implode(' AND ', $where)); 
+                                                       
+                        } else {
+                            $value = $operator == 'contains' ? '%' . trim($value) . '%' : trim($value);
+                            $where = array(
+                                $db->quoteIdentifier($field),
+                                $this->_opSqlMap[$operator],
+                                $db->quote($value)
+                            );
+                            $_select->where(implode(' ', $where));
+                        }
                     }
             }
         }
@@ -257,4 +286,91 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
         
         $this->_properties['container'] = $container;
     }    
+
+    /**
+     * calculates the date filter values
+     *
+     * @param string $_operatorValue
+     * @param string $_dateFormat
+     * @return array|string date value
+     * 
+     * @todo implement other date filter values (month, year, ...)
+     */
+    protected function _getDateValues($_operatorValue, $_dateFormat = 'YYYY-MM-dd')
+    {
+        $date = new Zend_Date();
+        $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
+        
+        switch($_operatorValue) {
+            case 'before':
+            case 'after':
+                $date->toString($_dateFormat);
+                break;
+            case 'weekBeforeLast':    
+                $date->sub(7, Zend_Date::DAY);
+            case 'weekLast':    
+                $date->sub(7, Zend_Date::DAY);
+            case 'weekThis':
+                $date->sub($dayOfWeek-1, Zend_Date::DAY);
+                $monday = $date->toString($_dateFormat);
+                $date->add(6, Zend_Date::DAY);
+                $sunday = $date->toString($_dateFormat);
+                
+                $value = array(
+                    $monday, 
+                    $sunday,
+                );
+                break;
+            case 'monthLast':
+                $date->sub(1, Zend_Date::MONTH);
+            case 'monthThis':
+                $dayOfMonth = $date->get(Zend_Date::DAY_SHORT);
+                $monthDays = $date->get(Zend_Date::MONTH_DAYS);
+                
+                $first = $date->toString('YYYY-MM');
+                $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
+                $last = $date->toString($_dateFormat);
+
+                $value = array(
+                    $first, 
+                    $last,
+                );
+                break;
+            case 'lastYear':
+                $date->sub(1, Zend_Date::YEAR);
+            case 'thisYear':
+                $value = array(
+                    $date->toString('YYYY') . '-01-01', 
+                    $date->toString('YYYY') . '-12-31',
+                );                
+                break;
+            case 'quarterLast':
+                $date->sub(3, Zend_Date::MONTH);
+            case 'quarterThis':
+                $month = $date->get(Zend_Date::MONTH);
+                if ($month < 4) {
+                    $first = $date->toString('YYYY' . '-01-01');
+                    $last = $date->toString('YYYY' . '-03-31');
+                } elseif ($month < 7) {
+                    $first = $date->toString('YYYY' . '-04-01');
+                    $last = $date->toString('YYYY' . '-06-30');
+                } elseif ($month < 10) {
+                    $first = $date->toString('YYYY' . '-07-01');
+                    $last = $date->toString('YYYY' . '-09-30');
+                } else {
+                    $first = $date->toString('YYYY' . '-10-01');
+                    $last = $date->toString('YYYY' . '-12-31');
+                }
+                $value = array(
+                    $first, 
+                    $last
+                );                
+                break;
+            default:
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_operatorValue);
+                $value = '';
+        }        
+        
+        return $value;
+    }
 }
