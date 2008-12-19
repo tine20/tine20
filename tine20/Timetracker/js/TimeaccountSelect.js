@@ -120,3 +120,44 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         ];
     }
 });
+
+Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
+    field: 'timeaccount_id',
+    valueType: 'timeaccount',    
+    
+    /**
+     * @private
+     */
+    initComponent: function() {
+        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
+        
+        this.label = _('Timeaccount');
+        this.operators = ['equals'];
+    },
+    
+    /**
+     * value renderer
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     */
+    valueRenderer: function(filter, el) {
+        // value
+        var value = new Tine.Timetracker.TimeAccountSelect({
+            filter: filter,
+            width: 200,
+            listWidth: 500,
+            id: 'tw-ftb-frow-valuefield-' + filter.id,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            renderTo: el
+        });
+        value.on('specialkey', function(field, e){
+             if(e.getKey() == e.ENTER){
+                 this.onFiltertrigger();
+             }
+        }, this);
+        value.on('select', this.onFiltertrigger, this);
+        
+        return value;
+    }
+});
