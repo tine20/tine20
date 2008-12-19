@@ -134,6 +134,12 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 }
             }, this);
         }
+        
+        // add detail panel
+        if (this.detailsPanel) {
+            this.items.push(this.detailsPanel);
+            this.detailsPanel.doBind(this.grid);
+        }
     },
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
