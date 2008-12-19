@@ -197,6 +197,18 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     }     
     
     /**
+     * get sum of timesheet durations
+     *
+     * @param string $filter json encoded
+     * @return integer
+     */
+    public function getTimesheetSum($filter)
+    {
+        $filter = new Timetracker_Model_TimesheetFilter(Zend_Json::decode($filter));
+        return $this->_timesheetController->getSum($filter);
+    }
+    
+    /**
      * Return a single record
      *
      * @param   string $id

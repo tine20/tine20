@@ -82,6 +82,17 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
         return $records;
     }
     
+    /**
+     * get sum of timesheet durations
+     *
+     * @param Timetracker_Model_TimesheetFilter $filter
+     * @return integer
+     */
+    public function getSum($_filter)
+    {
+        return $this->_backend->getSum($_filter);
+    }
+        
     /****************************** overwritten functions ************************/    
             
     /**

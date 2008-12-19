@@ -28,5 +28,27 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         parent::__construct(SQL_TABLE_PREFIX . 'timetracker_timesheet', 'Timetracker_Model_Timesheet');
     }
 
+    /**
+     * get sum for duration of multiple timesheets
+     *
+     * @param Timetracker_Model_TimesheetFilter $_filter
+     * @return integer
+     */
+    public function getSum(Timetracker_Model_TimesheetFilter $_filter)
+    {
+        // build query
+        $select = $this->_db->select();        
+        $select->from($this->_tableName, array('sum' => 'SUM(duration)'));    
+        $this->_addFilter($select, $_filter);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
+        // get records
+        $stmt = $this->_db->query($select);
+        $row = $stmt->fetch();
+        
+        return $row['sum'];        
+    }
+    
     /************************ helper functions ************************/
 }
