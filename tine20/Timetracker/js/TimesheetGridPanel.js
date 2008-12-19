@@ -55,7 +55,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 {label: this.app.i18n._('Date'),         field: 'start_date', valueType: 'date'},
                 {label: this.app.i18n._('Description'),  field: 'description' }
              ],
-             defaultFilter: 'query',
+             defaultFilter: 'start_date',
              filters: []
         });
     },    
