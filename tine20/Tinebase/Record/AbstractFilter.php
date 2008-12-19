@@ -170,7 +170,7 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                         $operator = $this->_operators[$field];
                         
                         if (in_array($field, $this->_dateFields)) {
-                            $value = $this->_getDateValues($value);
+                            $value = $this->_getDateValues($operator, $value);
                         }
                         
                         // check if multiple operators/values
@@ -290,86 +290,88 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
     /**
      * calculates the date filter values
      *
-     * @param string $_operatorValue
+     * @param string $_operator
+     * @param string $_value
      * @param string $_dateFormat
      * @return array|string date value
      * 
-     * @todo implement other date filter values (month, year, ...)
      */
-    protected function _getDateValues($_operatorValue, $_dateFormat = 'YYYY-MM-dd')
-    {
-        $date = new Zend_Date();
-        $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
-        
-        switch($_operatorValue) {
-            case 'before':
-            case 'after':
-                $date->toString($_dateFormat);
-                break;
-            case 'weekBeforeLast':    
-                $date->sub(7, Zend_Date::DAY);
-            case 'weekLast':    
-                $date->sub(7, Zend_Date::DAY);
-            case 'weekThis':
-                $date->sub($dayOfWeek-1, Zend_Date::DAY);
-                $monday = $date->toString($_dateFormat);
-                $date->add(6, Zend_Date::DAY);
-                $sunday = $date->toString($_dateFormat);
-                
-                $value = array(
-                    $monday, 
-                    $sunday,
-                );
-                break;
-            case 'monthLast':
-                $date->sub(1, Zend_Date::MONTH);
-            case 'monthThis':
-                $dayOfMonth = $date->get(Zend_Date::DAY_SHORT);
-                $monthDays = $date->get(Zend_Date::MONTH_DAYS);
-                
-                $first = $date->toString('YYYY-MM');
-                $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
-                $last = $date->toString($_dateFormat);
+    protected function _getDateValues($_operator, $_value, $_dateFormat = 'YYYY-MM-dd')
+    {        
+        if ($_operator === 'before' || $_operator === 'after') {
+            $value = substr($_value, 0, 10);
 
-                $value = array(
-                    $first, 
-                    $last,
-                );
-                break;
-            case 'yearLast':
-                $date->sub(1, Zend_Date::YEAR);
-            case 'yearThis':
-                $value = array(
-                    $date->toString('YYYY') . '-01-01', 
-                    $date->toString('YYYY') . '-12-31',
-                );                
-                break;
-            case 'quarterLast':
-                $date->sub(3, Zend_Date::MONTH);
-            case 'quarterThis':
-                $month = $date->get(Zend_Date::MONTH);
-                if ($month < 4) {
-                    $first = $date->toString('YYYY' . '-01-01');
-                    $last = $date->toString('YYYY' . '-03-31');
-                } elseif ($month < 7) {
-                    $first = $date->toString('YYYY' . '-04-01');
-                    $last = $date->toString('YYYY' . '-06-30');
-                } elseif ($month < 10) {
-                    $first = $date->toString('YYYY' . '-07-01');
-                    $last = $date->toString('YYYY' . '-09-30');
-                } else {
-                    $first = $date->toString('YYYY' . '-10-01');
-                    $last = $date->toString('YYYY' . '-12-31');
-                }
-                $value = array(
-                    $first, 
-                    $last
-                );                
-                break;
-            default:
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_operatorValue);
-                $value = '';
-        }        
+        } else {
+            $date = new Zend_Date();
+            $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
+            
+            // special values like this week, ...
+            switch($_value) {
+                case 'weekBeforeLast':    
+                    $date->sub(7, Zend_Date::DAY);
+                case 'weekLast':    
+                    $date->sub(7, Zend_Date::DAY);
+                case 'weekThis':
+                    $date->sub($dayOfWeek-1, Zend_Date::DAY);
+                    $monday = $date->toString($_dateFormat);
+                    $date->add(6, Zend_Date::DAY);
+                    $sunday = $date->toString($_dateFormat);
+                    
+                    $value = array(
+                        $monday, 
+                        $sunday,
+                    );
+                    break;
+                case 'monthLast':
+                    $date->sub(1, Zend_Date::MONTH);
+                case 'monthThis':
+                    $dayOfMonth = $date->get(Zend_Date::DAY_SHORT);
+                    $monthDays = $date->get(Zend_Date::MONTH_DAYS);
+                    
+                    $first = $date->toString('YYYY-MM');
+                    $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
+                    $last = $date->toString($_dateFormat);
+    
+                    $value = array(
+                        $first, 
+                        $last,
+                    );
+                    break;
+                case 'yearLast':
+                    $date->sub(1, Zend_Date::YEAR);
+                case 'yearThis':
+                    $value = array(
+                        $date->toString('YYYY') . '-01-01', 
+                        $date->toString('YYYY') . '-12-31',
+                    );                
+                    break;
+                case 'quarterLast':
+                    $date->sub(3, Zend_Date::MONTH);
+                case 'quarterThis':
+                    $month = $date->get(Zend_Date::MONTH);
+                    if ($month < 4) {
+                        $first = $date->toString('YYYY' . '-01-01');
+                        $last = $date->toString('YYYY' . '-03-31');
+                    } elseif ($month < 7) {
+                        $first = $date->toString('YYYY' . '-04-01');
+                        $last = $date->toString('YYYY' . '-06-30');
+                    } elseif ($month < 10) {
+                        $first = $date->toString('YYYY' . '-07-01');
+                        $last = $date->toString('YYYY' . '-09-30');
+                    } else {
+                        $first = $date->toString('YYYY' . '-10-01');
+                        $last = $date->toString('YYYY' . '-12-31');
+                    }
+                    $value = array(
+                        $first, 
+                        $last
+                    );                
+                    break;
+                default:
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_value);
+                    $value = '';
+            }        
+        }
         
         return $value;
     }
