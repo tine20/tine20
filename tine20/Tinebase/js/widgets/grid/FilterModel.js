@@ -201,13 +201,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             var valueType = newOperator == 'within' ? 'withinCombo' : 'datePicker';
             
             if (valueType == 'withinCombo') {
-                this.datePicker.hide();
-                this.withinCombo.show();
-                filter.formFields.value = this.withinCombo;
+                filter.datePicker.hide();
+                filter.withinCombo.show();
+                filter.formFields.value = filter.withinCombo;
             } else {
-                this.withinCombo.hide();
-                this.datePicker.show();
-                filter.formFields.value = this.datePicker;
+                filter.withinCombo.hide();
+                filter.datePicker.show();
+                filter.formFields.value = filter.datePicker;
             }
         }
         //console.log('operator change');
@@ -294,7 +294,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         var operator = filter.get('operator') ? filter.filter.get('operator') : this.defaultOperator;
         var valueType = operator == 'within' ? 'withinCombo' : 'datePicker';
         
-        this.withinCombo = new Ext.form.ComboBox({
+        filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
             filter: filter,
             width: 200,
@@ -318,7 +318,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             ]
         });
 
-        this.datePicker = new Ext.form.DateField({
+        filter.datePicker = new Ext.form.DateField({
             hidden: valueType != 'datePicker',
             filter: filter,
             width: 200,
@@ -327,7 +327,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         });
         
         // upps, how to get a var i only know the name of???
-        return this[valueType]
+        return filter[valueType]
     },
     
     /**
