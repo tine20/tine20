@@ -336,9 +336,9 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                     $last,
                 );
                 break;
-            case 'lastYear':
+            case 'yearLast':
                 $date->sub(1, Zend_Date::YEAR);
-            case 'thisYear':
+            case 'yearThis':
                 $value = array(
                     $date->toString('YYYY') . '-01-01', 
                     $date->toString('YYYY') . '-12-31',
