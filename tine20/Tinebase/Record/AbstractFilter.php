@@ -179,6 +179,7 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                         
                         // check if multiple operators/values
                         if (is_array($this->_opSqlMap[$operator]) && is_array($value)) {
+                            $where = array();
                             for ($i = 0; $i<sizeof($value); $i++) {
                                 $where[] = implode(' ', array(
                                     $db->quoteIdentifier($field),
