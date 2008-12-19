@@ -49,7 +49,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     /**
      * @cfg {string} default value
      */
-    defaultValue: '',
+    defaultValue: null,
     
     /**
      * @cfg {Array} valid operators
@@ -59,7 +59,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     /**
      * @cfg {String} name of the default operator
      */
-    defaultOperator: 'contains',
+    defaultOperator: null,
     
     /**
      * @private
@@ -72,6 +72,38 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             this.operators = [];
         }
         
+        
+        if (this.defaultOperator === null) {
+            switch (this.valueType) {
+                
+                case 'date':
+                    this.defaultOperator = 'within';
+                    break;
+                case 'account':
+                case 'group':
+                case 'user':
+                    this.defaultOperator = 'equals';
+                    break;
+                case 'string':
+                default:
+                    this.defaultOperator = 'contains';
+                    break;
+            }
+        }
+        
+        if (this.defaultValue === null) {
+            switch (this.valueType) {
+                case 'string':
+                    this.defaultValue = '';
+                    break;
+                case 'date':
+                case 'account':
+                case 'group':
+                case 'user':
+                default:
+                    break;
+            }
+        }
     },
     
     /**
@@ -88,15 +120,29 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'equals',   label: _('is equal to')},
                 {operator: 'greater',  label: _('is greater than')},
                 {operator: 'less',     label: _('is less than')},
-                {operator: 'not',      label: _('is not')}
-                //{operator: 'in',       label: _('is in')}
+                {operator: 'not',      label: _('is not')},
+                {operator: 'in',       label: _('is in')},
+                {operator: 'before',   label: _('is before')},
+                {operator: 'after',    label: _('is after')},
+                {operator: 'within',   label: _('is within')}
             ]
         });
 
         // filter operators
-        if (this.operators.length == 0 && this.valueType == 'string') {
-            this.operators.push('contains', 'equals', 'not');
+        if (this.operators.length == 0) {
+            switch (this.valueType) {
+                case 'string':
+                    this.operators.push('contains', 'equals', 'not');
+                    break;
+                case 'date':
+                    this.operators.push('equals', 'before', 'after', 'within');
+                    break;
+                default:
+                    this.operators.push(this.defaultOperator);
+                    break;
+            }
         }
+        
         if (this.operators.length > 0) {
             operatorStore.each(function(operator) {
                 if (this.operators.indexOf(operator.get('operator')) < 0 ) {
@@ -149,6 +195,21 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      */
     onOperatorChange: function(filter, newOperator) {
         filter.set('operator', newOperator);
+        
+        // for date filters we need to rerender the value section
+        if (this.valueType == 'date') {
+            var valueType = newOperator == 'within' ? 'withinCombo' : 'datePicker';
+            
+            if (valueType == 'withinCombo') {
+                this.datePicker.hide();
+                this.withinCombo.show();
+                filter.formFields.value = this.withinCombo;
+            } else {
+                this.withinCombo.hide();
+                this.datePicker.show();
+                filter.formFields.value = this.datePicker;
+            }
+        }
         //console.log('operator change');
     },
     
@@ -159,40 +220,58 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        // value
-        var value = new Ext.form.TextField({
-            //hideTrigger: true,
-            //triggerClass: 'x-form-clear-trigger',
-            filter: filter,
-            width: 200,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
-            value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el,
-            listeners: {
-                scope: this,
-                specialkey: function(field, e){
-                    if(e.getKey() == e.ENTER){
-                        //field.trigger.setVisible(field.getValue().length > 0);
-                        this.onFiltertrigger();
-                    }
-                }/*,
-                change: function() {
-                    //console.log('change');
-                }*/
-            }/*,
-            onTriggerClick: function() {
-                value.setValue(null);
-                //value.trigger.hide();
-                this.fireEvent('change');
-            }*/
-        });
-        /*
-        value.on('specialkey', function(field, e){
-             if(e.getKey() == e.ENTER){
-                 this.onFiltertrigger();
-             }
-        }, this);
-        */
+        var value;
+        
+        switch (this.valueType) {
+            case 'date':
+                value = this.dateValueRenderer(filter, el);
+                break;
+            case 'user':
+                value = new Tine.widgets.AccountpickerField({
+                    filter: filter,
+                    width: 200,
+                    id: 'tw-ftb-frow-valuefield-' + filter.id,
+                    value: filter.data.value ? filter.data.value : this.defaultValue,
+                    renderTo: el
+                });
+                break;
+            case 'string':
+            default:
+                value = new Ext.form.TextField({
+                    //hideTrigger: true,
+                    //triggerClass: 'x-form-clear-trigger',
+                    filter: filter,
+                    width: 200,
+                    id: 'tw-ftb-frow-valuefield-' + filter.id,
+                    value: filter.data.value ? filter.data.value : this.defaultValue,
+                    renderTo: el,
+                    listeners: {
+                        scope: this,
+                        specialkey: function(field, e){
+                            if(e.getKey() == e.ENTER){
+                                //field.trigger.setVisible(field.getValue().length > 0);
+                                this.onFiltertrigger();
+                            }
+                        }/*,
+                        change: function() {
+                            //console.log('change');
+                        }*/
+                    }/*,
+                    onTriggerClick: function() {
+                        value.setValue(null);
+                        //value.trigger.hide();
+                        this.fireEvent('change');
+                    }*/
+                });
+                /*
+                value.on('specialkey', function(field, e){
+                     if(e.getKey() == e.ENTER){
+                         this.onFiltertrigger();
+                     }
+                }, this);
+                */
+                break;
+        }
         
         return value;
     },
@@ -204,6 +283,51 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     onValueChange: function(filter, newValue) {
         filter.set('value', newValue);
         //console.log('value change');
+    },
+    
+    /**
+     * render a date value
+     * 
+     * we place a picker and a combo in the dom element and hide the one we don't need yet
+     */
+    dateValueRenderer: function(filter, el) {
+        var operator = filter.get('operator') ? filter.filter.get('operator') : this.defaultOperator;
+        var valueType = operator == 'within' ? 'withinCombo' : 'datePicker';
+        
+        this.withinCombo = new Ext.form.ComboBox({
+            hidden: valueType != 'withinCombo',
+            filter: filter,
+            width: 200,
+            value: filter.data.value ? filter.data.value : ( this.defaultValue ? this.defaultValue : 'weekLast'),
+            renderTo: el,
+            mode: 'local',
+            lazyInit: false,
+            forceSelection: true,
+            typeAhead: true,
+            triggerAction: 'all',
+            store: [
+                ['weekThis',        _('this week')], 
+                ['weekLast',        _('last week')],
+                ['weekBeforeLast',  _('the week before last')],
+                ['monthThis',       _('this month')],
+                ['monthLast',       _('last month')],
+                ['quaterThis',      _('this quater')],
+                ['quaterLast',      _('last quater')],
+                ['yearThis',        _('this year')],
+                ['yearLast',        _('last year')]
+            ]
+        });
+
+        this.datePicker = new Ext.form.DateField({
+            hidden: valueType != 'datePicker',
+            filter: filter,
+            width: 200,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            renderTo: el
+        });
+        
+        // upps, how to get a var i only know the name of???
+        return this[valueType]
     },
     
     /**
