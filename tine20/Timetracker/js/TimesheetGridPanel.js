@@ -36,6 +36,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
+        this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -106,5 +107,30 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             dataIndex: 'duration',
             renderer: Tine.Tinebase.common.minutesRenderer
         }];
-    }  
+    },
+    
+    initDetailsPanel: function() {
+        this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
+            gridpanel: this,
+            
+            showDefault: function(body) {
+                var totalsum = this.gridpanel.store.proxy.jsonReader.jsonData.totalsum;
+                var tpl = new Ext.XTemplate(' total time of all {totalcount} timesheets: {totalsum} minutes');
+                tpl.overwrite(body, this.gridpanel.store.proxy.jsonReader.jsonData);
+            },
+            
+            tpl: new Ext.XTemplate(
+                '<div class="detailPanel">',
+                    '{[this.encode(values.description)]}',
+                '</div>', {
+                encode: function(value, type, prefix) {
+                    if (value) {
+                        return Ext.util.Format.htmlEncode(value);
+                    } else {
+                        return '';
+                    }
+                }
+            })
+        });
+    }
 });
