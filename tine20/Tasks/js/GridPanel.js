@@ -12,7 +12,7 @@
 Ext.namespace('Tine.Tasks');
 
 /**
- * Tasks Edit Dialog
+ * Tasks grid panel
  */
 Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
