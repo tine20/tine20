@@ -135,6 +135,10 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
         
         foreach ($this->_properties as $field => $value)
         {
+            if (empty($value)) {
+                continue;
+            }
+            
             $value = str_replace(array('*', '_'), array('%', '\_'), $value);
             
             switch ($field) {
