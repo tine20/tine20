@@ -309,6 +309,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
         $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
         $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals(30, $search['totalsum']);
         
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
@@ -498,6 +499,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
                 'field' => 'start_date', 
                 'operator' => 'within', 
                 'value' => 'weekThis'
+            ),
+            array(
+                'field' => 'start_date', 
+                'operator' => 'after', 
+                'value' => '2008-12-12'
             ),
         );        
     }

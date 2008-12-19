@@ -87,6 +87,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
      *
      * @param Timetracker_Model_TimesheetFilter $filter
      * @return integer
+     * 
+     * @deprecated
      */
     public function getSum($_filter)
     {

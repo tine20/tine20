@@ -33,6 +33,8 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
      *
      * @param Timetracker_Model_TimesheetFilter $_filter
      * @return integer
+     * 
+     * @deprecated
      */
     public function getSum(Timetracker_Model_TimesheetFilter $_filter)
     {
@@ -42,7 +44,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
         $this->_addFilter($select, $_filter);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         // get records
         $stmt = $this->_db->query($select);
@@ -51,5 +53,51 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         return $row['sum'];        
     }
     
+    /**
+     * Gets total count and sum of duration of search with $_filter
+     * 
+     * @param Tinebase_Record_Interface $_filter
+     * @return array with count + sum
+     */
+    public function searchCount(Tinebase_Record_Interface $_filter)
+    {        
+        if (isset($_filter->container) && count($_filter->container) === 0) {
+            return 0;
+        }        
+        
+        $select = $this->_getSelect(TRUE);
+        $this->_addFilter($select, $_filter);
+        
+        $result = $this->_db->fetchRow($select);
+        return $result;        
+    }    
+    
     /************************ helper functions ************************/
+    
+    /**
+     * get the basic select object to fetch records from the database
+     * - we get the sum of the timesheet duration as well
+     *  
+     * @param $_getCount only get the count
+     * @param $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     * 
+     */
+    protected function _getSelect($_getCount = FALSE, $_getDeleted = FALSE)
+    {        
+        $select = $this->_db->select();
+        
+        if ($_getCount) {
+            $select->from($this->_tableName, array('count' => 'COUNT(*)', 'sum' => 'SUM(duration)'));    
+        } else {
+            $select->from($this->_tableName);
+        }
+        
+        if (!$_getDeleted && $this->_modlogActive) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');                        
+        }
+        
+        return $select;
+    }
 }

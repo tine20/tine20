@@ -193,7 +193,12 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function searchTimesheets($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter');
+        $result = $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter');
+        
+        $result['totalsum'] = $result['totalcount']['sum'];
+        $result['totalcount'] = $result['totalcount']['count'];
+        
+        return $result;
     }     
     
     /**
@@ -201,6 +206,8 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * @param string $filter json encoded
      * @return integer
+     * 
+     * @deprecated do we need this and the getSum in controller+backend?
      */
     public function getTimesheetSum($filter)
     {
@@ -218,6 +225,7 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         return $this->_get($id, $this->_timesheetController);
         
+        // @deprecated ?
         /*
         $ts['timeaccount_id'] = $ts['timeaccount_id'] ? $this->_timeaccountController->get($ts['timeaccount_id'])->toArray() : $ts['timeaccount_id'];
         $ts['account_id'] = $ts['account_id'] ? Tinebase_User::getInstance()->getUserById($ts['account_id'])->toArray() : $ts['account_id'];
