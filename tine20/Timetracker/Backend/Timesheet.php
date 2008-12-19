@@ -39,6 +39,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         // build query
         $select = $this->_db->select();        
         $select->from($this->_tableName, array('sum' => 'SUM(duration)'));    
+        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
         $this->_addFilter($select, $_filter);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
