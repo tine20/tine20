@@ -114,8 +114,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             gridpanel: this,
             
             showDefault: function(body) {
-                var totalsum = this.gridpanel.store.proxy.jsonReader.jsonData.totalsum;
-                var tpl = new Ext.XTemplate(' total time of all {totalcount} timesheets: {totalsum} minutes');
+                var totalsum = Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsum);
+                console.log(totalsum);
+                var tpl = new Ext.XTemplate(' total time of all {totalcount} timesheets: ' + totalsum + '&nbsp;&nbsp;&nbsp;');
                 tpl.overwrite(body, this.gridpanel.store.proxy.jsonReader.jsonData);
             },
             
