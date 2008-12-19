@@ -298,7 +298,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             hidden: valueType != 'withinCombo',
             filter: filter,
             width: 200,
-            value: filter.data.value ? filter.data.value : ( this.defaultValue ? this.defaultValue : 'weekLast'),
+            value: filter.data.value ? filter.data.value : ( this.defaultValue ? this.defaultValue : 'weekThis'),
             renderTo: el,
             mode: 'local',
             lazyInit: false,
@@ -311,8 +311,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 ['weekBeforeLast',  _('the week before last')],
                 ['monthThis',       _('this month')],
                 ['monthLast',       _('last month')],
-                ['quaterThis',      _('this quater')],
-                ['quaterLast',      _('last quater')],
+                ['quarterThis',     _('this quarter')],
+                ['quarterLast',     _('last quarter')],
                 ['yearThis',        _('this year')],
                 ['yearLast',        _('last year')]
             ]
