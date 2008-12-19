@@ -86,24 +86,27 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_properties['timeaccount_id'], true));
         
         if (isset($this->_properties['timeaccount_id']) && is_array($this->_properties['timeaccount_id'])) {
+            // @todo check rights
             return;
         }
         
-        // @todo we should need only one function call here
-        $grants = array(
-            Timetracker_Model_TimeaccountGrants::VIEW_ALL,
-            Timetracker_Model_TimeaccountGrants::BOOK_ALL,
-            Timetracker_Model_TimeaccountGrants::MANAGE_ALL
-        );
-        
-        $result = array();
-        foreach ($grants as $grant) {
-            $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
+        if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {        
+            // @todo we should need only one function call here
+            $grants = array(
+                Timetracker_Model_TimeaccountGrants::VIEW_ALL,
+                Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                Timetracker_Model_TimeaccountGrants::MANAGE_ALL
+            );
+            
+            $result = array();
+            foreach ($grants as $grant) {
+                $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
+            }
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+          
+            $this->_properties['timeaccount_id'] = array_unique($result);
         }
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
-      
-        $this->_properties['timeaccount_id'] = array_unique($result);
     }    
 
     /**
@@ -114,28 +117,33 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
      */
     public function appendFilterSql($_select)
     {
-        if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
-            $db = Tinebase_Core::getDb();
-                        
-            // we have to save the timeaccount_id property to a variable because empty() does not resolve the property 
-            $timeaccountIds = $this->timeaccount_id;
-            
-            // sanitize $timeaccountIds
-            if (empty($timeaccountIds)) {
-                $timeaccountIds = array(''); 
-            }
+        $db = Tinebase_Core::getDb();
+                    
+        // we have to save the timeaccount_id property to a variable because empty() does not resolve the property 
+        $timeaccountIds = $this->timeaccount_id;
+        
+        // sanitize $timeaccountIds
+        if (empty($timeaccountIds)) {
+            $timeaccountIds = array(''); 
+        }
 
+        if ($timeaccountIds[0] != '' || 
+            !Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
             $where = $db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $timeaccountIds);
-
-            // get timeaccounts with BOOK_OWN right
+        }
+        
+        // get timeaccounts with BOOK_OWN right
+        if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
             $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
             if (!empty($bookOwnTS)) {
                 $where .= ' OR (' . $db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $bookOwnTS)
                     . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';
             } 
-            
-            $_select->where($where);            
         }
+        
+        if (isset($where)) {
+            $_select->where($where);
+        }  
         
         parent::appendFilterSql($_select);
     }
