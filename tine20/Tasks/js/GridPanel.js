@@ -53,7 +53,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Task'),    field: 'query',    operators: ['contains']},
-                {label: this.app.i18n._('Summary'), field: 'summary' }
+                {label: this.app.i18n._('Summary'), field: 'summary' },
+                new Tine.widgets.tags.TagFilter({app: this.app})
              ],
              defaultFilter: 'query',
              filters: []
