@@ -116,13 +116,13 @@ class Setup_Controller
     public function getSetupXml($_applicationName)
     {
         $setupXML = $this->_baseDir . ucfirst($_applicationName) . '/Setup/setup.xml';
-      
+
         if (!file_exists($setupXML)) {
             throw new Setup_Exception_NotFound(ucfirst($_applicationName) . '/Setup/setup.xml not found. If application got renamed or deleted, re-run setup.php.');
         }
         
         $xml = simplexml_load_file($setupXML);
-       
+
         return $xml;
     }
     
@@ -301,7 +301,8 @@ class Setup_Controller
     public function installApplications($_applications)
     {
         foreach($_applications as $application) {
-            $this->_installApplication($this->getSetupXml($application));
+            $xml = $this->getSetupXml($application);
+            $this->_installApplication($xml);
         }
     }
     
