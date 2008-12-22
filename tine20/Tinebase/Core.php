@@ -98,6 +98,11 @@ class Tinebase_Core
         } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])) {
             $server = new Voipmanager_Server_Snom();
             
+        /**************************** ActiveSync API *****************************/
+            
+        } elseif($_SERVER['PHP_SELF'] == '/Microsoft-Server-ActiveSync') {
+            $server = new Sync_Server_ActiveSync();
+            
         /**************************** CLI API *****************************/
         
         } elseif (php_sapi_name() == 'cli') {
