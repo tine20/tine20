@@ -47,6 +47,9 @@ class Addressbook_Model_ContactFilter extends Tinebase_Record_AbstractFilter
             'adr_two_locality'     => array('allowEmpty' => true           ),
             'role'                 => array('allowEmpty' => true           ),
             'tag'                  => array('allowEmpty' => true           ),
+            'last_modified_time'   => array('allowEmpty' => true           ),
+            'deleted_time'         => array('allowEmpty' => true           ), 
+            'creation_time'        => array('allowEmpty' => true           ),
         ));
         
         // define query fields
