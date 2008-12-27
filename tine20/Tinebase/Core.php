@@ -101,7 +101,7 @@ class Tinebase_Core
         /**************************** ActiveSync API *****************************/
             
         } elseif($_SERVER['PHP_SELF'] == '/Microsoft-Server-ActiveSync') {
-            $server = new Sync_Server_ActiveSync();
+            $server = new ActiveSync_Server_Http();
             
         /**************************** CLI API *****************************/
         
