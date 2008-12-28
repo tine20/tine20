@@ -156,7 +156,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * adds roles (tables and user/admin role)
      *
      */    
-    function update_2()
+    public function update_2()
     {
         /************ create roles tables **************/
         
@@ -450,7 +450,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * add temp_files table and update to version 0.4 of tinebase
      */    
-    function update_3()
+    public function update_3()
     {
         $tableDefinition = ('
             <table>
@@ -519,7 +519,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * rename timemachine_modificationlog to timemachine_modlog
      */    
-    function update_4()
+    public function update_4()
     {        
         try {
             $this->validateTableVersion('timemachine_modificationlog', '1');
@@ -537,7 +537,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * drop table application_rights and update to version 0.6 of tinebase
      */    
-    function update_5()
+    public function update_5()
     {
         //echo "drop table application_rights";
         
@@ -549,7 +549,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * add config table and update to version 0.7 of tinebase
      */    
-    function update_6()
+    public function update_6()
     {
         $tableDefinition = ('
             <table>
@@ -635,7 +635,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * add config table and update to version 0.8 of tinebase
      */    
-    function update_7()
+    public function update_7()
     {
         $tableDefinition = ('
         <table>
@@ -682,7 +682,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * switch ids to alnum. As the table was not used, we don't need to update
      * its contents
      */
-    function update_8()
+    public function update_8()
     {
         //$this->validateTableVersion('record_relations', '1');
         //$this->_backend->dropTable('record_relations');
@@ -842,7 +842,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * - migrate old links to relations
      * 
      */
-    function update_9()
+    public function update_9()
     {
         /************* migrate old links to relations *************/
         
@@ -927,7 +927,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * - add notes table
      * 
      */
-    function update_10()
+    public function update_10()
     {
         $tableDefinition = ('
         <table>
@@ -1125,7 +1125,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.12
      * - delete links table
      */
-    function update_11()
+    public function update_11()
     {
         $this->_backend->dropTable('links');
         
@@ -1136,7 +1136,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.13
      * - rename Dialer app to 'Phone'
      */
-    function update_12()
+    public function update_12()
     {
         // rename app in application table
         $appTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX.'applications'));
@@ -1153,7 +1153,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * - add config user table 
      * - create Locale/Timezone default settings
      */
-    function update_13()
+    public function update_13()
     {
         $tableDefinition = ('
         <table>
@@ -1260,7 +1260,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.15
      * - remove constraint from config user table
      */
-    function update_14()
+    public function update_14()
     {
         $this->_backend->dropForeignKey('config_user', 'config_user::user_id--accounts::id');
         
@@ -1271,7 +1271,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.16
      * - add icon class to note types
      */
-    function update_15()
+    public function update_15()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -1305,7 +1305,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.17
      * - add config customfields table 
      */
-    function update_16()
+    public function update_16()
     {
         $tableDefinition = ('
         <table>
@@ -1394,7 +1394,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.18
      * - change columtype of applications.id and application_table.applications_id to text/40
      */
-    function update_17()
+    public function update_17()
     {
         // tables with application_id as foreign key
         $appIdTables = array(
@@ -1570,7 +1570,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.19
      * - add 'shared contracts' container for erp
      */
-    function update_18()
+    public function update_18()
     {
         try {
             $application = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
@@ -1697,4 +1697,24 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.20');
     }
+    
+    /**
+     * update to 0.15
+     * - remove constraint from config user table
+     */
+    public function update_20()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>result</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <unsigned>false</unsigned>
+            </field>
+        ');
+        $this->_backend->alterCol('access_log', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '0.21');
+    }
+
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.20</version>
+    <version>0.21</version>
     <tables>
         <table>
             <name>applications</name>
@@ -588,6 +588,7 @@
                     <name>result</name>
                     <type>integer</type>
                     <notnull>true</notnull>
+                    <unsigned>false</unsigned>
                 </field>
                 
                 <index>
