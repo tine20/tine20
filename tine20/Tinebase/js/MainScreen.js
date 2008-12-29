@@ -202,7 +202,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     
     ativateDefaultApp: function() {
         if (this.appPicker.getTreeCardPanel().rendered) {
-            Tine.Tinebase.appMgr.get(this.defaultAppName).getMainScreen().show();
+            var defaultApp = Tine.Tinebase.appMgr.get(this.defaultAppName);
+        	defaultApp.getMainScreen().show();
         } else {
             this.ativateDefaultApp.defer(10, this);
         }
@@ -263,6 +264,10 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             cardPanel.layout.setActiveItem(panel.id);
         } else {
             cardPanel.add(panel);
+            // @todo something bad happens here with IE7 (but only in legacy apps, i.e. adb/crm/admin/...)
+            // @todo fix it!
+            //console.log(panel);
+            //alert(panel.id);
             cardPanel.layout.setActiveItem(panel.id);
             cardPanel.doLayout();
         }
