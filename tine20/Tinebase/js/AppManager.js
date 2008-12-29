@@ -125,7 +125,7 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
             mainScreen: mainScreen
         });
         appPanel.on('render', function(p) {
-            p.header.remove()
+            p.header.remove();
             p.doLayout();
         });
         

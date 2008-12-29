@@ -85,7 +85,7 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
     setAppTitle: function(appTitle) {
         this.appTitle = appTitle;
         document.title = 'Tine 2.0 - ' + appTitle;
-        this.items.get(0).body.dom.innerHTML = '<div class ="app-panel-title">' + appTitle + '</div>'
+        this.items.get(0).body.dom.innerHTML = '<div class ="app-panel-title">' + appTitle + '</div>';
     },
     
     getAppTitle: function() {

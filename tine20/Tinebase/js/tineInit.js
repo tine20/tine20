@@ -64,7 +64,7 @@ Tine.Tinebase.tineInit = {
             var vp = Ext.getBody().getSize();
             p = Ext.get('tine-viewport-waitcycle');
             p.moveTo(vp.width/2 - this.splash.width/2, vp.height/2 - this.splash.height/2);
-        }
+        };
         
         this.splash = {
             id: 'tine-viewport-waitcycle',
@@ -398,4 +398,4 @@ Tine.Tinebase.tineInit = {
     onLangFilesLoad: function() {
         Ext.ux.form.DateField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     }
-}
+};

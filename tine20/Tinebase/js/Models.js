@@ -23,7 +23,7 @@ Tine.Tinebase.Model.genericFields = [
     { name: 'is_deleted',         type: 'boolean'              },
     { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
     { name: 'deleted_by',         type: 'int'                  }
-]
+];
     
 /**
  * Model of the tine (simple) user account

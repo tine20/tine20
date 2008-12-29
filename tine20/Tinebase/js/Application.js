@@ -18,7 +18,7 @@ Ext.ns('Tine.Tinebase');
  * <p>Abstract base class for all Tine applications</p>
  */
 Tine.Tinebase.Application = function(config) {
-    config = config || {}
+    config = config || {};
     Ext.apply(this, config);
     
     Tine.Tinebase.Application.superclass.constructor.call(this);

@@ -28,7 +28,7 @@ Tine.Tinebase.widgets.app.JsonBackend = function(config) {
         root: 'results',
         totalProperty: 'totalcount'
     }, this.recordClass);
-}
+};
 
 Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     /**
@@ -62,11 +62,12 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      */
     loadRecord: function(record, options) {
         options = options || {};
+        options.params = options.params || {};
         options.beforeSuccess = function(response) {
             return [this.recordReader(response)];
-        }
+        };
         
-        var p = options.params = options.params || {};
+        var p = options.params;
         p.method = this.appName + '.get' + this.modelName;
         p.id = record.get(this.idProperty); 
         
@@ -84,7 +85,9 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      */
     searchRecords: function(filter, paging, options) {
         options = options || {};
-        var p = options.params = options.params || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
         
         p.method = this.appName + '.search' + this.modelName + 's';
         p.filter = Ext.util.JSON.encode(filter);
@@ -92,7 +95,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         
         options.beforeSuccess = function(response) {
             return [this.jsonReader.read(response)];
-        }
+        };
                 
         return this.request(options);
     },
@@ -107,11 +110,12 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      */
     saveRecord: function(record, options) {
         options = options || {};
+        options.params = options.params || {};
         options.beforeSuccess = function(response) {
             return [this.recordReader(response)];
-        }
+        };
         
-        var p = options.params = options.params || {};
+        var p = options.params;
         p.method = this.appName + '.save' + this.modelName;
         p.recordData = Ext.util.JSON.encode(record.data);
         

@@ -253,7 +253,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     v.scroller.dom.scrollTop = v.scrollTop;
                 }
             }
-        })
+        });
         
         // which grid to use?
         var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : Ext.grid.GridPanel;
