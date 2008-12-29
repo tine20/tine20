@@ -24,6 +24,12 @@ global $tine20path;
 $tine20path = dirname(__FILE__);
 
 /**
+ * define buildtype
+ *
+ */
+define('TINE20_BUILDTYPE', 'RELEASE');
+
+/**
  * path to yui compressor
  */
 global $yuiCompressorPath;
