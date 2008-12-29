@@ -45,7 +45,7 @@ Tine.widgets.container.TreePanel = function(config) {
         }
     }
     Tine.widgets.container.TreePanel.superclass.constructor.call(this);
-}
+};
 
 Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
  	/**
