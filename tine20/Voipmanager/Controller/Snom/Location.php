@@ -26,7 +26,7 @@ class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstra
      */
     private function __construct() {
         $this->_modelName = 'Voipmanager_Model_Snom_Location';
-        $this->_backend      = new Voipmanager_Backend_Snom_Location($this->_getDatabaseBackend());
+        $this->_backend      = new Voipmanager_Backend_Snom_Location($this->getDatabaseBackend());
         $this->_cache        = Zend_Registry::get('cache');        
     }
         

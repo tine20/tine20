@@ -32,7 +32,7 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend      = new Voipmanager_Backend_Snom_Line($this->_getDatabaseBackend());
+        $this->_backend      = new Voipmanager_Backend_Snom_Line($this->getDatabaseBackend());
         $this->_cache        = Zend_Registry::get('cache');        
     }
         

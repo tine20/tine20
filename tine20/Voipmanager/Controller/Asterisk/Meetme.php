@@ -26,7 +26,7 @@ class Voipmanager_Controller_Asterisk_Meetme extends Voipmanager_Controller_Abst
      */
     private function __construct() {
         $this->_modelName = 'Voipmanager_Model_Asterisk_Meetme';
-		$this->_backend		= new Voipmanager_Backend_Asterisk_Meetme($this->_getDatabaseBackend());
+		$this->_backend		= new Voipmanager_Backend_Asterisk_Meetme($this->getDatabaseBackend());
     }
         
     /**

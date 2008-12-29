@@ -26,7 +26,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
      */
     private function __construct() {
         $this->_modelName = 'Voipmanager_Model_Asterisk_SipPeer';
-        $this->_backend      = new Voipmanager_Backend_Asterisk_SipPeer($this->_getDatabaseBackend());
+        $this->_backend      = new Voipmanager_Backend_Asterisk_SipPeer($this->getDatabaseBackend());
         $this->_cache        = Zend_Registry::get('cache');        
     }
         

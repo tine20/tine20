@@ -26,7 +26,7 @@ class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_A
      */
     private function __construct() {
         $this->_modelName = 'Voipmanager_Model_Asterisk_Voicemail';
-        $this->_backend     = new Voipmanager_Backend_Asterisk_Voicemail($this->_getDatabaseBackend());
+        $this->_backend     = new Voipmanager_Backend_Asterisk_Voicemail($this->getDatabaseBackend());
     }
         
     /**

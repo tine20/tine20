@@ -26,7 +26,7 @@ class Voipmanager_Controller_Snom_Template extends Voipmanager_Controller_Abstra
      */
     private function __construct() {
         $this->_modelName = 'Voipmanager_Model_Snom_Template';
-        $this->_backend      = new Voipmanager_Backend_Snom_Template($this->_getDatabaseBackend());
+        $this->_backend      = new Voipmanager_Backend_Snom_Template($this->getDatabaseBackend());
     }
         
     /**

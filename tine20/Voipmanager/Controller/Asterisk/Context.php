@@ -26,7 +26,7 @@ class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abs
      */
     private function __construct() {
         $this->_modelName = 'Voipmanager_Model_Asterisk_Context';        
-        $this->_backend      = new Voipmanager_Backend_Asterisk_Context($this->_getDatabaseBackend());          
+        $this->_backend      = new Voipmanager_Backend_Asterisk_Context($this->getDatabaseBackend());          
     }
     
     /**

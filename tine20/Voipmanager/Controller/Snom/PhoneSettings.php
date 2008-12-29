@@ -26,7 +26,7 @@ class Voipmanager_Controller_Snom_PhoneSettings extends Voipmanager_Controller_A
      */
     private function __construct() {
         $this->_modelName = 'Voipmanager_Model_Snom_PhoneSettings';
-        $this->_backend      = new Voipmanager_Backend_Snom_PhoneSettings($this->_getDatabaseBackend());
+        $this->_backend      = new Voipmanager_Backend_Snom_PhoneSettings($this->getDatabaseBackend());
     }
         
     /**
