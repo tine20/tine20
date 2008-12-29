@@ -252,7 +252,7 @@ class Tinebase_Container
      * @param   string $_application the application name
      * @param   int    $_grant the required grant
      * @param   bool   $_onlyIds return only ids
-     * @return  Tinebase_Record_RecordSet
+     * @return  Tinebase_Record_RecordSet|array
      * @throws  Tinebase_Exception_NotFound
      */
     public function getContainerByACL($_accountId, $_application, $_grant, $_onlyIds = FALSE)
