@@ -68,7 +68,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $mac. ' search for ' . $query);
             
-        $phone = Voipmanager_Controller::getInstance()->getSnomPhoneByMacAddress($mac);
+        $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
         
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
@@ -157,8 +157,8 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
         
-        $vmController = Voipmanager_Controller::getInstance();
-        $phone = $vmController->getSnomPhoneByMacAddress($mac);
+        $vmController = Voipmanager_Controller_Snom_Phone::getInstance();
+        $phone = $vmController->getByMacAddress($mac);
         $controller = Phone_Controller::getInstance();
         
         $pos = strpos($callId, '@');
