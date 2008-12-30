@@ -62,6 +62,8 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
     },
     
     initLayout: function() {
+        var headerHeight = Ext.isIE ? 23 : Ext.isSafari ? 25 : 24;
+        
         this.items = [{
             region: 'north',
             layout: 'fit',
@@ -77,7 +79,7 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
             region: 'south',
             layout: 'fit',
             border: false,
-            height: this.apps.getCount() * 24,
+            height: this.apps.getCount() * headerHeight,
             items: this.appPile
         }];
     },
