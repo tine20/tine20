@@ -23,7 +23,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * ISO8601LONG datetime representation
      */
-    const ISO8601LONG = 'YYYY-MM-dd HH:mm:ss';
+    const ISO8601LONG = 'yyyy-MM-dd HH:mm:ss';
     
 	/**
      * should datas be validated on the fly(false) or only on demand(true)
@@ -562,7 +562,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * results in datetime computations!
      * 
      * @param  string Zend_Date::ISO8601 representation of a datetime filed
-     * @return string ISO8601LONG representation ('YYYY-MM-dd HH:mm:ss')
+     * @return string ISO8601LONG representation ('yyyy-MM-dd HH:mm:ss')
      */
     protected function _convertISO8601ToISO8601LONG($_ISO)
     {

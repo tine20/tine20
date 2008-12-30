@@ -119,7 +119,7 @@ class Tinebase_Timemachine_ModificationLog
     public function getModifications( $_application,  $_id, $_type = NULL, $_backend, Zend_Date $_from, Zend_Date $_until,  $_modifierId = NULL ) {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
-        $isoDef = 'YYYY-MM-ddTHH:mm:ss';
+        $isoDef = 'yyyy-MM-ddTHH:mm:ss';
         
         $db = $this->_table->getAdapter();
         $select = $db->select()

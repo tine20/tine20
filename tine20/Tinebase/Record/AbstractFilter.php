@@ -301,7 +301,7 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
      * @return array|string date value
      * 
      */
-    protected function _getDateValues($_operator, $_value, $_dateFormat = 'YYYY-MM-dd')
+    protected function _getDateValues($_operator, $_value, $_dateFormat = 'yyyy-MM-dd')
     {        
         if ($_operator === 'before' || $_operator === 'after') {
             $value = substr($_value, 0, 10);
