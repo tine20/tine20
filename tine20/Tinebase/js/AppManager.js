@@ -126,6 +126,9 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
         });
         appPanel.on('render', function(p) {
             p.header.remove();
+            // additionally to removing the DOM node, we also need to reset the 
+            // header class variable, as IE evals "if (this.header)" to true otherwise 
+            p.header = false;
             p.doLayout();
         });
         
