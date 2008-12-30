@@ -215,6 +215,7 @@ class Timetracker_Setup_Import_Egw14
         
         foreach ($queryResult as $row) {
             // check filter
+            $doImport = TRUE;
             if (!empty($this->_projectFilter)) {
                 foreach($this->_projectFilter as $filter) {
                     if (
@@ -225,12 +226,14 @@ class Timetracker_Setup_Import_Egw14
                             && !preg_match('/' . $filter['value'] . '/', $row[$filter['name']]))
                     ) {
                         echo "filter not matched for project: " . $row['pm_number'] . $row['pm_title'] . "\n";
-                        continue;        
+                        $doImport = FALSE;        
                     }
                 }
             }
             
-            $this->_importProject($row);
+            if ($doImport) {
+                $this->_importProject($row);    
+            }
         }        
     }
     
@@ -246,10 +249,10 @@ class Timetracker_Setup_Import_Egw14
         Tinebase_Core::setupConfig();
         Tinebase_Core::setupServerTimezone();
         Tinebase_Core::setupLogger();
-        Tinebase_Core::setupCache();
         Tinebase_Core::set('locale', new Zend_Locale('de_DE'));
         Tinebase_Core::set('userTimeZone', 'UTC');
         Tinebase_Core::setupDatabaseConnection();        
+        Tinebase_Core::setupCache();
     }
     
     /**
