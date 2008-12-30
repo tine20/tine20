@@ -374,13 +374,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
      * generic edit in new window handler
      */
-    onEditInNewWindow: function(btn, e) {
-        
-    },
-    
-    /**
-     * generic edit in new window handler
-     */
     onEditInNewWindow: function(button, event) {
         var record; 
         if (button.actionType == 'edit') {
@@ -394,7 +387,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
         
-        var popupWindow = Tine.Timetracker[this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
+        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
             record: record,
             listeners: {
                 scope: this,
