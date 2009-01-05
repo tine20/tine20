@@ -335,7 +335,31 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
+
+    /**
+     * try to export Timesheets
+     *
+     */
+    public function testExportTimesheets()
+    {
+        // create
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         
+        // export & check
+        $result = $this->_json->exportTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), 'csv');
+        
+        $this->assertTrue(file_exists($result['filename']));
+        
+        $file = implode('', file($result['filename']));
+        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description'); 
+        $this->assertEquals(1, preg_match("/". description ."/", $file), 'no headline'); 
+        
+        // cleanup / delete file
+        unlink($result['filename']);
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+    }
+    
     /************ protected helper funcs *************/
     
     /**
@@ -384,7 +408,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             'account_id'        => Tinebase_Core::getUser()->getId(),
             'timeaccount_id'    => $timeaccount->getId(),
             'description'       => 'blabla',
-            'start_date'        => Zend_Date::now()->toString('YYYY-MM-dd'),
+            'start_date'        => Zend_Date::now()->toString('yyyy-MM-dd'),
             'duration'          => 30,
         ), TRUE);
     }
