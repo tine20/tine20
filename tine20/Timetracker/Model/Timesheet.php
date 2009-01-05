@@ -81,6 +81,15 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
     );
     
     /**
+     * name of fields containing time information
+     *
+     * @var array list of time fields
+     */
+    protected $_timeFields = array(
+        'start_time'
+    );
+    
+    /**
      * overwrite constructor to add more filters
      *
      * @param mixed $_data

@@ -94,12 +94,19 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected $_validationErrors = array();
     
     /**
-     * name of fields containing datetime or or an array of datetime
+     * name of fields containing datetime or an array of datetime
      * information
      *
      * @var array list of datetime fields
      */
     protected $_datetimeFields = array();
+    
+    /**
+     * name of fields containing time information
+     *
+     * @var array list of time fields
+     */
+    protected $_timeFields = array();
     
     /**
      * save state if data are validated
@@ -212,6 +219,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } else {
                 $this->_convertCustomDateToZendDate($_data, $this->dateConversionFormat);
             }
+            
+            $this->_convertTime($_data);
         }
         
         // set internal state to "not validated"
@@ -570,6 +579,34 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $cutedISO = str_replace('T', ' ', $cutedISO);
         
         return $cutedISO;
+    }
+    
+    /**
+     * Converts time into iso representation (hh:mm:ss)
+     *
+     * @param array &$_data
+     * @return void
+     * 
+     * @todo    add support for hh:mm:ss AM|PM
+     */
+    protected function _convertTime(&$_data)
+    {
+        foreach ($this->_timeFields as $field) {
+            list($hours, $minutes, $seconds) = explode(":", $_data[$field]);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $minutes);
+            if (preg_match('/AM|PM/', $minutes)) {
+                list($minutes, $notation) = explode(" ", $minutes);
+                switch($notation) {
+                    case 'AM':
+                        $hours = ($hours == '12') ? 0 : $hours;
+                        break;
+                    case 'PM':
+                        $hours = $hours + 12;
+                        break;
+                }
+                $_data[$field] = $hours. ':' . $minutes . ':' . (($seconds) ? $seconds : '00');
+            }
+        }        
     }
     
     /**
