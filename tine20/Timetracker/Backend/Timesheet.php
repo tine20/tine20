@@ -29,31 +29,6 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
     }
 
     /**
-     * get sum for duration of multiple timesheets
-     *
-     * @param Timetracker_Model_TimesheetFilter $_filter
-     * @return integer
-     * 
-     * @deprecated
-     */
-    public function getSum(Timetracker_Model_TimesheetFilter $_filter)
-    {
-        // build query
-        $select = $this->_db->select();        
-        $select->from($this->_tableName, array('sum' => 'SUM(duration)'));    
-        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
-        $this->_addFilter($select, $_filter);
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
-        // get records
-        $stmt = $this->_db->query($select);
-        $row = $stmt->fetch();
-        
-        return $row['sum'];        
-    }
-    
-    /**
      * Gets total count and sum of duration of search with $_filter
      * 
      * @param Tinebase_Record_Interface $_filter

@@ -202,20 +202,6 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     }     
     
     /**
-     * get sum of timesheet durations
-     *
-     * @param string $filter json encoded
-     * @return integer
-     * 
-     * @deprecated do we need this and the getSum in controller+backend?
-     */
-    public function getTimesheetSum($filter)
-    {
-        $filter = new Timetracker_Model_TimesheetFilter(Zend_Json::decode($filter));
-        return $this->_timesheetController->getSum($filter);
-    }
-    
-    /**
      * Return a single record
      *
      * @param   string $id
@@ -224,14 +210,6 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     public function getTimesheet($id)
     {
         return $this->_get($id, $this->_timesheetController);
-        
-        // @deprecated ?
-        /*
-        $ts['timeaccount_id'] = $ts['timeaccount_id'] ? $this->_timeaccountController->get($ts['timeaccount_id'])->toArray() : $ts['timeaccount_id'];
-        $ts['account_id'] = $ts['account_id'] ? Tinebase_User::getInstance()->getUserById($ts['account_id'])->toArray() : $ts['account_id'];
-        
-        return $ts;
-        */
     }
 
     /**

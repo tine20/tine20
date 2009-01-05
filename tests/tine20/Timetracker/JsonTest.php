@@ -335,29 +335,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
-    
-    /**
-     * test get sum of timesheets
-     *
-     * @todo implement
-     */
-    public function testTimesheetSum()
-    {
-        // create
-        $timesheet = $this->_getTimesheet();
         
-        // save 2 timesheets
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-        
-        // search & check
-        $sum = $this->_json->getTimesheetSum(Zend_Json::encode($this->_getTimesheetFilter()));
-        $this->assertEquals(60, $sum);
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-    }
-    
     /************ protected helper funcs *************/
     
     /**
