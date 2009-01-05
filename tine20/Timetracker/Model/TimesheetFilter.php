@@ -85,8 +85,11 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_properties['timeaccount_id'], true));
         
-        if (isset($this->_properties['timeaccount_id']) && is_array($this->_properties['timeaccount_id'])) {
+        if (isset($this->_properties['timeaccount_id'])) {
             // @todo check rights
+            if (!is_array($this->_properties['timeaccount_id'])) {
+                $this->_properties['timeaccount_id'] = array($this->_properties['timeaccount_id']);
+            }
             return;
         }
         
@@ -132,8 +135,8 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
             $where = $db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $timeaccountIds);
         }
         
-        // get timeaccounts with BOOK_OWN right
-        if (!Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
+        // get timeaccounts with BOOK_OWN right (get only if no manual filter is set)
+        if (!isset($this->_operators['timeaccount_id']) && !Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
             $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
             if (!empty($bookOwnTS)) {
                 $where .= ' OR (' . $db->quoteInto($db->quoteIdentifier('timeaccount_id') . ' IN (?)', $bookOwnTS)
