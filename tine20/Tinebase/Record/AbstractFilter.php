@@ -333,7 +333,7 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                     $dayOfMonth = $date->get(Zend_Date::DAY_SHORT);
                     $monthDays = $date->get(Zend_Date::MONTH_DAYS);
                     
-                    $first = $date->toString('YYYY-MM');
+                    $first = $date->toString('yyyy-MM');
                     $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
                     $last = $date->toString($_dateFormat);
     
@@ -346,8 +346,8 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                     $date->sub(1, Zend_Date::YEAR);
                 case 'yearThis':
                     $value = array(
-                        $date->toString('YYYY') . '-01-01', 
-                        $date->toString('YYYY') . '-12-31',
+                        $date->toString('yyyy') . '-01-01', 
+                        $date->toString('yyyy') . '-12-31',
                     );                
                     break;
                 case 'quarterLast':
@@ -355,17 +355,17 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                 case 'quarterThis':
                     $month = $date->get(Zend_Date::MONTH);
                     if ($month < 4) {
-                        $first = $date->toString('YYYY' . '-01-01');
-                        $last = $date->toString('YYYY' . '-03-31');
+                        $first = $date->toString('yyyy' . '-01-01');
+                        $last = $date->toString('yyyy' . '-03-31');
                     } elseif ($month < 7) {
-                        $first = $date->toString('YYYY' . '-04-01');
-                        $last = $date->toString('YYYY' . '-06-30');
+                        $first = $date->toString('yyyy' . '-04-01');
+                        $last = $date->toString('yyyy' . '-06-30');
                     } elseif ($month < 10) {
-                        $first = $date->toString('YYYY' . '-07-01');
-                        $last = $date->toString('YYYY' . '-09-30');
+                        $first = $date->toString('yyyy' . '-07-01');
+                        $last = $date->toString('yyyy' . '-09-30');
                     } else {
-                        $first = $date->toString('YYYY' . '-10-01');
-                        $last = $date->toString('YYYY' . '-12-31');
+                        $first = $date->toString('yyyy' . '-10-01');
+                        $last = $date->toString('yyyy' . '-12-31');
                     }
                     $value = array(
                         $first, 
