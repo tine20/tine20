@@ -353,7 +353,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         $file = implode('', file($result['filename']));
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description'); 
-        $this->assertEquals(1, preg_match("/". description ."/", $file), 'no headline'); 
+        $this->assertEquals(1, preg_match("/description/", $file), 'no headline'); 
         
         // cleanup / delete file
         unlink($result['filename']);
