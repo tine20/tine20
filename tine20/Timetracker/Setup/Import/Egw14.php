@@ -55,6 +55,13 @@ class Timetracker_Setup_Import_Egw14
     protected $_beginId = 0;
     
     /**
+     * do utf8 encoding
+     *
+     * @var boolean
+     */
+    protected $_utf8Encode = FALSE;
+    
+    /**
      * egw timesheet categories
      *
      * @var array
@@ -89,19 +96,19 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var array
      */
-    protected $_projectFilter = array(
+    protected $_projectFilter = array(        
         array(
             'name' => 'pm_number',
-            'operator' => 'not',
-            //'operator' => 'contains',
+            //'operator' => 'not',
+            'operator' => 'contains',
             'value' => '^SOW',
-        ),
+        ),/*
         array(
             'name' => 'pm_number',
-            'operator' => 'not',
-            //'operator' => 'contains',
+            //'operator' => 'not',
+            'operator' => 'contains',
             'value' => '^VT',
-        )
+        )*/
     );
     
     /**
@@ -414,7 +421,7 @@ class Timetracker_Setup_Import_Egw14
     protected function _createTimeaccount($_data, $_contractId)
     {
         $timeaccount = new Timetracker_Model_Timeaccount(array(
-            'title'                 => utf8_encode($_data['pm_title']),
+            'title'                 => $this->_encode($_data['pm_title']),
             'number'                => $_data['pm_number'],
             'description'           => $this->_convertDescription($_data['pm_description']),
             'budget'                => $_data['pm_planned_budget'],
@@ -526,7 +533,7 @@ class Timetracker_Setup_Import_Egw14
     protected function _createTag($_catData)
     {
         $tags = Tinebase_Tags::getInstance()->searchTags(new Tinebase_Model_TagFilter(array(
-            'name' => utf8_encode($_catData['cat_name']),
+            'name' => $this->_encode($_catData['cat_name']),
             'type' => Tinebase_Model_Tag::TYPE_SHARED
         )), new Tinebase_Model_Pagination());
         
@@ -536,8 +543,8 @@ class Timetracker_Setup_Import_Egw14
             // create tag
             $sharedTag = new Tinebase_Model_Tag(array(
                 'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                'name'  => utf8_encode($_catData['cat_name']),
-                'description' => 'Imported timesheet category ' . utf8_encode($_catData['cat_name']),
+                'name'  => $this->_encode($_catData['cat_name']),
+                'description' => 'Imported timesheet category ' . $this->_encode($_catData['cat_name']),
                 'color' => (!empty($catData['color'])) ? $catData['color'] :  '#009B31',                        
             ));
             
@@ -652,7 +659,7 @@ class Timetracker_Setup_Import_Egw14
             $data = array(
                 'account_id'            => $row['ts_owner'],
                 //'account_id'            => Tinebase_Core::getUser()->getId(),
-                'start_date'            => date("Y-m-d", $row['ts_start']),
+                'start_date'            => date("Y-m-d", $row['ts_start'] + 3601),
                 'duration'              => $row['ts_duration'],
                 'description'           => (!empty($row['ts_description'])) ? $this->_convertDescription($row['ts_description']) : 'not set (imported)',
                 'is_cleared'            => 1,
@@ -710,8 +717,22 @@ class Timetracker_Setup_Import_Egw14
      */
     protected function _convertDescription($_description)
     {
-        $result = strip_tags(utf8_encode(html_entity_decode($_description)));
+        $result = strip_tags($this->_encode(html_entity_decode($_description)));
         
         return $result;
+    }
+    
+    /**
+     * encode text
+     *
+     * @param unknown_type $_text
+     */
+    protected function _encode($_text) {
+        
+        if ($this->_utf8Encode) {
+            return utf8_encode($_text);
+        } else {
+            return $_text;
+        } 
     }
 }
