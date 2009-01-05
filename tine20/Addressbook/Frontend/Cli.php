@@ -163,38 +163,14 @@ class Addressbook_Frontend_Cli
             }
         }
         
-        $this->fputcsv(STDOUT, $fields);
+        Tinebase_Export_Csv::fputcsv(STDOUT, $fields);
         
         foreach ($contacts as $contact) {
             $contactArray = array();
             foreach ($fields as $fieldName) {
                 $contactArray[] = $contact->$fieldName;
             }
-            $this->fputcsv(STDOUT, $contactArray);
+            Tinebase_Export_Csv::fputcsv(STDOUT, $contactArray);
         }
-    }
-    
-    /**
-     * The php build in fputcsv function is buggy, so we need an own one :-(
-     * 
-     * @todo to be moved to csv export class ;-)
-     *
-     * @param resource $filePointer
-     * @param array $dataArray
-     * @param char $delimiter
-     * @param char $enclosure
-     */
-    protected function fputcsv($filePointer, $dataArray, $delimiter=',', $enclosure=''){
-        $string = "";
-        $writeDelimiter = false;
-        foreach($dataArray as $dataElement) {
-            if($writeDelimiter) $string .= $delimiter;
-            $string .= $enclosure . $dataElement . $enclosure;
-            $writeDelimiter = true;
-        } 
-        $string .= "\n";
-        
-        fwrite($filePointer, $string);
-            
-    }
+    }    
 }
