@@ -592,8 +592,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected function _convertTime(&$_data)
     {
         foreach ($this->_timeFields as $field) {
+            if (!isset($_data[$field]) || empty($_data[$field])) {
+                continue;
+            }
+            
             list($hours, $minutes, $seconds) = explode(":", $_data[$field]);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $minutes);
             if (preg_match('/AM|PM/', $minutes)) {
                 list($minutes, $notation) = explode(" ", $minutes);
                 switch($notation) {
