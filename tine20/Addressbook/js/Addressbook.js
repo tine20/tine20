@@ -570,6 +570,90 @@ Tine.Addressbook.Main = {
                 }
             }
         );
+		
+		/*
+		
+
+<div class="preview-panel-left">
+
+<!-- Preview image -->
+<div class="preview-panel preview-panel-left preview-panel-image">
+<div class="bordercorner_1"></div>
+<div class="bordercorner_2"></div>
+<div class="bordercorner_3"></div>
+<div class="bordercorner_4"></div>
+<img src="index.php?method=Tinebase.getImage&amp;application=Addressbook&amp;location=&amp;id=1&amp;width=90&amp;height=90&amp;ratiomode=0"/>
+</div>
+
+<!-- Preview office -->
+<div class="preview-panel preview-panel-office preview-panel-left">
+
+<div class="bordercorner_1"></div>
+<div class="bordercorner_2"></div>
+<div class="bordercorner_3"></div>
+<div class="bordercorner_4"></div>
+<div class="preview-panel-declaration">büro</div>
+
+<div class="preview-panel-address preview-panel-left">
+<span class="preview-panel-bold">Firm / Abteilung</span><br/>
+Straße<br/>
+202025 Ort<br/>
+Region  / <br/>
+</div>
+
+<div class="preview-panel-contact preview-panel-right">
+<span class="preview-panel-symbolcompare">phone</span> 0404040<br/>
+<span class="preview-panel-symbolcompare">mobil</span> 0404040<br/>
+<span class="preview-panel-symbolcompare">fax</span> 040404<br/>
+<span class="preview-panel-symbolcompare">mail</span> <a href="mailto:mai@me.dd">mai@me.dd</a><br/>
+<span class="preview-panel-symbolcompare">web</span> <a target="_blank" href="http://www.mmm.ww">http://www.mmm.ww</a><br/>
+</div>
+
+</div>
+
+</div>
+
+<!-- Preview privat -->
+<div class="preview-panel preview-panel-privat preview-panel-left">
+
+<div class="bordercorner_1"></div>
+<div class="bordercorner_2"></div>
+<div class="bordercorner_3"></div>
+<div class="bordercorner_4"></div>
+<div class="preview-panel-declaration">privat</div>
+
+<div class="preview-panel-address preview-panel-left">
+<span class="preview-panel-bold">Vorname Nachna</span><br/>
+eee<br/>
+eee<br/>
+eee<br/>
+</div>
+
+<div class="preview-panel-contact preview-panel-right">
+<span class="preview-panel-symbolcompare">phone</span> 0404040<br/>
+<span class="preview-panel-symbolcompare">mobil</span> 040404<br/>
+<span class="preview-panel-symbolcompare">fax</span> 04040<br/>
+<span class="preview-panel-symbolcompare">mail</span> <a href="mailto:mai@me.dd">mai@me.dd</a><br/>
+<span class="preview-panel-symbolcompare">web</span> <a target="_blank" href="(EmptyReference!)"/><br/>
+</div>
+
+</div>
+<!-- Preview info -->
+<div class="preview-panel-description preview-panel-left">
+<div class="bordercorner_gray_1"></div>
+<div class="bordercorner_gray_2"></div>
+<div class="bordercorner_gray_3"></div>
+<div class="bordercorner_gray_4"></div>
+<div class="preview-panel-declaration">info</div>
+ortortortort<br/>
+rprp<br/>
+</div>
+
+		
+		*/
+		
+		
+		
         
         rowSelectionModel.on('rowselect', function(sm, rowIdx, r) {
             var detailPanel = Ext.getCmp('adr-preview-panel');
