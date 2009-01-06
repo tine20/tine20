@@ -574,7 +574,7 @@ Tine.Addressbook.Main = {
                                     break;
                                 case 'shorttext':
                                     //console.log(metrics.getWidth(value));
-                                    value = Ext.util.Format.ellipsis(value, 26);
+                                    value = Ext.util.Format.ellipsis(value, 18);
                                     break;
                                 case 'prefix':
                                     if (prefix) {
