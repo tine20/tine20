@@ -602,11 +602,11 @@ Region  / <br/>
 </div>
 
 <div class="preview-panel-contact preview-panel-right">
-<span class="preview-panel-symbolcompare">phone</span> 0404040<br/>
-<span class="preview-panel-symbolcompare">mobil</span> 0404040<br/>
-<span class="preview-panel-symbolcompare">fax</span> 040404<br/>
-<span class="preview-panel-symbolcompare">mail</span> <a href="mailto:mai@me.dd">mai@me.dd</a><br/>
-<span class="preview-panel-symbolcompare">web</span> <a target="_blank" href="http://www.mmm.ww">http://www.mmm.ww</a><br/>
+<img src="images/oxygen/16x16/apps/kcall.png"/> <!-- <span class="preview-panel-symbolcompare">phone</span> --> 0404040<br/>
+<img src="images/oxygen/16x16/apps/phone.png"/> <!-- <span class="preview-panel-symbolcompare">mobil</span>  --> 0404040<br/>
+<img src="images/oxygen/16x16/apps/printer.png"/> <!-- <span class="preview-panel-symbolcompare">fax</span>  --> 040404<br/>
+<img src="images/oxygen/16x16/apps/kontact-mail.png"/> <!-- <span class="preview-panel-symbolcompare">mail</span>  --> <a href="mailto:mai@me.dd">mai@me.dd</a><br/>
+<img src="images/oxygen/16x16/apps/network.png"/> <!-- <span class="preview-panel-symbolcompare">web</span> -->  <a target="_blank" href="http://www.mmm.ww">http://www.mmm.ww</a><br/>
 </div>
 
 </div>
@@ -630,11 +630,11 @@ eee<br/>
 </div>
 
 <div class="preview-panel-contact preview-panel-right">
-<span class="preview-panel-symbolcompare">phone</span> 0404040<br/>
-<span class="preview-panel-symbolcompare">mobil</span> 040404<br/>
-<span class="preview-panel-symbolcompare">fax</span> 04040<br/>
-<span class="preview-panel-symbolcompare">mail</span> <a href="mailto:mai@me.dd">mai@me.dd</a><br/>
-<span class="preview-panel-symbolcompare">web</span> <a target="_blank" href="(EmptyReference!)"/><br/>
+<!-- <img src="images/oxygen/16x16/apps/kcall.png"/> --> <span class="preview-panel-symbolcompare">phone</span> 0404040<br/>
+<!-- <img src="images/oxygen/16x16/apps/phone.png"/> --> <span class="preview-panel-symbolcompare">mobil</span> 040404<br/>
+<!-- <img src="images/oxygen/16x16/apps/printer.png"/> --> <span class="preview-panel-symbolcompare">fax</span> 04040<br/>
+<!-- <img src="images/oxygen/16x16/apps/kontact-mail.png"/> --> <span class="preview-panel-symbolcompare">mail</span> <a href="mailto:mai@me.dd">mai@me.dd</a><br/>
+<!-- <img src="images/oxygen/16x16/apps/network.png"/> --> <span class="preview-panel-symbolcompare">web</span> <a target="_blank" href="(EmptyReference!)"/><br/>
 </div>
 
 </div>
