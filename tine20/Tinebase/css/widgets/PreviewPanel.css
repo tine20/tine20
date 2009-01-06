@@ -27,7 +27,7 @@
 	}
 .preview-panel-image{
 	vertical-align:middle;
-	margin:10px 2px 5px 5px;
+	margin:5px 2px 5px 5px;
 	width:90px;
 	height:90px;
 	padding:0px
@@ -49,6 +49,7 @@
     border: solid 3px #e5e6fe;
     position: relative;
     }
+.preview-panel-description,
 .preview-panel-description a,
 .preview-panel-description a:link,
 .preview-panel-description a:visited,
@@ -147,7 +148,7 @@
     height: 5px;
     }
 .preview-panel-declaration{
-    color: #fff;
+    color: #a0a0a0;
     font-size: 18px;
     position: absolute;
     font-weight: bold;
@@ -161,5 +162,5 @@ text-align: right;
 display: block;
 float: left;
 overflow: hidden;
-padding-right: 5px;
+padding-right: 7px;
 }
