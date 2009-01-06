@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-01-06 14:09+0100\n"
+"PO-Revision-Date: 2009-01-06 14:19+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -147,11 +147,11 @@ msgstr "Alle buchen"
 
 #: js/TimeaccountEditDialog.js:206
 msgid "Manage Clearing"
-msgstr ""
+msgstr "Abrechenbar setzen"
 
 #: js/TimeaccountEditDialog.js:211
 msgid "Manage All"
-msgstr ""
+msgstr "Darf Alles"
 
 #: js/TimeaccountEditDialog.js:219
 msgid "Permissions"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Add, edit and delete timeaccounts"
-msgstr ""
+msgstr "Zeitkonten ändern, editieren und löschen"
 
 #~ msgid "Timesheet number"
 #~ msgstr "Stundenzettel-Nr."
