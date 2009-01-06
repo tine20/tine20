@@ -96,19 +96,21 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var array
      */
-    protected $_projectFilter = array(        
+    protected $_projectFilter = array(
         array(
             'name' => 'pm_number',
             //'operator' => 'not',
             'operator' => 'contains',
             'value' => '^SOW',
-        ),/*
+        ),
+        /*
         array(
             'name' => 'pm_number',
             //'operator' => 'not',
             'operator' => 'contains',
-            'value' => '^VT',
-        )*/
+            'value' => '^I-AB-43590',
+        )
+        */
     );
     
     /**
@@ -324,6 +326,11 @@ class Timetracker_Setup_Import_Egw14
             $timeaccounts = array();
             foreach ($timesheets as $timesheet) {
                 $this->_importTimesheet($timesheet, $_data, $timeaccounts, $contract->getId());
+            }
+            
+            // create timeaccount event if timesheets are empty
+            if (empty($timeaccounts)) {
+                $this->_createTimeaccount($_data, $contract->getId());
             }
         }        
     }
