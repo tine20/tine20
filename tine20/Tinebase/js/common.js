@@ -135,6 +135,18 @@ Tine.Tinebase.common = {
         return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName); 
     },
     
+    /**
+     * return yes or no in the selected language for a boolean value
+     * 
+     * @param {string} value
+     * @return {string}
+     */
+    booleanRenderer: function(value) {
+        var translationString = String.format("{0}",(value==1) ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
+        
+        return translationString.substr(0, translationString.indexOf(':'));
+    },
+    
     /** 
      * returns json coded data from given data source
      *
