@@ -14,49 +14,191 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
-#: js/TimesheetGridPanel.js:46 js/Timetracker.js:88
-#: js/TimesheetEditDialog.js:69
+#: js/TimeaccountGridPanel.js:51 js/TimeaccountEditDialog.js:68
+#: js/TimeaccountSelect.js:134 js/Models.js:101
+msgid "Timeaccount"
+msgid_plural "Timeaccounts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/TimeaccountGridPanel.js:52 js/TimesheetGridPanel.js:57
+#: js/TimesheetGridPanel.js:111 js/TimeaccountEditDialog.js:139
+#: js/TimesheetEditDialog.js:114
+msgid "Description"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:53
+msgid "Summary"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:69 js/TimeaccountEditDialog.js:84
+msgid "Number"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:75 js/TimeaccountEditDialog.js:89
+msgid "Title"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:81
+msgid "Budget"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:33
+msgid "Duplicate"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:53 js/TimesheetEditDialog.js:60 js/Models.js:43
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/TimesheetGridPanel.js:47
-msgid "Summary"
+#: js/TimesheetGridPanel.js:55 js/TimesheetGridPanel.js:96
+#: js/TimesheetEditDialog.js:124
+msgid "Account"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:56 js/TimesheetGridPanel.js:72
+#: js/TimesheetEditDialog.js:92
+msgid "Date"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:80
+msgid "Start time"
 msgstr ""
 
 #: js/TimesheetGridPanel.js:87
-msgid "Timesheet number"
+msgid "Time account"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:93
-msgid "Title"
+#: js/TimesheetGridPanel.js:103 js/TimesheetEditDialog.js:87
+msgid "Duration"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:99
-msgid "Status"
+#: js/TimesheetGridPanel.js:119 js/TimesheetEditDialog.js:130
+msgid "Billable"
 msgstr ""
 
-#: js/Timetracker.js:50
+#: js/Timetracker.js:23
 msgid "Timesheets"
 msgstr ""
 
-#: js/Timetracker.js:92
+#: js/Timetracker.js:28
+msgid "All Timesheets"
+msgstr ""
+
+#: js/Timetracker.js:33
+msgid "Timeaccounts"
+msgstr ""
+
+#: js/Timetracker.js:38
+msgid "All Timeaccounts"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:110
+msgid "Unit"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:113
+msgid "Unit Price"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:116
+msgid "Status"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:122
+msgid "closed"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:122
+msgid "open"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:123
+msgid "Times could be added"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:153
+msgid "Enter description"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:191
+msgid "Book Own"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:196
+msgid "View All"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:201
+msgid "Book All"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:206
+msgid "Manage Clearing"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:211
+msgid "Manage All"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:219
+msgid "Permissions"
+msgstr ""
+
+#: js/DurationSlider.js:95
+msgid "{0}"
+msgstr ""
+
+#: js/TimesheetEditDialog.js:77
+msgid "Time Account"
+msgstr ""
+
+#: js/TimesheetEditDialog.js:78
+msgid "Select Time Accont..."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:79
+msgid "Searching..."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:97
+msgid "Start"
+msgstr ""
+
+#: js/TimesheetEditDialog.js:98
+msgid "not set"
+msgstr ""
+
+#: js/TimesheetEditDialog.js:115
+msgid "Enter description..."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:137
+msgid "Cleared"
+msgstr ""
+
+#: js/Models.js:47
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/TimesheetEditDialog.js:86
-msgid "Description"
+#: js/Models.js:105
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Acl/Rights.php:98
+msgid "Manage timeaccounts"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:87
-msgid "Enter description..."
-msgstr ""
-
-#: Setup/setup.xml:155
-msgid "Implementation"
+#: Acl/Rights.php:99
+msgid "Add, edit and delete timeaccounts"
 msgstr ""
