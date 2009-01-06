@@ -65,7 +65,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
      * returns cm
      * @private
      * 
-     * @todo    add more columns
      */
     getColumns: function(){
         return [{
@@ -85,13 +84,39 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             renderer: Tine.Tinebase.common.timeRenderer
         }, {
             id: 'timeaccount_id',
-            header: this.app.i18n._("Time account"),
-            width: 800,
+            header: this.app.i18n._("Time Account"),
+            width: 500,
             sortable: true,
             dataIndex: 'timeaccount_id',
             renderer: function(timeaccount) {
                 return new Tine.Timetracker.Model.Timeaccount(timeaccount).getTitle();
             }
+        },{
+            id: 'description',
+            hidden: true,
+            header: this.app.i18n._("Description"),
+            width: 400,
+            sortable: true,
+            dataIndex: 'description',
+            renderer: function(description) {
+            	return Ext.util.Format.htmlEncode(description);
+            }
+        },{
+            id: 'is_billable',
+            hidden: true,
+            header: this.app.i18n._("Billable"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'is_billable',
+            renderer: Tine.Tinebase.common.booleanRenderer
+        },{
+            id: 'is_cleared',
+            hidden: true,
+            header: this.app.i18n._("Cleared"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'is_cleared',
+            renderer: Tine.Tinebase.common.booleanRenderer
         },{
             id: 'account_id',
             header: this.app.i18n._("Account"),
