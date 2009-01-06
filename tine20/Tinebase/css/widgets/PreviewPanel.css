@@ -27,8 +27,9 @@
 	}
 .preview-panel-image{
 	vertical-align:middle;
-	margin:5px 2px 5px 5px;
-	width:100px;
+	margin:10px 2px 5px 5px;
+	width:90px;
+	height:90px;
 	}
 .preview-panel-office{
 	width:360px;
@@ -159,5 +160,5 @@ text-align: right;
 display: block;
 float: left;
 overflow: hidden;
-padding-right: 2px;
+padding-right: 5px;
 }
