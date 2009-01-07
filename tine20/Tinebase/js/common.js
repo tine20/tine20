@@ -98,7 +98,7 @@ Tine.Tinebase.common = {
         var Hs = String.format(Tine.Tinebase.tranlation.ngettext('{0} hour', '{0} hours', H), H);
         var is = String.format(Tine.Tinebase.tranlation.ngettext('{0} minute', '{0} minutes', i), i);
         
-        return '<div style="width: 100%; text-align: right;">' + ( H ? Hs + ', ' + is : is ) + '</div>';
+        return ( H ? Hs + ', ' + is : is );
     },
     
     /**
