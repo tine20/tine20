@@ -65,32 +65,43 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     
     /**
      * return all groups an account is member of
+     * - this function caches its result (with cache tag 'ldap')
      *
      * @param mixed $_accountId the account as integer or Tinebase_Model_User
      * @return array
      */
     public function getGroupMemberships($_accountId)
     {
-        if($_accountId instanceof Tinebase_Model_FullUser) {
-            $memberuid = $_accountId->accountLoginName;
-        } else {
-            $account = Tinebase_User::getInstance()->getFullUserById($_accountId);
-            $memberuid = $account->accountLoginName;
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'getLdapGroupMemberships' . (($_accountId instanceof Tinebase_Model_FullUser) ? $_accountId->getId() : $_accountId);
+        $result = $cache->load($cacheId);
+        
+        if (!$result) {
+            if($_accountId instanceof Tinebase_Model_FullUser) {
+                $memberuid = $_accountId->accountLoginName;
+            } else {
+                $account = Tinebase_User::getInstance()->getFullUserById($_accountId);
+                $memberuid = $account->accountLoginName;
+            }
+            
+            $filter = "(&(objectclass=posixgroup)(memberuid=$memberuid))";
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+            
+            $groups = $this->_ldap->fetchAll(Tinebase_Core::getConfig()->accounts->get('ldap')->groupsDn, $filter, array('gidnumber'));
+            
+            $memberships = array();
+            
+            foreach($groups as $group) {
+                $memberships[] = $group['gidnumber'][0];
+            }
+    
+            $result = $memberships;
+            
+            $cache->save($result, $cacheId, array('ldap'), 240);
         }
         
-        $filter = "(&(objectclass=posixgroup)(memberuid=$memberuid))";
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
-        
-        $groups = $this->_ldap->fetchAll(Tinebase_Core::getConfig()->accounts->get('ldap')->groupsDn, $filter, array('gidnumber'));
-        
-        $memberships = array();
-        
-        foreach($groups as $group) {
-            $memberships[] = $group['gidnumber'][0];
-        }
-
-        return $memberships;
+        return $result;
     }
     
     /**
