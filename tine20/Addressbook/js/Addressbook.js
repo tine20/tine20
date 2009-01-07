@@ -336,7 +336,8 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact,
                 '-',
                 this.actions.exportContact,
-                ( Tine.Phone && Tine.Phone.rights && Tine.Phone.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
+                //( Tine.Phone && Tine.Phone.rights && Tine.Phone.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
+                (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
             ]
         });
     },
@@ -435,7 +436,7 @@ Tine.Addressbook.Main = {
                 
             }  else if (rowCount == 1) {
                 // only one row selected
-                if(Tine.Phone && Tine.Phone.rights && Tine.Phone.rights.indexOf('run') > -1) {
+                if((Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone'))) {
 	                var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
 	                callMenu.removeAll();
 	                var contact = _selectionModel.getSelected();
