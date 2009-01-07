@@ -112,8 +112,9 @@ class Tinebase_Acl_Roles
 
         $select = $this->_roleRightsTable->select();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right));
-            
+               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right))
+               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $application->getId()));
+               
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
             $result = false;
         } else {
