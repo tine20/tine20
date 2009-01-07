@@ -336,7 +336,6 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact,
                 '-',
                 this.actions.exportContact,
-                //( Tine.Phone && Tine.Phone.rights && Tine.Phone.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
                 (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
             ]
         });
@@ -471,7 +470,6 @@ Tine.Addressbook.Main = {
 					'</div>',
 				'</div>',
 			'</div>'		
-					//'<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>'
 		);
 		
         // the rowselection model
