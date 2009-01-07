@@ -1,4 +1,4 @@
-Ext.namespace('Tine.Addressbook');
+﻿Ext.namespace('Tine.Addressbook');
 
 /**************************** panel ****************************************/
 
@@ -418,7 +418,62 @@ Tine.Addressbook.Main = {
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
-                
+
+		// define clear preview tpl
+		var clearTpl = new Ext.Template(	
+			'<div class="preview-panel-timesheet-nobreak">',	
+	            '<!-- Preview contacts -->',
+				'<div class="preview-panel preview-panel-timesheet-left">',
+					'<div class="bordercorner_1"></div>',
+					'<div class="bordercorner_2"></div>',
+					'<div class="bordercorner_3"></div>',
+					'<div class="bordercorner_4"></div>',
+					'<div class="preview-panel-declaration">contacts</div>',
+					'<div class="preview-panel-timesheet-leftside preview-panel-left">',
+						'<span class="preview-panel-bold">',
+							this.translation._('Select contact') + '<br/>',
+							'<br/>',
+							'<br/>',
+							'<br/>',
+						'</span>',
+					'</div>',
+					'<div class="preview-panel-timesheet-rightside preview-panel-left">',
+						'<span class="preview-panel-nonbold">',
+							'<br/>',
+							'<br/>',
+							'<br/>',
+							'<br/>',
+						'</span>',
+					'</div>',
+				'</div>',
+				'<!-- Preview xxx -->',
+				'<div class="preview-panel-timesheet-right">',
+					'<div class="bordercorner_gray_1"></div>',
+					'<div class="bordercorner_gray_2"></div>',
+					'<div class="bordercorner_gray_3"></div>',
+					'<div class="bordercorner_gray_4"></div>',
+					'<div class="preview-panel-declaration"></div>',
+					'<div class="preview-panel-timesheet-leftside preview-panel-left">',
+						'<span class="preview-panel-bold">',
+							'<br/>',
+							'<br/>',
+							'<br/>',
+							'<br/>',
+						'</span>',
+					'</div>',
+					'<div class="preview-panel-timesheet-rightside preview-panel-left">',
+						'<span class="preview-panel-nonbold">',
+							'<br/>',
+							'<br/>',
+							'<br/>',
+							'<br/>',
+						'</span>',
+					'</div>',
+				'</div>',
+			'</div>'		
+					//'<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>'
+		);
+		
         // the rowselection model
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
 
@@ -428,12 +483,7 @@ Tine.Addressbook.Main = {
             
             var rowCount = _selectionModel.getCount();
             if(rowCount < 1) {
-                // clear preview
-                var clearTpl = new Ext.Template(
-                    '<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>'
-                );
                 clearTpl.overwrite(Ext.getCmp('adr-preview-panel').body);    
-                
             }  else if (rowCount == 1) {
                 // only one row selected
                 if((Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone'))) {
@@ -722,7 +772,61 @@ Tine.Addressbook.Main = {
                 split: true,
                 layout: 'fit',
                 height: 125,
-                html: '<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>' 
+				html: clearTpl.applyTemplate({})
+				//tpl: clearTpl
+                /*
+				html: 
+				'<div class="preview-panel-timesheet-nobreak">',	
+		            '<!-- Preview contacts -->',
+					'<div class="preview-panel preview-panel-timesheet-left">',
+						'<div class="bordercorner_1"></div>',
+						'<div class="bordercorner_2"></div>',
+						'<div class="bordercorner_3"></div>',
+						'<div class="bordercorner_4"></div>',
+						'<div class="preview-panel-declaration">contacts</div>',
+						'<div class="preview-panel-timesheet-leftside preview-panel-left">',
+							'<span class="preview-panel-bold">',
+								'Anzahl der Kontakte<br/>',
+								'Selected Contacts<br/>',
+								'<br/>',
+								'<br/>',
+							'</span>',
+						'</div>',
+						'<div class="preview-panel-timesheet-rightside preview-panel-left">',
+							'<span class="preview-panel-nonbold">',
+								'123<br/>',
+								+ this.translation._('Select contact') + '<br/>',
+								'<br/>',
+								'<br/>',
+							'</span>',
+						'</div>',
+					'</div>',
+					'<!-- Preview xxx -->',
+					'<div class="preview-panel-timesheet-right">',
+						'<div class="bordercorner_gray_1"></div>',
+						'<div class="bordercorner_gray_2"></div>',
+						'<div class="bordercorner_gray_3"></div>',
+						'<div class="bordercorner_gray_4"></div>',
+						'<div class="preview-panel-declaration">xxx</div>',
+						'<div class="preview-panel-timesheet-leftside preview-panel-left">',
+							'<span class="preview-panel-bold">',
+								'<br/>',
+								'<br/>',
+								'<br/>',
+								'<br/>',
+							'</span>',
+						'</div>',
+						'<div class="preview-panel-timesheet-rightside preview-panel-left">',
+							'<span class="preview-panel-nonbold">',
+								'<br/>',
+								'<br/>',
+								'<br/>',
+								'<br/>',
+							'</span>',
+						'</div>',
+					'</div>',
+				'</div>'	
+				// '<div class="preview-panel-empty">' + this.translation._('Select contact') + '</div>'  */
             }]
         });
         this.gridPanel.on('resize', function(panel) {
