@@ -8,10 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
- * 
- * @todo        write tests for this
- * @todo        add phpdoc
- * @todo        do we need the constants?
+ *
+ * @todo        add memcached support
  * @todo        extend Tinebase_Model_Grants?
  */
 
@@ -184,7 +182,8 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     }
     
     /**
-     * returns accont_grants of given timeaccount
+     * returns account_grants of given timeaccount
+     * - this function caches its result (with cache tag 'timeaccountGrants')
      *
      * @param  Tinebase_Model_User|int              $_accountId
      * @param  Timetracker_Model_Timeaccount|string $_timeaccountId
@@ -193,23 +192,35 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function getGrantsOfAccount($_accountId, $_timeaccountId, $_ignoreAcl = FALSE)
     {
-        $timeaccount = $_timeaccountId instanceof Timetracker_Model_Timeaccount ? $_timeaccountId : 
-            Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
-            
-        $containerGrantsArray = Tinebase_Container::getInstance()->getGrantsOfAccount($_accountId, $timeaccount->container_id, $_ignoreAcl)->toArray();
-        // mapping
-        foreach ($containerGrantsArray as $grantName => $grantValue) {
-            if (array_key_exists($grantName, self::$_mapping)) {
-                $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'getGrantsOfAccount' . $_accountId . (($_timeaccountId instanceof Timetracker_Model_Timeaccount) ? $_timeaccountId->getId() : $_timeaccountId) . $_ignoreAcl;
+        $result = $cache->load($cacheId);
+        
+        if (!$result) {
+        
+            $timeaccount = $_timeaccountId instanceof Timetracker_Model_Timeaccount ? $_timeaccountId : 
+                Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
+                
+            $containerGrantsArray = Tinebase_Container::getInstance()->getGrantsOfAccount($_accountId, $timeaccount->container_id, $_ignoreAcl)->toArray();
+            // mapping
+            foreach ($containerGrantsArray as $grantName => $grantValue) {
+                if (array_key_exists($grantName, self::$_mapping)) {
+                    $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+                }
             }
+            
+            $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
+            $result = $account_grants->toArray();
+            
+            $cache->save($result, $cacheId, array('timeaccountGrants'));
         }
         
-        $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
-        return $account_grants->toArray();
+        return $result;
     }
     
     /**
      * get timeaccounts by grant
+     * - this function caches its result (with cache tag 'timeaccountGrants')
      *
      * @param integer $_grant
      * @param boolean $_onlyIds
@@ -219,34 +230,43 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get grant: ' . print_r($_grant, true));
         
-        $containerIds = Tinebase_Container::getInstance()->getContainerByACL(
-            Tinebase_Core::getUser()->getId(),
-            'Timetracker',
-            $_grant,
-            TRUE
-        );
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'getTimeaccountsByAcl' . Tinebase_Core::getUser()->getId() . $_grant . $_onlyIds;
+        $result = $cache->load($cacheId);
         
-        // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
-        
-        $filter = new Timetracker_Model_TimeaccountFilter(array(
-        ));        
-        $filter->container = $containerIds;
-        $filter->showClosed = TRUE;
-                
-        $backend = new Timetracker_Backend_Timeaccount();
-        $result = $backend->search($filter, new Tinebase_Model_Pagination());
-        
-        if ($_onlyIds) {
-            return $result->getArrayOfIds();
-        } else {
-            return $result;
+        if (!$result) {
+            
+            $containerIds = Tinebase_Container::getInstance()->getContainerByACL(
+                Tinebase_Core::getUser()->getId(),
+                'Timetracker',
+                $_grant,
+                TRUE
+            );
+            
+            // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
+            
+            $filter = new Timetracker_Model_TimeaccountFilter(array());        
+            $filter->container = $containerIds;
+            $filter->showClosed = TRUE;
+                    
+            $backend = new Timetracker_Backend_Timeaccount();
+            $result = $backend->search($filter, new Tinebase_Model_Pagination());
+            
+            if ($_onlyIds) {
+                $result = $result->getArrayOfIds();
+            }
+            
+            $cache->save($result, $cacheId, array('timeaccountGrants'));
         }
+        
+        return $result;
     }
     
     /**
      * returns all grants of a given timeaccount
+     * - this function caches its result (with cache tag 'timeaccountGrants')
      *
-     * @param  Timetracker_Model_Timeaccount $_timeaccountId
+     * @param  Timetracker_Model_Timeaccount $_timeaccount
      * @param  boolean $_ignoreACL
      * @return Tinebase_Record_RecordSet
      */
@@ -260,22 +280,33 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             }
         }
         
-        $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_timeaccount->container_id, true);
-        $allTimeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'getTimeaccountGrants' . Tinebase_Core::getUser()->getId() . $_timeaccount->getId() . $_ignoreACL;
+        $result = $cache->load($cacheId);
         
-        foreach ($allContainerGrants as $index => $containerGrants) {
-            // mapping
-            $containerGrantsArray = $containerGrants->toArray();
-            foreach ($containerGrantsArray as $grantName => $grantValue) {
-                if (array_key_exists($grantName, self::$_mapping)) {
-                    $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+        if (!$result) {
+                
+            $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_timeaccount->container_id, true);
+            $allTimeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
+            
+            foreach ($allContainerGrants as $index => $containerGrants) {
+                // mapping
+                $containerGrantsArray = $containerGrants->toArray();
+                foreach ($containerGrantsArray as $grantName => $grantValue) {
+                    if (array_key_exists($grantName, self::$_mapping)) {
+                        $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+                    }
                 }
+                $timeaccountGrants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
+                $allTimeaccountGrants->addRecord($timeaccountGrants);
             }
-            $timeaccountGrants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
-            $allTimeaccountGrants->addRecord($timeaccountGrants);
+
+            $result = $allTimeaccountGrants;
+            
+            $cache->save($result, $cacheId, array('timeaccountGrants'));
         }
         
-        return $allTimeaccountGrants;
+        return $result;
     }
     
     /**
@@ -299,6 +330,9 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         $grants = self::doMapping($_grants);
         
         Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, TRUE);
+        
+        // invalidate cache (no memcached support yet)
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('timeaccountGrants'));
     }
     
     /**
