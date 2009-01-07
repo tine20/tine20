@@ -479,6 +479,7 @@ Tine.Addressbook.Main = {
         // @todo add tags?
         var detailTpl = new Ext.XTemplate(
             '<tpl for=".">',
+				'<div class="preview-panel-adressbook-nobreak">',
                 '<div class="preview-panel-left">',                
                     '<!-- Preview image -->',
                     '<div class="preview-panel preview-panel-left preview-panel-image">',
@@ -557,7 +558,7 @@ Tine.Addressbook.Main = {
                     '<div class="preview-panel-declaration">info</div>',
                     '{[this.encode(values.note, "longtext")]}',
                 '</div>',
-                
+                '</div>',
                 //  '{[this.getTags(values.tags)]}',
             '</tpl>',
         	{

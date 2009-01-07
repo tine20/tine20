@@ -140,7 +140,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             
             showDefault: function(body) {
                 var totalsum = Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsum);
-                var tpl = new Ext.XTemplate(	
+                var tpl = new Ext.XTemplate(
+		'<div class="preview-panel-timesheet-nobreak">',
 			'<!-- Preview timeframe -->',			
 			'<div class="preview-panel preview-panel-timesheet-left">',
 				'<div class="bordercorner_1"></div>',
@@ -188,17 +189,15 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
 					'<br/>',
 					'</span>',
 				'</div>',
-			'</div>'
+			'</div>',
+		'</div>'
 				//' total time of all {totalcount} timesheets: ' + totalsum + '&nbsp;&nbsp;&nbsp;'
 				);
                 tpl.overwrite(body, this.gridpanel.store.proxy.jsonReader.jsonData);
             },
             
             tpl: new Ext.XTemplate(
-			
-			
-			
-			
+		'<div class="preview-panel-timesheet-nobreak">',	
 			'<!-- Preview beschreibung -->',
 			'<div class="preview-panel preview-panel-timesheet-left">',
 				'<div class="bordercorner_1"></div>',
@@ -236,14 +235,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
 					'<br/>',
 					'</span>',
 				'</div>',
-			'</div>',{
-			
-			
-			
-			
-			
-			
-			
+			'</div>',
+		'</div>',{
+
               //  '<div class="detailPanel">',
                 //    '{[this.encode(values.description)]}',
                 //'</div>', {

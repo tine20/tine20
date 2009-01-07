@@ -42,7 +42,7 @@ font-weight: bold;
 	margin:5px 2px 5px 5px;
 	}
 .preview-panel-description {
-	width: 190px;
+	width: 200px;
 	position: relative;  
     height: 97px;
     margin:5px 2px 5px 5px;
@@ -115,6 +115,9 @@ font-weight: bold;
     width: 4px;
     height: 4px;
     } 
+.preview-panel-adressbook-nobreak{
+min-width:1100px;
+}
 .bordercorner_gray_1{
  background-image: url(../../../images/preview/bordercorner_gray_1.gif);
     background-repeat: no-repeat;
@@ -199,3 +202,6 @@ font-weight: bold;
 	width:auto;
 	padding: 5px;
 	}
+.preview-panel-timesheet-nobreak{
+min-width:800px;
+}
