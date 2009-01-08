@@ -28,7 +28,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @var Phone_Frontend_Json
      */
-    protected $_backend;
+    protected $_json;
     
     /**
      * @var array test objects
@@ -55,7 +55,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Phone_Frontend_Json();
+        $this->_json = new Phone_Frontend_Json();
         
         $this->_objects['location'] = new Voipmanager_Model_Snom_Location(array(
             'id' => 20001,
@@ -249,7 +249,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetUserPhones()
     {        
         // get phone json
-        $phones = $this->_backend->getUserPhones(Zend_Registry::get('currentAccount')->getId());
+        $phones = $this->_json->getUserPhones(Zend_Registry::get('currentAccount')->getId());
 
         //print_r($phones);
         $this->assertGreaterThan(0, count($phones), 'more than 1 phone expected');        
@@ -267,11 +267,11 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $pagingJson = Zend_Json::encode($this->_objects['paging']);
         
         // search calls
-        $result = $this->_backend->searchCalls(Zend_Json::encode($this->_objects['filter1']), $pagingJson);
+        $result = $this->_json->searchCalls(Zend_Json::encode($this->_objects['filter1']), $pagingJson);
         $this->assertGreaterThan(1, $result['totalcount']);
         
         // search query -> '050'
-        $result = $this->_backend->searchCalls(Zend_Json::encode($this->_objects['filter2']), $pagingJson);
+        $result = $this->_json->searchCalls(Zend_Json::encode($this->_objects['filter2']), $pagingJson);
         $this->assertEquals(1, $result['totalcount'], 'query filter not working');
         
         $call2 = $result['results'][0];
@@ -280,7 +280,20 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_objects['call2']->getId(), $call2['id']);        
         
         // search for phone_id
-        $result = $this->_backend->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
+        $result = $this->_json->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
         $this->assertGreaterThan(1, $result['totalcount'], 'phone_id filter not working');
     }    
+
+    /**
+     * try to get registry data
+     *
+     */
+    public function testGetRegistryData()
+    {        
+        // get phone json
+        $data = $this->_json->getRegistryData();
+
+        $this->assertGreaterThan(0, count($data['Phones']), 'more than 1 phone expected');        
+        $this->assertGreaterThan(0, count($data['Phones'][0]['lines']), 'no lines attached');
+    }        
 }		
