@@ -22,7 +22,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
     /**
      * Voipmanager backend class
      *
-     * @var Voipmanager_Backend_MyPhone
+     * @var Voipmanager_Backend_Snom_Phone
      */
     protected $_backend;
     
