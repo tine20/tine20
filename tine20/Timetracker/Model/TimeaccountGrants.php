@@ -160,20 +160,24 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         Tinebase_Container::getInstance()->getGrantsOfRecords($_timeaccounts, $_accountId);
         
         foreach ($_timeaccounts as $timeaccount) {
-            $containerGrantsArray = $timeaccount->container_id['account_grants'];
-            // mapping
-            foreach ($containerGrantsArray as $grantName => $grantValue) {
-                if (array_key_exists($grantName, self::$_mapping)) {
-                    $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+            //Tinebase_Core::getLogger()->debug(print_r($timeaccount->toArray(), true));
+            
+            if (isset($timeaccount->container_id['account_grants'])) {
+                $containerGrantsArray = $timeaccount->container_id['account_grants'];
+                // mapping
+                foreach ($containerGrantsArray as $grantName => $grantValue) {
+                    if (array_key_exists($grantName, self::$_mapping)) {
+                        $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
+                    }
                 }
-            }
-            
-            $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
-            $timeaccount->account_grants = $account_grants->toArray();
-            
-            $containerId = $timeaccount->container_id;
-            $containerId['account_grants'] = $timeaccount->account_grants;
-            $timeaccount->container_id = $containerId;
+                
+                $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
+                $timeaccount->account_grants = $account_grants->toArray();
+                
+                $containerId = $timeaccount->container_id;
+                $containerId['account_grants'] = $timeaccount->account_grants;
+                $timeaccount->container_id = $containerId;
+            } 
             //$timeaccount->container_id = $timeaccount->container_id['id'];
             
             //Tinebase_Core::getLogger()->debug(print_r($_timeaccounts->toArray(), true));
