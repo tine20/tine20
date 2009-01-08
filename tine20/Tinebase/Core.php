@@ -477,7 +477,7 @@ class Tinebase_Core
      */
     public static function get($index)
     {
-        return Zend_Registry::get($index);
+        return (Zend_Registry::isRegistered($index)) ? Zend_Registry::get($index) : NULL;
     }
 
     /**
