@@ -47,7 +47,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },
             params: {
                 method: 'Tasks.getTask',
-                uid: this.record.id,
+                uid: (this.record) ? this.record.id : '',
                 containerId: this.containerId,
                 relatedApp: this.relatedApp
             }
@@ -169,7 +169,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                record_id: this.record.id,
+                record_id: (this.record) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
