@@ -75,7 +75,7 @@ abstract class Tinebase_Application_Controller_Abstract
         
         foreach ($rightsToCheck as $rightToCheck) {
             //echo "check right: " . $rightToCheck;
-            if (Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck)) {
+            if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, $this->_currentAccount->getId(), $rightToCheck)) {
                 $hasRight = TRUE;
                 break;    
             }
