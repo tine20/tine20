@@ -74,6 +74,10 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();        
         $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();     
 
+        // get timesheet
+        $this->_objects['timesheet'] = $this->_getTimesheet();
+        $this->_objects['timeaccount'] = $this->_timeaccountController->get($this->_objects['timesheet']->timeaccount_id);
+        
         // remove MANAGE_ALL & ADMIN for Timetracker right
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
         $app = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
@@ -87,10 +91,6 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             }
         }
         Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $rightsWithoutManageAll);
-
-        // get timesheet
-        $this->_objects['timesheet'] = $this->_getTimesheet();
-        $this->_objects['timeaccount'] = $this->_timeaccountController->get($this->_objects['timesheet']->timeaccount_id);
     }
 
     /**
