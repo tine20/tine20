@@ -24,7 +24,9 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();        
+        // we don't have a user when we have a snom connection
+        //$this->_currentAccount = Tinebase_Core::getUser();  
+              
         $this->_applicationName = 'Phone';
     }
 
