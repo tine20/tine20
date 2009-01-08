@@ -72,7 +72,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
     public function dialNumber($_number, $_phoneId = NULL, $_lineId = NULL)
     {
         $accountId = Tinebase_Core::getUser()->getId();
-        $vmController = Voipmanager_Controller::getInstance();
+        $vmController = Voipmanager_Controller_Snom_Phone::getInstance();
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::ASTERISK);
         
         if ($_phoneId === NULL && $_lineId === NULL) {
@@ -81,9 +81,10 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
                 'accountId' => $accountId 
             ));
-            $phones = $vmController->getSnomPhones($filter);
+            $phones = $vmController->search($filter);
+
             if(count($phones) > 0) {
-                $phone = $vmController->getSnomPhone($phones[0]->id);
+                $phone = $vmController->get($phones[0]->id);
                 if(count($phone->lines) > 0) {
                     $asteriskLineId = $phone->lines[0]->asteriskline_id;
                 } else {
@@ -95,12 +96,12 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
             
         } else {
             // use given phone and line ids
-            $phone = $vmController->getMyPhone($_phoneId, $accountId);
+            $phone = Voipmanager_Controller_MyPhone::getInstance()->getMyPhone($_phoneId, $accountId);
             $line = $phone->lines[$phone->lines->getIndexById($_lineId)];
             $asteriskLineId = $line->asteriskline_id; 
         }
 
-        $asteriskLine = $vmController->getAsteriskSipPeer($asteriskLineId);
+        $asteriskLine = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($asteriskLineId);
         $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskLine->context, $_number, 1, "WD <$_number>");
     }    
     
