@@ -23,3 +23,8 @@
 .AdminIconCls {
     background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
 }
+.x-tree-node-collapsed .x-tree-node-icon, 
+.x-tree-node-expanded .x-tree-node-icon, 
+.x-tree-node-leaf .x-tree-node-icon {
+	width:1px;
+}
