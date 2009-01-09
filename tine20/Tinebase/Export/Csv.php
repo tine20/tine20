@@ -49,7 +49,7 @@ class Tinebase_Export_Csv
     }
 
     /**
-     * export timesheets to csv file
+     * export records to csv file
      *
      * @param Tinebase_Record_RecordSet $_records
      * @param boolean $_toStdout
@@ -58,17 +58,14 @@ class Tinebase_Export_Csv
      * 
      * @todo add specific export values
      * @todo save in special download path
-     * @todo save skipped fields elsewhere (preferences?)
      */
     public function exportRecords(Tinebase_Record_RecordSet $_records, $_toStdout = FALSE, $_skipFields = array()) {
         
         $filename = ($_toStdout) ? 'STDOUT' : $this->_downloadPath . DIRECTORY_SEPARATOR . date('Y-m-d') . '_timesheet_export_' . time() . '.csv';
         
-        /*
         if (count($_records) < 1) {
-            throw new Tinebase_Exception_NotFound('No records found.');
+            return FALSE;
         }
-        */
                 
         // to ensure the order of fields we need to sort it ourself!
         $fields = array();
