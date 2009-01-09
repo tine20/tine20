@@ -97,20 +97,24 @@ class Timetracker_Setup_Import_Egw14
      * @var array
      */
     protected $_projectFilter = array(
+				      /*
         array(
             'name' => 'pm_number',
             //'operator' => 'not',
             'operator' => 'contains',
             'value' => '^SOW',
         ),
-        /*
+				      */
+        
         array(
             'name' => 'pm_number',
             //'operator' => 'not',
-            'operator' => 'contains',
-            'value' => '^I-AB-43590',
+            //'operator' => 'contains',
+            'operator' => 'equals',
+            //'value' => '^S-AB-42964$'
+            'value' => 'S-AB-42964'
         )
-        */
+        
     );
     
     /**
@@ -233,7 +237,9 @@ class Timetracker_Setup_Import_Egw14
                         ||
                         ($filter['operator'] == 'contains' 
                             && !preg_match('/' . $filter['value'] . '/', $row[$filter['name']]))
-                    ) {
+                        ||
+                        ($filter['operator'] == 'equals' && $filter['value'] != $row[$filter['name']])
+                       ) {
                         echo "filter not matched for project: " . $row['pm_number'] . $row['pm_title'] . "\n";
                         $doImport = FALSE;        
                     }
