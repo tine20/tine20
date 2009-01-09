@@ -339,7 +339,7 @@ Tine.Addressbook.Main = {
     initToolbar: function() {
         this.contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
-            //split: false,
+            split: false,
             height: 26,
             items: [
                 this.actions.addContact, 
