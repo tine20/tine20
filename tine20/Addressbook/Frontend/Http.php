@@ -3,6 +3,7 @@
  * Tine 2.0
  *
  * @package     Addressbook
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,14 +11,20 @@
  */
 
 /**
- * backend class for Tinebase_Http_Server
+ * Addressbook http frontend class
  *
  * This class handles all Http requests for the addressbook application
  *
  * @package     Addressbook
+ * @subpackage  Frontend
  */
 class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
+    /**
+     * app name
+     *
+     * @var string
+     */
     protected $_applicationName = 'Addressbook';
 
     /**
@@ -41,7 +48,7 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
                     
                 try {
                     $pdfOutput = $pdf->render();
-                } catch ( Zend_Pdf_Exception $e ) {
+                } catch (Zend_Pdf_Exception $e) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
                     echo "could not create pdf <br/>". $e->__toString();
                     exit();            
@@ -63,7 +70,7 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
                 header("Pragma: public");
                 header("Cache-Control: max-age=0");
                 header("Content-Disposition: inline; filename=$result");
-                header( "Content-Description: csv File" );  
+                header("Content-Description: csv File");  
                 header("Content-type: text/csv"); 
                 readfile($result);
                 exit;
