@@ -67,7 +67,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Record_AbstractFilter
     {
         $db = Tinebase_Core::getDb();
         
-        if(isset($_this->showClosed) && $_this->showClosed){
+        if(isset($this->showClosed) && $this->showClosed){
             // nothing to filter
         } else {
             $_select->where($db->quoteIdentifier('status.status_is_open') . ' = TRUE OR ' . 
