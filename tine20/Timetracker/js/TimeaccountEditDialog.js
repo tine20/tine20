@@ -113,6 +113,9 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fieldLabel: this.app.i18n._('Unit Price'),
                             name: 'price'
                         }, {
+                            fieldLabel: this.app.i18n._('Budget'),
+                            name: 'budget'
+                        }, {
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'is_open',
                             xtype: 'combo',
