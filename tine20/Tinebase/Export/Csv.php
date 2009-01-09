@@ -52,15 +52,17 @@ class Tinebase_Export_Csv
      * export timesheets to csv file
      *
      * @param Tinebase_Record_RecordSet $_records
+     * @param boolean $_toStdout
+     * @param array $_skipFields
      * @return string filename
      * 
      * @todo add specific export values
      * @todo save in special download path
      * @todo save skipped fields elsewhere (preferences?)
      */
-    public function exportRecords(Tinebase_Record_RecordSet $_records, $_filename = NULL, $_skipFields = array()) {
+    public function exportRecords(Tinebase_Record_RecordSet $_records, $_toStdout = FALSE, $_skipFields = array()) {
         
-        $filename = ($_filename !== NULL) ? $_filename : $this->_downloadPath . DIRECTORY_SEPARATOR . date('Y-m-d') . '_timesheet_export_' . time() . '.csv';
+        $filename = ($_toStdout) ? 'STDOUT' : $this->_downloadPath . DIRECTORY_SEPARATOR . date('Y-m-d') . '_timesheet_export_' . time() . '.csv';
         
         /*
         if (count($_records) < 1) {
@@ -91,7 +93,7 @@ class Tinebase_Export_Csv
             }
         }
         
-        $filehandle = ($filename == 'STDOUT') ? STDOUT : fopen($filename, 'w');
+        $filehandle = ($_toStdout) ? STDOUT : fopen($filename, 'w');
         
         self::fputcsv($filehandle, $fields);
         
@@ -104,7 +106,7 @@ class Tinebase_Export_Csv
             self::fputcsv($filehandle, $recordArray);
         }
         
-        if ($filename != 'STDOUT') {
+        if (!$_toStdout) {
             fclose($filehandle);
         }
         
