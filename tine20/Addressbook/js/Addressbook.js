@@ -72,6 +72,8 @@ Tine.Addressbook.Main = {
         dir: 'ASC'
     },
     
+    filterToolbar: null,
+    
     /**
      * @cfg {Array} default filters
      * @todo container filters not in filter logig yet!
@@ -121,7 +123,7 @@ Tine.Addressbook.Main = {
             
             var contactIds = Ext.util.JSON.encode(toExportIds);
 
-            Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 768, 1024);
+            Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContacts&_format=pdf&_filter=' + contactIds, 768, 1024);
         },
 
         /**
@@ -290,12 +292,21 @@ Tine.Addressbook.Main = {
             }),
             scope: this
         });
-        
+                
         // init grid store
         this.initStore();
-        this.initToolbar();
         this.initContactsGrid();
-        
+
+        // we have to init this button after the contacts grid because we need the filter toolbar here
+        this.action_exportCsv = new Tine.widgets.grid.ExportButton({
+            text: this.translation._('Csv Export All'),
+            format: 'csv',
+            exportFunction: 'Addressbook.exportContacts',
+            filterToolbar: this.filterToolbar,
+            appTreeId: 'Addressbook_Tree'
+        });
+
+        this.initToolbar();
     },
 
     updateMainToolbar : function() {
@@ -328,13 +339,14 @@ Tine.Addressbook.Main = {
     initToolbar: function() {
         this.contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
-            split: false,
+            //split: false,
             height: 26,
             items: [
                 this.actions.addContact, 
                 this.actions.editContact,
                 this.actions.deleteContact,
                 '-',
+                this.action_exportCsv,
                 this.actions.exportContact,
                 (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
             ]
@@ -343,7 +355,7 @@ Tine.Addressbook.Main = {
 
     initContactsGrid: function() {
         // the filter toolbar
-        var filterToolbar = new Tine.widgets.grid.FilterToolbar({
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'addressbookFilterToolbar',
             filterModels: [
                 {label: this.translation._('Contact'),    field: 'query',    operators: ['contains']},
@@ -364,7 +376,7 @@ Tine.Addressbook.Main = {
              filters: []
         });
         
-        filterToolbar.on('change', function() {
+        this.filterToolbar.on('change', function() {
             this.store.load({});
         }, this);
         // the paging toolbar
@@ -720,7 +732,7 @@ Tine.Addressbook.Main = {
         }, this);
 
         // temporary resizeing
-        filterToolbar.on('bodyresize', function(ftb, w, h) {
+        this.filterToolbar.on('bodyresize', function(ftb, w, h) {
             /*
             var layout = Ext.getCmp('adr-filtertoolbar-panel');
             layout.setHeight(h);
@@ -758,7 +770,7 @@ Tine.Addressbook.Main = {
                 region: 'center',
                 border: false,
                 layout: 'fit',              
-                tbar: filterToolbar,
+                tbar: this.filterToolbar,
                 items: gridPanel
             },{
                 // the new preview panel
@@ -1034,7 +1046,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     	// we have to create an array (json encoded) as param here because exportContact expects one (for multiple contact export)
     	var contactIds = Ext.util.JSON.encode([this.contact.id]);
 
-        Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactIds=' + contactIds, 200, 150);                   
+        Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContacts&_format=pdf&_filter=' + contactIds, 200, 150);                   
     },
     
     updateContactRecord: function(_contactData) {

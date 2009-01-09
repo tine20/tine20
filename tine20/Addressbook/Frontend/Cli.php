@@ -139,38 +139,9 @@ class Addressbook_Frontend_Cli
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
             array('field' => 'container',     'operator' => 'equals',   'value' => $containerId     ),
         ));
+
+        $csvExporter = new Addressbook_Export_Csv();
         
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => 0,
-            'limit' => 0,
-            'sort' => 'n_fileas',
-            'dir' => 'ASC',
-        ));
-        
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
-        if (count($contacts) < 1) {
-            die("No contacts found \n");
-        }
-        
-        // to ensure the order of fields we need to sort it ourself!
-        $fields = array();
-        $skipFields = array(
-            'jpegphoto'
-        );
-        foreach ($contacts[0] as $fieldName => $value) {
-            if (! in_array($fieldName, $skipFields)) {
-                $fields[] = $fieldName;
-            }
-        }
-        
-        Tinebase_Export_Csv::fputcsv(STDOUT, $fields);
-        
-        foreach ($contacts as $contact) {
-            $contactArray = array();
-            foreach ($fields as $fieldName) {
-                $contactArray[] = $contact->$fieldName;
-            }
-            Tinebase_Export_Csv::fputcsv(STDOUT, $contactArray);
-        }
+        $csvExporter->exportContacts($filter, TRUE);        
     }    
 }

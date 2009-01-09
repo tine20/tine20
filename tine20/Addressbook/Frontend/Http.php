@@ -23,17 +23,15 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
     /**
      * export contact
      * 
-     * @param	string JSON encoded string with contact ids for multi export
+     * @param	string JSON encoded string with contact ids for multi export or contact filter
      * @param	format	pdf or csv or ...
-     * 
-     * @todo	implement csv export
      */
-    public function exportContact ($_contactIds, $_format = 'pdf')
-    {
-        $contactIds = Zend_Json::decode($_contactIds);
-        
+    public function exportContacts($_filter, $_format = 'pdf')
+    {        
         switch ($_format) {
-            case 'pdf':                             
+            case 'pdf':
+                $contactIds = Zend_Json::decode($_filter);                
+                
                 $pdf = new Addressbook_Export_Pdf();
                 
                 foreach ($contactIds as $contactId) {
@@ -55,7 +53,21 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
                 header("Content-type: application/x-pdf"); 
                 echo $pdfOutput;
                 break;
+            
+            case 'csv':
+                $filter = new Addressbook_Model_ContactFilter(Zend_Json::decode($_filter));
                 
+                $csvExportClass = new Addressbook_Export_Csv();
+                $result = $csvExportClass->exportContacts($filter);
+                
+                header("Pragma: public");
+                header("Cache-Control: max-age=0");
+                header("Content-Disposition: inline; filename=$result");
+                header( "Content-Description: csv File" );  
+                header("Content-type: text/csv"); 
+                readfile($result);
+                exit;
+                                
             default:
                 echo "Format $_format not supported yet.";
                 exit();
