@@ -28,12 +28,14 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timeaccountBackend;
         
-        //this.actionToolbarItems = this.getToolbarItems();
+        this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
+        
+        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);        
         
         Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);
         
@@ -50,7 +52,6 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
             filterModels: [
                 {label: this.app.i18n._('Timeaccount'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']}
-                //{label: this.app.i18n._('Summary'), field: 'summary' }
              ],
              defaultFilter: 'query',
              filters: []
@@ -83,5 +84,21 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
             sortable: true,
             dataIndex: 'budget'
         }];
-    }  
+    },
+    
+    /**
+     * return additional tb items
+     */
+    getToolbarItems: function(){
+        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
+            text: this.app.i18n._('Show closed'),
+            iconCls: 'action_showArchived',
+            field: 'showClosed'
+        });
+        
+        return [
+            new Ext.Toolbar.Separator(),
+            this.action_showClosedToggle
+        ];
+    }    
 });

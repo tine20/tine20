@@ -61,7 +61,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
     {
         $db = Tinebase_Core::getDb();
         
-        if(isset($_this->showClosed) && $_this->showClosed){
+        if(isset($this->showClosed) && $this->showClosed){
             // nothing to filter
         } else {
             $_select->where($db->quoteIdentifier('is_open') . ' = 1');
@@ -71,6 +71,8 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
         if (!empty($this->container) && is_array($this->container)) {
             $_select->where($db->quoteInto($db->quoteIdentifier('container_id') . ' IN (?)', $this->container));
         }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
         
         parent::appendFilterSql($_select);
     }
