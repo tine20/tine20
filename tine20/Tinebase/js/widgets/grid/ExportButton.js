@@ -40,13 +40,30 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
      * @cfg {Object} the filter toolbar with filter settings
      */
     filterToolbar: null,
+    /**
+     * @cfg {String} application tree id
+     */
+    appTreeId: null,
     
     /**
      * do export
      */
-    doExport: function() {
-    	var filterSettings = Ext.util.JSON.encode(this.filterToolbar.getValue());
-    	Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=' + this.exportFunction + '&_format=' + this.format + '&_filter=' + filterSettings, 200, 150);
+    doExport: function() {    	
+    	var filterSettings = this.filterToolbar.getValue();
+        
+        // add container to filter
+    	if (this.appTreeId) {
+            var nodeAttributes = Ext.getCmp(this.appTreeId).getSelectionModel().getSelectedNode().attributes || {};
+            filterSettings.push(
+                {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
+                {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
+                {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+            );
+    	}
+
+        //console.log(filterSettings);
+    	Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=' + 
+            this.exportFunction + '&_format=' + this.format + '&_filter=' + Ext.util.JSON.encode(filterSettings), 200, 150);
     },
     
     /**
