@@ -255,7 +255,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     getToolbarItems: function(){
         this.action_exportCsv = new Tine.widgets.grid.ExportButton({
             text: this.app.i18n._('Export All'),
-            iconCls: 'action_showArchived',
             format: 'csv',
             exportFunction: 'Timetracker.exportTimesheets',
             filterToolbar: this.filterToolbar

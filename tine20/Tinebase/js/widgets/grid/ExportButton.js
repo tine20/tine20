@@ -23,7 +23,11 @@ Tine.widgets.grid.ExportButton = function(config) {
     Tine.widgets.grid.ExportButton.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
+Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {	
+    /**
+     * @cfg {String} icon class
+     */
+    iconCls: 'action_export',
     /**
      * @cfg {String} format of export (default: csv)
      */
