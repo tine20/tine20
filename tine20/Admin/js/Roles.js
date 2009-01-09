@@ -542,7 +542,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 	// check if right is set
                 	var rightIsSet = ( this.getRightId(_allRights[i].application_id,childData.right) > 0 );
                 	childData.checked = rightIsSet;
-                    
+                    childData.iconCls = "x-tree-node-leaf-roles";
                     var child = new Ext.tree.TreeNode(childData);
                     child.attributes.right = childData.right;
                 	
