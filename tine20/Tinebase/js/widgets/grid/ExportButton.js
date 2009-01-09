@@ -21,7 +21,6 @@ Tine.widgets.grid.ExportButton = function(config) {
     Ext.apply(this, config);
     
     Tine.widgets.grid.ExportButton.superclass.constructor.call(this);
-    //Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
 };
 
 Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
@@ -39,19 +38,9 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
     filterToolbar: null,
     
     /**
-     * @private
-     */
-    /*
-    getValue: function() {
-        return {field: this.field, operator: this.operator, value: this.invert ? !this.pressed : this.pressed};
-    },
-    */
-    
-    /**
      * do export
      */
     doExport: function() {
-    	//console.log(this.filterToolbar.getValue());
     	var filterSettings = Ext.util.JSON.encode(this.filterToolbar.getValue());
     	Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=' + this.exportFunction + '&_format=' + this.format + '&_filter=' + filterSettings, 200, 150);
     },
