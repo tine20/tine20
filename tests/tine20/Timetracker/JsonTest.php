@@ -338,7 +338,9 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to export Timesheets
-     *
+     * - this is no real json test
+     * 
+     * @todo move that to separate export test
      */
     public function testExportTimesheets()
     {
@@ -347,16 +349,17 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
         
         // export & check
-        $result = $this->_json->exportTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), 'csv');
+        $csvExportClass = new Timetracker_Export_Csv();
+        $result = $csvExportClass->exportTimesheets(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
         
-        $this->assertTrue(file_exists($result['filename']));
+        $this->assertTrue(file_exists($result));
         
-        $file = implode('', file($result['filename']));
+        $file = implode('', file($result));
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description'); 
         $this->assertEquals(1, preg_match("/description/", $file), 'no headline'); 
         
         // cleanup / delete file
-        unlink($result['filename']);
+        unlink($result);
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
     

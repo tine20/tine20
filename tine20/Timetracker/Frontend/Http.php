@@ -39,4 +39,30 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
             'Timetracker/js/TimesheetEditDialog.js',
         );
     }
+
+    /**
+     * export records matching given arguments
+     *
+     * @param string $_filter json encoded
+     * @param string $_format only csv implemented
+     */
+    public function exportTimesheets($_filter, $_format)
+    {
+        if ($_format != 'csv') {
+            throw new Timetracker_Exception_UnexpectedValue('Format ' . $_format . ' not supported yet.');
+        }
+        
+        $filter = new Timetracker_Model_TimesheetFilter(Zend_Json::decode($_filter));
+        $csvExportClass = new Timetracker_Export_Csv();
+        
+        $result = $csvExportClass->exportTimesheets($filter);
+        
+        header("Pragma: public");
+        header("Cache-Control: max-age=0");
+        header("Content-Disposition: inline; filename=$result");
+        header( "Content-Description: csv File" );  
+        header("Content-type: text/csv"); 
+        readfile($result);
+        exit;
+    }
 }

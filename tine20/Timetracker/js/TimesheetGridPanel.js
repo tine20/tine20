@@ -27,15 +27,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
     
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timesheetBackend;
-        
-        //this.actionToolbarItems = this.getToolbarItems();
-        //this.actionToolbarItems = [{
-        //    text: this.app.i18n._('Duplicate'),
-        //    iconCls: 'action_duplicate'
-        //}];
-        
+                
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
+        this.actionToolbarItems = this.getToolbarItems();
         this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
@@ -250,5 +245,31 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 }
             })
         });
-    }
+    },
+    
+    /**
+     * return additional tb items
+     * 
+     * @todo add duplicate button
+     */
+    getToolbarItems: function(){
+        this.action_exportCsv = new Tine.widgets.grid.ExportButton({
+            text: this.app.i18n._('Export All'),
+            iconCls: 'action_showArchived',
+            format: 'csv',
+            exportFunction: 'Timetracker.exportTimesheets',
+            filterToolbar: this.filterToolbar
+        });
+        
+        return [
+            new Ext.Toolbar.Separator(),
+            this.action_exportCsv
+            /*
+            ,[{
+                text: this.app.i18n._('Duplicate'),
+                iconCls: 'action_duplicate'
+            }]
+            */
+        ];
+    } 
 });

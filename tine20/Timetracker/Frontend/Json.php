@@ -202,30 +202,6 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     }     
     
     /**
-     * export records matching given arguments
-     *
-     * @param string $_filter json encoded
-     * @param string $_format only csv implemented
-     * @return array
-     */
-    public function exportTimesheets($_filter, $_format)
-    {
-        if ($_format != 'csv') {
-            throw new Timetracker_Exception_UnexpectedValue('Format ' . $_format . ' not supported yet.');
-        }
-        
-        $filter = new Timetracker_Model_TimesheetFilter(Zend_Json::decode($_filter));
-        $csvExportClass = new Timetracker_Export_Csv();
-        
-        $result = $csvExportClass->exportTimesheets($filter);
-        
-        return array(
-            'filename'      => $result,
-            //'totalcount'    => $_controller->searchCount($filter)
-        );
-    }
-    
-    /**
      * Return a single record
      *
      * @param   string $id

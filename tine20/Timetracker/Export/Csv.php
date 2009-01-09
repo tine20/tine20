@@ -26,25 +26,42 @@ class Timetracker_Export_Csv extends Tinebase_Export_Csv
      * @param Timetracker_Model_TimesheetFilter $_filter
      * @return string filename
      * 
-     * @todo resolve timeaccount and account
      * @todo add specific export values
      * @todo add ods (open office spreadsheet) creation
      * @todo save in special download path
      * @todo perhaps we can make this more generic (move it to Tinebase_Export_Csv)
+     * @todo save skipped fields elsewhere (preferences?)
      */
     public function exportTimesheets($_filter) {
         
-        $filename = date('Y-m-d') . '_timesheet_export.csv';
+        $filename = '/tmp/' . date('Y-m-d') . '_timesheet_export_' . time() . '.csv';
         
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
         if (count($timesheets) < 1) {
             throw new Timetracker_Exception_NotFound('No Timesheets found.');
         }
+
+        // resolve timeaccounts
+        $timeaccountIds = $timesheets->timeaccount_id;
+        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
         
+        // resolve accounts
+        $accountIds = $timesheets->account_id;
+        $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+                
         // to ensure the order of fields we need to sort it ourself!
         $fields = array();
         $skipFields = array(
+            'id'                    ,
+            'created_by'            ,
+            'creation_time'         ,
+            'last_modified_by'      ,
+            'last_modified_time'    ,
+            'is_deleted'            ,
+            'deleted_time'          ,
+            'deleted_by'            ,
         );
+        
         foreach ($timesheets[0] as $fieldName => $value) {
             if (! in_array($fieldName, $skipFields)) {
                 $fields[] = $fieldName;
@@ -57,9 +74,12 @@ class Timetracker_Export_Csv extends Tinebase_Export_Csv
         
         // fill file with records
         foreach ($timesheets as $timesheet) {
+            $timesheet->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->title;
+            $timesheet->account_id = $accounts[$accounts->getIndexById($timesheet->account_id)]->accountDisplayName;
+            
             $timesheetArray = array();
             foreach ($fields as $fieldName) {
-                $timesheetArray[] = $timesheet->$fieldName;
+                $timesheetArray[] = '"' . $timesheet->$fieldName . '"';
             }
             self::fputcsv($filehandle, $timesheetArray);
         }
