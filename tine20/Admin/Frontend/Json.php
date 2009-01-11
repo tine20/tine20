@@ -284,13 +284,13 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @param   string $state      state to set
      * @return  array with success flag
      */
-    public function setAccountState($accountIds, $state)
+    public function setAccountState($accountIds, $status)
     {
         $accountIds = Zend_Json::decode($accountIds);
         
         $controller = Admin_Controller_User::getInstance();
         foreach ($accountIds as $accountId) {
-            $controller->setAccountStatus($accountId, $state);
+            $controller->setAccountStatus($accountId, $status);
         }
 
         $result = array(
