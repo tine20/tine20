@@ -251,18 +251,40 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
      * return additional tb items
      * 
      * @todo add duplicate button
+     * @todo move export buttons to single menu/split button
      */
     getToolbarItems: function(){
+
+        this.action_exportOds = new Tine.widgets.grid.ExportButton({
+            text: this.app.i18n._('Export as ODS'),
+            format: 'ods',
+            exportFunction: 'Timetracker.exportTimesheets',
+            filterToolbar: this.filterToolbar
+        });
+    	
         this.action_exportCsv = new Tine.widgets.grid.ExportButton({
-            text: this.app.i18n._('Export All'),
+            text: this.app.i18n._('Export as CSV'),
             format: 'csv',
             exportFunction: 'Timetracker.exportTimesheets',
             filterToolbar: this.filterToolbar
         });
         
+        /*
+        // isn't working yet
+        var exportMenuButton = new Ext.menu.Menu({
+            text: this.app.i18n._('Export All'),
+            menu: [
+                this.action_exportCsv,
+                this.action_exportOds
+            ]
+        })
+        */
+        
         return [
             new Ext.Toolbar.Separator(),
-            this.action_exportCsv
+            //exportMenuButton
+            this.action_exportCsv,
+            this.action_exportOds
             /*
             ,[{
                 text: this.app.i18n._('Duplicate'),

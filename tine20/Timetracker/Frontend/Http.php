@@ -48,20 +48,28 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
      */
     public function exportTimesheets($_filter, $_format)
     {
-        if ($_format != 'csv') {
-            throw new Timetracker_Exception_UnexpectedValue('Format ' . $_format . ' not supported yet.');
-        }
-        
         $filter = new Timetracker_Model_TimesheetFilter(Zend_Json::decode($_filter));
-        $csvExportClass = new Timetracker_Export_Csv();
         
-        $result = $csvExportClass->exportTimesheets($filter);
+        switch($_format) {
+            case 'csv':
+                $csvExportClass = new Timetracker_Export_Csv();        
+                $result = $csvExportClass->exportTimesheets($filter);
+                $contentType = 'text/csv';
+                break;
+            case 'ods':
+                $odsExportClass = new Timetracker_Export_Ods();
+                $result = $odsExportClass->exportTimesheets($filter);
+                $contentType = Tinebase_Export_Ods::CONTENT_TYPE;
+                break;
+            default:
+                throw new Timetracker_Exception_UnexpectedValue('Format ' . $_format . ' not supported yet.');
+        }
         
         header("Pragma: public");
         header("Cache-Control: max-age=0");
-        header("Content-Disposition: inline; filename=timesheet_export.csv");
-        header( "Content-Description: csv File" );  
-        header("Content-type: text/csv"); 
+        header("Content-Disposition: inline; filename=timesheet_export." . $_format);
+        header("Content-Description: $_format File");  
+        header("Content-type: $contentType"); 
         readfile($result);
         exit;
     }

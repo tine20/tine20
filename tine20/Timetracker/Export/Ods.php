@@ -1,6 +1,6 @@
 <?php
 /**
- * Timetracker csv generation class
+ * Timetracker Ods generation class
  *
  * @package     Timetracker
  * @subpackage	Export
@@ -12,16 +12,16 @@
  */
 
 /**
- * Timetracker csv generation class
+ * Timetracker Ods generation class
  * 
  * @package     Timetracker
  * @subpackage	Export
  * 
  */
-class Timetracker_Export_Csv extends Tinebase_Export_Csv
+class Timetracker_Export_Ods extends Tinebase_Export_Ods
 {
     /**
-     * export timesheets to csv file
+     * export timesheets to Ods file
      *
      * @param Timetracker_Model_TimesheetFilter $_filter
      * @return string filename
