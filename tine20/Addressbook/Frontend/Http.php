@@ -69,7 +69,7 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
                 
                 header("Pragma: public");
                 header("Cache-Control: max-age=0");
-                header("Content-Disposition: inline; filename=$result");
+                header("Content-Disposition: inline; filename=contacts_export.csv");
                 header("Content-Description: csv File");  
                 header("Content-type: text/csv"); 
                 readfile($result);

@@ -61,7 +61,7 @@ class Tinebase_Export_Csv
      */
     public function exportRecords(Tinebase_Record_RecordSet $_records, $_toStdout = FALSE, $_skipFields = array()) {
         
-        $filename = ($_toStdout) ? 'STDOUT' : $this->_downloadPath . DIRECTORY_SEPARATOR . date('Y-m-d') . '_timesheet_export_' . time() . '.csv';
+        $filename = ($_toStdout) ? 'STDOUT' : $this->_downloadPath . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.csv';
         
         if (count($_records) < 1) {
             return FALSE;
