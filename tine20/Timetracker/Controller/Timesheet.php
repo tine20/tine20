@@ -97,10 +97,9 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        // @todo should users with MANAGE_TIMEACCOUNTS have all grants here?
-        
-        if ( /*$this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
-             || */ Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
+        // users with MANAGE_TIMEACCOUNTS have all grants here
+        if ( $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
+             || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
             return TRUE;
         }
         
