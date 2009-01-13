@@ -83,6 +83,7 @@ class Tinebase_Controller
             
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
             Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
+            Zend_Session::regenerateId();
             
             Tinebase_Core::set(Tinebase_Core::USER, $account);
             Tinebase_Core::getSession()->currentAccount = $account;
