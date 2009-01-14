@@ -336,13 +336,15 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
+    /******* export tests *****************/
+    
     /**
      * try to export Timesheets
      * - this is no real json test
      * 
      * @todo move that to separate export test
      */
-    public function testExportTimesheets()
+    public function testExportTimesheetsCsv()
     {
         // create
         $timesheet = $this->_getTimesheet();
@@ -357,6 +359,40 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $file = implode('', file($result));
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description'); 
         $this->assertEquals(1, preg_match("/description/", $file), 'no headline'); 
+        
+        // cleanup / delete file
+        unlink($result);
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+    }
+    
+    /**
+     * try to export Timesheets (as ods)
+     * - this is no real json test
+     * 
+     * @todo move that to separate export test
+     * @todo check custom fields
+     */
+    public function testExportTimesheetsOds()
+    {
+        // create
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        
+        // export & check
+        $odsExportClass = new Timetracker_Export_Ods();
+        $result = $odsExportClass->exportTimesheets(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
+        //$result = '/tmp/ef98ae18f621f110e5222b2fa02869d6.ods';
+        
+        $this->assertTrue(file_exists($result));
+        
+        // parse ods
+        $newOds = new Timetracker_Export_Ods($result);
+        
+        //print_r($newOds->sheets);
+        //print_r($newOds->styles);
+        
+        $this->assertEquals("Beschreibung", $newOds->sheets[0]['rows'][0][1]['value'], 'no headline');
+        $this->assertEquals($timesheetData['description'], $newOds->sheets[0]['rows'][1][1]['value'], 'no description'); 
         
         // cleanup / delete file
         unlink($result);

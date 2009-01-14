@@ -20,6 +20,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo save in special download path / get from prefs
+ * @todo support other field types
  */
 
 /**
@@ -48,33 +50,74 @@ class Tinebase_Export_Ods
      * the constructor
      *
      */
-    public function __contruct()
+    public function __construct($filename = NULL)
     {
-        $content = '<?xml version="1.0" encoding="UTF-8"?>
-        <office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" office:version="1.0"><office:scripts/><office:font-face-decls><style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/><style:font-face style:name="DejaVu Sans" svg:font-family="&apos;DejaVu Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/></office:font-face-decls><office:automatic-styles><style:style style:name="co1" style:family="table-column"><style:table-column-properties fo:break-before="auto" style:column-width="2.267cm"/></style:style><style:style style:name="ro1" style:family="table-row"><style:table-row-properties style:row-height="0.453cm" fo:break-before="auto" style:use-optimal-row-height="true"/></style:style><style:style style:name="ta1" style:family="table" style:master-page-name="Default"><style:table-properties table:display="true" style:writing-mode="lr-tb"/></style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Hoja1" table:style-name="ta1" table:print="false"><office:forms form:automatic-focus="false" form:apply-design-mode="false"/><table:table-column table:style-name="co1" table:default-cell-style-name="Default"/><table:table-row table:style-name="ro1"><table:table-cell/></table:table-row></table:table><table:table table:name="Hoja2" table:style-name="ta1" table:print="false"><table:table-column table:style-name="co1" table:default-cell-style-name="Default"/><table:table-row table:style-name="ro1"><table:table-cell/></table:table-row></table:table><table:table table:name="Hoja3" table:style-name="ta1" table:print="false"><table:table-column table:style-name="co1" table:default-cell-style-name="Default"/><table:table-row table:style-name="ro1"><table:table-cell/></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>';
+        if ($filename === NULL) {
+            $content = '<?xml version="1.0" encoding="UTF-8"?>
+            <office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" office:version="1.0"><office:scripts/><office:font-face-decls><style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/><style:font-face style:name="DejaVu Sans" svg:font-family="&apos;DejaVu Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/></office:font-face-decls><office:automatic-styles><style:style style:name="co1" style:family="table-column"><style:table-column-properties fo:break-before="auto" style:column-width="2.267cm"/></style:style><style:style style:name="ro1" style:family="table-row"><style:table-row-properties style:row-height="0.453cm" fo:break-before="auto" style:use-optimal-row-height="true"/></style:style><style:style style:name="ta1" style:family="table" style:master-page-name="Default"><style:table-properties table:display="true" style:writing-mode="lr-tb"/></style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Hoja1" table:style-name="ta1" table:print="false"><office:forms form:automatic-focus="false" form:apply-design-mode="false"/><table:table-column table:style-name="co1" table:default-cell-style-name="Default"/><table:table-row table:style-name="ro1"><table:table-cell/></table:table-row></table:table><table:table table:name="Hoja2" table:style-name="ta1" table:print="false"><table:table-column table:style-name="co1" table:default-cell-style-name="Default"/><table:table-row table:style-name="ro1"><table:table-cell/></table:table-row></table:table><table:table table:name="Hoja3" table:style-name="ta1" table:print="false"><table:table-column table:style-name="co1" table:default-cell-style-name="Default"/><table:table-row table:style-name="ro1"><table:table-cell/></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>';        
+            $this->parse($content);
+        } else {
+            //$tmp = get_tmp_dir();
+            $tmp = $this->_downloadPath;
+            copy($filename,$tmp.'/'.basename($filename));
+            $path = $tmp.'/'.basename($filename);
+            $uid = uniqid();
+            mkdir($tmp.'/'.$uid);
+            shell_exec('unzip '.escapeshellarg($path).' -d '.escapeshellarg($tmp.'/'.$uid));
+            $this->parse(file_get_contents($tmp.'/'.$uid.'/content.xml'));
+        }
+    }
+    
+    /**
+     * export array to ods file
+     *
+     * @param array $_data
+     * @return string filename
+     */
+    public function exportArray(array $_data, array $_headline) {
         
-        $this->parse($content);  
+        $filename = $this->_downloadPath . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
+        
+        if (count($_data) < 1) {
+            return FALSE;
+        }
+
+        // print headline
+        for ($i = 0; $i < sizeof($_headline); $i++) {
+            $this->addCell(0,0,$i,$_headline[$i]);
+        }        
+        
+        // add some styles
+        $this->addStyleToRow(0, 'fo:background-color', "#ccffff");
+        $this->addStyleToCell('altRow', 'fo:background-color', "#ccccff");
+        
+        // fill file with records
+        for ($i = 0; $i < sizeof($_data); $i++) {
+            $style = ($i % 2 == 1) ? 'altRow' : '';
+            for ($j = 0; $j < sizeof($_data[$i]); $j++) {
+                $this->addCell(0, $i+1, $j, $_data[$i][$j], 'string', $style);
+            }
+        }
+        
+        $this->saveOds($filename);
+                
+        return $filename;
     }
     
     /**
      * export records to csv file
      *
      * @param Tinebase_Record_RecordSet $_records
-     * @param boolean $_toStdout
-     * @param array $_skipFields
      * @return string filename
-     * 
-     * @todo add specific export values
-     * @todo save in special download path
      */
-    public function exportRecords(Tinebase_Record_RecordSet $_records, $_toStdout = FALSE, $_skipFields = array()) {
+    public function exportRecords(Tinebase_Record_RecordSet $_records) {
         
-        $filename = ($_toStdout) ? 'STDOUT' : $this->_downloadPath . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
+        $filename = $this->_downloadPath . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
         
         if (count($_records) < 1) {
             return FALSE;
         }
-                
+        
         // to ensure the order of fields we need to sort it ourself!
         $fields = array();
         if (empty($_skipFields)) {
@@ -98,17 +141,25 @@ class Tinebase_Export_Ods
             }
         }
 
+        // print headline
         for ($i = 0; $i < sizeof($fields); $i++) {
             $this->addCell(0,0,$i,$fields[$i]);
         }
         
+        
+        // add some styles
+        $this->addStyleToRow(0, 'fo:background-color', "#ccffff");
+        $this->addStyleToCell('altRow', 'fo:background-color', "#ccccff");
+        
         // fill file with records
         $row = 1;
         foreach ($_records as $record) {
+            $style = ($row % 2 == 0) ? 'altRow' : '';
             for ($i = 0; $i < sizeof($fields); $i++) {
-                $this->addCell(0,$row,$i,$record->$fields[$i]);
+                $this->addCell(0, $row, $i, $record->$fields[$i], 'string', $style);
             }
             $row++;
+        
         }
         
         $this->saveOds($filename);
@@ -118,6 +169,10 @@ class Tinebase_Export_Ods
     
     /**** ods-php code follows *****/
     
+    /**
+     * fonts and other attributes
+     *
+     */
     var $fonts = array();
     var $styles = array();
     var $sheets = array();
@@ -128,7 +183,119 @@ class Tinebase_Export_Ods
     var $currentCell = 0;
     var $lastRowAtt;
     var $repeat = 0;
+
+    /**
+     * add cell
+     *
+     * @param integer $sheet
+     * @param integer $row
+     * @param integer $cell
+     * @param mixed $value
+     * @param string $type
+     * @param string $style
+     */
+    function addCell($sheet,$row,$cell,$value,$type = 'string', $style = '') {
+        $this->sheets[$sheet]['rows'][$row][$cell]['attrs'] = array('OFFICE:VALUE-TYPE'=>$type,'OFFICE:VALUE'=>$value);
+        if (!empty($style)) {
+            $this->sheets[$sheet]['rows'][$row][$cell]['attrs']['table:style-name'] = $style;
+        }
+        $this->sheets[$sheet]['rows'][$row][$cell]['value'] = $value;
+    }
     
+    /**
+     * edit cell
+     *
+     * @param integer $sheet
+     * @param integer $row
+     * @param integer $cell
+     * @param mixed $value
+     */
+    function editCell($sheet,$row,$cell,$value) {
+        $this->sheets[$sheet]['rows'][$row][$cell]['attrs']['OFFICE:VALUE'] = $value;
+        $this->sheets[$sheet]['rows'][$row][$cell]['value'] = $value;
+    }
+    
+    /**
+     * add style to row
+     *
+     * @param integer $row
+     * @param string $key
+     * @param string $value
+     */
+    function addStyleToRow($row, $key, $value)
+    {
+        $this->styles['ro' . $row] = array(
+            'attrs' => array(
+                'style:name' => 'ro' . $row,
+                'style:family' => 'table-row',
+            ), 
+            'styles' => array(                
+                'style:table-row-properties' => array(
+                    $key => $value
+                )
+            )
+        );
+    }
+
+    /**
+     * add style to cell
+     *
+     * @param integer $name
+     * @param string $key
+     * @param string $value
+     */
+    function addStyleToCell($name, $key, $value)
+    {
+        $this->styles[$name] = array(
+            'attrs' => array(
+                'style:name' => $name,
+                'style:family' => 'table-cell',
+            ), 
+            'styles' => array(                
+                'style:table-cell-properties' => array(
+                    $key => $value
+                )
+            )
+        );
+    }
+    
+    /**
+     * save as file
+     *
+     * @param string $file
+     */
+    function saveOds($file) {
+        $charset = ini_get('default_charset');
+        ini_set('default_charset', 'UTF-8');
+        //$tmp = get_tmp_dir();
+        $tmp = $this->_downloadPath;
+        $uid = uniqid();
+        mkdir($tmp.'/'.$uid);
+        file_put_contents($tmp.'/'.$uid.'/content.xml',$this->array2ods());
+        file_put_contents($tmp.'/'.$uid.'/mimetype','application/vnd.oasis.opendocument.spreadsheet');
+        file_put_contents($tmp.'/'.$uid.'/meta.xml',$this->getMeta('es-ES'));
+        file_put_contents($tmp.'/'.$uid.'/styles.xml',$this->getStyle());
+        file_put_contents($tmp.'/'.$uid.'/settings.xml',$this->getSettings());
+        mkdir($tmp.'/'.$uid.'/META-INF/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/acceleator/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/images/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/popupmenu/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/statusbar/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/floater/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/menubar/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/progressbar/');
+        mkdir($tmp.'/'.$uid.'/Configurations2/toolbar/');
+        file_put_contents($tmp.'/'.$uid.'/META-INF/manifest.xml',$this->getManifest());
+        shell_exec('cd '.$tmp.'/'.$uid.';zip -r '.escapeshellarg($file).' ./');
+        ini_set('default_charset',$charset);
+    }
+    
+    /**
+     * parse
+     *
+     * @param string $data
+     */
     function parse($data) {
         $xml_parser = xml_parser_create(); 
         xml_set_object ( $xml_parser, $this );
@@ -140,6 +307,11 @@ class Tinebase_Export_Ods
         xml_parser_free($xml_parser);
     }
     
+    /**
+     * array to ods
+     *
+     * @return string
+     */
     function array2ods() {
         $fontArray = $this->fonts;
         $styleArray = $this->styles;
@@ -191,7 +363,8 @@ class Tinebase_Export_Ods
             //$string .= '<office:forms form:automatic-focus="false" form:apply-design-mode="false"/>';
             
             foreach ($tableContent['rows'] as $rowIndex => $rowContent) {
-                $string .= '<table:table-row>';
+                $string .= '<table:table-row table:style-name="ro' . $rowIndex . '">';
+                //$string .= '<table:table-row>';
                 
                 foreach($rowContent as $cellIndex => $cellContent) {
                     $string .= '<table:table-cell ';
@@ -218,6 +391,8 @@ class Tinebase_Export_Ods
         
         // Footer
         $string .= '</office:document-content>';
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $string);
         
         return $string;
     }
@@ -340,56 +515,9 @@ class Tinebase_Export_Ods
 </manifest:manifest>';
     }
     
-    function addCell($sheet,$row,$cell,$value,$type = 'string') {
-        $this->sheets[$sheet]['rows'][$row][$cell]['attrs'] = array('OFFICE:VALUE-TYPE'=>$type,'OFFICE:VALUE'=>$value);
-        $this->sheets[$sheet]['rows'][$row][$cell]['value'] = $value;
-    }
     
-    function editCell($sheet,$row,$cell,$value) {
-        $this->sheets[$sheet]['rows'][$row][$cell]['attrs']['OFFICE:VALUE'] = $value;
-        $this->sheets[$sheet]['rows'][$row][$cell]['value'] = $value;
-    }
     
-    function saveOds($file) {
-        $charset = ini_get('default_charset');
-        ini_set('default_charset', 'UTF-8');
-        //$tmp = get_tmp_dir();
-        $tmp = $this->_downloadPath;
-        $uid = uniqid();
-        mkdir($tmp.'/'.$uid);
-        file_put_contents($tmp.'/'.$uid.'/content.xml',$this->array2ods());
-        file_put_contents($tmp.'/'.$uid.'/mimetype','application/vnd.oasis.opendocument.spreadsheet');
-        file_put_contents($tmp.'/'.$uid.'/meta.xml',$this->getMeta('es-ES'));
-        file_put_contents($tmp.'/'.$uid.'/styles.xml',$this->getStyle());
-        file_put_contents($tmp.'/'.$uid.'/settings.xml',$this->getSettings());
-        mkdir($tmp.'/'.$uid.'/META-INF/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/acceleator/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/images/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/popupmenu/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/statusbar/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/floater/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/menubar/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/progressbar/');
-        mkdir($tmp.'/'.$uid.'/Configurations2/toolbar/');
-        file_put_contents($tmp.'/'.$uid.'/META-INF/manifest.xml',$this->getManifest());
-        shell_exec('cd '.$tmp.'/'.$uid.';zip -r '.escapeshellarg($file).' ./');
-        ini_set('default_charset',$charset);
-    }
-    
-    /*
-    function parseOds($file) {
-        //$tmp = get_tmp_dir();
-        $tmp = $this->_downloadPath;
-        copy($file,$tmp.'/'.basename($file));
-        $path = $tmp.'/'.basename($file);
-        $uid = uniqid();
-        mkdir($tmp.'/'.$uid);
-        shell_exec('unzip '.escapeshellarg($path).' -d '.escapeshellarg($tmp.'/'.$uid));
-        $obj = new ods();
-        $obj->parse(file_get_contents($tmp.'/'.$uid.'/content.xml'));
-        return $obj;
-    }
+        /*
     
     function newOds() {
         $content = '<?xml version="1.0" encoding="UTF-8"?>

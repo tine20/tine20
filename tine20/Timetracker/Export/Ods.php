@@ -27,6 +27,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      * @return string filename
      * 
      * @todo add specific export values
+     * @todo add fields array to preferences
      */
     public function exportTimesheets($_filter) {
         
@@ -43,13 +44,62 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         $accountIds = $timesheets->account_id;
         $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
         
+        // build export array
+        list($fields, $headline) = $this->_getExportFields();
+        
+        $exportArray = array();
         foreach ($timesheets as $timesheet) {
-            $timesheet->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->title;
-            $timesheet->account_id = $accounts[$accounts->getIndexById($timesheet->account_id)]->accountDisplayName;
+            $row = array();
+            foreach ($fields as $key => $params) {
+                switch($params['type']) {
+                    case 'timeaccount':
+                        $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
+                        $row[] = $value;
+                        break;
+                    case 'account':
+                        $value = $accounts[$accounts->getIndexById($timesheet->account_id)]->$params['field'];
+                        $row[] = $value;
+                        break;
+                    default:
+                        $row[] = preg_replace('/"/', "'", $timesheet->$key);
+                }
+            }
+            $exportArray[] = $row;
+            
+            //$timesheet->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->title;
+            //$timesheet->account_id = $accounts[$accounts->getIndexById($timesheet->account_id)]->accountDisplayName;
         }
-                
-        $filename = parent::exportRecords($timesheets);
+        
+        //$filename = parent::exportRecords($timesheets);
+        $filename = parent::exportArray($exportArray, $headline);
         
         return $filename;
+    }
+    
+    /**
+     * get export fields
+     * - record fieldname => headline (translated)
+     *
+     * @return array
+     */
+    protected function _getExportFields()
+    {
+        $translate = Tinebase_Translation::getTranslation('Timetracker');
+        $fields = array(
+            'start_date' => array('type' => 'default'),
+            'description' => array('type' => 'default'),
+            'timeaccount_id' => array('type' => 'timeaccount', 'field' => 'title'),
+            'account_id' => array('type' => 'account', 'field' => 'accountDisplayName'),
+            'duration' => array('type' => 'default'),
+        );
+        $headline = array(
+            $translate->_('Date'),
+            $translate->_('Description'),
+            $translate->_('Site'),
+            $translate->_('Staff Member'),
+            $translate->_('Duration'),
+        );
+        
+        return array($fields, $headline);
     }
 }
