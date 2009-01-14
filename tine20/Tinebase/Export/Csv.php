@@ -34,13 +34,15 @@ class Tinebase_Export_Csv
      * @param array $dataArray
      * @param char $delimiter
      * @param char $enclosure
+     * @param char $escapeEnclosure
      */
-    public static function fputcsv($filePointer, $dataArray, $delimiter=',', $enclosure=''){
+    public static function fputcsv($filePointer, $dataArray, $delimiter=',', $enclosure='"', $escapeEnclosure='"'){
         $string = "";
         $writeDelimiter = false;
         foreach($dataArray as $dataElement) {
             if($writeDelimiter) $string .= $delimiter;
-            $string .= $enclosure . $dataElement . $enclosure;
+            $escapedDataElement = preg_replace("/$enclosure/", $escapeEnclosure . $enclosure , $dataElement);
+            $string .= $enclosure . $escapedDataElement . $enclosure;
             $writeDelimiter = true;
         } 
         $string .= "\n";
@@ -98,8 +100,7 @@ class Tinebase_Export_Csv
         foreach ($_records as $record) {
             $recordArray = array();
             foreach ($fields as $fieldName) {
-                // place in quotes and replace double quotes with single quotes
-                $recordArray[] = '"' . preg_replace('/"/', "'", $record->$fieldName) . '"';
+                $recordArray[] = $record->$fieldName;
             }
             self::fputcsv($filehandle, $recordArray);
         }
