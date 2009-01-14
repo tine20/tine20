@@ -13,75 +13,76 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Acl/Rights.php:164
+#: Acl/Rights.php:162
 msgid "manage access log"
 msgstr "管理访问日志"
 
-#: Acl/Rights.php:165
+#: Acl/Rights.php:163
 msgid "delete access log entries"
 msgstr "删除访问日志记录"
 
-#: Acl/Rights.php:168
+#: Acl/Rights.php:166
 msgid "manage accounts"
 msgstr "管理帐户"
 
-#: Acl/Rights.php:169
+#: Acl/Rights.php:167
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr "添加并编辑用户和组，添加组成员，修改用户密码"
 
-#: Acl/Rights.php:172
+#: Acl/Rights.php:170
 msgid "manage applications"
 msgstr "管理应用程序"
 
-#: Acl/Rights.php:173
+#: Acl/Rights.php:171
 msgid "enable and disable applications, edit application settings"
 msgstr "开启和关闭应用程序，编辑应用程序设置"
 
-#: Acl/Rights.php:176
+#: Acl/Rights.php:174
 msgid "manage roles"
 msgstr "管理角色"
 
-#: Acl/Rights.php:177
-msgid "add and edit roles, add new members to roles, add application rights to roles"
+#: Acl/Rights.php:175
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
 msgstr "添加并编辑角色，给角色添加新成员，给角色添加应用程序权限"
 
-#: Acl/Rights.php:180
+#: Acl/Rights.php:178
 msgid "manage shared tags"
 msgstr "管理共享的标签"
 
-#: Acl/Rights.php:181
+#: Acl/Rights.php:179
 msgid "add, delete and edit shared tags"
 msgstr "添加、删除和编辑共享的标签"
 
-#: Acl/Rights.php:184
+#: Acl/Rights.php:182
 msgid "view access log"
 msgstr "浏览访问日志"
 
-#: Acl/Rights.php:185
+#: Acl/Rights.php:183
 msgid "view access log list"
 msgstr "浏览访问日志列表"
 
-#: Acl/Rights.php:188
+#: Acl/Rights.php:186
 msgid "view accounts"
 msgstr "浏览帐户"
 
-#: Acl/Rights.php:189
+#: Acl/Rights.php:187
 msgid "view accounts list and details"
 msgstr "浏览帐户列表和细节"
 
-#: Acl/Rights.php:192
+#: Acl/Rights.php:190
 msgid "view applications"
 msgstr "浏览应用程序"
 
-#: Acl/Rights.php:193
+#: Acl/Rights.php:191
 msgid "view applications list and details"
 msgstr "浏览应用程序列表和细节"
 
-#: Acl/Rights.php:196
+#: Acl/Rights.php:194
 msgid "view roles"
 msgstr "浏览角色"
 
-#: Acl/Rights.php:197
+#: Acl/Rights.php:195
 msgid "view roles list and details"
 msgstr "浏览角色列表和细节"
 
@@ -113,10 +114,7 @@ msgstr "角色"
 msgid "Admin"
 msgstr "管理"
 
-#: js/Admin.js:251
-#: js/Groups.js:47
-#: js/Roles.js:48
-#: js/Tags.js:41
+#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
 #: js/Users.js:166
 msgid "Confirm"
 msgstr "确认"
@@ -133,12 +131,8 @@ msgstr "删除条目"
 msgid "select all"
 msgstr "全选"
 
-#: js/Admin.js:372
-#: js/Admin.js:770
-#: js/Groups.js:111
-#: js/Roles.js:112
-#: js/Tags.js:103
-#: js/Users.js:204
+#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:204
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
 
@@ -150,12 +144,8 @@ msgstr "显示从："
 msgid "to:"
 msgstr "到："
 
-#: js/Admin.js:411
-#: js/Admin.js:787
-#: js/Groups.js:131
-#: js/Roles.js:132
-#: js/Tags.js:123
-#: js/Users.js:220
+#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:220
 msgid "Search:"
 msgstr "搜索："
 
@@ -191,15 +181,11 @@ msgstr "没有访问日志条目要显示"
 msgid "Session ID"
 msgstr "会话 ID"
 
-#: js/Admin.js:527
-#: js/Users.js:544
+#: js/Admin.js:527 js/Users.js:544
 msgid "Login Name"
 msgstr "登录名"
 
-#: js/Admin.js:528
-#: js/Groups.js:176
-#: js/Groups.js:488
-#: js/Roles.js:177
+#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
 #: js/Tags.js:165
 msgid "Name"
 msgstr "名字"
@@ -280,21 +266,13 @@ msgstr "真的要删除选中的组？"
 msgid "Deleting group(s)..."
 msgstr "删除组..."
 
-#: js/Groups.js:69
-#: js/Groups.js:378
-#: js/Groups.js:406
-#: js/Roles.js:70
-#: js/Roles.js:439
-#: js/Roles.js:467
-#: js/Tags.js:341
-#: js/Users.js:186
-#: js/Users.js:468
-#: js/Users.js:511
+#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
+#: js/Users.js:468 js/Users.js:511
 msgid "Failed"
 msgstr "失败"
 
-#: js/Groups.js:69
-#: js/Groups.js:406
+#: js/Groups.js:69 js/Groups.js:406
 msgid "Some error occurred while trying to delete the group."
 msgstr "当试图删除组时发生错误"
 
@@ -314,35 +292,24 @@ msgstr "删除组"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "显示组 {0} - {1} of {2}"
 
-#: js/Groups.js:170
-#: js/Groups.js:221
+#: js/Groups.js:170 js/Groups.js:221
 msgid "No groups to display"
 msgstr "没有组要显示"
 
-#: js/Groups.js:175
-#: js/Roles.js:176
-#: js/Users.js:270
+#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:177
-#: js/Groups.js:558
-#: js/Roles.js:178
-#: js/Roles.js:653
-#: js/Tags.js:166
-#: js/Tags.js:547
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
+#: js/Tags.js:166 js/Tags.js:547
 msgid "Description"
 msgstr "描述"
 
-#: js/Groups.js:343
-#: js/Roles.js:399
-#: js/Tags.js:297
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Groups.js:343
-#: js/Roles.js:399
-#: js/Tags.js:297
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
 msgid "Updating Memberships"
 msgstr "更新会员身份"
 
@@ -350,17 +317,11 @@ msgstr "更新会员身份"
 msgid "Could not save group."
 msgstr "不能保存组"
 
-#: js/Groups.js:385
-#: js/Roles.js:446
-#: js/Tags.js:346
-#: js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
 msgid "Errors"
 msgstr "错误"
 
-#: js/Groups.js:385
-#: js/Roles.js:446
-#: js/Tags.js:346
-#: js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
 msgid "Please fix the errors noted."
 msgstr "请修复标明的错误"
 
@@ -376,8 +337,7 @@ msgstr "组成员"
 msgid "Group Name"
 msgstr "组名"
 
-#: js/Groups.js:594
-#: js/Users.js:361
+#: js/Groups.js:594 js/Users.js:361
 msgid "add account"
 msgstr "添加账户"
 
@@ -401,8 +361,7 @@ msgstr "真的想删除选中的角色？"
 msgid "Deleting role(s)..."
 msgstr "删除角色 ..."
 
-#: js/Roles.js:70
-#: js/Roles.js:467
+#: js/Roles.js:70 js/Roles.js:467
 msgid "Some error occurred while trying to delete the role."
 msgstr "当试图删除角色是发生错误"
 
@@ -422,8 +381,7 @@ msgstr "删除角色"
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "显示角色{0} - {1} of {2}"
 
-#: js/Roles.js:171
-#: js/Roles.js:222
+#: js/Roles.js:171 js/Roles.js:222
 msgid "No roles to display"
 msgstr "没有角色要显示"
 
@@ -443,8 +401,7 @@ msgstr "角色成员"
 msgid "Members"
 msgstr "成员"
 
-#: js/Roles.js:616
-#: js/Tags.js:563
+#: js/Roles.js:616 js/Tags.js:563
 msgid "Rights"
 msgstr "权限"
 
@@ -456,9 +413,7 @@ msgstr "角色名"
 msgid "Loading Role..."
 msgstr "加载角色"
 
-#: js/Roles.js:686
-#: js/Tags.js:584
-#: js/Users.js:477
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
 msgid "Please Wait"
 msgstr "请稍等"
 
@@ -494,13 +449,11 @@ msgstr "删除标签"
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "显示标签{0} - {1} of {2}"
 
-#: js/Tags.js:159
-#: js/Tags.js:210
+#: js/Tags.js:159 js/Tags.js:210
 msgid "No tags to display"
 msgstr "没有标签要显示"
 
-#: js/Tags.js:164
-#: js/Tags.js:489
+#: js/Tags.js:164 js/Tags.js:489
 msgid "Color"
 msgstr "颜色"
 
@@ -576,8 +529,7 @@ msgstr "显示账户{0} - {1} of {2}"
 msgid "No accounts to display"
 msgstr "没有账户要显示"
 
-#: js/Users.js:271
-#: js/Users.js:582
+#: js/Users.js:271 js/Users.js:582
 msgid "Status"
 msgstr "状态"
 
@@ -601,13 +553,11 @@ msgstr "名"
 msgid "Email"
 msgstr "电子邮件"
 
-#: js/Users.js:277
-#: js/Users.js:606
+#: js/Users.js:277 js/Users.js:606
 msgid "Last login at"
 msgstr "上次登录时间"
 
-#: js/Users.js:278
-#: js/Users.js:613
+#: js/Users.js:278 js/Users.js:613
 msgid "Last login from"
 msgstr "上次登录于"
 
@@ -615,8 +565,7 @@ msgstr "上次登录于"
 msgid "Password changed"
 msgstr "密码已修改"
 
-#: js/Users.js:280
-#: js/Users.js:601
+#: js/Users.js:280 js/Users.js:601
 msgid "Expires"
 msgstr "过期"
 
@@ -668,8 +617,7 @@ msgstr "姓"
 msgid "Password"
 msgstr "密码"
 
-#: js/Users.js:552
-#: js/Users.js:558
+#: js/Users.js:552 js/Users.js:558
 msgid "no password set"
 msgstr "没有设置密码"
 
@@ -685,13 +633,11 @@ msgstr "基本组"
 msgid "Emailaddress"
 msgstr "电子邮件地址"
 
-#: js/Users.js:603
-#: js/Users.js:621
+#: js/Users.js:603 js/Users.js:621
 msgid "never"
 msgstr "从不"
 
-#: js/Users.js:608
-#: js/Users.js:615
+#: js/Users.js:608 js/Users.js:615
 msgid "never logged in"
 msgstr "从未登录"
 
@@ -706,4 +652,3 @@ msgstr "添加新用户账户"
 #: js/Users.js:663
 msgid "Edit User Account \"{0}\""
 msgstr "编辑用户账户 \"{0}\""
-

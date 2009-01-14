@@ -13,80 +13,80 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:164
+#: Acl/Rights.php:162
 msgid "manage access log"
 msgstr "Управлява протокола за влизане"
 
-#: Acl/Rights.php:165
+#: Acl/Rights.php:163
 msgid "delete access log entries"
 msgstr "Изтриване протокол за влизане"
 
-#: Acl/Rights.php:168
+#: Acl/Rights.php:166
 msgid "manage accounts"
 msgstr "Управлява потребителски конта"
 
-#: Acl/Rights.php:169
+#: Acl/Rights.php:167
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr ""
 "Създаване и обработка на групи и потребители, вкарване на потребители в "
 "групи, създаване и промяна на пароли"
 
-#: Acl/Rights.php:172
+#: Acl/Rights.php:170
 msgid "manage applications"
 msgstr "Управление на апликации"
 
-#: Acl/Rights.php:173
+#: Acl/Rights.php:171
 msgid "enable and disable applications, edit application settings"
 msgstr "Активиране, деактивиране и редакция на апликации"
 
-#: Acl/Rights.php:176
+#: Acl/Rights.php:174
 msgid "manage roles"
 msgstr "Управлява правата на достъп (ролите)"
 
-#: Acl/Rights.php:177
+#: Acl/Rights.php:175
 msgid ""
 "add and edit roles, add new members to roles, add application rights to roles"
 msgstr ""
 "Добавяне и редактиране на роли, добавяне на членове към роля, добавяне на "
 "апликационни права към роли"
 
-#: Acl/Rights.php:180
+#: Acl/Rights.php:178
 msgid "manage shared tags"
 msgstr "Управлява общодостъпните категории"
 
-#: Acl/Rights.php:181
+#: Acl/Rights.php:179
 msgid "add, delete and edit shared tags"
 msgstr "Редакция, изтриване и добавяне на общодостъпните категории"
 
-#: Acl/Rights.php:184
+#: Acl/Rights.php:182
 msgid "view access log"
 msgstr "Виж протокол за влизане"
 
-#: Acl/Rights.php:185
+#: Acl/Rights.php:183
 msgid "view access log list"
 msgstr "Виж листата на направени влизания"
 
-#: Acl/Rights.php:188
+#: Acl/Rights.php:186
 msgid "view accounts"
 msgstr "Виж потребителско конто"
 
-#: Acl/Rights.php:189
+#: Acl/Rights.php:187
 msgid "view accounts list and details"
 msgstr "Виж листата на потребителски конта и детайли"
 
-#: Acl/Rights.php:192
+#: Acl/Rights.php:190
 msgid "view applications"
 msgstr "Виж апликации"
 
-#: Acl/Rights.php:193
+#: Acl/Rights.php:191
 msgid "view applications list and details"
 msgstr "Виж листата с апликации и детайли"
 
-#: Acl/Rights.php:196
+#: Acl/Rights.php:194
 msgid "view roles"
 msgstr "Виж правата за достъп"
 
-#: Acl/Rights.php:197
+#: Acl/Rights.php:195
 msgid "view roles list and details"
 msgstr "Виж листата с правата на достъп и детайли"
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-11-26 11:40+0100\n"
-"Last-Translator: Matthias Greiling <m.greiling@metaways.de>\n"
+"PO-Revision-Date: 2009-01-14 20:17+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,62 +12,63 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ContractGridPanel.js:49
-#: js/Erp.js:61
-#: js/ContractEditDialog.js:68
+#: js/ContractEditDialog.js:69
+#: js/ContractGridPanel.js:46
+#: js/Erp.js:84
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Vertrag"
 msgstr[1] "Verträge"
 
-#: js/ContractGridPanel.js:50
 #: js/ContractEditDialog.js:86
-msgid "Summary"
-msgstr "Zusammenfassung"
-
-#: js/ContractGridPanel.js:66
+#: js/ContractGridPanel.js:93
 msgid "Title"
 msgstr "Titel"
 
-#: js/Erp.js:65
+#: js/ContractEditDialog.js:92
+msgid "Description"
+msgstr "Beschreibung"
+
+#: js/ContractEditDialog.js:93
+msgid "Enter description..."
+msgstr "Bitte geben Sie eine Beschreibung ein..."
+
+#: js/ContractGridPanel.js:47
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#: js/ContractGridPanel.js:87
+msgid "Contract number"
+msgstr "Vertragsnummer"
+
+#: js/ContractGridPanel.js:99
+msgid "Status"
+msgstr "Status"
+
+#: js/Erp.js:50
+msgid "Contracts"
+msgstr "Verträge"
+
+#: js/Erp.js:88
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "Vertragsliste"
 msgstr[1] "Vertragslisten"
 
-#: js/ContractEditDialog.js:91
-msgid "Due date"
-msgstr "Fälligkeitsdatum"
-
-#: js/ContractEditDialog.js:94
-msgid "Priority"
-msgstr "Priorität"
-
-#: js/ContractEditDialog.js:97
-msgid "Responsible"
-msgstr "Verantwortlicher"
-
-#: js/ContractEditDialog.js:101
-msgid "Notes"
-msgstr "Notiz"
-
-#: js/ContractEditDialog.js:102
-msgid "Enter description..."
-msgstr "Bitte geben Sie eine Beschreibung ein..."
-
-#: js/ContractEditDialog.js:107
-msgid "Percentage"
-msgstr "Prozentsatz"
-
-#: js/ContractEditDialog.js:111
-msgid "Status"
-msgstr "Status"
-
-#: js/ContractEditDialog.js:115
-msgid "Completed"
-msgstr "Fertig"
-
-#: Setup/setup.xml:171
+#: Setup/setup.xml:160
 msgid "Shared Contracts"
 msgstr "Gemeinsame Verträge"
+
+#~ msgid "Due date"
+#~ msgstr "Fälligkeitsdatum"
+#~ msgid "Priority"
+#~ msgstr "Priorität"
+#~ msgid "Responsible"
+#~ msgstr "Verantwortlicher"
+#~ msgid "Notes"
+#~ msgstr "Notiz"
+#~ msgid "Percentage"
+#~ msgstr "Prozentsatz"
+#~ msgid "Completed"
+#~ msgstr "Fertig"
 

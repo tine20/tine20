@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2008-11-26 11:34+0100\n"
-"Last-Translator: Matthias Greiling <m.greiling@metaways.de>\n"
+"PO-Revision-Date: 2009-01-14 20:13+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,75 +14,75 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:164
+#: Acl/Rights.php:162
 msgid "manage access log"
 msgstr "Zugriffsprotokoll bearbeiten"
 
-#: Acl/Rights.php:165
+#: Acl/Rights.php:163
 msgid "delete access log entries"
 msgstr "Zugriffsprotokoll bearbeiten"
 
-#: Acl/Rights.php:168
+#: Acl/Rights.php:166
 msgid "manage accounts"
 msgstr "Benutzerkonten bearbeiten"
 
-#: Acl/Rights.php:169
+#: Acl/Rights.php:167
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen zuordnen."
 
-#: Acl/Rights.php:172
+#: Acl/Rights.php:170
 msgid "manage applications"
 msgstr "Applikationen bearbeiten"
 
-#: Acl/Rights.php:173
+#: Acl/Rights.php:171
 msgid "enable and disable applications, edit application settings"
 msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
 
-#: Acl/Rights.php:176
+#: Acl/Rights.php:174
 msgid "manage roles"
 msgstr "Rollen bearbeiten"
 
-#: Acl/Rights.php:177
+#: Acl/Rights.php:175
 msgid "add and edit roles, add new members to roles, add application rights to roles"
 msgstr "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen Applikations-Rechte zuweisen."
 
-#: Acl/Rights.php:180
+#: Acl/Rights.php:178
 msgid "manage shared tags"
 msgstr "Gemeinsame Tags bearbeiten"
 
-#: Acl/Rights.php:181
+#: Acl/Rights.php:179
 msgid "add, delete and edit shared tags"
 msgstr "Gemeinsame Tags anlegen, bearbeiten und löschen"
 
-#: Acl/Rights.php:184
+#: Acl/Rights.php:182
 msgid "view access log"
 msgstr "Zugriffsprotokoll ansehen"
 
-#: Acl/Rights.php:185
+#: Acl/Rights.php:183
 msgid "view access log list"
 msgstr "Zugriffsprotokoll ansehen"
 
-#: Acl/Rights.php:188
+#: Acl/Rights.php:186
 msgid "view accounts"
 msgstr "Benutzerkonten ansehen"
 
-#: Acl/Rights.php:189
+#: Acl/Rights.php:187
 msgid "view accounts list and details"
 msgstr "Benutzerkonten ansehen"
 
-#: Acl/Rights.php:192
+#: Acl/Rights.php:190
 msgid "view applications"
 msgstr "Applikationen ansehen"
 
-#: Acl/Rights.php:193
+#: Acl/Rights.php:191
 msgid "view applications list and details"
 msgstr "Applikationen ansehen"
 
-#: Acl/Rights.php:196
+#: Acl/Rights.php:194
 msgid "view roles"
 msgstr "Rollen ansehen"
 
-#: Acl/Rights.php:197
+#: Acl/Rights.php:195
 msgid "view roles list and details"
 msgstr "Rollen ansehen"
 
@@ -246,7 +246,6 @@ msgid "enabled"
 msgstr "aktiviert"
 
 #: js/Admin.js:823
-#, fuzzy
 msgid "unknown status ({0})"
 msgstr "unbekannter Status ({0})"
 
@@ -297,7 +296,6 @@ msgstr "Fehlgeschlagen"
 
 #: js/Groups.js:69
 #: js/Groups.js:406
-#, fuzzy
 msgid "Some error occurred while trying to delete the group."
 msgstr "Beim Löschen der Gruppe trat ein Fehler auf."
 
@@ -393,7 +391,6 @@ msgid "Add new group"
 msgstr "Neue Gruppe erstellen"
 
 #: js/Groups.js:621
-#, fuzzy
 msgid "Edit Group \"{0}\""
 msgstr "Gruppe \"{0}\" bearbeiten"
 
@@ -407,7 +404,6 @@ msgstr "Lösche Rolle(n)..."
 
 #: js/Roles.js:70
 #: js/Roles.js:467
-#, fuzzy
 msgid "Some error occurred while trying to delete the role."
 msgstr "Beim Löschen der Rolle trat ein Fehler auf."
 
@@ -472,7 +468,6 @@ msgid "Add New Role"
 msgstr "Neue Rolle hinzufügen"
 
 #: js/Roles.js:728
-#, fuzzy
 msgid "Edit Role \"{0}\""
 msgstr "Rolle \"{0}\" bearbeiten"
 
@@ -551,7 +546,6 @@ msgid "Add New Tag"
 msgstr "Neuen Tag hinzufügen"
 
 #: js/Tags.js:617
-#, fuzzy
 msgid "Edit Tag \"{0}\""
 msgstr "Tag \"{0}\" bearbeiten"
 
@@ -572,9 +566,8 @@ msgid "Deleting account(s)..."
 msgstr "Lösche Account(s)..."
 
 #: js/Users.js:186
-#, fuzzy
 msgid "Some error occurred while trying to delete the account(s)."
-msgstr "Beim Löschen des/r Account(s) traten Fehler auf."
+msgstr "Beim Löschen des/r Benutzer(s) traten Fehler auf."
 
 #: js/Users.js:265
 msgid "Displaying accounts {0} - {1} of {2}"
@@ -653,9 +646,8 @@ msgid "Deleting account..."
 msgstr "Lösche Account..."
 
 #: js/Users.js:468
-#, fuzzy
 msgid "Some error occurred while trying to delete the account."
-msgstr "Beim Löschen des Accounts trat ein Fehler auf."
+msgstr "Beim Löschen des Benutzers trat ein Fehler auf."
 
 #: js/Users.js:477
 msgid "Saving User Account"
@@ -713,9 +705,8 @@ msgid "Add New User Account"
 msgstr "Neuen User-Account hinzufügen"
 
 #: js/Users.js:663
-#, fuzzy
 msgid "Edit User Account \"{0}\""
-msgstr "Bearbeite User Account \"{0}\""
+msgstr "Bearbeite Benutzer \"{0}\""
 
 #~ msgid "manage roles right description"
 #~ msgstr ""

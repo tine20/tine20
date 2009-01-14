@@ -52,38 +52,52 @@ msgstr "popis práva na spuštění"
 msgid "Tags"
 msgstr "Štítky"
 
-#: Export/Pdf.php:404
+#: Export/Pdf.php:402
 msgid "Export Date"
 msgstr "Datum exportu"
 
-#: Export/Pdf.php:408
+#: Export/Pdf.php:406
 msgid "Created by"
 msgstr "Vytvořil(a)"
 
-#: Export/Pdf.php:462 js/widgets/ActivitiesPanel.js:520
+#: Export/Pdf.php:460 js/widgets/ActivitiesPanel.js:520
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:248 js/tineInit.js:218
+#: Frontend/Http.php:258 js/tineInit.js:218
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:249
+#: Frontend/Http.php:259
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:275 js/ExceptionDialog.js:26
+#: Frontend/Http.php:285 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:276 js/ExceptionDialog.js:51
+#: Frontend/Http.php:286 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:355
-#: js/widgets/AccountpickerPanel.js:143
-#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:151
+#: js/common.js:98
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/common.js:99
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/ExceptionDialog.js:34 js/MainScreen.js:357
+#: js/widgets/AccountpickerPanel.js:148
+#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:156
 #: js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "Storno"
@@ -105,7 +119,7 @@ msgstr ""
 "Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
 "uveďte stručný popis to co jste dělal(a), když došlo k chybě."
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:556
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:560
 msgid "Description"
 msgstr "Popis"
 
@@ -121,11 +135,11 @@ msgstr "Odesílám hlášení..."
 msgid "Please wait a moment"
 msgstr "Počkejte prosím okamžik"
 
-#: js/ExceptionDialog.js:117
+#: js/ExceptionDialog.js:118
 msgid "Transmission Completed"
 msgstr "Přenos dokončen"
 
-#: js/ExceptionDialog.js:118
+#: js/ExceptionDialog.js:119
 msgid "Your report has been send. Thanks for your contribution"
 msgstr "Vaše hlášení bylo odesláno. Děkujeme za Vaši spolupráci."
 
@@ -154,9 +168,9 @@ msgid "Logging you in..."
 msgstr "Přihlašuji Vás..."
 
 #: js/Login.js:120 js/widgets/container/ContainerGrants.js:34
-#: js/widgets/container/ContainerTree.js:274
-#: js/widgets/container/ContainerTree.js:302
-#: js/widgets/container/ContainerTree.js:334
+#: js/widgets/container/ContainerTree.js:275
+#: js/widgets/container/ContainerTree.js:303
+#: js/widgets/container/ContainerTree.js:335
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
@@ -164,7 +178,7 @@ msgstr "Čekejte prosím"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Přihlášení bylo úspěšné. Načítám Tine 2.0..."
 
-#: js/Login.js:132 js/MainScreen.js:433
+#: js/Login.js:132 js/MainScreen.js:435
 msgid "Please wait!"
 msgstr "Čekejte prosím!"
 
@@ -176,96 +190,96 @@ msgstr "Chybné přihlášení"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
 
-#: js/MainScreen.js:53 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:54 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "Administrace"
 
-#: js/MainScreen.js:61
+#: js/MainScreen.js:62
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: js/MainScreen.js:77
+#: js/MainScreen.js:78
 #, fuzzy
 msgid "User: {0}"
 msgstr "Uživatel: {0}"
 
-#: js/MainScreen.js:78
+#: js/MainScreen.js:79
 #, fuzzy
 msgid "Timezone: {0}"
 msgstr "Časové pásmo: {0}"
 
-#: js/MainScreen.js:79 js/widgets/TimezoneChooser.js:34
+#: js/MainScreen.js:80 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr "Časové pásmo"
 
-#: js/MainScreen.js:80 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:81 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Jazyk"
 
-#: js/MainScreen.js:171
+#: js/MainScreen.js:172
 msgid "Change password"
 msgstr "Změnit heslo"
 
-#: js/MainScreen.js:177
+#: js/MainScreen.js:178
 msgid "Install Google Gears"
 msgstr "Instalovat Google Gears"
 
-#: js/MainScreen.js:183
+#: js/MainScreen.js:184
 msgid "Logout"
 msgstr "Odhlásit"
 
-#: js/MainScreen.js:184
+#: js/MainScreen.js:185
 msgid "Logout from Tine 2.0"
 msgstr "Odhlásit z Tine 2.0"
 
-#: js/MainScreen.js:319
+#: js/MainScreen.js:321
 #, fuzzy
 msgid "Change Password For \"{0}\""
 msgstr "Změnit heslo pro \"{0}\""
 
-#: js/MainScreen.js:343
+#: js/MainScreen.js:345
 msgid "Old Password"
 msgstr "Staré heslo"
 
-#: js/MainScreen.js:347
+#: js/MainScreen.js:349
 msgid "New Password"
 msgstr "Nové heslo"
 
-#: js/MainScreen.js:351
+#: js/MainScreen.js:353
 msgid "Repeat new Password"
 msgstr "Zopakujte nové heslo"
 
-#: js/MainScreen.js:361 js/widgets/AccountpickerPanel.js:135
-#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:134
+#: js/MainScreen.js:363 js/widgets/AccountpickerPanel.js:140
+#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:139
 #: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "OK"
 
-#: js/MainScreen.js:370
+#: js/MainScreen.js:372
 msgid "Please Wait!"
 msgstr "Čekejte prosím!"
 
-#: js/MainScreen.js:371
+#: js/MainScreen.js:373
 msgid "changing password..."
 msgstr "měním heslo..."
 
-#: js/MainScreen.js:382
+#: js/MainScreen.js:384
 msgid "Success"
 msgstr "Podařilo se"
 
-#: js/MainScreen.js:383
+#: js/MainScreen.js:385
 msgid "Your password has been changed."
 msgstr "Vaše heslo bylo změněno."
 
-#: js/MainScreen.js:389 js/MainScreen.js:399
+#: js/MainScreen.js:391 js/MainScreen.js:401
 msgid "Failure"
 msgstr "Došlo k chybě"
 
-#: js/MainScreen.js:400
+#: js/MainScreen.js:402
 msgid "The new passwords mismatch, please correct them."
 msgstr "Nová hesla se neshodují, opravte je prosím."
 
-#: js/MainScreen.js:418
+#: js/MainScreen.js:420
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -273,20 +287,20 @@ msgstr ""
 "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
 "potřebných souborů na tomto počítači."
 
-#: js/MainScreen.js:431 js/widgets/app/GridPanel.js:386
-#: js/widgets/container/ContainerTree.js:300 js/widgets/EditDialog.js:326
+#: js/MainScreen.js:433 js/widgets/app/GridPanel.js:412
+#: js/widgets/container/ContainerTree.js:301 js/widgets/EditDialog.js:377
 msgid "Confirm"
 msgstr "Potvrdit"
 
-#: js/MainScreen.js:431
+#: js/MainScreen.js:433
 msgid "Are you sure you want to logout?"
 msgstr "Určitě se chcete odhlásit?"
 
-#: js/MainScreen.js:433
+#: js/MainScreen.js:435
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
-#: js/Record.js:93
+#: js/Record.js:92
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -294,7 +308,7 @@ msgstr[0] "Štítky"
 msgstr[1] "Štítky"
 msgstr[2] "Štítky"
 
-#: js/Record.js:97
+#: js/Record.js:96
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
@@ -310,10 +324,18 @@ msgid "Your session timed out. You need to login again."
 msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
 
 #: js/tineInit.js:232
+msgid "Insufficient Rights"
+msgstr ""
+
+#: js/tineInit.js:233
+msgid "Sorry, you are not permitted to perform this action"
+msgstr ""
+
+#: js/tineInit.js:242
 msgid "Concurrent Updates"
 msgstr "Kolidující aktualizace"
 
-#: js/tineInit.js:233
+#: js/tineInit.js:243
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -434,7 +456,7 @@ msgstr "Hledat"
 msgid "Browse"
 msgstr "Procházet"
 
-#: js/widgets/AccountpickerPanel.js:129
+#: js/widgets/AccountpickerPanel.js:134
 msgid "please select an account"
 msgstr "vyberte prosím účet"
 
@@ -501,18 +523,18 @@ msgstr "Čas"
 msgid "User"
 msgstr "Uživatel"
 
-#: js/widgets/app/GridPanel.js:146
+#: js/widgets/app/GridPanel.js:152
 #, fuzzy
 msgid "Edit {0}"
 msgstr "Editovat"
 
-#: js/widgets/app/GridPanel.js:157 js/widgets/container/ContainerTree.js:381
+#: js/widgets/app/GridPanel.js:163 js/widgets/container/ContainerTree.js:382
 #, fuzzy
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
-#: js/widgets/app/GridPanel.js:167 js/widgets/app/GridPanel.js:168
-#: js/widgets/app/GridPanel.js:170 js/widgets/container/ContainerTree.js:387
+#: js/widgets/app/GridPanel.js:173 js/widgets/app/GridPanel.js:174
+#: js/widgets/app/GridPanel.js:176 js/widgets/container/ContainerTree.js:388
 #, fuzzy
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -520,17 +542,17 @@ msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/app/GridPanel.js:231
+#: js/widgets/app/GridPanel.js:237
 #, fuzzy
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
-#: js/widgets/app/GridPanel.js:232 js/widgets/app/GridPanel.js:240
+#: js/widgets/app/GridPanel.js:238 js/widgets/app/GridPanel.js:246
 #, fuzzy
 msgid "No {0} to display"
 msgstr "Žádné štítky ke zobrazení"
 
-#: js/widgets/app/GridPanel.js:384
+#: js/widgets/app/GridPanel.js:410
 #, fuzzy
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
@@ -538,18 +560,18 @@ msgstr[0] "Opravdu chcete smazat"
 msgstr[1] "Opravdu chcete smazat"
 msgstr[2] "Opravdu chcete smazat"
 
-#: js/widgets/app/GridPanel.js:389 js/widgets/EditDialog.js:328
+#: js/widgets/app/GridPanel.js:415 js/widgets/EditDialog.js:379
 #, fuzzy
 msgid "Deleting {0}"
 msgstr "Mažu štítek"
 
-#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:314
-#: js/widgets/EditDialog.js:339 js/widgets/tags/TagsPanel.js:250
-#: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:392
+#: js/widgets/app/GridPanel.js:427 js/widgets/EditDialog.js:354
+#: js/widgets/EditDialog.js:390 js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/app/GridPanel.js:401 js/widgets/EditDialog.js:339
+#: js/widgets/app/GridPanel.js:427 js/widgets/EditDialog.js:390
 #, fuzzy
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat štítek/štítky."
@@ -589,8 +611,8 @@ msgid "choose other {0}..."
 msgstr "vyberte jiné {0}..."
 
 #: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:105 js/widgets/tags/TagsPanel.js:406
-#: js/widgets/tags/TagsPanel.js:410
+#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:410
+#: js/widgets/tags/TagsPanel.js:414
 msgid "personal"
 msgstr "osobní"
 
@@ -622,161 +644,219 @@ msgstr "Sdílené {0}"
 msgid "Other Users {0}"
 msgstr "{0} ostatních uživatelů"
 
-#: js/widgets/container/ContainerTree.js:272
+#: js/widgets/container/ContainerTree.js:273
 #, fuzzy
 msgid "New {0}"
 msgstr "Nový {0}"
 
-#: js/widgets/container/ContainerTree.js:272
+#: js/widgets/container/ContainerTree.js:273
 #, fuzzy
 msgid "Please enter the name of the new {0}:"
 msgstr "Zadejte prosím název pro nový(ou/é) {0}:"
 
-#: js/widgets/container/ContainerTree.js:274
+#: js/widgets/container/ContainerTree.js:275
 #, fuzzy
 msgid "Creating {0}..."
 msgstr "Vytvářím {0}..."
 
-#: js/widgets/container/ContainerTree.js:300
+#: js/widgets/container/ContainerTree.js:301
 #, fuzzy
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Opravdu chcete smazat {0} \"{0}\"?"
 
-#: js/widgets/container/ContainerTree.js:302
+#: js/widgets/container/ContainerTree.js:303
 #, fuzzy
 msgid "Deleting {0} \"{1}\""
 msgstr "Mažu {0} \"{0}\""
 
-#: js/widgets/container/ContainerTree.js:329
+#: js/widgets/container/ContainerTree.js:330
 #, fuzzy
 msgid "Please enter the new name of the {0}:"
 msgstr "Zadejte prosím nový název pro {0}:"
 
-#: js/widgets/container/ContainerTree.js:334
+#: js/widgets/container/ContainerTree.js:335
 #, fuzzy
 msgid "Updating {0} \"{1}\""
 msgstr "Aktualizuji {0} \"{0}\""
 
-#: js/widgets/container/ContainerTree.js:368
+#: js/widgets/container/ContainerTree.js:369
 #, fuzzy
 msgid "Manage Permissions for {0} :\"{1}\""
 msgstr "Spravovat oprávnění pro {0} :\"{0}\""
 
-#: js/widgets/container/ContainerTree.js:393
+#: js/widgets/container/ContainerTree.js:394
 #, fuzzy
 msgid "Rename {0}"
 msgstr "Přejmenovat {0}"
 
-#: js/widgets/container/ContainerTree.js:399
+#: js/widgets/container/ContainerTree.js:400
 msgid "Manage permissions"
 msgstr "Spravovat oprávnění"
 
-#: js/widgets/EditDialog.js:143 js/widgets/EditRecord.js:126
+#: js/widgets/customfields/CustomfieldsPanel.js:36
+msgid "Custom Fields"
+msgstr ""
+
+#: js/widgets/customfields/CustomfieldsPanel.js:68
+msgid "There are no custom fields yet"
+msgstr ""
+
+#: js/widgets/EditDialog.js:148 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "Použít"
 
-#: js/widgets/EditDialog.js:160 js/widgets/EditRecord.js:146
+#: js/widgets/EditDialog.js:165 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "smazat"
 
-#: js/widgets/EditDialog.js:197
+#: js/widgets/EditDialog.js:230
 #, fuzzy
 msgid "Add New {0}"
 msgstr "Přidat nový osobní štítek"
 
-#: js/widgets/EditDialog.js:199
+#: js/widgets/EditDialog.js:232
 msgid "Edit {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/EditDialog.js:218 js/widgets/EditRecord.js:185
+#: js/widgets/EditDialog.js:261 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "Uloženo v"
 
-#: js/widgets/EditDialog.js:237
+#: js/widgets/EditDialog.js:280
 #, fuzzy
-msgid "Loading {0}..."
-msgstr "nahrávám nový jazyk..."
+msgid "Transfering {0}..."
+msgstr "Vytvářím {0}..."
 
-#: js/widgets/EditDialog.js:287
-msgid "Saving {0}"
-msgstr ""
-
-#: js/widgets/EditDialog.js:314
+#: js/widgets/EditDialog.js:354
 #, fuzzy
 msgid "Could not save {0}."
 msgstr "Nepodařilo se vytvořit štítek."
 
-#: js/widgets/EditDialog.js:318
+#: js/widgets/EditDialog.js:369
 msgid "Errors"
 msgstr ""
 
-#: js/widgets/EditDialog.js:318
+#: js/widgets/EditDialog.js:369
 #, fuzzy
 msgid "Please fix the errors noted."
 msgstr "Zadejte prosím nový název pro"
 
-#: js/widgets/EditDialog.js:326
+#: js/widgets/EditDialog.js:377
 #, fuzzy
 msgid "Do you really want to delete this {0}?"
 msgstr "Opravdu chcete smazat"
 
-#: js/widgets/grid/FilterModel.js:87
+#: js/widgets/grid/FilterModel.js:119
 msgid "contains"
 msgstr "obsahuje"
 
-#: js/widgets/grid/FilterModel.js:88
+#: js/widgets/grid/FilterModel.js:120
 msgid "is equal to"
 msgstr "je roven"
 
-#: js/widgets/grid/FilterModel.js:89
+#: js/widgets/grid/FilterModel.js:121
 msgid "is greater than"
 msgstr "je větší než"
 
-#: js/widgets/grid/FilterModel.js:90
+#: js/widgets/grid/FilterModel.js:122
 msgid "is less than"
 msgstr "je menší než"
 
-#: js/widgets/grid/FilterModel.js:91
+#: js/widgets/grid/FilterModel.js:123
 msgid "is not"
 msgstr "není"
 
-#: js/widgets/grid/FilterModel.js:92
+#: js/widgets/grid/FilterModel.js:124
 msgid "is in"
 msgstr "je v"
 
-#: js/widgets/grid/FilterModel.js:115
+#: js/widgets/grid/FilterModel.js:125
+msgid "is before"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:126
+#, fuzzy
+msgid "is after"
+msgstr "uložit filtr"
+
+#: js/widgets/grid/FilterModel.js:127
+#, fuzzy
+msgid "is within"
+msgstr "je v"
+
+#: js/widgets/grid/FilterModel.js:161
 msgid "select a operator"
 msgstr "vyberte operátor"
 
-#: js/widgets/grid/FilterToolbar.js:116
+#: js/widgets/grid/FilterModel.js:309
+msgid "this week"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:310
+msgid "last week"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:311
+msgid "the week before last"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:312
+#, fuzzy
+msgid "this month"
+msgstr "není"
+
+#: js/widgets/grid/FilterModel.js:313
+#, fuzzy
+msgid "last month"
+msgstr "Přihlašovací jméno"
+
+#: js/widgets/grid/FilterModel.js:314
+#, fuzzy
+msgid "this quarter"
+msgstr "je roven"
+
+#: js/widgets/grid/FilterModel.js:315
+#, fuzzy
+msgid "last quarter"
+msgstr "Prosím čekejte"
+
+#: js/widgets/grid/FilterModel.js:316
+msgid "this year"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:317
+msgid "last year"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:115
 msgid "add new filter"
 msgstr "zadat nový filtr"
 
-#: js/widgets/grid/FilterToolbar.js:122
+#: js/widgets/grid/FilterToolbar.js:121
 msgid "Delete all filters"
 msgstr "Smazat všechny filtry"
 
-#: js/widgets/grid/FilterToolbar.js:128
+#: js/widgets/grid/FilterToolbar.js:127
 msgid "start search"
 msgstr "zahájit hledání"
 
-#: js/widgets/grid/FilterToolbar.js:137
+#: js/widgets/grid/FilterToolbar.js:136
 msgid "save filter"
 msgstr "uložit filtr"
 
-#: js/widgets/grid/FilterToolbar.js:207
+#: js/widgets/grid/FilterToolbar.js:206
 msgid "select a field"
 msgstr "vybrat pole"
 
-#: js/widgets/grid/FilterToolbar.js:231
+#: js/widgets/grid/FilterToolbar.js:230
 msgid "Delete this filter"
 msgstr "Smazat filtr"
 
-#: js/widgets/grid/FilterToolbar.js:255
+#: js/widgets/grid/FilterToolbar.js:253
 msgid "and"
 msgstr "a"
 
-#: js/widgets/grid/FilterToolbar.js:274
+#: js/widgets/grid/FilterToolbar.js:272
 msgid "Show"
 msgstr "Zobrazit"
 
@@ -801,130 +881,130 @@ msgstr "Čekejte prosím"
 msgid "loading new language..."
 msgstr "nahrávám nový jazyk..."
 
-#: js/widgets/tags/TagCombo.js:37
+#: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
 msgstr "název štítku"
 
-#: js/widgets/tags/TagFilter.js:23
+#: js/widgets/tags/TagFilter.js:27
 msgid "Tag"
 msgstr "Štítek"
 
-#: js/widgets/tags/TagsPanel.js:83
+#: js/widgets/tags/TagsPanel.js:87
 msgid "Add a new personal tag"
 msgstr "Přidat nový osobní štítek"
 
-#: js/widgets/tags/TagsPanel.js:86
+#: js/widgets/tags/TagsPanel.js:90
 msgid "Add New Personal Tag"
 msgstr "Přidat nový osobní štítek"
 
-#: js/widgets/tags/TagsPanel.js:87
+#: js/widgets/tags/TagsPanel.js:91
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Pamatujte prosím, že vytváříte osobní štítek. Uvidíte ho jen Vy!"
 
-#: js/widgets/tags/TagsPanel.js:87
+#: js/widgets/tags/TagsPanel.js:91
 msgid "Enter tag name:"
 msgstr "Zadejte název štítku:"
 
-#: js/widgets/tags/TagsPanel.js:127
+#: js/widgets/tags/TagsPanel.js:131
 msgid "No Tags to display"
 msgstr "Žádné štítky ke zobrazení"
 
-#: js/widgets/tags/TagsPanel.js:150
+#: js/widgets/tags/TagsPanel.js:154
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Odpojit štítek"
 msgstr[1] "Odpojit štítky"
 msgstr[2] "Odpojit štítky"
 
-#: js/widgets/tags/TagsPanel.js:160
+#: js/widgets/tags/TagsPanel.js:164
 msgid "Edit tag"
 msgstr "Editovat štítek"
 
-#: js/widgets/tags/TagsPanel.js:165 js/widgets/tags/TagsPanel.js:170
+#: js/widgets/tags/TagsPanel.js:169 js/widgets/tags/TagsPanel.js:174
 msgid "Rename Tag"
 msgstr "Přejmenovat štítek"
 
-#: js/widgets/tags/TagsPanel.js:170
+#: js/widgets/tags/TagsPanel.js:174
 msgid "Please enter a new name:"
 msgstr "Zadejte prosím nový název:"
 
-#: js/widgets/tags/TagsPanel.js:179
+#: js/widgets/tags/TagsPanel.js:183
 msgid "Edit Description"
 msgstr "Editovat popis"
 
-#: js/widgets/tags/TagsPanel.js:184
+#: js/widgets/tags/TagsPanel.js:188
 msgid "Description for tag"
 msgstr "Popis štítku"
 
-#: js/widgets/tags/TagsPanel.js:184
+#: js/widgets/tags/TagsPanel.js:188
 msgid "Please enter new description:"
 msgstr "Zadejte prosím nový popis:"
 
-#: js/widgets/tags/TagsPanel.js:193
+#: js/widgets/tags/TagsPanel.js:197
 msgid "Change Color"
 msgstr "Změnit barvu"
 
-#: js/widgets/tags/TagsPanel.js:217
+#: js/widgets/tags/TagsPanel.js:221
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Smazat štítek"
 msgstr[1] "Smazat štítky"
 msgstr[2] "Smazat štítky"
 
-#: js/widgets/tags/TagsPanel.js:229
+#: js/widgets/tags/TagsPanel.js:233
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Opravdu chcete smazat vybraný štítek?"
 msgstr[1] "Opravdu chcete smazat vybrané štítky?"
 msgstr[2] "Opravdu chcete smazat vybrané štítky?"
 
-#: js/widgets/tags/TagsPanel.js:230
+#: js/widgets/tags/TagsPanel.js:234
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Vybraný štítek bude smazán a zmizí u všech záznamů"
 msgstr[1] "Vybrané štítky budou smazány a zmizí u všech záznamů"
 msgstr[2] "Vybrané štítky budou smazány a zmizí u všech záznamů"
 
-#: js/widgets/tags/TagsPanel.js:234
+#: js/widgets/tags/TagsPanel.js:238
 msgid "Please wait a moment..."
 msgstr "Počkejte prosím okamžik..."
 
-#: js/widgets/tags/TagsPanel.js:234
+#: js/widgets/tags/TagsPanel.js:238
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Mažu štítek"
 msgstr[1] "Mažu štítky"
 msgstr[2] "Mažu štítky"
 
-#: js/widgets/tags/TagsPanel.js:250
+#: js/widgets/tags/TagsPanel.js:254
 msgid "Could not delete Tag(s)."
 msgstr "Nepodařilo se smazat štítek/štítky."
 
-#: js/widgets/tags/TagsPanel.js:311 js/widgets/tags/TagsPanel.js:373
+#: js/widgets/tags/TagsPanel.js:315 js/widgets/tags/TagsPanel.js:377
 msgid "Notice"
 msgstr "Upozornění"
 
-#: js/widgets/tags/TagsPanel.js:312 js/widgets/tags/TagsPanel.js:374
+#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
 msgid "The minimum tag length is three."
 msgstr "Minimální délka štítku jsou tři znaky."
 
-#: js/widgets/tags/TagsPanel.js:359
+#: js/widgets/tags/TagsPanel.js:363
 msgid "Could not create tag."
 msgstr "Nepodařilo se vytvořit štítek."
 
-#: js/widgets/tags/TagsPanel.js:392
+#: js/widgets/tags/TagsPanel.js:396
 msgid "Could not update tag."
 msgstr "Nepodařilo se aktualizovat štítek."
 
-#: js/widgets/tags/TagsPanel.js:425 js/widgets/tags/TagsPanel.js:483
+#: js/widgets/tags/TagsPanel.js:429 js/widgets/tags/TagsPanel.js:487
 msgid "Enter tag name"
 msgstr "Zadejte název štítku"
 
-#: js/widgets/tags/TagsPanel.js:426
+#: js/widgets/tags/TagsPanel.js:430
 msgid "Searching..."
 msgstr "Vyhledávám..."
 
-#: js/widgets/tags/TagsPanel.js:560
+#: js/widgets/tags/TagsPanel.js:564
 msgid "Color"
 msgstr "Barva"
 
@@ -949,45 +1029,49 @@ msgstr "Jedná se o kritickou aktualizaci a musí být nainstalována co nejdř�
 msgid "Please consider updating!"
 msgstr "Zvažte prosím aktualizaci!"
 
-#: Setup/setup.xml:1749
+#: Setup/setup.xml:1830
 msgid "note"
 msgstr "poznámka"
 
-#: Setup/setup.xml:1754
+#: Setup/setup.xml:1835
 msgid "default note type"
 msgstr "výchozí typ poznámky"
 
-#: Setup/setup.xml:1780
+#: Setup/setup.xml:1861
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:1785
+#: Setup/setup.xml:1866
 msgid "telephone call"
 msgstr "telefonní hovor"
 
-#: Setup/setup.xml:1811
+#: Setup/setup.xml:1892
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:1816
+#: Setup/setup.xml:1897
 msgid "email contact"
 msgstr "emailový kontakt"
 
-#: Setup/setup.xml:1842
+#: Setup/setup.xml:1923
 msgid "created"
 msgstr "vytvořeno"
 
-#: Setup/setup.xml:1847
+#: Setup/setup.xml:1928
 msgid "record created"
 msgstr "záznam byl vytvořen"
 
-#: Setup/setup.xml:1873
+#: Setup/setup.xml:1954
 msgid "changed"
 msgstr "změněno"
 
-#: Setup/setup.xml:1878
+#: Setup/setup.xml:1959
 msgid "record changed"
 msgstr "záznam byl změněn"
+
+#, fuzzy
+#~ msgid "Loading {0}..."
+#~ msgstr "nahrávám nový jazyk..."
 
 #, fuzzy
 #~ msgid "Do you really want to delete the selected {0}"
@@ -1197,10 +1281,6 @@ msgstr "záznam byl změněn"
 #~ msgstr "Příjmení"
 
 #, fuzzy
-#~ msgid "Last login at"
-#~ msgstr "Přihlašovací jméno"
-
-#, fuzzy
 #~ msgid "Password changed"
 #~ msgstr "Heslo"
 
@@ -1375,10 +1455,6 @@ msgstr "záznam byl změněn"
 #, fuzzy
 #~ msgid "Enter searchfilter"
 #~ msgstr "zadejte hledaný výraz"
-
-#, fuzzy
-#~ msgid "leadstate"
-#~ msgstr "Prosím čekejte"
 
 #, fuzzy
 #~ msgid "Show details"

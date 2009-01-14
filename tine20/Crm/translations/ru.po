@@ -17,70 +17,70 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Crm\n"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:105
 msgid "manage leads"
 msgstr "Обработать указания продажи"
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:106
 msgid "add, edit and delete leads"
 msgstr "Добавить, обработать и удалить, указания продажи"
 
-#: Controller/Lead.php:210
+#: Controller/Lead.php:220
 msgid "State"
 msgstr "Статус"
 
-#: Controller/Lead.php:211 js/Crm.js:1067
+#: Controller/Lead.php:221 js/Crm.js:1067
 msgid "Type"
 msgstr "Тип"
 
-#: Controller/Lead.php:212
+#: Controller/Lead.php:222
 msgid "Source"
 msgstr "Источник"
 
-#: Controller/Lead.php:213 Export/Pdf.php:89 js/LeadEditDialog.js:112
+#: Controller/Lead.php:223 Export/Pdf.php:89 js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "Начать"
 
-#: Controller/Lead.php:214
+#: Controller/Lead.php:224
 msgid "Scheduled end"
 msgstr "Запланированный конец"
 
-#: Controller/Lead.php:215 Export/Pdf.php:92 js/LeadEditDialog.js:126
+#: Controller/Lead.php:225 Export/Pdf.php:92 js/LeadEditDialog.js:126
 msgid "End"
 msgstr "Конец"
 
-#: Controller/Lead.php:216 Export/Pdf.php:83 js/Crm.js:407
+#: Controller/Lead.php:226 Export/Pdf.php:83 js/Crm.js:407
 msgid "Turnover"
 msgstr "Оборот "
 
-#: Controller/Lead.php:217 Export/Pdf.php:86 js/Crm.js:265 js/Crm.js:266
+#: Controller/Lead.php:227 Export/Pdf.php:86 js/Crm.js:265 js/Crm.js:266
 #: js/Crm.js:267 js/Crm.js:406 js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "Вероятность"
 
-#: Controller/Lead.php:218
+#: Controller/Lead.php:228
 msgid "Folder"
 msgstr "Папка"
 
-#: Controller/Lead.php:219
+#: Controller/Lead.php:229
 msgid "Updated by"
 msgstr "Обновленно"
 
-#: Controller/Lead.php:220
+#: Controller/Lead.php:230
 msgid "Updated Fields:"
 msgstr ""
 
-#: Controller/Lead.php:221
+#: Controller/Lead.php:231
 #, fuzzy, python-format
 msgid "%s changed from %s to %s."
 msgstr "{0} изменен с {0} на {0}."
 
-#: Controller/Lead.php:227
+#: Controller/Lead.php:237
 #, fuzzy, python-format
 msgid "Lead %s has been changed"
 msgstr "Совет продажи {0} был изменен"
 
-#: Controller/Lead.php:229
+#: Controller/Lead.php:239
 #, fuzzy, python-format
 msgid "Lead %s has been creaded"
 msgstr "Совет продажи {0} был произведен"
@@ -203,13 +203,13 @@ msgstr "Идентификацыя указания продажи"
 msgid "Lead name"
 msgstr "Название указания продажи"
 
-#: js/Crm.js:403 js/Crm.js:1678 js/LeadEditDialog.js:332
-#: js/LeadEditDialog.js:375
+#: js/Crm.js:403 js/Crm.js:1678 js/LeadEditDialog.js:333
+#: js/LeadEditDialog.js:376
 msgid "Partner"
 msgstr "Партнёр"
 
-#: js/Crm.js:404 js/Crm.js:1658 js/LeadEditDialog.js:331
-#: js/LeadEditDialog.js:371
+#: js/Crm.js:404 js/Crm.js:1658 js/LeadEditDialog.js:332
+#: js/LeadEditDialog.js:372
 msgid "Customer"
 msgstr "Клиент"
 
@@ -361,7 +361,7 @@ msgstr "Добавьте нового клиента"
 msgid "Change type to Customer"
 msgstr ""
 
-#: js/Crm.js:1668 js/LeadEditDialog.js:330 js/LeadEditDialog.js:367
+#: js/Crm.js:1668 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
 msgid "Responsible"
 msgstr "Ответственный"
 
@@ -462,59 +462,59 @@ msgstr "Краткий обзор"
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/LeadEditDialog.js:227
+#: js/LeadEditDialog.js:228
 msgid "Expected turnover"
 msgstr "Ожидаемый оборот"
 
-#: Setup/setup.xml:362
+#: Setup/setup.xml:365
 msgid "telephone"
 msgstr "Телефон"
 
-#: Setup/setup.xml:376
+#: Setup/setup.xml:379
 msgid "email"
 msgstr "Электронная почта"
 
-#: Setup/setup.xml:390
+#: Setup/setup.xml:393
 msgid "website"
 msgstr "вебсайт"
 
-#: Setup/setup.xml:404
+#: Setup/setup.xml:407
 msgid "fair"
 msgstr "Рынок"
 
-#: Setup/setup.xml:418
+#: Setup/setup.xml:421
 msgid "customer"
 msgstr "Клиент"
 
-#: Setup/setup.xml:432
+#: Setup/setup.xml:435
 msgid "partner"
 msgstr "Партнер"
 
-#: Setup/setup.xml:446
+#: Setup/setup.xml:449
 msgid "reseller"
 msgstr "Перепродавец"
 
-#: Setup/setup.xml:460
+#: Setup/setup.xml:463
 msgid "open"
 msgstr "Открыто"
 
-#: Setup/setup.xml:478
+#: Setup/setup.xml:481
 msgid "contacted"
 msgstr "связавшийся"
 
-#: Setup/setup.xml:496
+#: Setup/setup.xml:499
 msgid "waiting for feedback"
 msgstr "Ожидание ответа"
 
-#: Setup/setup.xml:514
+#: Setup/setup.xml:517
 msgid "quote sent"
 msgstr ""
 
-#: Setup/setup.xml:532
+#: Setup/setup.xml:535
 msgid "accepted"
 msgstr "Принятый"
 
-#: Setup/setup.xml:554
+#: Setup/setup.xml:557
 msgid "lost"
 msgstr "Потерянный"
 

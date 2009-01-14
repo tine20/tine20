@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0}'s личные задания"
 
-#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:85
+#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:72
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -30,39 +30,39 @@ msgstr[0] "Задания"
 msgstr[1] "Задания"
 msgstr[2] "Задания"
 
-#: js/EditDialog.js:116 js/GridPanel.js:56 js/GridPanel.js:112
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:113
 msgid "Summary"
 msgstr "Содержание"
 
-#: js/EditDialog.js:121
+#: js/EditDialog.js:118
 msgid "Due date"
 msgstr "Число истечения срока"
 
-#: js/EditDialog.js:124 js/GridPanel.js:133
+#: js/EditDialog.js:121 js/GridPanel.js:134
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/EditDialog.js:127 js/GridPanel.js:185
+#: js/EditDialog.js:124 js/GridPanel.js:186
 msgid "Responsible"
 msgstr ""
 
-#: js/EditDialog.js:131
+#: js/EditDialog.js:128
 msgid "Notes"
 msgstr "Примечания"
 
-#: js/EditDialog.js:132
+#: js/EditDialog.js:129
 msgid "Enter description..."
 msgstr "Введите описание..."
 
-#: js/EditDialog.js:137
+#: js/EditDialog.js:134
 msgid "Percentage"
 msgstr "Подтвердить"
 
-#: js/EditDialog.js:141 js/GridPanel.js:162
+#: js/EditDialog.js:138 js/GridPanel.js:163
 msgid "Status"
 msgstr "Статус"
 
-#: js/EditDialog.js:145
+#: js/EditDialog.js:142
 msgid "Completed"
 msgstr ""
 
@@ -74,39 +74,39 @@ msgstr[0] "Вы уверены что хотите удалить выбранн
 msgstr[1] "Вы уверены что хотите удалить выбранные задания"
 msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
 
-#: js/GridPanel.js:76
+#: js/GridPanel.js:77
 msgid "Failed"
 msgstr "Неудача"
 
-#: js/GridPanel.js:76
+#: js/GridPanel.js:77
 msgid "Could not save task."
 msgstr "Задание не смогла быть сохранино"
 
-#: js/GridPanel.js:120
+#: js/GridPanel.js:121
 msgid "Add a task..."
 msgstr "Добавить задание..."
 
-#: js/GridPanel.js:124
+#: js/GridPanel.js:125
 msgid "Due Date"
 msgstr "Число истечения срока"
 
-#: js/GridPanel.js:148
+#: js/GridPanel.js:149
 msgid "Percent"
 msgstr "Процент"
 
-#: js/GridPanel.js:177
+#: js/GridPanel.js:178
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:205
+#: js/GridPanel.js:206
 msgid "Show closed"
 msgstr "Показ закрылся"
 
-#: js/Status.js:45 Setup/setup.xml:431
+#: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
 msgstr "НЕЗАВЕРШЕННЫЙ"
 
-#: js/Tasks.js:89
+#: js/Tasks.js:76
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -114,15 +114,15 @@ msgstr[0] "Сделать список"
 msgstr[1] "Сделать список"
 msgstr[2] "Сделать список"
 
-#: Setup/setup.xml:387
+#: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
 msgstr "ДЕЙСТВИЕ-ПОТРЕБНОСТЕЙ"
 
-#: Setup/setup.xml:409
+#: Setup/setup.xml:412
 msgid "COMPLETED"
 msgstr "ЗАКОНЧЕНО"
 
-#: Setup/setup.xml:453
+#: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "ОТСТАВЛЕНО"
 

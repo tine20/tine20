@@ -18,52 +18,45 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s 的个人任务"
 
-#: js/EditDialog.js:99
-#: js/GridPanel.js:55
-#: js/Tasks.js:85
+#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:72
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "任务"
 
-#: js/EditDialog.js:116
-#: js/GridPanel.js:56
-#: js/GridPanel.js:112
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:113
 msgid "Summary"
 msgstr "摘要"
 
-#: js/EditDialog.js:121
+#: js/EditDialog.js:118
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/EditDialog.js:124
-#: js/GridPanel.js:133
+#: js/EditDialog.js:121 js/GridPanel.js:134
 msgid "Priority"
 msgstr "优先"
 
-#: js/EditDialog.js:127
-#: js/GridPanel.js:185
+#: js/EditDialog.js:124 js/GridPanel.js:186
 msgid "Responsible"
 msgstr "有责任的"
 
-#: js/EditDialog.js:131
+#: js/EditDialog.js:128
 msgid "Notes"
 msgstr "注释"
 
-#: js/EditDialog.js:132
+#: js/EditDialog.js:129
 msgid "Enter description..."
 msgstr "输入描述"
 
-#: js/EditDialog.js:137
+#: js/EditDialog.js:134
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/EditDialog.js:141
-#: js/GridPanel.js:162
+#: js/EditDialog.js:138 js/GridPanel.js:163
 msgid "Status"
 msgstr "状态"
 
-#: js/EditDialog.js:145
+#: js/EditDialog.js:142
 msgid "Completed"
 msgstr "完成的"
 
@@ -73,103 +66,124 @@ msgid "Do you realy want to delte the selected task?"
 msgid_plural "Do you relay want to delete the selected tasks?"
 msgstr[0] "确实想删除选中的任务？"
 
-#: js/GridPanel.js:76
+#: js/GridPanel.js:77
 msgid "Failed"
 msgstr "失败"
 
-#: js/GridPanel.js:76
+#: js/GridPanel.js:77
 msgid "Could not save task."
 msgstr "不能保存任务"
 
-#: js/GridPanel.js:120
+#: js/GridPanel.js:121
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/GridPanel.js:124
+#: js/GridPanel.js:125
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/GridPanel.js:148
+#: js/GridPanel.js:149
 msgid "Percent"
 msgstr "百分比"
 
-#: js/GridPanel.js:177
+#: js/GridPanel.js:178
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: js/GridPanel.js:205
+#: js/GridPanel.js:206
 msgid "Show closed"
 msgstr "显示关闭的"
 
-#: js/Status.js:45
-#: Setup/setup.xml:431
+#: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
 msgstr "正在处理"
 
-#: js/Tasks.js:89
+#: js/Tasks.js:76
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
-#: Setup/setup.xml:387
+#: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
 msgstr "需要执行"
 
-#: Setup/setup.xml:409
+#: Setup/setup.xml:412
 msgid "COMPLETED"
 msgstr "完成"
 
-#: Setup/setup.xml:453
+#: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "取消了"
 
 #~ msgid "Could not delete task(s)."
 #~ msgstr "不能删除任务"
+
 #~ msgid "Edit task"
 #~ msgstr "编辑任务"
+
 #~ msgid "Add task"
 #~ msgstr "添加任务"
+
 #~ msgid "Delete task"
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "删除任务"
+
 #~ msgid "to do lists"
 #~ msgstr "to do 列表"
+
 #~ msgid "Enter searchfilter"
 #~ msgstr "输入搜索过滤器"
+
 #~ msgid "Search:"
 #~ msgstr "搜索："
+
 #~ msgid "Displaying tasks {0} - {1} of {2}"
 #~ msgstr "显示任务 {0} - {1} of {2}"
+
 #~ msgid "No tasks to display"
 #~ msgstr "没有任务要显示"
+
 #~ msgid "No Tasks to display"
 #~ msgstr "没有任务要显示"
+
 #~ msgid "Loading Task..."
 #~ msgstr "加载任务..."
+
 #~ msgid "Please Wait"
 #~ msgstr "请稍等"
+
 #~ msgid "Add New Task"
 #~ msgstr "添加新任务"
+
 #~ msgid "Edit Task \"{0}\""
 #~ msgstr "编辑任务 \"{0}\""
+
 #~ msgid "Please wait"
 #~ msgstr "请稍等"
+
 #~ msgid "Saving Task"
 #~ msgstr "保存任务"
+
 #~ msgid "Errors"
 #~ msgstr "错误"
+
 #~ msgid "Please fix the errors noted."
 #~ msgstr "请修改标注的错误"
+
 #~ msgid "Confirm"
 #~ msgstr "确认"
+
 #~ msgid "Do you really want to delete this task?"
 #~ msgstr "确实要删除这个任务？"
+
 #~ msgid "Please wait a moment..."
 #~ msgstr "请稍等一会儿..."
+
 #~ msgid "Enter short name..."
 #~ msgstr "输入短名..."
+
 #~ msgid "Saved in"
 #~ msgstr "保存到"
+
 #~ msgid "Folder"
 #~ msgstr "文件夹"
-

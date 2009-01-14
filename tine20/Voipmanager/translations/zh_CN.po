@@ -27,7 +27,7 @@ msgstr "删除上下文"
 
 #: js/Asterisk/Context.js:152 js/Asterisk/Meetme.js:152
 #: js/Asterisk/SipPeer.js:160 js/Asterisk/Voicemail.js:156
-#: js/Snom/Location.js:152 js/Snom/Phone.js:234 js/Snom/Settings.js:163
+#: js/Snom/Location.js:152 js/Snom/Phone.js:228 js/Snom/Settings.js:163
 #: js/Snom/Software.js:160 js/Snom/Templates.js:152
 msgid "Search: "
 msgstr "搜索："
@@ -46,14 +46,14 @@ msgstr "没有上下文要显示"
 msgid "id"
 msgstr "id"
 
-#: js/Asterisk/Context.js:191 js/Asterisk/SipPeer.js:211 js/Snom/Phone.js:1402
+#: js/Asterisk/Context.js:191 js/Asterisk/SipPeer.js:211 js/Snom/Phone.js:1396
 #: js/Snom/Settings.js:202 js/Snom/Settings.js:470 js/Snom/Settings.js:607
 #: js/Snom/Software.js:200 js/Snom/Software.js:435 js/Snom/Templates.js:191
 msgid "name"
 msgstr "名字"
 
 #: js/Asterisk/Context.js:192 js/Asterisk/Context.js:404
-#: js/Snom/Location.js:206 js/Snom/Location.js:441 js/Snom/Phone.js:917
+#: js/Snom/Location.js:206 js/Snom/Location.js:441 js/Snom/Phone.js:911
 #: js/Snom/Settings.js:486 js/Snom/Software.js:201 js/Snom/Software.js:441
 #: js/Snom/Templates.js:192 js/Snom/Templates.js:407
 msgid "Description"
@@ -61,8 +61,8 @@ msgstr "描述"
 
 #: js/Asterisk/Context.js:396 js/Asterisk/SipPeer.js:456
 #: js/Asterisk/SipPeer.js:610 js/Asterisk/Voicemail.js:456
-#: js/Snom/Location.js:202 js/Snom/Location.js:433 js/Snom/Phone.js:759
-#: js/Snom/Phone.js:1203 js/Snom/Templates.js:399
+#: js/Snom/Location.js:202 js/Snom/Location.js:433 js/Snom/Phone.js:753
+#: js/Snom/Phone.js:1197 js/Snom/Templates.js:399
 msgid "Name"
 msgstr "名字"
 
@@ -122,7 +122,7 @@ msgstr "显示 sipPeers {0} - {1} of {2}"
 msgid "No sipPeers to display"
 msgstr "没有 sipPeers 要显示"
 
-#: js/Asterisk/SipPeer.js:210 js/Snom/Phone.js:272 js/Snom/Settings.js:201
+#: js/Asterisk/SipPeer.js:210 js/Snom/Phone.js:266 js/Snom/Settings.js:201
 msgid "Id"
 msgstr "Id"
 
@@ -178,7 +178,7 @@ msgstr "主机"
 msgid "insecure"
 msgstr "不安全"
 
-#: js/Asterisk/SipPeer.js:225 js/Snom/Phone.js:1342 js/Snom/Settings.js:205
+#: js/Asterisk/SipPeer.js:225 js/Snom/Phone.js:1336 js/Snom/Settings.js:205
 #: js/Snom/Settings.js:545
 msgid "language"
 msgstr "语言"
@@ -433,7 +433,7 @@ msgstr "等待音乐"
 msgid "Reg Seconds"
 msgstr ""
 
-#: js/Asterisk/SipPeer.js:929 js/Snom/Phone.js:295
+#: js/Asterisk/SipPeer.js:929 js/Snom/Phone.js:289
 msgid "IP Address"
 msgstr "IP 地址"
 
@@ -579,9 +579,9 @@ msgstr "附加的"
 #: js/Asterisk/Voicemail.js:756 js/Asterisk/Voicemail.js:782
 #: js/Asterisk/Voicemail.js:813 js/Asterisk/Voicemail.js:839
 #: js/Asterisk/Voicemail.js:865 js/Asterisk/Voicemail.js:896
-#: js/Snom/Location.js:567 js/Snom/Location.js:593 js/Snom/Phone.js:1437
-#: js/Snom/Phone.js:1557 js/Snom/Phone.js:1585 js/Snom/Phone.js:1618
-#: js/Snom/Phone.js:1646 js/Snom/Phone.js:1674 js/Snom/Settings.js:643
+#: js/Snom/Location.js:567 js/Snom/Location.js:593 js/Snom/Phone.js:1431
+#: js/Snom/Phone.js:1551 js/Snom/Phone.js:1579 js/Snom/Phone.js:1612
+#: js/Snom/Phone.js:1640 js/Snom/Phone.js:1668 js/Snom/Settings.js:643
 #: js/Snom/Settings.js:767 js/Snom/Settings.js:796 js/Snom/Settings.js:830
 #: js/Snom/Settings.js:859 js/Snom/Settings.js:888
 msgid "on"
@@ -593,9 +593,9 @@ msgstr "开"
 #: js/Asterisk/Voicemail.js:757 js/Asterisk/Voicemail.js:783
 #: js/Asterisk/Voicemail.js:814 js/Asterisk/Voicemail.js:840
 #: js/Asterisk/Voicemail.js:866 js/Asterisk/Voicemail.js:897
-#: js/Snom/Location.js:568 js/Snom/Location.js:594 js/Snom/Phone.js:1440
-#: js/Snom/Phone.js:1558 js/Snom/Phone.js:1586 js/Snom/Phone.js:1619
-#: js/Snom/Phone.js:1647 js/Snom/Phone.js:1675 js/Snom/Settings.js:646
+#: js/Snom/Location.js:568 js/Snom/Location.js:594 js/Snom/Phone.js:1434
+#: js/Snom/Phone.js:1552 js/Snom/Phone.js:1580 js/Snom/Phone.js:1613
+#: js/Snom/Phone.js:1641 js/Snom/Phone.js:1669 js/Snom/Settings.js:646
 #: js/Snom/Settings.js:768 js/Snom/Settings.js:797 js/Snom/Settings.js:831
 #: js/Snom/Settings.js:860 js/Snom/Settings.js:889
 msgid "off"
@@ -717,178 +717,178 @@ msgstr "HTTP 端口"
 msgid "HTTP Password"
 msgstr "HTTP 密码"
 
-#: js/Snom/Phone.js:147
+#: js/Snom/Phone.js:141
 msgid "add phone"
 msgstr "添加电话"
 
-#: js/Snom/Phone.js:154
+#: js/Snom/Phone.js:148
 msgid "edit phone"
 msgstr "编辑电话"
 
-#: js/Snom/Phone.js:162
+#: js/Snom/Phone.js:156
 msgid "delete phone"
 msgstr "删除电话"
 
-#: js/Snom/Phone.js:170
+#: js/Snom/Phone.js:164
 msgid "reset phones HTTP authentication"
 msgstr "重置电话 HTTP 授权"
 
-#: js/Snom/Phone.js:177
+#: js/Snom/Phone.js:171
 msgid "Open phones web gui"
 msgstr ""
 
-#: js/Snom/Phone.js:266
+#: js/Snom/Phone.js:260
 msgid "Displaying phones {0} - {1} of {2}"
 msgstr "显示电话 {0} - {1} of {2}"
 
-#: js/Snom/Phone.js:267
+#: js/Snom/Phone.js:261
 msgid "No phones to display"
 msgstr "没有电话要显示"
 
-#: js/Snom/Phone.js:273
+#: js/Snom/Phone.js:267
 msgid "MAC address"
 msgstr "MAC 地址"
 
-#: js/Snom/Phone.js:274 js/Snom/Settings.js:203
+#: js/Snom/Phone.js:268 js/Snom/Settings.js:203
 msgid "description"
 msgstr "描述"
 
-#: js/Snom/Phone.js:278 js/Snom/Phone.js:898
+#: js/Snom/Phone.js:272 js/Snom/Phone.js:892
 msgid "Location"
 msgstr "位置"
 
-#: js/Snom/Phone.js:288 js/Snom/Phone.js:776
+#: js/Snom/Phone.js:282 js/Snom/Phone.js:770
 msgid "Template"
 msgstr "模板"
 
-#: js/Snom/Phone.js:296
+#: js/Snom/Phone.js:290
 msgid "Software"
 msgstr "软件"
 
-#: js/Snom/Phone.js:297
+#: js/Snom/Phone.js:291
 msgid "current model"
 msgstr "当前模型"
 
-#: js/Snom/Phone.js:298
+#: js/Snom/Phone.js:292
 msgid "redirect event"
 msgstr "重定向事件"
 
-#: js/Snom/Phone.js:299
+#: js/Snom/Phone.js:293
 msgid "redirect number"
 msgstr "重定向号码"
 
-#: js/Snom/Phone.js:300
+#: js/Snom/Phone.js:294
 msgid "redirect time"
 msgstr "重定向时间"
 
-#: js/Snom/Phone.js:301
+#: js/Snom/Phone.js:295
 msgid "settings loaded at"
 msgstr ""
 
-#: js/Snom/Phone.js:302
+#: js/Snom/Phone.js:296
 msgid "last modified"
 msgstr "最后修改的"
 
-#: js/Snom/Phone.js:608
+#: js/Snom/Phone.js:602
 msgid "lineactive"
 msgstr "线路激活"
 
-#: js/Snom/Phone.js:667
+#: js/Snom/Phone.js:661
 msgid "sipCombo"
 msgstr ""
 
-#: js/Snom/Phone.js:676
+#: js/Snom/Phone.js:670
 msgid "Idle Text"
 msgstr "空闲文字"
 
-#: js/Snom/Phone.js:769
+#: js/Snom/Phone.js:763
 msgid "MAC Address"
 msgstr "MAC 地址"
 
-#: js/Snom/Phone.js:862
+#: js/Snom/Phone.js:856
 msgid "Phone Model"
 msgstr "电话型号"
 
-#: js/Snom/Phone.js:932
+#: js/Snom/Phone.js:926
 msgid "infos"
 msgstr "信息"
 
-#: js/Snom/Phone.js:949
+#: js/Snom/Phone.js:943
 msgid "Current IP Address"
 msgstr "当前 IP 地址"
 
-#: js/Snom/Phone.js:956
+#: js/Snom/Phone.js:950
 msgid "Current Software Version"
 msgstr "当前软件版本"
 
-#: js/Snom/Phone.js:969
+#: js/Snom/Phone.js:963
 msgid "Settings Loaded at"
 msgstr ""
 
-#: js/Snom/Phone.js:977
+#: js/Snom/Phone.js:971
 msgid "Firmware last checked at"
 msgstr "固件最后检查时间"
 
-#: js/Snom/Phone.js:991
+#: js/Snom/Phone.js:985
 msgid "redirection"
 msgstr "重定向"
 
-#: js/Snom/Phone.js:1008
+#: js/Snom/Phone.js:1002
 msgid "redirect_event"
 msgstr "重定向事件"
 
-#: js/Snom/Phone.js:1033
+#: js/Snom/Phone.js:1027
 msgid "all"
 msgstr "所有"
 
-#: js/Snom/Phone.js:1034
+#: js/Snom/Phone.js:1028
 msgid "busy"
 msgstr "忙"
 
-#: js/Snom/Phone.js:1035 js/Snom/Phone.js:1529 js/Snom/Settings.js:738
+#: js/Snom/Phone.js:1029 js/Snom/Phone.js:1523 js/Snom/Settings.js:738
 msgid "none"
 msgstr "没有"
 
-#: js/Snom/Phone.js:1036
+#: js/Snom/Phone.js:1030
 msgid "time"
 msgstr "时间"
 
-#: js/Snom/Phone.js:1047
+#: js/Snom/Phone.js:1041
 msgid "redirect_number"
 msgstr "重定向号码"
 
-#: js/Snom/Phone.js:1059
+#: js/Snom/Phone.js:1053
 msgid "redirect_time"
 msgstr "重定向时间"
 
-#: js/Snom/Phone.js:1156
+#: js/Snom/Phone.js:1150
 msgid "add account"
 msgstr "添加帐户"
 
-#: js/Snom/Phone.js:1163
+#: js/Snom/Phone.js:1157
 msgid "remove account"
 msgstr "删除帐户"
 
-#: js/Snom/Phone.js:1233
+#: js/Snom/Phone.js:1227
 msgid "Owner"
 msgstr "主人"
 
-#: js/Snom/Phone.js:1250
+#: js/Snom/Phone.js:1244
 msgid "Users"
 msgstr "用户"
 
-#: js/Snom/Phone.js:1273 js/Snom/Templates.js:431
+#: js/Snom/Phone.js:1267 js/Snom/Templates.js:431
 msgid "Settings"
 msgstr "设置"
 
-#: js/Snom/Phone.js:1305 js/Snom/Settings.js:204 js/Snom/Settings.js:507
+#: js/Snom/Phone.js:1299 js/Snom/Settings.js:204 js/Snom/Settings.js:507
 msgid "web_language"
 msgstr "web 语言"
 
-#: js/Snom/Phone.js:1320 js/Snom/Phone.js:1357 js/Snom/Phone.js:1400
-#: js/Snom/Phone.js:1436 js/Snom/Phone.js:1466 js/Snom/Phone.js:1495
-#: js/Snom/Phone.js:1528 js/Snom/Phone.js:1556 js/Snom/Phone.js:1584
-#: js/Snom/Phone.js:1617 js/Snom/Phone.js:1645 js/Snom/Phone.js:1673
+#: js/Snom/Phone.js:1314 js/Snom/Phone.js:1351 js/Snom/Phone.js:1394
+#: js/Snom/Phone.js:1430 js/Snom/Phone.js:1460 js/Snom/Phone.js:1489
+#: js/Snom/Phone.js:1522 js/Snom/Phone.js:1550 js/Snom/Phone.js:1578
+#: js/Snom/Phone.js:1611 js/Snom/Phone.js:1639 js/Snom/Phone.js:1667
 #: js/Snom/Settings.js:523 js/Snom/Settings.js:561 js/Snom/Settings.js:605
 #: js/Snom/Settings.js:642 js/Snom/Settings.js:673 js/Snom/Settings.js:703
 #: js/Snom/Settings.js:737 js/Snom/Settings.js:766 js/Snom/Settings.js:795
@@ -896,91 +896,91 @@ msgstr "web 语言"
 msgid "- factory default -"
 msgstr "-工厂缺省-"
 
-#: js/Snom/Phone.js:1385 js/Snom/Settings.js:206 js/Snom/Settings.js:589
+#: js/Snom/Phone.js:1379 js/Snom/Settings.js:206 js/Snom/Settings.js:589
 msgid "display_method"
 msgstr "显示方式"
 
-#: js/Snom/Phone.js:1401 js/Snom/Settings.js:606
+#: js/Snom/Phone.js:1395 js/Snom/Settings.js:606
 msgid "whole url"
 msgstr "全 url"
 
-#: js/Snom/Phone.js:1403 js/Snom/Settings.js:608
+#: js/Snom/Phone.js:1397 js/Snom/Settings.js:608
 msgid "number"
 msgstr "号码"
 
-#: js/Snom/Phone.js:1404 js/Snom/Settings.js:609
+#: js/Snom/Phone.js:1398 js/Snom/Settings.js:609
 msgid "name + number"
 msgstr "名字＋号码"
 
-#: js/Snom/Phone.js:1405 js/Snom/Settings.js:610
+#: js/Snom/Phone.js:1399 js/Snom/Settings.js:610
 msgid "number + name"
 msgstr "号码＋名字"
 
-#: js/Snom/Phone.js:1421 js/Snom/Settings.js:215 js/Snom/Settings.js:626
+#: js/Snom/Phone.js:1415 js/Snom/Settings.js:215 js/Snom/Settings.js:626
 msgid "call_waiting"
 msgstr "呼叫等待"
 
-#: js/Snom/Phone.js:1438 js/Snom/Settings.js:644
+#: js/Snom/Phone.js:1432 js/Snom/Settings.js:644
 msgid "visual"
 msgstr ""
 
-#: js/Snom/Phone.js:1439 js/Snom/Settings.js:645
+#: js/Snom/Phone.js:1433 js/Snom/Settings.js:645
 msgid "ringer"
 msgstr "振铃器"
 
-#: js/Snom/Phone.js:1451 js/Snom/Settings.js:207 js/Snom/Settings.js:657
+#: js/Snom/Phone.js:1445 js/Snom/Settings.js:207 js/Snom/Settings.js:657
 msgid "mwi_notification"
 msgstr ""
 
-#: js/Snom/Phone.js:1467 js/Snom/Settings.js:674
+#: js/Snom/Phone.js:1461 js/Snom/Settings.js:674
 msgid "silent"
 msgstr "安静"
 
-#: js/Snom/Phone.js:1468 js/Snom/Settings.js:675
+#: js/Snom/Phone.js:1462 js/Snom/Settings.js:675
 msgid "beep"
 msgstr "哔哔"
 
-#: js/Snom/Phone.js:1469 js/Snom/Settings.js:676
+#: js/Snom/Phone.js:1463 js/Snom/Settings.js:676
 msgid "reminder"
 msgstr "提醒器"
 
-#: js/Snom/Phone.js:1480 js/Snom/Settings.js:208 js/Snom/Settings.js:687
+#: js/Snom/Phone.js:1474 js/Snom/Settings.js:208 js/Snom/Settings.js:687
 msgid "mwi_dialtone"
 msgstr ""
 
-#: js/Snom/Phone.js:1496 js/Snom/Settings.js:704
+#: js/Snom/Phone.js:1490 js/Snom/Settings.js:704
 msgid "normal"
 msgstr "正常"
 
-#: js/Snom/Phone.js:1497 js/Snom/Settings.js:705
+#: js/Snom/Phone.js:1491 js/Snom/Settings.js:705
 msgid "stutter"
 msgstr ""
 
-#: js/Snom/Phone.js:1513 js/Snom/Settings.js:209 js/Snom/Settings.js:721
+#: js/Snom/Phone.js:1507 js/Snom/Settings.js:209 js/Snom/Settings.js:721
 msgid "headset_device"
 msgstr ""
 
-#: js/Snom/Phone.js:1530 js/Snom/Settings.js:739
+#: js/Snom/Phone.js:1524 js/Snom/Settings.js:739
 msgid "headset_rj"
 msgstr ""
 
-#: js/Snom/Phone.js:1541 js/Snom/Settings.js:210 js/Snom/Settings.js:750
+#: js/Snom/Phone.js:1535 js/Snom/Settings.js:210 js/Snom/Settings.js:750
 msgid "message_led_other"
 msgstr ""
 
-#: js/Snom/Phone.js:1569 js/Snom/Settings.js:211 js/Snom/Settings.js:779
+#: js/Snom/Phone.js:1563 js/Snom/Settings.js:211 js/Snom/Settings.js:779
 msgid "global_missed_counter"
 msgstr ""
 
-#: js/Snom/Phone.js:1602 js/Snom/Settings.js:212 js/Snom/Settings.js:813
+#: js/Snom/Phone.js:1596 js/Snom/Settings.js:212 js/Snom/Settings.js:813
 msgid "scroll_outgoing"
 msgstr ""
 
-#: js/Snom/Phone.js:1630 js/Snom/Settings.js:213 js/Snom/Settings.js:842
+#: js/Snom/Phone.js:1624 js/Snom/Settings.js:213 js/Snom/Settings.js:842
 msgid "show_local_line"
 msgstr "显示本地线路"
 
-#: js/Snom/Phone.js:1658 js/Snom/Settings.js:214 js/Snom/Settings.js:871
+#: js/Snom/Phone.js:1652 js/Snom/Settings.js:214 js/Snom/Settings.js:871
 msgid "show_call_status"
 msgstr "显示呼叫状态"
 

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2008-11-26 11:36+0100\n"
-"Last-Translator: Matthias Greiling <m.greiling@metaways.de>\n"
+"PO-Revision-Date: 2009-01-14 20:16+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,50 +14,50 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:105
 msgid "manage leads"
 msgstr "Leads bearbeiten"
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:106
 msgid "add, edit and delete leads"
 msgstr "Leads hinzufügen, bearbeiten und löschen"
 
-#: Controller/Lead.php:210
+#: Controller/Lead.php:220
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:211
+#: Controller/Lead.php:221
 #: js/Crm.js:1067
 msgid "Type"
 msgstr "Typ"
 
-#: Controller/Lead.php:212
+#: Controller/Lead.php:222
 msgid "Source"
 msgstr "Quelle"
 
-#: Controller/Lead.php:213
+#: Controller/Lead.php:223
 #: Export/Pdf.php:89
 #: js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "Start"
 
-#: Controller/Lead.php:214
+#: Controller/Lead.php:224
 msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Controller/Lead.php:215
+#: Controller/Lead.php:225
 #: Export/Pdf.php:92
 #: js/LeadEditDialog.js:126
 msgid "End"
 msgstr "Ende"
 
-#: Controller/Lead.php:216
+#: Controller/Lead.php:226
 #: Export/Pdf.php:83
 #: js/Crm.js:407
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Controller/Lead.php:217
+#: Controller/Lead.php:227
 #: Export/Pdf.php:86
 #: js/Crm.js:265
 #: js/Crm.js:266
@@ -67,37 +67,37 @@ msgstr "Umsatz"
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
-#: Controller/Lead.php:218
+#: Controller/Lead.php:228
 msgid "Folder"
 msgstr "Ordner"
 
-#: Controller/Lead.php:219
+#: Controller/Lead.php:229
 msgid "Updated by"
 msgstr "Aktualisiert von"
 
-#: Controller/Lead.php:220
+#: Controller/Lead.php:230
 msgid "Updated Fields:"
 msgstr "Geänderte Felder:"
 
-#: Controller/Lead.php:221
-#, fuzzy, python-format
+#: Controller/Lead.php:231
+#, python-format
 msgid "%s changed from %s to %s."
-msgstr "{0} wurde von {0} auf {0} geändert."
+msgstr "%s wurde von %s auf %s geändert."
 
-#: Controller/Lead.php:227
-#, fuzzy, python-format
+#: Controller/Lead.php:237
+#, python-format
 msgid "Lead %s has been changed"
-msgstr "Lead {0} wurde geändert"
+msgstr "Lead %s wurde geändert"
 
-#: Controller/Lead.php:229
-#, fuzzy, python-format
+#: Controller/Lead.php:239
+#, python-format
 msgid "Lead %s has been creaded"
-msgstr "Lead {0} wurde erstellt "
+msgstr "Lead %s wurde erstellt "
 
 #: Controller.php:100
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal leads"
-msgstr "{0}'s persönliche Leads"
+msgstr "%ss persönliche Leads"
 
 #: Export/Pdf.php:71
 msgid "Lead Data"
@@ -227,15 +227,15 @@ msgstr "Lead-Name"
 
 #: js/Crm.js:403
 #: js/Crm.js:1678
-#: js/LeadEditDialog.js:332
-#: js/LeadEditDialog.js:375
+#: js/LeadEditDialog.js:333
+#: js/LeadEditDialog.js:376
 msgid "Partner"
 msgstr "Partner"
 
 #: js/Crm.js:404
 #: js/Crm.js:1658
-#: js/LeadEditDialog.js:331
-#: js/LeadEditDialog.js:371
+#: js/LeadEditDialog.js:332
+#: js/LeadEditDialog.js:372
 msgid "Customer"
 msgstr "Kunde"
 
@@ -336,9 +336,8 @@ msgid "Contactdata"
 msgstr "Kontakte"
 
 #: js/Crm.js:1112
-#, fuzzy
 msgid "Search for Contacts to add ..."
-msgstr "Kontakte suchen"
+msgstr "Kontakte zum Hinzufügen suchen..."
 
 #: js/Crm.js:1144
 msgid "Summary"
@@ -379,7 +378,7 @@ msgstr "Preis"
 
 #: js/Crm.js:1419
 msgid "Change contact type"
-msgstr ""
+msgstr "Kontakttyp ändern"
 
 #: js/Crm.js:1648
 msgid "Add new contact"
@@ -391,21 +390,21 @@ msgstr "Neuen Kunden hinzufügen"
 
 #: js/Crm.js:1659
 msgid "Change type to Customer"
-msgstr ""
+msgstr "Kontakttyp auf Kunde setzen"
 
 #: js/Crm.js:1668
-#: js/LeadEditDialog.js:330
-#: js/LeadEditDialog.js:367
+#: js/LeadEditDialog.js:331
+#: js/LeadEditDialog.js:368
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
 #: js/Crm.js:1669
 msgid "Change type to Responsible"
-msgstr ""
+msgstr "Kontakttyp auf Verantwortlicher setzen"
 
 #: js/Crm.js:1679
 msgid "Change type to Partner"
-msgstr ""
+msgstr "Kontakttyp auf Partner setzen"
 
 #: js/Crm.js:1687
 msgid "Edit contact"
@@ -473,7 +472,6 @@ msgid "Add New Lead"
 msgstr "Neuen Lead hinzufügen"
 
 #: js/Crm.js:1869
-#, fuzzy
 msgid "Edit Lead \"{0}\""
 msgstr "Lead \"{0}\" bearbeiten"
 
@@ -497,59 +495,59 @@ msgstr "Übersicht"
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
-#: js/LeadEditDialog.js:227
+#: js/LeadEditDialog.js:228
 msgid "Expected turnover"
 msgstr "Erwarteter Umsatz"
 
-#: Setup/setup.xml:362
+#: Setup/setup.xml:365
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:376
+#: Setup/setup.xml:379
 msgid "email"
 msgstr "Email"
 
-#: Setup/setup.xml:390
+#: Setup/setup.xml:393
 msgid "website"
 msgstr "Website"
 
-#: Setup/setup.xml:404
+#: Setup/setup.xml:407
 msgid "fair"
 msgstr "Markt"
 
-#: Setup/setup.xml:418
+#: Setup/setup.xml:421
 msgid "customer"
 msgstr "Kunde"
 
-#: Setup/setup.xml:432
+#: Setup/setup.xml:435
 msgid "partner"
 msgstr "Partner"
 
-#: Setup/setup.xml:446
+#: Setup/setup.xml:449
 msgid "reseller"
 msgstr "Reseller"
 
-#: Setup/setup.xml:460
+#: Setup/setup.xml:463
 msgid "open"
 msgstr "Öffnen"
 
-#: Setup/setup.xml:478
+#: Setup/setup.xml:481
 msgid "contacted"
 msgstr "kontaktiert"
 
-#: Setup/setup.xml:496
+#: Setup/setup.xml:499
 msgid "waiting for feedback"
 msgstr "Wartet auf Feedback"
 
-#: Setup/setup.xml:514
+#: Setup/setup.xml:517
 msgid "quote sent"
 msgstr "Quote gesendet"
 
-#: Setup/setup.xml:532
+#: Setup/setup.xml:535
 msgid "accepted"
 msgstr "akzeptiert"
 
-#: Setup/setup.xml:554
+#: Setup/setup.xml:557
 msgid "lost"
 msgstr "verloren"
 

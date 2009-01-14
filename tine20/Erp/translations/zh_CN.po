@@ -13,60 +13,65 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/ContractGridPanel.js:49
-#: js/Erp.js:61
-#: js/ContractEditDialog.js:68
+#: js/ContractEditDialog.js:69 js/ContractGridPanel.js:46 js/Erp.js:84
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "联系人"
 
-#: js/ContractGridPanel.js:50
-#: js/ContractEditDialog.js:86
-msgid "Summary"
-msgstr "摘要"
-
-#: js/ContractGridPanel.js:66
+#: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
 msgid "Title"
 msgstr "头衔"
 
-#: js/Erp.js:65
+#: js/ContractEditDialog.js:92
+#, fuzzy
+msgid "Description"
+msgstr "输入描述 ..."
+
+#: js/ContractEditDialog.js:93
+msgid "Enter description..."
+msgstr "输入描述 ..."
+
+#: js/ContractGridPanel.js:47
+msgid "Summary"
+msgstr "摘要"
+
+#: js/ContractGridPanel.js:87
+#, fuzzy
+msgid "Contract number"
+msgstr "联系人"
+
+#: js/ContractGridPanel.js:99
+msgid "Status"
+msgstr "状态"
+
+#: js/Erp.js:50
+#, fuzzy
+msgid "Contracts"
+msgstr "联系人"
+
+#: js/Erp.js:88
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "联系人列表"
 
-#: js/ContractEditDialog.js:91
-msgid "Due date"
-msgstr "过期日"
-
-#: js/ContractEditDialog.js:94
-msgid "Priority"
-msgstr "优先级"
-
-#: js/ContractEditDialog.js:97
-msgid "Responsible"
-msgstr "责任"
-
-#: js/ContractEditDialog.js:101
-msgid "Notes"
-msgstr "注释"
-
-#: js/ContractEditDialog.js:102
-msgid "Enter description..."
-msgstr "输入描述 ..."
-
-#: js/ContractEditDialog.js:107
-msgid "Percentage"
-msgstr "百分比"
-
-#: js/ContractEditDialog.js:111
-msgid "Status"
-msgstr "状态"
-
-#: js/ContractEditDialog.js:115
-msgid "Completed"
-msgstr "完成的"
-
-#: Setup/setup.xml:171
+#: Setup/setup.xml:160
 msgid "Shared Contracts"
 msgstr "共享的联系人"
 
+#~ msgid "Due date"
+#~ msgstr "过期日"
+
+#~ msgid "Priority"
+#~ msgstr "优先级"
+
+#~ msgid "Responsible"
+#~ msgstr "责任"
+
+#~ msgid "Notes"
+#~ msgstr "注释"
+
+#~ msgid "Percentage"
+#~ msgstr "百分比"
+
+#~ msgid "Completed"
+#~ msgstr "完成的"

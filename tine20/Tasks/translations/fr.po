@@ -18,45 +18,45 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr ""
 
-#: js/EditDialog.js:99 js/GridPanel.js:55 js/Tasks.js:85
+#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:72
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/EditDialog.js:116 js/GridPanel.js:56 js/GridPanel.js:112
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:113
 msgid "Summary"
 msgstr ""
 
-#: js/EditDialog.js:121
+#: js/EditDialog.js:118
 msgid "Due date"
 msgstr ""
 
-#: js/EditDialog.js:124 js/GridPanel.js:133
+#: js/EditDialog.js:121 js/GridPanel.js:134
 msgid "Priority"
 msgstr ""
 
-#: js/EditDialog.js:127 js/GridPanel.js:185
+#: js/EditDialog.js:124 js/GridPanel.js:186
 msgid "Responsible"
 msgstr ""
 
-#: js/EditDialog.js:131
+#: js/EditDialog.js:128
 msgid "Notes"
 msgstr ""
 
-#: js/EditDialog.js:132
+#: js/EditDialog.js:129
 msgid "Enter description..."
 msgstr ""
 
-#: js/EditDialog.js:137
+#: js/EditDialog.js:134
 msgid "Percentage"
 msgstr ""
 
-#: js/EditDialog.js:141 js/GridPanel.js:162
+#: js/EditDialog.js:138 js/GridPanel.js:163
 msgid "Status"
 msgstr ""
 
-#: js/EditDialog.js:145
+#: js/EditDialog.js:142
 msgid "Completed"
 msgstr ""
 
@@ -66,52 +66,52 @@ msgid_plural "Do you relay want to delete the selected tasks?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/GridPanel.js:76
+#: js/GridPanel.js:77
 msgid "Failed"
 msgstr ""
 
-#: js/GridPanel.js:76
+#: js/GridPanel.js:77
 msgid "Could not save task."
 msgstr ""
 
-#: js/GridPanel.js:120
+#: js/GridPanel.js:121
 msgid "Add a task..."
 msgstr ""
 
-#: js/GridPanel.js:124
+#: js/GridPanel.js:125
 msgid "Due Date"
 msgstr ""
 
-#: js/GridPanel.js:148
+#: js/GridPanel.js:149
 msgid "Percent"
 msgstr ""
 
-#: js/GridPanel.js:177
+#: js/GridPanel.js:178
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:205
+#: js/GridPanel.js:206
 msgid "Show closed"
 msgstr ""
 
-#: js/Status.js:45 Setup/setup.xml:431
+#: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
 msgstr ""
 
-#: js/Tasks.js:89
+#: js/Tasks.js:76
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Setup/setup.xml:387
+#: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
 msgstr ""
 
-#: Setup/setup.xml:409
+#: Setup/setup.xml:412
 msgid "COMPLETED"
 msgstr ""
 
-#: Setup/setup.xml:453
+#: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr ""
