@@ -109,6 +109,14 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
             return TRUE;
         }
         
+        // only TA managers are allowed to alter TS of closed TAs
+        if ($_action != 'get') {
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
+            if (! $timeaccount->is_open) {
+                return FALSE;
+            }
+        }
+        
         $hasGrant = FALSE;
         
         switch ($_action) {
