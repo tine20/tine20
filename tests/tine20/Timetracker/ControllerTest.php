@@ -10,7 +10,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        add test for manage_clearing
+ * @todo        add test for manage_billable
  */
 
 /**
@@ -120,7 +120,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             'view_all'      => TRUE,
-            'manage_clearing'      => TRUE,
+            'manage_billable'      => TRUE,
         )));
         
         $this->_grantTestHelper($grants, 'create', 'Exception');
@@ -157,23 +157,45 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test to create TS with manage_clearing grant
+     * test to create not billable TS with manage_billable grant
      *
-     * @todo implement
      */
     public function testManageClearingGrantTS()
     {
-        /*
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => 'user',
-            'manage_clearing'      => TRUE,
+            'account_id'      => Tinebase_Core::getUser()->getId(),
+            'account_type'    => 'user',
+            //'manage_all'    => TRUE,
+            'book_all'        => TRUE,
+            'manage_billable' => TRUE,
         )));        
         
-        $this->_grantTestHelper($grants);
-        */
+        $ts = clone $this->_objects['timesheet'];
+        $ts->is_billable = 0;
+        
+        $this->_grantTestHelper($grants, 'create', NULL, $ts);
     }
 
+    /**
+     * test to create not billable TS without manage_billable grant
+     *
+     */
+    public function testManageClearingGrantTSNotSet()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'      => Tinebase_Core::getUser()->getId(),
+            'account_type'    => 'user',
+            //'manage_all'    => TRUE,
+            'book_all'        => TRUE,
+            'manage_billable' => FALSE,
+        )));        
+        
+        $ts = clone $this->_objects['timesheet'];
+        $ts->is_billable = 0;
+        
+        $this->_grantTestHelper($grants, 'create', 'Exception', $ts);
+    }
+    
     /**
      * test to create TS with manage_all grant
      *
@@ -258,9 +280,13 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      * @param   Tinebase_Record_RecordSet $_grants
      * @param   string $_action
      * @param   mixed $_expect
+     * @param   Timetracker_Model_Timesheet
      */
-    protected function _grantTestHelper($_grants, $_action = 'create', $_expect = NULL)
-    {        
+    protected function _grantTestHelper($_grants, $_action = 'create', $_expect = NULL, $_ts = NULL)
+    {
+        // take default ts?
+        $ts = $_ts ? $_ts : $this->_objects['timesheet'];
+        
         // remove BOOK_OWN + BOOK_ALL + ADMIN grant
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $this->_objects['timeaccount'],
@@ -273,9 +299,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             case 'create':
                 if ($_expect === 'Exception') {
                     $this->setExpectedException('Tinebase_Exception_AccessDenied');
-                    $this->_timesheetController->create($this->_objects['timesheet']);
+                    $this->_timesheetController->create($ts);
                 } else {
-                    $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+                    $ts = $this->_timesheetController->create($ts);
                     $this->assertEquals(Tinebase_Core::getUser()->getId(), $ts->created_by);
                 }
                 break;
@@ -291,7 +317,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                 break;
             case 'searchTS':
                 $filter = $this->_getTimesheetFilter();
-                $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+                $ts = $this->_timesheetController->create($ts);
                 $result = $this->_timesheetController->search($filter);
                 $this->assertEquals($_expect, count($result));                
                 break;
@@ -303,7 +329,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'manage_clearing'  => TRUE,
+            'manage_billable'  => TRUE,
             'manage_all'      => TRUE,
             'book_all'      => TRUE,
             'book_own'      => TRUE,
