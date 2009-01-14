@@ -182,7 +182,7 @@ Tine.Addressbook.Main = {
 	    /**
 	     * onclick handler for deleteBtn
 	     */
-	    deleteContact: function(_button, _event) {
+	    deleteContact: function(btn, e) {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
 	        Ext.MessageBox.confirm(
                 this.translation._('Are you Sure?'), 
@@ -730,7 +730,7 @@ Tine.Addressbook.Main = {
 
         gridPanel.on('keydown', function(e){
              if(e.getKey() == e.DELETE && Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getCount() > 0){
-                 this.handlers.deleteContact();
+                 this.handlers.deleteContact.call(this);
              }
         }, this);
 
