@@ -331,7 +331,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onKeyDown: function(e){
         switch (e.getKey()) {
             case e.DELETE:
-                if (!this.grid.editing) {
+                if (!this.grid.editing && !this.grid.adding) {
                     this.onDeleteRecords.call(this);
                 }
                 break;
@@ -395,7 +395,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     this.store.load({});
                 }
             }
-        });     
+        });
     },
     
     /**
