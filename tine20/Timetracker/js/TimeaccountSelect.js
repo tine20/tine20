@@ -18,7 +18,17 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
      */
     recordProxy: Tine.Timetracker.timeaccountBackend,
     /**
-     * @cfg {Object } defaultPaging 
+     * @cfg {Bool} onlyBookable
+     * only show bookable TA's
+     */
+    onlyBookable: true,
+    /**
+     * @cfg {Bool} showClosed
+     * also show closed TA's
+     */
+    showClosed: false,
+    /**
+     * @cfg {Object} defaultPaging 
      */
     defaultPaging: {
         start: 0,
@@ -43,6 +53,7 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Timetracker');
         
         this.store = new Ext.data.Store({
             fields: Tine.Timetracker.Model.TimeaccountArray.concat({name: 'displaytitle'}),
@@ -59,7 +70,10 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
-                '<span>{[this.encode(values.number)]} - {[this.encode(values.title)]}</span>' +
+                '<span>' +
+                    '{[this.encode(values.number)]} - {[this.encode(values.title)]}' +
+                    '<tpl if="is_open != 1 ">&nbsp;<i>(' + this.app.i18n._('closed') + ')</i></tpl>',
+                '</span>' +
                 //'{[this.encode(values.description)]}' +
             '</div></tpl>',
             {
@@ -115,9 +129,16 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         options.params = options.params || {};
         
         options.params.filter = [
-            {field: 'query', operator: 'contains', value: store.baseParams.query},
-            {field: 'isBookable', operator: 'equals', value: 1 }
+            {field: 'query', operator: 'contains', value: store.baseParams.query}
         ];
+        
+        if (this.onlyBookable) {
+            options.params.filter.push({field: 'isBookable', operator: 'equals', value: 1 });
+        }
+        
+        if (this.showClosed) {
+            options.params.filter.push({field: 'showClosed', operator: 'equals', value: 1 });
+        }
     }
 });
 
@@ -145,6 +166,8 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
         // value
         var value = new Tine.Timetracker.TimeAccountSelect({
             filter: filter,
+            onlyBookable: false,
+            showClosed: true,
             width: 200,
             listWidth: 500,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
