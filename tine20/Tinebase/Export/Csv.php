@@ -98,7 +98,8 @@ class Tinebase_Export_Csv
         foreach ($_records as $record) {
             $recordArray = array();
             foreach ($fields as $fieldName) {
-                $recordArray[] = '"' . $record->$fieldName . '"';
+                // place in quotes and replace double quotes with single quotes
+                $recordArray[] = '"' . preg_replace('/"/', "'", $record->$fieldName) . '"';
             }
             self::fputcsv($filehandle, $recordArray);
         }
