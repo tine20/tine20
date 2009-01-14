@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
- * @todo        check manage_clearing grant in create/update functions
+ * @todo        check manage_billable grant in create/update functions
  */
 
 /**
@@ -37,6 +37,12 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
         // use modlog and don't completely delete records
         $this->_purgeRecords = FALSE;
     }    
+    
+    protected $_fieldGrants = array(
+        'is_billable' => array('default' => 1,  'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE),
+        'billed_in'   => array('default' => '', 'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_ALL),
+        'is_cleared'  => array('default' => 0,  'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_ALL),
+    );
     
     /**
      * holdes the instance of the singleton
@@ -122,13 +128,14 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
                     )
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
-                // check manage clearing grant
-                $hasGrant = (
-                    $hasGrant
-                    && (($_record->is_billable == 1 && $_record->is_cleared == 0)
-                        || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING)
-                    )
-                );
+                
+                // check filed grants
+                foreach ($this->_fieldGrants as $field => $config) {
+                    if (isset($_record->$field) && $_record->$field != $config['default']) {
+                        $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
+                    }
+                }
+
                 break;
             case 'update':
                 $hasGrant = (
@@ -136,13 +143,14 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
                         && $_record->account_id == $this->_currentAccount->getId())
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
-                // check manage clearing grant
-                $hasGrant = (
-                    $hasGrant
-                    && (($_record->is_billable == $_oldRecord->is_billable && $_record->is_cleared == $_oldRecord->is_cleared)
-                        || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING)
-                    )
-                );
+                
+                // check filed grants
+                foreach ($this->_fieldGrants as $field => $config) {
+                    if (isset($_record->$field) && $_record->$field != $_oldRecord->$field) {
+                        $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
+                    }
+                }
+
                 break;
             case 'delete':
                 $hasGrant = (
