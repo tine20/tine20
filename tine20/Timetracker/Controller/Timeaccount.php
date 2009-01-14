@@ -85,7 +85,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
             'book_own'      => TRUE,
             'view_all'      => TRUE,
             'book_all'      => TRUE,
-            'manage_clearing' => TRUE,
+            'manage_billable' => TRUE,
             'manage_all'    => TRUE,
         )));
         
@@ -150,7 +150,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
                 Timetracker_Model_TimeaccountGrants::VIEW_ALL,
                 Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                 Timetracker_Model_TimeaccountGrants::BOOK_ALL,
-                Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING,
+                Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
                 Timetracker_Model_TimeaccountGrants::MANAGE_ALL
             );
         }        
@@ -220,7 +220,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::VIEW_ALL)
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_OWN)
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::MANAGE_CLEARING) 
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE) 
                     );
             case 'delete':
             case 'update':

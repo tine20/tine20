@@ -39,8 +39,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var grants = timeaccount ? timeaccount.get('account_grants') : (this.record.get('timeaccount_id') ? this.record.get('timeaccount_id').account_grants : {});
         if (grants) {
             this.getForm().findField('account_id').setDisabled(! (grants.book_all || grants.manage_all));
-            this.getForm().findField('is_billable').setDisabled(! (grants.manage_clearing || grants.manage_all));
-            this.getForm().findField('is_cleared').setDisabled(! (/*grants.manage_clearing ||*/ grants.manage_all));
+            this.getForm().findField('is_billable').setDisabled(! (grants.manage_billable || grants.manage_all));
+            this.getForm().findField('is_cleared').setDisabled(! (/*grants.manage_billable ||*/ grants.manage_all));
         }
     },
     

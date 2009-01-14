@@ -40,10 +40,10 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     const BOOK_ALL = 4;
 
     /**
-     * constant for managa clearing and read complete TA (GRANT_DELETE)
+     * constant for manage billable in all bookable TS (GRANT_DELETE)
      *
      */
-    const MANAGE_CLEARING = 8;
+    const MANAGE_BILLABLE = 8;
 
     /**
      * constant for manage all / admin grant (GRANT_ADMIN)
@@ -60,7 +60,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         'readGrant'     => 'book_own',
         'addGrant'      => 'view_all',
         'editGrant'     => 'book_all',
-        'deleteGrant'   => 'manage_clearing',
+        'deleteGrant'   => 'manage_billable',
         'adminGrant'    => 'manage_all'
     );
     
@@ -116,7 +116,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
             ),
-            'manage_clearing' => array(
+            'manage_billable' => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
             ),
@@ -355,7 +355,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 'readGrant'     => $grant->book_own,
                 'addGrant'      => $grant->view_all,
                 'editGrant'     => $grant->book_all,
-                'deleteGrant'   => $grant->manage_clearing,
+                'deleteGrant'   => $grant->manage_billable,
                 'adminGrant'    => $grant->manage_all
             )));
         }

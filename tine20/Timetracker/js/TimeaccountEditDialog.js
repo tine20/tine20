@@ -207,7 +207,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header:this.app.i18n. _('Manage Clearing'),
-                    dataIndex: 'manage_clearing',
+                    dataIndex: 'manage_billable',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
