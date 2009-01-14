@@ -49,6 +49,8 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
             'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // date filter
             'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //    'is_billable'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
+        //    'is_cleared'            => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
         ));
         
         // define query fields
