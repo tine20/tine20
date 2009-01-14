@@ -44,6 +44,12 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 	 * @cfg {String} quickaddMandatory Mandatory field which must be set before quickadd fields will be enabled
 	 */
 	quickaddMandatory: false,
+    
+    /**
+     * @property {Bool} adding true if a quickadd is in process
+     */
+    adding: false,
+    
     /**
      * @private
      */
@@ -129,6 +135,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
             }
     		
+            this.adding = false;
     	}
     	
     },
@@ -204,6 +211,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     onMandatoryFocus: function() {
+        this.adding = true;
         Ext.each(this.getVisibleCols(), function(item){
             item.quickaddField.setDisabled(false);
         }, this);
