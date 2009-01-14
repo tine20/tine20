@@ -428,7 +428,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
                 'book_own' => TRUE,
                 'view_all' => TRUE,
                 'book_all' => TRUE,
-                'manage_clearing' => TRUE,
+                'manage_billable' => TRUE,
                 'manage_all' => TRUE
             )
         );        
