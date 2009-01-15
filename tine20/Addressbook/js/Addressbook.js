@@ -348,7 +348,37 @@ Tine.Addressbook.Main = {
                 '-',
                 this.action_exportCsv,
                 this.actions.exportContact,
-                (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
+                (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
+                {
+                    text: 'test ajax download',
+                    handler: function() {
+                        var form = Ext.getBody().createChild({
+                            tag:'form',
+                            action:this.url,
+                            method:'post',
+                            cls:'x-hidden',
+                            id:Ext.id(),
+                            cn:[{
+                                tag: 'input',
+                                type: 'hidden',
+                                name: 'filter',
+                                value: '{ourfilter}'
+                            }]
+                        });
+                        
+                        Ext.Ajax.request({
+                            isUpload: true,
+                            form: form,
+                            params: {
+                                method: 'Addressbook.ajaxDownloadTest',
+                                requestType: 'HTTP'
+                            },
+                            success: function() {
+                                form.remove();
+                            }
+                        });
+                    }
+                }
             ]
         });
     },
