@@ -131,11 +131,12 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
      */
     public function appendFilterSql($_select)
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_properties, true));
         $db = Tinebase_Core::getDb();
         
         foreach ($this->_properties as $field => $value)
         {
-            if (empty($value)) {
+            if ($value === '') {
                 continue;
             }
             
