@@ -24,15 +24,15 @@ Tine.Tinebase.AppManager = function() {
     var app;
     for(var i=0; i<enabledApps.length; i++) {
         app = enabledApps[i];
-
-        //we don't have a Tinebase 'Application'
-        if (app.name == 'Tinebase') {
-            continue;
-        }
+        
+        // if the app is not in the namespace, we don't initialise it
+        // we don't have a Tinebase 'Application'
+        if (Tine[app.name] && app.name != 'Tinebase') {
+            app.appName = app.name;
+            app.isInitialised = false;
             
-        app.appName = app.name;
-        app.isInitialised = false;
-        this.apps.add(app.appName, app);
+            this.apps.add(app.appName, app);
+        }
     }
 };
 
