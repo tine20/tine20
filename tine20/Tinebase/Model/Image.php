@@ -18,7 +18,17 @@
  */
 class Tinebase_Model_Image extends Tinebase_Record_Abstract 
 {
-
+    /**
+     * preserves ratio and cropes image on the oversize side
+     */
+    const RATIOMODE_PRESERVANDCROP = 0;
+    
+    /**
+     * preserves ratio and does not crop image. Resuling image dimension is less
+     * than requested on one dimension as this dim is not filled  
+     */
+    const RATIOMODE_PRESERVNOFILL = 1;
+    
     protected $_identifier = 'id';
     
     /**
@@ -58,9 +68,18 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_NotFound('Image file not found.');
         }
         $imgBlob = file_get_contents($_path);
-        return new Tinebase_Model_Image(Tinebase_ImageHelper::getImageInfoFromBlob($imgBlob) + array(
-            'blob' => $imgBlob
-        ), true);
+        return self::getImageFromBlob($imgBlob);
+    }
+    
+    /**
+     * returns image from given blob
+     *
+     * @param  string $_blob
+     * @return Tinebase_Model_Image
+     */
+    public static function getImageFromBlob($_blob)
+    {
+        return new Tinebase_Model_Image(Tinebase_ImageHelper::getImageInfoFromBlob($_blob), true);
     }
     
     /**
@@ -91,6 +110,106 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
             return $params;
         } else {
             throw new Tinebase_Exception_InvalidArgument("$_imageURL is not a valid imageURL");
+        }
+    }
+    
+    /**
+     * scales given image to given size
+     * 
+     * @param  int    $_width desitination width
+     * @param  int    $_height destination height
+     * @param  int    $_ratiomode
+     * @throws  Tinebase_Exception_InvalidArgument
+     */
+    public function resize($_width, $_height, $_ratiomode)
+    {
+        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        file_put_contents($tmpPath, $this->blob);
+        
+        switch ($this->mime) {
+            case ('image/png'):
+                $src_image = imagecreatefrompng($tmpPath);
+                $imgDumpFunction = 'imagepng';
+                break;
+            case ('image/jpeg'):
+                $src_image = imagecreatefromjpeg($tmpPath);
+                $imgDumpFunction = 'imagejpeg';
+                break;
+            case ('image/gif'):
+                $src_image = imagecreatefromgif($tmpPath);
+                $imgDumpFunction = 'imagegif';
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $this->mime);
+                break;
+        }
+        $src_ratio = $this->width/$this->height;
+        $dst_ratio = $_width/$_height;
+        switch ($_ratiomode) {
+            case self::RATIOMODE_PRESERVANDCROP:
+                $dst_width = $_width;
+                $dst_height = $_height;
+                if($src_ratio - $dst_ratio >= 0) {
+                    // crop width
+                    $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->height * $dst_ratio, $this->height);
+                } else {
+                    // crop heights
+                    $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->width, $this->width / $dst_ratio);
+                }
+                break;
+            case self::RATIOMODE_PRESERVNOFILL:
+                if($src_ratio - $dst_ratio >= 0) {
+                    // fit width
+                    $dst_height = floor($_width / $src_ratio);
+                    $dst_width = $_width;
+                } else {
+                    // fit height
+                    $dst_height = $_height;
+                    $dst_width = floor($_height * $src_ratio);
+                }
+                // recalculate dst_ratio
+                $dst_ratio = $dst_width/$dst_height;
+                $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->width, $this->height);
+                break;
+            default: 
+                throw new Tinebase_Exception_InvalidArgument('Ratiomode not supported.');
+                break;
+        }
+        $imgDumpFunction($dst_image, $tmpPath);
+        
+        $this->width = $dst_width;
+        $this->height = $dst_height;
+        $this->blob = file_get_contents($tmpPath);
+        unlink($tmpPath);
+        return;
+    }
+    
+    /**
+     * returns binary string in given format
+     *
+     * @param string $_mime
+     * @return string
+     */
+    public function getBinary($_mime='image/jpeg')
+    {
+        $img = @imagecreatefromstring($this->blob);
+        
+        switch ($_mime) {
+            case ('image/png'):
+                return imagepng($img);
+                break;
+            case ('image/jpeg'):
+                return imagejpeg($img);
+                break;
+            case ('image/gif'):
+                return imagegif($img);
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_mime);
+                break;
         }
     }
     
