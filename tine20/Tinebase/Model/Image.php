@@ -193,7 +193,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
      * @param string $_mime
      * @return string
      */
-    public function getBinary($_mime='image/jpeg')
+    public function getBlob($_mime='image/jpeg')
     {
         $img = @imagecreatefromstring($this->blob);
         
