@@ -92,13 +92,19 @@ Tine.Tinebase.common = {
      * @return {String}
      */
     minutesRenderer: function(minutes){
-        var H = Math.floor(minutes / 60);
-        var i = minutes - H * 60;
         
+        var i = minutes%60;
+        var H = Math.floor(minutes/60);//%(24);
+        //var d = Math.floor(minutes/(60*24));
+        
+        var s = String.format(Tine.Tinebase.tranlation.ngettext('{0} minute', '{0} minutes', i), i);
         var Hs = String.format(Tine.Tinebase.tranlation.ngettext('{0} hour', '{0} hours', H), H);
-        var is = String.format(Tine.Tinebase.tranlation.ngettext('{0} minute', '{0} minutes', i), i);
+        //var ds = String.format(Tine.Tinebase.tranlation.ngettext('{0} workday', '{0} workdays', d), d);
         
-        return ( H ? Hs + ', ' + is : is );
+        s = H ? Hs + ', ' + s : s;
+        //s = d ? ds + ', ' + s : s;
+        
+        return s;
     },
     
     /**
