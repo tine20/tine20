@@ -82,6 +82,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 case 'account':
                 case 'group':
                 case 'user':
+                case 'bool':
                     this.defaultOperator = 'equals';
                     break;
                 case 'string':
@@ -95,6 +96,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             switch (this.valueType) {
                 case 'string':
                     this.defaultValue = '';
+                    break;
+                case 'bool':
+                    this.defaultValue = '1';
                     break;
                 case 'date':
                 case 'account':
@@ -233,6 +237,22 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     renderTo: el
+                });
+                break;
+            case 'bool':
+                value = new Ext.form.ComboBox({
+                    filter: filter,
+                    width: 200,
+                    id: 'tw-ftb-frow-valuefield-' + filter.id,
+                    value: filter.data.value ? filter.data.value : this.defaultValue,
+                    renderTo: el,
+                    mode: 'local',
+                    forceSelection: true,
+                    triggerAction: 'all',
+                    store: [
+                        [0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
+                        [1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
+                    ]
                 });
                 break;
             case 'string':
