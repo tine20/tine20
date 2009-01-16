@@ -274,7 +274,7 @@ class Tinebase_Tags
         // NOTE: we name the column we join like the tag, to be able to join multiple tag criteria (multiple invocations of this function)
         $_select->joinLeft(
             /* what */    array($_tagId => SQL_TABLE_PREFIX . 'tagging'), 
-            /* on   */    $db->quoteIdentifier("$_tagId.record_id") . " = $idProperty AND $_tagId.tag_id = " . $db->quote($_tagId),
+            /* on   */    $db->quoteIdentifier("$_tagId.record_id") . " = $idProperty AND " . $db->quoteIdentifier("$_tagId.tag_id") . " = " . $db->quote($_tagId),
             /* selecct */ array());
         $criteria = $_operator == 'equals' ? ' IS NOT NULL' : ' IS NULL';
         $_select->where($db->quoteIdentifier("$_tagId.tag_id") .  $criteria);
