@@ -36,7 +36,8 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_validators = array_merge($this->_validators, array(
-            'description'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'tag'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
             'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
             'isBookable'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),

@@ -47,6 +47,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Record_AbstractFilter
         $this->_validators = array_merge($this->_validators, array(
             'timeaccount_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'special' => TRUE),
             'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'tag'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // date filter
             'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'is_billable'           => array('allowEmpty' => true, 'InArray' => array(0,1)),
