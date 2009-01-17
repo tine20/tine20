@@ -179,22 +179,37 @@ class OpenDocument_Document
         
         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $spreadSheat[0]->saveXML());
         
-        $zip = new ZipArchive();
-        
         $filename = '/tmp' . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
-        
-        if ($zip->open($filename, ZIPARCHIVE::CREATE) !== true) {
-            exit("cannot open <$filename>\n");
+            
+        if(class_exists('ZipArchive', false) === 7) {
+            $zip = new ZipArchive();
+            
+            if ($zip->open($filename, ZIPARCHIVE::CREATE) !== true) {
+                exit("cannot open <$filename>\n");
+            }
+            
+            $zip->addFromString('content.xml', $this->_document->saveXML());
+            $zip->addFromString('mimetype', $this->_body->getContentType());
+            $zip->addFromString('meta.xml', $this->_meta);
+            $zip->addFromString('styles.xml', $this->_styles);
+            $zip->addFromString('settings.xml', $this->_settings);
+            $zip->addFromString('META-INF/manifest.xml', $this->_manifest);
+            
+            $zip->close();
+        } else {
+            $tmp = '/tmp';
+            $uid = uniqid();
+            mkdir($tmp.'/'.$uid);
+            file_put_contents($tmp.'/'.$uid.'/content.xml', $this->_document->saveXML());
+            file_put_contents($tmp.'/'.$uid.'/mimetype', $this->_body->getContentType());
+            file_put_contents($tmp.'/'.$uid.'/meta.xml', $this->_meta);
+            file_put_contents($tmp.'/'.$uid.'/styles.xml', $this->_styles);
+            file_put_contents($tmp.'/'.$uid.'/settings.xml', $this->_settings);
+            mkdir($tmp.'/'.$uid.'/META-INF/');
+            file_put_contents($tmp.'/'.$uid.'/META-INF/manifest.xml', $this->_manifest);
+            shell_exec('cd '.$tmp.'/'.$uid.';zip -r '.escapeshellarg($filename).' ./');
+            shell_exec('rm -rf '.$tmp.'/'.$uid);
         }
-        
-        $zip->addFromString('content.xml', $this->_document->saveXML());
-        $zip->addFromString('mimetype', $this->_body->getContentType());
-        $zip->addFromString('meta.xml', $this->_meta);
-        $zip->addFromString('styles.xml', $this->_styles);
-        $zip->addFromString('settings.xml', $this->_settings);
-        $zip->addFromString('META-INF/manifest.xml', $this->_manifest);
-        
-        $zip->close();
         
         return $filename;
     }
