@@ -181,7 +181,7 @@ class OpenDocument_Document
         
         $filename = '/tmp' . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
             
-        if(class_exists('ZipArchive', false) === 7) {
+        if(class_exists('ZipArchive', false)) {
             $zip = new ZipArchive();
             
             if ($zip->open($filename, ZIPARCHIVE::CREATE) !== true) {
