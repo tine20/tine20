@@ -45,33 +45,77 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
         
         // build export array
-        list($fields, $headline) = $this->_getExportFields();
+        $fields = $this->_getExportFields();
         
-        $exportArray = array();
+        $document   = new OpenDocument_Document('SpreadSheet');
+        $document->setRowStyle('ro0', 'background-color', '#ccffff');
+        $document->setRowStyle('altRow', 'background-color', "#ccccff");
+        $document->setCellStyle('ceShortDate', OpenDocument_Document::NS_STYLE, 'data-style-name', 'nShortDate');
+        
+        $table      = $document->getBody()->appendTable('Timesheets');
+        $columnId = 0;
+        foreach($fields as $field) {
+            $column = $table->appendColumn();
+            $column->setStyle('co' . $columnId);
+            if($field['type'] == 'date') {
+                $column->setDefaultCellStyle('ceShortDate');
+            }
+            $document->setColumnStyle('co' . $columnId, 'column-width', $field['width']);
+            
+            $columnId++;
+        }
+        
+        $row = $table->appendRow();
+        $row->setStyle('ro0');
+        
+        foreach($fields as $field) {
+            $row->appendCell('string', $field['header']);
+        }
+        
+        $i = 0;
         foreach ($timesheets as $timesheet) {
-            $row = array();
+            $row = $table->appendRow();
+            if($i % 2 == 1) {
+                $row->setStyle('altRow');
+            }
             foreach ($fields as $key => $params) {
                 switch($params['type']) {
                     case 'timeaccount':
                         $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
-                        $row[] = $value;
+                        $row->appendCell('string', $value);
                         break;
                     case 'account':
                         $value = $accounts[$accounts->getIndexById($timesheet->account_id)]->$params['field'];
-                        $row[] = $value;
+                        $row->appendCell('string', $value);
+                        break;
+                    case 'date':
+                        $cell = $row->appendCell($params['type'], $timesheet->$key);
+                        break;
+                    case 'float':
+                        $row->appendCell($params['type'], $timesheet->$key);
                         break;
                     default:
-                        $row[] = preg_replace('/"/', "'", $timesheet->$key);
+                        $row->appendCell('string', $timesheet->$key);
                 }
             }
-            $exportArray[] = $row;
+            $i++;
             
             //$timesheet->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->title;
             //$timesheet->account_id = $accounts[$accounts->getIndexById($timesheet->account_id)]->accountDisplayName;
         }
         
+        $row = $table->appendRow();
+        $row = $table->appendRow();
+        $row->appendCell('string');
+        $row->appendCell('string');
+        $row->appendCell('string');
+        $row->appendCell('string');
+        $cell = $row->appendCell('float', 0);
+        $cell->setFormula('oooc:=SUM([.E2:.E3])');        
+        
         //$filename = parent::exportRecords($timesheets);
-        $filename = parent::exportArray($exportArray, $headline);
+        #$filename = parent::exportArray($document);
+        $filename = $document->getDocument();
         
         return $filename;
     }
@@ -85,21 +129,47 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
     protected function _getExportFields()
     {
         $translate = Tinebase_Translation::getTranslation('Timetracker');
+        
         $fields = array(
-            'start_date' => array('type' => 'default'),
-            'description' => array('type' => 'default'),
-            'timeaccount_id' => array('type' => 'timeaccount', 'field' => 'title'),
-            'account_id' => array('type' => 'account', 'field' => 'accountDisplayName'),
-            'duration' => array('type' => 'default'),
-        );
-        $headline = array(
-            $translate->_('Date'),
-            $translate->_('Description'),
-            $translate->_('Site'),
-            $translate->_('Staff Member'),
-            $translate->_('Duration'),
+            'start_date' => array(
+                'header'    => $translate->_('Date'),
+                'type'      => 'date', 
+                'width'     => '3cm'
+            ),
+            'description' => array(
+                'header'    => $translate->_('Description'),
+                'type'      => 'default', 
+                'width'     => '10cm'
+            ),
+            'timeaccount_id' => array(
+                'header'    => $translate->_('Site'),
+                'type'      => 'timeaccount', 
+                'field'     => 'title', 
+                'width'     => '7cm'
+            ),
+            'account_id' => array(
+                'header'    => $translate->_('Staff Member'),
+                'type'      => 'account', 
+                'field'     => 'accountDisplayName', 
+                'width'     => '4cm'
+            ),
+            'duration' => array(
+                'header'    => $translate->_('Duration'),
+                'type'      => 'float', 
+                'width'     => '2cm'
+            ),
+            'is_billable' => array(
+                'header'    => $translate->_('Billable'),
+                'type'      => 'float', 
+                'width'     => '3cm'
+            ),
+            'is_cleared' => array(
+                'header'    => $translate->_('Cleared'),
+                'type'      => 'float', 
+                'width'     => '3cm'
+            ),
         );
         
-        return array($fields, $headline);
+        return $fields;
     }
 }
