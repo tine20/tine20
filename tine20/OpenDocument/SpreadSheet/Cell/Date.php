@@ -22,11 +22,11 @@ class OpenDocument_SpreadSheet_Cell_Date extends OpenDocument_SpreadSheet_Cell_A
     public function saveXML(SimpleXMLElement $_table)
     {
         $cell = $_table->addChild('table-cell', NULL, OpenDocument_Document::NS_TABLE);
-        $cell->addAttribute('date-value', $this->_encodeValue(), 'urn:oasis:names:tc:opendocument:xmlns:office:1.0');    
-        $cell->addAttribute('value-type', 'date', 'urn:oasis:names:tc:opendocument:xmlns:office:1.0');    
+        $cell->addAttribute('office:date-value', $this->_encodeValue(), OpenDocument_Document::NS_OFFICE);    
+        $cell->addAttribute('office:value-type', 'date', OpenDocument_Document::NS_OFFICE);    
         
         $this->_addAttributes($cell);
         
-        $cell->addChild('p', $this->_encodeValue(), 'urn:oasis:names:tc:opendocument:xmlns:text:1.0');    
+        $cell->addChild('text:p', $this->_encodeValue(), 'urn:oasis:names:tc:opendocument:xmlns:text:1.0');    
     }
 }

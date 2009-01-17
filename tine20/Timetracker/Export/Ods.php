@@ -48,9 +48,9 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         $fields = $this->_getExportFields();
         
         $document   = new OpenDocument_Document('SpreadSheet');
-        $document->setRowStyle('ro0', 'background-color', '#ccffff');
-        $document->setRowStyle('altRow', 'background-color', "#ccccff");
-        $document->setCellStyle('ceShortDate', OpenDocument_Document::NS_STYLE, 'data-style-name', 'nShortDate');
+        $document->setRowStyle('ro0', 'fo:background-color', '#ccffff');
+        $document->setRowStyle('altRow', 'fo:background-color', "#ccccff");
+        $document->setCellStyle('ceShortDate', OpenDocument_Document::NS_STYLE, 'style:data-style-name', 'nShortDate');
         
         $table      = $document->getBody()->appendTable('Timesheets');
         $columnId = 0;
@@ -60,7 +60,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
             if($field['type'] == 'date') {
                 $column->setDefaultCellStyle('ceShortDate');
             }
-            $document->setColumnStyle('co' . $columnId, 'column-width', $field['width']);
+            $document->setColumnStyle('co' . $columnId, 'style:column-width', $field['width']);
             
             $columnId++;
         }

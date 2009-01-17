@@ -147,7 +147,7 @@ class OpenDocument_Document
         $this->_document = new SimpleXMLElement($this->_content);
         
         $body = $this->_document->xpath('//office:body');
-        $node = $body[0]->addChild('spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
+        $node = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
         $this->_body = new OpenDocument_SpreadSheet($node);        
     }    
     
@@ -219,31 +219,31 @@ class OpenDocument_Document
         $styles = $this->_document->xpath('//office:automatic-styles');
         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($styles, true));
         foreach($this->_rowStyles as $key => $rowStyles) {
-            $style = $styles[0]->addChild('style', NULL, OpenDocument_Document::NS_STYLE);
-            $style->addAttribute('name', $key, OpenDocument_Document::NS_STYLE);    
-            $style->addAttribute('family', 'table-row', OpenDocument_Document::NS_STYLE);   
+            $style = $styles[0]->addChild('style:style', NULL, OpenDocument_Document::NS_STYLE);
+            $style->addAttribute('style:name', $key, OpenDocument_Document::NS_STYLE);    
+            $style->addAttribute('style:family', 'table-row', OpenDocument_Document::NS_STYLE);   
 
-            $property = $style->addChild('table-row-properties', NULL, OpenDocument_Document::NS_STYLE);
+            $property = $style->addChild('style:table-row-properties', NULL, OpenDocument_Document::NS_STYLE);
             foreach($rowStyles as $styleName => $styleValue) {
                 $property->addAttribute($styleName, $styleValue, OpenDocument_Document::NS_FO);
             }
         }
         
         foreach($this->_columnStyles as $key => $columnStyles) {
-            $style = $styles[0]->addChild('style', NULL, OpenDocument_Document::NS_STYLE);
-            $style->addAttribute('name', $key, OpenDocument_Document::NS_STYLE);    
-            $style->addAttribute('family', 'table-column', OpenDocument_Document::NS_STYLE);   
+            $style = $styles[0]->addChild('style:style', NULL, OpenDocument_Document::NS_STYLE);
+            $style->addAttribute('style:name', $key, OpenDocument_Document::NS_STYLE);    
+            $style->addAttribute('style:family', 'table-column', OpenDocument_Document::NS_STYLE);   
 
-            $property = $style->addChild('table-column-properties', NULL, OpenDocument_Document::NS_STYLE);
+            $property = $style->addChild('style:table-column-properties', NULL, OpenDocument_Document::NS_STYLE);
             foreach($columnStyles as $styleName => $styleValue) {
                 $property->addAttribute($styleName, $styleValue, OpenDocument_Document::NS_STYLE);
             }
         }
         
         foreach($this->_cellStyles as $key => $cellStyles) {
-            $style = $styles[0]->addChild('style', NULL, OpenDocument_Document::NS_STYLE);
-            $style->addAttribute('name', $key, OpenDocument_Document::NS_STYLE);    
-            $style->addAttribute('family', 'table-cell', OpenDocument_Document::NS_STYLE);   
+            $style = $styles[0]->addChild('style:style', NULL, OpenDocument_Document::NS_STYLE);
+            $style->addAttribute('style:name', $key, OpenDocument_Document::NS_STYLE);    
+            $style->addAttribute('style:family', 'table-cell', OpenDocument_Document::NS_STYLE);   
 
             #$property = $style->addChild('table-column-properties', NULL, OpenDocument_Document::NS_STYLE);
             foreach($cellStyles as $nameSpace => $styleData) {

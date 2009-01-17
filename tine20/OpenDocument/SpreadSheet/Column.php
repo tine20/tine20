@@ -23,12 +23,12 @@ class OpenDocument_SpreadSheet_Column
     
     public function setStyle($_styleName)
     {
-        $this->_attributes['style-name'] = $_styleName;
+        $this->_attributes['table:style-name'] = $_styleName;
     }
     
     public function setDefaultCellStyle($_styleName)
     {
-        $this->_attributes['default-cell-style-name'] = $_styleName;
+        $this->_attributes['table:default-cell-style-name'] = $_styleName;
     }
     
     public function saveXML(SimpleXMLElement $_table)

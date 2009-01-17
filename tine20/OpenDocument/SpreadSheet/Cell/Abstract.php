@@ -42,7 +42,7 @@ abstract class OpenDocument_SpreadSheet_Cell_Abstract
     
     public function setStyle($_styleName)
     {
-        $this->_attributes[OpenDocument_Document::NS_TABLE]['style-name'] = $_styleName;
+        $this->_attributes[OpenDocument_Document::NS_TABLE]['table:style-name'] = $_styleName;
     }
     
     public function setAttribute($_nameSpace, $_key, $_value)
@@ -52,7 +52,7 @@ abstract class OpenDocument_SpreadSheet_Cell_Abstract
     
     public function setFormula($_formula)
     {
-        $this->_attributes[OpenDocument_Document::NS_TABLE]['formula'] = $_formula;
+        $this->_attributes[OpenDocument_Document::NS_TABLE]['table:formula'] = $_formula;
     }
     
     protected function _addAttributes(SimpleXMLElement $_cell)

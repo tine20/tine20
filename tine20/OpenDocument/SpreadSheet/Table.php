@@ -64,7 +64,7 @@ class OpenDocument_SpreadSheet_Table implements Iterator, Countable
     public function saveXML(SimpleXMLElement $_spreadSheet)
     {
         $table = $_spreadSheet->addChild('table', NULL, OpenDocument_Document::NS_TABLE);
-        $table->addAttribute('name', $this->_tableName, OpenDocument_Document::NS_TABLE);
+        $table->addAttribute('table:name', $this->_tableName, OpenDocument_Document::NS_TABLE);
                 
         foreach($this->_columns as $column) {
             $column->saveXML($table);

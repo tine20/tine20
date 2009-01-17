@@ -44,7 +44,7 @@ class OpenDocument_SpreadSheet_Row implements Iterator, Countable
     
     public function setStyle($_styleName)
     {
-        $this->_attributes['style-name'] = $_styleName;
+        $this->_attributes['table:style-name'] = $_styleName;
     }
 
     public function saveXML(SimpleXMLElement $_table)
