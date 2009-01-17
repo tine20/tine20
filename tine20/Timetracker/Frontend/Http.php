@@ -71,6 +71,8 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
         header("Content-Description: $_format File");  
         header("Content-type: $contentType"); 
         readfile($result);
+        
+        unlink($result);
         exit;
     }
 }
