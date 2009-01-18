@@ -24,6 +24,8 @@ class OpenDocument_Document
     const NS_OFFICE = 'urn:oasis:names:tc:opendocument:xmlns:office:1.0';
     const NS_FO     = 'urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0';
     
+    const SPREADSHEET = 'SpreadSheet';
+    
     protected $_rowStyles = array();
     
     protected $_columnStyles = array();
@@ -66,17 +68,8 @@ class OpenDocument_Document
                 <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
                 <style:font-face style:name="DejaVu Sans" svg:font-family="&apos;DejaVu Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
             </office:font-face-decls>
-            <office:automatic-styles>
-                <number:date-style style:name="nShortDate" number:automatic-order="true">
-                    <number:day number:style="long"/>
-                    <number:text>.</number:text>
-                    <number:month number:style="long"/>
-                    <number:text>.</number:text>
-                    <number:year number:style="long"/>
-                </number:date-style>
-            </office:automatic-styles>
+            <office:automatic-styles/>
             <office:body>
-                <office:spreadsheet></office:spreadsheet>
             </office:body>
         </office:document-content>';
     
@@ -142,33 +135,32 @@ class OpenDocument_Document
             xmlns:dom="http://www.w3.org/2001/xml-events" office:version="1.1">
         </office:document-styles>';
     
+    protected $_userStyles = array();
+    
     public function __construct($_type, $_fileName = null)
     {
         $this->_document = new SimpleXMLElement($this->_content);
         
-        $body = $this->_document->xpath('//office:body');
-        $node = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
-        $this->_body = new OpenDocument_SpreadSheet($node);        
+        switch ($_type) {
+            case self::SPREADSHEET:
+                $body = $this->_document->xpath('//office:body');
+                $node = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
+                $this->_body = new OpenDocument_SpreadSheet($node);        
+                break;
+            default:
+                throw new Exception('unsupported documenttype: ' . $_type);
+                break;
+        }        
     }    
     
     public function getBody()
     {
         return $this->_body;
     }
-
-    public function setRowStyle($_styleName, $_key, $_value)
-    {
-        $this->_rowStyles[$_styleName][$_key] = $_value;
-    }
     
-    public function setColumnStyle($_styleName, $_key, $_value)
+    public function addStyle($_style)
     {
-        $this->_columnStyles[$_styleName][$_key] = $_value;
-    }
-    
-    public function setCellStyle($_styleName, $_nameSpace, $_key, $_value)
-    {
-        $this->_cellStyles[$_styleName][$_nameSpace][$_key] = $_value;
+        $this->_userStyles[] = $_style; 
     }
     
     public function getDocument()
@@ -176,8 +168,6 @@ class OpenDocument_Document
         $this->_body->generateXML();
         
         $this->_addStyles();
-        
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $spreadSheat[0]->saveXML());
         
         $filename = '/tmp' . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
             
@@ -217,40 +207,19 @@ class OpenDocument_Document
     protected function _addStyles()
     {
         $styles = $this->_document->xpath('//office:automatic-styles');
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($styles, true));
-        foreach($this->_rowStyles as $key => $rowStyles) {
-            $style = $styles[0]->addChild('style:style', NULL, OpenDocument_Document::NS_STYLE);
-            $style->addAttribute('style:name', $key, OpenDocument_Document::NS_STYLE);    
-            $style->addAttribute('style:family', 'table-row', OpenDocument_Document::NS_STYLE);   
+        $domStyles = dom_import_simplexml($styles[0]);
 
-            $property = $style->addChild('style:table-row-properties', NULL, OpenDocument_Document::NS_STYLE);
-            foreach($rowStyles as $styleName => $styleValue) {
-                $property->addAttribute($styleName, $styleValue, OpenDocument_Document::NS_FO);
+        foreach($this->_userStyles as $userStyle) {
+            if($userStyle instanceof SimpleXMLElement) {
+                $newChild = $userStyle;
+            } else {
+                $newChild = new SimpleXMLElement($userStyle);
             }
+            $dom_sxe = dom_import_simplexml($newChild);
+            $newStyle = $domStyles->ownerDocument->importNode($dom_sxe, true);
+            $domStyles->appendChild($newStyle);        
         }
         
-        foreach($this->_columnStyles as $key => $columnStyles) {
-            $style = $styles[0]->addChild('style:style', NULL, OpenDocument_Document::NS_STYLE);
-            $style->addAttribute('style:name', $key, OpenDocument_Document::NS_STYLE);    
-            $style->addAttribute('style:family', 'table-column', OpenDocument_Document::NS_STYLE);   
-
-            $property = $style->addChild('style:table-column-properties', NULL, OpenDocument_Document::NS_STYLE);
-            foreach($columnStyles as $styleName => $styleValue) {
-                $property->addAttribute($styleName, $styleValue, OpenDocument_Document::NS_STYLE);
-            }
-        }
-        
-        foreach($this->_cellStyles as $key => $cellStyles) {
-            $style = $styles[0]->addChild('style:style', NULL, OpenDocument_Document::NS_STYLE);
-            $style->addAttribute('style:name', $key, OpenDocument_Document::NS_STYLE);    
-            $style->addAttribute('style:family', 'table-cell', OpenDocument_Document::NS_STYLE);   
-
-            #$property = $style->addChild('table-column-properties', NULL, OpenDocument_Document::NS_STYLE);
-            foreach($cellStyles as $nameSpace => $styleData) {
-                foreach($styleData as $styleName => $styleValue) {
-                    $style->addAttribute($styleName, $styleValue, $nameSpace);
-                }
-            }
-        }
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $styles[0]->saveXML());
     }
 }
