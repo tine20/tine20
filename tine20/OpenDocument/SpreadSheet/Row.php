@@ -47,7 +47,7 @@ class OpenDocument_SpreadSheet_Row implements Iterator, Countable
         $this->_attributes['table:style-name'] = $_styleName;
     }
 
-    public function saveXML(SimpleXMLElement $_table)
+    public function generateXML(SimpleXMLElement $_table)
     {
         $row = $_table->addChild('table-row', NULL, OpenDocument_Document::NS_TABLE);
         foreach($this->_attributes as $key => $value) {
@@ -55,7 +55,7 @@ class OpenDocument_SpreadSheet_Row implements Iterator, Countable
         }
         
         foreach($this->_cells as $cell) {
-            $cell->saveXML($row);
+            $cell->generateXML($row);
         }
     }
     

@@ -61,10 +61,10 @@ class OpenDocument_SpreadSheet implements Iterator, Countable
     public function generateXML()
     {
         foreach($this->_tables as $table) {
-            $table->saveXML($this->_document);
+            $table->generateXML($this->_document);
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $this->_document->saveXML());
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $this->_document->generateXML());
         
         return $this->_document->saveXML();
     }

@@ -61,17 +61,17 @@ class OpenDocument_SpreadSheet_Table implements Iterator, Countable
         return $column;
     }
     
-    public function saveXML(SimpleXMLElement $_spreadSheet)
+    public function generateXML(SimpleXMLElement $_spreadSheet)
     {
         $table = $_spreadSheet->addChild('table', NULL, OpenDocument_Document::NS_TABLE);
         $table->addAttribute('table:name', $this->_tableName, OpenDocument_Document::NS_TABLE);
                 
         foreach($this->_columns as $column) {
-            $column->saveXML($table);
+            $column->generateXML($table);
         }
         
         foreach($this->_rows as $row) {
-            $row->saveXML($table);
+            $row->generateXML($table);
         }
     }
     

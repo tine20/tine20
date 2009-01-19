@@ -31,7 +31,7 @@ class OpenDocument_SpreadSheet_Column
         $this->_attributes['table:default-cell-style-name'] = $_styleName;
     }
     
-    public function saveXML(SimpleXMLElement $_table)
+    public function generateXML(SimpleXMLElement $_table)
     {
         $row = $_table->addChild('table-column', NULL, OpenDocument_Document::NS_TABLE);
         foreach($this->_attributes as $key => $value) {

@@ -19,7 +19,7 @@
  
 class OpenDocument_SpreadSheet_Cell_Date extends OpenDocument_SpreadSheet_Cell_Abstract
 {
-    public function saveXML(SimpleXMLElement $_table)
+    public function generateXML(SimpleXMLElement $_table)
     {
         $cell = $_table->addChild('table-cell', NULL, OpenDocument_Document::NS_TABLE);
         $cell->addAttribute('office:date-value', $this->_encodeValue(), OpenDocument_Document::NS_OFFICE);    

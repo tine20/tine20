@@ -34,6 +34,11 @@ class OpenDocument_Document
     
     protected $_document;
     
+    /**
+     * document body
+     *
+     * @var OpenDocument_SpreadSheet
+     */
     protected $_body;
     
     protected $_content = '<?xml version="1.0" encoding="UTF-8"?>
@@ -153,6 +158,11 @@ class OpenDocument_Document
         }        
     }    
     
+    /**
+     * get the body
+     *
+     * @return OpenDocument_SpreadSheet
+     */
     public function getBody()
     {
         return $this->_body;
@@ -220,6 +230,6 @@ class OpenDocument_Document
             $domStyles->appendChild($newStyle);        
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $styles[0]->saveXML());
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $styles[0]->generateXML());
     }
 }

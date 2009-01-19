@@ -33,7 +33,7 @@ abstract class OpenDocument_SpreadSheet_Cell_Abstract
     #    return $this->_value;
     #}
     
-    abstract public function saveXML(SimpleXMLElement $_table);
+    abstract public function generateXML(SimpleXMLElement $_table);
     
     protected function _encodeValue()
     {
