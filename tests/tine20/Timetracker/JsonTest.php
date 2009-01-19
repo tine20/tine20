@@ -384,7 +384,9 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(file_exists($result));
         
-        $xmlBody = $odsExportClass->getBody()->generateXML();        
+        $xmlBody = $odsExportClass->getBody()->generateXML();    
+        //echo  $xmlBody;
+        $this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration'); 
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description'); 
         $translate = Tinebase_Translation::getTranslation('Timetracker'); 
         $this->assertEquals(1, preg_match("/". $translate->_('Description') ."/", $xmlBody), 'no headline'); 

@@ -140,7 +140,8 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                         }
                         break;
                     default:
-                        $cell = $row->appendCell($params['type'], $timesheet->$key);
+                        $value = (isset($params['divisor'])) ? $timesheet->$key / $params['divisor'] : $timesheet->$key;
+                        $cell = $row->appendCell($params['type'], $value);
                         if($i % 2 == 1) {
                             $cell->setStyle('ceAlternate');
                         }
@@ -224,7 +225,8 @@ class Timetracker_Export_Ods extends OpenDocument_Document
             'duration' => array(
                 'header'    => $this->_translate->_('Duration'),
                 'type'      => 'float', 
-                'width'     => '2cm'
+                'width'     => '2cm',
+                'divisor'   => 60 
             ),
             'is_billable' => array(
                 'header'    => $this->_translate->_('Billable'),
