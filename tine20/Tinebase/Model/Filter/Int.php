@@ -61,12 +61,17 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          // add wildcard to value according to operator
          $value = str_replace('/?/', $value, $action['wildcards']);
          
-         if (in_array($this->_operator, array('equals', 'greater', 'less'))) {
+         if (in_array($this->_operator, array('equals', 'greater', 'less', 'in'))) {
              // discard wildcards silenly
              $value = str_replace(array('%', '\\_'), '', $value);
              
-             // finally append query to select object
-             $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value, Zend_Db::INT_TYPE);
+             if ($this->_operator == 'in' && empty($value)) {
+                 // prevent sql error
+                 $_select->where('1=0');
+             } else {
+                 // finally append query to select object
+                 $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value, Zend_Db::INT_TYPE);
+             }
          } else {
             // finally append query to select object
             $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value);
