@@ -381,18 +381,13 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // export & check
         $odsExportClass = new Timetracker_Export_Ods();
         $result = $odsExportClass->exportTimesheets(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
-        //$result = '/tmp/ef98ae18f621f110e5222b2fa02869d6.ods';
         
         $this->assertTrue(file_exists($result));
         
-        // parse ods
-        $newOds = new Timetracker_Export_Ods($result);
-        
-        //print_r($newOds->sheets);
-        //print_r($newOds->styles);
-        
-        $this->assertEquals("Beschreibung", $newOds->sheets[0]['rows'][0][1]['value'], 'no headline');
-        $this->assertEquals($timesheetData['description'], $newOds->sheets[0]['rows'][1][1]['value'], 'no description'); 
+        $xmlBody = $odsExportClass->getBody()->generateXML();        
+        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description'); 
+        $translate = Tinebase_Translation::getTranslation('Timetracker'); 
+        $this->assertEquals(1, preg_match("/". $translate->_('Description') ."/", $xmlBody), 'no headline'); 
         
         // cleanup / delete file
         unlink($result);
