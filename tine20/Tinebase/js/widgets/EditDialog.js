@@ -182,7 +182,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         //this.tbarItems = genericButtons.concat(this.tbarItems);
         
         this.buttons = [
-            this.action_applyChanges,
+            //this.action_applyChanges,
             this.action_cancel,
             this.action_saveAndClose
        ];
