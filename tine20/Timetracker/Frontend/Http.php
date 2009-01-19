@@ -59,7 +59,7 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
             case 'ods':
                 $odsExportClass = new Timetracker_Export_Ods();
                 $result = $odsExportClass->exportTimesheets($filter);
-                $contentType = Tinebase_Export_Ods::CONTENT_TYPE;
+                $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
             default:
                 throw new Timetracker_Exception_UnexpectedValue('Format ' . $_format . ' not supported yet.');
