@@ -27,17 +27,6 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
      */
     protected $_applicationName = 'Addressbook';
     
-    public function ajaxDownloadTest()
-    {
-        $file = '/tmp/test.pdf';
-        
-        header("Content-type: application/force-download\n");
-        header("Content-Disposition: attachment; filename=test.pdf");
-
-        readfile($file);
-        exit;
-    }
-    
     /**
      * export contact
      * 
