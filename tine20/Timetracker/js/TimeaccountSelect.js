@@ -152,7 +152,8 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
     initComponent: function() {
         Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
         
-        this.label = _('Timeaccount');
+        this.app = Tine.Tinebase.appMgr.get('Timetracker');
+        this.label = this.app.i18n._("Time Account");
         this.operators = ['equals'];
     },
     
