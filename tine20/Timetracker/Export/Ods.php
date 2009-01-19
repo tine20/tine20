@@ -82,9 +82,6 @@ class Timetracker_Export_Ods extends OpenDocument_Document
     public function exportTimesheets($_filter) {
         
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
-        if (count($timesheets) < 1) {
-            throw new Timetracker_Exception_NotFound('No Timesheets found.');
-        }
 
         // resolve timeaccounts
         $timeaccountIds = $timesheets->timeaccount_id;
@@ -120,9 +117,6 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $i = 0;
         foreach ($timesheets as $timesheet) {
             $row = $table->appendRow();
-            if($i % 2 == 1) {
-                $row->setStyle('altRow');
-            }
             foreach ($fields as $key => $params) {
                 switch($params['type']) {
                     case 'timeaccount':
