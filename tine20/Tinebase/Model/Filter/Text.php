@@ -28,18 +28,20 @@ class Tinebase__Model_Filter_Text extends Tinebase__Model_Filter_Abstract
         1 => 'contains',
         2 => 'startswith',
         3 => 'endswith',
-        4 => 'not'
+        4 => 'not',
+        4 => 'in',
     );
     
     /**
      * @var array maps abstract operators to sql operators
      */
     protected $_opSqlMap = array(
-        'equals'     => array('sqlop' => 'LIKE ?',     'wildcards' => '?'  ),
-        'contains'   => array('sqlop' => 'LIKE ?',     'wildcards' => '%?%'),
-        'startswith' => array('sqlop' => 'LIKE ?',     'wildcards' => '%?' ),
-        'endswith'   => array('sqlop' => 'LIKE ?',     'wildcards' => '?%' ),
-        'not'        => array('sqlop' => 'NOT LIKE ?', 'wildcards' => '?'  ),
+        'equals'     => array('sqlop' => ' LIKE ?',     'wildcards' => '?'  ),
+        'contains'   => array('sqlop' => ' LIKE ?',     'wildcards' => '%?%'),
+        'startswith' => array('sqlop' => ' LIKE ?',     'wildcards' => '%?' ),
+        'endswith'   => array('sqlop' => ' LIKE ?',     'wildcards' => '?%' ),
+        'not'        => array('sqlop' => ' NOT LIKE ?', 'wildcards' => '?'  ),
+        'in'         => array('sqlop' => ' IN (?)',     'wildcards' => '?'  ),
     );
     
     /**

@@ -35,12 +35,12 @@
  *     'created_by' => array('filter' => Tinebase_Model_Filter_User, 'type' => Tinebase_Model_User)
  * );
  * $filterData = array(
- *     array('field' => 'name','operator' => 'beginsWith', 'value' => 'Hugo'),
+ *     array('field' => 'name','operator' => 'beginswith', 'value' => 'Hugo'),
  *     array('condition' => 'OR' => 'filters' => array(
  *         'field' => 'created_by'  => 'operator' => 'equals', 'value' => 2,
  *         'field' => 'modified_by' => 'operator' => 'equals', 'value' => 2
  *     ),
- *     array(field => 'container_id', 'operator' => isIn, 'value' => array(2,4,6,7)
+ *     array(field => 'container_id', 'operator' => in, 'value' => array(2,4,6,7)
  * );
  * 
  * $filterGroup = new Tinebase_Model_Filter_FilterGroup($filterData, 'AND', $filterModel);

@@ -30,19 +30,20 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         3 => 'greater',
         4 => 'less',
         5 => 'not',
-        
+        6 => 'in',
     );
     
     /**
      * @var array maps abstract operators to sql operators
      */
     protected $_opSqlMap = array(
-        'equals'     => 'LIKE ?',
-        'startswith' => 'LIKE ?%',
-        'endswith'   => 'LIKE %?',
-        'greater'    => ' > ?',
-        'less'       => ' < ?',
-        'not'        => ' NOT LIKE ?',
+        'equals'     => array('sqlop' => ' = ?'   ,     'wildcards' => '?'  ),
+        'startswith' => array('sqlop' => ' LIKE ?',     'wildcards' => '%?' ),
+        'endswith'   => array('sqlop' => ' LIKE ?',     'wildcards' => '?%' ),
+        'greater'    => array('sqlop' =>  ' > ?',       'wildcards' => '?'  ),
+        'less'       => array('sqlop' =>  ' < ?',       'wildcards' => '?'  ),
+        'not'        => array('sqlop' => ' NOT LIKE ?', 'wildcards' => '?'  ),
+        'in'         => array('sqlop' => ' IN (?)',     'wildcards' => '?'  ),
     );
     
     /**
@@ -52,7 +53,23 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
      public function appendSql($_select)
      {
+         $action = $this->_opSqlMap[$this->_operator];
+         
+         // replace wildcards from user
          $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
-         $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value);
+         
+         // add wildcard to value according to operator
+         $value = str_replace('/?/', $value, $action['wildcards']);
+         
+         if (in_array($this->_operator, array('equals', 'greater', 'less'))) {
+             // discard wildcards silenly
+             $value = str_replace(array('%', '\\_'), '', $value);
+             
+             // finally append query to select object
+             $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value, Zend_Db::INT_TYPE);
+         } else {
+            // finally append query to select object
+            $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value);
+         }
      }
 }
