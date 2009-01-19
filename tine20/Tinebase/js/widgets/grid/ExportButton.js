@@ -62,8 +62,38 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
     	}
 
         //console.log(filterSettings);
-    	Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=' + 
-            this.exportFunction + '&_format=' + this.format + '&_filter=' + Ext.util.JSON.encode(filterSettings), 200, 150);
+    	//Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=' + 
+        //    this.exportFunction + '&_format=' + this.format + '&_filter=' + Ext.util.JSON.encode(filterSettings), 200, 150);
+    	
+        var form = Ext.getBody().createChild({
+            tag:'form',
+            method:'post',
+            cls:'x-hidden'
+        });
+        
+        Ext.Ajax.request({
+            isUpload: true,
+            form: form,
+            // @todo replace icon with loading icon ...
+            /*
+            beforerequest: function() {
+            	// replace icon
+            	this.iconCls: 
+            },
+            */
+            params: {
+                method: this.exportFunction,
+                requestType: 'HTTP',
+                _filter: filterSettings,
+                _format: this.format
+            },
+            success: function() {
+                form.remove();
+            },
+            failure: function() {
+                form.remove();
+            }
+        });
     },
     
     /**
