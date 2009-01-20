@@ -81,7 +81,6 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         parent::__construct(OpenDocument_Document::SPREADSHEET);
         
         $this->_translate = Tinebase_Translation::getTranslation('Timetracker');
-        
     }
     
     /**
@@ -94,6 +93,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         
         // get timesheets by filter
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
+        $lastCell = count($timesheets)+1;
         
         // build export array
         $fields = $this->_getExportFields();
@@ -101,7 +101,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         // build export table
         $table = $this->_addHead($fields);
         $this->_addBody($table, $fields, $timesheets);
-        $lastCell = $this->_addFooter($table, $timesheets);
+        $this->_addFooter($table, $lastCell);
         
         // add overview table
         $this->_addOverview($lastCell);
@@ -111,6 +111,12 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         return $filename;
     }
     
+    /**
+     * add ods head (headline, column styles)
+     *
+     * @param array $fields
+     * @return OpenDocument_SpreadSheet_Table
+     */
     protected function _addHead($fields)
     {
         $table      = $this->getBody()->appendTable('Timesheets');
@@ -141,12 +147,9 @@ class Timetracker_Export_Ods extends OpenDocument_Document
     /**
      * add single export row
      *
-     * @param OpenDocument_SpreadSheet_Row $row
-     * @param integer $i
+     * @param OpenDocument_SpreadSheet_Table $table
      * @param array $fields
-     * @param Timetracker_Model_Timesheet $timesheet
-     * @param Tinebase_Record_RecordSet $timeaccounts
-     * @param Tinebase_Record_RecordSet $accounts
+     * @param Tinebase_Record_RecordSet $timesheets
      */
     protected function _addBody($table, $fields, $timesheets)
     {
@@ -199,7 +202,13 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         
     }
     
-    protected function _addFooter($table, $timesheets)
+    /**
+     * add table footer (formulas, ...)
+     *
+     * @param OpenDocument_SpreadSheet_Table $table
+     * @param integer $lastCell
+     */
+    protected function _addFooter($table, $lastCell)
     {
         // add footer
         $row = $table->appendRow();
@@ -209,14 +218,16 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $row->appendCell('string');
         $row->appendCell('string', 'Total');
         $cell = $row->appendCell('float', 0);
-        $lastCell = count($timesheets)+1;
         #$cell->setFormula('oooc:=SUM([.E2:.E' . $lastCell . '])');   
         $cell->setFormula('oooc:=SUM(E2:E' . $lastCell . ')');   
         $cell->setStyle('ceBold');     
-        
-        return $lastCell;
     }
     
+    /**
+     * add overview table
+     *
+     * @param integer $lastCell
+     */
     protected function _addOverview($lastCell)
     {
         $table = $this->getBody()->appendTable('Overview');
