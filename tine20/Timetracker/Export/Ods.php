@@ -73,6 +73,13 @@ class Timetracker_Export_Ods extends OpenDocument_Document
     protected $_translate;
     
     /**
+     * export config array
+     *
+     * @var array
+     */
+    protected $_config = array();
+    
+    /**
      * the constructor
      *
      */
@@ -81,6 +88,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         parent::__construct(OpenDocument_Document::SPREADSHEET);
         
         $this->_translate = Tinebase_Translation::getTranslation('Timetracker');
+        $this->_config = $this->_getExportConfig();
     }
     
     /**
@@ -95,12 +103,9 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
         $lastCell = count($timesheets)+1;
         
-        // build export array
-        $fields = $this->_getExportFields();
-        
         // build export table
-        $table = $this->_addHead($fields);
-        $this->_addBody($table, $fields, $timesheets);
+        $table = $this->_addHead();
+        $this->_addBody($table, $timesheets);
         $this->_addFooter($table, $lastCell);
         
         // add overview table
@@ -114,15 +119,14 @@ class Timetracker_Export_Ods extends OpenDocument_Document
     /**
      * add ods head (headline, column styles)
      *
-     * @param array $fields
      * @return OpenDocument_SpreadSheet_Table
      */
-    protected function _addHead($fields)
+    protected function _addHead()
     {
-        $table      = $this->getBody()->appendTable('Timesheets');
+        $table = $this->getBody()->appendTable('Timesheets');
 
         $columnId = 0;
-        foreach($fields as $field) {
+        foreach($this->_config['fields'] as $field) {
             $column = $table->appendColumn();
             $column->setStyle('co' . $columnId);
             if($field['type'] == 'date') {
@@ -136,7 +140,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $row = $table->appendRow();
         
         // add headline
-        foreach($fields as $field) {
+        foreach($this->_config['fields'] as $field) {
             $cell = $row->appendCell('string', $field['header']);
             $cell->setStyle('ceHeader');
         }
@@ -148,10 +152,9 @@ class Timetracker_Export_Ods extends OpenDocument_Document
      * add single export row
      *
      * @param OpenDocument_SpreadSheet_Table $table
-     * @param array $fields
      * @param Tinebase_Record_RecordSet $timesheets
      */
-    protected function _addBody($table, $fields, $timesheets)
+    protected function _addBody($table, $timesheets)
     {
         // resolve timeaccounts
         $timeaccountIds = $timesheets->timeaccount_id;
@@ -161,12 +164,27 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $accountIds = $timesheets->account_id;
         $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
 
+        if ($this->_config['customFields']) {
+            // we need the sql backend if the export contains custom fields
+            // @todo remove that when getMultiple() fetches the custom fields as well
+            $timesheetBackend = new Timetracker_Backend_Timesheet();
+        }
+        
         // add timesheet rows
         $i = 0;
         foreach ($timesheets as $timesheet) {
+            
+            // check if we need to get the complete timesheet with custom fields
+            // @todo remove that when getMultiple() fetches the custom fields as well
+            if ($this->_config['customFields']) {
+                $timesheet = $timesheetBackend->get($timesheet->getId());
+            }
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($timesheet->toArray(), true));
+            
             $row = $table->appendRow();
 
-            foreach ($fields as $key => $params) {
+            foreach ($this->_config['fields'] as $key => $params) {
                 switch($params['type']) {
                     case 'timeaccount':
                         $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
@@ -189,7 +207,24 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                         }
                         break;
                     default:
-                        $value = (isset($params['divisor'])) ? $timesheet->$key / $params['divisor'] : $timesheet->$key;
+                        if ($params['custom']) {
+                            // add custom fields
+                            if (isset($timesheet->customfields[$key])) {
+                                $value = $timesheet->customfields[$key];
+                            } else {
+                                $value = '';
+                            }
+                            
+                        } else {
+                            // all remaining
+                            $value = (isset($params['divisor'])) ? $timesheet->$key / $params['divisor'] : $timesheet->$key;
+                        }
+                        
+                        // set special value from params
+                        if (isset($param['values'])) {
+                            $value = $param['values'][$value];
+                        }
+                        
                         $cell = $row->appendCell($params['type'], $value);
                         if($i % 2 == 1) {
                             $cell->setStyle('ceAlternate');
@@ -252,20 +287,20 @@ class Timetracker_Export_Ods extends OpenDocument_Document
     }
     
     /**
-     * get export fields
-     * - record fieldname => headline (translated)
+     * get export config
+     * - filename should be: /config/Timetracker/export.inc.php
+     * - perhaps we could get this from user preferences later
      *
      * @return array
-     * 
-     * @todo add fields array to preferences or move to config file
      */
-    protected function _getExportFields()
+    protected function _getExportConfig()
     {
         $configFilename = dirname(__FILE__) . '/../../config/Timetracker/export.inc.php';
+        $configFilenameAlt = $configFilename . '.dist';
         
-        $fields = (file_exists($configFilename)) ? require $configFilename : array();
+        $config = (file_exists($configFilename)) ? require $configFilename : require $configFilenameAlt;
         
-        return $fields;
+        return $config;
     }
     
     /**
