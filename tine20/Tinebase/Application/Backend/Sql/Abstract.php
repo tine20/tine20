@@ -111,6 +111,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      *
      * @param string|array $_id Ids
      * @return Tinebase_Record_RecordSet
+     * 
+     * @todo get custom fields here as well
      */
     public function getMultiple($_id) {
         
