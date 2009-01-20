@@ -8,8 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
- *
- * @todo        check manage_billable grant in create/update functions
  */
 
 /**
@@ -41,7 +39,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
     /**
      * field grants for specific timesheet fields
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_fieldGrants = array(
         'is_billable' => array('default' => 1,  'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE),
