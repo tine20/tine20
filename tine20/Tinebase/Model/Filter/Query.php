@@ -37,7 +37,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
      * @param  array $_options
      * @throws Tinebase_Exception_Record_NotDefined
      */
-    protected function _setOptions($_options)
+    protected function _setOptions(array $_options)
     {
         if (empty($_options['fields'])) {
             throw new Tinebase_Exception_Record_NotDefined('Fields must be defined in the options of a query filter');

@@ -140,9 +140,8 @@ class Tinebase_Model_Filter_FilterGroup
         
         if (! empty($this->_filterModel[$_field])) {
             $definition = $this->_filterModel[$_field];
-            $options = isset($definition['options']) ? $definition['options'] : NULL;
             
-            $filter = new $definition['filter']($_field, $_operator, $_value, $options);
+            $filter = new $definition['filter']($_field, $_operator, $_value, (array)$definition['options']);
             
             return $filter;
         }

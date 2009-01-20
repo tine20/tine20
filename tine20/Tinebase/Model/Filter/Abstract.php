@@ -55,7 +55,7 @@ abstract class Tinebase_Model_Filter_Abstract
      * @param mixed  $_value    
      * @param array  $_options
      */
-    public function __construct($_field, $_operator, $_value, $_options)
+    public function __construct($_field, $_operator, $_value, array $_options = array())
     {
         $this->_setOptions($_options);
         $this->setField($_field);
@@ -68,7 +68,7 @@ abstract class Tinebase_Model_Filter_Abstract
      *
      * @param array $_options
      */
-    protected function _setOptions($_options)
+    protected function _setOptions(array $_options)
     {
         $this->_options = $_options;
     }
