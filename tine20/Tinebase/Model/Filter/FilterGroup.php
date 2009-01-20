@@ -172,14 +172,14 @@ class Tinebase_Model_Filter_FilterGroup
      *
      * @param  Zend_Db_Select $_select
      */
-    public function appendSql($_select)
+    public function appendFilterSql($_select)
     {
         foreach ($this->_filterObjects as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
                 $groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select, $this->_concatationCondition);
-                $filter->appendSql($groupSelect);
+                $filter->appendFilterSql($groupSelect);
             } else {
-                $filter->appendSql($_select);
+                $filter->appendFilterSql($_select);
             }
         }
     }

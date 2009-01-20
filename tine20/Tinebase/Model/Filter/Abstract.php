@@ -113,6 +113,6 @@ abstract class Tinebase_Model_Filter_Abstract
      *
      * @param Zend_Db_Select $_select
      */
-    abstract public function appendSql($_select);
+    abstract public function appendFilterSql($_select);
     
 }

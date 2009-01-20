@@ -51,7 +51,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      *
      * @param Zend_Db_Select $_select
      */
-     public function appendSql($_select)
+     public function appendFilterSql($_select)
      {
          $action = $this->_opSqlMap[$this->_operator];
          
