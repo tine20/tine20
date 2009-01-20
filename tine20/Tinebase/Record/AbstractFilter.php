@@ -167,7 +167,8 @@ abstract class Tinebase_Record_AbstractFilter extends Tinebase_Record_Abstract
                 case 'tag':
                     $operator = $this->_operators[$field];
                     if (strlen($value) == 40) {
-                        Tinebase_Tags::appendSqlFilter($_select, $value, $operator);
+                        $tagFilter = new Tinebase_Model_Filter_Tag('tag_id', $operator, $value);
+                        $tagFilter->appendFilterSql($_select);
                     }
                     break;
                 default:

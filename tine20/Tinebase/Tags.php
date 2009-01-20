@@ -254,33 +254,6 @@ class Tinebase_Tags
     }
     
     /**
-     * Apends sql to a given select object to filter by the given tagId
-     * 
-     * @param  Zend_Db_Select $_select
-     * @param  string         $_tagId
-     * @param  string         $_operator
-     * $param  string         $_idProperty id property of records
-     * @return void
-     */
-    public static function appendSqlFilter(Zend_Db_Select $_select, $_tagId, $_operator = 'equals', $_idProperty='id')
-    {
-        // check the view right of the tag (throws Exception if not accessable)
-        self::getInstance()->getTagsById($_tagId);
-        
-        $db = Tinebase_Core::getDb();
-        $idProperty = $db->quoteIdentifier($_idProperty);
-        
-        // per left join we add a tag column named as the tag and filter this joined column
-        // NOTE: we name the column we join like the tag, to be able to join multiple tag criteria (multiple invocations of this function)
-        $_select->joinLeft(
-            /* what */    array($_tagId => SQL_TABLE_PREFIX . 'tagging'), 
-            /* on   */    $db->quoteIdentifier("$_tagId.record_id") . " = $idProperty AND " . $db->quoteIdentifier("$_tagId.tag_id") . " = " . $db->quote($_tagId),
-            /* selecct */ array());
-        $criteria = $_operator == 'equals' ? ' IS NOT NULL' : ' IS NULL';
-        $_select->where($db->quoteIdentifier("$_tagId.tag_id") .  $criteria);
-    }
-    
-    /**
      * Gets tags of a given record where user has the required right to
      * The tags are stored in the records $_tagsProperty.
      * 
