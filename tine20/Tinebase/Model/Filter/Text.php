@@ -18,7 +18,7 @@
  * 
  * filters one filterstring in one property
  */
-class Tinebase__Model_Filter_Text extends Tinebase__Model_Filter_Abstract
+class Tinebase_Model_Filter_Text extends Tinebase__Model_Filter_Abstract
 {
     /**
      * @var array list of allowed operators
@@ -53,6 +53,9 @@ class Tinebase__Model_Filter_Text extends Tinebase__Model_Filter_Abstract
      {
          $action = $this->_opSqlMap[$this->_operator];
          
+         // quote field identifier
+         $field = $_select->getAdapter()->quoteIdentifier($this->field);
+         
          // replace wildcards from user
          $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
          
@@ -60,6 +63,6 @@ class Tinebase__Model_Filter_Text extends Tinebase__Model_Filter_Abstract
          $value = str_replace('/?/', $value, $action['wildcards']);
          
          // finally append query to select object
-         $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value);
+         $_select->where($this->field . $action['sqlop'], $value);
      }
 }

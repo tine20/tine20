@@ -55,6 +55,9 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      {
          $action = $this->_opSqlMap[$this->_operator];
          
+         // quote field identifier
+         $field = $_select->getAdapter()->quoteIdentifier($this->field);
+         
          // replace wildcards from user
          $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
          
@@ -70,11 +73,11 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
                  $_select->where('1=0');
              } else {
                  // finally append query to select object
-                 $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value, Zend_Db::INT_TYPE);
+                 $_select->where($this->field . $action['sqlop'], $value, Zend_Db::INT_TYPE);
              }
          } else {
             // finally append query to select object
-            $_select->where($this->field . $this->_opSqlMap[$this->_operator], $value);
+            $_select->where($this->field . $action['sqlop'], $value);
          }
      }
 }
