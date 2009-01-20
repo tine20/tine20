@@ -46,7 +46,6 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      */
     protected function _setOptions(array $_options)
     {
-        $_options['field'] = isset($_options['field']) ? $_options['field'] : 'tag_id';
         $_options['idProperty'] = isset($_options['idProperty']) ? $_options['idProperty'] : 'id';
         
         $this->_options = $_options;
