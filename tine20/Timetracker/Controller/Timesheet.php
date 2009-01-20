@@ -38,6 +38,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
         $this->_purgeRecords = FALSE;
     }    
     
+    /**
+     * field grants for specific timesheet fields
+     *
+     * @var unknown_type
+     */
     protected $_fieldGrants = array(
         'is_billable' => array('default' => 1,  'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE),
         'billed_in'   => array('default' => '', 'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_ALL),
@@ -109,11 +114,20 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
             return TRUE;
         }
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' action: ' . print_r($_action, true));
+        
         // only TA managers are allowed to alter TS of closed TAs
         if ($_action != 'get') {
             $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
             if (! $timeaccount->is_open) {
                 return FALSE;
+            }
+            
+            // check if timeaccount->is_billable is false => set default in fieldGrants to 0 and allow only managers to change it
+            if (!$timeaccount->is_billable) {
+                $this->_fieldGrants['is_billable']['default'] = 0;
+                $this->_fieldGrants['is_billable']['requiredGrant'] = Timetracker_Model_TimeaccountGrants::MANAGE_ALL;
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_fieldGrants, true));
             }
         }
         
@@ -137,7 +151,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
-                // check filed grants
+                // check field grants
                 foreach ($this->_fieldGrants as $field => $config) {
                     if (isset($_record->$field) && $_record->$field != $config['default']) {
                         $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
@@ -152,7 +166,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
-                // check filed grants
+                // check field grants
                 foreach ($this->_fieldGrants as $field => $config) {
                     if (isset($_record->$field) && $_record->$field != $_oldRecord->$field) {
                         $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
