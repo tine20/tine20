@@ -92,20 +92,29 @@ class Timetracker_Export_Ods extends OpenDocument_Document
      */
     public function exportTimesheets($_filter) {
         
+        // get timesheets by filter
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
-
-        // resolve timeaccounts
-        $timeaccountIds = $timesheets->timeaccount_id;
-        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
-        
-        // resolve accounts
-        $accountIds = $timesheets->account_id;
-        $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
         
         // build export array
         $fields = $this->_getExportFields();
         
+        // build export table
+        $table = $this->_addHead($fields);
+        $this->_addBody($table, $fields, $timesheets);
+        $lastCell = $this->_addFooter($table, $timesheets);
+        
+        // add overview table
+        $this->_addOverview($lastCell);
+        
+        // create file
+        $filename = $this->getDocument();        
+        return $filename;
+    }
+    
+    protected function _addHead($fields)
+    {
         $table      = $this->getBody()->appendTable('Timesheets');
+
         $columnId = 0;
         foreach($fields as $field) {
             $column = $table->appendColumn();
@@ -126,14 +135,72 @@ class Timetracker_Export_Ods extends OpenDocument_Document
             $cell->setStyle('ceHeader');
         }
         
+        return $table;
+    }
+    
+    /**
+     * add single export row
+     *
+     * @param OpenDocument_SpreadSheet_Row $row
+     * @param integer $i
+     * @param array $fields
+     * @param Timetracker_Model_Timesheet $timesheet
+     * @param Tinebase_Record_RecordSet $timeaccounts
+     * @param Tinebase_Record_RecordSet $accounts
+     */
+    protected function _addBody($table, $fields, $timesheets)
+    {
+        // resolve timeaccounts
+        $timeaccountIds = $timesheets->timeaccount_id;
+        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
+        
+        // resolve accounts
+        $accountIds = $timesheets->account_id;
+        $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+
         // add timesheet rows
         $i = 0;
         foreach ($timesheets as $timesheet) {
             $row = $table->appendRow();
-            $this->_addRow($row, $i, $fields, $timesheet, $timeaccounts, $accounts);
+
+            foreach ($fields as $key => $params) {
+                switch($params['type']) {
+                    case 'timeaccount':
+                        $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
+                        $cell = $row->appendCell('string', $value);
+                        if($i % 2 == 1) {
+                            $cell->setStyle('ceAlternate');
+                        }
+                        break;
+                    case 'account':
+                        $value = $accounts[$accounts->getIndexById($timesheet->account_id)]->$params['field'];
+                        $cell = $row->appendCell('string', $value);
+                        if($i % 2 == 1) {
+                            $cell->setStyle('ceAlternate');
+                        }
+                        break;
+                    case 'date':
+                        $cell = $row->appendCell($params['type'], $timesheet->$key);
+                        if($i % 2 == 1) {
+                            $cell->setStyle('ceAlternateCentered');
+                        }
+                        break;
+                    default:
+                        $value = (isset($params['divisor'])) ? $timesheet->$key / $params['divisor'] : $timesheet->$key;
+                        $cell = $row->appendCell($params['type'], $value);
+                        if($i % 2 == 1) {
+                            $cell->setStyle('ceAlternate');
+                        }
+                        break;
+                }
+            }        
             $i++;
         }
         
+    }
+    
+    protected function _addFooter($table, $timesheets)
+    {
         // add footer
         $row = $table->appendRow();
         $row = $table->appendRow();
@@ -147,8 +214,12 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $cell->setFormula('oooc:=SUM(E2:E' . $lastCell . ')');   
         $cell->setStyle('ceBold');     
         
-        // add overview table
-        $table      = $this->getBody()->appendTable('Overview');
+        return $lastCell;
+    }
+    
+    protected function _addOverview($lastCell)
+    {
+        $table = $this->getBody()->appendTable('Overview');
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Not billable'));
@@ -167,55 +238,6 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $cell = $row->appendCell('float', 0);
         $cell->setFormula('oooc:=SUM(Timesheets.E2:Timesheets.E' . $lastCell . ')');
         $cell->setStyle('ceBold');     
-        
-        $filename = $this->getDocument();
-        
-        return $filename;
-    }
-    
-    /**
-     * add single export row
-     *
-     * @param OpenDocument_SpreadSheet_Row $row
-     * @param integer $i
-     * @param array $fields
-     * @param Timetracker_Model_Timesheet $timesheet
-     * @param Tinebase_Record_RecordSet $timeaccounts
-     * @param Tinebase_Record_RecordSet $accounts
-     */
-    protected function _addRow($row, $i, $fields, $timesheet, $timeaccounts, $accounts)
-    {
-        foreach ($fields as $key => $params) {
-            switch($params['type']) {
-                case 'timeaccount':
-                    $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
-                    $cell = $row->appendCell('string', $value);
-                    if($i % 2 == 1) {
-                        $cell->setStyle('ceAlternate');
-                    }
-                    break;
-                case 'account':
-                    $value = $accounts[$accounts->getIndexById($timesheet->account_id)]->$params['field'];
-                    $cell = $row->appendCell('string', $value);
-                    if($i % 2 == 1) {
-                        $cell->setStyle('ceAlternate');
-                    }
-                    break;
-                case 'date':
-                    $cell = $row->appendCell($params['type'], $timesheet->$key);
-                    if($i % 2 == 1) {
-                        $cell->setStyle('ceAlternateCentered');
-                    }
-                    break;
-                default:
-                    $value = (isset($params['divisor'])) ? $timesheet->$key / $params['divisor'] : $timesheet->$key;
-                    $cell = $row->appendCell($params['type'], $value);
-                    if($i % 2 == 1) {
-                        $cell->setStyle('ceAlternate');
-                    }
-                    break;
-            }
-        }        
     }
     
     /**
