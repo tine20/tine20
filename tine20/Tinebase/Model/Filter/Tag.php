@@ -59,6 +59,11 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select)
     {
+        // don't take empty tag filter into account
+        if (empty($this->_value)) {
+            return;
+        }
+        
         // check the view right of the tag (throws Exception if not accessable)
         Tinebase_Tags::getInstance()->getTagsById($this->_value);
         
