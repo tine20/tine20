@@ -19,7 +19,8 @@ return array(
             'header'    => $this->_translate->_('Site'),
             'type'      => 'timeaccount', 
             'field'     => 'title', 
-            'width'     => '7cm'
+            'width'     => '7cm',
+            'replace'   => array('pattern' => "/^XYZ /", 'replacement' => '')
         ),
         'account_id' => array(
             'header'    => $this->_translate->_('Staff Member'),
@@ -45,12 +46,6 @@ return array(
         ),
         // custom fields follow
         /*
-        'asp' =>  array(
-            'header'    => $this->_translate->_('Ansprechpartner'),
-            'type'      => 'string', 
-            'width'     => '7cm',
-            'custom'    => TRUE
-        ),
         'newsletter' =>  array(
             'header'    => $this->_translate->_('NL'),
             'type'      => 'string',

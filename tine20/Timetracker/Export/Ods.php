@@ -180,31 +180,27 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                 $timesheet = $timesheetBackend->get($timesheet->getId());
             }
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($timesheet->toArray(), true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($timesheet->toArray(), true));
             
             $row = $table->appendRow();
 
             foreach ($this->_config['fields'] as $key => $params) {
+                
+                $style = 'ceAlternate';
+                $type = $params['type'];
+                
                 switch($params['type']) {
                     case 'timeaccount':
                         $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
-                        $cell = $row->appendCell('string', $value);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternate');
-                        }
+                        $type = 'string';
                         break;
                     case 'account':
                         $value = $accounts[$accounts->getIndexById($timesheet->account_id)]->$params['field'];
-                        $cell = $row->appendCell('string', $value);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternate');
-                        }
+                        $type = 'string';
                         break;
                     case 'date':
-                        $cell = $row->appendCell($params['type'], $timesheet->$key);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternateCentered');
-                        }
+                        $value = $timesheet->$key;
+                        $style = 'ceAlternateCentered';
                         break;
                     default:
                         if ($params['custom']) {
@@ -225,12 +221,21 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                             $value = $param['values'][$value];
                         }
                         
-                        $cell = $row->appendCell($params['type'], $value);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternate');
-                        }
                         break;
                 }
+                
+                // check for replacements
+                if (isset($params['replace'])) {
+                    $value = preg_replace($params['replace']['pattern'], $params['replace']['replacement'], $value);
+                }
+                
+                // create cell with type and value and add style
+                $cell = $row->appendCell($type, $value);
+                    
+                if ($i % 2 == 1) {
+                     $cell->setStyle($style);
+                }
+                
             }        
             $i++;
         }
