@@ -120,51 +120,21 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         
         $row = $table->appendRow();
         
+        // add headline
         foreach($fields as $field) {
             $cell = $row->appendCell('string', $field['header']);
             $cell->setStyle('ceHeader');
         }
         
+        // add timesheet rows
         $i = 0;
         foreach ($timesheets as $timesheet) {
             $row = $table->appendRow();
-            foreach ($fields as $key => $params) {
-                switch($params['type']) {
-                    case 'timeaccount':
-                        $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
-                        $cell = $row->appendCell('string', $value);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternate');
-                        }
-                        break;
-                    case 'account':
-                        $value = $accounts[$accounts->getIndexById($timesheet->account_id)]->$params['field'];
-                        $cell = $row->appendCell('string', $value);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternate');
-                        }
-                        break;
-                    case 'date':
-                        $cell = $row->appendCell($params['type'], $timesheet->$key);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternateCentered');
-                        }
-                        break;
-                    default:
-                        $value = (isset($params['divisor'])) ? $timesheet->$key / $params['divisor'] : $timesheet->$key;
-                        $cell = $row->appendCell($params['type'], $value);
-                        if($i % 2 == 1) {
-                            $cell->setStyle('ceAlternate');
-                        }
-                        break;
-                }
-            }
+            $this->_addRow($row, $i, $fields, $timesheet, $timeaccounts, $accounts);
             $i++;
-            
-            //$timesheet->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->title;
-            //$timesheet->account_id = $accounts[$accounts->getIndexById($timesheet->account_id)]->accountDisplayName;
         }
         
+        // add footer
         $row = $table->appendRow();
         $row = $table->appendRow();
         $row->appendCell('string');
@@ -177,6 +147,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $cell->setFormula('oooc:=SUM(E2:E' . $lastCell . ')');   
         $cell->setStyle('ceBold');     
         
+        // add overview table
         $table      = $this->getBody()->appendTable('Overview');
         
         $row = $table->appendRow();
@@ -200,6 +171,51 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $filename = $this->getDocument();
         
         return $filename;
+    }
+    
+    /**
+     * add single export row
+     *
+     * @param OpenDocument_SpreadSheet_Row $row
+     * @param integer $i
+     * @param array $fields
+     * @param Timetracker_Model_Timesheet $timesheet
+     * @param Tinebase_Record_RecordSet $timeaccounts
+     * @param Tinebase_Record_RecordSet $accounts
+     */
+    protected function _addRow($row, $i, $fields, $timesheet, $timeaccounts, $accounts)
+    {
+        foreach ($fields as $key => $params) {
+            switch($params['type']) {
+                case 'timeaccount':
+                    $value = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->$params['field'];
+                    $cell = $row->appendCell('string', $value);
+                    if($i % 2 == 1) {
+                        $cell->setStyle('ceAlternate');
+                    }
+                    break;
+                case 'account':
+                    $value = $accounts[$accounts->getIndexById($timesheet->account_id)]->$params['field'];
+                    $cell = $row->appendCell('string', $value);
+                    if($i % 2 == 1) {
+                        $cell->setStyle('ceAlternate');
+                    }
+                    break;
+                case 'date':
+                    $cell = $row->appendCell($params['type'], $timesheet->$key);
+                    if($i % 2 == 1) {
+                        $cell->setStyle('ceAlternateCentered');
+                    }
+                    break;
+                default:
+                    $value = (isset($params['divisor'])) ? $timesheet->$key / $params['divisor'] : $timesheet->$key;
+                    $cell = $row->appendCell($params['type'], $value);
+                    if($i % 2 == 1) {
+                        $cell->setStyle('ceAlternate');
+                    }
+                    break;
+            }
+        }        
     }
     
     /**
