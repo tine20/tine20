@@ -94,19 +94,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype: 'textarea',
                         name: 'description',
                         height: 150
-                        }], /*[{
-                        columnWidth: 1,
-                        xtype: 'tabpanel',
-                        height: 270,
-                        activeItem: 0,
-                        items: [{
-                            title: 'Access',
-                            items: [this.getGrantsGrid()]
-                        }, {
-                            title: 'Budget',
-                            //items: []
-                            html: ''
-                        }]}],*/ [{
+                        }], [{
                             fieldLabel: this.app.i18n._('Unit'),
                             name: 'price_unit'
                         }, {
@@ -115,6 +103,11 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }, {
                             fieldLabel: this.app.i18n._('Budget'),
                             name: 'budget'
+                        }, {
+                            hideLabel: true,
+                            boxLabel: this.app.i18n._('Timesheets are billable'),
+                            name: 'is_billable',
+                            xtype: 'checkbox'
                         }, {
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'is_open',
