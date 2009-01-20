@@ -274,14 +274,12 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $currentRecord = $this->_backend->get($_record->getId());
             
             // ACL checks
-            if ($this->_doContainerACLChecks) {                
-                if ($currentRecord->container_id != $_record->container_id) {
-                    $this->_checkGrant($_record, 'create');
-                    // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-                    $this->_checkGrant($currentRecord, 'delete');
-                } else {
-                    $this->_checkGrant($_record, 'update', TRUE, 'No permission to update record.', $currentRecord);
-                }
+            if ($currentRecord->has('container_id') && $currentRecord->container_id != $_record->container_id) {                
+                $this->_checkGrant($_record, 'create');
+                // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
+                $this->_checkGrant($currentRecord, 'delete');
+            } else {
+                $this->_checkGrant($_record, 'update', TRUE, 'No permission to update record.', $currentRecord);
             }
     
             // concurrency management & history log
