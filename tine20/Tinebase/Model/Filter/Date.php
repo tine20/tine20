@@ -18,7 +18,7 @@
  * 
  * filters one filterstring in one property
  */
-class Tinebase_Model_Filter_Date extends Tinebase__Model_Filter_Abstract
+class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 {
     /**
      * @var array list of allowed operators
@@ -35,9 +35,9 @@ class Tinebase_Model_Filter_Date extends Tinebase__Model_Filter_Abstract
      */
     protected $_opSqlMap = array(
         'equals'     => array('sqlop' => ' = ?'),
-        'within'     => array('sqlop' => array(' >=', ' <=')),
-        'before'     => array('sqlop' => ' <'),
-        'after'      => array('sqlop' => ' >')
+        'within'     => array('sqlop' => array(' >= ? ', ' <= ?')),
+        'before'     => array('sqlop' => ' < ?'),
+        'after'      => array('sqlop' => ' > ?')
     );
     
     /**
@@ -48,14 +48,15 @@ class Tinebase_Model_Filter_Date extends Tinebase__Model_Filter_Abstract
      public function appendFilterSql($_select)
      {
          // prepare value
-         $value = $this->_getDateValues($this->_operator, $this->_value);
+         $value = (array)$this->_getDateValues($this->_operator, $this->_value);
          
          // quote field identifier
-         $field = $_select->getAdapter()->quoteIdentifier($this->field);
+         // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
+         $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
          
          // append query to select object
-         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $operator) {
-             $_select->where($field . $operator, $value);
+         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
+             $_select->where($field . $operator, $value[$num]);
          }
          
      }
