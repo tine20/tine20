@@ -72,6 +72,8 @@ class Tinebase_Model_Filter_FilterGroup
      */
     public function __construct($_data, $_condition='AND', array $_filterModel=array())
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        
         $this->_concatationCondition = $_condition == 'OR' ? 'OR' : 'AND';
         
         // we do this to work around static late binding limitation ;-(
@@ -82,8 +84,10 @@ class Tinebase_Model_Filter_FilterGroup
         foreach ($_data as $filterData) {
             if (isset($filterData['condition'])) {
                 $this->addFilterGroup(new Tinebase_Model_Filter_FilterGroup($filterData['filters'], $filterData['condition'], $this->_filterModel));
-            } elseif (in_array($filterData['field'], $this->_filterModel)) {
+            } elseif (array_key_exists($filterData['field'], $this->_filterModel)) {
                 $this->addFilter($this->createFilter($filterData['field'], $filterData['operator'], $filterData['value']));
+            } else {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping filter ' . print_r($filterData, true));
             }
         }
     }
@@ -132,6 +136,8 @@ class Tinebase_Model_Filter_FilterGroup
      */
     public function createFilter($_field, $_operator, $_value)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating filter: $_field $_operator " . print_r($_value, true));
+        
         if (! empty($this->_filterModel[$_field])) {
             $definition = $this->_filterModel[$_field];
             $options = isset($definition['options']) ? $definition['options'] : NULL;

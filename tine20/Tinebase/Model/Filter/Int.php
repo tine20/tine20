@@ -56,7 +56,8 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          $action = $this->_opSqlMap[$this->_operator];
          
          // quote field identifier
-         $field = $_select->getAdapter()->quoteIdentifier($this->field);
+         // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
+         $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->field);
          
          // replace wildcards from user
          $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
