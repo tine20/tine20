@@ -1,5 +1,6 @@
 <?php
-// rename to config.inc.php
+// @todo move that to /config dir
+// rename to config.inc.php (and add update script for that)
 // minimal configuration
 return array(
 	'database' => array(
