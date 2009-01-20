@@ -20,6 +20,11 @@
  */
 class Timetracker_Export_Ods extends OpenDocument_Document
 {
+    /**
+     * user styles
+     *
+     * @var array
+     */
     protected $_userStyles = array(
         '<number:date-style style:name="nShortDate" number:automatic-order="true" 
                 xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
@@ -60,8 +65,17 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         </style:style>'
     );
     
+    /**
+     * translation object
+     *
+     * @var Zend_Translate
+     */
     protected $_translate;
     
+    /**
+     * the constructor
+     *
+     */
     public function __construct()
     {
         parent::__construct(OpenDocument_Document::SPREADSHEET);
@@ -75,9 +89,6 @@ class Timetracker_Export_Ods extends OpenDocument_Document
      *
      * @param Timetracker_Model_TimesheetFilter $_filter
      * @return string filename
-     * 
-     * @todo add specific export values
-     * @todo add fields array to preferences
      */
     public function exportTimesheets($_filter) {
         
@@ -196,53 +207,24 @@ class Timetracker_Export_Ods extends OpenDocument_Document
      * - record fieldname => headline (translated)
      *
      * @return array
+     * 
+     * @todo add fields array to preferences or move to config file
      */
     protected function _getExportFields()
     {
-        $fields = array(
-            'start_date' => array(
-                'header'    => $this->_translate->_('Date'),
-                'type'      => 'date', 
-                'width'     => '2,5cm'
-            ),
-            'description' => array(
-                'header'    => $this->_translate->_('Description'),
-                'type'      => 'string', 
-                'width'     => '10cm'
-            ),
-            'timeaccount_id' => array(
-                'header'    => $this->_translate->_('Site'),
-                'type'      => 'timeaccount', 
-                'field'     => 'title', 
-                'width'     => '7cm'
-            ),
-            'account_id' => array(
-                'header'    => $this->_translate->_('Staff Member'),
-                'type'      => 'account', 
-                'field'     => 'accountDisplayName', 
-                'width'     => '4cm'
-            ),
-            'duration' => array(
-                'header'    => $this->_translate->_('Duration'),
-                'type'      => 'float', 
-                'width'     => '2cm',
-                'divisor'   => 60 
-            ),
-            'is_billable' => array(
-                'header'    => $this->_translate->_('Billable'),
-                'type'      => 'float', 
-                'width'     => '3cm'
-            ),
-            'is_cleared' => array(
-                'header'    => $this->_translate->_('Cleared'),
-                'type'      => 'float', 
-                'width'     => '3cm'
-            ),
-        );
+        $configFilename = dirname(__FILE__) . '/../../config/Timetracker/export.inc.php';
+        
+        $fields = (file_exists($configFilename)) ? require $configFilename : array();
         
         return $fields;
     }
     
+    /**
+     * add style/width to column
+     *
+     * @param string $_styleName
+     * @param string $_columnWidth (for example: '2,5cm')
+     */
     protected function _addColumnStyle($_styleName, $_columnWidth) 
     {
         $this->addStyle('<style:style style:name="' . $_styleName . '" style:family="table-column" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><style:table-column-properties style:column-width="' . $_columnWidth . '"/></style:style>');
