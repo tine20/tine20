@@ -101,7 +101,11 @@ Tine.Tinebase.common = {
         var Hs = String.format(Tine.Tinebase.tranlation.ngettext('{0} hour', '{0} hours', H), H);
         //var ds = String.format(Tine.Tinebase.tranlation.ngettext('{0} workday', '{0} workdays', d), d);
         
-        s = H ? Hs + ', ' + s : s;
+        if (i == 0) {
+        	s = Hs;
+        } else {
+            s = H ? Hs + ', ' + s : s;
+        }
         //s = d ? ds + ', ' + s : s;
         
         return s;
