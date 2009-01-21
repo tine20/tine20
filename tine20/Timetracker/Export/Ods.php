@@ -217,8 +217,8 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                         }
                         
                         // set special value from params
-                        if (isset($param['values'])) {
-                            $value = $param['values'][$value];
+                        if (isset($params['values'])) {
+                            $value = $params['values'][$value];
                         }
                         
                         break;
@@ -227,6 +227,12 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                 // check for replacements
                 if (isset($params['replace'])) {
                     $value = preg_replace($params['replace']['pattern'], $params['replace']['replacement'], $value);
+                }
+
+                // check for matches
+                if (isset($params['match'])) {
+                    preg_match($params['match'], $value, $matches);
+                    $value = $matches[1];
                 }
                 
                 // create cell with type and value and add style
@@ -256,10 +262,10 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $row->appendCell('string');
         $row->appendCell('string');
         $row->appendCell('string');
-        $row->appendCell('string', 'Total');
+        $row->appendCell('string', $this->_translate->_('Total Sum'));
         $cell = $row->appendCell('float', 0);
-        #$cell->setFormula('oooc:=SUM([.E2:.E' . $lastCell . '])');   
-        $cell->setFormula('oooc:=SUM(E2:E' . $lastCell . ')');   
+        // set sum for timesheet duration (for example E2:E10)
+        $cell->setFormula('oooc:=SUM(' . $this->_config['sumColumn'] . '2:' . $this->_config['sumColumn'] . $lastCell . ')');   
         $cell->setStyle('ceBold');     
     }
     
@@ -275,19 +281,24 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Not billable'));
         $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUMIF(Timesheets.F2:Timesheets.F' . $lastCell . ';0;Timesheets.E2:Timesheets.E' . $lastCell . ')');
+        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
+            $this->_config['billableColumn'] . '2:Timesheets.' . $this->_config['billableColumn'] . $lastCell . 
+            ';0;Timesheets.' . $this->_config['sumColumn'] . '2:Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
         #$cell->setStyle('ceBold');     
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Billable'));
         $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUMIF(Timesheets.F2:Timesheets.F' . $lastCell . ';1;Timesheets.E2:Timesheets.E' . $lastCell . ')');
+        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
+            $this->_config['billableColumn'] . '2:Timesheets.' . $this->_config['billableColumn'] . $lastCell . 
+            ';1;Timesheets.' . $this->_config['sumColumn'] . '2:Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
         #$cell->setStyle('ceBold');     
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Total'));
         $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUM(Timesheets.E2:Timesheets.E' . $lastCell . ')');
+        $cell->setFormula('oooc:=SUM(Timesheets.' . 
+            $this->_config['sumColumn'] . '2:Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
         $cell->setStyle('ceBold');     
     }
     
@@ -300,12 +311,57 @@ class Timetracker_Export_Ods extends OpenDocument_Document
      */
     protected function _getExportConfig()
     {
-        $configFilename = dirname(__FILE__) . '/../../config/Timetracker/export.inc.php';
-        $configFilenameAlt = $configFilename . '.dist';
+        $config = Tinebase_Core::getConfig();
         
-        $config = (file_exists($configFilename)) ? require $configFilename : require $configFilenameAlt;
+        $exportConfig = (isset($config->timesheetExport)) ? $config->timesheetExport->toArray() : array(
+            'customFields' => FALSE,
+            'sumColumn' => 'E',
+            'billableColumn' => 'F',
+            'overviewTable' => TRUE,
+            'fields' => array(
+                'start_date' => array(
+                    'header'    => $this->_translate->_('Date'),
+                    'type'      => 'date', 
+                    'width'     => '2,5cm'
+                ),
+                'description' => array(
+                    'header'    => $this->_translate->_('Description'),
+                    'type'      => 'string', 
+                    'width'     => '10cm'
+                ),
+                'timeaccount_id' => array(
+                    'header'    => $this->_translate->_('Site'),
+                    'type'      => 'timeaccount', 
+                    'field'     => 'title', 
+                    'width'     => '7cm',
+                    'replace'   => array('pattern' => "/^XYZ /", 'replacement' => '')
+                ),
+                'account_id' => array(
+                    'header'    => $this->_translate->_('Staff Member'),
+                    'type'      => 'account', 
+                    'field'     => 'accountDisplayName', 
+                    'width'     => '4cm'
+                ),
+                'duration' => array(
+                    'header'    => $this->_translate->_('Duration'),
+                    'type'      => 'float', 
+                    'width'     => '2cm',
+                    'divisor'   => 60 
+                ),
+                'is_billable' => array(
+                    'header'    => $this->_translate->_('Billable'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+                'is_cleared' => array(
+                    'header'    => $this->_translate->_('Cleared'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+            )
+        );
         
-        return $config;
+        return $exportConfig;
     }
     
     /**
