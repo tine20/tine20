@@ -84,7 +84,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
             params: {
                 method: this.exportFunction,
                 requestType: 'HTTP',
-                _filter: filterSettings,
+                _filter: Ext.util.JSON.encode(filterSettings),
                 _format: this.format
             },
             success: function() {
