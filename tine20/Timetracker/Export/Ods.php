@@ -80,6 +80,12 @@ class Timetracker_Export_Ods extends OpenDocument_Document
     protected $_config = array();
     
     /**
+     * first row of body (records)
+     *
+     */
+    protected $_firstRow = 4;
+    
+    /**
      * the constructor
      *
      */
@@ -101,15 +107,20 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         
         // get timesheets by filter
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
-        $lastCell = count($timesheets)+1;
+        $lastCell = count($timesheets) + $this->_firstRow - 1;
         
+        // resolve timeaccounts
+        $timeaccountIds = $timesheets->timeaccount_id;
+        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
+                
         // build export table
-        $table = $this->_addHead();
-        $this->_addBody($table, $timesheets);
+        $table = $this->getBody()->appendTable('Timesheets');        
+        $this->_addHead($table, $_filter, $timeaccounts);
+        $this->_addBody($table, $timesheets, $timeaccounts);
         $this->_addFooter($table, $lastCell);
         
         // add overview table
-        $this->_addOverview($lastCell);
+        $this->_addOverviewTable($lastCell);
         
         // create file
         $filename = $this->getDocument();        
@@ -119,12 +130,12 @@ class Timetracker_Export_Ods extends OpenDocument_Document
     /**
      * add ods head (headline, column styles)
      *
-     * @return OpenDocument_SpreadSheet_Table
+     * @param OpenDocument_SpreadSheet_Table $table
+     * @param Timetracker_Model_TimesheetFilter $_filter
+     * @param Tinebase_Record_RecordSet $timeaccounts
      */
-    protected function _addHead()
+    protected function _addHead($table, $_filter, $timeaccounts)
     {
-        $table = $this->getBody()->appendTable('Timesheets');
-
         $columnId = 0;
         foreach($this->_config['fields'] as $field) {
             $column = $table->appendColumn();
@@ -137,15 +148,53 @@ class Timetracker_Export_Ods extends OpenDocument_Document
             $columnId++;
         }
         
+
+        // add header (replace placeholders)
+        $row = $table->appendRow();
+        if (isset($this->_config['header'])) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
+            
+            $locale = Tinebase_Core::get('locale');
+            
+            $patterns = array(
+                '/\{date\}/', 
+                '/\{user\}/',
+                '/\{filter\}/'
+            );
+            
+            $filters = array();
+            foreach ($_filter->toArray() as $key => $value) {
+                switch($key) {
+                    case 'timeaccount_id':
+                        $value = $timeaccounts[$timeaccounts->getIndexById($value[0])]->title;
+                        break;
+                    case 'account_id':
+                        $value = Tinebase_User::getInstance()->getUserById($value)->accountDisplayName;
+                        break;
+                }
+                $filters[] = $key . '=' . $value;
+            }
+            $replacements = array(
+                Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($locale), $locale),
+                Tinebase_Core::getUser()->accountDisplayName,
+                $this->_translate->_('Filter') . ': ' . implode(', ', $filters)
+            );
+            
+            foreach($this->_config['header'] as $headerCell) {
+                // replace data
+                $value = preg_replace($patterns, $replacements, $headerCell);
+                $cell = $row->appendCell('string', $value);                
+            }
+        }
+        
         $row = $table->appendRow();
         
-        // add headline
+        // add table headline
+        $row = $table->appendRow();
         foreach($this->_config['fields'] as $field) {
             $cell = $row->appendCell('string', $field['header']);
             $cell->setStyle('ceHeader');
         }
-        
-        return $table;
     }
     
     /**
@@ -153,17 +202,14 @@ class Timetracker_Export_Ods extends OpenDocument_Document
      *
      * @param OpenDocument_SpreadSheet_Table $table
      * @param Tinebase_Record_RecordSet $timesheets
+     * @param Tinebase_Record_RecordSet $timeaccounts
      */
-    protected function _addBody($table, $timesheets)
+    protected function _addBody($table, $timesheets, $timeaccounts)
     {
-        // resolve timeaccounts
-        $timeaccountIds = $timesheets->timeaccount_id;
-        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
-        
         // resolve accounts
         $accountIds = $timesheets->account_id;
         $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
-
+        
         if ($this->_config['customFields']) {
             // we need the sql backend if the export contains custom fields
             // @todo remove that when getMultiple() fetches the custom fields as well
@@ -203,7 +249,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                         $style = 'ceAlternateCentered';
                         break;
                     default:
-                        if ($params['custom']) {
+                        if (isset($params['custom']) && $params['custom']) {
                             // add custom fields
                             if (isset($timesheet->customfields[$key])) {
                                 $value = $timesheet->customfields[$key];
@@ -265,7 +311,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $row->appendCell('string', $this->_translate->_('Total Sum'));
         $cell = $row->appendCell('float', 0);
         // set sum for timesheet duration (for example E2:E10)
-        $cell->setFormula('oooc:=SUM(' . $this->_config['sumColumn'] . '2:' . $this->_config['sumColumn'] . $lastCell . ')');   
+        $cell->setFormula('oooc:=SUM(' . $this->_config['sumColumn'] . $this->_firstRow . ':' . $this->_config['sumColumn'] . $lastCell . ')');   
         $cell->setStyle('ceBold');     
     }
     
@@ -274,7 +320,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
      *
      * @param integer $lastCell
      */
-    protected function _addOverview($lastCell)
+    protected function _addOverviewTable($lastCell)
     {
         $table = $this->getBody()->appendTable('Overview');
         
@@ -282,23 +328,23 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         $row->appendCell('string', $this->_translate->_('Not billable'));
         $cell = $row->appendCell('float', 0);
         $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
-            $this->_config['billableColumn'] . '2:Timesheets.' . $this->_config['billableColumn'] . $lastCell . 
-            ';0;Timesheets.' . $this->_config['sumColumn'] . '2:Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
+            $this->_config['billableColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['billableColumn'] . $lastCell . 
+            ';0;Timesheets.' . $this->_config['sumColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
         #$cell->setStyle('ceBold');     
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Billable'));
         $cell = $row->appendCell('float', 0);
         $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
-            $this->_config['billableColumn'] . '2:Timesheets.' . $this->_config['billableColumn'] . $lastCell . 
-            ';1;Timesheets.' . $this->_config['sumColumn'] . '2:Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
+            $this->_config['billableColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['billableColumn'] . $lastCell . 
+            ';1;Timesheets.' . $this->_config['sumColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
         #$cell->setStyle('ceBold');     
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Total'));
         $cell = $row->appendCell('float', 0);
         $cell->setFormula('oooc:=SUM(Timesheets.' . 
-            $this->_config['sumColumn'] . '2:Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
+            $this->_config['sumColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['sumColumn'] . $lastCell . ')');
         $cell->setStyle('ceBold');     
     }
     
@@ -330,7 +376,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                     'width'     => '10cm'
                 ),
                 'timeaccount_id' => array(
-                    'header'    => $this->_translate->_('Site'),
+                    'header'    => $this->_translate->_('Timeaccount'),
                     'type'      => 'timeaccount', 
                     'field'     => 'title', 
                     'width'     => '7cm',
