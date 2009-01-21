@@ -198,7 +198,9 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         $result = $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter');
         
+        $result['totalcountbillable'] = $result['totalcount']['countBillable'];
         $result['totalsum'] = $result['totalcount']['sum'];
+        $result['totalsumbillable'] = $result['totalcount']['sumBillable'];
         $result['totalcount'] = $result['totalcount']['count'];
         
         return $result;

@@ -63,7 +63,12 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         $select = $this->_db->select();
         
         if ($_getCount) {
-            $select->from($this->_tableName, array('count' => 'COUNT(*)', 'sum' => 'SUM(duration)'));    
+            $select->from($this->_tableName, array(
+                'count'         => 'COUNT(*)', 
+                'countBillable' => 'SUM(is_billable)',
+                'sum'           => 'SUM(duration)',
+                'sumBillable'   => 'SUM(duration*is_billable)'
+            ));    
         } else {
             $select->from($this->_tableName);
         }
