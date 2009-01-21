@@ -101,7 +101,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             }
         },{
             id: 'is_billable',
-            hidden: true,
+            //hidden: true,
             header: this.app.i18n._("Billable"),
             width: 100,
             sortable: true,
@@ -136,62 +136,80 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
             gridpanel: this,
             
+            // use default Tpl for default and multi view
+            defaultTpl: new Ext.XTemplate(
+                '<div class="preview-panel-timesheet-nobreak">',
+                    '<!-- Preview timeframe -->',           
+                    '<div class="preview-panel preview-panel-timesheet-left">',
+                        '<div class="bordercorner_1"></div>',
+                        '<div class="bordercorner_2"></div>',
+                        '<div class="bordercorner_3"></div>',
+                        '<div class="bordercorner_4"></div>',
+                        '<div class="preview-panel-declaration">timeframe</div>',
+                        '<div class="preview-panel-timesheet-leftside preview-panel-left">',
+                            '<span class="preview-panel-bold">',
+                            'First Entry<br/>',
+                            'Last Entry<br/>',
+                            'Duration<br/>',
+                            '<br/>',
+                            '</span>',
+                        '</div>',
+                        '<div class="preview-panel-timesheet-rightside preview-panel-left">',
+                            '<span class="preview-panel-nonbold">',
+                            '<br/>',
+                            '<br/>',
+                            '<br/>',
+                            '<br/>',
+                            '</span>',
+                        '</div>',
+                    '</div>',
+                    '<!-- Preview summary -->',
+                    '<div class="preview-panel-timesheet-right">',
+                        '<div class="bordercorner_gray_1"></div>',
+                        '<div class="bordercorner_gray_2"></div>',
+                        '<div class="bordercorner_gray_3"></div>',
+                        '<div class="bordercorner_gray_4"></div>',
+                        '<div class="preview-panel-declaration">summary</div>',
+                        '<div class="preview-panel-timesheet-leftside preview-panel-left">',
+                            '<span class="preview-panel-bold">',
+                            'Total Timesheets<br/>',
+                            'Total Time<br/>',
+                            'Billable Timesheets<br/>',
+                            'Time of Billable Timesheets<br/>',
+                            '</span>',
+                        '</div>',
+                        '<div class="preview-panel-timesheet-rightside preview-panel-left">',
+                            '<span class="preview-panel-nonbold">',
+                            '{totalcount}<br/>',
+                            '{totalsum}<br/>',
+                            '<br/>',
+                            '<br/>',
+                            '</span>',
+                        '</div>',
+                    '</div>',
+                '</div>'            
+            ),
+            
             showDefault: function(body) {
-                var totalsum = Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsum);
-                var tpl = new Ext.XTemplate(
-		'<div class="preview-panel-timesheet-nobreak">',
-			'<!-- Preview timeframe -->',			
-			'<div class="preview-panel preview-panel-timesheet-left">',
-				'<div class="bordercorner_1"></div>',
-				'<div class="bordercorner_2"></div>',
-				'<div class="bordercorner_3"></div>',
-				'<div class="bordercorner_4"></div>',
-				'<div class="preview-panel-declaration">timeframe</div>',
-				'<div class="preview-panel-timesheet-leftside preview-panel-left">',
-					'<span class="preview-panel-bold">',
-					'First Entry<br/>',
-					'Last Entry<br/>',
-					'Duration<br/>',
-					'<br/>',
-					'</span>',
-				'</div>',
-				'<div class="preview-panel-timesheet-rightside preview-panel-left">',
-					'<span class="preview-panel-nonbold">',
-					'<br/>',
-					'<br/>',
-					'<br/>',
-					'<br/>',
-					'</span>',
-				'</div>',
-			'</div>',
-			'<!-- Preview summary -->',
-			'<div class="preview-panel-timesheet-right">',
-				'<div class="bordercorner_gray_1"></div>',
-				'<div class="bordercorner_gray_2"></div>',
-				'<div class="bordercorner_gray_3"></div>',
-				'<div class="bordercorner_gray_4"></div>',
-				'<div class="preview-panel-declaration">summary</div>',
-				'<div class="preview-panel-timesheet-leftside preview-panel-left">',
-					'<span class="preview-panel-bold">',
-					'Total Timesheets<br/>',
-					'Total Time<br/>',
-					'Billable Timesheets<br/>',
-					'Time of Billable Timesheets<br/>',
-					'</span>',
-				'</div>',
-				'<div class="preview-panel-timesheet-rightside preview-panel-left">',
-					'<span class="preview-panel-nonbold">',
-					'{totalcount}<br/>',
-					totalsum + '<br/>',
-					'<br/>',
-					'<br/>',
-					'</span>',
-				'</div>',
-			'</div>',
-		'</div>'
-				//' total time of all {totalcount} timesheets: ' + totalsum + '&nbsp;&nbsp;&nbsp;'
-				);
-                tpl.overwrite(body, this.gridpanel.store.proxy.jsonReader.jsonData);
+				var data = {
+				    totalcount: this.gridpanel.store.proxy.jsonReader.jsonData.totalcount,
+				    totalsum:  Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsum)
+			    };
+                
+                this.defaultTpl.overwrite(body, data);
+            },
+            
+            showMulti: function(sm, body) {
+                var data = {
+                    totalcount: sm.getCount(),
+                    totalsum: 0
+                };
+                sm.each(function(record){
+                    data.totalsum = data.totalsum + parseInt(record.data.duration);
+                });
+                data.totalsum = Tine.Tinebase.common.minutesRenderer(data.totalsum);
+                
+                this.defaultTpl.overwrite(body, data);
             },
             
             tpl: new Ext.XTemplate(

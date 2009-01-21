@@ -51,6 +51,12 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    showMulti: function(sm, body) {
+        if (this.multiTpl) {
+            this.multiTpl.overwrite(body);
+        }
+    },
+    
     doBind: function(grid) {
         grid.getSelectionModel().on('selectionchange', function(sm) {
             this.onDetailsUpdate(sm);
@@ -68,6 +74,8 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         } else if (count === 1) {
             var record = sm.getSelected();
             this.updateDetails(record, this.body);
+        } else if (count > 1) {
+        	this.showMulti(sm, this.body);
         }
     }
     
