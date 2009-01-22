@@ -278,6 +278,9 @@ class Tinebase_Config
         
         $this->_db->insert($this->_configCustomFieldsTablename, $recordArray);
         
+        // invalidate cache (no memcached support yet)
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+                
         return $this->getCustomField($_record->getId());
     }
 
@@ -305,28 +308,36 @@ class Tinebase_Config
 
     /**
      * get custom fields for an application
+     * - results are cached if caching is active (with cache tag 'customfields')
      *
      * @param string|Tinebase_Model_Application $_applicationId
      * @param string                            $_modelName
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField records
-     * 
-     * @todo    add caching here
      */
     public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $select = $this->_db->select();
-        $select->from($this->_configCustomFieldsTablename)
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId));
-               
-        if ($_modelName !== NULL) {
-            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ?', $_modelName));
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'getCustomFieldsForApplication' . $applicationId . (($_modelName !== NULL) ? $_modelName : '');
+        $result = $cache->load($cacheId);
+        
+        if (!$result) {        
+        
+            $select = $this->_db->select();
+            $select->from($this->_configCustomFieldsTablename)
+                   ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId));
+                   
+            if ($_modelName !== NULL) {
+                $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ?', $_modelName));
+            }
+            
+            $rows = $this->_db->fetchAssoc($select);
+            $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
+            
+            $cache->save($result, $cacheId, array('customfields'));
         }
-        
-        $rows = $this->_db->fetchAssoc($select);
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
-        
+            
         return $result;
     }
     
@@ -357,5 +368,8 @@ class Tinebase_Config
         );
         
         $this->_db->delete($this->_configCustomFieldsTablename, $where);
+
+        // invalidate cache (no memcached support yet)
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
     }
 }
