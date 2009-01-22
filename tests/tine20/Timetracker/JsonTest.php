@@ -274,37 +274,30 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to update multiple Timesheets
      *
-     * @todo finish
      */
     public function testUpdateMultipleTimesheetsWithIds()
     {
-        // @todo create 2 timesheets
-        $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-       
+        // create 2 timesheets
+        $timesheet1 = $this->_getTimesheet();
+        $timesheetData1 = $this->_json->saveTimesheet(Zend_Json::encode($timesheet1->toArray()));
+        $timesheet2 = $this->_getTimesheet($timesheetData1['timeaccount_id']['id']);
+        $timesheetData2 = $this->_json->saveTimesheet(Zend_Json::encode($timesheet2->toArray()));
+        
         // update Timesheets
         $newValues = array('description' => 'argl');
-        $ids = array($timesheetData['id']);
+        $ids = array($timesheetData1['id'], $timesheetData2['id']);
         $this->_json->updateMultipleTimesheets(Zend_Json::encode($ids), Zend_Json::encode($newValues));
         
-        /*
-        $timesheetData['description'] = "blubbblubb";
-        //$timesheetData['container_id'] = $timesheetData['container_id']['id'];
-        $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
-        $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
-        
-        $timesheetUpdated = $this->_json->saveTimesheet(Zend_Json::encode($timesheetData));
-        
+        $changed1 = $this->_json->getTimesheet($timesheetData1['id']);
+        $changed2 = $this->_json->getTimesheet($timesheetData2['id']);
+                
         // check
-        $this->assertEquals($timesheetData['id'], $timesheetUpdated['id']);
-        $this->assertEquals($timesheetData['description'], $timesheetUpdated['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['account_id']['accountId'], 'account is not resolved');
-        $this->assertEquals($timesheetData['timeaccount_id'], $timesheetUpdated['timeaccount_id']['id'], 'timeaccount is not resolved');
-        */        
-
+        $this->assertEquals($timesheetData1['id'], $changed1['id']);
+        $this->assertEquals($changed1['description'], $newValues['description']);
+        $this->assertEquals($changed2['description'], $newValues['description']);
+        
         // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+        $this->_json->deleteTimeaccounts($timesheetData1['timeaccount_id']['id']);
     }
 
     /**
@@ -315,6 +308,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateMultipleTimesheetsWithFilter()
     {
     }
+    
     /**
      * try to get a Timesheet
      *
@@ -480,13 +474,18 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return Timetracker_Model_Timesheet
      */
-    protected function _getTimesheet()
+    protected function _getTimesheet($_taId = NULL)
     {
-        $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($this->_getTimeaccount());
+        if ($_taId === NULL) {
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($this->_getTimeaccount());
+            $taId = $timeaccount->getId();
+        } else {
+            $taId = $_taId;
+        }
         
         return new Timetracker_Model_Timesheet(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
-            'timeaccount_id'    => $timeaccount->getId(),
+            'timeaccount_id'    => $taId,
             'description'       => 'blabla',
             'start_date'        => Zend_Date::now()->toString('yyyy-MM-dd'),
             'duration'          => 30,
