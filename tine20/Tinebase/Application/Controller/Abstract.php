@@ -87,7 +87,7 @@ abstract class Tinebase_Application_Controller_Abstract
                 }
             }
 
-            $cache->save($result, $cacheId, array('rights'), 240);
+            $cache->save($result, $cacheId, array('rights'), 120);
         }
             
         if (!$result && $_throwException) {
