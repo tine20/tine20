@@ -49,6 +49,11 @@
 class Tinebase_Model_Filter_FilterGroup
 {
     /**
+     * @var string application of this filter group
+     */
+    protected $_applicationName = NULL;
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array();
@@ -70,7 +75,7 @@ class Tinebase_Model_Filter_FilterGroup
      * @param  string $_condition {AND|OR}
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct($_data, $_condition='AND', array $_filterModel=array())
+    public function __construct(array $_data, $_condition='AND', array $_filterModel=array(), $_applicationName=NULL)
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         
@@ -80,10 +85,16 @@ class Tinebase_Model_Filter_FilterGroup
         if (! empty($_filterModel)) {
             $this->_filterModel = $_filterModel;
         }
+        if ($_applicationName) {
+            $this->_applicationName = $_applicationName;
+        }
+        
+        // legacy container handling
+        Tinebase_Model_Filter_Container::_transformLegacyData($_data);
         
         foreach ($_data as $filterData) {
             if (isset($filterData['condition'])) {
-                $this->addFilterGroup(new Tinebase_Model_Filter_FilterGroup($filterData['filters'], $filterData['condition'], $this->_filterModel));
+                $this->addFilterGroup(new Tinebase_Model_Filter_FilterGroup($filterData['filters'], $filterData['condition'], $this->_filterModel), $this->_applicationName);
             } elseif (array_key_exists($filterData['field'], $this->_filterModel)) {
                 $this->addFilter($this->createFilter($filterData['field'], $filterData['operator'], $filterData['value']));
             } else {
