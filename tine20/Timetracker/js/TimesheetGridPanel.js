@@ -192,11 +192,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             
             showDefault: function(body) {
             	
-            	console.log(this.gridpanel.store.proxy.jsonReader.jsonData);
+            	//console.log(this.gridpanel.store.proxy.jsonReader.jsonData);
             	
 				var data = {
 				    count: this.gridpanel.store.proxy.jsonReader.jsonData.totalcount,
-				    countbillable: this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable,
+				    countbillable: (this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable) ? this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable : 0,
 				    sum:  Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsum),
 				    sumbillable: Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsumbillable)
 			    };
