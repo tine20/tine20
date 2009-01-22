@@ -263,7 +263,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                         }
                         
                         // set special value from params
-                        if (isset($params['values'])) {
+                        if (isset($params['values']) && isset($params['values'][$value])) {
                             $value = $params['values'][$value];
                         }
                         
