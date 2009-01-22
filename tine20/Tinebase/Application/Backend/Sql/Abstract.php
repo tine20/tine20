@@ -326,6 +326,48 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     }
     
     /**
+     * Updates multiple entries
+     *
+     * @param array $_ids to update
+     * @param array $_values
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * 
+     * @todo    implement
+     */
+    public function updateMultiple($_ids, $_values) {
+        /*
+        if (!$_record instanceof $this->_modelName) {
+            throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
+        }
+        
+        if(!$_record->isValid()) {
+            throw new Tinebase_Exception_Record_Validation('record object is not valid');
+        }
+        
+        $id = $_record->getId();
+
+        $recordArray = $_record->toArray();
+        $tableKeys = $this->_db->describeTable($this->_tableName);
+        $recordArray = array_intersect_key($recordArray, $tableKeys);
+        
+        $this->_prepareData($recordArray);
+                
+        $where  = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id),
+        );
+        
+        $this->_db->update($this->_tableName, $recordArray, $where);
+        
+        // update custom fields
+        if ($_record->has('customfields')) {
+            $this->_saveCustomFields($_record);
+        }
+                
+        return $this->get($id, TRUE);
+        */
+    }
+    
+    /**
       * Deletes entries
       * 
       * @param string|integer|Tinebase_Record_Interface $_id

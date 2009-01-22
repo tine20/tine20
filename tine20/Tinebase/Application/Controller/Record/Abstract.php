@@ -321,6 +321,28 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     }    
     
     /**
+     * update multiple records
+     * 
+     * @param   array|Tinebase_Record_Interface $_what array of record identifiers or filter
+     * @param   array $_values
+     *  
+     * @todo    implement
+     * @todo    add acl
+     */
+    public function updateMultiple($_what, $_values)
+    {
+        if (is_array($_what)) {
+            // @todo check acl here
+            $ids = $_what;
+        } else {
+            // @todo check if filter
+            $ids = $this->search($_what)->getArrayOfIds();
+        }
+        
+        $this->_backend->updateMultiple($ids);
+    }    
+    
+    /**
      * Deletes a set of records.
      * 
      * If one of the records could not be deleted, no record is deleted

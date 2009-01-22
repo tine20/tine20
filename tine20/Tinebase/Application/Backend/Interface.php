@@ -80,6 +80,14 @@ interface Tinebase_Application_Backend_Interface
     public function update(Tinebase_Record_Interface $_record);
     
     /**
+     * Updates multiple entries
+     *
+     * @param array $_ids to update
+     * @param array $_values
+     */
+    public function updateMultiple($_ids, $_values);
+        
+    /**
      * Deletes one or more existing persistent record(s)
      *
      * @param string|array $_identifier

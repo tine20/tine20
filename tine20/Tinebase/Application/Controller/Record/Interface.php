@@ -89,6 +89,14 @@ interface Tinebase_Application_Controller_Record_Interface
     public function update(Tinebase_Record_Interface $_record);
     
     /**
+     * update multiple records
+     * 
+     * @param   array|Tinebase_Record_Interface $_what array of record identifiers or filter
+     * @param   array $_values
+     */
+    public function updateMultiple($_what, $_values);
+    
+    /**
      * Deletes a set of records.
      * 
      * If one of the records could not be deleted, no record is deleted
