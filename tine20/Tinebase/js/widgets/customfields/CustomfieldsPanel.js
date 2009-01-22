@@ -74,7 +74,7 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         // let cfpanel be a plugin of editDialog
         this.on('render', function() {
             // fill data from record into form wich is not done due to defered rendering
-            this.formField.setValue(this.quickHack.record.get('customfields'));
+            this.setAllCfValues(this.quickHack.record.get('customfields'));
         }, this);
         
     },
@@ -94,6 +94,20 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
             if (cfStore.getCount() > 0) {
                 return cfStore;
             }
+        }
+    },
+    
+    setAllCfValues: function(customfields) {
+        // check if all cfs are already rendered
+        var allRendered = false;
+        this.items.each(function(item) {
+            allRendered |= item.rendered
+        }, this);
+        
+        if (! allRendered) {
+            this.setAllCfValues.defer(100, this, [customfields]);
+        } else {
+            this.formField.setValue(customfields);
         }
     }
 });
