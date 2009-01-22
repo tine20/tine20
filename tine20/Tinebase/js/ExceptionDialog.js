@@ -98,7 +98,10 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
            description: Ext.getCmp('tb-exceptiondialog-description').getValue(),
            build: Tine.Build
         };
-        var chunks = this.strChunk(Ext.util.JSON.encode(info), 1000);
+        // NOTE:  - we have about 80 chars overhead (url, paramnames etc) in each request
+        //        - 1024 chars are expected to be pass client/server limits savely => 940
+        //        - base64 means about 30% overhead => 600 
+        var chunks = this.strChunk(Ext.util.JSON.encode(info), 600);
         
         var img = [];
         for (var i=0;i<chunks.length;i++) {
