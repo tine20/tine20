@@ -112,7 +112,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract
     {
         $db = Tinebase_Core::getDb();
         
-        $_select->where($db->quoteIdentifier($this->_field) .  'IN (?)', empty($this->_value) ? " " : $this->_value);
+        $_select->where($db->quoteIdentifier($this->_field) .  ' IN (?)', empty($this->_value) ? " " : $this->_value);
     }
     
     /**
