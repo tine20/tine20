@@ -323,23 +323,25 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     /**
      * update multiple records
      * 
-     * @param   array|Tinebase_Record_Interface $_what array of record identifiers or filter
+     * @param   array|Tinebase_Record_Interface $_filter
      * @param   array $_values
      *  
-     * @todo    implement
+     * @todo    use filter (only array of ids supported at the moment)
      * @todo    add acl
      */
-    public function updateMultiple($_what, $_values)
+    public function updateMultiple($_filter, $_values)
     {
-        if (is_array($_what)) {
+        /*
+        if (is_array($_filter->)) {
             // @todo check acl here
             $ids = $_what;
         } else {
             // @todo check if filter
             $ids = $this->search($_what)->getArrayOfIds();
         }
+        */
         
-        $this->_backend->updateMultiple($ids, $_values);
+        $this->_backend->updateMultiple($_filter, $_values);
     }    
     
     /**
