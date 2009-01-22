@@ -38,6 +38,7 @@ abstract class Tinebase_Application_Controller_Abstract
      * rules: 
      * - ADMIN right includes all other rights
      * - MANAGE_* right includes VIEW_* right 
+     * - results are cached if caching is active (with cache tag 'rights')
      * 
      * @param   string  $_right to check
      * @param   boolean $_throwException [optional]
@@ -53,38 +54,46 @@ abstract class Tinebase_Application_Controller_Abstract
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
         }
-        
+                
         $right = strtoupper($_right);
         
-        $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'checkRight' . $this->_currentAccount->getId() . $_right . $this->_applicationName;
+        $result = $cache->load($cacheId);
         
-        // array with the rights that should be checked, ADMIN is in it per default
-        $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
-        
-        if (preg_match("/MANAGE_/", $right)) {
-            $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
-        }
-
-        if (preg_match("/VIEW_([A-Z_]*)/", $right, $matches)) {
-            $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
-            // manage right includes view right
-            $rightsToCheck[] = constant($applicationRightsClass. '::MANAGE_' . $matches[1]);
-        }
-        
-        $hasRight = FALSE;
-        
-        foreach ($rightsToCheck as $rightToCheck) {
-            //echo "check right: " . $rightToCheck;
-            if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, $this->_currentAccount->getId(), $rightToCheck)) {
-                $hasRight = TRUE;
-                break;    
+        if (!$result) {        
+            $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
+            
+            // array with the rights that should be checked, ADMIN is in it per default
+            $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
+            
+            if (preg_match("/MANAGE_/", $right)) {
+                $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
             }
+    
+            if (preg_match("/VIEW_([A-Z_]*)/", $right, $matches)) {
+                $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
+                // manage right includes view right
+                $rightsToCheck[] = constant($applicationRightsClass. '::MANAGE_' . $matches[1]);
+            }
+            
+            $result = FALSE;
+            
+            foreach ($rightsToCheck as $rightToCheck) {
+                //echo "check right: " . $rightToCheck;
+                if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, $this->_currentAccount->getId(), $rightToCheck)) {
+                    $result = TRUE;
+                    break;    
+                }
+            }
+
+            $cache->save($result, $cacheId, array('rights'), 240);
         }
-        
-        if (!$hasRight && $_throwException) {
+            
+        if (!$result && $_throwException) {
             throw new Tinebase_Exception_AccessDenied("You are not allowed to $right in application $this->_applicationName !");
         }
 
-        return $hasRight;
+        return $result;
     }
 }
