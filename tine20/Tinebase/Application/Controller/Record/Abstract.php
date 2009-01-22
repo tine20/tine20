@@ -339,7 +339,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
             $ids = $this->search($_what)->getArrayOfIds();
         }
         
-        $this->_backend->updateMultiple($ids);
+        $this->_backend->updateMultiple($ids, $_values);
     }    
     
     /**

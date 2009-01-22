@@ -272,6 +272,50 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to update multiple Timesheets
+     *
+     * @todo finish
+     */
+    public function testUpdateMultipleTimesheetsWithIds()
+    {
+        // @todo create 2 timesheets
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+       
+        // update Timesheets
+        $newValues = array('description' => 'argl');
+        $ids = array($timesheetData['id']);
+        $this->_json->updateMultipleTimesheets(Zend_Json::encode($ids), Zend_Json::encode($newValues));
+        
+        /*
+        $timesheetData['description'] = "blubbblubb";
+        //$timesheetData['container_id'] = $timesheetData['container_id']['id'];
+        $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
+        $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
+        
+        $timesheetUpdated = $this->_json->saveTimesheet(Zend_Json::encode($timesheetData));
+        
+        // check
+        $this->assertEquals($timesheetData['id'], $timesheetUpdated['id']);
+        $this->assertEquals($timesheetData['description'], $timesheetUpdated['description']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['account_id']['accountId'], 'account is not resolved');
+        $this->assertEquals($timesheetData['timeaccount_id'], $timesheetUpdated['timeaccount_id']['id'], 'timeaccount is not resolved');
+        */        
+
+        // cleanup
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+    }
+
+    /**
+     * try to update multiple Timesheets
+     *
+     * @todo implement
+     */
+    public function testUpdateMultipleTimesheetsWithFilter()
+    {
+    }
+    /**
      * try to get a Timesheet
      *
      */
