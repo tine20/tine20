@@ -79,6 +79,10 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          } else {
             // finally append query to select object
             $_select->where($this->field . $action['sqlop'], $value);
+            
+             if ($this->_operator == 'not') {
+                 $_select->orWhere($field . ' IS NULL');
+             }
          }
      }
 }

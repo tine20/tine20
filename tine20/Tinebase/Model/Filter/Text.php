@@ -29,7 +29,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         2 => 'startswith',
         3 => 'endswith',
         4 => 'not',
-        4 => 'in',
+        5 => 'in',
     );
     
     /**
@@ -55,15 +55,19 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          
          // quote field identifier
          // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
-         $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->field);
+         $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
          
          // replace wildcards from user
          $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
          
          // add wildcard to value according to operator
-         $value = str_replace('/?/', $value, $action['wildcards']);
+         $value = str_replace('?', $value, $action['wildcards']);
          
          // finally append query to select object
-         $_select->where($this->field . $action['sqlop'], $value);
+         $_select->where($field . $action['sqlop'], $value);
+         
+         if ($this->_operator == 'not') {
+             $_select->orWhere($field . ' IS NULL');
+         }
      }
 }
