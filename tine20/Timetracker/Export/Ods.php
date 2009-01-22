@@ -278,7 +278,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                 // check for matches
                 if (isset($params['match'])) {
                     preg_match($params['match'], $value, $matches);
-                    $value = $matches[1];
+                    $value = (isset($matches[1])) ? $matches[1] : '';
                 }
                 
                 // create cell with type and value and add style
