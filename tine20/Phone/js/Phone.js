@@ -233,24 +233,30 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         
         /***************** form fields *****************/
         
-        this.items = [
+        this.items = [new Tine.widgets.customfields.CustomfieldsCombo(
+
             {
-                xtype: 'combo',
                 fieldLabel: this.translation._('Phone'),
                 store: this.phoneStore,
                 mode: 'local',
+                editable: false,
+                stateful: true,
+   //             stateId: 'lastPhoneLine',
+                stateEvents: ['select'],
                 displayField:'description',
                 valueField: 'id',
+                id: 'phoneId',
                 name: 'phoneId',
                 triggerAction: 'all',
-                listeners: {
+                listeners: {                
                 	scope: this,
+                	
                     // reload lines combo on change
                     select: function(combo, newValue, oldValue){
                         this.setLineStore(newValue.data.id);
                     }
                 }
-            },{
+            }),{
             	xtype: 'combo',
                 fieldLabel: this.translation._('Line'),
                 name: 'lineId',
@@ -335,7 +341,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         var lineCombo = this.getForm().findField('lineId'); 
         
         // select first combo values
-        phoneCombo.setValue(this.phoneStore.getAt(0).id);
+		if(!phoneCombo.getState()) { phoneCombo.setValue(this.phoneStore.getAt(0).id); }
         this.getForm().findField('lineId').setValue(this.linesStore.getAt(0).id);
     },
     

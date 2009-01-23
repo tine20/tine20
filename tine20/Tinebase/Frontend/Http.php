@@ -100,6 +100,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/widgets/container/ContainerGrants.js',
             'Tinebase/js/widgets/container/ContainerTree.js',
             'Tinebase/js/widgets/customfields/CustomfieldsPanel.js',
+			'Tinebase/js/widgets/customfields/CustomfieldsCombo.js',
             'Tinebase/js/widgets/grid/DetailsPanel.js',
             'Tinebase/js/widgets/grid/FilterModel.js',
             'Tinebase/js/widgets/grid/FilterPlugin.js',
