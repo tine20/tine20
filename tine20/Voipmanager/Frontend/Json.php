@@ -27,6 +27,27 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     protected $_applicationName = 'Voipmanager';
 
+    
+    
+    
+    
+    /**
+     * returns record prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     * 
+     * @todo move that to Tinebase_Record_Abstract
+     */
+    protected function _recordToJson($_record)
+    {
+        print $_record;exit;
+    }
+    
+    
+    
+    
+    
 
 
 /****************************************
@@ -485,7 +506,21 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
  *
  * 
  */    
-     
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param string $filter json encoded
+     * @param string $paging json encoded
+     * @return array
+     */
+    public function searchAsteriskContexts($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_Context::getInstance(), 'Voipmanager_Model_Asterisk_ContextFilter');
+        
+        return $result;
+    }     
+    
     /**
      * get asterisk contexts
      *
@@ -494,6 +529,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * @param string $query
      * @return array
      */
+    /*
     public function getAsteriskContexts($sort = NULL, $dir = NULL, $query = NULL)
     {     
         $controller = Voipmanager_Controller_Asterisk_Context::getInstance();
@@ -504,6 +540,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $this->_search($controller, $sort, $dir, $filter);
         return $result;            
     }
+    */
     
     
    /**
@@ -747,6 +784,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * 
      * @deprecated remove that when frontend gets refactored
      */
+    /*
     protected function _search($_controller, $_sort, $_dir, $_filter)
     {
         $result = array(
@@ -766,4 +804,5 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         
         return $result;    
     }
+    */
 }
