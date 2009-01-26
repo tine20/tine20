@@ -119,7 +119,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     showTransmissionCompleted: function() {
         Ext.MessageBox.show({
             title: _('Transmission Completed'),
-            msg: _('Your report has been send. Thanks for your contribution'),
+            msg: _('Your report has been sent. Thanks for your contribution'),
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.INFO
         });
