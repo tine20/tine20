@@ -30,12 +30,12 @@ Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.Tinebase.widgets.app
         this.recordProxy = Tine.Voipmanager.AsteriskContextBackend;
                 
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
+        //this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
-        this.initDetailsPanel();
+        //this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
+        //this.plugins.push(this.filterToolbar);
         
         Tine.Voipmanager.AsteriskContextGridPanel.superclass.initComponent.call(this);
     },

@@ -477,12 +477,12 @@ Tine.Voipmanager.Model.AsteriskContextArray = Tine.Tinebase.Model.genericFields.
  */
 Tine.Voipmanager.Model.AsteriskContext = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskContextArray, {
     appName: 'Voipmanager',
-    modelName: 'SipPeer',
+    modelName: 'AsteriskContext',
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('Context', 'Contexts', n);
-    recordName: 'Context',
-    recordsName: 'Contexts',
+    recordName: 'AsteriskContext',
+    recordsName: 'AsteriskContexts',
     containerProperty: 'context_id',
     // ngettext('contexts list', 'contexts lists', n);
     containerName: 'contexts list',

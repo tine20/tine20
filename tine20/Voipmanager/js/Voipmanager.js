@@ -245,7 +245,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
  */
 Tine.Voipmanager.AsteriskContextBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Context',
+    modelName: 'AsteriskContext',
     recordClass: Tine.Voipmanager.Model.AsteriskContext
 });
 
