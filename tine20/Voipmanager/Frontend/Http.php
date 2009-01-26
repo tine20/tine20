@@ -37,7 +37,9 @@ class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
             'Voipmanager/js/Snom/Location.js',
             'Voipmanager/js/Snom/Settings.js',
             'Voipmanager/js/Asterisk/SipPeer.js',
-            'Voipmanager/js/Asterisk/Context.js',
+//            'Voipmanager/js/Asterisk/Context.js',
+            'Voipmanager/js/Asterisk/ContextGridPanel.js',
+            'Voipmanager/js/Asterisk/ContextEditDialog.js',
             'Voipmanager/js/Asterisk/Voicemail.js',
 			'Voipmanager/js/Asterisk/Meetme.js',
 			'Voipmanager/js/widgets.js'
