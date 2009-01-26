@@ -15,8 +15,9 @@ Ext.ns('Tine.Voipmanager');
 Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
     activeContentType: 'Context',
+    activeContentGroup: 'Asterisk',
     
-    /*
+    
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){
             this.setTreePanel();
@@ -27,23 +28,32 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
             this.fireEvent('show', this);
         }
         return this;
-    },*/
+    },
+    
+    
+    
     
     setContentPanel: function() {
         
         // which content panel?
         var type = this.activeContentType;
-        
-        if (! this[type + 'GridPanel']) {
-            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
-                app: this.app,
-                plugins: [this.treePanel.getFilterPlugin()]
+        var group = this.activeContentGroup;
+		
+console.log(new Tine[this.app.appName][group + type + 'GridPanel']({
+                app: this.app
+            }));		
+		
+
+         if (! this[group + type  + 'GridPanel']) {        
+            this[group + type + 'GridPanel'] = new Tine[this.app.appName][group + type + 'GridPanel']({
+                app: this.app
             });
-            
+           
         }
+
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this[type + 'GridPanel'], true);
-        this[type + 'GridPanel'].store.load();
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this[group + type + 'GridPanel'], true);
+        this[group + type + 'GridPanel'].store.load();
     },
     
     /**
@@ -51,11 +61,12 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
      */
     setToolbar: function() {
         var type = this.activeContentType;
+        var group = this.activeContentGroup;
         
-        if (! this[type + 'ActionToolbar']) {
-            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].actionToolbar;
+        if (! this[group + type + 'ActionToolbar']) {
+            this[group + type + 'ActionToolbar'] = this[group + type + 'GridPanel'].actionToolbar;
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this[group + type + 'ActionToolbar'], true);
     }
 });

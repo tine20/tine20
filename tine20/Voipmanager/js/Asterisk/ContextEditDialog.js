@@ -9,12 +9,12 @@
  *
  */
  
-Ext.namespace('Tine.Voipmanager.Asterisk');
+Ext.namespace('Tine.Voipmanager');
 
 /**
  * Asterisk Context Edit Dialog
  */
-Tine.Voipmanager.Asterisk.ContextEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     
     /**
@@ -22,8 +22,8 @@ Tine.Voipmanager.Asterisk.ContextEditDialog = Ext.extend(Tine.widgets.dialog.Edi
      */
     windowNamePrefix: 'AsteriskContextEditWindow_',
     appName: 'Voipmanager',
-    recordClass: Tine.Voipmanager.Model.Asterisk.Context,
-    recordProxy: Tine.Voipmanager.Asterisk.contextBackend,
+    recordClass: Tine.Voipmanager.Model.AsteriskContext,
+    recordProxy: Tine.Voipmanager.AsteriskContextBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
@@ -32,7 +32,7 @@ Tine.Voipmanager.Asterisk.ContextEditDialog = Ext.extend(Tine.widgets.dialog.Edi
      */
     updateToolbars: function(record) {
         this.onContextUpdate();
-    	Tine.Voipmanager.Asterisk.ContextEditDialog.superclass.updateToolbars.call(this, record, 'id');
+    	Tine.Voipmanager.AsteriskContextEditDialog.superclass.updateToolbars.call(this, record, 'id');
     },
     
     /**
@@ -80,13 +80,13 @@ Tine.Voipmanager.Asterisk.ContextEditDialog = Ext.extend(Tine.widgets.dialog.Edi
 /**
  * Asterisk Context Edit Popup
  */
-Tine.Voipmanager.Asterisk.ContextEditDialog.openWindow = function (config) {
+Tine.Voipmanager.AsteriskContextEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,
-        name: Tine.Voipmanager.Asterisk.ContextEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Voipmanager.Asterisk.ContextEditDialog',
+        name: Tine.Voipmanager.AsteriskContextEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.Voipmanager.AsteriskContextEditDialog',
         contentPanelConstructorConfig: config
     });
     return window;

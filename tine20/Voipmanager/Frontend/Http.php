@@ -29,8 +29,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
     public function getJsFilesToInclude()
     {
         return array(
-            'Voipmanager/js/Voipmanager.js',
-            'Voipmanager/js/Model.js',
+        	'Voipmanager/js/Models.js',
             'Voipmanager/js/Snom/Software.js',
             'Voipmanager/js/Snom/Templates.js',
             'Voipmanager/js/Snom/Phone.js',
@@ -42,7 +41,9 @@ class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
             'Voipmanager/js/Asterisk/ContextEditDialog.js',
             'Voipmanager/js/Asterisk/Voicemail.js',
 			'Voipmanager/js/Asterisk/Meetme.js',
-			'Voipmanager/js/widgets.js'
+			'Voipmanager/js/widgets.js',
+            'Voipmanager/js/Voipmanager.js',
+        	'Voipmanager/js/MainScreen.js'
         );
     }
     

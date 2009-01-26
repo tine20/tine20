@@ -9,14 +9,14 @@
  *
  */
  
-Ext.namespace('Tine.Voipmanager.Asterisk');
+Ext.namespace('Tine.Voipmanager');
 
 /**
  * Context grid panel
  */
-Tine.Voipmanager.Asterisk.ContextGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
-    recordClass: Tine.Voipmanager.Model.Asterisk.Context,
+    recordClass: Tine.Voipmanager.Model.AsteriskContext,
     
     // grid specific
     defaultSortInfo: {field: 'description', direction: 'ASC'},
@@ -26,7 +26,8 @@ Tine.Voipmanager.Asterisk.ContextGridPanel = Ext.extend(Tine.Tinebase.widgets.ap
     },
     
     initComponent: function() {
-        this.recordProxy = Tine.Voipmanager.Asterisk.contextBackend;
+       
+        this.recordProxy = Tine.Voipmanager.AsteriskContextBackend;
                 
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
@@ -36,24 +37,14 @@ Tine.Voipmanager.Asterisk.ContextGridPanel = Ext.extend(Tine.Tinebase.widgets.ap
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
-        Tine.Voipmanager.Asterisk.ContextGridPanel.superclass.initComponent.call(this);
+        Tine.Voipmanager.AsteriskContextGridPanel.superclass.initComponent.call(this);
     },
     
     /**
      * initialises filter toolbar
      */
     initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                //{label: this.app.i18n._('Context'),    field: 'query',    operators: ['contains']}, // query only searches description
-                new Tine.Voipmanager.Asterisk.ContextGridFilter(),
-                {label: this.app.i18n._('Name'),      field: 'name' },
-                {label: this.app.i18n._('Description'),  field: 'description' },
-                new Tine.widgets.tags.TagFilter({app: this.app})
-             ],
-             defaultFilter: 'description',
-             filters: []
-        });
+        
     },    
     
     /**

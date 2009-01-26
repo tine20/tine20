@@ -361,7 +361,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
     	
     	var phone = this.phoneStore.getById(phoneId);
     	for(var i=0; i<phone.data.lines.length; i++) {
-    		var lineRecord = new Tine.Voipmanager.Model.Snom.Line(phone.data.lines[i], phone.data.lines[i].id);
+    		var lineRecord = new Tine.Voipmanager.Model.SnomLine(phone.data.lines[i], phone.data.lines[i].id);
             this.linesStore.add(lineRecord);
     	}
     	
@@ -741,7 +741,7 @@ Tine.Phone.loadPhoneStore = function(reload) {
     if (!store) {
         // create store (get from initial data)
         store = new Ext.data.JsonStore({
-            fields: Tine.Voipmanager.Model.Snom.Phone,
+            fields: Tine.Voipmanager.Model.SnomPhone,
 
             // initial data from http request
             data: Tine.Phone.registry.get('Phones'),
