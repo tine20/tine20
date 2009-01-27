@@ -409,7 +409,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     deleteFilter: function(filter) {
         var fRow = this.el.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
-        var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
+        //var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
+        var isLast = this.filterStore.getCount() == 1;
         this.filterStore.remove(this.filterStore.getById(filter.id));
         
         if (isLast) {
