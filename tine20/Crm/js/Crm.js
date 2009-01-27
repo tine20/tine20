@@ -394,7 +394,10 @@ Tine.Crm.Main = {
             displayInfo: true,
             displayMsg: this.translation._('Displaying leads {0} - {1} of {2}'),
             emptyMsg: this.translation._('No leads found.')
-        }); 
+        });
+        pagingToolbar.on('beforechange', function() {
+            Ext.getCmp('gridCrm').getView().isPagingRefresh = true;
+        }, this);
         
         var ctxMenuGrid = new Ext.menu.Menu({
 	        id:'ctxMenuGrid', 
@@ -461,7 +464,13 @@ Tine.Crm.Main = {
                         v.scrollTop = v.scroller.dom.scrollTop;
                     },
                     refresh: function(v) {
-                        v.scroller.dom.scrollTop = v.scrollTop;
+                        // on paging-refreshes (prev/last...) we don't preserv the scroller state
+                        if (v.isPagingRefresh) {
+                            v.scrollToTop();
+                            v.isPagingRefresh = false;
+                        } else {
+                            v.scroller.dom.scrollTop = v.scrollTop;
+                        }
                     }
                 }
             })            
