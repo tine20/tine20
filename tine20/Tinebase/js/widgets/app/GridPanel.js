@@ -237,6 +237,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             displayMsg: Tine.Tinebase.tranlation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
             emptyMsg: String.format(Tine.Tinebase.tranlation._("No {0} to display"), this.i18nRecordsName)
         });
+        // mark next grid refresh as paging-refresh
+        this.pagingToolbar.on('beforechange', function() {
+            this.grid.getView().isPagingRefresh = true;
+        }, this);
         
         // init view
         var view =  new Ext.grid.GridView({
@@ -250,7 +254,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     v.scrollTop = v.scroller.dom.scrollTop;
                 },
                 refresh: function(v) {
-                    v.scroller.dom.scrollTop = v.scrollTop;
+                    // on paging-refreshes (prev/last...) we don't preserv the scroller state
+                    if (v.isPagingRefresh) {
+                        v.scrollToTop();
+                        v.isPagingRefresh = false;
+                    } else {
+                        v.scroller.dom.scrollTop = v.scrollTop;
+                    }
                 }
             }
         });
