@@ -81,6 +81,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	iconCls: 'x-new-application',
 	rootVisible: false,
 	border: false,
+    autoScroll: true,
 	
 	// holds treenode which got a contextmenu
 	ctxNode: null,
