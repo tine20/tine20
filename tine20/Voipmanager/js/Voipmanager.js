@@ -27,17 +27,17 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		        id: 'Asterisk',
 		        icon: false,
 		        children: [{
-		            text: this.app.i18n._('SipPeers'),
+		            text: this.app.i18n._('SipPeer'),
 		            cls: "treemain",
 		            allowDrag: false,
 		            allowDrop: true,
-		            id: "SipPeers",
+		            id: "SipPeer",
 		            icon: false,
 		            children: [],
 		            leaf: true,
 		            expanded: true,
-		            dataPanelType: "sipPeers",
-		            viewRight: 'sipPeers'
+		            dataPanelType: "sipPeer",
+		            viewRight: 'sipPeer'
 		        }, {
 		            text: this.app.i18n._('Dialplan'),
 		            cls: "treemain",
@@ -201,6 +201,9 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
             this.app.getMainScreen().activeContentType = contentType;
             this.app.getMainScreen().activeContentGroup = contentGroup;
             this.app.getMainScreen().show();
+            
+            
+            
         }, this);
 	},
     
@@ -249,12 +252,13 @@ Tine.Voipmanager.AsteriskContextBackend = new Tine.Tinebase.widgets.app.JsonBack
     recordClass: Tine.Voipmanager.Model.AsteriskContext
 });
 
+
 /**
  * default Asterisk.SipPeer backend
  */
 Tine.Voipmanager.AsteriskSipPeerBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'SipPeer',
+    modelName: 'AsteriskSipPeer',
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer
 });
 
@@ -263,7 +267,7 @@ Tine.Voipmanager.AsteriskSipPeerBackend = new Tine.Tinebase.widgets.app.JsonBack
  */
 Tine.Voipmanager.AsteriskVoicemailBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Voicemail',
+    modelName: 'AsteriskVoicemail',
     recordClass: Tine.Voipmanager.Model.AsteriskVoicemail
 });
 
@@ -272,7 +276,7 @@ Tine.Voipmanager.AsteriskVoicemailBackend = new Tine.Tinebase.widgets.app.JsonBa
  */
 Tine.Voipmanager.AsteriskMeetmeBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Meetme',
+    modelName: 'AsteriskMeetme',
     recordClass: Tine.Voipmanager.Model.AsteriskMeetme
 });
 
@@ -283,7 +287,7 @@ Tine.Voipmanager.AsteriskMeetmeBackend = new Tine.Tinebase.widgets.app.JsonBacke
  */
 Tine.Voipmanager.SnomPhoneBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Phone',
+    modelName: 'SnomPhone',
     recordClass: Tine.Voipmanager.Model.SnomPhone
 });
 
@@ -292,7 +296,7 @@ Tine.Voipmanager.SnomPhoneBackend = new Tine.Tinebase.widgets.app.JsonBackend({
  */
 Tine.Voipmanager.SnomLocationBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Location',
+    modelName: 'SnomLocation',
     recordClass: Tine.Voipmanager.Model.SnomLocation
 });
 
@@ -301,7 +305,7 @@ Tine.Voipmanager.SnomLocationBackend = new Tine.Tinebase.widgets.app.JsonBackend
  */
 Tine.Voipmanager.SnomTemplateBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Template',
+    modelName: 'SnomTemplate',
     recordClass: Tine.Voipmanager.Model.SnomTemplate
 });
 
@@ -310,7 +314,7 @@ Tine.Voipmanager.SnomTemplateBackend = new Tine.Tinebase.widgets.app.JsonBackend
  */
 Tine.Voipmanager.SnomSoftwareBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Software',
+    modelName: 'SnomSoftware',
     recordClass: Tine.Voipmanager.Model.SnomSoftware
 });
 
@@ -319,7 +323,7 @@ Tine.Voipmanager.SnomSoftwareBackend = new Tine.Tinebase.widgets.app.JsonBackend
  */
 Tine.Voipmanager.SnomSoftwareImageBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'SoftwareImage',
+    modelName: 'SnomSoftwareImage',
     recordClass: Tine.Voipmanager.Model.SnomSoftwareImage
 });
 
@@ -328,7 +332,7 @@ Tine.Voipmanager.SnomSoftwareImageBackend = new Tine.Tinebase.widgets.app.JsonBa
  */
 Tine.Voipmanager.SnomLineBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Line',
+    modelName: 'SnomLine',
     recordClass: Tine.Voipmanager.Model.SnomLine
 });
 
@@ -337,7 +341,7 @@ Tine.Voipmanager.SnomLineBackend = new Tine.Tinebase.widgets.app.JsonBackend({
  */
 Tine.Voipmanager.SnomSettingBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Setting',
+    modelName: 'SnomSetting',
     recordClass: Tine.Voipmanager.Model.SnomSetting
 });
 
@@ -346,7 +350,7 @@ Tine.Voipmanager.SnomSettingBackend = new Tine.Tinebase.widgets.app.JsonBackend(
  */
 Tine.Voipmanager.SnomOwnerBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Voipmanager',
-    modelName: 'Owner',
+    modelName: 'SnomOwner',
     recordClass: Tine.Voipmanager.Model.SnomOwner
 });
 

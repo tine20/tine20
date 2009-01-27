@@ -75,12 +75,12 @@ Tine.Voipmanager.Model.SnomPhoneArray = Tine.Tinebase.Model.genericFields.concat
  */
 Tine.Voipmanager.Model.SnomPhone = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomPhoneArray, {
     appName: 'Voipmanager',
-    modelName: 'Phone',
+    modelName: 'SnomPhone',
     idProperty: 'id',
     titleProperty: 'macaddress',
     // ngettext('Phone', 'Phones', n);
-    recordName: 'Phone',
-    recordsName: 'Phones',
+    recordName: 'SnomPhone',
+    recordsName: 'SnomPhones',
     containerProperty: 'phone_id',
     // ngettext('phones list', 'phones lists', n);
     containerName: 'phones list',
@@ -126,12 +126,12 @@ Tine.Voipmanager.Model.SnomLocationArray = Tine.Tinebase.Model.genericFields.con
  */
 Tine.Voipmanager.Model.SnomLocation = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomLocationArray, {
     appName: 'Voipmanager',
-    modelName: 'Location',
+    modelName: 'SnomLocation',
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('Location', 'Locations', n);
-    recordName: 'Location',
-    recordsName: 'Locations',
+    recordName: 'SnomLocation',
+    recordsName: 'SnomLocations',
     containerProperty: 'location_id',
     // ngettext('locations list', 'locations lists', n);
     containerName: 'locations list',
@@ -163,12 +163,12 @@ Tine.Voipmanager.Model.SnomTemplateArray = Tine.Tinebase.Model.genericFields.con
  */
 Tine.Voipmanager.Model.SnomTemplate = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomTemplateArray, {
     appName: 'Voipmanager',
-    modelName: 'Template',
+    modelName: 'SnomTemplate',
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('Template', 'Templates', n);
-    recordName: 'Template',
-    recordsName: 'Templates',
+    recordName: 'SnomTemplate',
+    recordsName: 'SnomTemplates',
     containerProperty: 'template_id',
     // ngettext('templates list', 'templates lists', n);
     containerName: 'templates list',
@@ -201,12 +201,12 @@ Tine.Voipmanager.Model.SnomSoftwareArray = Tine.Tinebase.Model.genericFields.con
  */
 Tine.Voipmanager.Model.SnomSoftware = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomSoftwareArray, {
     appName: 'Voipmanager',
-    modelName: 'Software',
+    modelName: 'SnomSoftware',
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('Software', 'Softwares', n);
-    recordName: 'Software',
-    recordsName: 'Softwares',
+    recordName: 'SnomSoftware',
+    recordsName: 'SnomSoftwares',
     containerProperty: 'software_id',
     // ngettext('softwares list', 'softwares lists', n);
     containerName: 'softwares list',
@@ -234,12 +234,12 @@ Tine.Voipmanager.Model.SnomSoftwareImageArray = Tine.Tinebase.Model.genericField
  */
 Tine.Voipmanager.Model.SnomSoftwareImage = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomSoftwareImageArray, {
     appName: 'Voipmanager',
-    modelName: 'SoftwareImage',
+    modelName: 'SnomSoftwareImage',
     idProperty: 'model',
     titleProperty: 'softwareimage',
     // ngettext('SoftwareImage', 'SoftwareImages', n);
-    recordName: 'SoftwareImage',
-    recordsName: 'SoftwareImages',
+    recordName: 'SnomSoftwareImage',
+    recordsName: 'SnomSoftwareImages',
     containerProperty: 'softwareImage_model',
     // ngettext('softwareImages list', 'softwareImages lists', n);
     containerName: 'softwareImages list',
@@ -271,12 +271,12 @@ Tine.Voipmanager.Model.SnomLineArray = Tine.Tinebase.Model.genericFields.concat(
  */
 Tine.Voipmanager.Model.SnomLine = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomLineArray, {
     appName: 'Voipmanager',
-    modelName: 'Line',
+    modelName: 'SnomLine',
     idProperty: 'id',
     titleProperty: 'linenumber',
     // ngettext('Line', 'Lines', n);
-    recordName: 'Line',
-    recordsName: 'Lines',
+    recordName: 'SnomLine',
+    recordsName: 'SnomLines',
     containerProperty: 'line_id',
     // ngettext('lines list', 'lines lists', n);
     containerName: 'lines list',
@@ -328,12 +328,12 @@ Tine.Voipmanager.Model.SnomSettingArray = Tine.Tinebase.Model.genericFields.conc
  */
 Tine.Voipmanager.Model.SnomSetting = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomSettingArray, {
     appName: 'Voipmanager',
-    modelName: 'Setting',
+    modelName: 'SnomSetting',
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('Setting', 'Settings', n);
-    recordName: 'Setting',
-    recordsName: 'Settings',
+    recordName: 'SnomSetting',
+    recordsName: 'SnomSettings',
     containerProperty: 'setting_id',
     // ngettext('settings list', 'settings lists', n);
     containerName: 'settings list',
@@ -362,12 +362,12 @@ Tine.Voipmanager.Model.SnomOwnerArray = Tine.Tinebase.Model.genericFields.concat
  */
 Tine.Voipmanager.Model.SnomOwner = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomOwnerArray, {
     appName: 'Voipmanager',
-    modelName: 'Owner',
+    modelName: 'SnomOwner',
     idProperty: 'account_id',
     titleProperty: 'accountDisplayName',
     // ngettext('Owner', 'Owners', n);
-    recordName: 'Owner',
-    recordsName: 'Owners',
+    recordName: 'SnomOwner',
+    recordsName: 'SnomOwners',
     containerProperty: 'account_id',
     // ngettext('owners list', 'owners lists', n);
     containerName: 'owners list',
@@ -443,12 +443,12 @@ Tine.Voipmanager.Model.AsteriskSipPeerArray = Tine.Tinebase.Model.genericFields.
  */
 Tine.Voipmanager.Model.AsteriskSipPeer = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskSipPeerArray, {
     appName: 'Voipmanager',
-    modelName: 'SipPeer',
+    modelName: 'AsteriskSipPeer',
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('SipPeer', 'SipPeers', n);
-    recordName: 'SipPeer',
-    recordsName: 'SipPeers',
+    recordName: 'AsteriskSipPeer',
+    recordsName: 'AsteriskSipPeers',
     containerProperty: 'sipPeer_id',
     // ngettext('sipPeers list', 'sipPeers lists', n);
     containerName: 'sipPeers list',
@@ -532,12 +532,12 @@ Tine.Voipmanager.Model.AsteriskVoicemailArray = Tine.Tinebase.Model.genericField
  */
 Tine.Voipmanager.Model.AsteriskVoicemail = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskVoicemailArray, {
     appName: 'Voipmanager',
-    modelName: 'Voicemail',
+    modelName: 'AsteriskVoicemail',
     idProperty: 'id',
     titleProperty: 'context',
     // ngettext('Voicemail', 'Voicemails', n);
-    recordName: 'Voicemail',
-    recordsName: 'Voicemails',
+    recordName: 'AsteriskVoicemail',
+    recordsName: 'AsteriskVoicemails',
     containerProperty: 'voicemail_id',
     // ngettext('voicemails list', 'voicemails lists', n);
     containerName: 'voicemails list',
@@ -567,12 +567,12 @@ Tine.Voipmanager.Model.AsteriskMeetmeArray = Tine.Tinebase.Model.genericFields.c
  */
 Tine.Voipmanager.Model.AsteriskMeetme = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskMeetmeArray, {
     appName: 'Voipmanager',
-    modelName: 'Meetme',
+    modelName: 'AsteriskMeetme',
     idProperty: 'id',
     titleProperty: 'confno',
     // ngettext('Meetme', 'Meetmes', n);
-    recordName: 'Meetme',
-    recordsName: 'Meetmes',
+    recordName: 'AsteriskMeetme',
+    recordsName: 'AsteriskMeetmes',
     containerProperty: 'meetme_id',
     // ngettext('meetmes list', 'meetmes lists', n);
     containerName: 'meetmes list',
