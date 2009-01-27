@@ -181,6 +181,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         this.on('click', function(node){
             // note: if node is clicked, it is not selected!
             node.getOwnerTree().selectPath(node.getPath());
+            node.expand();
         }, this);
         
 	    this.on('contextmenu', function(node, event){
