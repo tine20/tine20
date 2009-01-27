@@ -47,6 +47,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: true,
+		            disabled: true,
 		            expanded: true,
 		            dataPanelType: "dialplan",
 		            viewRight: 'dialplan'
@@ -93,6 +94,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            allowDrop: true,
 		            id: "Queues",
 		            icon: false,
+		            disabled: true,
 		            children: [],
 		            leaf: true,
 		            expanded: true,
