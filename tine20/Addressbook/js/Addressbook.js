@@ -387,7 +387,11 @@ Tine.Addressbook.Main = {
             displayInfo: true,
             displayMsg: this.translation._('Displaying contacts {0} - {1} of {2}'),
             emptyMsg: this.translation._("No contacts to display")
-        }); 
+        });
+        // mark next grid refresh as paging-refresh
+        pagingToolbar.on('beforechange', function() {
+            Ext.getCmp('Addressbook_Contacts_Grid').getView().isPagingRefresh = true;
+        }, this);
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
@@ -694,7 +698,13 @@ Tine.Addressbook.Main = {
                         v.scrollTop = v.scroller.dom.scrollTop;
                     },
                     refresh: function(v) {
-                        v.scroller.dom.scrollTop = v.scrollTop;
+                        // on paging-refreshes (prev/last...) we don't preserv the scroller state
+                        if (v.isPagingRefresh) {
+                            v.scrollToTop();
+                            v.isPagingRefresh = false;
+                        } else {
+                            v.scroller.dom.scrollTop = v.scrollTop;
+                        }
                     }
                 }
             })              
