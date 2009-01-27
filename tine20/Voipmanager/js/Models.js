@@ -335,9 +335,9 @@ Tine.Voipmanager.Model.SnomSetting = Tine.Tinebase.Record.create(Tine.Voipmanage
     recordName: 'SnomSetting',
     recordsName: 'SnomSettings',
     containerProperty: 'setting_id',
-    // ngettext('settings list', 'settings lists', n);
-    containerName: 'settings list',
-    containersName: 'settings lists',
+    // ngettext('setting list', 'settings lists', n);
+    containerName: 'setting list',
+    containersName: 'setting lists',
     getTitle: function() {
         return this.get('number') ? (this.get('number') + ' ' + this.get('name')) : false;
     }

@@ -115,13 +115,13 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            cls: 'treemain',
 		            allowDrag: false,
 		            allowDrop: true,
-		            id: 'Phones',
+		            id: 'Phone',
 		            icon: false,
 		            children: [],
 		            leaf: true,
 		            expanded: true,
-		            dataPanelType: 'phones',
-		            viewRight: 'phones'
+		            dataPanelType: 'phone',
+		            viewRight: 'phone'
 		        }, {
 		            text: this.app.i18n._('Location'),
 		            cls: "treemain",
@@ -139,13 +139,13 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            cls: "treemain",
 		            allowDrag: false,
 		            allowDrop: true,
-		            id: "Templates",
+		            id: "Template",
 		            icon: false,
 		            children: [],
 		            leaf: null,
 		            expanded: true,
-		            dataPanelType: "templates",
-		            viewRight: 'templates'
+		            dataPanelType: "template",
+		            viewRight: 'template'
 		        }, {
 		            text: this.app.i18n._('Keylayout'),
 		            cls: "treemain",
@@ -160,17 +160,17 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            dataPanelType: "keylayout",
 		            viewRight: 'keylayout'
 		        }, {
-		            text: this.app.i18n._('Settings'),
+		            text: this.app.i18n._('Setting'),
 		            cls: "treemain",
 		            allowDrag: false,
 		            allowDrop: true,
-		            id: "Settings",
+		            id: "Setting",
 		            icon: false,
 		            children: [],
 		            leaf: null,
 		            expanded: true,
-		            dataPanelType: "settings",
-		            viewRight: 'settings'
+		            dataPanelType: "setting",
+		            viewRight: 'setting'
 		        }, {
 		            text: this.app.i18n._('Software'),
 		            cls: "treemain",
