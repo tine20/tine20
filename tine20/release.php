@@ -72,6 +72,10 @@ if ($opts->yui) {
     $yuiCompressorPath = $opts->yui;
 }
 
+if (!file_exists($yuiCompressorPath)) {
+   echo "WARNING yuicompressor.jar ($yuiCompressorPath) not found.\n Don't compress files but only copy them.\n";
+}
+
 /**
  * --clean 
  */
@@ -128,8 +132,12 @@ if ($opts->a || $opts->s) {
     }
     fclose($cssDebug);
 
-    $verbose = $opts->v ? ' --verbose ' : '';
-    system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
+    if (file_exists($yuiCompressorPath)) {
+        $verbose = $opts->v ? ' --verbose ' : '';
+        system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
+    } else {
+        copy("$tine20path/Tinebase/css/tine-all-debug.css","$tine20path/Tinebase/css/tine-all.css");
+    }
 }
 
 if ($opts->a || $opts->j) {
@@ -144,9 +152,15 @@ if ($opts->a || $opts->j) {
         }
     }
     fclose($jsDebug);
-    $verbose = $opts->v ? ' --verbose ' : '';
+
+    if (file_exists($yuiCompressorPath)) {
+        $verbose = $opts->v ? ' --verbose ' : '';
     
-    system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
+        system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
+    } else {
+        copy("$tine20path/Tinebase/js/tine-all-debug.js","$tine20path/Tinebase/js/tine-all.js");
+    }
+
 }
 
 /*
@@ -273,7 +287,13 @@ if ($opts->a || $opts->t) {
         
         $jsTranslation = Tinebase_Translation::getJsTranslations($locale);
         file_put_contents("$tine20path/Tinebase/js/Locale/build/$locale-all-debug.js", $jsTranslation);
-        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale-all.js $tine20path/Tinebase/js/Locale/build/$locale-all-debug.js");
+
+        if (file_exists($yuiCompressorPath)) {
+            system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale-all.js $tine20path/Tinebase/js/Locale/build/$locale-all-debug.js");
+        } else {
+            copy("$tine20path/Tinebase/js/Locale/build/$locale-all-debug.js","$tine20path/Tinebase/js/Locale/build/$locale-all.js");
+        }
+
     }
 }
 
@@ -285,10 +305,15 @@ if ( $opts->z ) {
     foreach ($localelist as $locale => $something) {        
         $js = createJsTranslationLists($locale);
         file_put_contents("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js", $js);
-        if ( $opts->v ) {
-            echo "compressing file generic-$locale.js\n";
+        if (file_exists($yuiCompressorPath)) {
+            if ( $opts->v ) {
+                echo "compressing file generic-$locale.js\n";
+            }
+            system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/static/generic-$locale.js $tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js");
+        } else {
+            copy("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js","$tine20path/Tinebase/js/Locale/static/generic-$locale.js");
         }
-        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/static/generic-$locale.js $tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js");
+
     }
 }
 
