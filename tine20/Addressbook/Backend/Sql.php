@@ -44,18 +44,5 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $result = new Addressbook_Model_Contact($row);
         return $result;
     }
-    
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select           $_select current where filter
-     * @param  Addressbook_Model_ContactFilter $_filter the string to search for
-     * @return void
-     */
-    protected function _addFilter (Zend_Db_Select $_select, Addressbook_Model_ContactFilter $_filter)
-    {        
-        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' IN (?)', $_filter->container));
-        
-        $_filter->appendFilterSql($_select);
-    }    
+
 }

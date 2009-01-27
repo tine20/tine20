@@ -72,16 +72,20 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     /**
      * get list of records
      *
-     * @param Tinebase_Record_Interface|optional $_filter
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
     {
+        /*
         if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
             return new Tinebase_Record_RecordSet($this->_modelName);
         }
+        */
+        
+        $this->_checkFilterACL($_filter);
         
         $result = $this->_backend->search($_filter, $_pagination);
         
@@ -95,14 +99,18 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tinebase_Record_Interface $_filter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
      */
-    public function searchCount(Tinebase_Record_Interface $_filter) 
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
     {
+        /*
         if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
             return 0;
         }
+        */
+        
+        $this->_checkFilterACL($_filter);
 
         $count = $this->_backend->searchCount($_filter);
         
@@ -197,7 +205,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      */
     public function create(Tinebase_Record_Interface $_record)
     {        
-        Tinebase_Core::getLogger()->debug(print_r($_record->toArray(),true));
+        //Tinebase_Core::getLogger()->debug(print_r($_record->toArray(),true));
         
         try {
             $db = $this->_backend->getDb();
@@ -323,25 +331,17 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     /**
      * update multiple records
      * 
-     * @param   array|Tinebase_Record_Interface $_filter
-     * @param   array $_values
-     *  
-     * @todo    use filter (only array of ids supported at the moment)
-     * @todo    add acl
+     * @param   Tinebase_Model_Filter_FilterGroup $_filter
+     * @param   array $_data
      */
-    public function updateMultiple($_filter, $_values)
-    {
-        /*
-        if (is_array($_filter->)) {
-            // @todo check acl here
-            $ids = $_what;
-        } else {
-            // @todo check if filter
-            $ids = $this->search($_what)->getArrayOfIds();
-        }
-        */
+    public function updateMultiple($_filter, $_data)
+    {        
+        $this->_checkFilterACL($_filter);
         
-        $this->_backend->updateMultiple($_filter, $_values);
+        // get only ids
+        $ids = $this->_backend->search($_filter, NULL, TRUE);
+        
+        $this->_backend->updateMultiple($ids, $_data);
     }    
     
     /**
@@ -386,20 +386,6 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     
     /*********** helper funcs **************/
     
-    /**
-     * Removes containers where current user has no access to
-     * 
-     * @param Tinebase_Record_Interface $_filter
-     * @return boolean
-     */
-    protected function _checkContainerACL($_filter)
-    {
-        $readableContainerIds = $this->_currentAccount->getContainerByACL($this->_applicationName, Tinebase_Model_Container::GRANT_READ, TRUE);
-        $_filter->container = array_intersect($_filter->container, $readableContainerIds);
-        
-        return TRUE;
-    }     
-
     /**
      * delete one recod
      *
@@ -505,4 +491,53 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         
         return $hasGrant;
     }
+
+    /**
+     * Removes containers where current user has no access to
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    protected function _checkFilterACL($_filter, $_action = 'get')
+    {
+        if ($this->_doContainerACLChecks) {
+            $containerFilter = $_filter->getAclFilter();
+            
+            if (! $containerFilter) {
+                // force a $containerFilter filter (ACL)
+                $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $this->_applicationName));
+                $_filter->addFilter($containerFilter);
+            }
+            
+            // do something like that
+            switch ($_action) {
+                case 'get':
+                    $containerFilter->setRequiredGrants(array(
+                        Tinebase_Model_Container::GRANT_READ,
+                        Tinebase_Model_Container::GRANT_ADMIN,
+                        //Tinebase_Model_Container::GRANT_ANY
+                    ));
+                    break;
+                case 'update':
+                    $containerFilter->setRequiredGrants(array(
+                        Tinebase_Model_Container::GRANT_EDIT,
+                        Tinebase_Model_Container::GRANT_ADMIN,
+                        //Tinebase_Model_Container::GRANT_ANY
+                    ));
+                    break;
+                default:
+                    throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
+            }
+            
+        
+            /*
+            $containerProperty = 'container_id';
+    
+            if (! array_key_exists($containerProperty, $_filter->getFilterModel())) {
+                $_filter->addFilter(new Tinebase_Model_Filter_Container($containerProperty, 'specialNode', 'all', array('applicationName' => $this->_applicationName)));
+            }
+            */
+        }
+    }     
+
 }

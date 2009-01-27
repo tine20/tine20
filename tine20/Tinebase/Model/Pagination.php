@@ -51,13 +51,13 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      * @param  Zend_Db_Select
      * @return void
      */
-    public function appendPagination($_select)
+    public function appendPaginationSql($_select)
     {
         if ($this->isValid()) {
             if (!empty($this->limit)) {
                 $_select->limit($this->limit, $this->start);
             }
-            if (!empty($this->sort) && !empty($this->sort)){
+            if (!empty($this->sort) && !empty($this->dir)){
                 $_select->order($this->sort . ' ' . $this->dir);
             }
         }

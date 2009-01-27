@@ -83,6 +83,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 case 'group':
                 case 'user':
                 case 'bool':
+                case 'number':
+                case 'percentage':
                     this.defaultOperator = 'equals';
                     break;
                 case 'string':
@@ -100,10 +102,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 case 'bool':
                     this.defaultValue = '1';
                     break;
+                case 'percentage':
+                    this.defaultValue = '0';
+                    break;
                 case 'date':
                 case 'account':
                 case 'group':
                 case 'user':
+                case 'number':
                 default:
                     break;
             }
@@ -140,6 +146,10 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     break;
                 case 'date':
                     this.operators.push('equals', 'before', 'after', 'within');
+                    break;
+                case 'number':
+                case 'percentage':
+                    this.operators.push('equals', 'greater', 'less');
                     break;
                 default:
                     this.operators.push(this.defaultOperator);
@@ -230,6 +240,15 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             case 'date':
                 value = this.dateValueRenderer(filter, el);
                 break;
+            case 'percentage':
+                value = new Ext.ux.PercentCombo({
+                    filter: filter,
+                    width: 200,
+                    id: 'tw-ftb-frow-valuefield-' + filter.id,
+                    value: filter.data.value ? filter.data.value : this.defaultValue,
+                    renderTo: el
+                });
+                break;
             case 'user':
                 value = new Tine.widgets.AccountpickerField({
                     filter: filter,
@@ -256,6 +275,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 });
                 break;
             case 'string':
+            case 'number':
             default:
                 value = new Ext.form.TextField({
                     //hideTrigger: true,

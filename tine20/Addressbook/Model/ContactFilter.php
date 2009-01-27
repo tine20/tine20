@@ -11,57 +11,47 @@
  */
 
 /**
- * Addressbook Filter Class
- * @package Addressbook
+ * Addressbook_Model_ContactFilter
+ * 
+ * @package     Addressbook
+ * @subpackage  Filter
  */
-class Addressbook_Model_ContactFilter extends Tinebase_Record_AbstractFilter
+class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
      */
-    protected $_application = 'Addressbook';
-
+    protected $_className = 'Addressbook_Model_ContactFilter';
+    
     /**
-     * the constructor
-     * it is needed because we have more validation fields in Tasks
-     * 
-     * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
+     * @var string application of this filter group
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        // add more filters
-        $this->_validators = array_merge($this->_validators, array(
-            'n_given'              => array('allowEmpty' => true           ),
-            'n_family'             => array('allowEmpty' => true           ),
-            'org_name'             => array('allowEmpty' => true           ),
-            'title'                => array('allowEmpty' => true           ),
-            'adr_one_street'       => array('allowEmpty' => true           ),
-            'adr_one_postalcode'   => array('allowEmpty' => true           ),
-            'adr_one_locality'     => array('allowEmpty' => true           ),
-            'adr_two_street'       => array('allowEmpty' => true           ),
-            'adr_two_postalcode'   => array('allowEmpty' => true           ),
-            'adr_two_locality'     => array('allowEmpty' => true           ),
-            'role'                 => array('allowEmpty' => true           ),
-            'tag'                  => array('allowEmpty' => true           ),
-            'last_modified_time'   => array('allowEmpty' => true           ),
-            'deleted_time'         => array('allowEmpty' => true           ), 
-            'creation_time'        => array('allowEmpty' => true           ),
-        ));
-        
-        // define query fields
-        $this->_queryFields = array(
-            'n_family',
-            'n_given',
-            'org_name',
-            'email',
-            'adr_one_locality',
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
-
+    protected $_applicationName = 'Addressbook';
+    
+    /**
+     * @var array filter model fieldName => definition
+     */
+    protected $_filterModel = array(
+        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'email', 'adr_one_locality',))),
+        'n_given'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'n_family'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'org_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'title'                => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_one_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_one_postalcode'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_one_locality'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_two_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_two_postalcode'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_two_locality'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag'),
+        //'bday'                 => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
+    );
+    
 }

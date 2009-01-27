@@ -47,14 +47,14 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
 	/**
 	 * search phones
 	 * 
-     * @param Voipmanager_Model_Snom_PhoneFilter $_filter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Snom_Phone
 	 * @deprecated
 	 * 
 	 * @todo   replace this
 	 */
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {	
         $where = array();
         
@@ -76,7 +76,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
                 $_pagination->setFromArray($_sort);
             }
             
-            $_pagination->appendPagination($select);
+            $_pagination->appendPaginationSql($select);
         }
 
         if(!empty($_filter->query)) {

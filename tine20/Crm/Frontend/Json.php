@@ -81,11 +81,10 @@ class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @param array $filter
      * @return array
      */
-    public function searchLeads($filter)
+    public function searchLeads($filter, $paging)
     {
-        $paginationFilter = Zend_Json::decode($filter);
-        $filter = new Crm_Model_LeadFilter($paginationFilter);
-        $pagination = new Tinebase_Model_Pagination($paginationFilter);
+        $filter = new Crm_Model_LeadFilter(Zend_Json::decode($filter));
+        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         $leads = Crm_Controller_Lead::getInstance()->search($filter, $pagination, TRUE);
         

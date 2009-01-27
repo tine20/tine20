@@ -133,6 +133,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             $data['container_id'] = $data['container_id']['id'];
         }
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
         $this->setFromArray($data);
     }
 }

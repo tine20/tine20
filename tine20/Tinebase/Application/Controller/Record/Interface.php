@@ -91,10 +91,10 @@ interface Tinebase_Application_Controller_Record_Interface
     /**
      * update multiple records
      * 
-     * @param   array|Tinebase_Record_Interface $_what array of record identifiers or filter
-     * @param   array $_values
+     * @param   Tinebase_Model_Filter_FilterGroup $_filter
+     * @param   array $_data
      */
-    public function updateMultiple($_what, $_values);
+    public function updateMultiple($_what, $_data);
     
     /**
      * Deletes a set of records.

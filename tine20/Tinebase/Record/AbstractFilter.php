@@ -8,8 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        use Zend_Filter/Tinebase_Model_Filter for the validators to get a more dynamic structure
- *              in appendFilterSql()
+ * @deprecated  got replaced by Tinebase_Model_Filter_FilterGroup
  */
 
 /**

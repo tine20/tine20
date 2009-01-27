@@ -123,7 +123,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
         
         // check
-        $this->assertEquals(1, $tasks['totalcount']);
+        $count = $tasks['totalcount'];
+        $this->assertGreaterThan(0, $count);
         
         // delete task
         // Tasks_Controller_Task::getInstance()->delete($task->getId());
@@ -131,7 +132,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
 
         // search and check again
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
-        $this->assertEquals(0, $tasks['totalcount']);
+        $this->assertEquals($count - 1, $tasks['totalcount']);
     }
     
     /**
@@ -211,8 +212,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         // define filter
         return array(
-            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
-            array('field' => 'query'        , 'operator' => 'equals', 'value' => 'minimal task by PHPUnit'),
+            array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'),
+            array('field' => 'summary'     , 'operator' => 'contains',    'value' => 'minimal task by PHPUnit'),
         );
     }
     

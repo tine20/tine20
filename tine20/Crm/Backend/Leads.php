@@ -62,18 +62,5 @@ class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
     }
     
     /************************ helper functions ************************/
-
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select           $_select current where filter
-     * @param  Crm_Model_LeadFilter $_filter the string to search for
-     * @return void
-     */
-    protected function _addFilter(Zend_Db_Select $_select, Crm_Model_LeadFilter $_filter)
-    {
-        $_select->where($this->_db->quoteInto( $this->_db->quoteIdentifier('container_id') . ' IN (?)', $_filter->container));
-                                
-        $_filter->appendFilterSql($_select);
-    }        
+   
 }

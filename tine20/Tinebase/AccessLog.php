@@ -143,7 +143,7 @@ class Tinebase_AccessLog
             ->from(SQL_TABLE_PREFIX . 'access_log');
             
         if($_pagination instanceof Tinebase_Model_Pagination) {
-            $_pagination->appendPagination($select);
+            $_pagination->appendPaginationSql($select);
         }
         
         if ($_from instanceof Zend_Date && $_to instanceof Zend_Date) {

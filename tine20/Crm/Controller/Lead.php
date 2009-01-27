@@ -114,7 +114,7 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         return $lead;
     }
     
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
     {
         $leads = parent::search($_filter, $_pagination);
         

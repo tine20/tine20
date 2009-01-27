@@ -409,12 +409,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAllLeads()
     {
-        $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->_testContainer->id);
-        $filter->query = 'PHPUnit';
-        $filter->showClosed = true;
-        $pagination = new Tinebase_Model_Pagination();
-        $leads = Crm_Controller_Lead::getInstance()->search($filter, $pagination);
+        $filter = $this->_getFilter();
+        
+        $leads = Crm_Controller_Lead::getInstance()->search($filter);
         $count = Crm_Controller_Lead::getInstance()->searchCount($filter);
                 
         $this->assertEquals(1, count($leads));
@@ -428,12 +425,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSharedLeads()
     {
-        $filter = new Crm_Model_LeadFilter();
-        $filter->containerType = 'shared';
-        $filter->query = 'PHPUnit';
-        $filter->showClosed = true;
-        $pagination = new Tinebase_Model_Pagination();
-        $leads = Crm_Controller_Lead::getInstance()->search($filter, $pagination);
+        $filter = $this->_getFilter('shared');
+        $leads = Crm_Controller_Lead::getInstance()->search($filter);
         
         $this->assertEquals(0, count($leads));
         $this->assertType('Tinebase_Record_RecordSet', $leads);
@@ -775,5 +768,38 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         Crm_Controller_LeadStates::getInstance()->saveLeadstates($savedLeadStates);
+    }
+
+    /**
+     * get lead filter
+     *
+     * @return Crm_Model_LeadFilter
+     */
+    protected function _getFilter($container = 'single')
+    {
+        $filterData = array(
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => 'PHPUnit'
+            ),
+        );
+        $filterData[] = ($container == 'single') 
+            ? array(
+                'field' => 'container_id', 
+                'operator' => 'equals', 
+                'value' => $this->_testContainer->id
+            ) 
+            : array(
+                'field' => 'container_id', 
+                'operator' => 'specialNode', 
+                'value' => $container
+            ); 
+        
+        $filter = new Crm_Model_LeadFilter($filterData);
+        
+        $filter->createFilter('showClosed', 'equals', TRUE);
+
+        return $filter;
     }
 }

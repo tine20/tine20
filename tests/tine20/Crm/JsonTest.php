@@ -31,7 +31,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @var Crm_Frontend_Json
      */
-    protected $_backend;
+    protected $_json;
     
     /**
      * @var bool allow the use of GLOBALS to exchange data between tests
@@ -70,7 +70,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Crm_Frontend_Json();
+        $this->_json = new Crm_Frontend_Json();
         
         // initialise global for this test suite
         $GLOBALS['Crm_JsonTest'] = array_key_exists('Crm_JsonTest', $GLOBALS) ? $GLOBALS['Crm_JsonTest'] : array();
@@ -188,6 +188,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         ));
         
         // define filter
+        /*
         $this->objects['filter'] = array(
             'start' => 0,
             'limit' => 50,
@@ -195,6 +196,11 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'dir' => 'ASC',
             'containerType' => 'all',
             'query' => $this->objects['initialLead']->lead_name     
+        );
+        */
+        $this->objects['filter'] = array(
+            array('field' => 'container_id',    'operator' => 'specialNode',    'value' => 'all'),
+            array('field' => 'query',           'operator' => 'contains',       'value' => $this->objects['initialLead']->lead_name),
         );
 
         $this->objects['productLink'] = array(
@@ -244,22 +250,22 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $leadData['relations'] = array(
             array(
                 'own_model'              => 'Crm_Model_Lead',
-                'own_backend'            => Crm_Backend_Factory::SQL,
+                'own_json'            => Crm_Backend_Factory::SQL,
                 'own_id'                 => $this->objects['initialLead']->getId(),
                 'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Tasks_Model_Task',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_json'        => Tasks_Backend_Factory::SQL,
                 'related_id'             => $GLOBALS['Crm_JsonTest']['taskId'],
                 'type'                   => 'TASK',
                 //'related_record'         => $this->objects['task']->toArray()
             ),
             array(
                 'own_model'              => 'Crm_Model_Lead',
-                'own_backend'            => Crm_Backend_Factory::SQL,
+                'own_json'            => Crm_Backend_Factory::SQL,
                 'own_id'                 => $this->objects['initialLead']->getId(),
                 'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Addressbook_Model_Contact',
-                'related_backend'        => Addressbook_Backend_Factory::SQL,
+                'related_json'        => Addressbook_Backend_Factory::SQL,
                 'related_id'             => $this->objects['contact']->getId(),
                 'type'                   => 'PARTNER',
                 //'related_record'         => $this->objects['contact']->toArray()
@@ -270,7 +276,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         $encodedData = Zend_Json::encode($leadData);
         
-        $result = $this->_backend->saveLead($encodedData);
+        $result = $this->_json->saveLead($encodedData);
 
         //print_r ( $result );
         
@@ -300,7 +306,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetEmptyLead()    
     {
-        $emptyLead = $this->_backend->getLead(NULL);
+        $emptyLead = $this->_json->getLead(NULL);
 
         $this->assertEquals(0, $emptyLead['probability']);
         $this->assertEquals(Zend_Registry::get('currentAccount')->accountFullName, $emptyLead['relations'][0]['related_record']['n_fn']);
@@ -312,11 +318,11 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLead()    
     {
-        $result = $this->_backend->searchLeads(Zend_Json::encode($this->objects['filter']));
+        $result = $this->_json->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));
         $leads = $result['results'];
         $initialLead = $leads[0];
         
-        $lead = $this->_backend->getLead($initialLead['id']);
+        $lead = $this->_json->getLead($initialLead['id']);
         
         //print_r($lead);
         
@@ -331,7 +337,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeads()    
     {
-        $result = $this->_backend->searchLeads(Zend_Json::encode($this->objects['filter']));
+        $result = $this->_json->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));
         $leads = $result['results'];
         $initialLead = $leads[0];
 
@@ -345,10 +351,10 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateLead()
     {
-        $result = $this->_backend->searchLeads(Zend_Json::encode($this->objects['filter']));        
+        $result = $this->_json->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));        
         $initialLeadId = $result['results'][0]['id'];
         
-        $initialLead = $this->_backend->getLead($initialLeadId);
+        $initialLead = $this->_json->getLead($initialLeadId);
         
         $updatedLead = $this->objects['updatedLead'];
         $updatedLead->id = $initialLead['id'];
@@ -363,7 +369,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         $encodedData = Zend_Json::encode($updatedLead->toArray());
         
-        $result = $this->_backend->saveLead($encodedData);
+        $result = $this->_json->saveLead($encodedData);
         
         $this->assertEquals($this->objects['updatedLead']->description, $result['description']);
 
@@ -378,7 +384,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteLead()
     {        
-        $result = $this->_backend->searchLeads(Zend_Json::encode($this->objects['filter']));        
+        $result = $this->_json->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));        
 
         $deleteIds = array();
         
@@ -391,9 +397,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         
         $encodedLeadIds = Zend_Json::encode($deleteIds);
         
-        $this->_backend->deleteLeads($encodedLeadIds);        
+        $this->_json->deleteLeads($encodedLeadIds);        
                 
-        $result = $this->_backend->searchLeads(Zend_Json::encode($this->objects['filter']));
+        $result = $this->_json->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));
         $this->assertEquals(0, $result['totalcount']);   
 
         // check if linked task got removed as well
@@ -415,13 +421,13 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     public function testLeadSources()
     {
         // test getLeadsources
-        $leadsources = $this->_backend->getLeadsources('id', 'ASC');
+        $leadsources = $this->_json->getLeadsources('id', 'ASC');
         $this->assertEquals(4, $leadsources['totalcount']);
 
         // test saveLeadsources
-        $this->_backend->saveLeadsources(Zend_Json::encode($leadsources['results']));
+        $this->_json->saveLeadsources(Zend_Json::encode($leadsources['results']));
 
-        $leadsourcesUpdated = $this->_backend->getLeadsources('id', 'ASC');
+        $leadsourcesUpdated = $this->_json->getLeadsources('id', 'ASC');
         $this->assertEquals(4, $leadsourcesUpdated['totalcount']);
     }
 
@@ -431,13 +437,13 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     public function testLeadStates()
     {
         // test getLeadstates
-        $leadstates = $this->_backend->getLeadstates('id', 'ASC');
+        $leadstates = $this->_json->getLeadstates('id', 'ASC');
         $this->assertEquals(6, $leadstates['totalcount']);
 
         // test saveLeadstates
-        $this->_backend->saveLeadstates(Zend_Json::encode($leadstates['results']));
+        $this->_json->saveLeadstates(Zend_Json::encode($leadstates['results']));
 
-        $leadstatesUpdated = $this->_backend->getLeadstates('id', 'ASC');
+        $leadstatesUpdated = $this->_json->getLeadstates('id', 'ASC');
         $this->assertEquals(6, $leadstatesUpdated['totalcount']);
     }
 
@@ -447,13 +453,13 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     public function testLeadTypes()
     {
         // test getLeadtypes
-        $leadtypes = $this->_backend->getLeadtypes('id', 'ASC');
+        $leadtypes = $this->_json->getLeadtypes('id', 'ASC');
         $this->assertEquals(3, $leadtypes['totalcount']);
 
         // test saveLeadtypes
-        $this->_backend->saveLeadtypes(Zend_Json::encode($leadtypes['results']));
+        $this->_json->saveLeadtypes(Zend_Json::encode($leadtypes['results']));
 
-        $leadtypesUpdated = $this->_backend->getLeadtypes('id', 'ASC');
+        $leadtypesUpdated = $this->_json->getLeadtypes('id', 'ASC');
         $this->assertEquals(3, $leadtypesUpdated['totalcount']);
     }
 
@@ -463,12 +469,12 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     public function testProducts()
     {
         // test getProducts
-        $products = $this->_backend->getProducts('id', 'ASC');
+        $products = $this->_json->getProducts('id', 'ASC');
 
         // test saveProducts
-        $this->_backend->saveProducts(Zend_Json::encode($products['results']));
+        $this->_json->saveProducts(Zend_Json::encode($products['results']));
 
-        $productsUpdated = $this->_backend->getProducts('id', 'ASC');
+        $productsUpdated = $this->_json->getProducts('id', 'ASC');
         $this->assertEquals($products['totalcount'], $productsUpdated['totalcount']);
     }
     

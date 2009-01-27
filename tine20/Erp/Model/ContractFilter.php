@@ -14,37 +14,25 @@
  * contract filter Class
  * @package     Erp
  */
-class Erp_Model_ContractFilter extends Tinebase_Record_AbstractFilter
+class Erp_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
      */
-    protected $_application = 'Erp';
+    protected $_className = 'Erp_Model_ContractFilter';
     
     /**
-     * the constructor
-     * it is needed because we have more validation fields in Tasks
-     * 
-     * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
-     * 
-     * @todo    add more validators/filters
+     * @var string application of this filter group
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators = array_merge($this->_validators, array(
-        ));
-        
-        // define query fields
-        $this->_queryFields = array(
-            'description',
-            'number',
-            'title'
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }    
+    protected $_applicationName = 'Erp';
+    
+    /**
+     * @var array filter model fieldName => definition
+     */
+    protected $_filterModel = array(
+        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('description', 'number', 'title'))),
+        'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Erp')),
+    );
 }

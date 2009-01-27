@@ -128,56 +128,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
     }
     
     /**
-     * Removes containers where current user has no access to
-     * 
-     * @param Tinebase_Record_Interface $_filter
-     * @return boolean
-     */
-    protected function _checkContainerACL($_filter)
-    {
-        if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
-            return TRUE;
-        }
-        
-        if ($_filter->isBookable) {
-            $rights = array(
-                Timetracker_Model_TimeaccountGrants::BOOK_OWN,
-                Timetracker_Model_TimeaccountGrants::BOOK_ALL,
-                Timetracker_Model_TimeaccountGrants::MANAGE_ALL
-            );
-        } else {
-            $rights = array(
-                Timetracker_Model_TimeaccountGrants::VIEW_ALL,
-                Timetracker_Model_TimeaccountGrants::BOOK_OWN,
-                Timetracker_Model_TimeaccountGrants::BOOK_ALL,
-                Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
-                Timetracker_Model_TimeaccountGrants::MANAGE_ALL
-            );
-        }        
-        
-        $readableContainerIds = array();
-        foreach ($rights as $right) {
-            //echo "check right: " . $right;
-            $readableContainerIds = array_merge($readableContainerIds, 
-                $this->_currentAccount->getContainerByACL($this->_applicationName, $right, TRUE));
-        }
-        $readableContainerIds = array_unique($readableContainerIds);
-                
-        if (!empty($_filter->container) && is_array($_filter->container)) {
-            $_filter->container = array_intersect($_filter->container, $readableContainerIds);
-        } else {
-            if (empty($readableContainerIds)) {
-                // no readable containers found -> access denied
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No readable containers found.');
-                return FALSE;
-            }
-            $_filter->container = $readableContainerIds;
-        }
-        
-        return TRUE;
-    }     
-    
-    /**
      * delete linked objects / timesheets
      *
      * @param Tinebase_Record_Interface $_record
@@ -237,4 +187,83 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
         
         return $hasGrant;
     }
+
+    /**
+     * Removes containers where current user has no access to
+     * 
+     * @param Timetracker_Model_TimeaccountFilter $_filter
+     * @param string $_action
+     */
+    protected function _checkFilterACL(Timetracker_Model_TimeaccountFilter $_filter, $_action = 'get')
+    {
+        $timeaccountIdFilter = $_filter->getAclFilter();
+        
+        if (! $timeaccountIdFilter) {
+            // force a timeaccount id filter (ACL)
+            $timeaccountIdFilter = $_filter->createFilter('id', 'all', NULL);
+            $_filter->addFilter($timeaccountIdFilter);
+        }
+        
+        switch ($_action) {
+            case 'get':
+                $timeaccountIdFilter->setRequiredGrants(array(
+                    Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                    Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                    Timetracker_Model_TimeaccountGrants::VIEW_ALL,
+                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                ));
+                break;
+            case 'update':
+                $timeaccountIdFilter->setRequiredGrants(array(
+                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                ));
+                break;
+            default:
+                throw new Timetracker_Exception_UnexpectedValue('Unknown action: ' . $_action);
+        }
+        
+        
+        /*
+        if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
+            return TRUE;
+        }
+        
+        if ($_filter->isBookable) {
+            $rights = array(
+                Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                Timetracker_Model_TimeaccountGrants::MANAGE_ALL
+            );
+        } else {
+            $rights = array(
+                Timetracker_Model_TimeaccountGrants::VIEW_ALL,
+                Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
+                Timetracker_Model_TimeaccountGrants::MANAGE_ALL
+            );
+        }        
+        
+        $readableContainerIds = array();
+        foreach ($rights as $right) {
+            //echo "check right: " . $right;
+            $readableContainerIds = array_merge($readableContainerIds, 
+                $this->_currentAccount->getContainerByACL($this->_applicationName, $right, TRUE));
+        }
+        $readableContainerIds = array_unique($readableContainerIds);
+                
+        if (!empty($_filter->container) && is_array($_filter->container)) {
+            $_filter->container = array_intersect($_filter->container, $readableContainerIds);
+        } else {
+            if (empty($readableContainerIds)) {
+                // no readable containers found -> access denied
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No readable containers found.');
+                return FALSE;
+            }
+            $_filter->container = $readableContainerIds;
+        }
+        
+        return TRUE;
+        */
+    }         
 }

@@ -14,45 +14,26 @@
  * timeaccount filter Class
  * @package     Timetracker
  */
-class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
+class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var string application of this filter group
      */
-    protected $_application = 'Timetracker';
+    protected $_applicationName = 'Timetracker';
     
     /**
-     * the constructor
-     * it is needed because we have more validation fields in Tasks
-     * 
-     * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
-     * 
-     * @todo    add more validators/filters
+     * @var array filter model fieldName => definition
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators = array_merge($this->_validators, array(
-            'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            'tag'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
-            'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
-            'isBookable'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
-        ));
-        
-        // define query fields
-        $this->_queryFields = array(
-            'number',
-            'title'
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }    
+    protected $_filterModel = array(
+        'id'             => array('filter' => 'Timetracker_Model_TimeaccountIdFilter'),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('number', 'title'))),
+        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag'),
+        'showClosed'     => array('custom' => true),
+        'isBookable'     => array('custom' => true),
+    );
 
-   /**
+    /**
      * appends current filters to a given select object
      * 
      * @param  Zend_Db_Select
@@ -62,13 +43,21 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Record_AbstractFilter
     {
         $db = Tinebase_Core::getDb();
         
-        if(isset($this->showClosed) && $this->showClosed){
+        $showClosed = false;
+        foreach ($this->_customData as $customData) {
+            if ($customData['field'] == 'showClosed' && $customData['value'] == true) {
+                $showClosed = true;
+            }
+        }
+        
+        if($showClosed){
             // nothing to filter
         } else {
             $_select->where($db->quoteIdentifier('is_open') . ' = 1');
         }
         
         // add container filter
+        // NOTE: $this->container is set by the Timeaccount controller
         if (!empty($this->container) && is_array($this->container)) {
             $_select->where($db->quoteInto($db->quoteIdentifier('container_id') . ' IN (?)', $this->container));
         }

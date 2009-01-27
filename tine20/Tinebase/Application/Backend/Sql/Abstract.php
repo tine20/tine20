@@ -85,7 +85,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         $id = $this->_convertId($_id);
         
-        $select = $this->_getSelect(FALSE, $_getDeleted);
+        $select = $this->_getSelect('*', $_getDeleted);
         $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
@@ -95,9 +95,10 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
                 
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound($this->_modelName . ' record with id ' . $id . ' not found!');
-        }        
+        }
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         $result = new $this->_modelName($queryResult);
-        
+               
         // get custom fields
         if ($result->has('customfields')) {
             $this->_getCustomFields($result);
@@ -164,33 +165,25 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
     * Search for records matching given filter
      *
-     * @param Tinebase_Record_Interface $_filter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
-     * @return Tinebase_Record_RecordSet
+     * @param boolean $_onlyIds
+     * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
-        $set = new Tinebase_Record_RecordSet($this->_modelName);
-        
-        // empty means, that e.g. no shared containers exist
-        if (isset($_filter->container) && count($_filter->container) === 0) {
-            return $set;
-        }
+        $result = ($_onlyIds) ? array() : new Tinebase_Record_RecordSet($this->_modelName);
         
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
         
         // build query
-        $select = $this->_getSelect();
+        $selectCols = ($_onlyIds) ? 'id' : '*';
+        $select = $this->_getSelect($selectCols);
         
-        if (!empty($_pagination->limit)) {
-            $select->limit($_pagination->limit, $_pagination->start);
-        }
-        if (!empty($_pagination->sort)) {
-            $select->order($_pagination->sort . ' ' . $_pagination->dir);
-        }        
         $this->_addFilter($select, $_filter);
+        $_pagination->appendPaginationSql($select);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
@@ -198,26 +191,26 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         foreach ($rows as $row) {
-            $record = new $this->_modelName($row, true, true);
-            $set->addRecord($record);
+            if ($_onlyIds) {
+                $result[] = $row['id'];
+            } else {
+                $record = new $this->_modelName($row, true, true);
+                $result->addRecord($record);
+            }
         }
         
-        return $set;
+        return $result;
     }
     
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tinebase_Record_Interface $_filter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
      */
-    public function searchCount(Tinebase_Record_Interface $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {        
-        if (isset($_filter->container) && count($_filter->container) === 0) {
-            return 0;
-        }        
-        
-        $select = $this->_getSelect(TRUE);
+        $select = $this->_getSelect(array('count' => 'COUNT(*)'));
         $this->_addFilter($select, $_filter);
         
         $result = $this->_db->fetchOne($select);
@@ -251,7 +244,6 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
     	
         $recordArray = $_record->toArray();
-        // print_r($recordArray);
         
         // unset id if autoincrement & still empty
         if (empty($_record->$identifier)) {
@@ -329,12 +321,17 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * Updates multiple entries
      *
      * @param array $_ids to update
-     * @param array $_values
+     * @param array $_data
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      */
-    public function updateMultiple($_ids, $_values) {
+    public function updateMultiple($_ids, $_data) {
 
-        $recordArray = $_values;
+        if (empty($_ids)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records updated.');
+            return;
+        }
+        
+        $recordArray = $_data;
         
         $tableKeys = $this->_db->describeTable($this->_tableName);
         $recordArray = array_intersect_key($recordArray, $tableKeys);
@@ -344,6 +341,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' IN (?)', $_ids),
         );
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
         $this->_db->update($this->_tableName, $recordArray, $where);        
     }
@@ -400,21 +399,17 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
      * get the basic select object to fetch records from the database
      *  
-     * @param $_getCount only get the count
-     * @param $_getDeleted get deleted records (if modlog is active)
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
      * 
      * @todo    perhaps we need to add the tablename here for filtering with more than 1 table (like that: ->from(array('blabla' => $this->_tableName))
      */
-    protected function _getSelect($_getCount = FALSE, $_getDeleted = FALSE)
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
         $select = $this->_db->select();
-        
-        if ($_getCount) {
-            $select->from($this->_tableName, array('count' => 'COUNT(*)'));    
-        } else {
-            $select->from($this->_tableName);
-        }
+
+        $select->from($this->_tableName, $_cols);
         
         if (!$_getDeleted && $this->_modlogActive) {
             // don't fetch deleted objects
@@ -428,11 +423,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     /**
      * add the fields to search for to the query
      *
-     * @param  Zend_Db_Select               $_select current where filter
-     * @param  Tinebase_Record_Interface    $_filter the string to search for
+     * @param  Zend_Db_Select                       $_select current where filter
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter the string to search for
      * @return void
      */
-    protected function _addFilter(Zend_Db_Select $_select, Tinebase_Record_Interface $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $_filter->appendFilterSql($_select);
     }

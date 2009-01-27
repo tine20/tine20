@@ -273,8 +273,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to update multiple Timesheets
-     *
-     * @todo build filter with id in ....
      */
     public function testUpdateMultipleTimesheetsWithIds()
     {
@@ -286,8 +284,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // update Timesheets
         $newValues = array('description' => 'argl');
-        $ids = array($timesheetData1['id'], $timesheetData2['id']);
-        $this->_json->updateMultipleTimesheets(Zend_Json::encode($ids), Zend_Json::encode($newValues));
+        $filterData = array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($timesheetData1['id'], $timesheetData2['id']))
+        );
+        $this->_json->updateMultipleTimesheets(Zend_Json::encode($filterData), Zend_Json::encode($newValues));
         
         $changed1 = $this->_json->getTimesheet($timesheetData1['id']);
         $changed2 = $this->_json->getTimesheet($timesheetData2['id']);

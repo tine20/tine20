@@ -45,7 +45,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     );
     
     /**
-     * appeds sql to given select statement
+     * appends sql to given select statement
      *
      * @param Zend_Db_Select $_select
      */

@@ -592,7 +592,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected function _convertISOToTs($_ISO)
     {
         $matches = array();
-        preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
+        preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
 
         if (count($matches) == 7) {
             list($match, $year, $month, $day, $hour, $minute, $second) = $matches;

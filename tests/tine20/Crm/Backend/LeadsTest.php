@@ -79,7 +79,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'     => $this->_testContainer->id,
+            'container_id'  => $this->_testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description',
             'end'           => Zend_Date::now(),
@@ -94,7 +94,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'     => $this->_testContainer->id,
+            'container_id'  => $this->_testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description updated',
             'end'           => NULL,
@@ -143,13 +143,13 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInitialLead()
     {
-        $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->_testContainer->id);
-        $filter->query = 'PHPUnit';
-        $filter->showClosed = true;
+        $filter = $this->_getFilter();
         $leads = $this->_backend->search($filter);
-        
-        $this->assertEquals(1, count($leads));
+        $this->assertEquals(0, count($leads), 'Closed lead should not be found.');
+
+        $filter->createFilter('showClosed', 'equals', TRUE);
+        $leads = $this->_backend->search($filter);
+        $this->assertEquals(1, count($leads), 'Closed lead should be found.');
     }
     
     /**
@@ -168,11 +168,8 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetUpdatedLead()
     {
-        $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->_testContainer->id);
-        $filter->query = 'PHPUnit';
-        $pagination = new Tinebase_Model_Pagination();
-        $leads = $this->_backend->search($filter, $pagination);
+        $filter = $this->_getFilter();
+        $leads = $this->_backend->search($filter);
         
         $this->assertEquals(1, count($leads));
     }
@@ -182,10 +179,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountOfLeads()
     {
-        $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->_testContainer->id);
-        $filter->query = 'PHPUnit';
-        $filter->showClosed = true;
+        $filter = $this->_getFilter();
         $count = $this->_backend->searchCount($filter);
         
         $this->assertEquals(1, $count);
@@ -201,6 +195,27 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
         $this->_backend->delete($id);
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_backend->get($id);
+    }
+
+    /**
+     * get lead filter
+     *
+     * @return Crm_Model_LeadFilter
+     */
+    protected function _getFilter()
+    {
+        return new Crm_Model_LeadFilter(array(
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => 'PHPUnit'
+            ),     
+            array(
+                'field' => 'container_id', 
+                'operator' => 'equals', 
+                'value' => $this->_testContainer->id
+            ),
+        ));
     }
 }		
 	

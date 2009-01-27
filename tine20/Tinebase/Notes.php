@@ -110,7 +110,7 @@ class Tinebase_Notes
             ->from(SQL_TABLE_PREFIX . 'notes');
         
         $_filter->appendFilterSql($select);
-        $_pagination->appendPagination($select);
+        $_pagination->appendPaginationSql($select);
         
         $rows = $this->_db->fetchAssoc($select);
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);

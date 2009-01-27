@@ -274,14 +274,31 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      * 
      * @return Zend_Db_Select
      */
-    protected function _getSelect($_getCount = FALSE)
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
+        $cols = (array)$_cols;
+        
+        if (array_key_exists('count', $cols)) {
+            $cols['count'] = "COUNT({$this->_db->quoteIdentifier('tasks.id')})";
+        } else {
+            $cols['is_due'] = "LENGTH({$this->_db->quoteIdentifier('tasks.due')})";
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cols, true));
+        
         $select = $this->_db->select()
-            ->where($this->_db->quoteIdentifier('tasks.is_deleted') . ' = FALSE');
+            ->from(array('tasks' => $this->_tableNames['tasks']), $cols)
+            ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array());
+            
+        if ($_getDeleted !== TRUE) {
+            $select->where($this->_db->quoteIdentifier('tasks.is_deleted') . ' = FALSE');
+        }
+        
+        /*
         
         $tablename = array('tasks' => $this->_tableNames['tasks']);
         
-        if ($_getCount) {
+        if ($_cols != '*') {
             $fields = array('count' => 'COUNT(tasks.id)');
             $select->from($tablename, $fields) 
                 ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array());
@@ -297,21 +314,9 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
                 ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
                 ->group('tasks.id');
         }
+*/
 
         return $select;
     }
-
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select           $_select current where filter
-     * @param  Tasks_Model_TaskFilter   $_filter filter settings
-     * @return void
-     */
-    protected function _addFilter (Zend_Db_Select $_select, Tasks_Model_TaskFilter $_filter)
-    {        
-        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' IN (?)', $_filter->container));
-        
-        $_filter->appendFilterSql($_select);
-    }    
+   
 }

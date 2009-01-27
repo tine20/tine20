@@ -206,3 +206,51 @@ Tine.Crm.LeadState.EditDialog = function() {
     Dialog.show();
 };
 
+Tine.Crm.LeadState.filter = Ext.extend(Tine.widgets.grid.FilterModel, {
+    field: 'leadstate_id',
+    valueType: 'number',    
+    
+    /**
+     * @private
+     */
+    initComponent: function() {
+        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
+        
+        this.app = Tine.Tinebase.appMgr.get('Crm');
+        this.label = this.app.i18n._("Leadstate");
+        this.operators = ['equals'];
+    },
+    
+    /**
+     * value renderer
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     */
+    valueRenderer: function(filter, el) {
+        // value
+        var value = new Ext.form.ComboBox({
+            store: Tine.Crm.LeadState.getStore(),
+            displayField: 'leadstate',
+            valueField: 'id',
+            typeAhead: true,
+            triggerAction: 'all',
+            selectOnFocus:true,
+            editable: false,
+            
+            filter: filter,
+            width: 200,
+            id: 'tw-ftb-frow-valuefield-' + filter.id,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            renderTo: el
+        });
+        value.on('specialkey', function(field, e){
+             if(e.getKey() == e.ENTER){
+                 this.onFiltertrigger();
+             }
+        }, this);
+        value.on('select', this.onFiltertrigger, this);
+        
+        return value;
+    }
+});

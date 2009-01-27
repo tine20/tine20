@@ -14,46 +14,37 @@
  * Tasks Filter Class
  * @package Tasks
  */
-class Tasks_Model_TaskFilter extends Tinebase_Record_AbstractFilter
-{    
+class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
+{
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
      */
-    protected $_application = 'Tasks';
-
+    protected $_className = 'Tasks_Model_TaskFilter';
+    
     /**
-     * the constructor
-     * it is needed because we have more validation fields in Tasks
-     * 
-     * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
+     * @var string application of this filter group
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        // add more filters
-        $this->_validators = array_merge($this->_validators, array(
-            'organizer'            => array('allowEmpty' => true           ),
-            'status'               => array('allowEmpty' => true           ),
-            'due'                  => array('allowEmpty' => true           ),
-            'tag'                  => array('allowEmpty' => true           ),
-            'description'          => array('allowEmpty' => true           ),              
-            'summary'              => array('allowEmpty' => true           ),              
-        
-        // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
-            'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
-        ));
-        
-        // define query fields
-        $this->_queryFields = array(
-            'description',
-            'summary',
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
+    protected $_applicationName = 'Tasks';
+    
+    /**
+     * @var array filter model fieldName => definition
+     */
+    protected $_filterModel = array(
+        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
+        'organizer'            => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'status'               => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'due'                  => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'summary'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'tasks.id')),
+        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
+        'showClosed'           => array('custom' => true),
+    );
     
     /**
      * appends current filters to a given select object
@@ -67,22 +58,22 @@ class Tasks_Model_TaskFilter extends Tinebase_Record_AbstractFilter
     {
         $db = Tinebase_Core::getDb();
         
-        if(isset($this->showClosed) && $this->showClosed){
-            // nothing to filter
-        } else {
-            $_select->where($db->quoteIdentifier('status.status_is_open') . ' = TRUE OR ' . 
-                    $db->quoteIdentifier('tasks.status_id') . ' IS NULL');
+        $showClosed = false;
+        foreach ($this->_customData as $customData) {
+            if ($customData['field'] == 'showClosed' && $customData['value'] == true) {
+                $showClosed = true;
+            }
         }
         
-        /*
-        if(!empty($_filter->status)){
-            $_select->where($this->_db->quoteInto($db->quoteIdentifier('tasks.status_id') . ' = ?',$_filter->status));
+        if($showClosed){
+            // nothing to filter
+        } else {
+            $where = $db->quoteInto($db->quoteIdentifier('status.status_is_open') . ' = ?', 1, Zend_Db::INT_TYPE) .
+                     ' OR ' . $db->quoteIdentifier('status_id') . ' IS NULL';
+            $_select->where($where);
         }
-        if(!empty($_filter->organizer)){
-            $_select->where($this->_db->quoteInto($db->quoteIdentifier('tasks.organizer') . ' = ?', (int)$_filter->organizer));
-        }
-        */
         
         parent::appendFilterSql($_select);
     }
+
 }

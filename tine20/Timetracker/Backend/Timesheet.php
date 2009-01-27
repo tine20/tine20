@@ -31,21 +31,18 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
     /**
      * Gets total count and sum of duration of search with $_filter
      * 
-     * @param Tinebase_Record_Interface $_filter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return array with count + sum
      */
-    public function searchCount(Tinebase_Record_Interface $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {        
-        if (isset($_filter->container) && count($_filter->container) === 0) {
-            return 0;
-        }        
-        
-        $select = $this->_getSelect(TRUE);
+        $select = $this->_getSelect(array('count' => 'COUNT(*)'));
         $this->_addFilter($select, $_filter);
         
+        // fetch complete row here
         $result = $this->_db->fetchRow($select);
         return $result;        
-    }    
+    } 
     
     /************************ helper functions ************************/
     
@@ -53,31 +50,24 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
      * get the basic select object to fetch records from the database
      * - we get the sum of the timesheet duration as well
      *  
-     * @param $_getCount only get the count
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
      * 
      */
-    protected function _getSelect($_getCount = FALSE, $_getDeleted = FALSE)
-    {        
-        $select = $this->_db->select();
-        
-        if ($_getCount) {
-            $select->from($this->_tableName, array(
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {     
+        if (is_array($_cols) && isset($_cols['count'])) {
+            $cols = array(
                 'count'         => 'COUNT(*)', 
                 'countBillable' => 'SUM(is_billable)',
                 'sum'           => 'SUM(duration)',
                 'sumBillable'   => 'SUM(duration*is_billable)'
-            ));    
+            );
         } else {
-            $select->from($this->_tableName);
+            $cols = $_cols;
         }
         
-        if (!$_getDeleted && $this->_modlogActive) {
-            // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');                        
-        }
-        
-        return $select;
+        return parent::_getSelect($cols, $_getDeleted);
     }
 }

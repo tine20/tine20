@@ -109,10 +109,25 @@ abstract class Tinebase_Model_Filter_Abstract
     }
     
     /**
-     * appeds sql to given select statement
+     * appends sql to given select statement
      *
      * @param Zend_Db_Select $_select
      */
     abstract public function appendFilterSql($_select);
-    
+
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $result = array(
+            'field'     => $this->_field,
+            'operator'  => $this->_operator,
+            'value'     => $this->_value
+        );
+        
+        return $result;
+    }    
 }

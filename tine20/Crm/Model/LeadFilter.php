@@ -14,41 +14,35 @@
  * Leads Filter Class
  * @package Crm
  */
-class Crm_Model_LeadFilter extends Tinebase_Record_AbstractFilter
+class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
      */
-    protected $_application = 'Crm';
+    protected $_className = 'Crm_Model_LeadFilter';
     
     /**
-     * the constructor
-     * it is needed because we have more validation fields in Tasks
-     * 
-     * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
+     * @var string application of this filter group
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators = array_merge($this->_validators, array(
-        // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
-            'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false), 'special' => TRUE),
-            'probability'          => array('allowEmpty' => true, 'Int',    'special' => TRUE),
-            'leadstate'            => array('allowEmpty' => true,           'special' => TRUE),
-        ));
-        
-        // define query fields
-        $this->_queryFields = array(
-            'description',
-            'lead_name',
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }    
+    protected $_applicationName = 'Crm';
     
+    /**
+     * @var array filter model fieldName => definition
+     */
+    protected $_filterModel = array(
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('lead_name', 'description'))),
+        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'lead_name'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag'),
+        'probability'    => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'turnover'       => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'leadstate_id'   => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Crm')),
+        'showClosed'     => array('custom' => true),
+    );
+
     /**
      * appends current filters to a given select object
      * 
@@ -59,33 +53,22 @@ class Crm_Model_LeadFilter extends Tinebase_Record_AbstractFilter
     {
         $db = Tinebase_Core::getDb();
         
-        if(isset($this->showClosed) && $this->showClosed){
+        $showClosed = false;
+        foreach ($this->_customData as $customData) {
+            if ($customData['field'] == 'showClosed' && $customData['value'] == true) {
+                $showClosed = true;
+            }
+        }
+        
+        if($showClosed){
             // nothing to filter
         } else {
             $_select->where($db->quoteIdentifier('end') . ' IS NULL');
         }
-
-        if (!empty($this->leadstate)) {
-            $_select->where($this->_db->quoteInto($db->quoteIdentifier('leadstate_id') . ' = ?', $this->leadstate));
-        }
-        if (!empty($this->probability)) {
-            $_select->where($this->_db->quoteInto($db->quoteIdentifier('probability') . ' >= ?', (int)$this->probability));
-        }
+        
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
         
         parent::appendFilterSql($_select);
-    }    
-    
-    /**
-     * sets the record related properties from user generated input.
-     * 
-     * overwrite this because we don't have the right filter structure in the crm yet
-     *
-     * @param array $_data            the new data to set
-     * 
-     * @todo    remove this when the crm filter toolbar has been updated to the general widget
-     */
-    public function setFromArray(array $_data)
-    {
-        parent::setFromArray($_data, FALSE);        
     }
 }

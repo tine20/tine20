@@ -104,6 +104,8 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $inTask = new Tasks_Model_Task();
         $inTask->setFromJsonInUsersTimezone($recordData);
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($inTask->toArray(), true));
+        
         $outTask = strlen($inTask->getId()) > 10 ? 
             Tasks_Controller_Task::getInstance()->update($inTask): 
             Tasks_Controller_Task::getInstance()->create($inTask);

@@ -365,6 +365,7 @@ Tine.Addressbook.Main = {
                 {label: this.translation._('Job Title'),    field: 'title'},
                 {label: this.translation._('Job Role'),    field: 'role'},
                 new Tine.widgets.tags.TagFilter({app: this.app}),
+                //{label: this.translation._('Birthday'),    field: 'bday', valueType: 'date'},
                 {label: this.translation._('Street') + ' (' + this.translation._('Company Address') + ')',      field: 'adr_one_street', defaultOperator: 'equals', valueType: 'int'},
                 {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals', valueType: 'int'},
                 {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality'},

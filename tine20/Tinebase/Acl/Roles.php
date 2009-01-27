@@ -225,7 +225,7 @@ class Tinebase_Acl_Roles
     {
         $select = $_filter->getSelect();
         
-        $_paging->appendPagination($select);
+        $_paging->appendPaginationSql($select);
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_Role', $this->_db->fetchAssoc($select));
     }

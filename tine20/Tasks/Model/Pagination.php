@@ -16,7 +16,21 @@
  */
 class Tasks_Model_Pagination extends Tinebase_Model_Pagination
 {    
-    protected $_datetimeFields = array(
-        'due',
-    );
+    /**
+     * Appends pagination statements to a given select object
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendPaginationSql($_select)
+    {
+        if ($this->isValid()) {
+            if (!empty($this->sort) && !empty($this->dir) && $this->sort == 'due'){
+                $dir = $this->dir == 'ASC' ? 'DESC' : 'ASC';
+                $_select->order('is_due' . ' ' . $dir);
+            }
+        }
+        
+        parent::appendPaginationSql($_select);
+    }
 }

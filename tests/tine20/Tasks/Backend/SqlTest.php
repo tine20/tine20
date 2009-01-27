@@ -47,11 +47,15 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	 */
 	public function setUp()
 	{
+	    $user = Tinebase_Core::getUser();
+        $container = $user->getPersonalContainer('Tasks', $user, Tinebase_Model_Container::GRANT_ANY);
+        $this->container_id = $container[0]->getId();
+        
 		$this->_backend = new Tasks_Backend_Sql();
         
 		$this->_testTask1 = new Tasks_Model_Task(array(
             // tine record fields
-	        'container_id'         => 5,
+	        'container_id'         => $this->container_id,
 	        'created_by'           => 6,
 	        'creation_time'        => Zend_Date::now(),
 	        'is_deleted'           => 0,
@@ -102,16 +106,18 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     public function testCreateMinimalTask()
     {
         $summary = 'minimal task by phpunit';
+        
         $task = new Tasks_Model_Task(array(
             'summary'       => $summary,
-            'container_id'  => 5,
+            'container_id'  => $this->container_id,
         ));
         $persitantTask = $this->_backend->create($task);
         
         $pagination = new Tasks_Model_Pagination();
-        $filter = new Tasks_Model_TaskFilter();
-        $filter->query     = $summary;
-        $filter->container = array($task->container_id);
+        $filter = new Tasks_Model_TaskFilter(array(
+            array('field' => 'summary',      'operator' => 'contains', 'value' => $summary),
+            array('field' => 'container_id', 'operator' => 'equals',   'value' => $task->container_id)
+        ));
 
         $tasks = $this->_backend->search($filter, $pagination);
         $this->assertEquals(1, count($tasks));
@@ -130,9 +136,12 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
     	$testId = $this->_persistantTestTask1->getId();
         $this->_backend->delete($testId);
-        $filter = new Tasks_Model_TaskFilter();
-        $filter->query = 'our fist test task';
-        $filter->container = array($this->_persistantTestTask1->container_id);
+        
+        $filter = new Tasks_Model_TaskFilter(array(
+            array('field' => 'summary',      'operator' => 'contains', 'value' => 'our fist test task'),
+            array('field' => 'container_id', 'operator' => 'equals',   'value' => $this->_persistantTestTask1->container_id)
+        ));
+        
         $pagination = new Tasks_Model_Pagination();
         $tasks = $this->_backend->search($filter, $pagination);
         foreach ($tasks as $task) {
@@ -173,9 +182,11 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $pagination = new Tasks_Model_Pagination();
         
-        $filter = new Tasks_Model_TaskFilter();
-        $filter->query = $this->_persistantTestTask1->getId();
-        $filter->container = array($this->_persistantTestTask1->container_id);
+        $filter = new Tasks_Model_TaskFilter(array(
+            array('field' => 'query',        'operator' => 'contains', 'value' => $this->_persistantTestTask1->getId()),
+            array('field' => 'container_id', 'operator' => 'equals',   'value' => $this->_persistantTestTask1->container_id)
+        ));
+        
         $tasks = $this->_backend->search($filter, $pagination);
         
         $this->assertEquals(1, count($tasks));

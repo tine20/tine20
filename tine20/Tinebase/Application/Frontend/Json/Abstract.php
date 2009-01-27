@@ -119,16 +119,17 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * update multiple records
      *
      * @param string $_filter json encoded filter
-     * @param string $_values json encoded key/value pairs 
+     * @param string $_data json encoded key/value pairs 
      * @param Tinebase_Application_Controller_Record_Interface $_controller
+     * @param string FilterGroup name
      * 
      * @todo use filter / filter_group
      */
-    protected function _updateMultiple($_filter, $_values, Tinebase_Application_Controller_Record_Interface $_controller)
+    protected function _updateMultiple($_filter, $_data, Tinebase_Application_Controller_Record_Interface $_controller, $_filterModel)
     {
-        //$filter = new Tinebase_Model_Filter_Text
+        $filter = new $_filterModel(Zend_Json::decode($_filter));
         
-        $_controller->updateMultiple(Zend_Json::decode($_filter), Zend_Json::decode($_values));
+        $_controller->updateMultiple($filter, Zend_Json::decode($_data));
     }
     
     /**

@@ -73,7 +73,7 @@ class Tinebase_Tags
         $select = $_filter->getSelect();
         
         Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
-        $_paging->appendPagination($select);
+        $_paging->appendPaginationSql($select);
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
     }

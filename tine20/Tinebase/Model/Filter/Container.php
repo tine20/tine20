@@ -23,8 +23,10 @@
  * 
  * NOTE: This filter already does all ACL checks. This means a controller only 
  *       has to make shure a containerfilter is set and if not add one
+ * 
+ * @todo implement setRequiredGrants
  */
-class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract implements Tinebase_Model_Filter_AclFilter 
 {
     /**
      * @var array list of allowed operators
@@ -36,6 +38,20 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract
         3 => 'personalNode', // value is expected to be a user id 
         //5 => 'not',        // value is expected to be a single container id
     );
+    
+    /**
+     * @var array one of these grants must be met
+     */
+    protected $_requiredGrants = array(
+        Tinebase_Model_Container::GRANT_READ
+    );
+    
+    /**
+     * is resolved
+     *
+     * @var boolean
+     */
+    protected $_isResolved = FALSE;
     
     /**
      * set options 
@@ -55,40 +71,88 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract
     }
     
     /**
-     * sets value
+     * sets the grants this filter needs to assure
+     *
+     * @param array $_grants
+     */
+    public function setRequiredGrants(array $_grants)
+    {
+        $this->_requiredGrants = $_grants;
+    }
+
+    /**
+     * set operator
+     *
+     * @param string $_operator
+     */
+    public function setOperator($_operator)
+    {
+        parent::setOperator($_operator);
+        $this->_isResolved = FALSE;
+    }
+    
+    /**
+     * set value
      *
      * @param mixed $_value
      */
     public function setValue($_value)
     {
-        $currentAccount = Tinebase_Core::getUser();
-        $appName = $this->_options['applicationName'];
+        parent::setValue($_value);
+        $this->_isResolved = FALSE;
+    }
+    
+    /**
+     * appeds sql to given select statement
+     *
+     * @param  Zend_Db_Select $_select
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function appendFilterSql($_select)
+    {
+        $this->_resolve();
         
+        $db = Tinebase_Core::getDb();
+        
+        $_select->where($db->quoteIdentifier($this->_field) .  ' IN (?)', empty($this->_value) ? " " : $this->_value);
+    }
+
+    /**
+     * resolve container ids
+     *
+     */
+    protected function _resolve()
+    {
+        if ($this->_isResolved) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' already resolved');
+            return;
+        }
+
         switch ($this->_operator) {
             case 'equals':
             case 'in':
-                $this->_value = (array)$_value;
+                $this->_value = (array)$this->_value;
                 if ($this->_options['ignoreAcl'] !== true) {
-                    $readableContainerIds = $currentAccount->getContainerByACL($appName, Tinebase_Model_Container::GRANT_READ, TRUE);
+                    $readableContainerIds = $this->_getContainer('getContainerByACL');
                     $this->_value = array_intersect($this->_value, $readableContainerIds);
                 }
                 break;
             case 'personalNode':
-                $this->_value = $currentAccount->getPersonalContainer($appName, $_value, Tinebase_Model_Container::GRANT_READ)->getId();
+                $this->_value = $this->_getContainer('getPersonalContainer');
                 break;
             case 'specialNode':
-                switch ($_value) {
+                switch ($this->_value) {
                     case 'all':
-                        $this->_value = Tinebase_Container::getInstance()->getContainerByACL($currentAccount, $appName, Tinebase_Model_Container::GRANT_READ, TRUE);
+                        $this->_value = $this->_getContainer('getContainerByACL');
                         break;
                     case 'shared':
-                        $this->_value = $currentAccount->getSharedContainer($appName, Tinebase_Model_Container::GRANT_READ)->getId();
+                        $this->_value = $this->_getContainer('getSharedContainer');
                         break;
                     case 'otherUsers':
-                        $this->_value = $currentAccount->getOtherUsersContainer($appName, Tinebase_Model_Container::GRANT_READ)->getId();
+                        $this->_value = $this->_getContainer('getOtherUsersContainer');
                         break;
                     case 'internal':
-                        $this->_value = array(Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName)->getId());
+                        $this->_value = $this->_getContainer('getInternalContainer');
                         break;
                     default:
                         throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
@@ -100,19 +164,44 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract
                 break;
         }
         
+        $this->_isResolved = TRUE;
     }
     
     /**
-     * appeds sql to given select statement
+     * wrapper for get container functions
      *
-     * @param  Zend_Db_Select $_select
-     * @throws Tinebase_Exception_NotFound
+     * @param string $_function
+     * @return array of container ids
      */
-    public function appendFilterSql($_select)
+    protected function _getContainer($_function)
     {
-        $db = Tinebase_Core::getDb();
+        $currentAccount = Tinebase_Core::getUser();
+        $appName = $this->_options['applicationName'];
         
-        $_select->where($db->quoteIdentifier($this->_field) .  ' IN (?)', empty($this->_value) ? " " : $this->_value);
+        $ids = array();
+        foreach ($this->_requiredGrants as $grant) {
+            switch ($_function) {
+                case 'getContainerByACL':
+                    $result = $currentAccount->getContainerByACL($appName, $grant, TRUE);
+                    break;
+                case 'getPersonalContainer':
+                    $result = $currentAccount->getPersonalContainer($appName, $this->_value, $grant)->getId();
+                    break;
+                case 'getSharedContainer':
+                    $result = $currentAccount->getSharedContainer($appName, $grant)->getId();
+                    break;
+                case 'getOtherUsersContainer':
+                    $result = $currentAccount->getOtherUsersContainer($appName, $grant)->getId();
+                    break;
+                case 'getInternalContainer':
+                    $result = Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName)->getId();
+                    break;
+            }
+            
+            $ids = array_merge($ids, (array)$result);
+        }
+                
+        return array_unique($ids);
     }
     
     /**
