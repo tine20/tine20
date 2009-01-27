@@ -77,7 +77,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
+    public function search(/*Tinebase_Model_Filter_FilterGroup*/ $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
     {
         /*
         if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
@@ -102,7 +102,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    public function searchCount(/*Tinebase_Model_Filter_FilterGroup */ $_filter) 
     {
         /*
         if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {

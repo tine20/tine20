@@ -9,6 +9,7 @@
  * @version     $Id$
  *
  * @todo        add save rights function
+ * @todo        add search function to interface again when search function is removed
  */
 
 /**
@@ -54,7 +55,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
 	 * 
 	 * @todo   replace this
 	 */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
+    public function search(/*Tinebase_Model_Filter_FilterGroup */$_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {	
         $where = array();
         
