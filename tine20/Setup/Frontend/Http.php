@@ -43,8 +43,8 @@ class Setup_Frontend_Http
      */
     public function handle()
     {
-        $this->_update();
-        $this->_install();
+        $updateDone = $this->_update();
+        $this->_install($updateDone);
     }
     
     /**
@@ -52,15 +52,17 @@ class Setup_Frontend_Http
      *
      * @param Zend_Console_Getopt $_opts
      */
-    protected function _install()
+    protected function _install($_updated = FALSE)
     {
         $controller = new Setup_Controller();
         
-        $extCheck = new Setup_ExtCheck('Setup/essentials.xml');
-        $extOutput = $extCheck->getOutput();
-        echo $extOutput;
+        if (!$_updated) {
+            $extCheck = new Setup_ExtCheck('Setup/essentials.xml');
+            $extOutput = $extCheck->getOutput();
+            echo $extOutput;
+        }
 
-        if (!preg_match("/FAILURE/", $extOutput)) {
+        if ($_updated && !preg_match("/FAILURE/", $extOutput)) {
             $applications = $controller->getInstallableApplications();
             
             foreach($applications as $key => &$application) {
@@ -94,6 +96,7 @@ class Setup_Frontend_Http
      * update existing applications
      *
      * @param Zend_Console_Getopt $_opts
+     * @return boolean update done
      */
     protected function _update()
     {
@@ -103,7 +106,7 @@ class Setup_Frontend_Http
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         } catch(Zend_Db_Statement_Exception $e) {
             // application installed at all
-            return;
+            return FALSE;
         }
         
         foreach($applications as $key => &$application) {
@@ -117,6 +120,7 @@ class Setup_Frontend_Http
             $controller->updateApplications($applications);
         }
         
-        echo "Updated " . count($applications) . " applications.<br>";        
+        echo "Updated " . count($applications) . " applications.<br>";
+        return TRUE;        
     }
 }
