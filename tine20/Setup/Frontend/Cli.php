@@ -6,6 +6,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Cli.php 5147 2008-10-28 17:03:33Z p.schuele@metaways.de $
+ * 
+ * @todo        add ext check again
  */
 
 /**

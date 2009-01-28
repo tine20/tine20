@@ -55,30 +55,39 @@ class Setup_Frontend_Http
     protected function _install()
     {
         $controller = new Setup_Controller();
+        
+        $extCheck = new Setup_ExtCheck('Setup/essentials.xml');
+        $extOutput = $extCheck->getOutput();
+        echo $extOutput;
 
-        $applications = $controller->getInstallableApplications();
-        
-        foreach($applications as $key => &$application) {
-            try {
-                Tinebase_Application::getInstance()->getApplicationByName($key);
-                // application is already installed
-                unset($applications[$key]);
-            } catch (Tinebase_Exception_NotFound $e) {
-                // application is not yet installed
-            } catch(Zend_Db_Statement_Exception $e) {
-                // base tables not yet installed
+        if (!preg_match("/FAILURE/", $extOutput)) {
+            $applications = $controller->getInstallableApplications();
+            
+            foreach($applications as $key => &$application) {
+                try {
+                    Tinebase_Application::getInstance()->getApplicationByName($key);
+                    // application is already installed
+                    unset($applications[$key]);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    // application is not yet installed
+                } catch(Zend_Db_Statement_Exception $e) {
+                    // base tables not yet installed
+                }
             }
+            
+            $controller->installApplications(array_keys($applications));
+            
+            if(array_key_exists('Tinebase', $applications)) {
+                $import = new Setup_Import_TineInitial();
+                //$import = new Setup_Import_Egw14();
+                $import->import();
+            }
+            
+            echo "Successfully installed " . count($applications) . " applications.<br/>";   
+                 
+        } else {
+            echo "Extension Check failed. Nothing installed.<br/>";
         }
-        
-        $controller->installApplications(array_keys($applications));
-        
-        if(array_key_exists('Tinebase', $applications)) {
-            $import = new Setup_Import_TineInitial();
-            //$import = new Setup_Import_Egw14();
-            $import->import();
-        }
-        
-        echo "Successfully installed " . count($applications) . " applications.<br>";        
     }
 
     /**

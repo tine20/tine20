@@ -344,6 +344,8 @@ class Setup_ExtCheck
             $parser = xml_parser_create();
             xml_parse_into_struct($parser, $buffer, $values);
             xml_parser_free($parser);
+        } else {
+            throw new Setup_Exception("File $_file not found!");
         }
         return $values;
     }
@@ -362,10 +364,14 @@ class Setup_ExtCheck
             if ($value['tag'] == 'ENVIROMENT') {
                 switch($value['attributes']['NAME']) {
                 case 'Zend':
-                    if (version_compare($value['attributes']['VERSION'], zend_version(), '<')) {
-                        $data[] = array($value['attributes']['NAME'], 'SUCCESS');
+                    $required = $value['attributes']['VERSION'];
+                    $zend = Zend_Version::VERSION;
+                    $operator = ($value['attributes']['OPERATOR'] == 'biggerThan') ? '>' : '<';
+                    $text = $value['attributes']['NAME'] . ' ' . $operator . ' ' . $required;
+                    if (version_compare($zend, $required, $operator)) {
+                        $data[] = array($text, 'SUCCESS');
                     } else {
-                        $data[] = array($value['attributes']['NAME'], 'FAILURE');
+                        $data[] = array($text . ' (version is ' . $zend . ')', 'FAILURE');
                     }
                     break;
                 case 'PHP':
