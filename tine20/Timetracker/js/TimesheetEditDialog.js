@@ -54,7 +54,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         if (timeaccount && timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0") {
         	this.getForm().findField('is_billable').setDisabled(true);
-        	this.getForm().findField('is_billable').setValue(0);
+        	if (this.record.id == 0) {
+        	   // set to 0 be default for new records
+        	   this.getForm().findField('is_billable').setValue(0);
+        	}
         }
     },
     
@@ -89,7 +92,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     items: [[new Tine.Timetracker.TimeAccountSelect({
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Time Account'),
-                        emptyText: this.app.i18n._('Select Time Accont...'),
+                        emptyText: this.app.i18n._('Select Time Account...'),
                         loadingText: this.app.i18n._('Searching...'),
                         allowBlank: false,
                         name: 'timeaccount_id',
