@@ -165,7 +165,7 @@ class Setup_Frontend_Http
         $extOutput = $extCheck->getOutput();
         echo $extOutput;
         
-        $success = ($success && preg_match("/FAILURE/", $extOutput));
+        $success = ($success && !preg_match("/FAILURE/", $extOutput));
         
         return $success;
     }
