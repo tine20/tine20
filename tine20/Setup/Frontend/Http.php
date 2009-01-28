@@ -140,7 +140,7 @@ class Setup_Frontend_Http
             'magic_quotes_runtime' => 0,
             'mbstring.func_overload' => 0,
             'eaccelerator.enable' => 0,
-            'memory_limit' => '129M'
+            'memory_limit' => '128M'
         );
         
         foreach ($requiredIniSettings as $variable => $newValue) {
