@@ -29,7 +29,7 @@ interface Tinebase_Application_Controller_Record_Interface
      * @return Tinebase_Record_RecordSet
      * @todo add that again when all controllers use the same search() footprint
      */
-    //public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE);
+    //public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE);
     
     /**
      * Gets total count of search with $_filter

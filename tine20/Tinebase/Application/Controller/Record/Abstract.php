@@ -75,9 +75,10 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
-     * @return Tinebase_Record_RecordSet
+     * @param boolean $_onlyIds
+     * @return Tinebase_Record_RecordSet|array
      */
-    public function search(/*Tinebase_Model_Filter_FilterGroup*/ $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
+    public function search(/*Tinebase_Model_Filter_FilterGroup*/ $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
         /*
         if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
@@ -87,7 +88,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         
         $this->_checkFilterACL($_filter);
         
-        $result = $this->_backend->search($_filter, $_pagination);
+        $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         if ($_getRelations) {
             $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $result->getId()));
