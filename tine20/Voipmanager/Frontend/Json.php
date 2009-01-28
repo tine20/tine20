@@ -108,25 +108,24 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function saveSnomPhone($phoneData, $lineData, $rightsData)
     {
-
         $phoneData  = Zend_Json::decode($phoneData);
         $lineData   = Zend_Json::decode($lineData);
         $rightsData = Zend_Json::decode($rightsData);
-
+        
         // unset if empty
         if (empty($phoneData['id'])) {
             unset($phoneData['id']);
         }
-
-        //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
-        Zend_Registry::get('logger')->debug(print_r($rightsData,true));
+        
+        // Zend_Registry::get('logger')->debug(print_r($phoneData,true));
+        // Zend_Registry::get('logger')->debug(print_r($rightsData,true));
         
         $phone = new Voipmanager_Model_Snom_Phone();
         $phone->setFromArray($phoneData);
         
         $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
         $phoneSettings->setFromArray($phoneData);
-
+        
         $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line', $lineData, true);
         $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', $rightsData);
         
@@ -383,9 +382,9 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         return $this->_delete($_softwareIds, Voipmanager_Controller_Snom_Software::getInstance());
     }       
-        
-        
-        
+    
+    
+    
 /********************************
  * SNOM TEMPLATE FUNCTIONS
  *
