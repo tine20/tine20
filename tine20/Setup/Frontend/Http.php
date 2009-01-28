@@ -57,12 +57,10 @@ class Setup_Frontend_Http
         $controller = new Setup_Controller();
         
         if (!$_updated) {
-            $extCheck = new Setup_ExtCheck('Setup/essentials.xml');
-            $extOutput = $extCheck->getOutput();
-            echo $extOutput;
+            $check = $this->_check();
         }
 
-        if ($_updated || !preg_match("/FAILURE/", $extOutput)) {
+        if ($_updated || $check) {
             $applications = $controller->getInstallableApplications();
             
             foreach($applications as $key => &$application) {
@@ -88,7 +86,7 @@ class Setup_Frontend_Http
             echo "Successfully installed " . count($applications) . " applications.<br/>";   
                  
         } else {
-            echo "Extension Check failed. Nothing installed.<br/>";
+            echo "Extension / Environment Check failed. Nothing installed.<br/>";
         }
     }
 
@@ -122,5 +120,53 @@ class Setup_Frontend_Http
         
         echo "Updated " . count($applications) . " applications.<br>";
         return TRUE;        
+    }
+
+    /**
+     * check environment
+     *
+     * @return boolean if check is successful
+     * 
+     * @todo use this in cli as well (move to controller?)
+     */
+    protected function _check()
+    {
+        $success = TRUE;
+        
+        // check php environment
+        $requiredIniSettings = array(
+            'magic_quotes_sybase'  => 0,
+            'magic_quotes_gpc'     => 0,
+            'magic_quotes_runtime' => 0,
+            'mbstring.func_overload' => 0,
+            'eaccelerator.enable' => 0,
+            'memory_limit' => '129M'
+        );
+        
+        foreach ($requiredIniSettings as $variable => $newValue) {
+            $oldValue = ini_get($variable);
+            if ($variable == 'memory_limit') {
+                $required = intval(substr($newValue,0,strpos($newValue,'M')));
+                $set = intval(substr($oldValue,0,strpos($oldValue,'M')));  
+                if ( $set < $required) {
+                    echo "Sorry, your environment is not supported. You need to set $variable equal or greater than $newValue (now: $oldValue).";
+                    $success = FALSE;
+                }
+                //echo $variable . ": " . $newValue . " " . $oldValue;
+            } elseif ($oldValue != $newValue) {
+                if (ini_set($variable, $newValue) === false) {
+                    echo "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
+                    $success = FALSE;
+                }
+            }
+        }
+        
+        $extCheck = new Setup_ExtCheck('Setup/essentials.xml');
+        $extOutput = $extCheck->getOutput();
+        echo $extOutput;
+        
+        $success = ($success && preg_match("/FAILURE/", $extOutput));
+        
+        return $success;
     }
 }
