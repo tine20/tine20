@@ -7,6 +7,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @deprecated  new setup frontend classes are used
  *
  */
 #define ( 'IMPORT_INITIALDATA', TRUE );
