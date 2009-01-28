@@ -16,7 +16,7 @@
  * @package     Timetracker
  * @subpackage  Filter
  */
-class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGroup
+class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter 
 {
     
     /**
@@ -30,13 +30,49 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('description'))),
-        'timeaccount_id' => array('filter' => 'Timetracker_Model_TimeaccountIdFilter', 'options' => array('useTimesheetAcl' => TRUE)),
-        'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
+        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'timeaccount_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Timetracker_Model_TimeaccountFilter', 'controller' => 'Timetracker_Controller_Timeaccount', 'useTimesheetAcl' => TRUE)),
+        'account_id'     => array('filter' => 'Tinebase_Model_Filter_Int'),
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
         'is_billable'    => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag')
     );
+    
+    /**
+     * is resolved
+     *
+     * @var boolean
+     */
+    protected $_isResolved = FALSE;
+    
+    /**
+     * @var array one of theese grants must be met
+     */
+    protected $_requiredGrants = array(
+        Timetracker_Model_TimeaccountGrants::BOOK_OWN
+    );
+    
+/**
+     * returns acl filter of this group or NULL if not set
+     *
+     * @return Tinebase_Model_Filter_AclFilter
+     */
+    public function getAclFilter()
+    {
+        return $this;
+    }
+    
+    /**
+     * sets the grants this filter needs to assure
+     *
+     * @param array $_grants
+     */
+    public function setRequiredGrants(array $_grants)
+    {
+        $this->_requiredGrants = $_grants;
+        $this->_isResolved = FALSE;
+    }
     
     /**
      * appends sql to given select statement
@@ -45,8 +81,43 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
      */
     public function appendFilterSql($_select)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'appending TimesheetfilterSql');
+        $this->_appendAclSqlFilter($_select);
         
         parent::appendFilterSql($_select);
+    }
+    
+    
+    protected function _appendAclSqlFilter($_select)
+    {
+        if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
+            return;
+        }
+        
+        if (! $this->_isResolved) {
+            // get all timeaccounts user has required grants for
+            $result = array();
+            foreach ($this->_requiredGrants as $grant) {
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
+                if ($grant != Timetracker_Model_TimeaccountGrants::BOOK_OWN) {
+                    $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
+                }
+            }
+            $this->_validTimeaccounts = array_unique($result);
+            $this->_isResolved = TRUE;
+        }
+        
+        $db = Tinebase_Core::getDb();
+        
+        $field = $db->quoteIdentifier('timeaccount_id');
+        $where = $db->quoteInto("$field IN (?)", empty($this->_validTimeaccounts) ? array('') : $this->_validTimeaccounts);
+        
+        // get timeaccounts with BOOK_OWN right (get only if no manual filter is set)
+        $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
+        if (! empty($bookOwnTS)) {
+            $where .= ' OR (' . $db->quoteInto($field . ' IN (?)', $bookOwnTS)
+                . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';
+        }
+                
+        $_select->where($where);
     }
 }

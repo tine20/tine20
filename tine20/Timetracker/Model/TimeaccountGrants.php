@@ -249,10 +249,14 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             
             // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
             
-            $filter = new Timetracker_Model_TimeaccountFilter(array(
-                array('field' => 'showClosed', 'value' => true),
-            ));        
-            $filter->container = $containerIds;
+            $filter = new Tinebase_Model_Filter_Container('container_id', 'in', $containerIds, array(
+                'applicationName' => 'Timetracker',
+                'ignoreAcl' => true
+            ));
+            //$filter = new Timetracker_Model_TimeaccountFilter(array(
+            //    array('field' => 'showClosed', 'value' => true),
+            //));        
+            //$filter->container = $containerIds;
             //$filter->showClosed = TRUE;
                     
             $backend = new Timetracker_Backend_Timeaccount();

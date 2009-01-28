@@ -198,11 +198,11 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
     {
         $timeaccountIdFilter = $_filter->getAclFilter();
         
-        if (! $timeaccountIdFilter) {
+        /*if (! $timeaccountIdFilter) {
             // force a timeaccount id filter (ACL)
             $timeaccountIdFilter = $_filter->createFilter('id', 'all', NULL);
             $_filter->addFilter($timeaccountIdFilter);
-        }
+        }*/
         
         switch ($_action) {
             case 'get':

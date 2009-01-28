@@ -79,11 +79,14 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
     public function getTimesheetsByTimeaccountId($_timeaccountId)
     {
         $filter = new Timetracker_Model_TimesheetFilter(array(
-            array(
+            /*array(
                 'field' => 'timeaccount_id', 
                 'operator' => 'equals', 
                 'value' => $_timeaccountId
-            ),             
+            ),*/
+            array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $_timeaccountId),
+            ))           
         ));
         
         $records = $this->search($filter);
@@ -197,18 +200,20 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
      */
     protected function _checkFilterACL($_filter, $_action = 'get')
     {
-        $timeaccountIdFilter = $_filter->getAclFilter();
+        $aclFilter = $_filter->getAclFilter();
         
-        if (! $timeaccountIdFilter) {
+        /*
+        if (! $aclFilter) {
             // force a timeaccount_id filter (ACL)
-            $timeaccountIdFilter = $_filter->createFilter('timeaccount_id', 'all', NULL);
-            $_filter->addFilter($timeaccountIdFilter);
+            $aclFilter = $_filter->createFilter('timeaccount_id', 'AND', NULL);
+            $_filter->addFilter($aclFilter);
         }
+        */
         
         // do something like that
         switch ($_action) {
             case 'get':
-                $timeaccountIdFilter->setRequiredGrants(array(
+                $aclFilter->setRequiredGrants(array(
                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
@@ -216,7 +221,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Application_Controller_R
                 ));
                 break;
             case 'update':
-                $timeaccountIdFilter->setRequiredGrants(array(
+                $aclFilter->setRequiredGrants(array(
                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
                     Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
