@@ -248,6 +248,11 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                         $value = $timesheet->$key;
                         $style = 'ceAlternateCentered';
                         break;
+                    case 'tags':
+                        $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($timesheet);
+                        $value = implode(', ', $tags->name);
+                        $type = 'string';
+                        break;
                     default:
                         if (isset($params['custom']) && $params['custom']) {
                             // add custom fields
