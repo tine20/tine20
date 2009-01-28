@@ -38,7 +38,6 @@ class Setup_Frontend_Http
     /**
      * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
      *
-     * @param Zend_Console_Getopt $_opts
      * @return boolean success
      */
     public function handle()
@@ -50,17 +49,13 @@ class Setup_Frontend_Http
     /**
      * install new applications
      *
-     * @param Zend_Console_Getopt $_opts
+     * @param boolean $_updated
      */
     protected function _install($_updated = FALSE)
     {
         $controller = new Setup_Controller();
         
-        if (!$_updated) {
-            $check = $this->_check();
-        }
-
-        if ($_updated || $check) {
+        if ($_updated || $this->_check()) {
             $applications = $controller->getInstallableApplications();
             
             foreach($applications as $key => &$application) {
@@ -152,7 +147,6 @@ class Setup_Frontend_Http
                     echo "Sorry, your environment is not supported. You need to set $variable equal or greater than $newValue (now: $oldValue).";
                     $success = FALSE;
                 }
-                //echo $variable . ": " . $newValue . " " . $oldValue;
             } elseif ($oldValue != $newValue) {
                 if (ini_set($variable, $newValue) === false) {
                     echo "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
