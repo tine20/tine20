@@ -62,7 +62,7 @@ class Setup_Frontend_Http
             echo $extOutput;
         }
 
-        if ($_updated && !preg_match("/FAILURE/", $extOutput)) {
+        if ($_updated || !preg_match("/FAILURE/", $extOutput)) {
             $applications = $controller->getInstallableApplications();
             
             foreach($applications as $key => &$application) {
