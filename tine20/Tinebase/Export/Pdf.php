@@ -399,9 +399,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		$xPos = 50;
 		$yPos = 30;
 		
+		$now = Zend_Date::now();
+		$now->setTimezone(Tinebase_Core::get('userTimeZone'));
 		$creationDate = $translate->_('Export Date').": ".
-		  Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
-		  Zend_Date::now()->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+		  $now->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
+		  $now->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
 
 		$creationURL = $translate->_('Created by').": ";
 		$creationURL .= 'http://www.tine20.org';
