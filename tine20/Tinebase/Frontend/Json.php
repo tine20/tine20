@@ -390,7 +390,7 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
                 'changepw'         => (isset(Tinebase_Core::getConfig()->accounts)
                                         && isset(Tinebase_Core::getConfig()->accounts->changepw))
                                             ? Tinebase_Core::getConfig()->accounts->changepw
-                                            : false
+                                            : true
             );
         }
         return $registryData;
