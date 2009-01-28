@@ -112,7 +112,8 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.Record.create(Tine.Timetracke
 });
 Tine.Timetracker.Model.Timeaccount.getDefaultData = function() { 
     return {
-        is_open: 1
+        is_open: 1,
+        is_billable: true
     }
 };
 /**
