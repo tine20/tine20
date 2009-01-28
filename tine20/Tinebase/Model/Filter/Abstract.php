@@ -84,6 +84,16 @@ abstract class Tinebase_Model_Filter_Abstract
     }
     
     /**
+     * retruns fieldname of this filter
+     *
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->_field;
+    }
+    
+    /**
      * sets operator
      *
      * @param string $_operator
