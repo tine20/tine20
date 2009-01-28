@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        use new filter group
+ * @todo        add more filters (created_by, real datetime filter, ...)
  */
 
 /**
@@ -18,43 +18,30 @@
  * @package     Tinebase
  * @subpackage  Notes 
  */
-class Tinebase_Model_NoteFilter extends Tinebase_Record_AbstractFilter
+class Tinebase_Model_NoteFilter extends Tinebase_Model_Filter_FilterGroup
 {    
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var string application of this filter group
      */
-    protected $_application = 'Tinebase';
-
+    protected $_applicationName = 'Tinebase';
+    
     /**
-     * the constructor
-     * it is needed because we have more validation fields in Tasks
-     * 
-     * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
+     * @var array filter model fieldName => definition
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators = array_merge($this->_validators, array(
-            'creation_time'          => array('allowEmpty' => true),
+    protected $_filterModel = array(
+        'creation_time'  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('note'))),
+        //
+        
         // not used yet
-            'record_id'              => array('allowEmpty' => true),
-            'record_model'           => array('allowEmpty' => true),
-            'record_backend'         => array('allowEmpty' => true),        
-            'note_type_id'           => array('allowEmpty' => true),
-        // 'special' defines a filter rule that doesn't fit into the normal operator/opSqlMap model 
-            'created_by'             => array('allowEmpty' => true, 'special' => TRUE),
-        ));
-        
-        // define query fields
-        $this->_queryFields = array(
-            'note',
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }    
+        /*
+            'created_by'     => array('custom' => true),
+            'record_id'              => array(),
+            'record_model'           => array(),
+            'record_backend'         => array(),        
+            'note_type_id'           => array(),
+        */
+    );
     
     /**
      * appends current filters to a given select object
@@ -64,8 +51,10 @@ class Tinebase_Model_NoteFilter extends Tinebase_Record_AbstractFilter
      * 
      * @todo add created_by filter (join with user table for that?)
      */
+    /*
     public function appendFilterSql($_select)
     {
         parent::appendFilterSql($_select);
     }
+    */
 }
