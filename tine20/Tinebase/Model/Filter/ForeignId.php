@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * foreign id filter
+ * 
+ * Expects:
+ * - a filtergroup in options->filtergroup
+ * - a controller  in options->controller
+ * 
+ * Hands over all options to filtergroup
+ * Hands over AclFilter functions to filtergroup
+ *
+ */
+class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
+{
+    /**
+     * @var array list of allowed operators
+     */
+    protected $_operators = array(
+        0 => 'AND',
+        1 => 'OR',
+    );
+    
+    /**
+     * @var Tinebase_Model_Filter_FilterGroup
+     */
+    protected $_filterGroup = NULL;
+    
+    /**
+     * @var Tinebase_Application_Controller_Record_Abstract
+     */
+    protected $_controller = NULL;
+    
+    /**
+     * @var array
+     */
+    protected $_foreignIds = NULL;
+    
+    /**
+     * creates corresponding filtergroup
+     *
+     * @param array $_value
+     */
+    public function setValue($_value) {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true));
+        
+        $this->_filterGroup = new $this->_options['filtergroup']((array)$_value, $this->_operator, $this->_options);
+        $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
+        
+        $this->_foreignIds = NULL;
+    }
+    
+    /**
+     * set options 
+     *
+     * @param array $_options
+     */
+    protected function _setOptions(array $_options)
+    {
+        if (! array_key_exists('controller', $_options) || ! array_key_exists('filtergroup', $_options)) {
+            throw new Tinebase_Exception_InvalidArgument('a controller and a filtergroup must be specified in the options');
+        }
+        $this->_options = $_options;
+    }
+    
+    
+    public function appendFilterSql($_select)
+    {
+        $db = Tinebase_Core::getDb();
+        
+        if (! is_array($this->_foreignIds)) {
+            $this->_foreignIds = $this->_controller->search($this->_filterGroup, new Tinebase_Model_Pagination(), FALSE, TRUE);
+        }
+        
+        $_select->where($db->quoteIdentifier($this->_field) . ' IN (?)', empty($this->_foreignIds) ? array('') : $this->_foreignIds);
+    }
+    
+    public function setRequiredGrants(array $_grants)
+    {
+        $this->_filterGroup->setRequiredGrants($_grants);
+    }
+}
