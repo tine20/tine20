@@ -33,10 +33,10 @@
  *     protected $_className = 'myFilterGroup';
  *     protected $_applicationName = 'myapp';
  *     protected $_filterModel = array (
- *         'name'       => array('filter' => Tinebase_Model_Filter_Text),
- *         'container'  => array('filter' => Tinebase_Model_Filter_Container, 'options' => array('applicationName' => 'myApp')),
- *         'created_by' => array('filter' => Tinebase_Model_Filter_User),
- *         'foreign_id' => array('filtergroup' => Someapp_Model_ForeignFilter),
+ *         'name'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+ *         'container'  => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'myApp')),
+ *         'created_by' => array('filter' => 'Tinebase_Model_Filter_User'),
+ *         'some_id'    => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Someapp_Model_SomeFilter', 'controller' => 'Myapp_Controller_Some')),
  *         'custom'     => array('custom' => true),  // will be ignored and you must handle this filter your own!
  *     );
  * }
@@ -77,6 +77,11 @@ class Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array();
     
+    /**
+     * @var string fieldName of acl filter
+     */
+    protected $_aclFilterField = NULL;
+    
     
     /******************************* properties ********************************/
     
@@ -84,6 +89,11 @@ class Tinebase_Model_Filter_FilterGroup
      * @var array holds filter objects of this filter
      */
     protected $_filterObjects = array();
+    
+    /**
+     * @var array spechial options
+     */
+    protected $_options = NULL;
     
     /**
      * @var Tinebase_Model_Filter_AclFilter
@@ -110,9 +120,10 @@ class Tinebase_Model_Filter_FilterGroup
      * @param  string $_condition {AND|OR}
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct(array $_data, $_condition='AND')
+    public function __construct(array $_data, $_condition='AND', $_options = array())
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == 'OR' ? 'OR' : 'AND';
         
@@ -135,10 +146,6 @@ class Tinebase_Model_Filter_FilterGroup
                     // create a 'single' filter
                     $this->addFilter($this->createFilter($filterData['field'], $filterData['operator'], $filterData['value']));
                 
-                } elseif (array_key_exists('filtergroup', $fieldModel)) {
-                    // create a filtergroup of an other model
-                    $this->addFilterGroup(new $fieldModel['filtergroup']($filterData));
-                
                 } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
                     // silently skip data, as they will be evaluated by the concreate filtergroup
                     $this->_customData[] = $filterData;
@@ -152,6 +159,16 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
+     * set options 
+     *
+     * @param array $_options
+     */
+    protected function _setOptions(array $_options)
+    {
+        $this->_options = $_options;
+    }
+    
+    /**
      * Add a filter to this group
      *
      * @param  Tinebase_Model_Filter_Abstract $_filter
@@ -160,7 +177,7 @@ class Tinebase_Model_Filter_FilterGroup
      */
     public function addFilter($_filter)
     {
-        if ($_filter instanceof Tinebase_Model_Filter_AclFilter) {
+        if ($_filter->getField() == $this->_aclFilterField || $_filter instanceof Tinebase_Model_Filter_AclFilter) {
             if (! $this->_aclFilter) {
                 $this->_aclFilter = $_filter;
             } else {
@@ -269,8 +286,9 @@ class Tinebase_Model_Filter_FilterGroup
     {
         foreach ($this->_filterObjects as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
-                $groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select, $this->_concatenationCondition);
-                $filter->appendFilterSql($groupSelect);
+                //$groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select, $this->_concatenationCondition);
+                //$filter->appendFilterSql($groupSelect);
+                //$groupSelect->assemble();
             } else {
                 $filter->appendFilterSql($_select);
             }
