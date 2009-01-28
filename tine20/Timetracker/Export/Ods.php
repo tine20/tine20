@@ -35,6 +35,11 @@ class Timetracker_Export_Ods extends OpenDocument_Document
             <number:text>.</number:text>
             <number:year number:style="long"/>
         </number:date-style>',
+        '<number:number-style style:name="N2"
+                xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+            <number:number number:decimal-places="2" number:min-integer-digits="1"/>
+        </number:number-style>',    
         '<style:style style:name="ceHeader" style:family="table-cell" 
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
@@ -42,7 +47,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
             <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
             <style:text-properties fo:font-weight="bold"/>
         </style:style>',
-        '<style:style style:name="ceBold" style:family="table-cell" 
+        '<style:style style:name="ceBold" style:family="table-cell" style:data-style-name="N2"
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
             <style:text-properties fo:font-weight="bold"/>
@@ -62,8 +67,19 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
             <style:paragraph-properties fo:text-align="center" fo:margin-left="0cm"/>
+        </style:style>',
+        '<style:style style:name="numberStyle" style:family="table-cell" style:data-style-name="N2"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+            <style:paragraph-properties fo:text-align="right"/>
+        </style:style>',
+        '<style:style style:name="numberStyleAlternate" style:family="table-cell" style:data-style-name="N2"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+            <style:table-cell-properties fo:background-color="#ccccff"/>
+            <style:paragraph-properties fo:text-align="right"/>
         </style:style>'
-    );
+        );
     
     /**
      * translation object
@@ -163,16 +179,21 @@ class Timetracker_Export_Ods extends OpenDocument_Document
             );
             
             $filters = array();
-            foreach ($_filter->toArray() as $key => $value) {
-                switch($key) {
+            //print_r($_filter->toArray());
+            foreach ($_filter->toArray() as $filter) {
+                switch($filter['field']) {
                     case 'timeaccount_id':
-                        $value = $timeaccounts[$timeaccounts->getIndexById($value[0])]->title;
+                        if (!empty($filter['value']) && is_array($filter['value'])) {
+                            $value = $timeaccounts[$timeaccounts->getIndexById($filter['value'][0])]->title;
+                        }
                         break;
                     case 'account_id':
-                        $value = Tinebase_User::getInstance()->getUserById($value)->accountDisplayName;
+                        $value = Tinebase_User::getInstance()->getUserById($filter['value'])->accountDisplayName;
                         break;
+                    default:
+                        $value = $filter['value'];
                 }
-                $filters[] = $key . '=' . $value;
+                $filters[] = $filter['field'] . '=' . $value;
             }
             $replacements = array(
                 Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($locale), $locale),
@@ -232,7 +253,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
 
             foreach ($this->_config['fields'] as $key => $params) {
                 
-                $style = 'ceAlternate';
+                $altStyle = 'ceAlternate';
                 $type = $params['type'];
                 
                 switch($params['type']) {
@@ -246,7 +267,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                         break;
                     case 'date':
                         $value = $timesheet->$key;
-                        $style = 'ceAlternateCentered';
+                        $altStyle = 'ceAlternateCentered';
                         break;
                     case 'tags':
                         $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($timesheet);
@@ -288,9 +309,14 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                 
                 // create cell with type and value and add style
                 $cell = $row->appendCell($type, $value);
-                    
+
+                if (isset($params['number']) && $params['number']) {
+                    $cell->setStyle('numberStyle');
+                    $altStyle = 'numberStyleAlternate';
+                }
+                
                 if ($i % 2 == 1) {
-                     $cell->setStyle($style);
+                    $cell->setStyle($altStyle);
                 }
                 
             }        
@@ -310,9 +336,11 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         // add footer
         $row = $table->appendRow();
         $row = $table->appendRow();
-        $row->appendCell('string');
-        $row->appendCell('string');
-        $row->appendCell('string');
+        $numberOfEmptyCells = ord($this->_config['sumColumn']) - 66;
+        for ($i=0; $i<$numberOfEmptyCells; $i++) {
+            $row->appendCell('string');
+        }
+
         $row->appendCell('string', $this->_translate->_('Total Sum'));
         $cell = $row->appendCell('float', 0);
         // set sum for timesheet duration (for example E2:E10)
@@ -397,7 +425,8 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                     'header'    => $this->_translate->_('Duration'),
                     'type'      => 'float', 
                     'width'     => '2cm',
-                    'divisor'   => 60 
+                    'divisor'   => 60,
+                    'number'    => TRUE,
                 ),
                 'is_billable' => array(
                     'header'    => $this->_translate->_('Billable'),
