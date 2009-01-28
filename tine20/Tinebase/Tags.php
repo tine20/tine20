@@ -55,6 +55,10 @@ class Tinebase_Tags
         return self::$_instance;
     }
     
+    /**
+     * the constructor
+     *
+     */
     private function __construct()
     {
         $this->_db = Tinebase_Core::getDb();
@@ -260,7 +264,7 @@ class Tinebase_Tags
      * @param Tinebase_Record_Abstract  $_record        the record object
      * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
      * @param string                    $_right         the required right current user must have on the tags
-     * return Tinebase_Record_RecordSet tags of record
+     * @return Tinebase_Record_RecordSet tags of record
      */
     public function getTagsOfRecord($_record, $_tagsProperty='tags', $_right=Tinebase_Model_TagRight::VIEW_RIGHT)
     {
