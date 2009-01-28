@@ -119,7 +119,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         
         $filter = new Tinebase_Model_NoteFilter(array(array(
             'field' => 'query',
-            'operator' => '',
+            'operator' => 'contains',
             'value' => 'created by'
         )));
         $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
@@ -138,7 +138,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
     {
         $filter = new Tinebase_Model_NoteFilter(array(array(
             'field' => 'query',
-            'operator' => '',
+            'operator' => 'contains',
             'value' => 'phpunit'
         )));
         
