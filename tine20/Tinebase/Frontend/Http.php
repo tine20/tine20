@@ -157,6 +157,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     	   'Tinebase/css/ux/form/ImageField.css',
     	   'Tinebase/css/ux/form/Spinner.css',
     	   'Tinebase/css/ux/LockCombo.css',
+    	   'Tinebase/css/ux/Menu.css',
     	   'Tinebase/css/widgets/EditRecord.css',
     	   'Tinebase/css/widgets/TagsPanel.css',
     	   'Tinebase/css/widgets/FilterToolbar.css',
