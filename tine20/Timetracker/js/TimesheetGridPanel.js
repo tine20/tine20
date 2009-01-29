@@ -32,6 +32,40 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
         this.initDetailsPanel();
+        this.contextMenuItems = {
+            text: 'change',
+            scope: this,
+            handler: function() {
+                var sm = this.grid.getSelectionModel();
+                sm.selectAll();
+                var filter = sm.getSelectionFilter();
+                console.log(filter);
+            }
+            /*
+            menu: {
+                items: [
+                    {
+                        text: 'is billable',
+                        menu: {
+                            items: [
+                                '<b class="x-ux-menu-title">is billable</b>',
+                                {
+                                    text: 'yes',
+                                    checked: true,
+                                    group: 'is_billable',
+                                    checkHandler: Ext.emptyFn
+                                }, {
+                                    text: 'no',
+                                    checked: false,
+                                    group: 'is_billable',
+                                    checkHandler: Ext.emptyFn
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }*/
+        };
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -299,14 +333,14 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             text: this.app.i18n._('Export as ODS'),
             format: 'ods',
             exportFunction: 'Timetracker.exportTimesheets',
-            filterToolbar: this.filterToolbar
+            gridPanel: this
         });
     	
         this.action_exportCsv = new Tine.widgets.grid.ExportButton({
             text: this.app.i18n._('Export as CSV'),
             format: 'csv',
             exportFunction: 'Timetracker.exportTimesheets',
-            filterToolbar: this.filterToolbar
+            gridPanel: this
         });
         
         /*
