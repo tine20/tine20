@@ -273,7 +273,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 //'</div>', {
                 encode: function(value, type, prefix) {
                     if (value) {
-                        return Ext.util.Format.htmlEncode(value);
+                        var encoded = Ext.util.Format.htmlEncode(value);
+                        encoded = Ext.util.Format.nl2br(encoded);
+                        
+                        return encoded;
                     } else {
                         return '';
                     }

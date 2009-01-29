@@ -655,7 +655,8 @@ Tine.Addressbook.Main = {
                                     value += type;
                 			}                			
                 		}
-                        return Ext.util.Format.htmlEncode(value);
+                		value = Ext.util.Format.htmlEncode(value);
+                        return Ext.util.Format.nl2br(value);
                 	} else {
                 		return '';
                 	}
