@@ -446,15 +446,27 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.onFilterRowsChange();
     },
     
+    /**
+     * @todo generalise TA quick hack ;-)
+     */
     getValue: function() {
         var filters = [];
+        var ta_filters = [];
         this.filterStore.each(function(filter) {
             var line = {};
             for (formfield in filter.formFields) {
                 line[formfield] = filter.formFields[formfield].getValue();
             }
-            filters.push(line);
+            if (line.field.match(/^timeaccount_/)) {
+                line.field = line.field.replace(/^timeaccount_/, '');
+                ta_filters.push(line);
+            } else {
+                filters.push(line);
+            }
         }, this);
+        if (ta_filters.length > 0) {
+            filters.push({field: 'timeaccount_id', operator: 'AND', value: ta_filters});
+        }
         return filters;
     }
     
