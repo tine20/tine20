@@ -126,15 +126,17 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         var operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: [
-                {operator: 'contains', label: _('contains')},
-                {operator: 'equals',   label: _('is equal to')},
-                {operator: 'greater',  label: _('is greater than')},
-                {operator: 'less',     label: _('is less than')},
-                {operator: 'not',      label: _('is not')},
-                {operator: 'in',       label: _('is in')},
-                {operator: 'before',   label: _('is before')},
-                {operator: 'after',    label: _('is after')},
-                {operator: 'within',   label: _('is within')}
+                {operator: 'contains',   label: _('contains')},
+                {operator: 'equals',     label: _('is equal to')},
+                {operator: 'greater',    label: _('is greater than')},
+                {operator: 'less',       label: _('is less than')},
+                {operator: 'not',        label: _('is not')},
+                {operator: 'in',         label: _('is in')},
+                {operator: 'before',     label: _('is before')},
+                {operator: 'after',      label: _('is after')},
+                {operator: 'within',     label: _('is within')},
+                {operator: 'startswith', label: _('starts with')},
+                {operator: 'endswith',   label: _('ends with')}
             ]
         });
 
@@ -142,7 +144,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         if (this.operators.length == 0) {
             switch (this.valueType) {
                 case 'string':
-                    this.operators.push('contains', 'equals', 'not');
+                    this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
                     break;
                 case 'date':
                     this.operators.push('equals', 'before', 'after', 'within');
