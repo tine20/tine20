@@ -95,8 +95,7 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         
         if (this.blurOnSelect){
             this.on('select', function(){
-                //this.fireEvent.defer(1000, this, ['blur', this]);
-                //Ext.getBody().focus();
+                this.fireEvent('blur', this);
             }, this);
         }
     },
@@ -214,7 +213,7 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
                  this.onFiltertrigger();
              }
         }, this);
-        value.on('select', this.onFiltertrigger, this);
+        //value.on('select', this.onFiltertrigger, this);
         
         return value;
     }
