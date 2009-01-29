@@ -70,12 +70,11 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         ));
 
         // add account for group / role member tests
-        try {
-            Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
-        } catch ( Exception $e ) {
-            Tinebase_User::getInstance()->addUser(  $this->objects['user'] );
+        $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
+        if (empty($user->accountId)) {
+            Tinebase_User::getInstance()->addUser($this->objects['user']);
         }
-        
+                
         return;        
     }
 
