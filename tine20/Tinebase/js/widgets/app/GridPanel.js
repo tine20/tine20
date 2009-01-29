@@ -219,7 +219,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             listeners: {
                 scope: this,
                 'update': this.onStoreUpdate,
-                'beforeload': this.onStoreBeforeload
+                'beforeload': this.onStoreBeforeload,
+                'load': this.onStoreLoad
             }
         });
     },
@@ -240,6 +241,12 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         // mark next grid refresh as paging-refresh
         this.pagingToolbar.on('beforechange', function() {
             this.grid.getView().isPagingRefresh = true;
+        }, this);
+        this.pagingToolbar.on('render', function() {
+            //Ext.fly(this.pagingToolbar.el.dom).createChild({cls:'x-tw-selection-info', html: '<b>100 Selected</b>'});
+            //console.log('h9er');
+            //this.pagingToolbar.addFill();
+            //this.pagingToolbar.add('sometext');
         }, this);
         
         // init view
@@ -272,7 +279,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,
-            sm: new Ext.grid.RowSelectionModel({}),
+            sm: new Tine.Tinebase.widgets.grid.FilterSelectionModel({
+                store: this.store
+            }),
             view: view
         }));
         
@@ -332,6 +341,19 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
+    },
+    
+    /**
+     * called after a new set of Records has been loaded
+     * 
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     * @return {Void}
+     */
+    onStoreLoad: function(store, records, options) {
+        // save used filter
+        this.store.lastFilter = options.params.filter;
     },
     
     /**
