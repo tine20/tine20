@@ -120,15 +120,19 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      *
      * @param string $_loginName the loginname of the user
      * @return Tinebase_Model_User the user object
-     *
-     * @throws Tinebase_Exception_Record_NotDefined when row is empty
      */
     public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {
         $loginName = Zend_Ldap::filterEscape($_loginName);
-        $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uid=' . $loginName);
-                
-        return $this->_ldap2User($account, $_accountClass);
+        
+        try {
+            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uid=' . $loginName);
+            $result = $this->_ldap2User($account, $_accountClass);
+        } catch (Tinebase_Exception_NotFound $enf) {
+            $result = $this->getNonExistentUser($_accountClass);
+        }
+        
+        return $result;
     }
     
     /**
@@ -141,9 +145,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
+        try {
+            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
+            $result = $this->_ldap2User($account, $_accountClass);
+        } catch (Tinebase_Exception_NotFound $enf) {
+            $result = $this->getNonExistentUser($_accountClass);
+        }
         
-        return $this->_ldap2User($account, $_accountClass);
+        return $result;
     }
     
     /**
@@ -170,6 +179,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         return $result;
     }
+    
+    /**
+     * get user select
+     *
+     * @return Zend_Db_Select
+     */
     
     protected function _getUserSelectObject()
     {
@@ -330,28 +345,28 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         );
         
         foreach ($_userData as $key => $value) {
-                if (is_int($key)) {
-                    continue;
-                }
-                $keyMapping = array_search($key, $this->_rowNameMapping);
-                if ($keyMapping !== FALSE) {
-                    switch($keyMapping) {
-                        case 'accountLastPasswordChange':
-                        case 'accountExpires':
-                            $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
-                            break;
-                        case 'accountStatus':
-                            break;
-                        default: 
-                            $accountArray[$keyMapping] = $value[0];
-                            break;
-                    }
+            if (is_int($key)) {
+                continue;
+            }
+            $keyMapping = array_search($key, $this->_rowNameMapping);
+            if ($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                    case 'accountLastPasswordChange':
+                    case 'accountExpires':
+                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                        break;
+                    case 'accountStatus':
+                        break;
+                    default: 
+                        $accountArray[$keyMapping] = $value[0];
+                        break;
                 }
             }
-            
-            $accountObject = new $_accountClass($accountArray);
-            
-            return $accountObject;
+        }
+        
+        $accountObject = new $_accountClass($accountArray);
+        
+        return $accountObject;
     }
     
 }

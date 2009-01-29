@@ -143,21 +143,23 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-           // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
-           // because of the wrong type that is not catched by the block below)
+        // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
+        // because of the wrong type that is not catched by the block below)
         if ( $row === false ) {
-             throw new Tinebase_Exception_NotFound('User not found.');
-        }        
-
-        try {
-            $account = new $_accountClass();
-            $account->setFromArray($row);
-        } catch (Exception $e) {
-            $validation_errors = $account->getValidationErrors();
-            Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
-                "Tinebase_Model_User::validation_errors: \n" .
-                print_r($validation_errors,true));
-            throw ($e);
+             //throw new Tinebase_Exception_NotFound('User not found.');
+             $account = $this->getNonExistentUser($_accountClass);
+             
+        } else {
+            try {
+                $account = new $_accountClass();
+                $account->setFromArray($row);
+            } catch (Exception $e) {
+                $validation_errors = $account->getValidationErrors();
+                Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
+                    "Tinebase_Model_User::validation_errors: \n" .
+                    print_r($validation_errors,true));
+                throw ($e);
+            }
         }
         
         return $account;
@@ -181,11 +183,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
-            $account = $this->getNonExistentUser($_accountClass); 
             //throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');
+            $account = $this->getNonExistentUser($_accountClass);
             
         } else {
-
             try {
                 $account = new $_accountClass();
                 $account->setFromArray($row);
@@ -212,6 +213,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $this->getUserById($_accountId, 'Tinebase_Model_FullUser');
     }
     
+    /**
+     * get user select
+     *
+     * @return Zend_Db_Select
+     */
     protected function _getUserSelectObject()
     {
         $select = $this->_db->select()

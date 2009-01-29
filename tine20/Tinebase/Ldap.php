@@ -117,7 +117,7 @@ class Tinebase_Ldap extends Zend_Ldap
         }
         
         if(ldap_count_entries($this->_resource, $searchResult) === 0) {
-            throw new Exception('Nothing found for filter: ' . $_filter);
+            throw new Tinebase_Exception_NotFound('Nothing found for filter: ' . $_filter);
         }
         
         $entries = ldap_get_entries($this->_resource, $searchResult);

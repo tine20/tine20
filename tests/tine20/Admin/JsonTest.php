@@ -158,16 +158,32 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * get account that doesn't exist
+     * get account that doesn't exist (by id)
      *
      */
-    public function testGetNonExistentAccount()
+    public function testGetNonExistentAccountById()
     {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $id = 12334567;
         
         // add account for group / role member tests
-        $user = Tinebase_User::getInstance()->getUserById($id) ;
+        $user = Tinebase_User::getInstance()->getUserById($id);
+        
+        $this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
+        $this->assertEquals(0, $user->accountId);
+    }
+
+    /**
+     * get account that doesn't exist (by login name)
+     *
+     */
+    public function testGetNonExistentAccountByLoginName()
+    {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        $loginName = 'something';
+        
+        // add account for group / role member tests
+        $user = Tinebase_User::getInstance()->getUserByLoginName($loginName);
         
         $this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
         $this->assertEquals(0, $user->accountId);
