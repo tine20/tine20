@@ -166,26 +166,7 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
         this.label = this.app.i18n._("Time Account");
         this.operators = ['equals'];
     },
-    
-    /**
-     * operator renderer
-     * 
-     * @param {Ext.data.Record} filter line
-     * @param {Ext.Element} element to render to 
-     */
-    operatorRenderer: function (filter, el) {
-        var operator = new Ext.form.Label({
-            filter: filter,
-            width: 100,
-            style: {margin: '0px 10px'},
-            getValue: function() { return 'AND' },
-            text : _('is equal to'),
-            //hideLabel: true,
-            //readOnly: true,
-            renderTo: el
-        });
-        return operator;
-    },
+   
     /**
      * value renderer
      * 
@@ -203,10 +184,7 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
             listWidth: 500,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el,
-            getValue: function() {
-                return [{field: 'id', operator: 'equals', value: Tine.Timetracker.TimeAccountSelect.prototype.getValue.call(this)}];
-            }
+            renderTo: el
         });
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
