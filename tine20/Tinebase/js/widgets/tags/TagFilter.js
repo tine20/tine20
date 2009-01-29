@@ -50,7 +50,7 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
                  this.onFiltertrigger();
              }
         }, this);
-        value.on('select', this.onFiltertrigger, this);
+        //value.on('select', this.onFiltertrigger, this);
         
         return value;
     }
