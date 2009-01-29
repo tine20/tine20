@@ -184,7 +184,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $preference = Tinebase_Config::getInstance()->getPreference($userId, 'Timezone');
         $this->assertEquals($timezone, $preference->value, "didn't get right timezone preference");
         
-        // restore old setting
+        // restore old settings
+        Tinebase_Core::set('userTimeZone', $oldPreference->value);
         Tinebase_Config::getInstance()->setPreference($userId, $oldPreference);
     }
     
