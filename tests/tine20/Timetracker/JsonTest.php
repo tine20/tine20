@@ -282,8 +282,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timesheet2 = $this->_getTimesheet($timesheetData1['timeaccount_id']['id']);
         $timesheetData2 = $this->_json->saveTimesheet(Zend_Json::encode($timesheet2->toArray()));
         
+        $this->assertEquals($timesheetData1['is_cleared'], 0);
+        
         // update Timesheets
-        $newValues = array('description' => 'argl');
+        $newValues = array('description' => 'argl', 'is_cleared' => 1);
         $filterData = array(
             array('field' => 'id', 'operator' => 'in', 'value' => array($timesheetData1['id'], $timesheetData2['id']))
         );
@@ -296,41 +298,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($timesheetData1['id'], $changed1['id']);
         $this->assertEquals($changed1['description'], $newValues['description']);
         $this->assertEquals($changed2['description'], $newValues['description']);
+        $this->assertEquals($changed1['is_cleared'], 1);
+        $this->assertEquals($changed2['is_cleared'], 1);
         
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData1['timeaccount_id']['id']);
-    }
-
-    /**
-     * try to update multiple Timesheets (with filter)
-     *
-     * @todo implement (build filter group)
-     */
-    public function testUpdateMultipleTimesheetsWithFilter()
-    {
-        /*
-        // create 2 timesheets
-        $timesheet1 = $this->_getTimesheet();
-        $timesheetData1 = $this->_json->saveTimesheet(Zend_Json::encode($timesheet1->toArray()));
-        $timesheet2 = $this->_getTimesheet($timesheetData1['timeaccount_id']['id']);
-        $timesheetData2 = $this->_json->saveTimesheet(Zend_Json::encode($timesheet2->toArray()));
-        
-        // update Timesheets
-        $newValues = array('description' => 'argl');
-        $ids = array($timesheetData1['id'], $timesheetData2['id']);
-        $this->_json->updateMultipleTimesheets(Zend_Json::encode($ids), Zend_Json::encode($newValues));
-        
-        $changed1 = $this->_json->getTimesheet($timesheetData1['id']);
-        $changed2 = $this->_json->getTimesheet($timesheetData2['id']);
-                
-        // check
-        $this->assertEquals($timesheetData1['id'], $changed1['id']);
-        $this->assertEquals($changed1['description'], $newValues['description']);
-        $this->assertEquals($changed2['description'], $newValues['description']);
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData1['timeaccount_id']['id']);
-        */
     }
     
     /**
