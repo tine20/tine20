@@ -297,13 +297,11 @@ Tine.Addressbook.Main = {
         this.initStore();
         this.initContactsGrid();
 
-        // we have to init this button after the contacts grid because we need the filter toolbar here
         this.action_exportCsv = new Tine.widgets.grid.ExportButton({
             text: this.translation._('Csv Export All'),
             format: 'csv',
             exportFunction: 'Addressbook.exportContacts',
-            filterToolbar: this.filterToolbar,
-            appTreeId: 'Addressbook_Tree'
+            sm: Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel()
         });
 
         this.initToolbar();
@@ -490,7 +488,9 @@ Tine.Addressbook.Main = {
 		);
 		
         // the rowselection model
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        var rowSelectionModel = new Tine.Tinebase.widgets.grid.FilterSelectionModel({
+            store: this.store
+        });
 
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             // update toolbars
@@ -864,6 +864,11 @@ Tine.Addressbook.Main = {
             
             options.params.filter = Ext.util.JSON.encode(filter);
         }, this);
+        
+        // save used filter
+        this.store.on('load', function(store, records, options) {
+            this.store.lastFilter = Ext.util.JSON.decode(options.params.filter);
+        }, this)
     },
     
     show: function(_node) {
