@@ -93,6 +93,10 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     /**
      * test pdf locale settings (translation & date formatting)
      *
+     * remark: be careful with this test, when another user timezone (something like America/Vancouver) is set, 
+     *  the birthday could be one day earlier and the test fails
+     * 
+     * @todo fix the timezone problem
      */
     public function testContactPdfLocale()
     {
