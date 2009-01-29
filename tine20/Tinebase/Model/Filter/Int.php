@@ -38,8 +38,8 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
      */
     protected $_opSqlMap = array(
         'equals'     => array('sqlop' => ' = ?'   ,     'wildcards' => '?'  ),
-        'startswith' => array('sqlop' => ' LIKE ?',     'wildcards' => '%?' ),
-        'endswith'   => array('sqlop' => ' LIKE ?',     'wildcards' => '?%' ),
+        'startswith' => array('sqlop' => ' LIKE ?',     'wildcards' => '?%' ),
+        'endswith'   => array('sqlop' => ' LIKE ?',     'wildcards' => '%?' ),
         'greater'    => array('sqlop' =>  ' > ?',       'wildcards' => '?'  ),
         'less'       => array('sqlop' =>  ' < ?',       'wildcards' => '?'  ),
         'not'        => array('sqlop' => ' NOT LIKE ?', 'wildcards' => '?'  ),
