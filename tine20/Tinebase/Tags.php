@@ -171,7 +171,7 @@ class Tinebase_Tags
             case Tinebase_Model_Tag::TYPE_SHARED:
                 // @todo move to controller later?
                 if ( !Tinebase_Acl_Roles::getInstance()
-                        ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS) ) {
+                        ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS) ) {
                     throw new Tinebase_Exception_AccessDenied('Your are not allowed to create this tag');
                 }
                 $_tag->owner = 0;
@@ -199,7 +199,7 @@ class Tinebase_Tags
     {
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
-            ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
+            ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         
         if ( ($_tag->type == Tinebase_Model_Tag::TYPE_PERSONAL && $_tag->owner == $currentAccountId) ||
              ($_tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
@@ -236,7 +236,7 @@ class Tinebase_Tags
     {
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
-            ->hasRight('Tinebase', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
+            ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         $tags = $this->getTagsById($_ids);
         if (count($tags) != count((array)$_ids)) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this tags');
