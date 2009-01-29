@@ -40,6 +40,11 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
     store: null,
     
     /**
+     * @property {String} xtype
+     */
+    xtype: 'filterplugin',
+    
+    /**
      * main method which must return the filter object of this filter
      * 
      * @return {Object}
