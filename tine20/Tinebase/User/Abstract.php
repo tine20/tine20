@@ -22,18 +22,6 @@
 abstract class Tinebase_User_Abstract
 {
     /**
-     * get list of users with NO internal informations
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
-     */
-    abstract public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL);
-    
-    /**
      * get list of users
      *
      * @param string $_filter
@@ -49,14 +37,6 @@ abstract class Tinebase_User_Abstract
     }
     
     /**
-     * get user by login name
-     *
-     * @param   string      $_loginName
-     * @return  Tinebase_Model_User full user
-     */
-    abstract public function getUserByLoginName($_loginName);
-
-    /**
      * get full user by login name
      *
      * @param   string      $_loginName
@@ -68,14 +48,6 @@ abstract class Tinebase_User_Abstract
     }
     
     /**
-     * get user by id
-     *
-     * @param   int         $_accountId
-     * @return  Tinebase_Model_User user
-     */
-    abstract public function getUserById($_accountId);
-
-    /**
      * get full user by id
      *
      * @param   int         $_accountId
@@ -86,6 +58,59 @@ abstract class Tinebase_User_Abstract
         return $this->getUserById($_accountId, 'Tinebase_Model_FullUser');
     }
     
+    /**
+     * get dummy user record
+     *
+     * @param string $_accountClass Tinebase_Model_User|Tinebase_Model_FullUser
+     * @return Tinebase_Model_User|Tinebase_Model_FullUser
+     */
+    public function getNonExistentUser($_accountClass = 'Tinebase_Model_User') 
+    {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        
+        $data = array(
+            'accountId'             => 0,
+            'accountLoginName'      => $translate->_('unknown'),
+            'accountDisplayName'    => $translate->_('unknown'),
+            'accountLastName'       => $translate->_('unknown'),
+            'accountFirstName'      => $translate->_('unknown'),
+            'accountFullName'       => $translate->_('unknown'),        
+        );
+        $result = new $_accountClass($data);
+        
+        return $result;
+    }
+    
+    /******************* abstract functions *********************/
+    
+    /**
+     * get list of users with NO internal informations
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
+     */
+    abstract public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL);
+    
+    /**
+     * get user by login name
+     *
+     * @param   string      $_loginName
+     * @return  Tinebase_Model_User full user
+     */
+    abstract public function getUserByLoginName($_loginName);
+
+    /**
+     * get user by id
+     *
+     * @param   int         $_accountId
+     * @return  Tinebase_Model_User user
+     */
+    abstract public function getUserById($_accountId);
+
     /**
      * update user status
      *

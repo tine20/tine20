@@ -181,18 +181,21 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
-            throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');
-        }
+            $account = $this->getNonExistentUser($_accountClass); 
+            //throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');
+            
+        } else {
 
-        try {
-            $account = new $_accountClass();
-            $account->setFromArray($row);
-        } catch (Tinebase_Exception_Record_Validation $e) {
-            $validation_errors = $account->getValidationErrors();
-            Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
-                "Tinebase_Model_User::validation_errors: \n" .
-                print_r($validation_errors,true));
-            throw ($e);
+            try {
+                $account = new $_accountClass();
+                $account->setFromArray($row);
+            } catch (Tinebase_Exception_Record_Validation $e) {
+                $validation_errors = $account->getValidationErrors();
+                Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
+                    "Tinebase_Model_User::validation_errors: \n" .
+                    print_r($validation_errors,true));
+                throw ($e);
+            }
         }
         
         return $account;
