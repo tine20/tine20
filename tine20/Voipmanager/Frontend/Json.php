@@ -31,7 +31,28 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
  * SNOM PHONE / PHONESETTINGS FUNCTIONS
  *
  * 
+ * 
  */
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param string $filter json encoded
+     * @param string $paging json encoded
+     * @return array
+     */
+    public function searchSnomPhones($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Voipmanager_Controller_Snom_Phone::getInstance(), 'Voipmanager_Model_Snom_PhoneFilter');
+        
+        foreach ($result['results'] as &$phone) {
+            #print $phone['location_id'];
+            $phone['location'] = $phone['location_id'];
+            $phone['template'] = $phone['template_id'];
+        }
+        
+        return $result;
+    }
     
     /**
      * get snom phones
@@ -40,6 +61,9 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * @param string $dir
      * @param string $query
      * @return array
+     * 
+     * @todo replace this with searchSnomPhones (and adjust test)
+     * @todo add templates & locations to $result['results'] in new function
      */
     public function getSnomPhones($sort, $dir, $query)
     {     
@@ -60,7 +84,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $rows = Voipmanager_Controller_Snom_Phone::getInstance()->search($filter, $pagination);
         
         $_rows = $rows->toArray();
-
+        
         $i = 0; 
               
         foreach($_rows AS $_row) {
@@ -96,7 +120,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $record->toArray();      
         return $result;        
     }    
-        
+    
     /**
      * save one phone
      * -  if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
@@ -117,9 +141,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             unset($phoneData['id']);
         }
         
-        // Zend_Registry::get('logger')->debug(print_r($phoneData,true));
-        // Zend_Registry::get('logger')->debug(print_r($rightsData,true));
-        
         $phone = new Voipmanager_Model_Snom_Phone();
         $phone->setFromArray($phoneData);
         
@@ -128,11 +149,14 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         
         $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line', $lineData, true);
         $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', $rightsData);
+        $phone->settings = $phoneSettings;
         
         if (empty($phone->id)) {
-            $phone = Voipmanager_Controller_Snom_Phone::getInstance()->create($phone, $phoneSettings);
+            # $phone = Voipmanager_Controller_Snom_Phone::getInstance()->create($phone, $phoneSettings);
+            $phone = Voipmanager_Controller_Snom_Phone::getInstance()->create($phone);
         } else {
-            $phone = Voipmanager_Controller_Snom_Phone::getInstance()->update($phone, $phoneSettings);
+            # $phone = Voipmanager_Controller_Snom_Phone::getInstance()->update($phone, $phoneSettings);
+            $phone = Voipmanager_Controller_Snom_Phone::getInstance()->update($phone);
         }
         $phone = $this->getSnomPhone($phone->getId());
 
@@ -146,7 +170,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
             $_ownerData[] = $_owner;
         }
         */
-        
         return $phone;         
     }     
     
@@ -247,27 +270,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     }
     
     /**
-     * get snom location
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     */
-    /*
-    public function getSnomLocations($sort, $dir, $query)
-    {     
-        $controller = Voipmanager_Controller_Snom_Location::getInstance();
-        $filter = new Voipmanager_Model_Snom_LocationFilter(array(
-            'query'     => $query
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;            
-    }
-    */
-    
-    /**
      * get one location identified by locationId
      *
      * @param int $locationId
@@ -324,27 +326,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $this->_search($filter, $paging, Voipmanager_Controller_Snom_Software::getInstance(), 'Voipmanager_Model_Snom_SoftwareFilter');
         return $result;
     }
-    
-    /**
-     * get snom software
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     */
-    /*
-    public function searchSnomSoftware($sort, $dir, $query)
-    {     
-        $controller = Voipmanager_Controller_Snom_Software::getInstance();
-        $filter = new Voipmanager_Model_Snom_SoftwareFilter(array(
-            'query'     => $query
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;            
-    }        
-    */
     
    /**
      * get one software identified by softwareId
@@ -404,27 +385,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         return $result;
     }
     
-    /**
-     * get snom templates
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     */
-    /*
-    public function getSnomTemplates($sort, $dir, $query)
-    {     
-        $controller = Voipmanager_Controller_Snom_Template::getInstance();
-        $filter = new Voipmanager_Model_Snom_TemplateFilter(array(
-            'query'     => $query
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;            
-    }
-    */
-    
    /**
      * get one template identified by templateId
      *
@@ -478,27 +438,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $this->_search($filter, $paging, Voipmanager_Controller_Snom_Setting::getInstance(), 'Voipmanager_Model_Snom_SettingFilter');
         return $result;
     }
-    
-    /**
-     * get snom settings
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     */
-    /*
-    public function getSnomSettings($sort, $dir, $query)
-    {     
-        $controller = Voipmanager_Controller_Snom_Setting::getInstance();
-        $filter = new Voipmanager_Model_Snom_SettingFilter(array(
-            'query'     => $query
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;            
-    }
-    */
     
    /**
      * get one setting identified by settingId
@@ -557,28 +496,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         return $result;
     }
     
-    /**
-     * get asterisk contexts
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     */
-    /*
-    public function getAsteriskContexts($sort = NULL, $dir = NULL, $query = NULL)
-    {     
-        $controller = Voipmanager_Controller_Asterisk_Context::getInstance();
-        $filter = new Voipmanager_Model_Asterisk_ContextFilter(array(
-            'query'     => $query
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;            
-    }
-    */
-    
-    
    /**
      * get one context identified by contextId
      *
@@ -636,27 +553,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         return $result;
     }
     
-    /**
-     * get asterisk meetmes
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     */
-    /*
-    public function getAsteriskMeetmes($sort, $dir, $query)
-    {     
-        $controller = Voipmanager_Controller_Asterisk_Meetme::getInstance();
-        $filter = new Voipmanager_Model_Asterisk_MeetmeFilter(array(
-            'query'     => $query
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;    
-    }
-    */
-    
    /**
      * get one meetme identified by meetmeId
      *
@@ -711,29 +607,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_SipPeer::getInstance(), 'Voipmanager_Model_Asterisk_SipPeerFilter');
         return $result;
     }
-    
-    /**
-     * get asterisk sip peers
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @param string $context
-     * @return array
-     */
-    /*
-    public function getAsteriskSipPeers($sort, $dir, $query, $context)
-    {       
-        $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
-        $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
-            'query'     => $query,
-            'context'   => $context
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;                    
-    }
-    */
     
    /**
      * get one asterisk sip peer identified by sipPeerId
@@ -791,29 +664,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         return $result;
     }
     
-    /**
-     * get asterisk voicemails
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @param string $context
-     * @return array
-     */
-    /*
-    public function getAsteriskVoicemails($sort, $dir, $query, $context)
-    {     
-        $controller = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
-        $filter = new Voipmanager_Model_Asterisk_VoicemailFilter(array(
-            'query'     => $query,
-            'context'   => $context
-        ));
-                
-        $result = $this->_search($controller, $sort, $dir, $filter);
-        return $result;
-    }
-*/
-    
    /**
      * get one voicemail identified by voicemailId
      *
@@ -848,41 +698,5 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     public function deleteAsteriskVoicemails($_voicemailIds)
     {
         return $this->_delete($_voicemailIds, Voipmanager_Controller_Asterisk_Voicemail::getInstance());
-    }     
-    
-    /********************* generic get/search/save/delete functions ************************************/
-    
-    
-    /**
-     * generic search function
-     *
-     * @param $_controller
-     * @param string $_sort
-     * @param string $_dir
-     * @param Tinebase_Record_Interface $_filter
-     * @return array
-     * 
-     * @deprecated remove that when frontend gets refactored
-     */
-    /*
-    protected function _search($_controller, $_sort, $_dir, $_filter)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $_sort,
-            'dir'   => $_dir
-        ));
-        
-        if($rows = $_controller->search($_filter, $pagination)) {
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-        
-        return $result;    
     }
-    */
 }
