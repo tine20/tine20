@@ -28,6 +28,10 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
      */
     showClosed: false,
     /**
+     * @cfg {bool} blurOnSelect blurs combobox when item gets selected
+     */
+    blurOnSelect: false,
+    /**
      * @cfg {Object} defaultPaging 
      */
     defaultPaging: {
@@ -88,6 +92,13 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         );
         
         Tine.Timetracker.TimeAccountSelect.superclass.initComponent.call(this);
+        
+        if (this.blurOnSelect){
+            this.on('select', function(){
+                //this.fireEvent.defer(1000, this, ['blur', this]);
+                //Ext.getBody().focus();
+            }, this);
+        }
     },
     
     getValue: function() {
@@ -158,6 +169,25 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
     },
     
     /**
+     * operator renderer
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     */
+    operatorRenderer: function (filter, el) {
+        var operator = new Ext.form.Label({
+            filter: filter,
+            width: 100,
+            style: {margin: '0px 10px'},
+            getValue: function() { return 'AND' },
+            text : _('is equal to'),
+            //hideLabel: true,
+            //readOnly: true,
+            renderTo: el
+        });
+        return operator;
+    },
+    /**
      * value renderer
      * 
      * @param {Ext.data.Record} filter line
@@ -169,11 +199,15 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
             filter: filter,
             onlyBookable: false,
             showClosed: true,
+            blurOnSelect: true,
             width: 200,
             listWidth: 500,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el
+            renderTo: el,
+            getValue: function() {
+                return [{field: 'id', operator: 'equals', value: Tine.Timetracker.TimeAccountSelect.prototype.getValue.call(this)}];
+            }
         });
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
