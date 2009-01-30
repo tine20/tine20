@@ -72,15 +72,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
     /**
      * @private
      */
-    onClick : function(which){
-        // clear selections when page changes
-        Ext.ux.grid.PagingToolbar.superclass.onClick.call(this, which);
-        this.sm.clearSelections();
-    },
-    
-    /**
-     * @private
-     */
     renderSelHelper: function() {
         this.deselectBtn = new Ext.Action({
             iconCls: 'x-ux-pagingtb-deselect',
@@ -88,17 +79,17 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
             scope: this,
             handler: function() {this.sm.clearSelections();}
         });
-        this.selectVisibleBtn = new Ext.Action({
-            iconCls: 'x-ux-pagingtb-selectvisible',
-            text: this.getSelHelperText('selectvisible'),
-            scope: this,
-            handler: function() {this.sm.selectAll(true);}
-        });
         this.selectAllPages = new Ext.Action({
             iconCls: 'x-ux-pagingtb-selectall',
             text: this.getSelHelperText('selectall'),
             scope: this,
             handler: function() {this.sm.selectAll();}
+        });
+        this.selectVisibleBtn = new Ext.Action({
+            iconCls: 'x-ux-pagingtb-selectvisible',
+            text: this.getSelHelperText('selectvisible'),
+            scope: this,
+            handler: function() {this.sm.selectAll(true);}
         });
         this.toggleSelectionBtn = new Ext.Action({
             iconCls: 'x-ux-pagingtb-toggle',
@@ -116,8 +107,8 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
             menu: new Ext.menu.Menu({
                 items: [
                     this.deselectBtn,
-                    this.selectVisibleBtn,
                     this.selectAllPages,
+                    this.selectVisibleBtn, // usefull?
                     this.toggleSelectionBtn
                 ]
             })
