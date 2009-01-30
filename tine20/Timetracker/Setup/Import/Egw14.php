@@ -59,7 +59,14 @@ class Timetracker_Setup_Import_Egw14
      *
      * @var boolean
      */
-    protected $_utf8Encode = FALSE;
+    protected $_utf8Encode = TRUE;
+    
+    /**
+     * import categories
+     *
+     * @var boolean
+     */
+    protected $_importCategories = FALSE;
     
     /**
      * egw timesheet categories
@@ -97,15 +104,13 @@ class Timetracker_Setup_Import_Egw14
      * @var array
      */
     protected $_projectFilter = array(
-				      /*
         array(
             'name' => 'pm_number',
             //'operator' => 'not',
             'operator' => 'contains',
             'value' => '^SOW',
         ),
-				      */
-        
+        /*
         array(
             'name' => 'pm_number',
             //'operator' => 'not',
@@ -114,7 +119,7 @@ class Timetracker_Setup_Import_Egw14
             //'value' => '^S-AB-42964$'
             'value' => 'S-AB-42964'
         )
-        
+        */
     );
     
     /**
@@ -146,7 +151,9 @@ class Timetracker_Setup_Import_Egw14
     public function import()
     {
         // get timesheet categories
-        $this->_tsCategories = $this->_getTimesheetCategories();
+        if ($this->_importCategories) {
+            $this->_tsCategories = $this->_getTimesheetCategories();
+        }
         
         echo "Importing custom fields for timesheets data from egroupware ...";
         $this->importTimesheetCustomFields();
