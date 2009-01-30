@@ -7,8 +7,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        still too much code duplication (in get/search/save/delete functions), remove that
- *              -> extend Tinebase_Application_Frontend_Json_Abstract and use __call interceptor
  */
 
 /**
@@ -129,6 +127,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * @param array $_phoneIDs list of phoneId's to delete
      * @return array
+     * 
+     * @todo use generic _delete() function
      */
     public function deleteSnomPhones($_phoneIds)
     {
@@ -442,9 +442,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function searchAsteriskContexts($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_Context::getInstance(), 'Voipmanager_Model_Asterisk_ContextFilter');
-        
-        return $result;
+        return $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_Context::getInstance(), 'Voipmanager_Model_Asterisk_ContextFilter');
     }
     
    /**
@@ -499,9 +497,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function searchAsteriskMeetmes($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_Meetme::getInstance(), 'Voipmanager_Model_Asterisk_MeetmeFilter');
-        
-        return $result;
+        return $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_Meetme::getInstance(), 'Voipmanager_Model_Asterisk_MeetmeFilter');
     }
     
    /**
@@ -555,8 +551,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function searchAsteriskSipPeers($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_SipPeer::getInstance(), 'Voipmanager_Model_Asterisk_SipPeerFilter');
-        return $result;
+        return $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_SipPeer::getInstance(), 'Voipmanager_Model_Asterisk_SipPeerFilter');
     }
     
    /**
@@ -611,8 +606,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     public function searchAsteriskVoicemails($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_Voicemail::getInstance(), 'Voipmanager_Model_Asterisk_VoicemailFilter');
-        return $result;
+        return $this->_search($filter, $paging, Voipmanager_Controller_Asterisk_Voicemail::getInstance(), 'Voipmanager_Model_Asterisk_VoicemailFilter');
     }
     
    /**
