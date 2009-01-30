@@ -104,10 +104,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $phone->settings = $phoneSettings;
         
         if (empty($phone->id)) {
-            # $phone = Voipmanager_Controller_Snom_Phone::getInstance()->create($phone, $phoneSettings);
             $phone = Voipmanager_Controller_Snom_Phone::getInstance()->create($phone);
         } else {
-            # $phone = Voipmanager_Controller_Snom_Phone::getInstance()->update($phone, $phoneSettings);
             $phone = Voipmanager_Controller_Snom_Phone::getInstance()->update($phone);
         }
         $phone = $this->getSnomPhone($phone->getId());

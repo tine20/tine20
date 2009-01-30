@@ -703,7 +703,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_json->resetHttpClientInfo(Zend_Json::encode(array($returned['id'])));
         
-        // delete everything
         $location_id = $testPhone['location_id'];
         $template_id = $testPhone['template_id'];
         
@@ -712,6 +711,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $settings_id = $phoneTemplate['setting_id'];  
         $software_id = $phoneTemplate['software_id'];
         
+        // delete everything
         $this->_json->deleteSnomPhones(Zend_Json::encode(array($returned['id'])));
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($template_id)));
         $this->_json->deleteSnomLocations(Zend_Json::encode(array($location_id)));
@@ -756,7 +756,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $test = $this->_getSnomPhoneSettings();
         
         $returned = $this->_json->getSnomPhoneSettings($test['phone_id']);
-        #$returned = $this->_json->getSnomPhoneSettings($test->toArray());
         
         $returned['web_language'] = 'Deutsch';
         
