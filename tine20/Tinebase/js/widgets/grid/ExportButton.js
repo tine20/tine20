@@ -23,7 +23,7 @@ Tine.widgets.grid.ExportButton = function(config) {
     Tine.widgets.grid.ExportButton.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {	
+Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {	
     /**
      * @cfg {String} icon class
      */
@@ -54,9 +54,6 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
         if (!this.sm) {
             this.sm = this.gridPanel.grid.getSelectionModel();
         }
-        
-        // temporary select all
-        this.sm.selectAll();
         
     	var filterSettings = this.sm.getSelectionFilter();
 
@@ -104,3 +101,4 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Button, {
         this.doExport();
     }
 });
+
