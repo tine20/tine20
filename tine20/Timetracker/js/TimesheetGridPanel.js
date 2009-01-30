@@ -37,7 +37,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             scope: this,
             handler: function() {
                 var sm = this.grid.getSelectionModel();
-                sm.selectAll();
                 var filter = sm.getSelectionFilter();
                 console.log(filter);
             }
@@ -327,44 +326,32 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
      * @todo add duplicate button
      * @todo move export buttons to single menu/split button
      */
-    getToolbarItems: function(){
-
-        this.action_exportOds = new Tine.widgets.grid.ExportButton({
-            text: this.app.i18n._('Export as ODS'),
-            format: 'ods',
-            exportFunction: 'Timetracker.exportTimesheets',
-            gridPanel: this
+    getToolbarItems: function() {
+        this.exportButton = new Ext.SplitButton({
+            text: _('Export'),
+            iconCls: 'action_export',
+            scope: this,
+            handler: function() {this.exportButton.showMenu();},
+            requiredGrant: 'readGrant',
+            disabled: true,
+            allowMultiple: true,
+            menu: {
+                items: [
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ODS'),
+                        format: 'ods',
+                        exportFunction: 'Timetracker.exportTimesheets',
+                        gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as CSV'),
+                        format: 'csv',
+                        exportFunction: 'Timetracker.exportTimesheets',
+                        gridPanel: this
+                    })
+                ]
+            }
         });
-    	
-        this.action_exportCsv = new Tine.widgets.grid.ExportButton({
-            text: this.app.i18n._('Export as CSV'),
-            format: 'csv',
-            exportFunction: 'Timetracker.exportTimesheets',
-            gridPanel: this
-        });
-        
-        /*
-        // isn't working yet
-        var exportMenuButton = new Ext.menu.Menu({
-            text: this.app.i18n._('Export All'),
-            menu: [
-                this.action_exportCsv,
-                this.action_exportOds
-            ]
-        })
-        */
-        
-        return [
-            new Ext.Toolbar.Separator(),
-            //exportMenuButton
-            this.action_exportCsv,
-            this.action_exportOds
-            /*
-            ,[{
-                text: this.app.i18n._('Duplicate'),
-                iconCls: 'action_duplicate'
-            }]
-            */
-        ];
+        return ['-', this.exportButton];
     } 
 });
