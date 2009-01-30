@@ -344,7 +344,7 @@ Tine.Addressbook.Main = {
                 this.actions.editContact,
                 this.actions.deleteContact,
                 '-',
-                this.action_exportCsv,
+                //this.action_exportCsv,
                 this.actions.exportContact,
                 (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : ''
             ]
