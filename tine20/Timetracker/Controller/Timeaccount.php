@@ -194,7 +194,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller
      * @param Timetracker_Model_TimeaccountFilter $_filter
      * @param string $_action
      */
-    protected function _checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup*/ $_filter, $_action = 'get')
     {
         $timeaccountIdFilter = $_filter->getAclFilter();
         
