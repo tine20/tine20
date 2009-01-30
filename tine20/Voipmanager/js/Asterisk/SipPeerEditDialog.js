@@ -23,7 +23,11 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     windowNamePrefix: 'AsteriskSipPeerEditWindow_',
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer,
-    recordProxy: Tine.Voipmanager.AsteriskSipPeerBackend,
+    recordProxy: new Tine.Tinebase.widgets.app.JsonBackend({
+	    appName: 'Voipmanager',
+	    modelName: 'AsteriskSipPeer',
+	    recordClass: Tine.Voipmanager.Model.AsteriskSipPeer
+	}),
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     

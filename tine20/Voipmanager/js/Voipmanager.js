@@ -35,9 +35,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: true,
-		            expanded: true,
-		            dataPanelType: "sipPeer",
-		            viewRight: 'sipPeer'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Dialplan'),
 		            cls: "treemain",
@@ -48,9 +46,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            children: [],
 		            leaf: true,
 		            disabled: true,
-		            expanded: true,
-		            dataPanelType: "dialplan",
-		            viewRight: 'dialplan'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Context'),
 		            cls: "treemain",
@@ -60,9 +56,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: true,
-		            expanded: true,
-		            dataPanelType: "context",
-		            viewRight: 'context'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Voicemail'),
 		            cls: "treemain",
@@ -72,9 +66,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: true,
-		            expanded: true,
-		            dataPanelType: "voicemail",
-		            viewRight: 'voicemail'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Meetme'),
 		            cls: "treemain",
@@ -84,9 +76,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: true,
-		            expanded: true,
-		            dataPanelType: "meetme",
-		            viewRight: 'meetme'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Queues'),
 		            cls: "treemain",
@@ -97,9 +87,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            disabled: true,
 		            children: [],
 		            leaf: true,
-		            expanded: true,
-		            dataPanelType: "queues",
-		            viewRight: 'queues'
+		            expanded: true
 		        }],
 		        leaf: null,
 		        expanded: true,
@@ -121,9 +109,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: true,
-		            expanded: true,
-		            dataPanelType: 'phone',
-		            viewRight: 'phone'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Location'),
 		            cls: "treemain",
@@ -133,9 +119,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: true,
-		            expanded: true,
-		            dataPanelType: "location",
-		            viewRight: 'location'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Templates'),
 		            cls: "treemain",
@@ -145,9 +129,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: null,
-		            expanded: true,
-		            dataPanelType: "template",
-		            viewRight: 'template'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Keylayout'),
 		            cls: "treemain",
@@ -158,9 +140,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            children: [],
 		            leaf: null,
 		            expanded: true,
-		            disabled: true,
-		            dataPanelType: "keylayout",
-		            viewRight: 'keylayout'
+		            disabled: true
 		        }, {
 		            text: this.app.i18n._('Setting'),
 		            cls: "treemain",
@@ -170,9 +150,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: null,
-		            expanded: true,
-		            dataPanelType: "setting",
-		            viewRight: 'setting'
+		            expanded: true
 		        }, {
 		            text: this.app.i18n._('Software'),
 		            cls: "treemain",
@@ -182,9 +160,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		            icon: false,
 		            children: [],
 		            leaf: null,
-		            expanded: true,
-		            dataPanelType: "software",
-		            viewRight: 'software'
+		            expanded: true
 		        }],
 		        leaf: null,
 		        expanded: true,
@@ -262,7 +238,7 @@ Tine.Voipmanager.AsteriskSipPeerBackend = new Tine.Tinebase.widgets.app.JsonBack
     appName: 'Voipmanager',
     modelName: 'AsteriskSipPeer',
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer
-});
+}); 
 
 /**
  * default Asterisk.Voicemail backend

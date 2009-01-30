@@ -56,11 +56,11 @@ console.log(group +  '/' + type);
     setToolbar: function() { 
         var type = this.activeContentType;
         var group = this.activeContentGroup;
-              /*
+              
         if (! this[group + type + 'ActionToolbar']) {
             this[group + type + 'ActionToolbar'] = this[group + type + 'GridPanel'].actionToolbar;
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[group + type + 'ActionToolbar'], true); */
+        Tine.Tinebase.MainScreen.setActiveToolbar(this[group + type + 'ActionToolbar'], true); 
     }
 });

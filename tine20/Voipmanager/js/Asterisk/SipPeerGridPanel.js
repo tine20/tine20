@@ -30,7 +30,7 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
         this.recordProxy = Tine.Voipmanager.AsteriskSipPeerBackend;
                 
         this.gridConfig.columns = this.getColumns();
-        //this.initFilterToolbar();
+        this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
       //  this.initDetailsPanel();
         
@@ -48,6 +48,7 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
         
     },    
     
+      
     /**
      * returns cm
      * @private
