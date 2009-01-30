@@ -32,6 +32,8 @@ class OpenDocument_Document
     
     protected $_cellStyles = array();
     
+    protected $_fileName;
+    
     protected $_document;
     
     /**
@@ -144,6 +146,14 @@ class OpenDocument_Document
     
     public function __construct($_type, $_fileName = null)
     {
+        if($_fileName !== null) {
+            $this->_content     = file_get_contents('zip://' . $_fileName . '#content.xml');
+            $this->_manifest    = file_get_contents('zip://' . $_fileName . '#META-INF/manifest.xml');
+            $this->_meta        = file_get_contents('zip://' . $_fileName . '#meta.xml');
+            $this->_settings    = file_get_contents('zip://' . $_fileName . '#settings.xml');
+            $this->_styles      = file_get_contents('zip://' . $_fileName . '#styles.xml');
+        }
+        
         $this->_document = new SimpleXMLElement($this->_content);
         
         switch ($_type) {
