@@ -66,6 +66,14 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
         }
     },
     
+    deselectAll: function() {
+        
+    },
+    
+    toggleSelection: function() {
+        
+    },
+    
     /**
      * Returns number of selected rows
      * 
@@ -78,7 +86,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
             return this.store.getCount();
         }
     },
-    
+   
     /**
      * converts a 'normal' row selection into a filter
      * 
