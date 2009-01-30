@@ -14,7 +14,7 @@ Ext.ns('Ext.ux.grid');
 
 
 /**
- * Plugin capable paging toolbar with build in selection support
+ * Paging toolbar with build in selection support
  * 
  * @constructor
  * @param {Object} config
@@ -35,8 +35,14 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
      */
     sm: null,
     
+    /**
+     * @private
+     */
     initComponent: function() {
+        // we don't use the original display-info handling
         this.displayInfo = false;
+        
+        // initialise i18n
         this.selHelperText = {
             'main'         : _('{0} selected'),
             'deselect'     : _('Unselect all'),
@@ -48,9 +54,13 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
         Ext.ux.grid.PagingToolbar.superclass.initComponent.call(this);
     },
     
+    /**
+     * @private
+     */
     onRender : function(ct, position) {
         Ext.ux.grid.PagingToolbar.superclass.onRender.call(this, ct, position);
         
+        // lets display info be a 'normal' tb item
         this.addFill();
         this.displayEl = Ext.get(this.addText('').getEl());
         
@@ -59,27 +69,41 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
         }
     },
     
+    /**
+     * @private
+     */
+    onClick : function(which){
+        // clear selections when page changes
+        Ext.ux.grid.PagingToolbar.superclass.onClick.call(this, which);
+        this.sm.clearSelections();
+    },
     
+    /**
+     * @private
+     */
     renderSelHelper: function() {
-        
         this.deselectBtn = new Ext.Action({
             iconCls: 'x-ux-pagingtb-deselect',
             text: this.getSelHelperText('deselect'),
-            handler: function() {this.sm.deselectAll();}
+            scope: this,
+            handler: function() {this.sm.clearSelections();}
         });
         this.selectVisibleBtn = new Ext.Action({
             iconCls: 'x-ux-pagingtb-selectvisible',
             text: this.getSelHelperText('selectvisible'),
+            scope: this,
             handler: function() {this.sm.selectAll(true);}
         });
         this.selectAllPages = new Ext.Action({
             iconCls: 'x-ux-pagingtb-selectall',
             text: this.getSelHelperText('selectall'),
+            scope: this,
             handler: function() {this.sm.selectAll();}
         });
         this.toggleSelectionBtn = new Ext.Action({
             iconCls: 'x-ux-pagingtb-toggle',
             text: this.getSelHelperText('toggle'),
+            scope: this,
             handler: function() {this.sm.toggleSelection();}
         });
         
@@ -101,16 +125,25 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
         
         this.add(this.selHelperBtn);
         
+        // update buttons when data or selection changes
         this.sm.on('selectionchange', this.updateSelHelper, this);
         this.store.on('load', this.updateSelHelper, this);
     },
     
+    /**
+     * update all button descr.
+     */
     updateSelHelper: function() {
         this.selHelperBtn.setText(this.getSelHelperText('main'));
         this.selectVisibleBtn.setText(this.getSelHelperText('selectvisible'));
         this.selectAllPages.setText(this.getSelHelperText('selectall'));
     },
-    
+
+    /**
+     * get test for button
+     * @param {String} domain 
+     * @return {String}
+     */
     getSelHelperText: function(domain) {
         var num;
         switch(domain) {
@@ -118,10 +151,10 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
                 num = this.sm.getCount();
                 break;
             case 'selectvisible':
-                num = '?';
+                num = this.store.getCount();
                 break;
             case 'selectall':
-                num = this.store.getCount();
+                num = this.store.getTotalCount();
                 break;
             default:
                 return this.selHelperText[domain];
