@@ -230,13 +230,23 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initGrid: function() {
+        // init sel model
+        this.selectionModel = new Tine.Tinebase.widgets.grid.FilterSelectionModel({
+            store: this.store
+        }),
+        this.selectionModel.on('selectionchange', function(sm) {
+            Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'));
+        }, this);
+        
         // we allways have a paging toolbar
-        this.pagingToolbar = new Ext.PagingToolbar({
+        this.pagingToolbar = new Ext.ux.grid.PagingToolbar({
             pageSize: 50,
             store: this.store,
             displayInfo: true,
             displayMsg: Tine.Tinebase.tranlation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
-            emptyMsg: String.format(Tine.Tinebase.tranlation._("No {0} to display"), this.i18nRecordsName)
+            emptyMsg: String.format(Tine.Tinebase.tranlation._("No {0} to display"), this.i18nRecordsName),
+            displaySelectionHelper: true,
+            sm: this.selectionModel
         });
         // mark next grid refresh as paging-refresh
         this.pagingToolbar.on('beforechange', function() {
@@ -279,9 +289,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,
-            sm: new Tine.Tinebase.widgets.grid.FilterSelectionModel({
-                store: this.store
-            }),
+            sm: this.selectionModel,
             view: view
         }));
         
@@ -302,9 +310,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             this.contextMenu.showAt(e.getXY());
         }, this);
         
-        this.grid.getSelectionModel().on('selectionchange', function(sm) {
-            Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'));
-        }, this);
     },
     
     /**
