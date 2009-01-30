@@ -46,67 +46,18 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $result = $this->_search($filter, $paging, Voipmanager_Controller_Snom_Phone::getInstance(), 'Voipmanager_Model_Snom_PhoneFilter');
         
         foreach ($result['results'] as &$phone) {
-            #print $phone['location_id'];
-            $phone['location'] = $phone['location_id'];
-            $phone['template'] = $phone['template_id'];
+            // resolve location and template names
+            if($location = Voipmanager_Controller_Snom_Location::getInstance()->get($phone['location_id'])) {
+                $phone['location'] = $location->name;
+            }
+            
+            if($template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone['template_id'])) {
+                $phone['template'] = $template->name;
+            }                            
         }
         
         return $result;
     }
-    
-    /**
-     * get snom phones
-     *
-     * @param string $sort
-     * @param string $dir
-     * @param string $query
-     * @return array
-     * 
-     * @todo replace this with searchSnomPhones (and adjust test)
-     * @todo add templates & locations to $result['results'] in new function
-     */
-    public function getSnomPhones($sort, $dir, $query)
-    {     
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
-            'query' => $query
-        ));
-        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        $rows = Voipmanager_Controller_Snom_Phone::getInstance()->search($filter, $pagination);
-        
-        $_rows = $rows->toArray();
-        
-        $i = 0; 
-              
-        foreach($_rows AS $_row) {
-            if($location_row = Voipmanager_Controller_Snom_Location::getInstance()->get($_row['location_id'])) {
-                $_location = $location_row->toArray();
-                $_rows[$i]['location'] = $_location['name'];
-            }
-            
-            if($template_row = Voipmanager_Controller_Snom_Template::getInstance()->get($_row['template_id'])) {
-                $_template = $template_row->toArray();                                        
-                $_rows[$i]['template'] = $_template['name'];
-            }                
-            
-            $i = $i + 1;
-        }         
-    
-        $result['results']      = $_rows;
-        $result['totalcount']   = count($result['results']);
-
-        return $result;    
-    }
-    
     
     /**
      * get one phone identified by phoneId
