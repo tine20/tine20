@@ -249,7 +249,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $recordArray = $_record->toArray();
         
         // unset id if autoincrement & still empty
-        if (empty($_record->$identifier)) {
+        if (empty($_record->$identifier) || $_record->$identifier == 'NULL' ) {
             unset($recordArray['id']);
         }
         
