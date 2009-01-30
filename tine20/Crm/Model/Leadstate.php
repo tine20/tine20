@@ -64,5 +64,22 @@ class Crm_Model_Leadstate extends Tinebase_Record_Abstract
      */
     protected $_toTranslate = array(
         'leadstate'
-    );        
+    );
+    
+    /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set values to 0 if not set
+        $this->_filters['endslead'] = new Zend_Filter_Empty(0);
+        $this->_filters['probability'] = new Zend_Filter_Empty(0);
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
 }
