@@ -149,7 +149,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
             $result = $this->_ldap2User($account, $_accountClass);
         } catch (Tinebase_Exception_NotFound $enf) {
-            $result = $this->getNonExistentUser($_accountClass);
+            $result = $this->getNonExistentUser($_accountClass, $accountId);
         }
         
         return $result;

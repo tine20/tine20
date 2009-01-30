@@ -62,16 +62,17 @@ abstract class Tinebase_User_Abstract
      * get dummy user record
      *
      * @param string $_accountClass Tinebase_Model_User|Tinebase_Model_FullUser
+     * @param integer $_id [optional]
      * @return Tinebase_Model_User|Tinebase_Model_FullUser
      * 
      * @todo add primary group for full users?
      */
-    public function getNonExistentUser($_accountClass = 'Tinebase_Model_User') 
+    public function getNonExistentUser($_accountClass = 'Tinebase_Model_User', $_id = 0) 
     {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         $data = array(
-            'accountId'             => 0,
+            'accountId'             => $_id,
             'accountLoginName'      => $translate->_('unknown'),
             'accountDisplayName'    => $translate->_('unknown'),
             'accountLastName'       => $translate->_('unknown'),

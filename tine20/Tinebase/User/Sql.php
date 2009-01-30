@@ -184,7 +184,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
             //throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');
-            $account = $this->getNonExistentUser($_accountClass);
+            $account = $this->getNonExistentUser($_accountClass, $accountId);
             
         } else {
             try {
@@ -584,6 +584,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $queryResult = $stmt->fetchAll();
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_User', $queryResult);
+        
+        // add unknown users if not found in database
+        foreach($_id as $id) {
+            if (!isset($result[$result->getIndexById($id)])) {
+                $result->addRecord($this->getNonExistentUser('Tinebase_Model_User', $id));
+            }
+        }
         
         return $result;
     }
