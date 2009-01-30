@@ -655,8 +655,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $searchResult = $this->_json->searchSnomPhones(Zend_Json::encode($this->_getSnomPhoneFilter()), Zend_Json::encode($this->_getPaging()));
         
         $this->assertEquals(1, $searchResult['totalcount']);
-        $this->assertEquals($phoneTemplate['id'], $searchResult['results'][0]['template']);
-        $this->assertEquals($phoneLocation['id'], $searchResult['results'][0]['location']);
+        $this->assertEquals($phoneTemplate['name'], $searchResult['results'][0]['template']);
+        $this->assertEquals($phoneLocation['name'], $searchResult['results'][0]['location']);
         
         $this->_json->deleteSnomPhones(Zend_Json::encode(array($returned['id'])));
         $this->_json->deleteSnomLocations(Zend_Json::encode(array($returned['location_id'])));

@@ -45,12 +45,15 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         
         foreach ($result['results'] as &$phone) {
             // resolve location and template names
+            $phoneTemplate = $this->getSnomTemplate($phone['template_id']);
+            $phoneLocation = $this->getSnomLocation($phone['location_id']);
+            
             if($location = Voipmanager_Controller_Snom_Location::getInstance()->get($phone['location_id'])) {
-                $phone['location'] = $location->id;
+                $phone['location'] = $location->name;
             }
             
             if($template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone['template_id'])) {
-                $phone['template'] = $template->id;
+                $phone['template'] = $template->name;
             }                            
         }
         
