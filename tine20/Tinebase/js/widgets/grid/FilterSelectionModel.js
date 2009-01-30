@@ -17,6 +17,8 @@ Ext.namespace('Tine.Tinebase.widgets.grid');
  * @constructor
  * @class Tine.Tinebase.widgets.grid.FilterSelectionModel
  * @extends Ext.grid.RowSelectionModel
+ * 
+ * @todo convert 'usual' selection into filter
  */
 Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, {
     /**
@@ -59,19 +61,48 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
      * @return {Void}
      */
     selectAll: function(onlyPage) {
-        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.selectAll.call(this);
-        
         if (! onlyPage) {
             this.isFilterSelect = true;
         }
-    },
-    
-    deselectAll: function() {
         
+        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.selectAll.call(this);
     },
     
+    /**
+     * Clears all selections.
+     */
+    clearSelections: function() {
+        this.suspendEvents();
+        this.isFilterSelect = false;
+        
+        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.clearSelections.call(this);
+        
+        this.resumeEvents();
+        this.fireEvent('selectionchange', this);
+    },
+    
+    /**
+     * toggle selection
+     */
     toggleSelection: function() {
-        
+        if (this.isFilterSelect) {
+            this.clearSelections();
+        } else {
+            this.suspendEvents();
+            
+            var index;
+            this.store.each(function(record) {
+                index = this.store.indexOf(record);
+                if (this.isSelected(index)) {
+                    this.deselectRow(index);
+                } else {
+                    this.selectRow(index, true);
+                }
+            }, this);
+            
+            this.resumeEvents();
+            this.fireEvent('selectionchange', this);
+        }
     },
     
     /**
@@ -83,7 +114,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
         if(! this.isFilterSelect) {
             return Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.getCount.call(this);
         } else {
-            return this.store.getCount();
+            return this.store.getTotalCount();
         }
     },
    
