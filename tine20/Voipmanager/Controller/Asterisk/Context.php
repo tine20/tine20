@@ -17,7 +17,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_AbstractNew
+class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abstract
 {   
     /**
      * the constructor

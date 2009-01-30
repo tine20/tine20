@@ -17,7 +17,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Snom_Template extends Voipmanager_Controller_AbstractNew
+class Voipmanager_Controller_Snom_Template extends Voipmanager_Controller_Abstract
 {    
     /**
      * the constructor

@@ -9,8 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @deprecated
- * @todo        remove later
+ * @todo        rename Voipmanager_Controller_AbstractNew to Voipmanager_Controller_Abstract later
  */
 
 /**
@@ -19,7 +18,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Controller_Abstract
+abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
      * application name (is needed in checkRight())
@@ -28,12 +27,12 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
      */
     protected $_applicationName = 'Voipmanager';
     
-   /**
-     * Voipmanager backend class
+    /**
+     * check for container ACLs?
      *
-     * @var Voipmanager_Backend_Interface
+     * @var boolean
      */
-    protected $_backend;
+    protected $_doContainerACLChecks = FALSE;
     
     /**
      * the central caching object
@@ -43,98 +42,12 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
     protected $_cache;
     
     /**
-     * get by id
-     *
-     * @param string $_id
-     * @return Tinebase_Record_RecordSet
-     */
-    public function get($_id)
-    {
-        $context = $this->_backend->get($_id);
-        
-        return $context;    
-    }
-
-    /**
-     * get list of voipmanager records
-     *
-     * @param Tinebase_Record_Interface|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-     * @return Tinebase_Record_RecordSet
-     */
-    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
-    {
-        $result = $this->_backend->search($_filter, $_pagination);
-        
-        return $result;    
-    }
-
-    /**
-     * add one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function create(Tinebase_Record_Interface $_record)
-    {        
-        $record = $this->_backend->create($_record);
-      
-        return $this->get($record);
-    }
-    
-    /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function update(Tinebase_Record_Interface $_record)
-    {
-        $record = $this->_backend->update($_record);
-        
-        return $this->get($record);
-    }    
-    
-    /**
-     * Deletes a set of records.
-     * 
-     * If one of the records could not be deleted, no record is deleted
-     * 
-     * @param   array array of record identifiers
-     * @return  void
-     */
-    public function delete($_identifiers)
-    {
-        $records = $this->_backend->getMultiple((array)$_identifiers);
-        if (count((array)$_identifiers) != count($records)) {
-            throw new Voipmanager_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$_identifiers) . ' records exist');
-        }
-                    
-        try {        
-            $db = $this->_backend->getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            foreach ($records as $record) {
-                $this->_backend->delete($record);
-            }
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Voipmanager_Exception($e->getMessage());
-        }                
-        
-        //$this->_backend->delete($_identifiers);
-    }    
-
-    /**
      * initialize the database backend
      *
      * @return Zend_Db_Adapter_Abstract
      * @throws  Voipmanager_Exception_UnexpectedValue
      */
-    public function getDatabaseBackend() 
+    protected function getDatabaseBackend() 
     {
         if(isset(Zend_Registry::get('configFile')->voipmanager) && isset(Zend_Registry::get('configFile')->voipmanager->database)) {
             $dbConfig = Zend_Registry::get('configFile')->voipmanager->database;

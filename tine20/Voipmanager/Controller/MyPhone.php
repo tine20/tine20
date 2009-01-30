@@ -96,6 +96,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      * @return  Voipmanager_Model_Snom_Phone
      * @throws  Voipmanager_Exception_InvalidArgument
      */
+    /*
     public function update(Voipmanager_Model_MyPhone $_phone, Voipmanager_Model_Snom_PhoneSettings $_phoneSettings, $_accountId)
     {
         if (empty($_accountId)) {
@@ -128,7 +129,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
       
         return $this->getMyPhone($phone, $_accountId);
     }    
-    
+    */
     /****************** don't allow get/create/search here ************************/
     
     /**
@@ -148,18 +149,21 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      * @param Tinebase_Record_Interface $_record
      * @throws  Voipmanager_Exception_AccessDenied
      */
+    /*
     public function create(Tinebase_Record_Interface $_record)
     {
         throw new Voipmanager_Exception_AccessDenied('not allowed!');        
     }
-    
+    */
     /**
      * disabled
      *
      * @param unknown_type $_identifiers
      * @throws  Voipmanager_Exception_AccessDenied
      */
+    /*
     public function delete($_identifiers) {
         throw new Voipmanager_Exception_AccessDenied('not allowed!');
     }
+*/
 }
