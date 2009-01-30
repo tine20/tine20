@@ -107,9 +107,6 @@ class Crm_Controller_LeadStates extends Tinebase_Application_Controller_Abstract
         
         $migration = $existingLeadStates->getMigration($_leadStates->getArrayOfIds());
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_leadStates->toArray(), true));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($migration, true));
-        
         // delete
         foreach ($migration['toDeleteIds'] as $id) {
             $backend->delete($id);
