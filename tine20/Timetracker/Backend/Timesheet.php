@@ -34,7 +34,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return array with count + sum
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function searchCount(/*Tinebase_Model_Filter_FilterGroup*/ $_filter)
     {        
         $select = $this->_getSelect(array('count' => 'COUNT(*)'));
         $this->_addFilter($select, $_filter);

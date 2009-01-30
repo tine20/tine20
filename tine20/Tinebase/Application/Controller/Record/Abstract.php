@@ -499,7 +499,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
      */
-    protected function _checkFilterACL($_filter, $_action = 'get')
+    protected function _checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         if ($this->_doContainerACLChecks) {
             $containerFilter = $_filter->getAclFilter();
