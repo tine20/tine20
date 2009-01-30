@@ -17,8 +17,6 @@ Ext.namespace('Tine.Tinebase.widgets.grid');
  * @constructor
  * @class Tine.Tinebase.widgets.grid.FilterSelectionModel
  * @extends Ext.grid.RowSelectionModel
- * 
- * @todo convert 'usual' selection into filter
  */
 Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, {
     /**
@@ -69,16 +67,34 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
     },
     
     /**
+     * @private
+     */
+    onRefresh : function(){
+        this.clearSelections(true);
+        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.onRefresh.call(this);
+    },
+    
+    /**
+     * @private
+     */
+    onRemove : function(v, index, r){
+        this.clearSelections(true);
+        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.onRemove.call(this, v, index, r);
+    },
+    
+    /**
      * Clears all selections.
      */
-    clearSelections: function() {
+    clearSelections: function(silent) {
         this.suspendEvents();
         this.isFilterSelect = false;
         
         Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.clearSelections.call(this);
         
         this.resumeEvents();
-        this.fireEvent('selectionchange', this);
+        if (! silent) {
+            this.fireEvent('selectionchange', this);
+        }
     },
     
     /**
@@ -125,6 +141,12 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
      * @return {Array} filterData
      */
     getFilterOfRowSelection: function() {
-        
+        //var idProperty = this.store.fields.getMeta('idProperty');
+        var idProperty = this.store.reader.meta.id;
+        var ids = [];
+        this.each(function(record) {
+            ids.push(record.id);
+        });
+        return [{field: idProperty, operator: 'in', value: ids}];
     }
 });
