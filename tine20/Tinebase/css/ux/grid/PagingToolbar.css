@@ -1,0 +1,19 @@
+.x-ux-pagingtb-main {
+    background-image: url(../../../../images/oxygen/16x16/actions/table.png) !important;
+}
+
+.x-ux-pagingtb-deselect {
+    background-image: url(../../../../images/oxygen/16x16/actions/edit-clear-list.png) !important;
+}
+
+.x-ux-pagingtb-selectvisible {
+    background-image: url(../../../../images/oxygen/16x16/actions/edit-select-all.png) !important;
+}
+
+.x-ux-pagingtb-selectall {
+    background-image: url(../../../../images/oxygen/16x16/actions/insert-table.png) !important;
+}
+
+.x-ux-pagingtb-toggle {
+    background-image: url(../../../../images/oxygen/16x16/actions/system-switch-user.png) !important;
+}
