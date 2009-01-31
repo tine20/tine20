@@ -32,7 +32,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
         this.initDetailsPanel();
-        this.contextMenuItems = {
+        this.contextMenuItems = [
+            '-', this.exportButton, '-', {
             text: 'change',
             scope: this,
             handler: function() {
@@ -64,7 +65,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                     }
                 ]
             }*/
-        };
+        }];
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -327,11 +328,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
      * @todo move export buttons to single menu/split button
      */
     getToolbarItems: function() {
-        this.exportButton = new Ext.SplitButton({
+        this.exportButton = new Ext.Action({
             text: _('Export'),
             iconCls: 'action_export',
             scope: this,
-            handler: function() {this.exportButton.showMenu();},
             requiredGrant: 'readGrant',
             disabled: true,
             allowMultiple: true,
