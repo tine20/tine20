@@ -59,9 +59,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
      * @return {Void}
      */
     selectAll: function(onlyPage) {
-        if (! onlyPage) {
-            this.isFilterSelect = true;
-        }
+        this.isFilterSelect = !onlyPage;
         
         Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.selectAll.call(this);
     },
