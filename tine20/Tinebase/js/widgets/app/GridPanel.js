@@ -47,6 +47,11 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     contextMenuItems: [],
     /**
+     * @cfg {Bool} evalGrants
+     * should grants of a grant-aware records be evaluated (defaults to true)
+     */
+    evalGrants: true,
+    /**
      * @cfg {Object} defaultSortInfo
      */
     defaultSortInfo: {},
@@ -235,7 +240,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             store: this.store
         }),
         this.selectionModel.on('selectionchange', function(sm) {
-            Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'));
+            if (this.evalGrants) {
+                Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'));
+            }
+            
         }, this);
         
         // we allways have a paging toolbar
