@@ -50,6 +50,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.getForm().findField('account_id').setDisabled(! (grants.book_all || grants.manage_all || manageRight));
             this.getForm().findField('is_billable').setDisabled(! (grants.manage_billable || grants.manage_all || manageRight));
             this.getForm().findField('is_cleared').setDisabled(! (/*grants.manage_billable ||*/ grants.manage_all || manageRight));
+            this.getForm().findField('billed_in').setDisabled(! (grants.manage_all || manageRight));
         }
         
         if (timeaccount && timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0") {
@@ -67,13 +68,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} field
      * @param {} newValue
      * 
-     * @todo    don't call this when dialog is opened
+     * @todo    add prompt later?
      */
     onClearedUpdate: function(field, checked) {
-    	//console.log(this.record);
-        //console.log(checked);
-    	/*
     	
+        this.getForm().findField('billed_in').setDisabled(! checked);
+
+        /*
     	if (checked && this.getForm().findField('billed_in').getValue() == '') {
     		// open modal window to type in billed in value
             Ext.Msg.prompt(
@@ -81,7 +82,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 this.app.i18n._('Billed in ...'), 
                 function(btn, text) {
                     if (btn == 'ok'){
-                    	//console.log(text);
                         this.getForm().findField('billed_in').setValue(text);
                     }
                 },
@@ -91,16 +91,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     		this.getForm().findField('billed_in').setValue('');
     	}
     	*/
-    	
-    	/*
-    	if (timeaccount && timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0") {
-            this.getForm().findField('is_billable').setDisabled(true);
-            if (this.record.id == 0) {
-               // set to 0 be default for new records
-               this.getForm().findField('is_billable').setValue(0);
-            }
-        }
-        */
     },
     
     /**
@@ -202,10 +192,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         }                        
                     }, {
                         columnWidth: .5,
-                        //hideLabel: true,
                         disabled: true,
-                        emptyText: this.app.i18n._('not billed yet...'),
-                        fieldLabel: this.app.i18n._('Billed In') + ' ...',
+                        //emptyText: this.app.i18n._('not cleared yet...'),
+                        fieldLabel: this.app.i18n._('Cleared In'),
                         name: 'billed_in',
                         xtype: 'textfield'
                     }]] 
