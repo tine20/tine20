@@ -26,6 +26,7 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     recordProxy: Tine.Voipmanager.AsteriskContextBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -36,7 +37,7 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     },
     
     /**
-     * this gets called when initializing and if a new timeaccount is chosen
+     * this gets called when initializing and if a new context is chosen
      * 
      * @param {} field
      * @param {} timeaccount
@@ -52,10 +53,10 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
      */
     getFormItems: function() { 
         return {
-            xtype: 'tabpanel',
+            layout: 'form',
             border: false,
-            plain:true,
-            activeTab: 0,
+            width: 440,
+            height: 280,
             items:[
             	{
                     xtype: 'textfield',
@@ -83,8 +84,8 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
 Tine.Voipmanager.AsteriskContextEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 470,
+        width: 500,
+        height: 300,
         name: Tine.Voipmanager.AsteriskContextEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Voipmanager.AsteriskContextEditDialog',
         contentPanelConstructorConfig: config
