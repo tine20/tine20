@@ -60,7 +60,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     showContainerSelector: false,
     /**
      * @cfg {Bool} evalGrants
-     * should grants of a grant-aware recotds be evaluated (defaults to true)
+     * should grants of a grant-aware records be evaluated (defaults to true)
      */
     evalGrants: true,
     /**
