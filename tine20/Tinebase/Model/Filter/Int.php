@@ -72,6 +72,8 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
              if ($this->_operator == 'in' && empty($value)) {
                  // prevent sql error
                  $_select->where('1=0');
+             } elseif ($this->_operator == 'equals' && empty($value)) {
+                 $_select->where($field . 'IS NULL');
              } else {
                  // finally append query to select object
                  $_select->where($field . $action['sqlop'], $value, Zend_Db::INT_TYPE);
