@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:$
+ * @version     $Id$
  *
  */
  
@@ -26,23 +26,13 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
     recordProxy: Tine.Voipmanager.AsteriskMeetmeBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function(record) {
-        this.onMeetmeUpdate();
     	Tine.Voipmanager.AsteriskMeetmeEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
-    
-    /**
-     * this gets called when initializing and if a new timeaccount is chosen
-     * 
-     * @param {} field
-     * @param {} timeaccount
-     */
-    onMeetmeUpdate: function(field, timeaccount) {
-        
     },
     
     /**
@@ -52,10 +42,10 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
      */
     getFormItems: function() { 
         return {
-            xtype: 'tabpanel',
+            layout: 'form',
             border: false,
-            plain:true,
-            activeTab: 0,
+            width: 440,
+            height: 280,
             items:[{
                     xtype: 'numberfield',
                     fieldLabel: this.app.i18n._('confno'),
@@ -91,8 +81,8 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
 Tine.Voipmanager.AsteriskMeetmeEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 470,
+        width: 500,
+        height: 300,
         name: Tine.Voipmanager.AsteriskMeetmeEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Voipmanager.AsteriskMeetmeEditDialog',
         contentPanelConstructorConfig: config
