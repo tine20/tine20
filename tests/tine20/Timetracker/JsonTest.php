@@ -289,12 +289,13 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $filterData = array(
             array('field' => 'id', 'operator' => 'in', 'value' => array($timesheetData1['id'], $timesheetData2['id']))
         );
-        $this->_json->updateMultipleTimesheets(Zend_Json::encode($filterData), Zend_Json::encode($newValues));
+        $result = $this->_json->updateMultipleTimesheets(Zend_Json::encode($filterData), Zend_Json::encode($newValues));
         
         $changed1 = $this->_json->getTimesheet($timesheetData1['id']);
         $changed2 = $this->_json->getTimesheet($timesheetData2['id']);
                 
         // check
+        $this->assertEquals(2, $result['count']);
         $this->assertEquals($timesheetData1['id'], $changed1['id']);
         $this->assertEquals($changed1['description'], $newValues['description']);
         $this->assertEquals($changed2['description'], $newValues['description']);
