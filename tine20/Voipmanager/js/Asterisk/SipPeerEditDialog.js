@@ -23,13 +23,10 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     windowNamePrefix: 'AsteriskSipPeerEditWindow_',
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer,
-    recordProxy: new Tine.Tinebase.widgets.app.JsonBackend({
-	    appName: 'Voipmanager',
-	    modelName: 'AsteriskSipPeer',
-	    recordClass: Tine.Voipmanager.Model.AsteriskSipPeer
-	}),
+    recordProxy: Tine.Voipmanager.AsteriskSipPeerBackend, 
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -93,18 +90,16 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
                 fieldLabel: this.app.i18n._('Type'),
                 name: 'type',
                 mode: 'local',
-                displayField: 'value',
-                valueField: 'key',
                 anchor: '98%',
                 triggerAction: 'all',
                 editable: false,
                 forceSelection: true,
-                store: new Ext.data.SimpleStore({
-                    autoLoad: true,
-                    id: 'key',
-                    fields: ['key', 'value'],
-                    data: [['friend', 'friend'], ['user', 'user'], ['peer', 'peer']]
-                })
+                value: 'peer',
+                store: [
+                    ['friend', this.app.i18n._('friend')], 
+                    ['user', this.app.i18n._('user')],
+                    ['peer', this.app.i18n._('peer')]
+                ]                 
             }], [{
                 xtype: 'textfield',
                 fieldLabel: this.app.i18n._('Secret'),
@@ -159,35 +154,23 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
                 fieldLabel: this.app.i18n._('NAT'),
                 name: 'nat',
                 mode: 'local',
-                displayField: 'value',
-                valueField: 'key',
                 anchor: '98%',
                 triggerAction: 'all',
                 editable: false,
                 forceSelection: true,
-                store: new Ext.data.SimpleStore({
-                    autoLoad: true,
-                    id: 'key',
-                    fields: ['key', 'value'],
-                    data: [['no', 'off'], ['yes', 'on']]
-                })
+                value: 'no',
+                store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
             }, {
                 xtype: 'combo',
                 fieldLabel: this.app.i18n._('Qualify'),
                 name: 'qualify',
                 mode: 'local',
-                displayField: 'value',
-                valueField: 'key',
                 anchor: '98%',
                 triggerAction: 'all',
                 editable: false,
                 forceSelection: true,
-                store: new Ext.data.SimpleStore({
-                    autoLoad: true,
-                    id: 'key',
-                    fields: ['key', 'value'],
-                    data: [['no', 'off'], ['yes', 'on']]
-                })
+                value: 'no',
+                store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
             }]]
         }]
         };
