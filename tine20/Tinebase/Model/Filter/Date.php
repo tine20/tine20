@@ -81,6 +81,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             
             // special values like this week, ...
             switch($_value) {
+                case 'weekNext':
+                    $date->add(21, Zend_Date::DAY);
                 case 'weekBeforeLast':    
                     $date->sub(7, Zend_Date::DAY);
                 case 'weekLast':    
