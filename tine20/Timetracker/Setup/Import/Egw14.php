@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
  *
- * @todo        timeaccount grants: user groups for special projects (SOW-42248, ...) 
- * @todo        import more relevant record fields?
  */
 
 /**
@@ -684,6 +682,7 @@ class Timetracker_Setup_Import_Egw14
                 'description'           => (!empty($row['ts_description'])) ? $this->_convertDescription($row['ts_description']) : 'not set (imported)',
                 'is_cleared'            => 1,
                 'is_billable'           => ($row['cat_id'] == $this->_unbillableCatId) ? 0 : 1,
+                'billed_in'             => 'imported'
             );
             
             // add custom fields
