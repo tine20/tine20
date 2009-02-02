@@ -340,6 +340,28 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         var operator = filter.get('operator') ? filter.filter.get('operator') : this.defaultOperator;
         var valueType = operator == 'within' ? 'withinCombo' : 'datePicker';
         
+        var pastOps = [
+            //['dayThis',         _('today')], 
+            //['dayLast',         _('yesterday')], 
+            ['weekThis',        _('this week')], 
+            ['weekLast',        _('last week')],
+            ['weekBeforeLast',  _('the week before last')],
+            ['monthThis',       _('this month')],
+            ['monthLast',       _('last month')],
+            ['quarterThis',     _('this quarter')],
+            ['quarterLast',     _('last quarter')],
+            ['yearThis',        _('this year')],
+            ['yearLast',        _('last year')]
+        ];
+        
+        var futureOps = [
+            //['dayNext',         _('tomorrow')], 
+            ['weekNext',        _('next week')], 
+            ['monthNext',       _('next month')],
+            ['quarterNext',     _('next quarter')],
+            ['yearNext',        _('next year')]
+        ];
+        
         filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
             filter: filter,
@@ -351,17 +373,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             forceSelection: true,
             typeAhead: true,
             triggerAction: 'all',
-            store: [
-                ['weekThis',        _('this week')], 
-                ['weekLast',        _('last week')],
-                ['weekBeforeLast',  _('the week before last')],
-                ['monthThis',       _('this month')],
-                ['monthLast',       _('last month')],
-                ['quarterThis',     _('this quarter')],
-                ['quarterLast',     _('last quarter')],
-                ['yearThis',        _('this year')],
-                ['yearLast',        _('last year')]
-            ]
+            store: this.pastOnly ? pastOps : futureOps.concat(pastOps)
         });
 
         filter.datePicker = new Ext.form.DateField({
