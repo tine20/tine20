@@ -337,12 +337,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      * we place a picker and a combo in the dom element and hide the one we don't need yet
      */
     dateValueRenderer: function(filter, el) {
-        var operator = filter.get('operator') ? filter.filter.get('operator') : this.defaultOperator;
+        var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
         var valueType = operator == 'within' ? 'withinCombo' : 'datePicker';
         
         var pastOps = [
-            //['dayThis',         _('today')], 
-            //['dayLast',         _('yesterday')], 
+            ['dayThis',         _('today')], 
+            ['dayLast',         _('yesterday')], 
             ['weekThis',        _('this week')], 
             ['weekLast',        _('last week')],
             ['weekBeforeLast',  _('the week before last')],
@@ -355,7 +355,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         ];
         
         var futureOps = [
-            //['dayNext',         _('tomorrow')], 
+            ['dayNext',         _('tomorrow')], 
             ['weekNext',        _('next week')], 
             ['monthNext',       _('next month')],
             ['quarterNext',     _('next quarter')],
