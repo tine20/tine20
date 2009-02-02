@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:$
  *
+ * @todo        check if we need this
  */
  
 Ext.ns('Tine.Voipmanager');
@@ -14,9 +15,8 @@ Ext.ns('Tine.Voipmanager');
 // default mainscreen
 Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
-    activeContentType: 'Context',
-    activeContentGroup: 'Asterisk',
-    
+    activeContentType: 'Phone',
+    activeContentGroup: 'Snom',
     
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){
@@ -29,9 +29,6 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         }
         return this;
     },
-    
-    
-    
     
     setContentPanel: function() {
         
