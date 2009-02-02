@@ -17,6 +17,7 @@ Ext.namespace('Tine.Voipmanager');
 Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer,
+    evalGrants: false,
     
     // grid specific
     defaultSortInfo: {field: 'callerid', direction: 'ASC'},
