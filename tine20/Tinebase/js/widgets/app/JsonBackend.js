@@ -142,13 +142,23 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     /**
      * updates multiple records with the same data
      * 
-     * @param   {Array} records Array of records or ids
+     * @param   {Array} filter filter data
      * @param   {Object} updates
      * @return  {Number} Ext.Ajax transaction id
-     * @success {Array} updated records
+     * @success
      */
-    updateRecords: function(records, updates, options) {
+    updateRecords: function(filter, updates, options) {
+        options = options || {};
+        options.params = options.params || {};
+        options.params.method = this.appName + '.updateMultiple' + this.modelName + 's';
+        options.params.filter = Ext.util.JSON.encode(filter);
+        options.params.values = Ext.util.JSON.encode(updates);
         
+        options.beforeSuccess = function(response) {
+            return [Ext.util.JSON.decode(response.responseText)];
+        };
+        
+        return this.request(options);
     },
     
     /**
