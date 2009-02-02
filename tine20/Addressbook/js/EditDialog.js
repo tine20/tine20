@@ -272,7 +272,21 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                     fieldLabel: translation._('Web'),
                     labelIcon: 'images/oxygen/16x16/actions/network.png',
                     name:'url',
-                    vtype:'url'
+                    vtype:'url',
+                    listeners: {
+                        scope: this,
+                        focus: function(field) {
+                            if (! field.getValue()) {
+                                field.setValue('http://www.');
+                            }
+                        },
+                        blur: function(field) {
+                            if (field.getValue() == 'http://www.') {
+                                field.setValue(null);
+                                field.validate();
+                            }
+                        }
+                    }
                 }
             ]
         ]
