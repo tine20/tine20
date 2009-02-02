@@ -69,6 +69,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @param string $_dateFormat
      * @return array|string date value
      * 
+     * @todo fix problem with day of week in 'this week' filter (sunday is first day of the week in english locales) 
+     * --> get that info from locale
      */
     protected function _getDateValues($_operator, $_value, $_dateFormat = 'yyyy-MM-dd')
     {        
@@ -77,7 +79,6 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 
         } else {
             $date = new Zend_Date();
-            $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
             
             // special values like this week, ...
             switch($_value) {
@@ -88,6 +89,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 case 'weekLast':    
                     $date->sub(7, Zend_Date::DAY);
                 case 'weekThis':
+                    $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
+                    // in german locale sunday is last day of the week
+                    $dayOfWeek = ($dayOfWeek == 0) ? 7 : $dayOfWeek;
                     $date->sub($dayOfWeek-1, Zend_Date::DAY);
                     $monday = $date->toString($_dateFormat);
                     $date->add(6, Zend_Date::DAY);
