@@ -286,12 +286,15 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         				'<div class="bordercorner_gray_4"></div>',
         				'<div class="preview-panel-declaration">detail</div>',
         				'<div class="preview-panel-timesheet-leftside preview-panel-left">',
+        				// @todo add custom fields here
+        				/*
         					'<span class="preview-panel-bold">',
         					'Ansprechpartner<br/>',
         					'Newsletter<br/>',
         					'Ticketnummer<br/>',
         					'Ticketsubjekt<br/>',
         					'</span>',
+        			    */
         				'</div>',
         				'<div class="preview-panel-timesheet-rightside preview-panel-left">',
         					'<span class="preview-panel-nonbold">',
