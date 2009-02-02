@@ -86,6 +86,7 @@ interface Tinebase_Application_Backend_Interface
      *
      * @param array $_ids to update
      * @param array $_data
+     * @return integer number of affected rows
      */
     public function updateMultiple($_ids, $_data);
         

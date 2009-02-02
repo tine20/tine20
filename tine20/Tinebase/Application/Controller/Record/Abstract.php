@@ -334,6 +334,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * 
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
      * @param   array $_data
+     * @return  integer number of updated records
      */
     public function updateMultiple($_filter, $_data)
     {        
@@ -342,7 +343,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         // get only ids
         $ids = $this->_backend->search($_filter, NULL, TRUE);
         
-        $this->_backend->updateMultiple($ids, $_data);
+        return $this->_backend->updateMultiple($ids, $_data);
     }    
     
     /**

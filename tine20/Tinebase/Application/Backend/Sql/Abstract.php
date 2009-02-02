@@ -325,6 +325,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      *
      * @param array $_ids to update
      * @param array $_data
+     * @return integer number of affected rows
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      */
     public function updateMultiple($_ids, $_data) {
@@ -347,7 +348,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
-        $this->_db->update($this->_tableName, $recordArray, $where);        
+        return $this->_db->update($this->_tableName, $recordArray, $where);        
     }
     
     /**

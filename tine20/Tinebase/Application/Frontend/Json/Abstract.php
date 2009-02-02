@@ -122,14 +122,17 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @param string $_data json encoded key/value pairs 
      * @param Tinebase_Application_Controller_Record_Interface $_controller
      * @param string FilterGroup name
-     * 
-     * @todo use filter / filter_group
+     * @return array with number of updated records
      */
     protected function _updateMultiple($_filter, $_data, Tinebase_Application_Controller_Record_Interface $_controller, $_filterModel)
     {
         $filter = new $_filterModel(Zend_Json::decode($_filter));
         
-        $_controller->updateMultiple($filter, Zend_Json::decode($_data));
+        $result = $_controller->updateMultiple($filter, Zend_Json::decode($_data));
+        
+        return array(
+            'count'       => $result,
+        );
     }
     
     /**
