@@ -5,8 +5,10 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:$
+ * @version     $Id$
  *
+ * @todo        make it more beautiful
+ * @todo        add hiddenFieldData again
  */
  
 Ext.namespace('Tine.Voipmanager');
@@ -26,23 +28,13 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     recordProxy: Tine.Voipmanager.SnomSettingBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function(record) {
-        this.onSettingUpdate();
     	Tine.Voipmanager.SnomSettingEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
-    
-    /**
-     * this gets called when initializing and if a new timeaccount is chosen
-     * 
-     * @param {} field
-     * @param {} timeaccount
-     */
-    onSettingUpdate: function(field, timeaccount) {
-        
     },
     
     /**
@@ -116,7 +108,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'web_language',
                                     id: 'web_language',
 									hiddenFieldId: 'web_language_writable',
-									hiddenFieldData: _settingData.web_language_writable,
+									// @todo what about that?
+									//hiddenFieldData: _settingData.web_language_writable,
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -154,7 +147,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'language',
                                     id: 'language',
 									hiddenFieldId: 'language_writable',
-									hiddenFieldData: _settingData.language_writable,                                    
+                                    // @todo what about that?
+									//hiddenFieldData: _settingData.language_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -198,7 +192,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'display_method',
                                     id: 'display_method',
 									hiddenFieldId: 'display_method_writable',
-									hiddenFieldData: _settingData.display_method_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.display_method_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -235,7 +230,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'call_waiting',
                                     id: 'call_waiting',
 									hiddenFieldId: 'call_waiting_writable',
-									hiddenFieldData: _settingData.call_waiting_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.call_waiting_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -266,7 +262,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'mwi_notification',
                                     id: 'mwi_notification',
 									hiddenFieldId: 'mwi_notification_writable',
-									hiddenFieldData: _settingData.mwi_notification_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.mwi_notification_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -296,7 +293,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'mwi_dialtone',
                                     id: 'mwi_dialtone',
 									hiddenFieldId: 'mwi_dialtone_writable',
-									hiddenFieldData: _settingData.mwi_dialtone_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.mwi_dialtone_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -330,7 +328,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'headset_device',
                                     id: 'headset_device',
 									hiddenFieldId: 'headset_device_writable',
-									hiddenFieldData: _settingData.headset_device_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.headset_device_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -359,7 +358,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         name: 'message_led_other',
                                         id: 'message_led_other',
 	    								hiddenFieldId: 'message_led_other_writable',
-    									hiddenFieldData: _settingData.message_led_other_writable,                                        
+	    								// @todo what about that?
+    									//hiddenFieldData: _settingData.message_led_other_writable,                                        
                                         mode: 'local',
                                         displayField: 'name',
                                         valueField: 'id',
@@ -388,7 +388,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'global_missed_counter',
                                     id: 'global_missed_counter',
 									hiddenFieldId: 'global_missed_counter_writable',
-									hiddenFieldData: _settingData.global_missed_counter_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.global_missed_counter_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -422,7 +423,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'scroll_outgoing',
                                     id: 'scroll_outgoing',
 									hiddenFieldId: 'scroll_outgoing_writable',
-									hiddenFieldData: _settingData.scroll_outgoing_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.scroll_outgoing_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -451,7 +453,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'show_local_line',
                                     id: 'show_local_line',
 									hiddenFieldId: 'show_local_line_writable',
-									hiddenFieldData: _settingData.show_local_line_writable,                                    
+									// @todo what about that?
+									//hiddenFieldData: _settingData.show_local_line_writable,                                    
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
@@ -480,7 +483,8 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'show_call_status',
                                     id: 'show_call_status',
 									hiddenFieldId: 'show_call_status_writable',
-									hiddenFieldData: _settingData.show_call_status_writable,                                        
+									// @todo what about that?
+									//hiddenFieldData: _settingData.show_call_status_writable,                                        
                                     mode: 'local',
                                     displayField: 'name',
                                     valueField: 'id',
