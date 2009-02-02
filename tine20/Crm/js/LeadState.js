@@ -206,7 +206,7 @@ Tine.Crm.LeadState.EditDialog = function() {
     Dialog.show();
 };
 
-Tine.Crm.LeadState.filter = Ext.extend(Tine.widgets.grid.FilterModel, {
+Tine.Crm.LeadState.Filter = Ext.extend(Tine.widgets.grid.FilterModel, {
     field: 'leadstate_id',
     valueType: 'number',    
     
@@ -214,7 +214,7 @@ Tine.Crm.LeadState.filter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
+        Tine.Crm.LeadState.Filter.superclass.initComponent.call(this);
         
         this.app = Tine.Tinebase.appMgr.get('Crm');
         this.label = this.app.i18n._("Leadstate");

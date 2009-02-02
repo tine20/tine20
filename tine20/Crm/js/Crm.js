@@ -374,8 +374,7 @@ Tine.Crm.Main = {
             filterModels: [
                 {label: this.translation._('Lead'),        field: 'query',    operators: ['contains']},
                 {label: this.translation._('Lead name'),   field: 'lead_name' },
-                //{label: this.translation._('Leadstate'),   field: 'leadstate_id'},
-                new Tine.Crm.LeadState.filter(),
+                new Tine.Crm.LeadState.Filter({}),
                 {label: this.translation._('Probability'), field: 'probability', valueType: 'percentage'},
                 {label: this.translation._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
                 new Tine.widgets.tags.TagFilter({app: Tine.Tinebase.appMgr.get('Crm')})
