@@ -78,13 +78,11 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * -  if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
      *
      * @param string $phoneData a JSON encoded array of phone properties
-     * @param string $lineData
-     * @param string $rightsData
      * @return array
      */
-    public function saveSnomPhone($phoneData, $lineData, $rightsData)
+    public function saveSnomPhone($recordData/*$phoneData, $lineData, $rightsData*/)
     {
-        $phoneData  = Zend_Json::decode($phoneData);
+        $phoneData  = Zend_Json::decode($recordData);
         $lineData   = Zend_Json::decode($lineData);
         $rightsData = Zend_Json::decode($rightsData);
         
@@ -182,12 +180,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $phoneSettingsData['id'] is empty the phoneSettings gets added, otherwise it gets updated
      *
-     * @param string $phoneSettingsData a JSON encoded array of phoneSettings properties
+     * @param string $recordData a JSON encoded array of phoneSettings properties
      * @return array
      */
-    public function saveSnomPhoneSettings($phoneSettingsData)
+    public function saveSnomPhoneSettings($recordData)
     {
-        return $this->_save($phoneSettingsData, Voipmanager_Controller_Snom_PhoneSettings::getInstance(), 'Snom_PhoneSettings', 'phone_id');       
+        return $this->_save($recordData, Voipmanager_Controller_Snom_PhoneSettings::getInstance(), 'Snom_PhoneSettings', 'phone_id');       
     }
 
     /**
@@ -238,12 +236,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $locationData['id'] is empty the location gets added, otherwise it gets updated
      *
-     * @param string $locationData a JSON encoded array of location properties
+     * @param string $recordData a JSON encoded array of location properties
      * @return array
      */
-    public function saveSnomLocation($locationData)
+    public function saveSnomLocation($recordData)
     {
-        return $this->_save($locationData, Voipmanager_Controller_Snom_Location::getInstance(), 'Snom_Location');              
+        return $this->_save($recordData, Voipmanager_Controller_Snom_Location::getInstance(), 'Snom_Location');              
     }
      
         
@@ -296,12 +294,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $softwareData['id'] is empty the software gets added, otherwise it gets updated
      *
-     * @param string $phoneData a JSON encoded array of software properties
+     * @param string $recordData a JSON encoded array of software properties
      * @return array
      */
-    public function saveSnomSoftware($softwareData)
+    public function saveSnomSoftware($recordData)
     {
-        return $this->_save($softwareData, Voipmanager_Controller_Snom_Software::getInstance(), 'Snom_Software');
+        return $this->_save($recordData, Voipmanager_Controller_Snom_Software::getInstance(), 'Snom_Software');
     }     
       
       
@@ -353,12 +351,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $templateData['id'] is empty the template gets added, otherwise it gets updated
      *
-     * @param string $templateData a JSON encoded array of template properties
+     * @param string $recordData a JSON encoded array of template properties
      * @return array
      */
-    public function saveSnomTemplate($templateData)
+    public function saveSnomTemplate($recordData)
     {
-        return $this->_save($templateData, Voipmanager_Controller_Snom_Template::getInstance(), 'Snom_Template');               
+        return $this->_save($recordData, Voipmanager_Controller_Snom_Template::getInstance(), 'Snom_Template');               
     }     
     
     /**
@@ -407,12 +405,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $settingData['id'] is empty the setting gets added, otherwise it gets updated
      *
-     * @param string $settingData a JSON encoded array of setting properties
+     * @param string $recordData a JSON encoded array of setting properties
      * @return array
      */
-    public function saveSnomSetting($settingData)
+    public function saveSnomSetting($recordData)
     {
-        return $this->_save($settingData, Voipmanager_Controller_Snom_Setting::getInstance(), 'Snom_Setting');
+        return $this->_save($recordData, Voipmanager_Controller_Snom_Setting::getInstance(), 'Snom_Setting');
     }
     
    
@@ -463,12 +461,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $contextData['id'] is empty the context gets added, otherwise it gets updated
      *
-     * @param string $contextData a JSON encoded array of context properties
+     * @param string $recordData a JSON encoded array of context properties
      * @return array
      */
-    public function saveAsteriskContext($contextData)
+    public function saveAsteriskContext($recordData)
     {
-        return $this->_save($contextData, Voipmanager_Controller_Asterisk_Context::getInstance(), 'Asterisk_Context');      
+        return $this->_save($recordData, Voipmanager_Controller_Asterisk_Context::getInstance(), 'Asterisk_Context');      
     }     
     
     
@@ -518,12 +516,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $meetmeData['id'] is empty the meetme gets added, otherwise it gets updated
      *
-     * @param string $meetmeData a JSON encoded array of meetme properties
+     * @param string $recordData a JSON encoded array of meetme properties
      * @return array
      */
-    public function saveAsteriskMeetme($meetmeData)
+    public function saveAsteriskMeetme($recordData)
     {
-        return $this->_save($meetmeData, Voipmanager_Controller_Asterisk_Meetme::getInstance(), 'Asterisk_Meetme');
+        return $this->_save($recordData, Voipmanager_Controller_Asterisk_Meetme::getInstance(), 'Asterisk_Meetme');
     }     
     
     /**
@@ -572,14 +570,13 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $sipPeerData['id'] is empty the sip peer gets added, otherwise it gets updated
      *
-     * @param string $sipPeerData a JSON encoded array of sipPeer properties
+     * @param string $recordData a JSON encoded array of sipPeer properties
      * @return array
      */
-    public function saveAsteriskSipPeer($sipPeerData)
+    public function saveAsteriskSipPeer($recordData)
     {
-        return $this->_save($sipPeerData, Voipmanager_Controller_Asterisk_SipPeer::getInstance(), 'Asterisk_SipPeer');       
+        return $this->_save($recordData, Voipmanager_Controller_Asterisk_SipPeer::getInstance(), 'Asterisk_SipPeer');       
     }     
-    
 
     /**
      * delete multiple asterisk sip peers
@@ -626,12 +623,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * if $voicemailData['id'] is empty the voicemail gets added, otherwise it gets updated
      *
-     * @param string $voicemailData a JSON encoded array of voicemail properties
+     * @param string $recordData a JSON encoded array of voicemail properties
      * @return array
      */
-    public function saveAsteriskVoicemail($voicemailData)
+    public function saveAsteriskVoicemail($recordData)
     {
-        return $this->_save($voicemailData, Voipmanager_Controller_Asterisk_Voicemail::getInstance(), 'Asterisk_Voicemail');
+        return $this->_save($recordData, Voipmanager_Controller_Asterisk_Voicemail::getInstance(), 'Asterisk_Voicemail');
     }     
     
    
