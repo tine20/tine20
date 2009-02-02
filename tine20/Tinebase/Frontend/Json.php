@@ -71,6 +71,10 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         Tinebase_Core::setupUserLocale($localeString, $saveaspreference);
         $locale = Tinebase_Core::get('locale');
+        
+        // save in cookie (expires in 30 days)
+        setcookie('TINE20LOCALE', $localeString, time()+60*60*24*30);        
+        
         /* No need for return values yet. Client needs to reload!
         return array(
             'locale' => array(

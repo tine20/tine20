@@ -364,17 +364,24 @@ class Tinebase_Core
         self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         $localeString = NULL;
         if ($_localeString == 'auto') {
-            // if the session already has a locale, use this, otherwise take the preference
-            // NOTE: the preference allways exists, cuase setup gives one!
-            if (isset($session->userLocale)) {
-                $localeString = $session->userLocale;
-                self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
-            } elseif (isset($session->currentAccount)) {
-                $localeString = Tinebase_Config::getInstance()
-                    ->getPreference(self::getUser()->getId(), 'Locale')
-                    ->value;
-                    
-                self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
+            
+            // check cookie
+            if (isset($_COOKIE['TINE20LOCALE'])) {
+                $localeString = $_COOKIE['TINE20LOCALE'];
+            } else {
+                
+                // if the session already has a locale, use this, otherwise take the preference
+                // NOTE: the preference allways exists, cuase setup gives one!
+                if (isset($session->userLocale)) {
+                    $localeString = $session->userLocale;
+                    self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
+                } elseif (isset($session->currentAccount)) {
+                    $localeString = Tinebase_Config::getInstance()
+                        ->getPreference(self::getUser()->getId(), 'Locale')
+                        ->value;
+                        
+                    self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
+                }
             }
         } 
         $locale = Tinebase_Translation::getLocale($localeString ? $localeString : $_localeString);
