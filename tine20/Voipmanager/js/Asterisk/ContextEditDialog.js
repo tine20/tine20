@@ -32,18 +32,7 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function(record) {
-        this.onContextUpdate();
     	Tine.Voipmanager.AsteriskContextEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
-    
-    /**
-     * this gets called when initializing and if a new context is chosen
-     * 
-     * @param {} field
-     * @param {} timeaccount
-     */
-    onContextUpdate: function(field, timeaccount) {
-        
     },
     
     /**
