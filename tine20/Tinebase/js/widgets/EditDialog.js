@@ -59,6 +59,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     showContainerSelector: false,
     /**
+     * @cfg {Bool} evalGrants
+     * should grants of a grant-aware recotds be evaluated (defaults to true)
+     */
+    evalGrants: true,
+    /**
      * @cfg {Ext.data.Record} record
      * record in edit process.
      */
@@ -287,6 +292,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * update (action updateer) top and bottom toolbars
      */
     updateToolbars: function(record, containerField) {
+        if (! this.evalGrants) {
+            return;
+        }
+        
         var actions = [
             this.action_saveAndClose,
             this.action_applyChanges,
