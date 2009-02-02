@@ -52,6 +52,7 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
     initComponent: function(){
 	    Tine.widgets.AccountpickerField.superclass.initComponent.call(this);
 		
+        this.emptyText = _('none');
 		if (this.selectOnFocus) {
 			this.on('focus', function(){
 				return this.onTrigger2Click();
