@@ -39,10 +39,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             '-', this.exportButton, '-', {
             text: _('Mass Update'),
             iconCls: 'action_edit',
+            disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
             scope: this,
             menu: {
                 items: [
-                    '<b class="x-ux-menu-title">' + _('Field to Update') + '</b>',
+                    '<b class="x-ux-menu-title">' + _('Update field:') + '</b>',
                     {
                         text: this.app.i18n._('Billable'),
                         field: 'is_billable',
@@ -137,6 +138,16 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                     
                     var update = {};
                     update[input.name] = input.getValue();
+                    
+                    // some adjustments
+                    if (input.name == 'is_cleared' && !update[input.name]) {
+                        // reset billed_in field
+                        update.billed_in = '';
+                    }
+                    if (input.name == 'billed_in' && update[input.name].length > 0) {
+                        // set is cleard dynamically
+                        update.is_cleared = true;
+                    }
                     
                     this.recordProxy.updateRecords(filter, update, {
                         scope: this,
