@@ -26,23 +26,13 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
     recordProxy: Tine.Voipmanager.SnomSoftwareBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function(record) {
-        this.onSoftwareUpdate();
     	Tine.Voipmanager.SnomSoftwareEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
-    
-    /**
-     * this gets called when initializing and if a new timeaccount is chosen
-     * 
-     * @param {} field
-     * @param {} timeaccount
-     */
-    onSoftwareUpdate: function(field, timeaccount) {
-        
     },
     
     /**
@@ -50,8 +40,7 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-     
-      getSoftwareVersion: function () {
+    getSoftwareVersion: function () {
       	
       	var softwareVersion = new Array();
          _phoneModels = Tine.Voipmanager.Data.loadPhoneModelData();
@@ -73,10 +62,11 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
      
     getFormItems: function() { 
         return {
-            xtype: 'tabpanel',
-            border: false,
-            plain:true,
-            activeTab: 0,
+            layout:'form',
+            //frame: true,
+            border:false,
+            width: 440,
+            autoHeight: true,
             items:[{
                     xtype:'textfield',
                     name: 'name',
@@ -95,7 +85,7 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     layout: 'form',
                     border: false,
                     anchor: '100%',
-                    items: this.softwareVersion
+                    items: this.getSoftwareVersion()
                 }]
         };
     }
@@ -107,8 +97,8 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
 Tine.Voipmanager.SnomSoftwareEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 470,
+        width: 500,
+        height: 300,
         name: Tine.Voipmanager.SnomSoftwareEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Voipmanager.SnomSoftwareEditDialog',
         contentPanelConstructorConfig: config
