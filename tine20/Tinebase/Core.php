@@ -365,16 +365,17 @@ class Tinebase_Core
         $localeString = NULL;
         if ($_localeString == 'auto') {
             
-            // check cookie
+            // check if cookie with language is available
             if (isset($_COOKIE['TINE20LOCALE'])) {
                 $localeString = $_COOKIE['TINE20LOCALE'];
             } else {
                 
-                // if the session already has a locale, use this, otherwise take the preference
-                // NOTE: the preference allways exists, cuase setup gives one!
+                // if the session already has a locale, use this, otherwise use the preference 
+                // NOTE: we always have the preference setting as fallback because it is created in the setup
                 if (isset($session->userLocale)) {
                     $localeString = $session->userLocale;
                     self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
+                    
                 } elseif (isset($session->currentAccount)) {
                     $localeString = Tinebase_Config::getInstance()
                         ->getPreference(self::getUser()->getId(), 'Locale')
