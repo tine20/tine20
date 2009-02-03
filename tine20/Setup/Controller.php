@@ -181,7 +181,22 @@ class Setup_Controller
                     do {
                         $functionName = 'update_' . $minor;
                         //echo "FUNCTIONNAME: $functionName<br>";
-                        $update->$functionName();
+                        
+                        try {
+                            $db = Tinebase_Core::getDb();
+                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+                        
+                            $update->$functionName();
+                        
+                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                
+                        } catch (Exception $e) {
+                            Tinebase_TransactionManager::getInstance()->rollBack();
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                            throw $e;
+                        }
+                            
                         $minor++;
                     } while(array_search('update_' . $minor, $classMethods) !== false);
                 }

@@ -1396,192 +1396,178 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      */
     public function update_17()
     {
-        try {
+        // tables with application_id as foreign key
+        $appIdTables = array(
+            'application_tables' => 'application_tables::application_id--applications::id',
+            'container' => 'container_application_id',
+            'role_rights' => 'role_rights::application_id--applications::id',
+            'config' => 'config::application_id--applications::id',
+            'config_user' => 'config_user::application_id--applications::id',
+            'config_customfields' => 'config_customfields::application_id--applications::id',
+            'timemachine_modlog' => 'timemachine_modlog::application_id--applications::id'
+        );
         
-            $db = Tinebase_Core::getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-                    
-            // tables with application_id as foreign key
-            $appIdTables = array(
-                'application_tables' => 'application_tables::application_id--applications::id',
-                'container' => 'container_application_id',
-                'role_rights' => 'role_rights::application_id--applications::id',
-                'config' => 'config::application_id--applications::id',
-                'config_user' => 'config_user::application_id--applications::id',
-                'config_customfields' => 'config_customfields::application_id--applications::id',
-                'timemachine_modlog' => 'timemachine_modlog::application_id--applications::id'
-            );
-            
-            foreach($appIdTables as $table => $key) {
-                try {
-                    $this->_backend->dropForeignKey($table, $key);
-                } catch (Zend_Db_Statement_Exception $ze) {
-                    // skip error
-                }
-            }
-            
-            $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>
-            ');
-            $this->_backend->alterCol('applications', $declaration);
-    
-            $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>application_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-            ');
-            
-            foreach ($appIdTables as $table => $fk) {
-                $this->_backend->alterCol($table, $declaration);
-            }
-    
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>application_tables::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                            <ondelete>cascade</ondelete>
-                            </reference>
-                    </index>
-            ');
-            $this->_backend->addForeignKey('application_tables', $declaration);
-    
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>container::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-            ');
-            $this->_backend->addForeignKey('container', $declaration);
-    
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>timemachine_modlog::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-            ');
-            $this->_backend->addForeignKey('timemachine_modlog', $declaration);
-    
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>role_rights::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-            ');
-            $this->_backend->addForeignKey('role_rights', $declaration);
-    
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                     <index>
-                        <name>config::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-            ');
-            $this->_backend->addForeignKey('config', $declaration);
-    
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>config_user::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-            ');
-            $this->_backend->addForeignKey('config_user', $declaration);
-    
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>config_customfields::application_id--applications::id</name>
-                        <field>
-                            <name>application_id</name>
-                        </field>
-                        <foreign>true</foreign>
-                        <reference>
-                            <table>applications</table>
-                            <field>id</field>
-                        </reference>
-                    </index>
-            ');
-            $this->_backend->addForeignKey('config_customfields', $declaration);
-            
-            // remove container acl, when deleting container
-            // and give foreign key a proper name
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>container_acl::container_id--container::id</name>
-                    <field>
-                        <name>container_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
-                        <field>id</field>
-                        <ondelete>cascade</ondelete>
-                    </reference>
-                </index>
-            ');
+        foreach($appIdTables as $table => $key) {
             try {
-                $this->_backend->dropForeignKey('container_acl', 'container_id');
+                $this->_backend->dropForeignKey($table, $key);
             } catch (Zend_Db_Statement_Exception $ze) {
                 // skip error
             }
-            $this->_backend->addForeignKey('container_acl', $declaration);
-            
-            $this->setApplicationVersion('Tinebase', '0.18');
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            throw $e;
         }
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('applications', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>application_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        
+        foreach ($appIdTables as $table => $fk) {
+            $this->_backend->alterCol($table, $declaration);
+        }
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>application_tables::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('application_tables', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>container::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('container', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>timemachine_modlog::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('timemachine_modlog', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>role_rights::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('role_rights', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                 <index>
+                    <name>config::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('config', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>config_user::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('config_user', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>config_customfields::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('config_customfields', $declaration);
+        
+        // remove container acl, when deleting container
+        // and give foreign key a proper name
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>container_acl::container_id--container::id</name>
+                <field>
+                    <name>container_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>container</table>
+                    <field>id</field>
+                    <ondelete>cascade</ondelete>
+                </reference>
+            </index>
+        ');
+        try {
+            $this->_backend->dropForeignKey('container_acl', 'container_id');
+        } catch (Zend_Db_Statement_Exception $ze) {
+            // skip error
+        }
+        $this->_backend->addForeignKey('container_acl', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '0.18');            
     }
 
     /**
