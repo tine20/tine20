@@ -108,16 +108,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         }
         $phone = $this->getSnomPhone($phone->getId());
 
-        /*
-        foreach($ownerData AS $owner) {
-            $owner['phone_id'] = $phone['id'];
-            
-            $_owner = new Voipmanager_Model_Snom_PhoneOwner();   
-            $_owner->setFromArray($owner);
-            
-            $_ownerData[] = $_owner;
-        }
-        */
         return $phone;         
     }     
     
