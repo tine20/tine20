@@ -63,12 +63,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * get one phone identified by phoneId
      *
-     * @param int $phoneId
+     * @param int $id
      * @return array
      */
-    public function getSnomPhone($phoneId)
+    public function getSnomPhone($id)
     {
-        $record = Voipmanager_Controller_Snom_Phone::getInstance()->get($phoneId);        
+        $record = Voipmanager_Controller_Snom_Phone::getInstance()->get($id);        
         $result = $record->toArray();      
         return $result;        
     }    
@@ -167,12 +167,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one phoneSettings identified by phoneSettingsId
      *
-     * @param int $phoneSettingsId
+     * @param int $id
      * @return array
      */
-    public function getSnomPhoneSettings($phoneSettingsId)
+    public function getSnomPhoneSettings($id)
     {
-        return $this->_get($phoneSettingsId, Voipmanager_Controller_Snom_PhoneSettings::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Snom_PhoneSettings::getInstance());
     }              
     
     /**
@@ -222,12 +222,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * get one location identified by locationId
      *
-     * @param int $locationId
+     * @param int $id
      * @return array
      */
-    public function getSnomLocation($locationId)
+    public function getSnomLocation($id)
     {
-        return $this->_get($locationId, Voipmanager_Controller_Snom_Location::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Snom_Location::getInstance());
     }      
 
 
@@ -280,12 +280,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one software identified by softwareId
      *
-     * @param int $softwareId
+     * @param int $id
      * @return array
      */
-    public function getSnomSoftware($softwareId)
+    public function getSnomSoftware($id)
     {
-        return $this->_get($softwareId, Voipmanager_Controller_Snom_Software::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Snom_Software::getInstance());
     }         
 
 
@@ -338,12 +338,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one template identified by templateId
      *
-     * @param int $templateId
+     * @param int $id
      * @return array
      */
-    public function getSnomTemplate($templateId)
+    public function getSnomTemplate($id)
     {
-        return $this->_get($templateId, Voipmanager_Controller_Snom_Template::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Snom_Template::getInstance());
     }
              
     /**
@@ -392,12 +392,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one setting identified by settingId
      *
-     * @param int $settingId
+     * @param int $id
      * @return array
      */
-    public function getSnomSetting($settingId)
+    public function getSnomSetting($id)
     {
-        return $this->_get($settingId, Voipmanager_Controller_Snom_Setting::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Snom_Setting::getInstance());
     }    
     
     /**
@@ -447,12 +447,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one context identified by contextId
      *
-     * @param int $contextId
+     * @param int $id
      * @return array
      */
-    public function getAsteriskContext($contextId)
+    public function getAsteriskContext($id)
     {
-        return $this->_get($contextId, Voipmanager_Controller_Asterisk_Context::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Asterisk_Context::getInstance());
     }    
     
     
@@ -502,12 +502,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one meetme identified by meetmeId
      *
-     * @param int $meetmeId
+     * @param int $id
      * @return array
      */
-    public function getAsteriskMeetme($meetmeId)
+    public function getAsteriskMeetme($id)
     {
-        return $this->_get($meetmeId, Voipmanager_Controller_Asterisk_Meetme::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Asterisk_Meetme::getInstance());
     }    
     
     
@@ -556,12 +556,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one asterisk sip peer identified by sipPeerId
      *
-     * @param int $sipPeerId
+     * @param int $id
      * @return array
      */
-    public function getAsteriskSipPeer($sipPeerId)
+    public function getAsteriskSipPeer($id)
     {
-        return $this->_get($sipPeerId, Voipmanager_Controller_Asterisk_SipPeer::getInstance());       
+        return $this->_get($id, Voipmanager_Controller_Asterisk_SipPeer::getInstance());       
     }
           
              
@@ -610,12 +610,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
    /**
      * get one voicemail identified by voicemailId
      *
-     * @param int $voicemailId
+     * @param int $id
      * @return array
      */
-    public function getAsteriskVoicemail($voicemailId)
+    public function getAsteriskVoicemail($id)
     {     
-        return $this->_get($voicemailId, Voipmanager_Controller_Asterisk_Voicemail::getInstance());
+        return $this->_get($id, Voipmanager_Controller_Asterisk_Voicemail::getInstance());
     }        
     
     /**
