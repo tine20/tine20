@@ -69,9 +69,12 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             'description'           => 'test role for phpunit',
         ));
 
+        
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        
         // add account for group / role member tests
         $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
-        if (empty($user->accountId)) {
+        if ($user->accountDisplayName == $translate->_('unknown')) {
             Tinebase_User::getInstance()->addUser($this->objects['user']);
         }
                 
