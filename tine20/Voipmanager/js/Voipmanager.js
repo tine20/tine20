@@ -174,7 +174,10 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
     	Tine.Voipmanager.TreePanel.superclass.initComponent.call(this);
         
         this.on('click', function(node) {
-        
+            if (node.disabled) {
+                return false;
+            }
+            
             var contentType = node.getPath().split('/')[3];
             var contentGroup = node.getPath().split('/')[2];
                                 
