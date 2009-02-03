@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:$
+ * @version     $Id$
  *
  */
  
@@ -26,23 +26,13 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
     recordProxy: Tine.Voipmanager.SnomTemplateBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function(record) {
-        this.onTemplateUpdate();
     	Tine.Voipmanager.SnomTemplateEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
-    
-    /**
-     * this gets called when initializing and if a new timeaccount is chosen
-     * 
-     * @param {} field
-     * @param {} timeaccount
-     */
-    onTemplateUpdate: function(field, timeaccount) {
-        
     },
     
     /**
@@ -52,10 +42,10 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
      */
     getFormItems: function() { 
         return {
-            xtype: 'tabpanel',
+            layout: 'form',
             border: false,
-            plain:true,
-            activeTab: 0,
+            width: 440,
+            height: 280,
             items:[{
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Name'),
@@ -134,8 +124,8 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
 Tine.Voipmanager.SnomTemplateEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 470,
+        width: 500,
+        height: 350,
         name: Tine.Voipmanager.SnomTemplateEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Voipmanager.SnomTemplateEditDialog',
         contentPanelConstructorConfig: config
