@@ -54,17 +54,17 @@ Tine.Voipmanager.AsteriskVoicemailEditDialog = Ext.extend(Tine.widgets.dialog.Ed
                       xtype: 'combo',
                       fieldLabel: this.app.i18n._('Context'),
                       name: 'context',
-                      mode: 'local',
                       displayField: 'name',
                       valueField: 'name',
                       anchor: '100%',
                       triggerAction: 'all',
                       editable: false,
                       forceSelection: true,
-                      store: new Ext.data.JsonStore({
-                          storeId: 'Voipmanger_EditVoicemail_Context',
-                          id: 'id',
-                          fields: ['id', 'name']
+                      store: new Ext.data.Store({
+                        fields: Tine.Voipmanager.Model.AsteriskContext,
+                        proxy: Tine.Voipmanager.AsteriskContextBackend,
+                        remoteSort: true,
+                        sortInfo: {field: 'name', dir: 'ASC'}
                       })
                   }, {
                       xtype: 'textfield',
@@ -110,14 +110,11 @@ Tine.Voipmanager.AsteriskVoicemailEditDialog = Ext.extend(Tine.widgets.dialog.Ed
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
-                        store: new Ext.data.SimpleStore({
-                            id: 'id',
-                            fields: ['id', 'value'],
-                            data: [                                                                 
-                                ['1', this.app.i18n._('on')],
-                                ['0', this.app.i18n._('off')]
-                            ]
-                        })
+                        value: '1',
+                        store: [                                                                 
+                            ['1', this.app.i18n._('on')],
+                            ['0', this.app.i18n._('off')]
+                        ]
                 },
                 items: [
                     [{
