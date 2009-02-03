@@ -15,7 +15,6 @@ Ext.namespace('Tine.Voipmanager');
  * Snom Template Edit Dialog
  */
 Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-
     
     /**
      * @private
@@ -24,16 +23,7 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.SnomTemplate,
     recordProxy: Tine.Voipmanager.SnomTemplateBackend,
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
-    
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     */
-    updateToolbars: function(record) {
-    	Tine.Voipmanager.SnomTemplateEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
     
     /**
      * returns dialog
@@ -44,14 +34,14 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
         return {
             layout: 'form',
             border: false,
-            width: 440,
-            height: 280,
+            defaults: {
+                anchor: '100%'
+            },
             items:[{
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Name'),
                     name: 'name',
                     maxLength: 80,
-                    anchor: '100%',
                     allowBlank: false
                 }, {
                     xtype: 'textarea',
@@ -59,16 +49,13 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     fieldLabel: this.app.i18n._('Description'),
                     grow: false,
                     preventScrollbars: false,
-                    anchor: '100%',
                     height: 40
                 }, {
                     xtype: 'combo',
                     fieldLabel: this.app.i18n._('Software Version'),
                     name: 'software_id',
-                    id: 'software_id',
                     displayField: 'name',
                     valueField: 'id',
-                    anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
@@ -82,10 +69,8 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     xtype: 'combo',
                     fieldLabel: this.app.i18n._('Settings'),
                     name: 'setting_id',
-                    id: 'setting_id',
                     displayField: 'name',
                     valueField: 'id',
-                    anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
@@ -99,12 +84,10 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     xtype: 'combo',
                     fieldLabel: this.app.i18n._('Keylayout'),
                     name: 'keylayout_id',
-                    id: 'keylayout_id',
                     mode: 'local',
                     disabled: true,
                     displayField: 'description',
                     valueField: 'id',
-                    anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
