@@ -35,7 +35,7 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         // which content panel?
         var type = this.activeContentType;
         var group = this.activeContentGroup;
-console.log(group +  '/' + type);		
+        //console.log(group +  '/' + type);		
          if (! this[group + type  + 'GridPanel']) { 
             this[group + type + 'GridPanel'] = new Tine[this.app.appName][group + type + 'GridPanel']({
                 app: this.app
