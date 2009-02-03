@@ -137,7 +137,7 @@ Tine.Voipmanager.Model.SnomLocation = Tine.Tinebase.Record.create(Tine.Voipmanag
     containerName: 'locations list',
     containersName: 'locations lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('name')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.SnomLocation.getDefaultData = function() { 
@@ -174,7 +174,7 @@ Tine.Voipmanager.Model.SnomTemplate = Tine.Tinebase.Record.create(Tine.Voipmanag
     containerName: 'templates list',
     containersName: 'templates lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('name')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.SnomTemplate.getDefaultData = function() { 
@@ -212,7 +212,7 @@ Tine.Voipmanager.Model.SnomSoftware = Tine.Tinebase.Record.create(Tine.Voipmanag
     containerName: 'softwares list',
     containersName: 'softwares lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('name')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.SnomSoftware.getDefaultData = function() { 
@@ -245,7 +245,7 @@ Tine.Voipmanager.Model.SnomSoftwareImage = Tine.Tinebase.Record.create(Tine.Voip
     containerName: 'softwareImages list',
     containersName: 'softwareImages lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('model')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.SnomSoftwareImage.getDefaultData = function() { 
@@ -282,7 +282,7 @@ Tine.Voipmanager.Model.SnomLine = Tine.Tinebase.Record.create(Tine.Voipmanager.M
     containerName: 'lines list',
     containersName: 'lines lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('linenumber')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.SnomLine.getDefaultData = function() { 
@@ -339,7 +339,7 @@ Tine.Voipmanager.Model.SnomSetting = Tine.Tinebase.Record.create(Tine.Voipmanage
     containerName: 'setting list',
     containersName: 'setting lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('name')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.SnomSetting.getDefaultData = function() { 
@@ -465,7 +465,7 @@ Tine.Voipmanager.Model.AsteriskSipPeer = Tine.Tinebase.Record.create(Tine.Voipma
     containerName: 'sipPeers list',
     containersName: 'sipPeers lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('name')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.AsteriskSipPeer.getDefaultData = function() { 
@@ -499,7 +499,7 @@ Tine.Voipmanager.Model.AsteriskContext = Tine.Tinebase.Record.create(Tine.Voipma
     containerName: 'contexts list',
     containersName: 'contexts lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('name')) : false;
+        return this.get('name') ? this.get('name') : false;
     }
 });
 Tine.Voipmanager.Model.AsteriskContext.getDefaultData = function() { 
