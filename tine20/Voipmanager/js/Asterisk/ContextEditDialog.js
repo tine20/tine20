@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:$
+ * @version     $Id$
  *
  */
  
@@ -24,16 +24,7 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.AsteriskContext,
     recordProxy: Tine.Voipmanager.AsteriskContextBackend,
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
-    
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     */
-    updateToolbars: function(record) {
-    	Tine.Voipmanager.AsteriskContextEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
     
     /**
      * returns dialog
@@ -44,8 +35,6 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
         return {
             layout: 'form',
             border: false,
-            width: 440,
-            height: 280,
             items:[
             	{
                     xtype: 'textfield',
