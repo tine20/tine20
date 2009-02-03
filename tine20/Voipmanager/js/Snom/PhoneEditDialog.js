@@ -56,6 +56,112 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },    
     
     /**
+     * update settings on template change
+     * 
+     * @param {} _combo
+     * @param {} _record
+     * @param {} _index
+     * 
+     * @todo add that again
+     */
+    onTemplateChange: function(_combo, _record, _index) {
+    	
+        /*
+          Ext.Ajax.request({
+                params: {
+                    method: 'Voipmanager.getSnomSetting', 
+                    settingId: _record.data.setting_id
+                },
+                success: function(_result, _request) {
+                    _data = Ext.util.JSON.decode(_result.responseText);
+                    _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
+                    var _notWritable = new Object();
+                    var _settingsData = new Object();
+
+                    Ext.each(_writableFields, function(_item, _index, _all) {
+                        _rwField = _item.toString() + '_writable';
+
+                        if(_data[_rwField] == '0') {
+                            _settingsData[_item] = _data[_item];                                                        
+                        } else  if(_phoneData[_item]) {
+                             _settingsData[_item] = _phoneData[_item];
+                        } else {
+                             _settingsData[_item] = _data[_item];                                                        
+                        }                                                       
+
+                        
+                        if(_data[_rwField] == '0') {
+                            _notWritable[_rwField.toString()] = 'true';                                                                                                       
+                        } else  {
+                             _notWritable[_rwField.toString()] = 'false';                                                        
+                        }   
+                    });                     
+                    
+                    Array.prototype.in_array = function(needle) {
+                        for (var i = 0; i < this.length; i++) {
+                            if (this[i] === needle) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }; 
+
+                    Ext.getCmp('voipmanager_editPhoneForm').cascade(function(_field) {
+                        if(_writableFields.in_array(_field.id)) {
+                            if(_notWritable[_field.id.toString()+'_writable'] == 'true') {
+                                _field.disable();    
+                            }
+                            if(_notWritable[_field.id.toString()+'_writable'] == 'false') {
+                                _field.enable();    
+                            }            
+                            _field.setValue(_settingsData[_field.id]);
+                        }
+                    });
+                
+                    Ext.getCmp('voipmanager_editPhoneForm').doLayout();
+                },
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert('Failed', 'No settings data found.'); 
+                },
+                scope: this 
+            });                                   
+        }
+        */ 
+    },
+    
+    /**
+     * on model change
+     * 
+     * @param {} _combo
+     * @param {} _record
+     * @param {} _index
+     */
+    onModelChange: function(_combo, _record, _index) {
+        // @todo add that again
+        /*
+        _store = Ext.getCmp('Voipmanager_PhoneLines_Grid').getStore();
+
+        while (_store.getCount() > _maxLines[_record.data.id] ) {
+            var _id = _store.getCount();
+            _store.remove(_store.getAt((_id-1)));
+        }
+  
+        while (_store.getCount() < _maxLines[_record.data.id]) {
+            _snomRecord = new Tine.Voipmanager.Model.Snom.Line({
+                'asteriskline_id':'',
+                'id':'',
+                'idletext':'',
+                'lineactive':0,
+                'linenumber':_store.getCount()+1,
+                'snomphone_id':''
+            });         
+            _store.add(_snomRecord);
+        }                                        
+        */
+    },
+    
+    
+    /**
      * 
      * @param {} _maxLines
      * @param {} _lines
@@ -221,7 +327,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         };
         
         return _phoneLinesDialog;
-//          return gridPanel;
     },                
 
     /**
@@ -404,84 +509,22 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 fieldLabel: this.app.i18n._('Template'),
                                 name: 'template_id',
                                 id: 'template_id',
-                                mode: 'local',
                                 displayField: 'name',
                                 valueField: 'id',
                                 anchor: '98%',
                                 triggerAction: 'all',
                                 editable: false,
                                 forceSelection: true,
+                                store: new Ext.data.Store({
+                                    fields: Tine.Voipmanager.Model.SnomTemplate,
+                                    proxy: Tine.Voipmanager.SnomTemplateBackend,
+                                    remoteSort: true,
+                                    sortInfo: {field: 'name', dir: 'ASC'}
+                                }),
                                 listeners: {
-                                	// @todo add that again
-                                	/*
-                                    select: function(_combo, _record, _index) {
-
-                                      Ext.Ajax.request({
-                                            params: {
-                                                method: 'Voipmanager.getSnomSetting', 
-                                                settingId: _record.data.setting_id
-                                            },
-                                            success: function(_result, _request) {
-                                                _data = Ext.util.JSON.decode(_result.responseText);
-                                                _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
-                                                var _notWritable = new Object();
-                                                var _settingsData = new Object();
-            
-                                                Ext.each(_writableFields, function(_item, _index, _all) {
-                                                    _rwField = _item.toString() + '_writable';
-
-                                                    if(_data[_rwField] == '0') {
-                                                        _settingsData[_item] = _data[_item];                                                        
-                                                    } else  if(_phoneData[_item]) {
-                                                         _settingsData[_item] = _phoneData[_item];
-                                                    } else {
-                                                         _settingsData[_item] = _data[_item];                                                        
-                                                    }                                                       
-
-                                                    
-                                                    if(_data[_rwField] == '0') {
-                                                        _notWritable[_rwField.toString()] = 'true';                                                                                                       
-                                                    } else  {
-                                                         _notWritable[_rwField.toString()] = 'false';                                                        
-                                                    }   
-                                                });                     
-                                                
-                                                Array.prototype.in_array = function(needle) {
-                                                    for (var i = 0; i < this.length; i++) {
-                                                        if (this[i] === needle) {
-                                                            return true;
-                                                        }
-                                                    }
-                                                    return false;
-                                                }; 
-
-                                                Ext.getCmp('voipmanager_editPhoneForm').cascade(function(_field) {
-                                                    if(_writableFields.in_array(_field.id)) {
-                                                        if(_notWritable[_field.id.toString()+'_writable'] == 'true') {
-                                                            _field.disable();    
-                                                        }
-                                                        if(_notWritable[_field.id.toString()+'_writable'] == 'false') {
-                                                            _field.enable();    
-                                                        }            
-                                                        _field.setValue(_settingsData[_field.id]);
-                                                    }
-                                                });
-                                            
-                                                Ext.getCmp('voipmanager_editPhoneForm').doLayout();
-                                            },
-                                            failure: function ( result, request) { 
-                                                Ext.MessageBox.alert('Failed', 'No settings data found.'); 
-                                            },
-                                            scope: this 
-                                        });                                   
-                                    } 
-                                    */   
-                                },
-                                store: new Ext.data.JsonStore({
-                                    storeId: 'Voipmanger_EditPhone_Templates',
-                                    id: 'id',
-                                    fields: ['id', 'name', 'setting_id']
-                                })
+                                	select: this.onTemplateChange
+                                }
+                                    
                             }]
                         }, {
                             columnWidth: 0.5,
@@ -501,29 +544,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 editable: false,
                                 forceSelection: true,
                                 listeners: {
-                                	// @todo add that again
-                                	/*
-                                    select: function(_combo, _record, _index) {
-                                        _store = Ext.getCmp('Voipmanager_PhoneLines_Grid').getStore();
-
-                                        while (_store.getCount() > _maxLines[_record.data.id] ) {
-                                            var _id = _store.getCount();
-                                            _store.remove(_store.getAt((_id-1)));
-                                        }
-      
-                                        while (_store.getCount() < _maxLines[_record.data.id]) {
-                                            _snomRecord = new Tine.Voipmanager.Model.Snom.Line({
-                                                'asteriskline_id':'',
-                                                'id':'',
-                                                'idletext':'',
-                                                'lineactive':0,
-                                                'linenumber':_store.getCount()+1,
-                                                'snomphone_id':''
-                                            });         
-                                            _store.add(_snomRecord);
-                                        }                                        
-                                    }
-                                    */
+                                	select: this.onModelChange
                                 },
                                 store: Tine.Voipmanager.Data.loadPhoneModelData()
                             }),
@@ -532,28 +553,19 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 fieldLabel: this.app.i18n._('Location'),
                                 name: 'location_id',
                                 id: 'location_id',
-                                mode: 'local',
                                 displayField: 'name',
                                 valueField: 'id',
                                 anchor: '98%',
                                 triggerAction: 'all',
                                 editable: false,
                                 forceSelection: true,
-                                store: new Ext.data.JsonStore({
-                                    storeId: 'Voipmanger_EditPhone_Locations',
-                                    id: 'id',
-                                    fields: ['id', 'name']
+                                store: new Ext.data.Store({
+                                    fields: Tine.Voipmanager.Model.SnomLocation,
+                                    proxy: Tine.Voipmanager.SnomLocationBackend,
+                                    remoteSort: true,
+                                    sortInfo: {field: 'name', dir: 'ASC'}
                                 })
-                            }                            
-                            /*, {
-                                xtype: 'textarea',
-                                name: 'description',
-                                fieldLabel: this.app.i18n._('Description'),
-                                grow: false,
-                                preventScrollbars: false,
-                                anchor: '100%',
-                                height: 70
-                            } */]
+                            }]
                         }]
                     }, {
                         layout: 'form',

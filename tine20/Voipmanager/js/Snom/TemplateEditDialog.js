@@ -66,34 +66,34 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     fieldLabel: this.app.i18n._('Software Version'),
                     name: 'software_id',
                     id: 'software_id',
-                    mode: 'local',
                     displayField: 'name',
                     valueField: 'id',
                     anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
-                    store: new Ext.data.JsonStore({
-                        storeId: 'Voipmanger_EditTemplate_Software',
-                        id: 'id',
-                        fields: ['id', 'name']
+                    store: new Ext.data.Store({
+                        fields: Tine.Voipmanager.Model.SnomSoftware,
+                        proxy: Tine.Voipmanager.SnomSoftwareBackend,
+                        remoteSort: true,
+                        sortInfo: {field: 'name', dir: 'ASC'}
                     })
                 }, {
                     xtype: 'combo',
                     fieldLabel: this.app.i18n._('Settings'),
                     name: 'setting_id',
                     id: 'setting_id',
-                    mode: 'local',
                     displayField: 'name',
                     valueField: 'id',
                     anchor: '100%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
-                    store: new Ext.data.JsonStore({
-                        storeId: 'Voipmanger_EditTemplate_Settings',
-                        id: 'id',
-                        fields: ['id', 'name']
+                    store: new Ext.data.Store({
+                        fields: Tine.Voipmanager.Model.SnomSetting,
+                        proxy: Tine.Voipmanager.SnomSettingBackend,
+                        remoteSort: true,
+                        sortInfo: {field: 'name', dir: 'ASC'}
                     })
                 }, {
                     xtype: 'combo',
