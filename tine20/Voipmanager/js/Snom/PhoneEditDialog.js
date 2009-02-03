@@ -30,10 +30,50 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     evalGrants: false,
     
     /**
+     * members grid panel
+     * 
+     * @type grid panel 
+     */
+    rightsGrid: null,
+    
+    /**
+     * rights store
+     * @type Ext.data.JsonStore
+     */
+    rightsStore: null,
+    
+    /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function(record) {
     	Tine.Voipmanager.SnomPhoneEditDialog.superclass.updateToolbars.call(this, record, 'id');
+    },
+    
+    /**
+     * record load (get rights and put them into the store)
+     */
+    onRecordLoad: function() {
+        // make sure grants grid is initialised
+        this.getRightsGrid();
+        
+        var rights = this.record.get('rights') || [];
+        this.rightsStore.loadData({results: rights});
+        Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordLoad.call(this);
+    },
+    
+    /**
+     * record update (push rights into record property)
+     */
+    onRecordUpdate: function() {
+        Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordUpdate.call(this);
+        this.record.set('rights', '');
+        
+        var rights = [];
+        this.rightsStore.each(function(_record){
+            rights.push(_record.data);
+        });
+        
+        this.record.set('rights', rights);
     },
     
     /**
@@ -159,7 +199,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }                                        
         */
     },
-    
     
     /**
      * 
@@ -331,124 +370,29 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
     /**
      * 
-     * @param {} _groupMembers
      * @return {}
      * 
      * @todo make it work again
      */
-    editPhoneOwnerSelection: function(/*_groupMembers*/){
-    
-    	/*
-    
-
-        this.actions = {
-            addAccount: new Ext.Action({
-                text: this.app.i18n._('add account'),
-                disabled: true,
-                scope: this,
-                handler: this.handlers.addAccount,
-                iconCls: 'action_addContact'
-            }),
-            removeAccount: new Ext.Action({
-                text: this.app.i18n._('remove account'),
-                disabled: true,
-                scope: this,
-                handler: this.handlers.removeAccount,
-                iconCls: 'action_deleteContact'
-            })
-        };
-
-        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
-            enableBbar: true,
-            region: 'west',
-            height: 200,
-            //bbar: this.userSelectionBottomToolBar,
-            selectAction: function() {              
-                this.account = account;
-                this.handlers.addAccount(account);
-            }  
-        });
-                
-        accountPicker.on('accountdblclick', function(account){
-            this.account = account;
-            this.handlers.addAccount(account);
-        }, this);
-            
-        this.dataStore = new Ext.data.JsonStore({
-            id: 'account_id',
-            fields: Tine.Voipmanager.Model.Snom.Owner
-        });
-
-        Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
-        
-        this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
-        
-        if (_groupMembers.length === 0) {
-            this.dataStore.removeAll();
-        } else {
-            this.dataStore.loadData(_groupMembers);    
+    getRightsGrid: function(){
+        	
+        if (! this.rightsGrid) {
+            this.rightsStore =  new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'id',
+                fields: Tine.Voipmanager.Model.SnomPhoneRight
+            });
+                        
+            this.rightsGrid = new Tine.widgets.account.ConfigGrid({
+            	accountPickerType: 'both',
+                accountListTitle: this.app.i18n._('Rights'),
+                configStore: this.rightsStore,
+                hasAccountPrefix: true
+                //configColumns: columns
+            });
         }
-
-        var columnModel = new Ext.grid.ColumnModel([{ 
-            resizable: true, id: 'accountDisplayName', header: this.app.i18n._('Name'), dataIndex: 'accountDisplayName', width: 30 
-        }]);
-
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.removeAccount.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.removeAccount.setDisabled(false);
-            }
-        }, this);
-       
-
-
-        var usersBottomToolbar = new Ext.Toolbar({
-            items: [
-                this.actions.removeAccount
-            ]
-        });
-
-
-        
-        var phoneUsersGridPanel = new Ext.grid.EditorGridPanel({
-            id: 'phoneUsersGrid',
-            region: 'center',
-            title: this.app.i18n._('Owner'),
-            store: this.dataStore,
-            cm: columnModel,
-            autoSizeColumns: false,
-            selModel: rowSelectionModel,
-            enableColLock:false,
-            loadMask: true,
-            //autoExpandColumn: 'accountLoginName',
-            autoExpandColumn: 'accountDisplayName',
-            bbar: usersBottomToolbar,
-            border: true
-        }); 
-        
-
-                */
-        
-        var editGroupDialog = {
-            layout:'border',
-            title: this.app.i18n._('Users'),
-            border:false,
-            width: 600,
-            height: 500,
-            items:[
-                //accountPicker, 
-                //phoneUsersGridPanel
-            ]
-        };            
-        
-        return editGroupDialog;   
+        return this.rightsGrid;
     },
     
     /**
@@ -1069,11 +1013,15 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         }]
                     }]   // form 
                 }]   // center       
+            },{
+                title: 'Users',
+                layout: 'fit',
+                items: [this.getRightsGrid()]
             }
             // @todo add that again
             /*, 
                 this.editPhoneLinesDialog(),
-                this.editPhoneOwnerSelection()
+                
             */
             ]
         };

@@ -55,7 +55,7 @@ class Voipmanager_Model_Snom_PhoneRight extends Tinebase_Record_Abstract
         'account_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'account_type'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
     
-        'accountDisplayName' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_name'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     
         'read_right'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'write_right'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),

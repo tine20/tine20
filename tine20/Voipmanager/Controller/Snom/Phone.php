@@ -84,7 +84,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         // add accountDisplayName
         foreach ($phone->rights as &$right) {
             $user = Tinebase_User::getInstance()->getUserById($right->account_id);
-            $right->accountDisplayName = $user->accountDisplayName;
+            $right->account_name = $user->accountDisplayName;
         }
         
         return $phone;    
@@ -109,7 +109,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         // add accountDisplayName
         foreach ($phone->rights as &$right) {
             $user = Tinebase_User::getInstance()->getUserById($right->account_id);
-            $right->accountDisplayName = $user->accountDisplayName;
+            $right->account_name = $user->accountDisplayName;
         }
         
         return $phone;    
@@ -121,7 +121,6 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * @param Voipmanager_Model_Snom_Phone $_phone
      * @return  Voipmanager_Model_Snom_Phone
      */
-    # public function create(Voipmanager_Model_Snom_Phone $_phone, Voipmanager_Model_Snom_PhoneSettings $_phoneSettings)
     public function create(Tinebase_Record_Interface $_phone)
     {
         // auto generate random http client username and password        
@@ -187,7 +186,6 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * @param Voipmanager_Model_Snom_PhoneSettings|optional $_phoneSettings
      * @return  Voipmanager_Model_Snom_Phone
      */
-    # public function update(Voipmanager_Model_Snom_Phone $_phone, $_phoneSettings = NULL)
     public function update(Tinebase_Record_Interface $_phone)
     {
         unset($_phone->settings_loaded_at);
@@ -197,6 +195,9 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         unset($_phone->current_software);
         
         $phone = $this->_backend->update($_phone);
+        
+        // @todo add that again
+        /*
         $_phoneSettings = $phone->settings;
         
         if($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
@@ -231,6 +232,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             $line->snomphone_id = $phone->getId();
             $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->create($line);
         }
+        */
         
         // save phone rights
         if (isset($_phone->rights)) {

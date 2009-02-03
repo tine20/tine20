@@ -117,7 +117,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
             $_acl->setId($id);
         }
         
-        unset($_acl->accountDisplayName);
+        unset($_acl->account_name);
         
         $result = $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones_acl', $_acl->toArray());
         

@@ -79,26 +79,28 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * @param string $phoneData a JSON encoded array of phone properties
      * @return array
+     * 
+     * @todo add lines again
      */
-    public function saveSnomPhone($recordData/*$phoneData, $lineData, $rightsData*/)
+    public function saveSnomPhone($recordData/*$lineData*/)
     {
         $phoneData  = Zend_Json::decode($recordData);
         $lineData   = Zend_Json::decode($lineData);
-        $rightsData = Zend_Json::decode($rightsData);
         
         // unset if empty
         if (empty($phoneData['id'])) {
             unset($phoneData['id']);
         }
         
-        $phone = new Voipmanager_Model_Snom_Phone();
-        $phone->setFromArray($phoneData);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($phoneData, true));
+        
+        $phone = new Voipmanager_Model_Snom_Phone($phoneData);
         
         $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
         $phoneSettings->setFromArray($phoneData);
         
-        $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line', $lineData, true);
-        $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', $rightsData);
+        $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line'/*, $lineData, true*/);
+        $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', $phoneData['rights']);
         $phone->settings = $phoneSettings;
         
         if (empty($phone->id)) {

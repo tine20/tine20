@@ -349,22 +349,33 @@ Tine.Voipmanager.Model.SnomSetting.getDefaultData = function() {
 };
 
 
+/**
+ * Model of a right
+ */
+Tine.Voipmanager.Model.SnomPhoneRight = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'account_id'},
+    {name: 'account_type'},
+    {name: 'account_name'}
+]);
 
+/*
+ * @deprecated
+ */
+/*
 
 Tine.Voipmanager.Model.SnomOwnerArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'account_id'},
     {name: 'account_type'},
-    {name: 'accountDisplayName'}
+    {name: 'account_name'}
+
+    //{name: 'accountDisplayName'}
 ]);
-/**
- * @type {Tine.Tinebase.Record}
- * Voipmanager record definition
- */
 Tine.Voipmanager.Model.SnomOwner = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomOwnerArray, {
     appName: 'Voipmanager',
     modelName: 'SnomOwner',
     idProperty: 'account_id',
-    titleProperty: 'accountDisplayName',
+    titleProperty: 'account_name',
     // ngettext('Owner', 'Owners', n);
     recordName: 'SnomOwner',
     recordsName: 'SnomOwners',
@@ -373,7 +384,7 @@ Tine.Voipmanager.Model.SnomOwner = Tine.Tinebase.Record.create(Tine.Voipmanager.
     containerName: 'owners list',
     containersName: 'owners lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('accountDisplayName')) : false;
+        return this.get('number') ? (this.get('number') + ' ' + this.get('account_name')) : false;
     }
 });
 Tine.Voipmanager.Model.SnomOwner.getDefaultData = function() { 
@@ -381,7 +392,7 @@ Tine.Voipmanager.Model.SnomOwner.getDefaultData = function() {
         account_id: Tine.Tinebase.registry.get('currentAccount')
     }
 };
-
+*/
 
 
 
