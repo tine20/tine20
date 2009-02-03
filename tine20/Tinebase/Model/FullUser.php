@@ -31,7 +31,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     protected $_filters = array(
         //'accountId'             => 'Digits',
         'accountLoginName'      => 'StringTrim',
-        'account_primary_group' => 'Digits',
+        //'accountPrimaryGroup'   => 'Digits',
         'accountDisplayName'    => 'StringTrim',
         'accountLastName'       => 'StringTrim',
         'accountFirstName'      => 'StringTrim',

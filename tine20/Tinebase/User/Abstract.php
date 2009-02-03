@@ -78,7 +78,7 @@ abstract class Tinebase_User_Abstract
             'accountLastName'       => $translate->_('unknown'),
             'accountFirstName'      => $translate->_('unknown'),
             'accountFullName'       => $translate->_('unknown'),
-            //'account_primary_group' => 0,         
+            //'accountPrimaryGroup' => 0,         
         );
         $result = new $_accountClass($data);
         

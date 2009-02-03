@@ -110,9 +110,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'description'           => 'phpunit test role',
         ));
         
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        
         // add account for group / role member tests
         $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
-        if (empty($user->accountId)) {
+        if ($user->accountDisplayName == $translate->_('unknown')) {
             Tinebase_User::getInstance()->addUser($this->objects['user']);
         }
         
@@ -161,7 +163,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $user = Tinebase_User::getInstance()->getUserById($id);
         
         $this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
-        $this->assertEquals(0, $user->accountId);
+        $this->assertEquals($id, $user->accountId);
     }
 
     /**
