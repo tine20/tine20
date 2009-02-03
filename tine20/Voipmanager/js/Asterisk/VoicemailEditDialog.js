@@ -102,7 +102,7 @@ Tine.Voipmanager.AsteriskVoicemailEditDialog = Ext.extend(Tine.widgets.dialog.Ed
                 formDefaults: {
                     xtype:'combo',
                     anchor: '100%',
-                    //labelSeparator: '',
+                    labelSeparator: '',
                     columnWidth: .333,
                     mode: 'local',
                         displayField: 'value',
