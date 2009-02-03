@@ -25,52 +25,51 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.SnomPhone,
     recordProxy: Tine.Voipmanager.SnomPhoneBackend,
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     
     /**
-     * members grid panel
-     * 
-     * @type grid panel 
-     */
-    rightsGrid: null,
-    
-    /**
-     * rights store
-     * @type Ext.data.JsonStore
+     * @property {Ext.data.JsonStore}
      */
     rightsStore: null,
     
     /**
-     * lines grid panel
-     * 
-     * @type grid panel 
-     */
-    linesGrid: null,
-    
-    /**
-     * lines store
-     * @type Ext.data.JsonStore
+     * @property {Ext.data.JsonStore}
      */
     linesStore: null,
     
     /**
-     * overwrite update toolbars function (we don't have record grants yet)
+     * @private
      */
-    updateToolbars: function(record) {
-    	Tine.Voipmanager.SnomPhoneEditDialog.superclass.updateToolbars.call(this, record, 'id');
+    initComponent: function() {
+        
+        // why the hack is this a jsonStore???
+        this.rightsStore =  new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Voipmanager.Model.SnomPhoneRight
+        });
+        
+        // why the hack is this a jsonStore???
+        this.linesStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Voipmanager.Model.SnomLine
+        });
+        
+        Tine.Voipmanager.SnomPhoneEditDialog.superclass.initComponent.call(this);
     },
     
     /**
      * record load (get rights and put them into the store)
      */
     onRecordLoad: function() {
-        // make sure grants grid is initialised
-        this.getRightsGrid();
-        
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
+        
+        var lines = this.record.get('lines') || [];
+        this.linesStore.loadData({results: lines});
         
         Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordLoad.call(this);
     },
@@ -80,19 +79,27 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     onRecordUpdate: function() {
         Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordUpdate.call(this);
+        
         this.record.set('rights', '');
+        this.record.set('lines', '');
         
         var rights = [];
         this.rightsStore.each(function(_record){
             rights.push(_record.data);
         });
-        
         this.record.set('rights', rights);
+        
+        var lines = [];
+        this.linesStore.each(function(_record){
+            lines.push(_record.data);
+        });
+        this.record.set('lines', lines);
     },
     
     /**
      * max lines
      * 
+     * @todo this data is already in some data array in voipmanager.js
      * @param {} _val
      * @return {}
      */
@@ -224,66 +231,14 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @todo make it work again
      */
     editPhoneLinesDialog: function(/*_maxLines, _lines, _snomLines*/) {
- 
-        if (! this.linesGrid) {
-            this.linesStore =  new Ext.data.JsonStore({
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'id',
-                fields: Tine.Voipmanager.Model.SnomPhoneRight
-            });
-               
-            /*
-            this.linesGrid = new Tine.widgets.account.ConfigGrid({
-                accountPickerType: 'both',
-                accountListTitle: this.app.i18n._('Rights'),
-                configStore: this.rightsStore,
-                hasAccountPrefix: true
-                //configColumns: columns
-            });
-            */
-        }
-        return this.linesGrid;
     	
     	/*
-        var linesText = new Array();
-        var linesSIPCombo = new Array();
-        var linesIdleText = new Array();
-        var linesActive = new Array();
+        var linesText = [];
+        var linesSIPCombo = [];
+        var linesIdleText = [];
+        var linesActive = [];
         
-        Ext.grid.CheckColumn = function(config){
-            Ext.apply(this, config);
-            if(!this.id){
-                this.id = Ext.id();
-            }
-            this.renderer = this.renderer.createDelegate(this);
-        };
-        
-        Ext.grid.CheckColumn.prototype ={
-            init : function(grid){
-                this.grid = grid;
-                this.grid.on('render', function(){
-                    var view = this.grid.getView();
-                    view.mainBody.on('mousedown', this.onMouseDown, this);
-                }, this);
-            },
-        
-            onMouseDown : function(e, t){
-                if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
-                    e.stopEvent();
-                    var index = this.grid.getView().findRowIndex(t);
-                    var record = this.grid.store.getAt(index);
-                    record.set(this.dataIndex, !record.data[this.dataIndex]);
-                }
-            },
-        
-            renderer : function(v, p, record){
-                p.css += ' x-grid3-check-col-td'; 
-                return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
-            }
-        };
-        
-        var checkColumn = new Ext.grid.CheckColumn({
+        var checkColumn = new Ext.ux.grid.CheckColumn({
            header: this.app.i18n._('lineactive'),
            dataIndex: 'lineactive',
            width: 25
@@ -296,14 +251,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             data: _lines
         });
         
-        var snomLinesDS = new Ext.data.JsonStore({
-            autoLoad: true,
-            storeId: 'Voipmanger_EditPhone_SnomLines',
-            id: 'id',
-            fields: ['asteriskline_id','id','idletext','lineactive','linenumber','snomphone_id'],
-            data: _snomLines
-        });
-
         while (snomLinesDS.getCount() < _maxLines) {
             _snomRecord = new Tine.Voipmanager.Model.Snom.Line({
                 'asteriskline_id':'',
@@ -383,682 +330,423 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 emptyText: 'No software to display'
             })            
         });
-        */
-        var _phoneLinesDialog = {
-            title: 'Lines',
-            id: 'phoneLines',
-            layout: 'border',
-            anchor: '100% 100%',
-            layoutOnTabChange: true,
-            defaults: {
-                border: true,
-                frame: false
-            },
-            items: [
-            //    gridPanel
-            ]
-        };
-        
-        return _phoneLinesDialog;
-    },                
+    },*/             
 
-    /**
-     * 
-     * @return {} Ext.data.JsonStore rightsGrid
-     * 
-     */
-    getRightsGrid: function(){
-        	
-        if (! this.rightsGrid) {
-            this.rightsStore =  new Ext.data.JsonStore({
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'id',
-                fields: Tine.Voipmanager.Model.SnomPhoneRight
-            });
-                        
-            this.rightsGrid = new Tine.widgets.account.ConfigGrid({
-            	accountPickerType: 'both',
-                accountListTitle: this.app.i18n._('Rights'),
-                configStore: this.rightsStore,
-                hasAccountPrefix: true
-                //configColumns: columns
-            });
-        }
-        return this.rightsGrid;
-    },
-    
     /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
             plain:true,
             activeTab: 0,
-            items:[{        	
-                title: this.app.i18n._('Phone'),
-                layout: 'border',
-                anchor: '100% 100%',
-                layoutOnTabChange: true,
-                defaults: {
-                    border: true,
-                    frame: false
+            deferredRender: false,
+            items:[
+                this.getPhonePanel(), 
+                this.getSettingsPanel(),
+                this.getLinesPanel(),
+                this.getRightsPanel()
+            ]
+        };
+    },
+    
+    /**
+     * returns general phone panel (first panel)
+     * 
+     * @return {Object}
+     */
+    getPhonePanel: function() {
+        return {
+            title: this.app.i18n._('Phone'),
+            layout: 'hfit',
+            frame: true,
+            border: false,
+            items: [{
+                xtype: 'columnform',
+                formDefaults: {
+                    columnWidth: 0.5,
+                    anchor: '100%',
+                    labelSeparator: ''
                 },
-                items: [{
-                    region: 'center',
-                    autoScroll: true,
+                items: [
+                    [{
+                        xtype: 'textfield',
+                        name: 'description',
+                        fieldLabel: this.app.i18n._('Name'),
+                        allowBlank: false
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: this.app.i18n._('Phone Model'),
+                        name: 'current_model',
+                        mode: 'local',
+                        displayField: 'model',
+                        valueField: 'id',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        listeners: {
+                            select: this.onModelChange
+                        },
+                        store: Tine.Voipmanager.Data.loadPhoneModelData()
+                    }], [{
+                        xtype: 'textfield',
+                        fieldLabel: this.app.i18n._('MAC Address'),
+                        name: 'macaddress',
+                        maxLength: 12,
+                        allowBlank: false
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: this.app.i18n._('Template'),
+                        name: 'template_id',
+                        displayField: 'name',
+                        valueField: 'id',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.Store({
+                            fields: Tine.Voipmanager.Model.SnomTemplate,
+                            proxy: Tine.Voipmanager.SnomTemplateBackend,
+                            remoteSort: true,
+                            sortInfo: {field: 'name', dir: 'ASC'}
+                        }),
+                        listeners: {
+                            select: this.onTemplateChange
+                        }
+                    }], [{
+                        xtype: 'combo',
+                        fieldLabel: this.app.i18n._('Location'),
+                        name: 'location_id',
+                        displayField: 'name',
+                        valueField: 'id',
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: new Ext.data.Store({
+                            fields: Tine.Voipmanager.Model.SnomLocation,
+                            proxy: Tine.Voipmanager.SnomLocationBackend,
+                            remoteSort: true,
+                            sortInfo: {field: 'name', dir: 'ASC'}
+                        })
+                    }]
+                ]}, {
+                    title: this.app.i18n._('infos'),
+                    autoHeight: true,
+                    xtype: 'fieldset',
+                    checkboxToggle: false,
+                    items: [{
+                        xtype: 'columnform',
+                        border: false,
+                        formDefaults: {
+                            columnWidth: 0.5,
+                            anchor: '100%',
+                            labelSeparator: ''
+                        },
+                        items: [
+                            [{
+                                xtype: 'textfield',
+                                fieldLabel: this.app.i18n._('Current IP Address'),
+                                name: 'ipaddress',
+                                maxLength: 20,
+                                anchor: '98%',
+                                readOnly: true
+                            }, {
+                                xtype: 'datetimefield',
+                                fieldLabel: this.app.i18n._('Firmware last checked at'),
+                                name: 'firmware_checked_at',
+                                anchor: '100%',
+                                emptyText: 'never',
+                                hideTrigger: true,
+                                readOnly: true
+                            }], [{
+                                xtype: 'textfield',
+                                fieldLabel: this.app.i18n._('Current Software Version'),
+                                name: 'current_software',
+                                maxLength: 20,
+                                anchor: '98%',
+                                readOnly: true
+                            }, {
+                                xtype: 'datetimefield',
+                                fieldLabel: this.app.i18n._('Settings Loaded at'),
+                                name: 'settings_loaded_at',
+                                anchor: '100%',
+                                emptyText: 'never',
+                                hideTrigger: true,
+                                readOnly: true
+                            }]
+                        ]
+                    }]
+                }, {
+                    title: this.app.i18n._('redirection'),
+                    xtype: 'fieldset',
+                    checkboxToggle: false,
                     autoHeight: true,
                     items: [{
-                        layout: 'column',
+                        xtype: 'columnform',
                         border: false,
-                        anchor: '100%',
-                        height: 130,
-                        items: [{
-                            columnWidth: 0.5,
-                            layout: 'form',
-                            border: false,
+                        formDefaults: {
+                            columnWidth: 0.333,
                             anchor: '100%',
-                            items: [
-                            {
-                                xtype: 'textfield',
-                                name: 'description',
-                                fieldLabel: this.app.i18n._('Name'),
-                                anchor: '98%',
-                                allowBlank: false
-                                /*
-                                grow: false,
-                                preventScrollbars: false,
-                                height: 70
-                                */
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: this.app.i18n._('MAC Address'),
-                                name: 'macaddress',
-                                maxLength: 12,
-                                anchor: '98%',
-                                allowBlank: false
-                            }, {
-                                xtype: 'combo',
-                                fieldLabel: this.app.i18n._('Template'),
-                                name: 'template_id',
-                                id: 'template_id',
-                                displayField: 'name',
-                                valueField: 'id',
-                                anchor: '98%',
-                                triggerAction: 'all',
-                                editable: false,
-                                forceSelection: true,
-                                store: new Ext.data.Store({
-                                    fields: Tine.Voipmanager.Model.SnomTemplate,
-                                    proxy: Tine.Voipmanager.SnomTemplateBackend,
-                                    remoteSort: true,
-                                    sortInfo: {field: 'name', dir: 'ASC'}
-                                }),
-                                listeners: {
-                                	select: this.onTemplateChange
-                                }
-                                    
-                            }]
-                        }, {
-                            columnWidth: 0.5,
-                            layout: 'form',
-                            border: false,
-                            anchor: '98%',
-                            autoHeight: true,
-                            items: [new Ext.form.ComboBox({
-                                fieldLabel: this.app.i18n._('Phone Model'),
-                                name: 'current_model',
-                                id: 'current_model',
-                                mode: 'local',
-                                displayField: 'model',
-                                valueField: 'id',
-                                anchor: '100%',
-                                triggerAction: 'all',
-                                editable: false,
-                                forceSelection: true,
-                                listeners: {
-                                	select: this.onModelChange
-                                },
-                                store: Tine.Voipmanager.Data.loadPhoneModelData()
-                            }),
-                            {
-                                xtype: 'combo',
-                                fieldLabel: this.app.i18n._('Location'),
-                                name: 'location_id',
-                                id: 'location_id',
-                                displayField: 'name',
-                                valueField: 'id',
-                                anchor: '98%',
-                                triggerAction: 'all',
-                                editable: false,
-                                forceSelection: true,
-                                store: new Ext.data.Store({
-                                    fields: Tine.Voipmanager.Model.SnomLocation,
-                                    proxy: Tine.Voipmanager.SnomLocationBackend,
-                                    remoteSort: true,
-                                    sortInfo: {field: 'name', dir: 'ASC'}
-                                })
-                            }]
-                        }]
-                    }, {
-                        layout: 'form',
-                        border: false,
-                        anchor: '100%',
-                        items: [{
-                            xtype: 'fieldset',
-                            checkboxToggle: false,
-                            id: 'infos',
-                            title: this.app.i18n._('infos'),
-                            autoHeight: true,
-                            anchor: '100%',
-                            defaults: {
-                                anchor: '100%'
-                            },
-                            items: [{
-                                layout: 'column',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    columnWidth: 0.5,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'textfield',
-                                        fieldLabel: this.app.i18n._('Current IP Address'),
-                                        name: 'ipaddress',
-                                        maxLength: 20,
-                                        anchor: '98%',
-                                        readOnly: true
-                                    }, {
-                                        xtype: 'textfield',
-                                        fieldLabel: this.app.i18n._('Current Software Version'),
-                                        name: 'current_software',
-                                        maxLength: 20,
-                                        anchor: '98%',
-                                        readOnly: true
-                                    }]
-                                }, {
-                                    columnWidth: 0.5,
-                                    layout: 'form',
-                                    border: false,
-                                    anchor: '100%',
-                                    items: [{
-                                        xtype: 'datetimefield',
-                                        fieldLabel: this.app.i18n._('Settings Loaded at'),
-                                        name: 'settings_loaded_at',
-                                        anchor: '100%',
-                                        emptyText: 'never',
-                                        hideTrigger: true,
-                                        readOnly: true
-                                    }, {
-                                        xtype: 'datetimefield',
-                                        fieldLabel: this.app.i18n._('Firmware last checked at'),
-                                        name: 'firmware_checked_at',
-                                        anchor: '100%',
-                                        emptyText: 'never',
-                                        hideTrigger: true,
-                                        readOnly: true
-                                    }]
-                                }]
-                            }]
-                        }]
-                    },{
-                        xtype: 'fieldset',
-                        checkboxToggle: false,
-                        id: 'redirectionFieldset',
-                        title: this.app.i18n._('redirection'),
-                        autoHeight: true,
-                        anchor: '100%',
-                        defaults: {
-                            anchor: '100%'
+                            labelSeparator: ''
                         },
-                        items: [{
-                            layout: 'column',
-                            border: false,
-                            anchor: '100%',
-                            items: [{ 
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('redirect_event'),
-                                    name: 'redirect_event',
-                                    id: 'redirect_event',                                                                       
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: 'all',
-                                    listeners: {
-                                        select: function(_combo, _record, _index) {
-                                            if (_record.data.id == 'time') {
-                                                Ext.getCmp('redirect_time').enable();
-                                            }
-                                            
-                                            if(_record.data.id != 'time') {                                                   
-                                                Ext.getCmp('redirect_time').disable();
-                                            }
+                        items: [
+                            [{ 
+                                xtype: 'combo',
+                                fieldLabel: this.app.i18n._('redirect_event'),
+                                name: 'redirect_event',
+                                mode: 'local',
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                value: 'all',
+                                listeners: {
+                                    select: function(_combo, _record, _index) {
+                                        if (_record.data.id == 'time') {
+                                            Ext.getCmp('redirect_time').enable();
                                         }
-                                    },
-                                    store: [
-                                        ['all', this.app.i18n._('all')],
-                                        ['busy', this.app.i18n._('busy')],
-                                        ['none', this.app.i18n._('none')],
-                                        ['time', this.app.i18n._('time')]
-                                    ]
-                                }]
+                                        
+                                        if(_record.data.id != 'time') {                                                   
+                                            Ext.getCmp('redirect_time').disable();
+                                        }
+                                    }
+                                },
+                                store: [
+                                    ['all', this.app.i18n._('all')],
+                                    ['busy', this.app.i18n._('busy')],
+                                    ['none', this.app.i18n._('none')],
+                                    ['time', this.app.i18n._('time')]
+                                ]
                             }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'textfield',
-                                    fieldLabel: this.app.i18n._('redirect_number'),
-                                    name: 'redirect_number',
-                                    id: 'redirect_number',
-                                    anchor: '95%'                                
-                               }]
+                                xtype: 'textfield',
+                                fieldLabel: this.app.i18n._('redirect_number'),
+                                name: 'redirect_number'
                             }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'numberfield',
-                                    fieldLabel: this.app.i18n._('redirect_time'),
-                                    name: 'redirect_time',
-                                    id: 'redirect_time',
-                                    anchor: '100%'                                                                     
-                               }]
-                            }]  
-                        }]
+                                xtype: 'numberfield',
+                                fieldLabel: this.app.i18n._('redirect_time'),
+                                name: 'redirect_time',
+                                id: 'redirect_time',
+                                anchor: '100%'                                                                     
+                           }]
+                        ]  
                     }]
                 }]
-            }, {
-                title: this.app.i18n._('Settings'),
-                layout: 'border',
-                id: 'settingsBorderLayout',
-                anchor: '100% 100%',
-                layoutOnTabChange: true,
-                defaults: {
-                    border: true,
-                    frame: false
-                },
-                items: [{
-                    layout: 'hfit',
-                    containsScrollbar: false,
-                    //margins: '0 18 0 5',
-                    autoScroll: false,
-                    id: 'editSettingMainDialog',
-                    region: 'center',
-                    items: [{
-                        layout: 'form',
-                        border: false,
-                        anchor: '100%',
-                        items: [{
-                            layout: 'column',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [
-                                    {
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('web_language'),
-                                    name: 'web_language',
-                                    id: 'web_language',
-                                    // @todo add that again
-                                    //disabled: _writable.web_language,
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],                                        
-                                        ['English', Locale.getTranslationData('Language', 'en')],
-                                        ['Deutsch', Locale.getTranslationData('Language', 'de')],
-                                        ['Espanol', Locale.getTranslationData('Language', 'es')],
-                                        ['Francais', Locale.getTranslationData('Language', 'fr')],
-                                        ['Italiano', Locale.getTranslationData('Language', 'it')],
-                                        ['Nederlands', Locale.getTranslationData('Language', 'nl')],
-                                        ['Portugues', Locale.getTranslationData('Language', 'pt')],
-                                        ['Suomi', Locale.getTranslationData('Language', 'fi')],
-                                        ['Svenska', Locale.getTranslationData('Language', 'sv')],
-                                        ['Dansk', Locale.getTranslationData('Language', 'da')],
-                                        ['Norsk', Locale.getTranslationData('Language', 'no')]
-                                    ]
-                                }]
-                            }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('language'),
-                                    name: 'language',
-                                    id: 'language',
-                                    // @todo add that again
-                                    //disabled: _writable.language,                                    
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],                                                                                               
-                                        ['English', Locale.getTranslationData('Language', 'en')],
-                                        ['English(UK)', Locale.getTranslationData('Language', 'en_GB')],
-                                        ['Deutsch', Locale.getTranslationData('Language', 'de')],
-                                        ['Espanol', Locale.getTranslationData('Language', 'es')],
-                                        ['Francais', Locale.getTranslationData('Language', 'fr')],
-                                        ['Italiano', Locale.getTranslationData('Language', 'it')],
-                                        ['Cestina', Locale.getTranslationData('Language', 'cs')],
-                                        ['Nederlands', Locale.getTranslationData('Language', 'nl')],
-                                        ['Polski', Locale.getTranslationData('Language', 'pl')],
-                                        ['Portugues', Locale.getTranslationData('Language', 'pt')],
-                                        ['Slovencina', Locale.getTranslationData('Language', 'sl')],
-                                        ['Suomi', Locale.getTranslationData('Language', 'fi')],
-                                        ['Svenska', Locale.getTranslationData('Language', 'sv')],
-                                        ['Dansk', Locale.getTranslationData('Language', 'da')],
-                                        ['Norsk', Locale.getTranslationData('Language', 'no')],                                            
-                                        ['Japanese', Locale.getTranslationData('Language', 'ja')],
-                                        ['Chinese', Locale.getTranslationData('Language', 'zh')]
-                                    ]
-                                }]
-                            },{
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('display_method'),
-                                    name: 'display_method',
-                                    id: 'display_method',
-                                    // @todo add that again
-                                    //disabled: _writable.display_method,                                    
-                                    mode: 'local',
-                                    anchor: '100%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],                                                                                
-                                        ['full_contact', this.app.i18n._('whole url')],
-                                        ['display_name', this.app.i18n._('name')],
-                                        ['display_number', this.app.i18n._('number')],
-                                        ['display_name_number', this.app.i18n._('name + number')],
-                                        ['display_number_name', this.app.i18n._('number + name')]
-                                    ]
-                                }]
-                            }]
-                        },{          
-                            layout: 'column',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('call_waiting'),
-                                    name: 'call_waiting',
-                                    id: 'call_waiting',
-                                    // @todo add that again
-                                    //disabled: _writable.call_waiting,                                    
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],                                        
-                                        ['on', this.app.i18n._('on')],
-                                        ['visual', this.app.i18n._('visual')],
-                                        ['ringer', this.app.i18n._('ringer')],
-                                        ['off', this.app.i18n._('off')]
-                                    ]
-                                }]
-                            }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('mwi_notification'),
-                                    name: 'mwi_notification',
-                                    id: 'mwi_notification',
-                                    // @todo add that again
-                                    //disabled: _writable.mwi_notification,                                    
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],                                        
-                                        ['silent', this.app.i18n._('silent')],
-                                        ['beep', this.app.i18n._('beep')],
-                                        ['reminder', this.app.i18n._('reminder')]
-                                    ]
-                                }]
-                            }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('mwi_dialtone'),
-                                    name: 'mwi_dialtone',
-                                    id: 'mwi_dialtone',
-                                    // @todo add that again
-                                    //disabled: _writable.mwi_dialtone,                                    
-                                    mode: 'local',
-                                    anchor: '100%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],                                        
-                                        ['normal', this.app.i18n._('normal')],
-                                        ['stutter', this.app.i18n._('stutter')]
-                                    ]
-                                }]
-                            }]
-                        }, {          
-                            layout: 'column',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('headset_device'),
-                                    name: 'headset_device',
-                                    id: 'headset_device',
-                                    // @todo add that again
-                                    //disabled: _writable.headset_device,                                    
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],                                        
-                                        ['none', this.app.i18n._('none')],
-                                        ['headset_rj', this.app.i18n._('headset_rj')]
-                                    ]
-                                }]
-                            }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                        xtype: 'combo',
-                                        fieldLabel: this.app.i18n._('message_led_other'),
-                                        name: 'message_led_other',
-                                        id: 'message_led_other',
-                                        // @todo add that again
-                                        //disabled: _writable.message_led_other,                                        
-                                        mode: 'local',
-                                        anchor: '95%',
-                                        triggerAction: 'all',
-                                        editable: false,
-                                        forceSelection: true,
-                                        value: null,
-                                        store: [
-                                            [ null,  this.app.i18n._('- factory default -')],
-                                            ['1', this.app.i18n._('on')],
-                                            ['0', this.app.i18n._('off')]
-                                        ]
-                                }]
-                            }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('global_missed_counter'),
-                                    name: 'global_missed_counter',
-                                    id: 'global_missed_counter',
-                                    // @todo add that again
-                                    //disabled: _writable.global_missed_counter,                                    
-                                    mode: 'local',
-                                    anchor: '100%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],
-                                        ['1', this.app.i18n._('on')], 
-                                        ['0', this.app.i18n._('off')]
-                                    ]
-                                }]
-                            }]
-                        }, {          
-                            layout: 'column',
-                            border: false,
-                            anchor: '100%',
-                            items: [{
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('scroll_outgoing'),
-                                    name: 'scroll_outgoing',
-                                    id: 'scroll_outgoing',
-                                    // @todo add that again
-                                    //disabled: _writable.scroll_outgoing,                                    
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],
-                                        ['1', this.app.i18n._('on')],
-                                        ['0', this.app.i18n._('off')]
-                                    ]
-                                }]
-                            }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('show_local_line'),
-                                    name: 'show_local_line',
-                                    id: 'show_local_line',
-                                    // @todo add that again
-                                    //disabled: _writable.show_local_line,                                    
-                                    mode: 'local',
-                                    anchor: '95%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],
-                                        ['1', this.app.i18n._('on')],
-                                        ['0', this.app.i18n._('off')]
-                                    ]
-                                }]
-                            }, {
-                                columnWidth: 0.33,
-                                layout: 'form',
-                                border: false,
-                                anchor: '100%',
-                                items: [{
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('show_call_status'),
-                                    name: 'show_call_status',
-                                    id: 'show_call_status',
-                                    // @todo add that again
-                                    //disabled: _writable.show_call_status,                                    
-                                    mode: 'local',
-                                    anchor: '100%',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    forceSelection: true,
-                                    value: null,
-                                    store: [
-                                        [ null,  this.app.i18n._('- factory default -')],
-                                        ['1', this.app.i18n._('on')],
-                                        ['0', this.app.i18n._('off')]
-                                    ]
-                                }]
-                            }]
-                        }]
-                    }]   // form 
-                }]   // center       
-            },{
-                title: this.app.i18n._('Users'),
-                layout: 'fit',
-                items: [this.getRightsGrid()]
-            },{
-                title: this.app.i18n._('Lines'),
-                layout: 'fit',
-                items: [this.getLinesGrid()]
-            }
+            };
+    },
+    
+    /**
+     * returns settings panel (second panel)
+     * 
+     * @return {Object}
+     */
+    getSettingsPanel: function() {
+        return {
+            title: this.app.i18n._('Settings'),
+            id: 'settingsBorderLayout',
+            frame: true,
+            border: false,
+            xtype: 'columnform',
+            formDefaults: {
+                xtype:'combo',
+                anchor: '100%',
+                labelSeparator: '',
+                columnWidth: .333,
+                mode: 'local',
+                triggerAction: 'all',
+                editable: false,
+                forceSelection: true,
+                value: null
+            },
+            items: [
+                [{
+                    fieldLabel: this.app.i18n._('web_language'),
+                    name: 'web_language',
+                    // @todo add that again
+                    //disabled: _writable.web_language,
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],                                        
+                        ['English', Locale.getTranslationData('Language', 'en')],
+                        ['Deutsch', Locale.getTranslationData('Language', 'de')],
+                        ['Espanol', Locale.getTranslationData('Language', 'es')],
+                        ['Francais', Locale.getTranslationData('Language', 'fr')],
+                        ['Italiano', Locale.getTranslationData('Language', 'it')],
+                        ['Nederlands', Locale.getTranslationData('Language', 'nl')],
+                        ['Portugues', Locale.getTranslationData('Language', 'pt')],
+                        ['Suomi', Locale.getTranslationData('Language', 'fi')],
+                        ['Svenska', Locale.getTranslationData('Language', 'sv')],
+                        ['Dansk', Locale.getTranslationData('Language', 'da')],
+                        ['Norsk', Locale.getTranslationData('Language', 'no')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('language'),
+                    name: 'language',
+                    // @todo add that again
+                    //disabled: _writable.language,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],                                                                                               
+                        ['English', Locale.getTranslationData('Language', 'en')],
+                        ['English(UK)', Locale.getTranslationData('Language', 'en_GB')],
+                        ['Deutsch', Locale.getTranslationData('Language', 'de')],
+                        ['Espanol', Locale.getTranslationData('Language', 'es')],
+                        ['Francais', Locale.getTranslationData('Language', 'fr')],
+                        ['Italiano', Locale.getTranslationData('Language', 'it')],
+                        ['Cestina', Locale.getTranslationData('Language', 'cs')],
+                        ['Nederlands', Locale.getTranslationData('Language', 'nl')],
+                        ['Polski', Locale.getTranslationData('Language', 'pl')],
+                        ['Portugues', Locale.getTranslationData('Language', 'pt')],
+                        ['Slovencina', Locale.getTranslationData('Language', 'sl')],
+                        ['Suomi', Locale.getTranslationData('Language', 'fi')],
+                        ['Svenska', Locale.getTranslationData('Language', 'sv')],
+                        ['Dansk', Locale.getTranslationData('Language', 'da')],
+                        ['Norsk', Locale.getTranslationData('Language', 'no')],                                            
+                        ['Japanese', Locale.getTranslationData('Language', 'ja')],
+                        ['Chinese', Locale.getTranslationData('Language', 'zh')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('display_method'),
+                    name: 'display_method',
+                    // @todo add that again
+                    //disabled: _writable.display_method,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],                                                                                
+                        ['full_contact', this.app.i18n._('whole url')],
+                        ['display_name', this.app.i18n._('name')],
+                        ['display_number', this.app.i18n._('number')],
+                        ['display_name_number', this.app.i18n._('name + number')],
+                        ['display_number_name', this.app.i18n._('number + name')]
+                    ]
+                }], [{
+                    fieldLabel: this.app.i18n._('call_waiting'),
+                    name: 'call_waiting',
+                    // @todo add that again
+                    //disabled: _writable.call_waiting,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],                                        
+                        ['on', this.app.i18n._('on')],
+                        ['visual', this.app.i18n._('visual')],
+                        ['ringer', this.app.i18n._('ringer')],
+                        ['off', this.app.i18n._('off')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('mwi_notification'),
+                    name: 'mwi_notification',
+                    // @todo add that again
+                    //disabled: _writable.mwi_notification,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],                                        
+                        ['silent', this.app.i18n._('silent')],
+                        ['beep', this.app.i18n._('beep')],
+                        ['reminder', this.app.i18n._('reminder')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('mwi_dialtone'),
+                    name: 'mwi_dialtone',
+                    // @todo add that again
+                    //disabled: _writable.mwi_dialtone,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],                                        
+                        ['normal', this.app.i18n._('normal')],
+                        ['stutter', this.app.i18n._('stutter')]
+                    ]
+                }], [{
+                    fieldLabel: this.app.i18n._('headset_device'),
+                    name: 'headset_device',
+                    // @todo add that again
+                    //disabled: _writable.headset_device,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],                                        
+                        ['none', this.app.i18n._('none')],
+                        ['headset_rj', this.app.i18n._('headset_rj')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('message_led_other'),
+                    name: 'message_led_other',
+                    // @todo add that again
+                    //disabled: _writable.message_led_other,                                        
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],
+                        ['1', this.app.i18n._('on')],
+                        ['0', this.app.i18n._('off')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('global_missed_counter'),
+                    name: 'global_missed_counter',
+                    // @todo add that again
+                    //disabled: _writable.global_missed_counter,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],
+                        ['1', this.app.i18n._('on')], 
+                        ['0', this.app.i18n._('off')]
+                    ]
+                }], [{
+                    fieldLabel: this.app.i18n._('scroll_outgoing'),
+                    name: 'scroll_outgoing',
+                    // @todo add that again
+                    //disabled: _writable.scroll_outgoing,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],
+                        ['1', this.app.i18n._('on')],
+                        ['0', this.app.i18n._('off')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('show_local_line'),
+                    name: 'show_local_line',
+                    // @todo add that again
+                    //disabled: _writable.show_local_line,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],
+                        ['1', this.app.i18n._('on')],
+                        ['0', this.app.i18n._('off')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('show_call_status'),
+                    name: 'show_call_status',
+                    // @todo add that again
+                    //disabled: _writable.show_call_status,                                    
+                    store: [
+                        [ null,  this.app.i18n._('- factory default -')],
+                        ['1', this.app.i18n._('on')],
+                        ['0', this.app.i18n._('off')]
+                    ]
+                }]
             ]
+        };
+    },
+    
+    /**
+     * returns the lines panel (thrid panel)
+     * 
+     * @return {Object}
+     */
+    getLinesPanel: function() {
+        return {
+            title: this.app.i18n._('Lines'),
+            layout: 'fit',
+            html: ''
+        };
+    },
+    
+    /**
+     * returns right panel (fourth panel)
+     * 
+     * @return {Object}
+     */
+    getRightsPanel: function() {
+        return {
+            title: this.app.i18n._('Users'),
+            layout: 'fit',
+            items: new Tine.widgets.account.ConfigGrid({
+                accountPickerType: 'both',
+                accountListTitle: this.app.i18n._('Rights'),
+                configStore: this.rightsStore,
+                hasAccountPrefix: true
+                //configColumns: columns
+            })
         };
     }
 });
+
 
 /**
  * Snom Phone Edit Popup
@@ -1066,8 +754,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 Tine.Voipmanager.SnomPhoneEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 470,
+        width: 700,
+        height: 450,
         name: Tine.Voipmanager.SnomPhoneEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Voipmanager.SnomPhoneEditDialog',
         contentPanelConstructorConfig: config
