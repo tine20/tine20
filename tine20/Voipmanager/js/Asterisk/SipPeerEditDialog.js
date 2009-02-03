@@ -54,17 +54,17 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
                     xtype: 'combo',
                     fieldLabel: this.app.i18n._('Context'),
                     name: 'context',
-                    mode: 'local',
                     displayField: 'name',
                     valueField: 'name',
                     anchor: '98%',
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
-                    store: new Ext.data.JsonStore({
-                        storeId: 'Voipmanger_EditSipPeer_Context',
-                        id: 'id',
-                        fields: ['id', 'name']
+                    store: new Ext.data.Store({
+                        fields: Tine.Voipmanager.Model.AsteriskContext,
+                        proxy: Tine.Voipmanager.AsteriskContextBackend,
+                        remoteSort: true,
+                        sortInfo: {field: 'name', dir: 'ASC'}
                     })
                 }, {
                     xtype: 'combo',
