@@ -66,7 +66,8 @@ Tine.Voipmanager.Model.SnomPhoneArray = Tine.Tinebase.Model.genericFields.concat
     {name: 'scroll_outgoing_writable'},
     {name: 'show_local_line_writable'},
     {name: 'show_call_status_writable'},
-    {name: 'lines'}
+    {name: 'lines'},
+    {name: 'rights'}
 ]);
 
 /**

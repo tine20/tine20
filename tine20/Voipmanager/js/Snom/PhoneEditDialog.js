@@ -58,6 +58,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
+        
         Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordLoad.call(this);
     },
     
@@ -370,9 +371,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
     /**
      * 
-     * @return {}
+     * @return {} Ext.data.JsonStore rightsGrid
      * 
-     * @todo make it work again
      */
     getRightsGrid: function(){
         	
