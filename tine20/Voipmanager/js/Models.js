@@ -77,7 +77,7 @@ Tine.Voipmanager.Model.SnomPhone = Tine.Tinebase.Record.create(Tine.Voipmanager.
     appName: 'Voipmanager',
     modelName: 'SnomPhone',
     idProperty: 'id',
-    titleProperty: 'macaddress',
+    titleProperty: 'description',
     // ngettext('Phone', 'Phones', n);
     recordName: 'SnomPhone',
     recordsName: 'SnomPhones',
@@ -86,7 +86,7 @@ Tine.Voipmanager.Model.SnomPhone = Tine.Tinebase.Record.create(Tine.Voipmanager.
     containerName: 'phones list',
     containersName: 'phones lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('macaddress')) : false;
+        return this.get('description') ? (this.get('description') + ' ' + this.get('macaddress')) : false;
     }
 });
 Tine.Voipmanager.Model.SnomPhone.getDefaultData = function() { 
