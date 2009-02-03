@@ -88,6 +88,9 @@ class Voipmanager_Model_Snom_Location extends Tinebase_Record_Abstract
         // set default value if field is empty
         $this->_filters['admin_mode'] = new Zend_Filter_Empty('false');
         $this->_filters['webserver_Type'] = new Zend_Filter_Empty('https');
+        $this->_filters['ntp_refresh'] = new Zend_Filter_Empty(0);
+        $this->_filters['http_port'] = new Zend_Filter_Empty(0);
+        $this->_filters['https_port'] = new Zend_Filter_Empty(0);
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
