@@ -431,7 +431,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter the string to search for
      * @return void
      */
-    protected function _addFilter(Zend_Db_Select $_select, Tinebase_Model_Filter_FilterGroup $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, /*Tinebase_Model_Filter_FilterGroup */$_filter)
     {
         $_filter->appendFilterSql($_select);
     }
