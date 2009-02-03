@@ -8,7 +8,7 @@
  * @version     $Id$
  *
  * @todo        add settings again
- * @todo        add user & lines again
+ * @todo        add lines again
  */
  
 Ext.namespace('Tine.Voipmanager');
@@ -41,6 +41,19 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @type Ext.data.JsonStore
      */
     rightsStore: null,
+    
+    /**
+     * lines grid panel
+     * 
+     * @type grid panel 
+     */
+    linesGrid: null,
+    
+    /**
+     * lines store
+     * @type Ext.data.JsonStore
+     */
+    linesStore: null,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -211,7 +224,27 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @todo make it work again
      */
     editPhoneLinesDialog: function(/*_maxLines, _lines, _snomLines*/) {
-        
+ 
+        if (! this.linesGrid) {
+            this.linesStore =  new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'id',
+                fields: Tine.Voipmanager.Model.SnomPhoneRight
+            });
+               
+            /*
+            this.linesGrid = new Tine.widgets.account.ConfigGrid({
+                accountPickerType: 'both',
+                accountListTitle: this.app.i18n._('Rights'),
+                configStore: this.rightsStore,
+                hasAccountPrefix: true
+                //configColumns: columns
+            });
+            */
+        }
+        return this.linesGrid;
+    	
     	/*
         var linesText = new Array();
         var linesSIPCombo = new Array();
@@ -1014,15 +1047,14 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     }]   // form 
                 }]   // center       
             },{
-                title: 'Users',
+                title: this.app.i18n._('Users'),
                 layout: 'fit',
                 items: [this.getRightsGrid()]
+            },{
+                title: this.app.i18n._('Lines'),
+                layout: 'fit',
+                items: [this.getLinesGrid()]
             }
-            // @todo add that again
-            /*, 
-                this.editPhoneLinesDialog(),
-                
-            */
             ]
         };
     }
