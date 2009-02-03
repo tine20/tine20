@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:$
+ * @version     $Id$
  *
  */
  
@@ -13,9 +13,9 @@ Ext.namespace('Tine.Voipmanager');
 
 /**
  * Snom Software Edit Dialog
+ * @todo in the model the snom models are hard coded, but in the dialog not... check it
  */
 Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-
     
     /**
      * @private
@@ -24,16 +24,7 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.SnomSoftware,
     recordProxy: Tine.Voipmanager.SnomSoftwareBackend,
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
-    
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     */
-    updateToolbars: function(record) {
-    	Tine.Voipmanager.SnomSoftwareEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
     
     /**
      * returns dialog
@@ -42,14 +33,14 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
      */
     getSoftwareVersion: function () {
       	
-      	var softwareVersion = new Array();
-         _phoneModels = Tine.Voipmanager.Data.loadPhoneModelData();
+      	var softwareVersion = [];
+        var phoneModels = Tine.Voipmanager.Data.loadPhoneModelData();
       
-            _phoneModels.each(function(_rec) {
+            phoneModels.each(function(rec) {
                 softwareVersion.push(new Ext.form.TextField({
-                    fieldLabel: _rec.data.model,
-                    name: 'softwareimage_' + _rec.data.id,
-                    id: 'softwareimage_' + _rec.data.id,
+                    fieldLabel: rec.data.model,
+                    name: 'softwareimage_' + rec.data.id,
+                    id: 'softwareimage_' + rec.data.id,
                     anchor:'100%',
                     maxLength: 128,                    
                     hideLabel: false
@@ -63,10 +54,7 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
     getFormItems: function() { 
         return {
             layout:'form',
-            //frame: true,
             border:false,
-            width: 440,
-            autoHeight: true,
             items:[{
                     xtype:'textfield',
                     name: 'name',
