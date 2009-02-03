@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:$
+ * @version     $Id$
  *
  */
  
@@ -24,27 +24,7 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer,
     recordProxy: Tine.Voipmanager.AsteriskSipPeerBackend, 
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
-    
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     */
-    updateToolbars: function(record) {
-        this.onSipPeerUpdate();
-    	Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
-    
-    /**
-     * this gets called when initializing and if a new timeaccount is chosen
-     * 
-     * @param {} field
-     * @param {} timeaccount
-     */
-    onSipPeerUpdate: function(field, timeaccount) {
-        
-    },
     
     /**
      * returns dialog
@@ -58,121 +38,122 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
             plain:true,
             activeTab: 0,
             items:[{
-            title: this.app.i18n._('General'),
-            border: false,
-            anchor: '100%',
-            xtype: 'columnform',
-            items: [[{
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Name'),
-                name: 'name',
-                maxLength: 80,
-                anchor: '98%',
-                allowBlank: false
-            }, {
-                xtype: 'combo',
-                fieldLabel: this.app.i18n._('Context'),
-                name: 'context',
-                mode: 'local',
-                displayField: 'name',
-                valueField: 'name',
-                anchor: '98%',
-                triggerAction: 'all',
-                editable: false,
-                forceSelection: true,
-                store: new Ext.data.JsonStore({
-                    storeId: 'Voipmanger_EditSipPeer_Context',
-                    id: 'id',
-                    fields: ['id', 'name']
-                })
-            }, {
-                xtype: 'combo',
-                fieldLabel: this.app.i18n._('Type'),
-                name: 'type',
-                mode: 'local',
-                anchor: '98%',
-                triggerAction: 'all',
-                editable: false,
-                forceSelection: true,
-                value: 'peer',
-                store: [
-                    ['friend', this.app.i18n._('friend')], 
-                    ['user', this.app.i18n._('user')],
-                    ['peer', this.app.i18n._('peer')]
-                ]                 
-            }], [{
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Secret'),
-                name: 'secret',
-                maxLength: 80,
-                anchor: '98%',
-                allowBlank: false
-            }, {
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Callerid'),
-                name: 'callerid',
-                maxLength: 80,
+                title: this.app.i18n._('General'),
+                border: false,
+                frame: true,
                 anchor: '100%',
-                allowBlank: true
-            }, {
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Mailbox'),
-                name: 'mailbox',
-                maxLength: 50,
-                anchor: '98%',
-                allowBlank: true
-            }], [{
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Callgroup'),
-                name: 'callgroup',
-                maxLength: 10,
-                anchor: '98%',
-                allowBlank: true
-            }, {
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Pickup group'),
-                name: 'pickupgroup',
-                maxLength: 10,
-                anchor: '98%',
-                allowBlank: true
-            }, {
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Accountcode'),
-                name: 'accountcode',
-                maxLength: 20,
-                anchor: '98%',
-                allowBlank: true
-            }], [{
-                xtype: 'textfield',
-                fieldLabel: this.app.i18n._('Language'),
-                name: 'language',
-                maxLength: 2,
-                anchor: '98%',
-                allowBlank: true
-            }, {
-                xtype: 'combo',
-                fieldLabel: this.app.i18n._('NAT'),
-                name: 'nat',
-                mode: 'local',
-                anchor: '98%',
-                triggerAction: 'all',
-                editable: false,
-                forceSelection: true,
-                value: 'no',
-                store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
-            }, {
-                xtype: 'combo',
-                fieldLabel: this.app.i18n._('Qualify'),
-                name: 'qualify',
-                mode: 'local',
-                anchor: '98%',
-                triggerAction: 'all',
-                editable: false,
-                forceSelection: true,
-                value: 'no',
-                store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
-            }]]
-        }]
+                xtype: 'columnform',
+                items: [[{
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Name'),
+                    name: 'name',
+                    maxLength: 80,
+                    anchor: '98%',
+                    allowBlank: false
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: this.app.i18n._('Context'),
+                    name: 'context',
+                    mode: 'local',
+                    displayField: 'name',
+                    valueField: 'name',
+                    anchor: '98%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: new Ext.data.JsonStore({
+                        storeId: 'Voipmanger_EditSipPeer_Context',
+                        id: 'id',
+                        fields: ['id', 'name']
+                    })
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: this.app.i18n._('Type'),
+                    name: 'type',
+                    mode: 'local',
+                    anchor: '98%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    value: 'peer',
+                    store: [
+                        ['friend', this.app.i18n._('friend')], 
+                        ['user', this.app.i18n._('user')],
+                        ['peer', this.app.i18n._('peer')]
+                    ]                 
+                }], [{
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Secret'),
+                    name: 'secret',
+                    maxLength: 80,
+                    anchor: '98%',
+                    allowBlank: false
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Callerid'),
+                    name: 'callerid',
+                    maxLength: 80,
+                    anchor: '100%',
+                    allowBlank: true
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Mailbox'),
+                    name: 'mailbox',
+                    maxLength: 50,
+                    anchor: '98%',
+                    allowBlank: true
+                }], [{
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Callgroup'),
+                    name: 'callgroup',
+                    maxLength: 10,
+                    anchor: '98%',
+                    allowBlank: true
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Pickup group'),
+                    name: 'pickupgroup',
+                    maxLength: 10,
+                    anchor: '98%',
+                    allowBlank: true
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Accountcode'),
+                    name: 'accountcode',
+                    maxLength: 20,
+                    anchor: '98%',
+                    allowBlank: true
+                }], [{
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Language'),
+                    name: 'language',
+                    maxLength: 2,
+                    anchor: '98%',
+                    allowBlank: true
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: this.app.i18n._('NAT'),
+                    name: 'nat',
+                    mode: 'local',
+                    anchor: '98%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    value: 'no',
+                    store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: this.app.i18n._('Qualify'),
+                    name: 'qualify',
+                    mode: 'local',
+                    anchor: '98%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    value: 'no',
+                    store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
+                }]]
+            }]
         };
     }
 });
