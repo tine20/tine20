@@ -230,7 +230,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      * @todo make it work again
      */
-    editPhoneLinesDialog: function(/*_maxLines, _lines, _snomLines*/) {
+    //editPhoneLinesDialog: function(/*_maxLines, _lines, _snomLines*/) {
     	
     	/*
         var linesText = [];
