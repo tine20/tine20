@@ -173,9 +173,10 @@
  * 
  * @param {Array|SelectionModel} records
  * @param {Array|Toolbar}        actions
- * @param {containerField}       string
+ * @param {String}               containerField
+ * @param {Bool}                 skipGrants evaluation
  */
-Tine.widgets.actionUpdater = function(records, actions, containerField) {
+Tine.widgets.actionUpdater = function(records, actions, containerField, skipGrants) {
     if (!containerField) {
         containerField = 'container_id';
     }
@@ -225,7 +226,7 @@ Tine.widgets.actionUpdater = function(records, actions, containerField) {
             // NOTE: we don't handle add action for the moment!
             var requiredGrant = initialConfig.requiredGrant;
             if (requiredGrant && requiredGrant != 'addGrant') {
-                var enable = grants[requiredGrant];
+                var enable = skipGrants || grants[requiredGrant];
                 if (records.length > 1 && ! initialConfig.allowMultiple) {
                     enable = false;
                 }

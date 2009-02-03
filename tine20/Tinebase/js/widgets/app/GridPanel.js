@@ -240,9 +240,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             store: this.store
         }),
         this.selectionModel.on('selectionchange', function(sm) {
-            if (this.evalGrants) {
-                Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'));
-            }
+            Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
             
         }, this);
         
