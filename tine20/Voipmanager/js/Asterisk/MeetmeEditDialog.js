@@ -15,7 +15,6 @@ Ext.namespace('Tine.Voipmanager');
  * Asterisk Meetme Edit Dialog
  */
 Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-
     
     /**
      * @private
@@ -24,16 +23,7 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.AsteriskMeetme,
     recordProxy: Tine.Voipmanager.AsteriskMeetmeBackend,
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
-    
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     */
-    updateToolbars: function(record) {
-    	Tine.Voipmanager.AsteriskMeetmeEditDialog.superclass.updateToolbars.call(this, record, 'id');
-    },
     
     /**
      * returns dialog
