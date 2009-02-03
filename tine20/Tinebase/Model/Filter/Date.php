@@ -170,7 +170,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 
             $value = substr($_value, 0, 10);
             
-            if ($this->_options['isDateTime']) {
+            if (isset($this->_options['isDateTime']) && $this->_options['isDateTime']) {
                 switch ($_operator) {
                     case 'before':
                         $value .= ' 00:00:00';
