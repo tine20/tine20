@@ -264,5 +264,9 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         this.on('resize', function(){
             this.quickSearchField.setWidth(this.getSize().width - 3 - (this.selectType == 'both' ? 44 : 0));
         }, this);
+
+        this.quickSearchField.on('render', function(field) {
+            this.quickSearchField.focus(false, 250);
+        }, this);
     }
 });
