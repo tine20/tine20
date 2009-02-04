@@ -89,7 +89,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     public function saveSnomPhone($recordData)
     {
         $phoneData  = Zend_Json::decode($recordData);
-        $lineData   = Zend_Json::decode($lineData);
         
         // unset if empty
         if (empty($phoneData['id'])) {
@@ -122,23 +121,27 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple phones
      *
-     * @param array $_phoneIDs list of phoneId's to delete
+     * @param array $ids list of phoneId's to delete
      * @return array
      * 
      * @todo use generic _delete() function
      */
-    public function deleteSnomPhones($_phoneIds)
+    public function deleteSnomPhones($ids)
     {
+        /*
         $controller = Voipmanager_Controller_Snom_Phone::getInstance();
         
         $result = array(
             'success'   => TRUE
         );
         
-        $ids = Zend_Json::decode($_phoneIds);
+        $ids = Zend_Json::decode($ids);
         Voipmanager_Controller_Snom_Phone::getInstance()->delete($ids);
         
         return $result;
+        */
+        
+        return $this->_delete($ids, Voipmanager_Controller_Snom_Phone::getInstance());
     }    
 
 
@@ -189,12 +192,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete phoneSettings
      *
-     * @param array $_phoneSettingsID phoneSettingsId to delete
+     * @param array $ids phoneSettingsId to delete
      * @return array
      */
-    public function deleteSnomPhoneSettings($_phoneSettingsId)
+    public function deleteSnomPhoneSettings($ids)
     {
-        return $this->_delete($_phoneSettingsId, Voipmanager_Controller_Snom_PhoneSettings::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Snom_PhoneSettings::getInstance());
     }
         
       
@@ -246,12 +249,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple locations
      *
-     * @param array $_locationIDs list of locationId's to delete
+     * @param array $ids list of locationId's to delete
      * @return array
      */
-    public function deleteSnomLocations($_locationIds)
+    public function deleteSnomLocations($ids)
     {
-        return $this->_delete($_locationIds, Voipmanager_Controller_Snom_Location::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Snom_Location::getInstance());
     }        
         
       
@@ -304,12 +307,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple softwareversion entries
      *
-     * @param array $_softwareIDs list of softwareId's to delete
+     * @param array $ids list of softwareId's to delete
      * @return array
      */
-    public function deleteSnomSoftware($_softwareIds)
+    public function deleteSnomSoftware($ids)
     {
-        return $this->_delete($_softwareIds, Voipmanager_Controller_Snom_Software::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Snom_Software::getInstance());
     }       
     
     
@@ -360,12 +363,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple template entries
      *
-     * @param array $_templateIDs list of templateId's to delete
+     * @param array $ids list of templateId's to delete
      * @return array
      */
-    public function deleteSnomTemplates($_templateIds)
+    public function deleteSnomTemplates($ids)
     {
-        return $this->_delete($_templateIds, Voipmanager_Controller_Snom_Template::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Snom_Template::getInstance());
     }     
 
 /********************************
@@ -415,12 +418,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple settings
      *
-     * @param array $_settingIDs list of settingId's to delete
+     * @param array $ids list of settingId's to delete
      * @return array
      */
-    public function deleteSnomSettings($_settingIds)
+    public function deleteSnomSettings($ids)
     {
-        return $this->_delete($_settingIds, Voipmanager_Controller_Snom_Setting::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Snom_Setting::getInstance());
     }         
 
     
@@ -471,12 +474,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      /**
      * delete multiple contexts
      *
-     * @param array $_contextIDs list of contextId's to delete
+     * @param array $ids list of contextId's to delete
      * @return array
      */
-    public function deleteAsteriskContexts($_contextIds)
+    public function deleteAsteriskContexts($ids)
     {
-        return $this->_delete($_contextIds, Voipmanager_Controller_Asterisk_Context::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Asterisk_Context::getInstance());
     }    
        
 /********************************
@@ -525,12 +528,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple meetmes
      *
-     * @param array $_meetmeIDs list of meetmeId's to delete
+     * @param array $ids list of meetmeId's to delete
      * @return array
      */
-    public function deleteAsteriskMeetmes($_meetmeIds)
+    public function deleteAsteriskMeetmes($ids)
     {
-        return $this->_delete($_meetmeIds, Voipmanager_Controller_Asterisk_Meetme::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Asterisk_Meetme::getInstance());
     }     
     
 /********************************
@@ -579,12 +582,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple asterisk sip peers
      *
-     * @param array $_sipPeerIDs list of sipPeerId's to delete
+     * @param array $ids list of sipPeerId's to delete
      * @return array
      */
-    public function deleteAsteriskSipPeers($_sipPeerIds)
+    public function deleteAsteriskSipPeers($ids)
     {
-        return $this->_delete($_sipPeerIds, Voipmanager_Controller_Asterisk_SipPeer::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Asterisk_SipPeer::getInstance());
     }     
     
 /********************************
@@ -633,11 +636,11 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple voicemails
      *
-     * @param array $_voicemailIDs list of voicemailId's to delete
+     * @param array $ids list of voicemailId's to delete
      * @return array
      */
-    public function deleteAsteriskVoicemails($_voicemailIds)
+    public function deleteAsteriskVoicemails($ids)
     {
-        return $this->_delete($_voicemailIds, Voipmanager_Controller_Asterisk_Voicemail::getInstance());
+        return $this->_delete($ids, Voipmanager_Controller_Asterisk_Voicemail::getInstance());
     }
 }
