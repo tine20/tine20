@@ -7,8 +7,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        make it more beautiful
- * @todo        add hiddenFieldData again
  */
  
 Ext.namespace('Tine.Voipmanager');
@@ -27,6 +25,57 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     recordClass: Tine.Voipmanager.Model.SnomSetting,
     recordProxy: Tine.Voipmanager.SnomSettingBackend,
     evalGrants: false,
+    
+    /**
+     * 
+     * @type array 
+     */
+    //writableFields: [["web_language_writable"],["language_writable"],["display_method_writable"],["call_waiting_writable"],["mwi_notification_writable"],["mwi_dialtone_writable"],["headset_device_writable"],["message_led_other_writable"],["global_missed_counter_writable"],["scroll_outgoing_writable"],["show_local_line_writable"],["show_call_status_writable"]], 
+    writableFields: [
+        "web_language_writable",
+        "language_writable",
+        "display_method_writable",
+        "call_waiting_writable",
+        "mwi_notification_writable",
+        "mwi_dialtone_writable",
+        "headset_device_writable",
+        "message_led_other_writable",
+        "global_missed_counter_writable",
+        "scroll_outgoing_writable",
+        "show_local_line_writable",
+        "show_call_status_writable"
+    ],
+    
+    /**
+     * record load
+     */
+    onRecordLoad: function() {
+    	// set lock combos
+        Ext.each(this.writableFields, function(_item, _index, _array) {
+        	var field = _item;
+        	field = field.replace(/_writable/, '');
+        	if (this.record.get(_item) == '0') {
+        	   this.getForm().findField(field).onTrigger2Click();
+        	}
+        }, this);
+    	
+        Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordLoad.call(this);
+    },
+    
+    /**
+     * record update
+     */
+    onRecordUpdate: function() {
+        Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordUpdate.call(this);
+        
+        Ext.each(this.writableFields, function(_item, _index, _array) {
+            if (Ext.getCmp(_item)) {
+            	var value = Ext.getCmp(_item).getValue();
+            }
+
+            this.record.set(_item, value);
+        }, this);
+    },
     
     /**
      * returns dialog
@@ -78,8 +127,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('web_language'),
                         name: 'web_language',
 						hiddenFieldId: 'web_language_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.web_language_writable,
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -102,8 +149,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('language'),
                         name: 'language',
 						hiddenFieldId: 'language_writable',
-                        // @todo what about that?
-						//hiddenFieldData: _settingData.language_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -132,8 +177,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('display_method'),
                         name: 'display_method',
 						hiddenFieldId: 'display_method_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.display_method_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -150,8 +193,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('call_waiting'),
                         name: 'call_waiting',
 						hiddenFieldId: 'call_waiting_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.call_waiting_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -167,8 +208,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('mwi_notification'),
                         name: 'mwi_notification',
 						hiddenFieldId: 'mwi_notification_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.mwi_notification_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -183,8 +222,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('mwi_dialtone'),
                         name: 'mwi_dialtone',
 						hiddenFieldId: 'mwi_dialtone_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.mwi_dialtone_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -198,8 +235,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('headset_device'),
                         name: 'headset_device',
 						hiddenFieldId: 'headset_device_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.headset_device_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -213,8 +248,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('message_led_other'),
                         name: 'message_led_other',
 						hiddenFieldId: 'message_led_other_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.message_led_other_writable,                                        
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -228,8 +261,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('global_missed_counter'),
                         name: 'global_missed_counter',
 						hiddenFieldId: 'global_missed_counter_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.global_missed_counter_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -243,8 +274,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('scroll_outgoing'),
                         name: 'scroll_outgoing',
 						hiddenFieldId: 'scroll_outgoing_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.scroll_outgoing_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -258,8 +287,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('show_local_line'),
                         name: 'show_local_line',
 						hiddenFieldId: 'show_local_line_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.show_local_line_writable,                                    
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -273,8 +300,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('show_call_status'),
                         name: 'show_call_status',
 						hiddenFieldId: 'show_call_status_writable',
-						// @todo what about that?
-						//hiddenFieldData: _settingData.show_call_status_writable,                                        
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
