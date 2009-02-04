@@ -79,10 +79,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      *
      * @param string $phoneData a JSON encoded array of phone properties
      * @return array
-     * 
-     * @todo add lines again
      */
-    public function saveSnomPhone($recordData/*$lineData*/)
+    public function saveSnomPhone($recordData)
     {
         $phoneData  = Zend_Json::decode($recordData);
         $lineData   = Zend_Json::decode($lineData);
@@ -99,7 +97,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
         $phoneSettings->setFromArray($phoneData);
         
-        $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line'/*, $lineData, true*/);
+        $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line', $phoneData['lines'], TRUE);
         $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', $phoneData['rights']);
         $phone->settings = $phoneSettings;
         

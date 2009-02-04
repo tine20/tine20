@@ -196,8 +196,6 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         
         $phone = $this->_backend->update($_phone);
         
-        // @todo add that again
-        /*
         $_phoneSettings = $phone->settings;
         
         if($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
@@ -232,7 +230,6 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             $line->snomphone_id = $phone->getId();
             $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->create($line);
         }
-        */
         
         // save phone rights
         if (isset($_phone->rights)) {
