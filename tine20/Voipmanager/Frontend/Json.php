@@ -70,6 +70,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         $record = Voipmanager_Controller_Snom_Phone::getInstance()->get($id);        
         $result = $record->toArray();      
+        
+        // add settings
+        $result = array_merge($result, $this->getSnomPhoneSettings($record->getId()));
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        
         return $result;        
     }    
     
@@ -100,6 +106,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $phone->lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line', $phoneData['lines'], TRUE);
         $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', $phoneData['rights']);
         $phone->settings = $phoneSettings;
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($phoneSettings->toArray(), true));
         
         if (empty($phone->id)) {
             $phone = Voipmanager_Controller_Snom_Phone::getInstance()->create($phone);

@@ -196,7 +196,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         
         $phone = $this->_backend->update($_phone);
         
-        $_phoneSettings = $phone->settings;
+        $_phoneSettings = $_phone->settings;
         
         if($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
         
@@ -207,15 +207,15 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
             $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
     
-            foreach($_phoneSettings AS $key => $value) {
+            foreach($_phoneSettings->toArray() AS $key => $value) {
                 if($key == 'phone_id') {
                     continue;
                 }
-                if($_phoneSettings->$key == $settingDefaults->$key) {
+                if($settingDefaults->$key == $value) {
                     $_phoneSettings->$key = NULL;
                 }    
             }
-
+            
             if(Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($phone->getId())) {
                 $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->update($_phoneSettings);
             } else {

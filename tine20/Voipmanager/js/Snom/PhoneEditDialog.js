@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add settings again
+ * @todo        perhaps we should load the settings only if settings tab is clicked
  */
  
 Ext.namespace('Tine.Voipmanager');
@@ -44,6 +44,13 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     maxLines: 4,
     
     /**
+     * writeable fields (from phone settings)
+     * 
+     * @type Object
+     */
+    writeableFields: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
@@ -71,6 +78,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * record load (get rights and put them into the store)
      */
     onRecordLoad: function() {
+    	
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
         
@@ -79,7 +87,11 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
         if (this.record.get('current_model')) {
         	this.addEmptyLines(this.getMaxLines(this.record.get('current_model')));
-        }        
+        }
+        
+        if (this.record.get('setting_id')) {
+            this.getWriteableFields(this.record.get('setting_id'));
+        }
         
         Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordLoad.call(this);
     },
@@ -148,77 +160,64 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
+     * 
+     * @param {} setting_id
+     */
+    getWriteableFields: function(setting_id) {
+    	
+        Ext.Ajax.request({
+            params: {
+                method: 'Voipmanager.getSnomSetting', 
+                id: setting_id
+            },
+            success: function(_result, _request) {
+                _data = Ext.util.JSON.decode(_result.responseText);
+                _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
+                this.writeableFields = new Object();
+                var _settingsData = new Object();
+
+                Ext.each(_writableFields, function(_item, _index, _all) {
+                    _rwField = _item.toString() + '_writable';
+
+                    // update record
+                    if(_data[_rwField] == '0' || !this.record.get(_item)) {
+                        this.record.set(_item, _data[_item]);                                                        
+                    }                                                       
+
+                    // set writeable fields
+                    this.getForm().findField(_item).setDisabled(_data[_rwField] == '0');
+                    this.getForm().findField(_item).setValue(this.record.get(_item));
+                }, this);                                     
+            },
+            failure: function ( result, request) { 
+                Ext.MessageBox.alert('Failed', 'No settings data found.'); 
+            },
+            scope: this 
+        });                                   
+    	
+    },
+    
+    /**
      * update settings on template change
      * 
      * @param {} _combo
      * @param {} _record
      * @param {} _index
-     * 
-     * @todo add that again
      */
     onTemplateChange: function(_combo, _record, _index) {
+
+    	var setting_id = false
+    	if (_record.data && _record.data.setting_id) {
+    		setting_id = _record.data.setting_id;
+    	}
     	
-        /*
-          Ext.Ajax.request({
-                params: {
-                    method: 'Voipmanager.getSnomSetting', 
-                    settingId: _record.data.setting_id
-                },
-                success: function(_result, _request) {
-                    _data = Ext.util.JSON.decode(_result.responseText);
-                    _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
-                    var _notWritable = new Object();
-                    var _settingsData = new Object();
-
-                    Ext.each(_writableFields, function(_item, _index, _all) {
-                        _rwField = _item.toString() + '_writable';
-
-                        if(_data[_rwField] == '0') {
-                            _settingsData[_item] = _data[_item];                                                        
-                        } else  if(_phoneData[_item]) {
-                             _settingsData[_item] = _phoneData[_item];
-                        } else {
-                             _settingsData[_item] = _data[_item];                                                        
-                        }                                                       
-
-                        
-                        if(_data[_rwField] == '0') {
-                            _notWritable[_rwField.toString()] = 'true';                                                                                                       
-                        } else  {
-                             _notWritable[_rwField.toString()] = 'false';                                                        
-                        }   
-                    });                     
-                    
-                    Array.prototype.in_array = function(needle) {
-                        for (var i = 0; i < this.length; i++) {
-                            if (this[i] === needle) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }; 
-
-                    Ext.getCmp('voipmanager_editPhoneForm').cascade(function(_field) {
-                        if(_writableFields.in_array(_field.id)) {
-                            if(_notWritable[_field.id.toString()+'_writable'] == 'true') {
-                                _field.disable();    
-                            }
-                            if(_notWritable[_field.id.toString()+'_writable'] == 'false') {
-                                _field.enable();    
-                            }            
-                            _field.setValue(_settingsData[_field.id]);
-                        }
-                    });
-                
-                    Ext.getCmp('voipmanager_editPhoneForm').doLayout();
-                },
-                failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'No settings data found.'); 
-                },
-                scope: this 
-            });                                   
-        }
-        */ 
+    	if (! setting_id && this.getForm().findField('template_id').store.getById(this.getForm().findField('template_id').getValue())) {
+    	    setting_id = this.getForm().findField('template_id').store.getById(this.getForm().findField('template_id').getValue()).data.setting_id;
+    	}
+    	
+    	if (setting_id) {
+            this.getWriteableFields(setting_id);
+    	}
     },
     
     /**
@@ -319,10 +318,18 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             fields: Tine.Voipmanager.Model.SnomTemplate,
                             proxy: Tine.Voipmanager.SnomTemplateBackend,
                             remoteSort: true,
-                            sortInfo: {field: 'name', dir: 'ASC'}
+                            sortInfo: {field: 'name', dir: 'ASC'},
+                            listeners: {
+                            	scope: this,
+                            	load: this.onTemplateChange
+                            }
                         }),
                         listeners: {
-                            select: this.onTemplateChange
+                        	scope: this,
+                            select: this.onTemplateChange,
+                            render: function(combo) {
+                            	combo.store.load();
+                            }
                         }
                     }], [{
                         xtype: 'combo',
@@ -472,8 +479,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 [{
                     fieldLabel: this.app.i18n._('web_language'),
                     name: 'web_language',
-                    // @todo add that again
-                    //disabled: _writable.web_language,
+                    disabled: (this.writeableFields) ? this.writeableFields.web_language : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],                                        
                         ['English', Locale.getTranslationData('Language', 'en')],
@@ -491,8 +497,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('language'),
                     name: 'language',
-                    // @todo add that again
-                    //disabled: _writable.language,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.language : true,                                    
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],                                                                                               
                         ['English', Locale.getTranslationData('Language', 'en')],
@@ -516,8 +521,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('display_method'),
                     name: 'display_method',
-                    // @todo add that again
-                    //disabled: _writable.display_method,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.display_method : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],                                                                                
                         ['full_contact', this.app.i18n._('whole url')],
@@ -529,8 +533,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }], [{
                     fieldLabel: this.app.i18n._('call_waiting'),
                     name: 'call_waiting',
-                    // @todo add that again
-                    //disabled: _writable.call_waiting,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.call_waiting : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],                                        
                         ['on', this.app.i18n._('on')],
@@ -541,8 +544,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('mwi_notification'),
                     name: 'mwi_notification',
-                    // @todo add that again
-                    //disabled: _writable.mwi_notification,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.mwi_notification : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],                                        
                         ['silent', this.app.i18n._('silent')],
@@ -552,8 +554,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('mwi_dialtone'),
                     name: 'mwi_dialtone',
-                    // @todo add that again
-                    //disabled: _writable.mwi_dialtone,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.mwi_dialtone : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],                                        
                         ['normal', this.app.i18n._('normal')],
@@ -562,8 +563,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }], [{
                     fieldLabel: this.app.i18n._('headset_device'),
                     name: 'headset_device',
-                    // @todo add that again
-                    //disabled: _writable.headset_device,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.headset_device : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],                                        
                         ['none', this.app.i18n._('none')],
@@ -572,8 +572,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('message_led_other'),
                     name: 'message_led_other',
-                    // @todo add that again
-                    //disabled: _writable.message_led_other,                                        
+                    disabled: (this.writeableFields) ? this.writeableFields.message_led_other : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],
                         ['1', this.app.i18n._('on')],
@@ -582,8 +581,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('global_missed_counter'),
                     name: 'global_missed_counter',
-                    // @todo add that again
-                    //disabled: _writable.global_missed_counter,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.global_missed_counter : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],
                         ['1', this.app.i18n._('on')], 
@@ -592,8 +590,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }], [{
                     fieldLabel: this.app.i18n._('scroll_outgoing'),
                     name: 'scroll_outgoing',
-                    // @todo add that again
-                    //disabled: _writable.scroll_outgoing,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.scroll_outgoing : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],
                         ['1', this.app.i18n._('on')],
@@ -602,8 +599,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('show_local_line'),
                     name: 'show_local_line',
-                    // @todo add that again
-                    //disabled: _writable.show_local_line,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.show_local_line : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],
                         ['1', this.app.i18n._('on')],
@@ -612,8 +608,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }, {
                     fieldLabel: this.app.i18n._('show_call_status'),
                     name: 'show_call_status',
-                    // @todo add that again
-                    //disabled: _writable.show_call_status,                                    
+                    disabled: (this.writeableFields) ? this.writeableFields.show_call_status : true,
                     store: [
                         [ null,  this.app.i18n._('- factory default -')],
                         ['1', this.app.i18n._('on')],
