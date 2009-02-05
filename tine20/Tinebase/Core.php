@@ -95,7 +95,10 @@ class Tinebase_Core
 
         /**************************** SNOM API *****************************/
             
-        } elseif(preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])) {
+        } elseif(
+            isset($_SERVER['HTTP_USER_AGENT']) && 
+            preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])
+        ) {
             $server = new Voipmanager_Server_Snom();
             
         /**************************** ActiveSync API *****************************/
