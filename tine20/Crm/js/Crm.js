@@ -131,18 +131,6 @@ Tine.Crm.Main = {
         sort: 'lead_name',
         dir: 'ASC'
     },
-    
-    /**
-     * holds current filters
-     */
-    filter: {
-        containerType: 'personal',
-        query: '',
-        container: false,
-        tag: false,
-        probability: 0,
-        leadstate: false
-    },    
 
 	handlers: {
 		/**
@@ -225,57 +213,6 @@ Tine.Crm.Main = {
      * showCrmToolbar function
      */
     showCrmToolbar: function() {
-        /*
-        var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
-            width: 200,
-            emptyText: this.translation._('Enter searchfilter')
-        });
-        
-        quickSearchField.on('change', function(field){
-            if(this.filter.query != field.getValue()){
-                this.store.load({params: this.paging});
-            }
-        }, this);
-
-            
-       var filterComboLeadstate = new Ext.ux.form.ClearableComboBox({
-            fieldLabel: this.translation._('Leadstate'), 
-            blankText: this.translation._('Leadstate') + '...',
-            emptyText: this.translation._('leadstate') + '...',
-            id:'filterLeadstate',
-            name:'leadstate',
-            hideLabel: true,
-            width: 180,   
-            store: Tine.Crm.LeadState.getStore(),
-            hiddenName: 'leadstate_id',
-            valueField: 'id',
-            displayField: 'leadstate',
-            typeAhead: true,
-            triggerAction: 'all',
-            selectOnFocus:true,
-            editable: false 
-        }); 
-       
-        filterComboLeadstate.on('select', function() {
-       	    this.store.load({params: this.paging});
-        }, this);
-      
-        var filterComboProbability = new Ext.ux.PercentCombo({
-            fieldLabel: this.translation._('Probability'), 
-            blankText: this.translation._('Probability') + '...',            
-            emptyText: this.translation._('Probability') + '...',
-            id: 'filterProbability',
-            name:'probability',
-            hideLabel: true,            
-            width:90            	
-        });
-                
-		filterComboProbability.on('select', function() {
-			this.store.load({params: this.paging});
-		}, this);
-        */    
-		
         /**
          * handlerToggleDetails function
          */          
@@ -337,15 +274,7 @@ Tine.Crm.Main = {
                     handler: function(toggle) {                        
                         Ext.getCmp('gridCrm').getStore().reload();
                     }                    
-                }) /*,
-                ' ',                
-                filterComboLeadstate,
-                ' ',
-                filterComboProbability,                
-                new Ext.Toolbar.Separator(),
-                '->',
-                ' ',
-                quickSearchField*/
+                })
             ]
         });
         
@@ -657,7 +586,7 @@ Tine.Crm.Main = {
     {    	
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
         if (currentToolbar === false || currentToolbar.id != 'crmToolbar') {
-            if (!this.girdPanel) {
+            if (!this.gridPanel) {
                 this.initComponent();
             }
             Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
@@ -871,9 +800,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
          */
         addTask: function(_button, _event) {
             var taskPopup = Tine.Tasks.EditDialog.openWindow({
-                relatedApp: 'Crm'
+                relatedApp: 'Crm',
+                listeners: {
+                    scope: this,
+                    update: this.onTaskUpdate
+                }
             });
-            taskPopup.on('update', this.onTaskUpdate, this);
+            //taskPopup.on('update', this.onTaskUpdate, this);
         },
             
         /**
@@ -885,9 +818,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             var selectedTask = selectedRows[0];
             
             var taskPopup = Tine.Tasks.EditDialog.openWindow({
-                record: selectedTask
+                record: selectedTask,
+                listeners: {
+                    scope: this,
+                    update: this.onTaskUpdate
+                }
             });
-            taskPopup.on('update', this.onTaskUpdate, this);
+            //taskPopup.on('update', this.onTaskUpdate, this);
         },
         
         /**
@@ -973,6 +910,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * update event handler for related tasks
      */
     onTaskUpdate: function(task) {
+        console.log(task);
         var storeTasks = Ext.StoreMgr.lookup('TasksStore');
         var myTask = storeTasks.getById(task.id);
         
@@ -1323,10 +1261,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             }
         }, this);        
         
-        grid.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
-            var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Tine.Tasks.EditDialog.openWindow({record: record});
-        });            
+        grid.on('rowdblclick', this.handlers.editTask, this);
 
         return grid;       
     },
