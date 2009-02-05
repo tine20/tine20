@@ -53,11 +53,17 @@ class Timetracker_Frontend_Cli
         }
     }
     
+    /**
+     * add manage billable to all users of all timeaccounts
+     *
+     */
     public function allBillable()
     {
         $containerController = Tinebase_Container::getInstance();
         
-        $allTAs = Timetracker_Controller_Timeaccount::getInstance()->search(new Timetracker_Model_TimeaccountFilter());
+        $allTAs = Timetracker_Controller_Timeaccount::getInstance()->search(new Timetracker_Model_TimeaccountFilter(array(
+            array('field' => 'query', 'operator' => 'contains', 'value' => '')
+        )));
         foreach ($allTAs->container_id as $container_id) {
             $allGrants = $containerController->getGrantsOfContainer($container_id, true);
             
@@ -66,8 +72,10 @@ class Timetracker_Frontend_Cli
                 $grants->deleteGrant = TRUE;
             }
             $containerController->setGrants($container_id, $allGrants, true);
+            echo '.';
             
         }
+        echo "done.\n";
     }
  
 }
