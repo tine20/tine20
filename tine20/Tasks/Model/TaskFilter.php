@@ -17,13 +17,6 @@
 class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tasks_Model_TaskFilter';
-    
-    /**
      * @var string application of this filter group
      */
     protected $_applicationName = 'Tasks';
