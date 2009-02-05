@@ -98,9 +98,9 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      *
      * @param   $_recordData
      * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
-     * @param   $_modelName
+     * @param   $_modelName for example: 'Task' for Tasks_Model_Task
      * @param   $_identifier of the record (default: id)
-     * @return array created/updated record
+     * @return  array created/updated record
      */
     protected function _save($_recordData, Tinebase_Application_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id')
     {
