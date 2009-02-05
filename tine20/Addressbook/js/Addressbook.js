@@ -76,7 +76,7 @@ Tine.Addressbook.Main = {
     
     /**
      * @cfg {Array} default filters
-     * @todo container filters not in filter logig yet!
+     * @todo container filters not in filter logic yet!
      * @see store.on(beforeload)
      */
     //filter: [],
@@ -364,11 +364,11 @@ Tine.Addressbook.Main = {
                 {label: this.translation._('Job Role'),    field: 'role'},
                 new Tine.widgets.tags.TagFilter({app: this.app}),
                 //{label: this.translation._('Birthday'),    field: 'bday', valueType: 'date'},
-                {label: this.translation._('Street') + ' (' + this.translation._('Company Address') + ')',      field: 'adr_one_street', defaultOperator: 'equals', valueType: 'int'},
-                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals', valueType: 'int'},
+                {label: this.translation._('Street') + ' (' + this.translation._('Company Address') + ')',      field: 'adr_one_street', defaultOperator: 'equals'},
+                {label: this.translation._('Postal Code') + ' (' + this.translation._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals'},
                 {label: this.translation._('City') + '  (' + this.translation._('Company Address') + ')',       field: 'adr_one_locality'},
-                {label: this.translation._('Street') + ' (' + this.translation._('Private Address') + ')',      field: 'adr_two_street', defaultOperator: 'equals', valueType: 'int'},
-                {label: this.translation._('Postal Code') + ' (' + this.translation._('Private Address') + ')', field: 'adr_two_postalcode', defaultOperator: 'equals', valueType: 'int'},
+                {label: this.translation._('Street') + ' (' + this.translation._('Private Address') + ')',      field: 'adr_two_street', defaultOperator: 'equals'},
+                {label: this.translation._('Postal Code') + ' (' + this.translation._('Private Address') + ')', field: 'adr_two_postalcode', defaultOperator: 'equals'},
                 {label: this.translation._('City') + '  (' + this.translation._('Private Address') + ')',       field: 'adr_two_locality'}
              ],
              defaultFilter: 'query',
@@ -1212,9 +1212,36 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'notes'}
 ];
 
-Tine.Addressbook.Model.Contact = Ext.data.Record.create(
-    Tine.Addressbook.Model.ContactArray
-);
+/**
+ * @type {Tine.Tinebase.Record}
+ * Contact record definition
+ */
+Tine.Addressbook.Model.Contact = Tine.Tinebase.Record.create(Tine.Addressbook.Model.ContactArray, {
+    appName: 'Addressbook',
+    modelName: 'Contact',
+    idProperty: 'id',
+    titleProperty: 'n_fn',
+    // ngettext('Contact', 'Contacts', n);
+    recordName: 'Contact',
+    recordsName: 'Contacts',
+    containerProperty: 'container_id',
+    // ngettext('addressbook', 'addressbooks', n);
+    containerName: 'addressbook',
+    containersName: 'addressbooks'
+});
+/* not possible yet as we don't have the container client side
+Tine.Addressbook.Model.Contact.getDefaultData = function() { 
+
+};*/
+
+/**
+ * default timesheets backend
+ */
+Tine.Addressbook.contactBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Addressbook',
+    modelName: 'Contact',
+    recordClass: Tine.Addressbook.Model.Contact
+});
 
 /**
  * salutation model
