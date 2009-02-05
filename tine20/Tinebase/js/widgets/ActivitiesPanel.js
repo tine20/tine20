@@ -45,6 +45,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     iconCls: 'notes_noteIcon',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
+    autoScroll: true,
     
     /**
      * event handler
@@ -117,21 +118,12 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             }
         );
         
-        // @todo try to get height from underlying element / resize events
-        var templateHeight = 375;
-        if (this.showAddNoteForm) {
-        	templateHeight -= 116;
-        }
-
         this.activities = new Ext.DataView({
             tpl: ActivitiesTpl,       
             id: 'grid_activities_limited',
             store: this.recordNotesStore,
             overClass: 'x-view-over',
-            itemSelector: 'activities-item-small',
-            style: 'overflow:auto',
-            // substract the height of form and title -> for the scrollbars
-            height: templateHeight            
+            itemSelector: 'activities-item-small'
         }); 
     },
     
