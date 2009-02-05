@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-05 11:03+0100\n"
+"PO-Revision-Date: 2009-02-05 14:37+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -275,7 +275,7 @@ msgstr[1] "Stundenzettel-Listen"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
-msgstr "Stundenzettel"
+msgstr "Zeiterfassung"
 
 #: Export/Ods.php:201
 msgid "Filter"
