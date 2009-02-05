@@ -363,6 +363,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @return {Void}
      */
     onStoreLoad: function(store, records, options) {
+        // we always focus the first row so that keynav starts in the grid
+        this.grid.getView().focusRow(0);
+        
         // save used filter
         this.store.lastFilter = options.params.filter;
     },
@@ -372,19 +375,26 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     onKeyDown: function(e){
-        switch (e.getKey()) {
-            case e.DELETE:
-                if (!this.grid.editing && !this.grid.adding) {
-                    this.onDeleteRecords.call(this);
-                }
-                break;
-            case e.E:
-                if (e.ctrlKey) {
+        if (e.ctrlKey) {
+            switch (e.getKey()) {
+                case e.E:
                     this.onEditInNewWindow.call(this, {
                         actionType: 'edit'
                     });
-                }
-                break;
+                    break;
+                case e.A:
+                    this.grid.getSelectionModel().selectAll();
+                    e.preventDefault();
+                    break;
+            }
+        } else {
+            switch (e.getKey()) {
+                case e.DELETE:
+                    if (!this.grid.editing && !this.grid.adding) {
+                        this.onDeleteRecords.call(this);
+                    }
+                    break;
+            }
         }
     },
     
