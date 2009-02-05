@@ -216,9 +216,9 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $asteriskSipPeerData = $this->_json->saveAsteriskSipPeer(Zend_Json::encode($asteriskSipPeer->toArray()));
         
         // search & check
-        $search = $this->_json->searchAsteriskSipPeers(Zend_Json::encode($this->_getAsteriskSipPeerFilter()), Zend_Json::encode($this->_getPaging()));
-        $this->assertEquals($asteriskSipPeer->name, $search['results'][0]['name']);
+        $search = $this->_json->searchAsteriskSipPeers(Zend_Json::encode($this->_getAsteriskSipPeerFilter($asteriskSipPeer->name)), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals($asteriskSipPeer->name, $search['results'][0]['name']);
         
         // cleanup
         $this->_json->deleteAsteriskSipPeers($asteriskSipPeerData['id']);
@@ -238,25 +238,20 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         ), TRUE);
     }
     
-    
     /**
      * get Asterisk SipPeer filter
      *
+     * @param string $_name to search for
      * @return array
      */
-    protected function _getAsteriskSipPeerFilter()
+    protected function _getAsteriskSipPeerFilter($_name)
     {
         return array(
             array(
-                'field' => 'name', 
+                'field' => 'query', 
                 'operator' => 'contains', 
-                'value' => 'blabla'
-            ),     
-            array(
-                'field' => 'containerType', 
-                'operator' => 'equals', 
-                'value' => Tinebase_Model_Container::TYPE_SHARED
-            ),     
+                'value' => $_name
+            ),  
         );        
     }
     
