@@ -27,42 +27,4 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_
         parent::__construct(SQL_TABLE_PREFIX . 'asterisk_sip_peers', 'Voipmanager_Model_Asterisk_SipPeer', $_db);
     }
     
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_Asterisk_SipPeerFilter $_filter the string to search for
-     */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Asterisk_SipPeerFilter $_filter= NULL)
-    {
-        if(!empty($_filter->query)) {
-            $search_values = explode(" ", $_filter->query);
-            
-            $search_fields = array( $this->_db->quoteIdentifier('callerid'), 
-                                    $this->_db->quoteIdentifier('name'), 
-                                    $this->_db->quoteIdentifier('ipaddr')
-                                   );
-            $fields = '';
-            foreach($search_fields AS $search_field) {
-                $fields .= " OR " . $search_field . " LIKE ?";    
-            }
-            $fields = substr($fields, 3);
-        
-            foreach($search_values AS $search_value) {
-                $_select->where($this->_db->quoteInto('('.$fields.')', '%' . trim($search_value) . '%'));                            
-            }
-        }
-        
-        if(!empty($_filter->name)) {
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_filter->name));
-        }
-
-        if(!empty($_filter->context)) {
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('context') . ' = ?', $_filter->context));
-        }
-
-        if(!empty($_filter->username)) {
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $_filter->username));
-        }
-    }            
 }

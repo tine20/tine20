@@ -8,36 +8,32 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add name/context/username filters to javascript?
  */
 
 /**
  * Asterisk SipPeer Filter Class
  * @package Voipmanager
  */
-class Voipmanager_Model_Asterisk_SipPeerFilter extends Tinebase_Record_Abstract
+class Voipmanager_Model_Asterisk_SipPeerFilter extends Tinebase_Model_Filter_FilterGroup
 {
-	/**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
+    /**
+     * @var string application of this filter group
+     */
+    protected $_applicationName = 'Voipmanager';
     
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var array filter model fieldName => definition
      */
-    protected $_application = 'Voipmanager';
-    
-    protected $_validators = array(
-    
-        'id'                    => array('allowEmpty' => true,  'Int'   ),
-
-        'name'                  => array('allowEmpty' => true           ),
-        'context'               => array('allowEmpty' => true           ),
-        'username'              => array('allowEmpty' => true           ),  
-        'query'                 => array('allowEmpty' => true           )        
-    );
+    protected $_filterModel = array(
+        'query'                => array(
+            'filter' => 'Tinebase_Model_Filter_Query', 
+            'options' => array(
+                'fields' => array('name', 'callerid', 'ipaddr')
+            )
+        ),
+        'name'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'context'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'username'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+    );    
 }

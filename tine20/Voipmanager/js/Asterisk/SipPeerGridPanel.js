@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:$
+ * @version     $Id$
  *
  */
  
@@ -33,11 +33,10 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
-      //  this.initDetailsPanel();
+        // this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
-        //this.plugins.push(this.filterToolbar);
- 
+        this.plugins.push(this.filterToolbar);
          
         Tine.Voipmanager.AsteriskSipPeerGridPanel.superclass.initComponent.call(this);
     },
@@ -46,7 +45,13 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
      * initialises filter toolbar
      */
     initFilterToolbar: function() {
-        
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            filterModels: [
+                {label: this.app.i18n._('Sip Peer'),    field: 'query',    operators: ['contains']}
+             ],
+             defaultFilter: 'query',
+             filters: []
+        });
     },    
     
       
