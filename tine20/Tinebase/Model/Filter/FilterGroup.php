@@ -321,4 +321,21 @@ class Tinebase_Model_Filter_FilterGroup
         
         return $result;
     }
+
+    /**
+     * return filter object
+     *
+     * @param string $_field
+     * @return Tinebase_Model_Filter_Abstract
+     */
+    protected function _findFilter($_field)
+    {
+        foreach ($this->_filterObjects as $object) {
+            if ($object->getField() == $_field) {
+                return $object;        
+            }
+        }
+        
+        return NULL;
+    }
 }
