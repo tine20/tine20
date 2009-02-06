@@ -562,19 +562,19 @@ Tine.Phone.Main = {
             var quicksearchField = Ext.getCmp('callhistoryQuickSearchField');
             var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || null;            
             
-            var filter = { query: quicksearchField.getValue(), phone_id: (node !== null && node.id != 'root') ? node.id : '' };
-            
-            // add phone/line to filter
-            /*
-            var filterToolbar = Ext.getCmp('callhistoryFilterToolbar');
-            var filter = filterToolbar ? filterToolbar.getFilter() : [];
-            var nodeAttributes = Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode().attributes || {};
-            filter.push(
-                {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
-                {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
-            );            
-            */
+            var filter = [{ 
+            	   field: 'query',
+            	   operator: 'contains',
+            	   value: quicksearchField.getValue()
+        	}];
+	        
+	        if (node !== null && node.id != 'root') {
+	        	filter.push({ 
+                    field: 'phone_id',
+                    operator: 'equals',
+                    value: node.id
+                });
+	        }
             
             options.params.filter = Ext.util.JSON.encode(filter);
             
