@@ -28,21 +28,6 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
     }
     
     /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_Snom_LineFilter $_filter the filter values to search for
-     */
-    /*
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_LineFilter $_filter)
-    {
-        if(!empty($_filter->snomphone_id)) {
-            $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier('snomphone_id') . ' = ?', $_filter->snomphone_id));
-        }
-    } 
-    */              
-
-    /**
      * delete lines(s) identified by phone id
      *
      * @param string|Voipmanager_Model_Snom_Phone $_id
