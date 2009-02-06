@@ -80,7 +80,8 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      */
     protected function _search($_filter, $_paging, Tinebase_Application_Controller_Record_Interface $_controller, $_filterModel)
     {
-        $filter = new $_filterModel(Zend_Json::decode($_filter));
+        $decodedFilter = Zend_Json::decode($_filter);
+        $filter = new $_filterModel(!empty($decodedFilter) ? $decodedFilter : array());
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($_paging));
         
         $records = $_controller->search($filter, $pagination);
