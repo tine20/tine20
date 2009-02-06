@@ -132,6 +132,10 @@
     margin-right: 10px;
 }
 
+.contactIcon {
+	position: relative;
+}
+
 .contactIconResponsible {
     background-image:url(../../images/oxygen/16x16/apps/preferences-desktop-user.png) !important;
 }
