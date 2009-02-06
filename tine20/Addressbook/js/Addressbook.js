@@ -601,7 +601,7 @@ Tine.Addressbook.Main = {
                     '</div>',
                     '<div class="preview-panel-contact preview-panel-right">',
                         '<span class="preview-panel-symbolcompare">' + this.translation._('Phone') + '</span>{[this.encode(values.tel_home)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.translation._('Mobile') + '</span>{[this.encode(values.tel_cell_home)]}<br/>',
+                        '<span class="preview-panel-symbolcompare">' + this.translation._('Mobile') + '</span>{[this.encode(values.tel_cell_private)]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.translation._('Fax') + '</span>{[this.encode(values.tel_fax_home)]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.translation._('E-Mail') + '</span><a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email_home, "shorttext")]}</a><br/>',
                         '<span class="preview-panel-symbolcompare">' + this.translation._('Web') + '</span><a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url_home, "shorttext")]}</a><br/>',
@@ -616,7 +616,7 @@ Tine.Addressbook.Main = {
                 '</div>',
                 
                 '<!-- Preview info -->',
-                '<div class="preview-panel-description preview-panel-left">',
+                '<div class="preview-panel-description preview-panel-left" ext:qtip="{[this.encode(values.note)]}">',
                     '<div class="bordercorner_gray_1"></div>',
                     '<div class="bordercorner_gray_2"></div>',
                     '<div class="bordercorner_gray_3"></div>',
