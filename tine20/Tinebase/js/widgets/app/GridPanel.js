@@ -364,7 +364,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     onStoreLoad: function(store, records, options) {
         // we always focus the first row so that keynav starts in the grid
-        this.grid.getView().focusRow(0);
+        if (this.store.getCount() > 0) {
+            this.grid.getView().focusRow(0);
+        }
         
         // save used filter
         this.store.lastFilter = options.params.filter;
