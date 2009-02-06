@@ -104,11 +104,11 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         
         $phone->lines = new Tinebase_Record_RecordSet(
             'Voipmanager_Model_Snom_Line', 
-            (isset($phoneData['lines'])) ? $phoneData['lines'] : array(),
+            (isset($phoneData['lines']) && !empty($phoneData['lines'])) ? $phoneData['lines'] : array(),
             TRUE
         );
         $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', 
-            (isset($phoneData['rights'])) ? $phoneData['rights'] : array()
+            (isset($phoneData['rights']) && !empty($phoneData['rights'])) ? $phoneData['rights'] : array()
         );
         $phone->settings = $phoneSettings;
         
