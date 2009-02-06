@@ -43,7 +43,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     );
     
     /**
-     * is resolved
+     * is acl filter resolved?
      *
      * @var boolean
      */
@@ -100,6 +100,11 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         parent::appendFilterSql($_select);
     }
     
+    /**
+     * append show closed filter
+     *
+     * @param Zend_Db_Select $_select
+     */
     protected function _appendShowClosedSql($_select)
     {
         $showClosed = false;
@@ -115,6 +120,11 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         }
     }
     
+    /**
+     * append acl filter
+     *
+     * @param Zend_Db_Select $_select
+     */
     protected function _appendAclSqlFilter($_select)
     {
         if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
