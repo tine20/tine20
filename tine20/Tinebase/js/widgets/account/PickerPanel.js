@@ -266,7 +266,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         }, this);
 
         this.quickSearchField.on('render', function(field) {
-            this.quickSearchField.focus(false, 250);
+            this.quickSearchField.focus(false, 350);
         }, this);
     }
 });
