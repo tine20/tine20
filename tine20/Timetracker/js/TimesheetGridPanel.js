@@ -368,9 +368,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         				'<div class="bordercorner_3"></div>',
         				'<div class="bordercorner_4"></div>',
         				'<div class="preview-panel-declaration">beschreibung</div>',
-        				'<div class="preview-panel-timesheet-description preview-panel-left">',
+        				'<div class="preview-panel-timesheet-description preview-panel-left" ext:qtip="{[this.encode(values.description)]}">',
         					'<span class="preview-panel-nonbold">',
-        					 '{[this.encode(values.description)]}',
+        					 '{[this.encode(values.description, "longtext")]}',
         					'<br/>',
         					'</span>',
         				'</div>',
@@ -403,12 +403,18 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         				'</div>',
         			'</div>',
         		'</div>',{
-
-              //  '<div class="detailPanel">',
-                //    '{[this.encode(values.description)]}',
-                //'</div>', {
                 encode: function(value, type, prefix) {
                     if (value) {
+                        if (type) {
+                            switch (type) {
+                                case 'longtext':
+                                    value = Ext.util.Format.ellipsis(value, 150);
+                                    break;
+                                default:
+                                    value += type;
+                            }                           
+                        }
+                    	
                         var encoded = Ext.util.Format.htmlEncode(value);
                         encoded = Ext.util.Format.nl2br(encoded);
                         
