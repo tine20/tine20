@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        check if this class needs refactoring / is the update function needed?
  */
 
 /**
@@ -82,7 +83,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
         $phone = $this->_backend->getMyPhone($_id, $_accountId);
         
         $filter = new Voipmanager_Model_Snom_LineFilter(array(
-            'snomphone_id'  => $phone->id
+            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
         ));
         $phone->lines = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
 
@@ -130,40 +131,4 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
         return $this->getMyPhone($phone, $_accountId);
     }    
     */
-    /****************** don't allow get/create/search here ************************/
-    
-    /**
-     * disabled
-     *
-     * @param unknown_type $_id
-     * @throws  Voipmanager_Exception_AccessDenied
-     */
-    public function get($_id)
-    {
-        throw new Voipmanager_Exception_AccessDenied('not allowed!');
-    }
-    
-    /**
-     * disabled
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @throws  Voipmanager_Exception_AccessDenied
-     */
-    /*
-    public function create(Tinebase_Record_Interface $_record)
-    {
-        throw new Voipmanager_Exception_AccessDenied('not allowed!');        
-    }
-    */
-    /**
-     * disabled
-     *
-     * @param unknown_type $_identifiers
-     * @throws  Voipmanager_Exception_AccessDenied
-     */
-    /*
-    public function delete($_identifiers) {
-        throw new Voipmanager_Exception_AccessDenied('not allowed!');
-    }
-*/
 }

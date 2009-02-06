@@ -76,7 +76,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         $phone = $this->_backend->get($_id);
         
         $filter = new Voipmanager_Model_Snom_LineFilter(array(
-            'snomphone_id'  => $phone->id
+            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
         ));
         $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
         $phone->rights = $this->_backend->getPhoneRights($phone->id);
@@ -101,7 +101,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         $phone = $this->_backend->getByMacAddress($_macAddress);
         
         $filter = new Voipmanager_Model_Snom_LineFilter(array(
-            'snomphone_id'  => $phone->id
+            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
         ));
         $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
         $phone->rights = $this->_backend->getPhoneRights($phone->id);

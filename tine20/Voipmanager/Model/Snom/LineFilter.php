@@ -14,26 +14,17 @@
  * Phone Filter Class
  * @package Voipmanager
  */
-class Voipmanager_Model_Snom_LineFilter extends Tinebase_Record_Abstract
+class Voipmanager_Model_Snom_LineFilter extends Tinebase_Model_Filter_FilterGroup
 {
-	/**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
+    /**
+     * @var string application of this filter group
+     */
+    protected $_applicationName = 'Voipmanager';
     
     /**
-     * application the record belongs to
-     *
-     * @var string
+     * @var array filter model fieldName => definition
      */
-    protected $_application = 'Voipmanager';
-    
-    protected $_validators = array(
-        'id'                    => array('allowEmpty' => true,  'Int'   ),
-
-        'snomphone_id'          => array('allowEmpty' => true           )
-    );
+    protected $_filterModel = array(
+        'snomphone_id'         => array('filter' => 'Tinebase_Model_Filter_Id'),
+    );    
 }
