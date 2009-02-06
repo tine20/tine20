@@ -86,7 +86,11 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         parent::appendFilterSql($_select);
     }
     
-    
+    /**
+     * append acl filter
+     *
+     * @param Zend_Db_Select $_select
+     */
     protected function _appendAclSqlFilter($_select)
     {
         if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
