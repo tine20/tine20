@@ -84,7 +84,7 @@ abstract class Tinebase_Model_Filter_Abstract
     }
     
     /**
-     * retruns fieldname of this filter
+     * returns fieldname of this filter
      *
      * @return string
      */
@@ -116,6 +116,16 @@ abstract class Tinebase_Model_Filter_Abstract
     {
         //@todo validate value before setting it!
         $this->_value = $_value;
+    }
+
+    /**
+     * gets value
+     *
+     * @return  mixed $_value
+     */
+    public function getValue()
+    {
+        return $this->_value;
     }
     
     /**
