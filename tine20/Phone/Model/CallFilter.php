@@ -7,66 +7,79 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo        use new filter group
+ * 
+ * @todo        use new filter syntax for Voipmanager_Model_Snom_PhoneFilter
  */
 
 /**
  * Call Filter Class
  * @package Phone
  */
-class Phone_Model_CallFilter extends Tinebase_Record_Abstract
+class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
 {
-	/**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
+    /**
+     * @var string application of this filter group
+     */
+    protected $_applicationName = 'Phone';
+    
+    /**
+     * @var array filter model fieldName => definition
+     */
+    protected $_filterModel = array(
+        'query'       => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('source', 'destination'))),
+        'phone_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
+    );
+
+    /**
+     * is acl filter resolved?
+     *
+     * @var boolean
+     */
+    protected $_isResolved = FALSE;
+    
+    /**
+     * appends current filters to a given select object
+     * - add user phone ids to filter
      * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
+     * @param  Zend_Db_Select
+     * @return void
      */
-    protected $_application = 'Phone';
-    
-    /**
-     * zend validators
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                   => array('allowEmpty' => true,  'Int'   ),
-        'query'                => array('allowEmpty' => true           ), // source / destination
-        'phone_id'             => array('allowEmpty' => true),
-    ); 
+    public function appendFilterSql($_select)
+    {
+        // ensure acl policies
+        $this->_appendAclSqlFilter($_select);
+                
+        parent::appendFilterSql($_select);
+    }
     
     /**
      * check user phones (add user phone ids to filter
      *
-     * @param unknown_type $_userId
+     * @param Zend_Db_Select $_select
      */
-    public function checkUserPhones($_userId) {
-        // set user phone ids as filter
-        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
-            'accountId' => $_userId
-        ));        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'      => 'description'
-        ));
-        $userPhoneIds = Voipmanager_Controller_MyPhone::getInstance()->search($filter, $pagination)->getArrayOfIds();
-        if (empty($this->phone_id)) {
-            $this->phone_id = $userPhoneIds;
-        } else {
-            if (is_array($this->phone_id)) {
-                $this->phone_id = array_intersect($this->phone_id, $userPhoneIds);
+    protected function _appendAclSqlFilter($_select) {
+        
+        if (! $this->_isResolved) {
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));    
+        
+            $phoneIdFilter = $this->_findFilter('phone_id');
+            
+            // set user phone ids as filter
+            $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
+                'accountId' => Tinebase_Core::getUser()->getId()
+            ));        
+            $userPhoneIds = Voipmanager_Controller_MyPhone::getInstance()->search($filter)->getArrayOfIds();
+            
+            if ($phoneIdFilter === NULL) {
+                $phoneIdFilter = $this->createFilter('phone_id', 'in', $userPhoneIds);
+                $this->addFilter($phoneIdFilter);
+
             } else {
-                if (!in_array($this->phone_id, $userPhoneIds)) {
-                    $this->phone_id = '';
-                }
-            }                
+                $phoneIdFilter->setValue(array_intersect((array) $phoneIdFilter->getValue(), $userPhoneIds));
+            }
+            
+            $this->_isResolved = TRUE;
         }
     }
 }

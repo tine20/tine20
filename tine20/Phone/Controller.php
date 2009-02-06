@@ -115,8 +115,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
      */
     public function searchCalls(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {        
-        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);           
-        $_filter->checkUserPhones(Tinebase_Core::getUser()->getId());
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         $calls = $backend->search($_filter, $_pagination);
         
         return $calls;
@@ -131,8 +130,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
      */
     public function searchCallsCount(Phone_Model_CallFilter $_filter)
     {
-        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);        
-        $_filter->checkUserPhones(Tinebase_Core::getUser()->getId());
+        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         $count = $backend->searchCount($_filter);
         return $count;
     }
