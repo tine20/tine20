@@ -152,7 +152,7 @@ class Phone_Controller extends Tinebase_Application_Controller_Abstract
         $_call->start = Zend_Date::now();
         
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
-            'name'     => $_call->line_id
+            array('field' => 'name', 'operator' => 'equals', 'value' => $_call->line_id)
         ));
         $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);
         if(count($asteriskSipPeers) > 0) {
