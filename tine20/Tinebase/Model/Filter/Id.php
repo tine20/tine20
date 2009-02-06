@@ -49,7 +49,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
          $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
          
-         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
+         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
          
          if ($this->_operator == 'in' && empty($this->_value)) {
              // prevent sql error
