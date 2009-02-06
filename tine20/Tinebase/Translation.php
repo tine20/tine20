@@ -191,7 +191,13 @@ class Tinebase_Translation
         $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
         
         $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
-        $jsTranslations  .= file_get_contents("$baseDir/ExtJS/build/locale/ext-lang-$localeString.js");
+        if (file_exists("$baseDir/ExtJS/build/locale/ext-lang-$localeString-min.js")) {
+            $jsTranslations  .= file_get_contents("$baseDir/ExtJS/build/locale/ext-lang-$localeString-min.js");
+        } elseif (file_exists("$baseDir/ExtJS/build/locale/ext-lang-$localeString.js")) {
+            $jsTranslations  .= file_get_contents("$baseDir/ExtJS/build/locale/ext-lang-$localeString.js");
+        } else {
+            $jsTranslations  .= "console.error('Translation Error: extjs chaged their lang file name again ;-(');";
+        }
         
         $poFiles = self::getPoTranslationFiles($_locale);
         foreach ($poFiles as $appName => $poPath) {
