@@ -54,7 +54,8 @@ class Voipmanager_Model_MyPhone extends Tinebase_Record_Abstract
         'redirect_event'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'redirect_number'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'redirect_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true) 
+        'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'settings'              => array(Zend_Filter_Input::ALLOW_EMPTY => true) 
     );
     
 

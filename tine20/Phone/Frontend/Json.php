@@ -102,7 +102,7 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     public function saveMyPhone($phoneData)
     {
         $phoneData = Zend_Json::decode($phoneData);
-        $voipController = Voipmanager_Controller::getInstance();
+        $voipController = Voipmanager_Controller_MyPhone::getInstance();
         
         // unset if empty
         if (empty($phoneData['id'])) {
@@ -114,18 +114,15 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
         $phoneSettings->setFromArray($phoneData);
-
-        $currentAccount = Tinebase_Core::getUser()->toArray();
+        $phone->settings = $phoneSettings;
         
         if (!empty($phone->id)) {
-            $phone = $voipController->updateMyPhone($phone, $phoneSettings, $currentAccount['accountId']);
+            $phone = $voipController->update($phone);
         } 
         
-        $phone = $voipController->getSnomPhone($phone->getId())->toArray();
-
         $result = array('success'           => true,
             'welcomeMessage'    => 'Entry updated',
-            'updatedData'       => $phone
+            'updatedData'       => $phone->toArray()
         );
         
         return $result;         

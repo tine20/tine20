@@ -42,18 +42,17 @@ class Phone_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     public function editMyPhone($phoneId = NULL)
     {
-        $controller = Voipmanager_Controller::getInstance();
         $currentAccount = Tinebase_Core::getUser()->toArray();
         
         if (!empty($phoneId)) {
-            $snomPhone = $controller->getMyPhone($phoneId, $currentAccount['accountId']);
+            $snomPhone = Voipmanager_Controller_MyPhone::getInstance()->getMyPhone($phoneId, $currentAccount['accountId']);
             //unset($phone->lines);
 
             $_phoneData = $snomPhone->toArray();
-            $_phoneSettingsData = $controller->getSnomPhoneSettings($_phoneData['id'])->toArray();
+            $_phoneSettingsData = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($_phoneData['id'])->toArray();
             
-            $_templateData = $controller->getSnomTemplate($_phoneData['template_id'])->toArray();            
-            $_settingsData = $controller->getSnomSetting($_templateData['setting_id'])->toArray();
+            $_templateData = Voipmanager_Controller_Snom_Template::getInstance()->get($_phoneData['template_id'])->toArray();            
+            $_settingsData = Voipmanager_Controller_Snom_Setting::getInstance()->get($_templateData['setting_id'])->toArray();
             
             $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 

@@ -6,8 +6,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: MyPhones.js 3306 2008-07-10 14:18:42Z t.wadewitz@metaways.de $
  *
- * @todo check if this js is needed / move to phone app ?
- * @deprecated ?
+ * @todo        check if this js is needed / move to phone app ?
+ * @deprecated  use new generic edit dialog
  */
 
 Ext.namespace('Tine.Voipmanager.MyPhones');
@@ -119,7 +119,7 @@ Tine.Voipmanager.MyPhones.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Model.Snom.Phone,
+            fields: Tine.Voipmanager.Model.SnomPhone,
             // turn on remote sorting
             remoteSort: true
         });
@@ -315,7 +315,7 @@ Tine.Voipmanager.MyPhones.EditDialog =  {
                 Ext.getCmp('redirect_time').disable();
             }
             
-            this.myphoneRecord = new Tine.Voipmanager.Model.Snom.Phone(_myphoneData);
+            this.myphoneRecord = new Tine.Voipmanager.Model.SnomPhone(_myphoneData);
 
         },
         

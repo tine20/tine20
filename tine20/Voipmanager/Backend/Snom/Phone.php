@@ -322,6 +322,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
         $phoneData = $_phone->toArray();
         unset($phoneData['id']);
         unset($phoneData['template_id']);
+        unset($phoneData['settings']);
 
         $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $phoneId), $this->_db->quoteInto('id IN (?)', $_validPhoneIds) );
 
