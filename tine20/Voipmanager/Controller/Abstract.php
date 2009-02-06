@@ -47,7 +47,7 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
      * @return Zend_Db_Adapter_Abstract
      * @throws  Voipmanager_Exception_UnexpectedValue
      */
-    protected function getDatabaseBackend() 
+    public function getDatabaseBackend() 
     {
         if(isset(Zend_Registry::get('configFile')->voipmanager) && isset(Zend_Registry::get('configFile')->voipmanager->database)) {
             $dbConfig = Zend_Registry::get('configFile')->voipmanager->database;
