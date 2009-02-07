@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-05 14:37+0100\n"
-"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2009-02-07 10:01+0100\n"
+"Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -283,11 +283,11 @@ msgstr "Filter"
 
 #: Export/Ods.php:344
 msgid "Total Sum"
-msgstr "Gesamtsummer"
+msgstr "Gesamtsumme"
 
 #: Export/Ods.php:361
 msgid "Not billable"
-msgstr "Nicht Abrechenbar"
+msgstr "Nicht abrechenbar"
 
 #: Export/Ods.php:377
 msgid "Total"
