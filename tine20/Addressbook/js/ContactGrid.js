@@ -32,7 +32,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     initComponent: function() {
         this.recordProxy = Tine.Addressbook.contactBackend;
         
-        //this.actionToolbarItems = this.getToolbarItems();
+        this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.filterToolbar = this.getFilterToolbar();
         this.detailsPanel = this.getDetailsPanel();
@@ -76,7 +76,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
      */
     getColumns: function(){
         return [
-            { resizable: true, id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTidRenderer },
+            { resizable: true, id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTidRenderer.createDelegate(this) },
             { resizable: true, id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family', hidden: true },
             { resizable: true, id: 'n_given', header: this.app.i18n._('First Name'), dataIndex: 'n_given', width: 80, hidden: true },
             { resizable: true, id: 'n_fn', header: this.app.i18n._('Full Name'), dataIndex: 'n_fn', hidden: true },
@@ -305,16 +305,40 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
      * return additional tb items
      */
     getToolbarItems: function(){
+        this.actions_exportContact = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            text: this.app.i18n._('export as pdf'),
+            disabled: true,
+            handler: this.onExportPdf,
+            iconCls: 'action_exportAsPdf',
+            scope: this
+        });
+
+        this.actions_callContact = new Ext.Action({
+            requiredGrant: 'readGrant',
+            id: 'Addressbook_Contacts_CallContact',
+            text: this.app.i18n._('call contact'),
+            disabled: true,
+            handler: this.onCallContact,
+            iconCls: 'PhoneIconCls',
+            menu: new Ext.menu.Menu({
+                id: 'Addressbook_Contacts_CallContact_Menu'
+            }),
+            scope: this
+        });
+        
         return [
-            new Ext.Toolbar.Separator()
+            new Ext.Toolbar.Separator(),
+            this.actions_exportContact,
+            this.actions_callContact
         ];
     },
     
-    contactTidRenderer: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-        //console.log(_record.get('container_id').type);
-        switch(_record.get('container_id').type) {
+    contactTidRenderer: function(data, cell, record) {
+        switch(record.get('container_id').type) {
             case 'internal':
-                return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + Tine.Tinebase.appMgr.get('Addressbook').i18n._("Internal Contacts") + "'/>";
+                return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + this.app.i18n._("Internal Contacts") + "'/>";
             default:
                 return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
         }
