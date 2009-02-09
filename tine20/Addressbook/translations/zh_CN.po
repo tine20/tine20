@@ -121,7 +121,7 @@ msgstr "工作头衔"
 msgid "Addressbook"
 msgstr "地址本"
 
-#: js/Addressbook.js:61 js/ContactGrid.js:257 Setup/setup.xml:486
+#: js/Addressbook.js:61 js/ContactGrid.js:285 Setup/setup.xml:486
 msgid "Internal Contacts"
 msgstr "内部联系人"
 
@@ -135,7 +135,7 @@ msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "地址本"
 
-#: js/Addressbook.js:136 js/ContactGrid.js:127
+#: js/Addressbook.js:136 js/ContactGrid.js:154
 msgid "export as pdf"
 msgstr "输入 pdf 文件"
 
@@ -281,17 +281,17 @@ msgstr "邮政编码（个人）"
 msgid "Country (private)"
 msgstr "国家（个人）"
 
-#: js/ContactGrid.js:102 js/ContactGrid.js:353 js/ContactGrid.js:383
+#: js/ContactGrid.js:102 js/ContactGrid.js:381 js/ContactGrid.js:411
 #: js/EditDialog.js:225
 msgid "Phone"
 msgstr "电话"
 
-#: js/ContactGrid.js:103 js/ContactGrid.js:354 js/ContactGrid.js:384
+#: js/ContactGrid.js:103 js/ContactGrid.js:382 js/ContactGrid.js:412
 #: js/EditDialog.js:230
 msgid "Mobile"
 msgstr "手机"
 
-#: js/ContactGrid.js:104 js/ContactGrid.js:355 js/ContactGrid.js:385
+#: js/ContactGrid.js:104 js/ContactGrid.js:383 js/ContactGrid.js:413
 #: js/EditDialog.js:235
 msgid "Fax"
 msgstr "传真"
@@ -320,7 +320,7 @@ msgstr "手机（个人）"
 msgid "Email (private)"
 msgstr "电子邮件（个人）"
 
-#: js/ContactGrid.js:111 js/ContactGrid.js:357 js/ContactGrid.js:387
+#: js/ContactGrid.js:111 js/ContactGrid.js:385 js/ContactGrid.js:415
 #: js/EditDialog.js:272
 msgid "Web"
 msgstr "网址"
@@ -341,31 +341,46 @@ msgstr "时区"
 msgid "Geo"
 msgstr "地理"
 
-#: js/ContactGrid.js:137
+#: js/ContactGrid.js:125
+#, fuzzy
+msgid "Export"
+msgstr "Csv 导出所有"
+
+#: js/ContactGrid.js:134
+#, fuzzy
+msgid "Export as PDF"
+msgstr "输入 pdf 文件"
+
+#: js/ContactGrid.js:141
+#, fuzzy
+msgid "Export as CSV"
+msgstr "输入 pdf 文件"
+
+#: js/ContactGrid.js:165
 msgid "call contact"
 msgstr "呼叫联系人"
 
-#: js/ContactGrid.js:175
+#: js/ContactGrid.js:203
 msgid "Work"
 msgstr "工作"
 
-#: js/ContactGrid.js:184
+#: js/ContactGrid.js:212
 msgid "Home"
 msgstr "家里"
 
-#: js/ContactGrid.js:193
+#: js/ContactGrid.js:221
 msgid "Cell"
 msgstr "手机"
 
-#: js/ContactGrid.js:202
+#: js/ContactGrid.js:230
 msgid "Cell private"
 msgstr "私人手机"
 
-#: js/ContactGrid.js:284
+#: js/ContactGrid.js:312
 msgid "Select contact"
 msgstr "选择联系人"
 
-#: js/ContactGrid.js:356 js/ContactGrid.js:386 js/EditDialog.js:259
+#: js/ContactGrid.js:384 js/ContactGrid.js:414 js/EditDialog.js:259
 msgid "E-Mail"
 msgstr "电子邮件"
 
@@ -443,9 +458,6 @@ msgstr "女士"
 #~ msgid "delete contact"
 #~ msgid_plural "delete contacts"
 #~ msgstr[0] "删除联系人"
-
-#~ msgid "Csv Export All"
-#~ msgstr "Csv 导出所有"
 
 #~ msgid "Displaying contacts {0} - {1} of {2}"
 #~ msgstr "显示联系人 {0} - {1} of {2}"

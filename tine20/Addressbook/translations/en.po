@@ -106,7 +106,7 @@ msgstr "Job Title"
 msgid "Addressbook"
 msgstr "Addressbook"
 
-#: js/Addressbook.js:61 js/ContactGrid.js:257 Setup/setup.xml:486
+#: js/Addressbook.js:61 js/ContactGrid.js:285 Setup/setup.xml:486
 msgid "Internal Contacts"
 msgstr "Internal Contacts"
 
@@ -120,7 +120,7 @@ msgid_plural "addressbooks"
 msgstr[0] "addressbook"
 msgstr[1] "addressbooks"
 
-#: js/Addressbook.js:136 js/ContactGrid.js:127
+#: js/Addressbook.js:136 js/ContactGrid.js:154
 msgid "export as pdf"
 msgstr "export as pdf"
 
@@ -266,17 +266,17 @@ msgstr "Postalcode (private)"
 msgid "Country (private)"
 msgstr "Country (private)"
 
-#: js/ContactGrid.js:102 js/ContactGrid.js:353 js/ContactGrid.js:383
+#: js/ContactGrid.js:102 js/ContactGrid.js:381 js/ContactGrid.js:411
 #: js/EditDialog.js:225
 msgid "Phone"
 msgstr "Phone"
 
-#: js/ContactGrid.js:103 js/ContactGrid.js:354 js/ContactGrid.js:384
+#: js/ContactGrid.js:103 js/ContactGrid.js:382 js/ContactGrid.js:412
 #: js/EditDialog.js:230
 msgid "Mobile"
 msgstr "Mobile"
 
-#: js/ContactGrid.js:104 js/ContactGrid.js:355 js/ContactGrid.js:385
+#: js/ContactGrid.js:104 js/ContactGrid.js:383 js/ContactGrid.js:413
 #: js/EditDialog.js:235
 msgid "Fax"
 msgstr "Fax"
@@ -305,7 +305,7 @@ msgstr "Mobile (private)"
 msgid "Email (private)"
 msgstr "Email (private)"
 
-#: js/ContactGrid.js:111 js/ContactGrid.js:357 js/ContactGrid.js:387
+#: js/ContactGrid.js:111 js/ContactGrid.js:385 js/ContactGrid.js:415
 #: js/EditDialog.js:272
 msgid "Web"
 msgstr "Web"
@@ -326,31 +326,43 @@ msgstr "Timezone"
 msgid "Geo"
 msgstr "Geo"
 
-#: js/ContactGrid.js:137
+#: js/ContactGrid.js:125
+msgid "Export"
+msgstr "Export"
+
+#: js/ContactGrid.js:134
+msgid "Export as PDF"
+msgstr "Export as PDF"
+
+#: js/ContactGrid.js:141
+msgid "Export as CSV"
+msgstr "Export as CSV"
+
+#: js/ContactGrid.js:165
 msgid "call contact"
 msgstr "call contact"
 
-#: js/ContactGrid.js:175
+#: js/ContactGrid.js:203
 msgid "Work"
 msgstr "Work"
 
-#: js/ContactGrid.js:184
+#: js/ContactGrid.js:212
 msgid "Home"
 msgstr "Home"
 
-#: js/ContactGrid.js:193
+#: js/ContactGrid.js:221
 msgid "Cell"
 msgstr "Cell"
 
-#: js/ContactGrid.js:202
+#: js/ContactGrid.js:230
 msgid "Cell private"
 msgstr "Cell private"
 
-#: js/ContactGrid.js:284
+#: js/ContactGrid.js:312
 msgid "Select contact"
 msgstr "Select contact"
 
-#: js/ContactGrid.js:356 js/ContactGrid.js:386 js/EditDialog.js:259
+#: js/ContactGrid.js:384 js/ContactGrid.js:414 js/EditDialog.js:259
 msgid "E-Mail"
 msgstr "E-Mail"
 
