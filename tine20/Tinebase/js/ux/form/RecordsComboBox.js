@@ -11,12 +11,22 @@
 Ext.namespace('Ext.ux.form');
 
 /**
- * A ComboBox with a store that loads its data from a record in this format
+ * A ComboBox with a (Ext.data.JsonStore) store that loads its data from a record in this format:
  * {
  *  value:1,
- *  records:[[0,'text 1'],[1,'text 2']]
+ *  records:[{id: 0, name: 'name 1'},{id: 1,name: 'name 2'}]
  * }
  * 
+ * use it like this:
+ * {
+ *   xtype:'reccombo',
+ *   name: 'software_id',
+ *   fieldLabel: this.app.i18n._('Software Version'),
+ *   displayField: 'name',
+ *   store: new Ext.data.JsonStore({
+ *      fields: Tine.Voipmanager.Model.SnomSoftware
+ *   })
+ * }
  */ 
 Ext.ux.form.RecordsComboBox = Ext.extend(Ext.form.ComboBox, {
 	
