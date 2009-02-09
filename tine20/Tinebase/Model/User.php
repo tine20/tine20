@@ -261,12 +261,13 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      *
      * @param int|string|Tinebase_Model_User $_accountId the accountid to convert
      * @return int
+     * @throws Tinebase_Exception_NotFound
      */
     static public function convertUserIdToInt($_accountId)
     {
         if ($_accountId instanceof Tinebase_Model_User) {
             if (empty($_accountId->accountId)) {
-                throw new Exception('no accountId set');
+                throw new Tinebase_Exception_NotFound('no accountId set');
             }
             $accountId = (int) $_accountId->accountId;
         } else {
@@ -274,7 +275,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         }
         
         if ($accountId === 0) {
-            throw new Exception('accountId can not be 0');
+            throw new Tinebase_Exception_NotFound('accountId can not be 0');
         }
         
         return $accountId;

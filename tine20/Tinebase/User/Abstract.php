@@ -72,7 +72,7 @@ abstract class Tinebase_User_Abstract
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         $data = array(
-            'accountId'             => $_id,
+            'accountId'             => ($_id !== NULL) ? $_id : 0,
             'accountLoginName'      => $translate->_('unknown'),
             'accountDisplayName'    => $translate->_('unknown'),
             'accountLastName'       => $translate->_('unknown'),
