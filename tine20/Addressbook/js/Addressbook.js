@@ -1,4 +1,16 @@
-﻿Ext.namespace('Tine.Addressbook');
+﻿/**
+ * Tine 2.0
+ * 
+ * @package     Addressbook
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: ContactGrid.js 6638 2009-02-09 11:56:32Z c.weiss@metaways.de $
+ *
+ */
+
+// appName translation: _('Addressbook')
+Ext.namespace('Tine.Addressbook');
 
 
 /******************************* main screen **********************************/
