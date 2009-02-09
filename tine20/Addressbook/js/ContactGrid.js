@@ -41,6 +41,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         this.plugins.push(this.filterToolbar);
         
         Tine.Addressbook.ContactGridPanel.superclass.initComponent.call(this);
+        
+        this.grid.getSelectionModel().on('selectionchange', this.onSelectionchange, this);
     },
     
     /**
@@ -115,6 +117,155 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         ];
     },
     
+    /**
+     * return additional tb items
+     */
+    getToolbarItems: function(){
+        this.actions_exportContact = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            text: this.app.i18n._('export as pdf'),
+            disabled: true,
+            handler: this.onExportPdf,
+            iconCls: 'action_exportAsPdf',
+            scope: this
+        });
+
+        this.actions_callContact = new Ext.Action({
+            requiredGrant: 'readGrant',
+            id: 'Addressbook_Contacts_CallContact',
+            text: this.app.i18n._('call contact'),
+            disabled: true,
+            handler: this.onCallContact,
+            iconCls: 'PhoneIconCls',
+            menu: new Ext.menu.Menu({
+                id: 'Addressbook_Contacts_CallContact_Menu'
+            }),
+            scope: this
+        });
+        
+        var items = [
+            new Ext.Toolbar.Separator(),
+            this.actions_exportContact
+        ];
+        
+        if (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
+            items.push(new Ext.Toolbar.MenuButton(this.actions_callContact));
+        }
+        
+        return items;
+    },
+    
+    /**
+     * updates call menu
+     * @param {} sm
+     */
+    onSelectionchange: function(sm) {
+        var rowCount = sm.getCount();
+        if (rowCount == 1 && Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
+            var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
+            callMenu.removeAll();
+            
+            this.actions_callContact.setDisabled(true);
+            
+            var contact = sm.getSelected();
+            if(!Ext.isEmpty(contact.data.tel_work)) {
+                callMenu.add({
+                   id: 'Addressbook_Contacts_CallContact_Work', 
+                   text: this.app.i18n._('Work') + ' ' + contact.data.tel_work + '',
+                   scope: this,
+                   handler: this.onCallContact
+                });
+                this.actions_callContact.setDisabled(false);
+            }
+            if(!Ext.isEmpty(contact.data.tel_home)) {
+                callMenu.add({
+                   id: 'Addressbook_Contacts_CallContact_Home', 
+                   text: this.app.i18n._('Home') + ' ' + contact.data.tel_home + '',
+                   scope: this,
+                   handler: this.onCallContact
+                });
+                this.actions_callContact.setDisabled(false);
+            }
+            if(!Ext.isEmpty(contact.data.tel_cell)) {
+                callMenu.add({
+                   id: 'Addressbook_Contacts_CallContact_Cell', 
+                   text: this.app.i18n._('Cell') + ' ' + contact.data.tel_cell + '',
+                   scope: this,
+                   handler: this.onCallContact
+                });
+                this.actions_callContact.setDisabled(false);
+            }
+            if(!Ext.isEmpty(contact.data.tel_cell_private)) {
+                callMenu.add({
+                   id: 'Addressbook_Contacts_CallContact_CellPrivate', 
+                   text: this.app.i18n._('Cell private') + ' ' + contact.data.tel_cell_private + '',
+                   scope: this,
+                   handler: this.onCallContact
+                });
+                this.actions_callContact.setDisabled(false);
+            }
+        }
+    },
+        
+    /**
+     * calls a contact
+     */
+    onCallContact: function(btn) {
+        var number;
+
+        var contact = this.grid.getSelectionModel().getSelected();
+
+        switch(btn.getId()) {
+            case 'Addressbook_Contacts_CallContact_Work':
+                number = contact.data.tel_work;
+                break;
+            case 'Addressbook_Contacts_CallContact_Home':
+                number = contact.data.tel_home;
+                break;
+            case 'Addressbook_Contacts_CallContact_Cell':
+                number = contact.data.tel_cell;
+                break;
+            case 'Addressbook_Contacts_CallContact_CellPrivate':
+                number = contact.data.tel_cell_private;
+                break;
+            default:
+                if(!Ext.isEmpty(contact.data.tel_work)) {
+                    number = contact.data.tel_work;
+                } else if (!Ext.isEmpty(contact.data.tel_cell)) {
+                    number = contact.data.tel_cell;
+                } else if (!Ext.isEmpty(contact.data.tel_cell_private)) {
+                    number = contact.data.tel_cell_private;
+                } else if (!Ext.isEmpty(contact.data.tel_home)) {
+                    number = contact.data.tel_work;
+                }
+                break;
+        }
+
+        Tine.Phone.dialNumber(number);
+    },
+    
+    /**
+     * tid renderer
+     * 
+     * @private
+     * @return {String} HTML
+     */
+    contactTidRenderer: function(data, cell, record) {
+        switch(record.get('container_id').type) {
+            case 'internal':
+                return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + this.app.i18n._("Internal Contacts") + "'/>";
+            default:
+                return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
+        }
+    },
+    
+    /**
+     * returns details panel
+     * 
+     * @private
+     * @return {Tine.widgets.grid.DetailsPanel}
+     */
     getDetailsPanel: function() {
         return new Tine.widgets.grid.DetailsPanel({
             gridpanel: this,
@@ -299,48 +450,5 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 }
             })
         });
-    },
-    
-    /**
-     * return additional tb items
-     */
-    getToolbarItems: function(){
-        this.actions_exportContact = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: true,
-            text: this.app.i18n._('export as pdf'),
-            disabled: true,
-            handler: this.onExportPdf,
-            iconCls: 'action_exportAsPdf',
-            scope: this
-        });
-
-        this.actions_callContact = new Ext.Action({
-            requiredGrant: 'readGrant',
-            id: 'Addressbook_Contacts_CallContact',
-            text: this.app.i18n._('call contact'),
-            disabled: true,
-            handler: this.onCallContact,
-            iconCls: 'PhoneIconCls',
-            menu: new Ext.menu.Menu({
-                id: 'Addressbook_Contacts_CallContact_Menu'
-            }),
-            scope: this
-        });
-        
-        return [
-            new Ext.Toolbar.Separator(),
-            this.actions_exportContact,
-            this.actions_callContact
-        ];
-    },
-    
-    contactTidRenderer: function(data, cell, record) {
-        switch(record.get('container_id').type) {
-            case 'internal':
-                return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + this.app.i18n._("Internal Contacts") + "'/>";
-            default:
-                return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
-        }
-    } 
+    }
 });

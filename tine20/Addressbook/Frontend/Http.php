@@ -88,6 +88,10 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
      */
     public function getJsFilesToInclude ()
     {
-        return array('Addressbook/js/Addressbook.js' , 'Addressbook/js/EditDialog.js');
+        return array(
+            'Addressbook/js/Addressbook.js',
+            'Addressbook/js/ContactGrid.js',
+            'Addressbook/js/EditDialog.js'
+        );
     }
 }
