@@ -1,0 +1,12 @@
+.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn {
+    display:block;
+}
+
+.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn {
+    background-image:url(../../../../images/GridViewMenu.png);
+    width:16px;
+}
+
+a.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn:hover {
+    background-position:-16px center;
+}
