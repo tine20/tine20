@@ -37,7 +37,9 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
     {        
         switch ($_format) {
             case 'pdf':
-                $contactIds = Zend_Json::decode($_filter);                
+                $filter = new Addressbook_Model_ContactFilter(Zend_Json::decode($_filter));
+                $paging = new Tinebase_Model_Pagination();
+                $contactIds = Addressbook_Controller_Contact::getInstance()->search($filter, $paging, false, true);                
                 
                 $pdf = new Addressbook_Export_Pdf();
                 
@@ -50,8 +52,8 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
                     $pdfOutput = $pdf->render();
                 } catch (Zend_Pdf_Exception $e) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
-                    echo "could not create pdf <br/>". $e->__toString();
-                    exit();            
+                    //echo "could not create pdf <br/>". $e->__toString();
+                    //exit();            
                 }
                 
                 header("Pragma: public");
