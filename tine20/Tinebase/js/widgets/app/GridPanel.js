@@ -292,6 +292,12 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : Ext.grid.GridPanel;
         
         this.gridConfig.store = this.store;
+        
+        // activate grid header menu for column selection
+        this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
+        this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        this.gridConfig.enableHdMenu = false;
+        
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,
