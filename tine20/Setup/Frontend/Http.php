@@ -123,6 +123,7 @@ class Setup_Frontend_Http
      * @return boolean if check is successful
      * 
      * @todo use this in cli as well (move to controller?)
+     * @todo move ini requirements elsewhere
      */
     protected function _check()
     {
@@ -135,7 +136,7 @@ class Setup_Frontend_Http
             'magic_quotes_runtime' => 0,
             'mbstring.func_overload' => 0,
             'eaccelerator.enable' => 0,
-            'memory_limit' => '128M'
+            'memory_limit' => '48M'
         );
         
         foreach ($requiredIniSettings as $variable => $newValue) {
