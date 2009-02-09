@@ -13,139 +13,100 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/TimeaccountGridPanel.js:53 js/TimeaccountEditDialog.js:68
-#: js/Models.js:103 Export/Ods.php:412
+#: Acl/Rights.php:98
+msgid "Manage timeaccounts"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Add, edit and delete timeaccounts"
+msgstr ""
+
+#: Export/Ods.php:201
+#, fuzzy
+msgid "Filter"
+msgstr "头衔"
+
+#: Export/Ods.php:344
+msgid "Total Sum"
+msgstr ""
+
+#: Export/Ods.php:361
+msgid "Not billable"
+msgstr ""
+
+#: Export/Ods.php:369 Export/Ods.php:432 js/TimesheetEditDialog.js:179
+#: js/TimesheetGridPanel.js:48 js/TimesheetGridPanel.js:186
+#: js/TimesheetGridPanel.js:238
+msgid "Billable"
+msgstr ""
+
+#: Export/Ods.php:377
+#, fuzzy
+msgid "Total"
+msgstr "头衔"
+
+#: Export/Ods.php:402 js/TimesheetEditDialog.js:141
+#: js/TimesheetGridPanel.js:184 js/TimesheetGridPanel.js:203
+msgid "Date"
+msgstr ""
+
+#: Export/Ods.php:407 js/TimeaccountEditDialog.js:135
+#: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:163
+#: js/TimesheetGridPanel.js:185 js/TimesheetGridPanel.js:228
+msgid "Description"
+msgstr "描述"
+
+#: Export/Ods.php:412 js/Models.js:103 js/TimeaccountEditDialog.js:68
+#: js/TimeaccountGridPanel.js:51
 msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] ""
 
-#: js/TimeaccountGridPanel.js:54 js/TimesheetGridPanel.js:185
-#: js/TimesheetGridPanel.js:228 js/TimeaccountEditDialog.js:135
-#: js/TimesheetEditDialog.js:163 Export/Ods.php:407
-msgid "Description"
-msgstr "描述"
-
-#: js/TimeaccountGridPanel.js:71 js/TimesheetGridPanel.js:181
-#: js/TimeaccountEditDialog.js:84
-msgid "Number"
+#: Export/Ods.php:419
+msgid "Staff Member"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:77 js/TimesheetGridPanel.js:182
-#: js/TimeaccountEditDialog.js:89
-msgid "Title"
-msgstr "头衔"
-
-#: js/TimeaccountGridPanel.js:83 js/TimeaccountEditDialog.js:104
-msgid "Budget"
-msgstr ""
-
-#: js/TimeaccountGridPanel.js:95
-msgid "Show closed"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:40
-msgid "Mass Update"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:46
-msgid "Update field:"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:48 js/TimesheetGridPanel.js:186
-#: js/TimesheetGridPanel.js:238 js/TimesheetEditDialog.js:179
-#: Export/Ods.php:369 Export/Ods.php:432
-msgid "Billable"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:187
-#: js/TimesheetGridPanel.js:246 js/TimesheetEditDialog.js:186
-#: Export/Ods.php:437
-msgid "Cleared"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:58
-msgid "Cleared in"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:117
-msgid "Update {0} records"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:126
-msgid "Cancel"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:132
-msgid "Ok"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:158
-msgid "Success"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:159
-msgid "Updated {0} records"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:179 js/TimesheetEditDialog.js:109 js/Models.js:44
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "时间表"
-
-#: js/TimesheetGridPanel.js:181 js/TimesheetGridPanel.js:182
-#: js/TimesheetGridPanel.js:218 js/TimesheetEditDialog.js:126
-#: js/TimeaccountSelect.js:166
-msgid "Time Account"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:253
-#: js/TimesheetEditDialog.js:173
-msgid "Account"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:184 js/TimesheetGridPanel.js:203
-#: js/TimesheetEditDialog.js:141 Export/Ods.php:402
-msgid "Date"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:211
-msgid "Start time"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:260 js/TimesheetEditDialog.js:136
-#: Export/Ods.php:425
+#: Export/Ods.php:425 js/TimesheetEditDialog.js:136
+#: js/TimesheetGridPanel.js:260
 #, fuzzy
 msgid "Duration"
 msgstr "描述"
 
-#: js/TimesheetGridPanel.js:432
-msgid "Export"
+#: Export/Ods.php:437 js/TimesheetEditDialog.js:186
+#: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:187
+#: js/TimesheetGridPanel.js:246
+msgid "Cleared"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:441
-msgid "Export as ODS"
+#: js/DurationSlider.js:95
+msgid "{0}"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:447
-msgid "Export as CSV"
-msgstr ""
+#: js/Models.js:44 js/TimesheetEditDialog.js:109 js/TimesheetGridPanel.js:179
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "时间表"
 
-#: js/Timetracker.js:23
-msgid "Timesheets"
-msgstr "时间表"
+#: js/Models.js:48
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] "时间表列表"
 
-#: js/Timetracker.js:28
+#: js/Models.js:107
 #, fuzzy
-msgid "All Timesheets"
-msgstr "时间表"
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] "时间表列表"
 
-#: js/Timetracker.js:33
-msgid "Timeaccounts"
+#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:69
+#: js/TimesheetGridPanel.js:181
+msgid "Number"
 msgstr ""
 
-#: js/Timetracker.js:38
-msgid "All Timeaccounts"
-msgstr ""
+#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:75
+#: js/TimesheetGridPanel.js:182
+msgid "Title"
+msgstr "头衔"
 
 #: js/TimeaccountEditDialog.js:98
 msgid "Unit"
@@ -153,6 +114,10 @@ msgstr ""
 
 #: js/TimeaccountEditDialog.js:101
 msgid "Unit Price"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:104 js/TimeaccountGridPanel.js:81
+msgid "Budget"
 msgstr ""
 
 #: js/TimeaccountEditDialog.js:108
@@ -205,8 +170,14 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: js/DurationSlider.js:95
-msgid "{0}"
+#: js/TimeaccountGridPanel.js:93
+msgid "Show closed"
+msgstr ""
+
+#: js/TimeaccountSelect.js:166 js/TimesheetEditDialog.js:126
+#: js/TimesheetGridPanel.js:181 js/TimesheetGridPanel.js:182
+#: js/TimesheetGridPanel.js:218
+msgid "Time Account"
 msgstr ""
 
 #: js/TimesheetEditDialog.js:81 js/TimesheetEditDialog.js:82
@@ -234,6 +205,11 @@ msgstr ""
 msgid "Enter description..."
 msgstr "输入描述 ..."
 
+#: js/TimesheetEditDialog.js:173 js/TimesheetGridPanel.js:183
+#: js/TimesheetGridPanel.js:253
+msgid "Account"
+msgstr ""
+
 #: js/TimesheetEditDialog.js:196
 msgid "not cleared yet..."
 msgstr ""
@@ -242,49 +218,93 @@ msgstr ""
 msgid "Cleared In"
 msgstr ""
 
-#: js/Models.js:48
-msgid "timesheets list"
-msgid_plural "timesheets lists"
-msgstr[0] "时间表列表"
+#: js/TimesheetGridPanel.js:40
+msgid "Mass Update"
+msgstr ""
 
-#: js/Models.js:107
+#: js/TimesheetGridPanel.js:46
+msgid "Update field:"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:58
+msgid "Cleared in"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:117
+msgid "Update {0} records"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:126
+msgid "Cancel"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:132
+msgid "Ok"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:158
+msgid "Success"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:159
+msgid "Updated {0} records"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:211
+msgid "Start time"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:308
 #, fuzzy
-msgid "timeaccount list"
-msgid_plural "timeaccount lists"
-msgstr[0] "时间表列表"
+msgid "Total Timesheets"
+msgstr "时间表"
+
+#: js/TimesheetGridPanel.js:309
+#, fuzzy
+msgid "Billable Timesheets"
+msgstr "时间表"
+
+#: js/TimesheetGridPanel.js:310
+#, fuzzy
+msgid "Total Time"
+msgstr "头衔"
+
+#: js/TimesheetGridPanel.js:311
+#, fuzzy
+msgid "Time of Billable Timesheets"
+msgstr "时间表"
+
+#: js/TimesheetGridPanel.js:439
+msgid "Export"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:448
+msgid "Export as ODS"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:454
+msgid "Export as CSV"
+msgstr ""
+
+#: js/Timetracker.js:23
+msgid "Timesheets"
+msgstr "时间表"
+
+#: js/Timetracker.js:28
+#, fuzzy
+msgid "All Timesheets"
+msgstr "时间表"
+
+#: js/Timetracker.js:33
+msgid "Timeaccounts"
+msgstr ""
+
+#: js/Timetracker.js:38
+msgid "All Timeaccounts"
+msgstr ""
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
-msgstr ""
-
-#: Export/Ods.php:201
-#, fuzzy
-msgid "Filter"
-msgstr "头衔"
-
-#: Export/Ods.php:344
-msgid "Total Sum"
-msgstr ""
-
-#: Export/Ods.php:361
-msgid "Not billable"
-msgstr ""
-
-#: Export/Ods.php:377
-#, fuzzy
-msgid "Total"
-msgstr "头衔"
-
-#: Export/Ods.php:419
-msgid "Staff Member"
-msgstr ""
-
-#: Acl/Rights.php:98
-msgid "Manage timeaccounts"
-msgstr ""
-
-#: Acl/Rights.php:99
-msgid "Add, edit and delete timeaccounts"
 msgstr ""
 
 #~ msgid "Summary"

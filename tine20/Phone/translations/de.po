@@ -12,14 +12,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Phone.js:27
-#: js/Phone.js:430
-#: js/Phone.js:431
+#: js/Phone.js:27 js/Phone.js:436 js/Phone.js:437
 msgid "Edit phone settings"
 msgstr "Telefoneinstellungen bearbeiten"
 
-#: js/Phone.js:44
-#: js/Phone.js:239
+#: js/Phone.js:44 js/Phone.js:239
 msgid "Phone"
 msgstr "Telefon"
 
@@ -31,100 +28,98 @@ msgstr "Telefone"
 msgid "Dial phone number"
 msgstr "Telefonnummer wählen"
 
-#: js/Phone.js:255
+#: js/Phone.js:261
 msgid "Line"
 msgstr "Leitung"
 
-#: js/Phone.js:264
+#: js/Phone.js:270
 msgid "Number"
 msgstr "Nummer"
 
-#: js/Phone.js:273
+#: js/Phone.js:279
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: js/Phone.js:283
+#: js/Phone.js:289
 msgid "Dial"
 msgstr "Wählen"
 
-#: js/Phone.js:420
+#: js/Phone.js:426
 msgid "Dial number"
 msgstr "Nummer wählen"
 
-#: js/Phone.js:421
+#: js/Phone.js:427
 msgid "Initiate a new outgoing call"
 msgstr "Neuer ausgehender Anruf"
 
-#: js/Phone.js:469
+#: js/Phone.js:475
 msgid "Incoming call"
 msgstr "Eingehender Anruf"
 
-#: js/Phone.js:473
+#: js/Phone.js:479
 msgid "Outgoing call"
 msgstr "Ausgehender Anruf"
 
-#: js/Phone.js:481
+#: js/Phone.js:487
 msgid "unknown number"
 msgstr "Unbekannte Rufnummer"
 
-#: js/Phone.js:492
+#: js/Phone.js:498
 msgid "enter searchfilter"
 msgstr "Suchfilter eingeben"
 
-#: js/Phone.js:506
+#: js/Phone.js:512
 msgid "Search:"
 msgstr "Suche:"
 
-#: js/Phone.js:591
+#: js/Phone.js:597
 msgid "Source or Destination"
 msgstr "Quelle oder Ziel"
 
-#: js/Phone.js:607
+#: js/Phone.js:613
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Anrufe  {0} - {1} of {2} anzeigen"
 
-#: js/Phone.js:608
-#: js/Phone.js:646
+#: js/Phone.js:614 js/Phone.js:652
 msgid "No calls to display"
 msgstr "Keine Anrufe"
 
-#: js/Phone.js:613
+#: js/Phone.js:619
 msgid "Direction"
 msgstr "Richtung"
 
-#: js/Phone.js:614
+#: js/Phone.js:620
 msgid "Source"
 msgstr "Quelle"
 
-#: js/Phone.js:615
+#: js/Phone.js:621
 msgid "Caller Id"
 msgstr "Eigene Rufnummer"
 
-#: js/Phone.js:616
+#: js/Phone.js:622
 msgid "Destination"
 msgstr "Gesprächspartner"
 
-#: js/Phone.js:617
+#: js/Phone.js:623
 msgid "Start"
 msgstr "Start"
 
-#: js/Phone.js:618
+#: js/Phone.js:624
 msgid "Connected"
 msgstr "Verbunden"
 
-#: js/Phone.js:619
+#: js/Phone.js:625
 msgid "Disconnected"
 msgstr "Getrennt"
 
-#: js/Phone.js:620
+#: js/Phone.js:626
 msgid "Duration"
 msgstr "Dauer"
 
-#: js/Phone.js:621
+#: js/Phone.js:627
 msgid "Ringing"
 msgstr "Klingeln"
 
-#: js/Phone.js:622
+#: js/Phone.js:628
 msgid "Call ID"
 msgstr "Anruf-ID"
-
