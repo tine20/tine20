@@ -34,6 +34,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'email', 'adr_one_locality',))),
         'n_given'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'n_family'             => array('filter' => 'Tinebase_Model_Filter_Text'),
