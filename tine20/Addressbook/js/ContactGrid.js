@@ -52,7 +52,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     getFilterToolbar: function() {
         return new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Contact'),    field: 'query',    operators: ['contains']},
+                {label: this.app.i18n.n_('Contact', 'Contacts', 1),    field: 'query',    operators: ['contains']},
                 {label: this.app.i18n._('First Name'), field: 'n_given' },
                 {label: this.app.i18n._('Last Name'),  field: 'n_family'},
                 {label: this.app.i18n._('Company'),    field: 'org_name'},
