@@ -211,7 +211,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             displayField: 'label',
             valueField: 'field',
             value: filterModel.field,
-            renderTo: fRow.child('td[class=tw-ftb-frow-field]')
+            renderTo: fRow.child('td[class=tw-ftb-frow-field]'),
+            validator: this.validateFilter.createDelegate(this)
         });
         filter.formFields.field.on('select', function(combo, newRecord, newKey) {
             if (combo.value != combo.filter.get('field')) {
@@ -236,6 +237,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 this.deleteFilter(button.filter);
             }
         });
+    },
+    
+    /**
+     * validate if type ahead is in our filter store
+     * @return {Bool}
+     */
+    validateFilter: function(value) {
+        return this.fieldStore.query('label', value).getCount() != 0;
     },
     
     /**
