@@ -79,6 +79,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     onRecordLoad: function() {
     	
+    	console.log(this.record);
+    	
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
         
@@ -305,45 +307,30 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         maxLength: 12,
                         allowBlank: false
                     }, {
-                        xtype: 'combo',
-                        fieldLabel: this.app.i18n._('Template'),
+                        xtype:'reccombo',
                         name: 'template_id',
+                        fieldLabel: this.app.i18n._('Template'),
                         displayField: 'name',
-                        valueField: 'id',
-                        triggerAction: 'all',
-                        editable: false,
-                        forceSelection: true,
-                        allowBlank: false,
                         store: new Ext.data.Store({
                             fields: Tine.Voipmanager.Model.SnomTemplate,
                             proxy: Tine.Voipmanager.SnomTemplateBackend,
+                            reader: Tine.Voipmanager.SnomTemplateBackend.getReader(),
                             remoteSort: true,
-                            sortInfo: {field: 'name', dir: 'ASC'},
-                            listeners: {
-                            	scope: this,
-                            	load: this.onTemplateChange
-                            }
+                            sortInfo: {field: 'name', dir: 'ASC'}
                         }),
                         listeners: {
-                        	scope: this,
-                            select: this.onTemplateChange,
-                            render: function(combo) {
-                            	combo.store.load();
-                            }
+                            scope: this,
+                            select: this.onTemplateChange
                         }
                     }], [{
-                        xtype: 'combo',
-                        fieldLabel: this.app.i18n._('Location'),
+                        xtype:'reccombo',
                         name: 'location_id',
+                        fieldLabel: this.app.i18n._('Location'),
                         displayField: 'name',
-                        valueField: 'id',
-                        triggerAction: 'all',
-                        editable: false,
-                        forceSelection: true,
-                        allowBlank: false,
                         store: new Ext.data.Store({
-                            fields: Tine.Voipmanager.Model.SnomLocation,
+                        	fields: Tine.Voipmanager.Model.SnomLocation,
                             proxy: Tine.Voipmanager.SnomLocationBackend,
+                            reader: Tine.Voipmanager.SnomLocationBackend.getReader(),
                             remoteSort: true,
                             sortInfo: {field: 'name', dir: 'ASC'}
                         })
