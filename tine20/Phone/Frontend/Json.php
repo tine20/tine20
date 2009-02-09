@@ -43,14 +43,17 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * get user phones
      *
      * @return string json encoded array with user phones
+     * @todo add account id filter again
      */
     public function getUserPhones($accountId)
     {        
         $voipController = Voipmanager_Controller_MyPhone::getInstance();
         
-        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
-            'accountId' => $accountId
+        $filter = new Voipmanager_Model_Snom_PhoneFilter(array());
+        /*
+            'account_id' => $accountId
         ));
+        */
         $phones = $voipController->search($filter);
         
         // add lines to phones
