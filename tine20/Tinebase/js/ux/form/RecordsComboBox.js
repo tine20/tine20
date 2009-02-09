@@ -20,6 +20,15 @@ Ext.namespace('Ext.ux.form');
  */ 
 Ext.ux.form.RecordsComboBox = Ext.extend(Ext.form.ComboBox, {
 	
+    /**
+     * default config
+     */
+	triggerAction: 'all',
+    editable: false,
+    forceSelection: true,
+    mode:'local',
+    valueField:'id',
+	
 	/**
 	 * overwrite setValue() to get records
 	 * 
@@ -27,13 +36,14 @@ Ext.ux.form.RecordsComboBox = Ext.extend(Ext.form.ComboBox, {
 	 */
     setValue: function(value) {
         var val = value;
-        if('object' === typeof value && '[object Object]' === Object.prototype.toString.call(value)) {
-            if(undefined !== value['records']) {
+        // check if object and load options from record
+        if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
+            if(value['records'] !== undefined) {
                 this.store.loadData(value['records']);
             }
             val = value['value'];
         }
-        Ext.ux.form.PopCombo.superclass.setValue.call(this, val);
+        Ext.ux.form.RecordsComboBox.superclass.setValue.call(this, val);
     }
 });
 

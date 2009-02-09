@@ -73,6 +73,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/ux/form/ColumnFormPanel.js',
             'Tinebase/js/ux/form/ExpandFieldSet.js',
             'Tinebase/js/ux/form/ClearableComboBox.js',
+            'Tinebase/js/ux/form/RecordsComboBox.js',
             'Tinebase/js/ux/form/DateTimeField.js',
             'Tinebase/js/ux/form/ClearableDateField.js',
             'Tinebase/js/ux/form/ImageField.js',
