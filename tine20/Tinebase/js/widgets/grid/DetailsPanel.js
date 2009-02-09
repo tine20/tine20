@@ -57,6 +57,10 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    /**
+     * 
+     * @param grid
+     */
     doBind: function(grid) {
         grid.getSelectionModel().on('selectionchange', function(sm) {
             this.onDetailsUpdate(sm);
@@ -67,9 +71,13 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         }, this);
     },
     
+    /**
+     * 
+     * @param sm selection model
+     */
     onDetailsUpdate: function(sm) {
         var count = sm.getCount();
-        if (count === 0) {
+        if (count === 0 || sm.isFilterSelect) {
             this.showDefault(this.body);
         } else if (count === 1) {
             var record = sm.getSelected();
