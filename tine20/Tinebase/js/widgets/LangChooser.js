@@ -81,7 +81,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
                 },
                 success: function(result, request){
                     var responseData = Ext.util.JSON.decode(result.responseText);
-                    window.location = window.location;
+                    window.location = window.location.href.replace(/#+.*/, '');
                     //this.loadNewLang(responseData.locale, responseData.translationFiles);
                 }
             });

@@ -41,7 +41,7 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
             '</tpl>',{
                 translate: function(timezone, timezoneTranslation) {
                     // use timezoneTranslation as fallback
-                	translation = (Locale.getTranslationData('CityToTimezone', timezone)) 
+                	var translation = (Locale.getTranslationData('CityToTimezone', timezone)) 
                 	   ? Locale.getTranslationData('CityToTimezone', timezone)
                 	   : timezoneTranslation;                	
                     return timezone + (translation ? (' - <i>(' + translation + ')</i>') : '');
@@ -82,7 +82,7 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
                 },
                 success: function(result, request){
                     var responseData = Ext.util.JSON.decode(result.responseText);
-                    window.location = window.location;
+                    window.location = window.location.href.replace(/#+.*/, '');
                 }
             });
         }
