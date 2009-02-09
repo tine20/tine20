@@ -3,13 +3,13 @@
 msgid "%s's personal tasks"
 msgstr "%s's personal tasks"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:72
+#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:73
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Task"
 msgstr[1] "Tasks"
 
-#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:113
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
 msgid "Summary"
 msgstr "Summary"
 
@@ -17,11 +17,11 @@ msgstr "Summary"
 msgid "Due date"
 msgstr "Due date"
 
-#: js/EditDialog.js:121 js/GridPanel.js:134
+#: js/EditDialog.js:121 js/GridPanel.js:136
 msgid "Priority"
 msgstr "Priority"
 
-#: js/EditDialog.js:124 js/GridPanel.js:186
+#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
 msgid "Responsible"
 msgstr "Responsible"
 
@@ -37,7 +37,7 @@ msgstr "Enter description..."
 msgid "Percentage"
 msgstr "Percentage"
 
-#: js/EditDialog.js:138 js/GridPanel.js:163
+#: js/EditDialog.js:138 js/GridPanel.js:165
 msgid "Status"
 msgstr "Status"
 
@@ -51,31 +51,31 @@ msgid_plural "Do you relay want to delete the selected tasks?"
 msgstr[0] "Do you realy want to delte the selected task?"
 msgstr[1] "Do you relay want to delete the selected tasks?"
 
-#: js/GridPanel.js:77
-msgid "Failed"
-msgstr "Failed"
-
-#: js/GridPanel.js:77
-msgid "Could not save task."
-msgstr "Could not save task."
-
-#: js/GridPanel.js:121
-msgid "Add a task..."
-msgstr "Add a task..."
-
-#: js/GridPanel.js:125
+#: js/GridPanel.js:57 js/GridPanel.js:127
 msgid "Due Date"
 msgstr "Due Date"
 
-#: js/GridPanel.js:149
+#: js/GridPanel.js:79
+msgid "Failed"
+msgstr "Failed"
+
+#: js/GridPanel.js:79
+msgid "Could not save task."
+msgstr "Could not save task."
+
+#: js/GridPanel.js:123
+msgid "Add a task..."
+msgstr "Add a task..."
+
+#: js/GridPanel.js:151
 msgid "Percent"
 msgstr "Percent"
 
-#: js/GridPanel.js:178
+#: js/GridPanel.js:180
 msgid "Creation Time"
 msgstr "Creation Time"
 
-#: js/GridPanel.js:206
+#: js/GridPanel.js:208
 msgid "Show closed"
 msgstr "Show closed"
 
@@ -83,7 +83,11 @@ msgstr "Show closed"
 msgid "IN-PROCESS"
 msgstr "IN-PROCESS"
 
-#: js/Tasks.js:76
+#: js/Tasks.js:12
+msgid "Tasks"
+msgstr "Tasks"
+
+#: js/Tasks.js:77
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "to do list"

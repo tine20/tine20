@@ -8,7 +8,8 @@
  * @version     $Id$
  *
  */
- 
+
+//tranlate appName:  _('Tasks') 
 Ext.namespace('Tine', 'Tine.Tasks');
 
 // default mainscreen

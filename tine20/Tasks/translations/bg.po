@@ -18,14 +18,14 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0}'s лични задачи"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:72
+#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:73
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Задачи"
 msgstr[1] "Задачи"
 
-#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:113
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
 msgid "Summary"
 msgstr "Заключение"
 
@@ -33,11 +33,11 @@ msgstr "Заключение"
 msgid "Due date"
 msgstr "Краен срок"
 
-#: js/EditDialog.js:121 js/GridPanel.js:134
+#: js/EditDialog.js:121 js/GridPanel.js:136
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/EditDialog.js:124 js/GridPanel.js:186
+#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
 msgid "Responsible"
 msgstr ""
 
@@ -53,7 +53,7 @@ msgstr "Напиши описание"
 msgid "Percentage"
 msgstr "Процент"
 
-#: js/EditDialog.js:138 js/GridPanel.js:163
+#: js/EditDialog.js:138 js/GridPanel.js:165
 msgid "Status"
 msgstr "Статус"
 
@@ -68,31 +68,31 @@ msgid_plural "Do you relay want to delete the selected tasks?"
 msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
 
-#: js/GridPanel.js:77
-msgid "Failed"
-msgstr "Неуспех"
-
-#: js/GridPanel.js:77
-msgid "Could not save task."
-msgstr "Задачата не може да бъде запаметена."
-
-#: js/GridPanel.js:121
-msgid "Add a task..."
-msgstr "Добави задача"
-
-#: js/GridPanel.js:125
+#: js/GridPanel.js:57 js/GridPanel.js:127
 msgid "Due Date"
 msgstr "Краен срок"
 
-#: js/GridPanel.js:149
+#: js/GridPanel.js:79
+msgid "Failed"
+msgstr "Неуспех"
+
+#: js/GridPanel.js:79
+msgid "Could not save task."
+msgstr "Задачата не може да бъде запаметена."
+
+#: js/GridPanel.js:123
+msgid "Add a task..."
+msgstr "Добави задача"
+
+#: js/GridPanel.js:151
 msgid "Percent"
 msgstr "Процент"
 
-#: js/GridPanel.js:178
+#: js/GridPanel.js:180
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:206
+#: js/GridPanel.js:208
 msgid "Show closed"
 msgstr "Покажи приключени задачи"
 
@@ -100,7 +100,12 @@ msgstr "Покажи приключени задачи"
 msgid "IN-PROCESS"
 msgstr "В ПРОЦЕС"
 
-#: js/Tasks.js:76
+#: js/Tasks.js:12
+#, fuzzy
+msgid "Tasks"
+msgstr "Задачи"
+
+#: js/Tasks.js:77
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -118,6 +123,10 @@ msgstr "ЗАВЪРШЕНИ"
 #: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "ПРЕКЪСНАТИ"
+
+#, fuzzy
+#~ msgid "Tasks) "
+#~ msgstr "Задачи"
 
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Задачата (-ите) не може(могат) да бъде(бъдатат) изтрита(-и)"
