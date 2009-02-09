@@ -84,31 +84,40 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
         if (grid.enableHdMenu === true) {
             throw("Ext.ux.grid.GridViewMenuPlugin - grid\"s \"enableHdMenu\" property has to be set to \"false\"");
         }
-
-        this._view = grid.view;
-
-        this._view.initElements = this._view.initElements.createSequence(
-            this.initElements,
-            this
-        );
-
-        this._view.initData = this._view.initData.createSequence(
-            this.initData,
-            this
-        );
-
-        this._view.destroy = this._view.destroy.createInterceptor(
-            this._destroy,
-            this
-        );
-
-        this.colMenu = new Ext.menu.Menu();
-        this.colMenu.on("beforeshow", this._beforeColMenuShow, this);
-        this.colMenu.on("itemclick",  this._handleHdMenuClick, this);
         
-        grid.on('resize',function() {
-            this._setBtnSize.defer(250, this);
-        }, this);
+        var v = this._view = grid.getView();
+        v.afterMethod('initElements', this.initElements, this);
+        v.afterMethod('initData', this.initData, this);
+        v.afterMethod('onLayout', this._onLayout, this);
+        v.beforeMethod('destroy', this._destroy, this);
+        
+        this.colMenu = new Ext.menu.Menu({
+            listeners: {
+                scope: this,
+                beforeshow: this._beforeColMenuShow,
+                itemclick: this._handleHdMenuClick
+            }
+        });
+        
+        this.colMenu.override({
+            show : function(el, pos, parentMenu){
+                this.parentMenu = parentMenu;
+                if(!this.el){
+                    this.render();
+                }
+                this.fireEvent("beforeshow", this);
+
+                // show menu and constrain to viewport if necessary
+                // ( + minor offset adjustments for pixel perfection)
+                this.showAt(
+                    this.el.getAlignToXY(el, pos || this.defaultAlign, [Ext.isSafari? 2 : 1, 0]), 
+                    parentMenu, 
+                    true // true to constrain
+                );
+            }
+        });
+        
+
     },
 
 // -------- listeners
@@ -128,10 +137,7 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
      */
     _handleHdMenuClick : function(item, e)
     {
-        var ret = this._view.handleHdMenuClick(item, e);
-        this._setBtnSize();
-        
-        return ret;
+        return this._view.handleHdMenuClick(item, e);
     },
 
     /**
@@ -218,14 +224,12 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
         this.menuBtn = this._getMenuButton();
         this._view.mainHd.dom.appendChild(this.menuBtn.dom);
         this.menuBtn.on("click", this._handleHdDown, this);
-        
-        this._setBtnSize();
     },
     
     /**
      * sets the buttons size
      */
-    _setBtnSize: function() {
+    _onLayout: function() {
         this.menuBtn.dom.style.height = (this._view.mainHd.dom.offsetHeight-1)+'px';
     },
     
