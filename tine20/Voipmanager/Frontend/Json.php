@@ -25,6 +25,33 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      */
     protected $_applicationName = 'Voipmanager';
     
+    /**
+     * returns record prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        switch (get_class($_record)) {
+            case 'Voipmanager_Model_Snom_Template':
+                $recordArray = parent::_recordToJson($_record);
+                
+                // add snom softwares
+                $softwares = $this->searchSnomSoftwares('', '');
+                $recordArray['software_id'] = array(
+                    'value'     => $_record->software_id,
+                    'records'   => $softwares['results']
+                );
+                break;
+            default:
+                $recordArray = parent::_recordToJson($_record);
+        }
+        
+        return $recordArray;
+    }
+    
+    
 /****************************************
  * SNOM PHONE / PHONESETTINGS FUNCTIONS
  *

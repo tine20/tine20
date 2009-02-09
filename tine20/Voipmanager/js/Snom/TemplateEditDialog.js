@@ -51,24 +51,17 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     preventScrollbars: false,
                     height: 40
                 }, {
-                    xtype: 'combo',
-                    fieldLabel: this.app.i18n._('Software Version'),
+                    xtype:'reccombo',
                     name: 'software_id',
+                    fieldLabel: this.app.i18n._('Software Version'),
                     displayField: 'name',
-                    valueField: 'id',
-                    triggerAction: 'all',
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.Store({
-                        fields: Tine.Voipmanager.Model.SnomSoftware,
-                        proxy: Tine.Voipmanager.SnomSoftwareBackend,
-                        remoteSort: true,
-                        sortInfo: {field: 'name', dir: 'ASC'}
+                    store: new Ext.data.JsonStore({
+                    	fields: Tine.Voipmanager.Model.SnomSoftware
                     })
                 }, {
                     xtype: 'combo',
-                    fieldLabel: this.app.i18n._('Settings'),
                     name: 'setting_id',
+                    fieldLabel: this.app.i18n._('Settings'),
                     displayField: 'name',
                     valueField: 'id',
                     triggerAction: 'all',
