@@ -122,6 +122,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         Tine.Tinebase.widgets.app.GridPanel.superclass.initComponent.call(this);
     },
     
+    /**
+     * @private
+     * 
+     * NOTE: Order of items matters! Ext.Layout.Border.SplitRegion.layout() does not
+     *       fence the rendering correctly, as such it's impotant, so have the ftb
+     *       defined after all other layout items
+     */
     initLayout: function() {
         this.items = [{
             region: 'center',
