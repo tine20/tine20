@@ -141,8 +141,14 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $accountId = Tinebase_Core::getUser()->getId();
         
+        try {
+            $phones = $this->getUserPhones($accountId);
+        } catch (Voipmanager_Exception_AccessDenied $vead) {
+            $phones = array();
+        }
+        
         $registryData = array(
-            'Phones' => $this->getUserPhones($accountId)
+            'Phones' => $phones
         );
         
         return $registryData;
