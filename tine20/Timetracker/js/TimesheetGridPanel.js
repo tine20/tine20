@@ -188,7 +188,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 new Tine.widgets.tags.TagFilter({app: this.app})
              ],
              defaultFilter: 'start_date',
-             filters: []
+             filters: [
+                {field: 'start_date', operator: 'within', value: 'weekThis'},
+                {field: 'account_id', operator: 'equals', value: Tine.Tinebase.registry.get('currentAccount')}
+             ]
         });
     },    
     
