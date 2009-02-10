@@ -25,7 +25,7 @@ msgstr "Създаване, редактиране и изтриване на п
 msgid "State"
 msgstr "Статус"
 
-#: Controller/Lead.php:221 js/Crm.js:1045
+#: Controller/Lead.php:221 js/Crm.js:1049
 msgid "Type"
 msgstr "Тип"
 
@@ -106,11 +106,11 @@ msgstr "Източник на предложението"
 msgid "End Scheduled"
 msgstr "Краен срок"
 
-#: Export/Pdf.php:176 js/Crm.js:1076
+#: Export/Pdf.php:176 js/Crm.js:1080
 msgid "Contacts"
 msgstr "Контакти"
 
-#: Export/Pdf.php:203 js/Crm.js:1023
+#: Export/Pdf.php:203 js/Crm.js:1027
 msgid "Address"
 msgstr "Адрес"
 
@@ -122,19 +122,19 @@ msgstr "Телефон"
 msgid "Email"
 msgstr "Имейл"
 
-#: Export/Pdf.php:224 js/Crm.js:1210
+#: Export/Pdf.php:224 js/Crm.js:1214
 msgid "Tasks"
 msgstr "Задачи"
 
-#: Export/Pdf.php:243 js/Crm.js:1134
+#: Export/Pdf.php:243 js/Crm.js:1138
 msgid "Due Date"
 msgstr "Краен срок"
 
-#: Export/Pdf.php:248 js/Crm.js:1148
+#: Export/Pdf.php:248 js/Crm.js:1152
 msgid "Priority"
 msgstr "Приоритет"
 
-#: Export/Pdf.php:262 js/Crm.js:619 js/Crm.js:1350
+#: Export/Pdf.php:262 js/Crm.js:619 js/Crm.js:1354
 msgid "Products"
 msgstr "Продукти"
 
@@ -195,12 +195,12 @@ msgstr "Няма намерени предложения"
 msgid "Lead id"
 msgstr "Иидентификатор на предложение (id)"
 
-#: js/Crm.js:352 js/Crm.js:1653 js/LeadEditDialog.js:333
+#: js/Crm.js:352 js/Crm.js:1657 js/LeadEditDialog.js:333
 #: js/LeadEditDialog.js:376
 msgid "Partner"
 msgstr "Партньор/Съдружник"
 
-#: js/Crm.js:353 js/Crm.js:1633 js/LeadEditDialog.js:332
+#: js/Crm.js:353 js/Crm.js:1637 js/LeadEditDialog.js:332
 #: js/LeadEditDialog.js:372
 msgid "Customer"
 msgstr "Клиент"
@@ -231,7 +231,7 @@ msgstr[1] "Изтрий осъществените контакти (предл�
 msgid "Delete selected leads"
 msgstr "Изтрий селектираните предложения"
 
-#: js/Crm.js:494 js/Crm.js:1740 js/Crm.js:1741
+#: js/Crm.js:494 js/Crm.js:1744 js/Crm.js:1745
 msgid "Export as PDF"
 msgstr "Експортирай като PDF"
 
@@ -239,7 +239,7 @@ msgstr "Експортирай като PDF"
 msgid "Export selected lead as PDF"
 msgstr "Експортирай селектираното предложение като PDF"
 
-#: js/Crm.js:504 js/Crm.js:1685 js/Crm.js:1704
+#: js/Crm.js:504 js/Crm.js:1689 js/Crm.js:1708
 msgid "Add task"
 msgstr "Прибави задача"
 
@@ -259,175 +259,175 @@ msgstr "Източник на предложение"
 msgid "Lead types"
 msgstr "Тип предложение"
 
-#: js/Crm.js:678 js/Crm.js:1037
+#: js/Crm.js:678 js/Crm.js:1041
 msgid "Phone"
 msgstr "Телефон"
 
-#: js/Crm.js:679 js/Crm.js:1038
+#: js/Crm.js:679 js/Crm.js:1042
 msgid "Cellphone"
 msgstr "Мобилен"
 
-#: js/Crm.js:859
+#: js/Crm.js:863
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/Crm.js:859
+#: js/Crm.js:863
 msgid "Saving lead"
 msgstr "Запамети предложение"
 
-#: js/Crm.js:883
+#: js/Crm.js:887
 msgid "Failed"
 msgstr "Отказано"
 
-#: js/Crm.js:883
+#: js/Crm.js:887
 msgid "Could not save lead."
 msgstr "Предложението не може да бъде запаметено"
 
-#: js/Crm.js:887
+#: js/Crm.js:891
 msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките"
 
-#: js/Crm.js:1014
+#: js/Crm.js:1018
 msgid "Name"
 msgstr "Име"
 
-#: js/Crm.js:1034
+#: js/Crm.js:1038
 msgid "Contactdata"
 msgstr "Данни за контакти"
 
-#: js/Crm.js:1090
+#: js/Crm.js:1094
 msgid "Search for Contacts to add ..."
 msgstr "Търси да прибави контакти"
 
-#: js/Crm.js:1122
+#: js/Crm.js:1126
 msgid "Summary"
 msgstr "Заключение"
 
-#: js/Crm.js:1130
+#: js/Crm.js:1134
 msgid "Add a task..."
 msgstr "Добави задача"
 
-#: js/Crm.js:1163
+#: js/Crm.js:1167
 msgid "Percent"
 msgstr "Процент"
 
-#: js/Crm.js:1177
+#: js/Crm.js:1181
 msgid "Status"
 msgstr "Статус"
 
-#: js/Crm.js:1227
+#: js/Crm.js:1231
 msgid "No Tasks to display"
 msgstr "Няма намерени задачи"
 
-#: js/Crm.js:1279
+#: js/Crm.js:1283
 msgid "Product"
 msgstr "Продукт"
 
-#: js/Crm.js:1288
+#: js/Crm.js:1292
 msgid "Add a product..."
 msgstr "Добави продукт"
 
-#: js/Crm.js:1297 js/LeadEditDialog.js:163
+#: js/Crm.js:1301 js/LeadEditDialog.js:163
 msgid "Description"
 msgstr "Описание"
 
-#: js/Crm.js:1310
+#: js/Crm.js:1314
 msgid "Price"
 msgstr "Цена"
 
-#: js/Crm.js:1394
+#: js/Crm.js:1398
 msgid "Change contact type"
 msgstr "Сменя контакт-тип"
 
-#: js/Crm.js:1623
+#: js/Crm.js:1627
 msgid "Add new contact"
 msgstr "Добави нов контакт"
 
-#: js/Crm.js:1624
+#: js/Crm.js:1628
 msgid "Add new customer contact"
 msgstr "Добави нов клиентски контакт"
 
-#: js/Crm.js:1634
+#: js/Crm.js:1638
 msgid "Change type to Customer"
 msgstr "Сменя тип с `Клиент`"
 
-#: js/Crm.js:1643 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
+#: js/Crm.js:1647 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
 msgid "Responsible"
 msgstr "Отговорник"
 
-#: js/Crm.js:1644
+#: js/Crm.js:1648
 msgid "Change type to Responsible"
 msgstr "Сменя тип с `Отговорник`"
 
-#: js/Crm.js:1654
+#: js/Crm.js:1658
 msgid "Change type to Partner"
 msgstr "Сменя тип с `Партньор`"
 
-#: js/Crm.js:1662
+#: js/Crm.js:1666
 msgid "Edit contact"
 msgstr "Редактирай контакт"
 
-#: js/Crm.js:1663
+#: js/Crm.js:1667
 msgid "Edit selected contact"
 msgstr "Редактирай селектираният контакт"
 
-#: js/Crm.js:1672
+#: js/Crm.js:1676
 msgid "Unlink contact"
 msgstr "Прекъсни връзката към контакта"
 
-#: js/Crm.js:1673
+#: js/Crm.js:1677
 msgid "Unlink selected contacts"
 msgstr "Прекъсни връзката към селектираните контакти"
 
-#: js/Crm.js:1686
+#: js/Crm.js:1690
 msgid "Add new task"
 msgstr "Добави нова задача"
 
-#: js/Crm.js:1694
+#: js/Crm.js:1698
 msgid "Edit task"
 msgstr "Редактирай задача"
 
-#: js/Crm.js:1695
+#: js/Crm.js:1699
 msgid "Edit selected task"
 msgstr "Редактирай селектиранта задача "
 
-#: js/Crm.js:1705
+#: js/Crm.js:1709
 msgid "Add existing task to lead"
 msgstr "Добави съществуваща задача към предложението"
 
-#: js/Crm.js:1714
+#: js/Crm.js:1718
 msgid "Remove tasks"
 msgstr "Изтрий задачи"
 
-#: js/Crm.js:1715
+#: js/Crm.js:1719
 msgid "Remove selected tasks"
 msgstr "Изтрий селектираните задачи"
 
-#: js/Crm.js:1727
+#: js/Crm.js:1731
 msgid "Remove products"
 msgstr "Изтрий продукти"
 
-#: js/Crm.js:1728
+#: js/Crm.js:1732
 msgid "Remove selected products"
 msgstr "Изтрий селектираните продукти"
 
-#: js/Crm.js:1769 js/Crm.js:1770
+#: js/Crm.js:1773 js/Crm.js:1774
 msgid "Leads"
 msgstr "Предложения"
 
-#: js/Crm.js:1816
+#: js/Crm.js:1820
 msgid "Loading Lead..."
 msgstr "Зарежда предложения"
 
-#: js/Crm.js:1816
+#: js/Crm.js:1820
 msgid "Please Wait"
 msgstr "Моля почакайте"
 
-#: js/Crm.js:1842
+#: js/Crm.js:1851
 msgid "Add New Lead"
 msgstr "Добавя ново предложение"
 
-#: js/Crm.js:1844
+#: js/Crm.js:1853
 #, fuzzy
 msgid "Edit Lead \"{0}\""
 msgstr "Редактирай предложение \"{0}\""

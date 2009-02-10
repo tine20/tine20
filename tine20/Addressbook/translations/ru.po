@@ -133,7 +133,7 @@ msgstr "Внутренние контакты"
 msgid "contacts"
 msgstr "Контакты"
 
-#: js/Addressbook.js:130 js/Addressbook.js:410
+#: js/Addressbook.js:130 js/Addressbook.js:417
 #, fuzzy
 msgid "addressbook"
 msgid_plural "addressbooks"
@@ -196,7 +196,7 @@ msgstr "Контакт удаляется"
 msgid "Some error occured while trying to delete the contact."
 msgstr "При удаление контакта возникла ошибка."
 
-#: js/Addressbook.js:406 js/ContactGrid.js:55 js/EditDialog.js:423
+#: js/Addressbook.js:413 js/EditDialog.js:423
 #, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"

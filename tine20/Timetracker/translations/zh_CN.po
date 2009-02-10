@@ -36,7 +36,7 @@ msgstr ""
 
 #: Export/Ods.php:369 Export/Ods.php:432 js/TimesheetEditDialog.js:179
 #: js/TimesheetGridPanel.js:48 js/TimesheetGridPanel.js:186
-#: js/TimesheetGridPanel.js:238
+#: js/TimesheetGridPanel.js:241
 msgid "Billable"
 msgstr ""
 
@@ -46,13 +46,13 @@ msgid "Total"
 msgstr "头衔"
 
 #: Export/Ods.php:402 js/TimesheetEditDialog.js:141
-#: js/TimesheetGridPanel.js:184 js/TimesheetGridPanel.js:203
+#: js/TimesheetGridPanel.js:184 js/TimesheetGridPanel.js:206
 msgid "Date"
 msgstr ""
 
 #: Export/Ods.php:407 js/TimeaccountEditDialog.js:135
 #: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:163
-#: js/TimesheetGridPanel.js:185 js/TimesheetGridPanel.js:228
+#: js/TimesheetGridPanel.js:185 js/TimesheetGridPanel.js:231
 msgid "Description"
 msgstr "描述"
 
@@ -67,20 +67,25 @@ msgid "Staff Member"
 msgstr ""
 
 #: Export/Ods.php:425 js/TimesheetEditDialog.js:136
-#: js/TimesheetGridPanel.js:260
+#: js/TimesheetGridPanel.js:263
 #, fuzzy
 msgid "Duration"
 msgstr "描述"
 
 #: Export/Ods.php:437 js/TimesheetEditDialog.js:186
 #: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:187
-#: js/TimesheetGridPanel.js:246
+#: js/TimesheetGridPanel.js:249
 msgid "Cleared"
 msgstr ""
 
 #: js/DurationSlider.js:95
 msgid "{0}"
 msgstr ""
+
+#: js/DurationSpinner.js:56 js/DurationSpinner.js:66
+#, fuzzy
+msgid "Not a valid time"
+msgstr "头衔"
 
 #: js/Models.js:44 js/TimesheetEditDialog.js:109 js/TimesheetGridPanel.js:179
 msgid "Timesheet"
@@ -176,7 +181,7 @@ msgstr ""
 
 #: js/TimeaccountSelect.js:166 js/TimesheetEditDialog.js:126
 #: js/TimesheetGridPanel.js:181 js/TimesheetGridPanel.js:182
-#: js/TimesheetGridPanel.js:218
+#: js/TimesheetGridPanel.js:221
 msgid "Time Account"
 msgstr ""
 
@@ -206,7 +211,7 @@ msgid "Enter description..."
 msgstr "输入描述 ..."
 
 #: js/TimesheetEditDialog.js:173 js/TimesheetGridPanel.js:183
-#: js/TimesheetGridPanel.js:253
+#: js/TimesheetGridPanel.js:256
 msgid "Account"
 msgstr ""
 
@@ -250,39 +255,39 @@ msgstr ""
 msgid "Updated {0} records"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:211
+#: js/TimesheetGridPanel.js:214
 msgid "Start time"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:308
+#: js/TimesheetGridPanel.js:311
 #, fuzzy
 msgid "Total Timesheets"
 msgstr "时间表"
 
-#: js/TimesheetGridPanel.js:309
+#: js/TimesheetGridPanel.js:312
 #, fuzzy
 msgid "Billable Timesheets"
 msgstr "时间表"
 
-#: js/TimesheetGridPanel.js:310
+#: js/TimesheetGridPanel.js:313
 #, fuzzy
 msgid "Total Time"
 msgstr "头衔"
 
-#: js/TimesheetGridPanel.js:311
+#: js/TimesheetGridPanel.js:314
 #, fuzzy
 msgid "Time of Billable Timesheets"
 msgstr "时间表"
 
-#: js/TimesheetGridPanel.js:439
+#: js/TimesheetGridPanel.js:442
 msgid "Export"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:448
+#: js/TimesheetGridPanel.js:451
 msgid "Export as ODS"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:454
+#: js/TimesheetGridPanel.js:457
 msgid "Export as CSV"
 msgstr ""
 

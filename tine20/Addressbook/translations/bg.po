@@ -130,7 +130,7 @@ msgstr "Международни контакти"
 msgid "contacts"
 msgstr "Контакти"
 
-#: js/Addressbook.js:130 js/Addressbook.js:410
+#: js/Addressbook.js:130 js/Addressbook.js:417
 #, fuzzy
 msgid "addressbook"
 msgid_plural "addressbooks"
@@ -192,7 +192,7 @@ msgstr "Изтрива контакт..."
 msgid "Some error occured while trying to delete the contact."
 msgstr "Настъпила е грешка при опит за изтриване на контакта."
 
-#: js/Addressbook.js:406 js/ContactGrid.js:55 js/EditDialog.js:423
+#: js/Addressbook.js:413 js/EditDialog.js:423
 #, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"

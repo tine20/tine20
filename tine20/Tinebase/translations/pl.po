@@ -294,7 +294,7 @@ msgstr ""
 "Tiny 2.0 przez lokalne buforowanie wszystkiech potrzebnych plików na tym "
 "komputerze."
 
-#: js/MainScreen.js:433 js/widgets/app/GridPanel.js:475
+#: js/MainScreen.js:433 js/widgets/app/GridPanel.js:494
 #: js/widgets/container/ContainerTree.js:303 js/widgets/EditDialog.js:386
 msgid "Confirm"
 msgstr "Potwierdź"
@@ -551,54 +551,54 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:159
+#: js/widgets/app/GridPanel.js:178
 msgid "Edit {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:170 js/widgets/container/ContainerTree.js:384
+#: js/widgets/app/GridPanel.js:189 js/widgets/container/ContainerTree.js:384
 msgid "Add {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:180 js/widgets/app/GridPanel.js:181
-#: js/widgets/app/GridPanel.js:183 js/widgets/container/ContainerTree.js:390
+#: js/widgets/app/GridPanel.js:199 js/widgets/app/GridPanel.js:200
+#: js/widgets/app/GridPanel.js:202 js/widgets/container/ContainerTree.js:390
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/app/GridPanel.js:254
+#: js/widgets/app/GridPanel.js:273
 msgid "Displaying records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:255
+#: js/widgets/app/GridPanel.js:274
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:275
+#: js/widgets/app/GridPanel.js:294
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:473
+#: js/widgets/app/GridPanel.js:492
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/app/GridPanel.js:478 js/widgets/EditDialog.js:388
+#: js/widgets/app/GridPanel.js:497 js/widgets/EditDialog.js:388
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:490 js/widgets/EditDialog.js:363
+#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:363
 #: js/widgets/EditDialog.js:399 js/widgets/tags/TagsPanel.js:254
 #: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
 msgid "Failed"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:490 js/widgets/EditDialog.js:399
+#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:399
 msgid "Could not delete {0}."
 msgstr ""
 
@@ -888,15 +888,15 @@ msgstr ""
 msgid "select a field"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:230
+#: js/widgets/grid/FilterToolbar.js:231
 msgid "Delete this filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:253
+#: js/widgets/grid/FilterToolbar.js:262
 msgid "and"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:272
+#: js/widgets/grid/FilterToolbar.js:281
 msgid "Show"
 msgstr ""
 

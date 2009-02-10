@@ -297,7 +297,7 @@ msgstr ""
 "Инсталляция Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "local на компьютере."
 
-#: js/MainScreen.js:433 js/widgets/app/GridPanel.js:475
+#: js/MainScreen.js:433 js/widgets/app/GridPanel.js:494
 #: js/widgets/container/ContainerTree.js:303 js/widgets/EditDialog.js:386
 msgid "Confirm"
 msgstr "Подтверждение"
@@ -563,18 +563,18 @@ msgstr "Время"
 msgid "User"
 msgstr "Пользователь"
 
-#: js/widgets/app/GridPanel.js:159
+#: js/widgets/app/GridPanel.js:178
 #, fuzzy
 msgid "Edit {0}"
 msgstr "Обработать"
 
-#: js/widgets/app/GridPanel.js:170 js/widgets/container/ContainerTree.js:384
+#: js/widgets/app/GridPanel.js:189 js/widgets/container/ContainerTree.js:384
 #, fuzzy
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
-#: js/widgets/app/GridPanel.js:180 js/widgets/app/GridPanel.js:181
-#: js/widgets/app/GridPanel.js:183 js/widgets/container/ContainerTree.js:390
+#: js/widgets/app/GridPanel.js:199 js/widgets/app/GridPanel.js:200
+#: js/widgets/app/GridPanel.js:202 js/widgets/container/ContainerTree.js:390
 #, fuzzy
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -582,23 +582,23 @@ msgstr[0] "Удалить"
 msgstr[1] "Удалить"
 msgstr[2] "Удалить"
 
-#: js/widgets/app/GridPanel.js:254
+#: js/widgets/app/GridPanel.js:273
 #, fuzzy
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Показываю действия {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:255
+#: js/widgets/app/GridPanel.js:274
 #, fuzzy
 msgid "No {0} to display"
 msgstr "Никаких тэгов в наличии не имеется"
 
-#: js/widgets/app/GridPanel.js:275
+#: js/widgets/app/GridPanel.js:294
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:473
+#: js/widgets/app/GridPanel.js:492
 #, fuzzy
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
@@ -606,18 +606,18 @@ msgstr[0] "Вы уверены что хотите удалить"
 msgstr[1] "Вы уверены что хотите удалить"
 msgstr[2] "Вы уверены что хотите удалить"
 
-#: js/widgets/app/GridPanel.js:478 js/widgets/EditDialog.js:388
+#: js/widgets/app/GridPanel.js:497 js/widgets/EditDialog.js:388
 #, fuzzy
 msgid "Deleting {0}"
 msgstr "Тэг удаляется"
 
-#: js/widgets/app/GridPanel.js:490 js/widgets/EditDialog.js:363
+#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:363
 #: js/widgets/EditDialog.js:399 js/widgets/tags/TagsPanel.js:254
 #: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
 msgid "Failed"
 msgstr "Неудалось"
 
-#: js/widgets/app/GridPanel.js:490 js/widgets/EditDialog.js:399
+#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:399
 #, fuzzy
 msgid "Could not delete {0}."
 msgstr "Не смог удалить тэг(и)."
@@ -935,15 +935,15 @@ msgstr "Сохранить фильтр"
 msgid "select a field"
 msgstr "Выберите поле"
 
-#: js/widgets/grid/FilterToolbar.js:230
+#: js/widgets/grid/FilterToolbar.js:231
 msgid "Delete this filter"
 msgstr "Удалить этот фильтр"
 
-#: js/widgets/grid/FilterToolbar.js:253
+#: js/widgets/grid/FilterToolbar.js:262
 msgid "and"
 msgstr "и"
 
-#: js/widgets/grid/FilterToolbar.js:272
+#: js/widgets/grid/FilterToolbar.js:281
 msgid "Show"
 msgstr "Показать"
 
