@@ -341,6 +341,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddLead()
     {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        
         $lead = $this->_objects['initialLead'];
         $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
         $lead = Crm_Controller_Lead::getInstance()->create($lead);
@@ -354,7 +356,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
         foreach ($notes as $note) {
             if ($note->note_type_id === $createdNoteType->getId()) {
-                $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $note->note);
+                $translatedMessage = $translate->_('created') . ' ' . $translate->_('by') . ' '; 
+                $this->assertEquals($translatedMessage.Zend_Registry::get('currentAccount')->accountDisplayName, $note->note);
             } else {
                 $this->assertEquals($this->objects['note']->note, $note->note);
             }
