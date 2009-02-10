@@ -79,8 +79,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     onRecordLoad: function() {
     	
-    	console.log(this.record);
-    	
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
         
