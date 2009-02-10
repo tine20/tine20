@@ -694,6 +694,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * @cfg {Tine.Crm.Model.Lead} lead to edit
      */
     lead: null,
+    /**
+     * @cfg {Object} container
+     */
+    forceContainer: null,
     
     /**
      * @private
@@ -1822,6 +1826,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     onRecordLoad: function(response) {
         this.getForm().findField('lead_name').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
+        if (this.forceContainer) {
+            recordData.container_id = this.forceContainer;
+            // only force initially!
+            this.forceContainer = null;
+        }
         this.updateRecord(recordData);
         
         // update stores
@@ -1860,6 +1869,12 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
  * Leads Edit Popup
  */
 Tine.Crm.LeadEditDialog.openWindow = function (config) {
+    // if a concreate container is selected in the tree, take this as default container
+    var treeNode = Ext.getCmp('crmTree') ? Ext.getCmp('crmTree').getSelectionModel().getSelectedNode() : null;
+    if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
+        config.forceContainer = treeNode.attributes.container;
+    }
+    
     config.lead = config.lead ? config.lead : new Tine.Crm.Model.Lead({}, 0);
     var window = Tine.WindowFactory.getWindow({
         width: 800,

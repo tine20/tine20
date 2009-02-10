@@ -157,7 +157,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         this.getForm().findField('n_prefix').focus(false, 250);
         var contactData = Ext.util.JSON.decode(response.responseText);
         if (this.forceContainer) {
-            contactData.container = this.forceContainer;
+            contactData.container_id = this.forceContainer;
             // only force initially!
             this.forceContainer = null;
         }
@@ -277,6 +277,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
  * Addressbook Edit Popup
  */
 Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
+    
+    // if a concreate container is selected in the tree, take this as default container
+    var treeNode = Ext.getCmp('Addressbook_Tree') ? Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode() : null;
+    if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
+        config.forceContainer = treeNode.attributes.container;
+    }
+    
     config.contact = config.record ? config.record : new Tine.Addressbook.Model.Contact({}, 0);
     var window = Tine.WindowFactory.getWindow({
         width: 800,
