@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add page layout (orientation landscape to styles
  */
 
 /**
@@ -78,7 +79,14 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
             <style:table-cell-properties fo:background-color="#ccccff"/>
             <style:paragraph-properties fo:text-align="right"/>
-        </style:style>'
+        </style:style>',
+    /*
+        '<style:style style:name="pm1"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+            <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" style:print-orientation="landscape" style:writing-mode="lr-tb"/>
+        </style:style>',
+    */
         );
     
     /**

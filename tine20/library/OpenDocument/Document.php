@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        add page layout (orientation landscape to styles
  */
 
 /**
@@ -141,6 +143,17 @@ class OpenDocument_Document
             xmlns:oooc="http://openoffice.org/2004/calc" 
             xmlns:dom="http://www.w3.org/2001/xml-events" office:version="1.1">
         </office:document-styles>';
+    /*
+            <office:automatic-styles>
+                <style:page-layout style:name="pm1">
+                    <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" 
+                        style:print-orientation="landscape" style:writing-mode="lr-tb"/>
+                </style:page-layout>
+            </office:automatic-styles>            
+            <office:master-styles>
+                <style:master-page style:name="Default" style:page-layout-name="pm1">
+            </style:master-page>
+    */                        
     
     protected $_userStyles = array();
     
