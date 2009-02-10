@@ -24,6 +24,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     split: true,
     layout: 'fit',
     height: 125,
+    autoScroll: true,
     
     /*
     initComponent: function() {
