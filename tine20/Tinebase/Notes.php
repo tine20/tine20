@@ -275,22 +275,29 @@ class Tinebase_Notes
      * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Model_ModificationLog)
      * @param string $_backend   backend of record
      * 
-     * @todo translate strings and field labels
+     * @todo get field translations from application?
      */
     public function addSystemNote($_record, $_userId, $_type, $_mods = NULL, $_backend = 'Sql')
     {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
         $backend = ucfirst(strtolower($_backend));
         
         $noteType = $this->getNoteTypeByName($_type);
         $user = Tinebase_User::getInstance()->getUserById($_userId);
         
-        $noteText = $_type . ' by ' . $user->accountDisplayName;
+        $noteText = $translate->_($_type) . ' ' . $translate->_('by') . ' ' . $user->accountDisplayName;
         
-        if ($_mods !== NULL ) {
-            $noteText .= ' | changed fields:';
+        if ($_mods !== NULL && count($_mods) > 0) {
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' mods to log: ' . $_mods);
+            
+            $noteText .= ' | ' .$translate->_('Changed fields:');
             foreach ($_mods as $mod) {
-                $noteText .= ' ' . $mod->modified_attribute .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
+                $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
             }
+        } else if ($_type === 'changed') {
+            // nothing changed -> don't add note
+            return FALSE;
         }
         
         $note = new Tinebase_Model_Note(array(
