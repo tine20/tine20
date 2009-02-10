@@ -208,7 +208,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             sortable: true,
             dataIndex: 'start_date',
             renderer: Tine.Tinebase.common.dateRenderer
-        }, {
+        },{
             id: 'start_time',
             hidden: true,
             header: this.app.i18n._("Start time"),
@@ -216,7 +216,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             sortable: true,
             dataIndex: 'start_time',
             renderer: Tine.Tinebase.common.timeRenderer
-        }, {
+        },{
             id: 'timeaccount_id',
             header: this.app.i18n._("Time Account"),
             width: 500,
@@ -224,6 +224,17 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             dataIndex: 'timeaccount_id',
             renderer: function(timeaccount) {
                 return new Tine.Timetracker.Model.Timeaccount(timeaccount).getTitle();
+            }
+        },{
+            id: 'timeaccount_closed',
+            hidden: true,
+            header: this.app.i18n._("Time Account closed"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'timeaccount_closed',
+            renderer: function(a, b, record) {
+            	var isopen = (record.data.timeaccount_id.is_open == '1');
+                return Tine.Tinebase.common.booleanRenderer(!isopen);
             }
         },{
             id: 'description',
@@ -251,6 +262,13 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             sortable: true,
             dataIndex: 'is_cleared',
             renderer: Tine.Tinebase.common.booleanRenderer
+        },{
+            id: 'billed_in',
+            hidden: true,
+            header: this.app.i18n._("Cleared in"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'billed_in'
         },{
             id: 'account_id',
             header: this.app.i18n._("Account"),
