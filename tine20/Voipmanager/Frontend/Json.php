@@ -393,7 +393,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         return $this->_get($id, Voipmanager_Controller_Snom_Template::getInstance());
     }
-             
+    
     /**
      * add/update template
      *

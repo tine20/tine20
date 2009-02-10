@@ -33,7 +33,7 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
-        // this.initDetailsPanel();
+        //this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);

@@ -31,12 +31,12 @@ Tine.Voipmanager.SnomTemplateGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gr
         this.recordProxy = Tine.Voipmanager.SnomTemplateBackend;
                 
         this.gridConfig.columns = this.getColumns();
-        //this.initFilterToolbar();
+        this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
-      //  this.initDetailsPanel();
+        //this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
-        //this.plugins.push(this.filterToolbar);
+        this.plugins.push(this.filterToolbar);
  
          
         Tine.Voipmanager.SnomTemplateGridPanel.superclass.initComponent.call(this);
@@ -46,8 +46,14 @@ Tine.Voipmanager.SnomTemplateGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gr
      * initialises filter toolbar
      */
     initFilterToolbar: function() {
-        
-    },    
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            filterModels: [
+                {label: this.app.i18n._('Template'),    field: 'query',    operators: ['contains']}
+             ],
+             defaultFilter: 'query',
+             filters: []
+        });
+    },
     
     /**
      * returns cm

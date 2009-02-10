@@ -27,23 +27,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
     public function __construct($_db = NULL)
     {
         parent::__construct(SQL_TABLE_PREFIX . 'snom_phones', 'Voipmanager_Model_Snom_Phone', $_db);
-    }
-    
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select $_select current where filter
-     * @param  Voipmanager_Model_Snom_PhoneFilter $_filter the filter values to search for
-     * 
-     * @todo    update/use this
-     */
-    protected function _addFilter(Zend_Db_Select $_select, Voipmanager_Model_Snom_PhoneFilter $_filter)
-    {
-        if(!empty($_filter->query)) {
-            $_select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('description') . ' LIKE ? OR ' .
-                            $this->_db->quoteIdentifier('name') . ' LIKE ?)', '%' . $_filter->query . '%'));
-        }
-    }               
+    }              
     
 	/**
 	 * search phones
@@ -55,7 +39,8 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
 	 * 
 	 * @todo   replace this
 	 */
-    public function search(/*Tinebase_Model_Filter_FilterGroup */$_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
+    /*
+    public function search($_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {	
         $where = array();
         
@@ -103,7 +88,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Ab
 		
         return $result;
 	}
-    
+    */
 	/**
 	 * write phone ACL
 	 * 
