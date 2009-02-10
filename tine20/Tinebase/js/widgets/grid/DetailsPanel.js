@@ -17,30 +17,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
  * @extends Ext.Panel
  */
 Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
-    region: 'south',
     border: false,
-    collapsible:true,
-    collapseMode: 'mini',
-    split: true,
-    layout: 'fit',
-    height: 125,
     autoScroll: true,
-    
-    /*
-    initComponent: function() {
-        this.items = [{
-            tpl: this.tplMarkup
-        }];
-        Tine.widgets.grid.DetailsPanel.superclass.initComponent.call(this);
-    }
-    */
-    /*
-    onRender: function(ct, position) {
-        Tine.widgets.grid.DetailsPanel.superclass.onRender.call(this, ct, position);
-        this.showDefault(this.body);
-    },
-    */
-    
+    layout: 'fit',
     
     updateDetails: function(record, body) {
         this.tpl.overwrite(body, record.data);

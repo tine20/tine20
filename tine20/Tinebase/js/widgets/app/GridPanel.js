@@ -132,6 +132,22 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             items: this.grid
         }];
         
+        // add detail panel
+        if (this.detailsPanel) {
+            this.items.push({
+                region: 'south',
+                border: false,
+                collapsible: true,
+                collapseMode: 'mini',
+                split: true,
+                layout: 'fit',
+                height: 125,
+                items: this.detailsPanel
+                
+            });
+            this.detailsPanel.doBind(this.grid);
+        }
+        
         // add filter toolbar
         if (this.filterToolbar) {
             this.items.push(this.filterToolbar);
@@ -142,11 +158,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             }, this);
         }
         
-        // add detail panel
-        if (this.detailsPanel) {
-            this.items.push(this.detailsPanel);
-            this.detailsPanel.doBind(this.grid);
-        }
+        
     },
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
