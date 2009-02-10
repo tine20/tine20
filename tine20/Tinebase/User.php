@@ -51,7 +51,7 @@ class Tinebase_User
     {
         if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' acconts backend: ' . $backendType);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
             
             self::$_instance = self::factory($backendType);
         }
