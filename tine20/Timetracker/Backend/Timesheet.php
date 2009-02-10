@@ -25,6 +25,10 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
     public function __construct ()
     {
         $this->_modlogActive = TRUE;
+        
+        // set identifier with table name because we join tables in _getSelect()
+        $this->_identifier = 'ts.id';
+        
         parent::__construct(SQL_TABLE_PREFIX . 'timetracker_timesheet', 'Timetracker_Model_Timesheet');
     }
 
@@ -53,21 +57,37 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
-     * 
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {     
+        $select = $this->_db->select();    
+        
         if (is_array($_cols) && isset($_cols['count'])) {
             $cols = array(
                 'count'         => 'COUNT(*)', 
-                'countBillable' => 'SUM(is_billable)',
+                'countBillable' => 'SUM(ts.is_billable*ta.is_billable)',
                 'sum'           => 'SUM(duration)',
-                'sumBillable'   => 'SUM(duration*is_billable)'
+                'sumBillable'   => 'SUM(duration*ts.is_billable*ta.is_billable)'
             );
+            
         } else {
-            $cols = $_cols;
+            $cols = array_merge((array)$_cols, array('is_billable_combined' => '(ts.is_billable*ta.is_billable)'));            
         }
+
+        $select->from(array('ts' => $this->_tableName), $cols);
         
-        return parent::_getSelect($cols, $_getDeleted);
+        // join with timeaccounts to get combined is_billable
+        $select->joinLeft(array('ta' => SQL_TABLE_PREFIX . 'timetracker_timeaccount'),
+                    $this->_db->quoteIdentifier('ts.timeaccount_id') . ' = ' . $this->_db->quoteIdentifier('ta.id'),
+                    array());        
+        
+        if (!$_getDeleted && $this->_modlogActive) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier('ts.is_deleted') . ' = 0');                        
+        }        
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
+        return $select; 
     }
 }

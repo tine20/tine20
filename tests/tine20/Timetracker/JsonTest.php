@@ -370,6 +370,32 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
+    
+    /**
+     * try to search for Timesheets (with combined is_billable)
+     *
+     */
+    public function testSearchTimesheetsWithCombinedIsBillable()
+    {
+        // create
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        
+        // update timeaccount -> is_billable = false
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->get($timesheetData['timeaccount_id']['id']);
+        $ta->is_billable = 0;
+        Timetracker_Controller_Timeaccount::getInstance()->update($ta);
+        
+        // search & check
+        $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
+        $this->assertEquals(0, $search['results'][0]['is_billable_combined']);
+        $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals(30, $search['totalsum']);
+        $this->assertEquals(0, $search['totalsumbillable']);
+        
+        // cleanup
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+    }
 
     /******* export tests *****************/
     
