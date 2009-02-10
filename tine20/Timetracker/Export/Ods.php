@@ -436,7 +436,7 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                     'divisor'   => 60,
                     'number'    => TRUE,
                 ),
-                'is_billable' => array(
+                'is_billable_combined' => array(
                     'header'    => $this->_translate->_('Billable'),
                     'type'      => 'float', 
                     'width'     => '3cm'
