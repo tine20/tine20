@@ -10,6 +10,7 @@
  * @version     $Id$
  *
  * @todo        add role members and rights
+ * @todo        extend Tinebase_Model_Filter_FilterGroup
  */
 
 
