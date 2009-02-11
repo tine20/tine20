@@ -72,6 +72,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testContactPdf()
     {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
         $contact = $this->_createContact();
         
 		$pdf = new Addressbook_Export_Pdf();
@@ -87,7 +88,8 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');   
 
         // check notes
-        $this->assertEquals(1, preg_match("/created by/", $pdfOutput), 'note not found');   
+        $translatedNoteString = $translate->_('created') . ' ' . $translate->_('by');
+        $this->assertEquals(1, preg_match("/$translatedNoteString/", $pdfOutput), 'note not found');   
     }
 
     /**
