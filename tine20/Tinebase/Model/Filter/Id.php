@@ -51,7 +51,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          
          //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
          
-         if ($this->_operator == 'in' && empty($this->_value)) {
+         if (/*$this->_operator == 'in' && */empty($this->_value)) {
              // prevent sql error
              $_select->where('1=0');
          } else {
