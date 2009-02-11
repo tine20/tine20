@@ -264,7 +264,8 @@ Tine.Voipmanager.Model.SnomLineArray = Tine.Tinebase.Model.genericFields.concat(
     {name: 'idletext'},
     {name: 'lineactive'},
     {name: 'linenumber'},
-    {name: 'snomphone_id'}
+    {name: 'snomphone_id'},
+    {name: 'name'}
 ]);
 /**
  * @type {Tine.Tinebase.Record}
