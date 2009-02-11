@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        finish implementation of to/from json functions
  */
 
 /**
@@ -322,6 +324,104 @@ class Tinebase_Model_Filter_FilterGroup
         return $result;
     }
 
+    /**
+     * wrapper for setFromJson which expects datetimes in array to be in
+     * users timezone and converts them to UTC
+     *
+     * @param  string $_data json encoded data
+     * 
+     * @todo implement
+     */
+    public function setFromJsonInUsersTimezone($_data)
+    {
+        /*
+        // change timezone of current php process to usertimezone to let new dates be in the users timezone
+        // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
+        //       lead to incorrect results on DST transistions 
+        date_default_timezone_set(Tinebase_Core::get('userTimeZone'));
+
+        // NOTE: setFromArray creates new Zend_Dates of $this->datetimeFields
+        $this->setFromJson($_data);
+        
+        // convert $this->_datetimeFields into the configured server's timezone (UTC)
+        //$this->setTimezone('UTC');
+        
+        // finally reset timzone of current php process to the configured server timezone (UTC)
+        date_default_timezone_set('UTC');
+        */
+    }
+    
+    /**
+     * Sets timezone
+     * 
+     * @see Zend_Date::setTimezone()
+     * @param  string $_timezone
+     * @param  bool   $_recursive
+     * @return  void
+     * 
+     * @todo implement
+     */
+    public function setTimezone($_timezone, $_recursive = TRUE)
+    {
+        /*
+        foreach ($this->_datetimeFields as $field) {
+            if (!isset($this->_properties[$field])) continue;
+            
+            if(!is_array($this->_properties[$field])) {
+                $toConvert = array($this->_properties[$field]);
+            } else {
+                $toConvert = $this->_properties[$field];
+            }
+
+            foreach ($toConvert as $field => &$value) {
+                if (! $value instanceof Zend_Date) {
+                    throw new Tinebase_Exception_Record_Validation($toConvert[$field] . 'must be an Zend_Date'); 
+                }
+                $value->setTimezone($_timezone);
+            } 
+        }
+        
+        if ($_recursive) {
+            foreach ($this->_properties as $property => $value) {
+                if (is_object($value) && 
+                        (in_array('Tinebase_Record_Interface', class_implements($value)) || 
+                        $value instanceof Tinebase_Record_Recordset) ) {
+                    $value->setTimezone($_timezone, TRUE);
+                }
+            }
+        }
+        */
+    }
+    
+    /**
+     * fills a filter group from json data
+     *
+     * @param string $_data json encoded data
+     * @return void
+     * 
+     * @todo implement
+     */
+    public function setFromJson($_data)
+    {
+        /*
+        $recordData = Zend_Json::decode($_data);
+        
+        $this->setFromArray($recordData);
+        */
+    }
+
+    /**
+     * converts filter group to json/array and resolves some filter data if necessary
+     *
+     * @return array
+     * 
+     * @todo add resolving of filters?
+     */
+    public function toJson()
+    {
+        return $this->toArray();
+    }
+    
     /**
      * return filter object
      *
