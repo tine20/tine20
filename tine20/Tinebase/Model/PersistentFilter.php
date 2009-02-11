@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        add persistent filter filter (to search for filters by app name, user id, ...)
  */
 
 /**

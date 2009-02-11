@@ -201,4 +201,51 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         
         return $result;
     }
+
+    /**
+     * get persistent filter
+     *
+     * @param string $_filterId
+     * @return array
+     * 
+     * @todo add test
+     */
+    protected function _getFilter($_filterId) 
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::loadPersistentFilter($_filterId); 
+        
+        return $filter->toJson();
+    }
+    
+    /**
+     * save persistent filter
+     *
+     * @param string $_filter
+     * @param string $_filterModel
+     * @param string $_name
+     * 
+     * @todo add test
+     */
+    protected function _saveFilter($_filter, $_filterModel, $_name) 
+    {
+        $decodedFilter = Zend_Json::decode($_filter);
+        $filter = new $_filterModel(!empty($decodedFilter) ? $decodedFilter : array());
+        $filter = $filter->save();
+        
+        // @todo return something here?
+        //return $filter->toJson();
+    }
+    
+    /**
+     * search for filters (by application, user, ...)
+     *
+     * @param string $_filter
+     * @return array
+     * 
+     * @todo implement
+     */
+    protected function _searchFilters($_filter)
+    {
+        return array();
+    }
 }
