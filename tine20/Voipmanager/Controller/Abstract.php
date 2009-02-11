@@ -54,7 +54,7 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Application_Cont
         
             $dbBackend = constant('Tinebase_Core::' . strtoupper($dbConfig->get('backend', Tinebase_Core::PDO_MYSQL)));
             
-            Tinebase_Core::set('voipdbTablePrefix', (isset($dbConfig['tableprefix'])) ? $dbConfig['tableprefix'] : SQL_TABLE_PREFIX);
+            Tinebase_Core::set('voipdbTablePrefix', (isset($dbConfig->tableprefix)) ? $dbConfig->tableprefix : SQL_TABLE_PREFIX);
             
             switch($dbBackend) {
                 case Tinebase_Core::PDO_MYSQL:
