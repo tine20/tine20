@@ -115,19 +115,22 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testAddSystemNote()
     {        
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        $translatedNoteString = $translate->_('created') . ' ' . $translate->_('by');
+        
         $this->_instance->addSystemNote($this->_objects['contact'], Zend_Registry::get('currentAccount')->getId(), 'created');
         
         $filter = new Tinebase_Model_NoteFilter(array(array(
             'field' => 'query',
             'operator' => 'contains',
-            'value' => 'created by'
+            'value' => $translatedNoteString
         )));
         $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
         
         //print_r($notes->toArray());
         
         $this->assertGreaterThan(0, count($notes));
-        $this->assertEquals('created by '.Zend_Registry::get('currentAccount')->accountDisplayName, $notes[0]->note); 
+        $this->assertEquals($translatedNoteString . ' ' . Zend_Registry::get('currentAccount')->accountDisplayName, $notes[0]->note); 
     }
     
     /**
