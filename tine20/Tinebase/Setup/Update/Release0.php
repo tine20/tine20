@@ -1703,7 +1703,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 0.15
+     * update to 0.21
      * - remove constraint from config user table
      */
     public function update_20()
@@ -1721,4 +1721,104 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '0.21');
     }
 
+    /**
+     * update to 0.22
+     * - add persistent filters table 
+     */
+    public function update_21()
+    {
+        $tableDefinition = ('
+        <table>
+            <name>filter</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>                
+                <field>
+                    <name>filters</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>is_default</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id-account_id-name-is_default</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>is_default</name>
+                    </field>
+                </index>
+                <index>
+                    <name>filter::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        ');
+    
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+        
+        $this->setApplicationVersion('Tinebase', '0.22');
+    }
+    
 }
