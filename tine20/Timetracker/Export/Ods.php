@@ -402,8 +402,8 @@ class Timetracker_Export_Ods extends OpenDocument_Document
         
         $exportConfig = (isset($config->timesheetExport)) ? $config->timesheetExport->toArray() : array(
             'customFields' => FALSE,
-            'sumColumn' => 'E',
-            'billableColumn' => 'F',
+            'sumColumn' => 'F',
+            'billableColumn' => 'G',
             'overviewTable' => TRUE,
             'fields' => array(
                 'start_date' => array(
@@ -416,6 +416,12 @@ class Timetracker_Export_Ods extends OpenDocument_Document
                     'type'      => 'string', 
                     'width'     => '10cm'
                 ),
+                'timeaccount_number' => array(
+                    'header'    => $this->_translate->_('Timeaccount Number'),
+                    'type'      => 'timeaccount', 
+                    'field'     => 'number', 
+                    'width'     => '5cm',
+                ),                
                 'timeaccount_id' => array(
                     'header'    => $this->_translate->_('Timeaccount'),
                     'type'      => 'timeaccount', 
