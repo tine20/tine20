@@ -130,8 +130,12 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Asterisk_Context']->create($test);
         
         $filter = new Voipmanager_Model_Asterisk_ContextFilter(array(
-            'query' => $test->name
-        ));        
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => $test->name
+            )
+        ));
         $returned = $this->_backends['Asterisk_Context']->search($filter);
         $this->assertEquals(1, count($returned));
         
@@ -193,7 +197,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Asterisk_Meetme']->create($test);
         
         $filter = new Voipmanager_Model_Asterisk_MeetmeFilter(array(
-            'query' => $test->confno
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => $test->confno
+            )
         ));        
         $returned = $this->_backends['Asterisk_Meetme']->search($filter);
         $this->assertEquals(1, count($returned));
@@ -278,13 +286,21 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Asterisk_SipPeer']->create($test);
         
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => $test->name)
+            array(
+                'field' => 'query',
+                'operator' => 'contains',
+                'value' => $test->name
+            )
         ));
         $returned = $this->_backends['Asterisk_SipPeer']->search($filter);
         $this->assertEquals(1, count($returned));
         
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => $test->name)
+            array(
+                'field' => 'query',
+                'operator' => 'contains',
+                'value' => $test->name
+            )
         ));
         $returned = $this->_backends['Asterisk_SipPeer']->search($filter);
         $this->assertEquals(1, count($returned));
@@ -349,7 +365,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Asterisk_Voicemail']->create($test);
         
         $filter = new Voipmanager_Model_Asterisk_VoicemailFilter(array(
-            'query' => $test->mailbox
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => $test->mailbox
+            )
         ));
         $returned = $this->_backends['Asterisk_Voicemail']->search($filter);
         $this->assertEquals(1, count($returned));
@@ -438,7 +458,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Software']->create($test);
         
         $filter = new Voipmanager_Model_Snom_SoftwareFilter(array(
-            'query' => $test->name
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => $test->name
+            )
         ));
         $returned = $this->_backends['Snom_Software']->search($filter);
         $this->assertEquals(1, count($returned));
@@ -516,7 +540,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Setting']->create($test);
         
         $filter = new Voipmanager_Model_Snom_SettingFilter(array(
-            'query' => $test->name
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => $test->name
+            )
         ));
         $returned = $this->_backends['Snom_Setting']->search($filter);
         $this->assertEquals(1, count($returned));
@@ -609,7 +637,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Location']->create($test);
         
         $filter = new Voipmanager_Model_Snom_LocationFilter(array(
-            'name' => $test->name
+            array(
+                'field' => 'name', 
+                'operator' => 'contains', 
+                'value' => $test->name
+            )
         ));
         
         $returned = $this->_backends['Snom_Location']->search($filter);
@@ -714,7 +746,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Template']->create($test);
         
         $filter = new Voipmanager_Model_Snom_TemplateFilter(array(
-            'query' => $test->name
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => $test->name
+            )
         ));
         $returned = $this->_backends['Snom_Template']->search($filter);
         $this->assertEquals(1, count($returned));
