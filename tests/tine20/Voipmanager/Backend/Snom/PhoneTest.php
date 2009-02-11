@@ -55,6 +55,9 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        // we need that because the voip db tables can have a different prefix
+        Tinebase_Core::set('voipdbTablePrefix', SQL_TABLE_PREFIX);
+        
         $this->_backend = new Voipmanager_Backend_Snom_Phone();
         
         $this->_objects['location'] = new Voipmanager_Model_Snom_Location(array(
