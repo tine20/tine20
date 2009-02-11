@@ -25,6 +25,6 @@ class Voipmanager_Backend_Asterisk_Voicemail extends Tinebase_Application_Backen
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_voicemail', 'Voipmanager_Model_Asterisk_Voicemail', $_db);
+        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'asterisk_voicemail', 'Voipmanager_Model_Asterisk_Voicemail', $_db);
     }
 }

@@ -24,7 +24,7 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_sip_peers', 'Voipmanager_Model_Asterisk_SipPeer', $_db);
+        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'asterisk_sip_peers', 'Voipmanager_Model_Asterisk_SipPeer', $_db);
     }
     
 }

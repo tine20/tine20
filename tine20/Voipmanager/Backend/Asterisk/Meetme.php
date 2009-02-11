@@ -25,6 +25,6 @@ class Voipmanager_Backend_Asterisk_Meetme extends Tinebase_Application_Backend_S
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_meetme', 'Voipmanager_Model_Asterisk_Meetme', $_db);
+        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'asterisk_meetme', 'Voipmanager_Model_Asterisk_Meetme', $_db);
     }       
 }

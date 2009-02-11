@@ -25,6 +25,6 @@ class Voipmanager_Backend_Asterisk_Context extends Tinebase_Application_Backend_
 	 */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'asterisk_context', 'Voipmanager_Model_Asterisk_Context', $_db);
+        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'asterisk_context', 'Voipmanager_Model_Asterisk_Context', $_db);
     }
 }

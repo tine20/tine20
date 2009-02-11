@@ -24,7 +24,7 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'snom_lines', 'Voipmanager_Model_Snom_Line', $_db);
+        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'snom_lines', 'Voipmanager_Model_Snom_Line', $_db);
     }
     
     /**
@@ -37,6 +37,6 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
         $phoneId = Voipmanager_Model_Snom_Phone::convertSnomPhoneIdToInt($_id);
         $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('snomphone_id') . ' = ?', $phoneId);
 
-        $this->_db->delete(SQL_TABLE_PREFIX . 'snom_lines', $where);
+        $this->_db->delete(Tinebase_Core::get('voipdbTablePrefix') . 'snom_lines', $where);
     }    
 }

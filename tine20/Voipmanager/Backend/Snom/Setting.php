@@ -26,6 +26,6 @@ class Voipmanager_Backend_Snom_Setting extends Tinebase_Application_Backend_Sql_
      */
     public function __construct($_db = NULL)
     {
-        parent::__construct(SQL_TABLE_PREFIX . 'snom_default_settings', 'Voipmanager_Model_Snom_Setting', $_db);
+        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'snom_default_settings', 'Voipmanager_Model_Snom_Setting', $_db);
     }                  
 }
