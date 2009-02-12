@@ -490,6 +490,52 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // cleanup / delete file
         $persistentFiltersJson->delete($persistentFilters['results'][0]['id']);
     }
+
+    /**
+     * try to save/update and search persistent filter
+     * 
+     * @todo move this test to tinebase json tests?
+     */
+    public function testUpdatePersistentTimesheetFilter()
+    {
+        $persistentFiltersJson = new Tinebase_Frontend_Json_PersistentFilter();
+        $tsFilter = $this->_getTimesheetFilter();
+        
+        // create
+        $filterName = Tinebase_Record_Abstract::generateUID();
+        $persistentFiltersJson->save(
+            Zend_Json::encode($tsFilter), 
+            $filterName, 
+            'Timetracker_Model_TimesheetFilter',
+            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+        );
+
+        $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        
+        // update
+        $updatedFilter = $tsFilter;
+        $updatedFilter[0]['value'] = 'blubb';
+        $persistentFiltersJson->save(
+            Zend_Json::encode($updatedFilter), 
+            $filterName, 
+            'Timetracker_Model_TimesheetFilter',
+            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+        );
+        
+        // get
+        $persistentFiltersUpdated = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        //print_r($persistentFiltersUpdated);
+        
+        //check
+        $this->assertEquals(1, count($persistentFiltersUpdated['totalcount'])); 
+        $this->assertEquals($filterName, $persistentFiltersUpdated['results'][0]['name']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFiltersUpdated['results'][0]['account_id']);
+        $this->assertEquals($persistentFiltersUpdated['results'][0]['filters'], $updatedFilter);
+        $this->assertEquals($persistentFilters['results'][0]['id'], $persistentFiltersUpdated['results'][0]['id']);
+
+        // cleanup / delete file
+        $persistentFiltersJson->delete($persistentFiltersUpdated['results'][0]['id']);
+    }
     
     /************ protected helper funcs *************/
     

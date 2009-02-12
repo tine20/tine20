@@ -30,6 +30,7 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'))),
         'application_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'is_default'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
     );
@@ -60,16 +61,10 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
      * add account id to filter (only if is_default == 0)
      *
      * @param Zend_Db_Select $_select
-     * 
-     * @todo    implement
-     * @todo    add is_default 
      */
     protected function _appendAclSqlFilter($_select) {
         
         if (! $this->_isResolved) {
-            
-            //$defaultFilter = $this->_findFilter('is_default');
-            //if ($defaultFilter !== NULL && $defaultFilter->)
             
             $accountIdFilter = $this->_findFilter('account_id');
             $userId = Tinebase_Core::getUser()->getId();

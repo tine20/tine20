@@ -18,8 +18,17 @@
  */
 class Tinebase_Frontend_Json_PersistentFilter
 {
+    /**
+     * persistent filter backend
+     *
+     * @var Tinebase_PersistentFilter
+     */
     protected $_backend;
     
+    /**
+     * the constructor
+     *
+     */
     public function __construct()
     {
         $this->_backend = new Tinebase_PersistentFilter();
@@ -30,8 +39,6 @@ class Tinebase_Frontend_Json_PersistentFilter
      *
      * @param string $filter
      * @return array
-     * 
-     * @todo add recordsToJson / use toJson from filter group or persistent filter model
      */
     public function search($filter)
     {
@@ -62,7 +69,7 @@ class Tinebase_Frontend_Json_PersistentFilter
         
         $filter = new $persistentFilter->model(unserialize($persistentFilter->filters));
         
-        $result = $filter->toJson();
+        $result = $filter->toArray(TRUE);
         
         return $filter;
     }
@@ -76,12 +83,11 @@ class Tinebase_Frontend_Json_PersistentFilter
      * 
      * @todo use set/createFromJson
      * @todo check if filter model is filter group
-     * @todo add update functionality
      */
     public function save($_filter, $_name, $_filterModel, $_applicationId) 
     {
-        $decodedFilter = Zend_Json::decode($_filter);
-        $filter = new $_filterModel(!empty($decodedFilter) ? $decodedFilter : array());
+        $filter = new $_filterModel(array());
+        $filter->setFromJsonInUsersTimezone($_filter);
 
         $persistentFilter = new Tinebase_Model_PersistentFilter(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
@@ -91,7 +97,20 @@ class Tinebase_Frontend_Json_PersistentFilter
             'name'              => $_name
         ));
         
-        $persistentFilter = $this->_backend->create($persistentFilter);
+        // check if exists
+        $searchFilter = new Tinebase_Model_PersistentFilterFilter(array(
+            array('field' => 'name',            'operator' => 'equals', 'value' => $_name),
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => $_applicationId),
+        ));
+        $existing = $this->_backend->search($searchFilter);
+        
+        if (count($existing) > 0) {
+            $persistentFilter->setId($existing[0]->getId());
+            $persistentFilter = $this->_backend->update($persistentFilter);
+            
+        } else {
+            $persistentFilter = $this->_backend->create($persistentFilter);
+        }
         
         // @todo return something here?
         //return $filter->toJson();
@@ -104,6 +123,11 @@ class Tinebase_Frontend_Json_PersistentFilter
      */
     public function delete($_filterId) 
     {
+        $persistentFilter = $this->_backend->get($_filterId);
+        if (Tinebase_Core::getUser()->getId() != $persistentFilter->account_id) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this filter.');
+        }
+        
         $this->_backend->delete($_filterId); 
     }
 }
