@@ -4,7 +4,7 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
@@ -462,15 +462,23 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to save and search persistent filter
      * 
+     * @todo move this test to tinebase json tests?
      */
     public function testSavePersistentTimesheetFilter()
     {
+        $persistentFiltersJson = new Tinebase_Frontend_Json_PersistentFilter();
+        
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
-        $this->_json->saveTimesheetFilter(Zend_Json::encode($this->_getTimesheetFilter()), $filterName);
+        $persistentFiltersJson->save(
+            Zend_Json::encode($this->_getTimesheetFilter()), 
+            $filterName, 
+            'Timetracker_Model_TimesheetFilter',
+            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+        );
         
         // get
-        $persistentFilters = $this->_json->searchFilters(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
         
         //check
         $this->assertEquals(1, count($persistentFilters['totalcount'])); 
@@ -478,7 +486,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($persistentFilters['results'][0]['filters'], $this->_getTimesheetFilter());
 
         // cleanup / delete file
-        $this->_json->deleteFilter($persistentFilters['results'][0]['id']);
+        $persistentFiltersJson->delete($persistentFilters['results'][0]['id']);
     }
     
     /************ protected helper funcs *************/

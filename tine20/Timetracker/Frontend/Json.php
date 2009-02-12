@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Json.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  */
@@ -300,14 +300,4 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $this->_delete($ids, $this->_timeaccountController);
     }    
 
-    /**
-     * save timesheet filter
-     *
-     * @param string $filter
-     * @param string $filtername
-     */
-    public function saveTimesheetFilter($filter, $filtername)
-    {
-        $this->_saveFilter($filter, $filtername, 'Addressbook_Model_ContactFilter');
-    }
 }
