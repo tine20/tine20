@@ -15,6 +15,7 @@ Ext.onReady(function() {
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
+    Tine.Tinebase.tineInit.initErrorHandler();
     Tine.Tinebase.tineInit.initRegistry();
     Tine.Tinebase.tineInit.initWindowMgr();
     Tine.Tinebase.tineInit.initState();
@@ -281,6 +282,38 @@ Tine.Tinebase.tineInit = {
             }
             
         });
+    },
+    
+    /**
+     * init a global error handler
+     */
+    initErrorHandler: function() {
+        window.onerror = !window.onerror ? Tine.Tinebase.tineInit.globalErrorHandler : window.onerror.createSequence(Tine.Tinebase.tineInit.globalErrorHandler);
+    },
+    
+    globalErrorHandler: function() {
+        // NOTE: Arguments is not a real Array
+        var args = [];
+        for (var i=0; i<arguments.length; i++) {
+            args[i] = arguments[i];
+        }
+        
+        var data = {
+            msg: 'js exception: ' + args[0],
+            traceHTML: args.join("<br>")
+        };
+        
+        var windowHeight = 400;
+        if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+            windowHeight = Ext.getBody().getHeight(true) * 0.7;
+        }
+        
+        var win = new Tine.Tinebase.ExceptionDialog({
+            height: windowHeight,
+            exceptionInfo: data
+        });
+        win.show();
+        return true;
     },
     
     /**
