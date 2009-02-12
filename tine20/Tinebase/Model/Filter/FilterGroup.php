@@ -455,7 +455,7 @@ class Tinebase_Model_Filter_FilterGroup
             'name'              => $_name
         ));
         
-        $persistentFilterBackend->get($_filterId);
+        $persistentFilter = $persistentFilterBackend->create($persistentFilter);
     }
     
     /**

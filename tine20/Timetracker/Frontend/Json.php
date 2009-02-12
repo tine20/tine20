@@ -44,6 +44,8 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
     }
     
+    /************************************** protected helper functions **************************************/
+    
     /**
      * returns record prepared for json transport
      *
@@ -186,6 +188,8 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
              $timeaccount->container_id = $containerId;
          }
     }
+
+    /************************************** public API **************************************/
     
     /**
      * Search for records matching given arguments
@@ -295,4 +299,15 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     {
         $this->_delete($ids, $this->_timeaccountController);
     }    
+
+    /**
+     * save timesheet filter
+     *
+     * @param string $filter
+     * @param string $filtername
+     */
+    public function saveTimesheetFilter($filter, $filtername)
+    {
+        $this->_saveFilter($filter, $filtername, 'Addressbook_Model_ContactFilter');
+    }
 }

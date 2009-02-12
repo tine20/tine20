@@ -456,6 +456,29 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         unlink($result);
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
+
+    /******* persistent filter tests *****************/
+    
+    /**
+     * try to save persistent filter
+     * 
+     */
+    public function testSavePersistentTimesheetFilter()
+    {
+        // create
+        $this->_json->saveTimesheetFilter(Zend_Json::encode($this->_getTimesheetFilter()), 'testfilter');
+        
+        /*        
+        //check
+        $file = implode('', file($result));
+        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description'); 
+        $this->assertEquals(1, preg_match("/description/", $file), 'no headline'); 
+        
+        // cleanup / delete file
+        unlink($result);
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+        */
+    }
     
     /************ protected helper funcs *************/
     
