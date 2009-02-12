@@ -216,9 +216,16 @@ Tine.Tinebase.tineInit = {
             // if communication is lost, we can't create a nice ext window.
             if (response.status === 0) {
                 alert(_('Connection lost, please check your network!'));
+                return false;
             }
             
-            var data = Ext.util.JSON.decode(response.responseText);
+            var data = response ? Ext.util.JSON.decode(response.responseText) : null;
+            
+            // server did not responde anything
+            if (! data) {
+                alert(_('The server did not respond to your request. Please check your network or contact your administrator.'));
+                return false;
+            }
             
             switch(data.code) {
                 // not autorised
