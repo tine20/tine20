@@ -479,10 +479,12 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // get
         $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        //print_r($persistentFilters);
         
         //check
         $this->assertEquals(1, count($persistentFilters['totalcount'])); 
-        $this->assertEquals($filterName, $persistentFilters['results'][0]['name']); 
+        $this->assertEquals($filterName, $persistentFilters['results'][0]['name']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFilters['results'][0]['account_id']);
         $this->assertEquals($persistentFilters['results'][0]['filters'], $this->_getTimesheetFilter());
 
         // cleanup / delete file

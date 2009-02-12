@@ -28,8 +28,8 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
      */
     protected $_filterModel = array(
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'))),
-        'application_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId'),
-        'account_id'     => array('filter' => 'Tinebase_Model_Filter_ForeignId'),
+        'application_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
         'model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'is_default'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
     );
@@ -68,7 +68,6 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
         
         if (! $this->_isResolved) {
             
-            /*
             //$defaultFilter = $this->_findFilter('is_default');
             //if ($defaultFilter !== NULL && $defaultFilter->)
             
@@ -85,7 +84,6 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
             }
             
             $this->_isResolved = TRUE;
-            */
         }
     }
 }
