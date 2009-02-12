@@ -9,7 +9,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        move that to another place? like Tinebase_Backend_PeristentFilter ?
+ * @todo        add account id to sql statements to check acl
+ * 
  */
 
 

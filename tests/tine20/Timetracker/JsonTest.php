@@ -460,20 +460,24 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /******* persistent filter tests *****************/
     
     /**
-     * try to save persistent filter
+     * try to save and search persistent filter
      * 
      */
     public function testSavePersistentTimesheetFilter()
     {
         // create
-        $this->_json->saveTimesheetFilter(Zend_Json::encode($this->_getTimesheetFilter()), 'testfilter');
+        $filterName = Tinebase_Record_Abstract::generateUID();
+        $this->_json->saveTimesheetFilter(Zend_Json::encode($this->_getTimesheetFilter()), $filterName);
         
-        /*        
+        // get
+        $persistentFilters = $this->_json->searchFilters(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        
         //check
-        $file = implode('', file($result));
-        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description'); 
-        $this->assertEquals(1, preg_match("/description/", $file), 'no headline'); 
-        
+        $this->assertEquals(1, count($persistentFilters['totalcount'])); 
+        $this->assertEquals($filterName, $persistentFilters['results'][0]['name']); 
+        $this->assertEquals($persistentFilters['results'][0]['filters'], $this->_getTimesheetFilter());
+
+        /*
         // cleanup / delete file
         unlink($result);
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
@@ -593,6 +597,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         );        
     }
     
+    
     /**
      * get Timesheet filter
      *
@@ -609,6 +614,23 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         );        
     }
 
+    /**
+     * get persistent filter filter
+     *
+     * @param string $_name
+     * @return array
+     */
+    protected function _getPersistentFilterFilter($_name)
+    {
+        return array(
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => $_name
+            ),
+        );        
+    }
+    
     /**
      * get Timesheet filter with date
      *

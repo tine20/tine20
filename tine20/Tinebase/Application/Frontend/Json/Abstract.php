@@ -38,6 +38,34 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     }
 
     /**
+     * search for filters (by application, user, ...)
+     *
+     * @param string $filter
+     * @return array
+     * 
+     * @todo add recordsToJson / use toJson from filter group?
+     */
+    public function searchFilters($filter)
+    {
+        $decodedFilter = Zend_Json::decode($filter);
+        $filter = new Tinebase_Model_PersistentFilterFilter(!empty($decodedFilter) ? $decodedFilter : array());
+        
+        $persistentFilterBackend = new Tinebase_PersistentFilter();
+        $result = $persistentFilterBackend->search($filter)->toArray();
+        
+        foreach ($result as &$record) {
+            $record['filters'] = unserialize($record['filters']);
+        }
+        
+        return array(
+            'results'       => $result,
+            'totalcount'    => $persistentFilterBackend->searchCount($filter)
+        );
+    }
+
+    /************************** protected functions **********************/    
+    
+    /**
      * Return a single record
      *
      * @param   string $_uid
@@ -236,19 +264,6 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         //return $filter->toJson();
     }
     
-    /**
-     * search for filters (by application, user, ...)
-     *
-     * @param string $_filter
-     * @return array
-     * 
-     * @todo implement
-     */
-    protected function _searchFilters($_filter)
-    {
-        return array();
-    }
-
     /**
      * delete persistent filter
      *

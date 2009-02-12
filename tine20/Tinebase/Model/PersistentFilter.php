@@ -3,20 +3,18 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Record
+ * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
- * 
- * @todo        add persistent filter filter (to search for filters by app name, user id, ...)
  */
 
 /**
  * class Tinebase_Model_PersistentFilter
  * 
  * @package     Tinebase
- * @subpackage  Record
+ * @subpackage  Filter
  */
 class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract 
 {
