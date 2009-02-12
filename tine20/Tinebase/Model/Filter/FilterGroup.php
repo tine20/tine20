@@ -392,4 +392,18 @@ class Tinebase_Model_Filter_FilterGroup
         
         return NULL;
     }
+
+    /**
+     * remove filter object
+     *
+     * @param string $_field
+     */
+    protected function _removeFilter($_field)
+    {
+        foreach ($this->_filterObjects as $key => $object) {
+            if ($object->getField() == $_field) {
+                unset($this->_filterObjects[$key]);
+            }
+        }
+    }
 }
