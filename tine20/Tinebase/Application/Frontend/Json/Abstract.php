@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id:Abstract.php 5090 2008-10-24 10:30:05Z p.schuele@metaways.de $
  */
@@ -35,43 +35,6 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     public function getRegistryData()
     {
         return array();
-    }
-
-    /**
-     * search for filters (by application, user, ...)
-     *
-     * @param string $filter
-     * @return array
-     * 
-     * @todo add recordsToJson / use toJson from filter group or persistent filter model
-     */
-    public function searchFilters($filter)
-    {
-        $decodedFilter = Zend_Json::decode($filter);
-        $filter = new Tinebase_Model_PersistentFilterFilter(!empty($decodedFilter) ? $decodedFilter : array());
-        
-        $persistentFilterBackend = new Tinebase_PersistentFilter();
-        $result = $persistentFilterBackend->search($filter)->toArray();
-        
-        foreach ($result as &$record) {
-            $record['filters'] = unserialize($record['filters']);
-        }
-        
-        return array(
-            'results'       => $result,
-            'totalcount'    => $persistentFilterBackend->searchCount($filter)
-        );
-    }
-
-    /**
-     * delete persistent filter
-     *
-     * @param string $_filterId
-     */
-    public function deleteFilter($_filterId) 
-    {
-        $persistentFilterBackend = new Tinebase_PersistentFilter();
-        $persistentFilterBackend->delete($_filterId); 
     }
     
     /************************** protected functions **********************/    
@@ -241,20 +204,4 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         return $result;
     }
 
-    /**
-     * save persistent filter
-     *
-     * @param string $_filter
-     * @param string $_name
-     * @param string $_filterModel
-     */
-    protected function _saveFilter($_filter, $_name, $_filterModel) 
-    {
-        $decodedFilter = Zend_Json::decode($_filter);
-        $filter = new $_filterModel(!empty($decodedFilter) ? $decodedFilter : array());
-        $filter = $filter->save($_name);
-        
-        // @todo return something here?
-        //return $filter->toJson();
-    }
 }
