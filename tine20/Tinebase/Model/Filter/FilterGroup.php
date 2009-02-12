@@ -423,26 +423,6 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
-     * saves a persistent filter
-     *
-     * @param string $_filterId
-     * @return Tinebase_Model_Filter_FilterGroup
-     */
-    public function save($_name)
-    {
-        $persistentFilterBackend = new Tinebase_PersistentFilter();
-        $persistentFilter = new Tinebase_Model_PersistentFilter(array(
-            'account_id'        => Tinebase_Core::getUser()->getId(),
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
-            'model'             => get_class($this),
-            'filters'           => serialize($this->toArray()),
-            'name'              => $_name
-        ));
-        
-        $persistentFilter = $persistentFilterBackend->create($persistentFilter);
-    }
-    
-    /**
      * return filter object
      *
      * @param string $_field
