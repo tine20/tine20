@@ -23,14 +23,6 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
      */
     protected $_className = 'Voipmanager_Model_Snom_PhoneFilter';
     
-	/**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    //protected $_identifier = 'id';
-    
     /**
      * application the record belongs to
      *
@@ -48,7 +40,7 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
                 'fields' => array('macaddress', 'ipaddress', 'description')
             )
         ),
-        //'account_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'account_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
     );
     /*
     protected $_validators = array(
@@ -57,9 +49,35 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
         'macaddress'            => array('allowEmpty' => true           ),
         'ipaddress'             => array('allowEmpty' => true           ),
         'description'           => array('allowEmpty' => true           ),
-        'accountId'             => array('allowEmpty' => true           ),
         'query'                 => array('allowEmpty' => true           )
         //'showClosed'          => array('allowEmpty' => true, 'InArray' => array(true,false)),
     );
     */
+    
+    /**
+     * appends current filters to a given select object
+     * - add user phone ids to filter
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendFilterSql($_select)
+    {
+        $accountIdFilter = $this->_findFilter('account_id');
+        if($accountIdFilter !== NULL) {
+            $db = Voipmanager_Controller_Snom_Phone::getInstance()->getDatabaseBackend();
+            $backend = new Voipmanager_Backend_Snom_Phone($db);
+            $_validPhoneIds = $backend->getValidPhoneIds($accountIdFilter->getValue());   
+            if(empty($_validPhoneIds)) {
+                $_select->where('1=0');
+            } else {      
+                $_select->where($db->quoteInto($db->quoteIdentifier('id') . ' IN (?)', $_validPhoneIds));
+            }
+            
+            // remove filter
+            $this->_removeFilter('account_id');
+        }
+        
+        parent::appendFilterSql($_select);
+    }
 }

@@ -67,7 +67,7 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
             
             // set user phone ids as filter
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
-                'accountId' => Tinebase_Core::getUser()->getId()
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
             ));        
             $userPhoneIds = Voipmanager_Controller_MyPhone::getInstance()->search($filter)->getArrayOfIds();
             

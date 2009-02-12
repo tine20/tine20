@@ -114,53 +114,54 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         ));
         
         // create phone, location, template, rights
-        $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
-        $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
-        $snomSettingBackend         = new Voipmanager_Backend_Snom_Setting();
-        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template();     
-        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software(); 
-        $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
-        $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
+        $db = Voipmanager_Controller_Snom_Phone::getInstance()->getDatabaseBackend();
+        $phoneBackend               = new Voipmanager_Backend_Snom_Phone($db);
+        $snomLocationBackend        = new Voipmanager_Backend_Snom_Location($db);
+        $snomSettingBackend         = new Voipmanager_Backend_Snom_Setting($db);
+        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template($db);     
+        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software($db); 
+        $snomLineBackend            = new Voipmanager_Backend_Snom_Line($db);
+        $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer($db);
         
         try {
             $snomSoftwareBackend->create($this->_objects['software']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         try {
             $snomLocationBackend->create($this->_objects['location']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         try {
             $snomSettingBackend->create($this->_objects['setting']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         try {
             $snomTemplateBackend->create($this->_objects['template']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         try {
             $phoneBackend->create($this->_objects['phone']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         try {
             $phoneBackend->setPhoneRights($this->_objects['phone']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         try {
             $asteriskSipPeerBackend->create($this->_objects['sippeer']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         try {
             $snomLineBackend->create($this->_objects['line']);
         } catch (Zend_Db_Statement_Exception $e) {
-            // exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         
         /******************** call history *************************/
@@ -222,6 +223,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
+        /*
         // remove phone, location, template
         $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
         $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
@@ -242,6 +244,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         $callHistoryBackend->delete($this->_objects['call1']->getId());
         $callHistoryBackend->delete($this->_objects['call2']->getId());
+        */
     }
     
     /**

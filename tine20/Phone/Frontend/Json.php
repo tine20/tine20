@@ -49,11 +49,9 @@ class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {        
         $voipController = Voipmanager_Controller_MyPhone::getInstance();
         
-        $filter = new Voipmanager_Model_Snom_PhoneFilter(array());
-        /*
-            'account_id' => $accountId
+        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
         ));
-        */
         $phones = $voipController->search($filter);
         
         // add lines to phones
