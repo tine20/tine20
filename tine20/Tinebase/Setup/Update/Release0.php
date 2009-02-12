@@ -1814,7 +1814,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     </field>
                 </index>
                 <index>
-                    <name>application_id-account_id-name-is_default</name>
+                    <name>application_id-account_id-name</name>
                     <unique>true</unique>
                     <field>
                         <name>application_id</name>
@@ -1824,9 +1824,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     </field>
                     <field>
                         <name>name</name>
-                    </field>
-                    <field>
-                        <name>is_default</name>
                     </field>
                 </index>
                 <index>
