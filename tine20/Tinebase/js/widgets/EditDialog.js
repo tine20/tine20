@@ -350,13 +350,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         
                         // free 0 namespace if record got created
                         this.window.rename(this.windowNamePrefix + this.record.id);
-    
+                        
+                        // update form with this new data
+                        // NOTE: We update the form also when window should be closed,
+                        //       cause sometimes security restrictions might prevent
+                        //       closing of native windows
+                        this.onRecordLoad();
+                        
                         if (closeWindow) {
                             this.purgeListeners();
                             this.window.close();
-                        } else {
-                            // update form with this new data
-                            this.onRecordLoad()
                         }
                     },
                     failure: function ( result, request) { 
