@@ -1784,28 +1784,23 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
-                    <notnull>true</notnull>
                 </field> 
                 <field>
                     <name>last_modified_by</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>last_modified_time</name>
                     <type>datetime</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>is_deleted</name>
                     <type>boolean</type>
-                    <notnull>true</notnull>
                     <default>false</default>
                 </field>
                 <field>
                     <name>deleted_by</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                 </field>            
                 <field>
                     <name>deleted_time</name>
