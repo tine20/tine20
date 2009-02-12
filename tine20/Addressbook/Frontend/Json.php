@@ -10,7 +10,7 @@
  * @version     $Id$
  *
  * @todo        use functions from Tinebase_Application_Frontend_Json_Abstract
- *              -> get/search/save/getAll
+ *              -> get/save/getAll
  * @todo        remove deprecated functions afterwards
  */
 
@@ -52,22 +52,10 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * @param string $filter json encoded
      * @param string $paging json encoded
      * @return array
-     * 
-     * @todo add timezone?
      */
     public function searchContacts($filter, $paging)
     {
-        $filter = new Addressbook_Model_ContactFilter(Zend_Json::decode($filter));
-        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
-        
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
-        //$contacts->setTimezone($this->_userTimezone);
-        //$contacts->convertDates = true;
-        
-        return array(
-            'results'       => $this->_multipleContactsToJson($contacts),
-            'totalcount'    => Addressbook_Controller_Contact::getInstance()->searchCount($filter)
-        );
+        return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
     }    
 
     /****************************************** save / delete contacts ****************************/
