@@ -298,16 +298,51 @@ Tine.Tinebase.tineInit = {
         window.onerror = !window.onerror ? Tine.Tinebase.tineInit.globalErrorHandler : window.onerror.createSequence(Tine.Tinebase.tineInit.globalErrorHandler);
     },
     
+    /**
+     * @todo   make this working in safari
+     * @return {string}
+     */
+    getFormattedMessage: function(args) {
+        var lines = ["The following error has occured:"];
+        if (args[0] instanceof Error) { // Error object thrown in try...catch
+            var err = args[0];
+            lines[lines.length] = "Message: (" + err.name + ") " + err.message;
+            lines[lines.length] = "Error number: " + (err.number & 0xFFFF); //Apply binary arithmetic for IE number, firefox returns message string in element array element 0
+            lines[lines.length] = "Description: " + err.description;
+        } else if ((args.length == 3) && (typeof(args[2]) == "number")) { // Check the signature for a match with an unhandled exception
+            lines[lines.length] = "Message: " + args[0];
+            lines[lines.length] = "URL: " + args[1];
+            lines[lines.length] = "Line Number: " + args[2];
+        } else {
+            lines = ["An unknown error has occured."]; // purposely rebuild lines
+            lines[lines.length] = "The following information may be useful:"
+            for (var x = 0; x < args.length; x++) {
+                lines[lines.length] = Ext.encode(args[x]);
+            }
+        }
+        return lines.join("\n");
+    },
+    
     globalErrorHandler: function() {
+        
         // NOTE: Arguments is not a real Array
         var args = [];
         for (var i=0; i<arguments.length; i++) {
             args[i] = arguments[i];
+            
+            
+        }
+        
+        var errormsg = Tine.Tinebase.tineInit.getFormattedMessage(args);
+        
+        // check for spechial cases we don't want to handle
+        if (errormsg.match(/versioncheck/)) {
+            return true;
         }
         
         var data = {
-            msg: 'js exception: ' + args[0],
-            traceHTML: args.join("<br>")
+            msg: 'js exception: ' + errormsg,
+            traceHTML: errormsg.replace(/\n/g, "<br />").replace(/\t/g, " &nbsp; &nbsp;")
         };
         
         var windowHeight = 400;
