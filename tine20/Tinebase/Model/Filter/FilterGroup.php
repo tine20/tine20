@@ -112,6 +112,10 @@ class Tinebase_Model_Filter_FilterGroup
      */
     protected $_concatenationCondition = NULL;
     
+    /**
+     * @var string timezone of this filtergroup
+     */
+    protected $_timezone = 'UTC';
     
     /******************************** functions ********************************/
     
@@ -129,6 +133,18 @@ class Tinebase_Model_Filter_FilterGroup
         
         $this->_concatenationCondition = $_condition == 'OR' ? 'OR' : 'AND';
         
+        $this->setFromArray($_data);
+    }
+    
+    /**
+     * sets this filter group from filter data in array representation
+     *
+     * @param array $_data
+     */
+    public function setFromArray($_data)
+    {
+        $this->_filterObjects = array();
+        
         // legacy container handling
         Tinebase_Model_Filter_Container::_transformLegacyData($_data);
         
@@ -136,7 +152,7 @@ class Tinebase_Model_Filter_FilterGroup
             
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
-                $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition']));
+                $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
             
             } else {
                 $fieldModel = (isset($this->_filterModel[$filterData['field']])) ? $this->_filterModel[$filterData['field']] : '';
@@ -157,7 +173,19 @@ class Tinebase_Model_Filter_FilterGroup
                 }
             }
         }
-        
+    }
+    
+    /**
+     * sets timezone of this filter group
+     *
+     * @param string $_timezone
+     */
+    public function setTimezone($_timezone)
+    {
+        $this->_timezone = $_timezone;
+        foreach ($this->_filterObjects as $filter) {
+            $filter->setTimezone($_timezone);
+        }
     }
     
     /**
@@ -192,6 +220,8 @@ class Tinebase_Model_Filter_FilterGroup
         }
         
         $this->_filterObjects[] = $_filter;
+        $_filter->setTimezone($this->_timezone);
+        
         return $this;
     }
     
@@ -209,6 +239,8 @@ class Tinebase_Model_Filter_FilterGroup
         }
         
         $this->_filterObjects[] = $_filtergroup;
+        $_filtergroup->setTimezone($this->_timezone);
+        
         return $this;
     }
     
@@ -238,7 +270,8 @@ class Tinebase_Model_Filter_FilterGroup
             );
             $filter = NULL;
         } else {
-            $filter = new $definition['filter']($_field, $_operator, $_value, (isset($definition['options']) ? (array)$definition['options'] : array()));
+            $options = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array());
+            $filter = new $definition['filter']($_field, $_operator, $_value, $options);
         }
             
         return $filter;
@@ -300,20 +333,14 @@ class Tinebase_Model_Filter_FilterGroup
     /**
      * returns array with the filter settings of this filter group 
      *
+     * @param  bool $_valueToJson resolve value for json api?
      * @return array
      */
-    public function toArray()
+    public function toArray($_valueToJson = false)
     {
         $result = array();
         foreach ($this->_filterObjects as $filter) {
-            $result[] = $filter->toArray();
-            /*
-            if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {                
-                $result[''] = $filter->toArray();
-            } else {
-                $result[''] = '';
-            }
-            */
+            $result[] = $filter->toArray($_valueToJson);
         }
         
         // add custom fields
@@ -329,68 +356,11 @@ class Tinebase_Model_Filter_FilterGroup
      * users timezone and converts them to UTC
      *
      * @param  string $_data json encoded data
-     * 
-     * @todo implement
      */
     public function setFromJsonInUsersTimezone($_data)
     {
-        /*
-        // change timezone of current php process to usertimezone to let new dates be in the users timezone
-        // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
-        //       lead to incorrect results on DST transistions 
-        date_default_timezone_set(Tinebase_Core::get('userTimeZone'));
-
-        // NOTE: setFromArray creates new Zend_Dates of $this->datetimeFields
+        $this->_timezone = Tinebase_Core::get('userTimeZone');
         $this->setFromJson($_data);
-        
-        // convert $this->_datetimeFields into the configured server's timezone (UTC)
-        //$this->setTimezone('UTC');
-        
-        // finally reset timzone of current php process to the configured server timezone (UTC)
-        date_default_timezone_set('UTC');
-        */
-    }
-    
-    /**
-     * Sets timezone
-     * 
-     * @see Zend_Date::setTimezone()
-     * @param  string $_timezone
-     * @param  bool   $_recursive
-     * @return  void
-     * 
-     * @todo implement
-     */
-    public function setTimezone($_timezone, $_recursive = TRUE)
-    {
-        /*
-        foreach ($this->_datetimeFields as $field) {
-            if (!isset($this->_properties[$field])) continue;
-            
-            if(!is_array($this->_properties[$field])) {
-                $toConvert = array($this->_properties[$field]);
-            } else {
-                $toConvert = $this->_properties[$field];
-            }
-
-            foreach ($toConvert as $field => &$value) {
-                if (! $value instanceof Zend_Date) {
-                    throw new Tinebase_Exception_Record_Validation($toConvert[$field] . 'must be an Zend_Date'); 
-                }
-                $value->setTimezone($_timezone);
-            } 
-        }
-        
-        if ($_recursive) {
-            foreach ($this->_properties as $property => $value) {
-                if (is_object($value) && 
-                        (in_array('Tinebase_Record_Interface', class_implements($value)) || 
-                        $value instanceof Tinebase_Record_Recordset) ) {
-                    $value->setTimezone($_timezone, TRUE);
-                }
-            }
-        }
-        */
     }
     
     /**
@@ -398,30 +368,14 @@ class Tinebase_Model_Filter_FilterGroup
      *
      * @param string $_data json encoded data
      * @return void
-     * 
-     * @todo implement
      */
     public function setFromJson($_data)
     {
-        /*
-        $recordData = Zend_Json::decode($_data);
+        $filterData = Zend_Json::decode($_data);
         
-        $this->setFromArray($recordData);
-        */
+        $this->setFromArray($filterData);
     }
 
-    /**
-     * converts filter group to json/array and resolves some filter data if necessary
-     *
-     * @return array
-     * 
-     * @todo add resolving of filters?
-     */
-    public function toJson()
-    {
-        return $this->toArray();
-    }
-    
     /**
      * return filter object
      *

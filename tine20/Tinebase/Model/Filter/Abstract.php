@@ -48,6 +48,11 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_options = NULL;
     
     /**
+     * @var string timezone
+     */
+    protected $_timezone = 'UTC';
+    
+    /**
      * get a new single filter action
      *
      * @param string $_field
@@ -61,6 +66,16 @@ abstract class Tinebase_Model_Filter_Abstract
         $this->setField($_field);
         $this->setOperator($_operator);
         $this->setValue($_value);
+    }
+    
+    /**
+     * sets timezone of this filter
+     *
+     * @param string $_timezone
+     */
+    public function setTimezone($_timezone)
+    {
+        $this->_timezone = $_timezone;
     }
     
     /**
@@ -138,9 +153,10 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * returns array with the filter settings of this filter
      *
+     * @param  bool $_valueToJson resolve value for json api?
      * @return array
      */
-    public function toArray()
+    public function toArray($_valueToJson = false)
     {
         $result = array(
             'field'     => $this->_field,
