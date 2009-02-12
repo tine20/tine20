@@ -423,22 +423,6 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
-     * loads a persistent filter
-     *
-     * @param string $_filterId
-     * @return Tinebase_Model_Filter_FilterGroup
-     */
-    public static function loadPersistentFilter($_filterId)
-    {
-        $persistentFilterBackend = new Tinebase_PersistentFilter();
-        $persistentFilter = $persistentFilterBackend->get($_filterId);
-        
-        $filter = new $persistentFilter->model(unserialize($persistentFilter->filters));
-        
-        return $filter;
-    }
-
-    /**
      * saves a persistent filter
      *
      * @param string $_filterId

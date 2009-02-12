@@ -477,11 +477,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($filterName, $persistentFilters['results'][0]['name']); 
         $this->assertEquals($persistentFilters['results'][0]['filters'], $this->_getTimesheetFilter());
 
-        /*
         // cleanup / delete file
-        unlink($result);
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-        */
+        $this->_json->deleteFilter($persistentFilters['results'][0]['id']);
     }
     
     /************ protected helper funcs *************/

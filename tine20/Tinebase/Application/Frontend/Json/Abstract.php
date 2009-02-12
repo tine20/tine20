@@ -43,7 +43,7 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * @param string $filter
      * @return array
      * 
-     * @todo add recordsToJson / use toJson from filter group?
+     * @todo add recordsToJson / use toJson from filter group or persistent filter model
      */
     public function searchFilters($filter)
     {
@@ -63,6 +63,17 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         );
     }
 
+    /**
+     * delete persistent filter
+     *
+     * @param string $_filterId
+     */
+    public function deleteFilter($_filterId) 
+    {
+        $persistentFilterBackend = new Tinebase_PersistentFilter();
+        $persistentFilterBackend->delete($_filterId); 
+    }
+    
     /************************** protected functions **********************/    
     
     /**
@@ -231,28 +242,11 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     }
 
     /**
-     * get persistent filter
-     *
-     * @param string $_filterId
-     * @return array
-     * 
-     * @todo add test
-     */
-    protected function _getFilter($_filterId) 
-    {
-        $filter = Tinebase_Model_Filter_FilterGroup::loadPersistentFilter($_filterId); 
-        
-        return $filter->toJson();
-    }
-    
-    /**
      * save persistent filter
      *
      * @param string $_filter
      * @param string $_name
      * @param string $_filterModel
-     * 
-     * @todo add test
      */
     protected function _saveFilter($_filter, $_name, $_filterModel) 
     {
@@ -262,18 +256,5 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         
         // @todo return something here?
         //return $filter->toJson();
-    }
-    
-    /**
-     * delete persistent filter
-     *
-     * @param string $_filterId
-     * 
-     * @todo implement
-     * @todo add test
-     */
-    protected function _deleteFilter($_filterId) 
-    {
-        //Tinebase_Model_Filter_FilterGroup::deletePersistentFilter($_filterId); 
     }
 }
