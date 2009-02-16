@@ -118,7 +118,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 handler: this.addFilter
             }),
             removeAllFilters: new Ext.Button({
-                tooltip: _('Delete all filters'),
+                tooltip: _('reset all filters'),
                 iconCls: 'action_delAllFilter',
                 scope: this,
                 handler: this.deleteAllFilters
@@ -132,9 +132,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
             }),
             saveFilter: new Ext.Button({
-                disabled: true,
                 tooltip: _('save filter'),
-                iconCls: 'action_saveFilter'
+                iconCls: 'action_saveFilter',
+                scope: this,
+                handler: this.onSaveFilter
             })
         };
     },
@@ -482,6 +483,35 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             filters.push({field: 'timeaccount_id', operator: 'AND', value: ta_filters});
         }
         return filters;
+    },
+    
+    // NOTE: we save the last applied filter!
+    onSaveFilter: function() {
+        var name = '';
+        Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the filter'), function(btn, value) {
+            if (btn == 'ok') {
+                if (! value) {
+                    Ext.Msg.alert(String.format(_('Filter not Saved'), this.containerName), String.format(_('You have to supply a name for the filter!'), this.containerName));
+                    return;
+                }
+                Ext.Msg.wait(_('Please Wait'), _('Saving filter'));
+                
+                var model = this.store.reader.recordType.getMeta('appName') + '_Model_' + this.store.reader.recordType.getMeta('modelName');
+                
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Tinebase_PersistentFilter.save',
+                        filterData: Ext.util.JSON.encode(this.store.lastFilter),
+                        name: value,
+                        model: model
+                    },
+                    success: function() {
+                        // TODO: push somewhere
+                        Ext.Msg.hide();
+                    }
+                });
+            }
+        }, this, false, name);
     }
     
 });
