@@ -140,14 +140,14 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 case 'equals':
                     $container = $cc->getContainerById($this->_value);
                     $result['value'] = $container->toArray();
-                    $result['value']['path'] = $container->getPath($container);
+                    $result['value']['path'] = $cc->getPath($container);
                     break;
                 case 'in':
                     $result['value'] = array();
                     foreach ($this->_value as $containerId) {
-                        $container = $cc->getContainerById($this->_value);
+                        $container = $cc->getContainerById($containerId);
                         $contaienrArray = $container->toArray();
-                        $contaienrArray['path'] = $container->getPath($container);
+                        $contaienrArray['path'] = $cc->getPath($container);
                         
                         $result['value'][] = $contaienrArray;
                     }
