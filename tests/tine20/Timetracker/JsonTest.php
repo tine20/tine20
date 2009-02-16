@@ -485,6 +485,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($persistentFilters['totalcount'])); 
         $this->assertEquals($filterName, $persistentFilters['results'][0]['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFilters['results'][0]['account_id']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFilters['results'][0]['created_by']);
         $this->assertEquals($persistentFilters['results'][0]['filters'], $this->_getTimesheetFilter());
 
         // cleanup / delete file
@@ -530,6 +531,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($persistentFiltersUpdated['totalcount'])); 
         $this->assertEquals($filterName, $persistentFiltersUpdated['results'][0]['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFiltersUpdated['results'][0]['account_id']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFiltersUpdated['results'][0]['last_modified_by']);
         $this->assertEquals($persistentFiltersUpdated['results'][0]['filters'], $updatedFilter);
         $this->assertEquals($persistentFilters['results'][0]['id'], $persistentFiltersUpdated['results'][0]['id']);
 

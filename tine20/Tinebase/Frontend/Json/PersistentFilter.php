@@ -81,7 +81,6 @@ class Tinebase_Frontend_Json_PersistentFilter
      * @param string $_name
      * @param string $_filterModel
      * 
-     * @todo use set/createFromJson
      * @todo check if filter model is filter group
      */
     public function save($_filter, $_name, $_filterModel, $_applicationId) 
@@ -106,13 +105,20 @@ class Tinebase_Frontend_Json_PersistentFilter
         
         if (count($existing) > 0) {
             $persistentFilter->setId($existing[0]->getId());
+            
+            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+            $modLog->manageConcurrentUpdates($persistentFilter, $existing[0], 'Tinebase_Model_PersistentFilter', 'Sql', $persistentFilter->getId());
+            $modLog->setRecordMetaData($persistentFilter, 'update', $existing[0]);
+            $currentMods = $modLog->writeModLog($persistentFilter, $existing[0],'Tinebase_Model_PersistentFilter', 'Sql', $persistentFilter->getId());
+            
             $persistentFilter = $this->_backend->update($persistentFilter);
             
         } else {
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($persistentFilter, 'create');
             $persistentFilter = $this->_backend->create($persistentFilter);
         }
         
-        // @todo return something here?
+        // return something here?
         //return $filter->toJson();
     }
     
