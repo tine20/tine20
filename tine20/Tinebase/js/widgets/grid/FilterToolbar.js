@@ -394,10 +394,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     /**
      * adds a new filer row
      */
-    addFilter: function() {
-        var filter = new this.record({
-            field: this.defaultFilter
-        });
+    addFilter: function(filter) {
+        if (! filter) {
+            filter = new this.record({
+                field: this.defaultFilter
+            });
+        }
         this.filterStore.add(filter);
         
         var fRow = this.templates.filterrow.insertAfter(this.el.child('tr[class=fw-ftb-frow]:last'),{
@@ -483,6 +485,26 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             filters.push({field: 'timeaccount_id', operator: 'AND', value: ta_filters});
         }
         return filters;
+    },
+    
+    setValue: function(filters) {
+        this.supressEvents = true;
+        
+        var oldFilterCount = this.filterStore.getCount();
+        
+        for (var i=0, filterData, filter; i<filters.length; i++) {
+            filterData = filters[i];
+            if (this.filterModelMap[filterData.field]) {
+                filter = new this.record(filterData);
+                this.addFilter(filter);
+            }
+        }
+        
+        for (var i=0; i<oldFilterCount; i++) {
+            this.deleteFilter(this.filterStore.getAt(i));
+        }
+        
+        this.supressEvents = false;
     },
     
     // NOTE: we save the last applied filter!
