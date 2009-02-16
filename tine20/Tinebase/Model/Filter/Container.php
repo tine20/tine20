@@ -54,6 +54,13 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     protected $_isResolved = FALSE;
     
     /**
+     * resolved containerIds
+     *
+     * @var array
+     */
+    protected $_containerIds = array();
+    
+    /**
      * set options 
      *
      * @param  array $_options
@@ -114,9 +121,46 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         
         $db = Tinebase_Core::getDb();
         
-        $_select->where($db->quoteIdentifier($this->_field) .  ' IN (?)', empty($this->_value) ? " " : $this->_value);
+        $_select->where($db->quoteIdentifier($this->_field) .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
     }
-
+    
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($_valueToJson == true) {
+            $cc = Tinebase_Container::getInstance();
+            switch ($this->_operator) {
+                case 'equals':
+                    $container = $cc->getContainerById($this->_value);
+                    $result['value'] = $container->toArray();
+                    $result['value']['path'] = $container->getPath($container);
+                    break;
+                case 'in':
+                    $result['value'] = array();
+                    foreach ($this->_value as $containerId) {
+                        $container = $cc->getContainerById($this->_value);
+                        $contaienrArray = $container->toArray();
+                        $contaienrArray['path'] = $container->getPath($container);
+                        
+                        $result['value'][] = $contaienrArray;
+                    }
+                    break;
+                default:
+                    // nothing to do
+                    break;
+            }
+        }
+        
+        return $result;
+    } 
+    
     /**
      * resolve container ids
      *
@@ -131,28 +175,28 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         switch ($this->_operator) {
             case 'equals':
             case 'in':
-                $this->_value = (array)$this->_value;
+                $this->_containerIds = (array)$this->_value;
                 if ($this->_options['ignoreAcl'] !== true) {
                     $readableContainerIds = $this->_getContainer('getContainerByACL');
-                    $this->_value = array_intersect($this->_value, $readableContainerIds);
+                    $this->_containerIds = array_intersect($this->_containerIds, $readableContainerIds);
                 }
                 break;
             case 'personalNode':
-                $this->_value = $this->_getContainer('getPersonalContainer');
+                $this->_containerIds = $this->_getContainer('getPersonalContainer');
                 break;
             case 'specialNode':
                 switch ($this->_value) {
                     case 'all':
-                        $this->_value = $this->_getContainer('getContainerByACL');
+                        $this->_containerIds = $this->_getContainer('getContainerByACL');
                         break;
                     case 'shared':
-                        $this->_value = $this->_getContainer('getSharedContainer');
+                        $this->_containerIds = $this->_getContainer('getSharedContainer');
                         break;
                     case 'otherUsers':
-                        $this->_value = $this->_getContainer('getOtherUsersContainer');
+                        $this->_containerIds = $this->_getContainer('getOtherUsersContainer');
                         break;
                     case 'internal':
-                        $this->_value = $this->_getContainer('getInternalContainer');
+                        $this->_containerIds = $this->_getContainer('getInternalContainer');
                         break;
                     default:
                         throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
