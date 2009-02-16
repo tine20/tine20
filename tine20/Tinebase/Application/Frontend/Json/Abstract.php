@@ -83,11 +83,15 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     protected function _search($_filter, $_paging, Tinebase_Application_Controller_Record_Interface $_controller, $_filterModel)
     {
         $decodedFilter = Zend_Json::decode($_filter);
+        
         if (is_array($decodedFilter)) {
-            $filter = new $_filterModel(!empty($decodedFilter) ? $decodedFilter : array());
+            $filter = new $_filterModel($decodedFilter);
         } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
             $persistentFilterJson = new Tinebase_Frontend_Json_PersistentFilter(); 
             $filter = $persistentFilterJson->get($decodedFilter);
+        } else {
+            // filter is empty
+            $filter = new $_filterModel(array());
         }
 
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($_paging));
