@@ -680,7 +680,7 @@ class Tinebase_Container
                 break;
             case 'personal':
                 // we need to find out who has admin grant
-                $allGrants = $this->getGrantsOfContainer($_container);
+                $allGrants = $this->getGrantsOfContainer($_container, true);
                 
                 $userId = NULL;
                 foreach ($allGrants as $grants) {
