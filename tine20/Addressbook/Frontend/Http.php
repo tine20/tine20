@@ -37,9 +37,16 @@ class Addressbook_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
     {        
         switch ($_format) {
             case 'pdf':
-                $filter = new Addressbook_Model_ContactFilter(Zend_Json::decode($_filter));
-                $paging = new Tinebase_Model_Pagination();
-                $contactIds = Addressbook_Controller_Contact::getInstance()->search($filter, $paging, false, true);                
+                
+                $decodedFilter = Zend_Json::decode($_filter);
+                
+                if (is_array($decodedFilter)) {
+                    $filter = new Addressbook_Model_ContactFilter($decodedFilter);
+                    $paging = new Tinebase_Model_Pagination();
+                    $contactIds = Addressbook_Controller_Contact::getInstance()->search($filter, $paging, false, true);                
+                } else {
+                    $contactIds = array($decodedFilter);
+                }
                 
                 $pdf = new Addressbook_Export_Pdf();
                 
