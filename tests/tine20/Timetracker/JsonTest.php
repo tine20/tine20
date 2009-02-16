@@ -536,6 +536,44 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // cleanup / delete file
         $persistentFiltersJson->delete($persistentFiltersUpdated['results'][0]['id']);
     }
+
+    /**
+     * try to search timesheets with saved persistent filter id
+     * 
+     * @todo move this test to tinebase json tests?
+     */
+    public function testSearchTimesheetsWithPersistentFilter()
+    {
+        $persistentFiltersJson = new Tinebase_Frontend_Json_PersistentFilter();
+        $tsFilter = $this->_getTimesheetFilter();
+        
+        // create
+        $filterName = Tinebase_Record_Abstract::generateUID();
+        $persistentFiltersJson->save(
+            Zend_Json::encode($tsFilter), 
+            $filterName, 
+            'Timetracker_Model_TimesheetFilter',
+            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+        );
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        
+        // search persistent filter
+        $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        
+        //check
+        $search = $this->_json->searchTimesheets($persistentFilters['results'][0]['id'], Zend_Json::encode($this->_getPaging()));
+        $this->assertEquals($timesheet->description, $search['results'][0]['description']);
+        $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
+        $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
+        $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals(30, $search['totalsum']);
+        $this->assertEquals($tsFilter, $search['filter']);
+        
+        // cleanup / delete file
+        $persistentFiltersJson->delete($persistentFilters['results'][0]['id']);
+        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);        
+    }
     
     /************ protected helper funcs *************/
     
