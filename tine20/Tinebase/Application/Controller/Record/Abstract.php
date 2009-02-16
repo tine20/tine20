@@ -78,14 +78,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param boolean $_onlyIds
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(/*Tinebase_Model_Filter_FilterGroup*/ $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
-        /*
-        if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
-            return new Tinebase_Record_RecordSet($this->_modelName);
-        }
-        */
-        
         $this->_checkFilterACL($_filter);
         
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
@@ -103,14 +97,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
      */
-    public function searchCount(/*Tinebase_Model_Filter_FilterGroup */ $_filter) 
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
     {
-        /*
-        if ($this->_doContainerACLChecks && !$this->_checkContainerACL($_filter)) {
-            return 0;
-        }
-        */
-        
         $this->_checkFilterACL($_filter);
 
         $count = $this->_backend->searchCount($_filter);
