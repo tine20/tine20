@@ -12,9 +12,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
 Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     
     /**
-     * @cfg {Tine.widgets.app.GridPanel}
+     * @cfg {application}
      */
-    gridPanel: null,
+    app: null,
     
     autoScroll: true,
     border: false,
@@ -22,28 +22,47 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     initComponent: function() {
         this.root = {
             id: '/',
-            text: _('My saved filters'),
+            name: _('My saved filters'),
             leaf: false,
             expanded: false
         };
         
         this.loader = new Tine.widgets.grid.PersistentFilterLoader({
-            gridPanel: this.gridPanel
+            app: this.app
         });
         
-        this.listeners = {
-            scope: this,
-            click: function(node) {
-                node.select();
-                this.onFilterSelect();
-            }
-        };
-        
         Tine.widgets.grid.PersistentFilterPicker.superclass.initComponent.call(this);
+        this.on('click', function(node) {
+                if (node.isLeaf()) {
+                    node.select();
+                    this.onFilterSelect();
+                } else {
+                    node.expand();
+                    return false;
+                }
+            }, this);
     },
     
+    /**
+     * load grid from saved filter
+     * 
+     * NOTE: As all filter plugins add their data on the stores beforeload event
+     *       we need a litte hack to only present a filterid.
+     *       
+     *       When a filter is selected, we register ourselve as latest beforeload,
+     *       remove all filter data and paste our filter id. To ensure we are
+     *       always the last listener, we directly remove the listener afterwards
+     */
     onFilterSelect: function() {
-        
+        var store = this.app.getMainScreen().getContentPanel().store;
+        store.on('beforeload', this.storeOnBeforeload, this);
+        store.load();
+        this.app.getMainScreen().getTreePanel().activate(0);
+    },
+    
+    storeOnBeforeload: function(store, options) {
+        options.params.filter = this.getSelectionModel().getSelectedNode().id;
+        store.un('beforeload', this.storeOnBeforeload);
     }
     
 });
@@ -55,75 +74,77 @@ Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Ext.tree.TreeLoader, {
     displayLength: 25,
     
     /**
-     * @cfg {Tine.widgets.app.GridPanel}
+     * @cfg {application}
      */
-    gridPanel: null,
+    app: null,
+    
+    // trick parent
+    url: true,
     
     /**
      * @private
      */
-    load: function(node, callback) {
-        var model = this.gridPanel.store.reader.recordType.getMeta('appName') + '_Model_' + this.gridPanel.store.reader.recordType.getMeta('modelName');
+    requestData: function(node, callback){
+        var gridPanel = this.app.getMainScreen().getContentPanel();
         
-        Ext.Ajax.request({
-            params: {
-                method: 'Tinebase_PersistentFilter.search',
-                filter: Ext.util.JSON.encode([
-                    {field: 'model', operator: 'equals', value: model}
-                ])
-            },
-            success: function() {
-                console.log(arguments);
-                callback.call(this);
+        var model = gridPanel.store.reader.recordType.getMeta('appName') + '_Model_' + gridPanel.store.reader.recordType.getMeta('modelName') + 'Filter';
+        
+        if(this.fireEvent("beforeload", this, node, callback) !== false){
+            
+            this.transId = Ext.Ajax.request({
+                params: {
+                    method: 'Tinebase_PersistentFilter.search',
+                    filter: Ext.util.JSON.encode([
+                        {field: 'model', operator: 'equals', value: model}
+                    ])
+                },
+                success: this.handleResponse,
+                failure: this.handleFailure,
+                scope: this,
+                argument: {callback: callback, node: node}
+            });
+        } else {
+            // if the load is cancelled, make sure we notify
+            // the node that we are done
+            if(typeof callback == "function"){
+                callback();
             }
-        });
+        }
+    },
+    
+    processResponse : function(response, node, callback){
+        var data = Ext.util.JSON.decode(response.responseText);
+        var o = data.results;
+        
+        try {
+            node.beginUpdate();
+            for(var i = 0, len = o.length; i < len; i++){
+                var n = this.createNode(o[i]);
+                if(n){
+                    node.appendChild(n);
+                }
+            }
+            node.endUpdate();
+            if(typeof callback == "function"){
+                callback(this, node);
+            }
+        }catch(e){
+            this.handleFailure(response);
+        }
     },
     
     /**
      * @private
-     *
+     */
     createNode: function(attr) {
+        node = {
+            text: attr.name,
+            id: attr.id,
+            //cls: 'file',
+            leaf: attr.leaf === false ? attr.leaf : true,
+            filter: attr
+        };
         
-        // map attributes from Tinebase_Container to attrs from ExtJS
-        if (attr.name) {
-            if (!attr.account_grants.account_id){
-                // temporary workaround, for a Zend_Json::encode problem
-                attr.account_grants = Ext.util.JSON.decode(attr.account_grants);
-            }
-            attr = {
-                containerType: 'singleContainer',
-                container: attr,
-                text: attr.name,
-                id: attr.id,
-                cls: 'file',
-                leaf: true
-            };
-        } else if (attr.accountDisplayName) {
-            attr = {
-                containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-                text: attr.accountDisplayName,
-                id: attr.accountId,
-                cls: 'folder',
-                leaf: false,
-                owner: attr
-            };
-        }
-                
-        attr.qtip = Ext.util.Format.htmlEncode(attr.text);
-        attr.text = Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(attr.text, this.displayLength));
-        
-        // apply baseAttrs, nice idea Corey!
-        if(this.baseAttrs){
-            Ext.applyIf(attr, this.baseAttrs);
-        }
-        if(this.applyLoader !== false){
-            attr.loader = this;
-        }
-        if(typeof attr.uiProvider == 'string'){
-           attr.uiProvider = this.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
-        }
-        return(attr.leaf ?
-                        new Ext.tree.TreeNode(attr) :
-                        new Ext.tree.AsyncTreeNode(attr));
-    }*/
+        return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
+    }
  });
