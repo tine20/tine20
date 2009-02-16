@@ -264,7 +264,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                                             }
                                             break;
                                         case 'shared':
-                                            containerid = parts[1];
+                                            containerId = parts[1];
                                             scope.selectPath('/root/all/shared/' + containerId);
                                             break;
                                         default:
