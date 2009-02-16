@@ -52,6 +52,13 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
     getValue: Ext.emptyFn,
     
     /**
+     * main method which must set the filter from given data
+     * 
+     * @param {Array} all filters
+     */
+    setValue: Ext.emptyFn,
+    
+    /**
      * plugin method of Ext.grid.GridPanel
      * 
      * @oaran {Ext.grid.GridPanel} grid
@@ -66,6 +73,7 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
      */
     doBind: function() {
         this.store.on('beforeload', this.onBeforeLoad, this);
+        this.store.on('load', this.onLoad, this);
     },
     
     /**
@@ -93,6 +101,17 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
             for (var i=0; i<value.length; i++) {
                 filter.push(value[i]);
             }
+        }
+    },
+    
+    /**
+     * called after store data loaded
+     */
+    onLoad: function(store, options) {
+        if (Ext.isArray(store.proxy.jsonReader.jsonData.filter)) {
+            
+            // filter plugin has to 'pick' its records
+            this.setValue(store.proxy.jsonReader.jsonData.filter);
         }
     }
 });
