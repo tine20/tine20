@@ -177,6 +177,7 @@ class Tinebase_Core
      * @param string $errstr
      * @param string $errfile
      * @param integer $errline
+     * @throws ErrorException
      */
     public static function exceptionErrorHandler($severity, $errstr, $errfile, $errline )
     {
