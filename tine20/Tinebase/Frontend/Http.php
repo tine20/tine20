@@ -111,6 +111,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/widgets/grid/ExportButton.js',
             'Tinebase/js/widgets/grid/FilterToolbar.js',
             'Tinebase/js/widgets/grid/FilterSelectionModel.js',
+            'Tinebase/js/widgets/grid/PersistentFilterPicker.js',
             'Tinebase/js/widgets/tags/TagsPanel.js',
             'Tinebase/js/widgets/tags/TagCombo.js',
             'Tinebase/js/widgets/tags/TagFilter.js',
