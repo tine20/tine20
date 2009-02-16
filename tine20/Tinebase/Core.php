@@ -170,9 +170,17 @@ class Tinebase_Core
         }
     }
     
-    public static function exceptionErrorHandler($errno, $errstr, $errfile, $errline )
+    /**
+     * tines error expeption handler for catchable fatal errors
+     *
+     * @param integer $severity
+     * @param string $errstr
+     * @param string $errfile
+     * @param integer $errline
+     */
+    public static function exceptionErrorHandler($severity, $errstr, $errfile, $errline )
     {
-        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+        throw new ErrorException($errstr, 0, $severity, $errfile, $errline);
     }
     
     /**
@@ -302,7 +310,12 @@ class Tinebase_Core
         define('TINE20_CODENAME',      'trunk');
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
-        
+
+        if (TINE20_BUILDTYPE == 'RELEASE') {
+            // set error mode to suppress notices & warnings in release mode
+            error_reporting(E_ERROR);
+        }
+                
         $session = new Zend_Session_Namespace('tinebase');
         
         if (!isset($session->jsonKey)) {
