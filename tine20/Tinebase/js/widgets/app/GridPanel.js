@@ -396,7 +396,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         }
         
         // save used filter
-        this.store.lastFilter = options.params.filter;
+        this.store.lastFilter = this.store.reader.jsonData.filter;
     },
     
     /**
