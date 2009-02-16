@@ -35,6 +35,12 @@ Tine.Addressbook.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         this[type + 'GridPanel'].store.load();
     },
     
+    getContentPanel: function() {
+        // which content panel?
+        var type = this.activeContentType;
+        return this[type + 'GridPanel'];
+    },
+    
     /**
      * sets toolbar in mainscreen
      */
@@ -74,7 +80,11 @@ Tine.Addressbook.TreePanel = function(config) {
 }
 Ext.extend(Tine.Addressbook.TreePanel , Tine.widgets.container.TreePanel);
 
-Tine.Addressbook.FilterPanel = Tine.widgets.grid.PersistentFilterPicker;
+Tine.Addressbook.FilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Addressbook.FilterPanel.superclass.constructor.call(this);
+};
+Ext.extend(Tine.Addressbook.FilterPanel, Tine.widgets.grid.PersistentFilterPicker);
 
 /**************************** edit dialog **********************************/
 
