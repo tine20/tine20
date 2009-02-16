@@ -62,7 +62,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     
     storeOnBeforeload: function(store, options) {
         options.params.filter = this.getSelectionModel().getSelectedNode().id;
-        store.un('beforeload', this.storeOnBeforeload);
+        store.un('beforeload', this.storeOnBeforeload, this);
     }
     
 });
