@@ -60,6 +60,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'price_unit'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
         'is_open'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),    
+        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),    
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

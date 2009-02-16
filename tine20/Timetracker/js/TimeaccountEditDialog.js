@@ -116,8 +116,18 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             forceSelection: true,
                             triggerAction: 'all',
                             store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
-                            //checkboxLabel: this.app.i18n._('Times could be added')
-                        
+                        }, {
+                            fieldLabel: this.app.i18n._('Billed'),
+                            name: 'status',
+                            xtype: 'combo',
+                            mode: 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store: [
+                                [this.app.i18n._('not yet billed'), this.app.i18n._('not yet billed')], 
+                                [this.app.i18n._('to bill'), this.app.i18n._('to bill')],
+                                [this.app.i18n._('billed'), this.app.i18n._('billed')]
+                            ]
                         }]] 
                 }, {
                     // activities and tags

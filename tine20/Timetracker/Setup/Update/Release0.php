@@ -30,4 +30,26 @@ class Timetracker_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Timetracker', '0.2');
     }
+
+    /**
+     * update function 2
+     * - add status to timeaccounts
+     *
+     */    
+    public function update_2()
+    {
+        $field = '<field>
+            <name>status</name>
+            <type>enum</type>
+            <value>not yet billed</value>
+            <value>to bill</value>
+            <value>billed</value>
+            <notnull>true</notnull>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('timetracker_timeaccount', $declaration);
+        
+        $this->setApplicationVersion('Timetracker', '0.3');
+    }
 }
