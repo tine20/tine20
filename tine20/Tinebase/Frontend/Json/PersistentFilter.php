@@ -69,7 +69,7 @@ class Tinebase_Frontend_Json_PersistentFilter
         
         $filter = new $persistentFilter->model(unserialize($persistentFilter->filters));
         
-        $result = $filter->toArray(TRUE);
+        //$result = $filter->toArray(TRUE);
         
         return $filter;
     }
