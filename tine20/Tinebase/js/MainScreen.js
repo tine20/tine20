@@ -440,7 +440,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                     callback : function(options, Success, response) {
                         // remove the event handler
                         // the reload() trigers the unload event
-                        window.location = window.location;
+                        window.location = window.location.href.replace(/#+.*/, '');
                     }
                 });
             }
