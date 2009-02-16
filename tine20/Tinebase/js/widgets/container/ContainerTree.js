@@ -346,6 +346,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 			addContainer: function() {
 				Ext.MessageBox.prompt(String.format(translation._('New {0}'), this.containerName), String.format(translation._('Please enter the name of the new {0}:'), this.containerName), function(_btn, _text) {
                     if( this.ctxNode && _btn == 'ok') {
+                        if (! _text) {
+                            Ext.Msg.alert(String.format(translation._('No {0} added'), this.containerName), String.format(translation._('You have to supply a {0} name!'), this.containerName));
+                            return;
+                        }
 						Ext.MessageBox.wait(translation._('Please wait'), String.format(translation._('Creating {0}...' ), this.containerName));
 						var parentNode = this.ctxNode;
 						
@@ -401,11 +405,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 					var node = this.ctxNode;
 					Ext.MessageBox.show({
 						title: 'Rename ' + this.containerName,
-						msg: String.format(translation._('Please enter the new name of the {0}:', this.containerName)),
+						msg: String.format(translation._('Please enter the new name of the {0}:'), this.containerName),
 						buttons: Ext.MessageBox.OKCANCEL,
 						value: node.text,
 						fn: function(_btn, _text){
 							if (_btn == 'ok') {
+                                if (! _text) {
+                                    Ext.Msg.alert(String.format(translation._('Not renamed {0}'), this.containerName), String.format(translation._('You have to supply a {0} name!'), this.containerName));
+                                    return;
+                                }
 								Ext.MessageBox.wait(translation._('Please wait'), String.format(translation._('Updating {0} "{1}"'), this.containerName, node.text));
 								
 								Ext.Ajax.request({
@@ -440,7 +448,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                         modal: true,
                         width: 700,
                         height: 450,
-                        title: String.format(_('Manage Permissions for {0} :"{1}"'), this.containerName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                        title: String.format(_('Manage Permissions for {0} "{1}"'), this.containerName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
                         contentPanelConstructor: 'Tine.widgets.container.grantDialog',
                         contentPanelConstructorConfig: {
                             containerName: this.containerName,
