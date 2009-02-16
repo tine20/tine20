@@ -119,6 +119,24 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     }  
     
     /****************************************** helper functions ***********************************/
+    
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    {
+        $result = parent::_multipleRecordsToJson($_records);
+        
+        foreach ($result as &$contact) {
+            $contact['jpegphoto'] = $this->_getImageLink($contact);
+        }
+        
+        return $result;
+    }
+    
 
     /**
      * returns contact prepared for json transport
@@ -141,29 +159,8 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         return $result;
     }
 
-    /**
-     * returns multiple contacts prepared for json transport
-     *
-     * @param Tinebase_Record_RecordSet $_contacts Addressbook_Model_Contact
-     * @return array contacts data
-     * 
-     * @deprecated 
-     */
-    protected function _multipleContactsToJson(Tinebase_Record_RecordSet $_contacts)
-    {        
-        // get acls for contacts
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_contacts, Tinebase_Core::get('currentAccount'));
-        
-        $_contacts->setTimezone(Tinebase_Core::get('userTimeZone'));
-        $result = $_contacts->toArray();
-        
-        foreach ($result as &$contact) {
-            $contact['jpegphoto'] = $this->_getImageLink($contact);
-        }
-        
-        return $result;
-    }
     
+
     /**
      * returns a image link
      * 
