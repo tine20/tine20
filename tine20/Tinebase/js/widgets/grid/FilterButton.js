@@ -53,6 +53,18 @@ Ext.extend(Tine.widgets.grid.FilterButton, Ext.Button, {
     /**
      * @private
      */
+    setValue: function(filters) {
+        for (var i=0; i<filters.length; i++) {
+            if (filters[i].field == this.field) {
+                this.toggle(this.invert ? !filters[i].value : !!filters[i].value);
+                break;
+            }
+        }
+    },
+    
+    /**
+     * @private
+     */
     handler: function() {
         this.onFilterChange();
     }
