@@ -142,6 +142,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	            text: String.format(translation._('Shared {0}'), this.containersName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_SHARED,
+                id: 'shared',
 	            children: null,
 	            leaf: null,
 				owner: null
@@ -149,6 +150,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	            text: String.format(translation._('Other Users {0}'), this.containersName),
 	            cls: 'file',
 	            containerType: 'otherUsers',
+                id: 'otherUsers',
 	            children: null,
 	            leaf: null,
 				owner: null
@@ -225,6 +227,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (!this.filterPlugin) {
             var scope = this;
             this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
+                
+                /**
+                 * gets value of this container filter
+                 */
                 getValue: function() {
                     var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
                     return [
@@ -232,6 +238,72 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                         {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
                         {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
                     ];
+                },
+                
+                /**
+                 * sets the selected container (node) of this tree
+                 * 
+                 * @param {Array} all filters
+                 */
+                setValue: function(filters) {
+                    for (var i=0; i<filters.length; i++) {
+                        if (filters[i].field == 'container_id') {
+                            switch (filters[i].operator) {
+                                case 'equals':
+                                    var parts = filters[i].value.path.replace(/^\//, '').split('/');
+                                    var userId, containerId;
+                                    switch (parts[0]) {
+                                        case 'personal':
+                                            userId = parts[1];
+                                            containerId = parts[2];
+                                            
+                                            if (userId == Tine.Tinebase.registry.get('currentAccount').accountId) {
+                                                scope.selectPath('/root/all/user/' + containerId);
+                                            } else {
+                                                scope.selectPath('/root/all/otherUsers/' + containerId);
+                                            }
+                                            break;
+                                        case 'shared':
+                                            containerid = parts[1];
+                                            scope.selectPath('/root/all/shared/' + containerId);
+                                            break;
+                                        default:
+                                            console.error('no such container type');
+                                            break;
+                                            
+                                    }
+                                    break;
+                                case 'specialNode':
+                                    switch (filters[i].value) {
+                                        case 'all':
+                                            scope.selectPath('/root/all')
+                                            break;
+                                        case 'shared':
+                                        case 'otherUsers':
+                                        case 'internal':
+                                            scope.selectPath('/root/all' + filters[i].value);
+                                            break;
+                                        default:
+                                            //throw new 
+                                            console.error('no such container_id spechial node');
+                                            break;
+                                    }
+                                    break;
+                                case 'personalNode':
+                                    if (filters[i].value == Tine.Tinebase.registry.get('currentAccount').accountId) {
+                                        scope.selectPath('/root/all/user');
+                                    } else {
+                                        //scope.expandPath('/root/all/otherUsers');
+                                        scope.selectPath('/root/all/otherUsers/' + filters[i].value);
+                                    }
+                                    break;
+                                default:
+                                    console.error('no such container_id filter operator');
+                                    break;
+                            }
+                        }
+                    }
+                    //console.log(filters);
                 }
             });
             
@@ -449,6 +521,7 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
                 containerType: 'singleContainer',
                 container: attr,
                 text: attr.name,
+                id: attr.id,
                 cls: 'file',
                 leaf: true
             };
@@ -456,6 +529,7 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
             attr = {
                 containerType: Tine.Tinebase.container.TYPE_PERSONAL,
                 text: attr.accountDisplayName,
+                id: attr.accountId,
                 cls: 'folder',
                 leaf: false,
                 owner: attr
