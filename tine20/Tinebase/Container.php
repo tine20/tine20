@@ -689,7 +689,6 @@ class Tinebase_Container
                         break;
                     }
                 }
-                
                 if (! $userId) {
                     throw new Exception('could not find container admin');
                 }
@@ -700,6 +699,7 @@ class Tinebase_Container
                 throw new Exception("unknown container type: '{$_container->type}'");
                 break;
         }
+        return $path;
     }
     
     /**
