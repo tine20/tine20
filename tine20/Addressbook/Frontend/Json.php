@@ -63,12 +63,12 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
     /**
      * delete multiple contacts
      *
-     * @param array $_contactIDs list of contactId's to delete
+     * @param array $ids list of contactId's to delete
      * @return array
      */
-    public function deleteContacts($_contactIds)
+    public function deleteContacts($ids)
     {
-        return $this->_delete($_contactIds, Addressbook_Controller_Contact::getInstance());
+        return $this->_delete($ids, Addressbook_Controller_Contact::getInstance());
     }
     
     /**
