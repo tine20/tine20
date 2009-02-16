@@ -85,7 +85,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
             });
         }
         if (this.filterPanel) {
-            Tine.Tinebase.MainScreen.setActiveTreePanel(new Ext.TabPanel({
+            this.leftTabPanel = new Ext.TabPanel({
                 border: false,
                 activeItem: 0,
                 layoutOnTabChange: true,
@@ -97,9 +97,19 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
                     items: this.filterPanel
                 }]
             
-            }), true);
+            });
+            
+            Tine.Tinebase.MainScreen.setActiveTreePanel(this.leftTabPanel, true);
         } else {
             Tine.Tinebase.MainScreen.setActiveTreePanel(this.treePanel, true);
+        }
+    },
+    
+    getTreePanel: function() {
+        if (this.leftTabPanel) {
+            return this.leftTabPanel;
+        } else {
+            return this.treePanel;
         }
     },
     
@@ -121,6 +131,10 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         
         Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
         this.gridPanel.store.load();
+    },
+    
+    getContentPanel: function() {
+        return this.gridPanel;
     },
     
     /**
