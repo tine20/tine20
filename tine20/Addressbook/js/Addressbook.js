@@ -74,7 +74,7 @@ Tine.Addressbook.TreePanel = function(config) {
 }
 Ext.extend(Tine.Addressbook.TreePanel , Tine.widgets.container.TreePanel);
 
-
+Tine.Addressbook.FilterPanel = Tine.widgets.grid.PersistentFilterPicker;
 
 /**************************** edit dialog **********************************/
 
