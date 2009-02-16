@@ -473,8 +473,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $persistentFiltersJson->save(
             Zend_Json::encode($this->_getTimesheetFilter()), 
             $filterName, 
-            'Timetracker_Model_TimesheetFilter',
-            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+            'Timetracker_Model_Timesheet'
         );
         
         // get
@@ -507,8 +506,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $persistentFiltersJson->save(
             Zend_Json::encode($tsFilter), 
             $filterName, 
-            'Timetracker_Model_TimesheetFilter',
-            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+            'Timetracker_Model_Timesheet'
         );
 
         $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
@@ -519,8 +517,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $persistentFiltersJson->save(
             Zend_Json::encode($updatedFilter), 
             $filterName, 
-            'Timetracker_Model_TimesheetFilter',
-            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+            'Timetracker_Model_Timesheet'
         );
         
         // get
