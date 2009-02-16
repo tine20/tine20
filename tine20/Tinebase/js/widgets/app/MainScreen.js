@@ -78,7 +78,29 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
             this.treePanel = new Tine[this.app.appName].TreePanel({app: this.app});
         }
         
-        Tine.Tinebase.MainScreen.setActiveTreePanel(this.treePanel, true);
+        if(!this.filterPanel && Tine[this.app.appName].FilterPanel) {
+            this.filterPanel = new Tine[this.app.appName].FilterPanel({
+                app: this.app,
+                treePanel: this.treePanel
+            });
+        }
+        if (this.filterPanel) {
+            Tine.Tinebase.MainScreen.setActiveTreePanel(new Ext.TabPanel({
+                border: false,
+                activeItem: 0,
+                layoutOnTabChange: true,
+                items: [{
+                    title: _('Containers'),
+                    items: this.treePanel
+                }, {
+                    title: _('Filter'),
+                    items: this.filterPanel
+                }]
+            
+            }), true);
+        } else {
+            Tine.Tinebase.MainScreen.setActiveTreePanel(this.treePanel, true);
+        }
     },
     
     /**
