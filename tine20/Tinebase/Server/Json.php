@@ -80,9 +80,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 $applicationName = ucfirst($applicationParts[0]);
                 
                 switch($applicationName) {
+                    // additional Tinebase json apis
                     case 'Tinebase_Container':
-                        // additional Tinebase json apis
                         $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');                
+                        break;
+                    case 'Tinebase_PersistentFilter':
+                        $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');                
                         break;
                         
                     default;
