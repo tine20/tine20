@@ -123,6 +123,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             mode: 'local',
                             forceSelection: true,
                             triggerAction: 'all',
+                            value: 'not yet billed',
                             store: [
                                 ['not yet billed', this.app.i18n._('not yet billed')], 
                                 ['to bill', this.app.i18n._('to bill')],
