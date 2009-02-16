@@ -60,12 +60,12 @@ class Tinebase_Frontend_Json_PersistentFilter
     /**
      * loads a persistent filter
      *
-     * @param string $_filterId
+     * @param string $filterId
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    public function get($_filterId)
+    public function get($filterId)
     {
-        $persistentFilter = $this->_backend->get($_filterId);
+        $persistentFilter = $this->_backend->get($filterId);
         
         $filter = new $persistentFilter->model(unserialize($persistentFilter->filters));
         
@@ -77,29 +77,34 @@ class Tinebase_Frontend_Json_PersistentFilter
     /**
      * save persistent filter
      *
-     * @param string $_filter
-     * @param string $_name
-     * @param string $_filterModel
+     * @param string $filterData
+     * @param string $name
+     * @param string $model
      * 
      * @todo check if filter model is filter group
      */
-    public function save($_filter, $_name, $_filterModel, $_applicationId) 
+    public function save($filterData, $name, $model) 
     {
-        $filter = new $_filterModel(array());
-        $filter->setFromJsonInUsersTimezone($_filter);
+        list($appName, $ns, $modelName) = explode('_', $model);
+        
+        $filterModel = "{$appName}_Model_{$modelName}Filter";
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
+        
+        $filter = new $filterModel(array());
+        $filter->setFromJsonInUsersTimezone($filterData);
 
         $persistentFilter = new Tinebase_Model_PersistentFilter(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
-            'application_id'    => $_applicationId,
+            'application_id'    => $applicationId,
             'model'             => get_class($filter),
             'filters'           => serialize($filter->toArray()),
-            'name'              => $_name
+            'name'              => $name
         ));
         
         // check if exists
         $searchFilter = new Tinebase_Model_PersistentFilterFilter(array(
-            array('field' => 'name',            'operator' => 'equals', 'value' => $_name),
-            array('field' => 'application_id',  'operator' => 'equals', 'value' => $_applicationId),
+            array('field' => 'name',            'operator' => 'equals', 'value' => $name),
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => $applicationId),
         ));
         $existing = $this->_backend->search($searchFilter);
         
@@ -125,15 +130,15 @@ class Tinebase_Frontend_Json_PersistentFilter
     /**
      * delete persistent filter
      *
-     * @param string $_filterId
+     * @param string $filterId
      */
-    public function delete($_filterId) 
+    public function delete($filterId) 
     {
-        $persistentFilter = $this->_backend->get($_filterId);
+        $persistentFilter = $this->_backend->get($filterId);
         if (Tinebase_Core::getUser()->getId() != $persistentFilter->account_id) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this filter.');
         }
         
-        $this->_backend->delete($_filterId); 
+        $this->_backend->delete($filterId); 
     }
 }
