@@ -53,7 +53,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Abstract
          
          // quote field identifier
          // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
-         $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
+         $field = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
          
          // append query to select object
          foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
@@ -165,23 +165,8 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Abstract
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_value);
                     $value = '';
             }        
-        } else  {
-            
+        } else  {            
             $value = $_value;
-            
-            if (strlen($value) == 10) {
-                switch ($_operator) { 
-                    case 'before':
-                        $value .= ' 00:00:00';
-                        break;
-                    case 'after':
-                        $value .= ' 23:59:59';
-                        break;
-                    //case 'equals':
-                    //    $value .= '%';                
-                    //    break;
-                }
-            }
         }
         
         return $value;
