@@ -157,7 +157,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         
         // automaticly enable saving
-        this.allowSaving = !!this.app.getMainScreen().filterPanel;
+        if (this.app.getMainScreen().filterPanel) {
+            this.allowSaving = true;
+        }
         
         // render static table
         this.renderTable();
