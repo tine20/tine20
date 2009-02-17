@@ -776,7 +776,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
             
             var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
-                contact: selectedRows[0],
+                record: selectedRows[0],
                 listeners: {
                     scope: this,
                     'update': this.onContactUpdate
