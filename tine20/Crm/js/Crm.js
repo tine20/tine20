@@ -299,6 +299,7 @@ Tine.Crm.Main = {
         //var dataStore = this.createDataStore();
         // the filter toolbar
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            app: Tine.Tinebase.appMgr.get('Crm'),
             id : 'crmLeadsFilterToolbar',
             filterModels: [
                 {label: this.translation._('Lead'),        field: 'query',    operators: ['contains']},

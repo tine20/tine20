@@ -152,7 +152,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         Tine.widgets.grid.FilterToolbar.superclass.onRender.call(this, ct, position);
         
         // at this point the plugins are initialised
-        this.app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'));
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'));
+        }
         
         // automaticly enable saving
         this.allowSaving = !!this.app.getMainScreen().filterPanel;
