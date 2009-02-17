@@ -46,6 +46,14 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         this[type + 'GridPanel'].store.load();
     },
     
+    getContentPanel: function() {
+        // which content panel?
+        //var type = this.activeContentType;
+        
+        // we always return timesheet grid panel as a quick hack for saving filters
+        return this['Timesheet' + 'GridPanel'];
+    },
+    
     /**
      * sets toolbar in mainscreen
      */
