@@ -53,7 +53,15 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function searchTasks($filter, $paging)
     {
-        $filter = new Tasks_Model_TaskFilter(Zend_Json::decode($filter));
+        $filterData = Zend_Json::decode($filter);
+        
+        if (! is_array($filterData)) {
+            $persitentFilter = new Tinebase_Frontend_Json_PersistentFilter();
+            $filter = $persitentFilter->get($filterData);
+        } else {
+            $filter = new Tasks_Model_TaskFilter($filterData);
+        }
+        
         $pagination = new Tasks_Model_Pagination(Zend_Json::decode($paging));
         
         $tasks = Tasks_Controller_Task::getInstance()->search($filter, $pagination);
@@ -62,7 +70,8 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         return array(
             'results' => $results,
-            'totalcount' => Tasks_Controller_Task::getInstance()->searchCount($filter)
+            'totalcount' => Tasks_Controller_Task::getInstance()->searchCount($filter),
+            'filter' => $filter->toArray(true)
         );
     }
     
