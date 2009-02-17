@@ -52,6 +52,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     defaultFilter: null,
     
+    /**
+     * @cfg {Bool} allowSaving (defaults to false)
+     */
+    allowSaving: false,
+    
     border: false,
     monitorResize: true,
     region: 'north',
@@ -145,6 +150,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     onRender: function(ct, position) {
         Tine.widgets.grid.FilterToolbar.superclass.onRender.call(this, ct, position);
+        
+        // at this point the plugins are initialised
+        this.app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'));
+        
+        // automaticly enable saving
+        this.allowSaving = !!this.app.getMainScreen().filterPanel;
         
         // render static table
         this.renderTable();
@@ -275,7 +286,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 this.actions.removeAllFilters.setVisible(numFilters > 1);
                 // move save filter button
                 // tr.child('td[class=tw-ftb-frow-savefilterbutton]').insertFirst(this.actions.saveFilter.getEl());
-                this.actions.saveFilter.setVisible(numFilters > 1);
+                this.actions.saveFilter.setVisible(this.allowSaving && numFilters > 1);
             }
             
             if (filter.id == firstId) {
@@ -332,6 +343,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     initComponent: function() {
+        Tine.widgets.grid.FilterToolbar.superclass.initComponent.call(this);
+        
         this.initTemplates();
         this.initActions();
         
@@ -544,12 +557,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     scope: this,
                     success: function(result) {
                         // push into filterPanel
-                        var app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'))
-                        
-                        if (app.getMainScreen().filterPanel && app.getMainScreen().filterPanel.getRootNode().isExpanded()) {
+                        if (this.app.getMainScreen().filterPanel && this.app.getMainScreen().filterPanel.getRootNode().isExpanded()) {
                             var filter = Ext.util.JSON.decode(result.responseText);
-                            var newNode = app.getMainScreen().filterPanel.loader.createNode(filter);
-                            app.getMainScreen().filterPanel.getRootNode().appendChild(newNode);
+                            var newNode = this.app.getMainScreen().filterPanel.loader.createNode(filter);
+                            this.app.getMainScreen().filterPanel.getRootNode().appendChild(newNode);
                         }
                         Ext.Msg.hide();
                     }
