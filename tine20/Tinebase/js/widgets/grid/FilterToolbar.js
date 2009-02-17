@@ -395,7 +395,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * adds a new filer row
      */
     addFilter: function(filter) {
-        if (! filter) {
+        if (! filter || arguments[1]) {
             filter = new this.record({
                 field: this.defaultFilter
             });
@@ -491,23 +491,37 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.supressEvents = true;
         
         var oldFilterCount = this.filterStore.getCount();
+        var skipFilter = [];
         
-        for (var i=0, filterData, filter; i<filters.length; i++) {
+        var filterData, filter, existingFilterPos, existingFilter;
+        for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
             if (this.filterModelMap[filterData.field]) {
                 filter = new this.record(filterData);
-                this.addFilter(filter);
+                
+                // check if this filter is already in our store
+                existingFilterPos = this.filterStore.find('field', filterData.field);
+                existingFilter = existingFilterPos >= 0 ? this.filterStore.getAt(existingFilterPos) : null;
+                
+                // we can't detect resolved records, sorry ;-(
+                if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
+                    skipFilter.push(existingFilterPos);
+                } else {
+                    this.addFilter(filter);
+                }
             }
         }
         
-        for (var i=0; i<oldFilterCount; i++) {
-            this.deleteFilter(this.filterStore.getAt(i));
+        for (var i=oldFilterCount-1; i>=0; i--) {
+            if (skipFilter.indexOf(i) < 0) {
+                this.deleteFilter(this.filterStore.getAt(i));
+            }
         }
         
+        this.onFilterRowsChange();
         this.supressEvents = false;
     },
     
-    // NOTE: we save the last applied filter!
     onSaveFilter: function() {
         var name = '';
         Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the filter'), function(btn, value) {
@@ -523,7 +537,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 Ext.Ajax.request({
                     params: {
                         method: 'Tinebase_PersistentFilter.save',
-                        filterData: Ext.util.JSON.encode(this.store.lastFilter),
+                        filterData: Ext.util.JSON.encode(this.getAllFilterData()),
                         name: value,
                         model: model
                     },
@@ -534,6 +548,27 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 });
             }
         }, this, false, name);
+    },
+    
+    /**
+     * gets filter data of all filter plugins
+     * 
+     * NOTE: As we can't find all filter plugins directly we need a litte hack 
+     *       to get their data
+     *       
+     *       We register ourselve as latest beforeload.
+     *       In the options.filter we have the filters then.
+     */
+    getAllFilterData: function() {
+        this.store.on('beforeload', this.storeOnBeforeload, this);
+        this.store.load();
+        this.store.un('beforeload', this.storeOnBeforeload, this);
+        
+        return this.allFilterData;
+    },
+    
+    storeOnBeforeload: function(store, options) {
+        this.allFilterData = options.params.filter;
     }
     
 });
