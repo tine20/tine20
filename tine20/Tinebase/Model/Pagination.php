@@ -58,7 +58,15 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 $_select->limit($this->limit, $this->start);
             }
             if (!empty($this->sort) && !empty($this->dir)){
-                $_select->order($this->sort . ' ' . $this->dir);
+                if (is_array($this->sort)) {
+                    $order = array();
+                    foreach ($this->sort as $sort) {
+                        $order[] = $sort . ' ' . $this->dir;
+                    }
+                } else {
+                    $order = $this->sort . ' ' . $this->dir;
+                }
+                $_select->order($order);
             }
         }
     }
