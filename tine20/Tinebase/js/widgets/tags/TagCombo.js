@@ -63,8 +63,6 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     setValue: function(value) {
         if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
             this.store.loadData({results: [value]});
-            console.log(this.store);
-            
             value = value.id;
         }
         Tine.widgets.tags.TagCombo.superclass.setValue.call(this, value);
