@@ -79,5 +79,25 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         
         $_select->where($db->quoteIdentifier("{$this->_value}.tag_id") .  $this->_opSqlMap[$this->_operator]['sqlop']);
     }
-     
+    
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($_valueToJson == true) {
+            $tags = Tinebase_Tags::getInstance()->getTagsById($this->_value)->toArray();
+            if (count($tags) > 0) {
+                $result['value'] = $tags[0];
+            } else {
+                $result['value'] = '';
+            }
+        }
+        return $result;
+    }
 }
