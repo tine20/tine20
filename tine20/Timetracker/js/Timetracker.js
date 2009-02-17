@@ -12,13 +12,18 @@
  
 Ext.namespace('Tine.Timetracker');
 
-Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
-    rootVisible: false,
-    border: false,
+Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
+    
+    // quick hack to get filter saving grid working
+    //recordClass: Tine.Timetracker.Model.Timesheet,
     
     initComponent: function() {
+        this.filterMountId = 'Timesheet';
+        
         this.root = {
             id: 'root',
+            leaf: false,
+            expanded: true,
             children: [{
                 text: this.app.i18n._('Timesheets'),
                 id : 'Timesheet',
@@ -65,6 +70,8 @@ Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
     
     /**
      * returns a filter plugin to be used in a grid
+     * 
+     * ???
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
@@ -73,9 +80,9 @@ Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
                 getValue: function() {
                     var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
                     return [
-                        {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
-                        {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                        {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+                        //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
+                        //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
+                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
                     ];
                 }
             });
@@ -84,7 +91,8 @@ Tine.Timetracker.TreePanel = Ext.extend(Ext.tree.TreePanel,{
         return this.filterPlugin;
     }
 });
-    
+
+//Tine.Timetracker.FilterPanel = Tine.widgets.grid.PersistentFilterPicker
 
 
 /**
