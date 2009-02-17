@@ -98,7 +98,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {    	
         return {
             xtype: 'tabpanel',
             border: false,
@@ -225,6 +225,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }]
             }, new Tine.widgets.customfields.CustomfieldsPanel ({
                 recordClass: this.recordClass,
+                disabled: (Tine[this.appName].registry.get('customfields').length == 0),
                 quickHack: this
             }), new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
