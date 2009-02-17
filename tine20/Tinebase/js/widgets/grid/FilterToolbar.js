@@ -535,8 +535,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
         }
         
-        this.onFilterRowsChange();
         this.supressEvents = false;
+        this.onFilterRowsChange();
+        
     },
     
     onSaveFilter: function() {
