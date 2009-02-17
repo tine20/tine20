@@ -26,7 +26,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
-        'organizer'            => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'organizer'            => array('filter' => 'Tinebase_Model_Filter_User'),
         'status'               => array('filter' => 'Tinebase_Model_Filter_Int'),
         'due'                  => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
