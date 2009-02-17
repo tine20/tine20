@@ -32,15 +32,18 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
         });
         
         Tine.widgets.grid.PersistentFilterPicker.superclass.initComponent.call(this);
+        
         this.on('click', function(node) {
-                if (node.isLeaf()) {
-                    node.select();
-                    this.onFilterSelect();
-                } else {
-                    node.expand();
-                    return false;
-                }
-            }, this);
+            if (node.isLeaf()) {
+                node.select();
+                this.onFilterSelect();
+            } else {
+                node.expand();
+                return false;
+            }
+        }, this);
+        
+        this.on('contextmenu', this.onContextMenu, this);
     },
     
     /**
@@ -63,6 +66,37 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     storeOnBeforeload: function(store, options) {
         options.params.filter = this.getSelectionModel().getSelectedNode().id;
         store.un('beforeload', this.storeOnBeforeload, this);
+    },
+    
+    onContextMenu: function(node, e) {
+        var menu = new Ext.menu.Menu({
+            items: [{
+                text: _('Delete Filter'),
+                iconCls: 'action_delete',
+                scope: this,
+                handler: function() {
+                    Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the Filter "{0}"?'), node.text), function(_btn){
+                        if ( _btn == 'yes') {
+                            Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Filter "{0}"' ), this.containerName , node.text));
+                            
+                            Ext.Ajax.request({
+                                params: {
+                                    method: 'Tinebase_PersistentFilter.delete',
+                                    filterId: node.id
+                                },
+                                scope: this,
+                                success: function(){
+                                    node.unselect();
+                                    node.remove();
+                                    Ext.MessageBox.hide();
+                                }
+                            });
+                        }
+                    }, this);
+                }
+            }]
+        });
+        menu.showAt(e.getXY());
     }
     
 });
