@@ -95,7 +95,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 xtype: 'columnform',
                 formDefaults: {
                     columnWidth: 0.333,
-                    anchor: '100%',
                     labelSeparator: '',
                     xtype:'lockCombo',
                     mode: 'local',
@@ -105,7 +104,6 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true
-                    
                 },
                 items: [
                     [{
