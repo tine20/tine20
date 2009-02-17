@@ -1,0 +1,92 @@
+<?php
+class ActiveSync_Frontend_Http extends Tinebase_Application_Frontend_Abstract
+{
+    protected $_applicationName = 'Sync';
+    
+    /**
+     * backend for data storage and authentication
+     *
+     * @var ActiveSync_Controller
+     */
+    protected $_controller;
+    
+    public function __construct()
+    {
+        $this->_controller = ActiveSync_Controller::getInstance();
+    }
+    
+    /**
+     * authenticate user
+     *
+     * @param unknown_type $_username
+     * @param unknown_type $_password
+     * @param unknown_type $_ipAddress
+     * @return unknown
+     */
+    public function authenticate($_username, $_password, $_ipAddress)
+    {
+        return $this->_controller->authenticate($_username, $_password, $_ipAddress);
+    }
+    
+    /**
+     * handle options request
+     *
+     */
+    public function handleOptions()
+    {
+        // same header like Exchange 2003
+        header("MS-Server-ActiveSync: 6.5.7638.1");
+        header("MS-ASProtocolVersions: 2.5");
+        # no Notify(SMS AUTD)
+        #header("MS-ASProtocolCommands: Sync,SendMail,SmartForward,SmartReply,GetAttachment,GetHierarchy,CreateCollection,DeleteCollection,MoveCollection,FolderSync,FolderCreate,FolderDelete,FolderUpdate,MoveItems,GetItemEstimate,MeetingResponse,ResolveRecipients,ValidateCert,Provision,Search,Ping");
+        header("MS-ASProtocolCommands: FolderSync,GetItemEstimate,Ping,Provision,SendMail,Settings,Sync");
+    }
+    
+    /**
+     * handle post request
+     *
+     * @param unknown_type $_user
+     * @param unknown_type $_deviceId
+     * @param unknown_type $_deviceType
+     * @param unknown_type $_command
+     */
+    public function handlePost($_user, $_deviceId, $_deviceType, $_command)
+    {
+        if(!isset($_SERVER['HTTP_MS_ASPROTOCOLVERSION'])) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " MS-ASPROTOCOLVERSION missing (" . $_command. ')');
+            header("HTTP/1.1 400 header MS-ASPROTOCOLVERSION not found");
+            return;
+        }
+        
+        #if(!isset($_SERVER['HTTP_X_MS_POLICYKEY']) && $_command != 'Ping') {
+        #    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
+        #    header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
+        #    return;
+        #}
+        
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $asVersion = $_SERVER['HTTP_MS_ASPROTOCOLVERSION'];
+        $policyKey = (int)$_SERVER['HTTP_X_MS_POLICYKEY']; 
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $asVersion Command: $_command");
+        
+        $device = $this->_controller->getUserDevice($_deviceId, $userAgent, $asVersion);
+        
+        #if($_command != 'Provision' && $_command != 'Ping' && $policyKey != $device->policykey) {
+        #    header("HTTP/1.1 449 Retry after sending a PROVISION command");
+        #} else {
+            if(!class_exists('ActiveSync_Command_' . $_command)) {
+                throw new Exception('unsupported command ' . $_command);
+            }
+    
+            $className = 'ActiveSync_Command_' . $_command;
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " class name: $className");
+            $command = new $className($device);
+            
+            $command->handle();
+            
+            header("MS-Server-ActiveSync: 6.5.7638.1");
+            
+            $command->getResponse();            
+        #}
+    }
+}
