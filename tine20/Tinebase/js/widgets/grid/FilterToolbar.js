@@ -541,8 +541,16 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                         name: value,
                         model: model
                     },
-                    success: function() {
-                        // TODO: push somewhere
+                    scope: this,
+                    success: function(result) {
+                        // push into filterPanel
+                        var app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'))
+                        
+                        if (app.getMainScreen().filterPanel && app.getMainScreen().filterPanel.getRootNode().isExpanded()) {
+                            var filter = Ext.util.JSON.decode(result.responseText);
+                            var newNode = app.getMainScreen().filterPanel.loader.createNode(filter);
+                            app.getMainScreen().filterPanel.getRootNode().appendChild(newNode);
+                        }
                         Ext.Msg.hide();
                     }
                 });
