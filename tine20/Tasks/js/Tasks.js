@@ -24,6 +24,8 @@ Tine.Tasks.TreePanel = function(config) {
 }
 Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel);
 
+Tine.Tasks.FilterPanel = Tine.widgets.grid.PersistentFilterPicker;
+
 // Task model
 Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
