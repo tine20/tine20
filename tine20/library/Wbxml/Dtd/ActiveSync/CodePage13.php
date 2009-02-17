@@ -27,11 +27,11 @@ class Wbxml_Dtd_ActiveSync_CodePage13 extends Wbxml_Dtd_ActiveSync_Abstract
         'Ping'                   => 0x05,
         'AutdState'              => 0x06,   //unused
         'Status'                 => 0x07,
-        'LifeTime'               => 0x08,   // should be HeartBeatInterval
+        'HeartBeatInterval'      => 0x08, 
         'Folders'                => 0x09,
         'Folder'                 => 0x0a,
-        'ServerEntryId'          => 0x0b,   // should be Id
-        'FolderType'             => 0x0c,   // should be Class
+        'Id'                     => 0x0b,
+        'Class'                  => 0x0c,
         'MaxFolders'             => 0x0d
     );
 }
