@@ -11,7 +11,7 @@
  */
 
 /**
- * class documentation
+ * class to convert XML to WBXML
  *
  * @package     Wbxml
  * @subpackage  Wbxml
