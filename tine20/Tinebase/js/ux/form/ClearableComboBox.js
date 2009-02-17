@@ -61,7 +61,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
     
     // clear contents of combobox
     onTrigger1Click : function() {
-        this.reset();
+        this.clearValue();
         this.fireEvent('select', this, this.getRawValue(), this.startValue);
         this.startValue = this.getRawValue();
         this.triggers[0].hide();
@@ -75,6 +75,13 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         Ext.ux.form.ClearableComboBox.superclass.onSelect.call(this, combo, record, index);
         this.startValue = this.getValue();
         this.triggers[0].show();
+    },
+    
+    setValue: function(value) {
+        Ext.ux.form.ClearableComboBox.superclass.setValue.call(this, value);
+        if (value) {
+            this.triggers[0].show();
+        }
     }
 
 });
