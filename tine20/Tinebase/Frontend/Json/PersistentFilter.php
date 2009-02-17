@@ -123,8 +123,7 @@ class Tinebase_Frontend_Json_PersistentFilter
             $persistentFilter = $this->_backend->create($persistentFilter);
         }
         
-        // return something here?
-        //return $filter->toJson();
+        return $persistentFilter->toArray();
     }
     
     /**
