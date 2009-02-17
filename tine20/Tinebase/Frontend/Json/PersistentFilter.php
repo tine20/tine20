@@ -45,7 +45,13 @@ class Tinebase_Frontend_Json_PersistentFilter
         $decodedFilter = Zend_Json::decode($filter);
         $filter = new Tinebase_Model_PersistentFilterFilter(!empty($decodedFilter) ? $decodedFilter : array());
         
-        $result = $this->_backend->search($filter)->toArray();
+        $result = $this->_backend->search(
+            $filter,
+            new Tinebase_Model_Pagination(array(
+                'dir'       => 'ASC',
+                'sort'      => array('name', 'creation_time')
+            ))
+        )->toArray();
         
         foreach ($result as &$record) {
             $record['filters'] = unserialize($record['filters']);
