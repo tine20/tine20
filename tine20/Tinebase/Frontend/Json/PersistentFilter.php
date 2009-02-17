@@ -80,19 +80,22 @@ class Tinebase_Frontend_Json_PersistentFilter
      * @param string $filterData
      * @param string $name
      * @param string $model
-     * 
-     * @todo check if filter model is filter group
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function save($filterData, $name, $model) 
     {
         list($appName, $ns, $modelName) = explode('_', $model);
         
         $filterModel = "{$appName}_Model_{$modelName}Filter";
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
-        
         $filter = new $filterModel(array());
+        
+        if (!is_subclass_of($filter, 'Tinebase_Model_Filter_FilterGroup')) {
+            throw new Tinebase_Exception_InvalidArgument('Filter Model has to be subclass of Tinebase_Model_Filter_FilterGroup.');
+        }
+        
+        // set filter data und create persistent filter record
         $filter->setFromJsonInUsersTimezone($filterData);
-
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
         $persistentFilter = new Tinebase_Model_PersistentFilter(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
             'application_id'    => $applicationId,
@@ -110,12 +113,8 @@ class Tinebase_Frontend_Json_PersistentFilter
         
         if (count($existing) > 0) {
             $persistentFilter->setId($existing[0]->getId());
-            
-            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-            $modLog->manageConcurrentUpdates($persistentFilter, $existing[0], 'Tinebase_Model_PersistentFilter', 'Sql', $persistentFilter->getId());
-            $modLog->setRecordMetaData($persistentFilter, 'update', $existing[0]);
-            $currentMods = $modLog->writeModLog($persistentFilter, $existing[0],'Tinebase_Model_PersistentFilter', 'Sql', $persistentFilter->getId());
-            
+
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($persistentFilter, 'update', $existing[0]);            
             $persistentFilter = $this->_backend->update($persistentFilter);
             
         } else {
