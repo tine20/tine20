@@ -19,12 +19,33 @@
  
 abstract class Wbxml_Dtd_ActiveSync_Abstract
 {
+    /**
+     * codepage number
+     *
+     * @var integer
+     */
     protected $_codePageNumber  = NULL;
             
+    /**
+     * codepage name
+     *
+     * @var string
+     */
     protected $_codePageName    = NULL;
 
+    /**
+     * document page identifier
+     * not needed for ActiveSync
+     *
+     * @var integer
+     */
     protected $_dpi             = NULL;
     
+    /**
+     * mapping of tags to id's
+     *
+     * @var array
+     */
     protected $_tags            = array();
     
     /**
@@ -38,16 +59,32 @@ abstract class Wbxml_Dtd_ActiveSync_Abstract
         return $this->_dpi;
     }
     
+    /**
+     * get codepage name
+     *
+     * @return string
+     */
     public function getCodePageName()
     {
         return $this->_codePageName;
     }
     
+    /**
+     * get namespace identifier
+     *
+     * @return string
+     */
     public function getNameSpace()
     {
         return 'uri:' . $this->_codePageName;
     }
     
+    /**
+     * get tag identifier
+     *
+     * @param string $_tag the tag name
+     * @return integer
+     */
     public function getIdentity($_tag)
     {
         if(!isset($this->_tags[$_tag])) {
