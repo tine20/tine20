@@ -65,7 +65,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             activeTab: 0,
             border: false,
             items:[{               
-                title: this.app.i18n._('Timeaccount'),
+                title: this.app.i18n._('Time Account'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -173,7 +173,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     })]
                 }]
             },{
-                title: 'Access',
+                title: this.app.i18n._('Access'),
                 layout: 'fit',
                 items: [this.getGrantsGrid()]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
