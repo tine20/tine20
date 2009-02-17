@@ -6,20 +6,20 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
 
 /**
- * Tinebase_Model_Filter_Date
+ * Tinebase_Model_Filter_DateTime
  * 
  * @package     Tinebase
  * @subpackage  Filter
  * 
  * filters date in one property
  */
-class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Abstract
 {
     /**
      * @var array list of allowed operators
@@ -73,7 +73,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @todo fix problem with day of week in 'this week' filter (sunday is first day of the week in english locales) 
      * --> get that info from locale
      */
-    protected function _getDateValues($_operator, $_value, $_dateFormat = 'yyyy-MM-dd')
+    protected function _getDateValues($_operator, $_value, $_dateFormat = 'yyyy-MM-dd HH:mm:ss')
     {        
         if ($_operator === 'within') {
             $date = new Zend_Date();
@@ -123,8 +123,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $date->sub(1, Zend_Date::YEAR);
                 case 'yearThis':
                     $value = array(
-                        $date->toString('yyyy') . '-01-01', 
-                        $date->toString('yyyy') . '-12-31',
+                        $date->toString('yyyy') . '-01-01 00:00:00', 
+                        $date->toString('yyyy') . '-12-31 23:59:59',
                     );                
                     break;
                 case 'quarterNext':
@@ -134,17 +134,17 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 case 'quarterThis':
                     $month = $date->get(Zend_Date::MONTH);
                     if ($month < 4) {
-                        $first = $date->toString('yyyy' . '-01-01');
-                        $last = $date->toString('yyyy' . '-03-31');
+                        $first = $date->toString('yyyy' . '-01-01 00:00:00');
+                        $last = $date->toString('yyyy' . '-03-31 23:59:59');
                     } elseif ($month < 7) {
-                        $first = $date->toString('yyyy' . '-04-01');
-                        $last = $date->toString('yyyy' . '-06-30');
+                        $first = $date->toString('yyyy' . '-04-01 00:00:00');
+                        $last = $date->toString('yyyy' . '-06-30 23:59:59');
                     } elseif ($month < 10) {
-                        $first = $date->toString('yyyy' . '-07-01');
-                        $last = $date->toString('yyyy' . '-09-30');
+                        $first = $date->toString('yyyy' . '-07-01 00:00:00');
+                        $last = $date->toString('yyyy' . '-09-30 23:59:59');
                     } else {
-                        $first = $date->toString('yyyy' . '-10-01');
-                        $last = $date->toString('yyyy' . '-12-31');
+                        $first = $date->toString('yyyy' . '-10-01 00:00:00');
+                        $last = $date->toString('yyyy' . '-12-31 23:59:59');
                     }
                     $value = array(
                         $first, 
@@ -157,8 +157,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $date->sub(1, Zend_Date::DAY);
                 case 'today':
                     $value = array(
-                        $date->toString('yyyy-MM-dd'), 
-                        $date->toString('yyyy-MM-dd'), 
+                        $date->toString($_dateFormat), 
+                        $date->toString($_dateFormat), 
                     );                
                     break;
                 default:
@@ -166,7 +166,22 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $value = '';
             }        
         } else  {
-            $value = substr($_value, 0, 10);
+            
+            $value = $_value;
+            
+            if (strlen($value) == 10) {
+                switch ($_operator) { 
+                    case 'before':
+                        $value .= ' 00:00:00';
+                        break;
+                    case 'after':
+                        $value .= ' 23:59:59';
+                        break;
+                    //case 'equals':
+                    //    $value .= '%';                
+                    //    break;
+                }
+            }
         }
         
         return $value;
