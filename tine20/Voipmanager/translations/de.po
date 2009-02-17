@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-15 11:02+0100\n"
-"PO-Revision-Date: 2009-02-12 12:57+0100\n"
+"PO-Revision-Date: 2009-02-17 13:41+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -568,11 +568,10 @@ msgstr[0] "Name"
 msgstr[1] "Name"
 
 #: js/Models.js:278
-#, fuzzy
 msgid "Line"
 msgid_plural "Lines"
-msgstr[0] "Ton"
-msgstr[1] "Ton"
+msgstr[0] "Line"
+msgstr[1] "Lines"
 
 #: js/Models.js:282
 msgid "lines list"
@@ -1130,14 +1129,12 @@ msgid "Software Id"
 msgstr "Software-ID"
 
 #: js/Voipmanager.js:25
-#, fuzzy
 msgid "Asterisk"
-msgstr "Besitzer"
+msgstr "Asterisk"
 
 #: js/Voipmanager.js:42
-#, fuzzy
 msgid "Dialplan"
-msgstr "Nicht ermöglicht"
+msgstr "Dialplan"
 
 #: js/Voipmanager.js:83
 msgid "Queues"
