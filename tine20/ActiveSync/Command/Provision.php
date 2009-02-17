@@ -29,7 +29,6 @@ class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml
      * process the XML file and add, change, delete or fetches data 
      *
      * @todo can we get rid of LIBXML_NOWARNING
-     * @todo we need to stored the initial data for folders and lifetime as the phone is sending them only when they change
      * @return resource
      */
     public function handle()

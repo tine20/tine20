@@ -57,7 +57,6 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     {
         $controller = ActiveSync_Controller::getInstance();
         
-        #$lifeTime = 480;
         $intervalStart = mktime();
         $status = self::STATUS_NO_CHANGES_FOUND;
         
@@ -67,21 +66,21 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             $xml = new SimpleXMLElement($this->_inputDom->saveXML(), LIBXML_NOWARNING);
             $xml->registerXPathNamespace('Ping', 'Ping');    
 
-            if(isset($xml->LifeTime)) {
-                $this->_device->pinglifetime = $xml->LifeTime;
+            if(isset($xml->HeartBeatInterval)) {
+                $this->_device->pinglifetime = $xml->HeartBeatInterval;
             }
             
             if(isset($xml->Folders->Folder)) {
                 foreach ($xml->Folders->Folder as $folderXml) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " folderType: " . print_r($folderXml, true));
-                    #$folderBackend = $this->_backend->factory((string)$folderXml->FolderType);
+                    #$folderBackend = $this->_backend->factory((string)$folderXml->Class);
                     try {
                         // does the folder exist?
-            #            $folderBackend->getFolder($folderXml->ServerEntryId);
+            #            $folderBackend->getFolder($folderXml->Id);
                         
                         $folder = array(
-                            'serverEntryId' => (string)$folderXml->ServerEntryId,
-                            'folderType'    => (string)$folderXml->FolderType
+                            'serverEntryId' => (string)$folderXml->Id,
+                            'folderType'    => (string)$folderXml->Class
                         );
                         
                         $folders[] = $folder;                
@@ -171,7 +170,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             $folders = $ping->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folders'));
             foreach($folderWithChanges as $changedFolder) {
                 $folder = $folders->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folder', $changedFolder['serverEntryId']));
-                #$folder->appendChild($this->_outputDom->createElementNS('uri:Ping', 'ServerEntryId', $changedFolder['serverEntryId']));
+                #$folder->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Id', $changedFolder['serverEntryId']));
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_deviceId . " changes in folder: " . $changedFolder['serverEntryId']);
             }
         }
