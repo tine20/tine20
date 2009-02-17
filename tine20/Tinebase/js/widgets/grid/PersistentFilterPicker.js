@@ -15,35 +15,59 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      * @cfg {application}
      */
     app: null,
+    /**
+     * @cfg {String} filterMountId
+     * mount point of persitant filter folder
+     */
+    filterMountId: '/',
     
     autoScroll: true,
     border: false,
     
-    initComponent: function() {
-        this.root = {
-            id: '/',
-            name: _('My saved filters'),
-            leaf: false,
-            expanded: false
-        };
+    rootVisible: false,
         
+    initComponent: function() {
         this.loader = new Tine.widgets.grid.PersistentFilterLoader({
             app: this.app
         });
         
+        if (! this.root) {
+            this.root = new Ext.tree.TreeNode({
+                id: '/',
+                leaf: false,
+                expanded: true
+            });
+        }
+        
         Tine.widgets.grid.PersistentFilterPicker.superclass.initComponent.call(this);
         
         this.on('click', function(node) {
-            if (node.isLeaf()) {
+            if (node.attributes.isPersistentFilter) {
                 node.select();
                 this.onFilterSelect();
-            } else {
+            } else if (node.id == '_persistentFilters') {
                 node.expand();
                 return false;
             }
         }, this);
         
         this.on('contextmenu', this.onContextMenu, this);
+    },
+    
+    /**
+     * @private
+     */
+    afterRender: function() {
+        Tine.widgets.grid.PersistentFilterPicker.superclass.afterRender.call(this);
+        
+        var filterNode = new Ext.tree.AsyncTreeNode({
+            text: _('My saved filters'),
+            id: '_persistentFilters',
+            leaf: false,
+            expanded: false
+        });
+        
+        this.getNodeById(this.filterMountId).appendChild(filterNode);
     },
     
     /**
@@ -60,7 +84,10 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
         var store = this.app.getMainScreen().getContentPanel().store;
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load();
-        this.app.getMainScreen().getTreePanel().activate(0);
+        
+        if (typeof this.app.getMainScreen().getTreePanel().activate == 'function') {
+            this.app.getMainScreen().getTreePanel().activate(0);
+        }
     },
     
     storeOnBeforeload: function(store, options) {
@@ -69,6 +96,10 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     },
     
     onContextMenu: function(node, e) {
+        if (! node.isPersistentFilter) {
+            return;
+        }
+        
         var menu = new Ext.menu.Menu({
             items: [{
                 text: _('Delete Filter'),
@@ -171,14 +202,14 @@ Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Ext.tree.TreeLoader, {
      * @private
      */
     createNode: function(attr) {
-        node = {
+        var isPersistentFilter = !!attr.model && !!attr.filters,
+        node = isPersistentFilter ? {
+            isPersistentFilter: isPersistentFilter,
             text: attr.name,
             id: attr.id,
-            //cls: 'file',
             leaf: attr.leaf === false ? attr.leaf : true,
             filter: attr
-        };
-        
+        } : attr;
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
     }
  });
