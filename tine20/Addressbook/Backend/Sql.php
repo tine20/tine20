@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -23,6 +23,7 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      */
     public function __construct ()
     {
+        $this->_modlogActive = TRUE;
         parent::__construct(SQL_TABLE_PREFIX . 'addressbook', 'Addressbook_Model_Contact');
     }
     
@@ -44,5 +45,4 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $result = new Addressbook_Model_Contact($row);
         return $result;
     }
-
 }
