@@ -530,8 +530,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         /**** end of foreign timeaccount_id hack ****/
         
-        console.log(filters);
-        
         for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
             
