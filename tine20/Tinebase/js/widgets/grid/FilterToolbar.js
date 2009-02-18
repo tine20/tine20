@@ -511,8 +511,30 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         var skipFilter = [];
         
         var filterData, filter, existingFilterPos, existingFilter;
+        
+        /**** foreign timeaccount_id hack ****/
         for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
+            
+            if (filterData.field.match(/^timeaccount_/)) {
+                filters.remove(filters[i]);
+                
+                var taFilters = filterData.value;
+                for (var j=taFilters.length -1; j>=0; j--) {
+                    taFilters[j].field = 'timeaccount_' + taFilters[j].field;
+                    filters.splice(i, 0, taFilters[j]);
+                }
+
+                break;
+            }
+        }
+        /**** end of foreign timeaccount_id hack ****/
+        
+        console.log(filters);
+        
+        for (var i=0; i<filters.length; i++) {
+            filterData = filters[i];
+            
             if (this.filterModelMap[filterData.field]) {
                 filter = new this.record(filterData);
                 
