@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        extend Tinebase_Model_Filter_Date and overwrite some functions (toArray, ....)
  */
 
 /**

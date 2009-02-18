@@ -46,22 +46,40 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      *
      * @param Zend_Db_Select $_select
      */
-     public function appendFilterSql($_select)
-     {
-         // prepare value
-         $value = (array)$this->_getDateValues($this->_operator, $this->_value);
+    public function appendFilterSql($_select)
+    {
+        // prepare value
+        $value = (array)$this->_getDateValues($this->_operator, $this->_value);
          
-         // quote field identifier
-         // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
-         $field = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
+        // quote field identifier
+        // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
+        $field = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
          
-         // append query to select object
-         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
-             $_select->where($field . $operator, $value[$num]);
-         }
-         
-     }
-     
+        // append query to select object
+        foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
+            $_select->where($field . $operator, $value[$num]);
+        }
+    }
+    
+    /**
+     * returns array with the filter settings of this filter
+     * - convert value to user timezone
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     * 
+     * @todo    finish implementation
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($_valueToJson == true) {
+            // @todo use _convertISO8601ToZendDate and then setTimezone(Tinebase_Core::get('userTimeZone')
+        }
+        return $result;
+    }
+    
     /**
      * calculates the date filter values
      *
