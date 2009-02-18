@@ -130,6 +130,23 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
     }
     
     /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($_valueToJson == true) {
+            $result['value'] = Timetracker_Controller_Timeaccount::getInstance()->get($result['value'])->toArray();
+        }
+        
+        return $result;
+    }
+    
+    /**
      * resolve timeaccount ids
      *
      */
